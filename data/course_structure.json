@@ -1,0 +1,338 @@
+{
+  "blocks": {
+    "1": {
+      "name": "🔥 Emocje & Mózg: Dlaczego inwestowanie tak nas rusza?",
+      "description": "Czemu boli, kiedy tracisz? Jak działa dopamina? Dlaczego biasy psują strategię?",
+      "categories": [1, 2, 3],
+      "color": "linear-gradient(135deg, #FF9950, #FF5E62)"
+    },
+    "2": {
+      "name": "🧘‍♀️ Wewnętrzny Kompas: Jak nie dać się sobie?",
+      "description": "Budujesz nawyki, tworzysz system decyzyjny i uczysz się zarządzać uwagą.",
+      "categories": [4, 5, 6, 7],
+      "color": "linear-gradient(135deg, #43C6AC, #191654)"
+    },
+    "3": {
+      "name": "🎯 Świadomość Działania: Kto tu naprawdę decyduje?",
+      "description": "Odkrywasz, jak myślisz o sobie jako inwestorze i jak budować spójność między kim jesteś a tym, co robisz.",
+      "categories": [8, 9, 14],
+      "color": "linear-gradient(135deg, #667eea, #764ba2)"
+    },
+    "4": {
+      "name": "💪 Elastyczność & Testowanie: Jak się nie złamać?",
+      "description": "Uczysz się być elastyczny, odpornny i stale testować swoje podejście.",
+      "categories": [10, 12, 13],
+      "color": "linear-gradient(135deg, #f093fb, #f5576c)"
+    },
+    "5": {
+      "name": "🌟 Mistrzostwo & Wspólnota: Jak to wszystko połączyć?",
+      "description": "Integrujesz wszystkie umiejętności i uczysz się funkcjonować w społeczności inwestorów.",
+      "categories": [11, 15],
+      "color": "linear-gradient(135deg, #4facfe, #00f2fe)"
+    }
+  },
+  "categories": {
+    "1": {
+      "name": "Emocje w inwestowaniu",
+      "description": "Jak emocje wpływają na Twoje decyzje inwestycyjne",
+      "icon": "😰",
+      "block": 1,
+      "difficulty": "Beginner",
+      "estimated_time": "2-3 tygodnie"
+    },
+    "2": {
+      "name": "Neurobiologia i chemia mózgu",
+      "description": "Zrozum, jak działa Twój mózg podczas inwestowania",
+      "icon": "🧠",
+      "block": 1,
+      "difficulty": "Intermediate",
+      "estimated_time": "2-3 tygodnie"
+    },
+    "3": {
+      "name": "Błędy poznawcze",
+      "description": "Poznaj pułapki myślowe, które szkodzą w inwestowaniu",
+      "icon": "🤔",
+      "block": 1,
+      "difficulty": "Intermediate",
+      "estimated_time": "3-4 tygodnie"
+    },
+    "4": {
+      "name": "Ukryte filtry poznawcze",
+      "description": "Odkryj nieświadome mechanizmy wpływające na Twoje decyzje",
+      "icon": "🔍",
+      "block": 2,
+      "difficulty": "Advanced",
+      "estimated_time": "2-3 tygodnie"
+    },
+    "5": {
+      "name": "Zarządzanie sobą",
+      "description": "Naucz się podstaw samoregulacji i mindfulness",
+      "icon": "🧘‍♂️",
+      "block": 2,
+      "difficulty": "Beginner",
+      "estimated_time": "3-4 tygodnie"
+    },
+    "6": {
+      "name": "Rozwój osobisty",
+      "description": "Zbuduj solidne podstawy rozwoju jako inwestor",
+      "icon": "📈",
+      "block": 2,
+      "difficulty": "Intermediate",
+      "estimated_time": "4-5 tygodni"
+    },
+    "7": {
+      "name": "Decyzyjność",
+      "description": "Stwórz skuteczne systemy podejmowania decyzji",
+      "icon": "⚡",
+      "block": 2,
+      "difficulty": "Advanced",
+      "estimated_time": "3-4 tygodnie"
+    },
+    "8": {
+      "name": "Metapoznanie",
+      "description": "Naucz się obserwować własne myśli i procesy decyzyjne",
+      "icon": "🎭",
+      "block": 3,
+      "difficulty": "Advanced",
+      "estimated_time": "3-4 tygodnie"
+    },
+    "9": {
+      "name": "Styl inwestora",
+      "description": "Odkryj i rozwiń swój unikalny styl inwestowania",
+      "icon": "🎨",
+      "block": 3,
+      "difficulty": "Intermediate",
+      "estimated_time": "2-3 tygodnie"
+    },
+    "10": {
+      "name": "Odporność i adaptacja",
+      "description": "Zbuduj odporność psychiczną na niepewność rynku",
+      "icon": "🛡️",
+      "block": 4,
+      "difficulty": "Intermediate",
+      "estimated_time": "3-4 tygodnie"
+    },
+    "11": {
+      "name": "Interakcje społeczne i środowisko inwestora",
+      "description": "Zarządzaj wpływem otoczenia na Twoje inwestowanie",
+      "icon": "👥",
+      "block": 5,
+      "difficulty": "Advanced",
+      "estimated_time": "4-5 tygodni"
+    },
+    "12": {
+      "name": "Testowanie i analiza własnych strategii",
+      "description": "Naucz się testować i analizować swoje podejście",
+      "icon": "🔬",
+      "block": 4,
+      "difficulty": "Advanced",
+      "estimated_time": "4-5 tygodni"
+    },
+    "13": {
+      "name": "Elastyczność, transformacja i rozwój",
+      "description": "Rozwijaj elastyczność i adaptuj się do zmian",
+      "icon": "🌱",
+      "block": 4,
+      "difficulty": "Expert",
+      "estimated_time": "5-6 tygodni"
+    },
+    "14": {
+      "name": "Motywacja i sens działania",
+      "description": "Znajdź głęboką motywację do długoterminowego inwestowania",
+      "icon": "🔥",
+      "block": 3,
+      "difficulty": "Intermediate",
+      "estimated_time": "2-3 tygodnie"
+    },
+    "15": {
+      "name": "Mistrzostwo psychologiczne",
+      "description": "Zintegruj wszystkie umiejętności w holistyczne podejście",
+      "icon": "👑",
+      "block": 5,
+      "difficulty": "Expert",
+      "estimated_time": "4-5 tygodni"
+    }
+  },
+  "lessons": {
+    "1": [
+      {"id": "B1C1L1", "title": "Strach przed stratą (loss aversion)"},
+      {"id": "B1C1L2", "title": "Euforia po zyskach"},
+      {"id": "B1C1L3", "title": "Regret aversion – lęk przed żalem"},
+      {"id": "B1C1L4", "title": "Emocjonalna zmienność a zmienność rynku"},
+      {"id": "B1C1L5", "title": "Syndrom FOMO"},
+      {"id": "B1C1L6", "title": "Nadmierna pewność siebie"},
+      {"id": "B1C1L7", "title": "Panika podczas korekt"},
+      {"id": "B1C1L8", "title": "Złość po stracie"},
+      {"id": "B1C1L9", "title": "Paraliż decyzyjny przez stres"},
+      {"id": "B1C1L10", "title": "Przenoszenie emocji z życia na rynek"}
+    ],
+    "2": [
+      {"id": "B1C2L1", "title": "Kortyzol i stres"},
+      {"id": "B1C2L2", "title": "Endorfiny po porażce"},
+      {"id": "B1C2L3", "title": "Dopamina i uzależnienie"},
+      {"id": "B1C2L4", "title": "Serotonina a spokój"},
+      {"id": "B1C2L5", "title": "Układ nagrody a ryzyko"},
+      {"id": "B1C2L6", "title": "Mózg gadzi vs. racjonalny"},
+      {"id": "B1C2L7", "title": "Neurofizjologia paniki"},
+      {"id": "B1C2L8", "title": "Chemia decyzji"},
+      {"id": "B1C2L9", "title": "Neuroplastyczność inwestora"},
+      {"id": "B1C2L10", "title": "Ból społeczny i krytyka"}
+    ],
+    "3": [
+      {"id": "B1C3L1", "title": "Anchoring"},
+      {"id": "B1C3L2", "title": "Confirmation bias"},
+      {"id": "B1C3L3", "title": "Availability bias"},
+      {"id": "B1C3L4", "title": "Framing effect"},
+      {"id": "B1C3L5", "title": "Status quo bias"},
+      {"id": "B1C3L6", "title": "Herd behavior"},
+      {"id": "B1C3L7", "title": "Iluzja kontroli"},
+      {"id": "B1C3L8", "title": "Self-attribution bias"},
+      {"id": "B1C3L9", "title": "Representativeness heuristic"},
+      {"id": "B1C3L10", "title": "Overtrading"}
+    ],
+    "4": [
+      {"id": "B2C4L1", "title": "Model SEEDS"},
+      {"id": "B2C4L2", "title": "Filtr emocjonalny"},
+      {"id": "B2C4L3", "title": "Filtr środowiskowy"},
+      {"id": "B2C4L4", "title": "Projekcja emocji"},
+      {"id": "B2C4L5", "title": "Name familiarity bias"},
+      {"id": "B2C4L6", "title": "Halo effect"},
+      {"id": "B2C4L7", "title": "Filtr wartości"},
+      {"id": "B2C4L8", "title": "Personalizacja danych"},
+      {"id": "B2C4L9", "title": "Iluzja wiedzy"},
+      {"id": "B2C4L10", "title": "Efekt pierwszeństwa i świeżości"}
+    ],
+    "5": [
+      {"id": "B2C5L1", "title": "Mindfulness"},
+      {"id": "B2C5L2", "title": "Rytuały dnia"},
+      {"id": "B2C5L3", "title": "Znaczenie snu"},
+      {"id": "B2C5L4", "title": "Detox cyfrowy"},
+      {"id": "B2C5L5", "title": "Dziennik emocji"},
+      {"id": "B2C5L6", "title": "Refleksja tygodniowa"},
+      {"id": "B2C5L7", "title": "Zasada STOP"},
+      {"id": "B2C5L8", "title": "Self-care jako strategia"},
+      {"id": "B2C5L9", "title": "Prośba o wsparcie"},
+      {"id": "B2C5L10", "title": "Asertywność decyzyjna"}
+    ],
+    "6": [
+      {"id": "B2C6L1", "title": "Kaizen"},
+      {"id": "B2C6L2", "title": "Mikrocele"},
+      {"id": "B2C6L3", "title": "Refleksja poranna i wieczorna"},
+      {"id": "B2C6L4", "title": "Praca nad mindsetem"},
+      {"id": "B2C6L5", "title": "Kompas inwestycyjny"},
+      {"id": "B2C6L6", "title": "Eliminacja rozpraszaczy"},
+      {"id": "B2C6L7", "title": "Zarządzanie energią"},
+      {"id": "B2C6L8", "title": "Rytuały bezpieczeństwa"},
+      {"id": "B2C6L9", "title": "Analiza sukcesów i błędów"},
+      {"id": "B2C6L10", "title": "Planowanie odporności psychicznej"}
+    ],
+    "7": [
+      {"id": "B2C7L1", "title": "Systemy decyzyjne"},
+      {"id": "B2C7L2", "title": "Checklisty"},
+      {"id": "B2C7L3", "title": "Decyzje warunkowe"},
+      {"id": "B2C7L4", "title": "Fakty vs emocje"},
+      {"id": "B2C7L5", "title": "Alternatywy"},
+      {"id": "B2C7L6", "title": "Sygnały vs szum"},
+      {"id": "B2C7L7", "title": "Scenariusze decyzyjne"},
+      {"id": "B2C7L8", "title": "Tempo decyzji"},
+      {"id": "B2C7L9", "title": "Presja czasu"},
+      {"id": "B2C7L10", "title": "Zmiana zdania bez żalu"}
+    ],
+    "8": [
+      {"id": "B3C8L1", "title": "Obserwacja myśli"},
+      {"id": "B3C8L2", "title": "Myśli ≠ fakty"},
+      {"id": "B3C8L3", "title": "Refleksyjność strategiczna"},
+      {"id": "B3C8L4", "title": "Skrypty mentalne"},
+      {"id": "B3C8L5", "title": "Źródła emocji"},
+      {"id": "B3C8L6", "title": "Moment wyboru"},
+      {"id": "B3C8L7", "title": "Automatyzm decyzyjny"},
+      {"id": "B3C8L8", "title": "Samoocena decyzji"},
+      {"id": "B3C8L9", "title": "Praca z intuicją"},
+      {"id": "B3C8L10", "title": "Introspekcja po transakcji"}
+    ],
+    "9": [
+      {"id": "B3C9L1", "title": "Rozpoznanie stylu"},
+      {"id": "B3C9L2", "title": "Spójność stylu i strategii"},
+      {"id": "B3C9L3", "title": "Ja-osoba vs ja-inwestor"},
+      {"id": "B3C9L4", "title": "Cele długoterminowe"},
+      {"id": "B3C9L5", "title": "Mapa tożsamości decyzyjnej"},
+      {"id": "B3C9L6", "title": "Zaufanie do siebie"},
+      {"id": "B3C9L7", "title": "Odzwyczajenie od rynku"},
+      {"id": "B3C9L8", "title": "Granice zaangażowania"},
+      {"id": "B3C9L9", "title": "Dialog wewnętrzny"},
+      {"id": "B3C9L10", "title": "Pytanie 'po co inwestuję?'"}
+    ],
+    "10": [
+      {"id": "B4C10L1", "title": "Budowanie odporności"},
+      {"id": "B4C10L2", "title": "Zarządzanie stresem chronicznym"},
+      {"id": "B4C10L3", "title": "Odporność na niepewność"},
+      {"id": "B4C10L4", "title": "Szybka regeneracja"},
+      {"id": "B4C10L5", "title": "Lekcje z błędów"},
+      {"id": "B4C10L6", "title": "Akceptacja pomyłek"},
+      {"id": "B4C10L7", "title": "Elastyczność poznawcza"},
+      {"id": "B4C10L8", "title": "Tolerancja niejasności"},
+      {"id": "B4C10L9", "title": "Oddzielenie od wyniku"},
+      {"id": "B4C10L10", "title": "Powrót do równowagi"}
+    ],
+    "11": [
+      {"id": "B5C11L1", "title": "Wpływ otoczenia (grupa, rodzina, media)"},
+      {"id": "B5C11L2", "title": "Porównywanie się z innymi inwestorami"},
+      {"id": "B5C11L3", "title": "Zarządzanie krytyką i opiniami innych"},
+      {"id": "B5C11L4", "title": "Rola coacha, mentora, społeczności"},
+      {"id": "B5C11L5", "title": "Efekt 'influencera' - jak go rozpoznać i neutralizować"},
+      {"id": "B5C11L6", "title": "Komunikacja z partnerem o finansach"},
+      {"id": "B5C11L7", "title": "Samotność inwestora - jak jej przeciwdziałać"},
+      {"id": "B5C11L8", "title": "Odpowiedzialność społeczna inwestowania"},
+      {"id": "B5C11L9", "title": "Inwestowanie w zgodzie z wartościami"},
+      {"id": "B5C11L10", "title": "Wspólne inwestowanie - szanse i zagrożenia"}
+    ],
+    "12": [
+      {"id": "B4C12L1", "title": "Budowanie hipotez inwestycyjnych"},
+      {"id": "B4C12L2", "title": "Testowanie scenariuszy w symulacjach"},
+      {"id": "B4C12L3", "title": "Retrospektywna analiza transakcji"},
+      {"id": "B4C12L4", "title": "Określanie stref emocjonalnych w strategii"},
+      {"id": "B4C12L5", "title": "Adaptowanie systemów do własnej osobowości"},
+      {"id": "B4C12L6", "title": "Tworzenie mapy błędów poznawczych"},
+      {"id": "B4C12L7", "title": "Analiza 'momentów przełomowych' w portfelu"},
+      {"id": "B4C12L8", "title": "Definiowanie poziomów komfortu i niepewności"},
+      {"id": "B4C12L9", "title": "Praca na danych z dziennika inwestycyjnego"},
+      {"id": "B4C12L10", "title": "Eksperymenty z różnymi stylami decyzji"}
+    ],
+    "13": [
+      {"id": "B4C13L1", "title": "Cykl przemian inwestora"},
+      {"id": "B4C13L2", "title": "Praca z oporem przed zmianą"},
+      {"id": "B4C13L3", "title": "Budowanie nowej tożsamości po kryzysie"},
+      {"id": "B4C13L4", "title": "Przejście z intuicji do struktury i odwrotnie"},
+      {"id": "B4C13L5", "title": "Przeformułowywanie porażek na rozwój"},
+      {"id": "B4C13L6", "title": "Transformacja podejścia do ryzyka"},
+      {"id": "B4C13L7", "title": "Kultura nieperfekcyjności i ryzyka"},
+      {"id": "B4C13L8", "title": "Trening elastyczności poznawczej"},
+      {"id": "B4C13L9", "title": "Tworzenie 'psychicznego kapitału'"},
+      {"id": "B4C13L10", "title": "Długoterminowa transformacja mentalna inwestora"}
+    ],
+    "14": [
+      {"id": "B3C14L1", "title": "Budowanie wewnętrznej motywacji inwestycyjnej"},
+      {"id": "B3C14L2", "title": "Różnica między celem a intencją"},
+      {"id": "B3C14L3", "title": "Autodyscyplina a motywacja chwilowa"},
+      {"id": "B3C14L4", "title": "Ustalanie priorytetów wewnętrznych"},
+      {"id": "B3C14L5", "title": "Świadomość konsekwencji emocjonalnych"},
+      {"id": "B3C14L6", "title": "Motywacja oparta na wartościach"},
+      {"id": "B3C14L7", "title": "Zastosowanie afirmacji i wizualizacji"},
+      {"id": "B3C14L8", "title": "Znaczenie postawy 'growth mindset'"},
+      {"id": "B3C14L9", "title": "Praca z przekonaniami ograniczającymi"},
+      {"id": "B3C14L10", "title": "Inwestowanie jako wyraz tożsamości"}
+    ],
+    "15": [
+      {"id": "B5C15L1", "title": "Samoświadomość jako klucz do sukcesu"},
+      {"id": "B5C15L2", "title": "Codzienne zarządzanie sobą w działaniu"},
+      {"id": "B5C15L3", "title": "Zarządzanie impulsami - odraczanie decyzji"},
+      {"id": "B5C15L4", "title": "Świadomość kosztu mentalnego transakcji"},
+      {"id": "B5C15L5", "title": "Przejście od reakcji do odpowiedzi"},
+      {"id": "B5C15L6", "title": "Mistrzostwo emocjonalne jako proces"},
+      {"id": "B5C15L7", "title": "Umiejętność 'myślenia długiego'"},
+      {"id": "B5C15L8", "title": "Integracja wszystkich poziomów inwestora"},
+      {"id": "B5C15L9", "title": "Świadomy inwestor - człowiek w równowadze"},
+      {"id": "B5C15L10", "title": "Podejście holistyczne w inwestowaniu"}
+    ]
+  }
+}

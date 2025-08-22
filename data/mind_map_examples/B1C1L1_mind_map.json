@@ -1,0 +1,238 @@
+{
+  "mind_map": {
+    "central_node": {
+      "id": "main_topic",
+      "label": "💸 STRACH PRZED STRATĄ",
+      "size": 30,
+      "color": "#FF6B6B",
+      "font_size": 16
+    },
+    "categories": [
+      {
+        "id": "teoria_perspektywy",
+        "label": "📊 Teoria perspektywy",
+        "size": 20,
+        "color": "#4ECDC4",
+        "font_size": 12,
+        "details": [
+          {
+            "id": "bol_straty",
+            "label": "😢 Ból straty 2-2,5x silniejszy",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          },
+          {
+            "id": "pewnosc",
+            "label": "🛡️ Preferujemy pewność",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          },
+          {
+            "id": "awersja_ryzyko",
+            "label": "⚠️ Awersja do ryzyka",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          }
+        ]
+      },
+      {
+        "id": "efekt_dyspozycji",
+        "label": "🔄 Efekt dyspozycji",
+        "size": 20,
+        "color": "#45B7D1",
+        "font_size": 12,
+        "details": [
+          {
+            "id": "sprzedaj_zyski",
+            "label": "💰 Za szybko sprzedajemy zyski",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          },
+          {
+            "id": "trzymaj_straty",
+            "label": "📉 Za długo trzymamy straty",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          },
+          {
+            "id": "get_even",
+            "label": "🎯 Syndrom 'wyjdę na zero'",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          }
+        ]
+      },
+      {
+        "id": "dopamina",
+        "label": "🧠 Dopamina",
+        "size": 20,
+        "color": "#96CEB4",
+        "font_size": 12,
+        "details": [
+          {
+            "id": "system_nagrody",
+            "label": "🎉 System nagrody w mózgu",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          },
+          {
+            "id": "uzaleznienie",
+            "label": "🎰 Uzależnienie od transakcji",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          },
+          {
+            "id": "euforia",
+            "label": "🚀 Euforia po zyskach",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          }
+        ]
+      },
+      {
+        "id": "framing",
+        "label": "🖼️ Efekt obramowania",
+        "size": 20,
+        "color": "#FECA57",
+        "font_size": 12,
+        "details": [
+          {
+            "id": "prezentacja_info",
+            "label": "📝 Sposób prezentacji wpływa na decyzje",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          },
+          {
+            "id": "pozytywne_negatywne",
+            "label": "😊😞 Pozytywne vs negatywne ujęcie",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          },
+          {
+            "id": "manipulacja",
+            "label": "🎭 Podatność na manipulację",
+            "size": 12,
+            "color": "#DDA0DD",
+            "font_size": 10
+          }
+        ]
+      }
+    ],
+    "solutions": [
+      {
+        "id": "zoom_out",
+        "label": "🔍 Zoom out - szeroka perspektywa",
+        "size": 15,
+        "color": "#90EE90",
+        "font_size": 11
+      },
+      {
+        "id": "limit_strat",
+        "label": "🚧 Wyznacz limit strat",
+        "size": 15,
+        "color": "#98FB98",
+        "font_size": 11
+      },
+      {
+        "id": "stop_checking",
+        "label": "📵 Przestań sprawdzać apki",
+        "size": 15,
+        "color": "#90EE90",
+        "font_size": 11
+      },
+      {
+        "id": "plan_strategii",
+        "label": "📋 Trzymaj się planu",
+        "size": 15,
+        "color": "#98FB98",
+        "font_size": 11
+      }
+    ],
+    "case_study": {
+      "id": "kuba_case",
+      "label": "👨‍💻 Case Study: Kuba i $MOONZ",
+      "size": 18,
+      "color": "#FF8C42",
+      "font_size": 12,
+      "details": [
+        {
+          "id": "fomo_moonz",
+          "label": "😱 FOMO na $MOONZ",
+          "size": 10,
+          "color": "#FFB347",
+          "font_size": 9
+        },
+        {
+          "id": "spadek_20",
+          "label": "📉 -20% w 2 dni",
+          "size": 10,
+          "color": "#FFB347",
+          "font_size": 9
+        },
+        {
+          "id": "panika_checking",
+          "label": "😰 Panika i sprawdzanie co 3 min",
+          "size": 10,
+          "color": "#FFB347",
+          "font_size": 9
+        }
+      ]
+    },
+    "connections": [
+      {
+        "from": "main_topic",
+        "to": "teoria_perspektywy"
+      },
+      {
+        "from": "main_topic",
+        "to": "efekt_dyspozycji"
+      },
+      {
+        "from": "main_topic",
+        "to": "dopamina"
+      },
+      {
+        "from": "main_topic",
+        "to": "framing"
+      },
+      {
+        "from": "main_topic",
+        "to": "zoom_out"
+      },
+      {
+        "from": "main_topic",
+        "to": "limit_strat"
+      },
+      {
+        "from": "main_topic",
+        "to": "stop_checking"
+      },
+      {
+        "from": "main_topic",
+        "to": "plan_strategii"
+      },
+      {
+        "from": "main_topic",
+        "to": "kuba_case"
+      }
+    ],
+    "config": {
+      "width": 800,
+      "height": 600,
+      "physics": true,
+      "directed": false,
+      "hierarchical": false
+    }
+  }
+}

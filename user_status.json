@@ -1,0 +1,122 @@
+﻿{
+  "a": {
+    "test_taken": true,
+    "degen_type": "Zen Degen",
+    "badges": []
+  },
+  "q": {
+    "test_taken": true,
+    "degen_type": "FOMO Hunter",
+    "badges": []
+  },
+  "b": {
+    "test_taken": true,
+    "degen_type": "YOLO Degen",
+    "badges": []
+  },
+  "c": {
+    "test_taken": true,
+    "degen_type": "Hype Degen",
+    "badges": []
+  },
+  "t": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "x": {
+    "test_taken": true,
+    "degen_type": "YOLO Degen",
+    "badges": []
+  },
+  "e": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "r": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "u": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "i": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "po": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "tr": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "admin": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "zenmaster": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "qw": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "zx": {
+    "test_taken": true,
+    "degen_type": "Zen Degen",
+    "badges": []
+  },
+  "pol": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "h": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "ert": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "ewq": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "mn": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "pawel": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "as": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  },
+  "qwer": {
+    "test_taken": false,
+    "degen_type": null,
+    "badges": []
+  }
+}
