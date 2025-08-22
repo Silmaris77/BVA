@@ -130,79 +130,73 @@ THEMES = {
     }
 }
 
-# Degen types
-DEGEN_TYPES = {
-    "Zen Degen": {
-        "icon": "🧘", 
-        "color": "#4CAF50", 
-        "theme": "zen", 
-        "description": "Dąży do równowagi i spokoju nawet w zmiennych warunkach rynkowych. Kontroluje emocje i podejmuje świadome decyzje.",
-        "strengths": ["Spokój i kontrola nad emocjami", "Świadome podejmowanie decyzji", "Odporność na wahania rynku"],
-        "challenges": ["Może być zbyt ostrożny", "Czasem trudno mu wykorzystać nagłe okazje", "Może przeoczyć niektóre trendy"],
-        "strategy": "Długoterminowe strategie oparte na solidnej analizie fundamentalnej i zrównoważonym podejściu do ryzyka."
+# Neuroleader types
+NEUROLEADER_TYPES = {
+    "Neuroanalityk": {
+        "description": "Rozważny, skrupulatny, często paraliżowany nadmiarem analiz. Lider, który ma trudności z podejmowaniem decyzji.",
+        "tagline": "Unikający Ryzyka",
+        "icon": "🧠",
+        "strengths": ["Wyczuwa zagrożenia", "Analizuje scenariusze ryzyka", "Dokładność w analizie", "Ostrożność w decyzjach"],
+        "challenges": ["Paraliż decyzyjny", "Odkłada decyzje na później", "Lęk przed błędami", "Traci okazje przez zwłokę"],
+        "strategy": "Ustal limity czasowe na analizę. Stosuj zasadę 'wystarczająco dobrej decyzji'. Praktykuj podejmowanie małych decyzji.",
+        "color": "#2c3e50",
+        "supermoc": "Wyczuwa zagrożenia i analizuje scenariusze ryzyka jak nikt inny",
+        "slabość": "Traci okazje przez zwłokę"
     },
-    "YOLO Degen": {
-        "icon": "🚀", 
-        "color": "#FF5722", 
-        "theme": "yolo", 
-        "description": "Dynamiczny inwestor kierujący się intuicją i chęcią maksymalizacji zysków. Nie boi się podejmować ryzykownych decyzji.",
-        "strengths": ["Szybkie podejmowanie decyzji", "Zdolność dostrzegania nowych okazji", "Odwaga i determinacja"],
-        "challenges": ["Podatność na działanie pod wpływem emocji", "Ryzyko dużych strat", "Brak długoterminowej strategii"],
-        "strategy": "Strategia bazująca na szybkich decyzjach i wykorzystywaniu krótkoterminowych trendów. Wymaga dyscypliny w zarządzaniu ryzykiem."
+    "Neuroreaktor": {
+        "description": "Lider, który reaguje impulsywnie na stres i emocje, działa błyskawicznie i emocjonalnie, często bez pełnych danych.",
+        "tagline": "Impulsywny Strażnik", 
+        "icon": "🔥",
+        "strengths": ["Szybkie reakcje w kryzysie", "Działanie pod presją", "Natychmiastowe rozwiązywanie problemów", "Energia w trudnych sytuacjach"],
+        "challenges": ["Impulsywne decyzje", "Działanie pod wpływem emocji", "Brak pełnej analizy", "Ryzykowne wybory"],
+        "strategy": "Techniki oddechowe i mindfulness. Zasada 24 godzin na ważne decyzje. Konsultuj decyzje z zaufaną osobą.",
+        "color": "#e74c3c",
+        "supermoc": "Zdolność do działania w kryzysie",
+        "slabość": "Podejmuje ryzykowne decyzje"
     },
-    "Emo Degen": {
-        "icon": "😭", 
-        "color": "#9C27B0", 
-        "theme": "emo", 
-        "description": "Inwestor silnie reagujący emocjonalnie na zmiany rynkowe. Intensywnie przeżywa zarówno zyski jak i straty.",
-        "strengths": ["Entuzjazm i zaangażowanie", "Umiejętność szybkiej adaptacji", "Intuicja społeczna"],
-        "challenges": ["Decyzje pod wpływem strachu lub euforii", "Trudności z trzymaniem się planu", "Stres związany z inwestowaniem"],
-        "strategy": "Strukturyzowane podejście z określonymi punktami wejścia i wyjścia, połączone z technikami zarządzania emocjami."
+    "Neurobalanser": {
+        "description": "Liderzy, którzy potrafią łączyć racjonalność z empatią, podejmując decyzje w oparciu o dane oraz intuicję.",
+        "tagline": "Zbalansowany Integrator",
+        "icon": "⚖️", 
+        "strengths": ["Inteligencja emocjonalna", "Logiczne myślenie", "Elastyczność", "Zrównoważone podejście"],
+        "challenges": ["Może zbyt długo analizować", "Wahanie w decyzjach", "Potrzeba znalezienia balansu", "Czasem zbyt ostrożny"],
+        "strategy": "Ustal jasne kryteria decyzyjne. Rozwijaj umiejętność facylitacji. Praktykuj podejmowanie decyzji w ograniczonym czasie.",
+        "color": "#3498db",
+        "supermoc": "Inteligencja emocjonalna + logika",
+        "slabość": "Może zbyt długo się wahać"
     },
-    "Strategist Degen": {
-        "icon": "🎯", 
-        "color": "#3F51B5", 
-        "theme": "default", 
-        "description": "Planujący inwestor, który opracowuje dokładne strategie i trzyma się ich. Działa zgodnie z planem i ustalonymi celami.",
-        "strengths": ["Metodyczne podejście", "Dyscyplina i konsekwencja", "Jasno określone cele"],
-        "challenges": ["Brak elastyczności", "Może przeoczyć spontaniczne okazje", "Czasem zbyt przywiązany do teorii"],
-        "strategy": "Precyzyjnie zdefiniowane strategie z jasnymi zasadami wejścia i wyjścia, regularnie weryfikowane i optymalizowane."
+    "Neuroempata": {
+        "description": "Lider, który skupia się na emocjonalnych potrzebach zespołu. Ceni zaufanie, dobre relacje i komunikację w zespole.",
+        "tagline": "Architekt Relacji",
+        "icon": "🌱",
+        "strengths": ["Budowanie więzi", "Empatia", "Zrozumienie potrzeb zespołu", "Tworzenie atmosfery zaufania"],
+        "challenges": ["Zbyt emocjonalne podejście", "Trudność z obiektywizmem", "Problem z granicami", "Preferencje osobiste"],
+        "strategy": "Rozwijaj umiejętności analityczne. Ustal jasne granice. Ucz się asertywności. Korzystaj z zewnętrznych opinii.",
+        "color": "#27ae60",
+        "supermoc": "Więzi emocjonalne i zaangażowanie zespołu",
+        "slabość": "Trudność z obiektywizmem"
     },
-    "Mad Scientist Degen": {
-        "icon": "🔬", 
-        "color": "#009688", 
-        "theme": "default", 
-        "description": "Eksperymentujący inwestor, który testuje nowe podejścia i teorie. Lubi badać niestandardowe rozwiązania i innowacje.",
-        "strengths": ["Innowacyjność", "Analityczne myślenie", "Odkrywanie niewykorzystanych możliwości"],
-        "challenges": ["Ryzyko nietestowanych strategii", "Skomplikowane podejście", "Nadmierne teoretyzowanie"],
-        "strategy": "Eksperymentowanie z innowacyjnymi podejściami, przy jednoczesnym zarządzaniu ryzykiem poprzez alokację kapitału w sposób kontrolowany."
+    "Neuroinnowator": {
+        "description": "Liderzy, którzy potrafią dostosować swoje podejście do zmieniającej się sytuacji. Są otwarci na nowe rozwiązania, gotowi do eksperymentów.",
+        "tagline": "Nawigator Zmiany",
+        "icon": "🌊",
+        "strengths": ["Adaptacja do zmian", "Innowacyjność", "Eksperymentowanie", "Elastyczność strategii"],
+        "challenges": ["Brak stabilności", "Zbyt częste zmiany", "Może frustrować zespół", "Brak konsekwencji"],
+        "strategy": "Wprowadź strukturę do swoich innowacji. Rozwijaj umiejętność priorytetyzacji. Komunikuj zmiany efektywnie.",
+        "color": "#9b59b6",
+        "supermoc": "Adaptacja i innowacyjność", 
+        "slabość": "Brak konsekwencji i cierpliwości"
     },
-    "Spreadsheet Degen": {
-        "icon": "📊", 
-        "color": "#795548", 
-        "theme": "default", 
-        "description": "Inwestor opierający decyzje na danych i analizach. Tworzy szczegółowe modele i kalkulacje przed każdą decyzją.",
-        "strengths": ["Podejście bazujące na danych", "Dokładna analiza", "Ograniczenie wpływu emocji"],
-        "challenges": ["Analiza paraliżująca", "Pomijanie czynników jakościowych", "Czasem przesadny perfekcjonizm"],
-        "strategy": "Strategie oparte na modelach matematycznych, analizie danych i wskaźnikach technicznych, z regularną weryfikacją założeń."
-    },
-    "Meta Degen": {
-        "icon": "🔄", 
-        "color": "#607D8B", 
-        "theme": "default", 
-        "description": "Inwestor analizujący swoje własne procesy myślowe i decyzyjne. Ciągle doskonali swoje podejście i uczy się na błędach.",
-        "strengths": ["Samoświadomość", "Ciągłe doskonalenie", "Adaptacyjność"],
-        "challenges": ["Nadmierna autorefleksja", "Trudności z podjęciem decyzji", "Zbyt częste zmiany strategii"],
-        "strategy": "Podejście adaptacyjne, łączące różne style inwestowania w zależności od okoliczności, z naciskiem na ciągłe uczenie się."
-    },
-    "Hype Degen": {
-        "icon": "📣", 
-        "color": "#FFC107", 
-        "theme": "default", 
-        "description": "Inwestor podążający za popularnymi trendami i projektami. Bardzo aktywny w mediach społecznościowych i śledzący opinie influencerów.",
-        "strengths": ["Wczesne wykrywanie trendów", "Znajomość nastrojów społeczności", "Szybka reakcja na nowe projekty"],
-        "challenges": ["Podatność na manipulacje", "FOMO (strach przed pominięciem)", "Brak własnej analizy"],
-        "strategy": "Śledzenie trendów społecznościowych z jednoczesnym zachowaniem krytycznego myślenia i weryfikacją informacji z wielu źródeł."
+    "Neuroinspirator": {
+        "description": "Liderzy, którzy potrafią zmotywować innych do działania dzięki swojej osobowości, wizji i entuzjazmowi.",
+        "tagline": "Charyzmatyczny Wizjoner",
+        "icon": "🌟",
+        "strengths": ["Charyzma", "Motywowanie zespołu", "Wizja przyszłości", "Energia i entuzjazm"],
+        "challenges": ["Może zdominować zespół", "Zależność od charyzmy", "Zaniedbywanie autonomii zespołu", "Nadmierna pewność siebie"],
+        "strategy": "Rozwijaj zdolność do słuchania. Świadomie buduj autonomię zespołu. Naucz się korzystać z danych w decyzjach.",
+        "color": "#f39c12",
+        "supermoc": "Wpływ, energia, wizja",
+        "slabość": "Może zdominować zespół"
     }
 }
 
@@ -307,14 +301,14 @@ BADGES = {
         "secret": False,
         "stackable": False
     },
-    "first_degen_test": {
+    "first_neuroleader_test": {
         "name": "Odkrywca Osobowości",
-        "description": "Wykonaj pierwszy test typu degena",
+        "description": "Wykonaj pierwszy test typu neurolidera",
         "icon": "🔍",
         "category": "getting_started",
         "tier": "silver",
         "xp_reward": 100,
-        "condition": "degen_test_completed",
+        "condition": "neuroleader_test_completed",
         "requirement": 1,
         "secret": False,
         "stackable": False

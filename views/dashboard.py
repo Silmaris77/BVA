@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 from data.users import load_user_data, save_user_data, get_current_user_data
-from data.test_questions import DEGEN_TYPES
+from data.neuroleader_test_questions import NEUROLEADER_TYPES
 from config.settings import DAILY_MISSIONS, USER_AVATARS
 from data.lessons import load_lessons
 from utils.goals import get_user_goals, calculate_goal_metrics
@@ -551,12 +551,12 @@ def show_investor_profile_compact(user_data):
     if 'test_scores' in user_data:
         # Pokaż dominujący typ
         dominant_type = max(user_data['test_scores'].items(), key=lambda x: x[1])[0]
-        degen_color = DEGEN_TYPES.get(dominant_type, {}).get('color', '#3498db')
+        neuroleader_color = NEUROLEADER_TYPES.get(dominant_type, {}).get('color', '#3498db')
         
         st.markdown(f"""
         <div style="text-align: center; padding: 16px;">
             <div style="font-size: 24px; margin-bottom: 8px;">🧬</div>
-            <div style="font-weight: 600; color: {degen_color};">{dominant_type}</div>
+            <div style="font-weight: 600; color: {neuroleader_color};">{dominant_type}</div>
             <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
                 Twój dominujący typ
             </div>

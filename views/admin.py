@@ -8,7 +8,7 @@ import time
 import json
 from data.users import load_user_data, save_user_data
 from data.lessons import load_lessons
-from data.test_questions import DEGEN_TYPES
+from data.neuroleader_test_questions import NEUROLEADER_TYPES
 from config.settings import XP_LEVELS
 from utils.material3_components import apply_material3_theme
 from utils.components import zen_header, zen_button, notification, data_chart, stat_card
@@ -40,7 +40,7 @@ def get_user_activity_data():
             'xp': data.get('xp', 0),
             'level': data.get('level', 1),
             'completed_lessons': len(data.get('completed_lessons', [])),
-            'degen_type': data.get('degen_type', 'Nieznany'),
+            'neuroleader_type': data.get('neuroleader_type', 'Nieznany'),
             'registration_date': data.get('joined_date', 'Nieznana'),  # Poprawione: używamy joined_date
             'last_login': data.get('last_login') or 'Nigdy',           # Lepsze formatowanie dla brakujących danych
             'test_taken': data.get('test_taken', False),
@@ -79,26 +79,26 @@ def get_lessons_stats():
     
     return pd.DataFrame(lessons_stats)
 
-def get_degen_type_distribution():
-    """Analizuje rozkład typów degenów wśród użytkowników"""
+def get_neuroleader_type_distribution():
+    """Analizuje rozkład typów neuroliderów wśród użytkowników"""
     users_data = load_user_data()
     
-    # Zlicz wystąpienia każdego typu degena
-    degen_counts = {}
+    # Zlicz wystąpienia każdego typu neurolidera
+    neuroleader_counts = {}
     for _, data in users_data.items():
-        degen_type = data.get('degen_type', 'Nieznany')
-        degen_counts[degen_type] = degen_counts.get(degen_type, 0) + 1
+        neuroleader_type = data.get('neuroleader_type', 'Nieznany')
+        neuroleader_counts[neuroleader_type] = neuroleader_counts.get(neuroleader_type, 0) + 1
     
     # Utwórz DataFrame dla wizualizacji
-    degen_distribution = []
-    for degen_type, count in degen_counts.items():
-        degen_distribution.append({
-            'degen_type': degen_type,
+    neuroleader_distribution = []
+    for neuroleader_type, count in neuroleader_counts.items():
+        neuroleader_distribution.append({
+            'neuroleader_type': neuroleader_type,
             'count': count,
             'percentage': round(count / len(users_data) * 100, 2) if users_data else 0
         })
     
-    return pd.DataFrame(degen_distribution)
+    return pd.DataFrame(neuroleader_distribution)
 
 def plot_user_activity_over_time():
     """Generuje wykres aktywności użytkowników w czasie na podstawie rzeczywistych danych"""
@@ -222,18 +222,18 @@ def show_admin_dashboard():
         
         st.altair_chart(chart, use_container_width=True)
         
-        # Rozkład typów degenów
-        st.subheader("Rozkład typów degenów")
+        # Rozkład typów neuroliderów
+        st.subheader("Rozkład typów neuroliderów")
         
-        degen_df = get_degen_type_distribution()
+        neuroleader_df = get_neuroleader_type_distribution()
         
-        if not degen_df.empty:
+        if not neuroleader_df.empty:
             # Wykres kołowy typów degenów z ulepszoną czytelnością
             fig, ax = plt.subplots(figsize=(12, 8))
             
             # Przygotuj dane
-            counts = degen_df['count'].tolist()
-            labels = degen_df['degen_type'].tolist()
+            counts = neuroleader_df['count'].tolist()
+            labels = neuroleader_df['neuroleader_type'].tolist()
             total = sum(counts)
             
             # Funkcja do wyświetlania procentów tylko dla większych wartości
@@ -389,7 +389,7 @@ def show_admin_dashboard():
     
     # 5. Zakładka Testy
     with admin_tabs[4]:
-        st.subheader("Wyniki testów Degena")
+        st.subheader("Wyniki testów Neurolidera")
         
         # Pobierz dane o użytkownikach
         users_data = load_user_data()

@@ -94,15 +94,15 @@ def add_recent_activity(username: str, activity_type: str, details: dict):
         print(f"Error: User {username} not found. Cannot add activity.")
         return
 
-    # Validate degen type if it's a degen_type_discovered activity
-    if activity_type == "degen_type_discovered":
-        degen_type = details.get("degen_type")
-        if not _validate_degen_type(degen_type):
-            print(f"Warning: Invalid degen type '{degen_type}'. Using user's actual degen type.")
-            # Use the user's actual degen type instead
-            actual_degen_type = users_data[username].get("degen_type")
-            if actual_degen_type:
-                details["degen_type"] = actual_degen_type
+    # Validate neuroleader type if it's a neuroleader_type_discovered activity
+    if activity_type == "neuroleader_type_discovered":
+        neuroleader_type = details.get("neuroleader_type")
+        if not _validate_neuroleader_type(neuroleader_type):
+            print(f"Warning: Invalid neuroleader type '{neuroleader_type}'. Using user's actual neuroleader type.")
+            # Use the user's actual neuroleader type instead
+            actual_neuroleader_type = users_data[username].get("neuroleader_type")
+            if actual_neuroleader_type:
+                details["neuroleader_type"] = actual_neuroleader_type
             else:
                 print(f"Error: No valid degen type found for user {username}")
                 return
@@ -123,11 +123,11 @@ def add_recent_activity(username: str, activity_type: str, details: dict):
     
     save_user_data(users_data)
 
-def _validate_degen_type(degen_type):
-    """Validate if the degen type is valid"""
+def _validate_neuroleader_type(neuroleader_type):
+    """Validate if the neuroleader type is valid"""
     try:
-        from data.test_questions import DEGEN_TYPES
-        return degen_type in DEGEN_TYPES
+        from data.neuroleader_test_questions import NEUROLEADER_TYPES
+        return neuroleader_type in NEUROLEADER_TYPES
     except ImportError:
-        # If we can't import DEGEN_TYPES, accept any string
-        return isinstance(degen_type, str) and len(degen_type) > 0
+        # If we can't import NEUROLEADER_TYPES, accept any string
+        return isinstance(neuroleader_type, str) and len(neuroleader_type) > 0

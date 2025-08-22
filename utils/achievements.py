@@ -39,9 +39,9 @@ def check_badge_condition(badge_id: str, user_data: Dict[str, Any], context: Opt
         required_fields = ['degen_type', 'avatar', 'theme']
         return all(user_data.get(field) for field in required_fields)
     
-    elif badge_id == "first_degen_test":
-        # Pierwszy test typu degena
-        return user_data.get('test_taken', False) and user_data.get('degen_type') is not None
+    elif badge_id == "first_neuroleader_test":
+        # Pierwszy test typu neurolidera
+        return user_data.get('test_taken', False) and user_data.get('neuroleader_type') is not None
     
     elif badge_id == "first_lesson":
         # Pierwsza ukończona lekcja
@@ -496,8 +496,8 @@ def check_category_completion(user_data: Dict[str, Any], category: str) -> bool:
 def check_all_degen_types_explored(user_data: Dict[str, Any]) -> bool:
     """Sprawdź czy użytkownik poznał wszystkie typy degenów"""
     explored_types = user_data.get('explored_degen_types', [])
-    from config.settings import DEGEN_TYPES
-    return len(explored_types) >= len(DEGEN_TYPES)
+    from config.settings import NEUROLEADER_TYPES
+    return len(explored_types) >= len(NEUROLEADER_TYPES)
 
 def check_complete_degen_mastery(user_data: Dict[str, Any]) -> bool:
     """Sprawdź czy użytkownik osiągnął pełne mistrzostwo degena"""

@@ -12,7 +12,7 @@ from matplotlib.projections.polar import PolarAxes
 from matplotlib.projections import register_projection
 from matplotlib.spines import Spine
 from matplotlib.transforms import Affine2D
-from data.test_questions import DEGEN_TYPES, TEST_QUESTIONS
+from data.neuroleader_test_questions import NEUROLEADER_TYPES, TEST_QUESTIONS
 from data.users import load_user_data, save_user_data, update_single_user_field, get_current_user_data
 from PIL import Image
 from utils.components import zen_header, zen_button, notification, tip_block
@@ -42,8 +42,8 @@ from utils.inventory import (
     format_time_remaining
 )
 from utils.badge_display import BadgeDisplaySystem
-from config.settings import USER_AVATARS, THEMES, DEGEN_TYPES, BADGES, BADGE_CATEGORIES
-from data.degen_details import degen_details
+from config.settings import USER_AVATARS, THEMES, NEUROLEADER_TYPES, BADGES, BADGE_CATEGORIES
+from data.neuroleader_details import neuroleader_details
 from utils.xp_system import calculate_xp_progress
 from utils.components import zen_header, zen_button, notification, stat_card, xp_level_display, goal_card, badge_card, progress_bar, tip_block, quote_block,  add_animations_css
 from utils.user_components import user_stats_panel
@@ -198,7 +198,7 @@ def show_profile():
     zen_header("Profil")
       # Add live XP indicator - ZAKOMENTOWANE
     # live_xp_indicator()
-      # Use current user data to ensure degen test results are included
+      # Use current user data to ensure neuroleader test results are included
     user_data = get_current_user_data(st.session_state.username)
     users_data = load_user_data()  # For shop transactions
     style = get_user_style(st.session_state.username)
@@ -210,7 +210,7 @@ def show_profile():
     add_animations_css()
 
     # Main Profile Tabs - usunięto Personalizację i Eksplorator Typów
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "🧬 Typ Degena"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "🧬 Typ Neurolidera"])
     
     # Tab 1: Statistics - podobnie jak w Dashboard
     with tab1:
@@ -365,9 +365,9 @@ def show_profile():
                 # Lista dostępnych awatarów
                 avatars = {
                     "diamond_degen": {
-                        "name": "💎 Diamond Degen",
+                        "name": "💎 Diamond Neuroleader",
                         "price": 500,
-                        "description": "Pokazuje twoje zaangażowanie w rozwój jako inwestor."
+                        "description": "Pokazuje twoje zaangażowanie w rozwój jako przywódca."
                     },
                     "crypto_wizard": {
                         "name": "🧙 Crypto Wizard",
@@ -574,20 +574,20 @@ def show_profile():
         # Use Step 5 badge display system
         show_badges_section()
         st.markdown("</div>", unsafe_allow_html=True)
-      # Tab 4: Degen Type with Test
+      # Tab 4: Neuroleader Type with Test
     with tab4:
         st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
         
-        # Sub-tabs within Typ Degena
-        degen_subtab1, degen_subtab2 = st.tabs(["🧠 Test Degena", "� Mój Typ"])
+        # Sub-tabs within Typ Neurolidera
+        neuroleader_subtab1, neuroleader_subtab2 = st.tabs(["🧠 Test Neurolidera", "🎯 Mój Typ"])
         
-        with degen_subtab1:
-            # Show Degen Test (imported functionality from degen_explorer)
-            show_degen_test_section()
+        with neuroleader_subtab1:
+            # Show Neuroleader Test (imported functionality from neuroleader_explorer)
+            show_neuroleader_test_section()
         
-        with degen_subtab2:
-            # Show current degen type info
-            show_current_degen_type()
+        with neuroleader_subtab2:
+            # Show current neuroleader type info
+            show_current_neuroleader_type()
             
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -678,7 +678,7 @@ def show_badges_section():
             st.markdown("""
             - **👋 Witaj w Akademii** - Automatycznie po rejestracji
             - **🎯 Pierwszy Uczeń** - Ukończ pierwszą lekcję
-            - **🔍 Odkrywca Osobowości** - Wykonaj test typu degena
+            - **🔍 Odkrywca Osobowości** - Wykonaj test typu neurolidera
             - **📝 Profil Kompletny** - Uzupełnij informacje w profilu
             """)
         st.markdown("---")
@@ -797,11 +797,11 @@ def clean_html(text):
     return normalized_text.strip()
 
 def calculate_test_results(scores):
-    """Calculate the dominant degen type based on test scores"""
+    """Calculate the dominant neuroleader type based on test scores"""
     return max(scores.items(), key=lambda x: x[1])[0]
 
-def show_degen_test_section():
-    """Wyświetla sekcję testu degena w profilu"""
+def show_neuroleader_test_section():
+    """Wyświetla sekcję testu neuroleadera w profilu"""
     device_type = get_device_type()
     
     # Informacja o teście
@@ -810,27 +810,27 @@ def show_degen_test_section():
     
     if st.session_state.show_test_info:
         st.markdown("""
-        ### 🧠 Test typu degena
+        ### 🧠 Test typu neuroleadera
         
-        Ten test pomoże Ci sprawdzić, **jakim typem inwestora (degena)** jesteś.
+        Ten test pomoże Ci sprawdzić, **jakim typem neuroleadera** jesteś.
         
-        - Każde pytanie ma **8 odpowiedzi** – każda reprezentuje inny styl inwestycyjny.
+        - Każde pytanie ma **6 odpowiedzi** – każda reprezentuje inny styl przywództwa.
         - **Wybierz tę odpowiedź, która najlepiej opisuje Twoje zachowanie lub sposób myślenia.**
         - Po zakończeniu zobaczysz graficzny wynik w postaci wykresu radarowego.
         
         🧩 Gotowy?
         """)
-        if zen_button("Rozpocznij test", key="start_degen_test"):
+        if zen_button("Rozpocznij test", key="start_neuroleader_test"):
             st.session_state.show_test_info = False
             if 'test_step' not in st.session_state:
                 st.session_state.test_step = 0
-                st.session_state.test_scores = {degen_type: 0 for degen_type in DEGEN_TYPES}
+                st.session_state.test_scores = {neuroleader_type: 0 for neuroleader_type in NEUROLEADER_TYPES}
             st.rerun()
     
     # Tryb testu    
     elif 'test_step' not in st.session_state:
         st.session_state.test_step = 0
-        st.session_state.test_scores = {degen_type: 0 for degen_type in DEGEN_TYPES}
+        st.session_state.test_scores = {neuroleader_type: 0 for neuroleader_type in NEUROLEADER_TYPES}
         st.rerun()
     
     elif st.session_state.test_step < len(TEST_QUESTIONS):
@@ -850,8 +850,8 @@ def show_degen_test_section():
             for i in range(len(options)):
                 if zen_button(f"{options[i]['text']}", key=f"q{st.session_state.test_step}_opt{i}", use_container_width=True):
                     # Add scores for the answer
-                    for degen_type, score in options[i]['scores'].items():
-                        st.session_state.test_scores[degen_type] += score
+                    for neuroleader_type, score in options[i]['scores'].items():
+                        st.session_state.test_scores[neuroleader_type] += score
                     
                     st.session_state.test_step += 1
                     st.rerun()
@@ -863,8 +863,8 @@ def show_degen_test_section():
                     with col1:
                         if zen_button(f"{options[i]['text']}", key=f"q{st.session_state.test_step}_opt{i}", use_container_width=True):
                             # Add scores for the answer
-                            for degen_type, score in options[i]['scores'].items():
-                                st.session_state.test_scores[degen_type] += score
+                            for neuroleader_type, score in options[i]['scores'].items():
+                                st.session_state.test_scores[neuroleader_type] += score
                             
                             st.session_state.test_step += 1
                             st.rerun()
@@ -872,8 +872,8 @@ def show_degen_test_section():
                     with col2:
                         if zen_button(f"{options[i]['text']}", key=f"q{st.session_state.test_step}_opt{i}", use_container_width=True):
                             # Add scores for the answer
-                            for degen_type, score in options[i]['scores'].items():
-                                st.session_state.test_scores[degen_type] += score
+                            for neuroleader_type, score in options[i]['scores'].items():
+                                st.session_state.test_scores[neuroleader_type] += score
                             
                             st.session_state.test_step += 1
                             st.rerun()
@@ -897,17 +897,17 @@ def show_test_results():
     
     st.markdown("<div class='st-bx'>", unsafe_allow_html=True)
     st.success("🎉 Test zakończony!")
-    st.markdown(f"## Twój typ degena: **{result}**")
+    st.markdown(f"## Twój typ neuroleadera: **{result}**")
     
-    if result in DEGEN_TYPES:
-        tagline = DEGEN_TYPES[result].get('tagline', 'Unikalny styl inwestowania')
-        description = DEGEN_TYPES[result].get('description', 'Opis niedostępny')
+    if result in NEUROLEADER_TYPES:
+        tagline = NEUROLEADER_TYPES[result].get('tagline', 'Unikalny styl przywództwa')
+        description = NEUROLEADER_TYPES[result].get('description', 'Opis niedostępny')
         
         st.markdown(f"*{tagline}*")
         st.markdown(description)
         
         # Show radar chart
-        st.subheader("Twój profil inwestycyjny")
+        st.subheader("Twój profil przywództwa")
         radar_fig = plot_radar_chart(st.session_state.test_scores, device_type=device_type)
         st.pyplot(radar_fig)
         
@@ -917,18 +917,18 @@ def show_test_results():
             if st.session_state.username not in users_data:
                 users_data[st.session_state.username] = {}
             
-            users_data[st.session_state.username]['degen_type'] = result
+            users_data[st.session_state.username]['neuroleader_type'] = result
             users_data[st.session_state.username]['test_scores'] = st.session_state.test_scores
             users_data[st.session_state.username]['test_date'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             
             save_user_data(users_data)
             
-            # Add recent activity for degen type discovery
+            # Add recent activity for neuroleader type discovery
             from data.users_fixed import add_recent_activity
             add_recent_activity(
                 st.session_state.username, 
-                "degen_type_discovered", 
-                {"degen_type": result}
+                "neuroleader_type_discovered", 
+                {"neuroleader_type": result}
             )
             
             # Check for achievements
@@ -952,29 +952,29 @@ def show_test_results():
                 del st.session_state[key]
         st.rerun()
 
-def show_current_degen_type():
-    """Wyświetla informacje o aktualnym typie degena użytkownika"""
+def show_current_neuroleader_type():
+    """Wyświetla informacje o aktualnym typie neurolidera użytkownika"""
     device_type = get_device_type()
     user_data = get_current_user_data()
     
     st.markdown("<div class='st-bx'>", unsafe_allow_html=True)
     
-    if user_data.get('degen_type'):
-        degen_type = user_data['degen_type']
-          # Header with degen type
-        st.markdown(f"<h2 style='text-align: center;'>{degen_type}</h2>", unsafe_allow_html=True)
-        tagline = DEGEN_TYPES.get(degen_type, {}).get("tagline", "Twój unikalny styl inwestowania")
+    if user_data.get('neuroleader_type'):
+        neuroleader_type = user_data['neuroleader_type']
+          # Header with neuroleader type
+        st.markdown(f"<h2 style='text-align: center;'>{neuroleader_type}</h2>", unsafe_allow_html=True)
+        tagline = NEUROLEADER_TYPES.get(neuroleader_type, {}).get("tagline", "Twój unikalny styl przywództwa")
         st.markdown(f"<div style='text-align: center; color: #666; margin-bottom: 20px;'>{tagline}</div>", unsafe_allow_html=True)
         
-        if degen_type in DEGEN_TYPES:
+        if neuroleader_type in NEUROLEADER_TYPES:
             # Description
             with st.expander("📖 Opis", expanded=True):
-                description = DEGEN_TYPES[degen_type].get("description", "Opis niedostępny")
+                description = NEUROLEADER_TYPES[neuroleader_type].get("description", "Opis niedostępny")
                 st.markdown(description)
                 
             # Radar chart if available
             if 'test_scores' in user_data:
-                st.subheader("Twój profil inwestycyjny")
+                st.subheader("Twój profil przywódczy")
                 
                 radar_fig = plot_radar_chart(user_data['test_scores'], device_type=device_type)
                 
@@ -999,16 +999,16 @@ def show_current_degen_type():
             
             with col1:
                 with st.expander("💪 Mocne strony", expanded=True):
-                    strengths = DEGEN_TYPES[degen_type].get("strengths", ["Brak danych"])
+                    strengths = NEUROLEADER_TYPES[neuroleader_type].get("strengths", ["Brak danych"])
                     st.markdown("\n".join([f"- ✅ {strength}" for strength in strengths]))
             
             with col2:
                 with st.expander("🔍 Wyzwania", expanded=True):
-                    challenges = DEGEN_TYPES[degen_type].get("challenges", ["Brak danych"])
+                    challenges = NEUROLEADER_TYPES[neuroleader_type].get("challenges", ["Brak danych"])
                     st.markdown("\n".join([f"- ⚠️ {challenge}" for challenge in challenges]))
             
             # Strategy
-            strategy = DEGEN_TYPES[degen_type].get("strategy", "Strategia niedostępna")
+            strategy = NEUROLEADER_TYPES[neuroleader_type].get("strategy", "Strategia niedostępna")
             tip_block(
                 strategy,
                 title="Rekomendowana strategia",
@@ -1016,11 +1016,11 @@ def show_current_degen_type():
             )
             
             # Detailed description
-            if degen_type in degen_details:
-                with st.expander("📚 Szczegółowy opis twojego typu degena", expanded=False):
-                    st.markdown(degen_details[degen_type])
+            if neuroleader_type in neuroleader_details:
+                with st.expander("📚 Szczegółowy opis twojego typu neurolidera", expanded=False):
+                    st.markdown(neuroleader_details[neuroleader_type])
             else:
-                st.warning("Szczegółowy opis dla tego typu degena nie jest jeszcze dostępny.")
+                st.warning("Szczegółowy opis dla tego typu neurolidera nie jest jeszcze dostępny.")
                 
             # Test info and retake option
             if 'test_date' in user_data:
@@ -1035,7 +1035,7 @@ def show_current_degen_type():
                 st.rerun()
     else:
         notification(
-            "Nie określono jeszcze twojego typu degena. Wykonaj test degena w zakładce powyżej, aby odkryć swój unikalny styl inwestowania i dostosowane rekomendacje.",
+            "Nie określono jeszcze twojego typu neurolidera. Wykonaj test neurolidera w zakładce powyżej, aby odkryć swój unikalny styl przywództwa i dostosowane rekomendacje.",
             type="info"
         )
     
@@ -1127,7 +1127,7 @@ def plot_radar_chart(scores, device_type=None):
     
     # Poprawiona wersja:
     for i, (angle, value) in enumerate(zip(angles_radians, values)):
-        color = DEGEN_TYPES[labels[i]].get("color", "#3498db")
+        color = NEUROLEADER_TYPES[labels[i]].get("color", "#3498db")
         
         # Na telefonach wyświetl tylko nazwę typu bez wyniku
         if device_type == 'mobile':
