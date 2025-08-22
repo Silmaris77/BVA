@@ -19,6 +19,7 @@ from utils.components import (
     xp_level_display, zen_button, notification, leaderboard_item, 
     add_animations_css, data_chart, user_stats_panel, lesson_card
 )
+from views.admin import is_lesson_accessible
 from utils.real_time_updates import live_xp_indicator
 from utils.time_utils import calculate_relative_time
 from utils.lesson_utils import get_lesson_title # Added import
@@ -428,11 +429,15 @@ def show_available_lessons(device_type):
     # Pobierz lekcje
     lessons = load_lessons()
     
-    # Wyświetl pierwsze 3 lekcje używając lesson_card
+    # Wyświetl pierwsze 3 dostępne lekcje używając lesson_card
     lesson_count = 0
     for lesson_id, lesson in lessons.items():
         if lesson_count >= 3:  # Ogranicz do 3 lekcji w widoku głównym
             break
+            
+        # Sprawdź czy lekcja jest dostępna dla użytkownika
+        if not is_lesson_accessible(st.session_state.username, lesson_id):
+            continue  # Pomiń niedostępne lekcje
             
         # Sprawdź czy lekcja jest ukończona
         is_completed = lesson_id in completed_lessons

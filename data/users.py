@@ -48,7 +48,41 @@ def register_user(username, password, password_confirm):
             }
         }
         save_user_data(users_data)
+        
+        # Inicjalizuj dostęp do lekcji dla nowego użytkownika
+        initialize_lesson_access_for_new_user(username)
+        
         return "Registration successful!"
+
+def initialize_lesson_access_for_new_user(username):
+    """Zainicjalizuj domyślny dostęp do lekcji dla nowego użytkownika"""
+    from data.lessons import load_lessons
+    
+    users_data = load_user_data()
+    
+    if username not in users_data:
+        return False
+    
+    if 'lesson_access' not in users_data[username]:
+        lessons = load_lessons()
+        users_data[username]['lesson_access'] = {}
+        
+        # Domyślnie wszystkie lekcje dostępne, ale można to zmienić
+        for lesson_id in lessons.keys():
+            # Specjalne reguły: np. "Wprowadzenie" dostępne zawsze, reszta może być zablokowana
+            if "Wprowadzenie" in lesson_id or "wprowadzenie" in lesson_id.lower():
+                users_data[username]['lesson_access'][lesson_id] = True
+            else:
+                # Dla przykładu: blokuj "Mózg emocjonalny" domyślnie
+                if "Mózg emocjonalny" in lesson_id:
+                    users_data[username]['lesson_access'][lesson_id] = False
+                else:
+                    users_data[username]['lesson_access'][lesson_id] = True
+        
+        save_user_data(users_data)
+        return True
+    
+    return False
 
 def login_user(username, password):
     """Login a user"""

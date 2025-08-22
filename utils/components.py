@@ -861,7 +861,7 @@ def user_stats_panel(username, avatar, degen_type, level, xp, completed_lessons=
 
 def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=None, 
                completed=False, button_text="Rozpocznij", on_click=None, 
-               button_key=None, lesson_id=None, category=None):
+               button_key=None, lesson_id=None, category=None, accessible=True):
     """
     Renders a standardized lesson card for both dashboard and lessons view
     with Material 3 design principles
@@ -890,7 +890,7 @@ def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=Non
     
     # Generate the HTML for the card with Material 3 design
     card_html = f"""
-    <div class="m3-lesson-card {'m3-lesson-card-completed' if completed else ''}">
+    <div class="m3-lesson-card {'m3-lesson-card-completed' if completed else ''} {'m3-lesson-card-inaccessible' if not accessible else ''}">
         <div class="m3-card-content">
             <h3>{title}</h3>
             <div class="m3-lesson-badges">
@@ -904,7 +904,7 @@ def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=Non
             </div>
             <p class="m3-description">{description[:150]}{'...' if len(description) > 150 else ''}</p>
             <p class="m3-completion-status {'m3-completed' if completed else ''}">
-                {'✓ Ukończono' if completed else 'Nieukończono'}
+                {'✓ Ukończono' if completed else ('🔒 Niedostępne' if not accessible else 'Nieukończono')}
             </p>
         </div>
     </div>
@@ -966,6 +966,27 @@ def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=Non
     
     .m3-lesson-card-completed::before {
         background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    }
+    
+    .m3-lesson-card-inaccessible {
+        opacity: 0.6;
+        filter: grayscale(50%);
+        pointer-events: none;
+    }
+    
+    .m3-lesson-card-inaccessible::before {
+        background: linear-gradient(90deg, #999999, #666666);
+    }
+    
+    .m3-lesson-card-inaccessible h3,
+    .m3-lesson-card-inaccessible .m3-description,
+    .m3-lesson-card-inaccessible .m3-completion-status {
+        color: #666666 !important;
+    }
+    
+    .m3-lesson-card-inaccessible .m3-badge {
+        background-color: #999999 !important;
+        color: #ffffff !important;
     }
     
     .m3-card-content {
@@ -1065,7 +1086,8 @@ def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=Non
     if button_key is None and lesson_id is not None:
         button_key = f"lesson_btn_{lesson_id}"
     
-    if zen_button(button_text, key=button_key, use_container_width=True):
+    # Only show clickable button if lesson is accessible
+    if accessible and zen_button(button_text, key=button_key, use_container_width=True):
         if on_click and callable(on_click):
             # If there's a callback function, call it with lesson_id
             if lesson_id:
@@ -1079,6 +1101,7 @@ def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=Non
             if 'quiz_score' in st.session_state:
                 st.session_state.quiz_score = 0
             st.rerun()
+    # No button for inaccessible lessons
 
 def skill_node(name, icon, level, max_level, description="", unlocked=True, cost=0, on_click=None, node_id=None):
     """

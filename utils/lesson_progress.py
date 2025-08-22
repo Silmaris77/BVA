@@ -133,9 +133,16 @@ def award_fragment_xp(lesson_id, fragment_type, xp_amount):
 
 def get_lesson_fragment_progress(lesson_id):
     """Pobierz postęp fragmentów dla danej lekcji"""
-    users_data = load_user_data()
     username = st.session_state.username
     
+    # Sprawdź najpierw session_state, potem plik
+    if hasattr(st.session_state, 'user_data') and st.session_state.user_data:
+        lesson_progress = st.session_state.user_data.get('lesson_progress', {})
+        if lesson_id in lesson_progress:
+            return lesson_progress.get(lesson_id, {})
+    
+    # Fallback do danych z pliku
+    users_data = load_user_data()
     if username in users_data:
         lesson_progress = users_data[username].get('lesson_progress', {})
         return lesson_progress.get(lesson_id, {})

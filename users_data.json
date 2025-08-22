@@ -3,17 +3,535 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": null,
-    "xp": 10,
+    "xp": 309,
+    "degencoins": 299,
+    "level": 1,
+    "joined_date": "2025-08-22",
+    "last_login": "2025-08-23 00:00:04",
+    "completed_lessons": [
+      "0. Wprowadzenie do neuroprzywództwa",
+      "1. Mózg emocjonalny_copy"
+    ],
+    "badges": [
+      "welcome",
+      "first_lesson",
+      "degen_explorer",
+      "pioneer",
+      "speed_learner",
+      "first_badge"
+    ],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "lesson_progress": {
+      "first_lesson_template": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 7,
+        "intro_degencoins": 7,
+        "intro_timestamp": "2025-08-22 16:34:35",
+        "content_xp_awarded": true,
+        "content_completed": true,
+        "content_xp": 45,
+        "content_degencoins": 45,
+        "content_timestamp": "2025-08-22 16:46:42",
+        "summary_xp_awarded": true,
+        "summary_completed": true,
+        "summary_xp": 7,
+        "summary_degencoins": 7,
+        "summary_timestamp": "2025-08-22 16:46:48"
+      },
+      "0. Wprowadzenie do neuroprzywództwa": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 5,
+        "intro_degencoins": 5,
+        "intro_timestamp": "2025-08-22 16:56:20",
+        "content_xp_awarded": true,
+        "content_completed": true,
+        "content_xp": 30,
+        "content_degencoins": 30,
+        "content_timestamp": "2025-08-22 16:56:24",
+        "closing_quiz_xp_awarded": true,
+        "closing_quiz_completed": true,
+        "closing_quiz_xp": 20,
+        "closing_quiz_degencoins": 20,
+        "closing_quiz_timestamp": "2025-08-22 16:58:20",
+        "practical_exercises_xp_awarded": true,
+        "practical_exercises_completed": true,
+        "practical_exercises_xp": 60,
+        "practical_exercises_degencoins": 60,
+        "practical_exercises_timestamp": "2025-08-22 16:58:22",
+        "summary_xp_awarded": true,
+        "summary_completed": true,
+        "summary_xp": 5,
+        "summary_degencoins": 5,
+        "summary_timestamp": "2025-08-22 17:06:40"
+      },
+      "1. Mózg emocjonalny_copy": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 5,
+        "intro_degencoins": 5,
+        "intro_timestamp": "2025-08-22 17:15:05",
+        "content_xp_awarded": true,
+        "content_completed": true,
+        "content_xp": 30,
+        "content_degencoins": 30,
+        "content_timestamp": "2025-08-22 17:15:11",
+        "closing_quiz_xp_awarded": true,
+        "closing_quiz_completed": true,
+        "closing_quiz_xp": 20,
+        "closing_quiz_degencoins": 20,
+        "closing_quiz_timestamp": "2025-08-22 17:15:12",
+        "practical_exercises_xp_awarded": true,
+        "practical_exercises_completed": true,
+        "practical_exercises_xp": 60,
+        "practical_exercises_degencoins": 60,
+        "practical_exercises_timestamp": "2025-08-22 17:15:30",
+        "summary_xp_awarded": true,
+        "summary_completed": true,
+        "summary_xp": 5,
+        "summary_degencoins": 5,
+        "summary_timestamp": "2025-08-22 17:23:45"
+      }
+    },
+    "recent_activities": [
+      {
+        "type": "lesson_completed",
+        "details": {
+          "lesson_id": "1. Mózg emocjonalny_copy"
+        },
+        "timestamp": "2025-08-22T15:23:45.217692+00:00"
+      },
+      {
+        "type": "lesson_completed",
+        "details": {
+          "lesson_id": "0. Wprowadzenie do neuroprzywództwa"
+        },
+        "timestamp": "2025-08-22T15:06:40.408196+00:00"
+      }
+    ],
+    "badge_data": {
+      "badges": {
+        "welcome": {
+          "earned": true,
+          "earned_date": "2025-08-22",
+          "xp_earned": 25,
+          "tier": "bronze",
+          "conditions_met": [
+            "migrated"
+          ],
+          "progress_when_earned": 100,
+          "context": {
+            "migrated": true
+          }
+        },
+        "first_lesson": {
+          "earned": true,
+          "earned_date": "2025-08-22",
+          "xp_earned": 75,
+          "tier": "silver",
+          "conditions_met": [
+            "migrated"
+          ],
+          "progress_when_earned": 100,
+          "context": {
+            "migrated": true
+          }
+        },
+        "degen_explorer": {
+          "earned": true,
+          "earned_date": "2025-08-22",
+          "xp_earned": 150,
+          "tier": "silver",
+          "conditions_met": [
+            "migrated"
+          ],
+          "progress_when_earned": 100,
+          "context": {
+            "migrated": true
+          }
+        },
+        "pioneer": {
+          "earned": true,
+          "earned_date": "2025-08-22",
+          "xp_earned": 500,
+          "tier": "diamond",
+          "conditions_met": [
+            "migrated"
+          ],
+          "progress_when_earned": 100,
+          "context": {
+            "migrated": true
+          }
+        },
+        "speed_learner": {
+          "earned": true,
+          "earned_date": "2025-08-22T17:23:45.252299",
+          "xp_earned": 300,
+          "tier": "silver",
+          "conditions_met": [
+            "main_condition"
+          ],
+          "progress_when_earned": 100,
+          "context": {
+            "lesson_id": "1. Mózg emocjonalny_copy"
+          }
+        },
+        "first_badge": {
+          "earned": true,
+          "earned_date": "2025-08-22T17:23:45.253410",
+          "xp_earned": 25,
+          "tier": "bronze",
+          "conditions_met": [
+            "main_condition"
+          ],
+          "progress_when_earned": 100,
+          "context": {
+            "lesson_id": "1. Mózg emocjonalny_copy"
+          }
+        }
+      },
+      "badge_progress": {
+        "lesson_rookie": {
+          "progress": 40.0,
+          "conditions_status": {
+            "lessons_completed": "2/5"
+          },
+          "last_updated": "2025-08-22T17:23:45.252087",
+          "next_steps": [
+            "Ukończ jeszcze 3 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_apprentice": {
+          "progress": 13.333333333333334,
+          "conditions_status": {
+            "lessons_completed": "2/15"
+          },
+          "last_updated": "2025-08-22T17:23:45.252099",
+          "next_steps": [
+            "Ukończ jeszcze 13 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_scholar": {
+          "progress": 6.666666666666667,
+          "conditions_status": {
+            "lessons_completed": "2/30"
+          },
+          "last_updated": "2025-08-22T17:23:45.252107",
+          "next_steps": [
+            "Ukończ jeszcze 28 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_master": {
+          "progress": 4.0,
+          "conditions_status": {
+            "lessons_completed": "2/50"
+          },
+          "last_updated": "2025-08-22T17:23:45.252117",
+          "next_steps": [
+            "Ukończ jeszcze 48 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "psychology_expert": {
+          "progress": 30.9,
+          "conditions_status": {
+            "xp_progress": "309/1000"
+          },
+          "last_updated": "2025-08-22T17:23:45.253149",
+          "next_steps": [
+            "Zdobądź jeszcze 691 XP"
+          ],
+          "estimated_completion": null
+        },
+        "xp_collector": {
+          "progress": 30.9,
+          "conditions_status": {
+            "xp_progress": "309/1000"
+          },
+          "last_updated": "2025-08-22T17:23:45.253167",
+          "next_steps": [
+            "Zdobądź jeszcze 691 XP"
+          ],
+          "estimated_completion": null
+        },
+        "xp_master": {
+          "progress": 6.18,
+          "conditions_status": {
+            "xp_progress": "309/5000"
+          },
+          "last_updated": "2025-08-22T17:23:45.253183",
+          "next_steps": [
+            "Zdobądź jeszcze 4691 XP"
+          ],
+          "estimated_completion": null
+        },
+        "badge_collector": {
+          "progress": 40.0,
+          "conditions_status": {
+            "badges_collected": "4/10"
+          },
+          "last_updated": "2025-08-22T17:23:45.253476",
+          "next_steps": [
+            "Zdobądź jeszcze 6 odznak"
+          ],
+          "estimated_completion": null
+        },
+        "profile_complete": {
+          "progress": 0.0,
+          "conditions_status": {
+            "degen_type": false,
+            "avatar": false,
+            "theme": false
+          },
+          "last_updated": "2025-08-22T17:23:45.251950",
+          "next_steps": [
+            "Uzupełnij: degen_type, avatar, theme"
+          ],
+          "estimated_completion": null
+        },
+        "first_degen_test": {
+          "progress": 0,
+          "conditions_status": {
+            "test_taken": false,
+            "has_degen_type": false
+          },
+          "last_updated": "2025-08-22T17:23:45.252066",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "quiz_perfectionist": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.252139",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "login_streak_3": {
+          "progress": 0.0,
+          "conditions_status": {
+            "streak_progress": "0/3"
+          },
+          "last_updated": "2025-08-22T17:23:45.252351",
+          "next_steps": [
+            "Kontynuuj streak przez 3 dni"
+          ],
+          "estimated_completion": null
+        },
+        "login_streak_7": {
+          "progress": 0.0,
+          "conditions_status": {
+            "streak_progress": "0/3"
+          },
+          "last_updated": "2025-08-22T17:23:45.252374",
+          "next_steps": [
+            "Kontynuuj streak przez 3 dni"
+          ],
+          "estimated_completion": null
+        },
+        "login_streak_30": {
+          "progress": 0.0,
+          "conditions_status": {
+            "streak_progress": "0/3"
+          },
+          "last_updated": "2025-08-22T17:23:45.252388",
+          "next_steps": [
+            "Kontynuuj streak przez 3 dni"
+          ],
+          "estimated_completion": null
+        },
+        "daily_mission_hero": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.252406",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "weekend_scholar": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.252448",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "night_owl": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.252517",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "early_bird": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253055",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "zen_master": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253099",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "market_analyst": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253109",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "strategy_guru": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253122",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "multi_degen": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253214",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "self_aware": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253235",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "degen_king": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253274",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "community_member": {
+          "progress": 0,
+          "conditions_status": {
+            "community_joined": false
+          },
+          "last_updated": "2025-08-22T17:23:45.253308",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "helpful_friend": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253330",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "mentor": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253360",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "influencer": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253371",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "badge_master": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253525",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "achievement_hunter": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253723",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "legend": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253822",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "dedicated_student": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253851",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "secret_discoverer": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253859",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "midnight_learner": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-08-22T17:23:45.253964",
+          "next_steps": [],
+          "estimated_completion": null
+        }
+      },
+      "badge_stats": {
+        "total_earned": 6,
+        "categories_completed": [],
+        "current_streak": 0,
+        "highest_tier_earned": "diamond",
+        "total_badge_xp": 1075,
+        "last_badge_earned": {
+          "badge_id": "first_badge",
+          "earned_date": "2025-08-22T17:23:45.253410"
+        },
+        "earning_rate": 0.0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "2. Chemia mózgu": false,
+      "3. Model SCARF": false,
+      "4. Model SEEDS": false,
+      "lesson_template": false
+    }
+  },
+  "admin": {
+    "user_id": "4c552312-1787-4a02-a06f-b6538e83adb7",
+    "password": "admin",
+    "degen_type": null,
+    "xp": 0,
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-08-22 15:44:26",
+    "last_login": "2025-08-22 23:39:50",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
     "inspirations": {
       "read": [],
       "favorites": []
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "lesson_template": true
     }
   }
 }

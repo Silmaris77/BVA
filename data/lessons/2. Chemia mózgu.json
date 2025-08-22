@@ -1,0 +1,153 @@
+{
+  "_template_info": {
+    "version": "1.0",
+    "description": "Standard lesson template for BrainventureAcademy",
+    "usage": "Copy this template and replace placeholder values with actual content",
+    "last_updated": "2024-01-20"
+  },
+  
+  "id": "B[BLOCK]C[CATEGORY]L[LESSON]",
+  "title": "Chemia mózgu",
+  "description": "[BRIEF_DESCRIPTION_OF_LESSON_CONTENT]",
+  "tag": "[CATEGORY_TAG]",
+  "xp_reward": 100,
+  "difficulty": "advanced",
+  
+  "intro": {
+    "main": "[MAIN_INTRODUCTION_CONTENT_HTML]",
+    "case_study": "[OPTIONAL_OPENING_CASE_STUDY_HTML]",
+    "quiz_samodiagnozy": {
+      "title": "Quiz Samodiagnozy",
+      "description": "Sprawdź swoją wiedzę przed rozpoczęciem lekcji - to narzędzie samorefleksji, nie ma tu dobrych ani złych odpowiedzi",
+      "questions": [
+        {
+          "question": "[QUESTION_TEXT]",
+          "options": [
+            "[OPTION_1]",
+            "[OPTION_2]",
+            "[OPTION_3]",
+            "[OPTION_4]"
+          ],
+          "correct_answer": 0,
+          "explanation": "[EXPLANATION_OF_CORRECT_ANSWER]"
+        }
+      ]
+    }
+  },
+  
+  "sections": {
+    "learning": {
+      "sections": [
+        {
+          "title": "[SECTION_TITLE]",
+          "content": "[SECTION_CONTENT_HTML]"
+        },
+        {
+          "title": "[SECTION_TITLE_2]",
+          "content": "[SECTION_CONTENT_HTML_2]"
+        }
+      ]
+    },
+    
+    "practical_exercises": {
+      "exercises": {
+        "title": "Ćwiczenia",
+        "description": "Zastosuj wiedzę w praktyce",
+        "sections": [
+          {
+            "title": "[EXERCISE_TITLE]",
+            "content": "[EXERCISE_CONTENT_HTML]"
+          }
+        ]
+      },
+      "closing_quiz": {
+        "title": "Quiz końcowy",
+        "description": "Sprawdź, ile zapamiętałeś z tej lekcji",
+        "questions": [
+          {
+            "question": "[QUESTION_TEXT]",
+            "options": [
+              "[OPTION_1]",
+              "[OPTION_2]",
+              "[OPTION_3]",
+              "[OPTION_4]"
+            ],
+            "correct_answer": 0,
+            "explanation": "[EXPLANATION_OF_CORRECT_ANSWER]"
+          }
+        ]
+      }
+    }
+  },
+  
+  "summary": {
+    "main": "[SUMMARY_CONTENT_HTML]",
+    "case_study": "[FINAL_CASE_STUDY_REFLECTION_HTML]",
+    "mind_map": {
+      "central_node": {
+        "id": "main_topic",
+        "label": "[CENTRAL_TOPIC]",
+        "size": 30,
+        "color": "#FF6B6B",
+        "font_size": 16
+      },
+      "categories": [
+        {
+          "id": "category_1",
+          "label": "[CATEGORY_1_LABEL]",
+          "size": 20,
+          "color": "#4ECDC4",
+          "font_size": 12,
+          "details": [
+            {
+              "id": "detail_1",
+              "label": "[DETAIL_1_LABEL]",
+              "size": 12,
+              "color": "#DDA0DD",
+              "font_size": 10
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "main_topic",
+          "to": "category_1"
+        }
+      ],
+      "config": {
+        "width": 800,
+        "height": 600,
+        "physics": true,
+        "directed": false,
+        "hierarchical": false
+      }
+    },
+    "key_points": [
+      "[KEY_POINT_1]",
+      "[KEY_POINT_2]",
+      "[KEY_POINT_3]"
+    ],
+    "next_steps": [
+      "[ACTION_STEP_1]",
+      "[ACTION_STEP_2]",
+      "[ACTION_STEP_3]"
+    ],
+    "resources": [
+      {
+        "title": "[RESOURCE_TITLE]",
+        "url": "[RESOURCE_URL]",
+        "type": "article"
+      }
+    ]
+  },
+  
+  "estimated_time": "20-25 minutes",
+  "learning_objectives": [
+    "[OBJECTIVE_1]",
+    "[OBJECTIVE_2]",
+    "[OBJECTIVE_3]"
+  ],
+  "prerequisites": ["[REQUIRED_LESSON_ID]"],
+  "tags": ["[TAG_1]", "[TAG_2]"]
+}

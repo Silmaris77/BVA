@@ -22,7 +22,7 @@ def check_admin_auth():
         st.error("Musisz być zalogowany, aby uzyskać dostęp do panelu administratora.")
         return False
        
-    admin_users = ["admin", "zenmaster", "Anna"]  # Dodaj swój login
+    admin_users = ["admin", "zenmaster", "Anna", "Max"]  # Dodaj swój login
     if st.session_state.get('username') not in admin_users:
         st.error("Nie masz uprawnień do przeglądania panelu administratora.")
         return False
@@ -174,7 +174,7 @@ def show_admin_dashboard():
         st.rerun()
     
     # Zakładki główne panelu administratora
-    admin_tabs = st.tabs(["Przegląd", "Użytkownicy", "Lekcje", "Testy", "Zarządzanie"])
+    admin_tabs = st.tabs(["Przegląd", "Użytkownicy", "Lekcje", "Dostępność", "Testy", "Zarządzanie"])
     
     # 1. Zakładka Przegląd
     with admin_tabs[0]:
@@ -383,8 +383,12 @@ def show_admin_dashboard():
         else:
             st.info("Brak danych o ukończonych lekcjach.")
     
-    # 4. Zakładka Testy
+    # 4. Zakładka Dostępność lekcji
     with admin_tabs[3]:
+        manage_lesson_access()
+    
+    # 5. Zakładka Testy
+    with admin_tabs[4]:
         st.subheader("Wyniki testów Degena")
         
         # Pobierz dane o użytkownikach
@@ -437,8 +441,8 @@ def show_admin_dashboard():
         else:
             st.info("Brak danych o wynikach testów.")
     
-    # 5. Zakładka Zarządzanie
-    with admin_tabs[4]:
+    # 6. Zakładka Zarządzanie
+    with admin_tabs[5]:
         st.subheader("Zarządzanie użytkownikami")
         
         # Pobierz dane
@@ -537,3 +541,158 @@ def show_admin_dashboard():
                 file_name=f"zen_degen_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                 mime="application/json"
             )
+
+def manage_lesson_access():
+    """Panel zarządzania dostępnością lekcji dla użytkowników"""
+    st.subheader("🔐 Zarządzanie dostępnością lekcji")
+    
+    users_data = load_user_data()
+    lessons = load_lessons()
+    
+    if not users_data:
+        st.warning("Brak danych użytkowników.")
+        return
+    
+    if not lessons:
+        st.warning("Brak danych lekcji.")
+        return
+    
+    # Wybór użytkownika
+    usernames = list(users_data.keys())
+    selected_user = st.selectbox("Wybierz użytkownika:", usernames)
+    
+    if selected_user:
+        st.write(f"**Zarządzanie dostępem dla: {selected_user}**")
+        
+        # Sprawdź czy użytkownik ma już dane o dostępności lekcji
+        if 'lesson_access' not in users_data[selected_user]:
+            users_data[selected_user]['lesson_access'] = {}
+        
+        lesson_access = users_data[selected_user]['lesson_access']
+        
+        # Wyświetl wszystkie lekcje z checkboxami
+        st.write("**Dostępne lekcje:**")
+        
+        changes_made = False
+        
+        # Utwórz kolumny dla lepszego układu
+        col1, col2 = st.columns([3, 1])
+        
+        for lesson_id, lesson_data in lessons.items():
+            lesson_title = lesson_data.get('title', lesson_id)
+            
+            with col1:
+                st.write(f"📚 {lesson_title}")
+            
+            with col2:
+                # Sprawdź aktualny status (domyślnie True jeśli nie ustawiono)
+                current_status = lesson_access.get(lesson_id, True)
+                
+                # Checkbox do zmiany statusu
+                new_status = st.checkbox(
+                    "Dostępna", 
+                    value=current_status,
+                    key=f"lesson_access_{selected_user}_{lesson_id}"
+                )
+                
+                # Sprawdź czy nastąpiła zmiana
+                if new_status != current_status:
+                    lesson_access[lesson_id] = new_status
+                    changes_made = True
+        
+        # Przycisk zapisywania zmian
+        if changes_made:
+            st.warning("⚠️ Masz niezapisane zmiany!")
+        
+        if st.button("💾 Zapisz zmiany dostępności", type="primary"):
+            try:
+                users_data[selected_user]['lesson_access'] = lesson_access
+                save_user_data(users_data)
+                st.success(f"✅ Zapisano zmiany dostępności lekcji dla użytkownika {selected_user}")
+                time.sleep(1)
+                st.rerun()
+            except Exception as e:
+                st.error(f"❌ Błąd podczas zapisywania: {str(e)}")
+        
+        # Pokaż aktualny status dostępności
+        st.write("**Aktualny status dostępności:**")
+        accessible_lessons = [lesson_id for lesson_id, access in lesson_access.items() if access]
+        blocked_lessons = [lesson_id for lesson_id, access in lesson_access.items() if not access]
+        
+        if accessible_lessons:
+            st.write("✅ **Dostępne lekcje:**")
+            for lesson_id in accessible_lessons:
+                lesson_title = lessons.get(lesson_id, {}).get('title', lesson_id)
+                st.write(f"  • {lesson_title}")
+        
+        if blocked_lessons:
+            st.write("🔒 **Zablokowane lekcje:**")
+            for lesson_id in blocked_lessons:
+                lesson_title = lessons.get(lesson_id, {}).get('title', lesson_id)
+                st.write(f"  • {lesson_title}")
+        
+        # Szybkie akcje
+        st.write("**Szybkie akcje:**")
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            if st.button("🔓 Odblokuj wszystkie lekcje"):
+                for lesson_id in lessons.keys():
+                    lesson_access[lesson_id] = True
+                users_data[selected_user]['lesson_access'] = lesson_access
+                save_user_data(users_data)
+                st.success("Odblokowano wszystkie lekcje!")
+                time.sleep(1)
+                st.rerun()
+        
+        with col2:
+            if st.button("🔒 Zablokuj wszystkie lekcje"):
+                for lesson_id in lessons.keys():
+                    lesson_access[lesson_id] = False
+                users_data[selected_user]['lesson_access'] = lesson_access
+                save_user_data(users_data)
+                st.success("Zablokowano wszystkie lekcje!")
+                time.sleep(1)
+                st.rerun()
+
+def get_lesson_access_status(username, lesson_id):
+    """Sprawdź czy użytkownik ma dostęp do lekcji"""
+    users_data = load_user_data()
+    
+    if username not in users_data:
+        return True  # Domyślnie dostępne dla nowych użytkowników
+    
+    lesson_access = users_data[username].get('lesson_access', {})
+    return lesson_access.get(lesson_id, True)  # Domyślnie dostępne jeśli nie ustawiono
+
+def is_lesson_accessible(username, lesson_id):
+    """Wrapper function dla łatwiejszego użycia"""
+    return get_lesson_access_status(username, lesson_id)
+
+def initialize_lesson_access_for_user(username):
+    """Zainicjalizuj domyślny dostęp do lekcji dla nowego użytkownika"""
+    users_data = load_user_data()
+    
+    if username not in users_data:
+        return False
+    
+    if 'lesson_access' not in users_data[username]:
+        lessons = load_lessons()
+        users_data[username]['lesson_access'] = {}
+        
+        # Domyślnie wszystkie lekcje dostępne, ale można to zmienić
+        for lesson_id in lessons.keys():
+            # Specjalne reguły: np. "Wprowadzenie" dostępne zawsze, reszta może być zablokowana
+            if "Wprowadzenie" in lesson_id or "wprowadzenie" in lesson_id.lower():
+                users_data[username]['lesson_access'][lesson_id] = True
+            else:
+                # Dla przykładu: blokuj "Mózg emocjonalny" domyślnie
+                if "Mózg emocjonalny" in lesson_id:
+                    users_data[username]['lesson_access'][lesson_id] = False
+                else:
+                    users_data[username]['lesson_access'][lesson_id] = True
+        
+        save_user_data(users_data)
+        return True
+    
+    return False
