@@ -1,213 +1,87 @@
 {
   "categories": {
-    
+    "neuroprzywodztwo": {
+      "name": "Neuroprzywództwo",
+      "description": "Nowoczesne podejście do przywództwa oparte na neurobiologii",
+      "color": "#2E86AB"
+    },
+    "neurobiologia": {
+      "name": "Neurobiologia",
+      "description": "Fascynujące fakty o działaniu mózgu i układu nerwowego",
+      "color": "#7C3AED"
+    },
+    "praktyki": {
+      "name": "Praktyki",
+      "description": "Praktyczne poradniki i techniki oparte na neuronaukach",
+      "color": "#059669"
+    }
   },
   "inspirations": [
-    
-  ],
-  "featured": [
-    
-  ]
-}
     {
-      "id": "motywacja_degen_power",
-      "title": "Degen Power - Jak Zamienić FOMO w Siłę",
-      "description": "FOMO może być Twoją supersiłą! Naucz się, jak przekuć strach przed utratą szansy w motywację do działania.",
-      "category": "motywacja",
-      "tags": ["FOMO", "crypto", "działanie", "motywacja"],
+      "id": "forrest_gump_neuroleadership",
+      "title": "Co Forrest Gump wiedział o neuroprzywództwie?",
+      "description": "Odkryj, jak proste działania mogą przekształcić Twój mózg i styl przywództwa. Historia o tym, jak bieganie stało się metaforą efektywnego zarządzania sobą i zespołem.",
+      "category": "neuroprzywodztwo",
+      "tags": ["neurobiologia", "przywództwo", "bieganie", "mindfulness", "rozwój"],
+      "reading_time": 8,
+      "content_path": "blog/forrest_gump_neuroleadership.md",
+      "author": "BrainVenture Academy",
+      "difficulty": "intermediate",
+      "featured": true
+    },
+    {
+      "id": "stress_decision_making",
+      "title": "Wpływ stresu na podejmowanie decyzji biznesowych",
+      "description": "Najnowsze badania neuronaukowe o tym, jak stres wpływa na jakość decyzji biznesowych. Dowiedz się, jak chroniczny stres zmienia mózg i poznaj praktyczne strategie zarządzania.",
+      "category": "neuroprzywodztwo",
+      "tags": ["stres", "decyzje", "neurobiologia", "zarządzanie", "kortyzol"],
+      "reading_time": 10,
+      "content_path": "blog/stress_decision_making.md",
+      "author": "Dr Anna Kowalska",
+      "difficulty": "intermediate",
+      "featured": true
+    },
+    {
+      "id": "chewing_gum_brain",
+      "title": "Bystrzak w mgnieniu oka??? To proste!!!",
+      "description": "Czy żucie gumy może zwiększyć wydajność mózgu? Poznaj fascynujące badania profesora Serge'a Onypera i dowiedz się, jak 5 minut może dać ci przewagę intelektualną.",
+      "category": "neurobiologia",
+      "tags": ["wydajność", "koncentracja", "badania", "mózg", "hack"],
       "reading_time": 5,
-      "content_path": "motivation/degen_power.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "intermediate",
-      "featured": true
-    },
-    {
-      "id": "produktywnosc_deep_work",
-      "title": "Deep Work w Erze Crypto - Koncentracja mimo Chartów",
-      "description": "Jak utrzymać głęboką koncentrację i produktywność, gdy market nigdy nie śpi? Praktyczne techniki dla degen'ów.",
-      "category": "produktywnosc",
-      "tags": ["koncentracja", "produktywność", "crypto", "focus"],
-      "reading_time": 8,
-      "content_path": "productivity/deep_work_crypto.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "intermediate",
-      "featured": false
-    },
-    {
-      "id": "sukces_compound_effect",
-      "title": "Efekt Złożony - Małe Kroki, Wielkie Rezultaty",
-      "description": "Dlaczego konsystentne, małe działania są potężniejsze niż sporadyczne, wielkie wysiłki. Matematyka sukcesu.",
-      "category": "sukces",
-      "tags": ["konsystencja", "nawyki", "rozwój", "wytrwałość"],
-      "reading_time": 6,
-      "content_path": "success/compound_effect.md",
-      "author": "ZenDegen Academy",
+      "content_path": "facts/chewing_gum_brain.md",
+      "author": "BrainVenture Academy",
       "difficulty": "beginner",
-      "featured": true
-    },
-    {
-      "id": "rozwoj_comfort_zone",
-      "title": "Zona Komfortu to Pułapka - Jak z Niej Wyjść",
-      "description": "Strefa komfortu może wydawać się bezpieczna, ale to tam umiera potencjał. Poznaj strategie bezpiecznego, ale skutecznego wychodzenia poza.",
-      "category": "rozwoj",
-      "tags": ["strefa komfortu", "rozwój", "odwaga", "zmiany"],
-      "reading_time": 9,
-      "content_path": "development/comfort_zone.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "intermediate",
       "featured": false
     },
     {
-      "id": "finanse_risk_management",
-      "title": "Risk Management dla Degen'ów - Sztuka Mądrego Ryzyka",
-      "description": "Jak być degen'em i nie stracić wszystkiego? Poznaj zasady zarządzania ryzykiem, które uratują Twój portfel.",
-      "category": "finanse",
-      "tags": ["ryzyko", "inwestycje", "crypto", "zarządzanie"],
-      "reading_time": 10,
-      "content_path": "finance/risk_management.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "advanced",
-      "featured": false
-    },
-    {
-      "id": "zdrowie_trader_wellness",
-      "title": "Wellness dla Trader'ów - Zdrowie w Świecie 24/7",
-      "description": "Jak zadbać o zdrowie fizyczne i psychiczne, gdy żyjesz w rytmie globalnych rynków? Przewodnik wellness dla aktywnych trader'ów.",
-      "category": "zdrowie",
-      "tags": ["zdrowie", "wellness", "trading", "równowaga"],
+      "id": "shower_ideas",
+      "title": "Dlaczego najlepsze pomysły przychodzą pod prysznicem?",
+      "description": "Odkryj naukowe podstawy 'efektu prysznica' i dowiedz się, jak świadomie wykorzystać tryb domyślny mózgu (DMN) do zwiększenia kreatywności i rozwiązywania problemów.",
+      "category": "neurobiologia",
+      "tags": ["kreatywność", "DMN", "pomysły", "neurobiologia", "innowacje"],
       "reading_time": 7,
-      "content_path": "health/trader_wellness.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "beginner",
-      "featured": false
-    },
-    {
-      "id": "relacje_networking_web3",
-      "title": "Networking w Web3 - Budowanie Relacji w Decentralizowanym Świecie",
-      "description": "Jak budować autentyczne relacje biznesowe w świecie Web3? Od Discord'a po Twitter - przewodnik po networking'u przyszłości.",
-      "category": "relacje",
-      "tags": ["networking", "web3", "relacje", "społeczność"],
-      "reading_time": 8,
-      "content_path": "relationships/web3_networking.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "intermediate",
-      "featured": false
-    },
-    {
-      "id": "finanse_style_inwestycyjne",
-      "title": "Style inwestycyjne",
-      "description": "Poznaj różne style inwestowania - od konserwatywnego value investing po agresywne growth investing. Dowiedz się, który styl najlepiej pasuje do Twojej osobowości i celów finansowych.",
-      "category": "finanse",
-      "tags": ["inwestycje", "style", "strategie", "portfel"],
-      "reading_time": 12,
-      "content_path": "finance/investment_styles.md",
-      "author": "ZenDegen Academy",
+      "content_path": "facts/shower_ideas.md",
+      "author": "BrainVenture Academy",
       "difficulty": "intermediate",
       "featured": true
     },
     {
-      "id": "mindset_zen_degen",
-      "title": "Zen Degen - Mistyka spokoju w chaosie rynku",
-      "description": "Poznaj filozofię Zen Degena, który znajdował równowagę i spokój nawet w najbardziej zmiennych warunkach rynkowych. Naucz się kontrolować emocje i podejmować świadome decyzje.",
-      "category": "mindset",
-      "tags": ["zen", "spokój", "emocje", "świadomość", "równowaga"],
-      "reading_time": 10,
-      "content_path": "mindset/zen_degen.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "intermediate",
-      "featured": true
-    },
-    {
-      "id": "motywacja_yolo_degen",
-      "title": "YOLO Degen - Siła intuicji i odwagi",
-      "description": "Odkryj sekret YOLO Degena - dynamicznego inwestora, który nie boi się podejmować śmiałych decyzji. Naucz się wykorzystywać intuicję, zachowując kontrolę nad ryzykiem.",
-      "category": "motywacja",
-      "tags": ["yolo", "odwaga", "intuicja", "dynamizm", "ryzyko"],
-      "reading_time": 8,
-      "content_path": "motivation/yolo_degen.md",
-      "author": "ZenDegen Academy",
+      "id": "stress_reduction_techniques",
+      "title": "Techniki redukcji stresu oparte na neuronaukach",
+      "description": "Praktyczny poradnik z technikami oddechowymi i mindfulness, które bezpośrednio wpływają na układ parasympatyczny. Naucz się skutecznie zarządzać stresem w oparciu o najnowsze badania.",
+      "category": "praktyki",
+      "tags": ["stres", "mindfulness", "oddech", "praktyki", "poradnik"],
+      "reading_time": 15,
+      "content_path": "tutorials/stress_reduction.md",
+      "author": "BrainVenture Academy",
       "difficulty": "beginner",
       "featured": true
-    },
-    {
-      "id": "mindset_emo_degen",
-      "title": "Emo Degen - Transformacja emocji w siłę",
-      "description": "Zrozum psychologię Emo Degena i naucz się, jak przekształcić intensywne emocje związane z inwestowaniem w narzędzie sukcesu. Emocje mogą być Twoją supermocą!",
-      "category": "mindset",
-      "tags": ["emocje", "psychologia", "intensywność", "transformacja"],
-      "reading_time": 9,
-      "content_path": "mindset/emo_degen.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "intermediate",
-      "featured": false
-    },
-    {
-      "id": "finanse_strategist_degen",
-      "title": "Strategist Degen - Sztuka planowania i dyscypliny",
-      "description": "Wejdź do świata Strategist Degena - mistrza planowania i konsekwencji. Naucz się opracowywać precyzyjne strategie inwestycyjne i trzymać się ich w każdych warunkach.",
-      "category": "finanse",
-      "tags": ["strategia", "planowanie", "dyscyplina", "metodyka"],
-      "reading_time": 11,
-      "content_path": "finance/strategist_degen.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "advanced",
-      "featured": false
-    },
-    {
-      "id": "rozwoj_mad_scientist_degen",
-      "title": "Mad Scientist Degen - Laboratorium innowacji",
-      "description": "Poznaj filozofię Mad Scientist Degena - eksperymentatora, który testuje niestandardowe rozwiązania. Naucz się łączyć innowacyjność z kontrolowanym zarządzaniem ryzykiem.",
-      "category": "rozwoj",
-      "tags": ["innowacje", "eksperymenty", "analiza", "badania"],
-      "reading_time": 10,
-      "content_path": "development/mad_scientist_degen.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "advanced",
-      "featured": false
-    },
-    {
-      "id": "finanse_spreadsheet_degen",
-      "title": "Spreadsheet Degen - Władca danych i analiz",
-      "description": "Odkryj moc Spreadsheet Degena - inwestora, który opiera każdą decyzję na twardych danych. Naucz się tworzyć modele analityczne i podejmować decyzje bez wpływu emocji.",
-      "category": "finanse",
-      "tags": ["dane", "analiza", "modele", "excel", "matematyka"],
-      "reading_time": 12,
-      "content_path": "finance/spreadsheet_degen.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "advanced",
-      "featured": false
-    },
-    {
-      "id": "rozwoj_meta_degen",
-      "title": "Meta Degen - Mistrz samoświadomości",
-      "description": "Zrozum podejście Meta Degena - inwestora, który analizuje swoje własne procesy myślowe. Naucz się ciągłego doskonalenia i adaptowania strategii do zmieniających się warunków.",
-      "category": "rozwoj",
-      "tags": ["samoświadomość", "meta-analiza", "doskonalenie", "adaptacja"],
-      "reading_time": 9,
-      "content_path": "development/meta_degen.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "intermediate",
-      "featured": false
-    },
-    {
-      "id": "motywacja_hype_degen",
-      "title": "Hype Degen - Surfing na fali trendów",
-      "description": "Poznaj sekret Hype Degena w umiejętnym wykorzystywaniu trendów społecznościowych. Naucz się wcześnie wykrywać trendy, zachowując jednocześnie krytyczne myślenie.",
-      "category": "motywacja",
-      "tags": ["trendy", "społeczność", "hype", "social media", "influencerzy"],
-      "reading_time": 8,
-      "content_path": "motivation/hype_degen.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "beginner",
-      "featured": false
     }
   ],
   "featured": [
-    "mindset_milionaire_1",
-    "motywacja_degen_power",
-    "sukces_compound_effect",
-    "finanse_style_inwestycyjne",
-    "mindset_zen_degen",
-    "motywacja_yolo_degen"
+    "forrest_gump_neuroleadership",
+    "stress_decision_making",
+    "shower_ideas",
+    "stress_reduction_techniques"
   ]
 }
