@@ -1,27 +1,14 @@
 {
   "categories": {
-    "mindset": "💭 Mindset",
-    "motywacja": "🔥 Motywacja",
-    "sukces": "🏆 Sukces",
-    "produktywnosc": "⚡ Produktywność",
-    "rozwoj": "🌱 Rozwój Osobisty",
-    "finanse": "💰 Finanse",
-    "zdrowie": "💪 Zdrowie",
-    "relacje": "🤝 Relacje"
+    
   },
   "inspirations": [
-    {
-      "id": "mindset_milionaire_1",
-      "title": "Myślenie Milionera - 5 Kluczowych Zasad",
-      "description": "Poznaj fundamentalne różnice w myśleniu między osobami bogatymi a biednymi. Te 5 zasad zmieni Twoje podejście do pieniędzy i sukcesu.",
-      "category": "mindset",
-      "tags": ["pieniądze", "bogactwo", "myślenie", "sukces"],
-      "reading_time": 7,
-      "content_path": "mindset/milionaire_mindset.md",
-      "author": "ZenDegen Academy",
-      "difficulty": "beginner",
-      "featured": true
-    },
+    
+  ],
+  "featured": [
+    
+  ]
+}
     {
       "id": "motywacja_degen_power",
       "title": "Degen Power - Jak Zamienić FOMO w Siłę",
