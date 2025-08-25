@@ -230,7 +230,7 @@ def show_stats_section(user_data, device_type):
     # 5 kart statystyk
     stats = [
         {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change},
-        {"icon": "🪙", "value": f"{degencoins}", "label": "DegenCoins", "change": degencoins_change},
+        {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change},
         {"icon": "⭐", "value": f"{level}", "label": "Poziom", "change": level_change},
         {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change},
         {"icon": "🔥", "value": f"{streak}", "label": "Aktualna passa", "change": streak_change}

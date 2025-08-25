@@ -76,12 +76,90 @@
       "author": "BrainVenture Academy",
       "difficulty": "beginner",
       "featured": true
+    },
+    {
+      "id": "neuroanalityk_guide",
+      "title": "Neuroanalityk: Mistrz Wyczuwania Zagrożeń",
+      "description": "Kompleksowy przewodnik po typie neurolidera, który charakteryzuje się głęboką analizą i umiejętnością przewidywania problemów. Poznaj mocne strony, wyzwania i strategie rozwoju Neuroanalityka.",
+      "category": "neuroprzywodztwo",
+      "tags": ["neuroanalityk", "przywództwo", "analiza", "podejmowanie decyzji", "zarządzanie ryzykiem"],
+      "reading_time": 12,
+      "content_path": "blog/neuroanalityk_guide.md",
+      "author": "BrainVenture Academy",
+      "difficulty": "intermediate",
+      "featured": true
+    },
+    {
+      "id": "neuroreaktor_guide",
+      "title": "Neuroreaktor: Mistrz Błyskawicznych Reakcji",
+      "description": "Poznaj typ neurolidera, który prosperuje w kryzysie i potrafi podejmować błyskawiczne decyzje. Dowiedz się jak wykorzystać energię Neuroreaktora i zarządzać impulsywnością.",
+      "category": "neuroprzywodztwo",
+      "tags": ["neuroreaktor", "kryzys", "reakcje", "impulsywność", "zarządzanie stresem"],
+      "reading_time": 10,
+      "content_path": "blog/neuroreaktor_guide.md",
+      "author": "BrainVenture Academy",
+      "difficulty": "intermediate",
+      "featured": true
+    },
+    {
+      "id": "neurobalanser_guide",
+      "title": "Neurobalanser: Mistrz Mądrej Równowagi",
+      "description": "Odkryj typ neurolidera, który łączy logikę z empatią i potrafi integrować różne perspektywy. Naucz się jak podejmować zbalansowane decyzje i unikać paraliżu wyboru.",
+      "category": "neuroprzywodztwo",
+      "tags": ["neurobalanser", "równowaga", "podejmowanie decyzji", "perspektywy", "integracja"],
+      "reading_time": 11,
+      "content_path": "blog/neurobalanser_guide.md",
+      "author": "BrainVenture Academy",
+      "difficulty": "intermediate",
+      "featured": true
+    },
+    {
+      "id": "neuroempata_guide",
+      "title": "Neuroempata: Mistrz Budowania Więzi",
+      "description": "Przewodnik po typie neurolidera, który stawia ludzi w centrum uwagi. Poznaj jak wykorzystać empatię w przywództwie i jednocześnie zachować obiektywizm biznesowy.",
+      "category": "neuroprzywodztwo",
+      "tags": ["neuroempata", "empatia", "relacje", "zespół", "budowanie więzi"],
+      "reading_time": 13,
+      "content_path": "blog/neuroempata_guide.md",
+      "author": "BrainVenture Academy",
+      "difficulty": "intermediate",
+      "featured": true
+    },
+    {
+      "id": "neuroinnowator_guide",
+      "title": "Neuroinnowator: Mistrz Nawigacji w Zmianach",
+      "description": "Poznaj typ neurolidera, który prosperuje w niepewności i przekształca chaos w innowacje. Dowiedz się jak skutecznie zarządzać zmianami i rozwijać kulturę eksperymentowania.",
+      "category": "neuroprzywodztwo",
+      "tags": ["neuroinnowator", "innowacje", "zmiany", "adaptacja", "eksperymentowanie"],
+      "reading_time": 14,
+      "content_path": "blog/neuroinnowator_guide.md",
+      "author": "BrainVenture Academy",
+      "difficulty": "intermediate",
+      "featured": true
+    },
+    {
+      "id": "neuroinspirator_guide",
+      "title": "Neuroinspirator: Mistrz Charyzmatycznego Przywództwa",
+      "description": "Kompleksowy przewodnik po typie neurolidera obdarzonym naturalną charyzmą. Naucz się jak inspirować zespół i jednocześnie budować jego autonomię.",
+      "category": "neuroprzywodztwo",
+      "tags": ["neuroinspirator", "charyzma", "inspiracja", "motywacja", "przywództwo"],
+      "reading_time": 15,
+      "content_path": "blog/neuroinspirator_guide.md",
+      "author": "BrainVenture Academy",
+      "difficulty": "intermediate",
+      "featured": true
     }
   ],
   "featured": [
     "forrest_gump_neuroleadership",
     "stress_decision_making",
     "shower_ideas",
-    "stress_reduction_techniques"
+    "stress_reduction_techniques",
+    "neuroanalityk_guide",
+    "neuroreaktor_guide",
+    "neurobalanser_guide",
+    "neuroempata_guide",
+    "neuroinnowator_guide",
+    "neuroinspirator_guide"
   ]
 }
