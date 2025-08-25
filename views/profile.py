@@ -1090,6 +1090,9 @@ def plot_radar_chart(scores, device_type=None):
     
     # Tworzenie i konfiguracja wykresu
     fig, ax = plt.subplots(figsize=fig_size, subplot_kw=dict(polar=True))
+    # Cast to PolarAxes for type checking (ax is PolarAxes when polar=True)
+    from typing import cast
+    ax = cast(PolarAxes, ax)
     
     # Dodaj przezroczyste tło za etykietami dla lepszej czytelności
     ax.set_facecolor('white')
@@ -1116,7 +1119,7 @@ def plot_radar_chart(scores, device_type=None):
         ax.set_thetagrids(angles_degrees, labels, fontsize=font_size)
     
     # Set title with responsive size
-    ax.set_title("Twój profil inwestycyjny", size=title_size, pad=20)
+    ax.set_title("Twój profil przywódczy", size=title_size, pad=20)
     
     # Dostosuj siatkę i oś
     ax.grid(True, alpha=grid_alpha)

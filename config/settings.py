@@ -233,10 +233,10 @@ BADGE_CATEGORIES = {
         "color": "#9C27B0",
         "order": 4
     },
-    "degen_mastery": {
-        "name": "Mistrzostwo Degena",
-        "description": "Poznanie i rozwój różnych typów osobowości inwestorskich",
-        "icon": "👑",
+    "neuroleadership_mastery": {
+        "name": "Mistrzostwo Neuroprzywództwa",
+        "description": "Poznanie i rozwój różnych typów neurolidera",
+        "icon": "🧠",
         "color": "#FFC107",
         "order": 5
     },
@@ -493,8 +493,20 @@ BADGES = {
     # =====================================
     # KATEGORIA: EKSPERTYZA (expertise)
     # =====================================
-    "zen_master": {
-        "name": "Mistrz Zen",
+    "neuroleadership_master": {
+        "name": "Mistrz Neuroprzywództwa",
+        "description": "Ukończ wszystkie lekcje z kategorii Neuroprzywództwo",
+        "icon": "�",
+        "category": "expertise",
+        "tier": "gold",
+        "xp_reward": 300,
+        "condition": "category_completed",
+        "requirement": {"category": "neuroleadership"},
+        "secret": False,
+        "stackable": False
+    },
+    "mindfulness_expert": {
+        "name": "Ekspert Mindfulness",
         "description": "Ukończ wszystkie lekcje z kategorii Mindfulness",
         "icon": "🧘‍♂️",
         "category": "expertise",
@@ -505,27 +517,15 @@ BADGES = {
         "secret": False,
         "stackable": False
     },
-    "market_analyst": {
-        "name": "Analityk Rynku",
-        "description": "Ukończ wszystkie lekcje z kategorii Analiza Rynku",
-        "icon": "📊",
+    "neuroscience_guru": {
+        "name": "Guru Neuronauk",
+        "description": "Ukończ wszystkie lekcje z kategorii Neuronauki",
+        "icon": "🔬",
         "category": "expertise",
         "tier": "gold",
         "xp_reward": 300,
         "condition": "category_completed",
-        "requirement": {"category": "market_analysis"},
-        "secret": False,
-        "stackable": False
-    },
-    "strategy_guru": {
-        "name": "Guru Strategii",
-        "description": "Ukończ wszystkie lekcje z kategorii Strategie",
-        "icon": "🎯",
-        "category": "expertise",
-        "tier": "gold",
-        "xp_reward": 300,
-        "condition": "category_completed",
-        "requirement": {"category": "strategies"},
+        "requirement": {"category": "neuroscience"},
         "secret": False,
         "stackable": False
     },
@@ -538,6 +538,18 @@ BADGES = {
         "xp_reward": 300,
         "condition": "category_completed",
         "requirement": {"category": "psychology"},
+        "secret": False,
+        "stackable": False
+    },
+    "stress_management_master": {
+        "name": "Mistrz Zarządzania Stresem",
+        "description": "Ukończ wszystkie lekcje z kategorii Zarządzanie Stresem",
+        "icon": "😌",
+        "category": "expertise",
+        "tier": "gold",
+        "xp_reward": 300,
+        "condition": "category_completed",
+        "requirement": {"category": "stress_management"},
         "secret": False,
         "stackable": False
     },
@@ -566,55 +578,79 @@ BADGES = {
         "stackable": False
     },
 
-    # =============================================
-    # KATEGORIA: MISTRZOSTWO DEGENA (degen_mastery)
-    # =============================================
-    "degen_explorer": {
-        "name": "Odkrywca Degenów",
-        "description": "Poznaj wszystkie typy degenów w eksploratorze",
+    # ======================================================
+    # KATEGORIA: MISTRZOSTWO NEUROPRZYWÓDZTWA (neuroleadership_mastery)
+    # ======================================================
+    "neuroleader_explorer": {
+        "name": "Odkrywca Neuroliderów",
+        "description": "Poznaj wszystkie typy neuroliderów",
         "icon": "🗺️",
-        "category": "degen_mastery",
+        "category": "neuroleadership_mastery",
         "tier": "silver",
         "xp_reward": 150,
-        "condition": "explore_all_types",
-        "requirement": 8,
+        "condition": "explore_all_neuroleader_types",
+        "requirement": 6,
         "secret": False,
         "stackable": False
     },
-    "multi_degen": {
-        "name": "Wieloaspektowy Degen",
-        "description": "Wykonaj test 3 razy z różnymi wynikami",
+    "multi_neuroleader": {
+        "name": "Wieloaspektowy Neurolidwer",
+        "description": "Wykonaj test neurolideara 3 razy z różnymi wynikami",
         "icon": "🎭",
-        "category": "degen_mastery",
+        "category": "neuroleadership_mastery",
         "tier": "gold",
         "xp_reward": 250,
-        "condition": "multiple_test_results",
+        "condition": "multiple_neuroleader_results",
         "requirement": 3,
         "secret": False,
         "stackable": False
     },
-    "self_aware": {
-        "name": "Samoświadomy",
-        "description": "Potwierdź swój typ degena wykonując test ponownie",
+    "self_aware_leader": {
+        "name": "Samoświadomy Lider",
+        "description": "Potwierdź swój typ neurolidera wykonując test ponownie",
         "icon": "🔮",
-        "category": "degen_mastery",
+        "category": "neuroleadership_mastery",
         "tier": "silver",
         "xp_reward": 100,
-        "condition": "confirm_degen_type",
+        "condition": "confirm_neuroleader_type",
         "requirement": 1,
         "secret": False,
         "stackable": False
     },
-    "degen_king": {
-        "name": "Król Degenów",
-        "description": "Osiągnij mistrzostwo we wszystkich aspektach degeneracy",
+    "neuroleadership_king": {
+        "name": "Król Neuroprzywództwa",
+        "description": "Osiągnij mistrzostwo we wszystkich aspektach neuroprzywództwa",
         "icon": "👑",
-        "category": "degen_mastery",
+        "category": "neuroleadership_mastery",
         "tier": "diamond",
         "xp_reward": 1000,
-        "condition": "complete_degen_mastery",
+        "condition": "complete_neuroleadership_mastery",
         "requirement": 1,
         "secret": True,
+        "stackable": False
+    },
+    "stress_master": {
+        "name": "Mistrz Stresu",
+        "description": "Przeczytaj wszystkie artykuły o zarządzaniu stresem",
+        "icon": "😌",
+        "category": "neuroleadership_mastery",
+        "tier": "gold",
+        "xp_reward": 200,
+        "condition": "read_stress_articles",
+        "requirement": 3,
+        "secret": False,
+        "stackable": False
+    },
+    "brain_hacker": {
+        "name": "Haker Mózgu",
+        "description": "Przeczytaj wszystkie artykuły o neurobiologii",
+        "icon": "🧠",
+        "category": "neuroleadership_mastery",
+        "tier": "gold",
+        "xp_reward": 200,
+        "condition": "read_neuroscience_articles",
+        "requirement": 5,
+        "secret": False,
         "stackable": False
     },
 
@@ -783,6 +819,42 @@ BADGES = {
         "condition": "midnight_learning",
         "requirement": 1,
         "secret": True,
+        "stackable": False
+    },
+    "forrest_gump_fan": {
+        "name": "Fan Forresta Gumpa",
+        "description": "Przeczytaj artykuł o Forrest Gump i neuroprzywództwie",
+        "icon": "🏃‍♂️",
+        "category": "special",
+        "tier": "silver",
+        "xp_reward": 150,
+        "condition": "read_forrest_article",
+        "requirement": 1,
+        "secret": False,
+        "stackable": False
+    },
+    "neuroplasticity_enthusiast": {
+        "name": "Entuzjasta Neuroplastyczności",
+        "description": "Przeczytaj 5 artykułów o mózgu i neurobiologii",
+        "icon": "🔬",
+        "category": "special",
+        "tier": "gold",
+        "xp_reward": 250,
+        "condition": "read_brain_articles",
+        "requirement": 5,
+        "secret": False,
+        "stackable": False
+    },
+    "mindfulness_practitioner": {
+        "name": "Praktyk Mindfulness",
+        "description": "Ukończ wszystkie ćwiczenia oddechowe",
+        "icon": "🧘",
+        "category": "special",
+        "tier": "platinum",
+        "xp_reward": 500,
+        "condition": "complete_breathing_exercises",
+        "requirement": 1,
+        "secret": False,
         "stackable": False
     }
 }

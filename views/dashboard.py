@@ -540,11 +540,11 @@ def show_progress_widget(user_data):
     # """, unsafe_allow_html=True)
 
 def show_investor_profile_compact(user_data):
-    """Kompaktowy profil inwestycyjny"""
+    """Kompaktowy profil Neurolidera"""
     st.markdown("""
     <div class="dashboard-section">
         <div class="section-header">
-            <h3 class="section-title">Profil inwestycyjny</h3>
+            <h3 class="section-title">Profil Neurolidera</h3>
         </div>
     """, unsafe_allow_html=True)
     

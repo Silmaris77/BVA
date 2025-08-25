@@ -532,9 +532,18 @@ class BadgeTracker:
         if badge_id == 'welcome':
             conditions['account_registered'] = bool(user_data.get('user_id'))
         
-        elif badge_id == 'first_degen_test':
+        elif badge_id == 'first_neuroleader_test':
             conditions['test_taken'] = user_data.get('test_taken', False)
-            conditions['has_degen_type'] = bool(user_data.get('degen_type'))
+            conditions['has_neuroleader_type'] = bool(user_data.get('neuroleader_type'))
+        
+        elif badge_id == 'neuroleader_explorer':
+            conditions['explored_all_types'] = len(user_data.get('explored_neuroleader_types', set())) >= 6
+        
+        elif badge_id in ['stress_master', 'brain_hacker']:
+            conditions['articles_read'] = len(user_data.get('read_inspirations', [])) >= 3
+        
+        elif badge_id == 'forrest_gump_fan':
+            conditions['forrest_article_read'] = 'forrest_gump_neuroleadership' in user_data.get('read_inspirations', [])
         
         elif badge_id == 'first_lesson':
             conditions['has_completed_lessons'] = len(user_data.get('completed_lessons', [])) > 0
@@ -850,7 +859,7 @@ class BadgeTracker:
             category_counts[category] = category_counts.get(category, 0) + 1
         
         if category_counts:
-            insights['favorite_category'] = max(category_counts, key=category_counts.get)
+            insights['favorite_category'] = max(category_counts.items(), key=lambda x: x[1])[0]
         
         # Sugestie poprawy
         if insights['completion_rate'] < 25:

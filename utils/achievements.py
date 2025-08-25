@@ -120,13 +120,14 @@ def check_badge_condition(badge_id: str, user_data: Dict[str, Any], context: Opt
     # KATEGORIA: EXPERTISE
     # ==========================================
     
-    elif badge_id in ["zen_master", "market_analyst", "strategy_guru", "psychology_expert"]:
+    elif badge_id in ["neuroleadership_master", "mindfulness_expert", "neuroscience_guru", "psychology_expert", "stress_management_master"]:
         # Ukończenie wszystkich lekcji z kategorii
         category_map = {
-            "zen_master": "mindfulness",
-            "market_analyst": "market_analysis", 
-            "strategy_guru": "strategies",
-            "psychology_expert": "psychology"
+            "neuroleadership_master": "neuroleadership",
+            "mindfulness_expert": "mindfulness",
+            "neuroscience_guru": "neuroscience", 
+            "psychology_expert": "psychology",
+            "stress_management_master": "stress_management"
         }
         target_category = category_map.get(badge_id)
         if target_category:
@@ -159,6 +160,42 @@ def check_badge_condition(badge_id: str, user_data: Dict[str, Any], context: Opt
     elif badge_id == "degen_king":
         # Mistrzostwo we wszystkich aspektach
         return check_complete_degen_mastery(user_data)
+
+    # =====================================================
+    # KATEGORIA: NEUROLEADERSHIP MASTERY
+    # =====================================================
+    
+    elif badge_id == "neuroleader_explorer":
+        # Poznanie wszystkich typów neuroliderów
+        return check_all_neuroleader_types_explored(user_data)
+    
+    elif badge_id == "multi_neuroleader":
+        # 3 różne wyniki testów neuroleader
+        test_results = user_data.get('neuroleader_test_results_history', [])
+        unique_results = set(result.get('neuroleader_type') for result in test_results)
+        return len(unique_results) >= 3
+    
+    elif badge_id == "self_aware_leader":
+        # Potwierdzenie typu neurolidera
+        return user_data.get('neuroleader_test_retaken', False) and user_data.get('neuroleader_type_confirmed', False)
+    
+    elif badge_id == "neuroleadership_king":
+        # Mistrzostwo we wszystkich aspektach neuroprzywództwa
+        return check_complete_neuroleadership_mastery(user_data)
+    
+    elif badge_id == "stress_master":
+        # Przeczytanie artykułów o stresie
+        read_inspirations = user_data.get('read_inspirations', [])
+        stress_articles = ['stress_decision_making', 'stress_reduction_techniques']
+        stress_read = sum(1 for article in stress_articles if article in read_inspirations)
+        return stress_read >= 2
+    
+    elif badge_id == "brain_hacker":
+        # Przeczytanie artykułów o neurobiologii
+        read_inspirations = user_data.get('read_inspirations', [])
+        brain_articles = ['chewing_gum_brain', 'shower_ideas', 'forrest_gump_neuroleadership']
+        brain_read = sum(1 for article in brain_articles if article in read_inspirations)
+        return brain_read >= 3
     
     # ==========================================
     # KATEGORIA: SOCIAL
@@ -228,6 +265,22 @@ def check_badge_condition(badge_id: str, user_data: Dict[str, Any], context: Opt
         if context and context.get('hour') == 0:
             return True
         return check_midnight_learning(user_data)
+    
+    elif badge_id == "forrest_gump_fan":
+        # Przeczytanie artykułu o Forrest Gump
+        read_inspirations = user_data.get('read_inspirations', [])
+        return 'forrest_gump_neuroleadership' in read_inspirations
+    
+    elif badge_id == "neuroplasticity_enthusiast":
+        # Przeczytanie 5 artykułów o mózgu
+        read_inspirations = user_data.get('read_inspirations', [])
+        brain_articles = ['chewing_gum_brain', 'shower_ideas', 'forrest_gump_neuroleadership', 'stress_decision_making', 'stress_reduction_techniques']
+        brain_read = sum(1 for article in brain_articles if article in read_inspirations)
+        return brain_read >= 5
+    
+    elif badge_id == "mindfulness_practitioner":
+        # Ukończenie wszystkich ćwiczeń oddechowych
+        return user_data.get('breathing_exercises_completed', False)
     
     return False
 
@@ -800,3 +853,28 @@ def validate_badge_data_integrity(username: str) -> Dict[str, Any]:
                 validation_results['recommendations'].append(f"Re-validate badge '{badge_id}' conditions")
     
     return validation_results
+
+# ==========================================
+# NEUROLEADERSHIP HELPER FUNCTIONS
+# ==========================================
+
+def check_all_neuroleader_types_explored(user_data: Dict[str, Any]) -> bool:
+    """Sprawdź czy użytkownik poznał wszystkie typy neuroliderów"""
+    explored_types = user_data.get('explored_neuroleader_types', set())
+    # Wszystkie typy z NEUROLEADER_TYPES w settings.py
+    expected_types = 6  # Neuroanalityk, Neuroreaktor, Neurobalanser, Neuroempata, Neuroinnowator, Neuroinspirator
+    return len(explored_types) >= expected_types
+
+def check_complete_neuroleadership_mastery(user_data: Dict[str, Any]) -> bool:
+    """Sprawdź czy użytkownik osiągnął pełne mistrzostwo w neuroprzywództwie"""
+    conditions = [
+        # Test wykonany
+        user_data.get('neuroleader_type') is not None,
+        # Wszystkie typy poznane
+        check_all_neuroleader_types_explored(user_data),
+        # Przeczytane artykuły o neuroprzywództwie
+        len(user_data.get('read_inspirations', [])) >= 5,
+        # Ukończone lekcje z kategorii neuroprzywództwo
+        check_category_completion(user_data, 'neuroleadership'),
+    ]
+    return all(conditions)
