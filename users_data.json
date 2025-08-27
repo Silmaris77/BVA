@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 309,
-    "degencoins": 299,
+    "xp": 316,
+    "degencoins": 306,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-08-25 18:57:36",
+    "last_login": "2025-08-27 14:02:07",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -102,6 +102,13 @@
         "summary_xp": 5,
         "summary_degencoins": 5,
         "summary_timestamp": "2025-08-22 17:23:45"
+      },
+      "5. Nauka przez film - neuroprzywództwo": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 7,
+        "intro_degencoins": 7,
+        "intro_timestamp": "2025-08-27 13:47:24"
       }
     },
     "recent_activities": [

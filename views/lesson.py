@@ -662,7 +662,44 @@ def show_lessons_content():
             else:                # Sprawdź, czy sekcja learning istnieje i czy zawiera sections
                 for i, section in enumerate(lesson["sections"]["learning"]["sections"]):
                     with st.expander(section.get("title", f"Sekcja {i+1}"), expanded=False):
-                        st.markdown(section.get("content", "Brak treści"), unsafe_allow_html=True)            # Przycisk "Dalej" po treści lekcji
+                        # Wyświetl treść sekcji
+                        st.markdown(section.get("content", "Brak treści"), unsafe_allow_html=True)
+                        
+                        # Sprawdź czy sekcja zawiera film YouTube (pojedynczy)
+                        if 'video' in section and section['video']:
+                            video_data = section['video']
+                            video_url = video_data.get('url')
+                            video_title = video_data.get('title')
+                            video_description = video_data.get('description')
+                            
+                            if video_url:
+                                from utils.components import youtube_video
+                                youtube_video(
+                                    video_url=video_url,
+                                    title=video_title,
+                                    description=video_description
+                                )
+                        
+                        # Sprawdź czy sekcja zawiera wiele filmów YouTube (videos)
+                        if 'videos' in section and section['videos']:
+                            st.markdown("### 🎥 Materiały wideo")
+                            for j, video_data in enumerate(section['videos']):
+                                video_url = video_data.get('url')
+                                video_title = video_data.get('title', f'Film {j+1}')
+                                video_description = video_data.get('description')
+                                
+                                if video_url:
+                                    from utils.components import youtube_video
+                                    youtube_video(
+                                        video_url=video_url,
+                                        title=video_title,
+                                        description=video_description
+                                    )
+                                    
+                                    # Dodaj separator między filmami
+                                    if j < len(section['videos']) - 1:
+                                        st.markdown("---")
+                                            # Przycisk "Dalej" po treści lekcji
             col1, col2, col3 = st.columns([1, 1, 1])
             with col2:
                 if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=True):

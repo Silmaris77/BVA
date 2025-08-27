@@ -589,6 +589,75 @@ def xp_level_display(xp, level, next_level_xp):
 
 # Komponenty treści edukacyjnych
 
+def youtube_video(video_url, title=None, description=None, width="100%", height="400px"):
+    """
+    Osadza film z YouTube w lekcji z responsywnym designem.
+    
+    Parametry:
+    - video_url: URL filmu YouTube (może być pełny URL lub ID filmu)
+    - title: Opcjonalny tytuł filmu
+    - description: Opcjonalny opis filmu
+    - width: Szerokość filmu (domyślnie: '100%')
+    - height: Wysokość filmu (domyślnie: '400px')
+    """
+    # Wyciągnij ID filmu z różnych formatów URL YouTube
+    def extract_video_id(url):
+        import re
+        patterns = [
+            r'(?:youtube\.com\/watch\?v=)([^&\n?#]+)',
+            r'(?:youtube\.com\/embed\/)([^&\n?#]+)',
+            r'(?:youtu\.be\/)([^&\n?#]+)',
+            r'(?:youtube\.com\/v\/)([^&\n?#]+)',
+            r'^([a-zA-Z0-9_-]{11})$'  # Samo ID filmu
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, url)
+            if match:
+                return match.group(1)
+        return None
+    
+    video_id = extract_video_id(video_url)
+    
+    if not video_id:
+        st.error("Nieprawidłowy URL filmu YouTube. Sprawdź link i spróbuj ponownie.")
+        return
+    
+    # Wyświetl tytuł i opis jeśli podane
+    if title:
+        st.markdown(f"**🎥 {title}**")
+    if description:
+        st.markdown(f"*{description}*")
+    
+    # Użyj Streamlit video component - lepiej obsługuje YouTube
+    try:
+        # Embed URL dla YouTube
+        embed_url = f"https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1&playsinline=1"
+        
+        # Użyj st.components.v1.iframe dla lepszej kompatybilności
+        import streamlit.components.v1 as components
+        
+        components.iframe(
+            src=embed_url,
+            width=800,
+            height=450,
+            scrolling=False
+        )
+        
+    except Exception as e:
+        # Fallback - użyj prostego HTML
+        st.markdown(f"""
+        <div style="text-align: center; margin: 20px 0;">
+            <iframe width="800" height="450" 
+                    src="https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1" 
+                    title="{title or 'Film edukacyjny'}"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+        """, unsafe_allow_html=True)
+
 def content_section(title, content, collapsed=True, icon=None, border_color=None):
     """
     Wyświetla sekcję z treścią, która może być rozwijana/zwijana

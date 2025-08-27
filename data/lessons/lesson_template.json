@@ -40,7 +40,12 @@
       "sections": [
         {
           "title": "[SECTION_TITLE]",
-          "content": "[SECTION_CONTENT_HTML]"
+          "content": "[SECTION_CONTENT_HTML]",
+          "video": {
+            "url": "[YOUTUBE_VIDEO_URL_OR_ID]",
+            "title": "[VIDEO_TITLE]",
+            "description": "[VIDEO_DESCRIPTION]"
+          }
         },
         {
           "title": "[SECTION_TITLE_2]",

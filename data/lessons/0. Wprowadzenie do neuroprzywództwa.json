@@ -21,11 +21,27 @@
     "learning": {
       "sections": [
         {
-          "title": "[SECTION_TITLE]",
-          "content": "[SECTION_CONTENT_HTML]"
+          "title": "Część 1 - Poniedziałkowy poranek",
+          "content": "",
+          "videos": [
+            {
+              "url": "https://youtu.be/Q8OOW_jAYMI",
+              "title": "Film edukacyjny 1 - Wprowadzenie",
+              "description": "Wprowadzenie do tematu neuroprzywództwa"
+            },
+            {
+              "url": "https://youtu.be/--eyzRdr8Gk",
+              "title": "Film edukacyjny 2 - Pogłębienie",
+              "description": "Pogłębienie wiedzy o neuroprzywództwie"
+            }
+          ]
         },
         {
-          "title": "[SECTION_TITLE_2]",
+          "title": "Część 2 - .....",
+          "content": "[SECTION_CONTENT_HTML_2]"
+        },
+                {
+          "title": "Część 3 - ......",
           "content": "[SECTION_CONTENT_HTML_2]"
         }
       ]
