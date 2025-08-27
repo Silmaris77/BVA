@@ -179,106 +179,78 @@
     "closing_quiz": {
       "title": "Quiz Autodiagnozy",
       "description": "Oceń, na ile poszczególne zagadnienia z neuroprzywództwa są ważne i stanowią wyzwanie w Twoim życiu zawodowym",
+      "type": "slider",
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "labels": {
+          "1": "W ogóle nieważne",
+          "2": "Raczej nieważne", 
+          "3": "Trudno powiedzieć",
+          "4": "Raczej ważne",
+          "5": "Bardzo ważne"
+        }
+      },
       "questions": [
         {
+          "id": 1,
           "question": "Czy kontrolowanie emocji w sytuacjach stresowych i ich wpływ na podejmowanie decyzji stanowi dla Ciebie wyzwanie w pracy menedżerskiej?",
-          "options": [
-            "W ogóle nieważne",
-            "Raczej nieważne", 
-            "Trudno powiedzieć",
-            "Raczej ważne",
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         },
         {
+          "id": 2,
           "question": "Jak ważne jest dla Ciebie zrozumienie roli neurotransmiterów (dopamina, serotonina, kortyzol) w motywowaniu zespołu i budowaniu zaangażowania?",
-          "options": [
-            "W ogóle nieważne",
-            "Raczej nieważne",
-            "Trudno powiedzieć", 
-            "Raczej ważne",
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         },
         {
+          "id": 3,
           "question": "Czy umiejętność zaspokajania 5 podstawowych potrzeb mózgu zespołu (Status, Pewność, Autonomia, Powiązania, Sprawiedliwość) stanowi dla Ciebie priorytet w przywództwie?",
-          "options": [
-            "W ogóle nieważne",
-            "Raczej nieważne",
-            "Trudno powiedzieć",
-            "Raczej ważne", 
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         },
         {
+          "id": 4,
           "question": "Na ile istotne jest dla Ciebie budowanie pozytywnego środowiska pracy poprzez zastosowanie modelu SEEDS (Bezpieczeństwo, Emocje, Eksploracja, Społeczność)?",
-          "options": [
-            "W ogóle nieważne",
-            "Raczej nieważne",
-            "Trudno powiedzieć",
-            "Raczej ważne",
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         },
         {
+          "id": 5,
           "question": "Czy zarządzanie własnym stresem i budowanie odporności psychicznej w zespole stanowi dla Ciebie znaczące wyzwanie zawodowe?",
-          "options": [
-            "W ogóle nieważne", 
-            "Raczej nieważne",
-            "Trudno powiedzieć",
-            "Raczej ważne",
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         },
         {
+          "id": 6,
           "question": "Jak ważne jest dla Ciebie doskonalenie procesów podejmowania decyzji i zarządzania ryzykiem w oparciu o mechanizmy działania mózgu?",
-          "options": [
-            "W ogóle nieważne",
-            "Raczej nieważne",
-            "Trudno powiedzieć",
-            "Raczej ważne",
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         },
         {
+          "id": 7,
           "question": "Czy problemy z koncentracją, pamięcią i spadkiem zdolności poznawczych (własnych lub zespołu) stanowią dla Ciebie wyzwanie w codziennej pracy?",
-          "options": [
-            "W ogóle nieważne",
-            "Raczej nieważne", 
-            "Trudno powiedzieć",
-            "Raczej ważne",
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         },
         {
+          "id": 8,
           "question": "Na ile istotne jest dla Ciebie wspieranie zdrowia i wydajności mózgu (swojego i zespołu) poprzez odpowiedni styl życia i nawyki pracy?",
-          "options": [
-            "W ogóle nieważne",
-            "Raczej nieważne",
-            "Trudno powiedzieć",
-            "Raczej ważne",
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         },
         {
+          "id": 9,
           "question": "Czy wykorzystanie neuroplastyczności mózgu do kształtowania pozytywnych nawyków i zmiany zachowań w zespole stanowi dla Ciebie priorytet?",
-          "options": [
-            "W ogóle nieważne",
-            "Raczej nieważne",
-            "Trudno powiedzieć", 
-            "Raczej ważne",
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         },
         {
+          "id": 10,
           "question": "Jak ważne jest dla Ciebie zastosowanie wiedzy o mózgu w rozwiązywaniu kluczowych wyzwań menedżerskich (motywowanie, rozwój pracowników, zarządzanie zmianą)?",
-          "options": [
-            "W ogóle nieważne",
-            "Raczej nieważne",
-            "Trudno powiedzieć",
-            "Raczej ważne",
-            "Bardzo ważne"
-          ]
+          "type": "slider",
+          "default": 3
         }
       ]
     },

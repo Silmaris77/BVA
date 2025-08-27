@@ -1,7 +1,8 @@
 ﻿import streamlit as st
 from data.lessons import load_lessons
 from data.users import load_user_data, save_user_data
-from utils.components import zen_header, zen_button, notification, content_section, tip_block, quote_block, progress_bar, embed_content, lesson_card, youtube_video
+from utils.components import zen_header, zen_button, notification, content_section, tip_block, quote_block, progress_bar, embed_content, lesson_card
+from utils.components import youtube_video  # Osobny import dla youtube_video
 from utils.material3_components import apply_material3_theme
 from utils.layout import get_device_type, responsive_grid, responsive_container, toggle_device_view
 from utils.lesson_progress import (
@@ -598,8 +599,22 @@ def show_lessons_content():
                                 if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
                                     # Reset stanu quizu samodiagnozy
                                     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
+                                    
+                                    # Usuń stan główny quizu
                                     if quiz_id in st.session_state:
                                         del st.session_state[quiz_id]
+                                    
+                                    # Usuń wszystkie odpowiedzi na pytania
+                                    for i in range(len(quiz_data.get('questions', []))):
+                                        question_key = f"{quiz_id}_q{i}_selected"
+                                        if question_key in st.session_state:
+                                            del st.session_state[question_key]
+                                        
+                                        # Usuń także klucze suwaków jeśli istnieją
+                                        slider_key = f"{quiz_id}_q{i}_slider"
+                                        if slider_key in st.session_state:
+                                            del st.session_state[slider_key]
+                                    
                                     st.rerun()
                     
                     elif 'sections' in lesson and 'opening_quiz' in lesson.get('sections', {}):
@@ -628,8 +643,22 @@ def show_lessons_content():
                                 if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_legacy_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
                                     # Reset stanu quizu samodiagnozy
                                     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
+                                    
+                                    # Usuń stan główny quizu
                                     if quiz_id in st.session_state:
                                         del st.session_state[quiz_id]
+                                    
+                                    # Usuń wszystkie odpowiedzi na pytania
+                                    for i in range(len(quiz_data.get('questions', []))):
+                                        question_key = f"{quiz_id}_q{i}_selected"
+                                        if question_key in st.session_state:
+                                            del st.session_state[question_key]
+                                        
+                                        # Usuń także klucze suwaków jeśli istnieją
+                                        slider_key = f"{quiz_id}_q{i}_slider"
+                                        if slider_key in st.session_state:
+                                            del st.session_state[slider_key]
+                                    
                                     st.rerun()
                     
                     else:
@@ -769,6 +798,7 @@ def show_lessons_content():
                             # Wyświetl video jeśli URL nie jest placeholder
                             video_url = part['video']['url']
                             if "PLACEHOLDER" not in video_url:
+                                from utils.components import youtube_video
                                 youtube_video(
                                     video_url,
                                     part['video']['title'],
@@ -797,7 +827,7 @@ def show_lessons_content():
                             st.rerun()
                         else:
                             # Sprawdź czy wszystkie sekcje zostały ukończone
-                            check_and_mark_lesson_completion(lesson_id, st.session_state.lesson_progress)
+                            check_and_mark_lesson_completion(lesson_id)
                             st.session_state.lesson_finished = True
                             st.rerun()
                 
@@ -834,28 +864,28 @@ def show_lessons_content():
                     if available_tabs and 'tabs' not in practical_data:
                         # Wyświetl pod-zakładki dla nowej struktury
                         tabs = tabs_with_fallback(available_tabs)
-                    
-                    for i, (tab_key, tab_title) in enumerate(zip(tab_keys, available_tabs)):
-                        with tabs[i]:
-                            if tab_key == 'closing_quiz':
-                                # Specjalna obsługa dla quizu końcowego
-                                lesson_title = lesson.get("title", "")
-                                if lesson_title == "Wprowadzenie do neuroprzywództwa":
-                                    # Dla tej lekcji quiz autodiagnozy bez wymogu 75%
-                                    st.info("🧠 **Quiz autodiagnozy** - Ten quiz pomoże Ci lepiej poznać swoje podejście do przywództwa. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję.")
-                                    
-                                    quiz_data = sub_tabs_data['closing_quiz']
-                                    quiz_completed, quiz_passed, earned_points = display_quiz(quiz_data, passing_threshold=0)  # Brak wymogu minimum
-                                    
-                                    # Oznacz quiz jako ukończony po wypełnieniu
-                                    if quiz_completed:
-                                        # Zapisz stan zaliczenia quizu do sprawdzania w nawigacji
-                                        closing_quiz_key = f"closing_quiz_{lesson_id}"
-                                        if closing_quiz_key not in st.session_state:
-                                            st.session_state[closing_quiz_key] = {}
+                        
+                        for i, (tab_key, tab_title) in enumerate(zip(tab_keys, available_tabs)):
+                            with tabs[i]:
+                                if tab_key == 'closing_quiz':
+                                    # Specjalna obsługa dla quizu końcowego
+                                    lesson_title = lesson.get("title", "")
+                                    if lesson_title == "Wprowadzenie do neuroprzywództwa":
+                                        # Dla tej lekcji quiz autodiagnozy bez wymogu 75%
+                                        st.info("🧠 **Quiz autodiagnozy** - Ten quiz pomoże Ci lepiej poznać swoje podejście do przywództwa. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję.")
                                         
-                                        st.session_state[closing_quiz_key]["quiz_completed"] = True
-                                        st.session_state[closing_quiz_key]["quiz_passed"] = True  # Zawsze zdany dla tej lekcji
+                                        quiz_data = sub_tabs_data['closing_quiz']
+                                        quiz_completed, quiz_passed, earned_points = display_quiz(quiz_data, passing_threshold=0)  # Brak wymogu minimum
+                                        
+                                        # Oznacz quiz jako ukończony po wypełnieniu
+                                        if quiz_completed:
+                                            # Zapisz stan zaliczenia quizu do sprawdzania w nawigacji
+                                            closing_quiz_key = f"closing_quiz_{lesson_id}"
+                                            if closing_quiz_key not in st.session_state:
+                                                st.session_state[closing_quiz_key] = {}
+                                            
+                                            st.session_state[closing_quiz_key]["quiz_completed"] = True
+                                            st.session_state[closing_quiz_key]["quiz_passed"] = True  # Zawsze zdany dla tej lekcji
                                         
                                         closing_quiz_xp_key = f"closing_quiz_xp_{lesson_id}"
                                         if not st.session_state.get(closing_quiz_xp_key, False):
@@ -876,79 +906,92 @@ def show_lessons_content():
                                             if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
                                                 # Reset stanu quizu
                                                 quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
+                                                closing_quiz_key = f"closing_quiz_{lesson_id}"  # Definiuj tutaj
+                                                
+                                                # Usuń stan główny quizu
                                                 if quiz_id in st.session_state:
                                                     del st.session_state[quiz_id]
+                                                
+                                                # Usuń wszystkie odpowiedzi na pytania
+                                                for i in range(len(quiz_data.get('questions', []))):
+                                                    question_key = f"{quiz_id}_q{i}_selected"
+                                                    if question_key in st.session_state:
+                                                        del st.session_state[question_key]
+                                                    
+                                                    # Usuń także klucze suwaków jeśli istnieją
+                                                    slider_key = f"{quiz_id}_q{i}_slider"
+                                                    if slider_key in st.session_state:
+                                                        del st.session_state[slider_key]
+                                                
                                                 # Reset stanu zaliczenia
                                                 if closing_quiz_key in st.session_state:
                                                     st.session_state[closing_quiz_key]["quiz_completed"] = False
                                                     st.session_state[closing_quiz_key]["quiz_passed"] = False
                                                 st.rerun()
-                                else:
-                                    # Dla wszystkich innych lekcji standardowy quiz końcowy
-                                    st.info("🎓 **Quiz końcowy** - Sprawdź swoją wiedzę z tej lekcji. Musisz uzyskać minimum 75% poprawnych odpowiedzi, aby przejść dalej.")
-                                    
-                                    quiz_data = sub_tabs_data['closing_quiz']
-                                    quiz_completed, quiz_passed, earned_points = display_quiz(quiz_data, passing_threshold=75)
-                                    
-                                    # Oznacz quiz jako ukończony po wypełnieniu
-                                    if quiz_completed:
-                                        # Zapisz stan zaliczenia quizu do sprawdzania w nawigacji
-                                        closing_quiz_key = f"closing_quiz_{lesson_id}"
-                                        if closing_quiz_key not in st.session_state:
-                                            st.session_state[closing_quiz_key] = {}
+                                    else:
+                                        # Dla wszystkich innych lekcji standardowy quiz końcowy
+                                        st.info("🎓 **Quiz końcowy** - Sprawdź swoją wiedzę z tej lekcji. Musisz uzyskać minimum 75% poprawnych odpowiedzi, aby przejść dalej.")
                                         
-                                        st.session_state[closing_quiz_key]["quiz_completed"] = True
-                                        st.session_state[closing_quiz_key]["quiz_passed"] = quiz_passed
+                                        quiz_data = sub_tabs_data['closing_quiz']
+                                        quiz_completed, quiz_passed, earned_points = display_quiz(quiz_data, passing_threshold=75)
                                         
-                                        closing_quiz_xp_key = f"closing_quiz_xp_{lesson_id}"
-                                        if not st.session_state.get(closing_quiz_xp_key, False):
-                                            # Award fragment XP for quiz completion
-                                            fragment_xp = get_fragment_xp_breakdown(lesson.get('xp_reward', 30))
-                                            # Quiz końcowy dostaje 1/3 z XP practical_exercises 
-                                            success, earned_xp = award_fragment_xp(lesson_id, 'closing_quiz', step_xp_values['practical_exercises'] // 3)
-                                            st.session_state[closing_quiz_xp_key] = True
-                                            if success and earned_xp > 0:
-                                                show_xp_notification(earned_xp, f"Zdobyłeś {earned_xp} XP za ukończenie quizu końcowego!")
-                                        
-                                        if quiz_passed:
-                                            st.success("✅ Gratulacje! Zaliczyłeś quiz końcowy! Możesz teraz przejść do podsumowania.")
+                                        # Oznacz quiz jako ukończony po wypełnieniu
+                                        if quiz_completed:
+                                            # Zapisz stan zaliczenia quizu do sprawdzania w nawigacji
+                                            closing_quiz_key = f"closing_quiz_{lesson_id}"
+                                            if closing_quiz_key not in st.session_state:
+                                                st.session_state[closing_quiz_key] = {}
                                             
-                                            # Dodaj przycisk do ponownego przystąpienia do quizu końcowego (nawet po zdaniu)
-                                            st.markdown("---")
-                                            col1, col2, col3 = st.columns([1, 1, 1])
-                                            with col2:
-                                                if st.button("🔄 Przystąp ponownie", key=f"retry_closing_quiz_passed_{lesson_id}", help="Możesz ponownie przystąpić do quizu końcowego aby poprawić swój wynik", use_container_width=True):
-                                                    # Reset stanu quizu końcowego
-                                                    quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
-                                                    if quiz_id in st.session_state:
-                                                        del st.session_state[quiz_id]
-                                                    # Reset stanu zaliczenia
-                                                    if closing_quiz_key in st.session_state:
-                                                        st.session_state[closing_quiz_key]["quiz_completed"] = False
-                                                        st.session_state[closing_quiz_key]["quiz_passed"] = False
-                                                    st.rerun()
-                                        else:
-                                            st.error("❌ Aby przejść do podsumowania, musisz uzyskać przynajmniej 75% poprawnych odpowiedzi. Spróbuj ponownie!")
+                                            st.session_state[closing_quiz_key]["quiz_completed"] = True
+                                            st.session_state[closing_quiz_key]["quiz_passed"] = quiz_passed
                                             
-                                            # Dodaj przycisk do ponowienia quizu
-                                            st.markdown("---")
-                                            col1, col2, col3 = st.columns([1, 1, 1])
-                                            with col2:
-                                                if st.button("🔄 Spróbuj ponownie", key=f"retry_closing_quiz_{lesson_id}", type="primary", use_container_width=True):
-                                                    # Reset stanu quizu
-                                                    quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
-                                                    if quiz_id in st.session_state:
-                                                        del st.session_state[quiz_id]
-                                                    # Reset stanu zaliczenia
-                                                    if closing_quiz_key in st.session_state:
-                                                        st.session_state[closing_quiz_key]["quiz_completed"] = False
-                                                        st.session_state[closing_quiz_key]["quiz_passed"] = False
-                                                    st.rerun()
-                            else:
-                                # Standardowa obsługa dla innych zakładek (exercises)
-                                tab_data = sub_tabs_data[tab_key]
-                                
-                                # Wyświetl opis zakładki jeśli istnieje
+                                            closing_quiz_xp_key = f"closing_quiz_xp_{lesson_id}"
+                                            if not st.session_state.get(closing_quiz_xp_key, False):
+                                                # Award fragment XP for quiz completion
+                                                fragment_xp = get_fragment_xp_breakdown(lesson.get('xp_reward', 30))
+                                                # Quiz końcowy dostaje 1/3 z XP practical_exercises 
+                                                success, earned_xp = award_fragment_xp(lesson_id, 'closing_quiz', step_xp_values['practical_exercises'] // 3)
+                                                st.session_state[closing_quiz_xp_key] = True
+                                                if success and earned_xp > 0:
+                                                    show_xp_notification(earned_xp, f"Zdobyłeś {earned_xp} XP za ukończenie quizu końcowego!")
+                                            
+                                            if quiz_passed:
+                                                st.success("✅ Gratulacje! Zaliczyłeś quiz końcowy! Możesz teraz przejść do podsumowania.")
+                                                
+                                                # Dodaj przycisk do ponownego przystąpienia do quizu końcowego (nawet po zdaniu)
+                                                st.markdown("---")
+                                                col1, col2, col3 = st.columns([1, 1, 1])
+                                                with col2:
+                                                    if st.button("🔄 Przystąp ponownie", key=f"retry_closing_quiz_passed_{lesson_id}", help="Możesz ponownie przystąpić do quizu końcowego aby poprawić swój wynik", use_container_width=True):
+                                                        # Reset stanu quizu końcowego
+                                                        quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
+                                                        if quiz_id in st.session_state:
+                                                            del st.session_state[quiz_id]
+                                                        # Reset stanu zaliczenia
+                                                        if closing_quiz_key in st.session_state:
+                                                            st.session_state[closing_quiz_key]["quiz_completed"] = False
+                                                            st.session_state[closing_quiz_key]["quiz_passed"] = False
+                                                        st.rerun()
+                                            else:
+                                                st.error("❌ Aby przejść do podsumowania, musisz uzyskać przynajmniej 75% poprawnych odpowiedzi. Spróbuj ponownie!")
+                                                
+                                                # Dodaj przycisk do ponowienia quizu
+                                                st.markdown("---")
+                                                col1, col2, col3 = st.columns([1, 1, 1])
+                                                with col2:
+                                                    if st.button("🔄 Spróbuj ponownie", key=f"retry_closing_quiz_{lesson_id}", type="primary", use_container_width=True):
+                                                        # Reset stanu quizu
+                                                        quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
+                                                        if quiz_id in st.session_state:
+                                                            del st.session_state[quiz_id]
+                                                        # Reset stanu zaliczenia
+                                                        if closing_quiz_key in st.session_state:
+                                                            st.session_state[closing_quiz_key]["quiz_completed"] = False
+                                                            st.session_state[closing_quiz_key]["quiz_passed"] = False
+                                                        st.rerun()
+                                elif tab_key == 'exercises':
+                                    # Standardowa obsługa dla zakładki exercises
+                                    tab_data = sub_tabs_data[tab_key]                                # Wyświetl opis zakładki jeśli istnieje
                                 if 'description' in tab_data:
                                     st.info(tab_data['description'])
                                 
@@ -963,6 +1006,11 @@ def show_lessons_content():
                 # Stara struktura z 'tabs' (backward compatibility)
                 if 'tabs' in practical_data:
                     old_tabs = practical_data['tabs']
+                    
+                    # Inicjalizuj zmienne dla starej struktury
+                    available_tabs = []
+                    tab_keys = []
+                    sub_tabs_data = {}
                     
                     # Sprawdź które zakładki są dostępne i przygotuj je w logicznej kolejności uczenia się
                     # 1. Autotest - sprawdzenie aktualnego stanu
@@ -1810,79 +1858,36 @@ def display_quiz(quiz_data, passing_threshold=60):
         font-size: 1.2em;
     }
     
-    /* Kontener dla przycisków odpowiedzi quiz */
-    .quiz-answers-section {
+    .quiz-final-button {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: bold;
         margin: 20px 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
     }
     
-    /* Style TYLKO dla przycisków w kontenerze quiz-answers-section */
-    .quiz-answers-section .stButton > button {
-        background-color: #f8f9fa !important;
-        background-image: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-        border: 2px solid #dee2e6 !important;
-        color: #495057 !important;
-        font-weight: 500 !important;
-        border-radius: 8px !important;
-        padding: 12px 20px !important;
-        transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-        min-height: 48px !important;
-        width: auto !important;
-        min-width: fit-content !important;
-        max-width: fit-content !important;
-        white-space: nowrap !important;
+    .quiz-final-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
     }
     
-    .quiz-answers-section .stButton > button:hover {
-        background-color: #e9ecef !important;
-        background-image: linear-gradient(135deg, #e9ecef 0%, #d1ecf1 100%) !important;
-        border-color: #adb5bd !important;
-        color: #343a40 !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
+    .quiz-results {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+        padding: 25px;
+        border-radius: 15px;
+        margin: 20px 0;
+        border-left: 5px solid #2196f3;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    
-    .quiz-answers-section .stButton > button:active {
-        transform: translateY(0px) scale(0.98) !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
-    }
-    
-    /* Dodatkowe selektory dla różnych wersji Streamlit - TYLKO w quiz-answers-section */
-    .quiz-answers-section div[data-testid="stButton"] button {
-        background-color: #f8f9fa !important;
-        background-image: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-        border: 2px solid #dee2e6 !important;
-        color: #495057 !important;
-        font-weight: 500 !important;
-        border-radius: 8px !important;
-        padding: 12px 20px !important;
-        transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-        min-height: 48px !important;
-        width: auto !important;
-        min-width: fit-content !important;
-        max-width: fit-content !important;
-        white-space: nowrap !important;
-    }
-    
-    .quiz-answers-section div[data-testid="stButton"] button:hover {
-        background-color: #e9ecef !important;
-        background-image: linear-gradient(135deg, #e9ecef 0%, #d1ecf1 100%) !important;
-        border-color: #adb5bd !important;
-        color: #343a40 !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-    }
-    
-    /* Kontrola szerokości kolumn z przyciskami quiz */
-    .quiz-answers-section .css-1r6slb0, 
-    .quiz-answers-section .css-12oz5g7 {
-        max-width: fit-content !important;
-        width: auto !important;
-        flex: 0 0 auto !important;
-    }    </style>
+    </style>
     """, unsafe_allow_html=True)
-    
+
     if not quiz_data or "questions" not in quiz_data:
         st.warning("Ten quiz nie zawiera żadnych pytań.")
         return False, False, 0
@@ -1891,120 +1896,309 @@ def display_quiz(quiz_data, passing_threshold=60):
     
     if "description" in quiz_data:
         st.markdown(quiz_data['description'])
-      # Sprawdź czy to quiz samodiagnozy (wszystkie correct_answer są null)
+    
+    # Sprawdź czy to quiz samodiagnozy (wszystkie correct_answer są null)
     is_self_diagnostic = all(q.get('correct_answer') is None for q in quiz_data['questions'])
     
-    # Style CSS z różnymi szerokościami dla różnych typów quizów
-    st.markdown(f"""
-    <style>
-    .quiz-question {{
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        padding: 20px;
-        border-radius: 15px;
-        margin: 20px 0;
-        border-left: 5px solid #4caf50;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }}
-    
-    .quiz-question h3 {{
-        color: #2e7d32;
-        margin: 0;
-        font-size: 1.2em;
-    }}
-    
-    /* Kontener dla przycisków odpowiedzi quiz */
-    .quiz-answers-section {{
-        margin: 20px 0;
-    }}
-    
-    /* Style dla quizów testowych - przyciski pełnej szerokości */
-    .quiz-answers-section.test-quiz .stButton > button {{
-        background-color: #f8f9fa !important;
-        background-image: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-        border: 2px solid #dee2e6 !important;
-        color: #495057 !important;
-        font-weight: 500 !important;
-        border-radius: 8px !important;
-        padding: 12px 20px !important;
-        transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-        min-height: 48px !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        white-space: normal !important;
-        text-align: left !important;
-    }}
-    
-    /* Style dla quizów autorefleksji - przyciski dopasowane do treści */
-    .quiz-answers-section.self-reflection-quiz .stButton > button {{
-        background-color: #f8f9fa !important;
-        background-image: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-        border: 2px solid #dee2e6 !important;
-        color: #495057 !important;
-        font-weight: 500 !important;
-        border-radius: 8px !important;
-        padding: 12px 20px !important;
-        transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-        min-height: 48px !important;
-        width: auto !important;
-        min-width: fit-content !important;
-        max-width: fit-content !important;
-        white-space: nowrap !important;
-    }}
-    
-    /* Hover efekty dla obu typów */
-    .quiz-answers-section .stButton > button:hover {{
-        background-color: #e9ecef !important;
-        background-image: linear-gradient(135deg, #e9ecef 0%, #d1ecf1 100%) !important;
-        border-color: #adb5bd !important;
-        color: #343a40 !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15) !important;
-    }}
-    
-    .quiz-answers-section .stButton > button:active {{
-        transform: translateY(0px) scale(0.98) !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
-    }}
-    
-    /* Dodatkowe selektory dla różnych wersji Streamlit */
-    .quiz-answers-section.test-quiz div[data-testid="stButton"] button {{
-        width: 100% !important;
-        max-width: 100% !important;
-        white-space: normal !important;
-        text-align: left !important;
-    }}
-    
-    .quiz-answers-section.self-reflection-quiz div[data-testid="stButton"] button {{
-        width: auto !important;
-        min-width: fit-content !important;
-        max-width: fit-content !important;
-        white-space: nowrap !important;
-    }}
-    
-    /* Kontrola szerokości kolumn dla quizów autorefleksji */
-    .quiz-answers-section.self-reflection-quiz .css-1r6slb0, 
-    .quiz-answers-section.self-reflection-quiz .css-12oz5g7 {{
-        max-width: fit-content !important;
-        width: auto !important;
-        flex: 0 0 auto !important;
-    }}
-    </style>
-    """, unsafe_allow_html=True)
     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
+    
+    # Klucz dla zapisywania wyników w danych użytkownika
+    results_key = f"{quiz_id}_results"
+    
+    # Sprawdź czy quiz został już ukończony i są zapisane wyniki
+    completed_quiz_data = None
+    if 'user_data' in st.session_state and results_key in st.session_state.user_data:
+        completed_quiz_data = st.session_state.user_data[results_key]
+    
+    # Przycisk "Przystąp ponownie" jeśli quiz był już ukończony
+    if completed_quiz_data:
+        st.markdown('<div class="quiz-results">', unsafe_allow_html=True)
+        st.success(f"✅ Ukończyłeś już ten quiz w dniu: {completed_quiz_data.get('completion_date', 'nieznana data')}")
+        
+        # Wyświetl poprzednie wyniki
+        if 'answers' in completed_quiz_data:
+            with st.expander("🔍 Zobacz swoje poprzednie odpowiedzi"):
+                quiz_type = quiz_data.get('type', 'buttons')
+                if quiz_type == 'slider':
+                    scale = quiz_data.get('scale', {'min': 1, 'max': 5})
+                    labels = scale.get('labels', {})
+                    
+                    total_points = 0
+                    for i, (question, answer) in enumerate(zip(quiz_data['questions'], completed_quiz_data['answers'])):
+                        st.write(f"**Pytanie {i+1}:** {question['question']}")
+                        answer_label = labels.get(str(answer), str(answer))
+                        st.write(f"**Odpowiedź:** {answer} - {answer_label}")
+                        total_points += answer
+                        st.markdown("---")
+                    
+                    st.info(f"**Łączna suma punktów:** {total_points}/{len(quiz_data['questions']) * scale['max']}")
+                else:
+                    # Stary format z opcjami
+                    for i, (question, answer) in enumerate(zip(quiz_data['questions'], completed_quiz_data['answers'])):
+                        st.write(f"**Pytanie {i+1}:** {question['question']}")
+                        if isinstance(answer, int) and answer < len(question.get('options', [])):
+                            st.write(f"**Odpowiedź:** {question['options'][answer]}")
+                        st.markdown("---")
+        
+        if st.button("🔄 Przystąp do quizu ponownie", key=f"{quiz_id}_restart"):
+            # Wyczyść dane sesji dla tego quizu
+            if quiz_id in st.session_state:
+                del st.session_state[quiz_id]
+            
+            # Wyczyść wszystkie klucze związane z tym quizem (suwaki, checkboxy, radio)
+            keys_to_delete = []
+            for key in st.session_state.keys():
+                if isinstance(key, str) and key.startswith(f"{quiz_id}_"):
+                    keys_to_delete.append(key)
+            
+            for key in keys_to_delete:
+                del st.session_state[key]
+            
+            # Usuń wyniki z persistent storage
+            if 'user_data' in st.session_state and results_key in st.session_state.user_data:
+                del st.session_state.user_data[results_key]
+            
+            st.rerun()
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        return True, True, completed_quiz_data.get('total_points', 0)
+    
+    # Inicjalizacja stanu quizu
     if quiz_id not in st.session_state:
         st.session_state[quiz_id] = {
-            "answered_questions": [],
-            "correct_answers": 0,
-            "total_questions": len(quiz_data['questions']),
+            "answers": [None] * len(quiz_data['questions']),
             "completed": False,
-            "total_points": 0  # Dla quizów samodiagnozy
+            "total_points": 0
         }
     
-    # Backward compatibility: ensure total_points exists for existing sessions
-    if "total_points" not in st.session_state[quiz_id]:
-        st.session_state[quiz_id]["total_points"] = 0
+    # Wyświetl wszystkie pytania
+    quiz_type = quiz_data.get('type', 'buttons')
+    all_answered = True
+    
+    for i, question in enumerate(quiz_data['questions']):
+        question_id = f"{quiz_id}_q{i}"
+        
+        # Kontener dla pytania
+        st.markdown(f"""
+        <div class="quiz-question">
+            <h3>Pytanie {i+1}: {question['question']}</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if quiz_type == 'slider' or question.get('type') == 'slider':
+            # Quiz ze suwakami
+            scale = quiz_data.get('scale', {'min': 1, 'max': 5})
+            min_val = scale['min']
+            max_val = scale['max']
+            default_val = question.get('default', (min_val + max_val) // 2)
+            
+            # Wyświetl etykiety skali
+            if 'labels' in scale:
+                labels_html = "<div style='display: flex; justify-content: space-between; margin: 10px 0; font-size: 0.9em; color: #666;'>"
+                for value in range(min_val, max_val + 1):
+                    label = scale['labels'].get(str(value), str(value))
+                    labels_html += f"<span><strong>{value}</strong>: {label}</span>"
+                labels_html += "</div>"
+                st.markdown(labels_html, unsafe_allow_html=True)
+            
+            # Użyj poprzedniej odpowiedzi jako wartość domyślną, jeśli istnieje
+            current_value = st.session_state[quiz_id]["answers"][i]
+            if current_value is None:
+                current_value = default_val
+            
+            # Suwak
+            slider_key = f"{question_id}_slider"
+            selected_value = st.slider(
+                "Twoja ocena:",
+                min_value=min_val,
+                max_value=max_val,
+                value=current_value,
+                key=slider_key,
+                help=f"Przesuń suwak, aby wybrać wartość od {min_val} do {max_val}"
+            )
+            
+            # Zapisz odpowiedź w czasie rzeczywistym
+            st.session_state[quiz_id]["answers"][i] = selected_value
+            
+        else:
+            # Stary format z przyciskami/checkboxami
+            if question.get('type') == 'multiple_choice':
+                st.write("**Wybierz wszystkie poprawne odpowiedzi:**")
+                current_answers = st.session_state[quiz_id]["answers"][i] or []
+                selected_options = []
+                
+                for j, option in enumerate(question['options']):
+                    checkbox_key = f"{question_id}_opt{j}"
+                    checked = j in current_answers
+                    if st.checkbox(option, value=checked, key=checkbox_key):
+                        selected_options.append(j)
+                
+                st.session_state[quiz_id]["answers"][i] = selected_options
+                if not selected_options:
+                    all_answered = False
+                    
+            else:
+                # Single choice
+                current_answer = st.session_state[quiz_id]["answers"][i]
+                selected_option = st.radio(
+                    "Wybierz odpowiedź:",
+                    options=range(len(question['options'])),
+                    format_func=lambda x: question['options'][x],
+                    index=current_answer if current_answer is not None else None,
+                    key=f"{question_id}_radio"
+                )
+                
+                st.session_state[quiz_id]["answers"][i] = selected_option
+                if selected_option is None:
+                    all_answered = False
+        
+        st.markdown("---")
+    
+    # Sprawdź czy wszystkie pytania zostały odpowiedziane
+    for i, answer in enumerate(st.session_state[quiz_id]["answers"]):
+        if answer is None or (isinstance(answer, list) and len(answer) == 0):
+            all_answered = False
+            break
+    
+    # Przycisk zatwierdzenia wszystkich odpowiedzi
+    if all_answered:
+        st.markdown('<div style="text-align: center; margin: 30px 0;">', unsafe_allow_html=True)
+        if st.button("🎯 Zatwierdź wszystkie odpowiedzi", key=f"{quiz_id}_submit_all", help="Zatwierdź quiz i zapisz wyniki"):
+            # Oblicz wyniki
+            total_points = 0
+            correct_answers = 0
+            
+            for i, (question, answer) in enumerate(zip(quiz_data['questions'], st.session_state[quiz_id]["answers"])):
+                if quiz_type == 'slider':
+                    total_points += answer
+                else:
+                    if is_self_diagnostic:
+                        # Dla quizów autodiagnozy: opcje 0-4 = 1-5 punktów
+                        if isinstance(answer, list):
+                            total_points += sum(j + 1 for j in answer)
+                        else:
+                            total_points += answer + 1
+                    else:
+                        # Dla quizów testowych
+                        correct_answer = question.get('correct_answer')
+                        if correct_answer is not None and answer == correct_answer:
+                            correct_answers += 1
+                        elif question.get('type') == 'multiple_choice':
+                            correct_answers_list = question.get('correct_answers', [])
+                            if set(answer) == set(correct_answers_list):
+                                correct_answers += 1
+            
+            # Zapisz wyniki do danych użytkownika (persistent storage)
+            if 'user_data' not in st.session_state:
+                st.session_state.user_data = {}
+            
+            from datetime import datetime
+            completion_date = datetime.now().strftime("%Y-%m-%d %H:%M")
+            
+            st.session_state.user_data[results_key] = {
+                'answers': st.session_state[quiz_id]["answers"].copy(),
+                'total_points': total_points,
+                'correct_answers': correct_answers,
+                'completion_date': completion_date,
+                'quiz_type': quiz_type
+            }
+            
+            # Oznacz quiz jako ukończony
+            st.session_state[quiz_id]["completed"] = True
+            st.session_state[quiz_id]["total_points"] = total_points
+            
+            st.success(f"✅ Quiz został ukończony! Twoje wyniki zostały zapisane.")
+            
+            # Wyświetl podsumowanie
+            if quiz_type == 'slider':
+                scale = quiz_data.get('scale', {'min': 1, 'max': 5})
+                max_possible = len(quiz_data['questions']) * scale['max']
+                st.info(f"📊 **Łączna suma punktów:** {total_points}/{max_possible}")
+            elif is_self_diagnostic:
+                st.info(f"📊 **Suma punktów autodiagnozy:** {total_points}")
+            else:
+                percentage = (correct_answers / len(quiz_data['questions'])) * 100
+                st.info(f"📊 **Wynik:** {correct_answers}/{len(quiz_data['questions'])} ({percentage:.1f}%)")
+            
+            # Przycisk "Przystąp ponownie"
+            st.markdown("---")
+            col1, col2, col3 = st.columns([1, 1, 1])
+            with col2:
+                if st.button("🔄 Przystąp ponownie", key=f"{quiz_id}_retry", help="Możesz ponownie przystąpić do quizu", use_container_width=True):
+                    # Reset kompletnego stanu quizu
+                    if quiz_id in st.session_state:
+                        del st.session_state[quiz_id]
+                    
+                    # Usuń wszystkie odpowiedzi na pytania
+                    for i in range(len(quiz_data.get('questions', []))):
+                        question_key = f"{quiz_id}_q{i}_selected"
+                        if question_key in st.session_state:
+                            del st.session_state[question_key]
+                        
+                        # Usuń także klucze suwaków jeśli istnieją
+                        slider_key = f"{quiz_id}_q{i}_slider"
+                        if slider_key in st.session_state:
+                            del st.session_state[slider_key]
+                    
+                    # Usuń wyniki z persistent storage
+                    if 'user_data' in st.session_state and results_key in st.session_state.user_data:
+                        del st.session_state.user_data[results_key]
+                    
+                    st.rerun()
+            
+            st.rerun()
+            
+        st.markdown('</div>', unsafe_allow_html=True)
+    else:
+        st.warning("⚠️ Odpowiedz na wszystkie pytania, aby móc zatwierdzić quiz.")
+    
+    # Zwróć status ukończenia
+    quiz_completed = st.session_state[quiz_id].get("completed", False)
+    quiz_passed = quiz_completed  # Dla autodiagnozy zawsze zaliczony
+    earned_points = st.session_state[quiz_id].get("total_points", 0)
+    
+    return quiz_completed, quiz_passed, earned_points
+
+
+def check_lesson_prerequisites(lesson_id, user_progress):
+    """
+    Sprawdza czy użytkownik ma wymagane wyniki z poprzednich lekcji
+    """
+    # Pobierz ustawienia wymagań dla lekcji
+    lesson_requirements = get_lesson_requirements(lesson_id)
+    
+    if not lesson_requirements:
+        return True  # Brak wymagań = dostęp dozwolony
+    
+    for requirement in lesson_requirements:
+        required_lesson = requirement.get('lesson')
+        required_score = requirement.get('min_score', 0)
+        
+        # Sprawdź wynik z wymaganej lekcji
+        if required_lesson not in user_progress:
+            return False
+        
+        lesson_data = user_progress[required_lesson]
+        score = lesson_data.get('quiz_score', 0)
+        
+        if score < required_score:
+            return False
+    
+    return True
+
+
+def get_lesson_requirements(lesson_id):
+    """
+    Pobiera wymagania dla danej lekcji
+    """
+    # W przyszłości można to przenieść do pliku konfiguracyjnego
+    requirements = {
+        "1": [],  # Pierwsza lekcja - brak wymagań
+        "2": [{"lesson": "1", "min_score": 60}],  # Druga lekcja wymaga 60% z pierwszej
+        "3": [{"lesson": "2", "min_score": 60}],  # itd.
+    }
+    
+    return requirements.get(lesson_id, [])
     
     # Wyświetl wszystkie pytania
     for i, question in enumerate(quiz_data['questions']):
@@ -2019,52 +2213,72 @@ def display_quiz(quiz_data, passing_threshold=60):
         if i in st.session_state[quiz_id]["answered_questions"]:
             selected = st.session_state.get(f"{question_id}_selected")
             question_type = question.get('type', 'single_choice')
+            quiz_type = quiz_data.get('type', 'buttons')
             
-            # Wyświetl odpowiedzi z oznaczeniem poprawnej
-            for j, option in enumerate(question['options']):
-                # Dla quizów samodiagnozy - wszystkie opcje równe
-                if is_self_diagnostic:
-                    if isinstance(selected, list):
-                        # Wielokrotny wybór w samodiagnozie (rzadko używane)
-                        if j in selected:
-                            st.markdown(f"✓ **{option}** _(Twoja odpowiedź)_")
-                        else:
-                            st.markdown(f"○ {option}")
-                    else:
-                        # Pojedynczy wybór w samodiagnozie
-                        if j == selected:
-                            st.markdown(f"✓ **{option}** _(Twoja odpowiedź)_")
-                        else:
-                            st.markdown(f"○ {option}")
-                else:
-                    # Dla quizów z poprawnymi odpowiedziami
-                    if question_type == 'multiple_choice':
-                        # Pytania z wielokrotnym wyborem
-                        correct_answers = question.get('correct_answers', [])
-                        selected_list = selected if isinstance(selected, list) else []
-                        
-                        if j in correct_answers and j in selected_list:
-                            st.markdown(f"✅ **{option}** _(Poprawna odpowiedź - wybrana)_")
-                        elif j in correct_answers and j not in selected_list:
-                            st.markdown(f"✅ **{option}** _(Poprawna odpowiedź - nie wybrana)_")
-                        elif j not in correct_answers and j in selected_list:
-                            st.markdown(f"❌ **{option}** _(Niepoprawna odpowiedź - wybrana)_")
-                        else:
-                            st.markdown(f"○ {option}")
-                    else:
-                        # Pytania z pojedynczym wyborem
-                        correct_answer = question.get('correct_answer')
-                        is_correct = correct_answer is not None and selected == correct_answer
-                        
-                        if correct_answer is not None:
-                            if j == correct_answer:
-                                st.markdown(f"✅ **{option}** _(Poprawna odpowiedź)_")
-                            elif j == selected and not is_correct:
-                                st.markdown(f"❌ **{option}** _(Twoja odpowiedź)_")
+            # Obsługa wyświetlania odpowiedzi dla suwaków
+            if quiz_type == 'slider' or question_type == 'slider':
+                scale = quiz_data.get('scale', {'min': 1, 'max': 5})
+                labels = scale.get('labels', {})
+                selected_label = labels.get(str(selected), str(selected))
+                
+                st.markdown(f"✓ **Twoja odpowiedź: {selected} - {selected_label}**")
+                
+                # Wyświetl skalę dla kontekstu
+                if 'labels' in scale:
+                    labels_html = "<div style='background: #f8f9fa; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 0.9em;'>"
+                    labels_html += "<strong>Skala ocen:</strong><br>"
+                    for value in range(scale['min'], scale['max'] + 1):
+                        label = labels.get(str(value), str(value))
+                        style = "background: #4caf50; color: white; padding: 2px 6px; border-radius: 4px;" if value == selected else ""
+                        labels_html += f"<span style='{style}'>{value}: {label}</span> "
+                    labels_html += "</div>"
+                    st.markdown(labels_html, unsafe_allow_html=True)
+            else:
+                # Wyświetl odpowiedzi z oznaczeniem poprawnej (stary kod)
+                for j, option in enumerate(question['options']):
+                    # Dla quizów samodiagnozy - wszystkie opcje równe
+                    if is_self_diagnostic:
+                        if isinstance(selected, list):
+                            # Wielokrotny wybór w samodiagnozie (rzadko używane)
+                            if j in selected:
+                                st.markdown(f"✓ **{option}** _(Twoja odpowiedź)_")
                             else:
                                 st.markdown(f"○ {option}")
                         else:
-                            st.markdown(f"○ {option}")
+                            # Pojedynczy wybór w samodiagnozie
+                            if j == selected:
+                                st.markdown(f"✓ **{option}** _(Twoja odpowiedź)_")
+                            else:
+                                st.markdown(f"○ {option}")
+                    else:
+                        # Dla quizów z poprawnymi odpowiedziami
+                        if question_type == 'multiple_choice':
+                            # Pytania z wielokrotnym wyborem
+                            correct_answers = question.get('correct_answers', [])
+                            selected_list = selected if isinstance(selected, list) else []
+                            
+                            if j in correct_answers and j in selected_list:
+                                st.markdown(f"✅ **{option}** _(Poprawna odpowiedź - wybrana)_")
+                            elif j in correct_answers and j not in selected_list:
+                                st.markdown(f"✅ **{option}** _(Poprawna odpowiedź - nie wybrana)_")
+                            elif j not in correct_answers and j in selected_list:
+                                st.markdown(f"❌ **{option}** _(Niepoprawna odpowiedź - wybrana)_")
+                            else:
+                                st.markdown(f"○ {option}")
+                        else:
+                            # Pytania z pojedynczym wyborem
+                            correct_answer = question.get('correct_answer')
+                            is_correct = correct_answer is not None and selected == correct_answer
+                            
+                            if correct_answer is not None:
+                                if j == correct_answer:
+                                    st.markdown(f"✅ **{option}** _(Poprawna odpowiedź)_")
+                                elif j == selected and not is_correct:
+                                    st.markdown(f"❌ **{option}** _(Twoja odpowiedź)_")
+                                else:
+                                    st.markdown(f"○ {option}")
+                            else:
+                                st.markdown(f"○ {option}")
               # Wyświetl wyjaśnienie
             if "explanation" in question:
                 st.info(question['explanation'])
@@ -2077,7 +2291,55 @@ def display_quiz(quiz_data, passing_threshold=60):
             # Rozpocznij sekcję przycisków odpowiedzi quiz z odpowiednią klasą
             st.markdown(f'<div class="quiz-answers-section {quiz_type_class}">', unsafe_allow_html=True)
             
-            if is_self_diagnostic:
+            # Sprawdź czy to quiz ze suwakami
+            question_type = question.get('type', 'single_choice')
+            quiz_type = quiz_data.get('type', 'buttons')
+            
+            if quiz_type == 'slider' or question_type == 'slider':
+                # Quiz ze suwakami
+                scale = quiz_data.get('scale', {'min': 1, 'max': 5})
+                min_val = scale['min']
+                max_val = scale['max']
+                default_val = question.get('default', (min_val + max_val) // 2)
+                
+                # Wyświetl etykiety skali
+                if 'labels' in scale:
+                    labels_html = "<div style='display: flex; justify-content: space-between; margin: 10px 0; font-size: 0.9em; color: #666;'>"
+                    for value in range(min_val, max_val + 1):
+                        label = scale['labels'].get(str(value), str(value))
+                        labels_html += f"<span><strong>{value}</strong>: {label}</span>"
+                    labels_html += "</div>"
+                    st.markdown(labels_html, unsafe_allow_html=True)
+                
+                # Suwak
+                slider_key = f"{question_id}_slider"
+                selected_value = st.slider(
+                    "Twoja ocena:",
+                    min_value=min_val,
+                    max_value=max_val,
+                    value=default_val,
+                    key=slider_key,
+                    help=f"Przesuń suwak, aby wybrać wartość od {min_val} do {max_val}"
+                )
+                
+                # Przycisk zatwierdzenia
+                if st.button("Zatwierdź odpowiedź", key=f"{question_id}_submit_slider"):
+                    # Zapisz wybraną wartość
+                    st.session_state[f"{question_id}_selected"] = selected_value
+                    st.session_state[quiz_id]["answered_questions"].append(i)
+                    
+                    # Dla quizów samodiagnozy - zlicz punkty
+                    if "total_points" not in st.session_state[quiz_id]:
+                        st.session_state[quiz_id]["total_points"] = 0
+                    st.session_state[quiz_id]["total_points"] += selected_value
+                    
+                    if len(st.session_state[quiz_id]["answered_questions"]) == st.session_state[quiz_id]["total_questions"]:
+                        st.session_state[quiz_id]["completed"] = True
+                    
+                    st.rerun()
+                    return False, False, 0
+                    
+            elif is_self_diagnostic:
                 # Quiz autorefleksji - przyciski krótkie, dopasowane do treści
                 for j, option in enumerate(question['options']):
                     # Każdy przycisk w osobnej kolumnie o minimalnej szerokości
