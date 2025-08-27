@@ -16,7 +16,7 @@
   "intro": {
     "main": "<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: white;'>🧠 Witaj w kursie Brainventure!</h1><p style='font-size: 1.2rem; text-align: center; margin-bottom: 30px;'>Poznaj sekrety mózgu, które pomogą Ci zostać lepszym liderem</p></div><h2>📖 Jak korzystać z kursu?</h2><div style='background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #667eea;'><p style='font-size: 1.1rem; margin-bottom: 20px;'>Kurs <strong>Brainventure</strong> zaczyna się od tej lekcji wstępnej <strong>\"Wprowadzenie do neuroprzywództwa\"</strong>, gdzie zapoznasz się z praktycznym case study dotyczącym dnia z życia menedżera.</p><p style='margin-bottom: 20px;'>Ten case study zostanie następnie omówiony w kontekście wiedzy o neuroprzywództwie, co będzie wprowadzeniem do omówienia treści całego kursu.</p><h3 style='color: #667eea; margin-bottom: 15px;'>📚 Treść kursu obejmuje 10 kluczowych modułów:</h3><ol style='line-height: 1.8;'><li><strong>Mózg emocjonalny</strong> - jak emocje wpływają na decyzje</li><li><strong>Chemia mózgu</strong> - neurotransmitery i ich rola w przywództwie</li><li><strong>Model SCARF</strong> - 5 podstawowych potrzeb mózgu</li><li><strong>Model SEEDS</strong> - budowanie pozytywnego środowiska</li><li><strong>Stres i odporność psychiczna</strong> - zarządzanie presją</li><li><strong>Podejmowanie decyzji i ryzyko</strong> - mechanizmy wyboru</li><li><strong>Pamięć i uwaga</strong> - utrata zdolności poznawczych</li><li><strong>Kondycja mózgu</strong> - jak wspierać jego zdrowie i wydajność</li><li><strong>Kształtowanie nawyków</strong> - neuroplastyczność w działaniu</li><li><strong>Wyzwania menedżerskie</strong> - motywowanie, rozwój, zmiana</li></ol><p style='margin-top: 20px; font-style: italic; color: #666;'>Na końcu tej lekcji wstępnej wykonasz test autodiagnozy, aby sprawdzić, na ile poszczególne zagadnienia z kursu są istotne i ważne w Twoim życiu zawodowym.</p></div><div style='background: #e3f2fd; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #1976d2;'><h3 style='color: #1976d2; margin-bottom: 15px;'>🏗️ Struktura każdej lekcji:</h3><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;'><div><strong>1. 📖 Wprowadzenie do lekcji</strong><br><span style='color: #666; font-size: 0.9rem;'>Cele i kontekst materiału</span></div><div><strong>2. 🎓 Materiał edukacyjny</strong><br><span style='color: #666; font-size: 0.9rem;'>Przystępne wyjaśnienie kwestii merytorycznych</span></div></div><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 20px;'><div><strong>3. 💪 Ćwiczenia praktyczne</strong><br><span style='color: #666; font-size: 0.9rem;'>Zastosowanie w praktyce + test sprawdzający</span></div><div><strong>4. 📋 Podsumowanie</strong><br><span style='color: #666; font-size: 0.9rem;'>Kluczowe wnioski i następne kroki</span></div></div></div><div style='background: #f3e5f5; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #9c27b0;'><h3 style='color: #9c27b0; margin-bottom: 15px;'>🎯 System motywacyjny:</h3><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 20px;'><div><strong>💎 Punkty doświadczenia (XP)</strong><br><span style='color: #666; font-size: 0.9rem;'>Za każdą ukończoną sekcję lekcji</span><br><br><strong>🏆 Odznaki i osiągnięcia</strong><br><span style='color: #666; font-size: 0.9rem;'>Za specjalne sukcesy w nauce</span></div><div><strong>💡 Materiały dodatkowe (Inspiracje)</strong><br><span style='color: #666; font-size: 0.9rem;'>Artykuły, case study, dodatkowe źródła</span><br><br><strong>📊 Śledzenie postępów</strong><br><span style='color: #666; font-size: 0.9rem;'>Wizualizacja Twojego rozwoju</span></div></div></div><div style='background: linear-gradient(135deg, #28a745 0%, #20c997 100%); padding: 25px; border-radius: 10px; color: white; text-align: center; margin: 20px 0;'><h3 style='margin-bottom: 15px; color: white;'>🚀 Rozpocznij swoją podróż!</h3><p style='margin-bottom: 15px; font-size: 1.1rem;'>Kliknij przycisk <strong>\"Dalej: Case Study\"</strong> aby poznać historię menedżera!</p><p style='font-size: 0.9rem; opacity: 0.9;'>Każdy wielki lider zaczynał od pierwszego kroku. Czas na Twój! 💪</p></div>"
   },
-  
+
   "sections": {
     "learning": {
       "sections": [
@@ -36,107 +36,137 @@
     
     "practical_exercises": {
       "case_study_analysis": {
-        "title": "Analiza Case Study - 10 zagadnień neuroprzywództwa",
-        "description": "Przeanalizuj poszczególne sytuacje z dnia menedżera w kontekście wiedzy o neuroprzywództwie",
+        "title": "Case Study: Dzień z życia menedżerki Anny",
+        "description": "Przeanalizuj poszczególne sytuacje z dnia menedżerki Anny pod kątem neuroprzywództwa. Każda część przedstawia konkretną sytuację, którą można rozpatrzyć w kontekście wiedzy o mózgu i emocjach.",
         "parts": [
           {
             "id": 1,
-            "title": "Mózg emocjonalny - jak emocje wpływają na decyzje",
-            "case_content": "W pierwszej części dnia menedżer musi podjąć trudną decyzję o zwolnieniu pracownika. Zauważa, że emocje (stres, żal, niepewność) znacząco wpływają na jego zdolność logicznego myślenia. Próbuje zachować profesjonalizm, ale jego reakcje emocjonalne są widoczne dla zespołu.",
+            "title": "Pobudka",
+            "case_content": "Poniedziałek 6.00 rano. Na dworze jeszcze półmrok. Anna otwiera oczy, zirytowana ostrym dźwiękiem budzika. Ach gdyby można było pospać jeszcze dwie godziny… Ma za sobą intensywny weekend: nadrabianie zaległości w pracy, impreza rodzinna, cotygodniowe zakupy i sprzątanie. W konsekwencji dużo obowiązków i mało snu. Przydałby się choć krótki urlop.",
             "video": {
               "url": "https://youtu.be/PLACEHOLDER_1",
-              "title": "Jak emocje wpływają na decyzje menedżerskie",
-              "description": "Analiza neurobiologicznych mechanizmów podejmowania decyzji"
+              "title": "Wpływ braku snu na funkcjonowanie mózgu",
+              "description": "Jak niedobór snu wpływa na podejmowanie decyzji i regulację emocji"
             }
           },
           {
             "id": 2,
-            "title": "Chemia mózgu - neurotransmitery i ich rola w przywództwie",
-            "case_content": "Podczas spotkania zespołu menedżer zauważa różne poziomy energii i motywacji pracowników. Niektórzy są podekscytowani nowymi projektami, inni wydają się apatyczni. Zastanawia się, jak można wpłynąć na biochemię mózgu zespołu, aby zwiększyć zaangażowanie.",
+            "title": "Poranne rozmyślania",
+            "case_content": "Tymczasem ten tydzień zapowiada się bardzo stresująco. Dziś czeka ją prezentacja przed zarządem, a poprzedniego wieczoru nie zdążyła jej dopracować, tak jak by tego chciała. Walczy o większy budżet marketingowy i jeśli nie uzyska poparcia zapowiada się katastrofa. Zapewne będzie poważny problem z realizacją planów biznesowych. A ile narzekania i frustracji w zespole… Do tego ostatnie spięcie z szefem, dotyczące jej odpowiedzialności za opóźnienia w projekcie. Nie przyjął argumentu, że przecież nagle wykruszyła się jej jedna osoba, a reszta miała swoje zadania do zrobienia. 'Źle zarządziłaś ich pracą' – powtarzał jak mantrę. Czuje narastające napięcie i niepokój, Serce zaczyna jej walić mocniej, a w głowie zaczynają się pojawiać czarne scenariusze zdarzeń. Próbuje je ignorować, mówiąc sobie: jakoś to będzie, ale emocje biorą górę. Lubi swoją pracę, jednak w takich momentach jak dziś, czuje jedynie złość i zniechęcenie.",
             "video": {
-              "url": "https://youtu.be/PLACEHOLDER_2", 
-              "title": "Neurotransmitery w motywowaniu zespołu",
-              "description": "Rola dopaminy, serotoniny i innych neuroprzekaźników"
+              "url": "https://youtu.be/PLACEHOLDER_2",
+              "title": "Neurobiologia stresu i lęku",
+              "description": "Jak mózg reaguje na stres i tworzy negatywne scenariusze"
             }
           },
           {
             "id": 3,
-            "title": "Model SCARF - 5 podstawowych potrzeb mózgu",
-            "case_content": "W trakcie prezentacji wyników jeden z pracowników reaguje defensywnie na krytykę. Menedżer rozpoznaje, że zostały naruszone podstawowe potrzeby: Status (krytyka publiczna), Pewność (nieprzewidywalne zmiany), Autonomia (narzucone rozwiązania).",
+            "title": "Kawa i droga do pracy",
+            "case_content": "Rano, czas jak zwykle, nabiera przyspieszenia. Na spokojne śniadanie brakuje czasu. W pośpiechu pije kawę, prawie się nią krztusząc, gdy dostrzega, że na zegarku jest już bardzo późno. W drodze do pracy stoi w długim korku. Wykorzystuje ten moment aby przejrzeć telefon. Widzi kilka maili, na które powinna pilnie odpowiedzieć. Jeden z nich, od szefa, nawiązuje do ich niedawnej kłótni. Zaczyna się zastanawiać, czy konflikt z przełożonym zagrozi jej pozycji w firmie. Tym bardziej, dzisiejsza prezentacja ma duże znaczenie. Gdy w końcu wchodzi do biura, czuje się zmęczona samym rozmyślaniem o sprawach, które mogą ułożyć się nie po jej myśli.",
             "video": {
               "url": "https://youtu.be/PLACEHOLDER_3",
-              "title": "Model SCARF w praktyce menedżerskiej", 
-              "description": "Jak zaspokajać potrzeby Status, Certainty, Autonomy, Relatedness, Fairness"
+              "title": "Multitasking i jego wpływ na mózg",
+              "description": "Dlaczego wielozadaniowość obniża wydajność kognitywną"
             }
           },
           {
             "id": 4,
-            "title": "Model SEEDS - budowanie pozytywnego środowiska",
-            "case_content": "Menedżer planuje reorganizację biura i zastanawia się, jak stworzyć przestrzeń, która będzie wspierać kreatywność i współpracę. Rozważa elementy: Bezpieczeństwo psychiczne, pozytywne Emocje, możliwość Eksploracji nowych pomysłów, budowanie Społeczności.",
+            "title": "Rozruch w pracy",
+            "case_content": "Włącza komputer i zaczyna porządkować biurko, na którym od piątku zalega stos dokumentów. Stara się to zrobić szybko, bo powiadomienia z outlook'a przypominają jej o mnogości spraw, którymi powinna się dzisiaj zająć. Raporty, przypomnienia o spotkaniach, informacje o nowym systemie IT, kilka maili od ważnych klientów. Notuje kilka rzeczy na kartce i próbuje zebrać myśli. Po godzinie ma wrażenie, że 'nic nie zrobiła'.",
             "video": {
               "url": "https://youtu.be/PLACEHOLDER_4",
-              "title": "Model SEEDS - tworzenie pozytywnego środowiska",
-              "description": "Safety, Emotions, Exploration, Social connection"
+              "title": "Przeciążenie informacyjne mózgu",
+              "description": "Jak nadmiar bodźców wpływa na koncentrację i produktywność"
             }
           },
           {
             "id": 5,
-            "title": "Stres i odporność psychiczna - zarządzanie presją",
-            "case_content": "Pod koniec dnia menedżer czuje się przytłoczony ilością zadań i odpowiedzialności. Zauważa pierwsze oznaki wypalenia zawodowego u siebie i niektórych członków zespołu. Zastanawia się nad strategiami budowania odporności na stres.",
+            "title": "Kawa w pracy",
+            "case_content": "Żeby dodać sobie energii idzie zrobić kawę. W kuchni spotyka kilka osób ze swojego zespołu. Rozmawiają z ożywieniem o jakimś filmie. Patrzy na zegarek. Jest już 10.00, a oni pewnie jeszcze nie zaczęli pracy. Czuje irytację i nie może się powstrzymać od uwagi: A wy nie macie nic pilnego do zrobienia? Podobno tacy jesteście zapracowani…",
             "video": {
               "url": "https://youtu.be/PLACEHOLDER_5",
-              "title": "Zarządzanie stresem w zespole",
-              "description": "Neurobiologia stresu i techniki budowania odporności"
+              "title": "Reakcje emocjonalne w zespole",
+              "description": "Jak stres wpływa na komunikację i relacje interpersonalne"
             }
           },
           {
             "id": 6,
-            "title": "Podejmowanie decyzji i ryzyko - mechanizmy wyboru",
-            "case_content": "Menedżer stoi przed wyborem między bezpieczną, sprawdzoną strategią a innowacyjnym, ale ryzykownym podejściem. Analizuje swoje procesy myślowe i rozpoznaje wpływ uprzedzeń poznawczych na ocenę ryzyka.",
+            "title": "Przed prezentacją",
+            "case_content": "Wraca do biurka i próbuje skupić się na samodzielnej pracy, ale jej umysł wciąż błądzi. Co chwilę zerka na telefon, nerwowo przegląda maile i notatki, sprawdza listę zadań do zrobienia. Do prezentacji zostały dwie godziny więc postanawia szybko uporać się ze sprawdzeniem zaległego raportu. Łapie się jednak na tym, że trzeci raz czyta ten sam akapit i nie rozumie treści. Myślami odpływa – raz do sytuacji z szefem, raz do czekającej ją prezentacji.",
             "video": {
               "url": "https://youtu.be/PLACEHOLDER_6",
-              "title": "Neurobiologia podejmowania decyzji",
-              "description": "Jak mózg ocenia ryzyko i podejmuje wybory"
+              "title": "Koncentracja i rozproszenie uwagi",
+              "description": "Neurobiologia skupienia i czynniki je zakłócające"
             }
           },
           {
             "id": 7,
-            "title": "Pamięć i uwaga - utrata zdolności poznawczych",
-            "case_content": "Podczas ważnego spotkania menedżer zauważa, że ma problemy z koncentracją i zapominaniem szczegółów. Pracownicy również wydają się rozkojarzeni. Zastanawia się nad czynnikami wpływającymi na zdolności kognitywne zespołu.",
+            "title": "Prośba Michała",
+            "case_content": "Gdy wchodzi Michał i pyta, czy mogłaby mu towarzyszyć w trakcie jutrzejszego spotkania z trudnym klientem chłodno i stanowczo mu odmawia. W końcu to doświadczony pracownik i powinien sobie poradzić bez niej.",
             "video": {
               "url": "https://youtu.be/PLACEHOLDER_7",
-              "title": "Optymalizacja zdolności poznawczych",
-              "description": "Czynniki wpływające na pamięć, uwagę i koncentrację"
+              "title": "Empatia i wsparcie w zespole",
+              "description": "Jak stres wpływa na zdolność do empatii i współpracy"
             }
           },
           {
             "id": 8,
-            "title": "Kondycja mózgu - jak wspierać jego zdrowie i wydajność",
-            "case_content": "Menedżer zauważa związek między stylem życia zespołu (sen, odżywianie, aktywność fizyczna) a ich wydajnością w pracy. Planuje wprowadzenie programu wellness, który wspierałby zdrowie mózgu pracowników.",
+            "title": "W drodze na prezentację",
+            "case_content": "Zbliża się 12.00. Za chwilę spotkanie Zarządu. Anna zbiera swoje rzeczy i idzie do windy. Z jednej strony czuje mobilizację, z drugiej strony, dużo myśli krąży po jej głowie, a w tle czai się obawa, że coś pójdzie nie tak.",
             "video": {
               "url": "https://youtu.be/PLACEHOLDER_8",
-              "title": "Wellness mózgu w miejscu pracy",
-              "description": "Jak styl życia wpływa na funkcjonowanie mózgu"
+              "title": "Stres przed ważnymi wydarzeniami",
+              "description": "Jak mózg przygotowuje się do wyzwań i zarządza lękiem"
             }
           },
           {
             "id": 9,
-            "title": "Kształtowanie nawyków - neuroplastyczność w działaniu",
-            "case_content": "Menedżer chce wprowadzić nowe procedury w zespole, ale napotyka opór związany z utrwalonymi nawykami. Zastanawia się, jak wykorzystać neuroplastyczność mózgu do skutecznego wprowadzania zmian.",
+            "title": "Po prezentacji",
+            "case_content": "Anna wraca po spotkaniu w fatalnym humorze. Spotkanie z zarządem poszło nie najlepiej. Dyrektor finansowy, wyjątkowo krytycznie odniósł się do jej propozycji, twierdząc, że nie ma podstaw ekonomicznych. Czepiał się szczegółów i ignorował jej argumenty. Tak jakby miał do niej jakąś osobistą niechęć. Jednocześnie bowiem dosyć pobłażliwie potraktował prezentację koleżanki z innego działu, która podobnie jak Anna walczyła o większy budżet marketingowy. Przełożony Anny milczał. Nie wsparł jej nawet słowem. Anna czuła rozżalenie i bezsilność. W pewnym momencie ledwo powstrzymała się od ostrej reakcji na kolejne zarzuty. Zaciskała tylko pięści pod stołem, czekając na koniec tej farsy.",
             "video": {
               "url": "https://youtu.be/PLACEHOLDER_9",
-              "title": "Neuroplastyczność i zmiana nawyków",
-              "description": "Jak mózg uczy się nowych wzorców zachowań"
+              "title": "Poczucie sprawiedliwości i status",
+              "description": "Model SCARF - jak naruszenie potrzeb mózgu wpływa na reakcje"
             }
           },
           {
             "id": 10,
-            "title": "Wyzwania menedżerskie - motywowanie, rozwój, zmiana",
-            "case_content": "Na koniec dnia menedżer podsumowuje wszystkie wyzwania i zastanawia się, jak zastosować wiedzę o neuroprzywództwie do: motywowania zespołu, wspierania rozwoju pracowników i skutecznego zarządzania zmianą organizacyjną.",
+            "title": "Spotkanie z zespołem",
+            "case_content": "W minorowym nastroju rozpoczyna spotkanie ze swoim zespołem. Wykręca się od odpowiedzi na pytanie: jak poszła prezentacja dla Zarządu. Przy omawianiu bieżących spraw Mateusz, programista, jak zwykle narzeka na hałas w open space, a Ewa, utalentowana analityczka, milczy jak zaklęta i trzeba niemal siłą wyciągać od niej informacje. Krzysztof stanowczo protestuje przeciwko wdrożeniu nowego systemu CRM, twierdząc, że wpłynie to negatywnie na pracę zespołu, a zakończenie już opóźnionego projektu bardziej się przesunie. Kilka osób pyta o zmieniające się cele kwartalne. Anna odpowiada zdawkowo, bo sama nie ma pełnych informacji. Krzysztof krótko to komentuje: 'No tak, znowu chaos na górze, a od nas wymaga się coraz więcej'. Anna z jakiegoś powodu odbiera tę uwagę personalnie i czuje jak wzbiera w niej złość. Nie może się powstrzymać i wyładowuje ją na dwóch osobach, które w kącie prowadzą między sobą dyskusję, ignorując resztę. Spotkanie kończy się w atmosferze niedomówień. Wszyscy w milczeniu rozchodzą się do swoich biurek, jednak Anna przeczuwa, że zaraz zacznie się szeptanie 'po kątach'.",
             "video": {
               "url": "https://youtu.be/PLACEHOLDER_10",
-              "title": "Integracja neuroprzywództwa w praktyce",
-              "description": "Całościowe podejście do zarządzania opartego na neuronaukach"
+              "title": "Zarządzanie emocjami w zespole",
+              "description": "Jak emocje lidera wpływają na całą grupę - zaraźliwość emocjonalna"
+            }
+          },
+          {
+            "id": 11,
+            "title": "Lunch z Basią",
+            "case_content": "W czasie późnego lunchu podchodzi do niej Basia i zaczyna przedstawiać propozycję wprowadzenia innowacyjnego, ale ryzykownego rozwiązania sprzedażowego. Wszystko brzmi naprawdę ciekawie. Anna dopytuje o szczegóły: 'Czy to poprawi nasze wyniki? Jakie są koszty porażki?'. Basia przytacza estymacje jednak Anny to nie przekonuje. Po krótkim namyśle podsumowuje: 'Nie, to się nie uda, to zbyt duże ryzyko'. Sama się później zastanawia, czemu tak szybko odrzuciła propozycję.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_11",
+              "title": "Podejmowanie decyzji pod wpływem stresu",
+              "description": "Jak stres wpływa na skłonność do ryzyka i otwartość na innowacje"
+            }
+          },
+          {
+            "id": 12,
+            "title": "Rozmowa z klientem",
+            "case_content": "Tuż przed końcem pracy dzwoni ważny klient, aby poskarżyć się na warunki współpracy, które niedawno uległy zmianie. Anna początkowo próbuje spokojnie tłumaczyć sytuację, ale klient stopniowo podnosi głos. W pewnym momencie sama zaczyna mówić ostrym tonem i przerywać mu w pół zdania. Po rozmowie ma poczucie winy i myśl: \"Nie powinnam tak reagować, ale to było silniejsze ode mnie\".",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_12",
+              "title": "Kontrola emocjonalna i reakcje obronne",
+              "description": "Neurobiologia konfliktów i mechanizmy samokontroli"
+            }
+          },
+          {
+            "id": 13,
+            "title": "Wieczór w domu",
+            "case_content": "Wieczorem wraca do domu całkowicie wyczerpana. Ma ochotę odreagować cały ten nieszczęsny dzień więc sięga po lampkę czerwonego wina i robi zakupy w ulubionym sklepie on-line. Od razu powraca dobry humor. Rozluźniona sięga po pilota i przez następne dwie godziny ogląda popularny serial. Kładzie się do łóżka już dobrze po północy. Zmęczona, ale przynajmniej w dobrym nastroju. Ma trochę wyrzutów sumienia, że w taki sposób spędziła wieczór, ale przecież należało jej się trochę przyjemności po tak fatalnym dniu. 'Jutro będzie inaczej', powtarza sobie w myśli. 'Jutro biorę się za siebie...'",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_13",
+              "title": "Mechanizmy radzenia sobie ze stresem",
+              "description": "Zdrowe i niezdrowe sposoby odreagowywania stresu - neurochemia nagrody"
             }
           }
         ]
