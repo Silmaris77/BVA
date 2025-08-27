@@ -1,7 +1,7 @@
 ﻿import streamlit as st
 from data.lessons import load_lessons
 from data.users import load_user_data, save_user_data
-from utils.components import zen_header, zen_button, notification, content_section, tip_block, quote_block, progress_bar, embed_content, lesson_card
+from utils.components import zen_header, zen_button, notification, content_section, tip_block, quote_block, progress_bar, embed_content, lesson_card, youtube_video
 from utils.material3_components import apply_material3_theme
 from utils.layout import get_device_type, responsive_grid, responsive_container, toggle_device_view
 from utils.lesson_progress import (
@@ -261,7 +261,18 @@ def show_lessons_content():
             'reflection': 'Refleksja',  # backward compatibility
             'application': 'Zadania praktyczne',  # backward compatibility
             'summary': 'Podsumowanie'
-        }# Mapowanie kroków do wartości XP (usunięto opening_quiz i closing_quiz)
+        }
+        
+        # Specjalne nazwy dla lekcji "Wprowadzenie do neuroprzywództwa"
+        if lesson.get('title') == 'Wprowadzenie do neuroprzywództwa':
+            step_names = {
+                'intro': 'Wprowadzenie',
+                'content': 'Case Study',
+                'practical_exercises': 'O CO TU CHODZI',
+                'reflection': 'Refleksja',  # backward compatibility
+                'application': 'Zadania praktyczne',  # backward compatibility
+                'summary': 'AUTODIAGNOZA'
+            }# Mapowanie kroków do wartości XP (usunięto opening_quiz i closing_quiz)
         step_xp_values = {
             'intro': int(base_xp * 0.05),          # 5% całkowitego XP
             'content': int(base_xp * 0.30),        # 30% całkowitego XP (Merytoryka)
@@ -727,50 +738,102 @@ def show_lessons_content():
             st.markdown("</div>", unsafe_allow_html=True)
         
         elif st.session_state.lesson_step == 'practical_exercises':
-            # Nowa sekcja ćwiczeń praktycznych z pod-zakładkami
+            # Sekcja ćwiczeń praktycznych - dla lekcji "Wprowadzenie do neuroprzywództwa" specjalna obsługa
             if 'sections' not in lesson:
                 st.error("Lekcja nie zawiera klucza 'sections'!")
             elif 'practical_exercises' not in lesson.get('sections', {}):
                 st.error("Lekcja nie zawiera sekcji 'practical_exercises'!")
             else:
                 practical_data = lesson['sections']['practical_exercises']
+                lesson_title = lesson.get("title", "")
                 
-                # Przygotuj zakładki dla różnych typów ćwiczeń
-                available_tabs = []
-                tab_keys = []
-                sub_tabs_data = {}
+                # Specjalna obsługa dla lekcji "Wprowadzenie do neuroprzywództwa"
+                if lesson_title == "Wprowadzenie do neuroprzywództwa" and 'case_study_analysis' in practical_data:
+                    case_study_data = practical_data['case_study_analysis']
+                    
+                    # Wyświetl tytuł i opis
+                    st.markdown(f"### {case_study_data['title']}")
+                    st.markdown(case_study_data['description'])
+                    st.markdown("---")
+                    
+                    # Wyświetl każdą część case study
+                    for part in case_study_data['parts']:
+                        with st.expander(f"**Część {part['id']}: {part['title']}**", expanded=False):
+                            # Pole tekstowe z case content
+                            st.markdown("#### 📝 Opis sytuacji")
+                            st.markdown(f"<div style='background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff; margin: 15px 0;'>{part['case_content']}</div>", unsafe_allow_html=True)
+                            
+                            # Film omawiający tę część
+                            st.markdown("#### 🎥 Analiza neurobiologiczna")
+                            
+                            # Wyświetl video jeśli URL nie jest placeholder
+                            video_url = part['video']['url']
+                            if "PLACEHOLDER" not in video_url:
+                                youtube_video(
+                                    video_url,
+                                    part['video']['title'],
+                                    part['video']['description']
+                                )
+                            else:
+                                st.info(f"🎬 **{part['video']['title']}**\n\n{part['video']['description']}\n\n*Film będzie dostępny wkrótce.*")
+                            
+                            st.markdown("---")
+                    
+                    # Przycisk ukończenia sekcji
+                    st.markdown("### ✅ Ukończenie analizy")
+                    if st.button("Przejdź dalej", key=f"complete_case_study_{lesson_id}", type="primary", use_container_width=True):
+                        success, xp_awarded = award_fragment_xp(lesson_id, 'practical_exercises', step_xp_values['practical_exercises'])
+                        if success and xp_awarded > 0:
+                            st.success(f"✅ Analiza case study ukończona! Zdobyłeś {xp_awarded} XP!")
+                        
+                        # Przejdź do następnego kroku
+                        if 'summary' in step_order:
+                            next_step = 'summary'
+                        else:
+                            next_step = None
+                        
+                        if next_step:
+                            st.session_state.lesson_step = next_step
+                            st.rerun()
+                        else:
+                            # Sprawdź czy wszystkie sekcje zostały ukończone
+                            check_and_mark_lesson_completion(lesson_id, st.session_state.lesson_progress)
+                            st.session_state.lesson_finished = True
+                            st.rerun()
                 
-                # Nowa struktura z 'exercises' i 'closing_quiz'
-                if 'exercises' in practical_data:
-                    available_tabs.append("🎯 Ćwiczenia")
-                    tab_keys.append('exercises')
-                    sub_tabs_data['exercises'] = practical_data['exercises']
-                
-                if 'closing_quiz' in practical_data:
-                    # Sprawdź tytuł lekcji dla specjalnej nazwy tabu
-                    lesson_title = lesson.get("title", "")
-                    if lesson_title == "Wprowadzenie do neuroprzywództwa":
-                        available_tabs.append("🧠 Quiz autodiagnozy")
-                    else:
+                else:
+                    # Standardowa obsługa dla innych lekcji
+                    # Przygotuj zakładki dla różnych typów ćwiczeń
+                    available_tabs = []
+                    tab_keys = []
+                    sub_tabs_data = {}
+                    
+                    # Nowa struktura z 'exercises' i 'closing_quiz'
+                    if 'exercises' in practical_data:
+                        available_tabs.append("🎯 Ćwiczenia")
+                        tab_keys.append('exercises')
+                        sub_tabs_data['exercises'] = practical_data['exercises']
+                    
+                    if 'closing_quiz' in practical_data:
                         available_tabs.append("🎓 Quiz końcowy")
-                    tab_keys.append('closing_quiz')
-                    sub_tabs_data['closing_quiz'] = practical_data['closing_quiz']
-                
-                # Backward compatibility - stara struktura bezpośrednia (reflection, application, closing_quiz)
-                if 'reflection' in practical_data:
-                    available_tabs.append("📝 Refleksja")
-                    tab_keys.append('reflection')
-                    sub_tabs_data['reflection'] = practical_data['reflection']
-                
-                if 'application' in practical_data:
-                    available_tabs.append("� Zadania Praktyczne")
-                    tab_keys.append('application')
-                    sub_tabs_data['application'] = practical_data['application']
-                
-                # Renderuj zakładki dla nowej struktury (exercises, closing_quiz)  
-                if available_tabs and 'tabs' not in practical_data:
-                    # Wyświetl pod-zakładki dla nowej struktury
-                    tabs = tabs_with_fallback(available_tabs)
+                        tab_keys.append('closing_quiz')
+                        sub_tabs_data['closing_quiz'] = practical_data['closing_quiz']
+                    
+                    # Backward compatibility - stara struktura bezpośrednia (reflection, application, closing_quiz)
+                    if 'reflection' in practical_data:
+                        available_tabs.append("📝 Refleksja")
+                        tab_keys.append('reflection')
+                        sub_tabs_data['reflection'] = practical_data['reflection']
+                    
+                    if 'application' in practical_data:
+                        available_tabs.append("🎯 Zadania Praktyczne")
+                        tab_keys.append('application')
+                        sub_tabs_data['application'] = practical_data['application']
+                    
+                    # Renderuj zakładki dla nowej struktury (exercises, closing_quiz)  
+                    if available_tabs and 'tabs' not in practical_data:
+                        # Wyświetl pod-zakładki dla nowej struktury
+                        tabs = tabs_with_fallback(available_tabs)
                     
                     for i, (tab_key, tab_title) in enumerate(zip(tab_keys, available_tabs)):
                         with tabs[i]:
@@ -1393,10 +1456,25 @@ def show_lessons_content():
                 lesson_title = lesson.get("title", "")
                 
                 if lesson_title == "Wprowadzenie do neuroprzywództwa":
-                    # Dla tej lekcji pokazuj tylko zakładkę "Podsumowanie"
-                    summary_tabs = tabs_with_fallback(["Podsumowanie"])
+                    # Dla tej lekcji pokazuj dwie zakładki: Quiz Autodiagnozy i Podsumowanie
+                    summary_tabs = tabs_with_fallback(["🎯 Quiz Autodiagnozy", "📋 Podsumowanie"])
                     
                     with summary_tabs[0]:
+                        # Wyświetl quiz autodiagnozy
+                        if 'closing_quiz' in lesson['summary']:
+                            st.markdown("### 🎯 Quiz Autodiagnozy")
+                            st.markdown("Sprawdź, na ile poszczególne zagadnienia z kursu są istotne i ważne w Twoim życiu zawodowym.")
+                            quiz_passed, can_continue, score = display_quiz(lesson['summary']['closing_quiz'])
+                            
+                            # Sprawdź czy quiz został ukończony
+                            if quiz_passed:
+                                success, fragment_xp = award_fragment_xp(lesson_id, 'closing_quiz', step_xp_values['summary'])
+                                if success and fragment_xp > 0:
+                                    st.success(f"✅ Quiz ukończony! Zdobyłeś {fragment_xp} XP!")
+                        else:
+                            st.warning("Brak quizu autodiagnozy.")
+                    
+                    with summary_tabs[1]:
                         # Wyświetl główne podsumowanie
                         if 'main' in lesson['summary']:
                             st.markdown(lesson['summary']['main'], unsafe_allow_html=True)

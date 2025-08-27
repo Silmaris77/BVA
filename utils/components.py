@@ -637,17 +637,20 @@ def youtube_video(video_url, title=None, description=None, width="100%", height=
         # Użyj st.components.v1.iframe dla lepszej kompatybilności
         import streamlit.components.v1 as components
         
-        components.iframe(
-            src=embed_url,
-            width=800,
-            height=450,
-            scrolling=False
-        )
+        # Wyśrodkuj video za pomocą kolumn Streamlit
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            components.iframe(
+                src=embed_url,
+                width=800,
+                height=450,
+                scrolling=False
+            )
         
     except Exception as e:
-        # Fallback - użyj prostego HTML
+        # Fallback - użyj prostego HTML z wyśrodkowaniem
         st.markdown(f"""
-        <div style="text-align: center; margin: 20px 0;">
+        <div style="display: flex; justify-content: center; margin: 20px 0;">
             <iframe width="800" height="450" 
                     src="https://www.youtube.com/embed/{video_id}?rel=0&modestbranding=1" 
                     title="{title or 'Film edukacyjny'}"

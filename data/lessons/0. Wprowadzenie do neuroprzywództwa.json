@@ -14,54 +14,130 @@
   "difficulty": "advanced",
   
   "intro": {
-    "main": "[MAIN_INTRODUCTION_CONTENT_HTML]"
+    "main": "<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: white;'>🧠 Witaj w kursie Brainventure!</h1><p style='font-size: 1.2rem; text-align: center; margin-bottom: 30px;'>Poznaj sekrety mózgu, które pomogą Ci zostać lepszym liderem</p></div><h2>📖 Jak korzystać z kursu?</h2><div style='background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #667eea;'><p style='font-size: 1.1rem; margin-bottom: 20px;'>Kurs <strong>Brainventure</strong> zaczyna się od tej lekcji wstępnej <strong>\"Wprowadzenie do neuroprzywództwa\"</strong>, gdzie zapoznasz się z praktycznym case study dotyczącym dnia z życia menedżera.</p><p style='margin-bottom: 20px;'>Ten case study zostanie następnie omówiony w kontekście wiedzy o neuroprzywództwie, co będzie wprowadzeniem do omówienia treści całego kursu.</p><h3 style='color: #667eea; margin-bottom: 15px;'>📚 Treść kursu obejmuje 10 kluczowych modułów:</h3><ol style='line-height: 1.8;'><li><strong>Mózg emocjonalny</strong> - jak emocje wpływają na decyzje</li><li><strong>Chemia mózgu</strong> - neurotransmitery i ich rola w przywództwie</li><li><strong>Model SCARF</strong> - 5 podstawowych potrzeb mózgu</li><li><strong>Model SEEDS</strong> - budowanie pozytywnego środowiska</li><li><strong>Stres i odporność psychiczna</strong> - zarządzanie presją</li><li><strong>Podejmowanie decyzji i ryzyko</strong> - mechanizmy wyboru</li><li><strong>Pamięć i uwaga</strong> - utrata zdolności poznawczych</li><li><strong>Kondycja mózgu</strong> - jak wspierać jego zdrowie i wydajność</li><li><strong>Kształtowanie nawyków</strong> - neuroplastyczność w działaniu</li><li><strong>Wyzwania menedżerskie</strong> - motywowanie, rozwój, zmiana</li></ol><p style='margin-top: 20px; font-style: italic; color: #666;'>Na końcu tej lekcji wstępnej wykonasz test autodiagnozy, aby sprawdzić, na ile poszczególne zagadnienia z kursu są istotne i ważne w Twoim życiu zawodowym.</p></div><div style='background: #e3f2fd; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #1976d2;'><h3 style='color: #1976d2; margin-bottom: 15px;'>🏗️ Struktura każdej lekcji:</h3><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;'><div><strong>1. 📖 Wprowadzenie do lekcji</strong><br><span style='color: #666; font-size: 0.9rem;'>Cele i kontekst materiału</span></div><div><strong>2. 🎓 Materiał edukacyjny</strong><br><span style='color: #666; font-size: 0.9rem;'>Przystępne wyjaśnienie kwestii merytorycznych</span></div></div><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 20px;'><div><strong>3. 💪 Ćwiczenia praktyczne</strong><br><span style='color: #666; font-size: 0.9rem;'>Zastosowanie w praktyce + test sprawdzający</span></div><div><strong>4. 📋 Podsumowanie</strong><br><span style='color: #666; font-size: 0.9rem;'>Kluczowe wnioski i następne kroki</span></div></div></div><div style='background: #f3e5f5; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #9c27b0;'><h3 style='color: #9c27b0; margin-bottom: 15px;'>🎯 System motywacyjny:</h3><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 20px;'><div><strong>💎 Punkty doświadczenia (XP)</strong><br><span style='color: #666; font-size: 0.9rem;'>Za każdą ukończoną sekcję lekcji</span><br><br><strong>🏆 Odznaki i osiągnięcia</strong><br><span style='color: #666; font-size: 0.9rem;'>Za specjalne sukcesy w nauce</span></div><div><strong>💡 Materiały dodatkowe (Inspiracje)</strong><br><span style='color: #666; font-size: 0.9rem;'>Artykuły, case study, dodatkowe źródła</span><br><br><strong>📊 Śledzenie postępów</strong><br><span style='color: #666; font-size: 0.9rem;'>Wizualizacja Twojego rozwoju</span></div></div></div><div style='background: linear-gradient(135deg, #28a745 0%, #20c997 100%); padding: 25px; border-radius: 10px; color: white; text-align: center; margin: 20px 0;'><h3 style='margin-bottom: 15px; color: white;'>🚀 Rozpocznij swoją podróż!</h3><p style='margin-bottom: 15px; font-size: 1.1rem;'>Kliknij przycisk <strong>\"Dalej: Case Study\"</strong> aby poznać historię menedżera!</p><p style='font-size: 0.9rem; opacity: 0.9;'>Każdy wielki lider zaczynał od pierwszego kroku. Czas na Twój! 💪</p></div>"
   },
   
   "sections": {
     "learning": {
       "sections": [
         {
-          "title": "Część 1 - Poniedziałkowy poranek",
-          "content": "",
+          "title": "Case Study - Dzień z życia menedżera",
+          "content": "<div style='background: #e8f5e8; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #28a745;'><h3 style='color: #28a745; margin-bottom: 20px;'>🎬 Przygotowanie</h3><p style='font-size: 1.1rem; margin-bottom: 20px;'>Za chwilę obejrzysz film opisujący <strong>jeden dzień w pracy menedżera</strong>. To nie jest zwykły film edukacyjny - to prawdziwa historia z codzienności zarządzania zespołem.</p><p style='margin-bottom: 20px;'><strong>Podczas oglądania staraj się:</strong></p><ul style='line-height: 1.8; margin-bottom: 20px;'><li>🔍 <strong>Odnaleźć sytuacje</strong>, z którymi miałeś do czynienia w swojej pracy</li><li>⚠️ <strong>Zidentyfikować problemy</strong>, które przypominają Twoje wyzwania</li><li>💡 <strong>Dostrzec momenty</strong>, które chciałbyś rozwiązać inaczej</li><li>🤔 <strong>Zastanowić się</strong>, jak zachowałbyś się w podobnych sytuacjach</li></ul><p style='background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 3px solid #ffc107; font-style: italic;'>💭 <strong>Wskazówka:</strong> Rób notatki lub zapisuj kluczowe obserwacje. Będziesz do nich wracać w dalszej części lekcji!</p></div>",
           "videos": [
             {
               "url": "https://youtu.be/Q8OOW_jAYMI",
-              "title": "Film edukacyjny 1 - Wprowadzenie",
-              "description": "Wprowadzenie do tematu neuroprzywództwa"
-            },
-            {
-              "url": "https://youtu.be/--eyzRdr8Gk",
-              "title": "Film edukacyjny 2 - Pogłębienie",
-              "description": "Pogłębienie wiedzy o neuroprzywództwie"
+              "title": "Dzień z życia menedżera",
+              "description": ""
             }
           ]
-        },
-        {
-          "title": "Część 2 - .....",
-          "content": "[SECTION_CONTENT_HTML_2]"
-        },
-                {
-          "title": "Część 3 - ......",
-          "content": "[SECTION_CONTENT_HTML_2]"
         }
       ]
     },
     
     "practical_exercises": {
-      "closing_quiz": {
-        "title": "Quiz końcowy",
-        "description": "Sprawdź, ile zapamiętałeś z tej lekcji",
-        "questions": [
+      "case_study_analysis": {
+        "title": "Analiza Case Study - 10 zagadnień neuroprzywództwa",
+        "description": "Przeanalizuj poszczególne sytuacje z dnia menedżera w kontekście wiedzy o neuroprzywództwie",
+        "parts": [
           {
-            "question": "[QUESTION_TEXT]",
-            "options": [
-              "[OPTION_1]",
-              "[OPTION_2]",
-              "[OPTION_3]",
-              "[OPTION_4]"
-            ],
-            "correct_answer": 0,
-            "explanation": "[EXPLANATION_OF_CORRECT_ANSWER]"
+            "id": 1,
+            "title": "Mózg emocjonalny - jak emocje wpływają na decyzje",
+            "case_content": "W pierwszej części dnia menedżer musi podjąć trudną decyzję o zwolnieniu pracownika. Zauważa, że emocje (stres, żal, niepewność) znacząco wpływają na jego zdolność logicznego myślenia. Próbuje zachować profesjonalizm, ale jego reakcje emocjonalne są widoczne dla zespołu.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_1",
+              "title": "Jak emocje wpływają na decyzje menedżerskie",
+              "description": "Analiza neurobiologicznych mechanizmów podejmowania decyzji"
+            }
+          },
+          {
+            "id": 2,
+            "title": "Chemia mózgu - neurotransmitery i ich rola w przywództwie",
+            "case_content": "Podczas spotkania zespołu menedżer zauważa różne poziomy energii i motywacji pracowników. Niektórzy są podekscytowani nowymi projektami, inni wydają się apatyczni. Zastanawia się, jak można wpłynąć na biochemię mózgu zespołu, aby zwiększyć zaangażowanie.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_2", 
+              "title": "Neurotransmitery w motywowaniu zespołu",
+              "description": "Rola dopaminy, serotoniny i innych neuroprzekaźników"
+            }
+          },
+          {
+            "id": 3,
+            "title": "Model SCARF - 5 podstawowych potrzeb mózgu",
+            "case_content": "W trakcie prezentacji wyników jeden z pracowników reaguje defensywnie na krytykę. Menedżer rozpoznaje, że zostały naruszone podstawowe potrzeby: Status (krytyka publiczna), Pewność (nieprzewidywalne zmiany), Autonomia (narzucone rozwiązania).",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_3",
+              "title": "Model SCARF w praktyce menedżerskiej", 
+              "description": "Jak zaspokajać potrzeby Status, Certainty, Autonomy, Relatedness, Fairness"
+            }
+          },
+          {
+            "id": 4,
+            "title": "Model SEEDS - budowanie pozytywnego środowiska",
+            "case_content": "Menedżer planuje reorganizację biura i zastanawia się, jak stworzyć przestrzeń, która będzie wspierać kreatywność i współpracę. Rozważa elementy: Bezpieczeństwo psychiczne, pozytywne Emocje, możliwość Eksploracji nowych pomysłów, budowanie Społeczności.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_4",
+              "title": "Model SEEDS - tworzenie pozytywnego środowiska",
+              "description": "Safety, Emotions, Exploration, Social connection"
+            }
+          },
+          {
+            "id": 5,
+            "title": "Stres i odporność psychiczna - zarządzanie presją",
+            "case_content": "Pod koniec dnia menedżer czuje się przytłoczony ilością zadań i odpowiedzialności. Zauważa pierwsze oznaki wypalenia zawodowego u siebie i niektórych członków zespołu. Zastanawia się nad strategiami budowania odporności na stres.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_5",
+              "title": "Zarządzanie stresem w zespole",
+              "description": "Neurobiologia stresu i techniki budowania odporności"
+            }
+          },
+          {
+            "id": 6,
+            "title": "Podejmowanie decyzji i ryzyko - mechanizmy wyboru",
+            "case_content": "Menedżer stoi przed wyborem między bezpieczną, sprawdzoną strategią a innowacyjnym, ale ryzykownym podejściem. Analizuje swoje procesy myślowe i rozpoznaje wpływ uprzedzeń poznawczych na ocenę ryzyka.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_6",
+              "title": "Neurobiologia podejmowania decyzji",
+              "description": "Jak mózg ocenia ryzyko i podejmuje wybory"
+            }
+          },
+          {
+            "id": 7,
+            "title": "Pamięć i uwaga - utrata zdolności poznawczych",
+            "case_content": "Podczas ważnego spotkania menedżer zauważa, że ma problemy z koncentracją i zapominaniem szczegółów. Pracownicy również wydają się rozkojarzeni. Zastanawia się nad czynnikami wpływającymi na zdolności kognitywne zespołu.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_7",
+              "title": "Optymalizacja zdolności poznawczych",
+              "description": "Czynniki wpływające na pamięć, uwagę i koncentrację"
+            }
+          },
+          {
+            "id": 8,
+            "title": "Kondycja mózgu - jak wspierać jego zdrowie i wydajność",
+            "case_content": "Menedżer zauważa związek między stylem życia zespołu (sen, odżywianie, aktywność fizyczna) a ich wydajnością w pracy. Planuje wprowadzenie programu wellness, który wspierałby zdrowie mózgu pracowników.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_8",
+              "title": "Wellness mózgu w miejscu pracy",
+              "description": "Jak styl życia wpływa na funkcjonowanie mózgu"
+            }
+          },
+          {
+            "id": 9,
+            "title": "Kształtowanie nawyków - neuroplastyczność w działaniu",
+            "case_content": "Menedżer chce wprowadzić nowe procedury w zespole, ale napotyka opór związany z utrwalonymi nawykami. Zastanawia się, jak wykorzystać neuroplastyczność mózgu do skutecznego wprowadzania zmian.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_9",
+              "title": "Neuroplastyczność i zmiana nawyków",
+              "description": "Jak mózg uczy się nowych wzorców zachowań"
+            }
+          },
+          {
+            "id": 10,
+            "title": "Wyzwania menedżerskie - motywowanie, rozwój, zmiana",
+            "case_content": "Na koniec dnia menedżer podsumowuje wszystkie wyzwania i zastanawia się, jak zastosować wiedzę o neuroprzywództwie do: motywowania zespołu, wspierania rozwoju pracowników i skutecznego zarządzania zmianą organizacyjną.",
+            "video": {
+              "url": "https://youtu.be/PLACEHOLDER_10",
+              "title": "Integracja neuroprzywództwa w praktyce",
+              "description": "Całościowe podejście do zarządzania opartego na neuronaukach"
+            }
           }
         ]
       }
@@ -70,6 +146,112 @@
   
   "summary": {
     "main": "[SUMMARY_CONTENT_HTML]",
+    "closing_quiz": {
+      "title": "Quiz Autodiagnozy",
+      "description": "Oceń, na ile poszczególne zagadnienia z neuroprzywództwa są ważne i stanowią wyzwanie w Twoim życiu zawodowym",
+      "questions": [
+        {
+          "question": "Czy kontrolowanie emocji w sytuacjach stresowych i ich wpływ na podejmowanie decyzji stanowi dla Ciebie wyzwanie w pracy menedżerskiej?",
+          "options": [
+            "W ogóle nieważne",
+            "Raczej nieważne", 
+            "Trudno powiedzieć",
+            "Raczej ważne",
+            "Bardzo ważne"
+          ]
+        },
+        {
+          "question": "Jak ważne jest dla Ciebie zrozumienie roli neurotransmiterów (dopamina, serotonina, kortyzol) w motywowaniu zespołu i budowaniu zaangażowania?",
+          "options": [
+            "W ogóle nieważne",
+            "Raczej nieważne",
+            "Trudno powiedzieć", 
+            "Raczej ważne",
+            "Bardzo ważne"
+          ]
+        },
+        {
+          "question": "Czy umiejętność zaspokajania 5 podstawowych potrzeb mózgu zespołu (Status, Pewność, Autonomia, Powiązania, Sprawiedliwość) stanowi dla Ciebie priorytet w przywództwie?",
+          "options": [
+            "W ogóle nieważne",
+            "Raczej nieważne",
+            "Trudno powiedzieć",
+            "Raczej ważne", 
+            "Bardzo ważne"
+          ]
+        },
+        {
+          "question": "Na ile istotne jest dla Ciebie budowanie pozytywnego środowiska pracy poprzez zastosowanie modelu SEEDS (Bezpieczeństwo, Emocje, Eksploracja, Społeczność)?",
+          "options": [
+            "W ogóle nieważne",
+            "Raczej nieważne",
+            "Trudno powiedzieć",
+            "Raczej ważne",
+            "Bardzo ważne"
+          ]
+        },
+        {
+          "question": "Czy zarządzanie własnym stresem i budowanie odporności psychicznej w zespole stanowi dla Ciebie znaczące wyzwanie zawodowe?",
+          "options": [
+            "W ogóle nieważne", 
+            "Raczej nieważne",
+            "Trudno powiedzieć",
+            "Raczej ważne",
+            "Bardzo ważne"
+          ]
+        },
+        {
+          "question": "Jak ważne jest dla Ciebie doskonalenie procesów podejmowania decyzji i zarządzania ryzykiem w oparciu o mechanizmy działania mózgu?",
+          "options": [
+            "W ogóle nieważne",
+            "Raczej nieważne",
+            "Trudno powiedzieć",
+            "Raczej ważne",
+            "Bardzo ważne"
+          ]
+        },
+        {
+          "question": "Czy problemy z koncentracją, pamięcią i spadkiem zdolności poznawczych (własnych lub zespołu) stanowią dla Ciebie wyzwanie w codziennej pracy?",
+          "options": [
+            "W ogóle nieważne",
+            "Raczej nieważne", 
+            "Trudno powiedzieć",
+            "Raczej ważne",
+            "Bardzo ważne"
+          ]
+        },
+        {
+          "question": "Na ile istotne jest dla Ciebie wspieranie zdrowia i wydajności mózgu (swojego i zespołu) poprzez odpowiedni styl życia i nawyki pracy?",
+          "options": [
+            "W ogóle nieważne",
+            "Raczej nieważne",
+            "Trudno powiedzieć",
+            "Raczej ważne",
+            "Bardzo ważne"
+          ]
+        },
+        {
+          "question": "Czy wykorzystanie neuroplastyczności mózgu do kształtowania pozytywnych nawyków i zmiany zachowań w zespole stanowi dla Ciebie priorytet?",
+          "options": [
+            "W ogóle nieważne",
+            "Raczej nieważne",
+            "Trudno powiedzieć", 
+            "Raczej ważne",
+            "Bardzo ważne"
+          ]
+        },
+        {
+          "question": "Jak ważne jest dla Ciebie zastosowanie wiedzy o mózgu w rozwiązywaniu kluczowych wyzwań menedżerskich (motywowanie, rozwój pracowników, zarządzanie zmianą)?",
+          "options": [
+            "W ogóle nieważne",
+            "Raczej nieważne",
+            "Trudno powiedzieć",
+            "Raczej ważne",
+            "Bardzo ważne"
+          ]
+        }
+      ]
+    },
     "mind_map": {
       "central_node": {
         "id": "main_topic",
