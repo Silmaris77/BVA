@@ -701,7 +701,12 @@ def show_lessons_content():
                 st.error("Sekcja 'learning' nie zawiera klucza 'sections'!")
             else:                # Sprawdź, czy sekcja learning istnieje i czy zawiera sections
                 for i, section in enumerate(lesson["sections"]["learning"]["sections"]):
-                    with st.expander(section.get("title", f"Sekcja {i+1}"), expanded=False):
+                    # Dla lekcji "Wprowadzenie do neuroprzywództwa" pierwszy expander jest otwarty
+                    is_expanded = False
+                    if lesson.get('title') == 'Wprowadzenie do neuroprzywództwa' and i == 0:
+                        is_expanded = True
+                    
+                    with st.expander(section.get("title", f"Sekcja {i+1}"), expanded=is_expanded):
                         # Wyświetl treść sekcji
                         st.markdown(section.get("content", "Brak treści"), unsafe_allow_html=True)
                         
@@ -808,28 +813,6 @@ def show_lessons_content():
                                 st.info(f"🎬 **{part['video']['title']}**\n\n{part['video']['description']}\n\n*Film będzie dostępny wkrótce.*")
                             
                             st.markdown("---")
-                    
-                    # Przycisk ukończenia sekcji
-                    st.markdown("### ✅ Ukończenie analizy")
-                    if st.button("Przejdź dalej", key=f"complete_case_study_{lesson_id}", type="primary", use_container_width=True):
-                        success, xp_awarded = award_fragment_xp(lesson_id, 'practical_exercises', step_xp_values['practical_exercises'])
-                        if success and xp_awarded > 0:
-                            st.success(f"✅ Analiza case study ukończona! Zdobyłeś {xp_awarded} XP!")
-                        
-                        # Przejdź do następnego kroku
-                        if 'summary' in step_order:
-                            next_step = 'summary'
-                        else:
-                            next_step = None
-                        
-                        if next_step:
-                            st.session_state.lesson_step = next_step
-                            st.rerun()
-                        else:
-                            # Sprawdź czy wszystkie sekcje zostały ukończone
-                            check_and_mark_lesson_completion(lesson_id)
-                            st.session_state.lesson_finished = True
-                            st.rerun()
                 
                 else:
                     # Standardowa obsługa dla innych lekcji
@@ -1596,8 +1579,6 @@ def show_lessons_content():
                     with summary_tabs[0]:
                         # Wyświetl quiz autodiagnozy
                         if 'closing_quiz' in lesson['summary']:
-                            st.markdown("### 🎯 Quiz Autodiagnozy")
-                            st.markdown("Sprawdź, na ile poszczególne zagadnienia z kursu są istotne i ważne w Twoim życiu zawodowym.")
                             quiz_passed, can_continue, score = display_quiz(lesson['summary']['closing_quiz'])
                             
                             # Sprawdź czy quiz został ukończony
