@@ -844,6 +844,12 @@ def show_lessons_content():
                         tab_keys.append('exercises')
                         sub_tabs_data['exercises'] = practical_data['exercises']
                     
+                    # Pytania otwarte z oceną AI
+                    if 'ai_questions' in practical_data:
+                        available_tabs.append("🤖 Pytania AI")
+                        tab_keys.append('ai_questions')
+                        sub_tabs_data['ai_questions'] = practical_data['ai_questions']
+                    
                     if 'closing_quiz' in practical_data:
                         available_tabs.append("🎓 Quiz końcowy")
                         tab_keys.append('closing_quiz')
@@ -991,17 +997,97 @@ def show_lessons_content():
                                                         st.rerun()
                                 elif tab_key == 'exercises':
                                     # Standardowa obsługa dla zakładki exercises
-                                    tab_data = sub_tabs_data[tab_key]                                # Wyświetl opis zakładki jeśli istnieje
-                                if 'description' in tab_data:
-                                    st.info(tab_data['description'])
+                                    tab_data = sub_tabs_data[tab_key]
+                                    
+                                    # Wyświetl opis zakładki jeśli istnieje
+                                    if 'description' in tab_data:
+                                        st.info(tab_data['description'])
+                                    
+                                    # Wyświetl sekcje w zakładce
+                                    if 'sections' in tab_data:
+                                        for section in tab_data['sections']:
+                                            st.markdown(f"### {section.get('title', 'Sekcja')}")
+                                            st.markdown(section.get('content', 'Brak treści'), unsafe_allow_html=True)
+                                    else:
+                                        st.warning(f"Zakładka '{tab_title}' nie zawiera sekcji do wyświetlenia.")
                                 
-                                # Wyświetl sekcje w zakładce
-                                if 'sections' in tab_data:
-                                    for section in tab_data['sections']:
-                                        st.markdown(f"### {section.get('title', 'Sekcja')}")
-                                        st.markdown(section.get('content', 'Brak treści'), unsafe_allow_html=True)
+                                elif tab_key == 'ai_questions':
+                                    # Obsługa pytań otwartych z oceną AI
+                                    try:
+                                        from utils.ai_questions import display_open_question, load_open_question_styles
+                                        load_open_question_styles()
+                                        
+                                        tab_data = sub_tabs_data[tab_key]
+                                        
+                                        # Wyświetl tytuł i opis sekcji
+                                        if 'title' in tab_data:
+                                            st.markdown(f"### {tab_data['title']}")
+                                        if 'description' in tab_data:
+                                            st.info(tab_data['description'])
+                                        
+                                        # Wyświetl pytania
+                                        if 'questions' in tab_data:
+                                            total_questions = len(tab_data['questions'])
+                                            answered_questions = 0
+                                            total_score = 0
+                                            max_total_score = 0
+                                            
+                                            for question in tab_data['questions']:
+                                                question_id = f"ai_q_{lesson_id}_{question.get('id', 'unknown')}"
+                                                answered, result = display_open_question(question, question_id)
+                                                
+                                                if answered:
+                                                    answered_questions += 1
+                                                    total_score += result.get('score', 0)
+                                                
+                                                max_total_score += question.get('max_score', 10)
+                                                st.markdown("---")
+                                            
+                                            # Podsumowanie wyników
+                                            if answered_questions > 0:
+                                                st.markdown("### 📊 Podsumowanie wyników")
+                                                percentage = (total_score / max_total_score) * 100 if max_total_score > 0 else 0
+                                                
+                                                col1, col2, col3 = st.columns(3)
+                                                with col1:
+                                                    st.metric("Odpowiedziano", f"{answered_questions}/{total_questions}")
+                                                with col2:
+                                                    st.metric("Punkty", f"{total_score}/{max_total_score}")
+                                                with col3:
+                                                    st.metric("Wynik", f"{percentage:.1f}%")
+                                                
+                                                if answered_questions == total_questions:
+                                                    # Award XP za ukończenie wszystkich pytań AI
+                                                    ai_questions_xp_key = f"ai_questions_xp_{lesson_id}"
+                                                    if not st.session_state.get(ai_questions_xp_key, False):
+                                                        ai_xp = step_xp_values['practical_exercises'] // 4  # 1/4 XP z practical_exercises
+                                                        success, earned_xp = award_fragment_xp(lesson_id, 'ai_questions', ai_xp)
+                                                        st.session_state[ai_questions_xp_key] = True
+                                                        if success and earned_xp > 0:
+                                                            st.success(f"🎉 Ukończyłeś wszystkie pytania AI! Zdobyłeś {earned_xp} XP!")
+                                        else:
+                                            st.warning("Brak pytań do wyświetlenia.")
+                                    
+                                    except ImportError:
+                                        st.error("Moduł obsługi pytań AI nie jest dostępny. Skontaktuj się z administratorem.")
+                                    except Exception as e:
+                                        st.error(f"Błąd podczas ładowania pytań AI: {str(e)}")
+                                
                                 else:
-                                    st.warning(f"Zakładka '{tab_title}' nie zawiera sekcji do wyświetlenia.")
+                                    # Standardowa obsługa dla innych zakładek
+                                    tab_data = sub_tabs_data[tab_key]
+                                    
+                                    # Wyświetl opis zakładki jeśli istnieje
+                                    if 'description' in tab_data:
+                                        st.info(tab_data['description'])
+                                    
+                                    # Wyświetl sekcje w zakładce
+                                    if 'sections' in tab_data:
+                                        for section in tab_data['sections']:
+                                            st.markdown(f"### {section.get('title', 'Sekcja')}")
+                                            st.markdown(section.get('content', 'Brak treści'), unsafe_allow_html=True)
+                                    else:
+                                        st.warning(f"Zakładka '{tab_title}' nie zawiera sekcji do wyświetlenia.")
                 
                 # Stara struktura z 'tabs' (backward compatibility)
                 if 'tabs' in practical_data:
@@ -1528,6 +1614,21 @@ def show_lessons_content():
                             st.markdown(lesson['summary']['main'], unsafe_allow_html=True)
                         else:
                             st.warning("Brak głównego podsumowania.")
+                        
+                        # Rekomendacje szkoleń (ukryte - możliwość przywrócenia w przyszłości)
+                        # try:
+                        #     from utils.training_recommendations import display_training_recommendations, load_recommendations_styles
+                        #     load_recommendations_styles()
+                        #     
+                        #     # Klucz wyników quizu autodiagnozy
+                        #     quiz_results_key = "quiz_quiz_autodiagnozy_results"
+                        #     display_training_recommendations(lesson_id, quiz_results_key)
+                        #     
+                        # except ImportError:
+                        #     st.error("Moduł rekomendacji szkoleń nie jest dostępny.")
+                        # except Exception as e:
+                        # except Exception as e:
+                        #     st.error(f"Błąd podczas ładowania rekomendacji: {str(e)}")
                 else:
                     # Dla wszystkich innych lekcji pokazuj pełne tabs
                     # Podziel podsumowanie na dwie zakładki - zakomentowano mapę myśli

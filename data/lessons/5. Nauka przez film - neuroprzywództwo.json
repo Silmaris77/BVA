@@ -73,6 +73,51 @@
           }
         ]
       },
+      "ai_questions": {
+        "title": "🤖 Pytania otwarte z oceną AI",
+        "description": "Sprawdź swoją wiedzę odpowiadając na pytania otwarte. Sztuczna inteligencja oceni Twoje odpowiedzi i udzieli spersonalizowanego feedbacku.",
+        "questions": [
+          {
+            "id": "scarf_acronym",
+            "question": "Co oznacza akronim SCARF w kontekście neuroprzywództwa? Wyjaśnij każdy element oraz podaj przykład praktycznego zastosowania.",
+            "correct_answer": "SCARF to model pięciu podstawowych potrzeb społecznych mózgu: Status (poczucie ważności i pozycji), Certainty (przewidywalność i jasność), Autonomy (kontrola i wybór), Relatedness (przynależność i więzi społeczne), Fairness (sprawiedliwość i uczciwość). Każda z tych potrzeb, gdy jest zagrożona, aktywuje w mózgu reakcję na niebezpieczeństwo podobną do zagrożenia fizycznego.",
+            "context": "Model SCARF został opracowany przez Davida Rocka jako praktyczne narzędzie dla liderów do lepszego zarządzania ludźmi w oparciu o neuronaukę.",
+            "max_score": 10,
+            "type": "open_question",
+            "hints": [
+              "Przypomnij sobie film - jakie 5 potrzeb zostało omówionych?",
+              "Każda litera SCARF reprezentuje jedną potrzebę",
+              "Pomyśl o sytuacjach, gdy czułeś się zagrożony w pracy - które potrzeby były naruszone?"
+            ]
+          },
+          {
+            "id": "neuroleadership_application",
+            "question": "Opisz konkretną sytuację z Twojego doświadczenia zawodowego, w której mogłeś zastosować zasady neuroprzywództwa. Jak wykorzystałbyś model SCARF w tej sytuacji?",
+            "correct_answer": "Dobra odpowiedź powinna zawierać: konkretny przykład sytuacji, identyfikację zagrożonych potrzeb SCARF, praktyczne działania dla każdej potrzeby, oraz oczekiwane rezultaty. Przykład: 'Podczas wprowadzania nowej procedury (zagrożenie Certainty), organizowałbym spotkania informacyjne (Certainty), pozwoliłbym zespołowi współtworzyć harmonogram wdrożenia (Autonomy), podkreśliłbym jak procedura pomoże każdemu w pracy (Status), zadbałbym o wsparcie zespołowe (Relatedness) i jasne kryteria oceny (Fairness).'",
+            "context": "Neuroprzywództwo najlepiej sprawdza się w praktycznych zastosowaniach, gdy lider świadomie uwzględnia potrzeby mózgu swojego zespołu.",
+            "max_score": 12,
+            "type": "open_question",
+            "hints": [
+              "Pomyśl o sytuacji zmiany, konfliktu lub trudnej decyzji",
+              "Przeanalizuj którą z potrzeb SCARF można było lepiej zaspokoić",
+              "Opisz konkretne działania, nie ogólniki"
+            ]
+          },
+          {
+            "id": "brain_threat_response",
+            "question": "Wyjaśnij jak mózg reaguje na zagrożenia społeczne i dlaczego jest to istotne dla liderów. Podaj przykład sytuacji menedżerskiej, gdzie ta wiedza może być kluczowa.",
+            "correct_answer": "Mózg reaguje na zagrożenia społeczne (naruszenie potrzeb SCARF) aktywując układ limbiczny i reakcję 'walcz lub uciekaj', co powoduje: spadek kreatywności, ograniczenie zdolności logicznego myślenia, problem z pamięcią i uczeniem się, wzrost stresu i napięcia. Dla liderów oznacza to, że pracownik czujący się zagrożony społecznie będzie mniej produktywny, kreatywny i skłonny do współpracy. Przykład: krytyka publicznie przekazana może wywołać reakcję zagrożenia Status, skutkując demotywacją zamiast poprawą.",
+            "context": "Zrozumienie neurobiologii reakcji na zagrożenie jest fundamentem skutecznego przywództwa i zarządzania ludźmi.",
+            "max_score": 10,
+            "type": "open_question",
+            "hints": [
+              "Przypomnij sobie co dzieje się w mózgu gdy czujemy się zagrożeni",
+              "Pomyśl o różnicy między zagrożeniem fizycznym a społecznym",
+              "Rozważ wpływ na wydajność i motywację zespołu"
+            ]
+          }
+        ]
+      },
       "closing_quiz": {
         "title": "Quiz końcowy",
         "description": "Sprawdź swoją wiedzę po obejrzeniu filmu i wykonaniu ćwiczeń",
