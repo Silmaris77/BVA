@@ -228,7 +228,7 @@ def show_admin_dashboard():
         neuroleader_df = get_neuroleader_type_distribution()
         
         if not neuroleader_df.empty:
-            # Wykres kołowy typów degenów z ulepszoną czytelnością
+            # Wykres kołowy typów neuroleaderów z ulepszoną czytelnością
             fig, ax = plt.subplots(figsize=(12, 8))
             
             # Przygotuj dane
@@ -266,16 +266,16 @@ def show_admin_dashboard():
             # Dodaj legendę z dokładnymi liczbami
             legend_labels = [f'{label}: {count} ({count/total*100:.1f}%)' 
                            for label, count in zip(labels, counts)]
-            ax.legend(wedges, legend_labels, title="Typy degenów", 
+            ax.legend(wedges, legend_labels, title="Typy neuroleaderów", 
                      loc="center left", bbox_to_anchor=(1, 0, 0.5, 1))
             
             ax.axis('equal')  # Zapewnia okrągły kształt
-            plt.title('Rozkład typów degenów', fontsize=14, fontweight='bold', pad=20)
+            plt.title('Rozkład typów neuroleaderów', fontsize=14, fontweight='bold', pad=20)
             plt.tight_layout()
             
             st.pyplot(fig)
         else:
-            st.info("Brak danych o typach degenów.")
+            st.info("Brak danych o typach neuroleaderów.")
     
     # 2. Zakładka Użytkownicy
     with admin_tabs[1]:
@@ -289,8 +289,8 @@ def show_admin_dashboard():
         with filter_cols[0]:
             min_xp = st.number_input("Min XP", min_value=0, value=0)
         with filter_cols[1]:
-            degen_filter = st.selectbox("Filtruj wg typu degena", 
-                                       options=["Wszystkie"] + list(user_df['degen_type'].unique()))
+            neuroleader_filter = st.selectbox("Filtruj wg typu neuroleader", 
+                                       options=["Wszystkie"] + list(user_df['neuroleader_type'].unique()))
         with filter_cols[2]:
             sort_by = st.selectbox("Sortuj wg", 
                                    options=["xp", "level", "completed_lessons", "username"])
@@ -300,8 +300,8 @@ def show_admin_dashboard():
         if min_xp > 0:
             filtered_df = filtered_df[filtered_df['xp'] >= min_xp]
         
-        if degen_filter != "Wszystkie":
-            filtered_df = filtered_df[filtered_df['degen_type'] == degen_filter]
+        if neuroleader_filter != "Wszystkie":
+            filtered_df = filtered_df[filtered_df['neuroleader_type'] == neuroleader_filter]
         
         # Sortuj dane
         filtered_df = filtered_df.sort_values(by=sort_by, ascending=False)
@@ -313,7 +313,7 @@ def show_admin_dashboard():
                 "xp": "XP",
                 "level": "Poziom",
                 "completed_lessons": "Ukończone lekcje",
-                "degen_type": "Typ degena",
+                "neuroleader_type": "Typ neuroleader",
                 "registration_date": "Data rejestracji",
                 "last_login": "Ostatnie logowanie",
                 "test_taken": "Test wykonany",
@@ -398,31 +398,31 @@ def show_admin_dashboard():
         test_results = []
         for username, data in users_data.items():
             if data.get('test_scores'):
-                for degen_type, score in data.get('test_scores', {}).items():
+                for neuroleader_type, score in data.get('test_scores', {}).items():
                     test_results.append({
                         'username': username,
-                        'degen_type': degen_type,
+                        'neuroleader_type': neuroleader_type,
                         'score': score
                     })
         
         test_df = pd.DataFrame(test_results)
         
         if not test_df.empty:
-            # Średnie wyniki dla każdego typu degena
-            st.subheader("Średnie wyniki dla typów degenów")
+            # Średnie wyniki dla każdego typu neuroleader
+            st.subheader("Średnie wyniki dla typów neuroleaderów")
             
-            avg_scores = test_df.groupby('degen_type')['score'].mean().reset_index()
+            avg_scores = test_df.groupby('neuroleader_type')['score'].mean().reset_index()
             avg_scores['score'] = avg_scores['score'].round(2)
             
             chart = alt.Chart(avg_scores).mark_bar().encode(
-                x=alt.X('degen_type:N', title='Typ degena'),
+                x=alt.X('neuroleader_type:N', title='Typ neuroleader'),
                 y=alt.Y('score:Q', title='Średni wynik'),
-                color=alt.Color('degen_type:N', title='Typ degena'),
-                tooltip=['degen_type', 'score']
+                color=alt.Color('neuroleader_type:N', title='Typ neuroleader'),
+                tooltip=['neuroleader_type', 'score']
             ).properties(
                 width='container',
                 height=350,
-                title='Średnie wyniki testów wg typu degena'
+                title='Średnie wyniki testów wg typu neuroleader'
             )
             
             st.altair_chart(chart, use_container_width=True)
@@ -433,7 +433,7 @@ def show_admin_dashboard():
                 test_df,
                 column_config={
                     "username": "Nazwa użytkownika",
-                    "degen_type": "Typ degena",
+                    "neuroleader_type": "Typ neuroleader",
                     "score": "Wynik"
                 },
                 use_container_width=True
@@ -538,7 +538,7 @@ def show_admin_dashboard():
             st.download_button(
                 label="Pobierz kopię zapasową (JSON)",
                 data=users_json,
-                file_name=f"zen_degen_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                file_name=f"neuroleader_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                 mime="application/json"
             )
 

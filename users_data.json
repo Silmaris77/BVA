@@ -536,7 +536,7 @@
     },
     "lesson_access": {
       "0. Wprowadzenie do neuroprzywództwa": true,
-      "1. Mózg emocjonalny_copy": false,
+      "1. Mózg emocjonalny_copy": true,
       "2. Chemia mózgu": false,
       "3. Model SCARF": false,
       "4. Model SEEDS": false,
@@ -561,7 +561,7 @@
     "degencoins": 220,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-08-27 22:35:54",
+    "last_login": "2025-08-28 06:43:39",
     "completed_lessons": [
       "2. Chemia mózgu"
     ],
