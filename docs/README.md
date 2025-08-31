@@ -13,6 +13,7 @@ Ten folder zawiera całą dokumentację projektu ZenDegenAcademy, zorganizowaną
 - **INTERACTIVE_MAP_USER_GUIDE.md** - Przewodnik interaktywnej mapy
 
 ### 🔧 `/implementation/` - Implementacja i funkcje
+- **INSPIRATION_ACTIVITIES_COMPLETE.md** - ✨ NAJNOWSZE: Aktywności dla sekcji Inspiracji (31.08.2025)
 - **INTEGRACJA_SKLEPU_Z_PROFILEM.md** - ✨ NOWE: Integracja sklepu w zakładkę Profil
 - **PRACTICAL_EXERCISES_FINAL_READY.md** - Implementacja ćwiczeń praktycznych
 - **PROMPT_IMPLEMENTACJA_NEUROPRZYWODZTWO.md** - Implementacja neuroprzywództwa

@@ -192,7 +192,26 @@ def mark_inspiration_as_read_for_user(inspiration_id, username=None):
     read_list = get_user_read_inspirations(username)
     if inspiration_id not in read_list:
         read_list.append(inspiration_id)
-        return save_user_inspiration_data(username, read_list=read_list)
+        result = save_user_inspiration_data(username, read_list=read_list)
+        
+        # Add recent activity for reading inspiration
+        if result:
+            try:
+                # Get inspiration title for the activity
+                from utils.inspirations_loader import get_inspiration_by_id
+                inspiration = get_inspiration_by_id(inspiration_id)
+                inspiration_title = inspiration.get('title', 'Nieznany artykuł') if inspiration else 'Nieznany artykuł'
+                
+                # Add activity using the existing add_recent_activity function
+                from data.users_fixed import add_recent_activity
+                add_recent_activity(username, "inspiration_read", {
+                    "inspiration_id": inspiration_id,
+                    "inspiration_title": inspiration_title
+                })
+            except Exception as e:
+                print(f"Error adding inspiration read activity: {e}")
+        
+        return result
     
     return True
 

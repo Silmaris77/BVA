@@ -1,0 +1,131 @@
+{
+  "_template_info": {
+    "version": "1.0",
+    "description": "Standard lesson template for BrainventureAcademy",
+    "usage": "Copy this template and replace placeholder values with actual content",
+    "last_updated": "2024-01-20"
+  },
+  
+  "id": "NEUROLEADERSHIP_LESSON_8",
+  "title": "Kondycja mózgu: jak wspierać jego zdrowie i wydajność",
+  "description": "Dowiedz się jak dbać o kondycję mózgu, wspierać jego wydajność i optymalizować funkcje poznawcze dla lepszego przywództwa.",
+  "tag": "Neuroprzywództwo",
+  "xp_reward": 100,
+  "difficulty": "intermediate",
+  "available": false,
+  
+  "intro": {
+    "main": "<div style='background: linear-gradient(135deg, #96e6a1 0%, #d4fc79 100%); padding: 30px; border-radius: 15px; color: #333; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: #333;'>🧠💪 Kondycja mózgu</h1><p style='font-size: 1.2rem; text-align: center; margin-bottom: 30px;'>Poznaj sekrety zdrowia i wysokiej wydajności mózgu</p></div><div style='background: #fff3cd; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #ffc107;'><h3 style='color: #856404; margin-bottom: 15px;'>⚠️ Lekcja w przygotowaniu</h3><p style='color: #856404; margin-bottom: 0;'>Ta lekcja jest obecnie przygotowywana przez nasz zespół ekspertów. Wkrótce będzie dostępna z pełną zawartością merytoryczną.</p></div>",
+    "case_study": "[CASE_STUDY_CONTENT_TO_BE_DEVELOPED]",
+    "quiz_samodiagnozy": {
+      "title": "Quiz Samodiagnozy - Kondycja mózgu",
+      "description": "Sprawdź swoją wiedzę o zdrowiu i kondycji mózgu",
+      "questions": [
+        {
+          "question": "[QUESTION_ABOUT_BRAIN_HEALTH_TO_BE_DEVELOPED]",
+          "options": [
+            "[OPTION_1]",
+            "[OPTION_2]",
+            "[OPTION_3]",
+            "[OPTION_4]"
+          ],
+          "correct_answer": 0,
+          "explanation": "[EXPLANATION_TO_BE_DEVELOPED]"
+        }
+      ]
+    }
+  },
+  
+  "sections": {
+    "learning": {
+      "sections": [
+        {
+          "title": "Podstawy zdrowia mózgu",
+          "content": "[CONTENT_TO_BE_DEVELOPED]"
+        },
+        {
+          "title": "Czynniki wpływające na wydajność mózgu",
+          "content": "[CONTENT_TO_BE_DEVELOPED]"
+        },
+        {
+          "title": "Praktyczne strategie optymalizacji",
+          "content": "[CONTENT_TO_BE_DEVELOPED]"
+        }
+      ]
+    },
+    "exercises": {
+      "practical": [
+        {
+          "title": "[EXERCISE_TITLE_TO_BE_DEVELOPED]",
+          "description": "[EXERCISE_DESCRIPTION_TO_BE_DEVELOPED]",
+          "steps": [
+            "[STEP_1_TO_BE_DEVELOPED]",
+            "[STEP_2_TO_BE_DEVELOPED]"
+          ]
+        }
+      ],
+      "quiz": {
+        "questions": [
+          {
+            "question": "[QUIZ_QUESTION_TO_BE_DEVELOPED]",
+            "options": [
+              "[OPTION_A]",
+              "[OPTION_B]",
+              "[OPTION_C]",
+              "[OPTION_D]"
+            ],
+            "correct_answer": 0,
+            "explanation": "[EXPLANATION_TO_BE_DEVELOPED]"
+          }
+        ]
+      }
+    },
+    "summary": {
+      "main_takeaways": "[SUMMARY_TO_BE_DEVELOPED]",
+      "mind_map": {
+        "nodes": [
+          {
+            "id": "main_topic",
+            "label": "Kondycja mózgu",
+            "size": 30,
+            "color": "#96e6a1",
+            "font_size": 16
+          }
+        ],
+        "connections": [],
+        "config": {
+          "width": 800,
+          "height": 600,
+          "physics": true,
+          "directed": false,
+          "hierarchical": false
+        }
+      },
+      "key_points": [
+        "[KEY_POINT_1_TO_BE_DEVELOPED]",
+        "[KEY_POINT_2_TO_BE_DEVELOPED]",
+        "[KEY_POINT_3_TO_BE_DEVELOPED]"
+      ],
+      "next_steps": [
+        "[ACTION_STEP_1_TO_BE_DEVELOPED]",
+        "[ACTION_STEP_2_TO_BE_DEVELOPED]"
+      ],
+      "resources": [
+        {
+          "title": "[RESOURCE_TITLE_TO_BE_DEVELOPED]",
+          "url": "[RESOURCE_URL_TO_BE_DEVELOPED]",
+          "type": "article"
+        }
+      ]
+    }
+  },
+  
+  "estimated_time": "30-35 minutes",
+  "learning_objectives": [
+    "Zrozumieć podstawy zdrowia i kondycji mózgu",
+    "Poznać czynniki wpływające na wydajność poznawczą",
+    "Opanować praktyczne strategie optymalizacji mózgu"
+  ],
+  "prerequisites": ["NEUROLEADERSHIP_LESSON_7"],
+  "tags": ["zdrowie_mózgu", "wydajność", "optymalizacja", "neurobiologia"]
+}

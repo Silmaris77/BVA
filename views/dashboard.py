@@ -340,6 +340,16 @@ def show_recent_activities(user_data):
                     title = "Zdobyto nową odznakę"
                 icon = "🏆"
                 color = "#f1c40f" # Yellow
+            elif activity_type == "inspiration_read":
+                inspiration_title = details.get("inspiration_title", "Nieznany artykuł")
+                title = f"Przeczytano artykuł: {inspiration_title}"
+                icon = "📖"
+                color = "#9b59b6" # Purple
+            elif activity_type == "neuroleader_type_discovered":
+                neuroleader_type = details.get("neuroleader_type", "Nieznany typ")
+                title = f"Odkryto typ przywódcy: {neuroleader_type}"
+                icon = "🧠"
+                color = "#e74c3c" # Red
             # Add more elif blocks here for other activity types as needed
             # e.g., quiz_completed, mission_completed, xp_gained etc.
             # Ensure 'details' in add_recent_activity call contains necessary info.
