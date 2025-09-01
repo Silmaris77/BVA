@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 316,
-    "degencoins": 306,
+    "xp": 481,
+    "degencoins": 471,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-08-31 19:07:57",
+    "last_login": "2025-09-01 13:03:38",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -28,7 +28,8 @@
         "neuroempata_guide",
         "neuroinspirator_guide",
         "neuroreaktor_guide",
-        "chewing_gum_brain"
+        "chewing_gum_brain",
+        "neuroinnowator_guide"
       ],
       "favorites": []
     },
@@ -109,10 +110,33 @@
         "intro_completed": true,
         "intro_xp": 7,
         "intro_degencoins": 7,
-        "intro_timestamp": "2025-08-27 13:47:24"
+        "intro_timestamp": "2025-08-27 13:47:24",
+        "content_xp_awarded": true,
+        "content_completed": true,
+        "content_xp": 45,
+        "content_degencoins": 45,
+        "content_timestamp": "2025-09-01 13:10:24",
+        "closing_quiz_xp_awarded": true,
+        "closing_quiz_completed": true,
+        "closing_quiz_xp": 30,
+        "closing_quiz_degencoins": 30,
+        "closing_quiz_timestamp": "2025-09-01 13:10:59",
+        "practical_exercises_xp_awarded": true,
+        "practical_exercises_completed": true,
+        "practical_exercises_xp": 90,
+        "practical_exercises_degencoins": 90,
+        "practical_exercises_timestamp": "2025-09-01 13:11:22"
       }
     },
     "recent_activities": [
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "neuroinnowator_guide",
+          "inspiration_title": "Neuroinnowator: Mistrz Nawigacji w Zmianach"
+        },
+        "timestamp": "2025-09-01T11:16:37.315388+00:00"
+      },
       {
         "type": "inspiration_read",
         "details": {
