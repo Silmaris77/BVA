@@ -226,30 +226,58 @@ def show_stats_section(user_data, device_type):
     streak_change = f"+{min(1, streak)}"
     level_change = f"+{max(0, level - 1)}"
     
-    # Utwórz 5 kolumn
-    cols = st.columns(5)
-    
-    # 5 kart statystyk
-    stats = [
-        {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change},
-        {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change},
-        {"icon": "⭐", "value": f"{level}", "label": "Poziom", "change": level_change},
-        {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change},
-        {"icon": "🔥", "value": f"{streak}", "label": "Aktualna passa", "change": streak_change}
-        # {"icon": "🎯", "value": f"{missions_progress['completed']}", "label": "Dzisiejsze misje", "change": f"+{missions_progress['completed']}"}
-    ]
-    
-    # Wygeneruj kartę w każdej kolumnie
-    for i, stat in enumerate(stats):
-        with cols[i]:
-            st.markdown(f"""
-            <div class="stat-card">
-                <div class="stat-icon">{stat['icon']}</div>
-                <div class="stat-value">{stat['value']}</div>
-                <div class="stat-label">{stat['label']}</div>
-                <div class="stat-change positive">{stat['change']}</div>
-            </div>
-            """, unsafe_allow_html=True)
+    # Utwórz responsywne kolumny
+    device_type = get_device_type()
+    if device_type == 'mobile':
+        cols_per_row = 2
+        # Podziel statystyki na wiersze po 2 kolumny dla mobile
+        stats = [
+            {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change},
+            {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change},
+            {"icon": "⭐", "value": f"{level}", "label": "Poziom", "change": level_change},
+            {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change}
+        ]
+        
+        # Podziel statystyki na wiersze
+        rows = []
+        for i in range(0, len(stats), cols_per_row):
+            rows.append(stats[i:i + cols_per_row])
+        
+        # Wyświetl każdy wiersz osobno
+        for row_stats in rows:
+            cols = st.columns(cols_per_row)
+            for col_index, stat in enumerate(row_stats):
+                if col_index < len(cols):
+                    with cols[col_index]:
+                        st.markdown(f"""
+                        <div class="stat-card">
+                            <div class="stat-icon">{stat['icon']}</div>
+                            <div class="stat-value">{stat['value']}</div>
+                            <div class="stat-label">{stat['label']}</div>
+                            <div class="stat-change positive">{stat['change']}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+    else:
+        # Desktop i tablet - 4 kolumny (usunięto "Aktualną passę")
+        cols = st.columns(4)
+        stats = [
+            {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change},
+            {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change},
+            {"icon": "⭐", "value": f"{level}", "label": "Poziom", "change": level_change},
+            {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change}
+        ]
+        
+        # Wygeneruj kartę w każdej kolumnie
+        for i, stat in enumerate(stats):
+            with cols[i]:
+                st.markdown(f"""
+                <div class="stat-card">
+                    <div class="stat-icon">{stat['icon']}</div>
+                    <div class="stat-value">{stat['value']}</div>
+                    <div class="stat-label">{stat['label']}</div>
+                    <div class="stat-change positive">{stat['change']}</div>
+                </div>
+                """, unsafe_allow_html=True)
 
 # def show_main_content(user_data, device_type):
 #     """Główna zawartość dashboardu"""
