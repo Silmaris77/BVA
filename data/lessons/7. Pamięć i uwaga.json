@@ -53,18 +53,21 @@
         }
       ]
     },
-    "exercises": {
-      "practical": [
-        {
-          "title": "[EXERCISE_TITLE_TO_BE_DEVELOPED]",
-          "description": "[EXERCISE_DESCRIPTION_TO_BE_DEVELOPED]",
-          "steps": [
-            "[STEP_1_TO_BE_DEVELOPED]",
-            "[STEP_2_TO_BE_DEVELOPED]"
-          ]
-        }
-      ],
-      "quiz": {
+    
+    "practical_exercises": {
+      "exercises": {
+        "title": "Ćwiczenia",
+        "description": "Zastosuj wiedzę w praktyce",
+        "sections": [
+          {
+            "title": "[EXERCISE_TITLE_TO_BE_DEVELOPED]",
+            "content": "[EXERCISE_DESCRIPTION_TO_BE_DEVELOPED]"
+          }
+        ]
+      },
+      "closing_quiz": {
+        "title": "Quiz końcowy",
+        "description": "Sprawdź, ile zapamiętałeś z tej lekcji",
         "questions": [
           {
             "question": "[QUIZ_QUESTION_TO_BE_DEVELOPED]",
@@ -80,19 +83,42 @@
         ]
       }
     },
+    
     "summary": {
-      "main_takeaways": "[SUMMARY_TO_BE_DEVELOPED]",
+      "main": "[SUMMARY_CONTENT_HTML]",
+      "case_study": "[FINAL_CASE_STUDY_REFLECTION_HTML]",
       "mind_map": {
-        "nodes": [
+        "central_node": {
+          "id": "main_topic",
+          "label": "Pamięć i uwaga",
+          "size": 30,
+          "color": "#a8edea",
+          "font_size": 16
+        },
+        "categories": [
           {
-            "id": "main_topic",
-            "label": "Pamięć i uwaga",
-            "size": 30,
-            "color": "#a8edea",
-            "font_size": 16
+            "id": "category_1",
+            "label": "[CATEGORY_1_LABEL]",
+            "size": 20,
+            "color": "#4ECDC4",
+            "font_size": 12,
+            "details": [
+              {
+                "id": "detail_1",
+                "label": "[DETAIL_1_LABEL]",
+                "size": 12,
+                "color": "#DDA0DD",
+                "font_size": 10
+              }
+            ]
           }
         ],
-        "connections": [],
+        "connections": [
+          {
+            "from": "main_topic",
+            "to": "category_1"
+          }
+        ],
         "config": {
           "width": 800,
           "height": 600,
@@ -108,7 +134,8 @@
       ],
       "next_steps": [
         "[ACTION_STEP_1_TO_BE_DEVELOPED]",
-        "[ACTION_STEP_2_TO_BE_DEVELOPED]"
+        "[ACTION_STEP_2_TO_BE_DEVELOPED]",
+        "[ACTION_STEP_3_TO_BE_DEVELOPED]"
       ],
       "resources": [
         {
