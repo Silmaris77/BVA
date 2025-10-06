@@ -6,6 +6,8 @@ from utils.components import youtube_video  # Osobny import dla youtube_video
 from utils.material3_components import apply_material3_theme
 from utils.layout import get_device_type, responsive_grid, responsive_container, toggle_device_view
 from utils.scroll_utils import scroll_to_top
+from utils.media_embed import render_embedded_content
+from utils.media_embed import render_embedded_content
 from utils.lesson_progress import (
     award_fragment_xp, get_lesson_fragment_progress, calculate_lesson_completion,
     is_lesson_fully_completed, get_fragment_xp_breakdown, mark_lesson_as_completed,
@@ -723,45 +725,70 @@ def show_lessons_content():
                     st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
         elif st.session_state.lesson_step == 'content':
-            # Diagnozowanie problemu z wyświetlaniem treści
+            # Sprawdź strukturę learning - obsługuj zarówno tabs jak i sections
             if 'sections' not in lesson:
                 st.error("Lekcja nie zawiera klucza 'sections'!")
             elif 'learning' not in lesson.get('sections', {}):
                 st.error("Lekcja nie zawiera sekcji 'learning'!")
-            elif 'sections' not in lesson['sections'].get('learning', {}):
-                st.error("Sekcja 'learning' nie zawiera klucza 'sections'!")
-            else:                # Sprawdź, czy sekcja learning istnieje i czy zawiera sections
-                for i, section in enumerate(lesson["sections"]["learning"]["sections"]):
-                    # Dla lekcji "Wprowadzenie do neuroprzywództwa" pierwszy expander jest otwarty
-                    is_expanded = False
-                    if lesson.get('title') == 'Wprowadzenie do neuroprzywództwa' and i == 0:
-                        is_expanded = True
+            else:
+                learning_data = lesson['sections']['learning']
+                
+                # Nowa struktura z tabs (jak w lekcji 11)
+                if 'tabs' in learning_data:
+                    st.markdown("### 📚 Materiał do nauki")
                     
-                    with st.expander(section.get("title", f"Sekcja {i+1}"), expanded=is_expanded):
-                        # Wyświetl treść sekcji
-                        st.markdown(section.get("content", "Brak treści"), unsafe_allow_html=True)
+                    # Utwórz tabs dla różnych typów treści
+                    tab_names = [tab.get('title', f'Tab {i+1}') for i, tab in enumerate(learning_data['tabs'])]
+                    tabs = st.tabs(tab_names)
+                    
+                    for i, (tab_container, tab_data) in enumerate(zip(tabs, learning_data['tabs'])):
+                        with tab_container:
+                            # Wyświetl sekcje w tym tab
+                            if 'sections' in tab_data:
+                                tab_title = tab_data.get('title', '')
+                                
+                                # Dla tab "Tekst" używaj expanderów
+                                if 'Tekst' in tab_title:
+                                    for j, section in enumerate(tab_data['sections']):
+                                        section_title = section.get('title', f'Sekcja {j+1}')
+                                        # Pierwszy expander domyślnie otwarty
+                                        is_expanded = (j == 0)
+                                        
+                                        with st.expander(section_title, expanded=is_expanded):
+                                            # Użyj nowego renderera obsługującego osadzone media
+                                            content = section.get('content', 'Brak treści')
+                                            render_embedded_content(content, section)
+                                else:
+                                    # Dla pozostałych tabs (Podcast, Video) standardowe wyświetlanie
+                                    for section in tab_data['sections']:
+                                        if 'title' in section:
+                                            st.markdown(f"### {section['title']}")
+                                        
+                                        # Użyj nowego renderera obsługującego osadzone media
+                                        content = section.get('content', 'Brak treści')
+                                        render_embedded_content(content, section)
+                            else:
+                                st.warning(f"Tab '{tab_data.get('title', 'Bez nazwy')}' nie zawiera sekcji.")
+                
+                # Stara struktura z sections (kompatybilność wsteczna)
+                elif 'sections' in learning_data:
+                    # Sprawdź, czy sekcja learning istnieje i czy zawiera sections
+                    for i, section in enumerate(learning_data["sections"]):
+                        # Dla lekcji "Wprowadzenie do neuroprzywództwa" pierwszy expander jest otwarty
+                        is_expanded = False
+                        if lesson.get('title') == 'Wprowadzenie do neuroprzywództwa' and i == 0:
+                            is_expanded = True
                         
-                        # Sprawdź czy sekcja zawiera film YouTube (pojedynczy)
-                        if 'video' in section and section['video']:
-                            video_data = section['video']
-                            video_url = video_data.get('url')
-                            video_title = video_data.get('title')
-                            video_description = video_data.get('description')
+                        with st.expander(section.get("title", f"Sekcja {i+1}"), expanded=is_expanded):
+                            # Wyświetl treść sekcji używając nowego renderera
+                            content = section.get("content", "Brak treści")
+                            render_embedded_content(content, section)
                             
-                            if video_url:
-                                from utils.components import youtube_video
-                                youtube_video(
-                                    video_url=video_url,
-                                    title=video_title,
-                                    description=video_description
-                                )
-                        
-                        # Sprawdź czy sekcja zawiera wiele filmów YouTube (videos)
-                        if 'videos' in section and section['videos']:
-                            st.markdown("### 🎥 Materiały wideo")
-                            for j, video_data in enumerate(section['videos']):
+                            # Sprawdź czy sekcja zawiera film YouTube (pojedynczy)
+                            if 'video' in section and section['video']:
+                                video_data = section['video']
                                 video_url = video_data.get('url')
-                                video_title = video_data.get('title', f'Film {j+1}')
+                                video_title = video_data.get('title')
                                 video_description = video_data.get('description')
                                 
                                 if video_url:
@@ -771,10 +798,28 @@ def show_lessons_content():
                                         title=video_title,
                                         description=video_description
                                     )
+                            
+                            # Sprawdź czy sekcja zawiera wiele filmów YouTube (videos)
+                            if 'videos' in section and section['videos']:
+                                st.markdown("### 🎥 Materiały wideo")
+                                for j, video_data in enumerate(section['videos']):
+                                    video_url = video_data.get('url')
+                                    video_title = video_data.get('title', f'Film {j+1}')
+                                    video_description = video_data.get('description')
                                     
-                                    # Dodaj separator między filmami
-                                    if j < len(section['videos']) - 1:
-                                        st.markdown("---")
+                                    if video_url:
+                                        from utils.components import youtube_video
+                                        youtube_video(
+                                            video_url=video_url,
+                                            title=video_title,
+                                            description=video_description
+                                        )
+                                        
+                                        # Dodaj separator między filmami
+                                        if j < len(section['videos']) - 1:
+                                            st.markdown("---")
+                else:
+                    st.error("Sekcja 'learning' nie zawiera ani 'tabs' ani 'sections'!")
                                             # Przycisk "Dalej" po treści lekcji
             col1, col2, col3 = st.columns([1, 1, 1])
             with col2:
@@ -1498,7 +1543,10 @@ def show_lessons_content():
                                     if 'sections' in tab_data:
                                         for section in tab_data['sections']:
                                             st.markdown(f"### {section.get('title', 'Sekcja')}")
-                                            st.markdown(section.get('content', 'Brak treści'), unsafe_allow_html=True)
+                                            
+                                            # Użyj nowego renderera obsługującego osadzone media
+                                            content = section.get('content', 'Brak treści')
+                                            render_embedded_content(content, section)
                                             
                                             # Jeśli sekcja wymaga odpowiedzi użytkownika
                                             if section.get('interactive', False):
