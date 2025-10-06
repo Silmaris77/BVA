@@ -278,7 +278,7 @@ def show_progress_dashboard(user_skills, user_xp, user_completed_lessons, catego
             titleFontSize=14
         )
         
-        st.altair_chart(chart, width='stretch')
+        st.altair_chart(chart, use_container_width=True)
     
     # Krótka informacja o mechanice zdobywania poziomów
     st.markdown("""
@@ -1229,7 +1229,7 @@ def show_skill_analytics(category, user_completed_lessons):
             title="Postęp lekcji"
         )
         
-        st.altair_chart(chart, width='stretch')
+        st.altair_chart(chart, use_container_width=True)
     
     # Rekomendacje dalszej nauki
     st.markdown("### Rekomendacje dalszej nauki")
