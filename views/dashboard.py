@@ -228,7 +228,9 @@ def show_stats_section(user_data, device_type):
     
     # Użyj przekazanego device_type zamiast wykrywać ponownie
     if device_type == 'mobile':
-        # Dla mobile używamy CSS Grid zamiast st.columns dla lepszej kontroli
+        # Metoda fallback: używaj standardowych komponentów Streamlit w 2 kolumnach
+        st.markdown("### 📊 Statystyki")
+        
         stats = [
             {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change},
             {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change},
@@ -236,85 +238,31 @@ def show_stats_section(user_data, device_type):
             {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change}
         ]
         
-        # Stwórz HTML grid 2x2 z responsywnym CSS
-        stats_html = """
-        <style>
-        .mobile-stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1rem 0;
-            width: 100%;
-        }
-        .mobile-stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            color: white;
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            min-height: 140px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: transform 0.3s ease;
-        }
-        .mobile-stat-card:hover {
-            transform: translateY(-5px);
-        }
-        .mobile-stat-card .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        .mobile-stat-card .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-        }
-        .mobile-stat-card .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-bottom: 0.5rem;
-        }
-        .mobile-stat-card .stat-change {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #4ade80;
-        }
-        /* Zapewnienie responsywności na bardzo małych ekranach */
-        @media (max-width: 480px) {
-            .mobile-stats-grid {
-                gap: 0.5rem;
-            }
-            .mobile-stat-card {
-                padding: 1rem;
-                min-height: 120px;
-            }
-            .mobile-stat-card .stat-icon {
-                font-size: 1.5rem;
-            }
-            .mobile-stat-card .stat-value {
-                font-size: 1.5rem;
-            }
-        }
-        </style>
-        <div class="mobile-stats-grid">
-        """
-        
-        for stat in stats:
-            stats_html += f"""
-            <div class="mobile-stat-card">
-                <div class="stat-icon">{stat['icon']}</div>
-                <div class="stat-value">{stat['value']}</div>
-                <div class="stat-label">{stat['label']}</div>
-                <div class="stat-change">{stat['change']}</div>
-            </div>
-            """
-        
-        stats_html += "</div>"
-        
-        st.markdown(stats_html, unsafe_allow_html=True)
+        # Wyświetl w 2 wierszach po 2 kolumny
+        for i in range(0, len(stats), 2):
+            cols = st.columns(2)
+            for j, col in enumerate(cols):
+                if i + j < len(stats):
+                    stat = stats[i + j]
+                    with col:
+                        st.markdown(f"""
+                        <div style="
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            border-radius: 16px;
+                            padding: 1.5rem;
+                            text-align: center;
+                            color: white;
+                            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            min-height: 140px;
+                            margin-bottom: 1rem;
+                        ">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">{stat['icon']}</div>
+                            <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{stat['value']}</div>
+                            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">{stat['label']}</div>
+                            <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{stat['change']}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
     else:
         # Desktop i tablet - 4 kolumny (usunięto "Aktualną passę")
         cols = st.columns(4)
@@ -745,23 +693,6 @@ def show_dashboard():
     # Opcja wyboru urządzenia w trybie deweloperskim
     if st.session_state.get('dev_mode', False):
         toggle_device_view()
-    
-    # TYMCZASOWO: Dodaj przełącznik urządzenia dla testów
-    with st.sidebar:
-        st.markdown("### 📱 Test widoku")
-        device_options = ["desktop", "tablet", "mobile"]
-        current_device = st.session_state.get('device_type', 'desktop')
-        
-        selected_device = st.selectbox(
-            "Wybierz urządzenie:", 
-            device_options,
-            index=device_options.index(current_device),
-            key="device_selector"
-        )
-        
-        if selected_device != current_device:
-            st.session_state.device_type = selected_device
-            st.rerun()
 
     # Pobierz aktualny typ urządzenia
     device_type = get_device_type()
