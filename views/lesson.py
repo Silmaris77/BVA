@@ -453,82 +453,98 @@ def show_lessons_content():
             
             st.markdown('<div class="lesson-nav-container">', unsafe_allow_html=True)
             st.markdown('<div class="lesson-nav-title">📚 Nawigacja lekcji</div>', unsafe_allow_html=True)
-              # Stwórz kolumny dla przycisków nawigacji (dynamicznie na podstawie dostępnych kroków)
-            available_steps_in_order = [step for step in step_order if step in available_steps]
-            cols = st.columns(len(available_steps_in_order))
             
-            for col_index, step in enumerate(available_steps_in_order):
-                with cols[col_index]:
-                        step_name = step_names.get(step, step.capitalize())
-                        step_number = step_order.index(step) + 1  # Numer kroku w oryginalnej kolejności
-                        
-                        # Sprawdź status kroku
-                        is_completed = st.session_state.lesson_progress.get(step, False)
-                        is_current = (step == st.session_state.lesson_step)
-                        
-                        # Specjalna logika dla sekcji "Podsumowanie" - wymaga zaliczenia quizu końcowego
-                        if step == 'summary':
-                            # Sprawdź czy quiz końcowy został zdany z minimum 75%
-                            lesson_title = lesson.get("title", "")
-                            closing_quiz_key = f"closing_quiz_{lesson_id}"
-                            closing_quiz_state = st.session_state.get(closing_quiz_key, {})
-                            quiz_passed = closing_quiz_state.get("quiz_passed", False)
+            # Stwórz kolumny dla przycisków nawigacji z responsive grid
+            available_steps_in_order = [step for step in step_order if step in available_steps]
+            
+            # Użyj responsive grid: 2 kolumny na desktop i tablet, 1 na mobile
+            device_type = get_device_type()
+            if device_type == 'mobile':
+                cols_per_row = 1
+            else:  # desktop i tablet
+                cols_per_row = 2
+            
+            # Podziel przyciski na wiersze
+            rows = []
+            for i in range(0, len(available_steps_in_order), cols_per_row):
+                rows.append(available_steps_in_order[i:i + cols_per_row])
+            
+            # Wyświetl każdy wiersz osobno
+            for row_steps in rows:
+                cols = st.columns(cols_per_row)
+                for col_index, step in enumerate(row_steps):
+                    if col_index < len(cols):  # Sprawdź czy kolumna istnieje
+                        with cols[col_index]:
+                            step_name = step_names.get(step, step.capitalize())
+                            step_number = step_order.index(step) + 1  # Numer kroku w oryginalnej kolejności
                             
-                            # Dla lekcji "Wprowadzenie do neuroprzywództwa" nie ma blokowania
-                            if lesson_title != "Wprowadzenie do neuroprzywództwa" and not quiz_passed and not is_current:
-                                # Blokuj dostęp do podsumowania jeśli quiz nie został zdany
-                                button_text = f"🔒 {step_number}. {step_name}"
-                                button_type = "secondary"
-                                disabled = True
-                                help_text = "Musisz zaliczyć quiz końcowy (min. 75%) w sekcji 'Praktyka', aby odblokować podsumowanie"
-                            elif is_current:
-                                button_text = f"👉 {step_number}. {step_name}"
-                                button_type = "primary"
-                                disabled = False
-                                help_text = f"Przejdź do: {step_name}"
-                            elif is_completed:
-                                button_text = f"✅ {step_number}. {step_name}"
-                                button_type = "secondary"
-                                disabled = False
-                                help_text = f"Przejdź do: {step_name}"
+                            # Sprawdź status kroku
+                            is_completed = st.session_state.lesson_progress.get(step, False)
+                            is_current = (step == st.session_state.lesson_step)
+                            
+                            # Specjalna logika dla sekcji "Podsumowanie" - wymaga zaliczenia quizu końcowego
+                            if step == 'summary':
+                                # Sprawdź czy quiz końcowy został zdany z minimum 75%
+                                lesson_title = lesson.get("title", "")
+                                closing_quiz_key = f"closing_quiz_{lesson_id}"
+                                closing_quiz_state = st.session_state.get(closing_quiz_key, {})
+                                quiz_passed = closing_quiz_state.get("quiz_passed", False)
+                                
+                                # Dla lekcji "Wprowadzenie do neuroprzywództwa" nie ma blokowania
+                                if lesson_title != "Wprowadzenie do neuroprzywództwa" and not quiz_passed and not is_current:
+                                    # Blokuj dostęp do podsumowania jeśli quiz nie został zdany
+                                    button_text = f"🔒 {step_number}. {step_name}"
+                                    button_type = "secondary"
+                                    disabled = True
+                                    help_text = "Musisz zaliczyć quiz końcowy (min. 75%) w sekcji 'Praktyka', aby odblokować podsumowanie"
+                                elif is_current:
+                                    button_text = f"👉 {step_number}. {step_name}"
+                                    button_type = "primary"
+                                    disabled = False
+                                    help_text = f"Przejdź do: {step_name}"
+                                elif is_completed:
+                                    button_text = f"✅ {step_number}. {step_name}"
+                                    button_type = "secondary"
+                                    disabled = False
+                                    help_text = f"Przejdź do: {step_name}"
+                                else:
+                                    button_text = f"{step_number}. {step_name}"
+                                    button_type = "secondary"
+                                    disabled = True
+                                    help_text = f"Ukończ poprzednie kroki aby odblokować: {step_name}"
                             else:
-                                button_text = f"{step_number}. {step_name}"
-                                button_type = "secondary"
-                                disabled = True
-                                help_text = f"Ukończ poprzednie kroki aby odblokować: {step_name}"
-                        else:
-                            # Standardowa logika dla innych kroków
-                            if is_current:
-                                # Aktualny krok - niebieski
-                                button_text = f"👉 {step_number}. {step_name}"
-                                button_type = "primary"
-                                disabled = False
-                                help_text = f"Przejdź do: {step_name}"
-                            elif is_completed:
-                                # Ukończony krok - zielony z checkmarkiem
-                                button_text = f"✅ {step_number}. {step_name}"
-                                button_type = "secondary"
-                                disabled = False
-                                help_text = f"Przejdź do: {step_name}"
-                            else:
-                                # Przyszły krok - szary, zablokowany
-                                button_text = f"{step_number}. {step_name}"
-                                button_type = "secondary"
-                                disabled = True
-                                help_text = f"Ukończ poprzednie kroki aby odblokować: {step_name}"
-                        
-                        # Wyświetl przycisk
-                        if st.button(
-                            button_text, 
-                            key=f"nav_step_{step}_{col_index}", 
-                            type=button_type,
-                            disabled=disabled,
-                            use_container_width=True,
-                            help=help_text
-                        ):
-                            if not is_current:  # Tylko jeśli nie jest to aktualny krok
-                                st.session_state.lesson_step = step
-                                st.rerun()
+                                # Standardowa logika dla innych kroków
+                                if is_current:
+                                    # Aktualny krok - niebieski
+                                    button_text = f"👉 {step_number}. {step_name}"
+                                    button_type = "primary"
+                                    disabled = False
+                                    help_text = f"Przejdź do: {step_name}"
+                                elif is_completed:
+                                    # Ukończony krok - zielony z checkmarkiem
+                                    button_text = f"✅ {step_number}. {step_name}"
+                                    button_type = "secondary"
+                                    disabled = False
+                                    help_text = f"Przejdź do: {step_name}"
+                                else:
+                                    # Przyszły krok - szary, zablokowany
+                                    button_text = f"{step_number}. {step_name}"
+                                    button_type = "secondary"
+                                    disabled = True
+                                    help_text = f"Ukończ poprzednie kroki aby odblokować: {step_name}"
+                            
+                            # Wyświetl przycisk
+                            if st.button(
+                                button_text, 
+                                key=f"nav_step_{step}_{col_index}", 
+                                type=button_type,
+                                disabled=disabled,
+                                use_container_width=True,
+                                help=help_text
+                            ):
+                                if not is_current:  # Tylko jeśli nie jest to aktualny krok
+                                    st.session_state.lesson_step = step
+                                    st.rerun()
             
             st.markdown('</div>', unsafe_allow_html=True)
         
