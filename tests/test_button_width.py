@@ -58,7 +58,7 @@ def test_button_container_structure():
         # Sprawdź strukturę kontenerów
         structure_checks = [
             ("st.columns(4)", "4 kolumny dla przycisków"),
-            ("use_container_width=True", "Użycie pełnej szerokości kolumny"),
+            ("width='stretch'", "Użycie pełnej szerokości kolumny"),
             ("lesson-nav-container", "Kontener CSS nawigacji"),
             ("with cols[i]:", "Użycie kolumn dla przycisków")
         ]

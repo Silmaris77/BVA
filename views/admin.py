@@ -222,7 +222,7 @@ def show_admin_dashboard():
             title='Aktywność użytkowników: rejestracje i logowania (ostatnie 30 dni)'
         )
         
-        st.altair_chart(chart, use_container_width=True)
+        st.altair_chart(chart, width='stretch')
         
         # Rozkład typów neuroliderów
         st.subheader("Rozkład typów neuroliderów")
@@ -322,7 +322,7 @@ def show_admin_dashboard():
                 "test_taken": "Test wykonany",
                 "streak": "Seria dni"
             },
-            use_container_width=True
+            width='stretch'
         )
         
         # Dodaj opcję eksportu danych
@@ -363,7 +363,7 @@ def show_admin_dashboard():
                     format="%{value:.2f}"
                 )
             },
-            use_container_width=True
+            width='stretch'
         )
         
         # Wykres popularności lekcji (top 10)
@@ -383,7 +383,7 @@ def show_admin_dashboard():
                 title='Top 10 najpopularniejszych lekcji'
             )
             
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(chart, width='stretch')
         else:
             st.info("Brak danych o ukończonych lekcjach.")
     
@@ -431,7 +431,7 @@ def show_admin_dashboard():
                 title='Średnie wyniki testów wg typu neuroleader'
             )
             
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(chart, width='stretch')
             
             # Tabela z wynikami testów
             st.subheader("Szczegółowe wyniki testów")
@@ -442,7 +442,7 @@ def show_admin_dashboard():
                     "neuroleader_type": "Typ neuroleader",
                     "score": "Wynik"
                 },
-                use_container_width=True
+                width='stretch'
             )
         else:
             st.info("Brak danych o wynikach testów.")

@@ -52,7 +52,7 @@ def main():
             # Nawigacja
             navigation_menu()
               # Przycisk wylogowania na dole sidebara
-            if zen_button("🚪 Wyloguj się", key="logout_button", use_container_width=True):
+            if zen_button("🚪 Wyloguj się", key="logout_button", width='stretch'):
                 # JavaScript do zamknięcia sidebar na mobile po wylogowaniu
                 st.markdown("""
                 <script>

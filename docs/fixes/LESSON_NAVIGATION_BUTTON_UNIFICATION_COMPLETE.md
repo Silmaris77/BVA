@@ -20,12 +20,12 @@
 ### 2. **Implementacja we wszystkich przypadkach**
 ```python
 # PRZED - szeroki przycisk na całą stronę lub z lewej strony
-if zen_button("Dalej: ...", use_container_width=False):
+if zen_button("Dalej: ...", width='content):
 
 # PO - wycentrowany przycisk w środkowej kolumnie  
 col1, col2, col3 = st.columns([1, 1, 1])
 with col2:
-    if zen_button("Dalej: ...", use_container_width=True):
+    if zen_button("Dalej: ...", width='stretch'):
 ```
 
 ### 3. **Kompletne pokrycie wszystkich typów przycisków**

@@ -59,7 +59,7 @@ quiz_completed, quiz_passed, earned_points = display_quiz(
 ### 3. Diagnostic Opening Quiz
 ```python
 # Skip option implementation (line ~457)
-if zen_button("⏭️ Pomiń quiz", use_container_width=True):
+if zen_button("⏭️ Pomiń quiz", width='stretch'):
     st.session_state.lesson_progress['opening_quiz'] = True
     st.info("Quiz diagnostyczny został pominięty...")
 ```

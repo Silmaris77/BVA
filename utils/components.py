@@ -192,7 +192,7 @@ def badge_card(icon, title, description, earned=False):
 
 # Komponenty przycisków i akcji
 
-def zen_button(label, on_click=None, key=None, disabled=False, help=None, use_container_width=False):
+def zen_button(label, on_click=None, key=None, disabled=False, help=None, width='content'):
     """
     Tworzy stylizowany przycisk Zen.
     
@@ -202,7 +202,7 @@ def zen_button(label, on_click=None, key=None, disabled=False, help=None, use_co
     - key: Unikalny klucz przycisku
     - disabled: Czy przycisk jest wyłączony
     - help: Tekst pomocy pokazywany po najechaniu
-    - use_container_width: Czy przycisk ma używać pełnej szerokości kontenera
+    - width: Czy przycisk ma używać pełnej szerokości kontenera
     
     Zwraca:
     - Bool: True jeśli przycisk został kliknięty
@@ -213,7 +213,7 @@ def zen_button(label, on_click=None, key=None, disabled=False, help=None, use_co
         key=key, 
         disabled=disabled, 
         help=help, 
-        use_container_width=use_container_width
+        width=width
     )
 
 def notification(message, type="info"):
@@ -384,7 +384,7 @@ def navigation_menu():
         if zen_button(
             button_label, 
             key=f"nav_{option['id']}",
-            use_container_width=True
+            width='stretch'
         ):
             # Jeśli klikamy na "Lekcje", resetuj stan bieżącej lekcji aby wrócić do przeglądu
             if option['id'] == 'lesson':
@@ -864,21 +864,21 @@ def data_chart(data, chart_type="bar", title=None, x_label=None, y_label=None, h
             x=alt.X(data.columns[0], title=x_label or data.columns[0]),
             y=alt.Y(data.columns[1], title=y_label or data.columns[1])
         ).properties(height=height)
-        st.altair_chart(chart, use_container_width=True)
+        st.altair_chart(chart, width='stretch')
     
     elif chart_type == "line":
         chart = alt.Chart(data).mark_line().encode(
             x=alt.X(data.columns[0], title=x_label or data.columns[0]),
             y=alt.Y(data.columns[1], title=y_label or data.columns[1])
         ).properties(height=height)
-        st.altair_chart(chart, use_container_width=True)
+        st.altair_chart(chart, width='stretch')
     
     elif chart_type == "area":
         chart = alt.Chart(data).mark_area().encode(
             x=alt.X(data.columns[0], title=x_label or data.columns[0]),
             y=alt.Y(data.columns[1], title=y_label or data.columns[1])
         ).properties(height=height)
-        st.altair_chart(chart, use_container_width=True)
+        st.altair_chart(chart, width='stretch')
     elif chart_type == "pie":
         # For pie charts, we use matplotlib
         fig, ax = plt.subplots()
@@ -1159,7 +1159,7 @@ def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=Non
         button_key = f"lesson_btn_{lesson_id}"
     
     # Only show clickable button if lesson is accessible
-    if accessible and zen_button(button_text, key=button_key, use_container_width=True):
+    if accessible and zen_button(button_text, key=button_key, width='stretch'):
         if on_click and callable(on_click):
             # If there's a callback function, call it with lesson_id
             if lesson_id:

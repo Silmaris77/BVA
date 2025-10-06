@@ -539,7 +539,7 @@ def show_lessons_content():
                                 key=f"nav_step_{step}_{col_index}", 
                                 type=button_type,
                                 disabled=disabled,
-                                use_container_width=True,
+                                width='stretch',
                                 help=help_text
                             ):
                                 if not is_current:  # Tylko jeśli nie jest to aktualny krok
@@ -619,7 +619,7 @@ def show_lessons_content():
                             st.markdown("---")
                             col1, col2, col3 = st.columns([1, 1, 1])
                             with col2:
-                                if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
+                                if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
                                     # Reset stanu quizu samodiagnozy
                                     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                     
@@ -663,7 +663,7 @@ def show_lessons_content():
                             st.markdown("---")
                             col1, col2, col3 = st.columns([1, 1, 1])
                             with col2:
-                                if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_legacy_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
+                                if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_legacy_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
                                     # Reset stanu quizu samodiagnozy
                                     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                     
@@ -691,7 +691,7 @@ def show_lessons_content():
             # Użyj kolumn aby ograniczyć szerokość przycisku
             col1, col2, col3 = st.columns([1, 1, 1])
             with col2:
-                if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=True):
+                if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                     # Award fragment XP using the new system
                     success, xp_awarded = award_fragment_xp(lesson_id, 'intro', step_xp_values['intro'])
                     
@@ -771,7 +771,7 @@ def show_lessons_content():
                                             # Przycisk "Dalej" po treści lekcji
             col1, col2, col3 = st.columns([1, 1, 1])
             with col2:
-                if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=True):
+                if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                     # Award fragment XP using the new system
                     success, xp_awarded = award_fragment_xp(lesson_id, 'content', step_xp_values['content'])
                     
@@ -917,7 +917,7 @@ def show_lessons_content():
                                         st.markdown("---")
                                         col1, col2, col3 = st.columns([1, 1, 1])
                                         with col2:
-                                            if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
+                                            if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
                                                 # Reset stanu quizu
                                                 quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                 closing_quiz_key = f"closing_quiz_{lesson_id}"  # Definiuj tutaj
@@ -976,7 +976,7 @@ def show_lessons_content():
                                                 st.markdown("---")
                                                 col1, col2, col3 = st.columns([1, 1, 1])
                                                 with col2:
-                                                    if st.button("🔄 Przystąp ponownie", key=f"retry_closing_quiz_passed_{lesson_id}", help="Możesz ponownie przystąpić do quizu końcowego aby poprawić swój wynik", use_container_width=True):
+                                                    if st.button("🔄 Przystąp ponownie", key=f"retry_closing_quiz_passed_{lesson_id}", help="Możesz ponownie przystąpić do quizu końcowego aby poprawić swój wynik", width='stretch'):
                                                         # Reset stanu quizu końcowego
                                                         quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                         if quiz_id in st.session_state:
@@ -993,7 +993,7 @@ def show_lessons_content():
                                                 st.markdown("---")
                                                 col1, col2, col3 = st.columns([1, 1, 1])
                                                 with col2:
-                                                    if st.button("🔄 Spróbuj ponownie", key=f"retry_closing_quiz_{lesson_id}", type="primary", use_container_width=True):
+                                                    if st.button("🔄 Spróbuj ponownie", key=f"retry_closing_quiz_{lesson_id}", type="primary", width='stretch'):
                                                         # Reset stanu quizu
                                                         quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                         if quiz_id in st.session_state:
@@ -1184,7 +1184,7 @@ def show_lessons_content():
                                             st.markdown("---")
                                             col1, col2, col3 = st.columns([1, 1, 1])
                                             with col2:
-                                                if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_practical_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
+                                                if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_practical_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
                                                     # Reset stanu quizu autodiagnozy
                                                     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                     if quiz_id in st.session_state:
@@ -1227,7 +1227,7 @@ def show_lessons_content():
                                                 st.markdown("---")
                                                 col1, col2, col3 = st.columns([1, 1, 1])
                                                 with col2:
-                                                    if st.button("🔄 Przystąp ponownie", key=f"retry_closing_quiz_practical_passed_{lesson_id}", help="Możesz ponownie przystąpić do quizu końcowego aby poprawić swój wynik", use_container_width=True):
+                                                    if st.button("🔄 Przystąp ponownie", key=f"retry_closing_quiz_practical_passed_{lesson_id}", help="Możesz ponownie przystąpić do quizu końcowego aby poprawić swój wynik", width='stretch'):
                                                         # Reset stanu quizu końcowego
                                                         quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                         if quiz_id in st.session_state:
@@ -1244,7 +1244,7 @@ def show_lessons_content():
                                                 st.markdown("---")
                                                 col1, col2, col3 = st.columns([1, 1, 1])
                                                 with col2:
-                                                    if st.button("🔄 Spróbuj ponownie", key=f"retry_closing_quiz_practical_{lesson_id}", type="primary", use_container_width=True):
+                                                    if st.button("🔄 Spróbuj ponownie", key=f"retry_closing_quiz_practical_{lesson_id}", type="primary", width='stretch'):
                                                         # Reset stanu quizu
                                                         quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                         if quiz_id in st.session_state:
@@ -1309,7 +1309,7 @@ def show_lessons_content():
                 if lesson_title == "Wprowadzenie do neuroprzywództwa" or quiz_passed:                    # Quiz zdany lub brak wymogu dla specjalnej lekcji - normalny przycisk "Dalej"
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
-                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=True):
+                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                             # Award fragment XP using the new system
                             success, xp_awarded = award_fragment_xp(lesson_id, 'practical_exercises', step_xp_values['practical_exercises'])
                             
@@ -1340,14 +1340,14 @@ def show_lessons_content():
                         zen_button(
                             f"🔒 Dalej: {step_names.get(next_step, next_step.capitalize())}",
                             disabled=True,
-                            use_container_width=True,
+                            width='stretch',
                             help="Musisz zaliczyć quiz końcowy (min. 75%) aby przejść do podsumowania"
                         )
                     st.warning("⚠️ Aby przejść do podsumowania, musisz najpierw zaliczyć quiz końcowy z wynikiem minimum 75%. Przejdź do zakładki '🎓 Quiz końcowy' powyżej.")
             else:                # Normalny przycisk dla innych kroków (nie-summary)
                 col1, col2, col3 = st.columns([1, 1, 1])
                 with col2:
-                    if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=True):
+                    if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                         # Award fragment XP using the new system
                         success, xp_awarded = award_fragment_xp(lesson_id, 'practical_exercises', step_xp_values['practical_exercises'])
                         
@@ -1427,7 +1427,7 @@ def show_lessons_content():
                     # Quiz zdany - normalny przycisk "Dalej"
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
-                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=True):
+                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                             # Award fragment XP using the new system
                             success, xp_awarded = award_fragment_xp(lesson_id, 'reflection', step_xp_values['reflection'])
                             
@@ -1455,7 +1455,7 @@ def show_lessons_content():
                         zen_button(
                             f"🔒 Dalej: {step_names.get(next_step, next_step.capitalize())}",
                             disabled=True,
-                            use_container_width=True,
+                            width='stretch',
                             help="Musisz zaliczyć quiz końcowy (min. 75%) aby przejść do podsumowania"
                         )
                     st.warning("⚠️ Aby przejść do podsumowania, musisz najpierw zaliczyć quiz końcowy z wynikiem minimum 75%. Quiz znajdziesz w sekcji 'Praktyka' → '🎓 Quiz końcowy'.")
@@ -1463,7 +1463,7 @@ def show_lessons_content():
                 # Normalny przycisk dla innych kroków (nie-summary)
                 col1, col2, col3 = st.columns([1, 1, 1])
                 with col2:
-                    if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=True):
+                    if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                         # Award fragment XP using the new system
                         success, xp_awarded = award_fragment_xp(lesson_id, 'reflection', step_xp_values['reflection'])
                         
@@ -1539,7 +1539,7 @@ def show_lessons_content():
                     # Quiz zdany - normalny przycisk "Dalej"
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
-                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=True):
+                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                             # Award fragment XP using the new system
                             success, xp_awarded = award_fragment_xp(lesson_id, 'application', step_xp_values['application'])
                             
@@ -1566,7 +1566,7 @@ def show_lessons_content():
                         zen_button(
                             f"🔒 Dalej: {step_names.get(next_step, next_step.capitalize())}",
                             disabled=True,
-                            use_container_width=True,
+                            width='stretch',
                             help="Musisz zaliczyć quiz końcowy (min. 75%) aby przejść do podsumowania"
                         )
                     st.warning("⚠️ Aby przejść do podsumowania, musisz najpierw zaliczyć quiz końcowy z wynikiem minimum 75%. Quiz znajdziesz w sekcji 'Praktyka' → '🎓 Quiz końcowy'.")
@@ -1574,7 +1574,7 @@ def show_lessons_content():
                 # Normalny przycisk dla innych kroków (nie-summary)
                 col1, col2, col3 = st.columns([1, 1, 1])
                 with col2:
-                    if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=True):
+                    if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                         # Award fragment XP using the new system
                         success, xp_awarded = award_fragment_xp(lesson_id, 'application', step_xp_values['application'])
                         
@@ -1684,7 +1684,7 @@ def show_lessons_content():
                     st.markdown("<div class='next-button'>", unsafe_allow_html=True)
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
-                        if zen_button("🎉 Zakończ lekcję", use_container_width=True):
+                        if zen_button("🎉 Zakończ lekcję", width='stretch'):
                             # Sprawdź czy XP za podsumowanie już zostało przyznane
                             progress = get_lesson_fragment_progress(lesson_id)
                             if not progress.get('summary_completed', False):
@@ -1744,7 +1744,7 @@ def show_lessons_content():
                     st.markdown("<div class='next-button'>", unsafe_allow_html=True)
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
-                        if zen_button("📚 Wróć do wszystkich lekcji", use_container_width=True):
+                        if zen_button("📚 Wróć do wszystkich lekcji", width='stretch'):
                             # Wyczyść stan zakończenia lekcji
                             st.session_state.lesson_finished = False
                             # Powrót do przeglądu lekcji
@@ -2236,7 +2236,7 @@ def display_quiz(quiz_data, passing_threshold=60):
             st.markdown("---")
             col1, col2, col3 = st.columns([1, 1, 1])
             with col2:
-                if st.button("🔄 Przystąp ponownie", key=f"{quiz_id}_retry", help="Możesz ponownie przystąpić do quizu", use_container_width=True):
+                if st.button("🔄 Przystąp ponownie", key=f"{quiz_id}_retry", help="Możesz ponownie przystąpić do quizu", width='stretch'):
                     # Reset kompletnego stanu quizu
                     if quiz_id in st.session_state:
                         del st.session_state[quiz_id]

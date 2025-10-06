@@ -865,7 +865,7 @@ def show_neuroleader_test_section():
         if device_type == 'mobile':
             # Na telefonach wyświetl opcje jedna pod drugą
             for i in range(len(options)):
-                if zen_button(f"{options[i]['text']}", key=f"q{st.session_state.test_step}_opt{i}", use_container_width=True):
+                if zen_button(f"{options[i]['text']}", key=f"q{st.session_state.test_step}_opt{i}", width='stretch'):
                     # Add scores for the answer
                     for neuroleader_type, score in options[i]['scores'].items():
                         st.session_state.test_scores[neuroleader_type] += score
@@ -878,7 +878,7 @@ def show_neuroleader_test_section():
             for i in range(len(options)):
                 if i < len(options) // 2:
                     with col1:
-                        if zen_button(f"{options[i]['text']}", key=f"q{st.session_state.test_step}_opt{i}", use_container_width=True):
+                        if zen_button(f"{options[i]['text']}", key=f"q{st.session_state.test_step}_opt{i}", width='stretch'):
                             # Add scores for the answer
                             for neuroleader_type, score in options[i]['scores'].items():
                                 st.session_state.test_scores[neuroleader_type] += score
@@ -887,7 +887,7 @@ def show_neuroleader_test_section():
                             st.rerun()
                 else:
                     with col2:
-                        if zen_button(f"{options[i]['text']}", key=f"q{st.session_state.test_step}_opt{i}", use_container_width=True):
+                        if zen_button(f"{options[i]['text']}", key=f"q{st.session_state.test_step}_opt{i}", width='stretch'):
                             # Add scores for the answer
                             for neuroleader_type, score in options[i]['scores'].items():
                                 st.session_state.test_scores[neuroleader_type] += score

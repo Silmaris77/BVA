@@ -397,7 +397,7 @@ def render_mission_summary_widget(username: str, lesson_id: str):
     
     with col2:
         # Navigation button to the lesson
-        if st.button("🎯 Idź do misji", key=f"go_to_missions_{lesson_id}", use_container_width=True):
+        if st.button("🎯 Idź do misji", key=f"go_to_missions_{lesson_id}", width='stretch'):
             # Navigate to lesson B1C1L1 and show summary with missions tab
             st.session_state.current_lesson = lesson_id
             st.session_state.lesson_step = 'summary'

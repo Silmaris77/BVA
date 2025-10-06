@@ -20,7 +20,7 @@ def test_button_alignment():
         "✅ Zaktualizowano HTML strukturę:",
         "   - Div z klasą 'inspiration-card-buttons'",
         "   - Kolumny z gap='medium'", 
-        "   - use_container_width=True dla przycisków",
+        "   - width='stretch' dla przycisków",
         "",
         "✅ Responsive design:",
         "   - Na mobile przyciski zajmują całą szerokość",

@@ -188,7 +188,7 @@ elif st.session_state.lesson_step == 'practical_exercises':
         
         # Przycisk "Dalej" po ćwiczeniach praktycznych
         st.markdown("<div class='next-button'>", unsafe_allow_html=True)
-        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=False):
+        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='content):
             # Award fragment XP using the new system
             success, xp_awarded = award_fragment_xp(lesson_id, 'practical_exercises', step_xp_values['practical_exercises'])
             

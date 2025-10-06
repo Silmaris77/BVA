@@ -41,7 +41,7 @@ def show_login_page():
         
         # Wyświetl logo
         if os.path.exists(logo_path):
-            st.image(logo_path, use_container_width=True)
+            st.image(logo_path, width='stretch')
         else:
             st.markdown("# 🧘‍♂️💰")
         
@@ -62,7 +62,7 @@ def show_login_page():
             with st.form("login_form", clear_on_submit=False):
                 username = st.text_input("Nazwa użytkownika")
                 password = st.text_input("Hasło", type="password")
-                submit_login = st.form_submit_button("Zaloguj się", use_container_width=True)
+                submit_login = st.form_submit_button("Zaloguj się", width='stretch')
                 
                 if submit_login:
                     if login_user(username, password):
@@ -80,7 +80,7 @@ def show_login_page():
                 new_username = st.text_input("Nazwa użytkownika")
                 new_password = st.text_input("Hasło", type="password")
                 confirm_password = st.text_input("Potwierdź hasło", type="password")
-                submit_register = st.form_submit_button("Zarejestruj się", use_container_width=True)
+                submit_register = st.form_submit_button("Zarejestruj się", width='stretch')
                 
                 if submit_register:
                     if not new_username or not new_password:

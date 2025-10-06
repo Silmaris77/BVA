@@ -24,11 +24,11 @@
 **Problem:** Button text assignment merged with zen_button call
 ```python
 # BEFORE (incorrect):
-button_text = "Dalej" if quiz_complete else f"Dalej: {step_names.get(next_step, next_step.capitalize())}"                if zen_button(button_text, use_container_width=True):
+button_text = "Dalej" if quiz_complete else f"Dalej: {step_names.get(next_step, next_step.capitalize())}"                if zen_button(button_text, width='stretch'):
 
 # AFTER (fixed):
 button_text = "Dalej" if quiz_complete else f"Dalej: {step_names.get(next_step, next_step.capitalize())}"
-                if zen_button(button_text, use_container_width=True):
+                if zen_button(button_text, width='stretch'):
 ```
 **Solution:** Separated statements onto individual lines
 
@@ -47,11 +47,11 @@ button_text = "Dalej" if quiz_complete else f"Dalej: {step_names.get(next_step, 
 **Problem:** Markdown and zen_button statements merged
 ```python
 # BEFORE (incorrect):
-st.markdown("<div class='next-button'>", unsafe_allow_html=True)                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=False):
+st.markdown("<div class='next-button'>", unsafe_allow_html=True)                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='content):
 
 # AFTER (fixed):
 st.markdown("<div class='next-button'>", unsafe_allow_html=True)
-                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", use_container_width=False):
+                        if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='content):
 ```
 **Solution:** Separated statements with proper line breaks
 

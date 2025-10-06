@@ -52,24 +52,24 @@ def test_all_next_buttons():
                 found_with_col2 = True
         
         if not (found_columns and found_with_col2):
-            # Sprawdź czy może to jest ten już naprawiony (ma use_container_width=True)
+            # Sprawdź czy może to jest ten już naprawiony (ma width='stretch')
             button_line = lines[line_num-1]
-            if 'use_container_width=True' in button_line:
-                print(f"✅ Linia {line_num}: Przycisk ma kolumny (use_container_width=True)")
+            if 'width='stretch'' in button_line:
+                print(f"✅ Linia {line_num}: Przycisk ma kolumny (width='stretch')")
             else:
                 issues.append(f"❌ Linia {line_num}: Przycisk bez układu kolumnowego")
                 print(f"❌ Linia {line_num}: {button_line.strip()}")
         else:
             print(f"✅ Linia {line_num}: Przycisk ma kolumny")
     
-    # Sprawdź czy wszystkie przyciski używają use_container_width=True
+    # Sprawdź czy wszystkie przyciski używają width='stretch'
     container_width_issues = []
     for line_num in button_locations:
         lines = content.split('\n')
         button_line = lines[line_num-1]
         
-        if 'use_container_width=False' in button_line:
-            container_width_issues.append(f"⚠️  Linia {line_num}: use_container_width=False (powinno być True)")
+        if 'width='content' in button_line:
+            container_width_issues.append(f"⚠️  Linia {line_num}: width='content (powinno być True)")
     
     print("\n📊 WYNIKI TESTU:")
     print(f"✅ Przycisków z kolumnami: {len(button_locations) - len(issues)}")
