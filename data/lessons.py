@@ -24,9 +24,7 @@ def load_lessons():
                         # Jeśli ID już istnieje, dodaj indeks
                         lesson_id = f"{lesson_id}_{i}"
                     lessons[lesson_id] = lesson_data
-                    print(f"Loaded lesson: {lesson_id}")
             except Exception as e:
                 print(f"Error loading lesson {filename}: {e}")
 
-    print(f"Total lessons loaded: {len(lessons)}")
     return lessons

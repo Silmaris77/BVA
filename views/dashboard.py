@@ -738,7 +738,7 @@ def show_dashboard():
     apply_material3_theme()
     
     # Opcja wyboru urządzenia w trybie deweloperskim (tymczasowo włączone)
-    toggle_device_view()
+    # toggle_device_view()
 
     # Pobierz aktualny typ urządzenia
     device_type = get_device_type()
