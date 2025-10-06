@@ -51,7 +51,7 @@ def show_login_page():
     
     with col2:
         # Tytuł formularza wycentrowany
-        st.markdown("<h2 style='text-align: center; margin-bottom: 2rem;'>Zaloguj się lub zarejestruj</h2>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; margin-bottom: 2rem;'>Zaloguj się lub zarejestruj</h3>", unsafe_allow_html=True)
         
         # Zakładki Logowanie/Rejestracja
         login_tab, register_tab = st.tabs(["Logowanie", "Rejestracja"])
