@@ -23,6 +23,7 @@ from views.admin import is_lesson_accessible
 from utils.real_time_updates import live_xp_indicator
 from utils.time_utils import calculate_relative_time
 from utils.lesson_utils import get_lesson_title # Added import
+from utils.scroll_utils import scroll_to_top, scroll_to_top_smooth
 
 def get_top_users(limit=5):
     """Get top users by XP"""
@@ -170,6 +171,7 @@ def display_lesson_cards(lessons_list, tab_name="", custom_columns=None):
                 on_click=lambda lesson_id=lesson_id: (
                     setattr(st.session_state, 'current_lesson', lesson_id),
                     setattr(st.session_state, 'page', 'lesson'),
+                    scroll_to_top(),
                     st.rerun()
                 )
             )
@@ -466,6 +468,7 @@ def show_available_lessons(device_type):
             on_click=lambda lid=lesson_id: (
                 setattr(st.session_state, 'current_lesson', lid),
                 setattr(st.session_state, 'page', 'lesson'),
+                scroll_to_top(),
                 st.rerun()
             )
         )
@@ -475,6 +478,7 @@ def show_available_lessons(device_type):
     # Przycisk do wszystkich lekcji
     if zen_button("Zobacz wszystkie lekcje", key="all_lessons_from_dashboard"):
         st.session_state.page = 'lesson'
+        scroll_to_top()
         st.rerun()
     
     st.markdown("</div>", unsafe_allow_html=True)
@@ -574,11 +578,13 @@ def show_investor_profile_compact(user_data):
         
         if zen_button("Zobacz szczegóły", key="profile_details"):
             st.session_state.page = 'profile'
+            scroll_to_top()
             st.rerun()
     else:
         st.info("Wykonaj test, aby odkryć swój profil")
         if zen_button("Wykonaj test", key="take_test_sidebar"):
             st.session_state.page = 'profile'
+            scroll_to_top()
             st.rerun()
     
     st.markdown("</div>", unsafe_allow_html=True)
@@ -644,6 +650,9 @@ def show_leaderboard_compact():
     st.markdown("</div>", unsafe_allow_html=True)
 
 def show_dashboard():
+    # Przewiń na górę strony
+    scroll_to_top()
+    
     # Zastosuj style Material 3
     apply_material3_theme()
     
@@ -706,4 +715,5 @@ def show_dashboard():
         st.markdown("---")
         if zen_button("🛡️ Panel administratora", key="admin_panel"):
             st.session_state.page = 'admin'
+            scroll_to_top()
             st.rerun()
