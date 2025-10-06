@@ -228,8 +228,7 @@ def show_stats_section(user_data, device_type):
     
     # Użyj przekazanego device_type zamiast wykrywać ponownie
     if device_type == 'mobile':
-        cols_per_row = 2
-        # Podziel statystyki na wiersze po 2 kolumny dla mobile
+        # Dla mobile używamy CSS Grid zamiast st.columns dla lepszej kontroli
         stats = [
             {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change},
             {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change},
@@ -237,25 +236,85 @@ def show_stats_section(user_data, device_type):
             {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change}
         ]
         
-        # Podziel statystyki na wiersze
-        rows = []
-        for i in range(0, len(stats), cols_per_row):
-            rows.append(stats[i:i + cols_per_row])
+        # Stwórz HTML grid 2x2 z responsywnym CSS
+        stats_html = """
+        <style>
+        .mobile-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+            width: 100%;
+        }
+        .mobile-stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        .mobile-stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .mobile-stat-card .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .mobile-stat-card .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+        .mobile-stat-card .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        .mobile-stat-card .stat-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4ade80;
+        }
+        /* Zapewnienie responsywności na bardzo małych ekranach */
+        @media (max-width: 480px) {
+            .mobile-stats-grid {
+                gap: 0.5rem;
+            }
+            .mobile-stat-card {
+                padding: 1rem;
+                min-height: 120px;
+            }
+            .mobile-stat-card .stat-icon {
+                font-size: 1.5rem;
+            }
+            .mobile-stat-card .stat-value {
+                font-size: 1.5rem;
+            }
+        }
+        </style>
+        <div class="mobile-stats-grid">
+        """
         
-        # Wyświetl każdy wiersz osobno
-        for row_stats in rows:
-            cols = st.columns(cols_per_row)
-            for col_index, stat in enumerate(row_stats):
-                if col_index < len(cols):
-                    with cols[col_index]:
-                        st.markdown(f"""
-                        <div class="stat-card">
-                            <div class="stat-icon">{stat['icon']}</div>
-                            <div class="stat-value">{stat['value']}</div>
-                            <div class="stat-label">{stat['label']}</div>
-                            <div class="stat-change positive">{stat['change']}</div>
-                        </div>
-                        """, unsafe_allow_html=True)
+        for stat in stats:
+            stats_html += f"""
+            <div class="mobile-stat-card">
+                <div class="stat-icon">{stat['icon']}</div>
+                <div class="stat-value">{stat['value']}</div>
+                <div class="stat-label">{stat['label']}</div>
+                <div class="stat-change">{stat['change']}</div>
+            </div>
+            """
+        
+        stats_html += "</div>"
+        
+        st.markdown(stats_html, unsafe_allow_html=True)
     else:
         # Desktop i tablet - 4 kolumny (usunięto "Aktualną passę")
         cols = st.columns(4)
