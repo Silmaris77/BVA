@@ -228,41 +228,78 @@ def show_stats_section(user_data, device_type):
     
     # Użyj przekazanego device_type zamiast wykrywać ponownie
     if device_type == 'mobile':
-        # Metoda fallback: używaj standardowych komponentów Streamlit w 2 kolumnach
+        # Mobile - jedna karta z czterema statystykami w środku
         st.markdown("### 📊 Statystyki")
         
-        stats = [
-            {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change},
-            {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change},
-            {"icon": "⭐", "value": f"{level}", "label": "Poziom", "change": level_change},
-            {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change}
-        ]
-        
-        # Wyświetl w 2 wierszach po 2 kolumny
-        for i in range(0, len(stats), 2):
-            cols = st.columns(2)
-            for j, col in enumerate(cols):
-                if i + j < len(stats):
-                    stat = stats[i + j]
-                    with col:
-                        st.markdown(f"""
-                        <div style="
-                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                            border-radius: 16px;
-                            padding: 1.5rem;
-                            text-align: center;
-                            color: white;
-                            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-                            border: 1px solid rgba(255, 255, 255, 0.1);
-                            min-height: 84px;
-                            margin-bottom: 1rem;
-                        ">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">{stat['icon']}</div>
-                            <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{stat['value']}</div>
-                            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">{stat['label']}</div>
-                            <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{stat['change']}</div>
-                        </div>
-                        """, unsafe_allow_html=True)
+        # Stwórz jedną dużą kartę z wewnętrznym gridem 2x2
+        st.markdown(f"""
+        <div style="
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        ">
+            <div style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                gap: 1.5rem;
+                height: 100%;
+            ">
+                <div style="
+                    text-align: center;
+                    padding: 1rem;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏆</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{xp}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Punkty XP</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{xp_change}</div>
+                </div>
+                <div style="
+                    text-align: center;
+                    padding: 1rem;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🪙</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{degencoins}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Monety</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{degencoins_change}</div>
+                </div>
+                <div style="
+                    text-align: center;
+                    padding: 1rem;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{level}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Poziom</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{level_change}</div>
+                </div>
+                <div style="
+                    text-align: center;
+                    padding: 1rem;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{completed_lessons}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Ukończone lekcje</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{lessons_change}</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     else:
         # Desktop i tablet - 4 kolumny (usunięto "Aktualną passę")
         cols = st.columns(4)
@@ -700,9 +737,8 @@ def show_dashboard():
     # Zastosuj style Material 3
     apply_material3_theme()
     
-    # Opcja wyboru urządzenia w trybie deweloperskim
-    if st.session_state.get('dev_mode', False):
-        toggle_device_view()
+    # Opcja wyboru urządzenia w trybie deweloperskim (tymczasowo włączone)
+    toggle_device_view()
 
     # Pobierz aktualny typ urządzenia
     device_type = get_device_type()

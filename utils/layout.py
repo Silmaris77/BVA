@@ -2,44 +2,30 @@ import streamlit as st
 
 def get_device_type():
     """
-    Wykrywa typ urządzenia na podstawie szerokości okna przeglądarki.
-    Zwraca: 'mobile', 'tablet' lub 'desktop'
-    
-    Uwaga: Jest to przybliżenie, które może nie być 100% dokładne, ale działa
-    wystarczająco dobrze dla większości przypadków.
+    Wykrywa typ urządzenia. W przypadku braku możliwości automatycznego wykrywania,
+    używa domyślnej wartości 'desktop', ale można ją zmienić przez toggle_device_view()
     """
-    # Streamlit nie dostarcza bezpośredniego sposobu wykrywania szerokości ekranu,
-    # więc używamy JavaScript i zapisujemy wynik w session_state
     
-    # Dodajemy kod JS, który będzie aktualizował session_state
-    st.markdown("""
-    <script>
-        // Ten kod zostanie zablokowany przez Streamlit, ale zostawiamy jako odniesienie
-        // jak można by to zrobić z JS, gdyby Streamlit na to pozwalał
+    # Sprawdź czy device_type już jest ustawiony w session_state
+    if 'device_type' not in st.session_state:
+        st.session_state.device_type = 'desktop'  # domyślna wartość
+    
+    # Spróbuj wykryć urządzenie na podstawie User-Agent (jeśli dostępny)
+    try:
+        # To będzie działać tylko jeśli mamy dostęp do headers
+        import streamlit.web.server.websocket_headers as headers
+        user_agent = headers.get('user-agent', '').lower()
         
-        // const updateScreenSize = () => {
-        //     const width = window.innerWidth;
-        //     if (width < 768) {
-        //         window.Streamlit.setComponentValue('mobile');
-        //     } else if (width < 1024) {
-        //         window.Streamlit.setComponentValue('tablet');
-        //     } else {
-        //         window.Streamlit.setComponentValue('desktop');
-        //     }
-        // }
-        // 
-        // updateScreenSize();
-        // window.addEventListener('resize', updateScreenSize);
-    </script>
-    """, unsafe_allow_html=True)
-    
-    # Ponieważ powyższy kod JS nie działa w Streamlit, używamy prostego mechanizmu
-    # z CSS media queries i sprawdzenia szerokości kontenera Streamlit
-    
-    # Dla celów testowych, możemy też ustawić tryb ręcznie
-    if 'device_type' not in st.session_state or st.session_state.device_type is None:
-        # Domyślnie przyjmujemy desktop, ale można to zmienić w ustawieniach
-        st.session_state.device_type = 'desktop'
+        if any(mobile in user_agent for mobile in ['mobile', 'android', 'iphone', 'ipad']):
+            if 'ipad' in user_agent or 'tablet' in user_agent:
+                st.session_state.device_type = 'tablet'
+            else:
+                st.session_state.device_type = 'mobile'
+        else:
+            st.session_state.device_type = 'desktop'
+    except:
+        # Fallback - zachowaj obecną wartość lub użyj desktop
+        pass
     
     return st.session_state.device_type
 
