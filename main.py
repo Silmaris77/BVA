@@ -2,7 +2,28 @@ import streamlit as st
 import os
 import sys
 import traceback
-from config.settings import PAGE_CONFIG
+
+# Ścieżka do głównego katalogu aplikacji (dla importów)
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+if APP_DIR not in sys.path:
+    sys.path.append(APP_DIR)
+
+try:
+    from config.settings import PAGE_CONFIG
+except ImportError as e:
+    st.error(f"Nie można zaimportować config.settings: {e}")
+    # Fallback PAGE_CONFIG
+    PAGE_CONFIG = {
+        "page_title": "BrainventureAcademy",
+        "page_icon": "🧠",
+        "layout": "wide",
+        "initial_sidebar_state": "expanded",
+        "menu_items": {
+            'Get Help': None,
+            'Report a bug': None,
+            'About': None
+        }
+    }
 
 # Ta funkcja musi być wywołana jako pierwsza funkcja Streamlit
 st.set_page_config(**PAGE_CONFIG)
