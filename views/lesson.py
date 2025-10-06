@@ -853,6 +853,12 @@ def show_lessons_content():
                     tab_keys = []
                     sub_tabs_data = {}
                     
+                    # Fiszki - sprawdzanie wiedzy (nowa funkcjonalność)
+                    if 'flashcards' in practical_data:
+                        available_tabs.append("🃏 Fiszki")
+                        tab_keys.append('flashcards')
+                        sub_tabs_data['flashcards'] = practical_data['flashcards']
+                    
                     # Nowa struktura z 'exercises' i 'closing_quiz'
                     if 'exercises' in practical_data:
                         available_tabs.append("🎯 Ćwiczenia")
@@ -1025,6 +1031,225 @@ def show_lessons_content():
                                             st.markdown(section.get('content', 'Brak treści'), unsafe_allow_html=True)
                                     else:
                                         st.warning(f"Zakładka '{tab_title}' nie zawiera sekcji do wyświetlenia.")
+                                
+                                elif tab_key == 'flashcards':
+                                    # Obsługa fiszek
+                                    tab_data = sub_tabs_data[tab_key]
+                                    
+                                    # Wyświetl tytuł i opis sekcji
+                                    if 'title' in tab_data:
+                                        st.markdown(f"### {tab_data['title']}")
+                                    if 'description' in tab_data:
+                                        st.info(tab_data['description'])
+                                    
+                                    # Obsługa fiszek
+                                    if 'cards' in tab_data:
+                                        cards = tab_data['cards']
+                                        
+                                        # Inicjalizacja stanu fiszek
+                                        flashcard_key = f"flashcards_{lesson_id}"
+                                        if flashcard_key not in st.session_state:
+                                            st.session_state[flashcard_key] = {
+                                                'current_card': 0,
+                                                'show_back': False,
+                                                'studied_cards': set(),
+                                                'correct_answers': set(),
+                                                'incorrect_answers': set()
+                                            }
+                                        
+                                        flashcard_state = st.session_state[flashcard_key]
+                                        total_cards = len(cards)
+                                        
+                                        if total_cards > 0:
+                                            # Statystyki nauki
+                                            studied_count = len(flashcard_state['studied_cards'])
+                                            correct_count = len(flashcard_state['correct_answers'])
+                                            incorrect_count = len(flashcard_state['incorrect_answers'])
+                                            
+                                            # Wyświetl postęp
+                                            col1, col2, col3, col4 = st.columns(4)
+                                            with col1:
+                                                st.metric("Przejrzane", f"{studied_count}/{total_cards}")
+                                            with col2:
+                                                st.metric("Poprawne", correct_count)
+                                            with col3:
+                                                st.metric("Niepoprawne", incorrect_count)
+                                            with col4:
+                                                accuracy = (correct_count / max(studied_count, 1)) * 100
+                                                st.metric("Skuteczność", f"{accuracy:.1f}%")
+                                            
+                                            # Progress bar
+                                            progress = studied_count / total_cards
+                                            st.progress(progress, text=f"Postęp nauki: {studied_count}/{total_cards} fiszek")
+                                            
+                                            # Aktualna fiszka
+                                            current_card = cards[flashcard_state['current_card']]
+                                            card_id = current_card['id']
+                                            
+                                            st.markdown("---")
+                                            
+                                            # Wyświetl kartę
+                                            if not flashcard_state['show_back']:
+                                                # Przód karty
+                                                st.markdown(f"### 🃏 Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
+                                                
+                                                # Kategoria i poziom trudności
+                                                col1, col2 = st.columns(2)
+                                                with col1:
+                                                    if 'category' in current_card:
+                                                        st.markdown(f"<span style='background: #e3f2fd; color: #1565c0; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;'>📂 {current_card['category']}</span>", unsafe_allow_html=True)
+                                                with col2:
+                                                    if 'difficulty' in current_card:
+                                                        st.markdown(f"<span style='background: #fff3e0; color: #e65100; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;'>⭐ {current_card['difficulty']}</span>", unsafe_allow_html=True)
+                                                
+                                                # Pytanie
+                                                st.markdown(f"""
+                                                <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                                           padding: 30px; border-radius: 15px; color: white; 
+                                                           margin: 20px 0; text-align: center; min-height: 200px; 
+                                                           display: flex; align-items: center; justify-content: center;'>
+                                                    <h3 style='color: white; margin: 0; font-size: 1.3rem; line-height: 1.4;'>
+                                                        {current_card['front']}
+                                                    </h3>
+                                                </div>
+                                                """, unsafe_allow_html=True)
+                                                
+                                                # Przycisk pokazania odpowiedzi
+                                                col1, col2, col3 = st.columns([1, 2, 1])
+                                                with col2:
+                                                    if st.button("🔄 Pokaż odpowiedź", key=f"show_back_{card_id}", type="primary", use_container_width=True):
+                                                        flashcard_state['show_back'] = True
+                                                        st.rerun()
+                                            
+                                            else:
+                                                # Tył karty
+                                                st.markdown(f"### 🃏 Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
+                                                
+                                                # Kategoria i poziom trudności
+                                                col1, col2 = st.columns(2)
+                                                with col1:
+                                                    if 'category' in current_card:
+                                                        st.markdown(f"<span style='background: #e3f2fd; color: #1565c0; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;'>📂 {current_card['category']}</span>", unsafe_allow_html=True)
+                                                with col2:
+                                                    if 'difficulty' in current_card:
+                                                        st.markdown(f"<span style='background: #fff3e0; color: #e65100; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;'>⭐ {current_card['difficulty']}</span>", unsafe_allow_html=True)
+                                                
+                                                # Pytanie (mniejsze)
+                                                st.markdown(f"""
+                                                <div style='background: #f8f9fa; padding: 15px; border-radius: 10px; 
+                                                           border-left: 4px solid #667eea; margin: 15px 0;'>
+                                                    <strong>Pytanie:</strong> {current_card['front']}
+                                                </div>
+                                                """, unsafe_allow_html=True)
+                                                
+                                                # Odpowiedź
+                                                st.markdown(f"""
+                                                <div style='background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); 
+                                                           padding: 30px; border-radius: 15px; color: white; 
+                                                           margin: 20px 0; min-height: 150px;'>
+                                                    <h4 style='color: white; margin-bottom: 15px;'>✅ Odpowiedź:</h4>
+                                                    <p style='color: white; margin: 0; font-size: 1.1rem; line-height: 1.5;'>
+                                                        {current_card['back']}
+                                                    </p>
+                                                </div>
+                                                """, unsafe_allow_html=True)
+                                                
+                                                # Ocena zrozumienia
+                                                st.markdown("#### Jak dobrze znałeś odpowiedź?")
+                                                col1, col2, col3 = st.columns(3)
+                                                
+                                                with col1:
+                                                    if st.button("❌ Nie wiedziałem", key=f"incorrect_{card_id}", type="secondary", use_container_width=True):
+                                                        flashcard_state['studied_cards'].add(card_id)
+                                                        flashcard_state['incorrect_answers'].add(card_id)
+                                                        flashcard_state['correct_answers'].discard(card_id)  # Usuń z poprawnych jeśli było
+                                                        flashcard_state['show_back'] = False
+                                                        flashcard_state['current_card'] = (flashcard_state['current_card'] + 1) % total_cards
+                                                        st.rerun()
+                                                
+                                                with col2:
+                                                    if st.button("🤔 Częściowo", key=f"partial_{card_id}", use_container_width=True):
+                                                        flashcard_state['studied_cards'].add(card_id)
+                                                        # Częściowa wiedza = nie dodawaj do żadnej kategorii
+                                                        flashcard_state['show_back'] = False
+                                                        flashcard_state['current_card'] = (flashcard_state['current_card'] + 1) % total_cards
+                                                        st.rerun()
+                                                
+                                                with col3:
+                                                    if st.button("✅ Wiedziałem", key=f"correct_{card_id}", type="primary", use_container_width=True):
+                                                        flashcard_state['studied_cards'].add(card_id)
+                                                        flashcard_state['correct_answers'].add(card_id)
+                                                        flashcard_state['incorrect_answers'].discard(card_id)  # Usuń z niepoprawnych jeśli było
+                                                        flashcard_state['show_back'] = False
+                                                        flashcard_state['current_card'] = (flashcard_state['current_card'] + 1) % total_cards
+                                                        st.rerun()
+                                            
+                                            # Nawigacja
+                                            st.markdown("---")
+                                            col1, col2, col3, col4 = st.columns(4)
+                                            
+                                            with col1:
+                                                if st.button("⏮️ Pierwsza", key=f"first_card_{lesson_id}", disabled=flashcard_state['current_card'] == 0):
+                                                    flashcard_state['current_card'] = 0
+                                                    flashcard_state['show_back'] = False
+                                                    st.rerun()
+                                            
+                                            with col2:
+                                                if st.button("◀️ Poprzednia", key=f"prev_card_{lesson_id}", disabled=flashcard_state['current_card'] == 0):
+                                                    flashcard_state['current_card'] = max(0, flashcard_state['current_card'] - 1)
+                                                    flashcard_state['show_back'] = False
+                                                    st.rerun()
+                                            
+                                            with col3:
+                                                if st.button("▶️ Następna", key=f"next_card_{lesson_id}", disabled=flashcard_state['current_card'] == total_cards - 1):
+                                                    flashcard_state['current_card'] = min(total_cards - 1, flashcard_state['current_card'] + 1)
+                                                    flashcard_state['show_back'] = False
+                                                    st.rerun()
+                                            
+                                            with col4:
+                                                if st.button("⏭️ Ostatnia", key=f"last_card_{lesson_id}", disabled=flashcard_state['current_card'] == total_cards - 1):
+                                                    flashcard_state['current_card'] = total_cards - 1
+                                                    flashcard_state['show_back'] = False
+                                                    st.rerun()
+                                            
+                                            # Funkcje dodatkowe
+                                            st.markdown("---")
+                                            col1, col2 = st.columns(2)
+                                            
+                                            with col1:
+                                                if st.button("🔄 Reset postępu", key=f"reset_flashcards_{lesson_id}"):
+                                                    flashcard_state['current_card'] = 0
+                                                    flashcard_state['show_back'] = False
+                                                    flashcard_state['studied_cards'] = set()
+                                                    flashcard_state['correct_answers'] = set()
+                                                    flashcard_state['incorrect_answers'] = set()
+                                                    st.success("Reset postępu fiszek!")
+                                                    st.rerun()
+                                            
+                                            with col2:
+                                                if st.button("🎯 Tylko niepoprawne", key=f"review_incorrect_{lesson_id}", disabled=len(flashcard_state['incorrect_answers']) == 0):
+                                                    # Znajdź pierwszą niepoprawną kartę
+                                                    for i, card in enumerate(cards):
+                                                        if card['id'] in flashcard_state['incorrect_answers']:
+                                                            flashcard_state['current_card'] = i
+                                                            flashcard_state['show_back'] = False
+                                                            break
+                                                    st.rerun()
+                                            
+                                            # Award XP za zakończenie wszystkich fiszek
+                                            if studied_count == total_cards:
+                                                flashcards_xp_key = f"flashcards_xp_{lesson_id}"
+                                                if not st.session_state.get(flashcards_xp_key, False):
+                                                    flashcards_xp = step_xp_values['practical_exercises'] // 6  # 1/6 XP z practical_exercises
+                                                    success, earned_xp = award_fragment_xp(lesson_id, 'flashcards', flashcards_xp)
+                                                    st.session_state[flashcards_xp_key] = True
+                                                    if success and earned_xp > 0:
+                                                        st.success(f"🎉 Przejrzałeś wszystkie fiszki! Zdobyłeś {earned_xp} XP!")
+                                        
+                                        else:
+                                            st.warning("Brak fiszek do wyświetlenia.")
+                                    else:
+                                        st.warning("Brak fiszek w tej sekcji.")
                                 
                                 elif tab_key == 'ai_questions':
                                     # Obsługa pytań otwartych z oceną AI

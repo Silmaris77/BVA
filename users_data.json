@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 486,
-    "degencoins": 476,
+    "xp": 686,
+    "degencoins": 676,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-06 15:42:44",
+    "last_login": "2025-10-06 16:35:08",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -133,6 +133,33 @@
         "intro_xp": 5,
         "intro_degencoins": 5,
         "intro_timestamp": "2025-10-06 14:46:07"
+      },
+      "11. Od słów do zaufania - Conversational Intelligence": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 8,
+        "intro_degencoins": 8,
+        "intro_timestamp": "2025-10-06 16:35:51",
+        "content_xp_awarded": true,
+        "content_completed": true,
+        "content_xp": 48,
+        "content_degencoins": 48,
+        "content_timestamp": "2025-10-06 16:36:10",
+        "closing_quiz_xp_awarded": true,
+        "closing_quiz_completed": true,
+        "closing_quiz_xp": 32,
+        "closing_quiz_degencoins": 32,
+        "closing_quiz_timestamp": "2025-10-06 16:37:00",
+        "practical_exercises_xp_awarded": true,
+        "practical_exercises_completed": true,
+        "practical_exercises_xp": 96,
+        "practical_exercises_degencoins": 96,
+        "practical_exercises_timestamp": "2025-10-06 16:37:15",
+        "flashcards_xp_awarded": true,
+        "flashcards_completed": true,
+        "flashcards_xp": 16,
+        "flashcards_degencoins": 16,
+        "flashcards_timestamp": "2025-10-06 17:51:28"
       }
     },
     "recent_activities": [
