@@ -12,7 +12,7 @@
   "tag": "Neuroprzywództwo",
   "xp_reward": 160,
   "difficulty": "advanced",
-  "available": false,
+  "available": true,
   
   "intro": {
     "main": "<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: white;'>🗣️🧠 Od słów do zaufania</h1><p style='font-size: 1.2rem; text-align: center; margin-bottom: 30px;'>Conversational Intelligence w praktyce neuroprzywództwa</p></div><div style='background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 5px solid #2196f3;'><h3 style='color: #1565c0; margin-bottom: 15px; display: flex; align-items: center;'><span style='margin-right: 10px;'>💡</span>Co to jest Conversational Intelligence?</h3><p style='color: #1976d2; margin-bottom: 15px; line-height: 1.6;'>Conversational Intelligence (C-IQ) to umiejętność prowadzenia rozmów, które budują zaufanie, wspierają współpracę i uruchamiają pozytywne neurochemiczne reakcje w móżgu.</p><div style='background: rgba(255,255,255,0.8); padding: 15px; border-radius: 8px; margin-top: 15px;'><strong style='color: #0d47a1;'>Kluczowe odkrycie:</strong> <span style='color: #1565c0;'>Jakość naszych rozmów wpływa bezpośrednio na poziom oksytocyny (hormon zaufania) i dopaminy (hormon motywacji) w mózgu rozmówcy.</span></div></div>",
