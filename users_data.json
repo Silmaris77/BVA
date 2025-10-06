@@ -3,8 +3,8 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 481,
-    "degencoins": 471,
+    "xp": 486,
+    "degencoins": 476,
     "level": 1,
     "joined_date": "2025-08-22",
     "last_login": "2025-10-06 14:35:40",
@@ -126,6 +126,13 @@
         "practical_exercises_xp": 90,
         "practical_exercises_degencoins": 90,
         "practical_exercises_timestamp": "2025-09-01 13:11:22"
+      },
+      "5. Stres i odporność psychiczna": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 5,
+        "intro_degencoins": 5,
+        "intro_timestamp": "2025-10-06 14:46:07"
       }
     },
     "recent_activities": [

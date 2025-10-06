@@ -254,7 +254,7 @@ def show_stats_section(user_data, device_type):
                             color: white;
                             box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
                             border: 1px solid rgba(255, 255, 255, 0.1);
-                            min-height: 140px;
+                            min-height: 84px;
                             margin-bottom: 1rem;
                         ">
                             <div style="font-size: 2rem; margin-bottom: 0.5rem;">{stat['icon']}</div>
@@ -273,15 +273,25 @@ def show_stats_section(user_data, device_type):
             {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change}
         ]
         
-        # Wygeneruj kartę w każdej kolumnie
+        # Wygeneruj kartę w każdej kolumnie z gradientowym stylem
         for i, stat in enumerate(stats):
             with cols[i]:
                 st.markdown(f"""
-                <div class="stat-card">
-                    <div class="stat-icon">{stat['icon']}</div>
-                    <div class="stat-value">{stat['value']}</div>
-                    <div class="stat-label">{stat['label']}</div>
-                    <div class="stat-change positive">{stat['change']}</div>
+                <div style="
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 16px;
+                    padding: 0.2rem;
+                    text-align: center;
+                    color: white;
+                    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    min-height: 30px;
+                    margin-bottom: 1rem;
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.3rem;">{stat['icon']}</div>
+                    <div style="font-size: 1.6rem; font-weight: bold; margin-bottom: 0.2rem;">{stat['value']}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">{stat['label']}</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{stat['change']}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
