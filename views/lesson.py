@@ -44,6 +44,9 @@ def get_difficulty_stars(difficulty):
 def show_lesson():
     """Show lesson view with tabs for lessons and course structure"""
     
+    # Przewiń na górę strony
+    scroll_to_top()
+    
     # Sprawdź czy został zażądany reset stanu lekcji przez kliknięcie "Lekcje" w nawigacji
     if st.session_state.get('lesson_reset_requested', False):
         # Reset lekcji zażądany - wyczyść stan
@@ -112,6 +115,7 @@ def show_lessons_by_category(lessons_by_category, completed_lessons, device_type
                             setattr(st.session_state, 'current_lesson', lid),
                             setattr(st.session_state, 'lesson_step', 'intro'),
                             setattr(st.session_state, 'quiz_score', 0) if 'quiz_score' in st.session_state else None,
+                            scroll_to_top(),
                             st.rerun()
                         )
                     )
@@ -692,6 +696,7 @@ def show_lessons_content():
                     
                     # Przejdź do następnego kroku
                     st.session_state.lesson_step = next_step
+                    scroll_to_top()
                     st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
         elif st.session_state.lesson_step == 'content':
@@ -771,6 +776,7 @@ def show_lessons_content():
                     
                     # Przejdź do następnego kroku
                     st.session_state.lesson_step = next_step
+                    scroll_to_top()
                     st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
         
@@ -1309,6 +1315,7 @@ def show_lessons_content():
                             
                             # Przejdź do następnego kroku
                             st.session_state.lesson_step = next_step
+                            scroll_to_top()
                             st.rerun()
                 else:
                     # Quiz niezdany - zablokowany przycisk z komunikatem
@@ -1344,7 +1351,9 @@ def show_lessons_content():
                             # Sprawdź czy lekcja została ukończona
                             check_and_mark_lesson_completion(lesson_id)
                         
-                        # Przejdź do następnego kroku                        st.session_state.lesson_step = next_step
+                        # Przejdź do następnego kroku
+                        st.session_state.lesson_step = next_step
+                        scroll_to_top()
                         st.rerun()
             
             st.markdown("</div>", unsafe_allow_html=True)
@@ -1421,6 +1430,7 @@ def show_lessons_content():
                             
                             # Przejdź do następnego kroku
                             st.session_state.lesson_step = next_step
+                            scroll_to_top()
                             st.rerun()
                 else:
                     # Quiz niezdany - zablokowany przycisk z komunikatem
@@ -1532,6 +1542,7 @@ def show_lessons_content():
                             
                             # Przejdź do następnego kroku
                             st.session_state.lesson_step = next_step
+                            scroll_to_top()
                             st.rerun()
                 else:                    # Quiz niezdany - zablokowany przycisk z komunikatem
                     col1, col2, col3 = st.columns([1, 1, 1])
