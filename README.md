@@ -26,7 +26,7 @@ python -m streamlit run main.py
 
 ## �📋 Przegląd Aplikacji
 
-**ZenDegenAcademy** to platforma edukacyjna skoncentrowana na rozwoju osobistym, inwestycjach i psychologii finansowej. Aplikacja łączy gamifikację z nowoczesnym podejściem do nauki, oferując spersonalizowane ścieżki rozwoju dla różnych typów osobowości inwestorskiej.
+**BrainVentureAcademy** to platforma edukacyjna skoncentrowana na rozwoju osobistym, inwestycjach i psychologii finansowej. Aplikacja łączy gamifikację z nowoczesnym podejściem do nauki, oferując spersonalizowane ścieżki rozwoju dla różnych typów osobowości inwestorskiej.
 
 ### 📦 Wymagania
 - **Python 3.11+** 
