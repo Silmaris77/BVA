@@ -7,6 +7,7 @@ from typing import Dict, List, Any, Optional, Tuple
 from config.settings import BADGES, BADGE_CATEGORIES, BADGE_TIERS
 from utils.badge_tracking import BadgeTracker
 from utils.achievements import load_user_data
+from utils.scroll_utils import scroll_to_top
 
 class BadgeDisplaySystem:
     """
@@ -198,6 +199,7 @@ class BadgeDisplaySystem:
         
         for i, (category_id, category_info) in enumerate(BADGE_CATEGORIES.items()):
             with category_tabs[i]:
+                scroll_to_top()
                 self._render_category_content(username, category_id, category_info, 
                                             category_badges[category_id], badge_data)
     

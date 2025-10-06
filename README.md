@@ -1,8 +1,51 @@
-# 🎓 ZenDegenAcademy - Kompletna Dokumentacja Aplikacji
+# ## 🚀 Szybki Start
 
-## 📋 Przegląd Aplikacji
+**Aby uruchomić aplikację:**
+```bash
+python -m streamlit run main.py
+```
+**Dostęp:** http://localhost:8501
+
+> ⚠️ **Ważne:** Nie używaj `streamlit run main.py` - może nie działać na Windows. Zawsze używaj `python -m streamlit run main.py`
+
+---
+
+## 📋 Przegląd Aplikacjiademy - Kompletna Dokumentacja Aplikacji
+
+## � Szybki Start
+
+**Aby uruchomić aplikację:**
+```bash
+python -m streamlit run main.py
+```
+**Dostęp:** http://localhost:8501
+
+> ⚠️ **Ważne:** Nie używaj `streamlit run main.py` - może nie działać na Windows. Zawsze używaj `python -m streamlit run main.py`
+
+---
+
+## �📋 Przegląd Aplikacji
 
 **ZenDegenAcademy** to platforma edukacyjna skoncentrowana na rozwoju osobistym, inwestycjach i psychologii finansowej. Aplikacja łączy gamifikację z nowoczesnym podejściem do nauki, oferując spersonalizowane ścieżki rozwoju dla różnych typów osobowości inwestorskiej.
+
+### 📦 Wymagania
+- **Python 3.11+** 
+- **pip** (menedżer pakietów Python)
+- **4GB RAM** (zalecane)
+- **Przeglądarka internetowa** (Chrome, Firefox, Safari)
+
+### 📥 Instalacja
+```bash
+# 1. Sklonuj repozytorium
+git clone [URL_REPOZYTORIUM]
+cd ZenDegenAcademy
+
+# 2. Zainstaluj zależności
+pip install -r requirements.txt
+
+# 3. Uruchom aplikację
+python -m streamlit run main.py
+```
 
 ---
 
@@ -154,19 +197,41 @@ ZenDegenAcademy/
 
 3. **Uruchomienie aplikacji:**
    
-   **Windows:**
+   **Windows (Zalecane):**
+   ```cmd
+   python -m streamlit run main.py
+   ```
+   
+   **Alternatywnie - plik batch:**
    ```cmd
    start.bat
    ```
    
    **Linux/Mac:**
    ```bash
-   streamlit run main.py
+   python -m streamlit run main.py
+   ```
+   
+   **Z dodatkowymi opcjami:**
+   ```bash
+   python -m streamlit run main.py --server.headless true --server.port 8501
    ```
 
 4. **Dostęp do aplikacji:**
-   - Otwórz przeglądarkę
-   - Przejdź do `http://localhost:8501`
+   - Aplikacja automatycznie otworzy się w przeglądarce
+   - Lub przejdź ręcznie do `http://localhost:8501`
+   - W przypadku problemów sprawdź porty: 8501, 8502, 8503
+
+### **Rozwiązywanie problemów z uruchomieniem:**
+
+**Problem:** `streamlit: The term 'streamlit' is not recognized`
+**Rozwiązanie:** Użyj `python -m streamlit run main.py` zamiast `streamlit run main.py`
+
+**Problem:** Aplikacja nie otwiera się automatycznie
+**Rozwiązanie:** Ręcznie otwórz http://localhost:8501 w przeglądarce
+
+**Problem:** Port już zajęty
+**Rozwiązanie:** Użyj innego portu: `python -m streamlit run main.py --server.port 8502`
 
 ---
 
@@ -522,16 +587,68 @@ rm user_status.json
 
 ## 📊 Statystyki Projektu
 
-**Ostatnia aktualizacja:** 31 sierpnia 2025
+**Ostatnia aktualizacja:** 6 października 2025
+**Status:** Aktywny rozwój
+**Wersja:** 1.2.0
+
+### **Najnowsze zmiany:**
+- ✅ Naprawiono problem z uruchamianiem Streamlit na Windows
+- ✅ Zaktualizowano instrukcje instalacji i uruchomienia
+- ✅ Dodano rozwiązania typowych problemów
+- ✅ Poprawiono dokumentację instalacji zależności
+- 🔄 W trakcie: Optymalizacja wydajności aplikacji
+
+### **Znane problemy:**
+- **Windows:** Komenda `streamlit` może nie być rozpoznawana - użyj `python -m streamlit run main.py`
+- **Porty:** Domyślny port 8501 może być zajęty - aplikacja automatycznie znajdzie wolny port
+- **Pierwsze uruchomienie:** Streamlit może zapytać o email - można pominąć naciskając Enter
+
+### **Roadmapa:**
+- 🎯 **Q4 2025:** Implementacja sklepu DegenCoins
+- 🎯 **Q1 2026:** System społeczności i rankingów
+- 🎯 **Q2 2026:** Mobilna aplikacja PWA
+- 🎯 **Q3 2026:** AI-powered rekomendacje treści
+
+### **Metryki projektu:**
+- **Pliki:** 100+ plików źródłowych
+- **Linie kodu:** 15,000+ LOC
+- **Testy:** 25+ plików testowych
+- **Dokumentacja:** Kompletna
+- **Platformy:** Windows, Linux, macOS
+
+---
+
+## 📝 Changelog
+
+### **v1.2.0** (6 października 2025)
+- 🔧 **Naprawiono:** Problem z uruchamianiem `streamlit` na Windows
+- 📚 **Dodano:** Szczegółowe instrukcje instalacji i rozwiązywania problemów
+- 🎨 **Ulepszono:** Dokumentację README.md z jasnymi krokami instalacji
+- ⚡ **Optymalizacja:** Instrukcje uruchamiania dla różnych systemów operacyjnych
+
+### **v1.1.0** (31 sierpnia 2025)
+- ✨ **Dodano:** System adminstracji i analityki
+- 🎮 **Ulepszono:** System gamifikacji i osiągnięć
+- 🐛 **Naprawiono:** Różne błędy UI i wydajności
+- 📱 **Dodano:** Responsywność dla urządzeń mobilnych
+
+### **v1.0.0** (Pierwsza wersja)
+- 🎉 **Premiera:** Pełnofunkcjonalna platforma edukacyjna
+- 🚀 **Funkcje:** Dashboard, system nauki, profil użytkownika
+- 🎯 **Gamifikacja:** XP, poziomy, odznaki, DegenCoins
+- 📚 **Treści:** Kompletny system lekcji i inspiracji
+
+---
 
 **Status aplikacji:** 🟢 **AKTYWNA**
 
-**Główne metryki:**
-- **Pliki kodu:** ~50 plików Python
-- **Linie kodu:** ~8,000+ LOC
-- **Funkcjonalności:** 25+ głównych funkcji
-- **Dokumentów:** 100+ plików dokumentacji
-- **Testy:** 20+ test cases
+**🔗 Przydatne linki:**
+- **Dokumentacja techniczna:** `/docs/`
+- **Historia zmian:** `/docs/fixes/`
+- **Plany rozwoju:** `/docs/planning/`
+- **Status projektu:** `/docs/status/`
+
+*Ostatnia aktualizacja dokumentacji: 6 października 2025*
 
 **Supported platforms:**
 - ✅ Windows 10/11

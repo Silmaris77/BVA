@@ -8,6 +8,7 @@ import time
 import json
 from data.users import load_user_data, save_user_data
 from data.lessons import load_lessons
+from utils.scroll_utils import scroll_to_top
 from data.neuroleader_test_questions import NEUROLEADER_TYPES
 from config.settings import XP_LEVELS
 from utils.material3_components import apply_material3_theme
@@ -178,6 +179,7 @@ def show_admin_dashboard():
     
     # 1. Zakładka Przegląd
     with admin_tabs[0]:
+        scroll_to_top()
         st.subheader("Przegląd statystyk platformy")
         
         # Pobierz dane
@@ -279,6 +281,7 @@ def show_admin_dashboard():
     
     # 2. Zakładka Użytkownicy
     with admin_tabs[1]:
+        scroll_to_top()
         st.subheader("Szczegóły użytkowników")
         
         # Pobierz dane
@@ -334,6 +337,7 @@ def show_admin_dashboard():
     
     # 3. Zakładka Lekcje
     with admin_tabs[2]:
+        scroll_to_top()
         st.subheader("Statystyki lekcji")
         
         # Pobierz dane lekcji
@@ -385,10 +389,12 @@ def show_admin_dashboard():
     
     # 4. Zakładka Dostępność lekcji
     with admin_tabs[3]:
+        scroll_to_top()
         manage_lesson_access()
     
     # 5. Zakładka Testy
     with admin_tabs[4]:
+        scroll_to_top()
         st.subheader("Wyniki testów Neurolidera")
         
         # Pobierz dane o użytkownikach
@@ -443,6 +449,7 @@ def show_admin_dashboard():
     
     # 6. Zakładka Zarządzanie
     with admin_tabs[5]:
+        scroll_to_top()
         st.subheader("Zarządzanie użytkownikami")
         
         # Pobierz dane

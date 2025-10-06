@@ -3,6 +3,7 @@ import random
 from utils.components import zen_header, zen_button
 from utils.material3_components import apply_material3_theme
 from utils.layout import get_device_type, toggle_device_view
+from utils.scroll_utils import scroll_to_top
 from utils.inspirations_loader import (
     load_inspirations_data, get_categories,
     get_inspirations_by_category, search_inspirations, get_inspiration_by_id,
@@ -339,6 +340,9 @@ def show_navigation():
 def show_overview():
     """Strona główna inspiracji - wszystkie artykuły"""
     
+    # Przewiń do góry przy wejściu na tę stronę
+    scroll_to_top()
+    
     # Wszystkie inspiracje
     st.subheader("📚 Wszystkie Inspiracje")
     all_inspirations = get_all_inspirations()
@@ -351,6 +355,10 @@ def show_overview():
 
 def show_categories_view():
     """Widok kategorii inspiracji"""
+    
+    # Przewiń do góry przy wejściu na tę stronę
+    scroll_to_top()
+    
     st.subheader("📂 Przeglądaj po kategoriach")
     
     categories = get_categories()
@@ -379,6 +387,10 @@ def show_categories_view():
 
 def show_search_view():
     """Widok wyszukiwania inspiracji"""
+    
+    # Przewiń do góry przy wejściu na tę stronę
+    scroll_to_top()
+    
     st.subheader("🔍 Szukaj inspiracji")
     
     # Search input
@@ -397,6 +409,10 @@ def show_search_view():
 
 def show_favorites_view():
     """Widok ulubionych inspiracji"""
+    
+    # Przewiń do góry przy wejściu na tę stronę
+    scroll_to_top()
+    
     st.subheader("⭐ Twoje ulubione inspiracje")
     
     favorites = get_favorite_inspirations()
@@ -408,6 +424,10 @@ def show_favorites_view():
 
 def show_read_view():
     """Widok przeczytanych inspiracji"""
+    
+    # Przewiń do góry przy wejściu na tę stronę
+    scroll_to_top()
+    
     st.subheader("✅ Przeczytane inspiracje")
     
     read_inspirations = get_read_inspirations()

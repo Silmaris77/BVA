@@ -5,6 +5,7 @@ from utils.components import zen_header, zen_button, notification, content_secti
 from utils.components import youtube_video  # Osobny import dla youtube_video
 from utils.material3_components import apply_material3_theme
 from utils.layout import get_device_type, responsive_grid, responsive_container, toggle_device_view
+from utils.scroll_utils import scroll_to_top
 from utils.lesson_progress import (
     award_fragment_xp, get_lesson_fragment_progress, calculate_lesson_completion,
     is_lesson_fully_completed, get_fragment_xp_breakdown, mark_lesson_as_completed,
@@ -166,6 +167,7 @@ def show_lessons_content():
         tab_available, tab_unavailable = st.tabs(["📚 Lekcje dostępne", "🔒 Lekcje niedostępne"])
         
         with tab_available:
+            scroll_to_top()
             st.markdown("### Dostępne lekcje")
             if available_lessons:
                 show_lessons_by_category(available_lessons, completed_lessons, device_type, accessible=True)
@@ -173,6 +175,7 @@ def show_lessons_content():
                 st.info("Brak dostępnych lekcji.")
         
         with tab_unavailable:
+            scroll_to_top()
             st.markdown("### Niedostępne lekcje")
             if unavailable_lessons:
                 show_lessons_by_category(unavailable_lessons, completed_lessons, device_type, accessible=False)

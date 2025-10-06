@@ -3,6 +3,7 @@ from data.users import register_user, login_user
 from utils.components import zen_header, notification, zen_button, add_animations_css
 from utils.material3_components import apply_material3_theme
 from utils.css_loader import ensure_css_files, load_login_css
+from utils.scroll_utils import scroll_to_top
 import os
 import base64
 
@@ -57,6 +58,7 @@ def show_login_page():
         
         # Zakładka logowania
         with login_tab:
+            scroll_to_top()
             with st.form("login_form", clear_on_submit=False):
                 username = st.text_input("Nazwa użytkownika")
                 password = st.text_input("Hasło", type="password")
@@ -73,6 +75,7 @@ def show_login_page():
         
         # Zakładka rejestracji
         with register_tab:
+            scroll_to_top()
             with st.form("register_form", clear_on_submit=False):
                 new_username = st.text_input("Nazwa użytkownika")
                 new_password = st.text_input("Hasło", type="password")

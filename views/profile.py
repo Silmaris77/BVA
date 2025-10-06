@@ -8,6 +8,7 @@ import json
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, RegularPolygon
 from matplotlib.path import Path
+from utils.scroll_utils import scroll_to_top
 from matplotlib.projections.polar import PolarAxes
 from matplotlib.projections import register_projection
 from matplotlib.spines import Spine
@@ -214,10 +215,12 @@ def show_profile():
     
     # Tab 1: Statistics - podobnie jak w Dashboard
     with tab1:
+        scroll_to_top()
         show_profile_stats_section(user_data, device_type)
     
     # Tab 2: Inventory/Equipment
     with tab2:
+        scroll_to_top()
         st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
         
         # Load user inventory
@@ -227,6 +230,7 @@ def show_profile():
         
         # Tab for Avatars
         with inv_tabs[0]:
+            scroll_to_top()
             st.subheader("Twoje Awatary")
             
             if inventory['avatars']:
@@ -255,6 +259,7 @@ def show_profile():
         
         # Tab for Backgrounds
         with inv_tabs[1]:
+            scroll_to_top()
             st.subheader("Twoje Tła")
             
             if inventory['backgrounds']:
@@ -282,6 +287,7 @@ def show_profile():
         
         # Tab for Special Lessons
         with inv_tabs[2]:
+            scroll_to_top()
             st.subheader("Twoje Specjalne Lekcje")
             
             if inventory['special_lessons']:
@@ -312,6 +318,7 @@ def show_profile():
         
         # Tab for Boosters
         with inv_tabs[3]:
+            scroll_to_top()
             st.subheader("Twoje Boostery")
             
             if inventory['boosters']:
@@ -352,6 +359,7 @@ def show_profile():
         
         # Tab 5: Shop
         with inv_tabs[4]:
+            scroll_to_top()
             st.subheader("🛒 Sklep")            # Display user's DegenCoins
             st.markdown(f"### Twoje DegenCoins: <span style='color: #FFA500;'>🪙 {user_data.get('degencoins', 0)}</span>", unsafe_allow_html=True)
             
@@ -360,6 +368,7 @@ def show_profile():
             
             # Avatars Shop
             with shop_tabs[0]:
+                scroll_to_top()
                 st.markdown("#### Awatary Premium 🔗")
                 
                 # Lista dostępnych awatarów
@@ -405,6 +414,7 @@ def show_profile():
             
             # Backgrounds Shop
             with shop_tabs[1]:
+                scroll_to_top()
                 st.markdown("#### Tła Premium 🖼️")
                 
                 # Lista dostępnych teł
@@ -451,6 +461,7 @@ def show_profile():
             
             # Special Lessons Shop
             with shop_tabs[2]:
+                scroll_to_top()
                 st.markdown("#### Specjalne Lekcje 📚")
                 
                 # Lista dostępnych specjalnych lekcji
@@ -501,6 +512,7 @@ def show_profile():
             
             # Boosters Shop
             with shop_tabs[3]:
+                scroll_to_top()
                 st.markdown("#### Boostery ⚡")
                 
                 # Lista dostępnych boosterów
@@ -570,22 +582,26 @@ def show_profile():
         st.markdown("</div>", unsafe_allow_html=True)
     # Tab 3: Badges
     with tab3:
+        scroll_to_top()
         st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
         # Use Step 5 badge display system
         show_badges_section()
         st.markdown("</div>", unsafe_allow_html=True)
       # Tab 4: Neuroleader Type with Test
     with tab4:
+        scroll_to_top()
         st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
         
         # Sub-tabs within Typ Neurolidera
         neuroleader_subtab1, neuroleader_subtab2 = st.tabs(["🧠 Test Neurolidera", "🎯 Mój Typ"])
         
         with neuroleader_subtab1:
+            scroll_to_top()
             # Show Neuroleader Test (imported functionality from neuroleader_explorer)
             show_neuroleader_test_section()
         
         with neuroleader_subtab2:
+            scroll_to_top()
             # Show current neuroleader type info
             show_current_neuroleader_type()
             
@@ -711,6 +727,7 @@ def show_badges_section():
     
     for i, (category_id, category_info) in enumerate(sorted(BADGE_CATEGORIES.items(), key=lambda x: x[1]['order'])):
         with tabs[i]:
+            scroll_to_top()
             # Nagłówek kategorii
             st.markdown(f"""
             <div class="category-stats">

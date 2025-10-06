@@ -7,7 +7,7 @@
     "degencoins": 471,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-09-01 13:03:38",
+    "last_login": "2025-10-05 23:06:18",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -594,7 +594,7 @@
     "degencoins": 220,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-08-28 06:43:39",
+    "last_login": "2025-10-02 21:36:57",
     "completed_lessons": [
       "2. Chemia mózgu"
     ],
@@ -1101,6 +1101,139 @@
           "earned_date": "2025-08-27T19:20:53.457469"
         },
         "earning_rate": 0.0
+      }
+    }
+  },
+  "Piotr": {
+    "user_id": "2686f4c8-e6dd-4463-9d39-b5724604ad4c",
+    "password": "Piotr",
+    "degen_type": null,
+    "xp": 95,
+    "degencoins": 95,
+    "level": 1,
+    "joined_date": "2025-09-03",
+    "last_login": "2025-09-03 17:12:50",
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [
+        "neuroinspirator_guide",
+        "forrest_gump_neuroleadership",
+        "stress_decision_making",
+        "chewing_gum_brain",
+        "stress_reduction_techniques",
+        "neurobalanser_guide",
+        "neuroanalityk_guide",
+        "shower_ideas",
+        "neuroreaktor_guide"
+      ],
+      "favorites": []
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": false,
+      "2. Chemia mózgu": false,
+      "3. Model SCARF": false,
+      "4. Model SEEDS": false,
+      "5. Stres i odporność psychiczna": false,
+      "6. Podejmowanie decyzji i ryzyko": false,
+      "7. Pamięć i uwaga": false,
+      "8. Kondycja mózgu": false,
+      "9. Kształtowanie nawyków": false
+    },
+    "recent_activities": [
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "neuroreaktor_guide",
+          "inspiration_title": "Neuroreaktor: Mistrz Błyskawicznych Reakcji"
+        },
+        "timestamp": "2025-09-03T13:40:12.393963+00:00"
+      },
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "shower_ideas",
+          "inspiration_title": "Dlaczego najlepsze pomysły przychodzą pod prysznicem?"
+        },
+        "timestamp": "2025-09-03T13:39:41.678927+00:00"
+      },
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "neuroanalityk_guide",
+          "inspiration_title": "Neuroanalityk: Mistrz Wyczuwania Zagrożeń"
+        },
+        "timestamp": "2025-09-03T13:25:40.986501+00:00"
+      },
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "neurobalanser_guide",
+          "inspiration_title": "Neurobalanser: Mistrz Mądrej Równowagi"
+        },
+        "timestamp": "2025-09-03T13:25:28.752199+00:00"
+      },
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "stress_reduction_techniques",
+          "inspiration_title": "Techniki redukcji stresu oparte na neuronaukach"
+        },
+        "timestamp": "2025-09-03T13:23:11.408650+00:00"
+      },
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "chewing_gum_brain",
+          "inspiration_title": "Bystrzak w mgnieniu oka??? To proste!!!"
+        },
+        "timestamp": "2025-09-03T13:22:43.532116+00:00"
+      },
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "stress_decision_making",
+          "inspiration_title": "Wpływ stresu na podejmowanie decyzji biznesowych"
+        },
+        "timestamp": "2025-09-03T13:20:20.731127+00:00"
+      },
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "forrest_gump_neuroleadership",
+          "inspiration_title": "Co Forrest Gump wiedział o neuroprzywództwie?"
+        },
+        "timestamp": "2025-09-03T13:20:16.688847+00:00"
+      },
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "neuroinspirator_guide",
+          "inspiration_title": "Neuroinspirator: Mistrz Charyzmatycznego Przywództwa"
+        },
+        "timestamp": "2025-09-03T13:20:04.138940+00:00"
+      }
+    ],
+    "lesson_progress": {
+      "0. Wprowadzenie do neuroprzywództwa": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 5,
+        "intro_degencoins": 5,
+        "intro_timestamp": "2025-09-03 15:24:35",
+        "content_xp_awarded": true,
+        "content_completed": true,
+        "content_xp": 30,
+        "content_degencoins": 30,
+        "content_timestamp": "2025-09-03 15:24:45",
+        "practical_exercises_xp_awarded": true,
+        "practical_exercises_completed": true,
+        "practical_exercises_xp": 60,
+        "practical_exercises_degencoins": 60,
+        "practical_exercises_timestamp": "2025-09-03 15:24:54"
       }
     }
   }

@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenDegenAcademy - Dokumentacja</title>
+    
+        <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 2cm;
+            }
+            body { font-size: 11px; }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #34495e;
+            font-size: 22px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        h4 {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+        
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            color: #e74c3c;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: #333;
+        }
+        
+        blockquote {
+            border-left: 4px solid #3498db;
+            margin: 16px 0;
+            padding: 8px 16px;
+            background-color: #f8f9fa;
+            font-style: italic;
+        }
+        
+        ul, ol {
+            margin: 12px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 6px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 16px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 12px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        </style>
+        
+</head>
+<body>
+    <h1 id="szybki-start">## 🚀 Szybki Start</h1>
+
+<p><strong>Aby uruchomić aplikację:</strong></p>
+
+<pre><code>python -m streamlit run main.py
+</code></pre>
+
+<p><strong>Dostęp:</strong> http://localhost:8501</p>
+
+<blockquote>
+  <p>⚠️ <strong>Ważne:</strong> Nie używaj <code>streamlit run main.py</code> - może nie działać na Windows. Zawsze używaj <code>python -m streamlit run main.py</code></p>
+</blockquote>
+
+<hr />
+
+<h2 id="przeglad-aplikacjiademy-kompletna-dokumentacja-aplikacji">📋 Przegląd Aplikacjiademy - Kompletna Dokumentacja Aplikacji</h2>
+
+<h2 id="szybki-start-2">� Szybki Start</h2>
+
+<p><strong>Aby uruchomić aplikację:</strong></p>
+
+<pre><code>python -m streamlit run main.py
+</code></pre>
+
+<p><strong>Dostęp:</strong> http://localhost:8501</p>
+
+<blockquote>
+  <p>⚠️ <strong>Ważne:</strong> Nie używaj <code>streamlit run main.py</code> - może nie działać na Windows. Zawsze używaj <code>python -m streamlit run main.py</code></p>
+</blockquote>
+
+<hr />
+
+<h2 id="przeglad-aplikacji">�📋 Przegląd Aplikacji</h2>
+
+<p><strong>ZenDegenAcademy</strong> to platforma edukacyjna skoncentrowana na rozwoju osobistym, inwestycjach i psychologii finansowej. Aplikacja łączy gamifikację z nowoczesnym podejściem do nauki, oferując spersonalizowane ścieżki rozwoju dla różnych typów osobowości inwestorskiej.</p>
+
+<h3 id="wymagania">📦 Wymagania</h3>
+
+<ul>
+<li><strong>Python 3.11+</strong> </li>
+<li><strong>pip</strong> (menedżer pakietów Python)</li>
+<li><strong>4GB RAM</strong> (zalecane)</li>
+<li><strong>Przeglądarka internetowa</strong> (Chrome, Firefox, Safari)</li>
+</ul>
+
+<h3 id="instalacja">📥 Instalacja</h3>
+
+<pre><code># 1. Sklonuj repozytorium
+git clone [URL_REPOZYTORIUM]
+cd ZenDegenAcademy
+
+# 2. Zainstaluj zależności
+pip install -r requirements.txt
+
+# 3. Uruchom aplikację
+python -m streamlit run main.py
+</code></pre>
+
+<hr />
+
+<h2 id="głowne-funkcjonalnosci">🎯 Główne Funkcjonalności</h2>
+
+<h3 id="dashboard-start">🏠 <strong>Dashboard (START)</strong></h3>
+
+<ul>
+<li><strong>Ostatnie aktywności</strong> - historia działań użytkownika (lekcje, inspiracje, testy)</li>
+<li><strong>Postęp w nauce</strong> - wizualizacja ukończonych modułów</li>
+<li><strong>Statystyki osobiste</strong> - XP, poziom, odznaki</li>
+<li><strong>Pasma dzienne</strong> - motywacja do regularnej nauki</li>
+<li><strong>Szybki dostęp</strong> - kontynuuj ostatnią lekcję</li>
+</ul>
+
+<h3 id="system-edukacyjny-nauka">📚 <strong>System Edukacyjny (NAUKA)</strong></h3>
+
+<ul>
+<li><strong>Strukturalne lekcje</strong> - 6-etapowy system nauki</li>
+<li><strong>Kursy tematyczne</strong> - inwestycje, psychologia, rozwój osobisty  </li>
+<li><strong>Mapy myśli</strong> - wizualne przedstawienie wiedzy</li>
+<li><strong>Test wiedzy</strong> - sprawdzenie postępów</li>
+<li><strong>Materiały dodatkowe</strong> - przykłady, studia przypadków</li>
+</ul>
+
+<h3 id="inspiracje">💡 <strong>Inspiracje</strong></h3>
+
+<ul>
+<li><strong>Blog artykuły</strong> - porady ekspertów</li>
+<li><strong>Przewodniki</strong> - szczegółowe instrukcje</li>
+<li><strong>Systemy</strong> - ulubione i przeczytane artykuły</li>
+<li><strong>Rekomendacje</strong> - polecane treści</li>
+<li><strong>Tracking aktywności</strong> - śledzenie przeczytanych materiałów</li>
+</ul>
+
+<h3 id="praktyka">⚡ <strong>Praktyka</strong></h3>
+
+<ul>
+<li><strong>Ćwiczenia praktyczne</strong> - zastosowanie wiedzy</li>
+<li><strong>Symulacje</strong> - bezpieczne testowanie strategii</li>
+<li><strong>Zadania daily</strong> - codzienne wyzwania</li>
+<li><strong>Projekty</strong> - długoterminowe cele</li>
+</ul>
+
+<h3 id="profil-uzytkownika">👤 <strong>Profil użytkownika</strong></h3>
+
+<ul>
+<li><strong>Test typu degena</strong> - analiza osobowości inwestorskiej</li>
+<li><strong>Odkrywanie typu NeuroLeader</strong> - styl przywództwa</li>
+<li><strong>Statystyki postępów</strong> - szczegółowa analiza rozwoju</li>
+<li><strong>Historia osiągnięć</strong> - zdobyte odznaki i milestones</li>
+<li><strong>Ustawienia konta</strong> - personalizacja doświadczenia</li>
+</ul>
+
+<h3 id="panel-administracyjny">🔧 <strong>Panel Administracyjny</strong></h3>
+
+<ul>
+<li><strong>Zarządzanie użytkownikami</strong> - statystyki i analityka</li>
+<li><strong>Monitoring aktywności</strong> - śledzenie zaangażowania</li>
+<li><strong>Analiza danych</strong> - raporty i wykresy</li>
+<li><strong>Moderacja treści</strong> - zarządzanie materiałami</li>
+</ul>
+
+<hr />
+
+<h2 id="architektura-aplikacji">🏗️ Architektura Aplikacji</h2>
+
+<h3 id="struktura-katalogow"><strong>Struktura katalogów:</strong></h3>
+
+<pre><code>ZenDegenAcademy/
+├── main.py                    # Główny plik aplikacji Streamlit
+├── requirements.txt           # Zależności Python
+├── runtime.txt               # Wersja Python dla deployment
+├── start.bat                 # Launcher aplikacji (Windows)
+├── users_data.json          # Baza danych użytkowników (JSON)
+├── user_status.json         # Status sesji użytkowników
+│
+├── config/                   # Konfiguracja aplikacji
+│   ├── settings.py          # Główne ustawienia
+│   └── api_limits.json      # Limity API
+│
+├── views/                   # Widoki/strony aplikacji
+│   ├── dashboard.py         # Strona główna
+│   ├── login.py            # System logowania
+│   ├── profile.py          # Profil użytkownika
+│   ├── learn.py            # System nauki
+│   ├── lesson.py           # Pojedyncze lekcje
+│   ├── inspirations.py     # Sekcja inspiracji
+│   ├── admin.py            # Panel administratora
+│   └── shop_new.py         # Sklep (w rozwoju)
+│
+├── utils/                   # Narzędzia i komponenty
+│   ├── session.py          # Zarządzanie sesją
+│   ├── components.py       # Komponenty UI
+│   ├── new_navigation.py   # System nawigacji
+│   ├── xp_system.py        # System doświadczenia
+│   ├── achievements.py     # System osiągnięć
+│   └── inspirations_loader.py # Ładowanie inspiracji
+│
+├── data/                    # Dane i modele
+│   ├── users.py            # Funkcje użytkowników
+│   ├── users_fixed.py      # Naprawione funkcje użytkowników
+│   ├── lessons.py          # Dane lekcji
+│   ├── course_data.py      # Dane kursów
+│   ├── test_questions.py   # Pytania testowe
+│   └── inspirations/       # Katalog z artykułami
+│
+├── static/                  # Zasoby statyczne
+│   ├── css/                # Style CSS
+│   └── js/                 # Skrypty JavaScript
+│
+├── tests/                   # Testy aplikacji
+│   └── test_*.py           # Poszczególne testy
+│
+└── docs/                    # Dokumentacja projektu
+    ├── implementation/     # Dokumentacja implementacji
+    ├── planning/           # Plany i strategie
+    ├── fixes/              # Historia napraw
+    └── status/             # Statusy i podsumowania
+</code></pre>
+
+<hr />
+
+<h2 id="technologie-i-zaleznosci">🔧 Technologie i Zależności</h2>
+
+<h3 id="framework-głowny"><strong>Framework główny:</strong></h3>
+
+<ul>
+<li><strong>Streamlit</strong> <code>&gt;=1.32.0</code> - Framework webowy dla aplikacji ML/Data Science</li>
+<li><strong>Python</strong> <code>3.11+</code> - Język programowania</li>
+</ul>
+
+<h3 id="biblioteki-analityczne"><strong>Biblioteki analityczne:</strong></h3>
+
+<ul>
+<li><strong>pandas</strong> <code>&gt;=2.0.0</code> - Manipulacja danych</li>
+<li><strong>numpy</strong> <code>&gt;=1.26.4</code> - Obliczenia numeryczne</li>
+<li><strong>matplotlib</strong> <code>&gt;=3.8.2</code> - Wykresy podstawowe</li>
+<li><strong>plotly</strong> <code>&gt;=5.17.0</code> - Interaktywne wykresy</li>
+<li><strong>altair</strong> <code>&gt;=5.2.0</code> - Wizualizacje statystyczne</li>
+</ul>
+
+<h3 id="biblioteki-specjalistyczne"><strong>Biblioteki specjalistyczne:</strong></h3>
+
+<ul>
+<li><strong>streamlit-agraph</strong> <code>0.0.45</code> - Grafy i sieci</li>
+<li><strong>networkx</strong> <code>&gt;=3.1</code> - Analiza sieci</li>
+<li><strong>Pillow</strong> <code>&gt;=10.0.0</code> - Przetwarzanie obrazów</li>
+</ul>
+
+<h3 id="narzedzia-pomocnicze"><strong>Narzędzia pomocnicze:</strong></h3>
+
+<ul>
+<li><strong>packaging</strong> <code>&gt;=21.0</code> - Zarządzanie wersjami</li>
+</ul>
+
+<hr />
+
+<h2 id="instalacja-i-uruchomienie">🚀 Instalacja i Uruchomienie</h2>
+
+<h3 id="wymagania-systemowe"><strong>Wymagania systemowe:</strong></h3>
+
+<ul>
+<li>Python 3.11 lub nowszy</li>
+<li>4GB RAM (rekomendowane)</li>
+<li>Połączenie internetowe (dla niektórych funkcji)</li>
+</ul>
+
+<h3 id="kroki-instalacji"><strong>Kroki instalacji:</strong></h3>
+
+<ol>
+<li><p><strong>Klonowanie repozytorium:</strong></p>
+
+<pre><code>git clone [URL_REPOZYTORIUM]
+cd ZenDegenAcademy
+</code></pre></li>
+<li><p><strong>Instalacja zależności:</strong></p>
+
+<pre><code>pip install -r requirements.txt
+</code></pre></li>
+<li><p><strong>Uruchomienie aplikacji:</strong></p>
+
+<p><strong>Windows (Zalecane):</strong></p>
+
+<pre><code>python -m streamlit run main.py
+</code></pre>
+
+<p><strong>Alternatywnie - plik batch:</strong></p>
+
+<pre><code>start.bat
+</code></pre>
+
+<p><strong>Linux/Mac:</strong></p>
+
+<pre><code>python -m streamlit run main.py
+</code></pre>
+
+<p><strong>Z dodatkowymi opcjami:</strong></p>
+
+<pre><code>python -m streamlit run main.py --server.headless true --server.port 8501
+</code></pre></li>
+<li><p><strong>Dostęp do aplikacji:</strong></p>
+
+<ul>
+<li>Aplikacja automatycznie otworzy się w przeglądarce</li>
+<li>Lub przejdź ręcznie do <code>http://localhost:8501</code></li>
+<li>W przypadku problemów sprawdź porty: 8501, 8502, 8503</li>
+</ul></li>
+</ol>
+
+<h3 id="rozwiazywanie-problemow-z-uruchomieniem"><strong>Rozwiązywanie problemów z uruchomieniem:</strong></h3>
+
+<p><strong>Problem:</strong> <code>streamlit: The term 'streamlit' is not recognized</code>
+<strong>Rozwiązanie:</strong> Użyj <code>python -m streamlit run main.py</code> zamiast <code>streamlit run main.py</code></p>
+
+<p><strong>Problem:</strong> Aplikacja nie otwiera się automatycznie
+<strong>Rozwiązanie:</strong> Ręcznie otwórz http://localhost:8501 w przeglądarce</p>
+
+<p><strong>Problem:</strong> Port już zajęty
+<strong>Rozwiązanie:</strong> Użyj innego portu: <code>python -m streamlit run main.py --server.port 8502</code></p>
+
+<hr />
+
+<h2 id="system-uzytkownikow">👥 System Użytkowników</h2>
+
+<h3 id="typy-kont"><strong>Typy kont:</strong></h3>
+
+<ul>
+<li><strong>Gość</strong> - ograniczony dostęp, dane w sesji</li>
+<li><strong>Użytkownik</strong> - pełny dostęp, dane trwałe</li>
+<li><strong>Administrator</strong> - pełny dostęp + panel admin</li>
+</ul>
+
+<h3 id="rejestracja-i-logowanie"><strong>Rejestracja i logowanie:</strong></h3>
+
+<ul>
+<li>Prosta rejestracja (username + password)</li>
+<li>Bezpieczne hashowanie haseł</li>
+<li>Sesje zarządzane przez Streamlit</li>
+<li>Automatic logout po bezczynności</li>
+</ul>
+
+<h3 id="struktura-danych-uzytkownika"><strong>Struktura danych użytkownika:</strong></h3>
+
+<pre><code>{
+  "username": {
+    "user_id": "UUID",
+    "password": "hashed_password",
+    "xp": 0,
+    "level": 1,
+    "degencoins": 0,
+    "degen_type": null,
+    "neuroleader_type": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "recent_activities": [
+      {
+        "type": "lesson_completed",
+        "details": {"lesson_id": "intro_1"},
+        "timestamp": "2025-08-31T10:00:00Z"
+      }
+    ]
+  }
+}
+</code></pre>
+
+<hr />
+
+<h2 id="system-gamifikacji">🎮 System Gamifikacji</h2>
+
+<h3 id="xp-experience-points"><strong>XP (Experience Points):</strong></h3>
+
+<ul>
+<li>Zdobywane za ukończenie lekcji</li>
+<li>Zdobywane za przeczytanie inspiracji</li>
+<li>Zdobywane za ukończenie testów</li>
+<li>Przeliczanie na poziomy użytkownika</li>
+</ul>
+
+<h3 id="poziomy-levels"><strong>Poziomy (Levels):</strong></h3>
+
+<ul>
+<li>Level 1: 0-99 XP</li>
+<li>Level 2: 100-299 XP  </li>
+<li>Level 3: 300-599 XP</li>
+<li>Itd. (rosnąca progresja)</li>
+</ul>
+
+<h3 id="degencoins"><strong>DegenCoins:</strong></h3>
+
+<ul>
+<li>Wirtualna waluta aplikacji</li>
+<li>Zdobywane za aktywność</li>
+<li>Planowane użycie w sklepie</li>
+</ul>
+
+<h3 id="odznaki-badges"><strong>Odznaki (Badges):</strong></h3>
+
+<ul>
+<li>&#8220;First Login&#8221; - pierwsze logowanie</li>
+<li>&#8220;Lesson Master&#8221; - ukończenie kursu</li>
+<li>&#8220;Explorer&#8221; - przeczytanie wielu inspiracji</li>
+<li>&#8220;Streak Keeper&#8221; - utrzymanie passy</li>
+</ul>
+
+<h3 id="osiagniecia-achievements"><strong>Osiągnięcia (Achievements):</strong></h3>
+
+<ul>
+<li>Milestones w nauce</li>
+<li>Specjalne wyzwania</li>
+<li>Seasonal events</li>
+</ul>
+
+<hr />
+
+<h2 id="system-sledzenia-aktywnosci">📊 System Śledzenia Aktywności</h2>
+
+<h3 id="typy-aktywnosci"><strong>Typy aktywności:</strong></h3>
+
+<ul>
+<li><code>lesson_completed</code> - ukończenie lekcji</li>
+<li><code>inspiration_read</code> - przeczytanie artykułu</li>
+<li><code>degen_type_discovered</code> - odkrycie typu degena  </li>
+<li><code>neuroleader_type_discovered</code> - odkrycie typu przywódcy</li>
+<li><code>badge_earned</code> - zdobycie odznaki</li>
+<li><code>daily_streak_started</code> - początek passy</li>
+</ul>
+
+<h3 id="format-aktywnosci"><strong>Format aktywności:</strong></h3>
+
+<pre><code>{
+  "type": "inspiration_read",
+  "details": {
+    "inspiration_id": "article_123",
+    "inspiration_title": "Jak inwestować mądrze"
+  },
+  "timestamp": "2025-08-31T17:04:29.365077+00:00"
+}
+</code></pre>
+
+<h3 id="wyswietlanie"><strong>Wyświetlanie:</strong></h3>
+
+<ul>
+<li>Dashboard - ostatnie 5 aktywności</li>
+<li>Profil - pełna historia</li>
+<li>Kolorowe ikony dla różnych typów</li>
+<li>Relative time stamps ("2 godziny temu")</li>
+</ul>
+
+<hr />
+
+<h2 id="typologie-uzytkownikow">🧠 Typologie Użytkowników</h2>
+
+<h3 id="typy-degena-inwestorskie"><strong>Typy Degena (Inwestorskie):</strong></h3>
+
+<ol>
+<li><strong>Hype Degen</strong> - FOMO, szybkie decyzje</li>
+<li><strong>YOLO Degen</strong> - wysokie ryzyko, intuicja</li>
+<li><strong>Zen Degen</strong> - spokój, długoterminowe myślenie</li>
+<li><strong>Smart Degen</strong> - analiza, racjonalność</li>
+<li><strong>Diamond Hands</strong> - cierpliwość, hodling</li>
+</ol>
+
+<h3 id="typy-neuroleader-przywodcze"><strong>Typy NeuroLeader (Przywódcze):</strong></h3>
+
+<ol>
+<li><strong>Neurostrategik</strong> - planowanie, wizja</li>
+<li><strong>Neuroempata</strong> - zrozumienie, relacje</li>
+<li><strong>Neuroinnowator</strong> - kreatywność, zmiany</li>
+<li><strong>Neurobalanser</strong> - harmonia, stabilność</li>
+<li><strong>Neuroinspirator</strong> - motywacja, charyzma</li>
+</ol>
+
+<h3 id="wykorzystanie-typologii"><strong>Wykorzystanie typologii:</strong></h3>
+
+<ul>
+<li>Personalizowane rekomendacje</li>
+<li>Dostosowane treści</li>
+<li>Specjalne ścieżki rozwoju</li>
+<li>Targeted missions</li>
+</ul>
+
+<hr />
+
+<h2 id="system-edukacyjny">📚 System Edukacyjny</h2>
+
+<h3 id="struktura-lekcji-6-etapow"><strong>Struktura lekcji (6 etapów):</strong></h3>
+
+<ol>
+<li><strong>Wprowadzenie</strong> - kontekst i cele</li>
+<li><strong>Teoria</strong> - podstawowe pojęcia</li>
+<li><strong>Przykłady</strong> - praktyczne zastosowania</li>
+<li><strong>Ćwiczenia</strong> - interaktywne zadania</li>
+<li><strong>Test</strong> - sprawdzenie wiedzy</li>
+<li><strong>Podsumowanie</strong> - kluczowe takeaways</li>
+</ol>
+
+<h3 id="typy-tresci"><strong>Typy treści:</strong></h3>
+
+<ul>
+<li><strong>Artykuły tekstowe</strong> - teoria i koncepty</li>
+<li><strong>Interaktywne ćwiczenia</strong> - praktyczne zadania</li>
+<li><strong>Quizy</strong> - sprawdzenie wiedzy</li>
+<li><strong>Mapy myśli</strong> - wizualne podsumowania</li>
+<li><strong>Studia przypadków</strong> - rzeczywiste przykłady</li>
+</ul>
+
+<h3 id="sledzenie-postepow"><strong>Śledzenie postępów:</strong></h3>
+
+<ul>
+<li>Procent ukończenia lekcji</li>
+<li>Wyniki testów</li>
+<li>Czas spędzony na nauce</li>
+<li>Słabsze i mocniejsze obszary</li>
+</ul>
+
+<hr />
+
+<h2 id="system-inspiracji">💡 System Inspiracji</h2>
+
+<h3 id="kategorie-artykułow"><strong>Kategorie artykułów:</strong></h3>
+
+<ul>
+<li><strong>Mindset</strong> - nastawienie i psychologia</li>
+<li><strong>Motywacja</strong> - inspiracja do działania</li>
+<li><strong>Sukces</strong> - strategie osiągania celów</li>
+<li><strong>Inwestycje</strong> - porady finansowe</li>
+<li><strong>Rozwój osobisty</strong> - self-improvement</li>
+</ul>
+
+<h3 id="funkcjonalnosci"><strong>Funkcjonalności:</strong></h3>
+
+<ul>
+<li><strong>Oznaczanie jako przeczytane</strong> - tracking postępów</li>
+<li><strong>System ulubionych</strong> - zapisywanie ważnych artykułów</li>
+<li><strong>Polecane treści</strong> - kuratorskie rekomendacje</li>
+<li><strong>Wyszukiwanie</strong> - filtrowanie po kategorii/tagach</li>
+<li><strong>Difficulty levels</strong> - beginner/intermediate/advanced</li>
+</ul>
+
+<h3 id="integracja-z-aktywnoscia"><strong>Integracja z aktywnością:</strong></h3>
+
+<ul>
+<li>Automatyczne dodawanie do &#8220;Ostatnie aktywności&#8221;</li>
+<li>Zdobywanie XP za przeczytanie</li>
+<li>Statystyki czytania w profilu</li>
+</ul>
+
+<hr />
+
+<h2 id="bezpieczenstwo-i-prywatnosc">🔒 Bezpieczeństwo i Prywatność</h2>
+
+<h3 id="zabezpieczenia"><strong>Zabezpieczenia:</strong></h3>
+
+<ul>
+<li>Proste hashowanie haseł (development)</li>
+<li>Walidacja danych wejściowych</li>
+<li>Session management przez Streamlit</li>
+<li>Error handling i graceful failures</li>
+</ul>
+
+<h3 id="dane-uzytkownikow"><strong>Dane użytkowników:</strong></h3>
+
+<ul>
+<li>Lokalne przechowywanie w JSON</li>
+<li>Backup automatyczny</li>
+<li>Anonimizacja w analytics</li>
+<li>GDPR compliance ready</li>
+</ul>
+
+<h3 id="planowane-ulepszenia"><strong>Planowane ulepszenia:</strong></h3>
+
+<ul>
+<li>Proper password hashing (bcrypt)</li>
+<li>Database migration (PostgreSQL)</li>
+<li>OAuth integration</li>
+<li>Enhanced session security</li>
+</ul>
+
+<hr />
+
+<h2 id="responsywnosc-i-ux">📱 Responsywność i UX</h2>
+
+<h3 id="desktop-experience"><strong>Desktop Experience:</strong></h3>
+
+<ul>
+<li>Sidebar navigation</li>
+<li>Card-based layouts</li>
+<li>Hover effects i animations</li>
+<li>Rich data visualizations</li>
+</ul>
+
+<h3 id="mobile-ready"><strong>Mobile Ready:</strong></h3>
+
+<ul>
+<li>Responsive design components</li>
+<li>Touch-friendly buttons</li>
+<li>Optimized information density</li>
+<li>Fast loading times</li>
+</ul>
+
+<h3 id="accessibility"><strong>Accessibility:</strong></h3>
+
+<ul>
+<li>Clear typography</li>
+<li>Color contrast compliance</li>
+<li>Keyboard navigation support</li>
+<li>Screen reader compatibility</li>
+</ul>
+
+<hr />
+
+<h2 id="panel-administracyjny-2">🔧 Panel Administracyjny</h2>
+
+<h3 id="funkcjonalnosci-2"><strong>Funkcjonalności:</strong></h3>
+
+<ul>
+<li><strong>User Management</strong> - lista i statystyki użytkowników</li>
+<li><strong>Activity Monitoring</strong> - śledzenie zaangażowania</li>
+<li><strong>Content Management</strong> - zarządzanie lekcjami i inspiracjami</li>
+<li><strong>Analytics Dashboard</strong> - szczegółowe raporty</li>
+<li><strong>System Health</strong> - monitoring aplikacji</li>
+</ul>
+
+<h3 id="metryki-i-raporty"><strong>Metryki i raporty:</strong></h3>
+
+<ul>
+<li>Liczba aktywnych użytkowników</li>
+<li>Najpopularniejsze treści</li>
+<li>Completion rates lekcji</li>
+<li>User engagement trends</li>
+<li>Performance metrics</li>
+</ul>
+
+<hr />
+
+<h2 id="development-i-maintenance">🚧 Development i Maintenance</h2>
+
+<h3 id="struktura-kodu"><strong>Struktura kodu:</strong></h3>
+
+<ul>
+<li><strong>MVC Pattern</strong> - separation of concerns</li>
+<li><strong>Modular architecture</strong> - easy maintenance</li>
+<li><strong>Error handling</strong> - robust error management</li>
+<li><strong>Logging system</strong> - debugging support</li>
+</ul>
+
+<h3 id="testing"><strong>Testing:</strong></h3>
+
+<ul>
+<li>Unit tests dla core functions</li>
+<li>Integration tests dla user flows</li>
+<li>Manual testing procedures</li>
+<li>Performance testing</li>
+</ul>
+
+<h3 id="deployment"><strong>Deployment:</strong></h3>
+
+<ul>
+<li>Streamlit Cloud ready</li>
+<li>Heroku compatible</li>
+<li>Docker containerization planned</li>
+<li>CI/CD pipeline ready</li>
+</ul>
+
+<hr />
+
+<h2 id="roadmapa-rozwoju">🔮 Roadmapa Rozwoju</h2>
+
+<h3 id="phase-1-current"><strong>Phase 1 (Current):</strong></h3>
+
+<p>✅ <strong>UKOŃCZONE</strong>
+- Podstawowa aplikacja
+- System użytkowników
+- Gamifikacja
+- Inspiracje
+- Dashboard</p>
+
+<h3 id="phase-2-q1-2026"><strong>Phase 2 (Q1 2026):</strong></h3>
+
+<p>🔄 <strong>W PLANACH</strong>
+- Advanced analytics
+- Social features
+- Enhanced gamification
+- Mobile app
+- API integration</p>
+
+<h3 id="phase-3-q2-q3-2026"><strong>Phase 3 (Q2-Q3 2026):</strong></h3>
+
+<p>🔮 <strong>PRZYSZŁOŚĆ</strong>
+- AI-powered recommendations
+- Real-time market data
+- Advanced certifications
+- Mentorship program
+- Enterprise features</p>
+
+<hr />
+
+<h2 id="troubleshooting">🆘 Troubleshooting</h2>
+
+<h3 id="czeste-problemy"><strong>Częste problemy:</strong></h3>
+
+<p><strong>1. Aplikacja nie startuje:</strong></p>
+
+<pre><code># Sprawdź wersję Python
+python --version
+
+# Reinstaluj zależności
+pip install -r requirements.txt --force-reinstall
+</code></pre>
+
+<p><strong>2. Błędy importu:</strong></p>
+
+<pre><code># Dodaj ścieżkę do PYTHONPATH
+import sys
+sys.path.append('.')
+</code></pre>
+
+<p><strong>3. Problemy z danymi:</strong></p>
+
+<pre><code># Backup danych użytkowników
+cp users_data.json users_data_backup.json
+
+# Reset do domyślnych ustawień
+rm user_status.json
+</code></pre>
+
+<h3 id="logi-i-debugging"><strong>Logi i debugging:</strong></h3>
+
+<ul>
+<li>Streamlit logi w konsoli</li>
+<li>Application errors w UI</li>
+<li>User activity logs w JSON</li>
+<li>Custom debug prints</li>
+</ul>
+
+<hr />
+
+<h2 id="support-i-kontakt">📞 Support i Kontakt</h2>
+
+<h3 id="dokumentacja"><strong>Dokumentacja:</strong></h3>
+
+<ul>
+<li><strong>README główny</strong> - <code>/docs/README.md</code></li>
+<li><strong>Implementation docs</strong> - <code>/docs/implementation/</code></li>
+<li><strong>Fix history</strong> - <code>/docs/fixes/</code></li>
+<li><strong>Planning docs</strong> - <code>/docs/planning/</code></li>
+</ul>
+
+<h3 id="zgłaszanie-problemow"><strong>Zgłaszanie problemów:</strong></h3>
+
+<ol>
+<li>Sprawdź <code>/docs/fixes/</code> czy problem był już naprawiany</li>
+<li>Przejrzyj <code>/docs/status/</code> dla aktualnego stanu</li>
+<li>Stwórz szczegółowy opis problemu</li>
+<li>Dołącz kroki reprodukcji</li>
+</ol>
+
+<h3 id="contributing"><strong>Contributing:</strong></h3>
+
+<ol>
+<li>Fork repozytorium</li>
+<li>Stwórz feature branch</li>
+<li>Dodaj testy dla nowych funkcji</li>
+<li>Zaktualizuj dokumentację</li>
+<li>Stwórz Pull Request</li>
+</ol>
+
+<hr />
+
+<h2 id="statystyki-projektu">📊 Statystyki Projektu</h2>
+
+<p><strong>Ostatnia aktualizacja:</strong> 6 października 2025
+<strong>Status:</strong> Aktywny rozwój
+<strong>Wersja:</strong> 1.2.0</p>
+
+<h3 id="najnowsze-zmiany"><strong>Najnowsze zmiany:</strong></h3>
+
+<ul>
+<li>✅ Naprawiono problem z uruchamianiem Streamlit na Windows</li>
+<li>✅ Zaktualizowano instrukcje instalacji i uruchomienia</li>
+<li>✅ Dodano rozwiązania typowych problemów</li>
+<li>✅ Poprawiono dokumentację instalacji zależności</li>
+<li>🔄 W trakcie: Optymalizacja wydajności aplikacji</li>
+</ul>
+
+<h3 id="znane-problemy"><strong>Znane problemy:</strong></h3>
+
+<ul>
+<li><strong>Windows:</strong> Komenda <code>streamlit</code> może nie być rozpoznawana - użyj <code>python -m streamlit run main.py</code></li>
+<li><strong>Porty:</strong> Domyślny port 8501 może być zajęty - aplikacja automatycznie znajdzie wolny port</li>
+<li><strong>Pierwsze uruchomienie:</strong> Streamlit może zapytać o email - można pominąć naciskając Enter</li>
+</ul>
+
+<h3 id="roadmapa"><strong>Roadmapa:</strong></h3>
+
+<ul>
+<li>🎯 <strong>Q4 2025:</strong> Implementacja sklepu DegenCoins</li>
+<li>🎯 <strong>Q1 2026:</strong> System społeczności i rankingów</li>
+<li>🎯 <strong>Q2 2026:</strong> Mobilna aplikacja PWA</li>
+<li>🎯 <strong>Q3 2026:</strong> AI-powered rekomendacje treści</li>
+</ul>
+
+<h3 id="metryki-projektu"><strong>Metryki projektu:</strong></h3>
+
+<ul>
+<li><strong>Pliki:</strong> 100+ plików źródłowych</li>
+<li><strong>Linie kodu:</strong> 15,000+ LOC</li>
+<li><strong>Testy:</strong> 25+ plików testowych</li>
+<li><strong>Dokumentacja:</strong> Kompletna</li>
+<li><strong>Platformy:</strong> Windows, Linux, macOS</li>
+</ul>
+
+<hr />
+
+<h2 id="changelog">📝 Changelog</h2>
+
+<h3 id="v120-6-pazdziernika-2025"><strong>v1.2.0</strong> (6 października 2025)</h3>
+
+<ul>
+<li>🔧 <strong>Naprawiono:</strong> Problem z uruchamianiem <code>streamlit</code> na Windows</li>
+<li>📚 <strong>Dodano:</strong> Szczegółowe instrukcje instalacji i rozwiązywania problemów</li>
+<li>🎨 <strong>Ulepszono:</strong> Dokumentację README.md z jasnymi krokami instalacji</li>
+<li>⚡ <strong>Optymalizacja:</strong> Instrukcje uruchamiania dla różnych systemów operacyjnych</li>
+</ul>
+
+<h3 id="v110-31-sierpnia-2025"><strong>v1.1.0</strong> (31 sierpnia 2025)</h3>
+
+<ul>
+<li>✨ <strong>Dodano:</strong> System adminstracji i analityki</li>
+<li>🎮 <strong>Ulepszono:</strong> System gamifikacji i osiągnięć</li>
+<li>🐛 <strong>Naprawiono:</strong> Różne błędy UI i wydajności</li>
+<li>📱 <strong>Dodano:</strong> Responsywność dla urządzeń mobilnych</li>
+</ul>
+
+<h3 id="v100-pierwsza-wersja"><strong>v1.0.0</strong> (Pierwsza wersja)</h3>
+
+<ul>
+<li>🎉 <strong>Premiera:</strong> Pełnofunkcjonalna platforma edukacyjna</li>
+<li>🚀 <strong>Funkcje:</strong> Dashboard, system nauki, profil użytkownika</li>
+<li>🎯 <strong>Gamifikacja:</strong> XP, poziomy, odznaki, DegenCoins</li>
+<li>📚 <strong>Treści:</strong> Kompletny system lekcji i inspiracji</li>
+</ul>
+
+<hr />
+
+<p><strong>Status aplikacji:</strong> 🟢 <strong>AKTYWNA</strong></p>
+
+<p><strong>🔗 Przydatne linki:</strong>
+- <strong>Dokumentacja techniczna:</strong> <code>/docs/</code>
+- <strong>Historia zmian:</strong> <code>/docs/fixes/</code>
+- <strong>Plany rozwoju:</strong> <code>/docs/planning/</code>
+- <strong>Status projektu:</strong> <code>/docs/status/</code></p>
+
+<p><em>Ostatnia aktualizacja dokumentacji: 6 października 2025</em></p>
+
+<p><strong>Supported platforms:</strong>
+- ✅ Windows 10/11
+- ✅ macOS 12+
+- ✅ Linux (Ubuntu 20.04+)
+- ✅ Web browsers (Chrome, Firefox, Safari, Edge)</p>
+
+<hr />
+
+<p><em>Dokumentacja wygenerowana automatycznie na podstawie analizy kodu i struktury projektu.</em></p>
+
+<p><strong>ZenDegenAcademy - Podróż ku finansowej mądrości rozpoczyna się tutaj! 🚀</strong></p>
+
+    <div class="footer">
+        <hr>
+        <p>Dokumentacja wygenerowana automatycznie dnia 06.10.2025 o 11:48</p>
+        <p><strong>ZenDegenAcademy v1.2.0</strong> | github.com/Silmaris77/BVA</p>
+    </div>
+</body>
+</html>
