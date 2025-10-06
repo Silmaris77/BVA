@@ -639,7 +639,7 @@ def show_investor_profile_compact(user_data):
     st.markdown("""
     <div class="dashboard-section">
         <div class="section-header">
-            <h3 class="section-title">Profil Neurolidera</h3>
+            <h3 class="section-title">Twój Profil</h3>
         </div>
     """, unsafe_allow_html=True)
     

@@ -88,7 +88,7 @@ def show_lessons_by_category(lessons_by_category, completed_lessons, device_type
         if device_type == 'mobile':
             columns = st.columns(1)
         else:
-            columns = st.columns(2)
+            columns = st.columns(1)
         
         # Wyświetlaj lekcje w kolumnach
         for i, (lesson_id, lesson) in enumerate(category_lessons):
@@ -166,6 +166,13 @@ def show_lessons_content():
                 if category not in unavailable_lessons:
                     unavailable_lessons[category] = []
                 unavailable_lessons[category].append((lesson_id, lesson))
+        
+        # Sortuj lekcje w każdej kategorii: nieukończone najpierw, potem ukończone
+        for category in available_lessons:
+            available_lessons[category].sort(key=lambda x: (x[0] in completed_lessons, x[0]))
+        
+        for category in unavailable_lessons:
+            unavailable_lessons[category].sort(key=lambda x: (x[0] in completed_lessons, x[0]))
         
         # Utwórz tabs dla dostępnych i niedostępnych lekcji
         tab_available, tab_unavailable = st.tabs(["📚 Lekcje dostępne", "🔒 Lekcje niedostępne"])
