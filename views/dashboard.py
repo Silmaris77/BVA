@@ -226,8 +226,7 @@ def show_stats_section(user_data, device_type):
     streak_change = f"+{min(1, streak)}"
     level_change = f"+{max(0, level - 1)}"
     
-    # Utwórz responsywne kolumny
-    device_type = get_device_type()
+    # Użyj przekazanego device_type zamiast wykrywać ponownie
     if device_type == 'mobile':
         cols_per_row = 2
         # Podziel statystyki na wiersze po 2 kolumny dla mobile
@@ -688,6 +687,23 @@ def show_dashboard():
     if st.session_state.get('dev_mode', False):
         toggle_device_view()
     
+    # TYMCZASOWO: Dodaj przełącznik urządzenia dla testów
+    with st.sidebar:
+        st.markdown("### 📱 Test widoku")
+        device_options = ["desktop", "tablet", "mobile"]
+        current_device = st.session_state.get('device_type', 'desktop')
+        
+        selected_device = st.selectbox(
+            "Wybierz urządzenie:", 
+            device_options,
+            index=device_options.index(current_device),
+            key="device_selector"
+        )
+        
+        if selected_device != current_device:
+            st.session_state.device_type = selected_device
+            st.rerun()
+
     # Pobierz aktualny typ urządzenia
     device_type = get_device_type()
       # Używamy naszego komponentu nagłówka - bez dodatkowego CSS
