@@ -842,6 +842,24 @@ def show_lessons_content():
                             box-sizing: border-box !important;
                         }
                         
+                        /* Większa czcionka dla tekstów (nie tytułów) w expanderach */
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown p,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown li,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown div:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+                            font-size: 1.1rem !important;
+                            line-height: 1.6 !important;
+                        }
+                        
+                        /* Zachowanie normalnego rozmiaru dla tytułów */
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown h1,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown h2,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown h3,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown h4,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown h5,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown h6 {
+                            font-size: inherit !important;
+                        }
+                        
                         /* Responsywność na urządzeniach mobilnych */
                         @media (max-width: 768px) {
                             div[data-testid="stExpander"] {
