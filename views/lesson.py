@@ -785,6 +785,82 @@ def show_lessons_content():
                 if 'tabs' in learning_data:
                     st.markdown("### 📚 Materiał do nauki")
                     
+                    # CSS dla pełnej szerokości expanderów w tabsie "Tekst"
+                    st.markdown("""
+                        <style>
+                        /* Expander w tabsie "Tekst" wypełnia całą szerokość */
+                        div[data-testid="stExpander"] {
+                            width: 100% !important;
+                            margin: 0 !important;
+                            border-radius: 8px !important;
+                            border: 1px solid #e0e0e0 !important;
+                            margin-bottom: 0.5rem !important;
+                        }
+                        
+                        div[data-testid="stExpander"] > div {
+                            width: 100% !important;
+                            margin: 0 !important;
+                        }
+                        
+                        /* Zawartość expandera również pełna szerokość */
+                        div[data-testid="stExpander"] .streamlit-expanderContent {
+                            width: 100% !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+                        
+                        /* Nagłówek expandera pełna szerokość */
+                        div[data-testid="stExpander"] .streamlit-expanderHeader {
+                            width: 100% !important;
+                            margin: 0 !important;
+                        }
+                        
+                        /* Karty wewnątrz expandera mają idealnie dopasowaną szerokość */
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown,
+                        div[data-testid="stExpander"] .streamlit-expanderContent div[data-testid="column"],
+                        div[data-testid="stExpander"] .streamlit-expanderContent div[data-testid="stVerticalBlock"],
+                        div[data-testid="stExpander"] .streamlit-expanderContent > div {
+                            width: 100% !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            box-sizing: border-box !important;
+                        }
+                        
+                        /* Wszystkie elementy wewnątrz expandera */
+                        div[data-testid="stExpander"] .streamlit-expanderContent * {
+                            max-width: 100% !important;
+                            box-sizing: border-box !important;
+                        }
+                        
+                        /* Konkretnie dla kart z treścią */
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown > div,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown > div > div {
+                            width: 100% !important;
+                            margin: 0 !important;
+                            padding: 1rem !important;
+                            border-radius: 8px !important;
+                            box-sizing: border-box !important;
+                        }
+                        
+                        /* Responsywność na urządzeniach mobilnych */
+                        @media (max-width: 768px) {
+                            div[data-testid="stExpander"] {
+                                width: 100% !important;
+                                margin: 0 0 0.5rem 0 !important;
+                            }
+                            
+                            div[data-testid="stExpander"] .streamlit-expanderContent {
+                                padding: 0 !important;
+                            }
+                            
+                            div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown > div,
+                            div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown > div > div {
+                                padding: 0.75rem !important;
+                            }
+                        }
+                        </style>
+                    """, unsafe_allow_html=True)
+                    
                     # Utwórz tabs dla różnych typów treści
                     tab_names = [tab.get('title', f'Tab {i+1}') for i, tab in enumerate(learning_data['tabs'])]
                     tabs = st.tabs(tab_names)
