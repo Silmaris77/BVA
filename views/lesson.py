@@ -846,7 +846,22 @@ def show_lessons_content():
                         div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown p,
                         div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown li,
                         div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown div:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
-                            font-size: 1.1rem !important;
+                            font-size: 1.5rem !important;
+                            line-height: 1.6 !important;
+                        }
+                        
+                        /* Bardziej specyficzne selektory dla tekstów w kartach */
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown > div p,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .stMarkdown > div > div p,
+                        div[data-testid="stExpander"] .streamlit-expanderContent .element-container p,
+                        div[data-testid="stExpander"] .streamlit-expanderContent [data-testid="stMarkdownContainer"] p {
+                            font-size: 1.5rem !important;
+                            line-height: 1.6 !important;
+                        }
+                        
+                        /* Uniwersalny selektor dla wszystkich tekstów w expanderach (oprócz nagłówków) */
+                        div[data-testid="stExpander"] .streamlit-expanderContent {
+                            font-size: 1.5rem !important;
                             line-height: 1.6 !important;
                         }
                         
@@ -2504,6 +2519,19 @@ def display_quiz(quiz_data, passing_threshold=60):
             "completed": False,
             "total_points": 0
         }
+    else:
+        # Sprawdź czy liczba pytań się zmieniła i dostosuj listę odpowiedzi
+        expected_length = len(quiz_data['questions'])
+        current_length = len(st.session_state[quiz_id]["answers"])
+        
+        if current_length != expected_length:
+            # Dostosuj długość listy odpowiedzi
+            if current_length < expected_length:
+                # Dodaj brakujące None'y
+                st.session_state[quiz_id]["answers"].extend([None] * (expected_length - current_length))
+            else:
+                # Obetnij listę do odpowiedniej długości
+                st.session_state[quiz_id]["answers"] = st.session_state[quiz_id]["answers"][:expected_length]
     
     # Wyświetl wszystkie pytania
     quiz_type = quiz_data.get('type', 'buttons')
@@ -2536,7 +2564,10 @@ def display_quiz(quiz_data, passing_threshold=60):
                 st.markdown(labels_html, unsafe_allow_html=True)
             
             # Użyj poprzedniej odpowiedzi jako wartość domyślną, jeśli istnieje
-            current_value = st.session_state[quiz_id]["answers"][i]
+            if i < len(st.session_state[quiz_id]["answers"]):
+                current_value = st.session_state[quiz_id]["answers"][i]
+            else:
+                current_value = None
             if current_value is None:
                 current_value = default_val
             
@@ -2552,13 +2583,20 @@ def display_quiz(quiz_data, passing_threshold=60):
             )
             
             # Zapisz odpowiedź w czasie rzeczywistym
+            # Upewnij się, że lista jest wystarczająco długa przed zapisem
+            if i >= len(st.session_state[quiz_id]["answers"]):
+                st.session_state[quiz_id]["answers"].extend([None] * (i + 1 - len(st.session_state[quiz_id]["answers"])))
+            
             st.session_state[quiz_id]["answers"][i] = selected_value
             
         else:
             # Stary format z przyciskami/checkboxami
             if question.get('type') == 'multiple_choice':
                 st.write("**Wybierz wszystkie poprawne odpowiedzi:**")
-                current_answers = st.session_state[quiz_id]["answers"][i] or []
+                if i < len(st.session_state[quiz_id]["answers"]):
+                    current_answers = st.session_state[quiz_id]["answers"][i] or []
+                else:
+                    current_answers = []
                 selected_options = []
                 
                 for j, option in enumerate(question['options']):
@@ -2567,13 +2605,20 @@ def display_quiz(quiz_data, passing_threshold=60):
                     if st.checkbox(option, value=checked, key=checkbox_key):
                         selected_options.append(j)
                 
+                # Upewnij się, że lista jest wystarczająco długa przed zapisem
+                if i >= len(st.session_state[quiz_id]["answers"]):
+                    st.session_state[quiz_id]["answers"].extend([None] * (i + 1 - len(st.session_state[quiz_id]["answers"])))
+                
                 st.session_state[quiz_id]["answers"][i] = selected_options
                 if not selected_options:
                     all_answered = False
                     
             else:
                 # Single choice
-                current_answer = st.session_state[quiz_id]["answers"][i]
+                if i < len(st.session_state[quiz_id]["answers"]):
+                    current_answer = st.session_state[quiz_id]["answers"][i]
+                else:
+                    current_answer = None
                 selected_option = st.radio(
                     "Wybierz odpowiedź:",
                     options=range(len(question['options'])),
@@ -2581,6 +2626,10 @@ def display_quiz(quiz_data, passing_threshold=60):
                     index=current_answer if current_answer is not None else None,
                     key=f"{question_id}_radio"
                 )
+                
+                # Upewnij się, że lista jest wystarczająco długa przed zapisem
+                if i >= len(st.session_state[quiz_id]["answers"]):
+                    st.session_state[quiz_id]["answers"].extend([None] * (i + 1 - len(st.session_state[quiz_id]["answers"])))
                 
                 st.session_state[quiz_id]["answers"][i] = selected_option
                 if selected_option is None:

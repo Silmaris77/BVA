@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 701,
-    "degencoins": 691,
+    "xp": 717,
+    "degencoins": 707,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-07 11:22:27",
+    "last_login": "2025-10-07 13:30:55",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -29,7 +29,9 @@
         "neuroinspirator_guide",
         "neuroreaktor_guide",
         "chewing_gum_brain",
-        "neuroinnowator_guide"
+        "neuroinnowator_guide",
+        "stress_decision_making",
+        "stress_reduction_techniques"
       ],
       "favorites": []
     },
@@ -159,7 +161,12 @@
         "flashcards_completed": true,
         "flashcards_xp": 16,
         "flashcards_degencoins": 16,
-        "flashcards_timestamp": "2025-10-06 17:51:28"
+        "flashcards_timestamp": "2025-10-06 17:51:28",
+        "intro_quiz_xp_awarded": true,
+        "intro_quiz_completed": true,
+        "intro_quiz_xp": 16,
+        "intro_quiz_degencoins": 16,
+        "intro_quiz_timestamp": "2025-10-07 13:37:08"
       },
       "10. Wyzwania menedżerskie": {
         "intro_xp_awarded": true,
@@ -177,6 +184,22 @@
       }
     },
     "recent_activities": [
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "stress_reduction_techniques",
+          "inspiration_title": "Techniki redukcji stresu oparte na neuronaukach"
+        },
+        "timestamp": "2025-10-07T13:42:38.960287+00:00"
+      },
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "stress_decision_making",
+          "inspiration_title": "Wpływ stresu na podejmowanie decyzji biznesowych"
+        },
+        "timestamp": "2025-10-07T12:24:50.370093+00:00"
+      },
       {
         "type": "inspiration_read",
         "details": {

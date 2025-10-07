@@ -556,8 +556,8 @@ def show_available_lessons(device_type):
         
         lesson_count += 1
     
-    # Przycisk do wszystkich lekcji
-    if zen_button("Zobacz wszystkie lekcje", key="all_lessons_from_dashboard"):
+    # Przycisk do wszystkich lekcji - pełna szerokość
+    if zen_button("Zobacz wszystkie lekcje", key="all_lessons_from_dashboard", width='stretch'):
         st.session_state.page = 'lesson'
         scroll_to_top()
         st.rerun()
@@ -657,13 +657,16 @@ def show_investor_profile_compact(user_data):
             </div>
         </div>        """, unsafe_allow_html=True)
         
-        if zen_button("Zobacz szczegóły", key="profile_details"):
+        # Przycisk pełna szerokość
+        if zen_button("Zobacz szczegóły", key="profile_details", width='stretch'):
             st.session_state.page = 'profile'
+            st.session_state.profile_tab = 'neuroleader'  # Ustawia aktywną zakładkę na Typ Neurolidera
             scroll_to_top()
             st.rerun()
     else:
         st.info("Wykonaj test, aby odkryć swój profil")
-        if zen_button("Wykonaj test", key="take_test_sidebar"):
+        # Przycisk pełna szerokość
+        if zen_button("Wykonaj test", key="take_test_sidebar", width='stretch'):
             st.session_state.page = 'profile'
             scroll_to_top()
             st.rerun()
@@ -736,6 +739,30 @@ def show_dashboard():
     
     # Zastosuj style Material 3
     apply_material3_theme()
+    
+    # Dodaj CSS dla pełnej szerokości przycisków w dashboard
+    st.markdown("""
+    <style>
+    /* Zapewnij pełną szerokość przycisków w sekcjach dashboard */
+    .dashboard-section .stButton > button {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    
+    .dashboard-section .stButton {
+        width: 100% !important;
+    }
+    
+    /* Dodatkowe style dla przycisków w lesson_card */
+    .m3-lesson-card + div .stButton > button {
+        width: 100% !important;
+    }
+    
+    .m3-lesson-card + div .stButton {
+        width: 100% !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
     # Opcja wyboru urządzenia w trybie deweloperskim (tymczasowo włączone)
     # toggle_device_view()
