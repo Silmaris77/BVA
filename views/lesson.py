@@ -390,13 +390,61 @@ def show_lessons_content():
 
         /* Specjalne style dla urządzeń mobilnych */
         @media (max-width: 768px) {
+            /* Zwiększ szerokość głównego kontenera */
+            .main .block-container {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+                max-width: 100% !important;
+            }
+            
+            /* Zmniejsz marginesy i padding dla sekcji tekstowych */
+            .stMarkdown, .st-emotion-cache-1oe5cao {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                padding-left: 5px !important;
+                padding-right: 5px !important;
+            }
+            
+            /* Zwiększ line-height i zmniejsz font-size dla lepszej czytelności */
+            .st-emotion-cache-16idsys p, .stMarkdown p {
+                font-size: 0.9rem !important;
+                line-height: 1.8 !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            /* Specjalne style dla treści w gradientowych divach */
+            div[style*="linear-gradient"] {
+                margin-left: -10px !important;
+                margin-right: -10px !important;
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+            
+            /* Zmniejsz padding dla zagnieżdżonych kontenerów */
+            div[style*="padding: 25px"] {
+                padding: 15px 10px !important;
+            }
+            
+            /* Zwiększ szerokość tabs na mobile */
+            .stTabs [data-baseweb="tab-list"] {
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+            }
+            
+            .stTabs [data-baseweb="tab"] {
+                min-width: auto !important;
+                padding: 8px 12px !important;
+                font-size: 0.85rem !important;
+            }
+            
             /* Większy obszar klikalny dla expanderów */
             .st-expander {
                 margin-bottom: 12px;
             }
             
             .st-expander .st-emotion-cache-16idsys p {
-                font-size: 0.95rem; /* Nieco mniejsza czcionka na małych ekranach */
+                font-size: 0.9rem !important; /* Nieco mniejsza czcionka na małych ekranach */
+                line-height: 1.7 !important;
             }
             
             /* Zwiększony obszar kliknięcia dla nagłówka expandera */

@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 693,
-    "degencoins": 683,
+    "xp": 701,
+    "degencoins": 691,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-07 01:41:30",
+    "last_login": "2025-10-07 10:44:09",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -167,6 +167,13 @@
         "intro_xp": 7,
         "intro_degencoins": 7,
         "intro_timestamp": "2025-10-07 01:10:50"
+      },
+      "11. Od słów do zaufania - Conversational Intelligence_backup_sections": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 8,
+        "intro_degencoins": 8,
+        "intro_timestamp": "2025-10-07 10:44:19"
       }
     },
     "recent_activities": [
