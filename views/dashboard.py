@@ -25,6 +25,94 @@ from utils.time_utils import calculate_relative_time
 from utils.lesson_utils import get_lesson_title # Added import
 from utils.scroll_utils import scroll_to_top, scroll_to_top_smooth
 
+def save_daily_stats(username):
+    """Zapisuje statystyki użytkownika na koniec dnia"""
+    from datetime import datetime
+    
+    user_data = get_current_user_data(username)
+    today = datetime.now().strftime("%Y-%m-%d")
+    
+    current_stats = {
+        'xp': user_data.get('xp', 0),
+        'degencoins': user_data.get('degencoins', 0),
+        'level': user_data.get('level', 1),
+        'completed_lessons': len(user_data.get('completed_lessons', []))
+    }
+    
+    # Dodaj do historii dziennej
+    if 'daily_stats' not in user_data:
+        user_data['daily_stats'] = {}
+    
+    user_data['daily_stats'][today] = current_stats
+    
+    # Zapisz dane użytkownika
+    users_data = load_user_data()
+    users_data[username] = user_data
+    save_user_data(users_data)
+
+def calculate_stats_changes(username):
+    """Oblicza zmiany statystyk w stosunku do poprzedniego dnia"""
+    from datetime import datetime, timedelta
+    
+    user_data = get_current_user_data(username)
+    today = datetime.now().strftime("%Y-%m-%d")
+    yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    
+    # Pobierz obecne statystyki
+    current_stats = {
+        'xp': user_data.get('xp', 0),
+        'degencoins': user_data.get('degencoins', 0),
+        'level': user_data.get('level', 1),
+        'completed_lessons': len(user_data.get('completed_lessons', []))
+    }
+    
+    # Pobierz statystyki z wczoraj
+    daily_stats = user_data.get('daily_stats', {})
+    yesterday_stats = daily_stats.get(yesterday, {})
+    
+    # Oblicz zmiany
+    changes = {}
+    for key in current_stats:
+        yesterday_value = yesterday_stats.get(key, 0)
+        current_value = current_stats[key]
+        absolute_change = current_value - yesterday_value
+        
+        if yesterday_value > 0:
+            percentage_change = ((current_value - yesterday_value) / yesterday_value) * 100
+        else:
+            # Jeśli wczoraj było 0, a dziś jest coś - to 100% wzrost
+            percentage_change = 100 if current_value > 0 else 0
+            
+        changes[key] = {
+            'absolute': absolute_change,
+            'percentage': percentage_change
+        }
+    
+    return current_stats, changes
+
+def format_change_text(change_data):
+    """Formatuje tekst zmiany z odpowiednim kolorem"""
+    absolute = change_data['absolute']
+    percentage = change_data['percentage']
+    
+    if absolute > 0:
+        if percentage >= 100:
+            change_text = f"+{absolute}"
+        else:
+            change_text = f"+{percentage:.0f}%"
+        color = "#4ade80"  # zielony
+    elif absolute < 0:
+        if percentage <= -100:
+            change_text = f"{absolute}"
+        else:
+            change_text = f"{percentage:.0f}%"
+        color = "#f87171"  # czerwony
+    else:
+        change_text = "0"
+        color = "#9ca3af"  # szary
+    
+    return change_text, color
+
 def get_top_users(limit=5):
     """Get top users by XP"""
     users_data = load_user_data()
@@ -211,20 +299,23 @@ def get_daily_missions(username):
 
 def show_stats_section(user_data, device_type):
     """Sekcja z kartami statystyk - alternatywne podejście z kolumnami"""
-      # Oblicz dane statystyk
-    xp = user_data.get('xp', 0)
-    degencoins = user_data.get('degencoins', 0)
-    completed_lessons = len(user_data.get('completed_lessons', []))
-    missions_progress = get_daily_missions_progress(st.session_state.username)
-    streak = missions_progress['streak']
-    level = user_data.get('level', 1)
+    # Zapisz dzisiejsze statystyki (jeśli jeszcze nie zostały zapisane)
+    save_daily_stats(st.session_state.username)
     
-    # Oblicz trend XP (przykładowy +15%)
-    xp_change = "+15%"
-    degencoins_change = "+15%"
-    lessons_change = f"+{min(3, completed_lessons)}"
-    streak_change = f"+{min(1, streak)}"
-    level_change = f"+{max(0, level - 1)}"
+    # Oblicz prawdziwe zmiany statystyk
+    current_stats, changes = calculate_stats_changes(st.session_state.username)
+    
+    # Pobierz podstawowe dane
+    xp = current_stats['xp']
+    degencoins = current_stats['degencoins']
+    completed_lessons = current_stats['completed_lessons']
+    level = current_stats['level']
+    
+    # Formatuj zmiany z odpowiednimi kolorami
+    xp_change, xp_color = format_change_text(changes['xp'])
+    degencoins_change, degencoins_color = format_change_text(changes['degencoins'])
+    lessons_change, lessons_color = format_change_text(changes['completed_lessons'])
+    level_change, level_color = format_change_text(changes['level'])
     
     # Użyj przekazanego device_type zamiast wykrywać ponownie
     if device_type == 'mobile':
@@ -259,7 +350,7 @@ def show_stats_section(user_data, device_type):
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏆</div>
                     <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{xp}</div>
                     <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Punkty XP</div>
-                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{xp_change}</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {xp_color};">{xp_change}</div>
                 </div>
                 <div style="
                     text-align: center;
@@ -271,7 +362,7 @@ def show_stats_section(user_data, device_type):
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">🪙</div>
                     <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{degencoins}</div>
                     <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Monety</div>
-                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{degencoins_change}</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {degencoins_color};">{degencoins_change}</div>
                 </div>
                 <div style="
                     text-align: center;
@@ -283,7 +374,7 @@ def show_stats_section(user_data, device_type):
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
                     <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{level}</div>
                     <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Poziom</div>
-                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{level_change}</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {level_color};">{level_change}</div>
                 </div>
                 <div style="
                     text-align: center;
@@ -295,7 +386,7 @@ def show_stats_section(user_data, device_type):
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
                     <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{completed_lessons}</div>
                     <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Ukończone lekcje</div>
-                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{lessons_change}</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {lessons_color};">{lessons_change}</div>
                 </div>
             </div>
         </div>
@@ -304,10 +395,10 @@ def show_stats_section(user_data, device_type):
         # Desktop i tablet - 4 kolumny (usunięto "Aktualną passę")
         cols = st.columns(4)
         stats = [
-            {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change},
-            {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change},
-            {"icon": "⭐", "value": f"{level}", "label": "Poziom", "change": level_change},
-            {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change}
+            {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change, "color": xp_color},
+            {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change, "color": degencoins_color},
+            {"icon": "⭐", "value": f"{level}", "label": "Poziom", "change": level_change, "color": level_color},
+            {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change, "color": lessons_color}
         ]
         
         # Wygeneruj kartę w każdej kolumnie z gradientowym stylem
@@ -328,7 +419,7 @@ def show_stats_section(user_data, device_type):
                     <div style="font-size: 2rem; margin-bottom: 0.3rem;">{stat['icon']}</div>
                     <div style="font-size: 1.6rem; font-weight: bold; margin-bottom: 0.2rem;">{stat['value']}</div>
                     <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">{stat['label']}</div>
-                    <div style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">{stat['change']}</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {stat['color']};">{stat['change']}</div>
                 </div>
                 """, unsafe_allow_html=True)
 

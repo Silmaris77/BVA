@@ -671,31 +671,6 @@ def show_lessons_content():
                                     show_xp_notification(earned_xp, "za szczerą samorefleksję")
                         
                             st.success("✅ Dziękujemy za szczerą samorefleksję!")
-                        
-                            # Dodaj przycisk do ponownego przystąpienia do quizu samodiagnozy
-                            st.markdown("---")
-                            col1, col2, col3 = st.columns([1, 1, 1])
-                            with col2:
-                                if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
-                                    # Reset stanu quizu samodiagnozy
-                                    quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
-                                    
-                                    # Usuń stan główny quizu
-                                    if quiz_id in st.session_state:
-                                        del st.session_state[quiz_id]
-                                    
-                                    # Usuń wszystkie odpowiedzi na pytania
-                                    for i in range(len(quiz_data.get('questions', []))):
-                                        question_key = f"{quiz_id}_q{i}_selected"
-                                        if question_key in st.session_state:
-                                            del st.session_state[question_key]
-                                        
-                                        # Usuń także klucze suwaków jeśli istnieją
-                                        slider_key = f"{quiz_id}_q{i}_slider"
-                                        if slider_key in st.session_state:
-                                            del st.session_state[slider_key]
-                                    
-                                    st.rerun()
                     
                     elif 'sections' in lesson and 'opening_quiz' in lesson.get('sections', {}):
                         # Backward compatibility - stary format
@@ -2469,13 +2444,9 @@ def display_quiz(quiz_data, passing_threshold=60):
         st.markdown('<div class="quiz-results">', unsafe_allow_html=True)
         st.success(f"✅ Ukończyłeś już ten quiz w dniu: {completed_quiz_data.get('completion_date', 'nieznana data')}")
         
-        # Dla quizów autodiagnozy dodaj komunikat o samorefleksji
-        if is_self_diagnostic:
-            st.success("✅ Dziękujemy za szczerą samorefleksję!")
-        
         # Wyświetl poprzednie wyniki
         if 'answers' in completed_quiz_data:
-            with st.expander("🔍 Zobacz swoje poprzednie odpowiedzi"):
+            with st.expander("🔍 Zobacz raport z quizu"):
                 quiz_type = quiz_data.get('type', 'buttons')
                 
                 # Sprawdź czy mamy szczegółowe wyniki
@@ -2526,7 +2497,8 @@ def display_quiz(quiz_data, passing_threshold=60):
         
         # Przycisk ponownego przystąpienia na końcu
         st.markdown("---")
-        if st.button("🔄 Przystąp do quizu ponownie", key=f"{quiz_id}_restart"):
+        help_text = "Możesz ponownie wypełnić quiz aby zaktualizować swoją autorefleksję" if is_self_diagnostic else "Możesz ponownie przystąpić do quizu aby poprawić swój wynik"
+        if st.button("🔄 Przystąp do quizu ponownie", key=f"{quiz_id}_restart", help=help_text):
             # Wyczyść dane sesji dla tego quizu
             if quiz_id in st.session_state:
                 del st.session_state[quiz_id]
@@ -2752,45 +2724,15 @@ def display_quiz(quiz_data, passing_threshold=60):
             
             st.success(f"✅ Quiz został ukończony! Twoje wyniki zostały zapisane.")
             
-            # Dla quizów autodiagnozy dodaj komunikat o samorefleksji
-            if is_self_diagnostic:
-                st.success("✅ Dziękujemy za szczerą samorefleksję!")
-                
-                # Najpierw wyświetl spersonalizowane wyniki jeśli dostępne
-                if 'results_interpretation' in quiz_data:
-                    try:
-                        display_self_diagnostic_results(quiz_data, st.session_state[quiz_id]["answers"])
-                    except Exception as e:
-                        st.error(f"Błąd podczas wyświetlania spersonalizowanych wyników: {e}")
+            # Dla quizów autodiagnozy wyświetl spersonalizowane wyniki jeśli dostępne
+            if is_self_diagnostic and 'results_interpretation' in quiz_data:
+                try:
+                    display_self_diagnostic_results(quiz_data, st.session_state[quiz_id]["answers"])
+                except Exception as e:
+                    st.error(f"Błąd podczas wyświetlania spersonalizowanych wyników: {e}")
             
             # Wyświetl szczegółowe wyniki quizu
             display_quiz_results(quiz_data, question_results, total_points, correct_answers, is_self_diagnostic, quiz_type)
-            
-            # Przycisk "Przystąp ponownie"
-            st.markdown("---")
-            col1, col2, col3 = st.columns([1, 1, 1])
-            with col2:
-                if st.button("🔄 Przystąp ponownie", key=f"{quiz_id}_retry", help="Możesz ponownie przystąpić do quizu", width='stretch'):
-                    # Reset kompletnego stanu quizu
-                    if quiz_id in st.session_state:
-                        del st.session_state[quiz_id]
-                    
-                    # Usuń wszystkie odpowiedzi na pytania
-                    for i in range(len(quiz_data.get('questions', []))):
-                        question_key = f"{quiz_id}_q{i}_selected"
-                        if question_key in st.session_state:
-                            del st.session_state[question_key]
-                        
-                        # Usuń także klucze suwaków jeśli istnieją
-                        slider_key = f"{quiz_id}_q{i}_slider"
-                        if slider_key in st.session_state:
-                            del st.session_state[slider_key]
-                    
-                    # Usuń wyniki z persistent storage
-                    if 'user_data' in st.session_state and results_key in st.session_state.user_data:
-                        del st.session_state.user_data[results_key]
-                    
-                    st.rerun()
             
             st.rerun()
             
@@ -3402,9 +3344,6 @@ def display_conversational_intelligence_results(answers, questions):
 def display_quiz_results(quiz_data, question_results, total_points, correct_answers, is_self_diagnostic, quiz_type):
     """Wyświetla szczegółowe wyniki quizu po jego ukończeniu"""
     
-    st.markdown("---")
-    st.markdown("## 📊 Szczegółowe wyniki quizu")
-    
     # Statystyki główne
     total_questions = len(question_results)
     
@@ -3453,16 +3392,8 @@ def display_quiz_results(quiz_data, question_results, total_points, correct_answ
         """, unsafe_allow_html=True)
     
     else:
-        # Quiz autodiagnozy
-        st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #9C27B020 0%, #9C27B010 100%); 
-                    padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #9C27B0;'>
-            <h3 style='color: #9C27B0; margin: 0;'>🔍 Suma punktów autodiagnozy</h3>
-            <p style='font-size: 1.2rem; margin: 10px 0; color: #333;'>
-                <strong>{total_points} punktów</strong>
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+        # Quiz autodiagnozy - przejdź bezpośrednio do szczegółów odpowiedzi
+        pass
     
     # Szczegółowa analiza pytań
     if not is_self_diagnostic:
@@ -3560,6 +3491,6 @@ def display_quiz_results(quiz_data, question_results, total_points, correct_answ
             Warto wrócić do materiału lekcji i przejrzeć go jeszcze raz. Nie martw się - uczenie się to proces!
             """)
     
-    # Przycisk do powtórzenia quizu (już istnieje w kodzie wyżej)
+    # Wskazówka o ponownym przystąpieniu
     st.markdown("---")
     st.markdown("💡 **Wskazówka:** Możesz przystąpić do quizu ponownie, klikając przycisk '🔄 Przystąp ponownie' powyżej.")

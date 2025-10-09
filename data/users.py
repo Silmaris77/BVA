@@ -91,6 +91,11 @@ def login_user(username, password):
         # Zaktualizuj datę ostatniego logowania
         users_data[username]["last_login"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         save_user_data(users_data)
+        
+        # Zapisz dzisiejsze statystyki dla śledzenia zmian
+        from views.dashboard import save_daily_stats
+        save_daily_stats(username)
+        
         return users_data[username]
     return None
 
