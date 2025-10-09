@@ -7,7 +7,7 @@
     "degencoins": 707,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-07 13:30:55",
+    "last_login": "2025-10-09 16:04:34",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -640,11 +640,19 @@
     },
     "lesson_access": {
       "0. Wprowadzenie do neuroprzywództwa": true,
-      "1. Mózg emocjonalny_copy": true,
+      "1. Mózg emocjonalny_copy": false,
       "2. Chemia mózgu": false,
       "3. Model SCARF": false,
       "4. Model SEEDS": false,
-      "lesson_template": false
+      "lesson_template": false,
+      "10. Wyzwania menedżerskie": false,
+      "5. Stres i odporność psychiczna": false,
+      "6. Podejmowanie decyzji i ryzyko": false,
+      "7. Pamięć i uwaga": false,
+      "8. Kondycja mózgu": false,
+      "9. Kształtowanie nawyków": false,
+      "backup_lesson_11_20251007_004910": false,
+      "backup_lesson_11_20251007_010417": false
     },
     "test_scores": {
       "Neuroanalityk": 0,
@@ -661,11 +669,11 @@
     "user_id": "4c552312-1787-4a02-a06f-b6538e83adb7",
     "password": "admin",
     "degen_type": null,
-    "xp": 220,
-    "degencoins": 220,
+    "xp": 236,
+    "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-06 12:14:20",
+    "last_login": "2025-10-09 15:23:26",
     "completed_lessons": [
       "2. Chemia mózgu"
     ],
@@ -683,7 +691,18 @@
     "lesson_access": {
       "0. Wprowadzenie do neuroprzywództwa": true,
       "1. Mózg emocjonalny_copy": false,
-      "lesson_template": true
+      "lesson_template": true,
+      "10. Wyzwania menedżerskie": false,
+      "2. Chemia mózgu": false,
+      "3. Model SCARF": false,
+      "4. Model SEEDS": false,
+      "5. Stres i odporność psychiczna": false,
+      "6. Podejmowanie decyzji i ryzyko": false,
+      "7. Pamięć i uwaga": false,
+      "8. Kondycja mózgu": false,
+      "9. Kształtowanie nawyków": false,
+      "backup_lesson_11_20251007_004910": false,
+      "backup_lesson_11_20251007_010417": false
     },
     "lesson_progress": {
       "0. Wprowadzenie do neuroprzywództwa": {
@@ -734,6 +753,13 @@
         "summary_xp": 5,
         "summary_degencoins": 5,
         "summary_timestamp": "2025-08-27 19:20:53"
+      },
+      "11. Od słów do zaufania - Conversational Intelligence": {
+        "intro_quiz_xp_awarded": true,
+        "intro_quiz_completed": true,
+        "intro_quiz_xp": 16,
+        "intro_quiz_degencoins": 16,
+        "intro_quiz_timestamp": "2025-10-07 17:47:23"
       }
     },
     "recent_activities": [
@@ -1306,6 +1332,39 @@
         "practical_exercises_degencoins": 60,
         "practical_exercises_timestamp": "2025-09-03 15:24:54"
       }
+    }
+  },
+  "Degen": {
+    "user_id": "9b7cddd3-1d97-4821-8192-1e43d35348ff",
+    "password": "Degen",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-09",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
     }
   }
 }

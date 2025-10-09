@@ -222,7 +222,7 @@ def show_admin_dashboard():
             title='Aktywność użytkowników: rejestracje i logowania (ostatnie 30 dni)'
         )
         
-        st.altair_chart(chart, width='stretch')
+        st.altair_chart(chart)
         
         # Rozkład typów neuroliderów
         st.subheader("Rozkład typów neuroliderów")
@@ -383,7 +383,7 @@ def show_admin_dashboard():
                 title='Top 10 najpopularniejszych lekcji'
             )
             
-            st.altair_chart(chart, width='stretch')
+            st.altair_chart(chart)
         else:
             st.info("Brak danych o ukończonych lekcjach.")
     
@@ -431,7 +431,7 @@ def show_admin_dashboard():
                 title='Średnie wyniki testów wg typu neuroleader'
             )
             
-            st.altair_chart(chart, width='stretch')
+            st.altair_chart(chart)
             
             # Tabela z wynikami testów
             st.subheader("Szczegółowe wyniki testów")

@@ -874,21 +874,21 @@ def data_chart(data, chart_type="bar", title=None, x_label=None, y_label=None, h
             x=alt.X(data.columns[0], title=x_label or data.columns[0]),
             y=alt.Y(data.columns[1], title=y_label or data.columns[1])
         ).properties(height=height)
-        st.altair_chart(chart, width='stretch')
+        st.altair_chart(chart)
     
     elif chart_type == "line":
         chart = alt.Chart(data).mark_line().encode(
             x=alt.X(data.columns[0], title=x_label or data.columns[0]),
             y=alt.Y(data.columns[1], title=y_label or data.columns[1])
         ).properties(height=height)
-        st.altair_chart(chart, width='stretch')
+        st.altair_chart(chart)
     
     elif chart_type == "area":
         chart = alt.Chart(data).mark_area().encode(
             x=alt.X(data.columns[0], title=x_label or data.columns[0]),
             y=alt.Y(data.columns[1], title=y_label or data.columns[1])
         ).properties(height=height)
-        st.altair_chart(chart, width='stretch')
+        st.altair_chart(chart)
     elif chart_type == "pie":
         # For pie charts, we use matplotlib
         fig, ax = plt.subplots()

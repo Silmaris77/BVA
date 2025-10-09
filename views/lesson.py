@@ -655,7 +655,7 @@ def show_lessons_content():
                         "quiz_samodiagnozy" in lesson["intro"] and 
                         "questions" in lesson["intro"]["quiz_samodiagnozy"]):
                         
-                        st.info("🪞 **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako inwestora. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
+                        st.info("🪞 **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako lidera. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
                         
                         quiz_data = lesson["intro"]["quiz_samodiagnozy"]
                         quiz_complete, _, earned_points = display_quiz(quiz_data)
@@ -2441,6 +2441,11 @@ def display_quiz(quiz_data, passing_threshold=60):
         st.warning("Ten quiz nie zawiera żadnych pytań.")
         return False, False, 0
         
+    # DEBUG - Wyświetl podstawowe informacje o quizie na początku
+    st.warning("🔧 DEBUG: Wewnątrz display_quiz funkcji")
+    st.write(f"Quiz title: {quiz_data.get('title', 'No title')}")
+    st.write(f"Number of questions: {len(quiz_data.get('questions', []))}")
+    
     st.markdown(f"<h2>{quiz_data.get('title', 'Quiz')}</h2>", unsafe_allow_html=True)
     
     if "description" in quiz_data:
@@ -2464,31 +2469,63 @@ def display_quiz(quiz_data, passing_threshold=60):
         st.markdown('<div class="quiz-results">', unsafe_allow_html=True)
         st.success(f"✅ Ukończyłeś już ten quiz w dniu: {completed_quiz_data.get('completion_date', 'nieznana data')}")
         
+        # Dla quizów autodiagnozy dodaj komunikat o samorefleksji
+        if is_self_diagnostic:
+            st.success("✅ Dziękujemy za szczerą samorefleksję!")
+        
         # Wyświetl poprzednie wyniki
         if 'answers' in completed_quiz_data:
             with st.expander("🔍 Zobacz swoje poprzednie odpowiedzi"):
                 quiz_type = quiz_data.get('type', 'buttons')
-                if quiz_type == 'slider':
-                    scale = quiz_data.get('scale', {'min': 1, 'max': 5})
-                    labels = scale.get('labels', {})
+                
+                # Sprawdź czy mamy szczegółowe wyniki
+                if 'question_results' in completed_quiz_data:
+                    # Nowy format z szczegółowymi wynikami
+                    question_results = completed_quiz_data['question_results']
+                    total_points = completed_quiz_data.get('total_points', 0)
+                    correct_answers = completed_quiz_data.get('correct_answers', 0)
                     
-                    total_points = 0
-                    for i, (question, answer) in enumerate(zip(quiz_data['questions'], completed_quiz_data['answers'])):
-                        st.write(f"**Pytanie {i+1}:** {question['question']}")
-                        answer_label = labels.get(str(answer), str(answer))
-                        st.write(f"**Odpowiedź:** {answer} - {answer_label}")
-                        total_points += answer
-                        st.markdown("---")
+                    # Dla quizów autodiagnozy - najpierw spersonalizowane wyniki Conversational Intelligence
+                    if is_self_diagnostic:
+                        quiz_title_lower = quiz_data.get('title', '').lower()
+                        conditions = [
+                            'conversational intelligence' in quiz_title_lower,
+                            'c-iq' in quiz_title_lower,
+                            'od słów do zaufania' in quiz_title_lower,
+                            'jak ważne może być' in quiz_title_lower
+                        ]
+                        
+                        if any(conditions):
+                            display_self_diagnostic_results(quiz_data, completed_quiz_data['answers'])
                     
-                    st.info(f"**Łączna suma punktów:** {total_points}/{len(quiz_data['questions']) * scale['max']}")
+                    # Potem szczegółowe wyniki quizu
+                    display_quiz_results(quiz_data, question_results, total_points, correct_answers, is_self_diagnostic, quiz_type)
+                
                 else:
-                    # Stary format z opcjami
-                    for i, (question, answer) in enumerate(zip(quiz_data['questions'], completed_quiz_data['answers'])):
-                        st.write(f"**Pytanie {i+1}:** {question['question']}")
-                        if isinstance(answer, int) and answer < len(question.get('options', [])):
-                            st.write(f"**Odpowiedź:** {question['options'][answer]}")
-                        st.markdown("---")
+                    # Stary format - zachowaj kompatybilność
+                    if quiz_type == 'slider':
+                        scale = quiz_data.get('scale', {'min': 1, 'max': 5})
+                        labels = scale.get('labels', {})
+                        
+                        total_points = 0
+                        for i, (question, answer) in enumerate(zip(quiz_data['questions'], completed_quiz_data['answers'])):
+                            st.write(f"**Pytanie {i+1}:** {question['question']}")
+                            answer_label = labels.get(str(answer), str(answer))
+                            st.write(f"**Odpowiedź:** {answer} - {answer_label}")
+                            total_points += answer
+                            st.markdown("---")
+                        
+                        st.info(f"**Łączna suma punktów:** {total_points}/{len(quiz_data['questions']) * scale['max']}")
+                    else:
+                        # Stary format z opcjami
+                        for i, (question, answer) in enumerate(zip(quiz_data['questions'], completed_quiz_data['answers'])):
+                            st.write(f"**Pytanie {i+1}:** {question['question']}")
+                            if isinstance(answer, int) and answer < len(question.get('options', [])):
+                                st.write(f"**Odpowiedź:** {question['options'][answer]}")
+                            st.markdown("---")
         
+        # Przycisk ponownego przystąpienia na końcu
+        st.markdown("---")
         if st.button("🔄 Przystąp do quizu ponownie", key=f"{quiz_id}_restart"):
             # Wyczyść dane sesji dla tego quizu
             if quiz_id in st.session_state:
@@ -2650,26 +2687,48 @@ def display_quiz(quiz_data, passing_threshold=60):
             # Oblicz wyniki
             total_points = 0
             correct_answers = 0
+            question_results = []  # Szczegółowe wyniki dla każdego pytania
             
             for i, (question, answer) in enumerate(zip(quiz_data['questions'], st.session_state[quiz_id]["answers"])):
+                question_result = {
+                    'question': question['question'],
+                    'user_answer': answer,
+                    'is_correct': False,
+                    'points_earned': 0
+                }
+                
                 if quiz_type == 'slider':
+                    question_result['points_earned'] = answer
                     total_points += answer
                 else:
                     if is_self_diagnostic:
                         # Dla quizów autodiagnozy: opcje 0-4 = 1-5 punktów
                         if isinstance(answer, list):
-                            total_points += sum(j + 1 for j in answer)
+                            points = sum(j + 1 for j in answer)
+                            question_result['points_earned'] = points
+                            total_points += points
                         else:
-                            total_points += answer + 1
+                            points = answer + 1
+                            question_result['points_earned'] = points
+                            total_points += points
                     else:
                         # Dla quizów testowych
                         correct_answer = question.get('correct_answer')
-                        if correct_answer is not None and answer == correct_answer:
-                            correct_answers += 1
+                        if correct_answer is not None:
+                            if answer == correct_answer:
+                                correct_answers += 1
+                                question_result['is_correct'] = True
+                                question_result['points_earned'] = 1
+                            question_result['correct_answer'] = correct_answer
                         elif question.get('type') == 'multiple_choice':
                             correct_answers_list = question.get('correct_answers', [])
                             if set(answer) == set(correct_answers_list):
                                 correct_answers += 1
+                                question_result['is_correct'] = True
+                                question_result['points_earned'] = 1
+                            question_result['correct_answers'] = correct_answers_list
+                
+                question_results.append(question_result)
             
             # Zapisz wyniki do danych użytkownika (persistent storage)
             if 'user_data' not in st.session_state:
@@ -2683,7 +2742,8 @@ def display_quiz(quiz_data, passing_threshold=60):
                 'total_points': total_points,
                 'correct_answers': correct_answers,
                 'completion_date': completion_date,
-                'quiz_type': quiz_type
+                'quiz_type': quiz_type,
+                'question_results': question_results  # Dodaj szczegółowe wyniki
             }
             
             # Oznacz quiz jako ukończony
@@ -2692,16 +2752,19 @@ def display_quiz(quiz_data, passing_threshold=60):
             
             st.success(f"✅ Quiz został ukończony! Twoje wyniki zostały zapisane.")
             
-            # Wyświetl podsumowanie
-            if quiz_type == 'slider':
-                scale = quiz_data.get('scale', {'min': 1, 'max': 5})
-                max_possible = len(quiz_data['questions']) * scale['max']
-                st.info(f"📊 **Łączna suma punktów:** {total_points}/{max_possible}")
-            elif is_self_diagnostic:
-                st.info(f"📊 **Suma punktów autodiagnozy:** {total_points}")
-            else:
-                percentage = (correct_answers / len(quiz_data['questions'])) * 100
-                st.info(f"📊 **Wynik:** {correct_answers}/{len(quiz_data['questions'])} ({percentage:.1f}%)")
+            # Dla quizów autodiagnozy dodaj komunikat o samorefleksji
+            if is_self_diagnostic:
+                st.success("✅ Dziękujemy za szczerą samorefleksję!")
+                
+                # Najpierw wyświetl spersonalizowane wyniki jeśli dostępne
+                if 'results_interpretation' in quiz_data:
+                    try:
+                        display_self_diagnostic_results(quiz_data, st.session_state[quiz_id]["answers"])
+                    except Exception as e:
+                        st.error(f"Błąd podczas wyświetlania spersonalizowanych wyników: {e}")
+            
+            # Wyświetl szczegółowe wyniki quizu
+            display_quiz_results(quiz_data, question_results, total_points, correct_answers, is_self_diagnostic, quiz_type)
             
             # Przycisk "Przystąp ponownie"
             st.markdown("---")
@@ -3092,7 +3155,411 @@ def get_lesson_requirements(lesson_id):
                 else:
                     if passing_threshold > 60:
                         st.error(f"Aby przejść dalej, musisz uzyskać przynajmniej {passing_threshold}% poprawnych odpowiedzi. Spróbuj ponownie!")
-                    else:                        st.warning("Spróbuj jeszcze raz - możesz to zrobić lepiej!")
+                    else:
+                        st.warning("Spróbuj jeszcze raz - możesz to zrobić lepiej!")
             
-            return is_completed, is_passed, earned_points    # Quiz nie jest jeszcze ukończony
+            return is_completed, is_passed, earned_points
+    
+    # Quiz nie jest jeszcze ukończony
     return is_completed, False, 0
+
+
+def display_self_diagnostic_results(quiz_data, answers):
+    """Uniwersalna funkcja do wyświetlania wyników quizów autodiagnozy na podstawie konfiguracji z JSON"""
+    
+    if 'results_interpretation' not in quiz_data:
+        st.info("Brak konfiguracji wyników dla tego quizu samodiagnozy.")
+        return
+    
+    interpretation = quiz_data['results_interpretation']
+    
+    st.markdown("---")
+    st.markdown("## 🎯 Twoje spersonalizowane wyniki")
+    
+    # Oblicz wynik na podstawie tej samej metody co główny system
+    # Opcje 0-4 = 1-5 punktów (answer + 1)
+    total_score = sum(answer + 1 for answer in answers)
+    
+    # Znajdź odpowiedni poziom wyników
+    matching_level = None
+    for level in interpretation['levels']:
+        if level['min_score'] <= total_score <= level['max_score']:
+            matching_level = level
+            break
+    
+    if not matching_level:
+        st.error(f"Nie znaleziono odpowiedniego poziomu dla wyniku: {total_score}")
+        return
+    
+    # Określ kolor na podstawie nazwy poziomu
+    color_map = {
+        "Bardzo wysoka": "#e53e3e",  # czerwony
+        "Wysoka": "#dd6b20",         # pomarańczowy  
+        "Średnia": "#3182ce",        # niebieski
+        "Niska": "#38a169"           # zielony
+    }
+    level_color = color_map.get(matching_level['name'], "#3182ce")
+    
+    # Główny wynik
+    relevance_icons = {
+        "Bardzo wysoka": "🔥",
+        "Wysoka": "⭐", 
+        "Średnia": "💡",
+        "Niska": "🌱"
+    }
+    icon = relevance_icons.get(matching_level['name'], "🎯")
+    
+    st.markdown(f"""
+    <div style='background: linear-gradient(135deg, {level_color} 0%, {level_color}CC 100%); 
+                padding: 25px; border-radius: 15px; margin: 20px 0; color: white; text-align: center;'>
+        <h2 style='margin: 0; color: white;'>{icon} ISTOTNOŚĆ: {matching_level['name'].upper()}</h2>
+        <p style='font-size: 1.2rem; margin: 15px 0; opacity: 0.9;'>
+            Wynik: <strong>{total_score}/{len(answers) * 4}</strong> punktów
+        </p>
+        <p style='font-size: 1rem; margin: 0; opacity: 0.8;'>
+            Poziom istotności tematyki lekcji dla Twoich potrzeb zawodowych
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Szczegółowa analiza
+    st.markdown(f"### {matching_level['title']}")
+    st.markdown(matching_level['description'])
+    
+    # Kluczowe wnioski
+    if 'insights' in matching_level and matching_level['insights']:
+        st.markdown("#### 💡 Kluczowe wnioski dla Ciebie:")
+        for insight in matching_level['insights']:
+            st.markdown(f"• {insight}")
+    
+    # Rekomendacje
+    if 'recommendations' in matching_level and matching_level['recommendations']:
+        st.markdown("#### 🎯 Konkretne rekomendacje:")
+        for i, recommendation in enumerate(matching_level['recommendations'], 1):
+            st.markdown(f"{i}. {recommendation}")
+    
+    # Następne kroki
+    if 'next_steps' in matching_level:
+        st.markdown("#### 🚀 Twoje następne kroki:")
+        st.info(matching_level['next_steps'])
+
+
+def display_conversational_intelligence_results(answers, questions):
+    """Wyświetla spersonalizowane wyniki quizu samodiagnozy dla Conversational Intelligence"""
+    
+    st.markdown("---")
+    st.markdown("## 🎯 Twoje spersonalizowane wyniki")
+    
+    # Oblicz punkty dla każdej kategorii
+    high_relevance_count = sum(1 for answer in answers if answer >= 2)  # odpowiedzi 2 i 3 (indeksy)
+    medium_relevance_count = sum(1 for answer in answers if answer == 1)  # odpowiedź 1 (indeks)
+    low_relevance_count = sum(1 for answer in answers if answer == 0)  # odpowiedź 0 (indeks)
+    
+    total_questions = len(questions)
+    high_percentage = (high_relevance_count / total_questions) * 100
+    
+    # Określ poziom relevantności
+    if high_percentage >= 75:
+        relevance_level = "BARDZO WYSOKA"
+        relevance_color = "#d32f2f"
+        relevance_icon = "🔥"
+    elif high_percentage >= 50:
+        relevance_level = "WYSOKA"
+        relevance_color = "#f57c00"
+        relevance_icon = "⭐"
+    elif high_percentage >= 25:
+        relevance_level = "ŚREDNIA"
+        relevance_color = "#1976d2"
+        relevance_icon = "💡"
+    else:
+        relevance_level = "NISKA"
+        relevance_color = "#388e3c"
+        relevance_icon = "✅"
+    
+    # Główny wynik
+    st.markdown(f"""
+    <div style='background: linear-gradient(135deg, {relevance_color} 0%, {relevance_color}CC 100%); 
+                padding: 25px; border-radius: 15px; margin: 20px 0; color: white; text-align: center;'>
+        <h2 style='margin: 0; color: white;'>{relevance_icon} RELEVANTNOŚĆ: {relevance_level}</h2>
+        <p style='font-size: 1.2rem; margin: 15px 0; opacity: 0.9;'>
+            Conversational Intelligence ma dla Ciebie <strong>{relevance_level.lower()}</strong> wartość praktyczną
+        </p>
+        <p style='font-size: 1rem; margin: 0; opacity: 0.8;'>
+            {high_relevance_count}/{total_questions} obszarów wskazuje na wysoką potrzebę rozwoju C-IQ
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Szczegółowa analiza na podstawie odpowiedzi
+    if high_percentage >= 75:
+        st.markdown("""
+        ### 🔥 Conversational Intelligence to dla Ciebie GAME CHANGER!
+        
+        **Twoja diagnoza pokazuje, że:**
+        - Borykasz się z wyzwaniami komunikacyjnymi, które wpływają na Twoje cele zawodowe
+        - Umiejętności C-IQ mogą być kluczem do przełomu w Twoim przywództwie
+        - Inwestycja w rozwój inteligencji konwersacyjnej może przynieść Ci bardzo szybkie i wymierne korzyści
+        
+        **Priorytetowe obszary rozwoju dla Ciebie:**
+        ✅ **Natychmiastowe zastosowanie** - rozpocznij od jednej trudnej rozmowy tygodniowo  
+        ✅ **Głębokie studiowanie** - przeanalizuj wszystkie poziomy rozmów w praktyce  
+        ✅ **Feedback od zespołu** - poproś o ocenę, jak zmienia się atmosfera rozmów  
+        """)
+        
+    elif high_percentage >= 50:
+        st.markdown("""
+        ### ⭐ Conversational Intelligence to solidna inwestycja w Twój rozwój
+        
+        **Twoja diagnoza pokazuje, że:**
+        - Masz kilka obszarów, gdzie C-IQ może realnie pomóc
+        - Widzisz potencjał w lepszych rozmowach dla osiągnięcia celów
+        - Rozwój tych umiejętności może wzmocnić Twoje mocne strony przywódcze
+        
+        **Rekomendowany plan rozwoju:**
+        ✅ **Stopniowe wdrażanie** - wybierz 2-3 techniki C-IQ do praktykowania  
+        ✅ **Obserwacja rezultatów** - monitoruj jak zmieniają się Twoje relacje  
+        ✅ **Eksperymentowanie** - testuj różne poziomy rozmów w bezpiecznych sytuacjach  
+        """)
+        
+    elif high_percentage >= 25:
+        st.markdown("""
+        ### 💡 Conversational Intelligence to użyteczne uzupełnienie Twoich umiejętności
+        
+        **Twoja diagnoza pokazuje, że:**
+        - Masz solidne podstawy komunikacyjne
+        - C-IQ może pomóc w kilku konkretnych sytuacjach
+        - Będzie to raczej rozwijanie istniejących mocnych stron niż radykalna zmiana
+        
+        **Sugerowane podejście:**
+        ✅ **Selektywne uczenie** - skup się na technikach najbardziej przydatnych w Twojej roli  
+        ✅ **Praktyczne zastosowanie** - używaj C-IQ w konkretnych, trudnych sytuacjach  
+        ✅ **Mentoring innych** - przekazuj te umiejętności członkom zespołu  
+        """)
+        
+    else:
+        st.markdown("""
+        ### ✅ Masz już solidne fundamenty - C-IQ to opcjonalne wzbogacenie
+        
+        **Twoja diagnoza pokazuje, że:**
+        - Prawdopodobnie już stosujesz wiele zasad C-IQ intuicyjnie
+        - Twoje obecne podejście do komunikacji jest skuteczne
+        - C-IQ może służyć głównie jako systematyzacja wiedzy, którą już posiadasz
+        
+        **Zalecenia:**
+        ✅ **Świadome stosowanie** - nadaj nazwy temu, co już robisz dobrze  
+        ✅ **Dzielenie się wiedzą** - ucz innych skutecznych wzorców komunikacji  
+        ✅ **Ciągłe doskonalenie** - stosuj C-IQ w wyjątkowo trudnych sytuacjach  
+        """)
+    
+    # Kluczowe wnioski i następne kroki
+    st.markdown("### 🎯 Twoje następne kroki")
+    
+    # Analizuj konkretne odpowiedzi i daj spersonalizowane wskazówki
+    problem_areas = []
+    for i, answer in enumerate(answers):
+        if answer >= 2:  # Wysokie wskazanie potrzeby
+            if i == 0:
+                problem_areas.append("**Defensywność rozmówców** - ludzie często się 'zamykają' w rozmowach z Tobą")
+            elif i == 1:
+                problem_areas.append("**Budowanie zaufania** - Twoje cele zawodowe silnie zależą od jakości relacji")
+            elif i == 2:
+                problem_areas.append("**Motywowanie zespołu** - tracisz energię na napięcia komunikacyjne")
+            elif i == 3:
+                problem_areas.append("**Zarządzanie konfliktem** - konflikty eskalują zamiast się konstruktywnie rozwiązywać")
+            elif i == 4:
+                problem_areas.append("**Konstruktywny feedback** - Twoje uwagi wywołują opór zamiast motywować")
+            elif i == 5:
+                problem_areas.append("**Współtworzenie** - widzisz potencjał w przejściu od przekonywania do współpracy")
+            elif i == 6:
+                problem_areas.append("**Kultura zespołu** - chcesz aktywnie wpływać na atmosferę przez rozmowy")
+            elif i == 7:
+                problem_areas.append("**Filozofia 'mikrozmian'** - inspiruje Cię idea transformacji przez codzienne interakcje")
+    
+    if problem_areas:
+        st.markdown("**Twoje priorytetowe obszary rozwoju:**")
+        for area in problem_areas:
+            st.markdown(f"• {area}")
+    
+    # Konkretne rekomendacje akcji
+    st.markdown("""
+    ### 🚀 Konkretne akcje na najbliższy tydzień:
+    
+    1. **Jedna świadoma rozmowa dziennie** - wybierz jedną interakcję i zastosuj zasady Poziomu III (ciekawość zamiast oceny)
+    2. **Obserwuj neurochemię** - zwracaj uwagę, kiedy widzisz napięcie u rozmówcy i jak możesz je rozładować
+    3. **Eksperymentuj z pytaniami** - zamiast mówić "nie", pytaj "jak moglibyśmy to rozwiązać?"
+    
+    **Pamiętaj:** Według Judith Glaser, każda rozmowa to szansa na mikro-zmianę. Już jedna świadoma interakcja dziennie może zacząć transformować Twoją rzeczywistość zawodową! 💪
+    """)
+    
+    # Dodaj motywujący cytat
+    st.markdown("""
+    ---
+    > *"Dotarcie do następnego poziomu wielkości zależy od jakości kultury, która zależy od jakości relacji, a te – od jakości rozmów."*  
+    > **— Judith Glaser**
+    """, unsafe_allow_html=True)
+
+
+def display_quiz_results(quiz_data, question_results, total_points, correct_answers, is_self_diagnostic, quiz_type):
+    """Wyświetla szczegółowe wyniki quizu po jego ukończeniu"""
+    
+    st.markdown("---")
+    st.markdown("## 📊 Szczegółowe wyniki quizu")
+    
+    # Statystyki główne
+    total_questions = len(question_results)
+    
+    if not is_self_diagnostic and quiz_type != 'slider':
+        # Quiz testowy - pokazuj wynik procentowy
+        percentage = (correct_answers / total_questions) * 100
+        
+        # Określ kolor na podstawie wyniku
+        if percentage >= 75:
+            color = "#4CAF50"  # zielony
+            status_icon = "🎉"
+            status_text = "Świetny wynik!"
+        elif percentage >= 60:
+            color = "#FF9800"  # pomarańczowy
+            status_icon = "👍"
+            status_text = "Dobry wynik!"
+        else:
+            color = "#f44336"  # czerwony
+            status_icon = "💪"
+            status_text = "Możesz lepiej!"
+        
+        st.markdown(f"""
+        <div style='background: linear-gradient(135deg, {color}20 0%, {color}10 100%); 
+                    padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid {color};'>
+            <h3 style='color: {color}; margin: 0;'>{status_icon} {status_text}</h3>
+            <p style='font-size: 1.2rem; margin: 10px 0; color: #333;'>
+                <strong>Wynik: {correct_answers}/{total_questions} ({percentage:.1f}%)</strong>
+            </p>
+            <p style='margin: 0; color: #666;'>
+                Poprawne odpowiedzi: {correct_answers} | Błędne odpowiedzi: {total_questions - correct_answers}
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    elif quiz_type == 'slider':
+        # Quiz ze sliderami
+        max_possible = total_questions * max([q.get('max_value', 5) for q in quiz_data.get('questions', [])])
+        st.markdown(f"""
+        <div style='background: linear-gradient(135deg, #2196F320 0%, #2196F310 100%); 
+                    padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #2196F3;'>
+            <h3 style='color: #2196F3; margin: 0;'>📈 Łączna suma punktów</h3>
+            <p style='font-size: 1.2rem; margin: 10px 0; color: #333;'>
+                <strong>{total_points}/{max_possible} punktów</strong>
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    else:
+        # Quiz autodiagnozy
+        st.markdown(f"""
+        <div style='background: linear-gradient(135deg, #9C27B020 0%, #9C27B010 100%); 
+                    padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #9C27B0;'>
+            <h3 style='color: #9C27B0; margin: 0;'>🔍 Suma punktów autodiagnozy</h3>
+            <p style='font-size: 1.2rem; margin: 10px 0; color: #333;'>
+                <strong>{total_points} punktów</strong>
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Szczegółowa analiza pytań
+    if not is_self_diagnostic:
+        st.markdown("### 📝 Analiza odpowiedzi na poszczególne pytania")
+        
+        for i, result in enumerate(question_results):
+            with st.expander(f"Pytanie {i+1}: {result['question'][:60]}..." if len(result['question']) > 60 else f"Pytanie {i+1}: {result['question']}", expanded=False):
+                
+                # Wyświetl pytanie
+                st.markdown(f"**Pytanie:** {result['question']}")
+                
+                # Wyświetl odpowiedź użytkownika
+                question_data = quiz_data['questions'][i]
+                user_answer = result['user_answer']
+                
+                if isinstance(user_answer, list):
+                    # Multiple choice
+                    user_answer_text = ", ".join([question_data['options'][idx] for idx in user_answer])
+                    st.markdown(f"**Twoja odpowiedź:** {user_answer_text}")
+                    
+                    # Pokaż poprawne odpowiedzi
+                    if 'correct_answers' in result:
+                        correct_text = ", ".join([question_data['options'][idx] for idx in result['correct_answers']])
+                        st.markdown(f"**Poprawne odpowiedzi:** {correct_text}")
+                else:
+                    # Single choice
+                    if user_answer is not None and user_answer < len(question_data.get('options', [])):
+                        user_answer_text = question_data['options'][user_answer]
+                        st.markdown(f"**Twoja odpowiedź:** {user_answer_text}")
+                        
+                        # Pokaż poprawną odpowiedź
+                        if 'correct_answer' in result and result['correct_answer'] is not None:
+                            correct_text = question_data['options'][result['correct_answer']]
+                            st.markdown(f"**Poprawna odpowiedź:** {correct_text}")
+                
+                # Status odpowiedzi
+                if result['is_correct']:
+                    st.success("✅ Odpowiedź poprawna!")
+                else:
+                    st.error("❌ Odpowiedź niepoprawna")
+                    
+                    # Dodaj wyjaśnienie, jeśli jest dostępne
+                    if 'explanation' in question_data:
+                        st.info(f"💡 **Wyjaśnienie:** {question_data['explanation']}")
+    
+    else:
+        # Dla quizów autodiagnozy - pokaż podsumowanie odpowiedzi i spersonalizowane wyniki
+        st.markdown("### 🔍 Twoje odpowiedzi")
+        
+        with st.expander("Zobacz szczegóły swoich odpowiedzi", expanded=False):
+            # Podstawowe szczegóły odpowiedzi
+            for i, result in enumerate(question_results):
+                st.markdown(f"**Pytanie {i+1}:** {result['question']}")
+                
+                question_data = quiz_data['questions'][i]
+                user_answer = result['user_answer']
+                
+                if isinstance(user_answer, list):
+                    # Multiple choice
+                    user_answer_text = ", ".join([question_data['options'][idx] for idx in user_answer])
+                    st.markdown(f"**Odpowiedź:** {user_answer_text} ({result['points_earned']} pkt)")
+                else:
+                    # Single choice
+                    if user_answer is not None and user_answer < len(question_data.get('options', [])):
+                        user_answer_text = question_data['options'][user_answer]
+                        st.markdown(f"**Odpowiedź:** {user_answer_text} ({result['points_earned']} pkt)")
+                
+                st.markdown("---")
+            
+            # Sprawdź czy to quiz Conversational Intelligence - spersonalizowane wyniki są już wyświetlane wcześniej
+            # więc tutaj je pomijamy
+            pass
+    
+    # Wskazówki i następne kroki
+    if not is_self_diagnostic:
+        if correct_answers == total_questions:
+            st.balloons()
+            st.markdown("""
+            ### 🎉 Gratulacje!
+            Uzyskałeś/aś maksymalny wynik! Doskonale opanowałeś/aś materiał z tej lekcji.
+            """)
+        elif correct_answers / total_questions >= 0.75:
+            st.markdown("""
+            ### 👏 Bardzo dobry wynik!
+            Świetnie radzisz sobie z materiałem. Może warto przejrzeć pytania, na które odpowiedziałeś/aś niepoprawnie.
+            """)
+        elif correct_answers / total_questions >= 0.5:
+            st.markdown("""
+            ### 📚 Dobra robota!
+            Masz solidne podstawy, ale warto jeszcze raz przejrzeć materiał lekcji, szczególnie tematy z pytań, na które odpowiedziałeś/aś niepoprawnie.
+            """)
+        else:
+            st.markdown("""
+            ### 💪 Czas na powtórkę!
+            Warto wrócić do materiału lekcji i przejrzeć go jeszcze raz. Nie martw się - uczenie się to proces!
+            """)
+    
+    # Przycisk do powtórzenia quizu (już istnieje w kodzie wyżej)
+    st.markdown("---")
+    st.markdown("💡 **Wskazówka:** Możesz przystąpić do quizu ponownie, klikając przycisk '🔄 Przystąp ponownie' powyżej.")
