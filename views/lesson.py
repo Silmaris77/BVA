@@ -1042,6 +1042,12 @@ def show_lessons_content():
                         tab_keys.append('exercises')
                         sub_tabs_data['exercises'] = practical_data['exercises']
                     
+                    # Case Studies - interaktywne przypadki do analizy
+                    if 'case_studies' in practical_data:
+                        available_tabs.append("🎭 Case Studies")
+                        tab_keys.append('case_studies')
+                        sub_tabs_data['case_studies'] = practical_data['case_studies']
+                    
                     # Pytania otwarte z oceną AI
                     if 'ai_questions' in practical_data:
                         available_tabs.append("🤖 Pytania AI")
@@ -1382,6 +1388,42 @@ def show_lessons_content():
                                             st.warning("Brak fiszek do wyświetlenia.")
                                     else:
                                         st.warning("Brak fiszek w tej sekcji.")
+                                
+                                elif tab_key == 'case_studies':
+                                    # Obsługa Case Studies - interaktywne przypadki do analizy
+                                    tab_data = sub_tabs_data[tab_key]
+                                    
+                                    # Wyświetl tytuł i opis sekcji
+                                    if 'title' in tab_data:
+                                        st.markdown(f"### {tab_data['title']}")
+                                    if 'description' in tab_data:
+                                        st.info(tab_data['description'])
+                                    
+                                    # Obsługa studies
+                                    if 'studies' in tab_data:
+                                        studies = tab_data['studies']
+                                        
+                                        for study in studies:
+                                            with st.expander(f"**Case Study {study['id']}: {study['title']}**", expanded=False):
+                                                # Opis scenariusza
+                                                st.markdown("#### 📋 Scenariusz")
+                                                st.markdown(study['scenario'], unsafe_allow_html=True)
+                                                
+                                                # Pytania do przemyślenia
+                                                st.markdown("#### 🤔 Pytania do przemyślenia")
+                                                for i, question in enumerate(study['questions'], 1):
+                                                    st.markdown(f"**{i}.** {question}")
+                                                
+                                                # Miejsce na odpowiedź użytkownika
+                                                st.markdown(study['user_space'], unsafe_allow_html=True)
+                                                
+                                                # Rozwijane rozwiązanie
+                                                with st.expander("💡 **Pokaż przykładowe rozwiązanie**", expanded=False):
+                                                    st.markdown(study['solution'], unsafe_allow_html=True)
+                                                
+                                                st.markdown("---")
+                                    else:
+                                        st.warning("Brak case studies w tej sekcji.")
                                 
                                 elif tab_key == 'ai_questions':
                                     # Obsługa pytań otwartych z oceną AI
@@ -2009,9 +2051,8 @@ def show_lessons_content():
                         #     st.error(f"Błąd podczas ładowania rekomendacji: {str(e)}")
                 else:
                     # Dla wszystkich innych lekcji pokazuj pełne tabs
-                    # Podziel podsumowanie na dwie zakładki - zakomentowano mapę myśli
-                    # summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli"])
-                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study"])
+                    # Podziel podsumowanie na cztery zakładki - dodajemy Cheatsheet
+                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli", "📋 Cheatsheet"])
                     
                     with summary_tabs[0]:
                         # Wyświetl główne podsumowanie
@@ -2027,20 +2068,57 @@ def show_lessons_content():
                         else:
                             st.warning("Brak studium przypadku w podsumowaniu.")
                 
-                # with summary_tabs[2]:
-                #     # Wyświetl interaktywną mapę myśli
-                #     st.markdown("### 🗺️ Interaktywna mapa myśli")
-                #     st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji. Możesz klikać na węzły aby je przesuwać i lepiej eksplorować powiązania między różnymi tematami.")
-                #     
-                #     try:
-                #         from utils.mind_map import create_lesson_mind_map
-                #         mind_map_result = create_lesson_mind_map(lesson)
-                #         
-                #         if mind_map_result is None:
-                #             st.info("💡 **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
-                #     except Exception as e:
-                #         st.warning("⚠️ Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
-                #         st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))# Wyświetl całkowitą zdobytą ilość XP
+                    with summary_tabs[2]:
+                        # Wyświetl interaktywną mapę myśli
+                        st.markdown("### 🗺️ Interaktywna mapa myśli")
+                        st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji. Możesz klikać na węzły aby je przesuwać i lepiej eksplorować powiązania między różnymi tematami.")
+                        
+                        try:
+                            from utils.mind_map import create_lesson_mind_map
+                            mind_map_result = create_lesson_mind_map(lesson)
+                            
+                            if mind_map_result is None:
+                                st.info("💡 **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
+                        except Exception as e:
+                            st.warning("⚠️ Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
+                            st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
+                    
+                    with summary_tabs[3]:
+                        # Wyświetl cheatsheet
+                        if 'cheatsheet' in lesson['summary']:
+                            st.markdown(lesson['summary']['cheatsheet'], unsafe_allow_html=True)
+                            
+                            # Dodaj przycisk do pobierania PDF
+                            st.markdown("---")
+                            st.markdown("### 📄 Pobierz Cheatsheet jako PDF")
+                            
+                            try:
+                                from utils.pdf_generator import generate_pdf_content, create_simple_download_button, clean_html_for_pdf
+                                
+                                # Przygotuj zawartość dla PDF
+                                lesson_title = lesson.get('title', 'Lekcja')
+                                cheatsheet_content = lesson['summary']['cheatsheet']
+                                
+                                # Wyczyść HTML dla lepszej konwersji do PDF
+                                cleaned_content = clean_html_for_pdf(cheatsheet_content)
+                                
+                                # Generuj kompletny HTML dla PDF
+                                pdf_html = generate_pdf_content(
+                                    title=f"Cheatsheet: {lesson_title}",
+                                    content_html=cleaned_content
+                                )
+                                
+                                # Twórz przycisk do pobrania
+                                filename = f"cheatsheet_{lesson.get('id', 'lesson').replace(' ', '_')}.html"
+                                create_simple_download_button(pdf_html, filename, "Pobierz Cheatsheet jako PDF")
+                                
+                            except Exception as e:
+                                st.warning("⚠️ Funkcja pobierania PDF nie jest obecnie dostępna.")
+                                st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
+                        else:
+                            st.warning("Brak cheatsheet w podsumowaniu.")
+
+                # Wyświetl całkowitą zdobytą ilość XP
                 total_xp = st.session_state.lesson_progress['total_xp_earned']
                 # st.success(f"Gratulacje! Ukończyłeś lekcję i zdobyłeś łącznie {total_xp} XP!")
                   # Sprawdź czy lekcja została już zakończona
@@ -2134,8 +2212,7 @@ def show_lessons_content():
                             st.warning("Brak głównego podsumowania.")
                 else:
                     # Dla wszystkich innych lekcji pokazuj pełne tabs
-                    # summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli"])
-                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study"])
+                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli"])
                     
                     with summary_tabs[0]:
                         # Wyświetl główne podsumowanie
@@ -2151,19 +2228,20 @@ def show_lessons_content():
                         else:
                             st.warning("Brak studium przypadku w podsumowaniu.")
                 
-                # with summary_tabs[2]:
-                #     # Wyświetl interaktywną mapę myśli
-                #     st.markdown("### 🗺️ Interaktywna mapa myśli")
-                #     st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji.")
-                #     
-                #     try:
-                #         from utils.mind_map import create_lesson_mind_map
-                #         mind_map_result = create_lesson_mind_map(lesson)
-                #         
-                #         if mind_map_result is None:
-                #             st.info("💡 **Mapa myśli w przygotowaniu**")
-                #     except Exception as e:
-                #         st.warning("⚠️ Mapa myśli nie jest obecnie dostępna.")
+                    with summary_tabs[2]:
+                        # Wyświetl interaktywną mapę myśli
+                        st.markdown("### 🗺️ Interaktywna mapa myśli")
+                        st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji. Możesz klikać na węzły aby je przesuwać i lepiej eksplorować powiązania między różnymi tematami.")
+                        
+                        try:
+                            from utils.mind_map import create_lesson_mind_map
+                            mind_map_result = create_lesson_mind_map(lesson)
+                            
+                            if mind_map_result is None:
+                                st.info("💡 **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
+                        except Exception as e:
+                            st.warning("⚠️ Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
+                            st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
             else:
                 # Brak podsumowania w danych lekcji
                 st.error("Lekcja nie zawiera podsumowania!")

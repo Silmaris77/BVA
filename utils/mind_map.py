@@ -4,6 +4,41 @@ Funkcje do generowania interaktywnych map myśli dla lekcji
 import streamlit as st
 import re
 
+def get_contrast_color(hex_color):
+    """
+    Automat        solution_color = "#8A9BFF"  # Jaśniejszy odcień Block 3 color
+        for solution in solutions:
+            nodes.append(Node(id=solution["id"],
+                            label=solution["label"],
+                            size=15,
+                            color=solution_color,
+                            font={"size": 11, "color": get_contrast_color(solution_color)}))dobiera kontrastowy kolor czcionki (biały lub czarny)
+    na podstawie jasności koloru tła
+    
+    Args:
+        hex_color (str): Kolor w formacie hex (np. "#FF0000")
+    
+    Returns:
+        str: "white" lub "black"
+    """
+    # Usuń znak # jeśli jest
+    hex_color = hex_color.lstrip('#')
+    
+    # Konwertuj na RGB
+    try:
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+        
+        # Oblicz jasność używając wzoru luminancji
+        luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        
+        # Jeśli jasność > 0.5, używaj czarnej czcionki, inaczej białej
+        return "black" if luminance > 0.5 else "white"
+    except:
+        # W przypadku błędu, zwróć bezpieczny kolor
+        return "black"
+
 def create_lesson_mind_map(lesson_data):
     """
     Tworzy interaktywną mapę myśli dla danej lekcji
@@ -17,11 +52,24 @@ def create_lesson_mind_map(lesson_data):
     """
     try:
         # Inteligentna logika decyzyjna
+        # Sprawdź mind_map w różnych lokalizacjach
+        mind_map_data = None
+        
         if 'mind_map' in lesson_data:
-            # Tryb 1: Data-driven - używaj danych z JSON
-            return create_data_driven_mind_map(lesson_data['mind_map'])
+            # Tryb 1a: Data-driven - mapa bezpośrednio w lesson_data
+            mind_map_data = lesson_data['mind_map']
+        elif 'summary' in lesson_data and 'mind_map' in lesson_data['summary']:
+            # Tryb 1b: Data-driven - mapa w summary
+            mind_map_data = lesson_data['summary']['mind_map']
+        elif 'outro' in lesson_data and 'mind_map' in lesson_data['outro']:
+            # Tryb 1c: Data-driven - mapa w outro
+            mind_map_data = lesson_data['outro']['mind_map']
+        
+        if mind_map_data:
+            # Użyj znalezionej mapy myśli
+            return create_data_driven_mind_map(mind_map_data)
         elif lesson_data.get('id') == 'B1C1L1':
-            # Tryb 2: Backward compatibility dla B1C1L1c
+            # Tryb 2: Backward compatibility dla B1C1L1
             return create_b1c1l1_mind_map()
         else:
             # Tryb 3: Auto-generated dla pozostałych lekcji
@@ -50,7 +98,7 @@ def create_b1c1l1_mind_map():
                          label="💸 STRACH PRZED STRATĄ", 
                          size=30,
                          color="#FF9950",
-                         font={"size": 16, "color": "#FF9950"}))
+                         font={"size": 16, "color": get_contrast_color("#FF9950")}))
         
         # Główne koncepty - kolory z bloków Skills
         concepts = [
@@ -64,7 +112,7 @@ def create_b1c1l1_mind_map():
                             label=concept["label"],
                             size=20,
                             color=concept["color"],
-                            font={"size": 12, "color": concept["color"]}))  # Font color matches node color
+                            font={"size": 12, "color": get_contrast_color(concept["color"])}))  # Font color matches node color
             edges.append(Edge(source="central", target=concept["id"]))
         
         # Szczegóły teorii perspektywy
@@ -109,7 +157,7 @@ def create_b1c1l1_mind_map():
                             label=detail["label"],
                             size=12,
                             color=parent_color,
-                            font={"size": 10, "color": parent_color}))
+                            font={"size": 10, "color": get_contrast_color(parent_color)}))
             edges.append(Edge(source=detail["parent"], target=detail["id"]))
           # Rozwiązania praktyczne - kolor z Block 3 Skills (jaśniejszy odcień)
         solutions = [
@@ -134,7 +182,7 @@ def create_b1c1l1_mind_map():
                         label="👨‍💻 Case Study: Kuba i $MOONZ",
                         size=18,
                         color=case_study_color,
-                        font={"size": 12, "color": case_study_color}))
+                        font={"size": 12, "color": get_contrast_color(case_study_color)}))
         edges.append(Edge(source="central", target="kuba"))
         
         kuba_details = [
@@ -149,7 +197,7 @@ def create_b1c1l1_mind_map():
                             label=detail["label"],
                             size=10,
                             color=kuba_detail_color,
-                            font={"size": 9, "color": kuba_detail_color}))
+                            font={"size": 9, "color": get_contrast_color(kuba_detail_color)}))
             edges.append(Edge(source=detail["parent"], target=detail["id"]))
           # Konfiguracja wyświetlania - highlight color zsynchronizowany z Skills Block 2
         config = Config(width=800, 
@@ -197,72 +245,80 @@ def create_data_driven_mind_map(mind_map_data):
           # Centralny węzeł - domyślnie używa koloru z Bloku 2 Skills
         central = mind_map_data.get('central_node', {})
         central_color = central.get('color', '#43C6AC')  # Block 2 color as default
+        central_font_color = central.get('font_color', get_contrast_color(central_color))
         nodes.append(Node(
             id=central.get('id', 'main_topic'),
             label=central.get('label', '🎯 GŁÓWNY TEMAT'),
             size=central.get('size', 30),
             color=central_color,
-            font={"size": central.get('font_size', 16), "color": central_color}
+            font={"size": central.get('font_size', 16), "color": central_font_color}
         ))
         
         # Kategorie główne
         for category in mind_map_data.get('categories', []):
+            category_color = category.get('color', '#43C6AC')
+            category_font_color = category.get('font_color', get_contrast_color(category_color))
             nodes.append(Node(
                 id=category.get('id', 'category'),
                 label=category.get('label', 'Kategoria'),
                 size=category.get('size', 20),
-                color=category.get('color', '#43C6AC'),  # Skills Block 2 color as default
-                font={"size": category.get('font_size', 12), "color": "white"}
+                color=category_color,  # Skills Block 2 color as default
+                font={"size": category.get('font_size', 12), "color": category_font_color}
             ))
             edges.append(Edge(source=central.get('id', 'main_topic'), target=category.get('id', 'category')))
             
             # Szczegóły kategorii
             for detail in category.get('details', []):
+                detail_color = detail.get('color', '#DDA0DD')
+                detail_font_color = detail.get('font_color', get_contrast_color(detail_color))
                 nodes.append(Node(
                     id=detail.get('id', 'detail'),
                     label=detail.get('label', 'Szczegół'),
                     size=detail.get('size', 12),
-                    color=detail.get('color', '#DDA0DD'),
-                    font={"size": detail.get('font_size', 10), "color": "black"}
+                    color=detail_color,
+                    font={"size": detail.get('font_size', 10), "color": detail_font_color}
                 ))
                 edges.append(Edge(source=category.get('id', 'category'), target=detail.get('id', 'detail')))
         
         # Rozwiązania praktyczne
         for solution in mind_map_data.get('solutions', []):
+            solution_color = solution.get('color', '#90EE90')
             nodes.append(Node(
                 id=solution.get('id', 'solution'),
                 label=solution.get('label', 'Rozwiązanie'),
                 size=solution.get('size', 15),
-                color=solution.get('color', '#90EE90'),
-                font={"size": solution.get('font_size', 11), "color": "black"}
+                color=solution_color,
+                font={"size": solution.get('font_size', 11), "color": get_contrast_color(solution_color)}
             ))
             edges.append(Edge(source=central.get('id', 'main_topic'), target=solution.get('id', 'solution')))
         
         # Case study
         case_study = mind_map_data.get('case_study', {})
         if case_study:
+            case_study_color = case_study.get('color', '#FF8C42')
             nodes.append(Node(
                 id=case_study.get('id', 'case_study'),
                 label=case_study.get('label', '📱 Case Study'),
                 size=case_study.get('size', 18),
-                color=case_study.get('color', '#FF8C42'),
-                font={"size": case_study.get('font_size', 12), "color": "white"}
+                color=case_study_color,
+                font={"size": case_study.get('font_size', 12), "color": get_contrast_color(case_study_color)}
             ))
             edges.append(Edge(source=central.get('id', 'main_topic'), target=case_study.get('id', 'case_study')))
             
             # Szczegóły case study
             for detail in case_study.get('details', []):
+                case_detail_color = detail.get('color', '#FFB347')
                 nodes.append(Node(
                     id=detail.get('id', 'case_detail'),
                     label=detail.get('label', 'Szczegół'),
                     size=detail.get('size', 10),
-                    color=detail.get('color', '#FFB347'),
-                    font={"size": detail.get('font_size', 9), "color": "black"}
+                    color=case_detail_color,
+                    font={"size": detail.get('font_size', 9), "color": get_contrast_color(case_detail_color)}
                 ))
                 edges.append(Edge(source=case_study.get('id', 'case_study'), target=detail.get('id', 'case_detail')))
         
         # Dodatkowe połączenia
-        for connection in mind_map_data.get('connections', []):
+        for connection in mind_map_data.get('relationships', []):
             edges.append(Edge(source=connection.get('from'), target=connection.get('to')))
           # Konfiguracja
         config_data = mind_map_data.get('config', {})
@@ -305,11 +361,12 @@ def create_auto_generated_mind_map(lesson_data):
                "Aby dodać dedykowaną mapę myśli, dodaj sekcję 'mind_map' do pliku JSON lekcji.")
           # Centralny węzeł z tytułem lekcji - kolor z bloku 2 Skills (morski)
         title = lesson_data.get('title', 'Lekcja')
+        central_color = "#43C6AC"
         nodes.append(Node(id="central", 
                          label=f"📚 {title}", 
                          size=25,
-                         color="#43C6AC",
-                         font={"size": 14, "color": "#43C6AC"}))
+                         color=central_color,
+                         font={"size": 14, "color": get_contrast_color(central_color)}))
           # Dodaj sekcje lekcji jako węzły - używa kolorów zsynchronizowanych z blokami Skills
         if 'sections' in lesson_data:
             sections = lesson_data['sections']
@@ -344,7 +401,7 @@ def create_auto_generated_mind_map(lesson_data):
                                     label=section_title,
                                     size=15,
                                     color=color,
-                                    font={"size": 10, "color": color}))
+                                    font={"size": 10, "color": get_contrast_color(color)}))
                     edges.append(Edge(source="central", target=section_id))
         
         # Dodaj elementy standardowe lekcji
@@ -372,7 +429,7 @@ def create_auto_generated_mind_map(lesson_data):
                             label=element["label"],
                             size=12,
                             color=element["color"],
-                            font={"size": 10, "color": element["color"]}))
+                            font={"size": 10, "color": get_contrast_color(element["color"])}))
             edges.append(Edge(source="central", target=element["id"]))
         
         config = Config(width=700, 

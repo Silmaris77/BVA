@@ -384,6 +384,38 @@
           }
         ]
       },
+      "case_studies": {
+        "title": "Case Studies",
+        "description": "Praktyczne sytuacje do analizy i zastosowania C-IQ",
+        "studies": [
+          {
+            "id": 1,
+            "title": "Trudna rozmowa z zespołem o opóźnieniach projektu",
+            "scenario": "<div style='background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;'><h4 style='color: #495057; margin-bottom: 15px;'>🎭 Sytuacja:</h4><p style='color: #6c757d; line-height: 1.7; margin-bottom: 15px;'>Jesteś liderem zespołu programistycznego. Kluczowy projekt dla największego klienta ma 2 tygodnie opóźnienia. Jutro masz spotkanie z klientem i musisz przedstawić mu plan naprawczy. Twój zespół jest zestresowany, pojawiają się wzajemne oskarżenia, a atmosfera jest napięta.</p><p style='color: #6c757d; line-height: 1.7; margin-bottom: 15px;'><strong>Kontekst:</strong> To trzeci projekt z rzędu, który ma opóźnienia. Management zaczyna kwestionować kompetencje zespołu. Niektórzy członkowie zespołu rozważają zmianę pracy.</p><p style='color: #6c757d; line-height: 1.7; margin: 0;'><strong>Wyzwanie:</strong> Musisz przeprowadzić spotkanie zespołu, które pozwoli znaleźć rozwiązania i odbudować zaufanie, zamiast pogłębić frustrację i wzajemne oskarżenia.</p></div>",
+            "questions": [
+              "Jak rozpocząłbyś takie spotkanie, aby od razu stworzyć atmosferę współpracy, a nie defensywy?",
+              "Jakie pytania zadałbyś, aby zespół sam zidentyfikował przyczyny opóźnień, zamiast czuć się oskarżany?",
+              "Jak przesunąłbyś fokus z \"kto jest winny\" na \"jak razem to naprawimy\"?",
+              "Jakiej techniki C-IQ użyłbyś, aby odbudować zaufanie w zespole?"
+            ],
+            "user_space": "<div style='background: #fff3cd; padding: 20px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #ffc107;'><h5 style='color: #856404; margin-bottom: 15px;'>✍️ Twoja odpowiedź:</h5><p style='color: #856404; font-style: italic; margin: 0;'>Zastanów się nad swoim podejściem i zapisz kluczowe punkty swojej strategii komunikacyjnej...</p></div>",
+            "solution": "<div style='background: #d4edda; padding: 20px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #28a745;'><h5 style='color: #155724; margin-bottom: 15px;'>💡 Przykładowe rozwiązanie C-IQ:</h5><div style='margin-bottom: 20px;'><h6 style='color: #155724; margin-bottom: 10px;'>🌟 Priming neurologiczny (otwarcie):</h6><p style='color: #155724; line-height: 1.7; margin: 0;'>\"Chcę zacząć od tego, że wiem, jak bardzo każdy z was zaangażował się w ten projekt. Widzę tę energię i commitment. To jest nasze wspólne wyzwanie i jestem przekonany, że razem znajdziemy sposób, żeby nie tylko je rozwiązać, ale wyjść z niego silniejszymi jako zespół.\"</p></div><div style='margin-bottom: 20px;'><h6 style='color: #155724; margin-bottom: 10px;'>❓ Pytania Poziomu III:</h6><ul style='color: #155724; line-height: 1.7; margin: 0;'><li>\"Co myślicie o tym, co się dzieje? Jak to widzicie z waszej perspektywy?\"</li><li>\"Gdybyśmy mogli cofnąć się o miesiąc wstecz, co zrobilibyśmy inaczej?\"</li><li>\"Jakie są nasze największe assets jako zespół, które mogą nam pomóc?\"</li><li>\"Co potrzebujemy od siebie nawzajem, żeby to się udało?\"</li></ul></div><div style='margin-bottom: 20px;'><h6 style='color: #155724; margin-bottom: 10px;'>🤝 Budowanie WE:</h6><p style='color: #155724; line-height: 1.7; margin: 0;'>\"Naszym celem nie jest znalezienie winnego, ale zrozumienie, jak możemy działać jeszcze lepiej. Każdy z nas ma kawałek tej układanki - opowiedźcie, co widzicie ze swojej strony.\"</p></div><div style='margin-bottom: 20px;'><h6 style='color: #155724; margin-bottom: 10px;'>🎯 Konkretne działania:</h6><ol style='color: #155724; line-height: 1.7; margin: 0;'><li>Mapowanie wspólne wszystkich challenges (bez szukania winnych)</li><li>Identyfikacja 2-3 najkrytyczniejszych obszarów</li><li>Wspólne wypracowanie planu działania z konkretnymi commitment</li><li>Ustalenie systemu regular check-inów dla przyszłych projektów</li></ol></div><div style='background: #c3e6cb; padding: 15px; border-radius: 8px;'><h6 style='color: #155724; margin-bottom: 8px;'>🎯 Oczekiwany rezultat:</h6><p style='color: #155724; line-height: 1.7; margin: 0;'>Zespół opuszcza spotkanie z poczuciem wspólnej odpowiedzialności, konkretnym planem działania i odbudowanym zaufaniem. Zamiast stresu i oskarżeń - energia do działania i poczucie 'jesteśmy w tym razem'.</p></div></div>"
+          },
+          {
+            "id": 2,
+            "title": "Rozmowa z underperforming zespołem członkiem",
+            "scenario": "<div style='background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;'><h4 style='color: #495057; margin-bottom: 15px;'>🎭 Sytuacja:</h4><p style='color: #6c757d; line-height: 1.7; margin-bottom: 15px;'>Marcin, jeden z twoich najlepszych specjalistów, od 3 miesięcy wyraźnie obniżył swoje performance. Spóźnia się na spotkania, oddaje zadania po deadline, a jego zwykle wysokiej jakości praca stała się przeciętna. Inne osoby w zespole zaczynają narzekać.</p><p style='color: #6c757d; line-height: 1.7; margin-bottom: 15px;'><strong>Kontekst:</strong> Marcin pracuje w firmie 4 lata, zawsze był reliable i zaangażowany. Ostatnio stał się wycofany, unika eye contact podczas spotkań zespołowych.</p><p style='color: #6c757d; line-height: 1.7; margin: 0;'><strong>Wyzwanie:</strong> Musisz przeprowadzić difficult conversation, która pomoże zrozumieć przyczyny sytuacji i wspólnie znaleźć rozwiązanie, nie niszcząc przy tym relacji i zaufania.</p></div>",
+            "questions": [
+              "Jak przygotowałbyś się mentalnie do tej rozmowy, żeby nie wejść w tryb 'oskarżyciel vs obrońca'?",
+              "Jakimi słowami rozpocząłbyś rozmowę, aby Marcin poczuł się bezpiecznie, a nie zaatakowany?",
+              "Jakie pytania zadałbyś, aby dowiedzieć się o prawdziwych przyczynach sytuacji?",
+              "Jak zadbałbyś o to, żeby rozmowa zakończyła się konkretnym planem działania, a nie tylko 'będzie lepiej'?"
+            ],
+            "user_space": "<div style='background: #fff3cd; padding: 20px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #ffc107;'><h5 style='color: #856404; margin-bottom: 15px;'>✍️ Twoja odpowiedź:</h5><p style='color: #856404; font-style: italic; margin: 0;'>Opisz swoją strategię komunikacyjną dla tej trudnej rozmowy...</p></div>",
+            "solution": "<div style='background: #d4edda; padding: 20px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #28a745;'><h5 style='color: #155724; margin-bottom: 15px;'>💡 Przykładowe rozwiązanie C-IQ:</h5><div style='margin-bottom: 20px;'><h6 style='color: #155724; margin-bottom: 10px;'>🧠 Przygotowanie mentalne:</h6><p style='color: #155724; line-height: 1.7; margin: 0;'>Intencja: \"Chcę zrozumieć i pomóc\" vs \"Chcę skonfrontować i poprawić\". Przypomnienie sobie o dotychczasowych sukcesach Marcina. Skupienie na curiosity, nie na judgment.</p></div><div style='margin-bottom: 20px;'><h6 style='color: #155724; margin-bottom: 10px;'>🤝 Bezpieczne otwarcie (TRUST model):</h6><p style='color: #155724; line-height: 1.7; margin: 0;'>\"Marcin, bardzo cenię naszą współpracę przez te 4 lata. Wiem, że jesteś zaangażowanym i kompetentnym specjalistą. Zauważyłem jednak, że ostatnio coś się zmieniło i martwię się o ciebie - zarówno jako o człowieka, jak i członka zespołu. Czy możemy o tym porozmawiać?\"</p></div><div style='margin-bottom: 20px;'><h6 style='color: #155724; margin-bottom: 10px;'>👂 Pytania eksploracyjne (Poziom III):</h6><ul style='color: #155724; line-height: 1.7; margin: 0;'><li>\"Jak się czujesz w pracy ostatnio?\"</li><li>\"Co się zmieniło w twoim życiu zawodowym lub prywatnym?\"</li><li>\"Czy jest coś, z czym mogę ci pomóc?\"</li><li>\"Jak widzisz swoją sytuację? Co myślisz o tym, co się dzieje?\"</li><li>\"Czego potrzebujesz ode mnie lub od zespołu?\"</li></ul></div><div style='margin-bottom: 20px;'><h6 style='color: #155724; margin-bottom: 10px;'>🎯 Współtworzenie rozwiązań:</h6><p style='color: #155724; line-height: 1.7; margin: 0;'>\"Na podstawie tego, co mi powiedziałeś, jak myślisz - co moglibyśmy zrobić razem, żeby te wyzwania rozwiązać? Jakie wsparcie byłoby dla ciebie najbardziej pomocne?\"</p></div><div style='margin-bottom: 20px;'><h6 style='color: #155724; margin-bottom: 10px;'>📋 Konkretny plan:</h6><ol style='color: #155724; line-height: 1.7; margin: 0;'><li>Ustalenie specific, small steps</li><li>Regular check-iny (np. co 2 tygodnie)</li><li>Clear communication channels</li><li>Mutual commitments (co Marcin zrobi, co ty jako lider zapewnisz)</li></ol></div><div style='background: #c3e6cb; padding: 15px; border-radius: 8px;'><h6 style='color: #155724; margin-bottom: 8px;'>🎯 Oczekiwany rezultat:</h6><p style='color: #155724; line-height: 1.7; margin: 0;'>Marcin czuje się zrozumiany i wspierany, a nie osądzany. Ma jasny plan powrotu do formy. Relacja lider-współpracownik zostaje wzmocniona. Problem zostaje rozwiązany w sposób, który buduje kulturę otwartości w zespole.</p></div></div>"
+          }
+        ]
+      },
       "closing_quiz": {
         "title": "Quiz końcowy - Conversational Intelligence",
         "description": "Sprawdź, jak dobrze opanowałeś zasady inteligencji konwersacyjnej Judith Glaser",
@@ -507,98 +539,188 @@
       "mind_map": {
         "central_node": {
           "id": "main_topic",
-          "label": "Conversational Intelligence",
-          "size": 30,
+          "label": "🗣️ Od słów do zaufania - Conversational Intelligence",
+          "size": 35,
           "color": "#667eea",
-          "font_size": 16
+          "font_size": 18
         },
         "categories": [
           {
             "id": "neurobiologia",
-            "label": "Neurobiologia rozmowy",
-            "size": 20,
+            "label": "🧠 Neurobiologia rozmowy",
+            "size": 25,
             "color": "#4ECDC4",
-            "font_size": 12,
+            "font_size": 14,
             "details": [
               {
-                "id": "reptilian",
-                "label": "Reptilian Brain",
-                "size": 12,
-                "color": "#FF6B6B",
-                "font_size": 10
+                "id": "oksytocyna",
+                "label": "💙 Oksytocyna (zaufanie)",
+                "size": 15,
+                "color": "#81C784",
+                "font_size": 11
               },
               {
-                "id": "limbic",
-                "label": "Limbic System",
-                "size": 12,
-                "color": "#FFE66D",
-                "font_size": 10
+                "id": "kortyzol",
+                "label": "⚠️ Kortyzol (stres)",
+                "size": 15,
+                "color": "#FF8A80",
+                "font_size": 11
               },
               {
-                "id": "prefrontal",
-                "label": "Prefrontal Cortex",
-                "size": 12,
-                "color": "#A8E6CF",
-                "font_size": 10
+                "id": "reakcje",
+                "label": "🔄 Reakcje chemiczne mózgu",
+                "size": 15,
+                "color": "#FFB74D",
+                "font_size": 11
               }
             ]
           },
           {
-            "id": "poziomy",
-            "label": "3 poziomy C-IQ",
-            "size": 20,
+            "id": "poziomy_ciq",
+            "label": "📊 3 poziomy C-IQ",
+            "size": 25,
             "color": "#DDA0DD",
-            "font_size": 12,
+            "font_size": 14,
             "details": [
               {
-                "id": "transactional",
-                "label": "I - Transactional",
+                "id": "poziom_1",
+                "label": "I - Transakcyjny (wymiana informacji)",
+                "size": 15,
+                "color": "#FFCDD2",
+                "font_size": 11
+              },
+              {
+                "id": "poziom_2",
+                "label": "II - Pozycyjny (przekonywanie)",
+                "size": 15,
+                "color": "#FFE0B2",
+                "font_size": 11
+              },
+              {
+                "id": "poziom_3",
+                "label": "III - Transformacyjny (współtworzenie)",
+                "size": 15,
+                "color": "#C8E6C9",
+                "font_size": 11
+              }
+            ]
+          },
+          {
+            "id": "praktyczne_narzedzia",
+            "label": "🛠️ Praktyczne narzędzia",
+            "size": 25,
+            "color": "#87CEEB",
+            "font_size": 14,
+            "details": [
+              {
+                "id": "priming",
+                "label": "🌟 Priming (pozytywne rozpoczęcie)",
+                "size": 15,
+                "color": "#B39DDB",
+                "font_size": 11
+              },
+              {
+                "id": "pytania_otwarte",
+                "label": "❓ Pytania otwierające",
+                "size": 15,
+                "color": "#F48FB1",
+                "font_size": 11
+              },
+              {
+                "id": "sluchanie",
+                "label": "👂 Słuchanie z ciekawością",
+                "size": 15,
+                "color": "#80CBC4",
+                "font_size": 11
+              }
+            ]
+          },
+          {
+            "id": "budowanie_zaufania",
+            "label": "🤝 Budowanie zaufania",
+            "size": 25,
+            "color": "#FFE082",
+            "font_size": 14,
+            "details": [
+              {
+                "id": "bezpieczenstwo",
+                "label": "🛡️ Bezpieczeństwo psychologiczne",
+                "size": 15,
+                "color": "#A5D6A7",
+                "font_size": 11
+              },
+              {
+                "id": "empatia",
+                "label": "💗 Empatia i zrozumienie",
+                "size": 15,
+                "color": "#FFAB91",
+                "font_size": 11
+              },
+              {
+                "id": "wspoltworzenie",
+                "label": "🌟 Wspólne tworzenie rozwiązań",
+                "size": 15,
+                "color": "#CE93D8",
+                "font_size": 11
+              }
+            ]
+          },
+          {
+            "id": "codzienne_zastosowanie",
+            "label": "📅 Codzienne zastosowanie",
+            "size": 25,
+            "color": "#BCAAA4",
+            "font_size": 14,
+            "details": [
+              {
+                "id": "jezyk_zmiana",
+                "label": "🔄 'Musisz' → 'Co możemy zrobić?'",
+                "size": 15,
+                "color": "#90CAF9",
+                "font_size": 11
+              },
+              {
+                "id": "rytualy",
+                "label": "🎯 Rytuały spotkań zespołowych",
+                "size": 15,
+                "color": "#DCEDC8",
+                "font_size": 11
+              },
+              {
+                "id": "feedback",
+                "label": "💬 Trudne rozmowy → współpraca",
+                "size": 15,
+                "color": "#F8BBD9",
+                "font_size": 11
+              }
+            ]
+          },
+          {
+            "id": "rezultaty",
+            "label": "📈 Rezultaty zastosowania",
+            "size": 22,
+            "color": "#A8E6CF",
+            "font_size": 13,
+            "details": [
+              {
+                "id": "produktywnosc",
+                "label": "🚀 +40% produktywności",
                 "size": 12,
-                "color": "#FF8A80",
+                "color": "#81C784",
                 "font_size": 10
               },
               {
-                "id": "positional",
-                "label": "II - Positional",
+                "id": "zadowolenie",
+                "label": "😊 Wyższe zadowolenie zespołu",
                 "size": 12,
                 "color": "#FFB74D",
                 "font_size": 10
               },
               {
-                "id": "transformational",
-                "label": "III - Transformational",
+                "id": "kreatywnosc",
+                "label": "💡 +65% innowacyjnych pomysłów",
                 "size": 12,
-                "color": "#81C784",
-                "font_size": 10
-              }
-            ]
-          },
-          {
-            "id": "techniki",
-            "label": "Praktyczne techniki",
-            "size": 20,
-            "color": "#87CEEB",
-            "font_size": 12,
-            "details": [
-              {
-                "id": "priming",
-                "label": "Neurochemical Priming",
-                "size": 12,
-                "color": "#B39DDB",
-                "font_size": 10
-              },
-              {
-                "id": "wait",
-                "label": "WAIT Technique",
-                "size": 12,
-                "color": "#F48FB1",
-                "font_size": 10
-              },
-              {
-                "id": "doubleclick",
-                "label": "Double-Click Listening",
-                "size": 12,
-                "color": "#80CBC4",
+                "color": "#BA68C8",
                 "font_size": 10
               }
             ]
@@ -611,52 +733,120 @@
           },
           {
             "from": "main_topic",
-            "to": "poziomy"
+            "to": "poziomy_ciq"
           },
           {
             "from": "main_topic",
-            "to": "techniki"
+            "to": "praktyczne_narzedzia"
+          },
+          {
+            "from": "main_topic",
+            "to": "budowanie_zaufania"
+          },
+          {
+            "from": "main_topic",
+            "to": "codzienne_zastosowanie"
+          },
+          {
+            "from": "main_topic",
+            "to": "rezultaty"
           },
           {
             "from": "neurobiologia",
-            "to": "reptilian"
+            "to": "oksytocyna"
           },
           {
             "from": "neurobiologia",
-            "to": "limbic"
+            "to": "kortyzol"
           },
           {
             "from": "neurobiologia",
-            "to": "prefrontal"
+            "to": "reakcje"
           },
           {
-            "from": "poziomy",
-            "to": "transactional"
+            "from": "poziomy_ciq",
+            "to": "poziom_1"
           },
           {
-            "from": "poziomy",
-            "to": "positional"
+            "from": "poziomy_ciq",
+            "to": "poziom_2"
           },
           {
-            "from": "poziomy",
-            "to": "transformational"
+            "from": "poziomy_ciq",
+            "to": "poziom_3"
           },
           {
-            "from": "techniki",
+            "from": "praktyczne_narzedzia",
             "to": "priming"
           },
           {
-            "from": "techniki",
-            "to": "wait"
+            "from": "praktyczne_narzedzia",
+            "to": "pytania_otwarte"
           },
           {
-            "from": "techniki",
-            "to": "doubleclick"
+            "from": "praktyczne_narzedzia",
+            "to": "sluchanie"
+          },
+          {
+            "from": "budowanie_zaufania",
+            "to": "bezpieczenstwo"
+          },
+          {
+            "from": "budowanie_zaufania",
+            "to": "empatia"
+          },
+          {
+            "from": "budowanie_zaufania",
+            "to": "wspoltworzenie"
+          },
+          {
+            "from": "codzienne_zastosowanie",
+            "to": "jezyk_zmiana"
+          },
+          {
+            "from": "codzienne_zastosowanie",
+            "to": "rytualy"
+          },
+          {
+            "from": "codzienne_zastosowanie",
+            "to": "feedback"
+          },
+          {
+            "from": "rezultaty",
+            "to": "produktywnosc"
+          },
+          {
+            "from": "rezultaty",
+            "to": "zadowolenie"
+          },
+          {
+            "from": "rezultaty",
+            "to": "kreatywnosc"
+          },
+          {
+            "from": "poziom_3",
+            "to": "budowanie_zaufania"
+          },
+          {
+            "from": "oksytocyna",
+            "to": "budowanie_zaufania"
+          },
+          {
+            "from": "praktyczne_narzedzia",
+            "to": "budowanie_zaufania"
+          },
+          {
+            "from": "budowanie_zaufania",
+            "to": "rezultaty"
+          },
+          {
+            "from": "codzienne_zastosowanie",
+            "to": "rezultaty"
           }
         ],
         "config": {
-          "width": 800,
-          "height": 600,
+          "width": 900,
+          "height": 700,
           "physics": true,
           "directed": false,
           "hierarchical": false
@@ -713,6 +903,177 @@
   ],
   "summary": {
     "main": "<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: white;'>🎯 Podsumowanie: Conversational Intelligence</h1><p style='text-align: center; font-size: 1.1rem; opacity: 0.95;'>Kluczowe wnioski z nauki o neurobiologii rozmowy</p></div><div style='background: #f8f9fa; padding: 25px; border-radius: 12px; margin: 20px 0;'><h3 style='color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center;'><span style='background: #667eea; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem;'>💡</span>Najważniejsze odkrycia</h3><div style='background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'><p style='color: #495057; line-height: 1.8; text-align: justify;'>Każda rozmowa wpływa na nasz mózg – dosłownie. Słowa, ton i intencje rozmówców uruchamiają reakcje chemiczne, które kształtują relacje. Kiedy rozmowa przebiega w atmosferze zaufania i otwartości, w mózgu wzrasta poziom <strong>oksytocyny</strong>, która wspiera współpracę i empatię. Gdy natomiast pojawia się napięcie lub ocena, wzrasta <strong>kortyzol</strong>, uruchamiający reakcję obronną. Kluczowym elementem inteligencji konwersacyjnej jest więc <strong>sposób słuchania</strong> – przejście od skupienia na własnych myślach i argumentach do słuchania z ciekawością i empatią całkowicie zmienia jakość relacji. Równie ważny jest <strong>język współtworzenia</strong>, czyli świadome używanie słów, które otwierają przestrzeń do dialogu zamiast wzmacniać konflikt. Wreszcie, to nie pojedyncze rozmowy, ale rytmy komunikacji – regularne, dobrze zaprojektowane spotkania i rozmowy – budują w zespole poczucie bezpieczeństwa, zaufania i wspólnego celu.</p></div></div><div style='background: #e8f5e8; padding: 25px; border-radius: 12px; margin: 20px 0;'><h3 style='color: #2e7d32; margin-bottom: 20px; display: flex; align-items: center;'><span style='background: #4caf50; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem;'>🛠️</span>Praktyczne zastosowania</h3><div style='background: white; padding: 20px; border-radius: 10px; border-left: 4px solid #4caf50;'><h4 style='color: #2e7d32; margin-bottom: 15px;'>Codzienne techniki C-IQ:</h4><ol style='color: #388e3c; line-height: 1.8; padding-left: 20px;'><li style='margin-bottom: 12px;'><strong>Priming neurologiczny:</strong> Rozpoczynaj spotkania pozytywnym akcentem</li><li style='margin-bottom: 12px;'><strong>Pytania otwierające:</strong> Używaj 'Co myślisz o...?' zamiast 'Czy zgadzasz się, że...?'</li><li style='margin-bottom: 12px;'><strong>Zmiana języka:</strong> Zamień 'musisz' na 'co możemy zrobić razem?'</li><li style='margin-bottom: 12px;'><strong>Ritual rozmów:</strong> Na początku spotkania zapytaj: 'Czego dziś najbardziej potrzebujemy jako zespół?'</li><li style='margin-bottom: 0;'><strong>Przestrzeń na wyrażenie:</strong> Regularnie pytaj: 'Jak się czujesz z tym rozwiązaniem?'</li></ol></div></div><div style='background: #fff3e0; padding: 25px; border-radius: 12px; margin: 20px 0;'><h3 style='color: #e65100; margin-bottom: 20px; display: flex; align-items: center;'><span style='background: #ff9800; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem;'>⭐</span>Cytat do zapamiętania</h3><blockquote style='background: white; padding: 25px; border-left: 4px solid #ff9800; margin: 0; border-radius: 0 10px 10px 0; font-style: italic; color: #bf360c; font-size: 1.1rem; line-height: 1.6;'>'Dotarcie do następnego poziomu wielkości zależy od jakości kultury,<br>która zależy od jakości relacji,<br>a te – od jakości rozmów.'<br><span style='font-weight: bold; font-style: normal; margin-top: 10px; display: block;'>- Judith Glaser, prekursorka Conversational Intelligence</span></blockquote></div><div style='background: #f3e5f5; padding: 25px; border-radius: 12px; margin: 20px 0;'><h3 style='color: #7b1fa2; margin-bottom: 20px; display: flex; align-items: center;'><span style='background: #9c27b0; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem;'>🤔</span>Pytania do refleksji</h3><div style='background: white; padding: 20px; border-radius: 10px; border-left: 4px solid #9c27b0;'><ol style='color: #6a1b9a; line-height: 1.8; padding-left: 20px;'><li style='margin-bottom: 15px;'>Które z Twoich codziennych rozmów budują zaufanie, a które je osłabiają?</li><li style='margin-bottom: 15px;'>Jak zmieniłaby się dynamika Twojego zespołu, gdyby wszyscy stosowali zasady C-IQ?</li><li style='margin-bottom: 15px;'>Jaką jedną zmianę w swoim stylu komunikacji wprowadzisz już jutro?</li><li style='margin-bottom: 0;'>W jaki sposób możesz zmierzyć poprawę jakości swoich rozmów zespołowych?</li></ol></div></div><div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px; border-radius: 12px; margin: 20px 0; color: white;'><h3 style='color: white; margin-bottom: 20px; text-align: center;'>🚀 Następne kroki</h3><div style='background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;'><p style='line-height: 1.7; margin-bottom: 15px; text-align: center;'>Conversational Intelligence to umiejętność, która rozwija się przez praktykę. Już dziś zacznij obserwować swoje rozmowy przez pryzmat neurobiologii.</p><p style='line-height: 1.7; margin-bottom: 0; text-align: center; font-weight: bold;'>Pamiętaj: Każda rozmowa to szansa na wzmocnienie zaufania i współpracy w Twoim zespole!</p></div></div>",
-    "case_study": "<div style='background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #28a745; margin: 20px 0;'><h3 style='color: #155724; margin-bottom: 20px;'>🌱 Closing Case Study – rozmowa, która odbudowała zaufanie</h3><div style='background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px;'><h4 style='color: #495057; margin-bottom: 15px;'>Kontekst:</h4><p style='color: #6c757d; line-height: 1.7;'>Minął miesiąc od nieudanego spotkania, które wywołało w zespole Marty napięcie i spadek zaangażowania. Po lekcji o Conversational Intelligence Marta zrozumiała, że jej ton, słowa i styl rozmowy mogły aktywować u pracowników reakcję stresową – podnosić poziom kortyzolu i blokować zdolność logicznego myślenia.</p><p style='color: #6c757d; line-height: 1.7;'><strong>Postanowiła spróbować inaczej.</strong></p></div><div style='background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px;'><h4 style='color: #495057; margin-bottom: 15px;'>💬 Nowa rozmowa</h4><p style='color: #6c757d; line-height: 1.7;'>Na kolejnym spotkaniu Marta rozpoczęła od słów:</p><blockquote style='background: #d4edda; padding: 15px; border-left: 4px solid #28a745; margin: 15px 0; font-style: italic; color: #155724;'><strong>'Chcę wrócić do naszej kampanii, ale przede wszystkim – do sposobu, w jaki o niej rozmawiamy. Widzę, że atmosfera stała się napięta i to częściowo moja odpowiedzialność. Chciałabym, żebyśmy wspólnie poszukali rozwiązań – nie winnych.'</strong></blockquote><p style='color: #6c757d; line-height: 1.7;'>Następnie zadała pytanie:</p><blockquote style='background: #d4edda; padding: 15px; border-left: 4px solid #28a745; margin: 15px 0; font-style: italic; color: #155724;'><strong>'Jak Wy to widzicie? Co możemy zrobić razem, żeby poprawić efekty i pracować w spokojniejszej atmosferze?'</strong></blockquote><p style='color: #6c757d; line-height: 1.7;'>Na początku panowała cisza. Potem Kasia nieśmiało odpowiedziała: <em>'Może potrzebujemy więcej przestrzeni na testowanie pomysłów, zanim je ocenimy.'</em></p><p style='color: #6c757d; line-height: 1.7;'>Marta podziękowała jej i poprosiła resztę zespołu o opinie. Rozmowa zaczęła się toczyć. Po kilkunastu minutach zespół miał listę trzech konkretnych usprawnień – a Marta zauważyła, że ludzie znowu patrzą sobie w oczy i uśmiechają się.</p></div><div style='background: #e2f3ff; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #007bff;'><h4 style='color: #004085; margin-bottom: 15px;'>🧠 Co się zmieniło</h4><p style='color: #004085; line-height: 1.7; margin-bottom: 15px;'><strong>Marta:</strong></p><ul style='color: #004085; line-height: 1.8; padding-left: 20px;'><li style='margin-bottom: 8px;'>Zmieniła intencję rozmowy z 'kontrolowania' na 'zrozumienie'.</li><li style='margin-bottom: 8px;'>Zamiast wydawać polecenia, zadawała pytania Poziomu III – otwierające, z ciekawością.</li><li style='margin-bottom: 8px;'>Świadomie budowała bezpieczeństwo psychologiczne, obniżając stres i uruchamiając oksytocynę.</li><li style='margin-bottom: 0;'>Wprowadziła nowy rytuał rozmów zespołowych – każde spotkanie kończyło się pytaniem: <em>'Czego się dziś nauczyliśmy i co warto spróbować inaczej?'</em></li></ul><p style='color: #004085; line-height: 1.7; margin-top: 15px;'>Po kilku tygodniach zauważyła, że ludzie częściej dzielą się pomysłami, chętniej zgłaszają trudności i wspólnie szukają rozwiązań. Projekt nie tylko ruszył naprzód – zespół odzyskał zaufanie i energię do działania.</p></div><div style='background: #fff3cd; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #ffc107;'><h4 style='color: #856404; margin-bottom: 15px;'>🔍 Pytania do refleksji</h4><ol style='color: #856404; line-height: 1.8; padding-left: 20px;'><li style='margin-bottom: 10px;'>Co konkretnie zrobiła Marta, co przesunęło jej rozmowę na Poziom III – transformacyjny?</li><li style='margin-bottom: 10px;'>Jak zmiana intencji rozmowy wpłynęła na emocje i zaangażowanie zespołu?</li><li style='margin-bottom: 10px;'>Które z zasad C-IQ (empatia, ciekawość, pytania, bezpieczeństwo) Ty możesz zastosować w swojej codziennej komunikacji?</li><li style='margin-bottom: 0;'>Jak mógłbyś zaprojektować własny 'rytuał rozmów' w zespole, który buduje zaufanie i otwartość?</li></ol></div><div style='background: #d1ecf1; padding: 20px; border-radius: 8px; border-left: 4px solid #17a2b8;'><h4 style='color: #0c5460; margin-bottom: 15px;'>🎯 Efekt case study</h4><p style='color: #0c5460; line-height: 1.7; margin-bottom: 15px;'>Historia Marty pokazuje, że <strong>jedna rozmowa może naprawić to, co zniszczyła inna</strong> – jeśli prowadzona jest z empatią, ciekawością i świadomością wpływu słów.</p><p style='color: #0c5460; line-height: 1.7; margin-bottom: 0;'><strong>C-IQ to nie teoria, lecz praktyka</strong>, która zaczyna się od zmiany tonu, intencji i sposobu słuchania.</p></div></div>"
+    "case_study": "<div style='background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #28a745; margin: 20px 0;'><h3 style='color: #155724; margin-bottom: 20px;'>🌱 Closing Case Study – rozmowa, która odbudowała zaufanie</h3><div style='background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px;'><h4 style='color: #495057; margin-bottom: 15px;'>Kontekst:</h4><p style='color: #6c757d; line-height: 1.7;'>Minął miesiąc od nieudanego spotkania, które wywołało w zespole Marty napięcie i spadek zaangażowania. Po lekcji o Conversational Intelligence Marta zrozumiała, że jej ton, słowa i styl rozmowy mogły aktywować u pracowników reakcję stresową – podnosić poziom kortyzolu i blokować zdolność logicznego myślenia.</p><p style='color: #6c757d; line-height: 1.7;'><strong>Postanowiła spróbować inaczej.</strong></p></div><div style='background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px;'><h4 style='color: #495057; margin-bottom: 15px;'>💬 Nowa rozmowa</h4><p style='color: #6c757d; line-height: 1.7;'>Na kolejnym spotkaniu Marta rozpoczęła od słów:</p><blockquote style='background: #d4edda; padding: 15px; border-left: 4px solid #28a745; margin: 15px 0; font-style: italic; color: #155724;'><strong>'Chcę wrócić do naszej kampanii, ale przede wszystkim – do sposobu, w jaki o niej rozmawiamy. Widzę, że atmosfera stała się napięta i to częściowo moja odpowiedzialność. Chciałabym, żebyśmy wspólnie poszukali rozwiązań – nie winnych.'</strong></blockquote><p style='color: #6c757d; line-height: 1.7;'>Następnie zadała pytanie:</p><blockquote style='background: #d4edda; padding: 15px; border-left: 4px solid #28a745; margin: 15px 0; font-style: italic; color: #155724;'><strong>'Jak Wy to widzicie? Co możemy zrobić razem, żeby poprawić efekty i pracować w spokojniejszej atmosferze?'</strong></blockquote><p style='color: #6c757d; line-height: 1.7;'>Na początku panowała cisza. Potem Kasia nieśmiało odpowiedziała: <em>'Może potrzebujemy więcej przestrzeni na testowanie pomysłów, zanim je ocenimy.'</em></p><p style='color: #6c757d; line-height: 1.7;'>Marta podziękowała jej i poprosiła resztę zespołu o opinie. Rozmowa zaczęła się toczyć. Po kilkunastu minutach zespół miał listę trzech konkretnych usprawnień – a Marta zauważyła, że ludzie znowu patrzą sobie w oczy i uśmiechają się.</p></div><div style='background: #e2f3ff; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #007bff;'><h4 style='color: #004085; margin-bottom: 15px;'>🧠 Co się zmieniło</h4><p style='color: #004085; line-height: 1.7; margin-bottom: 15px;'><strong>Marta:</strong></p><ul style='color: #004085; line-height: 1.8; padding-left: 20px;'><li style='margin-bottom: 8px;'>Zmieniła intencję rozmowy z 'kontrolowania' na 'zrozumienie'.</li><li style='margin-bottom: 8px;'>Zamiast wydawać polecenia, zadawała pytania Poziomu III – otwierające, z ciekawością.</li><li style='margin-bottom: 8px;'>Świadomie budowała bezpieczeństwo psychologiczne, obniżając stres i uruchamiając oksytocynę.</li><li style='margin-bottom: 0;'>Wprowadziła nowy rytuał rozmów zespołowych – każde spotkanie kończyło się pytaniem: <em>'Czego się dziś nauczyliśmy i co warto spróbować inaczej?'</em></li></ul><p style='color: #004085; line-height: 1.7; margin-top: 15px;'>Po kilku tygodniach zauważyła, że ludzie częściej dzielą się pomysłami, chętniej zgłaszają trudności i wspólnie szukają rozwiązań. Projekt nie tylko ruszył naprzód – zespół odzyskał zaufanie i energię do działania.</p></div><div style='background: #fff3cd; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #ffc107;'><h4 style='color: #856404; margin-bottom: 15px;'>🔍 Pytania do refleksji</h4><ol style='color: #856404; line-height: 1.8; padding-left: 20px;'><li style='margin-bottom: 10px;'>Co konkretnie zrobiła Marta, co przesunęło jej rozmowę na Poziom III – transformacyjny?</li><li style='margin-bottom: 10px;'>Jak zmiana intencji rozmowy wpłynęła na emocje i zaangażowanie zespołu?</li><li style='margin-bottom: 10px;'>Które z zasad C-IQ (empatia, ciekawość, pytania, bezpieczeństwo) Ty możesz zastosować w swojej codziennej komunikacji?</li><li style='margin-bottom: 0;'>Jak mógłbyś zaprojektować własny 'rytuał rozmów' w zespole, który buduje zaufanie i otwartość?</li></ol></div><div style='background: #d1ecf1; padding: 20px; border-radius: 8px; border-left: 4px solid #17a2b8;'><h4 style='color: #0c5460; margin-bottom: 15px;'>🎯 Efekt case study</h4><p style='color: #0c5460; line-height: 1.7; margin-bottom: 15px;'>Historia Marty pokazuje, że <strong>jedna rozmowa może naprawić to, co zniszczyła inna</strong> – jeśli prowadzona jest z empatią, ciekawością i świadomością wpływu słów.</p><p style='color: #0c5460; line-height: 1.7; margin-bottom: 0;'><strong>C-IQ to nie teoria, lecz praktyka</strong>, która zaczyna się od zmiany tonu, intencji i sposobu słuchania.</p></div></div>",
+    "cheatsheet": "<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px; border-radius: 15px; color: white; margin-bottom: 25px;'><h2 style='text-align: center; margin-bottom: 15px; color: white;'>📋 Cheatsheet: Conversational Intelligence</h2><p style='text-align: center; font-size: 1.1rem; opacity: 0.95; margin: 0;'>Szybki przewodnik po najważniejszych technikach C-IQ</p></div><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;'><div style='background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 5px solid #667eea;'><h3 style='color: #667eea; margin-bottom: 15px; font-size: 1.1rem;'>🧠 Neurobiologia</h3><div style='background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px;'><h4 style='color: #2e7d32; margin-bottom: 8px; font-size: 0.95rem;'>✅ Aktywuj oksytocynę:</h4><ul style='margin: 0; padding-left: 20px; color: #424242; font-size: 0.9rem; line-height: 1.5;'><li>Słuchaj z empatią</li><li>Zadawaj pytania z ciekawości</li><li>Używaj języka współtworzenia</li><li>Okazuj uznanie i wdzięczność</li></ul></div><div style='background: white; padding: 15px; border-radius: 8px;'><h4 style='color: #d32f2f; margin-bottom: 8px; font-size: 0.95rem;'>❌ Unikaj kortyzolu:</h4><ul style='margin: 0; padding-left: 20px; color: #424242; font-size: 0.9rem; line-height: 1.5;'><li>Nie oceniaj, nie krytykuj</li><li>Unikaj słów \"musisz\", \"powinieneś\"</li><li>Nie przerywaj, nie poprawiaj</li><li>Nie narzucaj swoich rozwiązań</li></ul></div></div><div style='background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 5px solid #4caf50;'><h3 style='color: #4caf50; margin-bottom: 15px; font-size: 1.1rem;'>📊 Poziomy rozmów</h3><div style='background: white; padding: 15px; border-radius: 8px; margin-bottom: 8px;'><h4 style='color: #ff9800; margin-bottom: 5px; font-size: 0.9rem;'>Poziom I: Wymiana informacji</h4><p style='margin: 0; color: #666; font-size: 0.85rem;'>Podstawowe fakty, dane, instrukcje</p></div><div style='background: white; padding: 15px; border-radius: 8px; margin-bottom: 8px;'><h4 style='color: #ff9800; margin-bottom: 5px; font-size: 0.9rem;'>Poziom II: Wymiana pozycji</h4><p style='margin: 0; color: #666; font-size: 0.85rem;'>Opinie, przekonania, argumenty</p></div><div style='background: white; padding: 15px; border-radius: 8px;'><h4 style='color: #4caf50; margin-bottom: 5px; font-size: 0.9rem;'>Poziom III: Współtworzenie ⭐</h4><p style='margin: 0; color: #666; font-size: 0.85rem;'>Innowacja, zaufanie, transformacja</p></div></div></div><div style='background: #fff3e0; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid #ff9800;'><h3 style='color: #ff9800; margin-bottom: 15px;'>🛠️ Techniki do natychmiastowego użycia</h3><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 15px;'><div style='background: white; padding: 15px; border-radius: 8px;'><h4 style='color: #667eea; margin-bottom: 10px; font-size: 0.95rem;'>🎯 Priming neurologiczny</h4><p style='margin-bottom: 8px; color: #424242; font-size: 0.85rem; line-height: 1.4;'><strong>Zamiast:</strong> \"Mamy problem...\"</p><p style='margin: 0; color: #2e7d32; font-size: 0.85rem; line-height: 1.4;'><strong>Powiedz:</strong> \"Mam pomysł jak możemy to ulepszyć...\"</p></div><div style='background: white; padding: 15px; border-radius: 8px;'><h4 style='color: #667eea; margin-bottom: 10px; font-size: 0.95rem;'>❓ Pytania Poziomu III</h4><p style='margin-bottom: 8px; color: #424242; font-size: 0.85rem; line-height: 1.4;'><strong>Zamiast:</strong> \"Czy zgadzasz się, że...?\"</p><p style='margin: 0; color: #2e7d32; font-size: 0.85rem; line-height: 1.4;'><strong>Zapytaj:</strong> \"Co myślisz o...?\"</p></div><div style='background: white; padding: 15px; border-radius: 8px;'><h4 style='color: #667eea; margin-bottom: 10px; font-size: 0.95rem;'>💬 Język współtworzenia</h4><p style='margin-bottom: 8px; color: #424242; font-size: 0.85rem; line-height: 1.4;'><strong>Zamiast:</strong> \"Musisz to zrobić\"</p><p style='margin: 0; color: #2e7d32; font-size: 0.85rem; line-height: 1.4;'><strong>Powiedz:</strong> \"Co możemy zrobić razem?\"</p></div><div style='background: white; padding: 15px; border-radius: 8px;'><h4 style='color: #667eea; margin-bottom: 10px; font-size: 0.95rem;'>🔄 Rytuały rozmów</h4><p style='margin-bottom: 8px; color: #424242; font-size: 0.85rem; line-height: 1.4;'><strong>Rozpocznij spotkanie:</strong></p><p style='margin: 0; color: #2e7d32; font-size: 0.85rem; line-height: 1.4;'>\"Czego dziś najbardziej potrzebujemy jako zespół?\"</p></div></div></div><div style='background: #e8f5e8; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid #4caf50;'><h3 style='color: #4caf50; margin-bottom: 15px;'>🚀 Plan działania na 30 dni</h3><div style='display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;'><div style='background: white; padding: 15px; border-radius: 8px; text-align: center;'><h4 style='color: #667eea; margin-bottom: 10px; font-size: 0.9rem;'>Tydzień 1-2</h4><h5 style='color: #2e7d32; margin-bottom: 8px; font-size: 0.85rem;'>Obserwuj</h5><ul style='margin: 0; padding-left: 15px; color: #424242; font-size: 0.8rem; line-height: 1.4; text-align: left;'><li>Na jakim poziomie są Twoje rozmowy?</li><li>Co wywołuje stres w zespole?</li><li>Kiedy ludzie są najbardziej otwarci?</li></ul></div><div style='background: white; padding: 15px; border-radius: 8px; text-align: center;'><h4 style='color: #667eea; margin-bottom: 10px; font-size: 0.9rem;'>Tydzień 3-4</h4><h5 style='color: #2e7d32; margin-bottom: 8px; font-size: 0.85rem;'>Eksperymentuj</h5><ul style='margin: 0; padding-left: 15px; color: #424242; font-size: 0.8rem; line-height: 1.4; text-align: left;'><li>Wypróbuj 1-2 techniki C-IQ</li><li>Zadawaj więcej pytań Poziomu III</li><li>Wprowadź rytuał rozmów</li></ul></div><div style='background: white; padding: 15px; border-radius: 8px; text-align: center;'><h4 style='color: #667eea; margin-bottom: 10px; font-size: 0.9rem;'>Tydzień 5-6</h4><h5 style='color: #2e7d32; margin-bottom: 8px; font-size: 0.85rem;'>Wdrażaj</h5><ul style='margin: 0; padding-left: 15px; color: #424242; font-size: 0.8rem; line-height: 1.4; text-align: left;'><li>Ucz zespół podstaw C-IQ</li><li>Mierzcie jakość rozmów</li><li>Świętujcie sukcesy!</li></ul></div></div></div><div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;'><h3 style='color: white; margin-bottom: 15px;'>⚡ Szybka lista kontrolna przed każdą ważną rozmową</h3><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left;'><div style='background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px;'><h4 style='color: white; margin-bottom: 10px; font-size: 0.9rem;'>Przygotowanie mentalnego</h4><ul style='margin: 0; padding-left: 15px; color: white; font-size: 0.8rem; line-height: 1.5;'><li>Jakie jest moje intencja? (kontrola vs zrozumienie)</li><li>Jak mogę stworzyć bezpieczną przestrzeń?</li><li>Czego chcę się dowiedzieć od innych?</li></ul></div><div style='background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px;'><h4 style='color: white; margin-bottom: 10px; font-size: 0.9rem;'>Podczas rozmowy</h4><ul style='margin: 0; padding-left: 15px; color: white; font-size: 0.8rem; line-height: 1.5;'><li>Słucham z ciekawością czy z zamiarem odpowiedzi?</li><li>Czy pozwalam na cisze i refleksję?</li><li>Czy buduję na pomysłach innych?</li></ul></div></div></div>",
+    "mind_map": {
+      "central_node": {
+        "id": "main_topic",
+        "label": "🗣️ Conversational Intelligence",
+        "size": 35,
+        "color": "#667eea",
+        "font_size": 18,
+        "font_color": "#667eea"
+      },
+      "categories": [
+        {
+          "id": "neurobiologia",
+          "label": "🧠 Neurobiologia rozmowy",
+          "size": 25,
+          "color": "#2196F3",
+          "font_size": 14,
+          "font_color": "#2196F3",
+          "details": [
+            {
+              "id": "oksytocyna",
+              "label": "💙 Oksytocyna (zaufanie)",
+              "size": 15,
+              "color": "#64B5F6",
+              "font_size": 11
+            },
+            {
+              "id": "kortyzol",
+              "label": "⚠️ Kortyzol (stres)",
+              "size": 15,
+              "color": "#90CAF9",
+              "font_size": 11
+            },
+            {
+              "id": "dopamina",
+              "label": "⚡ Dopamina (motywacja)",
+              "size": 15,
+              "color": "#BBDEFB",
+              "font_size": 11
+            }
+          ]
+        },
+        {
+          "id": "poziomy_rozmow",
+          "label": "📊 Trzy poziomy rozmów",
+          "size": 25,
+          "color": "#4CAF50",
+          "font_size": 14,
+          "font_color": "#4CAF50",
+          "details": [
+            {
+              "id": "poziom1",
+              "label": "Poziom I: Wymiana informacji",
+              "size": 15,
+              "color": "#81C784",
+              "font_size": 11
+            },
+            {
+              "id": "poziom2",
+              "label": "Poziom II: Wymiana pozycji",
+              "size": 15,
+              "color": "#A5D6A7",
+              "font_size": 11
+            },
+            {
+              "id": "poziom3",
+              "label": "Poziom III: Współtworzenie",
+              "size": 15,
+              "color": "#C8E6C9",
+              "font_size": 11
+            }
+          ]
+        },
+        {
+          "id": "techniki_ciq",
+          "label": "🛠️ Techniki C-IQ",
+          "size": 25,
+          "color": "#FF9800",
+          "font_size": 14,
+          "font_color": "#FF9800",
+          "details": [
+            {
+              "id": "sluchanie_empat",
+              "label": "👂 Słuchanie empatyczne",
+              "size": 15,
+              "color": "#FFCC02",
+              "font_size": 11
+            },
+            {
+              "id": "pytania_otwarte",
+              "label": "❓ Pytania otwarte",
+              "size": 15,
+              "color": "#FFD54F",
+              "font_size": 11
+            },
+            {
+              "id": "priming",
+              "label": "🎯 Priming neurologiczny",
+              "size": 15,
+              "color": "#FFECB3",
+              "font_size": 11
+            },
+            {
+              "id": "ritualy",
+              "label": "🔄 Rytuały rozmów",
+              "size": 15,
+              "color": "#FFF8E1",
+              "font_size": 11
+            }
+          ]
+        },
+        {
+          "id": "zastosowania",
+          "label": "🎯 Zastosowania praktyczne",
+          "size": 25,
+          "color": "#9C27B0",
+          "font_size": 14,
+          "font_color": "#9C27B0",
+          "details": [
+            {
+              "id": "feedback",
+              "label": "📢 Udzielanie feedbacku",
+              "size": 15,
+              "color": "#CE93D8",
+              "font_size": 11
+            },
+            {
+              "id": "konflikt",
+              "label": "⚖️ Zarządzanie konfliktem",
+              "size": 15,
+              "color": "#E1BEE7",
+              "font_size": 11
+            },
+            {
+              "id": "zmiany",
+              "label": "🔄 Wprowadzanie zmian",
+              "size": 15,
+              "color": "#F3E5F5",
+              "font_size": 11
+            },
+            {
+              "id": "zaangazowanie",
+              "label": "🚀 Budowanie zaangażowania",
+              "size": 15,
+              "color": "#FCE4EC",
+              "font_size": 11
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        { "from": "main_topic", "to": "neurobiologia" },
+        { "from": "main_topic", "to": "poziomy_rozmow" },
+        { "from": "main_topic", "to": "techniki_ciq" },
+        { "from": "main_topic", "to": "zastosowania" },
+        { "from": "neurobiologia", "to": "oksytocyna" },
+        { "from": "neurobiologia", "to": "kortyzol" },
+        { "from": "neurobiologia", "to": "dopamina" },
+        { "from": "poziomy_rozmow", "to": "poziom1" },
+        { "from": "poziomy_rozmow", "to": "poziom2" },
+        { "from": "poziomy_rozmow", "to": "poziom3" },
+        { "from": "techniki_ciq", "to": "sluchanie_empat" },
+        { "from": "techniki_ciq", "to": "pytania_otwarte" },
+        { "from": "techniki_ciq", "to": "priming" },
+        { "from": "techniki_ciq", "to": "ritualy" },
+        { "from": "zastosowania", "to": "feedback" },
+        { "from": "zastosowania", "to": "konflikt" },
+        { "from": "zastosowania", "to": "zmiany" },
+        { "from": "zastosowania", "to": "zaangazowanie" }
+      ]
+    }
   }
 }
