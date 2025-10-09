@@ -1238,46 +1238,14 @@ def show_lessons_content():
                                         total_cards = len(cards)
                                         
                                         if total_cards > 0:
-                                            # Statystyki nauki
-                                            studied_count = len(flashcard_state['studied_cards'])
-                                            correct_count = len(flashcard_state['correct_answers'])
-                                            incorrect_count = len(flashcard_state['incorrect_answers'])
-                                            
-                                            # Wyświetl postęp
-                                            col1, col2, col3, col4 = st.columns(4)
-                                            with col1:
-                                                st.metric("Przejrzane", f"{studied_count}/{total_cards}")
-                                            with col2:
-                                                st.metric("Poprawne", correct_count)
-                                            with col3:
-                                                st.metric("Niepoprawne", incorrect_count)
-                                            with col4:
-                                                accuracy = (correct_count / max(studied_count, 1)) * 100
-                                                st.metric("Skuteczność", f"{accuracy:.1f}%")
-                                            
-                                            # Progress bar
-                                            progress = studied_count / total_cards
-                                            st.progress(progress, text=f"Postęp nauki: {studied_count}/{total_cards} fiszek")
-                                            
                                             # Aktualna fiszka
                                             current_card = cards[flashcard_state['current_card']]
                                             card_id = current_card['id']
-                                            
-                                            st.markdown("---")
                                             
                                             # Wyświetl kartę
                                             if not flashcard_state['show_back']:
                                                 # Przód karty
                                                 st.markdown(f"### 🃏 Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
-                                                
-                                                # Kategoria i poziom trudności
-                                                col1, col2 = st.columns(2)
-                                                with col1:
-                                                    if 'category' in current_card:
-                                                        st.markdown(f"<span style='background: #e3f2fd; color: #1565c0; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;'>📂 {current_card['category']}</span>", unsafe_allow_html=True)
-                                                with col2:
-                                                    if 'difficulty' in current_card:
-                                                        st.markdown(f"<span style='background: #fff3e0; color: #e65100; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;'>⭐ {current_card['difficulty']}</span>", unsafe_allow_html=True)
                                                 
                                                 # Pytanie
                                                 st.markdown(f"""
@@ -1301,15 +1269,6 @@ def show_lessons_content():
                                             else:
                                                 # Tył karty
                                                 st.markdown(f"### 🃏 Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
-                                                
-                                                # Kategoria i poziom trudności
-                                                col1, col2 = st.columns(2)
-                                                with col1:
-                                                    if 'category' in current_card:
-                                                        st.markdown(f"<span style='background: #e3f2fd; color: #1565c0; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;'>📂 {current_card['category']}</span>", unsafe_allow_html=True)
-                                                with col2:
-                                                    if 'difficulty' in current_card:
-                                                        st.markdown(f"<span style='background: #fff3e0; color: #e65100; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;'>⭐ {current_card['difficulty']}</span>", unsafe_allow_html=True)
                                                 
                                                 # Pytanie (mniejsze)
                                                 st.markdown(f"""
@@ -1361,34 +1320,6 @@ def show_lessons_content():
                                                         flashcard_state['current_card'] = (flashcard_state['current_card'] + 1) % total_cards
                                                         st.rerun()
                                             
-                                            # Nawigacja
-                                            st.markdown("---")
-                                            col1, col2, col3, col4 = st.columns(4)
-                                            
-                                            with col1:
-                                                if st.button("⏮️ Pierwsza", key=f"first_card_{lesson_id}", disabled=flashcard_state['current_card'] == 0):
-                                                    flashcard_state['current_card'] = 0
-                                                    flashcard_state['show_back'] = False
-                                                    st.rerun()
-                                            
-                                            with col2:
-                                                if st.button("◀️ Poprzednia", key=f"prev_card_{lesson_id}", disabled=flashcard_state['current_card'] == 0):
-                                                    flashcard_state['current_card'] = max(0, flashcard_state['current_card'] - 1)
-                                                    flashcard_state['show_back'] = False
-                                                    st.rerun()
-                                            
-                                            with col3:
-                                                if st.button("▶️ Następna", key=f"next_card_{lesson_id}", disabled=flashcard_state['current_card'] == total_cards - 1):
-                                                    flashcard_state['current_card'] = min(total_cards - 1, flashcard_state['current_card'] + 1)
-                                                    flashcard_state['show_back'] = False
-                                                    st.rerun()
-                                            
-                                            with col4:
-                                                if st.button("⏭️ Ostatnia", key=f"last_card_{lesson_id}", disabled=flashcard_state['current_card'] == total_cards - 1):
-                                                    flashcard_state['current_card'] = total_cards - 1
-                                                    flashcard_state['show_back'] = False
-                                                    st.rerun()
-                                            
                                             # Funkcje dodatkowe
                                             st.markdown("---")
                                             col1, col2 = st.columns(2)
@@ -1412,6 +1343,30 @@ def show_lessons_content():
                                                             flashcard_state['show_back'] = False
                                                             break
                                                     st.rerun()
+                                            
+                                            # Statystyki nauki na dole
+                                            st.markdown("---")
+                                            st.markdown("### 📊 Statystyki nauki")
+                                            
+                                            studied_count = len(flashcard_state['studied_cards'])
+                                            correct_count = len(flashcard_state['correct_answers'])
+                                            incorrect_count = len(flashcard_state['incorrect_answers'])
+                                            
+                                            # Wyświetl postęp
+                                            col1, col2, col3, col4 = st.columns(4)
+                                            with col1:
+                                                st.metric("Przejrzane", f"{studied_count}/{total_cards}")
+                                            with col2:
+                                                st.metric("Poprawne", correct_count)
+                                            with col3:
+                                                st.metric("Niepoprawne", incorrect_count)
+                                            with col4:
+                                                accuracy = (correct_count / max(studied_count, 1)) * 100
+                                                st.metric("Skuteczność", f"{accuracy:.1f}%")
+                                            
+                                            # Progress bar
+                                            progress = studied_count / total_cards
+                                            st.progress(progress, text=f"Postęp nauki: {studied_count}/{total_cards} fiszek")
                                             
                                             # Award XP za zakończenie wszystkich fiszek
                                             if studied_count == total_cards:

@@ -127,6 +127,13 @@ def award_fragment_xp(lesson_id, fragment_type, xp_amount):
             # Odśwież session_state
             st.session_state.user_data = user_data
             
+            # Aktualizuj dzisiejsze statystyki
+            try:
+                from views.dashboard import update_daily_stats_if_needed
+                update_daily_stats_if_needed(username)
+            except ImportError:
+                pass  # Dashboard module not available
+            
             return True, xp_amount
     
     return False, 0
@@ -208,6 +215,14 @@ def mark_lesson_as_completed(lesson_id):
             except ImportError:
                 pass  # Activity system not available
             except Exception:
+                pass
+            
+            # Aktualizuj dzisiejsze statystyki
+            try:
+                from views.dashboard import update_daily_stats_if_needed
+                update_daily_stats_if_needed(username)
+            except ImportError:
+                pass  # Dashboard module not available
                 pass  # Ignore other errors
             
             # Check for achievements after completing lesson

@@ -45,7 +45,9 @@ def register_user(username, password, password_confirm):
             "inspirations": {
                 "read": [],      # Lista ID przeczytanych inspiracji
                 "favorites": []  # Lista ID ulubionych inspiracji
-            }
+            },
+            # Inicjalizacja dziennych statystyk
+            "daily_stats": {}
         }
         save_user_data(users_data)
         
@@ -105,6 +107,14 @@ def update_user_xp(username, xp_amount):
     if username in users_data:
         users_data[username]["xp"] += xp_amount
         save_user_data(users_data)
+        
+        # Aktualizuj dzisiejsze statystyki jeśli istnieją
+        try:
+            from views.dashboard import update_daily_stats_if_needed
+            update_daily_stats_if_needed(username)
+        except ImportError:
+            pass  # Ignore if dashboard module is not available
+        
         return True
     return False
 

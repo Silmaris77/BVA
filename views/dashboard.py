@@ -26,11 +26,16 @@ from utils.lesson_utils import get_lesson_title # Added import
 from utils.scroll_utils import scroll_to_top, scroll_to_top_smooth
 
 def save_daily_stats(username):
-    """Zapisuje statystyki użytkownika na koniec dnia"""
+    """Zapisuje statystyki użytkownika na koniec dnia (tylko raz dziennie)"""
     from datetime import datetime
     
     user_data = get_current_user_data(username)
     today = datetime.now().strftime("%Y-%m-%d")
+    
+    # Sprawdź czy już zapisano dzisiejsze statystyki
+    daily_stats = user_data.get('daily_stats', {})
+    if today in daily_stats:
+        return  # Już zapisano dzisiaj
     
     current_stats = {
         'xp': user_data.get('xp', 0),
@@ -44,6 +49,13 @@ def save_daily_stats(username):
         user_data['daily_stats'] = {}
     
     user_data['daily_stats'][today] = current_stats
+    
+    # Zachowaj tylko ostatnie 30 dni statystyk (żeby nie rozdmuchiwać pliku)
+    dates = list(user_data['daily_stats'].keys())
+    dates.sort()
+    if len(dates) > 30:
+        for old_date in dates[:-30]:
+            del user_data['daily_stats'][old_date]
     
     # Zapisz dane użytkownika
     users_data = load_user_data()
@@ -90,28 +102,61 @@ def calculate_stats_changes(username):
     
     return current_stats, changes
 
-def format_change_text(change_data):
+def format_change_text(change_data, use_absolute=False):
     """Formatuje tekst zmiany z odpowiednim kolorem"""
     absolute = change_data['absolute']
     percentage = change_data['percentage']
     
     if absolute > 0:
-        if percentage >= 100:
+        if use_absolute:
             change_text = f"+{absolute}"
         else:
-            change_text = f"+{percentage:.0f}%"
+            if percentage >= 100:
+                change_text = f"+{absolute}"
+            else:
+                change_text = f"+{percentage:.0f}%"
         color = "#4ade80"  # zielony
     elif absolute < 0:
-        if percentage <= -100:
+        if use_absolute:
             change_text = f"{absolute}"
         else:
-            change_text = f"{percentage:.0f}%"
+            if percentage <= -100:
+                change_text = f"{absolute}"
+            else:
+                change_text = f"{percentage:.0f}%"
         color = "#f87171"  # czerwony
     else:
         change_text = "0"
         color = "#9ca3af"  # szary
     
     return change_text, color
+
+def update_daily_stats_if_needed(username):
+    """Aktualizuje dzisiejsze statystyki jeśli już istnieją (po zmianie XP, ukończeniu lekcji itp.)"""
+    from datetime import datetime
+    
+    user_data = get_current_user_data(username)
+    today = datetime.now().strftime("%Y-%m-%d")
+    
+    # Sprawdź czy już istnieją dzisiejsze statystyki
+    daily_stats = user_data.get('daily_stats', {})
+    if today not in daily_stats:
+        return  # Nie ma dzisiejszych statystyk, nic nie rób
+    
+    # Zaktualizuj obecne statystyki
+    current_stats = {
+        'xp': user_data.get('xp', 0),
+        'degencoins': user_data.get('degencoins', 0),
+        'level': user_data.get('level', 1),
+        'completed_lessons': len(user_data.get('completed_lessons', []))
+    }
+    
+    user_data['daily_stats'][today] = current_stats
+    
+    # Zapisz dane użytkownika
+    users_data = load_user_data()
+    users_data[username] = user_data
+    save_user_data(users_data)
 
 def get_top_users(limit=5):
     """Get top users by XP"""
@@ -312,10 +357,10 @@ def show_stats_section(user_data, device_type):
     level = current_stats['level']
     
     # Formatuj zmiany z odpowiednimi kolorami
-    xp_change, xp_color = format_change_text(changes['xp'])
-    degencoins_change, degencoins_color = format_change_text(changes['degencoins'])
-    lessons_change, lessons_color = format_change_text(changes['completed_lessons'])
-    level_change, level_color = format_change_text(changes['level'])
+    xp_change, xp_color = format_change_text(changes['xp'], use_absolute=True)  # Liczby całkowite dla XP
+    degencoins_change, degencoins_color = format_change_text(changes['degencoins'], use_absolute=True)  # Liczby całkowite dla monet
+    lessons_change, lessons_color = format_change_text(changes['completed_lessons'], use_absolute=True)  # Liczby całkowite dla lekcji
+    level_change, level_color = format_change_text(changes['level'], use_absolute=True)  # Liczby całkowite dla poziomu
     
     # Użyj przekazanego device_type zamiast wykrywać ponownie
     if device_type == 'mobile':
