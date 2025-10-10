@@ -1268,7 +1268,7 @@ def show_lessons_content():
                                                 # Przycisk pokazania odpowiedzi
                                                 col1, col2, col3 = st.columns([1, 2, 1])
                                                 with col2:
-                                                    if st.button("🔄 Pokaż odpowiedź", key=f"show_back_{card_id}", type="primary", use_container_width=True):
+                                                    if st.button("🔄 Pokaż odpowiedź", key=f"show_back_{card_id}", type="primary", width="stretch"):
                                                         flashcard_state['show_back'] = True
                                                         st.rerun()
                                             
@@ -1301,7 +1301,7 @@ def show_lessons_content():
                                                 col1, col2, col3 = st.columns(3)
                                                 
                                                 with col1:
-                                                    if st.button("❌ Nie wiedziałem", key=f"incorrect_{card_id}", type="secondary", use_container_width=True):
+                                                    if st.button("❌ Nie wiedziałem", key=f"incorrect_{card_id}", type="secondary", width="stretch"):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         flashcard_state['incorrect_answers'].add(card_id)
                                                         flashcard_state['correct_answers'].discard(card_id)  # Usuń z poprawnych jeśli było
@@ -1310,7 +1310,7 @@ def show_lessons_content():
                                                         st.rerun()
                                                 
                                                 with col2:
-                                                    if st.button("🤔 Częściowo", key=f"partial_{card_id}", use_container_width=True):
+                                                    if st.button("🤔 Częściowo", key=f"partial_{card_id}", width="stretch"):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         # Częściowa wiedza = nie dodawaj do żadnej kategorii
                                                         flashcard_state['show_back'] = False
@@ -1318,7 +1318,7 @@ def show_lessons_content():
                                                         st.rerun()
                                                 
                                                 with col3:
-                                                    if st.button("✅ Wiedziałem", key=f"correct_{card_id}", type="primary", use_container_width=True):
+                                                    if st.button("✅ Wiedziałem", key=f"correct_{card_id}", type="primary", width="stretch"):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         flashcard_state['correct_answers'].add(card_id)
                                                         flashcard_state['incorrect_answers'].discard(card_id)  # Usuń z niepoprawnych jeśli było

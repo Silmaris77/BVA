@@ -41,7 +41,7 @@ def show_login_page():
         
         # Wyświetl logo
         if os.path.exists(logo_path):
-            st.image(logo_path, use_container_width=True)
+            st.image(logo_path, width="stretch")
         else:
             st.markdown("# 🧘‍♂️💰")
         

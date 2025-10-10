@@ -202,12 +202,12 @@ def zen_button(label, on_click=None, key=None, disabled=False, help=None, width=
     - key: Unikalny klucz przycisku
     - disabled: Czy przycisk jest wyłączony
     - help: Tekst pomocy pokazywany po najechaniu
-    - width: Czy przycisk ma używać pełnej szerokości kontenera ('stretch' -> use_container_width=True)
+    - width: Czy przycisk ma używać pełnej szerokości kontenera ('stretch' -> width="stretch")
     
     Zwraca:
     - Bool: True jeśli przycisk został kliknięty
     """
-    # Konwertuj stary parametr width='stretch' na nowy use_container_width=True
+    # Konwertuj stary parametr width='stretch' na nowy width="stretch"
     if width == 'stretch':
         return st.button(
             label, 
@@ -215,7 +215,7 @@ def zen_button(label, on_click=None, key=None, disabled=False, help=None, width=
             key=key, 
             disabled=disabled, 
             help=help, 
-            use_container_width=True
+            width="stretch"
         )
     else:
         return st.button(
