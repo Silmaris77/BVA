@@ -533,6 +533,107 @@
           }
         ]
       },
+      "ai_exercises": {
+        "title": "🤖 Ćwiczenia AI",
+        "description": "Interaktywne ćwiczenia sprawdzane przez sztuczną inteligencję z konstruktywnym feedbackiem",
+        "config": {
+          "ai_feedback_enabled": true,
+          "ai_model": "Google Gemini",
+          "validation_criteria": {
+            "min_words": 2,
+            "required_concepts": ["C-IQ", "neurobiologia", "poziomy rozmów"],
+            "feedback_type": "constructive"
+          }
+        },
+        "exercises": [
+          {
+            "id": "poziomy_identyfikacja",
+            "title": "🎯 Identyfikacja poziomów rozmowy",
+            "type": "ai_exercise",
+            "ai_config": {
+              "exercise_type": "level_identification",
+              "feedback_criteria": [
+                "Poprawna identyfikacja poziomu rozmowy",
+                "Zrozumienie charakterystyki każdego poziomu",
+                "Uzasadnienie swojej odpowiedzi",
+                "Rozpoznanie sygnałów językowych"
+              ],
+              "ai_prompts": {
+                "system": "Jesteś ekspertem w Conversational Intelligence. Oceniasz umiejętność identyfikacji poziomów rozmowy (I - Transakcyjny, II - Pozycyjny, III - Transformacyjny).",
+                "evaluation": "Oceń czy uczestnik poprawnie zidentyfikował poziom rozmowy i czy dobrze uzasadnił swoją odpowiedź. Podaj konstruktywny feedback z wyjaśnieniem."
+              }
+            },
+            "content": {
+              "main": "<div style='background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%); padding: 25px; border-radius: 12px; color: white; margin-bottom: 25px;'><h2 style='color: white; text-align: center; margin-bottom: 15px;'>🎯 Identyfikacja poziomów rozmowy</h2><p style='text-align: center; font-size: 1.1rem; opacity: 0.9;'>Praktyczne rozpoznawanie poziomów C-IQ w rzeczywistych wypowiedziach</p></div>",
+              "scenario": "<div style='background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #4caf50; margin: 20px 0;'><h3 style='color: #2e7d32; margin-bottom: 20px;'>📞 Sytuacja w firmie</h3><div style='background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px;'><h4 style='color: #495057; margin-bottom: 15px;'>Kontekst:</h4><p style='color: #6c757d; line-height: 1.7;'>Zespół nie dotrzymuje terminów projektowych. Na spotkaniu menedżer mówi do zespołu:</p></div><div style='background: #e3f2fd; padding: 20px; border-radius: 8px; border-left: 4px solid #2196f3;'><h4 style='color: #1565c0; margin-bottom: 15px;'>💬 Wypowiedź menedżera:</h4><blockquote style='background: #fff; padding: 20px; border-left: 4px solid #4caf50; margin: 15px 0; font-style: italic; font-size: 1.1rem; line-height: 1.8;'>\"Widzę, że mamy wyzwanie z terminami. Zastanawiam się, jakie przeszkody napotykamy jako zespół i jak możemy razem wypracować rozwiązania, które będą działać dla wszystkich. Co myślicie o przyczynach tej sytuacji i jakie pomysły macie na ulepszenie naszych procesów?\"</blockquote></div></div>",
+              "exercise_prompt": "<div style='background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 20px 0;'><h4 style='color: #2e7d32; margin-bottom: 15px;'>📝 Twoje zadanie:</h4><p style='color: #424242; margin-bottom: 15px;'>Przeanalizuj wypowiedź menedżera i określ:</p><ul style='color: #424242; line-height: 1.7; margin-bottom: 20px;'><li><strong>Na jakim poziomie rozmowy</strong> znajduje się ta wypowiedź (I, II, czy III)?</li><li><strong>Jakie konkretne słowa/frazy</strong> wskazują na ten poziom?</li><li><strong>Jak ta wypowiedź może wpłynąć</strong> na neurobiologię zespołu (hormony)?</li></ul><p style='color: #2e7d32; font-weight: bold; margin: 0;'>Napisz swoją analizę w polu poniżej i otrzymaj szczegółowy feedback AI! 👇</p></div>"
+            }
+          },
+          {
+            "id": "symulacja_rozmowy",
+            "title": "🎭 Symulacja trudnej rozmowy",
+            "type": "ai_exercise",
+            "ai_config": {
+              "exercise_type": "conversation_simulation",
+              "role_play": true,
+              "scenario": "difficult_team_conversation",
+              "feedback_criteria": [
+                "Zastosowanie poziomów C-IQ",
+                "Świadomość neurobiologii rozmowy",
+                "Praktyczne techniki budowania zaufania",
+                "Unikanie języka powodującego obronność"
+              ],
+              "ai_prompts": {
+                "system": "Jesteś ekspertem w Conversational Intelligence. Analizuj odpowiedzi uczestnika pod kątem zastosowania zasad C-IQ, neurobiologii rozmowy i praktycznych technik budowania zaufania. Dawaj konstruktywny feedback z konkretnymi sugestiami.",
+                "evaluation": "Oceń odpowiedź uczestnika w skali 1-10 w następujących kategoriach: 1) Zastosowanie poziomów C-IQ (czy rozpoznał poziom rozmowy i świadomie przeszedł do poziomu III?), 2) Świadomość neurobiologii (czy uwzględnił wpływ na hormony stres/zaufanie?), 3) Praktyczne techniki (czy zastosował konkretne narzędzia jak pytania otwarte, język współtworzenia?), 4) Unikanie obronności (czy unikał słów/tonów powodujących kortyzol?). Podaj konkretny feedback z przykładami."
+              }
+            },
+            "content": {
+              "scenario": "<div style='background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #ff9800; margin: 20px 0;'><h3 style='color: #e65100; margin-bottom: 20px;'>🎭 Symulacja: Trudna rozmowa z zespołem</h3><div style='background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px;'><h4 style='color: #495057; margin-bottom: 15px;'>Sytuacja:</h4><p style='color: #6c757d; line-height: 1.7;'>Jesteś liderem zespołu. Projekt, nad którym pracujecie od 3 miesięcy, właśnie został skrytykowany przez klienta jako 'niespójny i chaotyczny'. Zespół jest zdemoralizowany, niektórzy członkowie zaczynają się obwiniać nawzajem. Za godzinę masz spotkanie zespołu.</p><p style='color: #6c757d; line-height: 1.7; font-weight: bold;'>Członkowie zespołu mówią:</p><blockquote style='background: #f8d7da; padding: 15px; border-left: 4px solid #dc3545; margin: 15px 0; font-style: italic;'><strong>Anna (projektantka):</strong> \"Gdyby programiści lepiej czytali specyfikację, nie mielibyśmy tego problemu.\"</blockquote><blockquote style='background: #f8d7da; padding: 15px; border-left: 4px solid #dc3545; margin: 15px 0; font-style: italic;'><strong>Tomek (programista):</strong> \"A może gdyby projektanci robili rzeczy wykonalne, a nie piękne na papierze?\"</blockquote></div></div>",
+              "exercise_prompt": "<div style='background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 20px 0;'><h4 style='color: #1565c0; margin-bottom: 15px;'>💭 Twoje zadanie:</h4><p style='color: #424242; margin-bottom: 15px;'>Napisz dokładnie, co powiesz na początku spotkania (pierwsze 2-3 minuty). Uwzględnij zasady C-IQ i napisz swoją odpowiedź w polu poniżej:</p><ul style='color: #424242; line-height: 1.6; margin-bottom: 20px;'><li>Jak przejdziesz z poziomu II na poziom III?</li><li>Jakie słowa obniżą kortyzol i uruchomią oksytocynę?</li><li>Jak stworzysz bezpieczeństwo psychologiczne?</li></ul><p style='color: #1565c0; font-weight: bold; margin: 0;'>AI oceni Twoją strategię komunikacyjną! 👇</p></div>"
+            }
+          },
+          {
+            "id": "analiza_przypadku",
+            "title": "🔍 Analiza konfliktu komunikacyjnego",
+            "type": "ai_exercise",
+            "ai_config": {
+              "exercise_type": "case_analysis",
+              "assessment_rubric": {
+                "identification_of_ciq_levels": 25,
+                "neurobiological_understanding": 25,
+                "practical_solutions": 25,
+                "application_of_techniques": 25
+              },
+              "ai_prompts": {
+                "system": "Jesteś ekspertem w analizie przypadków komunikacyjnych przez pryzmat Conversational Intelligence. Oceń analizę uczestnika pod kątem: 1) Trafnej identyfikacji poziomów C-IQ, 2) Zrozumienia aspektów neurobiologicznych, 3) Proponowanych praktycznych rozwiązań, 4) Zastosowania konkretnych technik C-IQ.",
+                "evaluation": "Oceń analizę w każdej z 4 kategorii (25% każda): identyfikacja poziomów C-IQ, zrozumienie neurobiologii, praktyczne rozwiązania, zastosowanie technik. Podaj szczegółowy feedback z punktacją i sugestiami rozwoju."
+              }
+            },
+            "content": {
+              "case_study": "<div style='background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #2196f3; margin: 20px 0;'><h3 style='color: #1565c0; margin-bottom: 20px;'>🔍 Analiza przypadku: Konflikt o zasoby</h3><div style='background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px;'><h4 style='color: #495057; margin-bottom: 15px;'>Transkrypcja rozmowy:</h4><div style='border-left: 4px solid #ccc; padding-left: 20px; margin: 15px 0;'><p style='color: #666; margin-bottom: 10px;'><strong>Lider (Paweł):</strong> \"Zebrałem was, bo mamy problem z budżetem na Q4. Musimy obciąć koszty o 20%. Każdy dział musi się zastanowić, z czego może zrezygnować.\"</p><p style='color: #666; margin-bottom: 10px;'><strong>Kierownik IT (Ala):</strong> \"To niemożliwe! Już teraz ledwo dajemy radę. Jak mamy zrezygnować z kolejnych narzędzi?\"</p><p style='color: #666; margin-bottom: 10px;'><strong>Kierownik HR (Bartek):</strong> \"My też nie możemy więcej ciąć. Ludzie już narzekają na brak budżetu szkoleniowego.\"</p><p style='color: #666; margin-bottom: 10px;'><strong>Paweł:</strong> \"Rozumiem, że to trudne, ale decyzja jest podjęta. Każdy musi znaleźć 20%. Punkt.\"</p><p style='color: #666; margin-bottom: 10px;'><strong>Ala:</strong> \"To nie fair! IT zawsze płaci cenę za błędy innych działów.\"</p><p style='color: #666; margin-bottom: 10px;'><strong>Bartek:</strong> \"Może IT w końcu powinno pokazać, ile naprawdę kosztuje firmę?\"</p><p style='color: #666; margin: 0;'><strong>Paweł:</strong> \"Dość! Spotkanie kończymy. Każdy ma tydzień na przedstawienie listy cięć.\"</p></div></div></div>",
+              "analysis_prompt": "<div style='background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 20px 0;'><h4 style='color: #1565c0; margin-bottom: 15px;'>📝 Zadania do analizy:</h4><p style='color: #424242; margin-bottom: 15px;'>Przeanalizuj transkrypcję rozmowy i napisz szczegółową analizę obejmującą:</p><ol style='color: #424242; line-height: 1.6; margin-bottom: 20px;'><li><strong>Poziomy rozmowy:</strong> Które fragmenty to poziom I, II, III?</li><li><strong>Neurobiologia:</strong> Jakie hormony stres/zaufanie były aktywowane?</li><li><strong>Główne błędy komunikacyjne:</strong> Co poszło nie tak z perspektywy C-IQ?</li><li><strong>Przeprojektowanie:</strong> Jak prowadziłbyś tę rozmowę lepiej?</li></ol><p style='color: #1565c0; font-weight: bold; margin: 0;'>Napisz swoją kompleksową analizę w polu poniżej! 👇</p></div>"
+            }
+          },
+          {
+            "id": "autorefleksja",
+            "title": "💭 Dziennik rozwoju C-IQ",
+            "type": "ai_exercise",
+            "ai_config": {
+              "exercise_type": "self_reflection",
+              "feedback_style": "coaching",
+              "personal_development_focus": true,
+              "ai_prompts": {
+                "system": "Jesteś profesjonalnym coachem specjalizującym się w rozwoju umiejętności komunikacyjnych i Conversational Intelligence. Twój feedback ma być wspierający, motywujący i skoncentrowany na rozwoju osobistym. Pomagaj uczestnikowi odkrywać własne wzorce komunikacyjne i planować rozwój.",
+                "evaluation": "Przeanalizuj refleksję uczestnika i udziel coachingowego wsparcia. Skoncentruj się na: 1) Docenieniu samoświadomości, 2) Wskazaniu mocnych stron, 3) Delikatnym wskazaniu obszarów rozwoju, 4) Konkretnych, małych krokach do wprowadzenia, 5) Budowaniu motywacji do zmiany."
+              }
+            },
+            "content": {
+              "reflection_interface": "<div style='background: #f3e5f5; padding: 25px; border-radius: 12px; border-left: 5px solid #9c27b0; margin: 20px 0;'><h3 style='color: #7b1fa2; margin-bottom: 20px;'>💭 Dziennik rozwoju C-IQ</h3><div style='background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px;'><h4 style='color: #495057; margin-bottom: 15px;'>🪞 Przewodnik do refleksji</h4><p style='color: #6c757d; line-height: 1.7; margin-bottom: 15px;'>Ta sekcja pomoże Ci zrozumieć Twoje osobiste wzorce komunikacyjne przez pryzmat Conversational Intelligence. Bądź szczery ze sobą - to klucz do rozwoju.</p><div style='background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #9c27b0;'><p style='color: #424242; margin: 0; font-style: italic;'>💡 Pamiętaj: Nie ma 'dobrych' czy 'złych' odpowiedzi. Każdy wzorzec komunikacyjny można rozwijać i doskonalić.</p></div></div><div style='background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 20px 0;'><h4 style='color: #1565c0; margin-bottom: 20px;'>📖 Refleksja osobista</h4><p style='color: #424242; margin-bottom: 15px;'>Przemyśl swoje doświadczenia i napisz szczerą refleksję obejmującą:</p><ul style='color: #424242; line-height: 1.6; margin-bottom: 20px;'><li><strong>Moja największa insight</strong> z tej lekcji</li><li><strong>Mój główny wzorzec komunikacyjny</strong> (uczciwa samoocena)</li><li><strong>Konkretna sytuacja</strong> do przeanalizowania</li><li><strong>Jeden mały krok,</strong> który zrobię jutro</li></ul><p style='color: #7b1fa2; font-weight: bold; margin: 0;'>Napisz swoją szczerą autorefleksję w polu poniżej! 👇</p></div></div>"
+            }
+          }
+        ]
+      },
       "closing_quiz": {
         "title": "Quiz końcowy - Conversational Intelligence",
         "description": "Sprawdź, jak dobrze opanowałeś zasady inteligencji konwersacyjnej Judith Glaser",

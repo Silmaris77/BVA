@@ -1048,6 +1048,12 @@ def show_lessons_content():
                         tab_keys.append('case_studies')
                         sub_tabs_data['case_studies'] = practical_data['case_studies']
                     
+                    # AI Exercises - interaktywne ćwiczenia sprawdzane przez AI
+                    if 'ai_exercises' in practical_data:
+                        available_tabs.append("🤖 Ćwiczenia AI")
+                        tab_keys.append('ai_exercises')
+                        sub_tabs_data['ai_exercises'] = practical_data['ai_exercises']
+                    
                     # Pytania otwarte z oceną AI
                     if 'ai_questions' in practical_data:
                         available_tabs.append("🤖 Pytania AI")
@@ -1456,6 +1462,183 @@ def show_lessons_content():
                                         st.error("Moduł obsługi pytań AI nie jest dostępny. Skontaktuj się z administratorem.")
                                     except Exception as e:
                                         st.error(f"Błąd podczas ładowania pytań AI: {str(e)}")
+                                
+                                elif tab_key == 'ai_exercises':
+                                    # Obsługa ćwiczeń AI - interaktywne ćwiczenia sprawdzane przez AI
+                                    tab_data = sub_tabs_data[tab_key]
+                                    
+                                    # Wyświetl tytuł i opis sekcji
+                                    if 'title' in tab_data:
+                                        st.markdown(f"### {tab_data['title']}")
+                                    if 'description' in tab_data:
+                                        st.info(tab_data['description'])
+                                    
+                                    # Obsługa ćwiczeń AI
+                                    if 'exercises' in tab_data:
+                                        exercises = tab_data['exercises']
+                                        
+                                        # Wyświetl konfigurację AI jeśli istnieje
+                                        if 'config' in tab_data:
+                                            ai_config = tab_data['config']
+                                            st.sidebar.markdown("### 🤖 Konfiguracja AI")
+                                            st.sidebar.info(f"Model AI: {ai_config.get('ai_model', 'GPT-4')}")
+                                            st.sidebar.info(f"Minimalna liczba słów: {ai_config.get('validation_criteria', {}).get('min_words', 2)}")
+                                        
+                                        for exercise in exercises:
+                                            exercise_id = exercise.get('id', 'unknown')
+                                            exercise_title = exercise.get('title', 'Ćwiczenie')
+                                            exercise_type = exercise.get('type', 'standard')
+                                            
+                                            with st.expander(f"**{exercise_title}**", expanded=True):
+                                                # Wyświetl zawartość ćwiczenia
+                                                if 'content' in exercise:
+                                                    content = exercise['content']
+                                                    
+                                                    # Główna treść
+                                                    if 'main' in content:
+                                                        st.markdown(content['main'], unsafe_allow_html=True)
+                                                    
+                                                    # Scenariusz (dla symulacji)
+                                                    if 'scenario' in content:
+                                                        st.markdown(content['scenario'], unsafe_allow_html=True)
+                                                    
+                                                    # Przypadek do analizy
+                                                    if 'case_study' in content:
+                                                        st.markdown(content['case_study'], unsafe_allow_html=True)
+                                                    
+                                                    # Interfejs refleksji
+                                                    if 'reflection_interface' in content:
+                                                        st.markdown(content['reflection_interface'], unsafe_allow_html=True)
+                                                    
+                                                    # Prompt do ćwiczenia
+                                                    if 'exercise_prompt' in content:
+                                                        st.markdown(content['exercise_prompt'], unsafe_allow_html=True)
+                                                    
+                                                    # Prompt do analizy
+                                                    if 'analysis_prompt' in content:
+                                                        st.markdown(content['analysis_prompt'], unsafe_allow_html=True)
+                                                    
+                                                    # Interaktywne elementy (quiz wiedzy)
+                                                    if 'interactive_elements' in content:
+                                                        for element in content['interactive_elements']:
+                                                            if element['type'] == 'knowledge_check':
+                                                                st.markdown("---")
+                                                                question = element['question']
+                                                                options = element['options']
+                                                                correct = element['correct']
+                                                                explanation = element.get('explanation', '')
+                                                                
+                                                                # Sprawdź czy już odpowiedziano
+                                                                answer_key = f"knowledge_check_{exercise_id}_{lesson_id}"
+                                                                
+                                                                st.markdown(f"**Pytanie:** {question}")
+                                                                selected = st.radio(
+                                                                    "Wybierz odpowiedź:",
+                                                                    options,
+                                                                    key=answer_key,
+                                                                    index=None
+                                                                )
+                                                                
+                                                                if selected:
+                                                                    selected_index = options.index(selected)
+                                                                    if selected_index == correct:
+                                                                        st.success(f"✅ Poprawnie! {explanation}")
+                                                                    else:
+                                                                        st.error(f"❌ Niepoprawnie. Prawidłowa odpowiedź to: {options[correct]}")
+                                                                        st.info(explanation)
+                                                
+                                                st.markdown("---")
+                                                
+                                                # Placeholder dla przyszłej integracji AI
+                                                if exercise_type == 'ai_exercise':
+                                                    # Importuj i użyj modułu AI
+                                                    try:
+                                                        from utils.ai_exercises import display_ai_exercise_interface
+                                                        
+                                                        lesson_title = lesson.get("title", "")
+                                                        exercise_completed = display_ai_exercise_interface(exercise, lesson_title)
+                                                        
+                                                        # Jeśli ćwiczenie ukończone, zapisz w sesji
+                                                        if exercise_completed:
+                                                            completed_key = f"ai_exercise_{exercise_id}_{lesson_id}_completed"
+                                                            st.session_state[completed_key] = True
+                                                    
+                                                    except ImportError:
+                                                        st.error("Moduł obsługi ćwiczeń AI nie jest dostępny.")
+                                                    except Exception as e:
+                                                        st.error(f"Błąd podczas ładowania ćwiczenia AI: {str(e)}")
+                                                        # Fallback - podstawowy interfejs
+                                                        st.markdown("### 🤖 Feedback AI")
+                                                        st.info("Funkcjonalność oceny AI będzie dostępna wkrótce. Na razie możesz przeanalizować swoje odpowiedzi samodzielnie używając wskazówek z lekcji.")
+                                                        
+                                                        # Wyświetl kryteria oceny jeśli dostępne
+                                                        if 'ai_config' in exercise:
+                                                            ai_config = exercise['ai_config']
+                                                            if 'feedback_criteria' in ai_config:
+                                                                st.markdown("**Kryteria oceny AI:**")
+                                                                criteria = ai_config['feedback_criteria']
+                                                                if isinstance(criteria, list):
+                                                                    for criterion in criteria:
+                                                                        st.markdown(f"• {criterion}")
+                                                                elif isinstance(criteria, dict):
+                                                                    for criterion, weight in criteria.items():
+                                                                        st.markdown(f"• {criterion}: {weight}%")
+                                        
+                                        # Podsumowanie ćwiczeń AI
+                                        st.markdown("---")
+                                        st.markdown("### 📊 Postęp ćwiczeń AI")
+                                        
+                                        completed_exercises = 0
+                                        # Liczymy tylko prawdziwe ćwiczenia AI (z ai_config)
+                                        ai_only_exercises = [ex for ex in exercises if 'ai_config' in ex]
+                                        total_exercises = len(ai_only_exercises)
+                                        
+                                        # Sprawdź ile ćwiczeń zostało ukończonych
+                                        for exercise in ai_only_exercises:
+                                            exercise_id = exercise.get('id', 'unknown')
+                                            completion_key = f"ai_exercise_{exercise_id}_completed"
+                                            if st.session_state.get(completion_key, False):
+                                                completed_exercises += 1
+                                        
+                                        # Wyświetl postęp
+                                        progress = completed_exercises / total_exercises if total_exercises > 0 else 0
+                                        st.progress(progress, text=f"Ukończone ćwiczenia: {completed_exercises}/{total_exercises}")
+                                        
+                                        col1, col2, col3 = st.columns(3)
+                                        with col1:
+                                            st.metric("Ukończone", f"{completed_exercises}/{total_exercises}")
+                                        with col2:
+                                            percentage = (completed_exercises / total_exercises * 100) if total_exercises > 0 else 0
+                                            st.metric("Postęp", f"{percentage:.0f}%")
+                                        with col3:
+                                            remaining = total_exercises - completed_exercises
+                                            st.metric("Pozostało", remaining)
+                                        
+                                        # Award XP za ćwiczenia AI
+                                        if completed_exercises == total_exercises and total_exercises > 0:
+                                            ai_exercises_xp_key = f"ai_exercises_xp_{lesson_id}"
+                                            if not st.session_state.get(ai_exercises_xp_key, False):
+                                                ai_xp = step_xp_values['practical_exercises'] // 3  # 1/3 XP z practical_exercises
+                                                success, earned_xp = award_fragment_xp(lesson_id, 'ai_exercises', ai_xp)
+                                                st.session_state[ai_exercises_xp_key] = True
+                                                if success and earned_xp > 0:
+                                                    st.balloons()
+                                                    st.success(f"🎉 Gratulacje! Ukończyłeś wszystkie ćwiczenia AI! Zdobyłeś {earned_xp} XP!")
+                                        
+                                        # Motywująca wiadomość
+                                        if completed_exercises > 0:
+                                            if completed_exercises == total_exercises:
+                                                st.success("🏆 Doskonale! Ukończyłeś wszystkie ćwiczenia AI. Twoje umiejętności C-IQ są teraz znacznie lepsze!")
+                                            else:
+                                                st.info(f"💪 Świetna robota! Ukończyłeś już {completed_exercises} z {total_exercises} ćwiczeń. Kontynuuj rozwój!")
+                                        else:
+                                            st.info("🎯 Zacznij od pierwszego ćwiczenia, aby rozwijać swoje umiejętności Conversational Intelligence!")
+                                        
+                                        # Przycisk resetowania ćwiczeń
+                                        from utils.ai_exercises import display_reset_all_button
+                                        display_reset_all_button(lesson_id)
+                                    else:
+                                        st.warning("Brak ćwiczeń AI w tej sekcji.")
                                 
                                 else:
                                     # Standardowa obsługa dla innych zakładek

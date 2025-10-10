@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 717,
-    "degencoins": 507,
+    "xp": 749,
+    "degencoins": 539,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-10 15:16:04",
+    "last_login": "2025-10-10 19:25:07",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -167,7 +167,12 @@
         "intro_quiz_completed": true,
         "intro_quiz_xp": 16,
         "intro_quiz_degencoins": 16,
-        "intro_quiz_timestamp": "2025-10-07 13:37:08"
+        "intro_quiz_timestamp": "2025-10-07 13:37:08",
+        "ai_exercises_xp_awarded": true,
+        "ai_exercises_completed": true,
+        "ai_exercises_xp": 32,
+        "ai_exercises_degencoins": 32,
+        "ai_exercises_timestamp": "2025-10-10 20:05:25"
       },
       "10. Wyzwania menedżerskie": {
         "intro_xp_awarded": true,
@@ -687,8 +692,8 @@
         "completed_lessons": 1
       },
       "2025-10-10": {
-        "xp": 717,
-        "degencoins": 507,
+        "xp": 749,
+        "degencoins": 539,
         "level": 1,
         "completed_lessons": 2
       }
