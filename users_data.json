@@ -7,7 +7,7 @@
     "degencoins": 507,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-10 12:51:12",
+    "last_login": "2025-10-10 13:54:40",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -31,7 +31,8 @@
         "chewing_gum_brain",
         "neuroinnowator_guide",
         "stress_decision_making",
-        "stress_reduction_techniques"
+        "stress_reduction_techniques",
+        "neurobalanser_guide"
       ],
       "favorites": []
     },
@@ -184,6 +185,14 @@
       }
     },
     "recent_activities": [
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "neurobalanser_guide",
+          "inspiration_title": "Neurobalanser: Mistrz Mądrej Równowagi"
+        },
+        "timestamp": "2025-10-10T12:03:33.560251+00:00"
+      },
       {
         "type": "inspiration_read",
         "details": {

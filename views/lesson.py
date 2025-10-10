@@ -1168,22 +1168,7 @@ def show_lessons_content():
                                             if quiz_passed:
                                                 st.success("✅ Gratulacje! Zaliczyłeś quiz końcowy! Możesz teraz przejść do podsumowania.")
                                             else:
-                                                st.error("❌ Aby przejść do podsumowania, musisz uzyskać przynajmniej 75% poprawnych odpowiedzi. Spróbuj ponownie!")
-                                                
-                                                # Dodaj przycisk do ponowienia quizu
-                                                st.markdown("---")
-                                                col1, col2, col3 = st.columns([1, 1, 1])
-                                                with col2:
-                                                    if st.button("🔄 Spróbuj ponownie", key=f"retry_closing_quiz_{lesson_id}", type="primary", width='stretch'):
-                                                        # Reset stanu quizu
-                                                        quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
-                                                        if quiz_id in st.session_state:
-                                                            del st.session_state[quiz_id]
-                                                        # Reset stanu zaliczenia
-                                                        if closing_quiz_key in st.session_state:
-                                                            st.session_state[closing_quiz_key]["quiz_completed"] = False
-                                                            st.session_state[closing_quiz_key]["quiz_passed"] = False
-                                                        st.rerun()
+                                                st.error("❌ Aby przejść do podsumowania, musisz uzyskać przynajmniej 75% poprawnych odpowiedzi. Przystąp do quizu ponownie używając przycisku powyżej.")
                                 elif tab_key == 'exercises':
                                     # Standardowa obsługa dla zakładki exercises
                                     tab_data = sub_tabs_data[tab_key]
@@ -1614,22 +1599,7 @@ def show_lessons_content():
                                             if quiz_passed:
                                                 st.success("✅ Gratulacje! Zaliczyłeś quiz końcowy! Możesz teraz przejść do podsumowania.")
                                             else:
-                                                st.error("❌ Aby przejść do podsumowania, musisz uzyskać przynajmniej 75% poprawnych odpowiedzi. Spróbuj ponownie!")
-                                                
-                                                # Dodaj przycisk do ponowienia quizu
-                                                st.markdown("---")
-                                                col1, col2, col3 = st.columns([1, 1, 1])
-                                                with col2:
-                                                    if st.button("🔄 Spróbuj ponownie", key=f"retry_closing_quiz_practical_{lesson_id}", type="primary", width='stretch'):
-                                                        # Reset stanu quizu
-                                                        quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
-                                                        if quiz_id in st.session_state:
-                                                            del st.session_state[quiz_id]
-                                                        # Reset stanu zaliczenia
-                                                        if closing_quiz_key in st.session_state:
-                                                            st.session_state[closing_quiz_key]["quiz_completed"] = False
-                                                            st.session_state[closing_quiz_key]["quiz_passed"] = False
-                                                        st.rerun()
+                                                st.error("❌ Aby przejść do podsumowania, musisz uzyskać przynajmniej 75% poprawnych odpowiedzi. Przystąp do quizu ponownie używając przycisku powyżej.")
                                 else:
                                     # Standardowa obsługa dla innych zakładek
                                     tab_data = sub_tabs_data[tab_key]
@@ -2419,11 +2389,6 @@ def display_quiz(quiz_data, passing_threshold=60):
         st.warning("Ten quiz nie zawiera żadnych pytań.")
         return False, False, 0
         
-    # DEBUG - Wyświetl podstawowe informacje o quizie na początku
-    st.warning("🔧 DEBUG: Wewnątrz display_quiz funkcji")
-    st.write(f"Quiz title: {quiz_data.get('title', 'No title')}")
-    st.write(f"Number of questions: {len(quiz_data.get('questions', []))}")
-    
     st.markdown(f"<h2>{quiz_data.get('title', 'Quiz')}</h2>", unsafe_allow_html=True)
     
     if "description" in quiz_data:
@@ -2459,17 +2424,23 @@ def display_quiz(quiz_data, passing_threshold=60):
                     total_points = completed_quiz_data.get('total_points', 0)
                     correct_answers = completed_quiz_data.get('correct_answers', 0)
                     
-                    # Dla quizów autodiagnozy - najpierw spersonalizowane wyniki Conversational Intelligence
+                    # Dla quizów autodiagnozy - najpierw spersonalizowane wyniki
                     if is_self_diagnostic:
                         quiz_title_lower = quiz_data.get('title', '').lower()
-                        conditions = [
+                        current_lesson_id = st.session_state.get('current_lesson', '')
+                        
+                        # Specjalny raport dla lekcji "Wprowadzenie do neuroprzywództwa"
+                        if ('quiz autodiagnozy' in quiz_title_lower and 
+                            'wprowadzenie do neuroprzywództwa' in current_lesson_id.lower()):
+                            display_neuroleadership_autodiagnosis(quiz_data, completed_quiz_data['answers'])
+                        
+                        # Raport dla Conversational Intelligence
+                        elif any([
                             'conversational intelligence' in quiz_title_lower,
                             'c-iq' in quiz_title_lower,
                             'od słów do zaufania' in quiz_title_lower,
                             'jak ważne może być' in quiz_title_lower
-                        ]
-                        
-                        if any(conditions):
+                        ]):
                             display_self_diagnostic_results(quiz_data, completed_quiz_data['answers'])
                     
                     # Potem szczegółowe wyniki quizu
@@ -3143,6 +3114,113 @@ def get_lesson_requirements(lesson_id):
     return is_completed, False, 0
 
 
+def display_neuroleadership_autodiagnosis(quiz_data, answers):
+    """Wyświetla szczegółowy raport autodiagnozy dla lekcji 'Wprowadzenie do neuroprzywództwa'"""
+    
+    # Mapowanie pytań na zagadnienia
+    topics = [
+        "Kontrola emocji i podejmowanie decyzji",
+        "Neurotransmitery i motywacja zespołu", 
+        "Model SCARF - 5 potrzeb mózgu",
+        "Model SEEDS - pozytywne środowisko",
+        "Zarządzanie stresem i odporność",
+        "Podejmowanie decyzji i ryzyko",
+        "Koncentracja, pamięć i wydajność",
+        "Zdrowie i kondycja mózgu",
+        "Neuroplastyczność i nawyki",
+        "Zastosowanie w wyzwaniach menedżerskich"
+    ]
+    
+    # Mapowanie wartości na interpretacje
+    value_interpretations = {
+        5: {"label": "Bardzo ważne", "color": "#d32f2f", "priority": "PRIORYTET 1"},
+        4: {"label": "Raczej ważne", "color": "#f57c00", "priority": "PRIORYTET 2"}, 
+        3: {"label": "Trudno powiedzieć", "color": "#616161", "priority": "DO PRZEMYŚLENIA"},
+        2: {"label": "Raczej nieważne", "color": "#388e3c", "priority": "MNIEJSZA WAGA"},
+        1: {"label": "W ogóle nieważne", "color": "#1976d2", "priority": "NISKI PRIORYTET"}
+    }
+    
+    st.markdown("### 📊 Twój Profil Rozwojowy w Neuroprzywództwie")
+    st.markdown("Na podstawie Twoich odpowiedzi przygotowaliśmy spersonalizowany raport pokazujący, które zagadnienia z neuroprzywództwa są dla Ciebie najważniejsze.")
+    
+    # Sortuj zagadnienia według ważności (od najwyższej do najniższej)
+    topic_scores = list(zip(topics, answers))
+    topic_scores.sort(key=lambda x: x[1], reverse=True)
+    
+    # Grupuj zagadnienia według priorytetów
+    priority_groups = {
+        "PRIORYTET 1": [],
+        "PRIORYTET 2": [],
+        "DO PRZEMYŚLENIA": [],
+        "MNIEJSZA WAGA": [],
+        "NISKI PRIORYTET": []
+    }
+    
+    for topic, score in topic_scores:
+        priority = value_interpretations[score]["priority"]
+        priority_groups[priority].append((topic, score))
+    
+    # Wyświetl każdą grupę priorytetów
+    for priority_name, group_topics in priority_groups.items():
+        if group_topics:  # Tylko jeśli grupa nie jest pusta
+            if priority_name == "PRIORYTET 1":
+                st.markdown(f"#### 🎯 {priority_name} - Zagadnienia kluczowe dla Twojego rozwoju")
+                st.markdown("Te obszary wymagają Twojej szczególnej uwagi i mogą przynieść największe korzyści w Twojej pracy menedżerskiej.")
+            elif priority_name == "PRIORYTET 2":
+                st.markdown(f"#### ⭐ {priority_name} - Ważne obszary rozwoju")
+                st.markdown("Te zagadnienia również zasługują na uwagę i mogą znacząco wpłynąć na Twoją skuteczność jako lidera.")
+            elif priority_name == "DO PRZEMYŚLENIA":
+                st.markdown(f"#### 🤔 {priority_name}")
+                st.markdown("W tych obszarach warto pogłębić wiedzę, aby lepiej ocenić ich znaczenie dla Twojej pracy.")
+            elif priority_name == "MNIEJSZA WAGA":
+                st.markdown(f"#### ✅ {priority_name}")
+                st.markdown("Te zagadnienia mogą być mniej priorytetowe w Twoim obecnym kontekście zawodowym.")
+            else:  # NISKI PRIORYTET
+                st.markdown(f"#### ⬇️ {priority_name}")
+                st.markdown("Te obszary obecnie nie stanowią dla Ciebie wyzwania.")
+            
+            for topic, score in group_topics:
+                interpretation = value_interpretations[score]
+                st.markdown(f"""
+                <div style='background: linear-gradient(90deg, {interpretation['color']}15 0%, {interpretation['color']}05 100%); 
+                           padding: 15px; border-radius: 8px; margin: 8px 0; 
+                           border-left: 4px solid {interpretation['color']};'>
+                    <strong style='color: {interpretation['color']};'>{topic}</strong><br>
+                    <span style='color: #666; font-size: 0.9rem;'>Ocena: {score}/5 - {interpretation['label']}</span>
+                </div>
+                """, unsafe_allow_html=True)
+    
+    # Podsumowanie i rekomendacje
+    high_priority_count = len(priority_groups["PRIORYTET 1"]) + len(priority_groups["PRIORYTET 2"])
+    
+    st.markdown("---")
+    st.markdown("### 💡 Rekomendacje dla Twojego rozwoju")
+    
+    if high_priority_count >= 7:
+        st.info("""
+        🎯 **Kompleksowy rozwój:** Identyfikujesz wiele obszarów jako ważne. Rozważ systematyczne przejście przez cały kurs, 
+        koncentrując się szczególnie na zagadnieniach oznaczonych jako Priorytet 1.
+        """)
+    elif high_priority_count >= 4:
+        st.info("""
+        ⭐ **Ukierunkowany rozwój:** Masz wyraźnie zdefiniowane priorytety. Skup się na zagadnieniach z najwyższą oceną 
+        i stopniowo rozszerzaj wiedzę o pozostałe obszary.
+        """)
+    else:
+        st.info("""
+        🎯 **Selektywny rozwój:** Identyfikujesz konkretne obszary do rozwoju. To dobra strategia - skup się na tych 
+        zagadnieniach, które są dla Ciebie najbardziej istotne.
+        """)
+    
+    # Następne kroki
+    if priority_groups["PRIORYTET 1"]:
+        st.markdown("#### 🚀 Sugerowane kolejne kroki:")
+        st.markdown("1. **Zacznij od zagadnień Priorytetu 1** - te obszary mogą przynieść Ci największe korzyści")
+        st.markdown("2. **Przejdź przez odpowiednie lekcje kursu** - każde zagadnienie ma dedykowaną lekcję z praktycznymi ćwiczeniami")
+        st.markdown("3. **Zastosuj wiedzę w praktyce** - po każdej lekcji wypróbuj poznane techniki w swojej pracy")
+        st.markdown("4. **Wróć do autodiagnozy za 3-6 miesięcy** - sprawdź jak zmieniła się Twoja perspektywa")
+
+
 def display_self_diagnostic_results(quiz_data, answers):
     """Uniwersalna funkcja do wyświetlania wyników quizów autodiagnozy na podstawie konfiguracji z JSON"""
     
@@ -3487,8 +3565,15 @@ def display_quiz_results(quiz_data, question_results, total_points, correct_answ
                 
                 question_data = quiz_data['questions'][i]
                 user_answer = result['user_answer']
+                quiz_type = quiz_data.get('type', 'buttons')
                 
-                if isinstance(user_answer, list):
+                if quiz_type == 'slider':
+                    # Quiz ze sliderami - użyj labels ze scale
+                    scale = quiz_data.get('scale', {})
+                    labels = scale.get('labels', {})
+                    answer_label = labels.get(str(user_answer), str(user_answer))
+                    st.markdown(f"**Odpowiedź:** {user_answer}/5 - {answer_label}")
+                elif isinstance(user_answer, list):
                     # Multiple choice
                     user_answer_text = ", ".join([question_data['options'][idx] for idx in user_answer])
                     st.markdown(f"**Odpowiedź:** {user_answer_text} ({result['points_earned']} pkt)")
@@ -3530,4 +3615,4 @@ def display_quiz_results(quiz_data, question_results, total_points, correct_answ
     
     # Wskazówka o ponownym przystąpieniu
     st.markdown("---")
-    st.markdown("💡 **Wskazówka:** Możesz przystąpić do quizu ponownie, klikając przycisk '🔄 Przystąp ponownie' powyżej.")
+    st.markdown("💡 **Wskazówka:** Możesz przystąpić do quizu ponownie, klikając przycisk '🔄 Przystąp do quizu ponownie'.")
