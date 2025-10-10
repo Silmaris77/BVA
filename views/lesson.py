@@ -1167,21 +1167,6 @@ def show_lessons_content():
                                             
                                             if quiz_passed:
                                                 st.success("✅ Gratulacje! Zaliczyłeś quiz końcowy! Możesz teraz przejść do podsumowania.")
-                                                
-                                                # Dodaj przycisk do ponownego przystąpienia do quizu końcowego (nawet po zdaniu)
-                                                st.markdown("---")
-                                                col1, col2, col3 = st.columns([1, 1, 1])
-                                                with col2:
-                                                    if st.button("🔄 Przystąp ponownie", key=f"retry_closing_quiz_passed_{lesson_id}", help="Możesz ponownie przystąpić do quizu końcowego aby poprawić swój wynik", width='stretch'):
-                                                        # Reset stanu quizu końcowego
-                                                        quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
-                                                        if quiz_id in st.session_state:
-                                                            del st.session_state[quiz_id]
-                                                        # Reset stanu zaliczenia
-                                                        if closing_quiz_key in st.session_state:
-                                                            st.session_state[closing_quiz_key]["quiz_completed"] = False
-                                                            st.session_state[closing_quiz_key]["quiz_passed"] = False
-                                                        st.rerun()
                                             else:
                                                 st.error("❌ Aby przejść do podsumowania, musisz uzyskać przynajmniej 75% poprawnych odpowiedzi. Spróbuj ponownie!")
                                                 
@@ -1628,21 +1613,6 @@ def show_lessons_content():
                                             
                                             if quiz_passed:
                                                 st.success("✅ Gratulacje! Zaliczyłeś quiz końcowy! Możesz teraz przejść do podsumowania.")
-                                                
-                                                # Dodaj przycisk do ponownego przystąpienia do quizu końcowego (nawet po zdaniu)
-                                                st.markdown("---")
-                                                col1, col2, col3 = st.columns([1, 1, 1])
-                                                with col2:
-                                                    if st.button("🔄 Przystąp ponownie", key=f"retry_closing_quiz_practical_passed_{lesson_id}", help="Możesz ponownie przystąpić do quizu końcowego aby poprawić swój wynik", width='stretch'):
-                                                        # Reset stanu quizu końcowego
-                                                        quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
-                                                        if quiz_id in st.session_state:
-                                                            del st.session_state[quiz_id]
-                                                        # Reset stanu zaliczenia
-                                                        if closing_quiz_key in st.session_state:
-                                                            st.session_state[closing_quiz_key]["quiz_completed"] = False
-                                                            st.session_state[closing_quiz_key]["quiz_passed"] = False
-                                                        st.rerun()
                                             else:
                                                 st.error("❌ Aby przejść do podsumowania, musisz uzyskać przynajmniej 75% poprawnych odpowiedzi. Spróbuj ponownie!")
                                                 
@@ -2552,14 +2522,27 @@ def display_quiz(quiz_data, passing_threshold=60):
             st.rerun()
         
         st.markdown('</div>', unsafe_allow_html=True)
-        return True, True, completed_quiz_data.get('total_points', 0)
+        
+        # Sprawdź czy quiz został zdany na podstawie passing_threshold
+        if is_self_diagnostic:
+            # Quizy autodiagnozy zawsze zaliczone gdy ukończone
+            quiz_passed = True
+        else:
+            # Dla quizów testowych sprawdź wynik
+            correct = completed_quiz_data.get('correct_answers', 0)
+            total = len(quiz_data['questions'])
+            percentage = (correct / total) * 100 if total > 0 else 0
+            quiz_passed = percentage >= passing_threshold
+        
+        return True, quiz_passed, completed_quiz_data.get('total_points', 0)
     
     # Inicjalizacja stanu quizu
     if quiz_id not in st.session_state:
         st.session_state[quiz_id] = {
             "answers": [None] * len(quiz_data['questions']),
             "completed": False,
-            "total_points": 0
+            "total_points": 0,
+            "correct_answers": 0
         }
     else:
         # Sprawdź czy liczba pytań się zmieniła i dostosuj listę odpowiedzi
@@ -2754,6 +2737,7 @@ def display_quiz(quiz_data, passing_threshold=60):
             # Oznacz quiz jako ukończony
             st.session_state[quiz_id]["completed"] = True
             st.session_state[quiz_id]["total_points"] = total_points
+            st.session_state[quiz_id]["correct_answers"] = correct_answers  # Dodaj dla sprawdzania zaliczenia
             
             st.success(f"✅ Quiz został ukończony! Twoje wyniki zostały zapisane.")
             
@@ -2775,8 +2759,28 @@ def display_quiz(quiz_data, passing_threshold=60):
     
     # Zwróć status ukończenia
     quiz_completed = st.session_state[quiz_id].get("completed", False)
-    quiz_passed = quiz_completed  # Dla autodiagnozy zawsze zaliczony
     earned_points = st.session_state[quiz_id].get("total_points", 0)
+    
+    # Sprawdź czy quiz został zdany na podstawie passing_threshold
+    if quiz_completed:
+        if is_self_diagnostic:
+            # Quizy autodiagnozy zawsze zaliczone gdy ukończone
+            quiz_passed = True
+        else:
+            # Dla quizów testowych sprawdź wynik z saved data
+            if completed_quiz_data and 'correct_answers' in completed_quiz_data:
+                correct = completed_quiz_data['correct_answers']
+                total = len(quiz_data['questions'])
+                percentage = (correct / total) * 100 if total > 0 else 0
+                quiz_passed = percentage >= passing_threshold
+            else:
+                # Fallback - sprawdź current session state
+                correct = st.session_state[quiz_id].get("correct_answers", 0)
+                total = st.session_state[quiz_id].get("total_questions", len(quiz_data['questions']))
+                percentage = (correct / total) * 100 if total > 0 else 0
+                quiz_passed = percentage >= passing_threshold
+    else:
+        quiz_passed = False
     
     return quiz_completed, quiz_passed, earned_points
 
