@@ -295,6 +295,14 @@ Oceń odpowiedź uczestnika według następujących kryteriów:
 3. **Zastosowanie C-IQ** (1-10): Czy wykorzystał zasady Conversational Intelligence?
 4. **Wartość praktyczna** (1-10): Czy rozwiązanie można wdrożyć w rzeczywistości?
 
+DODATKOWO: Napisz przykładową wzorcową odpowiedź, która otrzymałaby maksymalną ocenę (10/10) na to zadanie. 
+
+WAŻNE: Wzorcowa odpowiedź powinna być napisana jako zwykły tekst (NIE JSON), tak jakby odpowiadał ekspert C-IQ. Powinna zawierać:
+- Analizę sytuacji z perspektywy C-IQ
+- Konkretne techniki i strategie komunikacyjne
+- Praktyczne kroki do wdrożenia
+- Uzasadnienie neurobiologiczne (kortyzol vs oksytocyna)
+
 Udziel szczegółowego, konstruktywnego feedback'u w formacie JSON:
 
 {{
@@ -307,7 +315,8 @@ Udziel szczegółowego, konstruktywnego feedback'u w formacie JSON:
     "strong_points": ["mocny punkt 1", "mocny punkt 2"],
     "improvement_areas": ["obszar poprawy 1", "obszar poprawy 2"],
     "c_iq_tips": ["wskazówka C-IQ 1", "wskazówka C-IQ 2"],
-    "next_steps": ["następny krok 1", "następny krok 2"]
+    "next_steps": ["następny krok 1", "następny krok 2"],
+    "exemplary_response": "[wzorcowa odpowiedź na to zadanie, która otrzymałaby 10/10 - szczegółowa, praktyczna, z zastosowaniem zaawansowanych technik C-IQ]"
 }}
 """
         
@@ -452,7 +461,8 @@ Udziel szczegółowego, konstruktywnego feedback'u w formacie JSON:
                 "strong_points": ["Analiza sytuacji", "Praktyczne podejście", "Zastosowanie teorii C-IQ"],
                 "improvement_areas": ["Głębsza analiza neurobiologiczna", "Więcej konkretnych technik"],
                 "c_iq_tips": ["Zwróć uwagę na różnicę między poziomami I, II i III", "Pomyśl o hormonach: kortyzol vs oksytocyna"],
-                "next_steps": ["Przetestuj rozwiązania w prawdziwej sytuacji", "Obserwuj reakcje innych na twoje podejście"]
+                "next_steps": ["Przetestuj rozwiązania w prawdziwej sytuacji", "Obserwuj reakcje innych na twoje podejście"],
+                "exemplary_response": "Analizując tę sytuację przez pryzmat Conversational Intelligence, identyfikuję główne wyzwanie: przekształcenie atmosfery wzajemnych oskarżeń (Poziom I) w konstruktywną naukę zespołową (Poziom III).\n\n**Moja strategia jako Project Manager:**\n\n1. **Przygotowanie neurobiologiczne**: Zacznę od uspokojenia atmosfery, aby obniżyć poziom kortyzolu. Użyję spokojnego tonu głosu i wolniejszego tempa mowy.\n\n2. **Otwarcie retrospektywy**: 'Wszyscy czujemy frustrację po tym projekcie. To naturalne. Naszym wspólnym celem jest wyciągnięcie nauki, która pomoże nam w przyszłości.' - używam języka 'my' zamiast 'wy'.\n\n3. **Przejście na Poziom III**: Zadam pytania otwarte: 'Jakie widzicie systemowe przyczyny tego co się stało?' zamiast szukania winnych.\n\n4. **Budowanie bezpieczeństwa**: Ustanowię zasadę: 'Skupiamy się na procesach i systemach, nie na osobach'.\n\n5. **Współtworzenie rozwiązań**: 'Jak możemy razem zaprojektować lepsze procesy komunikacji między zespołami?'\n\nTa strategia wykorzystuje neurobiologię zaufania do przekształcenia konfliktu w okazję do rozwoju zespołu."
             }
         else:
             return {
@@ -965,6 +975,20 @@ def display_ai_feedback(feedback: Dict):
         st.markdown("### 🎯 Konkretne kroki do działania")
         for step in feedback['action_steps']:
             st.markdown(f"• {step}")
+    
+    # Wzorcowa odpowiedź
+    if 'exemplary_response' in feedback:
+        st.markdown("### 🏆 Wzorcowa odpowiedź (10/10)")
+        with st.expander("👀 Pokaż przykład odpowiedzi, która otrzymałaby maksymalną ocenę", expanded=False):
+            st.markdown("#### 💡 Wzorcowa odpowiedź eksperta C-IQ:")
+            
+            # Użyj bezpiecznego wyświetlania tekstu
+            exemplary_text = feedback['exemplary_response']
+            
+            # Wyświetl w bezpiecznym kontenerze
+            st.success(exemplary_text)
+            
+            st.info("💡 **Wskazówka**: Porównaj swoją odpowiedź z tym wzorcem. Znajdź elementy, które możesz zastosować w przyszłych sytuacjach komunikacyjnych.")
     
     # Motywująca wiadomość
     if 'motivation_message' in feedback:
