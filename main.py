@@ -57,6 +57,7 @@ try:
     from views.skills_new import show_skill_tree
     from views.admin import show_admin_dashboard
     from views.inspirations import show_inspirations_page
+    from views.tools import show_tools_page
     
     # Import shop module is done within the routing section
 except Exception as e:
@@ -111,6 +112,8 @@ def main():
             show_dashboard()
         elif st.session_state.page == 'lesson':
             show_lesson()
+        elif st.session_state.page == 'tools':
+            show_tools_page()
         elif st.session_state.page == 'inspirations':
             show_inspirations_page()
         elif st.session_state.page == 'profile':

@@ -692,6 +692,13 @@ Wygeneruj w formacie JSON:
             "strong_points": ["Ukończenie ćwiczenia"],
             "suggestions": ["Spróbuj ponownie później"]
         }
+    
+    def get_ai_evaluation_direct(self, prompt: str) -> Dict:
+        """
+        Publiczna funkcja do bezpośredniego wywołania AI dla narzędzi
+        Wrapper na prywatną funkcję _get_ai_evaluation
+        """
+        return self._get_ai_evaluation(prompt)
 
 
 def display_ai_exercise_interface(exercise: Dict, lesson_context: str = "") -> bool:
