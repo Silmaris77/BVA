@@ -1,0 +1,142 @@
+{
+  "Max": {
+    "profiles": [
+      {
+        "dominant_ciq_level": "I",
+        "ciq_distribution": {
+          "level_i_percentage": 90,
+          "level_ii_percentage": 10,
+          "level_iii_percentage": 0
+        },
+        "leadership_style": {
+          "primary_style": "directive",
+          "flexibility_score": 1,
+          "adaptability": "low"
+        },
+        "communication_patterns": {
+          "question_types": "closed_dominant",
+          "language_patterns": [
+            "Dismissywne: 'To nie jest wymówka', 'Nie obchodzą mnie wymówki'",
+            "Dyrektywne: 'Musisz', 'Potrzebuję rozwiązań', 'Chcę codzienne raporty'",
+            "Autorytarne: 'Kropka', 'Rozumiesz?', 'żeby więcej takich sytuacji nie było'",
+            "Warunkowe pochwały/motywacja: 'Może dostaniesz więcej takich projektów'"
+          ],
+          "emotional_intelligence": 1
+        },
+        "neurobiological_impact": {
+          "cortisol_triggers": 9,
+          "oxytocin_builders": 1,
+          "psychological_safety": 1
+        },
+        "strengths": [
+          "Jasne komunikowanie oczekiwań i terminów",
+          "Silna orientacja na wyniki i odpowiedzialność",
+          "Zdecydowanie i szybkość w podejmowaniu decyzji",
+          "Bezpośrednie rozwiązywanie konfliktów i problemów z wydajnością"
+        ],
+        "development_areas": [
+          "Rozwijanie aktywnego słuchania i empatii (przejście do CIQ Poziomu III)",
+          "Budowanie psychologicznego bezpieczeństwa i zaufania w zespole",
+          "Stosowanie bardziej otwartych pytań i współpracy przy rozwiązywaniu problemów",
+          "Udzielanie konstruktywnej, wspierającej informacji zwrotnej zamiast krytyki",
+          "Poprawa inteligencji emocjonalnej i zrozumienie wpływu języka na członków zespołu"
+        ],
+        "leadership_evolution": {
+          "trajectory": "stable",
+          "consistency": 10,
+          "growth_potential": 3
+        },
+        "team_impact": {
+          "predicted_engagement": 2,
+          "trust_building_capability": 1,
+          "conflict_resolution": 3
+        },
+        "created_at": "2025-10-14T02:03:53.441155",
+        "username": "Max",
+        "profile_name": "Profil 2025-10-14 02:03"
+      }
+    ],
+    "current_profile": 0
+  },
+  "TestUser": {
+    "profiles": [
+      {
+        "dominant_ciq_level": "Level II - Pozycyjny",
+        "ciq_distribution": {
+          "level_i_percentage": 30,
+          "level_ii_percentage": 50,
+          "level_iii_percentage": 20
+        },
+        "leadership_style": {
+          "primary_style": "Demokratyczny",
+          "flexibility_score": 8,
+          "adaptability": "Wysoka"
+        },
+        "created_at": "2025-10-14T01:04:06.549022",
+        "username": "TestUser",
+        "profile_name": "Test Profile"
+      }
+    ],
+    "current_profile": 0
+  },
+  "admin": {
+    "profiles": [
+      {
+        "dominant_ciq_level": "I",
+        "ciq_distribution": {
+          "level_i_percentage": 85,
+          "level_ii_percentage": 15,
+          "level_iii_percentage": 0
+        },
+        "leadership_style": {
+          "primary_style": "directive",
+          "flexibility_score": 1,
+          "adaptability": "low"
+        },
+        "communication_patterns": {
+          "question_types": "closed",
+          "language_patterns": [
+            "Bezpośrednie nakazy i polecenia ('Musisz', 'Chcę', 'Ma być gotowe')",
+            "Dyskredytowanie i ignorowanie emocji oraz kontekstu ('To nie jest wymówka', 'Nie obchodzą mnie wymówki', 'To nie usprawiedliwia')",
+            "Użycie autorytetu i kategoryczność ('Kropka.', 'Rozumiesz?')",
+            "Skupienie na problemach i rozwiązaniach z perspektywy 'ja' ('potrzebuję rozwiązań, nie problemów')"
+          ],
+          "emotional_intelligence": 2
+        },
+        "neurobiological_impact": {
+          "cortisol_triggers": 9,
+          "oxytocin_builders": 1,
+          "psychological_safety": 1
+        },
+        "strengths": [
+          "Jasne określanie oczekiwań i wymagań (choć w sposób autorytarny)",
+          "Skupienie na wynikach i dotrzymywaniu terminów",
+          "Decyzyjność i szybkie podejmowanie działań",
+          "Bezpośrednie konfrontowanie problemów (choć często w sposób konfrontacyjny)"
+        ],
+        "development_areas": [
+          "Rozwój empatii i aktywnego słuchania, aby zrozumieć perspektywę pracownika",
+          "Budowanie psychologicznego bezpieczeństwa i otwartości w zespole",
+          "Przejście od stylu dyrektywnego do coachingowego/transformacyjnego (CIQ Poziom III)",
+          "Rozwijanie umiejętności facylitacji i wspólnego rozwiązywania problemów",
+          "Poprawa jakości udzielania informacji zwrotnej (mniej osądzania, więcej obserwacji i otwartości na dialog)",
+          "Zwiększenie elastyczności i zdolności adaptacji do różnych sytuacji i potrzeb pracowników"
+        ],
+        "leadership_evolution": {
+          "trajectory": "stable",
+          "consistency": 9,
+          "growth_potential": 4
+        },
+        "team_impact": {
+          "predicted_engagement": 2,
+          "trust_building_capability": 1,
+          "conflict_resolution": 2
+        },
+        "created_at": "2025-10-14T01:57:24.630861",
+        "username": "admin",
+        "profile_name": "Profil 2025-10-14 01:57"
+      }
+    ],
+    "current_profile": 0
+  }
+}
