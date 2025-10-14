@@ -6,17 +6,183 @@ Zawiera zaawansowane narzędzia do rozwoju umiejętności komunikacyjnych i przy
 import streamlit as st
 from utils.ai_exercises import AIExerciseEvaluator
 from utils.components import zen_header, zen_button, stat_card
+from utils.material3_components import apply_material3_theme
+from utils.layout import get_device_type, toggle_device_view
+from utils.scroll_utils import scroll_to_top
 import json
+import os
+from datetime import datetime
 from typing import Dict, List, Optional
+import io
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.lib.colors import HexColor
+from reportlab.lib import colors
+from reportlab.pdfbase import pdfutils
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+
+def save_leadership_profile(username: str, profile: Dict, profile_name: str = None) -> bool:
+    """Zapisuje profil przywódczy użytkownika"""
+    try:
+        # Ścieżka do pliku profili
+        profiles_file = "leadership_profiles.json"
+        
+        # Wczytaj istniejące profile lub stwórz nowy słownik
+        if os.path.exists(profiles_file):
+            with open(profiles_file, 'r', encoding='utf-8') as f:
+                profiles = json.load(f)
+        else:
+            profiles = {}
+        
+        # Migracja starych danych do nowej struktury
+        if username in profiles:
+            if not isinstance(profiles[username], dict) or "profiles" not in profiles[username]:
+                # Stary format - przekształć do nowego
+                old_profile = profiles[username] if username in profiles else {}
+                profiles[username] = {"profiles": [old_profile] if old_profile else [], "current_profile": 0}
+        
+        # Struktura: profiles[username] = {"profiles": [lista_profili], "current_profile": index}
+        if username not in profiles:
+            profiles[username] = {"profiles": [], "current_profile": 0}
+        
+        # Dodaj metadata do profilu
+        profile['created_at'] = datetime.now().isoformat()
+        profile['username'] = username
+        profile['profile_name'] = profile_name or f"Profil {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+        
+        # Dodaj nowy profil do listy (zawsze dodaj nowy zamiast nadpisywać)
+        profiles[username]["profiles"].append(profile)
+        profiles[username]["current_profile"] = len(profiles[username]["profiles"]) - 1
+        
+        # Ogranicz do ostatnich 10 profili
+        if len(profiles[username]["profiles"]) > 10:
+            profiles[username]["profiles"] = profiles[username]["profiles"][-10:]
+            profiles[username]["current_profile"] = 9
+        
+        # Zapisz do pliku
+        with open(profiles_file, 'w', encoding='utf-8') as f:
+            json.dump(profiles, f, ensure_ascii=False, indent=2)
+            
+        return True
+    except Exception as e:
+        st.error(f"Błąd zapisu profilu: {e}")
+        return False
+
+def load_leadership_profile(username: str, profile_index: int = None) -> Optional[Dict]:
+    """Wczytuje profil przywódczy użytkownika"""
+    try:
+        profiles_file = "leadership_profiles.json"
+        
+        if not os.path.exists(profiles_file):
+            return None
+            
+        with open(profiles_file, 'r', encoding='utf-8') as f:
+            profiles = json.load(f)
+            
+        user_data = profiles.get(username)
+        if not user_data:
+            return None
+            
+        # Obsługa starego formatu (backward compatibility)
+        if isinstance(user_data, dict) and 'profiles' not in user_data:
+            return user_data
+            
+        # Nowy format z listą profili
+        if profile_index is not None:
+            if 0 <= profile_index < len(user_data["profiles"]):
+                return user_data["profiles"][profile_index]
+        else:
+            # Zwróć aktualny profil
+            current_idx = user_data.get("current_profile", 0)
+            if user_data["profiles"]:
+                return user_data["profiles"][current_idx]
+                
+        return None
+    except Exception as e:
+        st.error(f"Błąd wczytywania profilu: {e}")
+        return None
+
+def get_user_profiles_history(username: str) -> List[Dict]:
+    """Pobiera historię wszystkich profili użytkownika"""
+    try:
+        profiles_file = "leadership_profiles.json"
+        
+        if not os.path.exists(profiles_file):
+            return []
+            
+        with open(profiles_file, 'r', encoding='utf-8') as f:
+            profiles = json.load(f)
+            
+        user_data = profiles.get(username)
+        if not user_data:
+            return []
+            
+        # Obsługa starego formatu
+        if isinstance(user_data, dict) and 'profiles' not in user_data:
+            return [user_data]
+            
+        # Nowy format - zwróć wszystkie profile
+        return user_data.get("profiles", [])
+    except Exception:
+        return []
+
+def delete_user_profile(username: str, profile_index: int = None) -> bool:
+    """Usuwa profil użytkownika"""
+    try:
+        profiles_file = "leadership_profiles.json"
+        
+        if not os.path.exists(profiles_file):
+            return True
+            
+        with open(profiles_file, 'r', encoding='utf-8') as f:
+            profiles = json.load(f)
+            
+        user_data = profiles.get(username)
+        if not user_data:
+            return True
+            
+        if profile_index is not None:
+            # Usuń konkretny profil
+            if isinstance(user_data, dict) and 'profiles' in user_data:
+                if 0 <= profile_index < len(user_data["profiles"]):
+                    user_data["profiles"].pop(profile_index)
+                    # Zaktualizuj current_profile jeśli potrzeba
+                    if user_data["current_profile"] >= len(user_data["profiles"]):
+                        user_data["current_profile"] = max(0, len(user_data["profiles"]) - 1)
+        else:
+            # Usuń wszystkie profile użytkownika
+            del profiles[username]
+            
+        # Zapisz zmiany
+        with open(profiles_file, 'w', encoding='utf-8') as f:
+            json.dump(profiles, f, ensure_ascii=False, indent=2)
+            
+        return True
+    except Exception as e:
+        st.error(f"Błąd usuwania profilu: {e}")
+        return False
 
 def show_tools_page():
     """Główna strona narzędzi AI"""
     
+    # Zastosuj style Material 3
+    apply_material3_theme()
+    
+    # Opcja wyboru urządzenia w trybie deweloperskim
+    if st.session_state.get('dev_mode', False):
+        toggle_device_view()
+    
+    # Pobierz aktualny typ urządzenia
+    device_type = get_device_type()
+    
+    # Przewiń na górę strony
+    scroll_to_top()
+    
     # Header strony
-    zen_header(
-        "🛠️ Narzędzia AI", 
-        "Zaawansowane narzędzia do rozwoju umiejętności komunikacyjnych i przywództwa"
-    )
+    zen_header("🛠️ Narzędzia AI")
     
     # Główne kategorie w tabach
     tab1, tab2, tab3, tab4 = st.tabs([
@@ -66,38 +232,41 @@ def show_ciq_tools():
                 st.session_state.active_tool = "level_detector"
         
     with col2:
-        # Detektor Emocji
+        # Conversation Intelligence Pro
         with st.container():
             st.markdown("""
             <div style='padding: 20px; border: 2px solid #E91E63; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #ffeef8 0%, #f8bbd9 100%);'>
-                <h4>😊 Detektor Emocji</h4>
-                <p><strong>Identyfikuj emocje i ich wpływ neurobiologiczny</strong></p>
+                <h4>🧠 Conversation Intelligence Pro</h4>
+                <p><strong>Zaawansowana analiza rozmów biznesowych w czasie rzeczywistym</strong></p>
                 <ul style='margin: 10px 0; padding-left: 20px;'>
-                    <li>💭 Analiza emocji w tekście</li>
-                    <li>🧬 Wpływ na kortyzol/oksytocynę</li>
-                    <li>🎯 Strategie regulacji emocji</li>
+                    <li>💎 Sentiment i emocje + wpływ neurobiologiczny</li>
+                    <li>🎯 Wykrywanie intencji sprzedażowych i biznesowych</li>
+                    <li>⚠️ Ostrzeżenia o eskalacji problemów</li>
+                    <li>💡 Sugestie real-time dla agentów</li>
+                    <li>🔍 Automatyczna kategoryzacja problemów</li>
                 </ul>
             </div>
             """, unsafe_allow_html=True)
             
-            if zen_button("😊 Uruchom Detektor Emocji", key="emotion_detector", width='stretch'):
+            if zen_button("🧠 Uruchom CI Pro", key="emotion_detector", width='stretch'):
                 st.session_state.active_tool = "emotion_detector"
         
-        # Analizator Komunikacji
+        # C-IQ Leadership Profile
         with st.container():
             st.markdown("""
             <div style='padding: 20px; border: 2px solid #2196F3; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #e3f2fd 0%, #90caf9 100%);'>
-                <h4>📝 Analizator Komunikacji</h4>
-                <p><strong>Kompleksowa analiza stylu komunikacyjnego</strong></p>
+                <h4>💎 C-IQ Leadership Profile</h4>
+                <p><strong>Długoterminowa analiza stylu przywództwa przez pryzmat C-IQ</strong></p>
                 <ul style='margin: 10px 0; padding-left: 20px;'>
-                    <li>📊 Wielowymiarowa analiza</li>
-                    <li>🎭 Styl komunikacyjny</li>
-                    <li>🔍 Szczegółowy raport</li>
+                    <li>📈 Trend rozwoju C-IQ w czasie</li>
+                    <li>🎯 Profil przywódczy (dominujące poziomy)</li>
+                    <li>📋 Plan rozwoju komunikacyjnego</li>
+                    <li>🏆 Benchmark z innymi liderami</li>
                 </ul>
             </div>
             """, unsafe_allow_html=True)
             
-            if zen_button("📝 Uruchom Analizator", key="communication_analyzer", width='stretch'):
+            if zen_button("💎 Utwórz Profil Lidera", key="communication_analyzer", width='stretch'):
                 st.session_state.active_tool = "communication_analyzer"
     
     # Wyświetl aktywne narzędzie
@@ -573,85 +742,473 @@ def show_email_templates():
     st.info("🚧 Funkcja w przygotowaniu - biblioteka szablonów emaili na różnych poziomach C-IQ")
 
 def show_emotion_detector():
-    """Detektor Emocji w komunikacji"""
-    st.markdown("## 😊 Detektor Emocji")
-    st.markdown("Identyfikuj emocje w komunikacji i poznaj ich wpływ neurobiologiczny")
+    """Conversation Intelligence Pro - Analiza rozmów menedżerskich"""
+    st.markdown("## 🧠 Conversation Intelligence Pro")
+    st.markdown("**Zaawansowana analiza rozmów menedżerskich** - C-IQ w kontekście przywództwa i zarządzania zespołem")
     
-    st.info("🚧 **W przygotowaniu** - wkrótce będziesz mógł analizować emocje w tekstach i ich wpływ na kortyzol/oksytocynę")
+    # Tabs dla różnych funkcji CI w kontekście menedżerskim
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "📊 Analiza Rozmowy", 
+        "🎯 Dynamika Zespołu", 
+        "⚠️ Sygnały Problemów", 
+        "💡 Leadership Coach"
+    ])
     
-    # Placeholder dla przyszłej funkcjonalności
-    text_input = st.text_area(
-        "Tekst do analizy emocji:",
-        placeholder="Wklej tekst aby zanalizować obecne w nim emocje...",
-        height=150,
-        disabled=True
+    with tab1:
+        show_sentiment_analysis()
+    
+    with tab2:
+        show_intent_detection()
+        
+    with tab3:
+        show_escalation_monitoring()
+        
+    with tab4:
+        show_ai_coach()
+
+def show_sentiment_analysis():
+    """Analiza rozmów menedżerskich"""
+    st.markdown("### 📊 Analiza Rozmowy Menedżer-Pracownik")
+    
+    conversation_text = st.text_area(
+        "🎤 Wklej transkrypcję rozmowy menedżerskiej:",
+        placeholder="""Przykład rozmowy menedżer-pracownik:
+Menedżer: Chciałbym porozmawiać o Twoich ostatnich projektach.
+Pracownik: Okej, ale muszę powiedzieć, że czuję się przeciążony zadaniami...
+Menedżer: Rozumiem, opowiedz mi więcej o tym przeciążeniu...""",
+        height=120,
+        key="sentiment_input"
+    )
+    
+    if conversation_text and len(conversation_text) > 10:
+        if zen_button("📊 Analizuj Sentiment + C-IQ", key="analyze_sentiment", width='stretch'):
+            with st.spinner("🔍 Analizuję sentiment i poziomy C-IQ..."):
+                # Analiza C-IQ + sentiment
+                result = analyze_conversation_sentiment(conversation_text)
+                if result:
+                    display_sentiment_results(result)
+
+def show_intent_detection():
+    """Wykrywanie dynamiki zespołowej i potrzeb pracowników"""
+    st.markdown("### 🎯 Analiza Dynamiki Zespołu i Motywacji")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("**🔍 Wykrywane potrzeby pracownika:**")
+        st.markdown("• 🎯 Potrzeba jasnych celów")
+        st.markdown("• 📚 Chęć rozwoju i szkoleń") 
+        st.markdown("• 🤝 Potrzeba wsparcia/mentoringu")
+        st.markdown("• ⚖️ Sygnały wypalenia zawodowego")
+        st.markdown("• 🚀 Ambicje i aspiracje kariery")
+        
+    with col2:
+        st.markdown("**📈 Wyniki analizy:**")
+        st.markdown("• Poziom zaangażowania zespołu")
+        st.markdown("• Rekomendowane akcje menedżerskie")  
+        st.markdown("• Optymalne momenty na feedback")
+        st.markdown("• Przewidywane reakcje pracownika")
+    
+    intent_text = st.text_area(
+        "Tekst do analizy dynamiki zespołu:",
+        placeholder="Wklej fragment rozmowy menedżer-pracownik o zadaniach, celach, problemach...",
+        height=100,
+        key="intent_input"
+    )
+    
+    if intent_text and len(intent_text) > 10:
+        if zen_button("🎯 Wykryj Intencje", key="detect_intent", width='stretch'):
+            result = analyze_business_intent(intent_text)
+            if result:
+                display_intent_results(result)
+
+def show_escalation_monitoring():
+    """Monitoring sygnałów problemów w zespole"""
+    st.markdown("### ⚠️ Wykrywanie Sygnałów Problemów Zespołowych")
+    
+    st.info("💡 **Early warning system** dla problemów zespołowych: wypalenie, konflikty, spadek motywacji")
+    
+    escalation_text = st.text_area(
+        "🚨 Tekst do analizy sygnałów problemów:",
+        placeholder="Wklej fragment rozmowy z pracownikiem, który może sygnalizować problemy zespołowe...",
+        height=100,
+        key="escalation_input"
+    )
+    
+    # Ustawienia czułości
+    sensitivity = st.slider(
+        "🎚️ Czułość wykrywania eskalacji:",
+        min_value=1, max_value=10, value=5,
+        help="1 = tylko oczywiste sygnały, 10 = bardzo wyczulone wykrywanie"
     )
     
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("**🔍 Planowane funkcje:**")
-        st.markdown("• Identyfikacja emocji w tekście")
-        st.markdown("• Analiza intensywności emocji") 
-        st.markdown("• Wpływ na kortyzol/oksytocynę")
-        st.markdown("• Sugestie regulacji emocji")
-    
+        st.markdown("**⚠️ Sygnały eskalacji:**")
+        st.markdown("• Spadek motywacji i zaangażowania")
+        st.markdown("• Sygnały wypalenia zawodowego") 
+        st.markdown("• Konflikty interpersonalne")
+        st.markdown("• Rozważanie zmiany pracy")
+        
     with col2:
-        st.markdown("**🎯 Rodzaje emocji do wykrywania:**")
-        st.markdown("• Stres i napięcie")
-        st.markdown("• Frustracja i złość")
-        st.markdown("• Radość i entuzjazm") 
-        st.markdown("• Lęk i niepewność")
+        st.markdown("**🎯 Rekomendowane akcje:**")
+        st.markdown("• Rozmowa 1-on-1 z pracownikiem")
+        st.markdown("• Przegląd obciążenia i zadań")
+        st.markdown("• Plan rozwoju i wsparcia")
+        st.markdown("• Poprawa warunków pracy")
+    
+    if escalation_text and len(escalation_text) > 10:
+        if zen_button("🚨 Sprawdź Ryzyko Eskalacji", key="check_escalation", width='stretch'):
+            result = analyze_escalation_risk(escalation_text, sensitivity)
+            if result:
+                display_escalation_results(result)
+
+def show_ai_coach():
+    """Real-time coach dla menedżerów"""
+    st.markdown("### 💡 Leadership Coach - Wsparcie Real-time")
+    
+    st.info("🎯 **Inteligentny coach przywództwa** podpowiadający najlepsze odpowiedzi w trudnych sytuacjach menedżerskich")
+    
+    # Kontekst rozmowy menedżerskiej
+    context = st.selectbox(
+        "🎭 Typ rozmowy menedżerskiej:",
+        [
+            "🎯 Ustawienie celów i oczekiwań",
+            "📈 Feedback o wydajności", 
+            "💬 Rozmowa z demotywowanym pracownikiem",
+            "⚡ Zarządzanie konfliktem w zespole",
+            "🚀 Rozmowa rozwojowa i kariera",
+            "📋 Delegowanie zadań i odpowiedzialności",
+            "🔄 Zarządzanie zmianą organizacyjną",
+            "⚠️ Rozmowa dyscyplinująca"
+        ]
+    )
+    
+    coach_text = st.text_area(
+        "💬 Ostatnia wypowiedź pracownika:",
+        placeholder="Wklej co właśnie powiedział pracownik, a AI zasugeruje najlepszą odpowiedź menedżerską...",
+        height=100,
+        key="coach_input"
+    )
+    
+    if coach_text and len(coach_text) > 5:
+        if zen_button("💡 Podpowiedz Odpowiedź", key="suggest_response", width='stretch'):
+            result = get_ai_coaching(coach_text, context)
+            if result:
+                display_coaching_results(result)
 
 
 def show_communication_analyzer():
-    """Kompleksowy analizator komunikacji"""
-    st.markdown("## 📝 Analizator Komunikacji")
-    st.markdown("Kompleksowa wielowymiarowa analiza stylu komunikacyjnego")
+    """C-IQ Leadership Profile - długoterminowa analiza stylu przywództwa"""
+    st.markdown("## 💎 C-IQ Leadership Profile")
+    st.markdown("**Długoterminowa analiza Twojego stylu przywództwa** przez pryzmat Conversational Intelligence")
     
-    st.info("🚧 **W przygotowaniu** - zaawansowana analiza wszystkich aspektów komunikacji")
+    st.info("💎 **Unikalność:** To jedyne narzędzie które analizuje **wzorce długoterminowe** w Twoim stylu przywództwa, zamiast pojedynczych rozmów")
     
-    # Placeholder dla różnych rodzajów analiz
-    analysis_types = st.multiselect(
-        "Wybierz rodzaje analiz:",
-        [
-            "🎯 Poziomy C-IQ",
-            "😊 Analiza emocji", 
-            "🧠 Wpływ neurobiologiczny",
-            "🤝 Budowanie zaufania",
-            "📊 Styl komunikacyjny",
-            "🎭 Ton i postawa",
-            "📈 Skuteczność przekazu"
-        ],
-        disabled=True
-    )
+    # Auto-wczytywanie zapisanego profilu
+    if hasattr(st.session_state, 'username') and st.session_state.username:
+        if 'leadership_profile' not in st.session_state:
+            saved_profile = load_leadership_profile(st.session_state.username)
+            if saved_profile:
+                st.session_state['leadership_profile'] = saved_profile
+                st.success(f"📂 Wczytano Twój zapisany profil przywódczy z {saved_profile.get('created_at', 'wcześniej')[:10]}")
     
-    st.text_area(
-        "Tekst do kompleksowej analizy:",
-        placeholder="Wklej długszy tekst do szczegółowej analizy...",
-        height=200,
-        disabled=True
-    )
+    # Tabs dla różnych aspektów profilu
+    tab1, tab2, tab3 = st.tabs([
+        "📊 Upload Danych", 
+        "👤 Profil Przywódczy", 
+        "🎯 Plan Rozwoju"
+    ])
     
-    st.markdown("**📊 Przykładowy raport będzie zawierał:**")
-    col1, col2, col3 = st.columns(3)
+    with tab1:
+        st.markdown("### 📊 Wgraj próbki swojej komunikacji")
+        st.markdown("Im więcej danych, tym dokładniejszy profil przywódczy!")
+        
+        # Opis co będzie w raporcie
+        st.markdown("**📋 Twój raport będzie zawierał:**")
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("**🎯 Poziomy C-IQ**")
+            st.markdown("• Dominujący poziom")
+            st.markdown("• Rozkład procentowy")
+            st.markdown("• Rekomendacje")
+        
+        with col2:
+            st.markdown("**🧠 Neurobiologia**") 
+            st.markdown("• Wpływ na kortyzol")
+            st.markdown("• Stymulacja oksytocyny")
+            st.markdown("• Bezpieczeństwo psychologiczne")
+        
+        with col3:
+            st.markdown("**📈 Skuteczność**")
+            st.markdown("• Clarność przekazu")
+            st.markdown("• Potencjał zaufania")
+            st.markdown("• Ryzyko konfliktu")
+            
+        st.markdown("---")
+        
+        # Przycisk do przykładowych danych
+        col_demo, col_info = st.columns([1, 3])
+        with col_demo:
+            demo_col1, demo_col2 = st.columns(2)
+            with demo_col1:
+                if zen_button("🎯 Użyj przykładów", key="fill_demo_data"):
+                    # Bezpośrednio ustawiamy wartości w session_state
+                    st.session_state['team_conv'] = """Menedżer: Kasia, muszę wiedzieć co się dzieje z projektem ABC. Deadline jest za tydzień!
+Pracownik: Mam problem z terminem, klient ciągle zmienia wymagania
+Menedżer: To nie jest wymówka. Musisz lepiej planować. Co konkretnie robiłaś przez ostatnie dni?
+Pracownik: Próbowałam dopasować się do nowych wymagań, ale...
+Menedżer: Słuchaj, potrzebuję rozwiązań, nie problemów. Jak zamierzasz to naprawić?
+Pracownik: Może gdybym miała więcej wsparcia od zespołu?
+Menedżer: Dobrze, porozmawiam z Tomkiem żeby ci pomógł. Ale chcę codzienne raporty z postępów."""
+                    
+                    st.session_state['feedback_conv'] = """Menedżer: Tomek, muszę z tobą porozmawiać o ocenach. Twoje wyniki techniczne są ok, ale komunikacja kuleje
+Pracownik: Czyli co dokładnie robię źle?
+Menedżer: Za mało komunikujesz się z zespołem. Ludzie nie wiedzą nad czym pracujesz
+Pracownik: Ale skupiam się na pracy, żeby była jakość...
+Menedżer: To nie usprawiedliwia braku komunikacji. Od następnego tygodnia codzienne update'y na kanale zespołowym. Rozumiesz?
+Pracownik: Tak, rozumiem
+Menedżer: I jeszcze jedno - więcej inicjatywy. Nie czekaj aż ktoś ci każe coś zrobić."""
+                    
+                    st.session_state['conflict_conv'] = """Menedżer: Ania, słyszałem że wczoraj kłóciłaś się z Markiem o dane do raportu
+Pracownik: To był stres, przepraszam. Deadline naciska i...
+Menedżer: Nie obchodzą mnie wymówki. W biurze nie krzyczy się na współpracowników. Kropka.
+Pracownik: Ale Marek miał dostarczyć dane tydzień temu, a...
+Menedżer: To nie usprawiedliwia takiego zachowania. Następnym razem przychodzisz do mnie, zamiast robić scenę
+Pracownik: Dobrze, ale co z tymi danymi?
+Menedżer: Porozmawiam z Markiem. A ty przeprosisz go jutro. I żeby więcej takich sytuacji nie było."""
+                    
+                    st.session_state['motivation_conv'] = """Menedżer: Paweł, dobra robota z tym automatycznym raportem. Działa jak należy
+Pracownik: Dzięki, starałem się...
+Menedżer: No właśnie. Trzeba było tylko trochę nacisnąć. Widzisz? Jak się chce, to się można
+Pracownik: Tak, chociaż trochę czasu mi to zajęło
+Menedżer: Czas to pieniądz. Następnym razem rób szybciej, ale tak samo dokładnie. Może dostaniesz więcej takich projektów
+Pracownik: To brzmi dobrze. Co mam teraz robić?
+Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodnia ma być gotowe."""
+                    
+                    st.success("✅ Wypełniono pola przykładowymi danymi! Przewiń w dół żeby zobaczyć dane.")
+                    
+            with demo_col2:
+                if zen_button("🧹 Wyczyść pola", key="clear_data"):
+                    # Czyścimy wartości w session_state
+                    st.session_state['team_conv'] = ""
+                    st.session_state['feedback_conv'] = ""
+                    st.session_state['conflict_conv'] = ""
+                    st.session_state['motivation_conv'] = ""
+                    st.success("🧹 Wyczyszczono wszystkie pola! Przewiń w dół żeby sprawdzić.")
+        
+        with col_info:
+            st.info("💡 **Wskazówka:** Wklej rzeczywiste fragmenty swoich rozmów (minimum 2-3 zdania na pole). Możesz też kliknąć 'Użyj przykładów' żeby zobaczyć jak działa narzędzie.")
+            
+            # Debug info
+            if st.session_state.get('team_conv'):
+                st.write(f"🔍 Debug: team_conv ma {len(st.session_state.get('team_conv', ''))} znaków")
+        
+        # Multiple text areas dla różnych sytuacji
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.markdown("**🎯 Rozmowy z zespołem:**")
+            team_conversations = st.text_area(
+                "Wklej fragmenty rozmów z pracownikami:",
+                placeholder="Wklej tutaj rzeczywiste fragmenty swoich rozmów z zespołem...",
+                height=150,
+                key="team_conv"
+            )
+            
+            st.markdown("**📈 Feedback i oceny:**")
+            feedback_conversations = st.text_area(
+                "Fragmenty rozmów feedbackowych:",
+                placeholder="Wklej tutaj fragmenty rozmów dotyczących ocen i feedbacku...", 
+                height=150,
+                key="feedback_conv"
+            )
+
+        with col2:
+            st.markdown("**⚡ Sytuacje konfliktowe:**")
+            conflict_conversations = st.text_area(
+                "Rozmowy w trudnych sytuacjach:",
+                placeholder="Wklej tutaj fragmenty trudnych rozmów i rozwiązywania konfliktów...",
+                height=150,
+                key="conflict_conv"
+            )
+            
+            st.markdown("**🚀 Motywowanie zespołu:**")
+            motivation_conversations = st.text_area(
+                "Fragmenty motywujące i inspirujące:",
+                placeholder="Wklej tutaj fragmenty motywujących rozmów z zespołem...",
+                height=150,
+                key="motivation_conv"
+            )
+        
+        st.markdown("---")
+        st.markdown("#### 📋 Wskazówki do wypełnienia:")
+        tip_col1, tip_col2, tip_col3 = st.columns(3)
+        
+        with tip_col1:
+            st.markdown("**✅ Dobre przykłady:**")
+            st.markdown("• Pełne dialogi (2-6 wymian)")
+            st.markdown("• Rzeczywiste sytuacje")
+            st.markdown("• Różnorodne scenariusze")
+        
+        with tip_col2:
+            st.markdown("**❌ Unikaj:**")
+            st.markdown("• Pojedynczych zdań")
+            st.markdown("• Zbyt ogólnych opisów")
+            st.markdown("• Danych osobowych")
+            
+        with tip_col3:
+            st.markdown("**🎯 Minimalna ilość:**")
+            st.markdown("• Przynajmniej 2 pola wypełnione")
+            st.markdown("• Po 3-5 zdań w każdym")
+            st.markdown("• Łącznie ~200 słów")
+        
+        # Licznik słów i status gotowości
+        all_conversations = [team_conversations, feedback_conversations, conflict_conversations, motivation_conversations]
+        filled_fields = sum(1 for conv in all_conversations if conv.strip())
+        total_words = sum(len(conv.split()) for conv in all_conversations if conv.strip())
+        
+        col_stats1, col_stats2, col_stats3 = st.columns(3)
+        with col_stats1:
+            st.metric("Wypełnione pola", f"{filled_fields}/4")
+        with col_stats2:
+            st.metric("Łączna liczba słów", total_words)
+        with col_stats3:
+            if filled_fields >= 2 and total_words >= 150:
+                st.success("✅ Gotowe do analizy!")
+            elif total_words < 150:
+                st.warning(f"⏳ Potrzeba jeszcze {150-total_words} słów")
+            else:
+                st.info("📝 Wypełnij więcej pól")
+        
+        # Pole na nazwę profilu (opcjonalne)
+        profile_name = st.text_input(
+            "📝 Nazwa profilu (opcjonalnie):",
+            placeholder="np. 'Październik 2024' lub 'Po szkoleniu C-IQ'",
+            help="Opcjonalna nazwa ułatwiająca rozpoznanie profilu w przyszłości"
+        )
+        
+        # Przycisk analizy
+        analysis_ready = filled_fields >= 2 and total_words >= 150
+        if zen_button("🔍 Analizuj Mój Styl Przywództwa", 
+                     key="analyze_leadership", 
+                     width='stretch',
+                     disabled=not analysis_ready):
+            conversations_text = "\n---\n".join([conv for conv in all_conversations if conv.strip()])
+            
+            if conversations_text:
+                with st.spinner("🧠 Tworzę Twój profil przywódczy..."):
+                    leadership_profile = create_leadership_profile(conversations_text)
+                    if leadership_profile:
+                        st.session_state['leadership_profile'] = leadership_profile
+                        
+                        # Auto-zapis profilu dla zalogowanego użytkownika
+                        if hasattr(st.session_state, 'username') and st.session_state.username:
+                            profile_title = profile_name.strip() if profile_name else None
+                            if save_leadership_profile(st.session_state.username, leadership_profile, profile_title):
+                                saved_name = profile_title or f"Profil {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+                                st.success(f"✅ Profil '{saved_name}' gotowy i zapisany! Zobacz zakładkę 'Profil Przywódczy'")
+                            else:
+                                st.success("✅ Profil przywódczy gotowy! Zobacz zakładkę 'Profil Przywódczy'")
+                                st.warning("⚠️ Nie udało się zapisać profilu do pliku")
+                        else:
+                            st.success("✅ Profil przywódczy gotowy! Zobacz zakładkę 'Profil Przywódczy'")
+                            st.info("💡 Zaloguj się, aby automatycznie zapisywać swoje profile")
+            else:
+                st.warning("⚠️ Dodaj przynajmniej jeden fragment rozmowy do analizy")
     
-    with col1:
-        st.markdown("**🎯 Poziomy C-IQ**")
-        st.markdown("• Dominujący poziom")
-        st.markdown("• Rozkład procentowy")
-        st.markdown("• Rekomendacje")
-    
-    with col2:
-        st.markdown("**🧠 Neurobiologia**") 
-        st.markdown("• Wpływ na kortyzol")
-        st.markdown("• Stymulacja oksytocyny")
-        st.markdown("• Bezpieczeństwo psychologiczne")
-    
-    with col3:
-        st.markdown("**📈 Skuteczność**")
-        st.markdown("• Clarność przekazu")
-        st.markdown("• Potencjał zaufania")
-        st.markdown("• Ryzyko konfliktu")
+    with tab2:
+        # Sekcja zarządzania zapisanymi profilami
+        if hasattr(st.session_state, 'username') and st.session_state.username:
+            st.markdown("### 💾 Twoje zapisane profile")
+            
+            profiles_history = get_user_profiles_history(st.session_state.username)
+            if profiles_history:
+                st.markdown(f"**📊 Masz {len(profiles_history)} zapisanych profili:**")
+                
+                # Lista profili do wyboru
+                for i, profile in enumerate(profiles_history):
+                    col_info, col_actions = st.columns([3, 1])
+                    
+                    with col_info:
+                        profile_name = profile.get('profile_name', f'Profil {i+1}')
+                        profile_date = profile.get('created_at', 'Nieznana data')[:16].replace('T', ' ')
+                        dominant_level = profile.get('dominant_ciq_level', '?')
+                        
+                        # Sprawdź czy to aktualnie wczytany profil
+                        is_current = ('leadership_profile' in st.session_state and 
+                                    st.session_state['leadership_profile'].get('created_at') == profile.get('created_at'))
+                        
+                        if is_current:
+                            st.success(f"✅ **{profile_name}** (aktualnie wczytany)")
+                        else:
+                            st.info(f"📂 **{profile_name}**")
+                        
+                        st.caption(f"📅 {profile_date} | 🎯 Poziom dominujący: {dominant_level}")
+                        
+                    with col_actions:
+                        if not is_current:
+                            if zen_button("📥 Wczytaj", key=f"load_profile_{i}"):
+                                st.session_state['leadership_profile'] = profile
+                                st.success(f"✅ Wczytano profil: {profile_name}")
+                                st.rerun()
+                        
+                        if zen_button("🗑️ Usuń", key=f"delete_profile_{i}"):
+                            if delete_user_profile(st.session_state.username, i):
+                                if is_current:
+                                    del st.session_state['leadership_profile']
+                                st.success(f"🗑️ Usunięto profil: {profile_name}")
+                                st.rerun()
+                    
+                    st.markdown("---")
+            else:
+                st.info("📂 Nie masz jeszcze żadnych zapisanych profili")
+                st.markdown("💡 Po stworzeniu pierwszego profilu zostanie automatycznie zapisany")
+        else:
+            st.info("💡 Zaloguj się, aby automatycznie zapisywać swoje profile")
+            
+        st.markdown("---")
+        
+        if 'leadership_profile' in st.session_state:
+            # Przycisk eksportu PDF
+            col_export, col_info = st.columns([1, 3])
+            with col_export:
+                if zen_button("📄 Eksportuj PDF", key="export_leadership_pdf"):
+                    try:
+                        username = getattr(st.session_state, 'username', 'Użytkownik')
+                        pdf_data = generate_leadership_pdf(st.session_state['leadership_profile'], username)
+                        
+                        # Przygotuj nazwę pliku
+                        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                        filename = f"raport_przywodczy_{username}_{timestamp}.pdf"
+                        
+                        st.download_button(
+                            label="⬇️ Pobierz raport",
+                            data=pdf_data,
+                            file_name=filename,
+                            mime="application/pdf",
+                            key="download_pdf"
+                        )
+                        st.success("✅ Raport PDF gotowy do pobrania!")
+                        
+                    except Exception as e:
+                        st.error(f"❌ Błąd podczas generowania PDF: {str(e)}")
+            
+            with col_info:
+                st.info("💡 Eksport zawiera pełny raport przywódczy + plan rozwoju")
+            
+            st.markdown("---")
+            
+            display_leadership_profile(st.session_state['leadership_profile'])
+        else:
+            st.info("📊 Najpierw wgraj dane w zakładce 'Upload Danych'")
+            
+    with tab3:
+        if 'leadership_profile' in st.session_state:
+            display_leadership_development_plan(st.session_state['leadership_profile'])
+        else:
+            st.info("🎯 Profil przywódczy jest potrzebny do stworzenia planu rozwoju")
 
 def show_simulators():
     """Symulatory komunikacyjne"""
@@ -785,6 +1342,1182 @@ def show_ai_assistant():
         st.markdown("• Analiza komunikacji")
         st.markdown("• Strategie C-IQ")
         st.markdown("• Budowanie pewności siebie")
+
+# ===============================================
+# CONVERSATION INTELLIGENCE PRO - FUNKCJE AI
+# ===============================================
+
+def analyze_conversation_sentiment(text: str) -> Optional[Dict]:
+    """Analizuje sentiment rozmowy menedżer-pracownik + poziomy C-IQ"""
+    evaluator = AIExerciseEvaluator()
+    
+    prompt = f"""
+Jesteś ekspertem w Conversational Intelligence i analizie rozmów przywódczych między menedżerem a pracownikiem.
+Przeanalizuj następującą transkrypcję rozmowy menedżerskiej:
+
+TRANSKRYPCJA:
+"{text}"
+
+Przeprowadź kompleksową analizę z perspektywy przywództwa zawierającą:
+1. SENTIMENT ANALYSIS - emocje menedżera i pracownika
+2. C-IQ LEVELS - poziomy komunikacji przywódczej
+3. NEUROBIOLOGICAL IMPACT - wpływ na kortyzol/oksytocynę w kontekście zespołu
+4. LEADERSHIP INSIGHTS - wnioski dla rozwoju przywództwa
+
+Odpowiedz w formacie JSON:
+{{
+    "overall_sentiment": "pozytywny/neutralny/negatywny",
+    "sentiment_score": [1-10],
+    "ciq_analysis": {{
+        "manager_level": "Poziom I/II/III",
+        "employee_level": "Poziom I/II/III", 
+        "leadership_effectiveness": "niska/średnia/wysoka",
+        "conversation_flow": "buduje_zaufanie/neutralna/tworzy_napięcie"
+    }},
+    "emotions_detected": {{
+        "manager": ["emocja1", "emocja2"],
+        "employee": ["emocja1", "emocja2"]
+    }},
+    "neurobiological_impact": {{
+        "cortisol_triggers": ["sytuacja powodująca stres"],
+        "oxytocin_builders": ["sytuacja budująca zaufanie"]
+    }},
+    "leadership_insights": {{
+        "team_engagement_risk": [1-10],
+        "leadership_effectiveness": [1-10],
+        "key_moments": ["ważny moment w rozmowie przywódczej"],
+        "development_opportunities": ["obszar rozwoju przywództwa"]
+    }},
+    "recommendations": {{
+        "immediate_actions": ["natychmiastowe działanie"],
+        "long_term_improvements": ["długoterminowa poprawa"],
+        "coaching_points": ["wskazówka dla menedżera"]
+    }}
+}}
+"""
+    
+    try:
+        if hasattr(evaluator, 'gemini_model'):
+            response = evaluator.gemini_model.generate_content(prompt)
+            if response and response.text:
+                import json, re
+                content = response.text.strip()
+                if content.startswith("```json"):
+                    content = content.replace("```json", "").replace("```", "").strip()
+                
+                json_match = re.search(r'\{.*\}', content, re.DOTALL)
+                if json_match:
+                    result = json.loads(json_match.group())
+                    return result
+        
+        return create_fallback_sentiment_analysis(text)
+    except Exception as e:
+        st.error(f"❌ Błąd analizy sentiment: {str(e)}")
+        return create_fallback_sentiment_analysis(text)
+
+def analyze_business_intent(text: str) -> Optional[Dict]:
+    """Wykrywa intencje biznesowe w rozmowie"""
+    evaluator = AIExerciseEvaluator()
+    
+    prompt = f"""
+Jesteś ekspertem w wykrywaniu intencji biznesowych w rozmowach.
+Przeanalizuj następujący tekst pod kątem potrzeb i motywacji pracownika:
+
+TEKST: "{text}"
+
+Wykryj i ocen potrzeby pracownika oraz dynamike zespolowa. Odpowiedz w JSON:
+{{
+    "detected_intents": [
+        {{
+            "need": "development/support/recognition/autonomy/clear_goals/workload_balance", 
+            "confidence": [1-10],
+            "evidence": ["konkretny fragment tekstu"],
+            "urgency": "low/medium/high"
+        }}
+    ],
+    "team_dynamics": {{
+        "engagement_level": [1-10],
+        "motivation_level": [1-10],
+        "development_readiness": "high/medium/low",
+        "leadership_approach": "konkretne podejscie przywodcze"
+    }},
+    "risk_assessment": {{
+        "burnout_risk": [1-10],
+        "turnover_likelihood": [1-10],
+        "performance_decline": [1-10]
+    }},
+    "leadership_actions": [
+        "konkretne dzialanie menedzerskie 1",
+        "konkretne dzialanie menedzerskie 2"
+    ],
+    "key_phrases": ["ważna fraza1", "ważna fraza2"]
+}}
+"""
+    
+    try:
+        if hasattr(evaluator, 'gemini_model'):
+            response = evaluator.gemini_model.generate_content(prompt)
+            if response and response.text:
+                import json, re
+                content = response.text.strip()
+                if content.startswith("```json"):
+                    content = content.replace("```json", "").replace("```", "").strip()
+                
+                json_match = re.search(r'\{.*\}', content, re.DOTALL)
+                if json_match:
+                    return json.loads(json_match.group())
+        
+        return create_fallback_intent_analysis(text)
+    except Exception:
+        return create_fallback_intent_analysis(text)
+
+def analyze_escalation_risk(text: str, sensitivity: int) -> Optional[Dict]:
+    """Analizuje ryzyko problemów zespołowych i wypalenia"""
+    evaluator = AIExerciseEvaluator()
+    
+    prompt = f"""
+Jesteś ekspertem w wykrywaniu sygnałów problemów zespołowych i wypalenia zawodowego w kontekście przywództwa.
+Czułość wykrywania: {sensitivity}/10 (1=bardzo konserwatywne, 10=bardzo wyczulone)
+
+FRAGMENT ROZMOWY Z PRACOWNIKIEM: "{text}"
+
+Przeanalizuj ryzyko problemów zespołowych i odpowiedz w JSON:
+{{
+    "team_problem_risk": [1-10],
+    "risk_level": "low/medium/high/critical", 
+    "warning_signals": [
+        {{
+            "signal": "konkretny sygnał problemu zespołowego",
+            "severity": [1-10],
+            "fragment": "fragment tekstu pokazujący sygnał"
+        }}
+    ],
+    "employee_state": {{
+        "current_emotion": "motywacja/frustracja/wypalenie/zaangażowanie",
+        "engagement_level": [1-10],
+        "progression": "improving/stable/deteriorating"
+    }},
+    "leadership_actions": [
+        "rekomendowane działanie przywódcze 1",
+        "rekomendowane działanie przywódcze 2"
+    ],
+    "support_strategies": [
+        "strategia wsparcia pracownika 1", 
+        "strategia wsparcia pracownika 2"
+    ],
+    "hr_escalation": {{
+        "recommended": true/false,
+        "reason": "powód przekazania do HR lub wyższego managementu",
+        "urgency": "immediate/within_week/monitor"
+    }}
+}}
+"""
+    
+    try:
+        if hasattr(evaluator, 'gemini_model'):
+            response = evaluator.gemini_model.generate_content(prompt)
+            if response and response.text:
+                import json, re
+                content = response.text.strip()
+                if content.startswith("```json"):
+                    content = content.replace("```json", "").replace("```", "").strip()
+                
+                json_match = re.search(r'\{.*\}', content, re.DOTALL)
+                if json_match:
+                    return json.loads(json_match.group())
+                    
+        return create_fallback_escalation_analysis(text, sensitivity)
+    except Exception:
+        return create_fallback_escalation_analysis(text, sensitivity)
+
+def get_ai_coaching(text: str, context: str) -> Optional[Dict]:
+    """Generuje coaching przywódczy w czasie rzeczywistym dla menedżerów"""
+    evaluator = AIExerciseEvaluator()
+    
+    prompt = f"""
+Jesteś ekspertem w Conversational Intelligence i coachem przywódczym dla menedżerów.
+
+TYP ROZMOWY MENEDŻERSKIEJ: {context}
+OSTATNIA WYPOWIEDŹ PRACOWNIKA: "{text}"
+
+Zasugeruj najlepszą odpowiedź menedżerską na poziomie III C-IQ (Transformacyjnym), która buduje zaufanie i zaangażowanie w zespole.
+
+Odpowiedz w JSON:
+{{
+    "suggested_responses": [
+        {{
+            "response": "konkretna sugerowana odpowiedź",
+            "ciq_level": "III",
+            "rationale": "dlaczego ta odpowiedź jest dobra",
+            "expected_outcome": "oczekiwany rezultat"
+        }}
+    ],
+    "alternative_approaches": [
+        {{
+            "approach": "alternatywne podejście",
+            "when_to_use": "kiedy użyć tego podejścia"
+        }}
+    ],
+    "what_to_avoid": [
+        "czego unikać w odpowiedzi 1",
+        "czego unikać w odpowiedzi 2"
+    ],
+    "ciq_techniques": [
+        "konkretna technika C-IQ do zastosowania",
+        "druga technika C-IQ"
+    ],
+    "follow_up_questions": [
+        "pytanie otwarte dla pracownika 1",
+        "pytanie otwarte dla pracownika 2"
+    ],
+    "leadership_strategy": {{
+        "employee_emotion": "rozpoznana emocja pracownika",
+        "desired_team_state": "pożądany stan zespołu", 
+        "leadership_approach": "jak menedżer może wspierać przejście do lepszego stanu"
+    }}
+}}
+"""
+    
+    try:
+        if hasattr(evaluator, 'gemini_model'):
+            response = evaluator.gemini_model.generate_content(prompt)
+            if response and response.text:
+                import json, re
+                content = response.text.strip()
+                if content.startswith("```json"):
+                    content = content.replace("```json", "").replace("```", "").strip()
+                
+                json_match = re.search(r'\{.*\}', content, re.DOTALL)
+                if json_match:
+                    return json.loads(json_match.group())
+                    
+        return create_fallback_coaching(context)
+    except Exception:
+        return create_fallback_coaching(context)
+
+# ===============================================
+# FALLBACK FUNCTIONS (gdy AI nie działa)
+# ===============================================
+
+def create_fallback_sentiment_analysis(text: str) -> Dict:
+    """Fallback analiza sentiment gdy AI nie działa"""
+    text_lower = text.lower()
+    
+    negative_words = ['problem', 'błąd', 'nie działa', 'zły', 'słaby', 'frustracja', 'źle']
+    positive_words = ['dobrze', 'super', 'świetnie', 'dziękuję', 'pomocy', 'miło']
+    
+    neg_count = sum(1 for word in negative_words if word in text_lower)
+    pos_count = sum(1 for word in positive_words if word in text_lower)
+    
+    if neg_count > pos_count:
+        sentiment = "negatywny"
+        score = max(3, 5 - neg_count)
+    elif pos_count > neg_count:
+        sentiment = "pozytywny" 
+        score = min(8, 5 + pos_count)
+    else:
+        sentiment = "neutralny"
+        score = 5
+        
+    return {
+        "overall_sentiment": sentiment,
+        "sentiment_score": score,
+        "ciq_analysis": {
+            "manager_level": "Poziom II",
+            "employee_level": "Poziom I", 
+            "leadership_effectiveness": "srednia",
+            "conversation_flow": "neutralna"
+        },
+        "business_insights": {
+            "escalation_risk": neg_count * 2,
+            "satisfaction_prediction": score,
+            "key_moments": ["Analiza heurystyczna"],
+            "improvement_opportunities": ["Użyj więcej pytań otwartych"]
+        },
+        "recommendations": {
+            "immediate_actions": ["Zastosuj techniki C-IQ poziom III"],
+            "coaching_points": ["Fokus na współtworzeniu rozwiązań"]
+        }
+    }
+
+def create_fallback_intent_analysis(text: str) -> Dict:
+    """Fallback analiza intencji"""
+    text_lower = text.lower()
+    
+    development_signals = ['rozwój', 'szkolenie', 'nauka', 'kariera', 'awans']
+    support_signals = ['pomoc', 'wsparcie', 'trudności', 'przeciążenie', 'stres']
+    
+    need = "general_support"
+    if any(word in text_lower for word in development_signals):
+        need = "development"
+    elif any(word in text_lower for word in support_signals):
+        need = "support"
+        
+    return {
+        "detected_intents": [{
+            "need": need,
+            "confidence": 7,
+            "evidence": ["Analiza słów kluczowych"],
+            "urgency": "medium"
+        }],
+        "team_dynamics": {
+            "engagement_level": 5,
+            "development_readiness": "medium"
+        },
+        "leadership_actions": [
+            "Zastosuj techniki C-IQ Poziom III",
+            "Zadaj pytania otwarte o potrzeby pracownika"
+        ]
+    }
+
+def create_fallback_escalation_analysis(text: str, sensitivity: int) -> Dict:
+    """Fallback analiza problemów zespołowych"""
+    text_lower = text.lower()
+    problem_words = ['przeciążenie', 'stres', 'wypalenie', 'frustracja', 'demotywacja', 'rezygnacja']
+    
+    problem_count = sum(1 for word in problem_words if word in text_lower)
+    risk = min(10, problem_count * sensitivity)
+    
+    return {
+        "team_problem_risk": risk,
+        "risk_level": "high" if risk > 7 else "medium" if risk > 4 else "low",
+        "warning_signals": [{
+            "signal": f"Wykryto {problem_count} sygnałów problemów zespołowych",
+            "severity": min(8, problem_count * 2)
+        }],
+        "leadership_actions": [
+            "Przeprowadź rozmowę 1-on-1 z pracownikiem",
+            "Zastosuj techniki C-IQ Poziom III"
+        ],
+        "support_strategies": [
+            "Zaoferuj wsparcie w zarządzaniu obciążeniem",
+            "Skup się na wspólnych celach zespołu"
+        ],
+        "hr_escalation": {
+            "recommended": risk > 8,
+            "reason": "Wysokie ryzyko problemów zespołowych wymagających interwencji HR"
+        }
+    }
+
+def create_fallback_coaching(context: str) -> Dict:
+    """Fallback coaching przywódczy"""
+    return {
+        "suggested_responses": [{
+            "response": "Rozumiem Twoją sytuację. Jak możemy wspólnie pracować nad tym wyzwaniem?",
+            "ciq_level": "III",
+            "rationale": "Pytanie otwarte + język współtworzenia + empatia przywódcza"
+        }],
+        "ciq_techniques": [
+            "Używaj pytań otwartych z pracownikami",
+            "Język 'my' i 'wspólnie' zamiast 'ty musisz'",
+            "Fokus na wspólnych celach zespołu"
+        ],
+        "what_to_avoid": [
+            "Język dyrektywny menedżerski (Poziom I)",
+            "Argumentowanie i przekonywanie (Poziom II)"
+        ],
+        "follow_up_questions": [
+            "Co mogę zrobić, żeby Ci pomóc?",
+            "Jakie wsparcie byłoby dla Ciebie najcenniejsze?"
+        ],
+        "leadership_strategy": {
+            "employee_emotion": "analiza w trybie offline",
+            "desired_team_state": "zaangażowany i zmotywowany zespół",
+            "leadership_approach": "coaching i wsparcie zamiast kontroli"
+        }
+    }
+
+# ===============================================
+# LEADERSHIP PROFILE FUNCTIONS
+# ===============================================
+
+def create_leadership_profile(conversations_text: str) -> Optional[Dict]:
+    """Tworzy długoterminowy profil przywódczy na podstawie wielu rozmów"""
+    evaluator = AIExerciseEvaluator()
+    
+    prompt = f"""
+Jesteś ekspertem w analizie długoterminowych wzorców przywódczych przez pryzmat Conversational Intelligence.
+Przeanalizuj zbiór rozmów menedżerskich i stwórz kompletny profil przywódczy.
+
+ZBIÓR ROZMÓW MENEDŻERSKICH:
+"{conversations_text}"
+
+Stwórz długoterminowy profil przywódczy w JSON:
+{{
+    "dominant_ciq_level": "I/II/III",
+    "ciq_distribution": {{
+        "level_i_percentage": [0-100],
+        "level_ii_percentage": [0-100], 
+        "level_iii_percentage": [0-100]
+    }},
+    "leadership_style": {{
+        "primary_style": "directive/collaborative/transformational/coaching",
+        "flexibility_score": [1-10],
+        "adaptability": "low/medium/high"
+    }},
+    "communication_patterns": {{
+        "question_types": "closed/mixed/open_dominant",
+        "language_patterns": ["wzorzec 1", "wzorzec 2"],
+        "emotional_intelligence": [1-10]
+    }},
+    "neurobiological_impact": {{
+        "cortisol_triggers": [1-10],
+        "oxytocin_builders": [1-10],
+        "psychological_safety": [1-10]
+    }},
+    "strengths": [
+        "silna strona przywódcza 1",
+        "silna strona przywódcza 2"
+    ],
+    "development_areas": [
+        "obszar do rozwoju 1", 
+        "obszar do rozwoju 2"
+    ],
+    "leadership_evolution": {{
+        "trajectory": "improving/stable/declining",
+        "consistency": [1-10],
+        "growth_potential": [1-10]
+    }},
+    "team_impact": {{
+        "predicted_engagement": [1-10],
+        "trust_building_capability": [1-10],
+        "conflict_resolution": [1-10]
+    }}
+}}
+"""
+    
+    try:
+        if hasattr(evaluator, 'gemini_model'):
+            response = evaluator.gemini_model.generate_content(prompt)
+            if response and response.text:
+                import json, re
+                content = response.text.strip()
+                if content.startswith("```json"):
+                    content = content.replace("```json", "").replace("```", "").strip()
+                
+                json_match = re.search(r'\{.*\}', content, re.DOTALL)
+                if json_match:
+                    return json.loads(json_match.group())
+                    
+        return create_fallback_leadership_profile()
+    except Exception:
+        return create_fallback_leadership_profile()
+
+def create_fallback_leadership_profile() -> Dict:
+    """Fallback profil gdy AI nie działa - menedżer poziom I-II"""
+    return {
+        "dominant_ciq_level": "I",
+        "ciq_distribution": {
+            "level_i_percentage": 55,
+            "level_ii_percentage": 35,
+            "level_iii_percentage": 10
+        },
+        "leadership_style": {
+            "primary_style": "directive",
+            "flexibility_score": 4,
+            "adaptability": "low"
+        },
+        "communication_patterns": {
+            "question_types": "closed_dominant",
+            "language_patterns": ["Polecenia i instrukcje", "Kontrola wykonania", "Wymagania rezultatów"],
+            "emotional_intelligence": 4
+        },
+        "neurobiological_impact": {
+            "cortisol_triggers": 7,
+            "oxytocin_builders": 4,
+            "psychological_safety": 4
+        },
+        "strengths": [
+            "Jasne komunikowanie oczekiwań",
+            "Zdecydowanie w podejmowaniu decyzji",
+            "Orientacja na wyniki",
+            "Reagowanie na problemy operacyjne"
+        ],
+        "development_areas": [
+            "Redukcja stylu dyrektywnego (za dużo poziomu I)",
+            "Rozwijanie umiejętności słuchania aktywnego",
+            "Więcej pytań otwartych zamiast poleceń",
+            "Budowanie bezpiecznej przestrzeni do dialogu",
+            "Mniej presji czasowej w komunikacji"
+        ],
+        "leadership_evolution": {
+            "trajectory": "stable",
+            "consistency": 7,
+            "growth_potential": 8
+        },
+        "team_impact": {
+            "predicted_engagement": 4,
+            "trust_building_capability": 4,
+            "conflict_resolution": 5
+        }
+    }
+
+def safe_get_numeric(data: dict, key: str, default: int) -> int:
+    """Bezpieczne pobieranie wartości liczbowej z domyślną wartością"""
+    value = data.get(key, default)
+    return default if value is None else value
+
+def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
+    """Generuje raport przywódczy w formacie PDF"""
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    import os
+    
+    # Utwórz buffer dla PDF
+    buffer = io.BytesIO()
+    
+    # Zarejestruj font systemowy Windows z polskim wsparciem
+    try:
+        arial_path = "C:/Windows/Fonts/arial.ttf"
+        if os.path.exists(arial_path):
+            pdfmetrics.registerFont(TTFont('ArialUnicode', arial_path))
+            unicode_font = "ArialUnicode"
+            unicode_font_bold = "ArialUnicode"
+        else:
+            unicode_font = 'Times-Roman'
+            unicode_font_bold = 'Times-Bold'
+    except Exception as e:
+        print(f"Błąd ładowania fontu: {e}")
+        unicode_font = 'Times-Roman'
+        unicode_font_bold = 'Times-Bold'
+    
+    # Konfiguracja dokumentu PDF
+    doc = SimpleDocTemplate(buffer, pagesize=A4,
+                          rightMargin=72, leftMargin=72,
+                          topMargin=72, bottomMargin=18)
+    
+    # Style tekstu z obsługą polskich znaków
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontName=unicode_font_bold,
+        fontSize=24,
+        spaceAfter=30,
+        textColor=HexColor('#2E7D32'),
+        alignment=1  # Center
+    )
+    
+    subtitle_style = ParagraphStyle(
+        'CustomSubtitle',
+        parent=styles['Heading2'], 
+        fontName=unicode_font_bold,
+        fontSize=16,
+        spaceBefore=20,
+        spaceAfter=12,
+        textColor=HexColor('#1976D2')
+    )
+    
+    normal_style = ParagraphStyle(
+        'CustomNormal',
+        parent=styles['Normal'],
+        fontName=unicode_font,
+        fontSize=11,
+        spaceAfter=8
+    )
+    
+    # Zawartość PDF
+    story = []
+    
+    # Upewnij się, że wszystkie stringi są w UTF-8 z polskimi znakami
+    def ensure_unicode(text):
+        if text is None:
+            return ""
+        if isinstance(text, (int, float)):
+            return str(text)
+        
+        # Konwertuj na string i zachowaj polskie znaki
+        text_str = str(text)
+        
+        # Upewnij się, że string jest w UTF-8
+        try:
+            if isinstance(text_str, bytes):
+                text_str = text_str.decode('utf-8', errors='ignore')
+            else:
+                # Test enkodowania - jeśli się udaje, znaczy że string jest OK
+                text_str.encode('utf-8')
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            # Fallback - usuń problematyczne znaki
+            text_str = str(text).encode('utf-8', errors='ignore').decode('utf-8')
+            
+        return text_str
+    
+    # Nagłówek
+    story.append(Paragraph(ensure_unicode("💎 Raport Przywódczy C-IQ"), title_style))
+    story.append(Paragraph(f"<b>Użytkownik:</b> {ensure_unicode(username)}", normal_style))
+    story.append(Paragraph(f"<b>Data wygenerowania:</b> {datetime.now().strftime('%Y-%m-%d %H:%M')}", normal_style))
+    story.append(Spacer(1, 20))
+    
+    # Sekcja 1: Dominujący poziom
+    story.append(Paragraph(ensure_unicode("🎯 Dominujący Poziom C-IQ"), subtitle_style))
+    dominant_level = ensure_unicode(profile.get('dominant_ciq_level', 'Brak danych'))
+    story.append(Paragraph(f"<b>{dominant_level}</b>", normal_style))
+    story.append(Spacer(1, 15))
+    
+    # Sekcja 2: Rozkład poziomów
+    story.append(Paragraph(ensure_unicode("📊 Rozkład Poziomów C-IQ"), subtitle_style))
+    distribution = profile.get('ciq_distribution', {})
+    
+    level_data = [
+        [ensure_unicode('Poziom'), ensure_unicode('Wartość')],
+        [ensure_unicode('Level I (Transakcyjny)'), f"{safe_get_numeric(distribution, 'level_i_percentage', 30)}%"],
+        [ensure_unicode('Level II (Pozycyjny)'), f"{safe_get_numeric(distribution, 'level_ii_percentage', 50)}%"], 
+        [ensure_unicode('Level III (Transformacyjny)'), f"{safe_get_numeric(distribution, 'level_iii_percentage', 20)}%"]
+    ]
+    
+    level_table = Table(level_data, colWidths=[3*inch, 2*inch])
+    level_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), HexColor('#E3F2FD')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), unicode_font_bold),
+        ('FONTNAME', (0, 1), (-1, -1), unicode_font),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('FONTSIZE', (0, 1), (-1, -1), 11),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    story.append(level_table)
+    story.append(Spacer(1, 20))
+    
+    # Sekcja 3: Neurobiologia 
+    story.append(Paragraph(ensure_unicode("🧠 Wpływ Neurobiologiczny"), subtitle_style))
+    neurobiological = profile.get('neurobiological_impact', {})
+    
+    neuro_data = [
+        [ensure_unicode('Aspekt'), ensure_unicode('Poziom (1-10)')],
+        [ensure_unicode('Wyzwalacze kortyzolu'), str(safe_get_numeric(neurobiological, 'cortisol_triggers', 5))],
+        [ensure_unicode('Budowanie oksytocyny'), str(safe_get_numeric(neurobiological, 'oxytocin_builders', 5))],
+        [ensure_unicode('Bezpieczeństwo psychologiczne'), str(safe_get_numeric(neurobiological, 'psychological_safety', 5))]
+    ]
+    
+    neuro_table = Table(neuro_data, colWidths=[3.5*inch, 1.5*inch])
+    neuro_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), HexColor('#FFF3E0')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), unicode_font_bold),
+        ('FONTNAME', (0, 1), (-1, -1), unicode_font),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('FONTSIZE', (0, 1), (-1, -1), 11),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    story.append(neuro_table)
+    story.append(Spacer(1, 20))
+    
+    # Sekcja 4: Mocne strony
+    story.append(Paragraph("💪 Mocne Strony", subtitle_style))
+    strengths = profile.get('strengths', ['Brak danych'])
+    for strength in strengths[:5]:  # Max 5 pozycji
+        story.append(Paragraph(f"• {ensure_unicode(strength)}", normal_style))
+    story.append(Spacer(1, 15))
+    
+    # Sekcja 5: Obszary rozwoju
+    story.append(Paragraph(ensure_unicode("📈 Obszary Rozwoju"), subtitle_style))
+    development_areas = profile.get('development_areas', ['Brak danych'])
+    for area in development_areas[:5]:  # Max 5 pozycji  
+        story.append(Paragraph(f"• {ensure_unicode(area)}", normal_style))
+    story.append(Spacer(1, 20))
+    
+    # Nowa strona dla planu rozwoju
+    story.append(PageBreak())
+    story.append(Paragraph(ensure_unicode("🎯 Plan Rozwoju Przywódczego"), title_style))
+    story.append(Spacer(1, 20))
+    
+    # Plan rozwoju - cele
+    level_iii = safe_get_numeric(profile.get('ciq_distribution', {}), 'level_iii_percentage', 20)
+    target_level_iii = min(level_iii + 20, 80)
+    
+    story.append(Paragraph("📊 Cele Rozwojowe", subtitle_style))
+    story.append(Paragraph(f"<b>Aktualny poziom transformacyjny:</b> {level_iii}%", normal_style))
+    story.append(Paragraph(f"<b>Docelowy poziom transformacyjny:</b> {target_level_iii}%", normal_style))
+    story.append(Paragraph(f"<b>Wymagany wzrost:</b> +{target_level_iii - level_iii}%", normal_style))
+    story.append(Spacer(1, 15))
+    
+    # Rekomendacje
+    story.append(Paragraph("🎯 Kluczowe Rekomendacje", subtitle_style))
+    
+    recommendations = [
+        "Praktykuj zadawanie pytań otwartych zamiast zamkniętych",
+        "Rozwijaj umiejętności aktywnego słuchania", 
+        "Wprowadzaj więcej empatii w codziennej komunikacji",
+        "Eksperymentuj z różnymi stylami komunikacyjnymi",
+        "Regularne sesje feedbacku z zespołem"
+    ]
+    
+    for rec in recommendations:
+        story.append(Paragraph(f"• {ensure_unicode(rec)}", normal_style))
+    
+    story.append(Spacer(1, 20))
+    
+    # Stopka
+    footer_style = ParagraphStyle(
+        'Footer',
+        parent=styles['Normal'],
+        fontName=unicode_font,
+        fontSize=9,
+        textColor=colors.grey,
+        alignment=1
+    )
+    
+    story.append(Spacer(1, 30))
+    story.append(Paragraph("---", footer_style))
+    story.append(Paragraph(ensure_unicode("Raport wygenerowany przez BrainVenture Academy"), footer_style))
+    story.append(Paragraph(ensure_unicode("System C-IQ Leadership Profile"), footer_style))
+    
+    # Zbuduj PDF
+    doc.build(story)
+    
+    # Zwróć dane PDF
+    pdf_data = buffer.getvalue()
+    buffer.close()
+    
+    return pdf_data
+
+def display_leadership_profile(profile: Dict):
+    """Wyświetla profil przywódczy"""
+    st.markdown("## 📊 Twój Profil Przywódczy C-IQ")
+    
+    # Główne metryki
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        dominant_level = profile.get('dominant_ciq_level', 'II')
+        st.metric("🎯 Dominujący poziom C-IQ", f"Poziom {dominant_level}")
+        
+    with col2:
+        leadership_style = profile.get('leadership_style', {})
+        style = leadership_style.get('primary_style', 'collaborative')
+        st.metric("👔 Styl przywództwa", style.title())
+        
+    with col3:
+        team_impact = profile.get('team_impact', {})
+        engagement = team_impact.get('predicted_engagement', 6)
+        if engagement is None:
+            engagement = 6
+        st.metric("🚀 Wpływ na zaangażowanie", f"{engagement}/10")
+        
+    with col4:
+        trust_building = team_impact.get('trust_building_capability', 6)
+        if trust_building is None:
+            trust_building = 6
+        st.metric("🤝 Budowanie zaufania", f"{trust_building}/10")
+    
+    # Rozkład poziomów C-IQ
+    st.markdown("### 📈 Rozkład Twoich poziomów C-IQ")
+    distribution = profile.get('ciq_distribution', {})
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        level_i = distribution.get('level_i_percentage', 30)
+        if level_i is None:
+            level_i = 30
+        st.metric("🔵 Poziom I (Transakcyjny)", f"{level_i}%")
+        
+    with col2:
+        level_ii = distribution.get('level_ii_percentage', 50) 
+        if level_ii is None:
+            level_ii = 50
+        st.metric("🟡 Poziom II (Pozycyjny)", f"{level_ii}%")
+        
+    with col3:
+        level_iii = distribution.get('level_iii_percentage', 20)
+        # Walidacja - upewniamy się że to liczba
+        if level_iii is None:
+            level_iii = 20
+        st.metric("🟢 Poziom III (Transformacyjny)", f"{level_iii}%")
+        
+    # Rekomendacje na podstawie rozkładu C-IQ
+    st.markdown("#### 💡 Rekomendacje na podstawie Twoich poziomów C-IQ:")
+    
+    # Walidacja wszystkich wartości przed porównaniem
+    level_i = distribution.get('level_i_percentage', 30)
+    if level_i is None:
+        level_i = 30
+    level_ii = distribution.get('level_ii_percentage', 50) 
+    if level_ii is None:
+        level_ii = 50
+    if level_iii is None:
+        level_iii = 20
+    
+    if level_iii < 30:
+        st.warning("🎯 **Prioritet:** Zwiększ używanie poziomu III - zadawaj więcej pytań otwartych, słuchaj aktywnie, współtwórz rozwiązania")
+    elif level_iii < 50:
+        st.info("📈 **Kierunek rozwoju:** Kontynuuj pracę nad poziomem III - doskonał umiejętności budowania dialogu")
+    else:
+        st.success("🎉 **Gratulacje!** Masz silny poziom III - teraz skup się na konsystentności i rozwijaniu innych")
+        
+    if level_i > 50:
+        st.warning("⚠️ **Uwaga:** Za dużo poziomu I (transakcyjnego) - spróbuj więcej słuchać niż mówić")
+        
+    if level_ii > 60:
+        st.info("💡 **Wskazówka:** Dużo poziomu II - rozwijaj umiejętności przejścia do poziomu III")
+    
+    # Mocne strony i obszary rozwoju
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("### 💪 Twoje mocne strony przywódcze")
+        strengths = profile.get('strengths', [])
+        for strength in strengths:
+            st.markdown(f"✅ {strength}")
+            
+    with col2:
+        st.markdown("### 🎯 Obszary do rozwoju")
+        development_areas = profile.get('development_areas', [])
+        for area in development_areas:
+            st.markdown(f"📈 {area}")
+            
+    # Sekcja neurobiologiczna
+    st.markdown("### 🧠 Wpływ neurobiologiczny Twojej komunikacji")
+    neurobiological = profile.get('neurobiological_impact', {})
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        cortisol = neurobiological.get('cortisol_triggers', 5)
+        if cortisol is None:
+            cortisol = 5
+        if cortisol <= 3:
+            st.success(f"🟢 **Niski cortyzol** {cortisol}/10")
+            st.write("Twoja komunikacja minimalizuje stres")
+        elif cortisol <= 7:
+            st.warning(f"🟡 **Średni cortyzol** {cortisol}/10") 
+            st.write("Czasami możesz wywoływać napięcie")
+        else:
+            st.error(f"🔴 **Wysoki cortyzol** {cortisol}/10")
+            st.write("Komunikacja może stresować zespół")
+            
+    with col2:
+        oxytocin = neurobiological.get('oxytocin_builders', 5)
+        if oxytocin is None:
+            oxytocin = 5
+        if oxytocin >= 7:
+            st.success(f"🟢 **Wysoka oksytocyna** {oxytocin}/10")
+            st.write("Świetnie budujesz więzi i zaufanie")
+        elif oxytocin >= 4:
+            st.info(f"🟡 **Średnia oksytocyna** {oxytocin}/10")
+            st.write("Umiarkowanie budujesz relacje") 
+        else:
+            st.error(f"🔴 **Niska oksytocyna** {oxytocin}/10")
+            st.write("Potrzeba więcej budowania więzi")
+            
+    with col3:
+        safety = neurobiological.get('psychological_safety', 5)
+        if safety is None:
+            safety = 5
+        if safety >= 7:
+            st.success(f"🟢 **Wysokie bezpieczeństwo** {safety}/10")
+            st.write("Zespół czuje się bezpiecznie")
+        elif safety >= 4:
+            st.info(f"🟡 **Średnie bezpieczeństwo** {safety}/10")
+            st.write("Jest miejsce na poprawę bezpieczeństwa")
+        else:
+            st.error(f"🔴 **Niskie bezpieczeństwo** {safety}/10") 
+            st.write("Zespół może czuć się niepewnie")
+    
+    # Sekcja skuteczności komunikacji
+    st.markdown("### 📈 Skuteczność Twojej komunikacji")
+    
+    communication = profile.get('communication_patterns', {})
+    team_impact = profile.get('team_impact', {})
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        # Clarność przekazu - wyliczamy na podstawie poziomu C-IQ
+        level_iii = profile.get('ciq_distribution', {}).get('level_iii_percentage', 20)
+        if level_iii is None:
+            level_iii = 20
+        clarity_score = min(10, max(3, int(level_iii / 10 + 3)))
+        
+        if clarity_score >= 7:
+            st.success(f"🎯 **Clarność przekazu** {clarity_score}/10")
+            st.write("Komunikujesz jasno i zrozumiale")
+        elif clarity_score >= 5:
+            st.info(f"🎯 **Clarność przekazu** {clarity_score}/10")
+            st.write("Przekaz jest w miarę jasny")
+        else:
+            st.warning(f"🎯 **Clarność przekazu** {clarity_score}/10")
+            st.write("Przekaz wymaga uściślenia")
+            
+    with col2:
+        trust_potential = team_impact.get('trust_building_capability', 6)
+        if trust_potential is None:
+            trust_potential = 6
+        if trust_potential >= 7:
+            st.success(f"🤝 **Potencjał zaufania** {trust_potential}/10")
+            st.write("Silnie budujesz zaufanie zespołu")
+        elif trust_potential >= 5:
+            st.info(f"🤝 **Potencjał zaufania** {trust_potential}/10") 
+            st.write("Umiarkowanie budujesz zaufanie")
+        else:
+            st.warning(f"🤝 **Potencjał zaufania** {trust_potential}/10")
+            st.write("Zaufanie wymaga wzmocnienia")
+            
+    with col3:
+        # Ryzyko konfliktu - odwrotność conflict_resolution
+        conflict_resolution = team_impact.get('conflict_resolution', 6)
+        if conflict_resolution is None:
+            conflict_resolution = 6
+        conflict_risk = 10 - conflict_resolution
+        
+        if conflict_risk <= 3:
+            st.success(f"⚡ **Ryzyko konfliktu** {conflict_risk}/10")
+            st.write("Bardzo niskie ryzyko konfliktów")
+        elif conflict_risk <= 6:
+            st.info(f"⚡ **Ryzyko konfliktu** {conflict_risk}/10")
+            st.write("Umiarkowane ryzyko konfliktów") 
+        else:
+            st.warning(f"⚡ **Ryzyko konfliktu** {conflict_risk}/10")
+            st.write("Wysokie ryzyko napięć w zespole")
+
+def display_leadership_development_plan(profile: Dict):
+    """Wyświetla plan rozwoju przywódczego"""
+    st.markdown("## 🎯 Twój Plan Rozwoju Przywódczego")
+    
+    # Analiza obecnego poziomu
+    dominant_level = profile.get('dominant_ciq_level', 'II')
+    distribution = profile.get('ciq_distribution', {})
+    level_iii_percentage = safe_get_numeric(distribution, 'level_iii_percentage', 20)
+    
+    st.markdown("### 📊 Analiza obecnej sytuacji")
+    if level_iii_percentage < 30:
+        st.warning(f"⚠️ **Poziom III stanowi tylko {level_iii_percentage}%** Twojej komunikacji. To główny obszar rozwoju!")
+    elif level_iii_percentage < 50:
+        st.info(f"📈 **Poziom III: {level_iii_percentage}%** - dobry start, ale jest miejsce na poprawę")
+    else:
+        st.success(f"🎉 **Poziom III: {level_iii_percentage}%** - świetny poziom transformacyjnego przywództwa!")
+    
+    # Plan rozwoju na najbliższe 3 miesiące
+    st.markdown("### 🗓️ Plan rozwoju - najbliższe 3 miesiące")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("**🎯 Cele do osiągnięcia:**")
+        target_level_iii = min(level_iii_percentage + 20, 80)
+        st.markdown(f"• Zwiększ poziom III z {level_iii_percentage}% do {target_level_iii}%")
+        st.markdown("• Stosuj więcej pytań otwartych")
+        st.markdown("• Praktykuj język współtworzenia")
+        st.markdown("• Buduj psychologiczne bezpieczeństwo")
+        
+    with col2:
+        st.markdown("**📚 Konkretne ćwiczenia:**")
+        st.markdown("• **Tygodniowo:** 3 rozmowy 1-on-1 z fokusem na C-IQ III")
+        st.markdown("• **Dziennie:** Zadaj 5+ pytań otwartych zespołowi") 
+        st.markdown("• **Miesięcznie:** Przeanalizuj swoje rozmowy tym narzędziem")
+        st.markdown("• **Kwartalne:** Feedback 360° o stylu komunikacji")
+    
+    # Benchmark z innymi liderami
+    st.markdown("### 🏆 Benchmark z innymi liderami")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("**🥉 Lider Początkujący**")
+        st.markdown("• Poziom III: 15-25%")
+        st.markdown("• Fokus na zadania")
+        st.markdown("• Komunikacja dyrektywna")
+        
+    with col2:
+        st.markdown("**🥈 Lider Doświadczony**") 
+        st.markdown("• Poziom III: 40-60%")
+        st.markdown("• Balans zadania-relacje")
+        st.markdown("• Rozwój zespołu")
+        
+    with col3:
+        st.markdown("**🥇 Lider Transformacyjny**")
+        st.markdown("• Poziom III: 65%+")
+        st.markdown("• Inspiruje i motywuje")
+        st.markdown("• Buduje kultur zaufania")
+    
+    # Gdzie jesteś
+    if level_iii_percentage < 25:
+        st.info("📍 **Jesteś na poziomie:** Lider Początkujący - świetny moment na rozwój!")
+    elif level_iii_percentage < 60:
+        st.success("📍 **Jesteś na poziomie:** Lider Doświadczony - bardzo dobry wynik!")
+    else:
+        st.success("📍 **Jesteś na poziomie:** Lider Transformacyjny - gratulacje! 🎉")
+
+# ===============================================
+# DISPLAY FUNCTIONS - WYŚWIETLANIE REZULTATÓW  
+# ===============================================
+
+def display_sentiment_results(result: Dict):
+    """Wyświetla wyniki analizy sentymentu"""
+    st.markdown("## 📊 Wyniki Analizy Sentiment + C-IQ")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        sentiment = result.get('overall_sentiment', 'neutralny')
+        score = result.get('sentiment_score', 5)
+        
+        color = "🟢" if sentiment == "pozytywny" else "🔴" if sentiment == "negatywny" else "🟡"
+        st.metric(f"{color} Sentiment ogólny", f"{sentiment.title()}", f"Ocena: {score}/10")
+        
+    with col2:
+        ciq = result.get('ciq_analysis', {})
+        manager_level = ciq.get('manager_level', 'N/A')
+        st.metric("🎯 Poziom menedżera", manager_level)
+        
+    with col3:
+        business = result.get('business_insights', {})
+        escalation = business.get('escalation_risk', 0)
+        color = "🟢" if escalation < 4 else "🟡" if escalation < 7 else "🔴"
+        st.metric(f"{color} Ryzyko eskalacji", f"{escalation}/10")
+    
+    # Szczegóły
+    if 'emotions_detected' in result:
+        st.markdown("### 😊 Wykryte emocje")
+        emotions = result['emotions_detected']
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("**👨‍💼 Menedżer:**")
+            for emotion in emotions.get('manager', []):
+                st.markdown(f"• {emotion}")
+                
+        with col2:
+            st.markdown("**� Pracownik:**")
+            for emotion in emotions.get('employee', []):
+                st.markdown(f"• {emotion}")
+    
+    # Rekomendacje
+    if 'recommendations' in result:
+        st.markdown("### 💡 Rekomendacje")
+        recommendations = result['recommendations']
+        
+        if 'immediate_actions' in recommendations:
+            st.markdown("**🚨 Natychmiastowe działania:**")
+            for action in recommendations['immediate_actions']:
+                st.markdown(f"• {action}")
+                
+        if 'coaching_points' in recommendations:
+            st.markdown("**🎯 Wskazówki coachingowe:**")
+            for point in recommendations['coaching_points']:
+                st.markdown(f"• {point}")
+
+def display_intent_results(result: Dict):
+    """Wyświetla wyniki detekcji intencji"""
+    st.markdown("## 🎯 Wykryte Intencje Biznesowe")
+    
+    if 'detected_intents' in result:
+        for intent_data in result['detected_intents']:
+            intent = intent_data.get('intent', 'unknown')
+            confidence = intent_data.get('confidence', 0)
+            urgency = intent_data.get('urgency', 'medium')
+            
+            # Kolory dla różnych intencji
+            intent_colors = {
+                'purchase': '💰',
+                'complaint': '🚨', 
+                'cancellation': '❌',
+                'upsell_opportunity': '📈',
+                'feature_request': '💡'
+            }
+            
+            color = intent_colors.get(intent, '❓')
+            
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric(f"{color} Intencja", intent.replace('_', ' ').title())
+            with col2:
+                st.metric("🎯 Pewność", f"{confidence}/10")
+            with col3:
+                urgency_color = "🔴" if urgency == "high" else "🟡" if urgency == "medium" else "🟢"
+                st.metric(f"{urgency_color} Pilność", urgency.title())
+    
+    # Rekomendacje biznesowe
+    if 'next_best_actions' in result:
+        st.markdown("### 🎯 Rekomendowane działania")
+        for action in result['next_best_actions']:
+            st.markdown(f"• {action}")
+
+def display_escalation_results(result: Dict):
+    """Wyświetla wyniki analizy problemów zespołowych"""
+    st.markdown("## 🚨 Analiza Problemów Zespołowych")
+    
+    risk_level = result.get('risk_level', 'medium')
+    team_risk = result.get('team_problem_risk', result.get('escalation_risk', 5))
+    
+    # Kolory dla poziomów ryzyka
+    risk_colors = {
+        'low': '🟢',
+        'medium': '🟡', 
+        'high': '🟠',
+        'critical': '🔴'
+    }
+    
+    color = risk_colors.get(risk_level, '🟡')
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric(f"{color} Poziom ryzyka", risk_level.upper(), f"{team_risk}/10")
+    
+    with col2:
+        hr_esc = result.get('hr_escalation', result.get('manager_escalation', {}))
+        if hr_esc.get('recommended', False):
+            st.error("🚨 ZALECANE PRZEKAZANIE DO HR/WYŻSZEGO MANAGEMENTU")
+        else:
+            st.success("✅ Menedżer może kontynuować wsparcie zespołu")
+    
+    # Sygnały ostrzegawcze
+    if 'warning_signals' in result:
+        st.markdown("### ⚠️ Wykryte sygnały ostrzegawcze")
+        for signal in result['warning_signals']:
+            severity = signal.get('severity', 0)
+            signal_text = signal.get('signal', '')
+            severity_color = "🔴" if severity > 7 else "🟡" if severity > 4 else "🟢"
+            st.markdown(f"{severity_color} **{signal_text}** (Intensywność: {severity}/10)")
+    
+    # Strategie wsparcia
+    if 'support_strategies' in result:
+        st.markdown("### 🤝 Strategie wsparcia pracownika")
+        for strategy in result['support_strategies']:
+            st.markdown(f"• {strategy}")
+    
+    # Działania przywódcze
+    if 'leadership_actions' in result:
+        st.markdown("### 👔 Rekomendowane działania menedżerskie")
+        for action in result['leadership_actions']:
+            st.markdown(f"• {action}")
+
+def display_coaching_results(result: Dict):
+    """Wyświetla wyniki coachingu przywódczego"""
+    st.markdown("## 💡 Leadership Coach - Sugerowane odpowiedzi")
+    
+    # Główne sugestie
+    if 'suggested_responses' in result:
+        for i, suggestion in enumerate(result['suggested_responses']):
+            st.markdown(f"### 🎯 Sugerowana odpowiedź {i+1}")
+            
+            response = suggestion.get('response', '')
+            rationale = suggestion.get('rationale', '')
+            
+            st.success(f"**💬 Odpowiedź:** {response}")
+            st.info(f"**🧠 Uzasadnienie:** {rationale}")
+    
+    # Techniki C-IQ
+    if 'ciq_techniques' in result:
+        st.markdown("### 🎯 Techniki C-IQ do zastosowania")
+        for technique in result['ciq_techniques']:
+            st.markdown(f"• {technique}")
+    
+    # Czego unikać
+    if 'what_to_avoid' in result:
+        st.markdown("### ❌ Czego unikać")
+        for avoid in result['what_to_avoid']:
+            st.markdown(f"• {avoid}")
+    
+    # Pytania otwarte
+    if 'follow_up_questions' in result:
+        st.markdown("### ❓ Sugerowane pytania otwarte")
+        for question in result['follow_up_questions']:
+            st.markdown(f"• {question}")
 
 if __name__ == "__main__":
     show_tools_page()

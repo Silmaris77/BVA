@@ -13,7 +13,7 @@ from data.neuroleader_test_questions import NEUROLEADER_TYPES
 from config.settings import XP_LEVELS
 from utils.material3_components import apply_material3_theme
 from utils.components import zen_header, zen_button, notification, data_chart, stat_card
-from utils.layout import get_device_type, responsive_grid
+from utils.layout import get_device_type, responsive_grid, toggle_device_view
 
 def check_admin_auth():
     """Sprawdza uwierzytelnienie administratora"""
@@ -147,11 +147,19 @@ def plot_user_activity_over_time():
 
 def show_admin_dashboard():
     """Wyświetla panel administratora"""
-    # Zastosuj style Material 3 - tymczasowo wykomentowane
-    # apply_material3_theme()
     
-    # Dodaj informację diagnostyczną
-    st.write("DEBUG - show_admin_dashboard() started")
+    # Zastosuj style Material 3
+    apply_material3_theme()
+    
+    # Opcja wyboru urządzenia w trybie deweloperskim
+    if st.session_state.get('dev_mode', False):
+        toggle_device_view()
+    
+    # Pobierz aktualny typ urządzenia
+    device_type = get_device_type()
+    
+    # Przewiń na górę strony
+    scroll_to_top()
     
     # Sprawdź uwierzytelnienie admina
     if not check_admin_auth():
@@ -163,9 +171,6 @@ def show_admin_dashboard():
     
     # Nagłówek panelu administratora
     zen_header("🛡️ Panel Administratora")
-    
-    # Pobierz urządzenie
-    device_type = get_device_type()
     
     # Dodaj informację o ostatnim odświeżeniu
     st.markdown(f"**Ostatnie odświeżenie:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -179,7 +184,6 @@ def show_admin_dashboard():
     
     # 1. Zakładka Przegląd
     with admin_tabs[0]:
-        scroll_to_top()
         st.subheader("Przegląd statystyk platformy")
         
         # Pobierz dane
@@ -281,7 +285,6 @@ def show_admin_dashboard():
     
     # 2. Zakładka Użytkownicy
     with admin_tabs[1]:
-        scroll_to_top()
         st.subheader("Szczegóły użytkowników")
         
         # Pobierz dane
@@ -337,7 +340,6 @@ def show_admin_dashboard():
     
     # 3. Zakładka Lekcje
     with admin_tabs[2]:
-        scroll_to_top()
         st.subheader("Statystyki lekcji")
         
         # Pobierz dane lekcji
@@ -389,12 +391,10 @@ def show_admin_dashboard():
     
     # 4. Zakładka Dostępność lekcji
     with admin_tabs[3]:
-        scroll_to_top()
         manage_lesson_access()
     
     # 5. Zakładka Testy
     with admin_tabs[4]:
-        scroll_to_top()
         st.subheader("Wyniki testów Neurolidera")
         
         # Pobierz dane o użytkownikach
@@ -449,7 +449,6 @@ def show_admin_dashboard():
     
     # 6. Zakładka Zarządzanie
     with admin_tabs[5]:
-        scroll_to_top()
         st.subheader("Zarządzanie użytkownikami")
         
         # Pobierz dane

@@ -7,7 +7,7 @@
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-13 14:13:27",
+    "last_login": "2025-10-14 02:06:47",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -719,6 +719,12 @@
         "degencoins": 563,
         "level": 1,
         "completed_lessons": 2
+      },
+      "2025-10-14": {
+        "xp": 773,
+        "degencoins": 563,
+        "level": 1,
+        "completed_lessons": 2
       }
     },
     "inventory": {
@@ -735,7 +741,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-09 15:23:26",
+    "last_login": "2025-10-14 01:37:39",
     "completed_lessons": [
       "2. Chemia mózgu"
     ],
@@ -1260,6 +1266,14 @@
           "earned_date": "2025-08-27T19:20:53.457469"
         },
         "earning_rate": 0.0
+      }
+    },
+    "daily_stats": {
+      "2025-10-14": {
+        "xp": 236,
+        "degencoins": 236,
+        "level": 1,
+        "completed_lessons": 1
       }
     }
   },
