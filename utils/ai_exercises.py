@@ -288,39 +288,87 @@ ODPOWIEDŹ UCZESTNIKA:
 
 KONTEKST LEKCJI: {context}
 
-Oceń odpowiedź uczestnika według następujących kryteriów:
+WAŻNE: Odpowiedz w ZWYKŁYM TEKŚCIE, NIE w JSON! Użyj formatowania markdown.
 
-1. **Zrozumienie przypadku** (1-10): Czy uczestnik prawidłowo zidentyfikował kluczowe wyzwania?
-2. **Jakość rozwiązania** (1-10): Czy proponowane rozwiązanie jest praktyczne i wykonalne?
-3. **Zastosowanie C-IQ** (1-10): Czy wykorzystał zasady Conversational Intelligence?
-4. **Wartość praktyczna** (1-10): Czy rozwiązanie można wdrożyć w rzeczywistości?
+Oceń odpowiedź uczestnika według następujących kryteriów (1-10):
 
-DODATKOWO: Napisz przykładową wzorcową odpowiedź, która otrzymałaby maksymalną ocenę (10/10) na to zadanie. 
+**🎯 OCENA OGÓLNA:** [podaj ocenę 1-10]
 
-WAŻNE: Wzorcowa odpowiedź powinna być napisana jako zwykły tekst (NIE JSON), tak jakby odpowiadał ekspert C-IQ. Powinna zawierać:
-- Analizę sytuacji z perspektywy C-IQ
-- Konkretne techniki i strategie komunikacyjne
-- Praktyczne kroki do wdrożenia
-- Uzasadnienie neurobiologiczne (kortyzol vs oksytocyna)
+**📊 SZCZEGÓŁOWE OCENY:**
+- **Zrozumienie przypadku:** [1-10] - Czy uczestnik prawidłowo zidentyfikował kluczowe wyzwania?
+- **Jakość rozwiązania:** [1-10] - Czy proponowane rozwiązanie jest praktyczne i wykonalne?
+- **Zastosowanie C-IQ:** [1-10] - Czy wykorzystał zasady Conversational Intelligence?
+- **Wartość praktyczna:** [1-10] - Czy rozwiązanie można wdrożyć w rzeczywistości?
 
-Udziel szczegółowego, konstruktywnego feedback'u w formacie JSON:
+**💬 SZCZEGÓŁOWY FEEDBACK:**
+[Napisz konstruktywny, szczegółowy feedback z konkretnymi wskazówkami]
 
-{{
-    "overall_score": [1-10],
-    "feedback": "[szczegółowy feedback z konkretami]",
-    "case_understanding": [1-10],
-    "solution_quality": [1-10], 
-    "c_iq_application": [1-10],
-    "practical_value": [1-10],
-    "strong_points": ["mocny punkt 1", "mocny punkt 2"],
-    "improvement_areas": ["obszar poprawy 1", "obszar poprawy 2"],
-    "c_iq_tips": ["wskazówka C-IQ 1", "wskazówka C-IQ 2"],
-    "next_steps": ["następny krok 1", "następny krok 2"],
-    "exemplary_response": "[wzorcowa odpowiedź na to zadanie, która otrzymałaby 10/10 - szczegółowa, praktyczna, z zastosowaniem zaawansowanych technik C-IQ]"
-}}
+**✅ MOCNE STRONY:**
+- [mocny punkt 1]
+- [mocny punkt 2]
+
+**🎯 OBSZARY DO ROZWOJU:**
+- [obszar poprawy 1]
+- [obszar poprawy 2]
+
+**💡 WSKAZÓWKI C-IQ:**
+- [wskazówka C-IQ 1]
+- [wskazówka C-IQ 2]
+
+**📋 NASTĘPNE KROKI:**
+- [następny krok 1]
+- [następny krok 2]
+
+**🏆 WZORCOWA ODPOWIEDŹ (10/10):**
+[Napisz przykładową wzorcową odpowiedź eksperta C-IQ, która otrzymałaby maksymalną ocenę. Powinna zawierać analizę sytuacji z perspektywy C-IQ, konkretne techniki komunikacyjne, praktyczne kroki i uzasadnienie neurobiologiczne (kortyzol vs oksytocyna)]
 """
         
-        return self._get_ai_evaluation(prompt)
+        return self._get_ai_evaluation_text(prompt)
+    
+    def _get_ai_evaluation_text(self, prompt: str) -> Dict:
+        """Wysyła prompt do Google Gemini i parsuje odpowiedź jako zwykły tekst (nie JSON)"""
+        
+        try:
+            # Sprawdź długość promptu
+            prompt_length = len(prompt)
+            if prompt_length > 8000:
+                prompt = prompt[:7500] + "\n\nOceń odpowiedź w formacie markdown."
+            
+            # Wyślij do Gemini
+            response = self.gemini_model.generate_content(prompt)
+            content = response.text if response else ""
+            
+            if not content or len(content.strip()) < 10:
+                return {
+                    "overall_score": 5,
+                    "feedback": "AI nie zwróciło odpowiedzi. Spróbuj ponownie.",
+                    "strong_points": ["Podjęłeś próbę rozwiązania zadania"],
+                    "areas_for_improvement": ["Spróbuj ponownie przesłać odpowiedź"],
+                    "learning_tips": ["Sprawdź połączenie internetowe", "Spróbuj w innym czasie"]
+                }
+            
+            # Parsuj zwykły tekst - wyciągnij ocenę ogólną
+            import re
+            overall_score_match = re.search(r'OCENA OGÓLNA.*?(\d+)', content, re.IGNORECASE)
+            overall_score = int(overall_score_match.group(1)) if overall_score_match else 7
+            
+            return {
+                "overall_score": overall_score,
+                "feedback": content,  # Cały tekst jako feedback
+                "strong_points": ["Otrzymano szczegółową analizę z AI"],
+                "areas_for_improvement": ["Przeanalizuj feedback AI i zastosuj wskazówki"],
+                "learning_tips": ["Kontynuuj rozwijanie umiejętności C-IQ"]
+            }
+                    
+        except Exception as e:
+            error_msg = str(e)
+            return {
+                "overall_score": 5,
+                "feedback": f"Wystąpił błąd podczas komunikacji z AI: {error_msg}",
+                "strong_points": ["Podjęłeś próbę wykonania zadania"],
+                "areas_for_improvement": ["Spróbuj ponownie za chwilę"],
+                "learning_tips": ["Sprawdź połączenie internetowe"]
+            }
     
     def _get_ai_evaluation(self, prompt: str) -> Dict:
         """Wysyła prompt do Google Gemini i parsuje odpowiedź"""
@@ -350,7 +398,22 @@ Udziel szczegółowego, konstruktywnego feedback'u w formacie JSON:
                 import json
                 import re
                 
-                # Znajdź JSON w odpowiedzi
+                # Usunię znaczniki markdown jeśli są
+                content_clean = content
+                if content_clean.startswith("```json"):
+                    content_clean = content_clean.replace("```json", "").replace("```", "").strip()
+                elif content_clean.startswith("```"):
+                    content_clean = content_clean.replace("```", "").strip()
+                
+                # Próbuj najpierw parsować całą odpowiedź jako JSON
+                try:
+                    result = json.loads(content_clean)
+                    if 'overall_score' in result or 'feedback' in result or 'coaching_score' in result:
+                        return result
+                except json.JSONDecodeError:
+                    pass
+                
+                # Jeśli nie udało się, znajdź JSON w odpowiedzi
                 json_match = re.search(r'\{.*\}', content, re.DOTALL)
                 if json_match:
                     json_str = json_match.group(0)
@@ -360,8 +423,17 @@ Udziel szczegółowego, konstruktywnego feedback'u w formacie JSON:
                     if 'overall_score' in result or 'feedback' in result or 'coaching_score' in result:
                         return result
                         
-            except (json.JSONDecodeError, ValueError):
-                pass
+            except (json.JSONDecodeError, ValueError) as json_error:
+                # ZAWSZE zastąp content przyjaznym komunikatem gdy JSON się nie parsuje
+                content = f"""Przepraszamy, AI napotkało problem techniczny podczas generowania feedback'u. 
+
+**Co się stało:** Odpowiedź zawierała nieprawidłowe znaki lub format.
+
+**Co możesz zrobić:**
+• Spróbuj ponownie przesłać swoją odpowiedź  
+• Jeśli problem się powtarza, skontaktuj się z administratorem
+
+*Szczegóły techniczne: {str(json_error)[:100]}...*"""
             
             # Fallback - użyj surowej odpowiedzi Gemini
             import random
@@ -472,7 +544,7 @@ Udziel szczegółowego, konstruktywnego feedback'u w formacie JSON:
                 "suggestions": ["Skonfiguruj AI dla szczegółowej oceny", "Kontynuuj rozwijanie umiejętności C-IQ"]
             }
     
-    def generate_case_study(self, lesson_context: str = "", difficulty_level: str = "medium") -> Dict:
+    def generate_case_study(self, lesson_context: str = "", difficulty_level: str = "medium", industry: str = "Ogólny") -> Dict:
         """
         Generuje nowy case study z zadaniem dla użytkownika
         
@@ -488,17 +560,29 @@ Udziel szczegółowego, konstruktywnego feedback'u w formacie JSON:
             return self._generate_demo_case(difficulty_level)
         
         difficulty_prompts = {
-            "easy": "prosty przypadek z oczywistymi rozwiązaniami",
-            "medium": "przypadek o średniej złożoności wymagający analizy",
-            "hard": "złożony przypadek z wieloma zmiennymi i dylematami"
+            "easy": "bardzo prosty przypadek wymagający odpowiedzi 2-3 słów lub jednego zdania",
+            "medium": "przypadek o średniej złożoności wymagający odpowiedzi 3-5 zdań", 
+            "hard": "złożony przypadek wymagający szczegółowej analizy i długiej odpowiedzi"
         }
         
+        task_complexity = {
+            "easy": "Zadanie powinno być bardzo proste - wystarczy krótka odpowiedź (2-3 słowa lub jedno zdanie). Przykład: 'Jak Anna powinna zacząć rozmowę?' lub 'Jakie pierwsze słowa powinna wypowiedzieć?'",
+            "medium": "Zadanie powinno wymagać odpowiedzi 3-5 zdań. Przykład: 'Opisz strategię komunikacyjną' lub 'Zaproponuj scenariusz rozmowy'",
+            "hard": "Zadanie powinno wymagać szczegółowej analizy i długiej odpowiedzi. Przykład: 'Opracuj kompleksową strategię komunikacyjną z wieloma etapami'"
+        }
+        
+        industry_context = ""
+        if industry != "Ogólny":
+            industry_context = f" w branży {industry}"
+        
         prompt = f"""
-Wygeneruj realny case study z obszaru komunikacji zespołowej i przywództwa.
+Wygeneruj realny case study z obszaru komunikacji zespołowej i przywództwa{industry_context}.
 
 KONTEKST LEKCJI: {lesson_context}
 
 POZIOM TRUDNOŚCI: {difficulty_prompts.get(difficulty_level, "medium")}
+
+WYMAGANIA CO DO ZADANIA: {task_complexity.get(difficulty_level, "")}
 
 Stwórz {difficulty_prompts.get(difficulty_level, "przypadek o średniej złożoności")} oparty na zasadach Conversational Intelligence, który:
 
@@ -506,6 +590,11 @@ Stwórz {difficulty_prompts.get(difficulty_level, "przypadek o średniej złożo
 2. **Zawiera wyzwanie komunikacyjne** wymagające zastosowania C-IQ
 3. **Ma jasno określony cel** - co należy osiągnąć
 4. **Uwzględnia neurobiologię rozmowy** (poziomy, oksytocyna/kortyzol)
+
+WAŻNE - dostosuj zadanie do poziomu trudności:
+- EASY: zadanie musi być bardzo proste, wystarczy odpowiedź 2-3 słów lub jedno zdanie
+- MEDIUM: zadanie powinno wymagać odpowiedzi 3-5 zdań
+- HARD: zadanie może wymagać szczegółowej analizy
 
 Wygeneruj w formacie JSON:
 
@@ -611,48 +700,47 @@ Wygeneruj w formacie JSON:
         
         demo_cases = {
             "easy": {
-                "title": "Konflikt o deadline w zespole marketingu",
-                "company_context": "TechFlow to średnia firma software'owa. Dział marketingu przygotowuje kampanię produktową.",
-                "situation": "Anna, kierownik marketingu, otrzymała informację, że deadline kampanii został przesunięty o tydzień wcześniej. Musi poinformować zespół o zmianie. Wie, że będą niezadowoleni - już pracują w nadgodzinach. Wczoraj Tomek z grafiki narzekał na ciągłe zmiany. Kasia z content'u wspomniała o wypaleniu. Anna obawia się reakcji zespołu i nie wie jak przekazać złą wiadomość.",
+                "title": "Pierwsze słowa w trudnej rozmowie",
+                "company_context": "Małe biuro rachunkowe. Anna musi przekazać współpracownikowi Tomkowi niepopularną informację.",
+                "situation": "Anna, kierownik, dowiedziała się że musi poprosić Tomka o zostanie po godzinach. Wie, że Tomek ma dziś ważne plany rodzinne. Stoi przed jego biurkiem i zastanawia się jak zacząć rozmowę.",
                 "characters": {
                     "main_character": {
                         "name": "Anna",
-                        "position": "Kierownik marketingu",
-                        "challenge": "Przekazanie niepopularnej informacji bez demotywacji zespołu"
+                        "position": "Kierownik",
+                        "challenge": "Jak zacząć trudną rozmowę"
                     },
                     "other_characters": [
-                        {"name": "Tomek", "position": "Graphic Designer", "role_in_conflict": "Frustracja ciągłymi zmianami"},
-                        {"name": "Kasia", "position": "Content Creator", "role_in_conflict": "Oznaki wypalenia zawodowego"}
+                        {"name": "Tomek", "position": "Księgowy", "role_in_conflict": "Ma ważne plany rodzinne"}
                     ]
                 },
-                "communication_challenge": "Jak przekazać stresującą informację zachowując zaufanie zespołu",
-                "c_iq_opportunity": "Zastosowanie Poziomu III - współtworzenie rozwiązań zamiast jednostronnych poleceń",
-                "task": "Zaproponuj konkretny scenariusz rozmowy Anny z zespołem. Użyj zasad C-IQ aby przekształcić potencjalny konflikt w okazję do wzmocnienia współpracy.",
-                "success_criteria": ["Zachowanie zaufania zespołu", "Znalezienie wspólnych rozwiązań", "Zastosowanie języka współtworzenia"],
+                "communication_challenge": "Pierwsze słowa w trudnej rozmowie",
+                "c_iq_opportunity": "Zastosowanie empatycznego otwarcia zamiast bezpośredniego polecenia",
+                "task": "Jakie pierwsze słowa powinna wypowiedzieć Anna?",
+                "success_criteria": ["Empatyczne podejście", "Respekt dla sytuacji Tomka"],
                 "difficulty": "easy",
-                "estimated_time": "10-15 minut"
+                "estimated_time": "2-3 minuty"
             },
             "medium": {
-                "title": "Kryzys komunikacji po nieudanym projekcie",
-                "company_context": "InnovateTech - firma konsultingowa. Projekt dla kluczowego klienta nie powiódł się ze względu na błędy komunikacyjne między zespołami.",
-                "situation": "Projekt wart 500k zakończył się niepowodzeniem. Klient wycofał się po 3 miesiącach pracy. Zespół programistów obwinia analityków biznesowych o nieprecyzyjne wymagania. Analitycy uważają, że programiści nie słuchali ich uwag. Marcin, project manager, musi przeprowadzić retrospektywę, ale atmosfera jest bardzo napięta. Ludzie już się obwiniają. Niektórzy rozważają odejście z firmy.",
+                "title": "Konflikt między zespołami",
+                "company_context": "Średnia firma IT. Zespół programistów i zespół testowy mają konflikt o jakość deliverów.",
+                "situation": "Ostatnio programiści oddają kod z wieloma błędami. Testerzy są sfrustrowani, bo muszą znajdować podstawowe problemy zamiast skupić się na zaawansowanych testach. Programiści czują się atakowani i twierdzą, że testerzy są zbyt wymagający. Marcin, project manager, musi przeprowadzić spotkanie mediacyjne.",
                 "characters": {
                     "main_character": {
-                        "name": "Marcin",
+                        "name": "Marcin", 
                         "position": "Project Manager",
-                        "challenge": "Przeprowadzenie konstruktywnej retrospektywy w atmosferze wzajemnych oskarżeń"
+                        "challenge": "Mediacja między skonfliktowanymi zespołami"
                     },
                     "other_characters": [
-                        {"name": "Team Dev", "position": "Programiści", "role_in_conflict": "Obwiniają analityków"},
-                        {"name": "Team BA", "position": "Analitycy biznesowi", "role_in_conflict": "Czują się niezrozumiani"}
+                        {"name": "Zespół Dev", "position": "Programiści", "role_in_conflict": "Czują się atakowani"},
+                        {"name": "Zespół QA", "position": "Testerzy", "role_in_conflict": "Frustracja jakością kodu"}
                     ]
                 },
-                "communication_challenge": "Przekształcenie wzajemnych oskarżeń w konstruktywną analizę przyczyn",
-                "c_iq_opportunity": "Przejście z Poziomu II (pozycyjne obwinianie) na Poziom III (współtworzenie nauki)",
-                "task": "Opracuj strategię prowadzenia retrospektywy. Zaproponuj konkretne techniki C-IQ aby przekształcić atmosferę konfliktu w okazję do wspólnej nauki i poprawy procesów.",
-                "success_criteria": ["Wyciszenie wzajemnych oskarżeń", "Identyfikacja systemowych przyczyn", "Wypracowanie wspólnego planu poprawy", "Odbudowa zaufania między zespołami"],
-                "difficulty": "medium",
-                "estimated_time": "15-20 minut"
+                "communication_challenge": "Przeprowadzenie mediacji między zespołami",
+                "c_iq_opportunity": "Przejście z wzajemnych oskarżeń na współtworzenie rozwiązań",
+                "task": "Opisz strategię Marcina na spotkanie mediacyjne. Jak powinien prowadzić rozmowę aby oba zespoły poczuły się wysłuchane?",
+                "success_criteria": ["Wyciszenie oskarżeń", "Znalezienie wspólnych rozwiązań", "Odbudowa współpracy"],
+                "difficulty": "medium", 
+                "estimated_time": "10-15 minut"
             },
             "hard": {
                 "title": "Reorganizacja i opór przed zmianą",
@@ -661,7 +749,7 @@ Wygeneruj w formacie JSON:
                 "characters": {
                     "main_character": {
                         "name": "Katarzyna",
-                        "position": "Dyrektor ds. Produktu",
+                        "position": "Dyrektor ds. Produktu", 
                         "challenge": "Przełamanie oporu przed zmianą i zbudowanie jedności w nowej strukturze"
                     },
                     "other_characters": [
@@ -727,6 +815,15 @@ def display_ai_exercise_interface(exercise: Dict, lesson_context: str = "") -> b
             col1, col2 = st.columns([4, 1])
             with col1:
                 with st.expander("📝 Pokaż poprzedni feedback AI", expanded=False):
+                    # Pokaż odpowiedź użytkownika
+                    response_key = f"ai_exercise_{exercise_id}_response"
+                    if response_key in st.session_state:
+                        user_response = st.session_state[response_key]
+                        st.markdown("### 📝 Twoja odpowiedź")
+                        st.info(user_response)
+                        st.markdown("---")
+                    
+                    # Pokaż feedback AI
                     feedback = st.session_state[feedback_key]
                     display_ai_feedback(feedback)
             with col2:
@@ -747,22 +844,76 @@ def display_ai_exercise_interface(exercise: Dict, lesson_context: str = "") -> b
         case_key = f"ai_exercise_{exercise_id}_generated_case"
         
         if case_key not in st.session_state:
-            # Wygeneruj nowy przypadek
-            st.info("🎲 Generuję dla Ciebie unikalny przypadek komunikacyjny...")
+            # Wyświetl opcje personalizacji case study
+            st.markdown("### 🎯 Personalizuj swój case study")
+            st.markdown("Wybierz parametry, aby otrzymać case study dostosowany do Twoich potrzeb:")
             
-            evaluator = AIExerciseEvaluator()
-            difficulty_level = ai_config.get('difficulty_level', 'medium')
-            lesson_context = ai_config.get('lesson_context', lesson_context)
+            col1, col2 = st.columns(2)
             
-            try:
-                generated_case = evaluator.generate_case_study(lesson_context, difficulty_level)
-                st.session_state[case_key] = generated_case
-                st.rerun()
-            except Exception as e:
-                st.error(f"Błąd podczas generowania przypadku: {str(e)}")
-                # Fallback - użyj demo przypadku
-                demo_case = evaluator._generate_demo_case(difficulty_level)
-                st.session_state[case_key] = demo_case
+            with col1:
+                st.markdown("**📊 Stopień trudności:**")
+                difficulty_level = st.radio(
+                    "Wybierz poziom:",
+                    options=['easy', 'medium', 'hard'],
+                    format_func=lambda x: {
+                        'easy': '🟢 Łatwy (2-3 słowa odpowiedzi)',
+                        'medium': '🟡 Średni (3-5 zdań)',
+                        'hard': '🔴 Trudny (szczegółowa analiza)'
+                    }[x],
+                    index=1,  # medium jako domyślny
+                    key=f"difficulty_{exercise_id}"
+                )
+            
+            with col2:
+                st.markdown("**🏢 Branża:**")
+                industry = st.selectbox(
+                    "Wybierz sektor:",
+                    options=['IT', 'Finanse', 'FMCG', 'Farmacja', 'Nauka', 'Ogólny'],
+                    format_func=lambda x: {
+                        'IT': '💻 IT / Technologie',
+                        'Finanse': '💰 Finanse / Banking',
+                        'FMCG': '🛒 FMCG / Retail',
+                        'Farmacja': '💊 Farmacja / Medycyna',
+                        'Nauka': '🎓 Nauka / Edukacja',
+                        'Ogólny': '🏢 Ogólny biznes'
+                    }[x],
+                    index=0,  # IT jako domyślny
+                    key=f"industry_{exercise_id}"
+                )
+            
+            # Wyświetl opis wybranej konfiguracji
+            difficulty_names = {'easy': 'Łatwy', 'medium': 'Średni', 'hard': 'Trudny'}
+            industry_names = {'IT': 'IT/Technologie', 'Finanse': 'Finanse/Banking', 'FMCG': 'FMCG/Retail', 'Farmacja': 'Farmacja/Medycyna', 'Nauka': 'Nauka/Edukacja', 'Ogólny': 'Ogólny biznes'}
+            
+            st.info(f"""
+**Twoje ustawienia:**
+- **Poziom:** {difficulty_names[difficulty_level]}
+- **Branża:** {industry_names[industry]}
+
+Case study będzie dostosowany do wybranej branży z odpowiednim poziomem złożoności.
+            """)
+            
+            # Przycisk generowania
+            if st.button("🎲 Wygeneruj spersonalizowany case study", key=f"generate_{exercise_id}"):
+                with st.spinner("🎲 Generuję spersonalizowany przypadek komunikacyjny..."):
+                    evaluator = AIExerciseEvaluator()
+                    lesson_context = ai_config.get('lesson_context', lesson_context)
+                    
+                    try:
+                        generated_case = evaluator.generate_case_study(
+                            lesson_context=lesson_context, 
+                            difficulty_level=difficulty_level,
+                            industry=industry
+                        )
+                        st.session_state[case_key] = generated_case
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Błąd podczas generowania przypadku: {str(e)}")
+                        # Fallback - użyj demo przypadku z wybranymi parametrami
+                        demo_case = evaluator._generate_demo_case(difficulty_level)
+                        demo_case['industry'] = industry  # Dodaj informację o branży
+                        st.session_state[case_key] = demo_case
+                        st.rerun()
         
         # Wyświetl wygenerowany przypadek
         if case_key in st.session_state:
@@ -911,93 +1062,17 @@ def display_reset_all_button(lesson_id: str = None, exercise_prefix: str = "ai_e
 def display_ai_feedback(feedback: Dict):
     """Wyświetla feedback AI w przyjaznym formacie"""
     
-    # Główna ocena
-    if 'overall_score' in feedback:
-        score = feedback['overall_score']
-        st.metric("🎯 Ocena ogólna", f"{score}/10")
-    elif 'score' in feedback:
-        score = feedback['score']
-        st.metric("🎯 Ocena", f"{score}/10")
-    elif 'coaching_score' in feedback:
-        score = feedback['coaching_score']
-        st.metric("🎯 Ocena coachingowa", f"{score}/10")
+    # DEBUGGING: sprawdź typ feedback
+    if not isinstance(feedback, dict):
+        st.error(f"⚠️ Błąd: Feedback nie jest słownikiem. Typ: {type(feedback)}")
+        st.code(str(feedback)[:500] + "..." if len(str(feedback)) > 500 else str(feedback))
+        return
     
-    # Szczegółowe oceny jeśli dostępne
-    if 'detailed_scores' in feedback:
-        st.markdown("### 📊 Szczegółowe oceny")
-        cols = st.columns(len(feedback['detailed_scores']))
-        for i, (category, score) in enumerate(feedback['detailed_scores'].items()):
-            with cols[i]:
-                category_name = category.replace('_', ' ').title()
-                st.metric(category_name, f"{score}/10")
-    
-    if 'category_scores' in feedback:
-        st.markdown("### 📊 Oceny kategorialne")
-        cols = st.columns(2)
-        for i, (category, score) in enumerate(feedback['category_scores'].items()):
-            with cols[i % 2]:
-                category_name = category.replace('_', ' ').title()
-                st.metric(category_name, f"{score}/10")
-    
-    # Główny feedback
+    # Główny feedback - AI już generuje wszystko w tekście z własnymi nagłówkami
     if 'feedback' in feedback:
-        st.markdown("### 💬 Feedback AI")
-        st.info(feedback['feedback'])
+        st.markdown(feedback['feedback'], unsafe_allow_html=True)
     
-    # Mocne strony
-    if 'strong_points' in feedback:
-        st.markdown("### ✅ Twoje mocne strony")
-        for point in feedback['strong_points']:
-            st.markdown(f"• {point}")
-    
-    if 'acknowledged_strengths' in feedback:
-        st.markdown("### ✅ Rozpoznane mocne strony")
-        for strength in feedback['acknowledged_strengths']:
-            st.markdown(f"• {strength}")
-    
-    # Obszary do poprawy
-    if 'areas_for_improvement' in feedback:
-        st.markdown("### 🎯 Obszary do rozwoju")
-        for area in feedback['areas_for_improvement']:
-            st.markdown(f"• {area}")
-    
-    if 'growth_opportunities' in feedback:
-        st.markdown("### 🌱 Szanse rozwoju")
-        for opportunity in feedback['growth_opportunities']:
-            st.markdown(f"• {opportunity}")
-    
-    # Sugestie
-    if 'suggestions' in feedback or 'specific_suggestions' in feedback:
-        st.markdown("### 💡 Sugestie")
-        suggestions = feedback.get('suggestions', feedback.get('specific_suggestions', []))
-        for suggestion in suggestions:
-            st.markdown(f"• {suggestion}")
-    
-    if 'learning_suggestions' in feedback:
-        st.markdown("### 📚 Sugestie dalszej nauki")
-        for suggestion in feedback['learning_suggestions']:
-            st.markdown(f"• {suggestion}")
-    
-    if 'action_steps' in feedback:
-        st.markdown("### 🎯 Konkretne kroki do działania")
-        for step in feedback['action_steps']:
-            st.markdown(f"• {step}")
-    
-    # Wzorcowa odpowiedź
-    if 'exemplary_response' in feedback:
-        st.markdown("### 🏆 Wzorcowa odpowiedź (10/10)")
-        with st.expander("👀 Pokaż przykład odpowiedzi, która otrzymałaby maksymalną ocenę", expanded=False):
-            st.markdown("#### 💡 Wzorcowa odpowiedź eksperta C-IQ:")
-            
-            # Użyj bezpiecznego wyświetlania tekstu
-            exemplary_text = feedback['exemplary_response']
-            
-            # Wyświetl w bezpiecznym kontenerze
-            st.success(exemplary_text)
-            
-            st.info("💡 **Wskazówka**: Porównaj swoją odpowiedź z tym wzorcem. Znajdź elementy, które możesz zastosować w przyszłych sytuacjach komunikacyjnych.")
-    
-    # Motywująca wiadomość
+    # Motywująca wiadomość (jeśli dostępna)
     if 'motivation_message' in feedback:
         st.markdown("### 🌟 Wiadomość motywacyjna")
         st.success(feedback['motivation_message'])

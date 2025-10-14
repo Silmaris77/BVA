@@ -1483,12 +1483,7 @@ def show_lessons_content():
                                     if 'exercises' in tab_data:
                                         exercises = tab_data['exercises']
                                         
-                                        # Wyświetl konfigurację AI jeśli istnieje
-                                        if 'config' in tab_data:
-                                            ai_config = tab_data['config']
-                                            st.sidebar.markdown("### 🤖 Konfiguracja AI")
-                                            st.sidebar.info(f"Model AI: {ai_config.get('ai_model', 'GPT-4')}")
-                                            st.sidebar.info(f"Minimalna liczba słów: {ai_config.get('validation_criteria', {}).get('min_words', 2)}")
+                                        # Wyświetl konfigurację AI jeśli istnieje - USUNIĘTE (nie potrzebne)
                                         
                                         for exercise in exercises:
                                             exercise_id = exercise.get('id', 'unknown')
@@ -1660,15 +1655,7 @@ def show_lessons_content():
                                     if 'exercises' in tab_data:
                                         exercises = tab_data['exercises']
                                         
-                                        # Wyświetl konfigurację AI jeśli istnieje
-                                        if 'config' in tab_data:
-                                            ai_config = tab_data['config']
-                                            st.sidebar.markdown("### 🎲 Konfiguracja Dynamicznych Case Studies")
-                                            st.sidebar.info(f"Model AI: {ai_config.get('ai_model', 'Google Gemini')}")
-                                            st.sidebar.info(f"Generowanie przypadków: {'✅ Włączone' if ai_config.get('case_generation', {}).get('enabled', False) else '❌ Wyłączone'}")
-                                            difficulty_levels = ai_config.get('case_generation', {}).get('difficulty_levels', [])
-                                            if difficulty_levels:
-                                                st.sidebar.info(f"Poziomy trudności: {', '.join(difficulty_levels)}")
+                                        # Wyświetl konfigurację AI jeśli istnieje - USUNIĘTE (nie potrzebne)
                                         
                                         for exercise in exercises:
                                             exercise_id = exercise.get('id', 'unknown')
