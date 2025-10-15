@@ -1,0 +1,50 @@
+**🎯 OCENA OGÓLNA:** 5
+
+**📊 SZCZEGÓŁOWE OCENY:**
+- **Zrozumienie przypadku:** 5 - Dobre rozumienie podstaw, ale można głębiej przeanalizować sytuację
+- **Jakość rozwiązania:** 5 - Rozwiązanie ma potencjał, ale potrzebuje dopracowania
+- **Zastosowanie C-IQ:** 5 - Podstawowe zastosowanie C-IQ, można więcej technik użyć
+- **Wartość praktyczna:** 5 - Rozwiązanie potrzebuje konkretniejszych kroków
+
+**💬 SZCZEGÓŁOWY FEEDBACK:**
+Twoja analiza przypadku pokazuje dobre zrozumienie podstawowych zasad Conversational Intelligence. **Demo Mode** - dla pełnej analizy AI skonfiguruj klucz API. Widać, że potrafisz identyfikować poziomy rozmowy i próbujesz znajdować praktyczne rozwiązania. Twoje podejście pokazuje podstawowe zrozumienie neurobiologii komunikacji.
+
+**✅ MOCNE STRONY:**
+- Systematyczne podejście do analizy przypadku
+- Próba zastosowania teorii C-IQ w praktyce
+- Koncentracja na praktycznych aspektach komunikacji
+- Zaangażowanie w rozwiązanie problemu komunikacyjnego
+
+**🎯 OBSZARY DO ROZWOJU:**
+- Lepsze rozpoznawanie poziomów rozmowy (I, II, III)
+- Bardziej konkretne kroki praktyczne
+- Głębsza analiza neurobiologicznych aspektów komunikacji
+
+**💡 WSKAZÓWKI C-IQ:**
+- Pamiętaj o różnicy między Poziomem I (transakcyjny), II (pozycyjny) a III (transformacyjny)
+- Zwracaj uwagę na słowa i frazy, które budują "my" vs "ja/ty"
+- Rozważ wpływ swojej komunikacji na hormony: kortyzol (stres) vs oksytocyna (zaufanie)
+- Ćwicz przechodzenie na poziom III - współtworzenie rozwiązań
+
+**📋 NASTĘPNE KROKI:**
+- Przetestuj opracowane rozwiązanie w podobnej sytuacji w pracy
+- Obserwuj reakcje innych na twoje podejście komunikacyjne
+- Przećwicz rozpoznawanie i stosowanie poziomów C-IQ
+- Zbieraj feedback od zespołu o jakości komunikacji
+
+**🏆 WZORCOWA ODPOWIEDŹ (10/10):**
+Analizując tę sytuację przez pryzmat Conversational Intelligence, identyfikuję główne wyzwanie: przekształcenie atmosfery wzajemnych oskarżeń (Poziom I/II) w konstruktywną współpracę zespołową (Poziom III).
+
+**Moja strategia C-IQ:**
+
+1. **Neurobiologiczne przygotowanie atmosfery**: Zacznę od obniżenia poziomu kortyzolu w zespole przez spokojny ton głosu, uznanie trudności sytuacji i stworzenie bezpiecznej przestrzeni.
+
+2. **Przejście z Poziomu II na III**: Zamiast szukać winnych ("Kto to przegapił?"), zastosuję język współtworzenia: "Jak możemy razem wyciągnąć z tego naukę?"
+
+3. **Pytania transformacyjne**: "Co ta sytuacja uczy nas o naszej komunikacji?", "Jak możemy zaprojektować lepsze procesy, żeby uniknąć takich problemów?"
+
+4. **Budowanie oksytocyny**: Użyję języka "my" zamiast "wy", pokażę własną wrażliwość i zachęcę do dzielenia się perspektywami.
+
+5. **Konkretne działania**: Wspólnie stworzymy plan poprawy z jasnymi rolami i terminami, który zespół będzie czuł jako "swój".
+
+Ta strategia wykorzystuje neurobiologię zaufania do przekształcenia kryzysu w okazję do wzmocnienia zespołu.

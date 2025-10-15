@@ -87,29 +87,41 @@ class AIExerciseEvaluator:
         system_prompt = config.get('ai_prompts', {}).get('system', 
             "Jesteś ekspertem w Conversational Intelligence. Oceniasz umiejętność identyfikacji poziomów rozmowy.")
         
-        prompt = f"""Oceń analizę poziomów C-IQ.
+        prompt = f"""Jesteś ekspertem C-IQ. Oceń identyfikację poziomu rozmowy - ZWIĘŹLE (max 1000 znaków).
 
-WYPOWIEDŹ MENEDŻERA:
+KLUCZOWE: W modelu C-IQ są TYLKO 3 POZIOMY:
+• Poziom I (Transakcyjny) - wymiana informacji
+• Poziom II (Pozycyjny) - obrona stanowisk, ja vs ty
+• Poziom III (Transformacyjny) - współtworzenie, my razem
+NIE ma poziomu 0, 4, 5 ani innych!
+
+WYPOWIEDŹ:
 "Widzę, że mamy wyzwanie z terminami. Zastanawiam się, jakie przeszkody napotykamy jako zespół i jak możemy razem wypracować rozwiązania, które będą działać dla wszystkich. Co myślicie o przyczynach tej sytuacji i jakie pomysły macie na ulepszenie naszych procesów?"
 
-ODPOWIEDŹ UCZESTNIKA:
-{user_response}
+ODPOWIEDŹ UCZESTNIKA: {user_response}
 
-POPRAWNA ODPOWIEDŹ: To Poziom III (Transformacyjny) - język współtworzenia, pytania otwarte, focus na rozwiązania.
+POPRAWNA: Poziom III (Transformacyjny) - język współtworzenia, pytania otwarte.
 
-Oceń w JSON:
-{{
-    "overall_score": [1-10],
-    "identification_correct": true/false,
-    "level_identified": "[poziom z odpowiedzi]",
-    "correct_level": "Poziom III",
-    "feedback": "[feedback po polsku]",
-    "strong_points": ["punkt1", "punkt2"],
-    "areas_for_improvement": ["obszar1"],
-    "learning_tips": ["tip1"]
-}}"""
+WAŻNE: Użyj DOKŁADNIE tego formatu. NIE dodawaj emoji ani dwukropków po nagłówkach!
+
+**OCENA OGÓLNA:** [liczba 1-10]
+
+**FEEDBACK**
+[2-3 zwięzłe akapity głównej analizy]
+
+**MOCNE STRONY**
+• [punkt 1]
+• [punkt 2]
+
+**DO POPRAWY**
+• [punkt 1 - konkretnie]
+• [punkt 2]
+
+**KLUCZOWA RADA**
+[Jedna najważniejsza lekcja - napisz przystępnie, bez żargonu. Dodaj KONKRETNY PRZYKŁAD: cytuj dokładną wypowiedź (w cudzysłowie) lub opisz konkretne zachowanie, które jest emanacją tej rady. Np. "Zamiast mówić 'To nie zadziała', powiedz: 'Co by się stało, gdybyśmy spróbowali...?'" lub "Przed spotkaniem poświęć 2 minuty na głęboki oddech i uświadom sobie intencję - chcesz zrozumieć, nie wygrać."]
+"""
         
-        return self._get_ai_evaluation(prompt)
+        return self._get_ai_evaluation_text(prompt)
     
     def _evaluate_conversation_simulation(self, config: Dict, user_response: str, context: str) -> Dict:
         """Ocena symulacji rozmowy"""
@@ -120,40 +132,40 @@ Oceń w JSON:
         evaluation_prompt = config.get('ai_prompts', {}).get('evaluation', 
             "Oceń symulację rozmowy pod kątem zastosowania zasad C-IQ.")
         
-        prompt = f"""Jesteś ekspertem w dziedzinie Conversational Intelligence (C-IQ) i neurobiologii komunikacji. Twoje zadanie to profesjonalna ocena symulacji rozmowy.
+        prompt = f"""Jesteś ekspertem C-IQ. Oceń symulację rozmowy - ZWIĘŹLE (max 1200 znaków).
 
-KONTEKST LEKCJI: {context}
+KLUCZOWE: W modelu C-IQ są TYLKO 3 POZIOMY:
+• Poziom I (Transakcyjny) - wymiana informacji
+• Poziom II (Pozycyjny) - obrona stanowisk, ja vs ty
+• Poziom III (Transformacyjny) - współtworzenie, my razem
+NIE ma poziomu 0, 4, 5 ani innych!
 
-SYMULACJA ROZMOWY - ODPOWIEDŹ UCZESTNIKA:
-{user_response}
+KONTEKST: {context}
 
-KRYTERIA OCENY:
-{chr(10).join([f"• {criterion}" for criterion in criteria])}
+SYMULACJA UCZESTNIKA: {user_response}
 
-ZADANIE: Przeanalizuj odpowiedź uczestnika i oceń ją według zasad C-IQ. Zwróć szczególną uwagę na:
-1. Identyfikację i świadome przechodzenie między poziomami rozmów (I, II, III)
-2. Rozumienie neurobiologii - jak słowa wpływają na hormony (kortyzol vs oksytocyna)
-3. Zastosowanie praktycznych technik budowania zaufania
-4. Unikanie języka powodującego reakcje obronne
+KRYTERIA: {', '.join(criteria)}
 
-ODPOWIEDZ W FORMACIE JSON:
-{{
-    "overall_score": [ocena ogólna 1-10],
-    "detailed_scores": {{
-        "ciq_levels": [1-10],
-        "neurobiology_awareness": [1-10], 
-        "practical_techniques": [1-10],
-        "avoiding_defensiveness": [1-10]
-    }},
-    "feedback": "[szczegółowy, konstruktywny feedback po polsku]",
-    "strong_points": ["silna strona 1", "silna strona 2"],
-    "areas_for_improvement": ["obszar do rozwoju 1", "obszar do rozwoju 2"],
-    "specific_suggestions": ["konkretna sugestia 1", "konkretna sugestia 2"]
-}}
+WAŻNE: Użyj DOKŁADNIE tego formatu. NIE dodawaj emoji ani dwukropków po nagłówkach!
 
-Bądź konstruktywny ale wymagający. Doceniaj próby zastosowania C-IQ, ale wskazuj konkretne możliwości doskonalenia."""
+**OCENA OGÓLNA:** [liczba 1-10]
+
+**FEEDBACK**
+[2-3 akapity: Jak wykorzystał poziomy C-IQ? Co z neurobiologią (kortyzol vs oksytocyna)? Jakie techniki zastosował lub pominął?]
+
+**MOCNE STRONY**
+• [punkt 1]
+• [punkt 2]
+
+**DO POPRAWY**
+• [punkt 1 - konkretnie jak poprawić]
+• [punkt 2]
+
+**KLUCZOWA RADA**
+[Jedna najważniejsza wskazówka - napisz przystępnie, jak do kolegi. Dodaj KONKRETNY PRZYKŁAD: cytuj dokładną wypowiedź (w cudzysłowie) lub opisz konkretne zachowanie. Np. "Gdy widzisz, że rozmówca się defensuje, zatrzymaj się i powiedz: 'Chcę zrozumieć Twoją perspektywę - co jest dla Ciebie najważniejsze w tej sytuacji?'" lub "Zanotuj sobie na kartce przed trudną rozmową: 'Moja intencja = partnerstwo, nie wygrana'."]
+"""
         
-        return self._get_ai_evaluation(prompt)
+        return self._get_ai_evaluation_text(prompt)
     
     def _evaluate_case_analysis(self, config: Dict, user_response: str, context: str) -> Dict:
         """Ocena analizy przypadku"""
@@ -162,36 +174,38 @@ Bądź konstruktywny ale wymagający. Doceniaj próby zastosowania C-IQ, ale wsk
         system_prompt = config.get('ai_prompts', {}).get('system',
             "Jesteś ekspertem w analizie przypadków komunikacyjnych.")
         
-        prompt = f"""
-{system_prompt}
+        prompt = f"""Jesteś ekspertem C-IQ. Oceń analizę przypadku - ZWIĘŹLE (max 1200 znaków).
 
-KONTEKST LEKCJI: {context}
+KLUCZOWE: W modelu C-IQ są TYLKO 3 POZIOMY:
+• Poziom I (Transakcyjny) - wymiana informacji
+• Poziom II (Pozycyjny) - obrona stanowisk, ja vs ty
+• Poziom III (Transformacyjny) - współtworzenie, my razem
+NIE ma poziomu 0, 4, 5 ani innych!
 
-ANALIZA PRZYPADKU - ODPOWIEDŹ UCZESTNIKA:
-{user_response}
+KONTEKST: {context}
 
-RUBYKA OCENY:
-{chr(10).join([f"• {category}: {weight}%" for category, weight in assessment_rubric.items()])}
+ANALIZA UCZESTNIKA: {user_response}
 
-Oceń analizę w każdej kategorii i podaj szczegółowy feedback:
+WAŻNE: Użyj DOKŁADNIE tego formatu z emoji. NIE ZMIENIAJ nagłówków!
 
-Podaj ocenę w formacie JSON:
-{{
-    "overall_score": [1-10],
-    "category_scores": {{
-        "identification_of_ciq_levels": [1-10],
-        "neurobiological_understanding": [1-10],
-        "practical_solutions": [1-10],
-        "application_of_techniques": [1-10]
-    }},
-    "feedback": "[szczegółowy feedback]",
-    "strong_points": ["mocna strona 1", "mocna strona 2"],
-    "areas_for_improvement": ["obszar rozwoju 1", "obszar rozwoju 2"],
-    "learning_suggestions": ["sugestia nauki 1", "sugestia nauki 2"]
-}}
+**🎯 OCENA:** [1-10]
+
+**� FEEDBACK:**
+[2-3 akapity: Jak dobrze przeanalizował przypadek? Czy zidentyfikował poziomy C-IQ? Co z neurobiologią i praktyką?]
+
+**✅ MOCNE STRONY:**
+• [punkt 1]
+• [punkt 2]
+
+**🎯 DO POPRAWY:**
+• [punkt 1 - konkretnie]
+• [punkt 2]
+
+**💡 KLUCZOWA RADA:**
+[Jedna najważniejsza lekcja - pisz jak do przyjaciela, prostym językiem. Zawrzyj KONKRETNY PRZYKŁAD działania lub wypowiedzi. Np. "Przed ważną rozmową powiedz sobie na głos: 'Mogę być ciekawy, zamiast mieć rację' - te 5 sekund zmienia całą interakcję" lub "Gdy czujesz napięcie w brzuchu podczas rozmowy, to znak - weź głęboki oddech i zapytaj: 'Jak Ty to widzisz?'"]
 """
         
-        return self._get_ai_evaluation(prompt)
+        return self._get_ai_evaluation_text(prompt)
     
     def _evaluate_self_reflection(self, config: Dict, user_response: str, context: str) -> Dict:
         """Ocena refleksji osobistej (styl coachingowy)"""
@@ -199,62 +213,72 @@ Podaj ocenę w formacie JSON:
         system_prompt = config.get('ai_prompts', {}).get('system',
             "Jesteś profesjonalnym coachem. Udzielaj wspierającego feedback'u.")
         
-        prompt = f"""
-{system_prompt}
+        prompt = f"""Jesteś coachem. Oceń refleksję osobistą - WSPIERAJĄCO i ZWIĘŹLE (max 1000 znaków).
 
-KONTEKST LEKCJI: {context}
+KONTEKST: {context}
 
-REFLEKSJA OSOBISTA - ODPOWIEDŹ UCZESTNIKA:
-{user_response}
+REFLEKSJA UCZESTNIKA: {user_response}
 
-Jako coach, udziel wspierającego i motywującego feedback'u. Skoncentruj się na:
-1. Docenieniu samoświadomości
-2. Wskazaniu mocnych stron
-3. Delikatnym wskazaniu obszarów rozwoju
-4. Konkretnych, małych krokach do wprowadzenia
-5. Budowaniu motywacji do zmiany
+WAŻNE: Użyj DOKŁADNIE tego formatu z emoji. NIE ZMIENIAJ nagłówków!
 
-Podaj feedback w formacie JSON:
-{{
-    "coaching_score": [1-10],
-    "self_awareness_level": [1-10],
-    "feedback": "[wspierający, coachingowy feedback]",
-    "acknowledged_strengths": ["mocna strona 1", "mocna strona 2"],
-    "growth_opportunities": ["szansa rozwoju 1", "szansa rozwoju 2"],
-    "action_steps": ["mały krok 1", "mały krok 2"],
-    "motivation_message": "[motywujące zakończenie]"
-}}
+**🎯 OCENA:** [1-10]
+
+**💬 FEEDBACK:**
+[2-3 akapity: Docenij samoświadomość. Wskaż mocne strony. Delikatnie zasugeruj obszary rozwoju. Zmotywuj.]
+
+**✅ ZAUWAŻONE MOCNE STRONY:**
+• [punkt 1]
+• [punkt 2]
+
+**🌱 SZANSE ROZWOJU:**
+• [punkt 1 - delikatnie]
+• [punkt 2]
+
+**💡 MAŁY KROK DO DZIAŁANIA:**
+[Jedna konkretna, łatwa rzecz do zrobienia dzisiaj]
 """
         
-        return self._get_ai_evaluation(prompt)
+        return self._get_ai_evaluation_text(prompt)
     
     def _evaluate_general_exercise(self, config: Dict, user_response: str, context: str) -> Dict:
         """Ocena ogólnego ćwiczenia"""
         
         criteria = config.get('feedback_criteria', [])
         
-        prompt = f"""
-Jesteś ekspertem w neuroprzywództwie i Conversational Intelligence.
+        prompt = f"""Jesteś ekspertem C-IQ. Oceń odpowiedź - ZWIĘŹLE (max 1000 znaków).
 
-KONTEKST LEKCJI: {context}
+KLUCZOWE: W modelu C-IQ są TYLKO 3 POZIOMY:
+• Poziom I (Transakcyjny) - wymiana informacji
+• Poziom II (Pozycyjny) - obrona stanowisk, ja vs ty
+• Poziom III (Transformacyjny) - współtworzenie, my razem
+NIE ma poziomu 0, 4, 5 ani innych!
 
-ODPOWIEDŹ UCZESTNIKA:
-{user_response}
+KONTEKST: {context}
 
-KRYTERIA OCENY:
-{chr(10).join([f"• {criterion}" for criterion in criteria])}
+ODPOWIEDŹ: {user_response}
 
-Oceń odpowiedź i udziel konstruktywnego feedback'u:
+KRYTERIA: {', '.join(criteria)}
 
-{{
-    "score": [1-10],
-    "feedback": "[konstruktywny feedback]",
-    "strong_points": ["mocna strona 1", "mocna strona 2"],
-    "suggestions": ["sugestia 1", "sugestia 2"]
-}}
+WAŻNE: Użyj DOKŁADNIE tego formatu z emoji. NIE ZMIENIAJ nagłówków!
+
+**🎯 OCENA:** [1-10]
+
+**💬 FEEDBACK:**
+[2-3 akapity konstruktywnej analizy]
+
+**✅ MOCNE STRONY:**
+• [punkt 1]
+• [punkt 2]
+
+**🎯 SUGESTIE:**
+• [punkt 1]
+• [punkt 2]
+
+**💡 KLUCZOWA RADA:**
+[Jedna najważniejsza lekcja - pisz prostym, przystępnym językiem. Dodaj KONKRETNY PRZYKŁAD: dokładną wypowiedź (w cudzysłowie "...") lub konkretne zachowanie. Np. "Następnym razem, zanim odpowiesz na zarzut, zrób pauzę 3 sekundy i zapytaj: 'Powiedz mi więcej - co dokładnie Cię martwi?'" lub "Zacznij spotkanie od: 'Chcę, żebyśmy wspólnie znaleźli rozwiązanie' - te słowa uruchamiają oksytocynę zamiast kortyzolu."]
 """
         
-        return self._get_ai_evaluation(prompt)
+        return self._get_ai_evaluation_text(prompt)
     
     def _evaluate_generated_case(self, config: Dict, user_response: str, context: str) -> Dict:
         """Ocena odpowiedzi na wygenerowany case study"""
@@ -272,58 +296,45 @@ Oceń odpowiedź i udziel konstruktywnego feedback'u:
         
         case_data = config['generated_case_data']
         
-        prompt = f"""
-Jesteś ekspertem w Conversational Intelligence i neuroprzywództwie.
+        prompt = f"""Jesteś ekspertem C-IQ. Oceń rozwiązanie case study - ZWIĘŹLE (max 1500 znaków).
 
-WYGENEROWANY CASE STUDY:
+KLUCZOWE: W modelu C-IQ są TYLKO 3 POZIOMY:
+• Poziom I (Transakcyjny) - wymiana informacji
+• Poziom II (Pozycyjny) - obrona stanowisk, ja vs ty
+• Poziom III (Transformacyjny) - współtworzenie, my razem
+NIE ma poziomu 0, 4, 5 ani innych!
+
+CASE STUDY:
 Tytuł: {case_data.get('title', 'Case Study')}
-Kontekst firmy: {case_data.get('company_context', '')}
+Kontekst: {case_data.get('company_context', '')}
 Sytuacja: {case_data.get('situation', '')}
+Zadanie: {case_data.get('task', '')}
 
-ZADANIE DLA UCZESTNIKA:
-{case_data.get('task', '')}
+ROZWIĄZANIE UCZESTNIKA: {user_response}
 
-ODPOWIEDŹ UCZESTNIKA:
-{user_response}
+WAŻNE: Użyj DOKŁADNIE tego formatu. NIE dodawaj emoji ani dwukropków po nagłówkach!
 
-KONTEKST LEKCJI: {context}
+**OCENA OGÓLNA:** [liczba 1-10]
 
-WAŻNE: Odpowiedz w ZWYKŁYM TEKŚCIE, NIE w JSON! Użyj formatowania markdown.
+**FEEDBACK**
+[2-4 akapity: Czy poprawnie zidentyfikował poziom C-IQ (I, II lub III)? Jak praktyczne jest rozwiązanie? Co z neurobiologią? Przykład lepszego podejścia.]
 
-Oceń odpowiedź uczestnika według następujących kryteriów (1-10):
+**MOCNE STRONY**
+• [punkt 1]
+• [punkt 2]
 
-**🎯 OCENA OGÓLNA:** [podaj ocenę 1-10]
+**DO POPRAWY**
+• [punkt 1 - konkretnie jak poprawić]
+• [punkt 2]
 
-**📊 SZCZEGÓŁOWE OCENY:**
-- **Zrozumienie przypadku:** [1-10] - Czy uczestnik prawidłowo zidentyfikował kluczowe wyzwania?
-- **Jakość rozwiązania:** [1-10] - Czy proponowane rozwiązanie jest praktyczne i wykonalne?
-- **Zastosowanie C-IQ:** [1-10] - Czy wykorzystał zasady Conversational Intelligence?
-- **Wartość praktyczna:** [1-10] - Czy rozwiązanie można wdrożyć w rzeczywistości?
-
-**💬 SZCZEGÓŁOWY FEEDBACK:**
-[Napisz konstruktywny, szczegółowy feedback z konkretnymi wskazówkami]
-
-**✅ MOCNE STRONY:**
-- [mocny punkt 1]
-- [mocny punkt 2]
-
-**🎯 OBSZARY DO ROZWOJU:**
-- [obszar poprawy 1]
-- [obszar poprawy 2]
-
-**💡 WSKAZÓWKI C-IQ:**
-- [wskazówka C-IQ 1]
-- [wskazówka C-IQ 2]
-
-**📋 NASTĘPNE KROKI:**
-- [następny krok 1]
-- [następny krok 2]
-
-**🏆 WZORCOWA ODPOWIEDŹ (10/10):**
-[Napisz przykładową wzorcową odpowiedź eksperta C-IQ, która otrzymałaby maksymalną ocenę. Powinna zawierać analizę sytuacji z perspektywy C-IQ, konkretne techniki komunikacyjne, praktyczne kroki i uzasadnienie neurobiologiczne (kortyzol vs oksytocyna)]
+**KLUCZOWA RADA**
+[Jedna najważniejsza lekcja - pisz prostym, zrozumiałym językiem (bez żargonu!). Dodaj KONKRETNY PRZYKŁAD: albo cytuj dokładną wypowiedź (w cudzysłowie "..."), albo opisz konkretne zachowanie krok po kroku. Np. "Zanim zaczniesz mówić o rozwiązaniu, powiedz: 'Rozumiem, że to dla Ciebie ważne - powiedz mi, co najbardziej Cię w tym niepokoi?' - takie pytanie obniża kortyzol o 40%" lub "Gdy ktoś atakuje, zamiast się bronić, zrób to: (1) głęboki oddech, (2) kontakt wzrokowy, (3) powiedz: 'Słyszę, że jesteś zaniepokojony. Pomóż mi to zrozumieć.' UŻYWAJ TYLKO Poziomów I, II, III!"]
 """
         
-        return self._get_ai_evaluation_text(prompt)
+        result = self._get_ai_evaluation_text(prompt)
+        # Dodaj case_data do wyniku, aby móc wygenerować wzorcową odpowiedź
+        result['generated_case_data'] = case_data
+        return result
     
     def _get_ai_evaluation_text(self, prompt: str) -> Dict:
         """Wysyła prompt do Google Gemini i parsuje odpowiedź jako zwykły tekst (nie JSON)"""
@@ -348,8 +359,9 @@ Oceń odpowiedź uczestnika według następujących kryteriów (1-10):
                 }
             
             # Parsuj zwykły tekst - wyciągnij ocenę ogólną
+            # Szukaj oceny w różnych formatach: "OCENA OGÓLNA: 8", "**🎯 OCENA OGÓLNA:** 7", itp.
             import re
-            overall_score_match = re.search(r'OCENA OGÓLNA.*?(\d+)', content, re.IGNORECASE)
+            overall_score_match = re.search(r'OCENA\s+OG[ÓO]LNA[:\*\s]+(\d+)', content, re.IGNORECASE)
             overall_score = int(overall_score_match.group(1)) if overall_score_match else 7
             
             return {
@@ -573,7 +585,62 @@ Oceń odpowiedź uczestnika według następujących kryteriów (1-10):
         
         industry_context = ""
         if industry != "Ogólny":
-            industry_context = f" w branży {industry}"
+            # Szczegółowe konteksty dla poszczególnych branż
+            detailed_contexts = {
+                "Nauka": """ w środowisku akademickim - Interdisciplinary Centre for Labour Market and Family Dynamics (LabFam) na Uniwersytecie Warszawskim.
+
+KONTEKST BRANŻY NAUKA - LabFam:
+
+GŁÓWNA POSTAĆ (używaj zawsze tej osoby):
+Anna Matysiak - Head of LabFam (kierownik centrum badawczego)
+
+O LabFam:
+LabFam to interdyscyplinarne centrum badawcze na Wydziale Nauk Ekonomicznych Uniwersytetu Warszawskiego, które bada związki między rynkiem pracy, technologią, globalizacją a dynamiką rodziny. Centrum powstało dzięki finansowaniu NAWA (Polskie Powroty 2019) i prowadzi projekty finansowane przez European Research Council (ERC), w tym flagowy projekt LABFER o wpływie globalizacji i technologii na płodność. LabFam łączy ekonomistów, socjologów, demografów, politologów i statystyków.
+
+ZESPÓŁ LABFAM (używaj tych prawdziwych imion w case study):
+
+Kierownictwo:
+- Anna Matysiak (Head of LabFam) - profesor, demografka rodzin i ekonomistka
+- Anna Kurowska (Vice-Head) - profesor, politolog i ekonomistka specjalizująca się w polityce rodzinnej
+- Anna Wielgopolan (Project Manager) - zarządza administracją i upowszechnianiem
+
+Senior Researchers (Assistant/Associate Professors):
+- Ewa Cukrowska-Torzewska - ekonomistka, nierówności płci na rynku pracy
+- Wojciech Hardy - ekonomista, technologia i rynek pracy, sektory kreatywne
+- Ewa Jarosz - socjolożka, time use, zdrowie publiczne
+- Beata Osiewalska - demografka rodzin i statystyczka, childlessness
+- Lucas van der Velde - ekonomista, automatyzacja i konsekwencje dla rodzin
+- Alina Pavelea - ekonomistka, precarious work, creative workers
+
+PhD Researchers i Research Assistants:
+- Agata Kałamucka - ekonomistka, family dynamics, work-life balance
+- Agnieszka Kasperska - gender and job quality, social policies
+- Chen Luo - ekonomistka, globalizacja i demografia, gender equality
+- Honorata Bogusz - ekonometryczka, automation and labor markets
+- Ewa Weychert - data analyst, machine learning, inequality
+- Ilyar Heydari Barardehi - family policy, gendered roles, aging
+- Magdalena Grabowska - ekonomistka, subjective well-being, labor market outcomes
+
+Typowe wyzwania komunikacyjne Anny Matysiak jako Head of LabFam:
+- Zarządzanie międzynarodowym, interdyscyplinarnym zespołem (ekonomiści, socjologowie, demografowie)
+- Koordynacja projektów badawczych (LABFER/ERC, rEUsilience/Horyzont Europa, projekty IDUB)
+- Mentoring doktorantów (Agata, Agnieszka, Chen, Honorata, Ewa, Ilyar, Magdalena) i młodszych badaczy
+- Organizacja seminariów naukowych z zagranicznymi prelegentami
+- Mediacja w konfliktach o autorstwo publikacji i podział zasobów
+- Balansowanie między własnymi badaniami a obowiązkami kierowniczymi
+- Komunikacja z grantodawcami (ERC, NAWA, Komisja Europejska) i raportowanie
+- Budowanie współpracy międzywydziałowej (WNE, Wydział Nauk Politycznych)
+- Zarządzanie presją publikacyjną (Journal of Marriage and Family, Population Studies, Demographic Research)
+- Rozwiązywanie napięć między młodszymi naukowcami a seniorami (np. Ewa CT, Wojciech, Beata)
+- Prowadzenie trudnych rozmów o przedłużeniu/zakończeniu kontraktów z doktorantami/postdokami
+- Tworzenie kultury współpracy w środowisku naturalnie konkurencyjnym
+- Koordynacja pracy Vice-Head (Anna Kurowska) i Project Manager (Anna Wielgopolan)
+
+WAŻNE: Case study musi zawsze dotyczyć Anny Matysiak jako Head of LabFam w konkretnej sytuacji menedżerskiej/przywódczej. Używaj prawdziwych imion członków zespołu wymienionego powyżej (np. Wojciech Hardy, Ewa Cukrowska-Torzewska, Agata Kałamucka, Chen Luo, Honorata Bogusz itp.)."""
+            }
+            
+            industry_context = detailed_contexts.get(industry, f" w branży {industry}")
+
         
         prompt = f"""
 Wygeneruj realny case study z obszaru komunikacji zespołowej i przywództwa{industry_context}.
@@ -584,11 +651,13 @@ POZIOM TRUDNOŚCI: {difficulty_prompts.get(difficulty_level, "medium")}
 
 WYMAGANIA CO DO ZADANIA: {task_complexity.get(difficulty_level, "")}
 
+{'KLUCZOWE DLA BRANŻY NAUKA: Case study MUSI dotyczyć Anny Matysiak jako Head of LabFam (kierownik centrum badawczego na UW). Anna Matysiak to doświadczony naukowiec i menedżer zarządzający międzynarodowym zespołem badawczym. Sytuacja powinna być realistyczna dla środowiska akademickiego. UŻYWAJ PRAWDZIWYCH IMION z zespołu LabFam (np. Wojciech Hardy, Ewa Cukrowska-Torzewska, Agata Kałamucka, Chen Luo, Honorata Bogusz, Anna Kurowska, Beata Osiewalska itp.).' if industry == 'Nauka' else ''}
+
 Stwórz {difficulty_prompts.get(difficulty_level, "przypadek o średniej złożoności")} oparty na zasadach Conversational Intelligence, który:
 
-1. **Przedstawia autentyczną sytuację biznesową** z konkretymi postaciami
+1. **Przedstawia autentyczną sytuację {'w LabFam na UW' if industry == 'Nauka' else 'biznesową'}** z konkretymi postaciami
 2. **Zawiera wyzwanie komunikacyjne** wymagające zastosowania C-IQ
-3. **Ma jasno określony cel** - co należy osiągnąć
+3. **Ma jasno określony cel** - {'co Anna powinna zrobić jako lider' if industry == 'Nauka' else 'co należy osiągnąć'}
 4. **Uwzględnia neurobiologię rozmowy** (poziomy, oksytocyna/kortyzol)
 
 WAŻNE - dostosuj zadanie do poziomu trudności:
@@ -600,25 +669,25 @@ Wygeneruj w formacie JSON:
 
 {{
     "title": "[krótki, opisowy tytuł case study]",
-    "company_context": "[2-3 zdania o firmie/dziale]",
+    "company_context": "[2-3 zdania o firmie/dziale{' - dla branży Nauka: zawsze LabFam na UW' if industry == 'Nauka' else ''}]",
     "situation": "[szczegółowy opis sytuacji - 4-6 zdań]",
     "characters": {{
         "main_character": {{
-            "name": "[imię]",
-            "position": "[stanowisko]",
+            "name": "{'Anna Matysiak' if industry == 'Nauka' else '[imię]'}",
+            "position": "{'Head of LabFam' if industry == 'Nauka' else '[stanowisko]'}",
             "challenge": "[główne wyzwanie tej osoby]"
         }},
         "other_characters": [
             {{
-                "name": "[imię]",
-                "position": "[stanowisko]", 
+                "name": "[{'UŻYWAJ PRAWDZIWYCH imion z zespołu LabFam: Wojciech Hardy, Ewa Cukrowska-Torzewska, Agata Kałamucka, Chen Luo, Honorata Bogusz, Anna Kurowska, Beata Osiewalska, Ewa Jarosz, Lucas van der Velde, Alina Pavelea, Agnieszka Kasperska, Ewa Weychert, Ilyar Heydari Barardehi, Magdalena Grabowska, Anna Wielgopolan' if industry == 'Nauka' else 'imię'}]",
+                "position": "[stanowisko - np. {'PhD Researcher, Research Assistant, Assistant Professor, Vice-Head, Project Manager' if industry == 'Nauka' else 'stanowisko'}]", 
                 "role_in_conflict": "[rola w sytuacji]"
             }}
         ]
     }},
     "communication_challenge": "[główny problem komunikacyjny]",
     "c_iq_opportunity": "[jakie zasady C-IQ można zastosować]",
-    "task": "[konkretne zadanie dla uczestnika - co ma zrobić]",
+    "task": "[konkretne zadanie dla uczestnika - {'CO ANNA MATYSIAK (Head of LabFam) POWINNA ZROBIĆ w tej sytuacji' if industry == 'Nauka' else 'co ma zrobić'}]",
     "success_criteria": ["kryterium 1", "kryterium 2", "kryterium 3"],
     "difficulty": "{difficulty_level}",
     "estimated_time": "[czas w minutach]"
@@ -812,22 +881,37 @@ def display_ai_exercise_interface(exercise: Dict, lesson_context: str = "") -> b
         # Wyświetl poprzedni feedback jeśli istnieje
         feedback_key = f"ai_exercise_{exercise_id}_feedback"
         if feedback_key in st.session_state:
-            col1, col2 = st.columns([4, 1])
-            with col1:
-                with st.expander("📝 Pokaż poprzedni feedback AI", expanded=False):
-                    # Pokaż odpowiedź użytkownika
-                    response_key = f"ai_exercise_{exercise_id}_response"
-                    if response_key in st.session_state:
-                        user_response = st.session_state[response_key]
-                        st.markdown("### 📝 Twoja odpowiedź")
-                        st.info(user_response)
-                        st.markdown("---")
-                    
-                    # Pokaż feedback AI
-                    feedback = st.session_state[feedback_key]
-                    display_ai_feedback(feedback)
+            # Sprawdź czy to świeży feedback (właśnie otrzymany)
+            fresh_feedback_key = f"ai_exercise_{exercise_id}_fresh_feedback"
+            is_fresh = st.session_state.get(fresh_feedback_key, True)
+            
+            with st.expander("📝 Feedback AI", expanded=is_fresh):
+                # Po pierwszym wyświetleniu oznacz jako nieświeży
+                if is_fresh:
+                    st.session_state[fresh_feedback_key] = False
+                
+                # Pokaż odpowiedź użytkownika
+                response_key = f"ai_exercise_{exercise_id}_response"
+                if response_key in st.session_state:
+                    user_response = st.session_state[response_key]
+                    st.markdown("### 📝 Twoja odpowiedź")
+                    st.info(user_response)
+                    st.markdown("---")
+                
+                # Pokaż feedback AI
+                feedback = st.session_state[feedback_key]
+                # Pobierz exercise_type dla feedbacku
+                exercise_type = exercise.get('ai_config', {}).get('exercise_type', '')
+                
+                # Utwórz evaluator dla wzorcowej odpowiedzi
+                evaluator = AIExerciseEvaluator()
+                
+                display_ai_feedback(feedback, exercise_type=exercise_type, evaluator=evaluator)
+            
+            # Przycisk Reset pod expanderem
+            col1, col2, col3 = st.columns([2, 1, 2])
             with col2:
-                if st.button("🔄 Reset", key=f"reset_{exercise_id}", help="Resetuj to ćwiczenie i zrób je ponownie"):
+                if st.button("🔄 Reset", key=f"reset_{exercise_id}", help="Resetuj to ćwiczenie i zrób je ponownie", use_container_width=True):
                     reset_single_exercise(exercise_id)
                     st.rerun()
         
@@ -844,30 +928,25 @@ def display_ai_exercise_interface(exercise: Dict, lesson_context: str = "") -> b
         case_key = f"ai_exercise_{exercise_id}_generated_case"
         
         if case_key not in st.session_state:
-            # Wyświetl opcje personalizacji case study
-            st.markdown("### 🎯 Personalizuj swój case study")
-            st.markdown("Wybierz parametry, aby otrzymać case study dostosowany do Twoich potrzeb:")
-            
+            # Opcje personalizacji - bez tabsów
             col1, col2 = st.columns(2)
             
             with col1:
-                st.markdown("**📊 Stopień trudności:**")
-                difficulty_level = st.radio(
-                    "Wybierz poziom:",
+                difficulty_level = st.selectbox(
+                    "Poziom trudności:",
                     options=['easy', 'medium', 'hard'],
                     format_func=lambda x: {
-                        'easy': '🟢 Łatwy (2-3 słowa odpowiedzi)',
-                        'medium': '🟡 Średni (3-5 zdań)',
-                        'hard': '🔴 Trudny (szczegółowa analiza)'
+                        'easy': '🟢 Łatwy',
+                        'medium': '🟡 Średni',
+                        'hard': '🔴 Trudny'
                     }[x],
-                    index=1,  # medium jako domyślny
+                    index=1,
                     key=f"difficulty_{exercise_id}"
                 )
             
             with col2:
-                st.markdown("**🏢 Branża:**")
                 industry = st.selectbox(
-                    "Wybierz sektor:",
+                    "Branża:",
                     options=['IT', 'Finanse', 'FMCG', 'Farmacja', 'Nauka', 'Ogólny'],
                     format_func=lambda x: {
                         'IT': '💻 IT / Technologie',
@@ -877,25 +956,14 @@ def display_ai_exercise_interface(exercise: Dict, lesson_context: str = "") -> b
                         'Nauka': '🎓 Nauka / Edukacja',
                         'Ogólny': '🏢 Ogólny biznes'
                     }[x],
-                    index=0,  # IT jako domyślny
+                    index=0,
                     key=f"industry_{exercise_id}"
                 )
             
-            # Wyświetl opis wybranej konfiguracji
-            difficulty_names = {'easy': 'Łatwy', 'medium': 'Średni', 'hard': 'Trudny'}
-            industry_names = {'IT': 'IT/Technologie', 'Finanse': 'Finanse/Banking', 'FMCG': 'FMCG/Retail', 'Farmacja': 'Farmacja/Medycyna', 'Nauka': 'Nauka/Edukacja', 'Ogólny': 'Ogólny biznes'}
+            st.info(f"💡 Wygeneruję case study na poziomie **{difficulty_level}** z branży **{industry}**")
             
-            st.info(f"""
-**Twoje ustawienia:**
-- **Poziom:** {difficulty_names[difficulty_level]}
-- **Branża:** {industry_names[industry]}
-
-Case study będzie dostosowany do wybranej branży z odpowiednim poziomem złożoności.
-            """)
-            
-            # Przycisk generowania
-            if st.button("🎲 Wygeneruj spersonalizowany case study", key=f"generate_{exercise_id}"):
-                with st.spinner("🎲 Generuję spersonalizowany przypadek komunikacyjny..."):
+            if st.button("🎲 Wygeneruj Case Study", key=f"generate_{exercise_id}"):
+                with st.spinner("🎲 Generuję spersonalizowany przypadek..."):
                     evaluator = AIExerciseEvaluator()
                     lesson_context = ai_config.get('lesson_context', lesson_context)
                     
@@ -906,22 +974,21 @@ Case study będzie dostosowany do wybranej branży z odpowiednim poziomem złoż
                             industry=industry
                         )
                         st.session_state[case_key] = generated_case
+                        st.success("✅ Case study wygenerowany!")
                         st.rerun()
                     except Exception as e:
                         st.error(f"Błąd podczas generowania przypadku: {str(e)}")
-                        # Fallback - użyj demo przypadku z wybranymi parametrami
                         demo_case = evaluator._generate_demo_case(difficulty_level)
-                        demo_case['industry'] = industry  # Dodaj informację o branży
+                        demo_case['industry'] = industry
                         st.session_state[case_key] = demo_case
+                        st.success("✅ Case study wygenerowany (demo mode)!")
                         st.rerun()
         
-        # Wyświetl wygenerowany przypadek
+        # Wyświetl wygenerowany przypadek i formularz odpowiedzi
         if case_key in st.session_state:
             generated_case = st.session_state[case_key]
             
             st.markdown("### 🎯 Twoje zadanie")
-            
-            # Wyświetl przypadek w ładnym formacie
             st.markdown(f"""
 <div style='background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff; margin: 15px 0;'>
 <h4 style='color: #0066cc; margin-top: 0;'>📋 {generated_case.get('title', 'Przypadek komunikacyjny')}</h4>
@@ -934,56 +1001,67 @@ Case study będzie dostosowany do wybranej branży z odpowiednim poziomem złoż
 </div>
 """, unsafe_allow_html=True)
             
-            # Dodaj przycisk do wygenerowania nowego przypadku
-            col1, col2 = st.columns([3, 1])
-            with col2:
-                if st.button("🔄 Nowy przypadek", key=f"new_case_{exercise_id}", help="Wygeneruj nowy przypadek"):
-                    del st.session_state[case_key]
-                    st.rerun()
-    
-    response_key = f"ai_exercise_{exercise_id}_response"
-    user_response = st.text_area(
-        "Twoja odpowiedź:",
-        value=st.session_state.get(response_key, ""),
-        height=200,
-        key=response_key,
-        placeholder="Wpisz swoją szczegółową odpowiedź tutaj..."
-    )
-    
-    # Przycisk do otrzymania feedback'u AI
-    col1, col2 = st.columns([3, 1])
-    
-    with col1:
-        if st.button(f"🤖 Otrzymaj feedback AI", key=f"evaluate_{exercise_id}"):
-            if len(user_response.strip()) < 2:
-                st.warning("Napisz co najmniej 2 słowa, aby otrzymać szczegółowy feedback.")
-            else:
-                with st.spinner("AI analizuje Twoją odpowiedź..."):
-                    evaluator = AIExerciseEvaluator()
-                    ai_config = exercise.get('ai_config', {}).copy()  # Kopia żeby nie modyfikować oryginału
-                    
-                    # Dla generated_case, dodaj wygenerowany case study do config
-                    if exercise_type == 'generated_case':
-                        case_key = f"ai_exercise_{exercise_id}_generated_case"
+            # Sprawdź czy użytkownik już otrzymał feedback
+            feedback_key = f"ai_exercise_{exercise_id}_feedback"
+            has_feedback = feedback_key in st.session_state
+            
+            # Jeśli NIE MA jeszcze feedbacku, pokaż przycisk Reset (wygeneruj nowy case)
+            if not has_feedback:
+                col1, col2, col3 = st.columns([2, 1, 2])
+                with col2:
+                    if st.button("🔄 Wygeneruj nowy", key=f"regenerate_{exercise_id}", help="Nie podoba Ci się ten case? Wygeneruj nowy!", use_container_width=True):
+                        # Usuń wygenerowany case
                         if case_key in st.session_state:
-                            ai_config['generated_case_data'] = st.session_state[case_key]
-                    
-                    result = evaluator.evaluate_exercise(ai_config, user_response, lesson_context)
-                    
-                    # Zapisz feedback
-                    feedback_key = f"ai_exercise_{exercise_id}_feedback"
-                    st.session_state[feedback_key] = result
-                    
-                    # Oznacz jako ukończone
-                    st.session_state[completion_key] = True
-                    
-                    st.rerun()
+                            del st.session_state[case_key]
+                        # Usuń odpowiedź (jeśli była)
+                        response_key = f"ai_exercise_{exercise_id}_response"
+                        if response_key in st.session_state:
+                            del st.session_state[response_key]
+                        st.success("✨ Kliknij 'Wygeneruj Case Study' aby otrzymać nowy przypadek!")
+                        st.rerun()
+                st.markdown("---")
+            
+            # Pole odpowiedzi - tylko po wygenerowaniu case study
+            response_key = f"ai_exercise_{exercise_id}_response"
+            user_response = st.text_area(
+                "Twoja odpowiedź:",
+                value=st.session_state.get(response_key, ""),
+                height=200,
+                key=response_key,
+                placeholder="Wpisz swoją szczegółową odpowiedź tutaj..."
+            )
+            
+            # Przycisk do otrzymania feedback'u AI
+            if st.button(f"🤖 Otrzymaj feedback AI", key=f"evaluate_{exercise_id}"):
+                if len(user_response.strip()) < 2:
+                    st.warning("Napisz co najmniej 2 słowa, aby otrzymać szczegółowy feedback.")
+                else:
+                    with st.spinner("AI analizuje Twoją odpowiedź..."):
+                        evaluator = AIExerciseEvaluator()
+                        ai_config = exercise.get('ai_config', {}).copy()
+                        
+                        # Dla generated_case, dodaj wygenerowany case study do config
+                        if exercise_type == 'generated_case':
+                            case_key_inner = f"ai_exercise_{exercise_id}_generated_case"
+                            if case_key_inner in st.session_state:
+                                ai_config['generated_case_data'] = st.session_state[case_key_inner]
+                        
+                        result = evaluator.evaluate_exercise(ai_config, user_response, lesson_context)
+                        
+                        # Zapisz feedback
+                        feedback_key = f"ai_exercise_{exercise_id}_feedback"
+                        st.session_state[feedback_key] = result
+                        
+                        # Oznacz jako świeży feedback (rozwinie się automatycznie)
+                        fresh_feedback_key = f"ai_exercise_{exercise_id}_fresh_feedback"
+                        st.session_state[fresh_feedback_key] = True
+                        
+                        # Oznacz jako ukończone
+                        st.session_state[completion_key] = True
+                        
+                        st.rerun()
     
-    with col2:
-        word_count = len(user_response.split())
-        st.metric("Słowa", word_count)
-        if word_count < 2:
-            st.caption("Min. 2 słowa")
+    # Jeśli to NIE jest generated_case, wyświetl standardowy formularz
     
     return False
 
@@ -993,6 +1071,7 @@ def reset_single_exercise(exercise_id: str):
     completion_key = f"ai_exercise_{exercise_id}_completed"
     feedback_key = f"ai_exercise_{exercise_id}_feedback"
     response_key = f"ai_exercise_{exercise_id}_response"
+    case_key = f"ai_exercise_{exercise_id}_generated_case"
     
     # Usuń z session_state
     if completion_key in st.session_state:
@@ -1001,6 +1080,8 @@ def reset_single_exercise(exercise_id: str):
         del st.session_state[feedback_key]
     if response_key in st.session_state:
         del st.session_state[response_key]
+    if case_key in st.session_state:
+        del st.session_state[case_key]
     
     st.success(f"✅ Ćwiczenie zresetowane! Możesz je zrobić ponownie.")
 
@@ -1013,7 +1094,8 @@ def reset_all_ai_exercises(lesson_id: str = None, exercise_prefix: str = "ai_exe
         if key.startswith(f"{exercise_prefix}_") and (
             key.endswith("_completed") or 
             key.endswith("_feedback") or 
-            key.endswith("_response")
+            key.endswith("_response") or
+            key.endswith("_generated_case")
         ):
             # Jeśli podano lesson_id, resetuj tylko dla tej lekcji
             if lesson_id:
@@ -1059,8 +1141,91 @@ def display_reset_all_button(lesson_id: str = None, exercise_prefix: str = "ai_e
                 st.info("💡 **Wskazówka**: Możesz też resetować pojedyncze ćwiczenia przyciskiem 🔄 obok każdego.")
 
 
-def display_ai_feedback(feedback: Dict):
-    """Wyświetla feedback AI w przyjaznym formacie"""
+def generate_model_answer(case_data: Dict, evaluator) -> str:
+    """Generuje wzorcową odpowiedź na poziomie 10/10 dla case study używając AI"""
+    
+    title = case_data.get('title', 'Case Study')
+    context = case_data.get('company_context', '')
+    situation = case_data.get('situation', '')
+    challenge = case_data.get('challenge', '')
+    
+    # Prompt do wygenerowania wzorcowej odpowiedzi
+    prompt = f"""Jesteś światowej klasy ekspertem w Conversational Intelligence (C-IQ). 
+Twoim zadaniem jest napisanie WZORCOWEJ odpowiedzi na poniższy case study, która otrzymałaby ocenę 10/10.
+
+KLUCZOWE: W modelu C-IQ istnieją TYLKO 3 POZIOMY komunikacji:
+• Poziom I (Transakcyjny) - wymiana informacji, pozycjonowanie
+• Poziom II (Pozycyjny) - bronienie stanowisk, ja vs ty
+• Poziom III (Transformacyjny) - współtworzenie, my razem
+
+NIE WYMYŚLAJ innych poziomów (0, 4, 5 itd.)! Używaj TYLKO tych trzech!
+
+CASE STUDY:
+Tytuł: {title}
+Kontekst firmy: {context}
+Sytuacja: {situation}
+Wyzwanie: {challenge}
+
+Napisz KOMPLETNĄ odpowiedź uczestnika szkolenia, która:
+1. **Precyzyjnie identyfikuje poziom C-IQ** w sytuacji - używając TYLKO Poziomu I, II lub III
+2. **Głęboko analizuje aspekty neurobiologiczne** (amygdala, kortyzol, oksytocyna, układ nagrody)
+3. **Proponuje KONKRETNE techniki** C-IQ do przejścia na wyższy poziom
+4. **Przewiduje rezultaty** i wskaźniki sukcesu
+5. Ma długość 500-700 słów
+6. Jest napisana z perspektywy uczestnika ("Zrobiłbym...", "Zastosowałbym...", "Moim podejściem byłoby...")
+
+Format odpowiedzi (użyj prostego markdown bez emoji):
+
+**Identyfikacja poziomu C-IQ:**
+[Określ czy to Poziom I, II czy III - używaj TYLKO tych trzech! Uzasadnij konkretami z case study]
+
+**Analiza neurobiologiczna:**
+[Jakie procesy w mózgu się dzieją: amygdala/kortyzol (stres) vs prefrontalny/oksytocyna (zaufanie)]
+
+**Konkretne działania:**
+[Szczegółowy plan z technikami C-IQ - np. Double-Click, Validacja, Prime, Tell Me More - minimum 3-4 kroki]
+
+**Oczekiwane rezultaty:**
+[Konkretne, mierzalne wskaźniki - jak zmieni się komunikacja i współpraca]
+
+WAŻNE: 
+- Używaj TYLKO Poziomów I, II, III - żadnych innych!
+- Pisz jako uczestnik ("Moją pierwszą akcją byłoby...", "Zastosowałbym...")
+- Bądź BARDZO konkretny - cytuj rozmowy, opisuj działania krok po kroku
+- Odpowiedź ma być kompletna i samodzielna (500-700 słów)
+- NIE używaj emoji ani ozdobników HTML - tylko czysty markdown
+"""
+    
+    try:
+        # Wywołaj AI API
+        response = evaluator.gemini_model.generate_content(prompt)
+        model_answer_text = response.text if response else ""
+        
+        if not model_answer_text or len(model_answer_text.strip()) < 100:
+            return "<p style='color: #666;'>Nie udało się wygenerować wzorcowej odpowiedzi. Spróbuj ponownie.</p>"
+        
+        # Konwertuj podstawowy markdown na HTML
+        import re
+        # Zamień **text** na <strong>text</strong>
+        formatted_text = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', model_answer_text)
+        # Zamień podwójne nowe linie na paragrafy
+        formatted_text = formatted_text.replace('\n\n', '</p><p style="margin: 15px 0;">')
+        # Zamień pojedyncze nowe linie na <br>
+        formatted_text = formatted_text.replace('\n', '<br>')
+        
+        formatted_answer = f"""
+<div style='padding: 20px; background: #f9fafb; border-radius: 8px; line-height: 1.8; color: #1f2937;'>
+    <p style="margin: 15px 0;">{formatted_text}</p>
+</div>
+"""
+        return formatted_answer
+        
+    except Exception as e:
+        return f"<p style='color: #ef4444;'>Błąd podczas generowania wzorcowej odpowiedzi: {str(e)}</p>"
+
+
+def display_ai_feedback(feedback: Dict, exercise_type: str = "", evaluator=None):
+    """Wyświetla feedback AI w atrakcyjnym, wizualnym formacie"""
     
     # DEBUGGING: sprawdź typ feedback
     if not isinstance(feedback, dict):
@@ -1068,11 +1233,176 @@ def display_ai_feedback(feedback: Dict):
         st.code(str(feedback)[:500] + "..." if len(str(feedback)) > 500 else str(feedback))
         return
     
-    # Główny feedback - AI już generuje wszystko w tekście z własnymi nagłówkami
-    if 'feedback' in feedback:
-        st.markdown(feedback['feedback'], unsafe_allow_html=True)
+    # Wyciągnij tekst feedbacku i sparsuj sekcje
+    feedback_text = feedback.get('feedback', '')
     
-    # Motywująca wiadomość (jeśli dostępna)
+    if not feedback_text:
+        st.warning("Brak feedbacku do wyświetlenia.")
+        return
+    
+    # Usuń WSZYSTKIE emoji i symbole z nagłówków feedbacku
+    import re
+    # Usuń emoji, symbole Unicode i inne ozdobniki po ** (nagłówki markdown)
+    # Pattern: ** + dowolne znaki niebędące literami/cyframi/spacjami + opcjonalna spacja → **
+    feedback_text = re.sub(r'\*\*[^\w\s]+\s*', '**', feedback_text, flags=re.UNICODE)
+    
+    # Parsuj sekcje z feedbacku markdown
+    
+    # Wyciągnij ocenę - obsługuje "OCENA OGÓLNA" i "OCENA" z i bez emoji
+    score_match = re.search(r'\*\*(?:🎯\s*)?OCENA(?:\s+OGÓLNA)?:?\*\*\s*(\d+)', feedback_text, re.IGNORECASE)
+    score = int(score_match.group(1)) if score_match else feedback.get('overall_score', 7)
+    
+    # Określ kolor na podstawie oceny
+    if score >= 9:
+        color_start, color_end = "#10b981", "#059669"  # Zielony
+        emoji = "🌟"
+        message = "Wyśmienicie!"
+    elif score >= 7:
+        color_start, color_end = "#3b82f6", "#2563eb"  # Niebieski
+        emoji = "👍"
+        message = "Dobra robota!"
+    elif score >= 5:
+        color_start, color_end = "#f59e0b", "#d97706"  # Pomarańczowy
+        emoji = "💪"
+        message = "W porządku!"
+    else:
+        color_start, color_end = "#ef4444", "#dc2626"  # Czerwony
+        emoji = "📈"
+        message = "Potencjał do rozwoju!"
+    
+    # Wyświetl ocenę w dużej metryce
+    st.markdown(f"""
+    <div style='text-align: center; padding: 15px 20px; background: linear-gradient(135deg, {color_start} 0%, {color_end} 100%); border-radius: 12px; margin: 15px 0; box-shadow: 0 3px 5px rgba(0,0,0,0.1);'>
+        <div style='font-size: 2em; margin: 0;'>{emoji}</div>
+        <h1 style='color: white; font-size: 2.2em; margin: 8px 0; font-weight: bold;'>{score}<span style='font-size: 0.5em; opacity: 0.8;'>/10</span></h1>
+        <p style='color: white; margin: 0; font-size: 1em; opacity: 0.95;'>{message}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Wyciągnij główny feedback - obsługuje format z i bez emoji
+    feedback_match = re.search(r'\*\*(?:💬\s*)?FEEDBACK:?\*\*\s*(.*?)(?=\*\*(?:✅|MOCNE)|$)', feedback_text, re.DOTALL | re.IGNORECASE)
+    main_feedback = feedback_match.group(1).strip() if feedback_match else ""
+    
+    # Wyciągnij mocne strony
+    strengths_match = re.search(r'\*\*(?:✅\s*)?(?:MOCNE STRONY|ZAUWAŻONE MOCNE STRONY):?\*\*\s*(.*?)(?=\*\*(?:🎯|DO POPRAWY)|$)', feedback_text, re.DOTALL | re.IGNORECASE)
+    strengths_text = strengths_match.group(1).strip() if strengths_match else ""
+    strengths = [s.strip() for s in re.findall(r'•\s*([^\n•]+)', strengths_text)]
+    
+    # Wyciągnij obszary do poprawy
+    improve_match = re.search(r'\*\*(?:[🎯🌱]\s*)?(?:DO POPRAWY|OBSZARY DO ROZWOJU|SUGESTIE|SZANSE ROZWOJU):?\*\*\s*(.*?)(?=\*\*(?:💡|KLUCZOWA)|$)', feedback_text, re.DOTALL | re.IGNORECASE)
+    improve_text = improve_match.group(1).strip() if improve_match else ""
+    improvements = [s.strip() for s in re.findall(r'•\s*([^\n•]+)', improve_text)]
+    
+    # Wyciągnij kluczową radę
+    advice_match = re.search(r'\*\*(?:💡\s*)?(?:KLUCZOWA RADA|MAŁY KROK DO DZIAŁANIA):?\*\*\s*(.*?)(?=$)', feedback_text, re.DOTALL | re.IGNORECASE)
+    key_advice = advice_match.group(1).strip() if advice_match else ""
+    
+    # Wyświetl w tabsach - dla generated_case dodaj tab "Rozwiązanie"
+    if exercise_type == 'generated_case':
+        tab1, tab2, tab3, tab4 = st.tabs(["💬 Analiza", "📊 Szczegóły", "💡 Kluczowa rada", "✨ Rozwiązanie"])
+    else:
+        tab1, tab2, tab3 = st.tabs(["💬 Analiza", "📊 Szczegóły", "💡 Kluczowa rada"])
+        tab4 = None
+    
+    with tab1:
+        st.markdown("### 💬 Feedback AI")
+        # Wyświetl sekcję FEEDBACK z odpowiedzi AI
+        if main_feedback:
+            st.markdown(f"""
+            <div style='padding: 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #667eea; border-radius: 10px; margin: 15px 0;'>
+                <p style='color: #333; margin: 0; line-height: 1.8; font-size: 1.05em;'>{main_feedback}</p>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            # Jeśli regex nie znalazł sekcji FEEDBACK, pokaż cały feedback
+            st.markdown(f"""
+            <div style='padding: 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #667eea; border-radius: 10px; margin: 15px 0;'>
+                <p style='color: #333; margin: 0; line-height: 1.8; font-size: 1.05em;'>{feedback_text}</p>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    with tab2:
+        col_left, col_right = st.columns(2)
+        
+        with col_left:
+            st.markdown("#### ✅ Mocne strony")
+            if strengths:
+                for i, strength in enumerate(strengths, 1):
+                    st.markdown(f"""
+                    <div style='padding: 12px; background: #d1fae5; border-left: 4px solid #10b981; border-radius: 5px; margin: 8px 0;'>
+                        <p style='color: #065f46; margin: 0; font-weight: 500;'>✓ {strength}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.info("💡 Analiza ogólna - sprawdź zakładkę 'Analiza'")
+        
+        with col_right:
+            st.markdown("#### 🎯 Obszary rozwoju")
+            if improvements:
+                for i, improvement in enumerate(improvements, 1):
+                    st.markdown(f"""
+                    <div style='padding: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 5px; margin: 8px 0;'>
+                        <p style='color: #92400e; margin: 0; font-weight: 500;'>→ {improvement}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.info("💡 Sugestie zawarte w analizie - sprawdź zakładkę 'Analiza'")
+    
+    with tab3:
+        st.markdown("### 💡 Najważniejsza lekcja do zapamiętania")
+        if key_advice:
+            # Usuń gwiazdki
+            clean_advice = key_advice.replace('**', '').replace('*', '').strip()
+            st.markdown(f"""
+            <div style='padding: 25px; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 6px solid #f59e0b; border-radius: 10px; margin: 15px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);'>
+                <div style='font-size: 2.5em; margin-bottom: 10px;'>💡</div>
+                <p style='font-size: 1.2em; color: #78350f; margin: 0; line-height: 1.6; font-weight: 500;'>{clean_advice}</p>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.info("💡 Kluczowe wnioski zawarte w głównej analizie")
+    
+    # Tab 4: Rozwiązanie wzorcowe (tylko dla generated_case)
+    if tab4 is not None and exercise_type == 'generated_case':
+        with tab4:
+            st.markdown("### ✨ Wzorcowa odpowiedź na poziomie 10/10")
+            st.markdown("""
+            <div style='padding: 20px; background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 6px solid #10b981; border-radius: 10px; margin: 15px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);'>
+                <div style='font-size: 2em; margin-bottom: 10px;'>🌟</div>
+                <p style='font-size: 1.1em; color: #065f46; margin: 0; line-height: 1.6;'>
+                    AI wygenerowało przykładową odpowiedź uczestnika, która otrzymałaby ocenę 10/10. 
+                    Zwróć uwagę na poziom szczegółowości, odniesienia do poziomów C-IQ, 
+                    aspektów neurobiologicznych i konkretnych, praktycznych rozwiązań.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Generuj wzorcową odpowiedź jeśli mamy dane case study
+            if 'generated_case_data' in feedback and evaluator:
+                case_data = feedback['generated_case_data']
+                
+                # Twórz wzorcową odpowiedź na podstawie case study
+                with st.spinner("🤖 Generuję wzorcową odpowiedź 10/10..."):
+                    model_answer = generate_model_answer(case_data, evaluator)
+                
+                st.markdown("#### 📝 Wzorcowa odpowiedź wygenerowana przez AI:")
+                st.markdown(f"""
+                <div style='padding: 20px; background: white; border: 2px solid #10b981; border-radius: 10px; margin: 15px 0;'>
+                    {model_answer}
+                </div>
+                """, unsafe_allow_html=True)
+                
+                st.info("""
+                💡 **Pamiętaj:** To tylko jeden z możliwych sposobów podejścia do problemu. 
+                Twoja odpowiedź może być inna i równie wartościowa, jeśli zawiera podobny 
+                poziom analizy i praktycznych rozwiązań.
+                """)
+            elif not evaluator:
+                st.warning("⚠️ Nie można wygenerować wzorcowej odpowiedzi - brak połączenia z AI.")
+            else:
+                st.info("💡 Wzorcowa odpowiedź nie jest dostępna dla tego typu ćwiczenia.")
+    
+    # Motywująca wiadomość (jeśli dostępna - dla self_reflection)
     if 'motivation_message' in feedback:
-        st.markdown("### 🌟 Wiadomość motywacyjna")
-        st.success(feedback['motivation_message'])
+        st.markdown("---")
+        st.success(f"🌟 **{feedback['motivation_message']}**")

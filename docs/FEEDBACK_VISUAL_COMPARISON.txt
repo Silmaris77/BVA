@@ -1,0 +1,148 @@
+"""
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    FEEDBACK AI - TRANSFORMACJA WIZUALNA                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PRZED (Stary format)                                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│ Jako ekspert w Conversational Intelligence, oceniam analizę uczestnika.     │
+│                                                                              │
+│ **🎯 OCENA OGÓLNA:** 6/10                                                    │
+│                                                                              │
+│ **✅ POPRAWNOŚĆ IDENTYFIKACJI:**                                             │
+│ - Czy uczestnik poprawnie zidentyfikował poziom? TAK                        │
+│ - Zidentyfikowany poziom: poziom 3                                          │
+│ - Prawidłowy poziom: Poziom III (Transformacyjny)                           │
+│                                                                              │
+│ **📊 SZCZEGÓŁOWA ANALIZA:**                                                  │
+│ - **Identyfikacja poziomu C-IQ:** 9/10 - Poprawne wskazanie...             │
+│ - **Analiza językowa:** 6/10 - Zauważenie "komunikatu my"...               │
+│ - **Zrozumienie neurobiologii:** 2/10 - Stwierdzenie "wzrost...            │
+│ - **Jakość uzasadnienia:** 4/10 - Uzasadnienie jest zbyt...                │
+│                                                                              │
+│ [... kolejne 5000 znaków tekstu ...]                                        │
+│                                                                              │
+│ **📚 TEORIA C-IQ:**                                                          │
+│ - **Poziom I (Transakcyjny):** Koncentruje się na faktach...               │
+│ - **Poziom II (Pozycyjny):** Charakteryzuje się dążeniem...                │
+│ [... długie wyjaśnienia teorii ...]                                         │
+│                                                                              │
+│ **🧠 NEUROBIOLOGIA:**                                                        │
+│ [... 500 słów o hormonach ...]                                              │
+│                                                                              │
+│ Długość: ~6680 znaków                                                        │
+│ Czas czytania: 3-4 minuty                                                    │
+│ Problem: Przytłaczający, trudny do skanowania                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PO (Nowy format z wizualizacją)                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│     ╔═══════════════════════════════════════════════════════╗               │
+│     ║                        👍                              ║               │
+│     ║                      7/10                              ║               │
+│     ║                  Dobra robota!                         ║               │
+│     ╚═══════════════════════════════════════════════════════╝               │
+│                                                                              │
+│  ┌─────────────┬──────────────┬─────────────────┐                          │
+│  │ 💬 Analiza  │ 📊 Szczegóły │ 💡 Kluczowa rada │                         │
+│  └─────────────┴──────────────┴─────────────────┘                          │
+│                                                                              │
+│  [TAB 1: 💬 Analiza]                                                        │
+│  ┌─────────────────────────────────────────────────────────┐               │
+│  │ Świetnie zidentyfikowałeś Poziom III! Trafnie zauważyłeś│               │
+│  │ język "my" i współtworzenia.                             │               │
+│  └─────────────────────────────────────────────────────────┘               │
+│  ┌─────────────────────────────────────────────────────────┐               │
+│  │ Błąd w neurobiologii: Poziom III OBNIŻA kortyzol i      │               │
+│  │ podnosi oksytocynę (nie odwrotnie).                      │               │
+│  └─────────────────────────────────────────────────────────┘               │
+│                                                                              │
+│  [TAB 2: 📊 Szczegóły]                                                      │
+│  ┌──────────────────────────┬────────────────────────────┐                 │
+│  │ ✅ Mocne strony          │ 🎯 Do poprawy              │                 │
+│  ├──────────────────────────┼────────────────────────────┤                 │
+│  │ ┌──────────────────────┐ │ ┌────────────────────────┐ │                │
+│  │ │ ✓ Poprawna           │ │ │ → Neurobiologia: III = │ │                │
+│  │ │   identyfikacja      │ │ │   zaufanie↑ stres↓     │ │                │
+│  │ └──────────────────────┘ │ └────────────────────────┘ │                │
+│  │ ┌──────────────────────┐ │ ┌────────────────────────┐ │                │
+│  │ │ ✓ Zauważenie języka  │ │ │ → Rozróżniaj oksytocynę│ │                │
+│  │ │   współtworzenia     │ │ │   od kortyzolu         │ │                │
+│  │ └──────────────────────┘ │ └────────────────────────┘ │                │
+│  └──────────────────────────┴────────────────────────────┘                 │
+│                                                                              │
+│  [TAB 3: 💡 Kluczowa rada]                                                  │
+│  ┌─────────────────────────────────────────────────────────┐               │
+│  │                          💡                              │               │
+│  │  Komunikacja Transformacyjna (Poziom III) buduje        │               │
+│  │  zaufanie i współpracę, aktywując oksytocynę            │               │
+│  │  i obniżając poziom kortyzolu.                           │               │
+│  └─────────────────────────────────────────────────────────┘               │
+│                                                                              │
+│  📊 Twój progres                                                            │
+│  [████████░░] 70%                                                           │
+│  Aktualna: 7/10  │  Procent: 70%  │  Status: ✅ Kompetentny                │
+│                                                                              │
+│  Długość: ~1035 znaków                                                       │
+│  Czas czytania: 45 sekund                                                    │
+│  Zalety: Zwięzły, wizualny, łatwy do skanowania                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                            KLUCZOWE RÓŻNICE                                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  📏 DŁUGOŚĆ                                                                  ║
+║    Przed: 6680 znaków  →  Po: 1035 znaków  = 6x KRÓCEJ                     ║
+║                                                                              ║
+║  ⏱️ CZAS CZYTANIA                                                            ║
+║    Przed: 3-4 min      →  Po: 45 sek       = 4x SZYBCIEJ                   ║
+║                                                                              ║
+║  🎨 WIZUALIZACJA                                                             ║
+║    Przed: Zwykły tekst →  Po: Kolorowe karty + gradient + ikony            ║
+║                                                                              ║
+║  📊 ORGANIZACJA                                                              ║
+║    Przed: 10+ sekcji   →  Po: 3 zakładki    = Łatwiejsza nawigacja         ║
+║                                                                              ║
+║  🎯 PRIORYTETYZACJA                                                          ║
+║    Przed: Wszystko równie ważne                                             ║
+║    Po: Ocena → Analiza → Szczegóły → Rada (hierarchia)                     ║
+║                                                                              ║
+║  📱 MOBILE UX                                                                ║
+║    Przed: Słaby (długi scroll)                                              ║
+║    Po: Doskonały (zakładki + karty)                                         ║
+║                                                                              ║
+║  🎮 GAMIFICATION                                                             ║
+║    Przed: Brak                                                               ║
+║    Po: Progress bar + statusy + emoji nagrody                               ║
+║                                                                              ║
+║  💪 MOTYWACJA                                                                ║
+║    Przed: Neutralna (suchy tekst)                                           ║
+║    Po: Wysoka (kolory, emoji, "Dobra robota!")                             ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        PRZYKŁADY KOLORÓW GRADIENTU                           ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  🌟 EKSPERT (9-10 pkt)     [████████████] Zielony gradient                 ║
+║     Emoji: 🌟  Komunikat: "Wyśmienicie!"                                    ║
+║                                                                              ║
+║  👍 DOBRY (7-8 pkt)        [██████████░░] Niebieski gradient                ║
+║     Emoji: 👍  Komunikat: "Dobra robota!"                                   ║
+║                                                                              ║
+║  💪 W PORZĄDKU (5-6 pkt)   [████████░░░░] Pomarańczowy gradient             ║
+║     Emoji: 💪  Komunikat: "W porządku!"                                     ║
+║                                                                              ║
+║  📈 ROZWÓJ (<5 pkt)        [██████░░░░░░] Czerwony gradient                 ║
+║     Emoji: 📈  Komunikat: "Potencjał do rozwoju!"                           ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+REZULTAT: Feedback AI jest teraz profesjonalny, motywujący i łatwy do przyswojenia! 🚀
+"""

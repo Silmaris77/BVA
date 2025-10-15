@@ -534,8 +534,7 @@
         ]
       },
       "generated_case_studies": {
-        "title": "🎲 Dynamiczne Case Studies",
-        "description": "AI generuje unikalne przypadki biznesowe z wyzwaniami komunikacyjnymi do rozwiązania",
+        "title": "💪 Challenge",
         "config": {
           "ai_feedback_enabled": true,
           "ai_model": "Google Gemini",

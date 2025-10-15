@@ -1060,9 +1060,9 @@ def show_lessons_content():
                         tab_keys.append('ai_questions')
                         sub_tabs_data['ai_questions'] = practical_data['ai_questions']
                     
-                    # Dynamiczne Case Studies - AI generuje przypadki do rozwiązania
+                    # Challenge - AI generuje przypadki do rozwiązania
                     if 'generated_case_studies' in practical_data:
-                        available_tabs.append("🎲 Dynamiczne Case Studies")
+                        available_tabs.append("💪 Challenge")
                         tab_keys.append('generated_case_studies')
                         sub_tabs_data['generated_case_studies'] = practical_data['generated_case_studies']
                     
@@ -1645,117 +1645,50 @@ def show_lessons_content():
                                     # Obsługa dynamicznych case studies generowanych przez AI
                                     tab_data = sub_tabs_data[tab_key]
                                     
-                                    # Wyświetl tytuł i opis sekcji
+                                    # Wyświetl tytuł sekcji
                                     if 'title' in tab_data:
                                         st.markdown(f"### {tab_data['title']}")
-                                    if 'description' in tab_data:
-                                        st.info(tab_data['description'])
                                     
                                     # Obsługa ćwiczeń z generowanymi case studies
                                     if 'exercises' in tab_data:
                                         exercises = tab_data['exercises']
                                         
-                                        # Wyświetl konfigurację AI jeśli istnieje - USUNIĘTE (nie potrzebne)
-                                        
-                                        for exercise in exercises:
-                                            exercise_id = exercise.get('id', 'unknown')
-                                            exercise_title = exercise.get('title', 'Case Study')
+                                        # Pobierz pierwsze ćwiczenie (używamy go jako szablon)
+                                        if exercises:
+                                            exercise = exercises[0]
                                             exercise_type = exercise.get('type', 'ai_exercise')
-                                            difficulty = exercise.get('difficulty', 'medium')
                                             
-                                            with st.expander(f"**{exercise_title}**", expanded=True):
-                                                # Wyświetl opis ćwiczenia
-                                                if 'description' in exercise:
-                                                    st.markdown(exercise['description'])
-                                                
-                                                # Wyświetl szacowany czas
-                                                if 'estimated_time' in exercise:
-                                                    st.markdown(f"⏱️ **Szacowany czas:** {exercise['estimated_time']}")
-                                                
-                                                st.markdown("---")
-                                                
-                                                # Obsługa ćwiczenia AI z dynamicznym generowaniem case studies
-                                                if exercise_type == 'ai_exercise' and 'ai_config' in exercise:
-                                                    try:
-                                                        from utils.ai_exercises import display_ai_exercise_interface
-                                                        
-                                                        lesson_title = lesson.get("title", "")
-                                                        exercise_completed = display_ai_exercise_interface(exercise, lesson_title)
-                                                        
-                                                        # Jeśli ćwiczenie ukończone, zapisz w sesji
-                                                        if exercise_completed:
-                                                            completed_key = f"generated_case_{exercise_id}_{lesson_id}_completed"
-                                                            st.session_state[completed_key] = True
+                                            # Obsługa ćwiczenia AI z dynamicznym generowaniem case studies
+                                            if exercise_type == 'ai_exercise' and 'ai_config' in exercise:
+                                                try:
+                                                    from utils.ai_exercises import display_ai_exercise_interface
                                                     
-                                                    except ImportError:
-                                                        st.error("Moduł obsługi ćwiczeń AI nie jest dostępny.")
-                                                    except Exception as e:
-                                                        st.error(f"Błąd podczas ładowania dynamicznego case study: {str(e)}")
-                                                        # Fallback - podstawowy interfejs
-                                                        st.markdown("### 🎲 Dynamiczne Case Studies")
-                                                        st.info("Funkcjonalność dynamicznego generowania case studies będzie dostępna wkrótce.")
-                                                        
-                                                        # Wyświetl kryteria oceny jeśli dostępne
-                                                        if 'ai_config' in exercise:
-                                                            ai_config = exercise['ai_config']
-                                                            if 'feedback_criteria' in ai_config:
-                                                                st.markdown("**Kryteria oceny AI:**")
-                                                                criteria = ai_config['feedback_criteria']
-                                                                if isinstance(criteria, list):
-                                                                    for criterion in criteria:
-                                                                        st.markdown(f"• {criterion}")
-                                        
-                                        # Podsumowanie dynamicznych case studies
-                                        st.markdown("---")
-                                        st.markdown("### 📊 Postęp Dynamicznych Case Studies")
-                                        
-                                        completed_exercises = 0
-                                        total_exercises = len(exercises)
-                                        
-                                        # Sprawdź ile ćwiczeń zostało ukończonych
-                                        for exercise in exercises:
-                                            exercise_id = exercise.get('id', 'unknown')
-                                            completion_key = f"generated_case_{exercise_id}_{lesson_id}_completed"
-                                            if st.session_state.get(completion_key, False):
-                                                completed_exercises += 1
-                                        
-                                        # Wyświetl postęp
-                                        progress = completed_exercises / total_exercises if total_exercises > 0 else 0
-                                        st.progress(progress, text=f"Ukończone case studies: {completed_exercises}/{total_exercises}")
-                                        
-                                        col1, col2, col3 = st.columns(3)
-                                        with col1:
-                                            st.metric("Ukończone", f"{completed_exercises}/{total_exercises}")
-                                        with col2:
-                                            percentage = (completed_exercises / total_exercises * 100) if total_exercises > 0 else 0
-                                            st.metric("Postęp", f"{percentage:.0f}%")
-                                        with col3:
-                                            remaining = total_exercises - completed_exercises
-                                            st.metric("Pozostało", remaining)
-                                        
-                                        # Award XP za dynamiczne case studies
-                                        if completed_exercises == total_exercises and total_exercises > 0:
-                                            generated_case_xp_key = f"generated_case_studies_xp_{lesson_id}"
-                                            if not st.session_state.get(generated_case_xp_key, False):
-                                                case_studies_xp = step_xp_values['practical_exercises'] // 4  # 1/4 XP z practical_exercises
-                                                success, earned_xp = award_fragment_xp(lesson_id, 'generated_case_studies', case_studies_xp)
-                                                st.session_state[generated_case_xp_key] = True
-                                                if success and earned_xp > 0:
-                                                    st.balloons()
-                                                    st.success(f"🎉 Gratulacje! Ukończyłeś wszystkie dynamiczne case studies! Zdobyłeś {earned_xp} XP!")
-                                        
-                                        # Motywująca wiadomość
-                                        if completed_exercises > 0:
-                                            if completed_exercises == total_exercises:
-                                                st.success("🏆 Doskonale! Ukończyłeś wszystkie dynamiczne case studies. Twoje umiejętności rozwiązywania problemów komunikacyjnych są teraz na wysokim poziomie!")
-                                            else:
-                                                st.info(f"💪 Świetna robota! Ukończyłeś już {completed_exercises} z {total_exercises} case studies. Kontynuuj rozwój!")
-                                        else:
-                                            st.info("🎯 Zacznij od pierwszego case study, aby rozwijać swoje umiejętności rozwiązywania problemów komunikacyjnych!")
-                                        
-                                        # Przycisk resetowania ćwiczeń
-                                        from utils.ai_exercises import display_reset_all_button
-                                        display_reset_all_button(lesson_id, exercise_prefix="generated_case")
+                                                    lesson_title = lesson.get("title", "")
+                                                    exercise_completed = display_ai_exercise_interface(exercise, lesson_title)
+                                                    
+                                                    # Jeśli ćwiczenie ukończone, zapisz w sesji
+                                                    if exercise_completed:
+                                                        exercise_id = exercise.get('id', 'unknown')
+                                                        completed_key = f"generated_case_{exercise_id}_{lesson_id}_completed"
+                                                        st.session_state[completed_key] = True
+                                                
+                                                except ImportError:
+                                                    st.error("Moduł obsługi ćwiczeń AI nie jest dostępny.")
+                                                except Exception as e:
+                                                    st.error(f"Błąd podczas ładowania dynamicznego case study: {str(e)}")
+                                                    # Fallback - podstawowy interfejs
+                                                    st.markdown("### 💪 Challenge")
+                                                    st.info("Funkcjonalność generowania challenge będzie dostępna wkrótce.")
+                                                    
+                                                    # Wyświetl kryteria oceny jeśli dostępne
+                                                    if 'ai_config' in exercise:
+                                                        ai_config = exercise['ai_config']
+                                                        if 'feedback_criteria' in ai_config:
+                                                            st.markdown("**Kryteria oceny AI:**")
+                                                            criteria = ai_config['feedback_criteria']
+                                                            if isinstance(criteria, list):
+                                                                for criterion in criteria:
+                                                                    st.markdown(f"• {criterion}")
                                     else:
                                         st.warning("Brak dynamicznych case studies w tej sekcji.")
                                 
