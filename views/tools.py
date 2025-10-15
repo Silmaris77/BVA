@@ -11,9 +11,11 @@ from utils.layout import get_device_type, toggle_device_view
 from utils.scroll_utils import scroll_to_top
 import json
 import os
+import math
 from datetime import datetime
 from typing import Dict, List, Optional
 import io
+import plotly.graph_objects as go
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -165,7 +167,855 @@ def delete_user_profile(username: str, profile_index: int = None) -> bool:
         st.error(f"Błąd usuwania profilu: {e}")
         return False
 
+def show_autodiagnosis():
+    """Narzędzia autodiagnozy"""
+    st.markdown("### 🎯 Autodiagnoza")
+    st.markdown("Poznaj swój styl uczenia się i preferowane sposoby rozwoju")
+    
+    # Karta z testem Kolba
+    with st.container():
+        st.markdown("""
+        <div style='padding: 20px; border: 2px solid #9C27B0; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);'>
+            <h4>🔄 Test stylów uczenia się według Kolba</h4>
+            <p><strong>Odkryj swój preferowany styl uczenia się i maksymalizuj efektywność rozwoju</strong></p>
+            <ul style='margin: 10px 0; padding-left: 20px;'>
+                <li>🔍 12 pytań diagnostycznych</li>
+                <li>🎯 Identyfikacja dominującego stylu (Reflector, Theorist, Pragmatist, Activist)</li>
+                <li>💪 Analiza mocnych stron w uczeniu się</li>
+                <li>💡 Spersonalizowane wskazówki rozwojowe</li>
+                <li>🔄 Zrozumienie pełnego cyklu uczenia się Kolba</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if zen_button("🔄 Rozpocznij Test Kolba", key="kolb_test", width='stretch'):
+            st.session_state.active_tool = "kolb_test"
+    
+    # Wyświetl test jeśli jest aktywny
+    active_tool = st.session_state.get('active_tool')
+    if active_tool == "kolb_test":
+        st.markdown("---")
+        
+        # Przycisk resetowania
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if zen_button("❌ Zamknij test", key="close_kolb_test", width='stretch'):
+                st.session_state.active_tool = None
+                st.rerun()
+        
+        st.markdown("---")
+        show_kolb_test()
+
+def show_kolb_test():
+    """Wyświetla test stylów uczenia się według Kolba"""
+    st.markdown("### 🔄 Kolb Experiential Learning Profile (KELP)")
+    st.markdown("""
+    **Teoria Uczenia się przez Doświadczenie (ELT)** Davida Kolba z 1984 roku definiuje uczenie się jako 
+    dynamiczny proces, w którym wiedza jest tworzona poprzez transformację doświadczenia.
+    
+    #### Cykl Uczenia się Kolba składa się z czterech faz:
+    
+    1. **Konkretne Doświadczenie (CE)** → Zetknięcie się z nową sytuacją (Feeling)
+    2. **Refleksyjna Obserwacja (RO)** → Obserwacja i refleksja nad doświadczeniem (Watching)
+    3. **Abstrakcyjna Konceptualizacja (AC)** → Tworzenie teorii i uogólnień (Thinking)
+    4. **Aktywne Eksperymentowanie (AE)** → Testowanie koncepcji w praktyce (Doing)
+    
+    #### Wymiary biegunowe:
+    - **Oś Postrzegania**: Konkretne Przeżycie (CE) ↔ Abstrakcyjna Konceptualizacja (AC)
+    - **Oś Przetwarzania**: Refleksyjna Obserwacja (RO) ↔ Aktywne Eksperymentowanie (AE)
+    
+    💡 **Cel testu**: Zidentyfikować Twój preferowany styl uczenia się i ocenić elastyczność w przechodzeniu 
+    przez pełny cykl Kolba.
+    """)
+    
+    # Inicjalizacja state
+    if 'kolb_answers' not in st.session_state:
+        st.session_state.kolb_answers = {}
+    if 'kolb_completed' not in st.session_state:
+        st.session_state.kolb_completed = False
+    
+    # Pytania testowe - 12 pytań z 4 opcjami każde (odpowiadające CE, RO, AC, AE)
+    # Format zgodny z LSI: ranking wymuszony wybór
+    questions = [
+        {
+            "id": 1,
+            "question": "Kiedy uczę się czegoś nowego, najlepiej mi się pracuje gdy:",
+            "options": {
+                "CE": "Angażuję się osobiście i uczę się przez doświadczenie",
+                "RO": "Mam czas na obserwację i refleksję",
+                "AC": "Mogę analizować i tworzyć logiczne teorie",
+                "AE": "Mogę aktywnie testować i eksperymentować"
+            }
+        },
+        {
+            "id": 2,
+            "question": "W procesie uczenia się najbardziej cenię:",
+            "options": {
+                "CE": "Konkretne przykłady i osobiste doświadczenia",
+                "RO": "Możliwość przemyślenia i obserwacji",
+                "AC": "Abstrakcyjne koncepcje i modele teoretyczne",
+                "AE": "Praktyczne zastosowania i działanie"
+            }
+        },
+        {
+            "id": 3,
+            "question": "Podczas rozwiązywania problemów:",
+            "options": {
+                "CE": "Polegam na intuicji i uczuciach",
+                "RO": "Słucham różnych perspektyw i zbieramy informacje",
+                "AC": "Analizuję logicznie i systematycznie",
+                "AE": "Testuję różne rozwiązania w praktyce"
+            }
+        },
+        {
+            "id": 4,
+            "question": "W zespole najlepiej funkcjonuję jako:",
+            "options": {
+                "CE": "Osoba, która wnosi osobiste zaangażowanie i empatię",
+                "RO": "Obserwator, który dostrzega różne perspektywy",
+                "AC": "Analityk, który tworzy strategie i plany",
+                "AE": "Praktyk, który wdraża i koordynuje działania"
+            }
+        },
+        {
+            "id": 5,
+            "question": "Podczas szkolenia/warsztatu najbardziej odpowiada mi:",
+            "options": {
+                "CE": "Osobiste zaangażowanie i doświadczenie sytuacji",
+                "RO": "Czas na dyskusję i przemyślenie tematu",
+                "AC": "Solidne podstawy teoretyczne i modele",
+                "AE": "Praktyczne ćwiczenia i testowanie umiejętności"
+            }
+        },
+        {
+            "id": 6,
+            "question": "Podejmuję decyzje głównie na podstawie:",
+            "options": {
+                "CE": "Osobistych wartości i bezpośredniego doświadczenia",
+                "RO": "Obserwacji sytuacji i przemyśleń",
+                "AC": "Logicznej analizy i racjonalnych przesłanek",
+                "AE": "Praktycznych testów i sprawdzania w działaniu"
+            }
+        },
+        {
+            "id": 7,
+            "question": "W sytuacji nowej/stresowej:",
+            "options": {
+                "CE": "Kieruję się emocjami i bezpośrednim odczuciem",
+                "RO": "Wycofuję się i najpierw obserwuję",
+                "AC": "Szukam racjonalnych wyjaśnień i teorii",
+                "AE": "Działam szybko i sprawdzam co zadziała"
+            }
+        },
+        {
+            "id": 8,
+            "question": "Moja największa mocna strona to:",
+            "options": {
+                "CE": "Empatia i wrażliwość na ludzi",
+                "RO": "Umiejętność słuchania i refleksji",
+                "AC": "Zdolności analityczne i logiczne myślenie",
+                "AE": "Praktyczność i skuteczność działania"
+            }
+        },
+        {
+            "id": 9,
+            "question": "Przy nauce nowego narzędzia/programu:",
+            "options": {
+                "CE": "Eksperymentuję swobodnie i uczę się przez próby",
+                "RO": "Obserwuję innych i czytam opinie",
+                "AC": "Czytam dokumentację i poznaję strukturę",
+                "AE": "Od razu zaczynam używać i testuję funkcje"
+            }
+        },
+        {
+            "id": 10,
+            "question": "W projektach zawodowych najbardziej lubię:",
+            "options": {
+                "CE": "Pracę z ludźmi i budowanie relacji",
+                "RO": "Analizowanie danych i integrację różnych perspektyw",
+                "AC": "Tworzenie strategii i systemów",
+                "AE": "Realizację konkretnych zadań i wdrażanie"
+            }
+        },
+        {
+            "id": 11,
+            "question": "Najlepiej pamiętam, gdy:",
+            "options": {
+                "CE": "Czuję emocjonalne połączenie z tematem",
+                "RO": "Mam czas na obserwację i rozważanie",
+                "AC": "Rozumiem logikę i teorię stojącą za tym",
+                "AE": "Praktykuję i wielokrotnie testuję"
+            }
+        },
+        {
+            "id": 12,
+            "question": "Mój naturalny sposób działania to:",
+            "options": {
+                "CE": "Spontaniczne reagowanie na sytuacje",
+                "RO": "Cierpliwe obserwowanie przed działaniem",
+                "AC": "Systematyczne planowanie i analizowanie",
+                "AE": "Szybkie podejmowanie decyzji i działanie"
+            }
+        }
+    ]
+    
+    # Wyświetl pytania
+    st.markdown("---")
+    st.markdown("#### Odpowiedz na poniższe pytania, wybierając opcję najbardziej do Ciebie pasującą:")
+    
+    for q in questions:
+        st.markdown(f"**{q['id']}. {q['question']}**")
+        answer = st.radio(
+            f"Pytanie {q['id']}",
+            options=list(q['options'].keys()),
+            format_func=lambda x, opts=q['options']: opts[x],
+            key=f"kolb_q{q['id']}",
+            label_visibility="collapsed"
+        )
+        st.session_state.kolb_answers[q['id']] = answer
+        st.markdown("")
+    
+    # Przycisk do obliczenia wyniku
+    if st.button("📊 Oblicz mój styl uczenia się", type="primary", use_container_width=True):
+        if len(st.session_state.kolb_answers) == len(questions):
+            calculate_kolb_results()
+            st.session_state.kolb_completed = True
+            st.rerun()
+        else:
+            st.warning("⚠️ Proszę odpowiedzieć na wszystkie pytania")
+    
+    # Wyświetl wyniki jeśli test został ukończony
+    if st.session_state.kolb_completed:
+        display_kolb_results()
+
+def generate_kolb_ai_tips(learning_style: str, profession: str):
+    """Generuje spersonalizowane wskazówki AI na podstawie stylu uczenia się i zawodu"""
+    try:
+        import google.generativeai as genai
+        
+        # Pobierz klucz API z secrets
+        api_key = st.secrets.get("GOOGLE_API_KEY")
+        
+        if not api_key:
+            st.error("❌ Klucz API Google Gemini nie jest skonfigurowany. Skontaktuj się z administratorem.")
+            return
+        
+        # Konfiguruj Gemini
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(
+            st.secrets.get("AI_SETTINGS", {}).get("gemini_model", "gemini-2.5-flash")
+        )
+        
+        # Mapowanie stylów na opisy (zgodnie z naukową dokumentacją ELT)
+        style_descriptions = {
+            "Diverging (Wyobraźnia/Imagination)": "osoba ucząca się przez konkretne doświadczenia i refleksyjną obserwację, postrzegająca sytuacje z wielu perspektyw, ceniąca wyobraźnię i emocjonalne zaangażowanie",
+            "Assimilating (Teoria/Thinking)": "osoba ucząca się przez abstrakcyjną konceptualizację i refleksyjną obserwację, ceniąca logiczne modele i systematyczne podejście teoretyczne",
+            "Converging (Decyzja/Decision)": "osoba ucząca się przez abstrakcyjną konceptualizację i aktywne eksperymentowanie, skupiona na praktycznym zastosowaniu teorii i rozwiązywaniu problemów",
+            "Accommodating (Działanie/Action)": "osoba ucząca się przez konkretne doświadczenia i aktywne eksperymentowanie, ceniąca intuicję, elastyczność i praktyczne działanie"
+        }
+        
+        prompt = f"""Jesteś ekspertem od rozwoju zawodowego i stylów uczenia się według teorii Experiential Learning Theory (ELT) Davida Kolba.
+
+Użytkownik to {profession}, którego dominującym stylem uczenia się jest: **{learning_style}**
+({style_descriptions.get(learning_style, '')})
+
+Wygeneruj 5-7 **bardzo konkretnych i praktycznych wskazówek**, jak ta osoba może wykorzystać swój styl uczenia się w swojej pracy jako {profession}.
+
+Wskazówki powinny być:
+- Konkretne i możliwe do wdrożenia od zaraz
+- Bezpośrednio związane z codzienną pracą {profession}a
+- Dostosowane do stylu uczenia się {learning_style}
+- Napisane w sposób motywujący i inspirujący
+- W języku polskim
+- Uwzględniające mocne strony tego stylu (według ELT) oraz sposoby radzenia sobie ze słabościami
+
+Format odpowiedzi (HTML):
+<h4 style='color: white; margin-bottom: 15px;'>🎯 Praktyczne wskazówki dla Ciebie:</h4>
+<ul style='line-height: 1.8; font-size: 1.05em;'>
+<li><strong>Wskazówka 1:</strong> opis</li>
+<li><strong>Wskazówka 2:</strong> opis</li>
+...
+</ul>
+<h4 style='color: white; margin: 20px 0 15px 0;'>💡 Przykład zastosowania:</h4>
+<p style='line-height: 1.6; font-size: 1.05em; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;'>
+[Konkretny, praktyczny przykład sytuacji z pracy {profession}a i jak zastosować styl {learning_style} wykorzystując pełny cykl uczenia się Kolba: CE → RO → AC → AE]
+</p>
+"""
+        
+        response = model.generate_content(prompt)
+        
+        if response and response.text:
+            ai_tips = response.text
+            st.session_state.kolb_ai_tips = ai_tips
+            st.success("✅ Wskazówki zostały wygenerowane!")
+        else:
+            st.error("❌ Nie otrzymano odpowiedzi od AI")
+            st.session_state.kolb_ai_tips = None
+        
+    except Exception as e:
+        st.error(f"❌ Błąd generowania wskazówek: {str(e)}")
+        import traceback
+        st.error(f"Szczegóły: {traceback.format_exc()}")
+        st.session_state.kolb_ai_tips = None
+
+def calculate_kolb_results():
+    """Oblicza wyniki testu Kolba zgodnie z metodologią LSI"""
+    answers = st.session_state.kolb_answers
+    
+    # Liczenie punktów dla każdej zdolności uczenia się
+    # CE = Konkretne Doświadczenie (Concrete Experience - Feeling)
+    # RO = Refleksyjna Obserwacja (Reflective Observation - Watching)
+    # AC = Abstrakcyjna Konceptualizacja (Abstract Conceptualization - Thinking)
+    # AE = Aktywne Eksperymentowanie (Active Experimentation - Doing)
+    
+    scores = {"CE": 0, "RO": 0, "AC": 0, "AE": 0}
+    
+    for answer in answers.values():
+        scores[answer] += 1
+    
+    # Obliczanie wymiarów różnicowych (zgodnie z metodologią LSI)
+    # Wymiar Postrzegania (Oś Abstrakcja-Konkret)
+    ac_ce = scores["AC"] - scores["CE"]  # Dodatni = preferencja AC, Ujemny = preferencja CE
+    
+    # Wymiar Przetwarzania (Oś Aktywność-Refleksja)
+    ae_ro = scores["AE"] - scores["RO"]  # Dodatni = preferencja AE, Ujemny = preferencja RO
+    
+    # Określenie stylu na podstawie wymiarów (siatka 2x2)
+    if ac_ce > 0 and ae_ro > 0:
+        dominant_style = "Converging (Konwergent)"
+        quadrant = "AC/AE"
+    elif ac_ce > 0 and ae_ro <= 0:
+        dominant_style = "Assimilating (Asymilator)"
+        quadrant = "AC/RO"
+    elif ac_ce <= 0 and ae_ro > 0:
+        dominant_style = "Accommodating (Akomodator)"
+        quadrant = "CE/AE"
+    else:  # ac_ce <= 0 and ae_ro <= 0
+        dominant_style = "Diverging (Dywergent)"
+        quadrant = "CE/RO"
+    
+    # Obliczenie elastyczności uczenia się (odległość od centrum siatki)
+    # Im bliżej centrum (0,0), tym większa elastyczność
+    distance_from_center = math.sqrt(ac_ce**2 + ae_ro**2)
+    max_distance = math.sqrt(12**2 + 12**2)  # Maksymalna odległość przy 12 pytaniach
+    flexibility_score = 100 - (distance_from_center / max_distance * 100)
+    
+    # Zapisz wyniki
+    st.session_state.kolb_results = scores
+    st.session_state.kolb_dimensions = {
+        "AC-CE": ac_ce,
+        "AE-RO": ae_ro
+    }
+    st.session_state.kolb_dominant = dominant_style
+    st.session_state.kolb_quadrant = quadrant
+    st.session_state.kolb_flexibility = flexibility_score
+
+def display_kolb_results():
+    """Wyświetla wyniki testu Kolba zgodnie z metodologią ELT"""
+    st.markdown("---")
+    st.markdown("## 🎯 Twoje wyniki - Kolb Experiential Learning Profile")
+    
+    results = st.session_state.kolb_results
+    dimensions = st.session_state.kolb_dimensions
+    dominant = st.session_state.kolb_dominant
+    quadrant = st.session_state.kolb_quadrant
+    flexibility = st.session_state.kolb_flexibility
+    
+    # Wyświetl wyniki dla czterech zdolności uczenia się
+    st.markdown("### 📊 Twoje zdolności uczenia się")
+    cols = st.columns(4)
+    
+    ability_info = {
+        "CE": {"name": "Konkretne Doświadczenie", "emoji": "❤️", "color": "#E74C3C", "desc": "Feeling"},
+        "RO": {"name": "Refleksyjna Obserwacja", "emoji": "👁️", "color": "#4A90E2", "desc": "Watching"},
+        "AC": {"name": "Abstrakcyjna Konceptualizacja", "emoji": "🧠", "color": "#9B59B6", "desc": "Thinking"},
+        "AE": {"name": "Aktywne Eksperymentowanie", "emoji": "⚙️", "color": "#2ECC71", "desc": "Doing"}
+    }
+    
+    for idx, (ability, score) in enumerate(results.items()):
+        with cols[idx]:
+            info = ability_info[ability]
+            st.markdown(f"""
+            <div style='padding: 15px; background: #f8f9fa; border-radius: 12px; text-align: center; 
+                        border-left: 4px solid {info['color']};'>
+                <div style='font-size: 2em; margin-bottom: 5px;'>{info['emoji']}</div>
+                <h5 style='color: {info['color']}; margin: 5px 0; font-size: 0.9em;'>{info['name']}</h5>
+                <p style='color: #666; font-size: 0.8em; margin: 3px 0;'>({info['desc']})</p>
+                <div style='font-size: 1.8em; font-weight: bold; color: {info['color']};'>{score}/12</div>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Wizualizacja 1: Wykres Słupkowy dla Zdolności Podstawowych
+    st.markdown("---")
+    st.markdown("### 📊 Wykres Zdolności Podstawowych (Bar Chart)")
+    st.markdown("*Twoje preferencje do poszczególnych etapów Cyklu Kolba*")
+    
+    # Przygotuj dane do wykresu słupkowego
+    abilities_order = ['CE', 'RO', 'AC', 'AE']
+    ability_labels = {
+        'CE': 'Konkretne Doświadczenie<br>(Feeling)',
+        'RO': 'Refleksyjna Obserwacja<br>(Watching)',
+        'AC': 'Abstrakcyjna Konceptualizacja<br>(Thinking)',
+        'AE': 'Aktywne Eksperymentowanie<br>(Doing)'
+    }
+    ability_colors = {
+        'CE': '#E74C3C',  # Czerwony
+        'RO': '#4A90E2',  # Niebieski
+        'AC': '#9B59B6',  # Fioletowy
+        'AE': '#2ECC71'   # Zielony
+    }
+    
+    scores = [results[a] for a in abilities_order]
+    labels = [ability_labels[a] for a in abilities_order]
+    colors = [ability_colors[a] for a in abilities_order]
+    
+    fig_bar = go.Figure(data=[
+        go.Bar(
+            x=labels,
+            y=scores,
+            marker=dict(
+                color=colors,
+                line=dict(color='rgba(0,0,0,0.3)', width=2)
+            ),
+            text=scores,
+            textposition='outside',
+            textfont=dict(size=16, color='#333', family='Arial Black'),
+            hovertemplate='<b>%{x}</b><br>Wynik: %{y}/12<extra></extra>'
+        )
+    ])
+    
+    fig_bar.update_layout(
+        title=dict(
+            text='Zdolności Podstawowe w Cyklu Kolba',
+            font=dict(size=18, color='#333', family='Arial')
+        ),
+        yaxis=dict(
+            title='Wynik (punkty)',
+            range=[0, 13],
+            gridcolor='rgba(0,0,0,0.1)',
+            tickfont=dict(size=12)
+        ),
+        xaxis=dict(
+            tickfont=dict(size=11)
+        ),
+        plot_bgcolor='rgba(248,249,250,0.8)',
+        paper_bgcolor='white',
+        height=400,
+        margin=dict(t=60, b=80, l=60, r=40),
+        showlegend=False
+    )
+    
+    st.plotly_chart(fig_bar, use_container_width=True)
+    
+    # Interpretacja wykresu słupkowego
+    strongest = max(results.items(), key=lambda x: x[1])
+    weakest = min(results.items(), key=lambda x: x[1])
+    
+    col_int1, col_int2 = st.columns(2)
+    with col_int1:
+        st.success(f"**💪 Twoja najsilniejsza zdolność:** {ability_info[strongest[0]]['name']} ({strongest[1]}/12)")
+    with col_int2:
+        st.warning(f"**🎯 Obszar do rozwoju:** {ability_info[weakest[0]]['name']} ({weakest[1]}/12)")
+    
+    # Wizualizacja 2: Siatka Stylów Uczenia się (Learning Style Grid)
+    st.markdown("---")
+    st.markdown("### 🎯 Siatka Stylów Uczenia się (Learning Style Grid)")
+    st.markdown("*Twoja pozycja w matrycy stylów ELT - im bliżej środka, tym większa elastyczność*")
+    
+    # Pobierz współrzędne
+    x_coord = dimensions['AE-RO']  # Oś pozioma (Przetwarzanie)
+    y_coord = dimensions['AC-CE']  # Oś pionowa (Postrzeganie)
+    
+    # Utwórz wykres siatki
+    fig_grid = go.Figure()
+    
+    # Dodaj tło ćwiartek z nazwami stylów
+    quadrant_info = {
+        'Diverging': {'x': [-12, 0], 'y': [-12, 0], 'color': 'rgba(231, 76, 60, 0.15)', 'label_x': -6, 'label_y': -6},
+        'Assimilating': {'x': [-12, 0], 'y': [0, 12], 'color': 'rgba(155, 89, 182, 0.15)', 'label_x': -6, 'label_y': 6},
+        'Converging': {'x': [0, 12], 'y': [0, 12], 'color': 'rgba(52, 152, 219, 0.15)', 'label_x': 6, 'label_y': 6},
+        'Accommodating': {'x': [0, 12], 'y': [-12, 0], 'color': 'rgba(46, 204, 113, 0.15)', 'label_x': 6, 'label_y': -6}
+    }
+    
+    # Rysuj prostokąty ćwiartek
+    for style_name, info in quadrant_info.items():
+        fig_grid.add_shape(
+            type="rect",
+            x0=info['x'][0], x1=info['x'][1],
+            y0=info['y'][0], y1=info['y'][1],
+            fillcolor=info['color'],
+            line=dict(width=0)
+        )
+        
+        # Dodaj etykiety stylów
+        fig_grid.add_annotation(
+            x=info['label_x'], y=info['label_y'],
+            text=f"<b>{style_name}</b>",
+            showarrow=False,
+            font=dict(size=14, color='rgba(0,0,0,0.5)', family='Arial Black'),
+            xanchor='center',
+            yanchor='middle'
+        )
+    
+    # Strefa Zrównoważonego Uczenia się (centralna)
+    balanced_zone_radius = 4
+    theta = [i for i in range(0, 361, 10)]
+    balanced_x = [balanced_zone_radius * math.cos(math.radians(t)) for t in theta]
+    balanced_y = [balanced_zone_radius * math.sin(math.radians(t)) for t in theta]
+    
+    fig_grid.add_trace(go.Scatter(
+        x=balanced_x, y=balanced_y,
+        fill='toself',
+        fillcolor='rgba(255, 193, 7, 0.2)',
+        line=dict(color='rgba(255, 193, 7, 0.6)', width=2, dash='dash'),
+        name='Strefa Zrównoważonego<br>Uczenia się',
+        hoverinfo='name',
+        showlegend=True
+    ))
+    
+    # Osie
+    fig_grid.add_shape(type="line", x0=-12, x1=12, y0=0, y1=0, 
+                       line=dict(color="rgba(0,0,0,0.4)", width=2))
+    fig_grid.add_shape(type="line", x0=0, x1=0, y0=-12, y1=12, 
+                       line=dict(color="rgba(0,0,0,0.4)", width=2))
+    
+    # Punkt użytkownika
+    fig_grid.add_trace(go.Scatter(
+        x=[x_coord], y=[y_coord],
+        mode='markers+text',
+        marker=dict(
+            size=20,
+            color='#FF5722',
+            line=dict(color='white', width=3),
+            symbol='circle'
+        ),
+        text=['TWÓJ<br>WYNIK'],
+        textposition='top center',
+        textfont=dict(size=12, color='#FF5722', family='Arial Black'),
+        name='Twoja pozycja',
+        hovertemplate=f'<b>Twoja pozycja</b><br>AE-RO: {x_coord:+d}<br>AC-CE: {y_coord:+d}<br>Elastyczność: {flexibility:.0f}%<extra></extra>'
+    ))
+    
+    # Etykiety osi
+    fig_grid.add_annotation(x=12.5, y=0, text="<b>AE</b><br>(Doing)", showarrow=False, 
+                           font=dict(size=11, color='#2ECC71'), xanchor='left')
+    fig_grid.add_annotation(x=-12.5, y=0, text="<b>RO</b><br>(Watching)", showarrow=False, 
+                           font=dict(size=11, color='#4A90E2'), xanchor='right')
+    fig_grid.add_annotation(x=0, y=12.5, text="<b>AC</b><br>(Thinking)", showarrow=False, 
+                           font=dict(size=11, color='#9B59B6'), yanchor='bottom')
+    fig_grid.add_annotation(x=0, y=-12.5, text="<b>CE</b><br>(Feeling)", showarrow=False, 
+                           font=dict(size=11, color='#E74C3C'), yanchor='top')
+    
+    fig_grid.update_layout(
+        title=dict(
+            text=f'Twój Styl: {dominant} | Elastyczność: {flexibility:.0f}%',
+            font=dict(size=18, color='#333', family='Arial Black'),
+            x=0.5,
+            xanchor='center'
+        ),
+        xaxis=dict(
+            title='<b>Oś Przetwarzania (AE-RO)</b>',
+            range=[-14, 14],
+            zeroline=False,
+            gridcolor='rgba(0,0,0,0.1)',
+            tickfont=dict(size=10)
+        ),
+        yaxis=dict(
+            title='<b>Oś Postrzegania (AC-CE)</b>',
+            range=[-14, 14],
+            zeroline=False,
+            gridcolor='rgba(0,0,0,0.1)',
+            tickfont=dict(size=10),
+            scaleanchor='x',
+            scaleratio=1
+        ),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        height=600,
+        margin=dict(t=80, b=80, l=80, r=80),
+        showlegend=True,
+        legend=dict(
+            x=1.02,
+            y=1,
+            xanchor='left',
+            yanchor='top',
+            bgcolor='rgba(255,255,255,0.9)',
+            bordercolor='rgba(0,0,0,0.2)',
+            borderwidth=1
+        )
+    )
+    
+    st.plotly_chart(fig_grid, use_container_width=True)
+    
+    # Interpretacja siatki
+    distance_from_center = math.sqrt(x_coord**2 + y_coord**2)
+    
+    if distance_from_center <= 4:
+        interpretation_color = "success"
+        interpretation = f"🎯 **Gratulacje!** Twój wynik znajduje się w **Strefie Zrównoważonego Uczenia się**. Oznacza to wysoką elastyczność i zdolność do wykorzystania wszystkich faz cyklu Kolba w zależności od sytuacji."
+    elif distance_from_center <= 8:
+        interpretation_color = "info"
+        interpretation = f"� **Umiarkowana preferencja** - Twój styl jest wyraźnie określony ({dominant}), ale zachowujesz dobrą elastyczność. Możesz efektywnie adaptować się do różnych sytuacji uczenia się."
+    else:
+        interpretation_color = "warning"
+        interpretation = f"⚠️ **Silna preferencja** - Twój wynik znajduje się daleko od centrum siatki, co wskazuje na wyraźną tendencję do stylu **{dominant}**. Rozważ celowe rozwijanie słabszych zdolności, aby zwiększyć elastyczność uczenia się."
+    
+    if interpretation_color == "success":
+        st.success(interpretation)
+    elif interpretation_color == "info":
+        st.info(interpretation)
+    else:
+        st.warning(interpretation)
+    
+    # Wymiary liczbowe
+    st.markdown("---")
+    st.markdown("### 📐 Wymiary Liczbowe (LSI Dimensions)")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown(f"""
+        <div style='padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    border-radius: 12px; text-align: center; color: white;'>
+            <h4 style='color: white; margin-bottom: 10px;'>Oś Postrzegania</h4>
+            <p style='font-size: 0.9em; margin: 5px 0;'>AC-CE</p>
+            <div style='font-size: 2em; font-weight: bold; margin: 10px 0;'>{dimensions['AC-CE']:+d}</div>
+            <p style='font-size: 0.85em;'>{'Preferencja: Myślenie (AC)' if dimensions['AC-CE'] > 0 else 'Preferencja: Czucie (CE)'}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown(f"""
+        <div style='padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+                    border-radius: 12px; text-align: center; color: white;'>
+            <h4 style='color: white; margin-bottom: 10px;'>Oś Przetwarzania</h4>
+            <p style='font-size: 0.9em; margin: 5px 0;'>AE-RO</p>
+            <div style='font-size: 2em; font-weight: bold; margin: 10px 0;'>{dimensions['AE-RO']:+d}</div>
+            <p style='font-size: 0.85em;'>{'Preferencja: Działanie (AE)' if dimensions['AE-RO'] > 0 else 'Preferencja: Obserwacja (RO)'}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        flex_color = "#2ECC71" if flexibility > 60 else "#F39C12" if flexibility > 30 else "#E74C3C"
+        st.markdown(f"""
+        <div style='padding: 20px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); 
+                    border-radius: 12px; text-align: center; color: white;'>
+            <h4 style='color: white; margin-bottom: 10px;'>Elastyczność</h4>
+            <p style='font-size: 0.9em; margin: 5px 0;'>Learning Flexibility</p>
+            <div style='font-size: 2em; font-weight: bold; margin: 10px 0;'>{flexibility:.0f}%</div>
+            <p style='font-size: 0.85em;'>{'Wysoka - Zrównoważony profil' if flexibility > 60 else 'Średnia - Umiarkowana' if flexibility > 30 else 'Niska - Wyraźna preferencja'}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Wyświetl dominujący styl
+    st.markdown("---")
+    st.markdown(f"### ⭐ Twój dominujący styl: **{dominant}**")
+    st.markdown(f"**Ćwiartka:** {quadrant}")
+    
+    # Opisy stylów zgodnie z dokumentacją naukową
+    style_descriptions = {
+        "Diverging (Dywergent)": {
+            "quadrant": "CE/RO",
+            "description": "Łączysz Konkretne Doświadczenie i Refleksyjną Obserwację. Jesteś wrażliwy i potrafisz spojrzeć na sytuacje z wielu różnych perspektyw. Twoja główna mocna strona to wyobraźnia i zdolność do generowania wielu pomysłów.",
+            "strengths": [
+                "Wyobraźnia i kreatywność",
+                "Zdolność do widzenia sytuacji z różnych perspektyw",
+                "Empatia i wrażliwość",
+                "Doskonałość w burzy mózgów i generowaniu pomysłów",
+                "Umiejętność integracji różnych obserwacji"
+            ],
+            "weaknesses": [
+                "Trudności z podejmowaniem szybkich decyzji",
+                "Problemy z przekładaniem teorii na działanie",
+                "Tendencja do nadmiernego analizowania"
+            ],
+            "careers": "Doradztwo, sztuka, HR, psychologia, dziennikarstwo",
+            "learning_methods": "Studia przypadków, dyskusje grupowe, feedback, introspekcja, obserwacja działania innych"
+        },
+        "Assimilating (Asymilator)": {
+            "quadrant": "AC/RO",
+            "description": "Łączysz Abstrakcyjną Konceptualizację i Refleksyjną Obserwację. Preferujesz zwięzłe, logiczne i systematyczne podejście. Wykazujesz dużą zdolność do tworzenia modeli teoretycznych i scalania licznych obserwacji w zintegrowane wyjaśnienia.",
+            "strengths": [
+                "Tworzenie modeli teoretycznych",
+                "Logiczne i systematyczne myślenie",
+                "Precyzja i spójność teorii",
+                "Zdolność do scalania wielu obserwacji",
+                "Planowanie strategiczne"
+            ],
+            "weaknesses": [
+                "Mniejsze zainteresowanie problemami praktycznymi",
+                "Trudności w pracy z ludźmi",
+                "Preferencja teorii nad zastosowaniem"
+            ],
+            "careers": "Nauka, informatyka, planowanie strategiczne, badania, matematyka",
+            "learning_methods": "Wykłady teoretyczne, modele i schematy, analiza koncepcji, dociekliwe pytania, prace nad systemami"
+        },
+        "Converging (Konwergent)": {
+            "quadrant": "AC/AE",
+            "description": "Łączysz Abstrakcyjną Konceptualizację i Aktywne Eksperymentowanie. Doskonale radzisz sobie z praktycznym zastosowaniem teorii do rozwiązywania konkretnych problemów. Skupiasz się na zadaniach i rzeczach, a nie na kwestiach międzyludzkich.",
+            "strengths": [
+                "Praktyczne zastosowanie teorii",
+                "Efektywność i sprawność działania",
+                "Zdolność do podejmowania decyzji",
+                "Umiejętności techniczne",
+                "Rozwiązywanie konkretnych problemów"
+            ],
+            "weaknesses": [
+                "Mniejsze zainteresowanie relacjami międzyludzkimi",
+                "Skupienie na zadaniach kosztem ludzi",
+                "Preferencja dla jednoznacznych rozwiązań"
+            ],
+            "careers": "Inżynieria, technologia, medycyna, ekonomia, zawody techniczne",
+            "learning_methods": "Ćwiczenia praktyczne, wdrożenia, testowanie umiejętności, konkretne przykłady zawodowe, zadania aplikacyjne"
+        },
+        "Accommodating (Akomodator)": {
+            "quadrant": "CE/AE",
+            "description": "Łączysz Konkretne Doświadczenie i Aktywne Eksperymentowanie. To styl 'hands-on', który polega na intuicji. Jesteś elastyczny, zdolny do wprowadzania planów w życie, chętnie eksperymentujesz i adaptujesz się do nowych warunków.",
+            "strengths": [
+                "Elastyczność i adaptacja",
+                "Podejmowanie ryzyka",
+                "Szybka reakcja na zmiany",
+                "Osobiste zaangażowanie",
+                "Umiejętność wprowadzania planów w życie"
+            ],
+            "weaknesses": [
+                "Tendencja do działania bez planu",
+                "Niecierpliwość wobec teorii",
+                "Ryzyko podejmowania pochopnych decyzji"
+            ],
+            "careers": "Zarządzanie operacyjne, sprzedaż, marketing, przedsiębiorczość",
+            "learning_methods": "Gry, symulacje, różnorodne ćwiczenia, odgrywanie ról, zadania niestandardowe wymagające ryzyka"
+        }
+    }
+    
+    desc = style_descriptions[dominant]
+    
+    st.markdown(f"**{desc['description']}**")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("#### 💪 Twoje mocne strony:")
+        for strength in desc['strengths']:
+            st.markdown(f"✅ {strength}")
+        
+        st.markdown("#### 🎯 Typowe zawody:")
+        st.markdown(f"💼 {desc['careers']}")
+    
+    with col2:
+        st.markdown("#### ⚠️ Obszary do rozwoju:")
+        for weakness in desc['weaknesses']:
+            st.markdown(f"� {weakness}")
+        
+        st.markdown("#### 📚 Rekomendowane metody szkoleniowe:")
+        st.markdown(f"🎓 {desc['learning_methods']}")
+    
+    # Dodatkowe informacje o cyklu Kolba i elastyczności
+    st.markdown("---")
+    st.markdown("### 🔄 Strategia rozwoju elastyczności uczenia się")
+    
+    # Identyfikacja słabych zdolności
+    weak_abilities = [ability for ability, score in results.items() if score < 4]
+    strong_abilities = [ability for ability, score in results.items() if score > 8]
+    
+    if weak_abilities:
+        st.markdown("#### 🎯 Zdolności do wzmocnienia:")
+        st.info(f"""
+        Twoje słabsze zdolności to: **{', '.join([ability_info[a]['name'] for a in weak_abilities])}**
+        
+        💡 **Zalecenia rozwojowe**: Celowo angażuj się w sytuacje, które wymagają używania tych zdolności. 
+        Na przykład: {' '.join([f"• Dla {ability_info[a]['name']} ({a}): ćwicz {ability_info[a]['desc'].lower()}" for a in weak_abilities])}
+        """)
+    
+    st.markdown("""
+    ### 📊 Pełny Cykl Uczenia się Kolba (ELT Cycle)
+    
+    Najbardziej efektywne uczenie się wykorzystuje **wszystkie cztery fazy** w cyklu:
+    
+    1. **Konkretne Doświadczenie (CE)** → Zetknięcie się z nową sytuacją (Feeling)
+    2. **Refleksyjna Obserwacja (RO)** → Obserwacja i refleksja (Watching)
+    3. **Abstrakcyjna Konceptualizacja (AC)** → Tworzenie teorii (Thinking)
+    4. **Aktywne Eksperymentowanie (AE)** → Testowanie w praktyce (Doing)
+    
+    💡 **Kluczowa wskazówka**: Twój wynik elastyczności ({flexibility:.0f}%) pokazuje, jak dobrze potrafisz przełączać się 
+    między stylami. {"Im bliżej centrum siatki, tym większa zdolność adaptacji do różnych sytuacji uczenia się." if flexibility > 50 else "Rozwijaj słabsze zdolności, aby zwiększyć elastyczność i efektywność uczenia się w różnych kontekstach."}
+    """)
+    
+    # Sekcja AI - Praktyczne wskazówki dla zawodu
+    st.markdown("---")
+    st.markdown("### 🤖 AI: Wskazówki praktyczne dla Twojego zawodu")
+    st.markdown("Wybierz swój zawód, aby otrzymać spersonalizowane wskazówki, jak wykorzystać swój styl uczenia się w praktyce:")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("👨‍🏫 Trener", use_container_width=True, type="secondary", key="prof_trainer"):
+            st.session_state.kolb_profession = "Trener"
+            st.session_state.kolb_ai_generated = False
+            st.rerun()
+    
+    with col2:
+        if st.button("👔 Menedżer", use_container_width=True, type="secondary", key="prof_manager"):
+            st.session_state.kolb_profession = "Menedżer"
+            st.session_state.kolb_ai_generated = False
+            st.rerun()
+    
+    with col3:
+        if st.button("💼 Sprzedawca", use_container_width=True, type="secondary", key="prof_sales"):
+            st.session_state.kolb_profession = "Sprzedawca"
+            st.session_state.kolb_ai_generated = False
+            st.rerun()
+    
+    # Wyświetl wybrany zawód i wygeneruj wskazówki
+    if 'kolb_profession' in st.session_state and st.session_state.kolb_profession:
+        st.info(f"✅ Wybrany zawód: **{st.session_state.kolb_profession}**")
+        
+        # Wyświetl wygenerowane wskazówki lub przycisk do generowania
+        if st.session_state.get('kolb_ai_generated') and 'kolb_ai_tips' in st.session_state and st.session_state.kolb_ai_tips:
+            st.markdown("---")
+            st.markdown(f"### 💡 Spersonalizowane wskazówki dla {st.session_state.kolb_profession}a")
+            
+            st.markdown(f"""
+            <div style='padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                        border-radius: 15px; color: white; margin: 20px 0;'>
+                {st.session_state.kolb_ai_tips}
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            if st.button("✨ Wygeneruj wskazówki AI", type="primary", use_container_width=True, key="generate_ai_tips"):
+                with st.spinner("🤖 AI generuje spersonalizowane wskazówki..."):
+                    generate_kolb_ai_tips(dominant, st.session_state.kolb_profession)
+                    st.session_state.kolb_ai_generated = True
+                
+                # Wyświetl od razu jeśli się udało
+                if 'kolb_ai_tips' in st.session_state and st.session_state.kolb_ai_tips:
+                    st.markdown("---")
+                    st.markdown(f"### 💡 Spersonalizowane wskazówki dla {st.session_state.kolb_profession}a")
+                    
+                    st.markdown(f"""
+                    <div style='padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                border-radius: 15px; color: white; margin: 20px 0;'>
+                        {st.session_state.kolb_ai_tips}
+                    </div>
+                    """, unsafe_allow_html=True)
+    
+    # Przycisk do ponownego testu
+    st.markdown("---")
+    if st.button("🔄 Rozpocznij test od nowa", use_container_width=True):
+        st.session_state.kolb_answers = {}
+        st.session_state.kolb_completed = False
+        st.session_state.kolb_results = {}
+        st.session_state.kolb_dimensions = {}
+        st.session_state.kolb_dominant = None
+        st.session_state.kolb_quadrant = None
+        st.session_state.kolb_flexibility = 0
+        st.session_state.kolb_profession = None
+        st.session_state.kolb_ai_generated = False
+        st.session_state.kolb_ai_tips = None
+        st.rerun()
+
 def show_tools_page():
+
     """Główna strona narzędzi AI"""
     
     # Zastosuj style Material 3
@@ -185,11 +1035,12 @@ def show_tools_page():
     zen_header("🛠️ Narzędzia AI")
     
     # Główne kategorie w tabach
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "🧠 C-IQ Tools", 
         "🎭 Symulatory", 
         "📊 Analityki", 
-        "🤖 AI Asystent"
+        "🤖 AI Asystent",
+        "🎯 Autodiagnoza"
     ])
     
     with tab1:
@@ -203,6 +1054,9 @@ def show_tools_page():
         
     with tab4:
         show_ai_assistant()
+    
+    with tab5:
+        show_autodiagnosis()
 
 def show_ciq_tools():
     """Narzędzia Conversational Intelligence"""

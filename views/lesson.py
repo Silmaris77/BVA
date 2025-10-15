@@ -1,4 +1,5 @@
 ﻿import streamlit as st
+from datetime import datetime
 from data.lessons import load_lessons
 from data.users import load_user_data, save_user_data
 from utils.components import zen_header, zen_button, notification, content_section, tip_block, quote_block, progress_bar, embed_content, lesson_card
@@ -2263,33 +2264,87 @@ def show_lessons_content():
                         if 'cheatsheet' in lesson['summary']:
                             st.markdown(lesson['summary']['cheatsheet'], unsafe_allow_html=True)
                             
-                            # Dodaj przycisk do pobierania PDF
+                            # Dodaj przycisk do eksportu PDF (jak w Tools)
                             st.markdown("---")
-                            st.markdown("### 📄 Pobierz Cheatsheet jako PDF")
                             
-                            try:
-                                from utils.pdf_generator import generate_pdf_content, create_simple_download_button, clean_html_for_pdf
+                            col_export, col_info = st.columns([1, 3])
+                            with col_export:
+                                # Przycisk PDF
+                                if zen_button("📄 Eksportuj PDF", key="export_cheatsheet_pdf"):
+                                    try:
+                                        from utils.cheatsheet_pdf_v5 import generate_cheatsheet_pdf
+                                        
+                                        username = getattr(st.session_state, 'username', 'Użytkownik')
+                                        lesson_title = lesson.get('title', 'Lekcja')
+                                        cheatsheet_content = lesson['summary']['cheatsheet']
+                                        
+                                        # Generuj prawdziwy PDF (jak w Tools)
+                                        pdf_data = generate_cheatsheet_pdf(
+                                            lesson_title=lesson_title,
+                                            cheatsheet_html=cheatsheet_content,
+                                            username=username
+                                        )
+                                        
+                                        # Przygotuj nazwę pliku
+                                        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                                        lesson_id = lesson.get('id', 'lesson').replace(' ', '_')
+                                        filename = f"cheatsheet_{lesson_id}_{timestamp}.pdf"
+                                        
+                                        st.download_button(
+                                            label="⬇️ Pobierz PDF",
+                                            data=pdf_data,
+                                            file_name=filename,
+                                            mime="application/pdf",
+                                            key="download_cheatsheet_pdf"
+                                        )
+                                        st.success("✅ Cheatsheet PDF gotowy do pobrania!")
+                                        
+                                    except Exception as e:
+                                        st.error(f"❌ Błąd podczas generowania PDF: {str(e)}")
+                                        if st.session_state.get('debug_mode', False):
+                                            import traceback
+                                            st.expander("Szczegóły błędu (dla deweloperów)").code(traceback.format_exc())
                                 
-                                # Przygotuj zawartość dla PDF
-                                lesson_title = lesson.get('title', 'Lekcja')
-                                cheatsheet_content = lesson['summary']['cheatsheet']
-                                
-                                # Wyczyść HTML dla lepszej konwersji do PDF
-                                cleaned_content = clean_html_for_pdf(cheatsheet_content)
-                                
-                                # Generuj kompletny HTML dla PDF
-                                pdf_html = generate_pdf_content(
-                                    title=f"Cheatsheet: {lesson_title}",
-                                    content_html=cleaned_content
-                                )
-                                
-                                # Twórz przycisk do pobrania
-                                filename = f"cheatsheet_{lesson.get('id', 'lesson').replace(' ', '_')}.html"
-                                create_simple_download_button(pdf_html, filename, "Pobierz Cheatsheet jako PDF")
-                                
-                            except Exception as e:
-                                st.warning("⚠️ Funkcja pobierania PDF nie jest obecnie dostępna.")
-                                st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
+                                # Przycisk PNG
+                                if zen_button("🖼️ Eksportuj Obraz", key="export_cheatsheet_image"):
+                                    try:
+                                        from utils.cheatsheet_image_generator import generate_cheatsheet_image
+                                        
+                                        lesson_title = lesson.get('title', 'Lekcja')
+                                        cheatsheet_content = lesson['summary']['cheatsheet']
+                                        
+                                        # Generuj obraz PNG
+                                        image_data = generate_cheatsheet_image(
+                                            lesson_title=lesson_title,
+                                            cheatsheet_html=cheatsheet_content,
+                                            format='png'
+                                        )
+                                        
+                                        if image_data:
+                                            # Przygotuj nazwę pliku
+                                            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                                            lesson_id = lesson.get('id', 'lesson').replace(' ', '_')
+                                            filename = f"cheatsheet_{lesson_id}_{timestamp}.png"
+                                            
+                                            st.download_button(
+                                                label="⬇️ Pobierz PNG",
+                                                data=image_data,
+                                                file_name=filename,
+                                                mime="image/png",
+                                                key="download_cheatsheet_image"
+                                            )
+                                            st.success("✅ Cheatsheet PNG gotowy do pobrania!")
+                                        else:
+                                            st.error("❌ Nie udało się wygenerować obrazu")
+                                        
+                                    except Exception as e:
+                                        st.error(f"❌ Błąd podczas generowania obrazu: {str(e)}")
+                                        if st.session_state.get('debug_mode', False):
+                                            import traceback
+                                            st.expander("Szczegóły błędu (dla deweloperów)").code(traceback.format_exc())
+                            
+                            with col_info:
+                                st.info("💡 Wybierz format: PDF lub Obraz (PNG)")
                         else:
                             st.warning("Brak cheatsheet w podsumowaniu.")
 

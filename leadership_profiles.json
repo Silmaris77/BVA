@@ -54,9 +54,66 @@
         "created_at": "2025-10-14T02:03:53.441155",
         "username": "Max",
         "profile_name": "Profil 2025-10-14 02:03"
+      },
+      {
+        "dominant_ciq_level": "I",
+        "ciq_distribution": {
+          "level_i_percentage": 85,
+          "level_ii_percentage": 10,
+          "level_iii_percentage": 5
+        },
+        "leadership_style": {
+          "primary_style": "directive",
+          "flexibility_score": 2,
+          "adaptability": "low"
+        },
+        "communication_patterns": {
+          "question_types": "closed",
+          "language_patterns": [
+            "Dyrektywny i rozkazujący ton",
+            "Brak empatii i ignorowanie perspektywy pracownika",
+            "Fokus na problemach i winie, nie na współtworzeniu rozwiązań",
+            "Warunkowa pochwała i motywacja oparta na strachu/nagrodzie",
+            "Używanie stwierdzeń zamykających dyskusję ('Kropka')",
+            "Język zorientowany na kontrolę i odpowiedzialność"
+          ],
+          "emotional_intelligence": 2
+        },
+        "neurobiological_impact": {
+          "cortisol_triggers": 9,
+          "oxytocin_builders": 1,
+          "psychological_safety": 1
+        },
+        "strengths": [
+          "Jasne wyznaczanie oczekiwań i terminów",
+          "Silna orientacja na wyniki i odpowiedzialność",
+          "Zdecydowanie w działaniu i podejmowaniu decyzji",
+          "Szybkie reagowanie na zidentyfikowane problemy"
+        ],
+        "development_areas": [
+          "Rozwój empatii i umiejętności aktywnego słuchania (Poziom CIQ III)",
+          "Budowanie zaufania i poczucia bezpieczeństwa psychologicznego w zespole",
+          "Wykorzystywanie otwartych pytań i prawdziwej ciekawości (Poziom CIQ III)",
+          "Rozwijanie umiejętności dawania konstruktywnego feedbacku w sposób wspierający",
+          "Przejście od dyrektywnego zarządzania do współtworzenia rozwiązań",
+          "Zarządzanie własnymi emocjami i komunikowanie frustracji w sposób dojrzały"
+        ],
+        "leadership_evolution": {
+          "trajectory": "stable",
+          "consistency": 9,
+          "growth_potential": 4
+        },
+        "team_impact": {
+          "predicted_engagement": 3,
+          "trust_building_capability": 2,
+          "conflict_resolution": 3
+        },
+        "created_at": "2025-10-15T17:02:59.750484",
+        "username": "Max",
+        "profile_name": "Profil 2025-10-15 17:02"
       }
     ],
-    "current_profile": 0
+    "current_profile": 1
   },
   "TestUser": {
     "profiles": [

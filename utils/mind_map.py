@@ -239,82 +239,228 @@ def create_data_driven_mind_map(mind_map_data):
     """
     try:
         from streamlit_agraph import agraph, Node, Edge, Config
+        import base64
+        from io import BytesIO
+        
+        # Panel kontrolny - expander z parametrami
+        with st.expander("⚙️ Panel kontrolny mapy myśli", expanded=False):
+            st.markdown("### 🎨 Personalizacja mapy")
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.markdown("**📏 Rozmiary**")
+                size_multiplier = st.slider(
+                    "Wielkość węzłów",
+                    min_value=0.5,
+                    max_value=2.0,
+                    value=1.0,
+                    step=0.1,
+                    help="Zmień rozmiar wszystkich węzłów"
+                )
+                
+                font_multiplier = st.slider(
+                    "Rozmiar czcionki",
+                    min_value=0.7,
+                    max_value=1.5,
+                    value=1.0,
+                    step=0.1,
+                    help="Zmień rozmiar czcionki we wszystkich węzłach"
+                )
+            
+            with col2:
+                st.markdown("**🎭 Układ**")
+                physics_enabled = st.checkbox(
+                    "Fizyka włączona",
+                    value=True,
+                    help="Dynamiczny układ z symulacją fizyczną"
+                )
+                
+                hierarchical = st.checkbox(
+                    "Układ hierarchiczny",
+                    value=False,
+                    help="Organizuj węzły hierarchicznie"
+                )
+                
+                map_width = st.slider(
+                    "Szerokość mapy",
+                    min_value=600,
+                    max_value=1400,
+                    value=900,
+                    step=50,
+                    help="Dostosuj szerokość obszaru mapy"
+                )
+                
+                map_height = st.slider(
+                    "Wysokość mapy",
+                    min_value=400,
+                    max_value=1000,
+                    value=600,
+                    step=50,
+                    help="Dostosuj wysokość obszaru mapy"
+                )
+            
+            with col3:
+                st.markdown("**💾 Eksport**")
+                st.info("💡 Tip: Użyj narzędzi przeglądarki do zrobienia zrzutu ekranu mapy (np. Ctrl+Shift+S w Firefox, lub narzędzie Wycinek w Windows)")
+                
+                export_format = st.selectbox(
+                    "Format eksportu",
+                    ["PNG", "SVG", "JSON"],
+                    help="Wybierz format do eksportu"
+                )
+                
+                if st.button("📸 Instrukcje zrzutu ekranu", use_container_width=True):
+                    st.markdown("""
+                    **Jak zrobić zrzut ekranu mapy:**
+                    
+                    **Windows:**
+                    - `Win + Shift + S` - Narzędzie Wycinek
+                    - `Alt + PrtScn` - Zrzut aktywnego okna
+                    
+                    **Mac:**
+                    - `Cmd + Shift + 4` - Wybór obszaru
+                    - `Cmd + Shift + 3` - Cały ekran
+                    
+                    **Firefox:**
+                    - `Ctrl + Shift + S` - Wbudowane narzędzie
+                    
+                    **Chrome:**
+                    - `F12` → Menu (⋮) → Capture screenshot
+                    """)
+                
+                if export_format == "JSON":
+                    if st.button("⬇️ Pobierz JSON", use_container_width=True):
+                        import json
+                        json_str = json.dumps(mind_map_data, ensure_ascii=False, indent=2)
+                        b64 = base64.b64encode(json_str.encode()).decode()
+                        href = f'<a href="data:application/json;base64,{b64}" download="mind_map.json">📥 Kliknij aby pobrać JSON</a>'
+                        st.markdown(href, unsafe_allow_html=True)
         
         nodes = []
         edges = []
-          # Centralny węzeł - domyślnie używa koloru z Bloku 2 Skills
+        
+        # Centralny węzeł - domyślnie używa koloru z Bloku 2 Skills
         central = mind_map_data.get('central_node', {})
         central_color = central.get('color', '#43C6AC')  # Block 2 color as default
         central_font_color = central.get('font_color', get_contrast_color(central_color))
-        nodes.append(Node(
-            id=central.get('id', 'main_topic'),
-            label=central.get('label', '🎯 GŁÓWNY TEMAT'),
-            size=central.get('size', 30),
-            color=central_color,
-            font={"size": central.get('font_size', 16), "color": central_font_color}
-        ))
+        
+        # Przygotuj Node z opcjonalnym tooltip
+        central_node_params = {
+            'id': central.get('id', 'main_topic'),
+            'label': central.get('label', '🎯 GŁÓWNY TEMAT'),
+            'size': int(central.get('size', 30) * size_multiplier),
+            'color': central_color,
+            'font': {"size": int(central.get('font_size', 16) * font_multiplier), "color": central_font_color}
+        }
+        
+        # Dodaj tooltip jeśli jest dostępny w danych
+        if 'description' in central or 'tooltip' in central:
+            central_node_params['title'] = central.get('description', central.get('tooltip', ''))
+        
+        nodes.append(Node(**central_node_params))
         
         # Kategorie główne
         for category in mind_map_data.get('categories', []):
             category_color = category.get('color', '#43C6AC')
             category_font_color = category.get('font_color', get_contrast_color(category_color))
-            nodes.append(Node(
-                id=category.get('id', 'category'),
-                label=category.get('label', 'Kategoria'),
-                size=category.get('size', 20),
-                color=category_color,  # Skills Block 2 color as default
-                font={"size": category.get('font_size', 12), "color": category_font_color}
-            ))
+            
+            # Przygotuj Node z opcjonalnym tooltip
+            category_node_params = {
+                'id': category.get('id', 'category'),
+                'label': category.get('label', 'Kategoria'),
+                'size': int(category.get('size', 20) * size_multiplier),
+                'color': category_color,
+                'font': {"size": int(category.get('font_size', 12) * font_multiplier), "color": category_font_color}
+            }
+            
+            # Dodaj tooltip jeśli jest dostępny
+            if 'description' in category or 'tooltip' in category:
+                category_node_params['title'] = category.get('description', category.get('tooltip', ''))
+            
+            nodes.append(Node(**category_node_params))
             edges.append(Edge(source=central.get('id', 'main_topic'), target=category.get('id', 'category')))
             
             # Szczegóły kategorii
             for detail in category.get('details', []):
                 detail_color = detail.get('color', '#DDA0DD')
                 detail_font_color = detail.get('font_color', get_contrast_color(detail_color))
-                nodes.append(Node(
-                    id=detail.get('id', 'detail'),
-                    label=detail.get('label', 'Szczegół'),
-                    size=detail.get('size', 12),
-                    color=detail_color,
-                    font={"size": detail.get('font_size', 10), "color": detail_font_color}
-                ))
+                
+                # Przygotuj Node z opcjonalnym tooltip
+                detail_node_params = {
+                    'id': detail.get('id', 'detail'),
+                    'label': detail.get('label', 'Szczegół'),
+                    'size': int(detail.get('size', 12) * size_multiplier),
+                    'color': detail_color,
+                    'font': {"size": int(detail.get('font_size', 10) * font_multiplier), "color": detail_font_color}
+                }
+                
+                # Dodaj tooltip jeśli jest dostępny
+                if 'description' in detail or 'tooltip' in detail:
+                    detail_node_params['title'] = detail.get('description', detail.get('tooltip', ''))
+                
+                nodes.append(Node(**detail_node_params))
                 edges.append(Edge(source=category.get('id', 'category'), target=detail.get('id', 'detail')))
         
         # Rozwiązania praktyczne
         for solution in mind_map_data.get('solutions', []):
             solution_color = solution.get('color', '#90EE90')
-            nodes.append(Node(
-                id=solution.get('id', 'solution'),
-                label=solution.get('label', 'Rozwiązanie'),
-                size=solution.get('size', 15),
-                color=solution_color,
-                font={"size": solution.get('font_size', 11), "color": get_contrast_color(solution_color)}
-            ))
+            
+            # Przygotuj Node z opcjonalnym tooltip
+            solution_node_params = {
+                'id': solution.get('id', 'solution'),
+                'label': solution.get('label', 'Rozwiązanie'),
+                'size': int(solution.get('size', 15) * size_multiplier),
+                'color': solution_color,
+                'font': {"size": int(solution.get('font_size', 11) * font_multiplier), "color": get_contrast_color(solution_color)}
+            }
+            
+            # Dodaj tooltip jeśli jest dostępny
+            if 'description' in solution or 'tooltip' in solution:
+                solution_node_params['title'] = solution.get('description', solution.get('tooltip', ''))
+            
+            nodes.append(Node(**solution_node_params))
             edges.append(Edge(source=central.get('id', 'main_topic'), target=solution.get('id', 'solution')))
         
         # Case study
         case_study = mind_map_data.get('case_study', {})
         if case_study:
             case_study_color = case_study.get('color', '#FF8C42')
-            nodes.append(Node(
-                id=case_study.get('id', 'case_study'),
-                label=case_study.get('label', '📱 Case Study'),
-                size=case_study.get('size', 18),
-                color=case_study_color,
-                font={"size": case_study.get('font_size', 12), "color": get_contrast_color(case_study_color)}
-            ))
+            
+            # Przygotuj Node z opcjonalnym tooltip
+            case_study_node_params = {
+                'id': case_study.get('id', 'case_study'),
+                'label': case_study.get('label', '📱 Case Study'),
+                'size': int(case_study.get('size', 18) * size_multiplier),
+                'color': case_study_color,
+                'font': {"size": int(case_study.get('font_size', 12) * font_multiplier), "color": get_contrast_color(case_study_color)}
+            }
+            
+            # Dodaj tooltip jeśli jest dostępny
+            if 'description' in case_study or 'tooltip' in case_study:
+                case_study_node_params['title'] = case_study.get('description', case_study.get('tooltip', ''))
+            
+            nodes.append(Node(**case_study_node_params))
             edges.append(Edge(source=central.get('id', 'main_topic'), target=case_study.get('id', 'case_study')))
             
             # Szczegóły case study
             for detail in case_study.get('details', []):
                 case_detail_color = detail.get('color', '#FFB347')
-                nodes.append(Node(
-                    id=detail.get('id', 'case_detail'),
-                    label=detail.get('label', 'Szczegół'),
-                    size=detail.get('size', 10),
-                    color=case_detail_color,
-                    font={"size": detail.get('font_size', 9), "color": get_contrast_color(case_detail_color)}
-                ))
+                
+                # Przygotuj Node z opcjonalnym tooltip
+                case_detail_node_params = {
+                    'id': detail.get('id', 'case_detail'),
+                    'label': detail.get('label', 'Szczegół'),
+                    'size': int(detail.get('size', 10) * size_multiplier),
+                    'color': case_detail_color,
+                    'font': {"size": int(detail.get('font_size', 9) * font_multiplier), "color": get_contrast_color(case_detail_color)}
+                }
+                
+                # Dodaj tooltip jeśli jest dostępny
+                if 'description' in detail or 'tooltip' in detail:
+                    case_detail_node_params['title'] = detail.get('description', detail.get('tooltip', ''))
+                
+                nodes.append(Node(**case_detail_node_params))
                 edges.append(Edge(source=case_study.get('id', 'case_study'), target=detail.get('id', 'case_detail')))
         
         # Dodatkowe połączenia
@@ -322,16 +468,42 @@ def create_data_driven_mind_map(mind_map_data):
             edges.append(Edge(source=connection.get('from'), target=connection.get('to')))
           # Konfiguracja
         config_data = mind_map_data.get('config', {})
-        config = Config(
-            width=config_data.get('width', 800),
-            height=config_data.get('height', 600),
-            directed=config_data.get('directed', False),
-            physics=config_data.get('physics', True),
-            hierarchical=config_data.get('hierarchical', False),
-            nodeHighlightBehavior=True,
-            highlightColor="#43C6AC",  # Zsynchronizowany z Skills Block 2
-            collapsible=False
-        )
+        
+        # Konfiguracja fizyki - próbujemy najpierw zaawansowanej konfiguracji
+        # Konfiguracja z większymi odległościami między węzłami
+        # Używamy parametrów które rozpraszają węzły i wykorzystują więcej przestrzeni
+        if physics_enabled:
+            # Tryb fizyki z większymi odległościami
+            config = Config(
+                width=map_width,
+                height=map_height,
+                directed=config_data.get('directed', False),
+                physics=True,
+                hierarchical=hierarchical,
+                nodeHighlightBehavior=True,
+                highlightColor="#43C6AC",
+                collapsible=False,
+                # Parametry które rozpraszają węzły:
+                # - nodeDistance: minimalna odległość między węzłami
+                # - springLength: naturalna długość połączeń
+                # - springConstant: słabsze przyciąganie = więcej przestrzeni
+                nodeDistance=200,  # Minimalna odległość między węzłami
+                springLength=250,  # Naturalna długość "sprężyn" łączących węzły
+                springConstant=0.001  # Bardzo słabe przyciąganie = rozciągnięta mapa
+            )
+        else:
+            # Tryb statyczny
+            config = Config(
+                width=map_width,
+                height=map_height,
+                directed=config_data.get('directed', False),
+                physics=False,
+                hierarchical=hierarchical,
+                nodeHighlightBehavior=True,
+                highlightColor="#43C6AC",
+                collapsible=False,
+                nodeSpacing=250
+            )
         
         return agraph(nodes=nodes, edges=edges, config=config)
         

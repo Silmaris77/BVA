@@ -1328,9 +1328,11 @@ def display_ai_feedback(feedback: Dict, exercise_type: str = "", evaluator=None)
             st.markdown("#### ✅ Mocne strony")
             if strengths:
                 for i, strength in enumerate(strengths, 1):
+                    # Usuń gwiazdki markdown przed wyświetleniem
+                    clean_strength = strength.replace('**', '').replace('*', '').strip()
                     st.markdown(f"""
                     <div style='padding: 12px; background: #d1fae5; border-left: 4px solid #10b981; border-radius: 5px; margin: 8px 0;'>
-                        <p style='color: #065f46; margin: 0; font-weight: 500;'>✓ {strength}</p>
+                        <p style='color: #065f46; margin: 0; font-weight: 500;'>✓ {clean_strength}</p>
                     </div>
                     """, unsafe_allow_html=True)
             else:
@@ -1340,9 +1342,11 @@ def display_ai_feedback(feedback: Dict, exercise_type: str = "", evaluator=None)
             st.markdown("#### 🎯 Obszary rozwoju")
             if improvements:
                 for i, improvement in enumerate(improvements, 1):
+                    # Usuń gwiazdki markdown przed wyświetleniem
+                    clean_improvement = improvement.replace('**', '').replace('*', '').strip()
                     st.markdown(f"""
                     <div style='padding: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 5px; margin: 8px 0;'>
-                        <p style='color: #92400e; margin: 0; font-weight: 500;'>→ {improvement}</p>
+                        <p style='color: #92400e; margin: 0; font-weight: 500;'>→ {clean_improvement}</p>
                     </div>
                     """, unsafe_allow_html=True)
             else:
