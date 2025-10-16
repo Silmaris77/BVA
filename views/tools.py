@@ -174,8 +174,11 @@ def show_autodiagnosis():
     st.markdown("### 🎯 Autodiagnoza")
     st.markdown("Poznaj swój styl uczenia się, typ neuroleadera i preferowane sposoby rozwoju")
     
+    # Wyświetl testy w dwóch kolumnach
+    col1, col2 = st.columns(2)
+    
     # Karta z testem Neurolidera
-    with st.container():
+    with col1:
         st.markdown("""
         <div style='padding: 20px; border: 2px solid #E91E63; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);'>
             <h4>🧠 Test typu Neurolidera</h4>
@@ -194,14 +197,14 @@ def show_autodiagnosis():
             st.session_state.active_tool = "neuroleader_test"
     
     # Karta z testem Kolba
-    with st.container():
+    with col2:
         st.markdown("""
         <div style='padding: 20px; border: 2px solid #9C27B0; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);'>
             <h4>🔄 Test stylów uczenia się według Kolba</h4>
             <p><strong>Odkryj swój preferowany styl uczenia się i maksymalizuj efektywność rozwoju</strong></p>
             <ul style='margin: 10px 0; padding-left: 20px;'>
                 <li>🔍 12 pytań diagnostycznych</li>
-                <li>🎯 Identyfikacja dominującego stylu (Reflector, Theorist, Pragmatist, Activist)</li>
+                <li>🎯 Identyfikacja dominującego stylu </li>
                 <li>💪 Analiza mocnych stron w uczeniu się</li>
                 <li>💡 Spersonalizowane wskazówki rozwojowe</li>
                 <li>🔄 Zrozumienie pełnego cyklu uczenia się Kolba</li>
@@ -2561,29 +2564,35 @@ def show_tools_page():
     # Header strony
     zen_header("🛠️ Narzędzia AI")
     
+    # Sprawdź czy użytkownik został przekierowany z Dashboard do Autodiagnozy
+    if st.session_state.get('tools_tab') == 'autodiagnoza':
+        st.info("💡 Jesteś w zakładce **🎯 Autodiagnoza** - pierwsza zakładka poniżej")
+        # Wyczyść flagę po wyświetleniu
+        st.session_state.tools_tab = None
+    
     # Główne kategorie w tabach
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "🎯 Autodiagnoza",
         "🧠 C-IQ Tools", 
         "🎭 Symulatory", 
         "📊 Analityki", 
-        "🤖 AI Asystent",
-        "🎯 Autodiagnoza"
+        "🤖 AI Asystent"
     ])
     
     with tab1:
-        show_ciq_tools()
+        show_autodiagnosis()
     
     with tab2:
-        show_simulators()
+        show_ciq_tools()
     
     with tab3:
-        show_analytics()
+        show_simulators()
         
     with tab4:
-        show_ai_assistant()
+        show_analytics()
     
     with tab5:
-        show_autodiagnosis()
+        show_ai_assistant()
 
 def show_ciq_tools():
     """Narzędzia Conversational Intelligence"""

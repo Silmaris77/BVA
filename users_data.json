@@ -7,7 +7,7 @@
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-16 18:08:13",
+    "last_login": "2025-10-16 19:30:42",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -1810,6 +1810,506 @@
       "quadrant": "AC/RO",
       "flexibility": 49.31,
       "completed_date": "2025-10-16 09:23:58"
+    }
+  },
+  "Roman": {
+    "user_id": "2644f3e6-2d02-4fd1-a78a-b6700cf34fe0",
+    "password": "Roman",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-16",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [
+      "welcome",
+      "pioneer"
+    ],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-16": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "neuroleader_type": "Neuroinspirator",
+    "test_scores": {
+      "Neuroanalityk": 3,
+      "Neuroreaktor": 6,
+      "Neurobalanser": 3,
+      "Neuroempata": 3,
+      "Neuroinnowator": 6,
+      "Neuroinspirator": 9
+    },
+    "test_date": "2025-10-16 19:34:54",
+    "recent_activities": [
+      {
+        "type": "neuroleader_type_discovered",
+        "details": {
+          "neuroleader_type": "Neuroinspirator"
+        },
+        "timestamp": "2025-10-16T17:34:54.598294+00:00"
+      }
+    ],
+    "badge_data": {
+      "badges": {
+        "welcome": {
+          "earned": true,
+          "earned_date": "2025-10-16T19:34:54.623004",
+          "xp_earned": 25,
+          "tier": "bronze",
+          "conditions_met": [
+            "main_condition"
+          ],
+          "progress_when_earned": 100,
+          "context": {}
+        },
+        "pioneer": {
+          "earned": true,
+          "earned_date": "2025-10-16T19:34:54.625170",
+          "xp_earned": 2500,
+          "tier": "diamond",
+          "conditions_met": [
+            "main_condition"
+          ],
+          "progress_when_earned": 100,
+          "context": {}
+        }
+      },
+      "badge_progress": {
+        "first_neuroleader_test": {
+          "progress": 50,
+          "conditions_status": {
+            "test_taken": false,
+            "has_neuroleader_type": true
+          },
+          "last_updated": "2025-10-16T19:34:54.623052",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "profile_complete": {
+          "progress": 0.0,
+          "conditions_status": {
+            "degen_type": false,
+            "avatar": false,
+            "theme": false
+          },
+          "last_updated": "2025-10-16T19:34:54.623038",
+          "next_steps": [
+            "Uzupełnij: degen_type, avatar, theme"
+          ],
+          "estimated_completion": null
+        },
+        "first_lesson": {
+          "progress": 0.0,
+          "conditions_status": {
+            "lessons_completed": "0/1"
+          },
+          "last_updated": "2025-10-16T19:34:54.623067",
+          "next_steps": [
+            "Ukończ jeszcze 1 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_rookie": {
+          "progress": 0.0,
+          "conditions_status": {
+            "lessons_completed": "0/5"
+          },
+          "last_updated": "2025-10-16T19:34:54.623075",
+          "next_steps": [
+            "Ukończ jeszcze 5 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_apprentice": {
+          "progress": 0.0,
+          "conditions_status": {
+            "lessons_completed": "0/15"
+          },
+          "last_updated": "2025-10-16T19:34:54.623082",
+          "next_steps": [
+            "Ukończ jeszcze 15 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_scholar": {
+          "progress": 0.0,
+          "conditions_status": {
+            "lessons_completed": "0/30"
+          },
+          "last_updated": "2025-10-16T19:34:54.623092",
+          "next_steps": [
+            "Ukończ jeszcze 30 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_master": {
+          "progress": 0.0,
+          "conditions_status": {
+            "lessons_completed": "0/50"
+          },
+          "last_updated": "2025-10-16T19:34:54.623099",
+          "next_steps": [
+            "Ukończ jeszcze 50 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "quiz_perfectionist": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623128",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "speed_learner": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623140",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "login_streak_3": {
+          "progress": 0.0,
+          "conditions_status": {
+            "streak_progress": "0/3"
+          },
+          "last_updated": "2025-10-16T19:34:54.623152",
+          "next_steps": [
+            "Kontynuuj streak przez 3 dni"
+          ],
+          "estimated_completion": null
+        },
+        "login_streak_7": {
+          "progress": 0.0,
+          "conditions_status": {
+            "streak_progress": "0/3"
+          },
+          "last_updated": "2025-10-16T19:34:54.623164",
+          "next_steps": [
+            "Kontynuuj streak przez 3 dni"
+          ],
+          "estimated_completion": null
+        },
+        "login_streak_30": {
+          "progress": 0.0,
+          "conditions_status": {
+            "streak_progress": "0/3"
+          },
+          "last_updated": "2025-10-16T19:34:54.623172",
+          "next_steps": [
+            "Kontynuuj streak przez 3 dni"
+          ],
+          "estimated_completion": null
+        },
+        "daily_mission_hero": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623181",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "weekend_scholar": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623190",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "night_owl": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623198",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "early_bird": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623206",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "neuroleadership_master": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623214",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "mindfulness_expert": {
+          "progress": 0.0,
+          "conditions_status": {
+            "xp_progress": "0/1000"
+          },
+          "last_updated": "2025-10-16T19:34:54.623231",
+          "next_steps": [
+            "Zdobądź jeszcze 1000 XP"
+          ],
+          "estimated_completion": null
+        },
+        "neuroscience_guru": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623243",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "psychology_expert": {
+          "progress": 0.0,
+          "conditions_status": {
+            "xp_progress": "0/1000"
+          },
+          "last_updated": "2025-10-16T19:34:54.623253",
+          "next_steps": [
+            "Zdobądź jeszcze 1000 XP"
+          ],
+          "estimated_completion": null
+        },
+        "stress_management_master": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623261",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "xp_collector": {
+          "progress": 0.0,
+          "conditions_status": {
+            "xp_progress": "0/1000"
+          },
+          "last_updated": "2025-10-16T19:34:54.623275",
+          "next_steps": [
+            "Zdobądź jeszcze 1000 XP"
+          ],
+          "estimated_completion": null
+        },
+        "xp_master": {
+          "progress": 0.0,
+          "conditions_status": {
+            "xp_progress": "0/5000"
+          },
+          "last_updated": "2025-10-16T19:34:54.623285",
+          "next_steps": [
+            "Zdobądź jeszcze 5000 XP"
+          ],
+          "estimated_completion": null
+        },
+        "neuroleader_explorer": {
+          "progress": 0.0,
+          "conditions_status": {
+            "xp_progress": "0/6"
+          },
+          "last_updated": "2025-10-16T19:34:54.623298",
+          "next_steps": [
+            "Zdobądź jeszcze 6 XP"
+          ],
+          "estimated_completion": null
+        },
+        "multi_neuroleader": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623313",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "self_aware_leader": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623323",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "neuroleadership_king": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623338",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "stress_master": {
+          "progress": 0,
+          "conditions_status": {
+            "articles_read": false
+          },
+          "last_updated": "2025-10-16T19:34:54.623352",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "brain_hacker": {
+          "progress": 0,
+          "conditions_status": {
+            "articles_read": false
+          },
+          "last_updated": "2025-10-16T19:34:54.623362",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "community_member": {
+          "progress": 0,
+          "conditions_status": {
+            "community_joined": false
+          },
+          "last_updated": "2025-10-16T19:34:54.623371",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "helpful_friend": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623379",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "mentor": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623387",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "influencer": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623394",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "first_badge": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623401",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "badge_collector": {
+          "progress": 0.0,
+          "conditions_status": {
+            "badges_collected": "0/10"
+          },
+          "last_updated": "2025-10-16T19:34:54.623414",
+          "next_steps": [
+            "Zdobądź jeszcze 10 odznak"
+          ],
+          "estimated_completion": null
+        },
+        "badge_master": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623422",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "achievement_hunter": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.623487",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "legend": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.625204",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "dedicated_student": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.625211",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "secret_discoverer": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.625217",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "midnight_learner": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.625224",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "forrest_gump_fan": {
+          "progress": 0,
+          "conditions_status": {
+            "forrest_article_read": false
+          },
+          "last_updated": "2025-10-16T19:34:54.625233",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "neuroplasticity_enthusiast": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.625244",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "mindfulness_practitioner": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-10-16T19:34:54.625250",
+          "next_steps": [],
+          "estimated_completion": null
+        }
+      },
+      "badge_stats": {
+        "total_earned": 2,
+        "categories_completed": [],
+        "current_streak": 0,
+        "highest_tier_earned": "diamond",
+        "total_badge_xp": 2525,
+        "last_badge_earned": {
+          "badge_id": "pioneer",
+          "earned_date": "2025-10-16T19:34:54.625170"
+        },
+        "earning_rate": 0.0
+      }
+    },
+    "kolb_test": {
+      "scores": {
+        "CE": 4,
+        "RO": 4,
+        "AC": 2,
+        "AE": 2
+      },
+      "dimensions": {
+        "AC-CE": -2,
+        "AE-RO": -2
+      },
+      "dominant_style": "Diverging (Dywergent)",
+      "quadrant": "CE/RO",
+      "flexibility": 83.33,
+      "completed_date": "2025-10-16 19:37:44"
     }
   }
 }

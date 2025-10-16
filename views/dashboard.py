@@ -495,11 +495,126 @@ def show_main_content(user_data, device_type):
 
     
 
+def show_diagnostic_tests_widget(user_data):
+    """Widget testów diagnostycznych - Kolb i Neuroleader"""
+    # Nagłówek sekcji - taki sam jak "Twój Profil"
+    st.markdown("""
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h3 class="section-title">🧠 Twoja Diagnoza</h3>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Sprawdź czy użytkownik wykonał testy
+    has_kolb = 'kolb_test' in user_data and user_data.get('kolb_test')
+    has_neuroleader = 'test_scores' in user_data and user_data.get('test_scores')
+    
+    # Jeśli ma oba testy - pokaż wyniki
+    if has_kolb and has_neuroleader:
+        # Pobierz wyniki Kolb
+        kolb_style = user_data['kolb_test'].get('dominant_style', 'Nieznany')
+        # Skróć nazwę (np. "Diverging (Dywergent)" -> "Diverging")
+        kolb_display = kolb_style.split('(')[0].strip()
+        
+        # Pobierz dominujący typ Neuroleader
+        dominant_neuroleader = max(user_data['test_scores'].items(), key=lambda x: x[1])[0]
+        neuroleader_color = NEUROLEADER_TYPES.get(dominant_neuroleader, {}).get('color', '#3498db')
+        
+        st.markdown(f"""
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; color: white; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">✅</div>
+        <div style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Profil kompletny</div>
+    </div>
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🔄 Styl uczenia się Kolba:</div>
+        <div style="font-size: 1.1rem; font-weight: 600;">{kolb_display}</div>
+    </div>
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🧬 Typ Neuroleadera:</div>
+        <div style="font-size: 1.1rem; font-weight: 600;">{dominant_neuroleader}</div>
+    </div>
+</div>
+        """, unsafe_allow_html=True)
+        
+    # Jeśli ma tylko jeden test
+    elif has_kolb or has_neuroleader:
+        if has_kolb:
+            kolb_style = user_data['kolb_test'].get('dominant_style', 'Nieznany')
+            kolb_display = kolb_style.split('(')[0].strip()
+            
+            st.markdown(f"""
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; color: white; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🔄</div>
+        <div style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Częściowy profil</div>
+    </div>
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🔄 Styl uczenia się:</div>
+        <div style="font-size: 1.1rem; font-weight: 600;">{kolb_display}</div>
+    </div>
+    <div style="background: rgba(255, 193, 7, 0.2); border-radius: 8px; padding: 10px; border: 1px solid rgba(255, 193, 7, 0.4);">
+        <div style="font-size: 0.8rem; text-align: center;">⚡ Uzupełnij profil testem Neuroleadera</div>
+    </div>
+</div>
+            """, unsafe_allow_html=True)
+            
+        if has_neuroleader:
+            dominant_neuroleader = max(user_data['test_scores'].items(), key=lambda x: x[1])[0]
+            neuroleader_color = NEUROLEADER_TYPES.get(dominant_neuroleader, {}).get('color', '#3498db')
+            
+            st.markdown(f"""
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; color: white; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🧬</div>
+        <div style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Częściowy profil</div>
+    </div>
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🧬 Typ Neuroleadera:</div>
+        <div style="font-size: 1.1rem; font-weight: 600;">{dominant_neuroleader}</div>
+    </div>
+    <div style="background: rgba(255, 193, 7, 0.2); border-radius: 8px; padding: 10px; border: 1px solid rgba(255, 193, 7, 0.4);">
+        <div style="font-size: 0.8rem; text-align: center;">⚡ Uzupełnij profil testem Kolba</div>
+    </div>
+</div>
+            """, unsafe_allow_html=True)
+    
+    # Jeśli nie ma żadnego testu - CTA
+    else:
+        st.markdown("""
+<div style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); border-radius: 16px; padding: 25px; text-align: center; box-shadow: 0 8px 25px rgba(253, 203, 110, 0.3); border: 2px solid rgba(255, 193, 7, 0.3); margin-bottom: 15px;">
+    <div style="font-size: 3rem; margin-bottom: 10px;">🎯</div>
+    <div style="font-size: 1.1rem; font-weight: 600; color: #2c3e50; margin-bottom: 8px;">Poznaj siebie!</div>
+    <div style="font-size: 0.9rem; color: #555; line-height: 1.6;">
+        Odkryj swój styl uczenia się i typ przywódcy.<br>
+        <b>2 testy • 10 minut • Spersonalizowane wyniki</b>
+    </div>
+</div>
+        """, unsafe_allow_html=True)
+    
+    # Przycisk "Zobacz szczegóły" / "Wykonaj testy" - zawsze pełna szerokość
+    if has_kolb or has_neuroleader:
+        button_text = "🔍 Zobacz pełne wyniki"
+        button_key = "diagnostic_details"
+    else:
+        button_text = "🚀 Wykonaj testy"
+        button_key = "diagnostic_start"
+    
+    if zen_button(button_text, key=button_key, width='stretch'):
+        st.session_state.page = 'tools'
+        st.session_state.tools_tab = 'autodiagnoza'  # Ustawia aktywną zakładkę
+        scroll_to_top()
+        st.rerun()
+
 
 def show_dashboard_sidebar(user_data, device_type):
     """Sidebar z dodatkowymi informacjami"""
     
-       # Profil inwestycyjny
+    # Widget Testów Diagnostycznych - NOWY!
+    show_diagnostic_tests_widget(user_data)
+    
+    # Profil inwestycyjny
     show_investor_profile_compact(user_data)
     
     # Ranking XP
