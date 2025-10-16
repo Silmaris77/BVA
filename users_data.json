@@ -7,7 +7,7 @@
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-16 01:08:09",
+    "last_login": "2025-10-16 18:08:13",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -743,6 +743,22 @@
       "booster": [
         "xp_boost"
       ]
+    },
+    "kolb_test": {
+      "scores": {
+        "CE": 3,
+        "RO": 5,
+        "AC": 2,
+        "AE": 2
+      },
+      "dimensions": {
+        "AC-CE": -1,
+        "AE-RO": -3
+      },
+      "dominant_style": "Diverging (Dywergent)",
+      "quadrant": "CE/RO",
+      "flexibility": 81.37,
+      "completed_date": "2025-10-16 13:29:28"
     }
   },
   "admin": {
@@ -753,7 +769,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-14 01:37:39",
+    "last_login": "2025-10-16 09:24:33",
     "completed_lessons": [
       "2. Chemia mózgu"
     ],
@@ -1286,7 +1302,29 @@
         "degencoins": 236,
         "level": 1,
         "completed_lessons": 1
+      },
+      "2025-10-16": {
+        "xp": 236,
+        "degencoins": 236,
+        "level": 1,
+        "completed_lessons": 1
       }
+    },
+    "kolb_test": {
+      "scores": {
+        "CE": 2,
+        "RO": 4,
+        "AC": 4,
+        "AE": 2
+      },
+      "dimensions": {
+        "AC-CE": 2,
+        "AE-RO": -2
+      },
+      "dominant_style": "Assimilating (Asymilator)",
+      "quadrant": "AC/RO",
+      "flexibility": 83.33,
+      "completed_date": "2025-10-16 10:02:03"
     }
   },
   "Piotr": {
@@ -1533,5 +1571,176 @@
         "timestamp": "2025-10-09T15:44:17.139147+00:00"
       }
     ]
+  },
+  "Asia": {
+    "user_id": "977d007f-906c-402b-96c0-6f5421e9844b",
+    "password": "Asia",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-16",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-16": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "kolb_test": {
+      "scores": {
+        "CE": 1,
+        "RO": 1,
+        "AC": 3,
+        "AE": 7
+      },
+      "dimensions": {
+        "AC-CE": 2,
+        "AE-RO": 6
+      },
+      "dominant_style": "Converging (Konwergent)",
+      "quadrant": "AC/AE",
+      "flexibility": 62.73,
+      "completed_date": "2025-10-16 09:09:27"
+    }
+  },
+  "Pawel": {
+    "user_id": "0c69fdbd-454e-49bd-8af1-ee2b5ee0522e",
+    "password": "Pawel",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-16",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-16": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "kolb_test": {
+      "scores": {
+        "CE": 1,
+        "RO": 4,
+        "AC": 0,
+        "AE": 7
+      },
+      "dimensions": {
+        "AC-CE": -1,
+        "AE-RO": 3
+      },
+      "dominant_style": "Accommodating (Akomodator)",
+      "quadrant": "CE/AE",
+      "flexibility": 81.37,
+      "completed_date": "2025-10-16 09:12:35"
+    }
+  },
+  "Kasia": {
+    "user_id": "d1875d00-5f12-4612-ae90-56133309714d",
+    "password": "Kasia",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-16",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-16": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "kolb_test": {
+      "scores": {
+        "CE": 0,
+        "RO": 5,
+        "AC": 7,
+        "AE": 0
+      },
+      "dimensions": {
+        "AC-CE": 7,
+        "AE-RO": -5
+      },
+      "dominant_style": "Assimilating (Asymilator)",
+      "quadrant": "AC/RO",
+      "flexibility": 49.31,
+      "completed_date": "2025-10-16 09:23:58"
+    }
   }
 }

@@ -12,10 +12,12 @@ from utils.scroll_utils import scroll_to_top
 import json
 import os
 import math
+import re
 from datetime import datetime
 from typing import Dict, List, Optional
 import io
 import plotly.graph_objects as go
+import base64
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -209,6 +211,32 @@ def show_autodiagnosis():
 def show_kolb_test():
     """Wyświetla test stylów uczenia się według Kolba"""
     st.markdown("### 🔄 Kolb Experiential Learning Profile (KELP)")
+    
+    # Wczytaj zapisane wyniki z bazy danych (jeśli użytkownik zalogowany)
+    # ALE TYLKO jeśli użytkownik nie kliknął "Rozpocznij test od nowa"
+    if st.session_state.get('logged_in') and st.session_state.get('username'):
+        from data.users import load_user_data
+        
+        users_data = load_user_data()
+        username = st.session_state.username
+        
+        # Sprawdź czy użytkownik nie zresetował testu celowo
+        if username in users_data and users_data[username].get('kolb_test'):
+            # Jeśli użytkownik ma zapisane wyniki, wczytaj je do session state
+            kolb_data = users_data[username]['kolb_test']
+            
+            # Sprawdź czy session state nie ma już wczytanych wyników
+            # ORAZ czy użytkownik nie kliknął "reset" (sprawdzamy flagę kolb_reset)
+            if not st.session_state.get('kolb_completed') and not st.session_state.get('kolb_reset'):
+                st.session_state.kolb_results = kolb_data.get('scores', {})
+                st.session_state.kolb_dimensions = kolb_data.get('dimensions', {})
+                st.session_state.kolb_dominant = kolb_data.get('dominant_style')
+                st.session_state.kolb_quadrant = kolb_data.get('quadrant')
+                st.session_state.kolb_flexibility = kolb_data.get('flexibility', 0)
+                st.session_state.kolb_completed = True
+                
+                # Informacja o wczytaniu zapisanych wyników
+                st.info(f"✅ Wczytano Twoje wcześniejsze wyniki testu z dnia: {kolb_data.get('completed_date', 'Nieznana')}")
     
     # Karta z teorią ELT
     st.markdown("""
@@ -459,52 +487,53 @@ def show_kolb_test():
         }
     ]
     
-    # Wyświetl pytania
-    st.markdown("---")
-    st.markdown("""
-    <div style='background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
-                border-radius: 12px; 
-                padding: 15px; 
-                margin: 20px 0; 
-                text-align: center;'>
-        <h4 style='margin: 0; color: #2c3e50;'>📝 Odpowiedz na poniższe pytania</h4>
-        <p style='margin: 5px 0 0 0; color: #555;'>Wybierz opcję najbardziej do Ciebie pasującą</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    for q in questions:
-        st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
-                    border-left: 5px solid #3498db; 
-                    border-radius: 10px; 
-                    padding: 20px; 
-                    margin: 15px 0; 
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>
-            <h5 style='margin: 0 0 15px 0; color: #2c3e50;'>
-                <span style='background: #3498db; color: white; padding: 5px 12px; border-radius: 50%; margin-right: 10px;'>{q['id']}</span>
-                {q['question']}
-            </h5>
+    # Wyświetl pytania TYLKO jeśli test nie został ukończony
+    if not st.session_state.kolb_completed:
+        st.markdown("---")
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+                    border-radius: 12px; 
+                    padding: 15px; 
+                    margin: 20px 0; 
+                    text-align: center;'>
+            <h4 style='margin: 0; color: #2c3e50;'>📝 Odpowiedz na poniższe pytania</h4>
+            <p style='margin: 5px 0 0 0; color: #555;'>Wybierz opcję najbardziej do Ciebie pasującą</p>
         </div>
         """, unsafe_allow_html=True)
         
-        answer = st.radio(
-            f"Pytanie {q['id']}",
-            options=list(q['options'].keys()),
-            format_func=lambda x, opts=q['options']: opts[x],
-            key=f"kolb_q{q['id']}",
-            label_visibility="collapsed"
-        )
-        st.session_state.kolb_answers[q['id']] = answer
-        st.markdown("<div style='margin-bottom: 10px;'></div>", unsafe_allow_html=True)
-    
-    # Przycisk do obliczenia wyniku
-    if st.button("📊 Oblicz mój styl uczenia się", type="primary", use_container_width=True):
-        if len(st.session_state.kolb_answers) == len(questions):
-            calculate_kolb_results()
-            st.session_state.kolb_completed = True
-            st.rerun()
-        else:
-            st.warning("⚠️ Proszę odpowiedzieć na wszystkie pytania")
+        for q in questions:
+            st.markdown(f"""
+            <div style='background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
+                        border-left: 5px solid #3498db; 
+                        border-radius: 10px; 
+                        padding: 20px; 
+                        margin: 15px 0; 
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>
+                <h5 style='margin: 0 0 15px 0; color: #2c3e50;'>
+                    <span style='background: #3498db; color: white; padding: 5px 12px; border-radius: 50%; margin-right: 10px;'>{q['id']}</span>
+                    {q['question']}
+                </h5>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            answer = st.radio(
+                f"Pytanie {q['id']}",
+                options=list(q['options'].keys()),
+                format_func=lambda x, opts=q['options']: opts[x],
+                key=f"kolb_q{q['id']}",
+                label_visibility="collapsed"
+            )
+            st.session_state.kolb_answers[q['id']] = answer
+            st.markdown("<div style='margin-bottom: 10px;'></div>", unsafe_allow_html=True)
+        
+        # Przycisk do obliczenia wyniku
+        if st.button("📊 Oblicz mój styl uczenia się", type="primary", use_container_width=True):
+            if len(st.session_state.kolb_answers) == len(questions):
+                calculate_kolb_results()
+                st.session_state.kolb_completed = True
+                st.rerun()
+            else:
+                st.warning("⚠️ Proszę odpowiedzieć na wszystkie pytania")
     
     # Wyświetl wyniki jeśli test został ukończony
     if st.session_state.kolb_completed:
@@ -541,27 +570,34 @@ def generate_kolb_ai_tips(learning_style: str, profession: str):
 Użytkownik to {profession}, którego dominującym stylem uczenia się jest: **{learning_style}**
 ({style_descriptions.get(learning_style, '')})
 
-Wygeneruj 5-7 **bardzo konkretnych i praktycznych wskazówek**, jak ta osoba może wykorzystać swój styl uczenia się w swojej pracy jako {profession}.
+Wygeneruj **konkretne, praktyczne wskazówki** dostosowane do tego stylu uczenia się.
 
-Wskazówki powinny być:
-- Konkretne i możliwe do wdrożenia od zaraz
-- Bezpośrednio związane z codzienną pracą {profession}a
-- Dostosowane do stylu uczenia się {learning_style}
-- Napisane w sposób motywujący i inspirujący
+KRYTYCZNE WYMAGANIA FORMATOWANIA:
+
+1. Utwórz dokładnie 3 sekcje z nagłówkami:
+   **Optymalne warunki dla Twojej nauki:**
+   **Jak wzmacniać swoje mocne strony:**
+   **Jak rozwijać obszary do rozwoju:**
+
+2. Każdy nagłówek MUSI być w osobnej linii i po nim MUSI być pusta linia
+
+3. Pod każdym nagłówkiem utwórz dokładnie 3 punkty rozpoczynające się od "- "
+
+4. W sekcji "Jak wzmacniać swoje mocne strony" każdy punkt powinien zaczynać się od pogrubionej nazwy mocnej strony, np:
+   - **Empatia:** Wykorzystuj swoją wrażliwość do...
+   - **Kreatywność:** Twoja wyobraźnia pozwala na...
+
+5. W sekcji "Jak rozwijać obszary do rozwoju" każdy punkt powinien zaczynać się od pogrubionej nazwy obszaru, np:
+   - **Podejmowanie decyzji:** Aby szybciej decydować, wypróbuj...
+   - **Praktyczne wdrażanie:** Rozwijaj tę umiejętność przez...
+
+TREŚĆ:
+- Bardzo konkretne wskazówki możliwe do wdrożenia natychmiast
+- Dostosowane do stylu {learning_style} i zawodu {profession}
+- Każdy punkt max 2-3 zdania
 - W języku polskim
-- Uwzględniające mocne strony tego stylu (według ELT) oraz sposoby radzenia sobie ze słabościami
-
-Format odpowiedzi (HTML):
-<h4 style='color: white; margin-bottom: 15px;'>🎯 Praktyczne wskazówki dla Ciebie:</h4>
-<ul style='line-height: 1.8; font-size: 1.05em;'>
-<li><strong>Wskazówka 1:</strong> opis</li>
-<li><strong>Wskazówka 2:</strong> opis</li>
-...
-</ul>
-<h4 style='color: white; margin: 20px 0 15px 0;'>💡 Przykład zastosowania:</h4>
-<p style='line-height: 1.6; font-size: 1.05em; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;'>
-[Konkretny, praktyczny przykład sytuacji z pracy {profession}a i jak zastosować styl {learning_style} wykorzystując pełny cykl uczenia się Kolba: CE → RO → AC → AE]
-</p>
+- BEZ formatowania HTML
+- NIE używaj zwrotów typu "Warunek 1", "Mocna strona 2", "Obszar rozwoju 3" - pisz bezpośrednio o konkretnej umiejętności/warunku
 """
         
         response = model.generate_content(prompt)
@@ -622,7 +658,7 @@ def calculate_kolb_results():
     max_distance = math.sqrt(12**2 + 12**2)  # Maksymalna odległość przy 12 pytaniach
     flexibility_score = 100 - (distance_from_center / max_distance * 100)
     
-    # Zapisz wyniki
+    # Zapisz wyniki w session state
     st.session_state.kolb_results = scores
     st.session_state.kolb_dimensions = {
         "AC-CE": ac_ce,
@@ -631,6 +667,1118 @@ def calculate_kolb_results():
     st.session_state.kolb_dominant = dominant_style
     st.session_state.kolb_quadrant = quadrant
     st.session_state.kolb_flexibility = flexibility_score
+    
+    # Zapisz wyniki do danych użytkownika (persistent storage)
+    if st.session_state.get('logged_in') and st.session_state.get('username'):
+        from data.users import load_user_data, save_user_data
+        from datetime import datetime
+        
+        users_data = load_user_data()
+        username = st.session_state.username
+        
+        if username in users_data:
+            # Zapisz wyniki testu Kolba
+            users_data[username]['kolb_test'] = {
+                'scores': scores,  # CE, RO, AC, AE punkty
+                'dimensions': {
+                    'AC-CE': ac_ce,
+                    'AE-RO': ae_ro
+                },
+                'dominant_style': dominant_style,
+                'quadrant': quadrant,
+                'flexibility': round(flexibility_score, 2),
+                'completed_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }
+            
+            save_user_data(users_data)
+    
+    # Wyczyść flagę reset po zapisaniu nowych wyników (pozwól na auto-load przy kolejnym logowaniu)
+    st.session_state.kolb_reset = False
+
+def format_ai_tips_compact(ai_tips_text: str) -> str:
+    """
+    Formatuje tekst AI na kompaktową strukturę z kategoriami i punktami.
+    Wykrywa sekcje i przekształca je w wizualne boxy.
+    Radzi sobie z różnymi formatami AI (wieloliniowe i jednoliniowe punkty).
+    """
+    import re
+    
+    # Ikony dla różnych kategorii
+    category_icons = {
+        'optymalne warunki': '🌟',
+        'warunki': '🌟',
+        'nauki': '📖',
+        'mocne strony': '💪',
+        'wzmacniać': '💪',
+        'silne': '💪',
+        'obszary do rozwoju': '🚀',
+        'rozwijać': '🚀',
+        'słabe': '🚀',
+        'rozwój': '🚀',
+        'metody': '📚',
+        'technik': '🔧',
+        'narzędzi': '🛠️',
+        'strategi': '🎯',
+        'ćwicz': '💪',
+        'przykład': '✨',
+        'zalec': '👍',
+        'unikaj': '⚠️',
+        'rozwój': '🚀',
+        'praktyk': '⚡',
+        'tips': '💡',
+        'wskazówk': '💡',
+        'zastosow': '🔍',
+        'sposób': '📋',
+        'korzyść': '🌟'
+    }
+    
+    # Najpierw podziel tekst na sekcje przez nagłówki **Header**:
+    # Użyj regex aby znaleźć sekcje - TYLKO te które są na początku linii i kończą się dwukropkiem + newline
+    section_pattern = r'^\*\*(.+?)\*\*:\s*$'
+    
+    lines = ai_tips_text.strip().split('\n')
+    formatted_sections = []
+    current_section = None
+    current_items = []
+    
+    for line in lines:
+        line_stripped = line.strip()
+        if not line_stripped:
+            continue
+        
+        # Sprawdź czy to nagłówek sekcji (linia zawiera TYLKO **Nagłówek**: i nic więcej)
+        header_match = re.match(section_pattern, line_stripped)
+        
+        if header_match and len(line_stripped) < 80:  # Nagłówki są krótkie (max 80 znaków)
+            # To jest nagłówek sekcji
+            if current_section and current_items:
+                formatted_sections.append((current_section, current_items))
+            
+            current_section = header_match.group(1).strip()
+            current_items = []
+        else:
+            # To jest zawartość (może zawierać **bold:** wewnątrz)
+            # Usuń bullet points z początku
+            clean_line = re.sub(r'^[-•*]+\s*', '', line_stripped)
+            clean_line = clean_line.strip()
+            
+            if clean_line:
+                if not current_section:
+                    current_section = "Wskazówki"
+                current_items.append(clean_line)
+    
+    # Dodaj ostatnią sekcję
+    if current_section and current_items:
+        formatted_sections.append((current_section, current_items))
+    
+    # Jeśli nadal nic nie wykryto, fallback
+    if not formatted_sections and ai_tips_text.strip():
+        # Podziel po kropkach lub nowych liniach
+        items = [item.strip() for item in re.split(r'[.\n]+', ai_tips_text) if item.strip()]
+        if items:
+            formatted_sections.append(("Wskazówki AI", items))
+    
+    # Generuj HTML
+    html_parts = []
+    
+    # Filtruj puste sekcje
+    formatted_sections = [(title, items) for title, items in formatted_sections if items]
+    
+    if not formatted_sections:
+        # Fallback - surowy tekst
+        return f'''
+        <div class="ai-tip-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; border-radius: 8px;">
+            <h3 style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold;">💡 Wskazówki AI</h3>
+            <div style="margin: 0; padding-left: 10px;">
+                {ai_tips_text.replace(chr(10), '<br>')}
+            </div>
+        </div>
+        '''
+    
+    for i, (title, items) in enumerate(formatted_sections):
+        # Usuń emoji z tytułu jeśli już jest
+        title = re.sub(r'^[\U0001F300-\U0001F9FF]\s*', '', title)
+        
+        # Wybierz ikonę
+        icon = '📌'
+        title_lower = title.lower()
+        for key, emoji in category_icons.items():
+            if key in title_lower:
+                icon = emoji
+                break
+        
+        # Kolory naprzemienne
+        colors = [
+            ('linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 'white'),
+            ('linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', 'white'),
+            ('linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', 'white'),
+            ('linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', '#333'),
+            ('linear-gradient(135deg, #fa709a 0%, #fee140 100%)', '#333'),
+        ]
+        bg, text_color = colors[i % len(colors)]
+        
+        # Box z nagłówkiem i klasą CSS - używamy div zamiast ul/li dla lepszego renderowania w PDF
+        html_parts.append(f'''
+        <div class="ai-tip-box" style="background: {bg}; color: {text_color}; padding: 12px 18px; border-radius: 8px; margin-bottom: 15px;">
+            <h3 style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold;">{icon} {title}</h3>
+            <div style="margin: 0; padding-left: 10px;">
+        ''')
+        
+        for item in items:
+            # Sprawdź czy punkt zaczyna się od **Bold tekst:**
+            bold_prefix_match = re.match(r'^\*\*(.+?)\*\*:\s*(.+)', item)
+            
+            if bold_prefix_match:
+                # Punkt ma bold prefix
+                bold_text = bold_prefix_match.group(1).strip()
+                rest_text = bold_prefix_match.group(2).strip()
+                clean_item = f'<strong>{bold_text}:</strong> {rest_text}'
+            else:
+                # Zwykły punkt - usuń gwiazdki z tekstu i zamień na <strong>
+                clean_item = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', item)
+            
+            # Usuń ewentualne podwójne spacje
+            clean_item = re.sub(r'\s+', ' ', clean_item).strip()
+            
+            if clean_item:
+                # Każdy punkt jako osobny div z margin-bottom dla separacji
+                html_parts.append(f'<div style="margin-bottom: 8px; line-height: 1.6; font-size: 14px;">▸ {clean_item}</div>')
+        
+        html_parts.append('</div></div>')
+    
+    return '\n'.join(html_parts)
+
+def format_ai_tips_for_streamlit(ai_tips_text: str) -> str:
+    """
+    Formatuje tekst AI dla Streamlit (bez HTML, używa markdown i emoji).
+    Zwraca czysty tekst z emoji i strukturą do wyświetlenia przez st.markdown().
+    """
+    import re
+    
+    # Podziel tekst na sekcje - nagłówki to linie z **Tekst:**
+    section_pattern = r'^\*\*(.+?)\*\*:?\s*$'
+    
+    lines = ai_tips_text.strip().split('\n')
+    sections = []
+    current_section = None
+    current_items = []
+    
+    for line in lines:
+        line_stripped = line.strip()
+        
+        # Pomiń puste linie między sekcjami
+        if not line_stripped:
+            continue
+        
+        # Sprawdź czy to nagłówek sekcji
+        header_match = re.match(section_pattern, line_stripped)
+        
+        # Nagłówek = krótka linia (max 100 znaków) z **Tekst:**
+        if header_match and len(line_stripped) < 100:
+            # To jest nagłówek - zapisz poprzednią sekcję
+            if current_section and current_items:
+                sections.append((current_section, current_items))
+            
+            current_section = header_match.group(1).strip().rstrip(':')
+            current_items = []
+        else:
+            # To jest zawartość punktu
+            # Usuń bullet points i spacje
+            clean_line = re.sub(r'^[-•*]\s*', '', line_stripped)
+            clean_line = clean_line.strip()
+            
+            if clean_line:
+                if not current_section:
+                    # Jeśli nie ma sekcji, utwórz domyślną
+                    current_section = "Wskazówki"
+                current_items.append(clean_line)
+    
+    # Dodaj ostatnią sekcję
+    if current_section and current_items:
+        sections.append((current_section, current_items))
+    
+    # Jeśli nie wykryto sekcji, spróbuj przetworzyć jako jeden blok
+    if not sections:
+        # Spróbuj podzielić po pustych liniach i nagłówkach inline
+        fallback_sections = []
+        current_section = "Wskazówki"
+        current_items = []
+        
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            
+            # Sprawdź czy linia zawiera inline nagłówek **Tekst:** tekst
+            inline_match = re.match(r'^\*\*(.+?)\*\*:\s*(.+)', line)
+            if inline_match and len(inline_match.group(1)) < 50:
+                if current_items:
+                    fallback_sections.append((current_section, current_items))
+                current_section = inline_match.group(1).strip()
+                current_items = [inline_match.group(2).strip()]
+            else:
+                clean_line = re.sub(r'^[-•*]\s*', '', line)
+                if clean_line:
+                    current_items.append(clean_line)
+        
+        if current_items:
+            fallback_sections.append((current_section, current_items))
+        
+        sections = fallback_sections if fallback_sections else []
+    
+    # Jeśli nadal nie ma sekcji, zwróć surowy tekst
+    if not sections:
+        return ai_tips_text
+    
+    # Generuj markdown dla Streamlit
+    result_parts = []
+    
+    for section_title, items in sections:
+        # Wybierz emoji na podstawie tytułu sekcji
+        icon = '📌'
+        title_lower = section_title.lower()
+        if 'warunki' in title_lower or 'optymalne' in title_lower:
+            icon = '🌟'
+        elif 'mocn' in title_lower or 'wzmacnia' in title_lower or 'siln' in title_lower:
+            icon = '💪'
+        elif 'rozwój' in title_lower or 'rozwija' in title_lower or 'słab' in title_lower or 'obszar' in title_lower:
+            icon = '🚀'
+        
+        # Dodaj nagłówek sekcji
+        result_parts.append(f"\n#### {icon} {section_title}\n")
+        
+        # Dodaj punkty
+        for item in items:
+            # Sprawdź czy punkt ma bold prefix **Tekst:**
+            bold_prefix_match = re.match(r'^\*\*(.+?)\*\*:\s*(.+)', item)
+            
+            if bold_prefix_match:
+                # Punkt ma bold prefix
+                bold_text = bold_prefix_match.group(1).strip()
+                rest_text = bold_prefix_match.group(2).strip()
+                result_parts.append(f"- **{bold_text}:** {rest_text}")
+            else:
+                # Zwykły punkt - zostaw **bold** jak jest
+                result_parts.append(f"- {item}")
+        
+        result_parts.append("")  # Pusta linia po sekcji
+    
+    return '\n'.join(result_parts)
+
+def generate_kolb_html_report() -> str:
+    """Generuje raport HTML z wynikami testu Kolba - gotowy do druku jako PDF"""
+    
+    # Pobierz dane z session state
+    results = st.session_state.kolb_results
+    dimensions = st.session_state.kolb_dimensions
+    dominant = st.session_state.kolb_dominant
+    quadrant = st.session_state.kolb_quadrant
+    flexibility = st.session_state.kolb_flexibility
+    username = st.session_state.get('username', 'Użytkownik')
+    
+    # Przygotuj dane dla wykresów
+    ability_info = {
+        "CE": {"name": "Konkretne Doświadczenie", "emoji": "❤️", "color": "#E74C3C", "desc": "Feeling"},
+        "RO": {"name": "Refleksyjna Obserwacja", "emoji": "👁️", "color": "#4A90E2", "desc": "Watching"},
+        "AC": {"name": "Abstrakcyjna Konceptualizacja", "emoji": "🧠", "color": "#9B59B6", "desc": "Thinking"},
+        "AE": {"name": "Aktywne Eksperymentowanie", "emoji": "⚙️", "color": "#2ECC71", "desc": "Doing"}
+    }
+    
+    # Wygeneruj wykres słupkowy jako HTML (Plotly offline)
+    abilities_order = ['CE', 'RO', 'AC', 'AE']
+    scores = [results[a] for a in abilities_order]
+    colors = [ability_info[a]['color'] for a in abilities_order]
+    
+    # Etykiety w dwóch liniach dla lepszej czytelności
+    labels_multiline = [
+        'Konkretne<br>Doświadczenie',
+        'Refleksyjna<br>Obserwacja',
+        'Abstrakcyjna<br>Konceptualizacja',
+        'Aktywne<br>Eksperymentowanie'
+    ]
+    
+    # Wykres słupkowy
+    fig_bar = go.Figure(data=[
+        go.Bar(
+            x=labels_multiline,  # Etykiety w dwóch liniach
+            y=scores,
+            marker=dict(color=colors),
+            text=scores,
+            textposition='outside',
+            textfont=dict(size=16, color='#333')
+        )
+    ])
+    fig_bar.update_layout(
+        title='Zdolności Podstawowe w Cyklu Kolba',
+        xaxis=dict(tickangle=0, tickfont=dict(size=12)),  # Poziome etykiety
+        yaxis=dict(title='Wynik (punkty)', range=[0, 13]),
+        width=650,  # Fixed width - bezpieczna szerokość dla A4
+        height=350,  # Zwiększone z 300 dla etykiet X
+        margin=dict(t=50, b=80, l=50, r=40),  # Zmniejszony dolny margines (etykiety 2-liniowe)
+        plot_bgcolor='white',
+        paper_bgcolor='white'
+    )
+    
+    # Konwertuj wykres do HTML (inline, bez CDN)
+    bar_chart_html = fig_bar.to_html(
+        include_plotlyjs='inline',  # Osadź plotly.js w HTML
+        div_id='bar_chart',
+        config={'displayModeBar': False}  # Ukryj toolbar
+    )
+    
+    # Wygeneruj wykres siatki
+    x_coord = dimensions['AE-RO']
+    y_coord = dimensions['AC-CE']
+    
+    fig_grid = go.Figure()
+    
+    # Dodaj tło ćwiartek
+    quadrant_colors = {
+        'Diverging': 'rgba(231, 76, 60, 0.15)',
+        'Assimilating': 'rgba(155, 89, 182, 0.15)',
+        'Converging': 'rgba(52, 152, 219, 0.15)',
+        'Accommodating': 'rgba(46, 204, 113, 0.15)'
+    }
+    
+    quadrant_positions = {
+        'Diverging': {'x': [-12, 0], 'y': [-12, 0], 'label_x': -6, 'label_y': -6},
+        'Assimilating': {'x': [-12, 0], 'y': [0, 12], 'label_x': -6, 'label_y': 6},
+        'Converging': {'x': [0, 12], 'y': [0, 12], 'label_x': 6, 'label_y': 6},
+        'Accommodating': {'x': [0, 12], 'y': [-12, 0], 'label_x': 6, 'label_y': -6}
+    }
+    
+    for style_name, pos in quadrant_positions.items():
+        fig_grid.add_shape(
+            type="rect",
+            x0=pos['x'][0], x1=pos['x'][1],
+            y0=pos['y'][0], y1=pos['y'][1],
+            fillcolor=quadrant_colors[style_name],
+            line=dict(width=0)
+        )
+        fig_grid.add_annotation(
+            x=pos['label_x'], y=pos['label_y'],
+            text=f"<b>{style_name}</b>",
+            showarrow=False,
+            font=dict(size=12, color='rgba(0,0,0,0.5)')
+        )
+    
+    # Dodaj punkt użytkownika
+    fig_grid.add_trace(go.Scatter(
+        x=[x_coord], y=[y_coord],
+        mode='markers+text',
+        marker=dict(size=20, color='red', symbol='star'),
+        text=['Ty'],
+        textposition='top center',
+        name='Twoja pozycja'
+    ))
+    
+    # Dodaj osie
+    fig_grid.add_hline(y=0, line_dash="dash", line_color="gray")
+    fig_grid.add_vline(x=0, line_dash="dash", line_color="gray")
+    
+    fig_grid.update_layout(
+        title='Siatka Stylów Uczenia się',
+        xaxis=dict(title='Przetwarzanie (AE - RO)', range=[-13, 13]),
+        yaxis=dict(title='Postrzeganie (AC - CE)', range=[-13, 13]),
+        width=650,  # Fixed width - bezpieczna szerokość dla A4
+        height=400,  
+        showlegend=False,
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        margin=dict(t=60, b=60, l=70, r=70)  # Większe boczne marginesy
+    )
+    
+    # Konwertuj wykres siatki do HTML
+    grid_chart_html = fig_grid.to_html(
+        include_plotlyjs=False,  # Plotly.js już jest w pierwszym wykresie
+        div_id='grid_chart',
+        config={'displayModeBar': False, 'responsive': True}  # Responsive
+    )
+    
+    # Opisy stylów
+    style_descriptions = {
+        "Diverging (Dywergent)": {
+            "icon": "🎨",
+            "desc": "Uczysz się poprzez obserwację i refleksję. Preferujesz kreatywne podejście i wielość perspektyw.",
+            "strengths": "Kreatywność, empatia, wyobraźnia, generowanie pomysłów",
+            "development": "Praca w grupach, burze mózgów, case studies, dyskusje"
+        },
+        "Assimilating (Asymilator)": {
+            "icon": "📚",
+            "desc": "Uczysz się poprzez logiczne myślenie i teorię. Preferujesz systematyczne podejście.",
+            "strengths": "Analiza, organizacja informacji, myślenie konceptualne",
+            "development": "Wykłady, czytanie, badania, modele teoretyczne"
+        },
+        "Converging (Konwergent)": {
+            "icon": "🎯",
+            "desc": "Uczysz się poprzez praktyczne zastosowanie teorii. Preferujesz rozwiązywanie konkretnych problemów.",
+            "strengths": "Rozwiązywanie problemów, podejmowanie decyzji, praktyczne zastosowania",
+            "development": "Ćwiczenia praktyczne, symulacje, eksperymenty, projekty"
+        },
+        "Accommodating (Akomodator)": {
+            "icon": "⚡",
+            "desc": "Uczysz się poprzez działanie i eksperymentowanie. Preferujesz intuicyjne podejście.",
+            "strengths": "Adaptacja, działanie, branie ryzyka, realizacja planów",
+            "development": "Praktyka w terenie, trial-and-error, projekty terenowe"
+        }
+    }
+    
+    style_info = style_descriptions.get(dominant, style_descriptions["Diverging (Dywergent)"])
+    
+    # Szczegółowe opisy stylów (pełna wersja dla PDF)
+    detailed_style_descriptions = {
+        "Diverging (Dywergent)": {
+            "icon": "🎨",
+            "quadrant": "CE/RO",
+            "description": "Łączysz Konkretne Doświadczenie i Refleksyjną Obserwację. Jesteś wrażliwy i potrafisz spojrzeć na sytuacje z wielu różnych perspektyw. Twoja główna mocna strona to wyobraźnia i zdolność do generowania wielu pomysłów.",
+            "strengths": ["Wyobraźnia i kreatywność", "Zdolność do widzenia sytuacji z różnych perspektyw", "Empatia i wrażliwość", "Doskonałość w burzy mózgów i generowaniu pomysłów", "Umiejętność integracji różnych obserwacji"],
+            "weaknesses": ["Trudności z podejmowaniem szybkich decyzji", "Problemy z przekładaniem teorii na działanie", "Tendencja do nadmiernego analizowania"],
+            "careers": "Doradztwo, sztuka, HR, psychologia, dziennikarstwo",
+            "learning_methods": "Studia przypadków, dyskusje grupowe, feedback, introspekcja, obserwacja działania innych"
+        },
+        "Assimilating (Asymilator)": {
+            "icon": "📚",
+            "quadrant": "AC/RO",
+            "description": "Łączysz Abstrakcyjną Konceptualizację i Refleksyjną Obserwację. Preferujesz zwięzłe, logiczne i systematyczne podejście. Wykazujesz dużą zdolność do tworzenia modeli teoretycznych i scalania licznych obserwacji w zintegrowane wyjaśnienia.",
+            "strengths": ["Tworzenie modeli teoretycznych", "Logiczne i systematyczne myślenie", "Precyzja i spójność teorii", "Zdolność do scalania wielu obserwacji", "Planowanie strategiczne"],
+            "weaknesses": ["Mniejsze zainteresowanie problemami praktycznymi", "Trudności w pracy z ludźmi", "Preferencja teorii nad zastosowaniem"],
+            "careers": "Nauka, informatyka, planowanie strategiczne, badania, matematyka",
+            "learning_methods": "Wykłady teoretyczne, modele i schematy, analiza koncepcji, dociekliwe pytania, prace nad systemami"
+        },
+        "Converging (Konwergent)": {
+            "icon": "🎯",
+            "quadrant": "AC/AE",
+            "description": "Łączysz Abstrakcyjną Konceptualizację i Aktywne Eksperymentowanie. Doskonale radzisz sobie z praktycznym zastosowaniem teorii do rozwiązywania konkretnych problemów. Skupiasz się na zadaniach i rzeczach, a nie na kwestiach międzyludzkich.",
+            "strengths": ["Praktyczne zastosowanie teorii", "Efektywność i sprawność działania", "Zdolność do podejmowania decyzji", "Umiejętności techniczne", "Rozwiązywanie konkretnych problemów"],
+            "weaknesses": ["Mniejsze zainteresowanie relacjami międzyludzkimi", "Skupienie na zadaniach kosztem ludzi", "Preferencja dla jednoznacznych rozwiązań"],
+            "careers": "Inżynieria, technologia, medycyna, ekonomia, zawody techniczne",
+            "learning_methods": "Ćwiczenia praktyczne, wdrożenia, testowanie umiejętności, konkretne przykłady zawodowe, zadania aplikacyjne"
+        },
+        "Accommodating (Akomodator)": {
+            "icon": "⚡",
+            "quadrant": "CE/AE",
+            "description": "Łączysz Konkretne Doświadczenie i Aktywne Eksperymentowanie. To styl 'hands-on', który polega na intuicji. Jesteś elastyczny, zdolny do wprowadzania planów w życie, chętnie eksperymentujesz i adaptujesz się do nowych warunków.",
+            "strengths": ["Elastyczność i adaptacja", "Podejmowanie ryzyka", "Szybka reakcja na zmiany", "Osobiste zaangażowanie", "Umiejętność wprowadzania planów w życie"],
+            "weaknesses": ["Tendencja do działania bez planu", "Niecierpliwość wobec teorii", "Ryzyko podejmowania pochopnych decyzji"],
+            "careers": "Zarządzanie operacyjne, sprzedaż, marketing, przedsiębiorczość",
+            "learning_methods": "Gry, symulacje, różnorodne ćwiczenia, odgrywanie ról, zadania niestandardowe wymagające ryzyka"
+        }
+    }
+    
+    detailed_style_info = detailed_style_descriptions.get(dominant, detailed_style_descriptions["Diverging (Dywergent)"])
+    
+    # HTML template
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Raport Kolb - {username}</title>
+        <style>
+            @page {{
+                size: A4;
+                margin: 2cm;
+            }}
+            
+            body {{
+                font-family: 'Arial', 'Helvetica', sans-serif;
+                line-height: 1.6;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }}
+            
+            .header {{
+                text-align: center;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 10px;
+                margin-bottom: 30px;
+            }}
+            
+            .header h1 {{
+                margin: 0;
+                font-size: 32px;
+                font-weight: bold;
+            }}
+            
+            .header p {{
+                margin: 10px 0 0 0;
+                font-size: 16px;
+                opacity: 0.9;
+            }}
+            
+            .section {{
+                margin-bottom: 30px;
+                page-break-inside: avoid;
+            }}
+            
+            .section-title {{
+                font-size: 24px;
+                color: #667eea;
+                border-bottom: 3px solid #667eea;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }}
+            
+            .abilities-grid {{
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);  /* Jeden wiersz, cztery kolumny */
+                gap: 15px;  /* Mniejsza przerwa między kartami */
+                margin-bottom: 30px;
+            }}
+            
+            .ability-card {{
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                padding: 15px 10px;  /* Mniejszy padding dla węższych kart */
+                text-align: center;
+                background: #f8f9fa;
+            }}
+            
+            .ability-card h3 {{
+                color: #333;
+                margin: 8px 0;
+                font-size: 14px;  /* Mniejsza czcionka */
+                line-height: 1.3;
+            }}
+            
+            .ability-card .score {{
+                font-size: 32px;  /* Mniejszy wynik */
+                font-weight: bold;
+                margin: 8px 0;
+            }}
+            
+            .ability-card .desc {{
+                color: #666;
+                font-size: 12px;  /* Mniejszy opis */
+                line-height: 1.3;
+            }}
+            
+            .chart-container {{
+                text-align: center;
+                margin: 20px 0;
+                page-break-inside: avoid;
+                max-width: 100%;
+                overflow: hidden;
+            }}
+            
+            .chart-container img {{
+                max-width: 100%;
+                height: auto;
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+            }}
+            
+            .dominant-style {{
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 25px;
+                border-radius: 10px;
+                margin: 20px 0;
+            }}
+            
+            .dominant-style h2 {{
+                margin: 0 0 15px 0;
+                font-size: 28px;
+            }}
+            
+            .dominant-style p {{
+                margin: 10px 0;
+                font-size: 16px;
+                line-height: 1.8;
+            }}
+            
+            .info-box {{
+                background: #f0f7ff;
+                border-left: 4px solid #4A90E2;
+                padding: 20px;
+                margin: 20px 0;
+                border-radius: 5px;
+            }}
+            
+            .info-box h3 {{
+                margin: 0 0 10px 0;
+                color: #4A90E2;
+            }}
+            
+            .flexibility-meter {{
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                text-align: center;
+                margin: 20px 0;
+            }}
+            
+            .flexibility-meter .score {{
+                font-size: 48px;
+                font-weight: bold;
+                color: #667eea;
+            }}
+            
+            .footer {{
+                text-align: center;
+                color: #999;
+                font-size: 12px;
+                margin-top: 40px;
+                padding-top: 20px;
+                border-top: 1px solid #e0e0e0;
+            }}
+            
+            .two-column {{
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                margin: 20px 0;
+            }}
+            
+            /* Style dla kompaktowych wskazówek AI */
+            .ai-tip-box {{
+                page-break-inside: avoid;
+                margin-bottom: 15px;
+            }}
+            
+            .ai-tip-box h3 {{
+                margin: 0 0 10px 0;
+                font-size: 16px;
+                font-weight: bold;
+            }}
+            
+            .ai-tip-box > div {{
+                margin: 0;
+                padding-left: 10px;
+            }}
+            
+            .ai-tip-box > div > div {{
+                margin-bottom: 8px;
+                font-size: 14px;
+                line-height: 1.5;
+            }}
+            
+            /* Style dla wykresów Plotly */
+            .plotly, .js-plotly-plot {{
+                max-width: 100%;
+                overflow: visible;
+                margin: 20px auto;
+            }}
+            
+            #bar_chart, #grid_chart {{
+                max-width: 100%;
+                overflow: visible;
+                page-break-inside: avoid;
+            }}
+            
+            .plotly svg {{
+                max-width: 100%;
+                height: auto;
+            }}
+            
+            /* Media query dla druku */
+            @media print {{
+                body {{
+                    background: white;
+                }}
+                
+                .header, .dominant-style, .ai-card-color, .ai-header-color {{
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                    color-adjust: exact !important;
+                }}
+                
+                .section {{
+                    page-break-inside: avoid;
+                }}
+                
+                /* Karty zdolności - kompaktowe w druku */
+                .abilities-grid {{
+                    gap: 10px !important;  /* Mniejsza przerwa */
+                }}
+                
+                .ability-card {{
+                    padding: 10px 8px !important;  /* Jeszcze mniejszy padding */
+                }}
+                
+                .ability-card h3 {{
+                    font-size: 13px !important;
+                }}
+                
+                .ability-card .score {{
+                    font-size: 28px !important;
+                }}
+                
+                .ability-card .desc {{
+                    font-size: 11px !important;
+                }}
+                
+                /* Boxy AI - kompaktowe w druku */
+                .ai-tip-box {{
+                    margin-bottom: 10px !important;
+                    padding: 10px 15px !important;
+                }}
+                
+                .ai-tip-box h3 {{
+                    font-size: 14px !important;
+                    margin-bottom: 8px !important;
+                }}
+                
+                .ai-tip-box > div > div {{
+                    font-size: 12px !important;
+                    margin-bottom: 5px !important;
+                    line-height: 1.4 !important;
+                }}
+                
+                .chart-container {{
+                    margin: 15px auto !important;
+                    max-width: 680px !important;  /* Szerokość dopasowana do wykresów */
+                    overflow: visible !important;
+                }}
+                
+                /* Wykresy Plotly - bez skalowania */
+                .plotly {{
+                    page-break-inside: avoid !important;
+                    max-width: 680px !important;
+                    margin: 0 auto !important;
+                }}
+                
+                .js-plotly-plot {{
+                    page-break-inside: avoid !important;
+                    max-width: 680px !important;
+                }}
+                
+                /* Kontenery wykresów */
+                #bar_chart, #grid_chart {{
+                    page-break-inside: avoid !important;
+                    max-width: 680px !important;
+                    overflow: visible !important;
+                    margin: 0 auto 15px auto !important;
+                }}
+                
+                /* SVG w wykresach */
+                .plotly svg {{
+                    max-width: 680px !important;
+                }}
+                
+                @page {{
+                    margin: 1.5cm;
+                    size: A4;
+                }}
+            }}
+            
+            /* Przycisk drukowania */
+            .print-button {{
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #667eea;
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+                z-index: 1000;
+            }}
+            
+            .print-button:hover {{
+                background: #5568d3;
+            }}
+            
+            @media print {{
+                .print-button {{
+                    display: none;
+                }}
+            }}
+        </style>
+    </head>
+    <body>
+        <!-- Przycisk do drukowania -->
+        <button class="print-button" onclick="window.print()">🖨️ Drukuj / Zapisz jako PDF</button>
+        
+        <div class="header">
+            <h1>🎓 Raport Kolb Learning Style Inventory</h1>
+            <p>Użytkownik: {username}</p>
+            <p>Data: {datetime.now().strftime('%d.%m.%Y %H:%M')}</p>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">📊 Twoje Zdolności Uczenia się</h2>
+            
+            <div class="abilities-grid">
+                <div class="ability-card" style="border-left: 5px solid {ability_info['CE']['color']}">
+                    <div style="font-size: 32px;">{ability_info['CE']['emoji']}</div>
+                    <h3>{ability_info['CE']['name']}</h3>
+                    <div class="desc">({ability_info['CE']['desc']})</div>
+                    <div class="score" style="color: {ability_info['CE']['color']}">{results['CE']}/12</div>
+                </div>
+                
+                <div class="ability-card" style="border-left: 5px solid {ability_info['RO']['color']}">
+                    <div style="font-size: 32px;">{ability_info['RO']['emoji']}</div>
+                    <h3>{ability_info['RO']['name']}</h3>
+                    <div class="desc">({ability_info['RO']['desc']})</div>
+                    <div class="score" style="color: {ability_info['RO']['color']}">{results['RO']}/12</div>
+                </div>
+                
+                <div class="ability-card" style="border-left: 5px solid {ability_info['AC']['color']}">
+                    <div style="font-size: 32px;">{ability_info['AC']['emoji']}</div>
+                    <h3>{ability_info['AC']['name']}</h3>
+                    <div class="desc">({ability_info['AC']['desc']})</div>
+                    <div class="score" style="color: {ability_info['AC']['color']}">{results['AC']}/12</div>
+                </div>
+                
+                <div class="ability-card" style="border-left: 5px solid {ability_info['AE']['color']}">
+                    <div style="font-size: 32px;">{ability_info['AE']['emoji']}</div>
+                    <h3>{ability_info['AE']['name']}</h3>
+                    <div class="desc">({ability_info['AE']['desc']})</div>
+                    <div class="score" style="color: {ability_info['AE']['color']}">{results['AE']}/12</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">📈 Wizualizacja Wyników</h2>
+            <div class="chart-container" style="max-width: 95%; margin: 0 auto;">
+                {bar_chart_html}
+            </div>
+        </div>
+        
+        <div class="section" style="page-break-before: always;">
+            <h2 class="section-title">🎯 Twój Dominujący Styl Uczenia się</h2>
+            
+            <div class="dominant-style">
+                <h2>{detailed_style_info['icon']} {dominant}</h2>
+                <p><strong>Ćwiartka:</strong> {detailed_style_info['quadrant']}</p>
+                <p style="margin-top: 15px; font-size: 16px; line-height: 1.8;">{detailed_style_info['description']}</p>
+            </div>
+            
+            <div class="chart-container" style="max-width: 95%; margin: 0 auto;">
+                {grid_chart_html}
+            </div>
+            
+            <div class="two-column" style="margin-top: 30px;">
+                <div class="info-box" style="border-left-color: #2ECC71; background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, rgba(39, 174, 96, 0.1) 100%);">
+                    <h3 style="color: #2ECC71;">💪 Twoje mocne strony:</h3>
+                    <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+                        {''.join([f'<li>{s}</li>' for s in detailed_style_info['strengths']])}
+                    </ul>
+                </div>
+                
+                <div class="info-box" style="border-left-color: #E67E22; background: linear-gradient(135deg, rgba(230, 126, 34, 0.1) 0%, rgba(211, 84, 0, 0.1) 100%);">
+                    <h3 style="color: #E67E22;">🎯 Obszary do rozwoju:</h3>
+                    <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+                        {''.join([f'<li>{w}</li>' for w in detailed_style_info['weaknesses']])}
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="two-column" style="margin-top: 20px;">
+                <div class="info-box" style="border-left-color: #3498DB;">
+                    <h3 style="color: #3498DB;">💼 Typowe zawody:</h3>
+                    <p>{detailed_style_info['careers']}</p>
+                </div>
+                
+                <div class="info-box" style="border-left-color: #9B59B6;">
+                    <h3 style="color: #9B59B6;">📚 Rekomendowane metody uczenia się:</h3>
+                    <p>{detailed_style_info['learning_methods']}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">💫 Elastyczność Uczenia się</h2>
+            
+            <div class="flexibility-meter">
+                <div class="score">{flexibility:.1f}%</div>
+                <p>Twoja elastyczność w uczeniu się</p>
+                <p style="color: #666; font-size: 14px;">
+                    {"🌟 Wysoka elastyczność! Potrafisz łączyć różne style uczenia się." if flexibility > 70 
+                     else "⭐ Dobra elastyczność. Masz zrównoważone podejście." if flexibility > 50
+                     else "💪 Silne preferencje w określonym stylu. Rozważ rozwijanie innych zdolności."}
+                </p>
+            </div>
+            
+            <div class="info-box">
+                <h3>📍 Twoja pozycja na siatce</h3>
+                <div class="two-column">
+                    <div>
+                        <strong>Postrzeganie (AC-CE):</strong> {dimensions['AC-CE']:+.1f}
+                    </div>
+                    <div>
+                        <strong>Przetwarzanie (AE-RO):</strong> {dimensions['AE-RO']:+.1f}
+                    </div>
+                </div>
+                <p style="margin-top: 15px;">
+                    <strong>Kwadrant:</strong> {quadrant}
+                </p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">� Wymiary Liczbowe (LSI Dimensions)</h2>
+            
+            <div class="abilities-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="ability-card" style="border-left: 5px solid #667eea; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">
+                    <h3>Oś Postrzegania</h3>
+                    <div style="color: #666; font-size: 14px; margin: 5px 0;">AC-CE</div>
+                    <div class="score" style="color: #667eea">{dimensions['AC-CE']:+d}</div>
+                    <div style="color: #666; font-size: 14px;">{'Preferencja: Myślenie (AC)' if dimensions['AC-CE'] > 0 else 'Preferencja: Czucie (CE)'}</div>
+                </div>
+                
+                <div class="ability-card" style="border-left: 5px solid #f5576c; background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);">
+                    <h3>Oś Przetwarzania</h3>
+                    <div style="color: #666; font-size: 14px; margin: 5px 0;">AE-RO</div>
+                    <div class="score" style="color: #f5576c">{dimensions['AE-RO']:+d}</div>
+                    <div style="color: #666; font-size: 14px;">{'Preferencja: Działanie (AE)' if dimensions['AE-RO'] > 0 else 'Preferencja: Obserwacja (RO)'}</div>
+                </div>
+                
+                <div class="ability-card" style="border-left: 5px solid #38f9d7; background: linear-gradient(135deg, rgba(67, 233, 123, 0.1) 0%, rgba(56, 249, 215, 0.1) 100%);">
+                    <h3>Elastyczność</h3>
+                    <div style="color: #666; font-size: 14px; margin: 5px 0;">Learning Flexibility</div>
+                    <div class="score" style="color: #38f9d7">{flexibility:.0f}%</div>
+                    <div style="color: #666; font-size: 14px;">{'Wysoka - Zrównoważony' if flexibility > 60 else 'Średnia - Umiarkowana' if flexibility > 30 else 'Niska - Wyraźna preferencja'}</div>
+                </div>
+            </div>
+            
+            <div class="info-box" style="margin-top: 20px;">
+                <h3>📊 Interpretacja wymiarów:</h3>
+                <p><strong>AC-CE (Postrzeganie):</strong> Pokazuje jak preferujesz postrzegać informacje - poprzez abstrakcyjne myślenie (AC) czy konkretne doświadczenie (CE).</p>
+                <p><strong>AE-RO (Przetwarzanie):</strong> Pokazuje jak preferujesz przetwarzać informacje - poprzez aktywne eksperymentowanie (AE) czy refleksyjną obserwację (RO).</p>
+                <p><strong>Elastyczność:</strong> Im bliżej centrum siatki, tym większa elastyczność w przełączaniu między stylami uczenia się.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">�💡 Rekomendacje Rozwojowe</h2>
+            
+            <div class="info-box" style="border-left-color: #2ECC71;">
+                <h3>✅ Co robić więcej:</h3>
+                <p>{style_info['development']}</p>
+            </div>
+            
+            <div class="info-box" style="border-left-color: #E74C3C;">
+                <h3>🎯 Obszary do rozwinięcia:</h3>
+                <p>Rozważ ćwiczenie pozostałych stylów uczenia się, aby zwiększyć swoją elastyczność i efektywność.</p>
+            </div>
+        </div>
+        """
+    
+    # Dodaj sekcję AI jeśli jest dostępna
+    ai_section = ""
+    if st.session_state.get('kolb_profession') and st.session_state.get('kolb_ai_tips'):
+        profession = st.session_state.kolb_profession
+        ai_tips_raw = st.session_state.kolb_ai_tips
+        
+        # Parsuj wskazówki AI na sekcje (taka sama logika jak w Streamlit)
+        section_pattern = r'^\*\*(.+?)\*\*:?\s*$'
+        lines = ai_tips_raw.strip().split('\n')
+        sections = []
+        current_section = None
+        current_items = []
+        
+        for line in lines:
+            line_stripped = line.strip()
+            if not line_stripped:
+                continue
+            
+            header_match = re.match(section_pattern, line_stripped)
+            
+            if header_match and len(line_stripped) < 100:
+                if current_section and current_items:
+                    sections.append((current_section, current_items))
+                current_section = header_match.group(1).strip().rstrip(':')
+                current_items = []
+            else:
+                clean_line = re.sub(r'^[-•*]\s*', '', line_stripped)
+                clean_line = clean_line.strip()
+                if clean_line:
+                    current_items.append(clean_line)
+        
+        if current_section and current_items:
+            sections.append((current_section, current_items))
+        
+        # Generuj HTML dla sekcji
+        ai_cards_html = ""
+        for idx, (section_title, items) in enumerate(sections):
+            # Automatyczne wybieranie koloru i ikony
+            if 'warunki' in section_title.lower() or 'optymalne' in section_title.lower():
+                icon = '🌟'
+                bg = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                text_color = 'white'
+            elif 'mocn' in section_title.lower() or 'wzmacnia' in section_title.lower():
+                icon = '💪'
+                bg = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+                text_color = 'white'
+            elif 'rozwój' in section_title.lower() or 'rozwija' in section_title.lower():
+                icon = '🚀'
+                bg = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+                text_color = '#333'
+            else:
+                icon = '📌'
+                bg = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+                text_color = 'white'
+            
+            # Buduj HTML dla punktów z numeracją
+            items_html = "<ol style='margin: 10px 0 0 20px; padding-left: 0;'>"
+            for item in items:
+                # Zamień **tekst** na <strong>tekst</strong>
+                formatted_item = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', item)
+                items_html += f"<li style='margin: 10px 0; line-height: 1.6;'>{formatted_item}</li>"
+            items_html += "</ol>"
+            
+            # Dodaj kartę z klasą dla zachowania kolorów w druku
+            ai_cards_html += f"""
+            <div class='ai-card-color' style='background: {bg}; 
+                        color: {text_color}; 
+                        padding: 25px; 
+                        border-radius: 15px; 
+                        margin: 15px 0;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                        color-adjust: exact;'>
+                <h4 style='margin: 0 0 20px 0; color: {text_color};'>{icon} {section_title}</h4>
+                {items_html}
+            </div>
+            """
+        
+        ai_section = f"""
+        <div class="section" style="page-break-before: always;">
+            <h2 class="section-title">🤖 Jak Uczyć się Efektywnie</h2>
+            
+            <div class='ai-header-color' style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                        color: white; 
+                        padding: 15px 20px; 
+                        border-radius: 10px; 
+                        margin-bottom: 20px;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                        color-adjust: exact;">
+                <p style="margin: 0; font-size: 16px;"><strong>👔 Zawód:</strong> {profession} | <strong>🎯 Styl uczenia się:</strong> {dominant}</p>
+            </div>
+            
+            {ai_cards_html}
+            
+            <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; border-radius: 5px; margin-top: 20px;">
+                <p style="margin: 0; font-size: 13px; color: #1565c0;"><strong>💡 Pamiętaj:</strong> Te wskazówki są dopasowane do Twojego stylu uczenia się. Testuj je w praktyce i obserwuj co działa najlepiej w Twojej sytuacji.</p>
+            </div>
+        </div>
+        """
+    
+    html_content += ai_section + """
+        
+        <div class="footer">
+            <p>Raport wygenerowany przez BrainVenture Academy</p>
+            <p>Test Kolba - Experiential Learning Theory © David A. Kolb</p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    # Zwróć HTML - przeglądarka użytkownika wygeneruje PDF
+    return html_content
 
 def display_kolb_results():
     """Wyświetla wyniki testu Kolba zgodnie z metodologią ELT"""
@@ -1198,12 +2346,113 @@ def display_kolb_results():
         # Wyświetl wygenerowane wskazówki lub przycisk do generowania
         if st.session_state.get('kolb_ai_generated') and 'kolb_ai_tips' in st.session_state and st.session_state.kolb_ai_tips:
             st.markdown("---")
-            st.markdown(f"### 💡 Spersonalizowane wskazówki dla {st.session_state.kolb_profession}a")
+            st.markdown(f"### 🤖 Jak Uczyć się Efektywnie")
             
+            # Header z zawodem i stylem
             st.markdown(f"""
-            <div style='padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                        border-radius: 15px; color: white; margin: 20px 0;'>
-                {st.session_state.kolb_ai_tips}
+            <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                        color: white; 
+                        padding: 20px; 
+                        border-radius: 15px; 
+                        margin: 20px 0;
+                        box-shadow: 0 4px 15px rgba(102,126,234,0.3);'>
+                <h4 style='margin: 0; color: white;'>👔 Zawód: {st.session_state.kolb_profession} | 🎯 Styl uczenia się: {dominant}</h4>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Parsuj wskazówki AI na sekcje dla kart
+            ai_tips_text = st.session_state.kolb_ai_tips
+            section_pattern = r'^\*\*(.+?)\*\*:?\s*$'
+            lines = ai_tips_text.strip().split('\n')
+            sections = []
+            current_section = None
+            current_items = []
+            
+            for line in lines:
+                line_stripped = line.strip()
+                if not line_stripped:
+                    continue
+                
+                header_match = re.match(section_pattern, line_stripped)
+                
+                if header_match and len(line_stripped) < 100:
+                    if current_section and current_items:
+                        sections.append((current_section, current_items))
+                    current_section = header_match.group(1).strip().rstrip(':')
+                    current_items = []
+                else:
+                    clean_line = re.sub(r'^[-•*]\s*', '', line_stripped)
+                    clean_line = clean_line.strip()
+                    if clean_line:
+                        current_items.append(clean_line)
+            
+            if current_section and current_items:
+                sections.append((current_section, current_items))
+            
+            # Wyświetl sekcje jako karty
+            if sections:
+                for idx, (section_title, items) in enumerate(sections):
+                    # Automatyczne wybieranie koloru i ikony na podstawie tytułu sekcji
+                    if 'warunki' in section_title.lower() or 'optymalne' in section_title.lower():
+                        icon = '🌟'
+                        bg = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                        text_color = 'white'
+                    elif 'mocn' in section_title.lower() or 'wzmacnia' in section_title.lower():
+                        icon = '💪'
+                        bg = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+                        text_color = 'white'
+                    elif 'rozwój' in section_title.lower() or 'rozwija' in section_title.lower():
+                        icon = '🚀'
+                        bg = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+                        text_color = '#333'
+                    else:
+                        icon = '�'
+                        bg = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+                        text_color = 'white'
+                    
+                    # Buduj HTML dla wszystkich punktów w jednej karcie z numeracją
+                    items_html = "<ol style='margin: 10px 0 0 20px; padding-left: 0;'>"
+                    for item in items:
+                        # Przetwórz tekst aby zamienić **tekst** na <strong>tekst</strong>
+                        # Użyj regex do zamiany wszystkich wystąpień **coś** na <strong>coś</strong>
+                        formatted_item = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', item)
+                        
+                        items_html += f"<li style='margin: 10px 0; line-height: 1.6;'>{formatted_item}</li>"
+                    
+                    items_html += "</ol>"
+                    
+                    # Jedna karta z nagłówkiem i wszystkimi punktami
+                    with st.container():
+                        st.markdown(f"""
+                        <div style='background: {bg}; 
+                                    color: {text_color}; 
+                                    padding: 25px; 
+                                    border-radius: 15px; 
+                                    margin: 15px 0;
+                                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);'>
+                            <h4 style='margin: 0 0 20px 0; color: {text_color};'>{icon} {section_title}</h4>
+                            {items_html}
+                        </div>
+                        """, unsafe_allow_html=True)
+            else:
+                # Fallback - wyświetl surowy tekst jeśli parsowanie nie zadziałało
+                st.markdown(ai_tips_text)
+            
+            # Debug ekspander - pokaż surowy tekst AI
+            with st.expander("🔍 Debug: Zobacz surowy tekst AI"):
+                st.code(st.session_state.kolb_ai_tips, language="text")
+            
+            # Stopka z informacją
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+                        padding: 20px; 
+                        border-radius: 15px; 
+                        margin: 20px 0;
+                        border-left: 4px solid #667eea;'>
+                <p style='margin: 0; color: #2c3e50; font-size: 1.05em;'>
+                    💡 <strong>Pamiętaj:</strong> Te wskazówki są dopasowane do Twojego stylu uczenia się. 
+                    Testuj je w praktyce i obserwuj co działa najlepiej w Twojej sytuacji.
+                </p>
             </div>
             """, unsafe_allow_html=True)
         else:
@@ -1211,33 +2460,64 @@ def display_kolb_results():
                 with st.spinner("🤖 AI generuje spersonalizowane wskazówki..."):
                     generate_kolb_ai_tips(dominant, st.session_state.kolb_profession)
                     st.session_state.kolb_ai_generated = True
-                
-                # Wyświetl od razu jeśli się udało
-                if 'kolb_ai_tips' in st.session_state and st.session_state.kolb_ai_tips:
-                    st.markdown("---")
-                    st.markdown(f"### 💡 Spersonalizowane wskazówki dla {st.session_state.kolb_profession}a")
-                    
-                    st.markdown(f"""
-                    <div style='padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                                border-radius: 15px; color: white; margin: 20px 0;'>
-                        {st.session_state.kolb_ai_tips}
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.rerun()
     
-    # Przycisk do ponownego testu
+    # Przycisk do pobrania raportu PDF
     st.markdown("---")
-    if st.button("🔄 Rozpocznij test od nowa", use_container_width=True):
-        st.session_state.kolb_answers = {}
-        st.session_state.kolb_completed = False
-        st.session_state.kolb_results = {}
-        st.session_state.kolb_dimensions = {}
-        st.session_state.kolb_dominant = None
-        st.session_state.kolb_quadrant = None
-        st.session_state.kolb_flexibility = 0
-        st.session_state.kolb_profession = None
-        st.session_state.kolb_ai_generated = False
-        st.session_state.kolb_ai_tips = None
-        st.rerun()
+    col_pdf, col_reset = st.columns([1, 1])
+    
+    with col_pdf:
+        if st.button("📄 Wygeneruj raport PDF", use_container_width=True, type="primary", key="download_kolb_pdf"):
+            try:
+                html_content = generate_kolb_html_report()
+                
+                # Zapisz HTML do pliku tymczasowego
+                report_filename = f"Kolb_Raport_{st.session_state.username}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
+                report_path = os.path.join("temp", report_filename)
+                
+                # Upewnij się że folder temp istnieje
+                os.makedirs("temp", exist_ok=True)
+                
+                with open(report_path, "w", encoding="utf-8") as f:
+                    f.write(html_content)
+                
+                # Download button dla HTML
+                st.download_button(
+                    label="💾 Pobierz raport HTML",
+                    data=html_content,
+                    file_name=report_filename,
+                    mime="text/html",
+                    use_container_width=True,
+                    key="save_kolb_html"
+                )
+                
+                st.success("✅ Raport wygenerowany!")
+                st.info(
+                    "📋 **Jak zapisać jako PDF:**\n\n"
+                    "1. Otwórz pobrany plik HTML w przeglądarce\n"
+                    "2. Naciśnij **Ctrl+P** (Windows) lub **Cmd+P** (Mac)\n"
+                    "3. Wybierz **'Zapisz jako PDF'**\n"
+                    "4. Kliknij **Zapisz**"
+                )
+                    
+            except Exception as e:
+                st.error(f"❌ Błąd podczas generowania raportu: {str(e)}")
+    
+    with col_reset:
+        if st.button("🔄 Rozpocznij test od nowa", use_container_width=True, key="restart_kolb_test"):
+            # Ustaw flagę reset, aby zapobiec automatycznemu wczytywaniu wyników z bazy
+            st.session_state.kolb_reset = True
+            st.session_state.kolb_answers = {}
+            st.session_state.kolb_completed = False
+            st.session_state.kolb_results = {}
+            st.session_state.kolb_dimensions = {}
+            st.session_state.kolb_dominant = None
+            st.session_state.kolb_quadrant = None
+            st.session_state.kolb_flexibility = 0
+            st.session_state.kolb_profession = None
+            st.session_state.kolb_ai_generated = False
+            st.session_state.kolb_ai_tips = None
+            st.rerun()
 
 def show_tools_page():
 
@@ -1294,7 +2574,7 @@ def show_ciq_tools():
     with col1:
         # C-IQ Scanner
         with st.container():
-            st.markdown("""
+            scanner_html = '''
             <div style='padding: 20px; border: 2px solid #4CAF50; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);'>
                 <h4>🎯 C-IQ Scanner</h4>
                 <p><strong>Zeskanuj poziom komunikacji I otrzymaj wersje na wyższych poziomach C-IQ</strong></p>
@@ -1305,7 +2585,8 @@ def show_ciq_tools():
                     <li>🎯 Gotowe alternatywne wersje do użycia</li>
                 </ul>
             </div>
-            """, unsafe_allow_html=True)
+            '''
+            st.markdown(scanner_html, unsafe_allow_html=True)
             
             if zen_button("🎯 Uruchom C-IQ Scanner", key="level_detector", width='stretch'):
                 st.session_state.active_tool = "level_detector"
@@ -1313,7 +2594,7 @@ def show_ciq_tools():
     with col2:
         # Conversation Intelligence Pro
         with st.container():
-            st.markdown("""
+            pro_html = '''
             <div style='padding: 20px; border: 2px solid #E91E63; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #ffeef8 0%, #f8bbd9 100%);'>
                 <h4>🧠 Conversation Intelligence Pro</h4>
                 <p><strong>Zaawansowana analiza rozmów biznesowych w czasie rzeczywistym</strong></p>
@@ -1325,14 +2606,15 @@ def show_ciq_tools():
                     <li>🔍 Automatyczna kategoryzacja problemów</li>
                 </ul>
             </div>
-            """, unsafe_allow_html=True)
+            '''
+            st.markdown(pro_html, unsafe_allow_html=True)
             
             if zen_button("🧠 Uruchom CI Pro", key="emotion_detector", width='stretch'):
                 st.session_state.active_tool = "emotion_detector"
         
         # C-IQ Leadership Profile
         with st.container():
-            st.markdown("""
+            leadership_html = '''
             <div style='padding: 20px; border: 2px solid #2196F3; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #e3f2fd 0%, #90caf9 100%);'>
                 <h4>💎 C-IQ Leadership Profile</h4>
                 <p><strong>Długoterminowa analiza stylu przywództwa przez pryzmat C-IQ</strong></p>
@@ -1343,7 +2625,8 @@ def show_ciq_tools():
                     <li>🏆 Benchmark z innymi liderami</li>
                 </ul>
             </div>
-            """, unsafe_allow_html=True)
+            '''
+            st.markdown(leadership_html, unsafe_allow_html=True)
             
             if zen_button("💎 Utwórz Profil Lidera", key="communication_analyzer", width='stretch'):
                 st.session_state.active_tool = "communication_analyzer"
@@ -2034,37 +3317,41 @@ def show_communication_analyzer():
             with demo_col1:
                 if zen_button("🎯 Użyj przykładów", key="fill_demo_data"):
                     # Bezpośrednio ustawiamy wartości w session_state
-                    st.session_state['team_conv'] = """Menedżer: Kasia, muszę wiedzieć co się dzieje z projektem ABC. Deadline jest za tydzień!
+                    team_conv_text = '''Menedżer: Kasia, muszę wiedzieć co się dzieje z projektem ABC. Deadline jest za tydzień!
 Pracownik: Mam problem z terminem, klient ciągle zmienia wymagania
 Menedżer: To nie jest wymówka. Musisz lepiej planować. Co konkretnie robiłaś przez ostatnie dni?
 Pracownik: Próbowałam dopasować się do nowych wymagań, ale...
 Menedżer: Słuchaj, potrzebuję rozwiązań, nie problemów. Jak zamierzasz to naprawić?
 Pracownik: Może gdybym miała więcej wsparcia od zespołu?
-Menedżer: Dobrze, porozmawiam z Tomkiem żeby ci pomógł. Ale chcę codzienne raporty z postępów."""
+Menedżer: Dobrze, porozmawiam z Tomkiem żeby ci pomógł. Ale chcę codzienne raporty z postępów.'''
+                    st.session_state['team_conv'] = team_conv_text
                     
-                    st.session_state['feedback_conv'] = """Menedżer: Tomek, muszę z tobą porozmawiać o ocenach. Twoje wyniki techniczne są ok, ale komunikacja kuleje
+                    feedback_conv_text = '''Menedżer: Tomek, muszę z tobą porozmawiać o ocenach. Twoje wyniki techniczne są ok, ale komunikacja kuleje
 Pracownik: Czyli co dokładnie robię źle?
 Menedżer: Za mało komunikujesz się z zespołem. Ludzie nie wiedzą nad czym pracujesz
 Pracownik: Ale skupiam się na pracy, żeby była jakość...
-Menedżer: To nie usprawiedliwia braku komunikacji. Od następnego tygodnia codzienne update'y na kanale zespołowym. Rozumiesz?
+Menedżer: To nie usprawiedliwia braku komunikacji. Od następnego tygodnia codzienne updaty na kanale zespołowym. Rozumiesz?
 Pracownik: Tak, rozumiem
-Menedżer: I jeszcze jedno - więcej inicjatywy. Nie czekaj aż ktoś ci każe coś zrobić."""
+Menedżer: I jeszcze jedno - więcej inicjatywy. Nie czekaj aż ktoś ci każe coś zrobić.'''
+                    st.session_state['feedback_conv'] = feedback_conv_text
                     
-                    st.session_state['conflict_conv'] = """Menedżer: Ania, słyszałem że wczoraj kłóciłaś się z Markiem o dane do raportu
+                    conflict_conv_text = '''Menedżer: Ania, słyszałem że wczoraj kłóciłaś się z Markiem o dane do raportu
 Pracownik: To był stres, przepraszam. Deadline naciska i...
 Menedżer: Nie obchodzą mnie wymówki. W biurze nie krzyczy się na współpracowników. Kropka.
 Pracownik: Ale Marek miał dostarczyć dane tydzień temu, a...
 Menedżer: To nie usprawiedliwia takiego zachowania. Następnym razem przychodzisz do mnie, zamiast robić scenę
 Pracownik: Dobrze, ale co z tymi danymi?
-Menedżer: Porozmawiam z Markiem. A ty przeprosisz go jutro. I żeby więcej takich sytuacji nie było."""
+Menedżer: Porozmawiam z Markiem. A ty przeprosisz go jutro. I żeby więcej takich sytuacji nie było.'''
+                    st.session_state['conflict_conv'] = conflict_conv_text
                     
-                    st.session_state['motivation_conv'] = """Menedżer: Paweł, dobra robota z tym automatycznym raportem. Działa jak należy
+                    motivation_conv_text = '''Menedżer: Paweł, dobra robota z tym automatycznym raportem. Działa jak należy
 Pracownik: Dzięki, starałem się...
 Menedżer: No właśnie. Trzeba było tylko trochę nacisnąć. Widzisz? Jak się chce, to się można
 Pracownik: Tak, chociaż trochę czasu mi to zajęło
 Menedżer: Czas to pieniądz. Następnym razem rób szybciej, ale tak samo dokładnie. Może dostaniesz więcej takich projektów
 Pracownik: To brzmi dobrze. Co mam teraz robić?
-Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodnia ma być gotowe."""
+Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodnia ma być gotowe.'''
+                    st.session_state['motivation_conv'] = motivation_conv_text
                     
                     st.success("✅ Wypełniono pola przykładowymi danymi! Przewiń w dół żeby zobaczyć dane.")
                     
@@ -2298,7 +3585,7 @@ def show_simulators():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("""
+        business_sim_html = '''
         <div style='padding: 20px; border: 2px solid #9C27B0; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #f3e5f5 0%, #ce93d8 100%);'>
             <h4>💼 Symulator Rozmów Biznesowych</h4>
             <p><strong>Ćwicz trudne rozmowy z AI partnerem</strong></p>
@@ -2308,13 +3595,14 @@ def show_simulators():
                 <li>📊 Ocena w czasie rzeczywistym</li>
             </ul>
         </div>
-        """, unsafe_allow_html=True)
+        '''
+        st.markdown(business_sim_html, unsafe_allow_html=True)
         
         if zen_button("💼 Uruchom Symulator", key="business_simulator", width='stretch'):
             st.info("🚧 W przygotowaniu - interaktywne symulacje rozmów biznesowych")
     
     with col2:
-        st.markdown("""
+        negotiation_html = '''
         <div style='padding: 20px; border: 2px solid #795548; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #efebe9 0%, #bcaaa4 100%);'>
             <h4>🤝 Trener Negocjacji</h4>
             <p><strong>Doskonał umiejętności negocjacyjne</strong></p>
@@ -2324,7 +3612,8 @@ def show_simulators():
                 <li>📈 Analiza skuteczności</li>
             </ul>
         </div>
-        """, unsafe_allow_html=True)
+        '''
+        st.markdown(negotiation_html, unsafe_allow_html=True)
         
         if zen_button("🤝 Uruchom Trenera", key="negotiation_trainer", width='stretch'):
             st.info("🚧 W przygotowaniu - trening umiejętności negocjacyjnych")
@@ -2337,34 +3626,37 @@ def show_analytics():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("""
+        tracker_html = '''
         <div style='padding: 15px; border: 1px solid #4CAF50; border-radius: 10px; background: #f8fff8;'>
             <h4>📈 Tracker Postępów</h4>
             <p>Monitoruj rozwój umiejętności C-IQ w czasie</p>
         </div>
-        """, unsafe_allow_html=True)
+        '''
+        st.markdown(tracker_html, unsafe_allow_html=True)
         
         if zen_button("📈 Zobacz Postępy", key="progress_tracker", width='stretch'):
             st.info("🚧 W przygotowaniu - szczegółowy tracking postępów w nauce")
     
     with col2:
-        st.markdown("""
+        goals_html = '''
         <div style='padding: 15px; border: 1px solid #FF9800; border-radius: 10px; background: #fffbf0;'>
             <h4>🎯 Cele Rozwoju</h4>
             <p>Ustaw i śledź osobiste cele komunikacyjne</p>
         </div>
-        """, unsafe_allow_html=True)
+        '''
+        st.markdown(goals_html, unsafe_allow_html=True)
         
         if zen_button("🎯 Ustaw Cele", key="development_goals", width='stretch'):
             st.info("🚧 W przygotowaniu - system celów rozwojowych")
     
     with col3:
-        st.markdown("""
+        report_html = '''
         <div style='padding: 15px; border: 1px solid #2196F3; border-radius: 10px; background: #f0f8ff;'>
             <h4>📋 Raport Umiejętności</h4>
             <p>Kompleksowy raport Twoich kompetencji</p>
         </div>
-        """, unsafe_allow_html=True)
+        '''
+        st.markdown(report_html, unsafe_allow_html=True)
         
         if zen_button("📋 Zobacz Raport", key="skills_report", width='stretch'):
             st.info("🚧 W przygotowaniu - szczegółowy raport umiejętności")
@@ -2388,7 +3680,7 @@ def show_ai_assistant():
         st.markdown("Jak przygotować się do trudnej rozmowy z szefem?")
     
     with st.chat_message("assistant"):
-        st.markdown("""
+        ai_response = '''
         Świetne pytanie! Oto moja strategia oparta na C-IQ:
         
         **🎯 Przygotowanie:**
@@ -2402,7 +3694,8 @@ def show_ai_assistant():
         - Zadawaj pytania: "Jak widzisz tę sytuację?"
         
         Chcesz przećwiczyć konkretny scenariusz?
-        """)
+        '''
+        st.markdown(ai_response)
     
     # Wyłączony input
     chat_input = st.chat_input("Napisz wiadomość do AI Asystenta...", disabled=True)
@@ -3456,12 +4749,12 @@ def display_sentiment_results(result: Dict):
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("**👨‍💼 Menedżer:**")
+            st.markdown("** Menedżer:**")
             for emotion in emotions.get('manager', []):
                 st.markdown(f"• {emotion}")
                 
         with col2:
-            st.markdown("**� Pracownik:**")
+            st.markdown("**👤 Pracownik:**")
             for emotion in emotions.get('employee', []):
                 st.markdown(f"• {emotion}")
     

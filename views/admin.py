@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import altair as alt
+import plotly.graph_objects as go
+import math
 from datetime import datetime, timedelta
 import time
 import json
@@ -446,6 +448,261 @@ def show_admin_dashboard():
             )
         else:
             st.info("Brak danych o wynikach testów.")
+        
+        # NOWA SEKCJA: Wyniki testów Kolba Learning Styles
+        st.markdown("---")
+        st.subheader("🎯 Wyniki testów Stylów Uczenia się Kolba (Learning Styles)")
+        
+        # Pobierz dane o użytkownikach z wynikami testów Kolba
+        kolb_results = []
+        for username, data in users_data.items():
+            if data.get('kolb_test'):
+                kolb_data = data['kolb_test']
+                kolb_results.append({
+                    'username': username,
+                    'dominant_style': kolb_data.get('dominant_style', 'Nieznany'),
+                    'AC-CE': kolb_data.get('dimensions', {}).get('AC-CE', 0),
+                    'AE-RO': kolb_data.get('dimensions', {}).get('AE-RO', 0),
+                    'flexibility': kolb_data.get('flexibility', 0),
+                    'completed_date': kolb_data.get('completed_date', 'Nieznana'),
+                    'CE': kolb_data.get('scores', {}).get('CE', 0),
+                    'RO': kolb_data.get('scores', {}).get('RO', 0),
+                    'AC': kolb_data.get('scores', {}).get('AC', 0),
+                    'AE': kolb_data.get('scores', {}).get('AE', 0)
+                })
+        
+        if kolb_results:
+            kolb_df = pd.DataFrame(kolb_results)
+            
+            # Statystyki podstawowe
+            st.markdown("#### 📊 Statystyki podstawowe")
+            
+            stats_cols = st.columns(4)
+            with stats_cols[0]:
+                st.metric("Liczba użytkowników", len(kolb_df))
+            with stats_cols[1]:
+                st.metric("Średnia elastyczność", f"{kolb_df['flexibility'].mean():.1f}%")
+            with stats_cols[2]:
+                most_common_style = kolb_df['dominant_style'].mode()[0] if not kolb_df.empty else "Brak"
+                st.metric("Najczęstszy styl", most_common_style.split('(')[0].strip())
+            with stats_cols[3]:
+                st.metric("Najwyższa elastyczność", f"{kolb_df['flexibility'].max():.1f}%")
+            
+            # Rozkład stylów uczenia się
+            st.markdown("---")
+            st.markdown("#### 📈 Rozkład stylów uczenia się")
+            
+            style_counts = kolb_df['dominant_style'].value_counts().reset_index()
+            style_counts.columns = ['Styl', 'Liczba']
+            
+            chart = alt.Chart(style_counts).mark_bar().encode(
+                x=alt.X('Liczba:Q', title='Liczba użytkowników'),
+                y=alt.Y('Styl:N', title='Styl uczenia się', sort='-x'),
+                color=alt.Color('Styl:N', legend=None),
+                tooltip=['Styl', 'Liczba']
+            ).properties(
+                width='container',
+                height=300,
+                title='Rozkład stylów uczenia się wśród użytkowników'
+            )
+            
+            st.altair_chart(chart, use_container_width=True)
+            
+            # GŁÓWNA WIZUALIZACJA: Siatka wszystkich użytkowników
+            st.markdown("---")
+            st.markdown("#### 🗺️ Siatka Stylów Uczenia się - Wszyscy Użytkownicy")
+            st.markdown("*Pozycje wszystkich użytkowników w matrycy ELT z etykietami nazw*")
+            
+            # Utwórz wykres siatki Kolba z wszystkimi użytkownikami
+            fig_all = go.Figure()
+            
+            # Dodaj tło ćwiartek z nazwami stylów
+            quadrant_info = {
+                'Diverging': {'x': [-12, 0], 'y': [-12, 0], 'color': 'rgba(231, 76, 60, 0.15)', 'label_x': -6, 'label_y': -6},
+                'Assimilating': {'x': [-12, 0], 'y': [0, 12], 'color': 'rgba(155, 89, 182, 0.15)', 'label_x': -6, 'label_y': 6},
+                'Converging': {'x': [0, 12], 'y': [0, 12], 'color': 'rgba(52, 152, 219, 0.15)', 'label_x': 6, 'label_y': 6},
+                'Accommodating': {'x': [0, 12], 'y': [-12, 0], 'color': 'rgba(46, 204, 113, 0.15)', 'label_x': 6, 'label_y': -6}
+            }
+            
+            # Rysuj prostokąty ćwiartek
+            for style_name, info in quadrant_info.items():
+                fig_all.add_shape(
+                    type="rect",
+                    x0=info['x'][0], x1=info['x'][1],
+                    y0=info['y'][0], y1=info['y'][1],
+                    fillcolor=info['color'],
+                    line=dict(width=0)
+                )
+                
+                # Dodaj etykiety stylów
+                fig_all.add_annotation(
+                    x=info['label_x'], y=info['label_y'],
+                    text=f"<b>{style_name}</b>",
+                    showarrow=False,
+                    font=dict(size=14, color='rgba(0,0,0,0.5)', family='Arial Black'),
+                    xanchor='center',
+                    yanchor='middle'
+                )
+            
+            # Strefa Zrównoważonego Uczenia się (centralna)
+            balanced_zone_radius = 4
+            theta = [i for i in range(0, 361, 10)]
+            balanced_x = [balanced_zone_radius * math.cos(math.radians(t)) for t in theta]
+            balanced_y = [balanced_zone_radius * math.sin(math.radians(t)) for t in theta]
+            
+            fig_all.add_trace(go.Scatter(
+                x=balanced_x, y=balanced_y,
+                fill='toself',
+                fillcolor='rgba(255, 193, 7, 0.2)',
+                line=dict(color='rgba(255, 193, 7, 0.6)', width=2, dash='dash'),
+                name='Strefa Zrównoważonego<br>Uczenia się',
+                hoverinfo='name',
+                showlegend=True
+            ))
+            
+            # Osie
+            fig_all.add_shape(type="line", x0=-12, x1=12, y0=0, y1=0, 
+                              line=dict(color="rgba(0,0,0,0.4)", width=2))
+            fig_all.add_shape(type="line", x0=0, x1=0, y0=-12, y1=12, 
+                              line=dict(color="rgba(0,0,0,0.4)", width=2))
+            
+            # Mapowanie kolorów dla stylów
+            style_colors = {
+                'Diverging (Dywergent)': '#E74C3C',      # Czerwony
+                'Assimilating (Asymilator)': '#9B59B6',  # Fioletowy
+                'Converging (Konwergent)': '#3498DB',    # Niebieski
+                'Accommodating (Akomodator)': '#2ECC71'  # Zielony
+            }
+            
+            # Dodaj punkty użytkowników pogrupowane wg stylu
+            for style in kolb_df['dominant_style'].unique():
+                style_data = kolb_df[kolb_df['dominant_style'] == style]
+                
+                # Przygotuj tekst dla hover i etykiety
+                hover_texts = []
+                for _, row in style_data.iterrows():
+                    hover_text = (
+                        f"<b>{row['username']}</b><br>"
+                        f"Styl: {row['dominant_style']}<br>"
+                        f"AE-RO: {row['AE-RO']:+d}<br>"
+                        f"AC-CE: {row['AC-CE']:+d}<br>"
+                        f"Elastyczność: {row['flexibility']:.1f}%<br>"
+                        f"Data: {row['completed_date']}"
+                    )
+                    hover_texts.append(hover_text)
+                
+                fig_all.add_trace(go.Scatter(
+                    x=style_data['AE-RO'],
+                    y=style_data['AC-CE'],
+                    mode='markers+text',
+                    marker=dict(
+                        size=15,
+                        color=style_colors.get(style, '#95A5A6'),
+                        line=dict(color='white', width=2),
+                        symbol='circle'
+                    ),
+                    text=style_data['username'],
+                    textposition='top center',
+                    textfont=dict(size=10, color='#2C3E50', family='Arial Black'),
+                    name=style.split('(')[0].strip(),  # Skrócona nazwa do legendy
+                    hovertemplate='%{customdata}<extra></extra>',
+                    customdata=hover_texts
+                ))
+            
+            # Etykiety osi
+            fig_all.add_annotation(x=12.5, y=0, text="<b>AE</b><br>(Doing)", showarrow=False, 
+                                   font=dict(size=11, color='#2ECC71'), xanchor='left')
+            fig_all.add_annotation(x=-12.5, y=0, text="<b>RO</b><br>(Watching)", showarrow=False, 
+                                   font=dict(size=11, color='#4A90E2'), xanchor='right')
+            fig_all.add_annotation(x=0, y=12.5, text="<b>AC</b><br>(Thinking)", showarrow=False, 
+                                   font=dict(size=11, color='#9B59B6'), yanchor='bottom')
+            fig_all.add_annotation(x=0, y=-12.5, text="<b>CE</b><br>(Feeling)", showarrow=False, 
+                                   font=dict(size=11, color='#E74C3C'), yanchor='top')
+            
+            fig_all.update_layout(
+                title=dict(
+                    text=f'Mapa Stylów Uczenia się - {len(kolb_df)} użytkowników',
+                    font=dict(size=18, color='#333', family='Arial Black'),
+                    x=0.5,
+                    xanchor='center'
+                ),
+                xaxis=dict(
+                    title='<b>Oś Przetwarzania (AE-RO)</b>',
+                    range=[-14, 14],
+                    zeroline=False,
+                    gridcolor='rgba(0,0,0,0.1)',
+                    tickfont=dict(size=10)
+                ),
+                yaxis=dict(
+                    title='<b>Oś Postrzegania (AC-CE)</b>',
+                    range=[-14, 14],
+                    zeroline=False,
+                    gridcolor='rgba(0,0,0,0.1)',
+                    tickfont=dict(size=10),
+                    scaleanchor='x',
+                    scaleratio=1
+                ),
+                plot_bgcolor='white',
+                paper_bgcolor='white',
+                height=700,
+                margin=dict(t=80, b=80, l=80, r=80),
+                showlegend=True,
+                legend=dict(
+                    title="Style uczenia się:",
+                    x=1.02,
+                    y=1,
+                    xanchor='left',
+                    yanchor='top',
+                    bgcolor='rgba(255,255,255,0.9)',
+                    bordercolor='rgba(0,0,0,0.2)',
+                    borderwidth=1
+                )
+            )
+            
+            st.plotly_chart(fig_all, use_container_width=True)
+            
+            # Tabela szczegółowa
+            st.markdown("---")
+            st.markdown("#### 📋 Szczegółowe wyniki użytkowników")
+            
+            # Formatuj DataFrame do wyświetlenia
+            display_df = kolb_df[['username', 'dominant_style', 'CE', 'RO', 'AC', 'AE', 
+                                   'AC-CE', 'AE-RO', 'flexibility', 'completed_date']]
+            
+            st.dataframe(
+                display_df,
+                column_config={
+                    "username": "Użytkownik",
+                    "dominant_style": "Dominujący styl",
+                    "CE": st.column_config.NumberColumn("CE (Feeling)", format="%d/12"),
+                    "RO": st.column_config.NumberColumn("RO (Watching)", format="%d/12"),
+                    "AC": st.column_config.NumberColumn("AC (Thinking)", format="%d/12"),
+                    "AE": st.column_config.NumberColumn("AE (Doing)", format="%d/12"),
+                    "AC-CE": st.column_config.NumberColumn("AC-CE", format="%+d"),
+                    "AE-RO": st.column_config.NumberColumn("AE-RO", format="%+d"),
+                    "flexibility": st.column_config.ProgressColumn(
+                        "Elastyczność (%)",
+                        min_value=0,
+                        max_value=100,
+                        format="%.1f%%"
+                    ),
+                    "completed_date": "Data ukończenia"
+                },
+                hide_index=True,
+                use_container_width=True
+            )
+            
+            # Opcja eksportu
+            if zen_button("📥 Eksportuj wyniki testów Kolba do CSV"):
+                csv = display_df.to_csv(index=False, encoding='utf-8-sig')
+                st.download_button(
+                    label="⬇️ Pobierz CSV",
+                    data=csv,
+                    file_name=f"kolb_test_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                    mime="text/csv"
+                )
+        else:
+            st.info("Brak użytkowników, którzy ukończyli test stylów uczenia się Kolba.")
     
     # 6. Zakładka Zarządzanie
     with admin_tabs[5]:
