@@ -28,7 +28,7 @@ from reportlab.pdfbase import pdfutils
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 
-def save_leadership_profile(username: str, profile: Dict, profile_name: str = None) -> bool:
+def save_leadership_profile(username: str, profile: Dict, profile_name: Optional[str] = None) -> bool:
     """Zapisuje profil przywódczy użytkownika"""
     try:
         # Ścieżka do pliku profili
@@ -75,7 +75,7 @@ def save_leadership_profile(username: str, profile: Dict, profile_name: str = No
         st.error(f"Błąd zapisu profilu: {e}")
         return False
 
-def load_leadership_profile(username: str, profile_index: int = None) -> Optional[Dict]:
+def load_leadership_profile(username: str, profile_index: Optional[int] = None) -> Optional[Dict]:
     """Wczytuje profil przywódczy użytkownika"""
     try:
         profiles_file = "leadership_profiles.json"
@@ -133,7 +133,7 @@ def get_user_profiles_history(username: str) -> List[Dict]:
     except Exception:
         return []
 
-def delete_user_profile(username: str, profile_index: int = None) -> bool:
+def delete_user_profile(username: str, profile_index: Optional[int] = None) -> bool:
     """Usuwa profil użytkownika"""
     try:
         profiles_file = "leadership_profiles.json"
@@ -172,7 +172,26 @@ def delete_user_profile(username: str, profile_index: int = None) -> bool:
 def show_autodiagnosis():
     """Narzędzia autodiagnozy"""
     st.markdown("### 🎯 Autodiagnoza")
-    st.markdown("Poznaj swój styl uczenia się i preferowane sposoby rozwoju")
+    st.markdown("Poznaj swój styl uczenia się, typ neuroleadera i preferowane sposoby rozwoju")
+    
+    # Karta z testem Neurolidera
+    with st.container():
+        st.markdown("""
+        <div style='padding: 20px; border: 2px solid #E91E63; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);'>
+            <h4>🧠 Test typu Neurolidera</h4>
+            <p><strong>Odkryj swój unikalny styl przywództwa i maksymalizuj swój potencjał lidera</strong></p>
+            <ul style='margin: 10px 0; padding-left: 20px;'>
+                <li>🎯 Kompleksowa analiza stylu przywództwa</li>
+                <li>📊 Wykres radarowy kompetencji</li>
+                <li>💪 Identyfikacja mocnych stron i wyzwań</li>
+                <li>🎓 Spersonalizowane strategie rozwoju</li>
+                <li>🧩 Dopasowanie do ról biznesowych</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if zen_button("🧠 Rozpocznij Test Neurolidera", key="neuroleader_test", width='stretch'):
+            st.session_state.active_tool = "neuroleader_test"
     
     # Karta z testem Kolba
     with st.container():
@@ -193,18 +212,16 @@ def show_autodiagnosis():
         if zen_button("🔄 Rozpocznij Test Kolba", key="kolb_test", width='stretch'):
             st.session_state.active_tool = "kolb_test"
     
-    # Wyświetl test jeśli jest aktywny
+    # Wyświetl odpowiedni test jeśli jest aktywny
     active_tool = st.session_state.get('active_tool')
-    if active_tool == "kolb_test":
+    
+    if active_tool == "neuroleader_test":
         st.markdown("---")
-        
-        # Przycisk resetowania
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            if zen_button("❌ Zamknij test", key="close_kolb_test", width='stretch'):
-                st.session_state.active_tool = None
-                st.rerun()
-        
+        # Import funkcji z profile.py
+        from views.profile import show_neuroleader_test_section
+        show_neuroleader_test_section()
+    
+    elif active_tool == "kolb_test":
         st.markdown("---")
         show_kolb_test()
 
@@ -2462,9 +2479,9 @@ def display_kolb_results():
                     st.session_state.kolb_ai_generated = True
                     st.rerun()
     
-    # Przycisk do pobrania raportu PDF
+    # Przyciski akcji na dole
     st.markdown("---")
-    col_pdf, col_reset = st.columns([1, 1])
+    col_pdf, col_reset, col_close = st.columns([1, 1, 1])
     
     with col_pdf:
         if st.button("📄 Wygeneruj raport PDF", use_container_width=True, type="primary", key="download_kolb_pdf"):
@@ -2517,6 +2534,11 @@ def display_kolb_results():
             st.session_state.kolb_profession = None
             st.session_state.kolb_ai_generated = False
             st.session_state.kolb_ai_tips = None
+            st.rerun()
+    
+    with col_close:
+        if st.button("❌ Zamknij test", use_container_width=True, key="close_kolb_from_results"):
+            st.session_state.active_tool = None
             st.rerun()
 
 def show_tools_page():
@@ -2699,7 +2721,7 @@ def show_level_detector():
         col1, col2 = st.columns([3, 1])
         with col1:
             if zen_button("📡 Skanuj poziom C-IQ", key="analyze_level", width='stretch'):
-                if text_input.strip():
+                if text_input and text_input.strip():
                     with st.spinner("🤖 Scanner analizuje poziom rozmowy..."):
                         result = analyze_conversation_level(text_input)
                         if result:
@@ -2716,7 +2738,7 @@ def show_level_detector():
                 st.metric("Słowa", word_count)
         
         # Wyświetl wynik analizy jeśli istnieje
-        if 'last_analysis_result' in st.session_state and text_input.strip():
+        if 'last_analysis_result' in st.session_state and text_input and text_input.strip():
             st.markdown("---")
             
             if st.session_state.last_analysis_result.get('analyzed_text') != text_input:
@@ -3471,7 +3493,7 @@ Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodn
                         
                         # Auto-zapis profilu dla zalogowanego użytkownika
                         if hasattr(st.session_state, 'username') and st.session_state.username:
-                            profile_title = profile_name.strip() if profile_name else None
+                            profile_title = profile_name.strip() if (profile_name and profile_name.strip()) else None
                             if save_leadership_profile(st.session_state.username, leadership_profile, profile_title):
                                 saved_name = profile_title or f"Profil {datetime.now().strftime('%Y-%m-%d %H:%M')}"
                                 st.success(f"✅ Profil '{saved_name}' gotowy i zapisany! Zobacz zakładkę 'Profil Przywódczy'")

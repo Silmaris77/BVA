@@ -267,8 +267,8 @@ def show_profile():
     # Add animations and effects using the component
     add_animations_css()
 
-    # Main Profile Tabs - usunięto Personalizację i Eksplorator Typów
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "🧬 Typ Neurolidera"])
+    # Main Profile Tabs - usunięto Personalizację, Eksplorator Typów i Typ Neurolidera
+    tab1, tab2, tab3 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki"])
     
     # Tab 1: Statistics - podobnie jak w Dashboard
     with tab1:
@@ -644,25 +644,6 @@ def show_profile():
         # Use Step 5 badge display system
         show_badges_section()
         st.markdown("</div>", unsafe_allow_html=True)
-      # Tab 4: Neuroleader Type with Test
-    with tab4:
-        scroll_to_top()
-        st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
-        
-        # Sub-tabs within Typ Neurolidera
-        neuroleader_subtab1, neuroleader_subtab2 = st.tabs(["🧠 Test Neurolidera", "🎯 Mój Typ"])
-        
-        with neuroleader_subtab1:
-            scroll_to_top()
-            # Show Neuroleader Test (imported functionality from neuroleader_explorer)
-            show_neuroleader_test_section()
-        
-        with neuroleader_subtab2:
-            scroll_to_top()
-            # Show current neuroleader type info
-            show_current_neuroleader_type()
-            
-        st.markdown("</div>", unsafe_allow_html=True)
 
 def show_badges_section():
     """Wyświetl sekcję odznak w profilu - Step 5 Implementation"""
@@ -751,7 +732,7 @@ def show_badges_section():
             st.markdown("""
             - **👋 Witaj w Akademii** - Automatycznie po rejestracji
             - **🎯 Pierwszy Uczeń** - Ukończ pierwszą lekcję
-            - **🔍 Odkrywca Osobowości** - Wykonaj test typu neurolidera
+            - **🔍 Odkrywca Osobowości** - Wykonaj test typu neurolidera (znajdziesz go w zakładce 🛠️ Narzędzia → 🎯 Autodiagnoza)
             - **📝 Profil Kompletny** - Uzupełnij informacje w profilu
             """)
         st.markdown("---")
@@ -877,6 +858,15 @@ def calculate_test_results(scores):
 def show_neuroleader_test_section():
     """Wyświetla sekcję testu neuroleadera w profilu"""
     device_type = get_device_type()
+    
+    # Sprawdź czy użytkownik ma już zapisane wyniki
+    user_data = get_current_user_data(st.session_state.get('username'))
+    has_results = user_data.get('neuroleader_type') is not None
+    
+    # Jeśli użytkownik ma wyniki i nie rozpoczął testu ponownie, pokaż wyniki
+    if has_results and 'test_step' not in st.session_state:
+        show_current_neuroleader_type()
+        return
     
     # Informacja o teście
     if 'show_test_info' not in st.session_state:
@@ -1019,17 +1009,25 @@ def show_test_results():
     
     st.markdown("</div>", unsafe_allow_html=True)
     
-    # Option to restart test
-    if zen_button("Wykonaj test ponownie", key="restart_test"):
-        for key in ['test_step', 'test_scores', 'show_test_info']:
-            if key in st.session_state:
-                del st.session_state[key]
-        st.rerun()
+    # Przyciski akcji
+    col_restart, col_close = st.columns([1, 1])
+    
+    with col_restart:
+        if zen_button("🔄 Wykonaj test ponownie", key="restart_test", width='stretch'):
+            for key in ['test_step', 'test_scores', 'show_test_info']:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.rerun()
+    
+    with col_close:
+        if st.button("❌ Zamknij test", use_container_width=True, key="close_neuroleader_from_results"):
+            st.session_state.active_tool = None
+            st.rerun()
 
 def show_current_neuroleader_type():
     """Wyświetla informacje o aktualnym typie neurolidera użytkownika"""
     device_type = get_device_type()
-    user_data = get_current_user_data()
+    user_data = get_current_user_data(st.session_state.get('username'))
     
     st.markdown("<div class='st-bx'>", unsafe_allow_html=True)
     
@@ -1100,13 +1098,22 @@ def show_current_neuroleader_type():
             if 'test_date' in user_data:
                 st.info(f"📅 Test wykonany: {user_data['test_date']}")
             
-            if zen_button("Wykonaj test ponownie", key="retake_test"):
-                # Reset test state
-                for key in ['test_step', 'test_scores', 'show_test_info']:
-                    if key in st.session_state:
-                        del st.session_state[key]
-                st.session_state.show_test_info = True
-                st.rerun()
+            # Przyciski akcji
+            col_restart, col_close = st.columns([1, 1])
+            
+            with col_restart:
+                if zen_button("🔄 Wykonaj test ponownie", key="retake_test", width='stretch'):
+                    # Reset test state
+                    for key in ['test_step', 'test_scores', 'show_test_info']:
+                        if key in st.session_state:
+                            del st.session_state[key]
+                    st.session_state.show_test_info = True
+                    st.rerun()
+            
+            with col_close:
+                if st.button("❌ Zamknij test", use_container_width=True, key="close_neuroleader_from_type"):
+                    st.session_state.active_tool = None
+                    st.rerun()
     else:
         notification(
             "Nie określono jeszcze twojego typu neurolidera. Wykonaj test neurolidera w zakładce powyżej, aby odkryć swój unikalny styl przywództwa i dostosowane rekomendacje.",
