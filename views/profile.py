@@ -113,76 +113,133 @@ def buy_item(item_type, item_id, price, user_data, users_data, username):
     return True, f"Pomyślnie zakupiono {item_id.replace('_', ' ').title()}!"
 
 def show_profile_stats_section(user_data, device_type):
-    """Sekcja z kartami statystyk użytkownika - na wzór Dashboard"""
-    st.markdown("### 📊 Twoje statystyki")
+    """Sekcja z kartami statystyk użytkownika - identyczna jak w Dashboard"""
+    from views.dashboard import save_daily_stats, calculate_stats_changes, format_change_text
     
-    # Oblicz dane statystyk
-    xp = user_data.get('xp', 0)
-    degencoins = user_data.get('degencoins', 0)
-    completed_lessons = len(user_data.get('completed_lessons', []))
-    missions_progress = get_daily_missions_progress(st.session_state.username)
-    streak = missions_progress['streak']
-    level = user_data.get('level', 1)
+    # Zapisz dzisiejsze statystyki (jeśli jeszcze nie zostały zapisane)
+    save_daily_stats(st.session_state.username)
     
-    # Oblicz trend (przykładowe wartości)
-    xp_change = "+15%"
-    degencoins_change = "+10%"
-    lessons_change = f"+{min(3, completed_lessons)}"
-    streak_change = f"+{min(1, streak)}"
-    level_change = f"+{max(0, level - 1)}"
+    # Oblicz prawdziwe zmiany statystyk
+    current_stats, changes = calculate_stats_changes(st.session_state.username)
     
-    # Responsywny układ kolumn
+    # Pobierz podstawowe dane
+    xp = current_stats['xp']
+    degencoins = current_stats['degencoins']
+    completed_lessons = current_stats['completed_lessons']
+    level = current_stats['level']
+    
+    # Formatuj zmiany z odpowiednimi kolorami
+    xp_change, xp_color = format_change_text(changes['xp'], use_absolute=True)
+    degencoins_change, degencoins_color = format_change_text(changes['degencoins'], use_absolute=True)
+    lessons_change, lessons_color = format_change_text(changes['completed_lessons'], use_absolute=True)
+    level_change, level_color = format_change_text(changes['level'], use_absolute=True)
+    
+    # Użyj przekazanego device_type
     if device_type == 'mobile':
-        # Na mobile: 2 kolumny, 3 wiersze
-        cols1 = st.columns(2)
-        cols2 = st.columns(2) 
-        cols3 = st.columns(1)  # Ostatnia statystyka na środku
-        all_cols = list(cols1) + list(cols2) + list(cols3)
-    else:
-        # Na desktop: 5 kolumn w jednym wierszu
-        all_cols = st.columns(5)
-    
-    # 5 kart statystyk
-    stats = [
-        {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change},
-        {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change},
-        {"icon": "⭐", "value": f"{level}", "label": "Poziom", "change": level_change},
-        {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change},
-        {"icon": "🔥", "value": f"{streak}", "label": "Aktualna passa", "change": streak_change}
-    ]
-    
-    # Wygeneruj kartę w każdej kolumnie
-    for i, stat in enumerate(stats):
-        with all_cols[i]:
-            st.markdown(f"""
-            <div class="stat-card">
-                <div class="stat-icon">{stat['icon']}</div>
-                <div class="stat-value">{stat['value']}</div>
-                <div class="stat-label">{stat['label']}</div>
-                <div class="stat-change positive">{stat['change']}</div>
+        # Mobile - jedna karta z czterema statystykami w środku
+        st.markdown("### 📊 Statystyki")
+        
+        # Stwórz jedną dużą kartę z wewnętrznym gridem 2x2
+        st.markdown(f"""
+        <div style="
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        ">
+            <div style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                gap: 1.5rem;
+                height: 100%;
+            ">
+                <div style="
+                    text-align: center;
+                    padding: 1rem;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏆</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{xp}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Punkty XP</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {xp_color};">{xp_change}</div>
+                </div>
+                <div style="
+                    text-align: center;
+                    padding: 1rem;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🪙</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{degencoins}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Monety</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {degencoins_color};">{degencoins_change}</div>
+                </div>
+                <div style="
+                    text-align: center;
+                    padding: 1rem;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{level}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Poziom</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {level_color};">{level_change}</div>
+                </div>
+                <div style="
+                    text-align: center;
+                    padding: 1rem;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+                    <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.3rem;">{completed_lessons}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">Ukończone lekcje</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {lessons_color};">{lessons_change}</div>
+                </div>
             </div>
-            """, unsafe_allow_html=True)
-    
-    # Dodatkowe informacje w expanderze
-    with st.expander("📈 Szczegółowe statystyki"):
-        col1, col2 = st.columns(2)
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        # Desktop i tablet - 4 kolumny
+        cols = st.columns(4)
+        stats = [
+            {"icon": "🏆", "value": f"{xp}", "label": "Punkty XP", "change": xp_change, "color": xp_color},
+            {"icon": "🪙", "value": f"{degencoins}", "label": "Monety", "change": degencoins_change, "color": degencoins_color},
+            {"icon": "⭐", "value": f"{level}", "label": "Poziom", "change": level_change, "color": level_color},
+            {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change, "color": lessons_color}
+        ]
         
-        with col1:
-            st.metric("🎯 Średnia punktów za lekcję", 
-                     f"{int(xp/max(1, completed_lessons))}", 
-                     help="Średnia liczba punktów XP za ukończoną lekcję")
-            
-            total_quiz_score = user_data.get('total_quiz_score', 0)
-            quizzes_completed = user_data.get('quizzes_completed', 0)
-            avg_quiz_score = (total_quiz_score / quizzes_completed) if quizzes_completed > 0 else 0
-            st.metric("📝 Średni wynik quiz", f"{avg_quiz_score:.1f}%")
-        
-        with col2:
-            max_streak = user_data.get('max_streak', 0)
-            st.metric("🔥 Najdłuższa passa", f"{max_streak} dni")
-            
-            badges_count = len(user_data.get('badges', []))
-            st.metric("🏆 Zdobyte odznaki", badges_count)
+        # Wygeneruj kartę w każdej kolumnie z gradientowym stylem
+        for i, stat in enumerate(stats):
+            with cols[i]:
+                st.markdown(f"""
+                <div style="
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 16px;
+                    padding: 0.2rem;
+                    text-align: center;
+                    color: white;
+                    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    min-height: 30px;
+                    margin-bottom: 1rem;
+                ">
+                    <div style="font-size: 2rem; margin-bottom: 0.3rem;">{stat['icon']}</div>
+                    <div style="font-size: 1.6rem; font-weight: bold; margin-bottom: 0.2rem;">{stat['value']}</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.3rem;">{stat['label']}</div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: {stat['color']};">{stat['change']}</div>
+                </div>
+                """, unsafe_allow_html=True)
+
 
 def show_profile():
     # Zastosuj style Material 3 (tak jak w dashboard)
