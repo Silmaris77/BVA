@@ -3607,6 +3607,992 @@ Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodn
         else:
             st.info("🎯 Profil przywódczy jest potrzebny do stworzenia planu rozwoju")
 
+def generate_case_context(scenario):
+    """Generuje konkretny kontekst case study dla scenariusza"""
+    try:
+        api_key = st.secrets.get("API_KEYS", {}).get("gemini")
+        if not api_key:
+            # Fallback - prosty kontekst bez AI
+            return get_fallback_context(scenario)
+        
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        
+        try:
+            model = genai.GenerativeModel(
+                "gemini-2.0-flash-exp",
+                generation_config=genai.GenerationConfig(
+                    temperature=0.8,  # Średnia kreatywność
+                    top_p=0.9,
+                )
+            )
+        except:
+            model = genai.GenerativeModel(
+                "gemini-1.5-flash",
+                generation_config=genai.GenerationConfig(
+                    temperature=0.8,
+                    top_p=0.9,
+                )
+            )
+        
+        response = model.generate_content(scenario['context_prompt'])
+        return response.text.strip()
+        
+    except Exception as e:
+        # W razie błędu użyj fallbacku
+        return get_fallback_context(scenario)
+
+def get_fallback_context(scenario):
+    """Zwraca predefiniowany kontekst gdy AI nie działa"""
+    fallback_contexts = {
+        "salary_raise": "Jesteś Project Managerem w firmie IT. Pracujesz od 18 miesięcy bez podwyżki, a niedawno przejąłeś dodatkowe obowiązki po zwolnionym koledze. Słyszałeś, że firma ma dobry kwartał finansowy.",
+        "difficult_feedback": "Marek pracuje jako Junior Developer. Ostatnio jego projekty są opóźnione o średnio 2 tygodnie, a kod wymaga wielu poprawek. Problem trwa od 3 miesięcy. Ma potencjał, ale wydaje się być przytłoczony zadaniami.",
+        "team_conflict": "Konflikt między Anią (Senior Designer) a Tomkiem (Frontend Developer). Problem: Ania czuje że Tomek ignoruje jej wskazówki designerskie i samowolnie zmienia projekty. To trwa od 2 miesięcy i wpływa na jakość produktu. Twoja perspektywa (Ania): czujesz się lekceważona i sfrustrowana."
+    }
+    
+    scenario_id = None
+    for sid, sc in {"salary_raise": {}, "difficult_feedback": {}, "team_conflict": {}}.items():
+        if scenario.get('name') == {"salary_raise": "💰 Rozmowa o podwyżkę", "difficult_feedback": "📢 Feedback dla pracownika", "team_conflict": "⚡ Rozwiązanie konfliktu"}.get(sid):
+            scenario_id = sid
+            break
+    
+    if scenario_id:
+        return fallback_contexts.get(scenario_id, "Kontekst rozmowy biznesowej.")
+    else:
+        return "Kontekst rozmowy biznesowej."
+
+def generate_initial_message(scenario, case_context):
+    """Generuje pierwszą wiadomość AI uwzględniającą kontekst"""
+    try:
+        api_key = st.secrets.get("API_KEYS", {}).get("gemini")
+        if not api_key:
+            return get_fallback_initial_message(scenario)
+        
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        
+        try:
+            model = genai.GenerativeModel(
+                "gemini-2.0-flash-exp",
+                generation_config=genai.GenerationConfig(temperature=0.7)
+            )
+        except:
+            model = genai.GenerativeModel(
+                "gemini-1.5-flash",
+                generation_config=genai.GenerationConfig(temperature=0.7)
+            )
+        
+        prompt = f"""Jesteś {scenario['ai_role']} w symulacji biznesowej.
+
+KONTEKST SYTUACJI:
+{case_context}
+
+TWOJA POSTAĆ: {scenario['ai_persona']}
+
+Wygeneruj pierwszą naturalną wypowiedź rozpoczynającą tę rozmowę. 
+- 1-2 zdania
+- Naturalny ton odpowiedni do roli
+- Możesz nawiązać do kontekstu jeśli to naturalne
+
+Tylko treść wypowiedzi, bez opisów:"""
+
+        response = model.generate_content(prompt)
+        return response.text.strip()
+        
+    except Exception:
+        return get_fallback_initial_message(scenario)
+
+def get_fallback_initial_message(scenario):
+    """Zwraca prostą pierwszą wiadomość jako fallback"""
+    fallback_messages = {
+        "Szef": "Dzień dobry. Słucham, o co chodzi? Mam tylko 10 minut.",
+        "Pracownik": "Cześć! Co tam? Wszystko w porządku?",
+        "Członek zespołu": "No dobra, to o co w końcu chodzi? I tak nikt mnie tu nie słucha..."
+    }
+    return fallback_messages.get(scenario.get('ai_role'), "Dzień dobry, słucham.")
+
+def generate_conversation_report(messages, scenario, case_context):
+    """Generuje końcowy raport z rozmowy używając AI"""
+    try:
+        api_key = st.secrets.get("API_KEYS", {}).get("gemini")
+        if not api_key:
+            return generate_fallback_report(messages)
+        
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        
+        try:
+            model = genai.GenerativeModel(
+                "gemini-2.0-flash-exp",
+                generation_config=genai.GenerationConfig(temperature=0.3)
+            )
+        except:
+            model = genai.GenerativeModel(
+                "gemini-1.5-flash",
+                generation_config=genai.GenerationConfig(temperature=0.3)
+            )
+        
+        # Przygotuj historię rozmowy dla AI
+        conversation_text = f"SCENARIUSZ: {scenario['name']}\nKONTEKST: {case_context}\n\nROZMOWA:\n"
+        user_messages = []
+        
+        for msg in messages:
+            if msg['role'] == 'user':
+                ciq = msg.get('ciq_level', {})
+                level = ciq.get('level', 'Brak analizy')
+                conversation_text += f"\nUSER: {msg['content']} [C-IQ: {level}]\n"
+                user_messages.append({
+                    'content': msg['content'],
+                    'ciq_level': level,
+                    'is_appropriate': ciq.get('is_appropriate', False)
+                })
+            else:
+                conversation_text += f"AI: {msg['content']}\n"
+        
+        # Liczenie statystyk
+        total_turns = len([m for m in messages if m['role'] == 'user'])
+        ciq_stats = {
+            'Transformacyjny': 0,
+            'Pozycyjny': 0,
+            'Transakcyjny': 0
+        }
+        for msg in messages:
+            if msg['role'] == 'user' and msg.get('ciq_level'):
+                level = msg['ciq_level'].get('level', '')
+                if level in ciq_stats:
+                    ciq_stats[level] += 1
+        
+        prompt = f"""{conversation_text}
+
+ZADANIE:
+Oceń całą rozmowę i wygeneruj raport rozwojowy. Zwróć JSON:
+
+{{
+    "outcome": "Pozytywny|Częściowy|Negatywny",
+    "outcome_reason": "1-2 zdania dlaczego taki wynik",
+    "strengths": ["mocna strona 1 (konkret, nr wymiany)", "mocna strona 2"],
+    "improvements": ["obszar rozwoju 1 (konkret, nr wymiany)", "obszar rozwoju 2"],
+    "key_moment": "Najbardziej krytyczny moment rozmowy i dlaczego",
+    "next_steps": "Co użytkownik powinien ćwiczyć dalej"
+}}
+
+KRYTERIA OCENY:
+- Pozytywny: osiągnięto porozumienie, zbudowano rapport, konstruktywne rozwiązanie
+- Częściowy: kompromis, nierozstrzygnięta kwestia, ale bez eskalacji
+- Negatywny: konflikt, pat, przerwanie rozmowy, brak postępu
+
+WAŻNE:
+- Bądź konkretny: "wymiana 3" zamiast "na początku"
+- Doceniaj użycie Transformacyjnego C-IQ
+- Zwróć uwagę na progression - czy poziom C-IQ się poprawiał?
+- Max 15 słów na punkt
+
+TYLKO JSON:"""
+
+        response = model.generate_content(prompt)
+        result_text = response.text.strip()
+        
+        # Wyczyść JSON
+        if "```json" in result_text:
+            result_text = result_text.split("```json")[1].split("```")[0].strip()
+        elif "```" in result_text:
+            result_text = result_text.split("```")[1].split("```")[0].strip()
+        
+        import json
+        report = json.loads(result_text)
+        
+        # Dodaj statystyki
+        report['total_turns'] = total_turns
+        report['ciq_stats'] = ciq_stats
+        
+        return report
+        
+    except Exception as e:
+        return generate_fallback_report(messages)
+
+def generate_fallback_report(messages):
+    """Prosty raport gdy AI nie działa"""
+    total_turns = len([m for m in messages if m['role'] == 'user'])
+    ciq_stats = {
+        'Transformacyjny': 0,
+        'Pozycyjny': 0,
+        'Transakcyjny': 0
+    }
+    for msg in messages:
+        if msg['role'] == 'user' and msg.get('ciq_level'):
+            level = msg['ciq_level'].get('level', '')
+            if level in ciq_stats:
+                ciq_stats[level] += 1
+    
+    return {
+        'outcome': 'Częściowy',
+        'outcome_reason': 'Rozmowa została zakończona.',
+        'strengths': ['Ukończyłeś scenariusz', 'Przećwiczyłeś komunikację C-IQ'],
+        'improvements': ['Spróbuj więcej pytań otwartych', 'Buduj na odpowiedziach rozmówcy'],
+        'key_moment': 'Cała rozmowa była ćwiczeniem umiejętności.',
+        'next_steps': 'Spróbuj innego scenariusza i zwróć uwagę na poziomy C-IQ.',
+        'total_turns': total_turns,
+        'ciq_stats': ciq_stats
+    }
+
+def generate_conversation_transcript(messages, scenario):
+    """Generuje transkrypcję rozmowy w formacie tekstowym"""
+    transcript_lines = []
+    transcript_lines.append("=" * 60)
+    transcript_lines.append("TRANSKRYPCJA ROZMOWY")
+    transcript_lines.append("=" * 60)
+    transcript_lines.append(f"Scenariusz: {scenario['name']}")
+    transcript_lines.append(f"Data: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    transcript_lines.append("=" * 60)
+    transcript_lines.append("")
+    
+    # Kontekst case study
+    case_context = st.session_state.get('simulator_case_context', '')
+    if case_context:
+        transcript_lines.append("KONTEKST:")
+        transcript_lines.append(case_context)
+        transcript_lines.append("")
+        transcript_lines.append("-" * 60)
+        transcript_lines.append("")
+    
+    # Historia rozmowy z analizą C-IQ
+    exchange_num = 0
+    for i, msg in enumerate(messages):
+        if msg['role'] == 'user':
+            exchange_num += 1
+            transcript_lines.append(f"[Wymiana {exchange_num}]")
+            transcript_lines.append("")
+            
+        if msg['role'] == 'ai':
+            transcript_lines.append(f"{scenario.get('ai_role', 'AI').upper()}:")
+            transcript_lines.append(msg['content'])
+            transcript_lines.append("")
+        else:
+            transcript_lines.append(f"{scenario.get('user_role', 'TY').upper()}:")
+            transcript_lines.append(msg['content'])
+            
+            # Dodaj analizę C-IQ
+            if msg.get('ciq_level'):
+                ciq = msg['ciq_level']
+                level = ciq.get('level', 'Brak')
+                is_appropriate = ciq.get('is_appropriate', None)
+                
+                appropriate_text = ""
+                if is_appropriate is not None:
+                    appropriate_text = " ✓ (odpowiedni w kontekście)" if is_appropriate else " ⚠ (nieodpowiedni)"
+                
+                transcript_lines.append(f"   └─ C-IQ: {level}{appropriate_text}")
+                
+                # Opcjonalnie dodaj feedback
+                feedback = ciq.get('feedback', '')
+                if feedback:
+                    # Skróć feedback do 100 znaków
+                    short_feedback = feedback[:100] + "..." if len(feedback) > 100 else feedback
+                    transcript_lines.append(f"   └─ {short_feedback}")
+            
+            transcript_lines.append("")
+            transcript_lines.append("-" * 60)
+            transcript_lines.append("")
+    
+    transcript_lines.append("=" * 60)
+    transcript_lines.append("KONIEC TRANSKRYPCJI")
+    transcript_lines.append("=" * 60)
+    
+    return "\n".join(transcript_lines)
+
+def show_conversation_report(report, scenario):
+    """Wyświetla końcowy raport z rozmowy"""
+    st.markdown("---")
+    st.markdown("## 📊 PODSUMOWANIE ROZMOWY")
+    st.markdown("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    
+    # Wynik rozmowy z emoji
+    outcome_emoji = {
+        'Pozytywny': '✅',
+        'Częściowy': '🤝',
+        'Negatywny': '❌'
+    }
+    outcome = report.get('outcome', 'Częściowy')
+    emoji = outcome_emoji.get(outcome, '🤝')
+    
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        st.markdown(f"### {emoji} Wynik")
+        outcome_color = {
+            'Pozytywny': 'green',
+            'Częściowy': 'orange',
+            'Negatywny': 'red'
+        }
+        color = outcome_color.get(outcome, 'blue')
+        if color == 'green':
+            st.success(f"**{outcome}**")
+        elif color == 'orange':
+            st.warning(f"**{outcome}**")
+        else:
+            st.error(f"**{outcome}**")
+    with col2:
+        st.markdown("### 📝 Dlaczego?")
+        st.info(report.get('outcome_reason', 'Brak opisu'))
+    
+    # Statystyki
+    st.markdown("---")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("⏱️ Wymian", report.get('total_turns', 0))
+    
+    ciq_stats = report.get('ciq_stats', {})
+    with col2:
+        st.metric("🟢 Transformacyjny", ciq_stats.get('Transformacyjny', 0))
+    with col3:
+        st.metric("🟠 Pozycyjny", ciq_stats.get('Pozycyjny', 0))
+    with col4:
+        st.metric("🔴 Transakcyjny", ciq_stats.get('Transakcyjny', 0))
+    
+    # Mocne strony
+    st.markdown("---")
+    st.markdown("### 💪 Twoje mocne strony")
+    strengths = report.get('strengths', [])
+    if strengths:
+        for strength in strengths:
+            st.success(f"✓ {strength}")
+    else:
+        st.info("Brak szczegółów")
+    
+    # Obszary rozwoju
+    st.markdown("### 🎓 Obszary do rozwoju")
+    improvements = report.get('improvements', [])
+    if improvements:
+        for improvement in improvements:
+            st.warning(f"→ {improvement}")
+    else:
+        st.info("Brak szczegółów")
+    
+    # Kluczowy moment
+    st.markdown("---")
+    st.markdown("### 🔑 Kluczowy moment rozmowy")
+    st.info(report.get('key_moment', 'Brak analizy'))
+    
+    # Następne kroki
+    st.markdown("### 🌟 Co dalej?")
+    st.success(report.get('next_steps', 'Kontynuuj ćwiczenia z innymi scenariuszami'))
+    
+    st.markdown("---")
+    
+    # TRANSKRYPCJA ROZMOWY
+    st.markdown("### 📜 Transkrypcja rozmowy")
+    st.caption("Pełny zapis Twojej rozmowy z analizą poziomów C-IQ")
+    
+    # Generuj transkrypcję
+    messages = st.session_state.get('simulator_messages', [])
+    transcript = generate_conversation_transcript(messages, scenario)
+    
+    # Wyświetl w expander (domyślnie zwinięty)
+    with st.expander("🔍 Zobacz pełną transkrypcję", expanded=False):
+        st.text(transcript)
+        
+        # Przycisk do pobrania
+        st.download_button(
+            label="💾 Pobierz transkrypcję (.txt)",
+            data=transcript,
+            file_name=f"transkrypcja_{scenario['name'].replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+            mime="text/plain",
+            help="Zapisz transkrypcję na swoim komputerze"
+        )
+    
+    st.markdown("---")
+
+def show_business_conversation_simulator():
+    """Symulator rozmów biznesowych z analizą C-IQ"""
+    st.markdown("### 💼 Symulator Rozmów Biznesowych")
+    
+    # DIAGNOSTYKA - ZAWSZE WIDOCZNA
+    try:
+        api_key = st.secrets.get("API_KEYS", {}).get("gemini")
+        if api_key:
+            st.success(f"✅ API OK - Klucz znaleziony ({len(api_key)} znaków) - Używam prawdziwego AI")
+        else:
+            st.error("❌ BRAK KLUCZA API - Dodaj 'gemini' do secrets w [API_KEYS]")
+            st.warning("⚠️ Używam prostych odpowiedzi fallback zamiast AI")
+    except Exception as e:
+        st.error(f"❌ BŁĄD SECRETS: {type(e).__name__}: {str(e)}")
+        st.warning("⚠️ Nie mogę odczytać konfiguracji - używam fallback")
+    
+    st.markdown("---")
+    
+    # Inicjalizacja session state
+    if 'simulator_scenario' not in st.session_state:
+        st.session_state.simulator_scenario = None
+    if 'simulator_messages' not in st.session_state:
+        st.session_state.simulator_messages = []
+    if 'simulator_started' not in st.session_state:
+        st.session_state.simulator_started = False
+    if 'simulator_case_context' not in st.session_state:
+        st.session_state.simulator_case_context = None
+    if 'simulator_max_turns' not in st.session_state:
+        st.session_state.simulator_max_turns = 10  # Maksymalnie 10 wymian (20 wiadomości)
+    if 'simulator_completed' not in st.session_state:
+        st.session_state.simulator_completed = False
+    if 'simulator_final_report' not in st.session_state:
+        st.session_state.simulator_final_report = None
+    
+    # Definicja scenariuszy z promptami do generowania kontekstu
+    scenarios = {
+        "salary_raise": {
+            "name": "💰 Rozmowa o podwyżkę",
+            "description": "Prosisz szefa o podwyżkę. Twój szef jest wymagający i skupiony na wynikach.",
+            "ai_persona": "Jesteś wymagającym dyrektorem firmy. Cenisz konkretne wyniki i liczby. Jesteś sceptyczny wobec próśb o podwyżkę, chyba że rozmówca przedstawi mocne argumenty biznesowe. Nie jesteś wrogi, ale wymagasz przekonujących dowodów wartości pracownika.",
+            "ai_role": "Szef",
+            "user_role": "Pracownik",
+            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst biznesowy dla rozmowy pracownik-szef o podwyżkę:
+- Nazwa stanowiska pracownika
+- Branża/firma
+- Dlaczego pracownik chce podwyżki (np. rok bez podwyżki, nowe obowiązki, oferta z innej firmy)
+- Dodatkowy szczegół zwiększający trudność (np. firma ma trudności finansowe, ostatnio było zwolnienie kogoś)
+
+Odpowiedz TYLKO kontekstem, bez dodatków. Format: "Jesteś [stanowisko] w [firma/branża]. [sytuacja]. [wyzwanie]."
+"""
+        },
+        "difficult_feedback": {
+            "name": "📢 Feedback dla pracownika",
+            "description": "Musisz przekazać trudny feedback pracownikowi, który nie spełnia oczekiwań.",
+            "ai_persona": "Jesteś pracownikiem, który nie zdaje sobie sprawy z problemów w swojej pracy. Początkowo możesz być defensywny, ale jeśli rozmówca użyje empatii i konkretów (poziom Transformacyjny C-IQ), stajesz się otwarty na feedback.",
+            "ai_role": "Pracownik",
+            "user_role": "Menedżer",
+            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst dla trudnej rozmowy feedbackowej:
+- Imię pracownika i stanowisko
+- Konkretny problem z wydajnością (np. spóźnione projekty, konflikty w zespole, błędy w pracy)
+- Jak długo problem trwa
+- Dodatkowy kontekst (np. pracownik ma potencjał ale ostatnio się pogubił, albo nie przyjmuje feedbacku)
+
+Odpowiedz TYLKO kontekstem. Format: "[Imię] pracuje jako [stanowisko]. Problem: [konkret]. [dodatkowy szczegół]."
+"""
+        },
+        "team_conflict": {
+            "name": "⚡ Rozwiązanie konfliktu",
+            "description": "Dwóch członków zespołu ma konflikt. Musisz pomóc im się porozumieć.",
+            "ai_persona": "Jesteś sfrustrowanym członkiem zespołu, który czuje się niedoceniony. Jesteś lekko agresywny i obwiniasz innych. Możesz się uspokoić tylko jeśli rozmówca wykaże empatię i pomoże znaleźć wspólne rozwiązanie (C-IQ Transformacyjny).",
+            "ai_role": "Członek zespołu",
+            "user_role": "Mediator",
+            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst konfliktu zespołowego:
+- Imiona dwóch skonfliktowanych osób i ich role
+- O co dokładnie chodzi w konflikcie (np. podział zadań, różne style pracy, nieporozumienie)
+- Jak długo to trwa i jaki ma wpływ na zespół
+- Perspektywa osoby z którą rozmawiasz (czuje się niedoceniona/wykorzystana)
+
+Odpowiedz TYLKO kontekstem. Format: "Konflikt między [osoba1] a [osoba2]. Problem: [konkret]. Twoja perspektywa: [uczucia]."
+"""
+        }
+    }
+    
+    # Wybór scenariusza
+    if not st.session_state.simulator_started:
+        st.markdown("#### 🎯 Wybierz scenariusz:")
+        
+        for scenario_id, scenario in scenarios.items():
+            with st.container():
+                col1, col2 = st.columns([3, 1])
+                with col1:
+                    st.markdown(f"**{scenario['name']}**")
+                    st.markdown(f"_{scenario['description']}_")
+                with col2:
+                    if st.button("Rozpocznij", key=f"start_{scenario_id}"):
+                        st.session_state.simulator_scenario = scenario_id
+                        st.session_state.simulator_started = True
+                        st.session_state.simulator_waiting_for_next = False  # Reset flagi
+                        
+                        # Generuj kontekst case study
+                        with st.spinner("🎬 Generuję kontekst scenariusza..."):
+                            case_context = generate_case_context(scenario)
+                            st.session_state.simulator_case_context = case_context
+                            
+                            # Wygeneruj pierwszą wiadomość AI z kontekstem
+                            initial_message = generate_initial_message(scenario, case_context)
+                            st.session_state.simulator_messages = [
+                                {"role": "ai", "content": initial_message, "ciq_level": None}
+                            ]
+                        
+                        st.rerun()
+        
+        # Instrukcja
+        st.markdown("---")
+        st.markdown("#### 📚 Poziomy C-IQ (Conversational Intelligence):")
+        
+        ciq_col1, ciq_col2, ciq_col3 = st.columns(3)
+        
+        with ciq_col1:
+            st.markdown("""
+            **🔴 Transakcyjny**
+            - Wymiana informacji
+            - "Ty mówisz - ja słucham"
+            - Brak głębszego dialogu
+            - Przykład: _"Chcę podwyżki o 20%"_
+            """)
+        
+        with ciq_col2:
+            st.markdown("""
+            **🟡 Pozycyjny**
+            - Obrona swojej pozycji
+            - Walka o rację
+            - "Ja vs. Ty"
+            - Przykład: _"Zasługuję na więcej, bo inni zarabiają więcej"_
+            """)
+        
+        with ciq_col3:
+            st.markdown("""
+            **🟢 Transformacyjny**
+            - Współtworzenie rozwiązań
+            - Empatia i zrozumienie
+            - "My razem"
+            - Przykład: _"Jak możemy wspólnie znaleźć rozwiązanie?"_
+            """)
+        
+        return
+    
+    # Aktywna symulacja
+    scenario_id = st.session_state.simulator_scenario
+    if not scenario_id:
+        return
+    scenario = scenarios[scenario_id]
+    
+    # SPRAWDŹ CZY ROZMOWA ZAKOŃCZONA - jeśli tak, pokaż raport
+    if st.session_state.simulator_completed and st.session_state.simulator_final_report:
+        show_conversation_report(st.session_state.simulator_final_report, scenario)
+        
+        # Przycisk do rozpoczęcia nowego scenariusza
+        if st.button("🎯 Spróbuj innego scenariusza", type="primary", use_container_width=True):
+            st.session_state.simulator_started = False
+            st.session_state.simulator_messages = []
+            st.session_state.simulator_scenario = None
+            st.session_state.simulator_case_context = None
+            st.session_state.simulator_waiting_for_next = False
+            st.session_state.simulator_completed = False
+            st.session_state.simulator_final_report = None
+            st.rerun()
+        
+        return  # Zakończ funkcję - nie pokazuj reszty interfejsu
+    
+    # Oblicz liczbę wymian (tylko wiadomości użytkownika)
+    user_turns = len([m for m in st.session_state.simulator_messages if m['role'] == 'user'])
+    max_turns = st.session_state.simulator_max_turns
+    
+    # Nagłówek z nazwą scenariusza i licznikiem
+    col1, col2, col3 = st.columns([3, 1, 1])
+    with col1:
+        st.markdown(f"#### {scenario['name']}")
+        st.caption(scenario['description'])
+    with col2:
+        # Licznik wymian
+        progress = user_turns / max_turns
+        if progress < 0.6:
+            color = "�"
+        elif progress < 0.8:
+            color = "🟡"
+        else:
+            color = "🔴"
+        st.metric("Wymiana", f"{color} {user_turns}/{max_turns}")
+    with col3:
+        # Przycisk zakończenia
+        if st.button("🏁 Zakończ", help="Zakończ rozmowę i zobacz raport"):
+            # Generuj raport
+            with st.spinner("📊 Generuję raport..."):
+                report = generate_conversation_report(
+                    st.session_state.simulator_messages,
+                    scenario,
+                    st.session_state.simulator_case_context
+                )
+                st.session_state.simulator_final_report = report
+                st.session_state.simulator_completed = True
+            st.rerun()
+    
+    # Wyświetl kontekst case study
+    if st.session_state.simulator_case_context:
+        with st.expander("📋 Kontekst scenariusza", expanded=False):
+            st.info(st.session_state.simulator_case_context)
+    
+    st.markdown("---")
+    
+    # Wyświetl historię rozmowy
+    for idx, msg in enumerate(st.session_state.simulator_messages):
+        if msg['role'] == 'ai':
+            with st.chat_message("assistant", avatar="💼"):
+                st.markdown(msg['content'])
+        else:
+            with st.chat_message("user", avatar="👤"):
+                st.markdown(msg['content'])
+                if msg.get('ciq_level'):
+                    # Wyświetl analizę C-IQ z odpowiednim kolorem
+                    level_info = msg['ciq_level']
+                    color = level_info.get('color', 'blue')
+                    is_appropriate = level_info.get('is_appropriate', None)
+                    
+                    # Wybierz funkcję Streamlit bazując na kolorze i kontekście
+                    feedback_text = f"📊 **C-IQ: {level_info['level']}** - {level_info['feedback']}"
+                    
+                    if color == 'green':
+                        st.success(feedback_text)
+                    elif color == 'blue':
+                        # Niebieski = odpowiedni w kontekście
+                        st.info(feedback_text)
+                    elif color == 'orange':
+                        st.warning(feedback_text)
+                    else:  # red
+                        st.error(feedback_text) if not is_appropriate else st.info(feedback_text)
+                    
+                    # Jeśli to ostatnia wiadomość użytkownika, pokaż przyciski akcji
+                    # Sprawdź czy następna wiadomość to odpowiedź AI (wtedy możemy "powtórzyć")
+                    is_last_user_msg = (idx == len(st.session_state.simulator_messages) - 2 
+                                       and idx + 1 < len(st.session_state.simulator_messages)
+                                       and st.session_state.simulator_messages[idx + 1]['role'] == 'ai')
+                    
+                    if is_last_user_msg and not st.session_state.get('simulator_waiting_for_next', False):
+                        col1, col2, col3 = st.columns([1, 1, 3])
+                        with col1:
+                            if st.button("🔄 Powtórz", key=f"retry_{idx}", help="Usuń tę wypowiedź i spróbuj ponownie"):
+                                # Usuń ostatnią parę wiadomości (user + AI)
+                                st.session_state.simulator_messages = st.session_state.simulator_messages[:-2]
+                                st.rerun()
+                        with col2:
+                            if st.button("✅ Dalej", key=f"continue_{idx}", help="Kontynuuj konwersację"):
+                                # Oznacz że użytkownik zaakceptował i chce iść dalej
+                                st.session_state.simulator_waiting_for_next = True
+                                st.rerun()
+    
+    # Input użytkownika - dostępny tylko gdy:
+    # 1. To początek rozmowy (brak wiadomości)
+    # 2. Ostatnia wiadomość to AI (user odpowiedział na feedback i kliknął "Dalej")
+    # 3. User kliknął "Dalej" (flaga simulator_waiting_for_next)
+    can_send_message = (
+        len(st.session_state.simulator_messages) == 0 or  # Początek
+        st.session_state.simulator_messages[-1]['role'] == 'ai' or  # Ostatnia to AI
+        st.session_state.get('simulator_waiting_for_next', False)  # User kliknął "Dalej"
+    )
+    
+    if can_send_message:
+        # Reset flagi
+        if st.session_state.get('simulator_waiting_for_next'):
+            st.session_state.simulator_waiting_for_next = False
+        
+        user_input = st.chat_input("Twoja odpowiedź...")
+        
+        if user_input:
+            # Sprawdź czy to będzie ostatnia wymiana (osiągnięcie limitu)
+            user_turns = len([m for m in st.session_state.simulator_messages if m['role'] == 'user'])
+            will_reach_limit = (user_turns + 1) >= st.session_state.simulator_max_turns
+            
+            # Analiza C-IQ przed dodaniem do historii
+            ciq_analysis = analyze_ciq_level(user_input)
+            
+            # Generuj odpowiedź AI (PRZED dodaniem wiadomości użytkownika do historii)
+            ai_response = generate_ai_response(
+                user_input, 
+                st.session_state.simulator_messages,  # Historia BEZ obecnej wiadomości
+                scenario,
+                ciq_analysis
+            )
+            
+            # Teraz dodaj wiadomość użytkownika
+            user_message = {"role": "user", "content": user_input, "ciq_level": ciq_analysis}
+            st.session_state.simulator_messages.append(user_message)
+            
+            # Dodaj odpowiedź AI
+            st.session_state.simulator_messages.append({
+                "role": "ai", 
+                "content": ai_response,
+                "ciq_level": None
+            })
+            
+            # Jeśli osiągnięto limit, automatycznie zakończ i generuj raport
+            if will_reach_limit:
+                with st.spinner("🏁 Osiągnięto limit wymian. Generuję raport..."):
+                    report = generate_conversation_report(
+                        st.session_state.simulator_messages,
+                        scenario,
+                        st.session_state.simulator_case_context
+                    )
+                    st.session_state.simulator_final_report = report
+                    st.session_state.simulator_completed = True
+            
+            st.rerun()
+    else:
+        # Użytkownik musi przeczytać feedback i wybrać akcję
+        st.info("💡 **Przeczytaj feedback powyżej i wybierz:**\n- 🔄 **Powtórz** - spróbuj przeformułować swoją odpowiedź\n- ✅ **Dalej** - kontynuuj konwersację")
+
+def analyze_ciq_level(user_message):
+    """Analizuje poziom C-IQ w wiadomości użytkownika za pomocą AI"""
+    
+    # Sprawdź czy API jest dostępne
+    try:
+        api_key = st.secrets.get("API_KEYS", {}).get("gemini")
+        if not api_key:
+            return analyze_ciq_level_fallback(user_message)
+        
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        
+        try:
+            model = genai.GenerativeModel(
+                "gemini-2.0-flash-exp",
+                generation_config=genai.GenerationConfig(
+                    temperature=0.3,  # Niska temperatura dla konsystentnej analizy
+                )
+            )
+        except:
+            model = genai.GenerativeModel(
+                "gemini-1.5-flash",
+                generation_config=genai.GenerationConfig(temperature=0.3)
+            )
+        
+        # Pobierz kontekst rozmowy i historię
+        conversation_history = st.session_state.get('simulator_messages', [])
+        case_context = st.session_state.get('simulator_case_context', '')
+        
+        # Zbuduj kontekst ostatnich wymian
+        recent_context = "\n".join([
+            f"{'AI' if msg['role'] == 'ai' else 'Ty'}: {msg['content']}" 
+            for msg in conversation_history[-4:]  # Ostatnie 2 wymiany
+        ]) if conversation_history else "Początek rozmowy"
+        
+        prompt = f"""Przeanalizuj tę wypowiedź pod kątem Conversational Intelligence (C-IQ) w kontekście trwającej rozmowy:
+
+KONTEKST SYTUACJI:
+{case_context if case_context else 'Rozmowa biznesowa'}
+
+OSTATNIE WYPOWIEDZI:
+{recent_context}
+
+AKTUALNA WYPOWIEDŹ: "{user_message}"
+
+POZIOMY C-IQ:
+🔴 **Transakcyjny** - wymiana informacji, pytania o fakty, jasne komunikaty ("co/kiedy/ile")
+   → Odpowiedni gdy: ustalamy fakty, planujemy działania, wymieniamy dane
+   → Nieodpowiedni gdy: sytuacja wymaga empatii, rozwiązania konfliktu, budowania relacji
+
+🟡 **Pozycyjny** - obrona stanowiska, argumentowanie, "ja vs ty" ("zasługuję/powinienem")
+   → Czasem potrzebny gdy: musimy być asertywni, bronić granic
+   → Problematyczny gdy: eskaluje konflikt, niszczy zaufanie
+
+🟢 **Transformacyjny** - współtworzenie, empatia, "my/razem" ("jak możemy/co myślisz")
+   → Najlepszy gdy: trudne rozmowy, budowanie relacji, rozwiązywanie problemów
+   → Rzadko nieodpowiedni (może być postrzegany jako "za miękki" w niektórych kulturach)
+
+Oceń:
+1. Jaki to poziom?
+2. Czy jest odpowiedni do KONTEKSTU rozmowy?
+3. Jak można poprawić (jeśli warto)?
+
+Odpowiedz w formacie JSON:
+{{
+    "level": "Transakcyjny|Pozycyjny|Transformacyjny",
+    "is_appropriate": true/false,
+    "reasoning": "Dlaczego to ten poziom i czy jest OK w tym kontekście",
+    "tip": "Wskazówka - jeśli poziom odpowiedni: 'Dobry wybór! ...' lub 'OK w tym momencie, ale...' / jeśli nieodpowiedni: 'Spróbuj...' "
+}}
+
+TYLKO JSON:"""
+
+        response = model.generate_content(prompt)
+        result_text = response.text.strip()
+        
+        # Wyczyść JSON z markdown
+        if "```json" in result_text:
+            result_text = result_text.split("```json")[1].split("```")[0].strip()
+        elif "```" in result_text:
+            result_text = result_text.split("```")[1].split("```")[0].strip()
+        
+        import json
+        result = json.loads(result_text)
+        
+        # Mapuj kolor bazując na poziomie I czy jest odpowiedni
+        is_appropriate = result.get("is_appropriate", False)
+        level = result["level"]
+        
+        # Logika kolorów:
+        # - Transformacyjny: zawsze zielony (prawie zawsze dobry)
+        # - Transakcyjny/Pozycyjny: niebieski jeśli odpowiedni, czerwony/pomarańczowy jeśli nie
+        if level == "Transformacyjny":
+            color = "green"
+        elif is_appropriate:
+            color = "blue"  # Niebieski = OK w tym kontekście
+        else:
+            # Standardowe kolory ostrzegawcze
+            color = "red" if level == "Transakcyjny" else "orange"
+        
+        return {
+            "level": result["level"],
+            "feedback": f"{result['reasoning']} 💡 {result['tip']}",
+            "color": color,
+            "is_appropriate": is_appropriate
+        }
+        
+    except Exception as e:
+        # Fallback na prostą heurystykę
+        return analyze_ciq_level_fallback(user_message)
+
+def analyze_ciq_level_fallback(user_message):
+    """Prosta heurystyka analizy C-IQ gdy AI nie działa"""
+    user_message_lower = user_message.lower()
+    
+    # Słowa kluczowe dla każdego poziomu
+    transformational_keywords = [
+        'razem', 'wspólnie', 'jak możemy', 'zrozumiem', 'pomóż mi zrozumieć',
+        'jakie masz', 'co myślisz', 'współpraca', 'oboje', 'nasz cel',
+        'słucham', 'rozumiem', 'doceniam', 'cenię'
+    ]
+    
+    positional_keywords = [
+        'ale', 'jednak', 'zasługuję', 'powinienem', 'musisz', 'masz obowiązek',
+        'to niesprawiedliwe', 'inni mają', 'dlaczego ja nie', 'to twoja wina'
+    ]
+    
+    transactional_keywords = [
+        'chcę', 'potrzebuję', 'daj mi', 'kiedy', 'ile', 'co dostanę'
+    ]
+    
+    # Analiza obecności słów kluczowych
+    transformational_score = sum(1 for keyword in transformational_keywords if keyword in user_message_lower)
+    positional_score = sum(1 for keyword in positional_keywords if keyword in user_message_lower)
+    transactional_score = sum(1 for keyword in transactional_keywords if keyword in user_message_lower)
+    
+    # Dodatkowe wskaźniki
+    has_question = '?' in user_message
+    has_we_language = any(word in user_message_lower for word in ['my', 'nam', 'nasz', 'wspólnie', 'razem'])
+    has_i_focus = any(word in user_message_lower.split()[:3] for word in ['ja', 'chcę', 'potrzebuję', 'muszę'])
+    
+    # Określ poziom
+    if transformational_score >= 2 or (has_question and has_we_language):
+        return {
+            "level": "Transformacyjny",
+            "feedback": "Świetnie! Budujesz współpracę i pokazujesz empatię. To buduje zaufanie.",
+            "color": "green"
+        }
+    elif positional_score >= 2 or (has_i_focus and positional_score >= 1):
+        return {
+            "level": "Pozycyjny",
+            "feedback": "Bronisz swojej pozycji. 💡 Spróbuj skupić się na wspólnych celach zamiast 'ja vs. ty'.",
+            "color": "orange"
+        }
+    else:
+        return {
+            "level": "Transakcyjny",
+            "feedback": "Wymieniasz informacje. 💡 Możesz pogłębić rozmowę pytając o perspektywę drugiej strony.",
+            "color": "red"
+        }
+
+def generate_ai_response(user_input, conversation_history, scenario, ciq_analysis):
+    """Generuje odpowiedź AI na podstawie kontekstu rozmowy"""
+    
+    # Sprawdź czy API jest dostępne (BEZ wyświetlania komunikatów w UI)
+    try:
+        api_key = st.secrets.get("API_KEYS", {}).get("gemini")
+    except Exception:
+        api_key = None
+    
+    if not api_key:
+        # Fallback na prostą odpowiedź bez AI
+        if ciq_analysis['level'] == 'Transformacyjny':
+            return "Doceniam twoje podejście. Zgadzam się, że warto to omówić szczegółowo. Co proponujesz?"
+        elif ciq_analysis['level'] == 'Pozycyjny':
+            return "Rozumiem twój punkt widzenia, ale muszę spojrzeć na to szerzej. Czy możemy porozmawiać o faktach?"
+        else:
+            return "Okej, słucham. Opowiedz więcej."
+        if ciq_analysis['level'] == 'Transformacyjny':
+            return "Doceniam twoje podejście. Zgadzam się, że warto to omówić szczegółowo. Co proponujesz?"
+        elif ciq_analysis['level'] == 'Pozycyjny':
+            return "Rozumiem twój punkt widzenia, ale muszę spojrzeć na to szerzej. Czy możemy porozmawiać o faktach?"
+        else:
+            return "Okej, słucham. Opowiedz więcej."
+    
+    try:
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        
+        # Spróbuj użyć najbardziej dostępnego modelu
+        try:
+            model = genai.GenerativeModel(
+                "gemini-2.0-flash-exp",
+                generation_config=genai.GenerationConfig(
+                    temperature=0.9,  # Wysoka kreatywność
+                    top_p=0.95,
+                    top_k=40,
+                )
+            )
+        except:
+            # Fallback na stabilny model
+            model = genai.GenerativeModel(
+                "gemini-1.5-flash",
+                generation_config=genai.GenerationConfig(
+                    temperature=0.9,
+                    top_p=0.95,
+                    top_k=40,
+                )
+            )
+        
+        # Przygotuj historię rozmowy z odpowiednimi rolami
+        history_text = "\n".join([
+            f"{scenario.get('ai_role', 'AI') if msg['role'] == 'ai' else scenario.get('user_role', 'Ty')}: {msg['content']}" 
+            for msg in conversation_history[-8:]  # Ostatnie 4 wymiany
+        ])
+        
+        # Pobierz kontekst case study jeśli istnieje
+        case_context = st.session_state.get('simulator_case_context', '')
+        
+        # Sprawdź liczbę wymian - czy zbliżamy się do końca?
+        user_turns = len([m for m in conversation_history if m['role'] == 'user']) + 1  # +1 bo obecna
+        max_turns = st.session_state.get('simulator_max_turns', 10)
+        approaching_end = user_turns >= 6  # Po 6 wymianach sugeruj zakończenie
+        
+        # Prompt dla AI - z kontekstem case study
+        end_hint = ""
+        if approaching_end:
+            end_hint = "\n\nWSKAZÓWKA: To już wymiana {}/{}. Subtelnie sugeruj zakończenie rozmowy - np. 'Myślę że ustaliliśmy...', 'Wydaje mi się że dobrze byłoby teraz...', itp.".format(user_turns, max_turns)
+        
+        prompt = f"""Wcielasz się w rolę: {scenario.get('ai_role', 'rozmówcy')} w symulacji biznesowej.
+
+KONTEKST SYTUACJI:
+{case_context}
+
+TWOJA POSTAĆ: {scenario['ai_persona']}
+
+DOTYCHCZASOWA ROZMOWA:
+{history_text}
+
+{scenario.get('user_role', 'Rozmówca').upper()} WŁAŚNIE POWIEDZIAŁ: "{user_input}"
+
+Odpowiedz jako {scenario.get('ai_role', 'rozmówca')} - naturalnie, bezpośrednio, w 1-2 zdaniach.
+
+WSKAZÓWKI:
+- Pamiętaj o kontekście sytuacji i używaj go w odpowiedziach gdy to naturalne
+- Jeśli rozmówca używa słów "my", "razem", "wspólnie" → bądź bardziej otwarty i współpracuj
+- Jeśli atakuje lub oskarża → bądź defensywny lub zdecydowany  
+- Jeśli zadaje pytanie → odpowiedz konkretnie na nie
+- Zachowuj swoją postać ale reaguj naturalnie na ton rozmówcy
+- NIE powtarzaj poprzednich odpowiedzi{end_hint}
+
+Odpowiedź ({scenario.get('ai_role', 'AI')}):"""
+
+        response = model.generate_content(prompt)
+        ai_text = response.text.strip()
+        
+        # Zwróć odpowiedź AI
+        if len(ai_text) > 0:
+            return ai_text
+        else:
+            # Pusta odpowiedź - użyj fallbacku
+            raise Exception("AI zwróciło pustą odpowiedź")
+        
+    except Exception as e:
+        # Ciche logowanie błędu (bez wyświetlania użytkownikowi)
+        # Można dodać print(f"AI Error: {e}") do debugowania lokalnie
+        
+        # Fallback jeśli API zawiedzie - lepsze odpowiedzi bazowane na C-IQ
+        if ciq_analysis['level'] == 'Transformacyjny':
+            return "Naprawdę doceniam twoje podejście. Zastanówmy się razem, jak to rozwiązać."
+        elif ciq_analysis['level'] == 'Pozycyjny':
+            return "Hmm, widzę że masz swoje zdanie. Ale czy możemy spojrzeć na to z innej perspektywy?"
+        else:
+            return "Dobrze, co jeszcze chciałbyś powiedzieć?"
+
 def show_simulators():
     """Symulatory komunikacyjne"""
     st.markdown("### 🎭 Symulatory Komunikacyjne")
@@ -3630,7 +4616,7 @@ def show_simulators():
         st.markdown(business_sim_html, unsafe_allow_html=True)
         
         if zen_button("💼 Uruchom Symulator", key="business_simulator", width='stretch'):
-            st.info("🚧 W przygotowaniu - interaktywne symulacje rozmów biznesowych")
+            st.session_state.active_simulator = "business_conversation"
     
     with col2:
         negotiation_html = '''
@@ -3648,6 +4634,13 @@ def show_simulators():
         
         if zen_button("🤝 Uruchom Trenera", key="negotiation_trainer", width='stretch'):
             st.info("🚧 W przygotowaniu - trening umiejętności negocjacyjnych")
+    
+    # Wyświetl aktywny symulator
+    active_simulator = st.session_state.get('active_simulator')
+    
+    if active_simulator == "business_conversation":
+        st.markdown("---")
+        show_business_conversation_simulator()
 
 def show_analytics():
     """Analityki i tracking postępów"""
