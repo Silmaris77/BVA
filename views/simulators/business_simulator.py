@@ -239,6 +239,11 @@ def analyze_message_ciq_fallback(message: str) -> Dict:
 
 def generate_ai_response(scenario: Dict, messages: List[Dict], user_message: str) -> str:
     """Generuje odpowiedź AI w roli rozmówcy"""
+    # Wykryj poziom C-IQ ostatniej wypowiedzi użytkownika (przed blokiem try)
+    last_user_ciq = "nieznany"
+    if messages and messages[-1]['role'] == 'user' and 'ciq_analysis' in messages[-1]:
+        last_user_ciq = messages[-1]['ciq_analysis'].get('level', 'nieznany')
+    
     try:
         from utils.ai_exercises import AIExerciseEvaluator
         evaluator = AIExerciseEvaluator()
@@ -250,10 +255,8 @@ def generate_ai_response(scenario: Dict, messages: List[Dict], user_message: str
             for m in recent_messages
         ])
         
-        # Wykryj poziom C-IQ ostatniej wypowiedzi użytkownika
-        last_user_ciq = "nieznany"
-        if messages and messages[-1]['role'] == 'user' and 'ciq_analysis' in messages[-1]:
-            last_user_ciq = messages[-1]['ciq_analysis'].get('level', 'nieznany')
+        # Pobierz kontekst sytuacji (jeśli istnieje)
+        context = scenario.get('context', scenario.get('description', 'Brak kontekstu'))
         
         prompt = f"""Jesteś ekspertem w symulacji realistycznych rozmów biznesowych.
 
@@ -261,10 +264,10 @@ TWOJA ROLA: {scenario['ai_role']}
 ROLA UŻYTKOWNIKA: {scenario['user_role']}
 
 PERSONA (jak masz się zachowywać):
-{scenario['ai_persona']}
+{scenario.get('ai_persona', 'Zachowuj się naturalnie i profesjonalnie.')}
 
 KONTEKST SYTUACJI:
-{scenario['context']}
+{context}
 
 HISTORIA ROZMOWY:
 {conversation_history}
@@ -298,7 +301,7 @@ Odpowiedz TYLKO tekstem wypowiedzi, bez dodatkowych oznaczeń:"""
         st.warning(error_msg)
     
     # Fallback
-    return generate_ai_response_fallback(scenario, last_user_ciq if 'last_user_ciq' in locals() else "nieznany")
+    return generate_ai_response_fallback(scenario, last_user_ciq)
 
 def generate_ai_response_fallback(scenario: Dict, user_ciq_level: str) -> str:
     """Prosta odpowiedź AI gdy API nie działa"""
@@ -404,9 +407,10 @@ def show_business_simulator():
         with col2:
             st.markdown(f"**🤖 AI:** {scenario['ai_role']}")
         
-        # Kontekst
-        with st.expander("📄 Szczegółowy kontekst sytuacji", expanded=False):
-            st.markdown(scenario['context'])
+        # Kontekst (jeśli istnieje)
+        if 'context' in scenario:
+            with st.expander("📄 Szczegółowy kontekst sytuacji", expanded=False):
+                st.markdown(scenario['context'])
         
         # Przycisk start
         st.markdown("")
