@@ -1,6 +1,6 @@
-"""
-Modu³ narzêdzi AI dla BrainVenture Academy
-Zawiera zaawansowane narzêdzia do rozwoju umiejêtnoœci komunikacyjnych i przywództwa
+ï»¿"""
+ModuÅ‚ narzÄ™dzi AI dla BrainVenture Academy
+Zawiera zaawansowane narzÄ™dzia do rozwoju umiejÄ™tnoÅ›ci komunikacyjnych i przywÃ³dztwa
 """
 
 import streamlit as st
@@ -29,12 +29,12 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 
 def save_leadership_profile(username: str, profile: Dict, profile_name: Optional[str] = None) -> bool:
-    """Zapisuje profil przywódczy u¿ytkownika"""
+    """Zapisuje profil przywÃ³dczy uÅ¼ytkownika"""
     try:
-        # Œcie¿ka do pliku profili
+        # ÅšcieÅ¼ka do pliku profili
         profiles_file = "leadership_profiles.json"
         
-        # Wczytaj istniej¹ce profile lub stwórz nowy s³ownik
+        # Wczytaj istniejÄ…ce profile lub stwÃ³rz nowy sÅ‚ownik
         if os.path.exists(profiles_file):
             with open(profiles_file, 'r', encoding='utf-8') as f:
                 profiles = json.load(f)
@@ -44,7 +44,7 @@ def save_leadership_profile(username: str, profile: Dict, profile_name: Optional
         # Migracja starych danych do nowej struktury
         if username in profiles:
             if not isinstance(profiles[username], dict) or "profiles" not in profiles[username]:
-                # Stary format - przekszta³æ do nowego
+                # Stary format - przeksztaÅ‚Ä‡ do nowego
                 old_profile = profiles[username] if username in profiles else {}
                 profiles[username] = {"profiles": [old_profile] if old_profile else [], "current_profile": 0}
         
@@ -57,7 +57,7 @@ def save_leadership_profile(username: str, profile: Dict, profile_name: Optional
         profile['username'] = username
         profile['profile_name'] = profile_name or f"Profil {datetime.now().strftime('%Y-%m-%d %H:%M')}"
         
-        # Dodaj nowy profil do listy (zawsze dodaj nowy zamiast nadpisywaæ)
+        # Dodaj nowy profil do listy (zawsze dodaj nowy zamiast nadpisywaÄ‡)
         profiles[username]["profiles"].append(profile)
         profiles[username]["current_profile"] = len(profiles[username]["profiles"]) - 1
         
@@ -72,11 +72,11 @@ def save_leadership_profile(username: str, profile: Dict, profile_name: Optional
             
         return True
     except Exception as e:
-        st.error(f"B³¹d zapisu profilu: {e}")
+        st.error(f"BÅ‚Ä…d zapisu profilu: {e}")
         return False
 
 def load_leadership_profile(username: str, profile_index: Optional[int] = None) -> Optional[Dict]:
-    """Wczytuje profil przywódczy u¿ytkownika"""
+    """Wczytuje profil przywÃ³dczy uÅ¼ytkownika"""
     try:
         profiles_file = "leadership_profiles.json"
         
@@ -90,27 +90,27 @@ def load_leadership_profile(username: str, profile_index: Optional[int] = None) 
         if not user_data:
             return None
             
-        # Obs³uga starego formatu (backward compatibility)
+        # ObsÅ‚uga starego formatu (backward compatibility)
         if isinstance(user_data, dict) and 'profiles' not in user_data:
             return user_data
             
-        # Nowy format z list¹ profili
+        # Nowy format z listÄ… profili
         if profile_index is not None:
             if 0 <= profile_index < len(user_data["profiles"]):
                 return user_data["profiles"][profile_index]
         else:
-            # Zwróæ aktualny profil
+            # ZwrÃ³Ä‡ aktualny profil
             current_idx = user_data.get("current_profile", 0)
             if user_data["profiles"]:
                 return user_data["profiles"][current_idx]
                 
         return None
     except Exception as e:
-        st.error(f"B³¹d wczytywania profilu: {e}")
+        st.error(f"BÅ‚Ä…d wczytywania profilu: {e}")
         return None
 
 def get_user_profiles_history(username: str) -> List[Dict]:
-    """Pobiera historiê wszystkich profili u¿ytkownika"""
+    """Pobiera historiÄ™ wszystkich profili uÅ¼ytkownika"""
     try:
         profiles_file = "leadership_profiles.json"
         
@@ -124,17 +124,17 @@ def get_user_profiles_history(username: str) -> List[Dict]:
         if not user_data:
             return []
             
-        # Obs³uga starego formatu
+        # ObsÅ‚uga starego formatu
         if isinstance(user_data, dict) and 'profiles' not in user_data:
             return [user_data]
             
-        # Nowy format - zwróæ wszystkie profile
+        # Nowy format - zwrÃ³Ä‡ wszystkie profile
         return user_data.get("profiles", [])
     except Exception:
         return []
 
 def delete_user_profile(username: str, profile_index: Optional[int] = None) -> bool:
-    """Usuwa profil u¿ytkownika"""
+    """Usuwa profil uÅ¼ytkownika"""
     try:
         profiles_file = "leadership_profiles.json"
         
@@ -149,15 +149,15 @@ def delete_user_profile(username: str, profile_index: Optional[int] = None) -> b
             return True
             
         if profile_index is not None:
-            # Usuñ konkretny profil
+            # UsuÅ„ konkretny profil
             if isinstance(user_data, dict) and 'profiles' in user_data:
                 if 0 <= profile_index < len(user_data["profiles"]):
                     user_data["profiles"].pop(profile_index)
-                    # Zaktualizuj current_profile jeœli potrzeba
+                    # Zaktualizuj current_profile jeÅ›li potrzeba
                     if user_data["current_profile"] >= len(user_data["profiles"]):
                         user_data["current_profile"] = max(0, len(user_data["profiles"]) - 1)
         else:
-            # Usuñ wszystkie profile u¿ytkownika
+            # UsuÅ„ wszystkie profile uÅ¼ytkownika
             del profiles[username]
             
         # Zapisz zmiany
@@ -166,56 +166,56 @@ def delete_user_profile(username: str, profile_index: Optional[int] = None) -> b
             
         return True
     except Exception as e:
-        st.error(f"B³¹d usuwania profilu: {e}")
+        st.error(f"BÅ‚Ä…d usuwania profilu: {e}")
         return False
 
 def show_autodiagnosis():
-    """Narzêdzia autodiagnozy"""
-    st.markdown("### ?? Autodiagnoza")
-    st.markdown("Poznaj swój styl uczenia siê, typ neuroleadera i preferowane sposoby rozwoju")
+    """NarzÄ™dzia autodiagnozy"""
+    st.markdown("### ğŸ¯ Autodiagnoza")
+    st.markdown("Poznaj swÃ³j styl uczenia siÄ™, typ neuroleadera i preferowane sposoby rozwoju")
     
-    # Wyœwietl testy w dwóch kolumnach
+    # WyÅ›wietl testy w dwÃ³ch kolumnach
     col1, col2 = st.columns(2)
     
     # Karta z testem Neurolidera
     with col1:
         st.markdown("""
         <div style='padding: 20px; border: 2px solid #E91E63; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);'>
-            <h4>?? Test typu Neurolidera</h4>
-            <p><strong>Odkryj swój unikalny styl przywództwa i maksymalizuj swój potencja³ lidera</strong></p>
+            <h4>ğŸ¯ Test typu Neurolidera</h4>
+            <p><strong>Odkryj swÃ³j unikalny styl przywÃ³dztwa i maksymalizuj swÃ³j potencjaÅ‚ lidera</strong></p>
             <ul style='margin: 10px 0; padding-left: 20px;'>
-                <li>?? Kompleksowa analiza stylu przywództwa</li>
-                <li>?? Wykres radarowy kompetencji</li>
-                <li>?? Identyfikacja mocnych stron i wyzwañ</li>
-                <li>?? Spersonalizowane strategie rozwoju</li>
-                <li>?? Dopasowanie do ról biznesowych</li>
+                <li>âœ… Kompleksowa analiza stylu przywÃ³dztwa</li>
+                <li>âœ… Wykres radarowy kompetencji</li>
+                <li>âœ… Identyfikacja mocnych stron i wyzwaÅ„</li>
+                <li>âœ… Spersonalizowane strategie rozwoju</li>
+                <li>âœ… Dopasowanie do rÃ³l biznesowych</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
         
-        if zen_button("?? Rozpocznij Test Neurolidera", key="neuroleader_test", width='stretch'):
+        if zen_button("â–¶ï¸ Rozpocznij Test Neurolidera", key="neuroleader_test", width='stretch'):
             st.session_state.active_tool = "neuroleader_test"
     
     # Karta z testem Kolba
     with col2:
         st.markdown("""
         <div style='padding: 20px; border: 2px solid #9C27B0; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);'>
-            <h4>?? Test stylów uczenia siê wed³ug Kolba</h4>
-            <p><strong>Odkryj swój preferowany styl uczenia siê i maksymalizuj efektywnoœæ rozwoju</strong></p>
+            <h4>ğŸ¯ Test stylÃ³w uczenia siÄ™ wedÅ‚ug Kolba</h4>
+            <p><strong>Odkryj swÃ³j preferowany styl uczenia siÄ™ i maksymalizuj efektywnoÅ›Ä‡ rozwoju</strong></p>
             <ul style='margin: 10px 0; padding-left: 20px;'>
-                <li>?? 12 pytañ diagnostycznych</li>
-                <li>?? Identyfikacja dominuj¹cego stylu </li>
-                <li>?? Analiza mocnych stron w uczeniu siê</li>
-                <li>?? Spersonalizowane wskazówki rozwojowe</li>
-                <li>?? Zrozumienie pe³nego cyklu uczenia siê Kolba</li>
+                <li>âœ… 12 pytaÅ„ diagnostycznych</li>
+                <li>âœ… Identyfikacja dominujÄ…cego stylu </li>
+                <li>âœ… Analiza mocnych stron w uczeniu siÄ™</li>
+                <li>âœ… Spersonalizowane wskazÃ³wki rozwojowe</li>
+                <li>âœ… Zrozumienie peÅ‚nego cyklu uczenia siÄ™ Kolba</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
         
-        if zen_button("?? Rozpocznij Test Kolba", key="kolb_test", width='stretch'):
+        if zen_button("â–¶ï¸ Rozpocznij Test Kolba", key="kolb_test", width='stretch'):
             st.session_state.active_tool = "kolb_test"
     
-    # Wyœwietl odpowiedni test jeœli jest aktywny
+    # WyÅ›wietl odpowiedni test jeÅ›li jest aktywny
     active_tool = st.session_state.get('active_tool')
     
     if active_tool == "neuroleader_test":
@@ -229,24 +229,24 @@ def show_autodiagnosis():
         show_kolb_test()
 
 def show_kolb_test():
-    """Wyœwietla test stylów uczenia siê wed³ug Kolba"""
-    st.markdown("### ?? Kolb Experiential Learning Profile (KELP)")
+    """WyÅ›wietla test stylÃ³w uczenia siÄ™ wedÅ‚ug Kolba"""
+    st.markdown("### ğŸ¯ Kolb Experiential Learning Profile (KELP)")
     
-    # Wczytaj zapisane wyniki z bazy danych (jeœli u¿ytkownik zalogowany)
-    # ALE TYLKO jeœli u¿ytkownik nie klikn¹³ "Rozpocznij test od nowa"
+    # Wczytaj zapisane wyniki z bazy danych (jeÅ›li uÅ¼ytkownik zalogowany)
+    # ALE TYLKO jeÅ›li uÅ¼ytkownik nie kliknÄ…Å‚ "Rozpocznij test od nowa"
     if st.session_state.get('logged_in') and st.session_state.get('username'):
         from data.users import load_user_data
         
         users_data = load_user_data()
         username = st.session_state.username
         
-        # SprawdŸ czy u¿ytkownik nie zresetowa³ testu celowo
+        # SprawdÅº czy uÅ¼ytkownik nie zresetowaÅ‚ testu celowo
         if username in users_data and users_data[username].get('kolb_test'):
-            # Jeœli u¿ytkownik ma zapisane wyniki, wczytaj je do session state
+            # JeÅ›li uÅ¼ytkownik ma zapisane wyniki, wczytaj je do session state
             kolb_data = users_data[username]['kolb_test']
             
-            # SprawdŸ czy session state nie ma ju¿ wczytanych wyników
-            # ORAZ czy u¿ytkownik nie klikn¹³ "reset" (sprawdzamy flagê kolb_reset)
+            # SprawdÅº czy session state nie ma juÅ¼ wczytanych wynikÃ³w
+            # ORAZ czy uÅ¼ytkownik nie kliknÄ…Å‚ "reset" (sprawdzamy flagÄ™ kolb_reset)
             if not st.session_state.get('kolb_completed') and not st.session_state.get('kolb_reset'):
                 st.session_state.kolb_results = kolb_data.get('scores', {})
                 st.session_state.kolb_dimensions = kolb_data.get('dimensions', {})
@@ -255,10 +255,10 @@ def show_kolb_test():
                 st.session_state.kolb_flexibility = kolb_data.get('flexibility', 0)
                 st.session_state.kolb_completed = True
                 
-                # Informacja o wczytaniu zapisanych wyników
-                st.info(f"? Wczytano Twoje wczeœniejsze wyniki testu z dnia: {kolb_data.get('completed_date', 'Nieznana')}")
+                # Informacja o wczytaniu zapisanych wynikÃ³w
+                st.info(f"? Wczytano Twoje wczeÅ›niejsze wyniki testu z dnia: {kolb_data.get('completed_date', 'Nieznana')}")
     
-    # Karta z teori¹ ELT
+    # Karta z teoriÄ… ELT
     st.markdown("""
     <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                 box-shadow: 0 4px 15px rgba(102,126,234,0.4); 
@@ -266,17 +266,17 @@ def show_kolb_test():
                 padding: 30px; 
                 margin: 20px 0; 
                 color: white;'>
-        <div style='font-size: 2.5em; margin-bottom: 15px;'>??</div>
-        <h4 style='color: white; margin: 0 0 20px 0;'>Teoria Uczenia siê przez Doœwiadczenie (ELT)</h4>
+        <div style='font-size: 2.5em; margin-bottom: 15px;'>ğŸ“</div>
+        <h4 style='color: white; margin: 0 0 20px 0;'>Teoria Uczenia siÄ™ przez DoÅ›wiadczenie (ELT)</h4>
         <p style='font-size: 1.1em; line-height: 1.7; margin-bottom: 0;'>
-            Teoria Davida Kolba z 1984 roku definiuje uczenie siê jako <b>dynamiczny proces</b>, 
-            w którym wiedza jest tworzona poprzez <b>transformacjê doœwiadczenia</b>.
+            Teoria Davida Kolba z 1984 roku definiuje uczenie siÄ™ jako <b>dynamiczny proces</b>, 
+            w ktÃ³rym wiedza jest tworzona poprzez <b>transformacjÄ™ doÅ›wiadczenia</b>.
         </p>
     </div>
     """, unsafe_allow_html=True)
     
     # Karty z czterema fazami cyklu
-    st.markdown("<h4 style='margin: 30px 0 20px 0; color: #333;'>?? Cykl Uczenia siê Kolba - Cztery Fazy:</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='margin: 30px 0 20px 0; color: #333;'>ğŸ”„ Cykl Uczenia siÄ™ Kolba - Cztery Fazy:</h4>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
@@ -289,9 +289,9 @@ def show_kolb_test():
                     margin: 10px 0; 
                     color: white;'>
         <div style='font-size: 2.5em; margin-bottom: 15px;'></div>
-            <h5 style='color: white; margin: 0 0 10px 0;'>1. Konkretne Doœwiadczenie (CE)</h5>
+            <h5 style='color: white; margin: 0 0 10px 0;'>1. Konkretne DoÅ›wiadczenie (CE)</h5>
             <p style='margin: 0; font-size: 0.95em; line-height: 1.6;'>
-                Zetkniêcie siê z now¹ sytuacj¹<br><b>› Feeling (Odczuwanie)</b>
+                ZetkniÄ™cie siÄ™ z nowÄ… sytuacjÄ…<br><b>â€º Feeling (Odczuwanie)</b>
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -306,7 +306,7 @@ def show_kolb_test():
             <div style='font-size: 2em; margin-bottom: 10px;'></div>
             <h5 style='color: white; margin: 0 0 10px 0;'>3. Abstrakcyjna Konceptualizacja (AC)</h5>
             <p style='margin: 0; font-size: 0.95em; line-height: 1.6;'>
-                Tworzenie teorii i uogólnieñ<br><b>› Thinking (Myœlenie)</b>
+                Tworzenie teorii i uogÃ³lnieÅ„<br><b>â€º Thinking (MyÅ›lenie)</b>
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -322,7 +322,7 @@ def show_kolb_test():
             <div style='font-size: 2em; margin-bottom: 10px;'></div>
             <h5 style='color: white; margin: 0 0 10px 0;'>2. Refleksyjna Obserwacja (RO)</h5>
             <p style='margin: 0; font-size: 0.95em; line-height: 1.6;'>
-                Obserwacja i refleksja<br><b>› Watching (Obserwowanie)</b>
+                Obserwacja i refleksja<br><b>â€º Watching (Obserwowanie)</b>
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -337,7 +337,7 @@ def show_kolb_test():
             <div style='font-size: 2em; margin-bottom: 10px;'></div>
             <h5 style='color: white; margin: 0 0 10px 0;'>4. Aktywne Eksperymentowanie (AE)</h5>
             <p style='margin: 0; font-size: 0.95em; line-height: 1.6;'>
-                Testowanie koncepcji w praktyce<br><b>› Doing (Dzia³anie)</b>
+                Testowanie koncepcji w praktyce<br><b>â€º Doing (DziaÅ‚anie)</b>
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -353,8 +353,8 @@ def show_kolb_test():
             <div style='font-size: 2em; margin-bottom: 10px;'></div>
         <h5 style='color: white; margin: 0 0 15px 0;'>Wymiary Biegunowe:</h5>
         <ul style='margin: 0; padding-left: 20px; line-height: 2;'>
-            <li><b>Oœ Postrzegania:</b> Konkretne Prze¿ycie (CE) - Abstrakcyjna Konceptualizacja (AC)</li>
-            <li><b>Oœ Przetwarzania:</b> Refleksyjna Obserwacja (RO) - Aktywne Eksperymentowanie (AE)</li>
+            <li><b>OÅ› Postrzegania:</b> Konkretne PrzeÅ¼ycie (CE) - Abstrakcyjna Konceptualizacja (AC)</li>
+            <li><b>OÅ› Przetwarzania:</b> Refleksyjna Obserwacja (RO) - Aktywne Eksperymentowanie (AE)</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
@@ -370,8 +370,8 @@ def show_kolb_test():
         <div style='font-size: 2em; margin-bottom: 10px;'></div>
         <h5 style='margin: 0 0 10px 0; color: #e17055;'>Cel testu:</h5>
         <p style='margin: 0; font-size: 1.05em; line-height: 1.7;'>
-            Zidentyfikowaæ Twój <b>preferowany styl uczenia siê</b> i oceniæ <b>elastycznoœæ</b> 
-            w przechodzeniu przez pe³ny cykl Kolba.
+            ZidentyfikowaÄ‡ TwÃ³j <b>preferowany styl uczenia siÄ™</b> i oceniÄ‡ <b>elastycznoÅ›Ä‡</b> 
+            w przechodzeniu przez peÅ‚ny cykl Kolba.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -382,132 +382,132 @@ def show_kolb_test():
     if 'kolb_completed' not in st.session_state:
         st.session_state.kolb_completed = False
     
-    # Pytania testowe - 12 pytañ z 4 opcjami ka¿de (odpowiadaj¹ce CE, RO, AC, AE)
-    # Format zgodny z LSI: ranking wymuszony wybór
+    # Pytania testowe - 12 pytaÅ„ z 4 opcjami kaÅ¼de (odpowiadajÄ…ce CE, RO, AC, AE)
+    # Format zgodny z LSI: ranking wymuszony wybÃ³r
     questions = [
         {
             "id": 1,
-            "question": "Kiedy uczê siê czegoœ nowego, najlepiej mi siê pracuje gdy:",
+            "question": "Kiedy uczÄ™ siÄ™ czegoÅ› nowego, najlepiej mi siÄ™ pracuje gdy:",
             "options": {
-                "CE": "Anga¿ujê siê osobiœcie i uczê siê przez doœwiadczenie",
-                "RO": "Mam czas na obserwacjê i refleksjê",
-                "AC": "Mogê analizowaæ i tworzyæ logiczne teorie",
-                "AE": "Mogê aktywnie testowaæ i eksperymentowaæ"
+                "CE": "AngaÅ¼ujÄ™ siÄ™ osobiÅ›cie i uczÄ™ siÄ™ przez doÅ›wiadczenie",
+                "RO": "Mam czas na obserwacjÄ™ i refleksjÄ™",
+                "AC": "MogÄ™ analizowaÄ‡ i tworzyÄ‡ logiczne teorie",
+                "AE": "MogÄ™ aktywnie testowaÄ‡ i eksperymentowaÄ‡"
             }
         },
         {
             "id": 2,
-            "question": "W procesie uczenia siê najbardziej ceniê:",
+            "question": "W procesie uczenia siÄ™ najbardziej ceniÄ™:",
             "options": {
-                "CE": "Konkretne przyk³ady i osobiste doœwiadczenia",
-                "RO": "Mo¿liwoœæ przemyœlenia i obserwacji",
+                "CE": "Konkretne przykÅ‚ady i osobiste doÅ›wiadczenia",
+                "RO": "MoÅ¼liwoÅ›Ä‡ przemyÅ›lenia i obserwacji",
                 "AC": "Abstrakcyjne koncepcje i modele teoretyczne",
-                "AE": "Praktyczne zastosowania i dzia³anie"
+                "AE": "Praktyczne zastosowania i dziaÅ‚anie"
             }
         },
         {
             "id": 3,
-            "question": "Podczas rozwi¹zywania problemów:",
+            "question": "Podczas rozwiÄ…zywania problemÃ³w:",
             "options": {
                 "CE": "Polegam na intuicji i uczuciach",
-                "RO": "S³ucham ró¿nych perspektyw i zbieramy informacje",
-                "AC": "Analizujê logicznie i systematycznie",
-                "AE": "Testujê ró¿ne rozwi¹zania w praktyce"
+                "RO": "SÅ‚ucham rÃ³Å¼nych perspektyw i zbieramy informacje",
+                "AC": "AnalizujÄ™ logicznie i systematycznie",
+                "AE": "TestujÄ™ rÃ³Å¼ne rozwiÄ…zania w praktyce"
             }
         },
         {
             "id": 4,
-            "question": "W zespole najlepiej funkcjonujê jako:",
+            "question": "W zespole najlepiej funkcjonujÄ™ jako:",
             "options": {
-                "CE": "Osoba, która wnosi osobiste zaanga¿owanie i empatiê",
-                "RO": "Obserwator, który dostrzega ró¿ne perspektywy",
-                "AC": "Analityk, który tworzy strategie i plany",
-                "AE": "Praktyk, który wdra¿a i koordynuje dzia³ania"
+                "CE": "Osoba, ktÃ³ra wnosi osobiste zaangaÅ¼owanie i empatiÄ™",
+                "RO": "Obserwator, ktÃ³ry dostrzega rÃ³Å¼ne perspektywy",
+                "AC": "Analityk, ktÃ³ry tworzy strategie i plany",
+                "AE": "Praktyk, ktÃ³ry wdraÅ¼a i koordynuje dziaÅ‚ania"
             }
         },
         {
             "id": 5,
             "question": "Podczas szkolenia/warsztatu najbardziej odpowiada mi:",
             "options": {
-                "CE": "Osobiste zaanga¿owanie i doœwiadczenie sytuacji",
-                "RO": "Czas na dyskusjê i przemyœlenie tematu",
+                "CE": "Osobiste zaangaÅ¼owanie i doÅ›wiadczenie sytuacji",
+                "RO": "Czas na dyskusjÄ™ i przemyÅ›lenie tematu",
                 "AC": "Solidne podstawy teoretyczne i modele",
-                "AE": "Praktyczne æwiczenia i testowanie umiejêtnoœci"
+                "AE": "Praktyczne Ä‡wiczenia i testowanie umiejÄ™tnoÅ›ci"
             }
         },
         {
             "id": 6,
-            "question": "Podejmujê decyzje g³ównie na podstawie:",
+            "question": "PodejmujÄ™ decyzje gÅ‚Ã³wnie na podstawie:",
             "options": {
-                "CE": "Osobistych wartoœci i bezpoœredniego doœwiadczenia",
-                "RO": "Obserwacji sytuacji i przemyœleñ",
-                "AC": "Logicznej analizy i racjonalnych przes³anek",
-                "AE": "Praktycznych testów i sprawdzania w dzia³aniu"
+                "CE": "Osobistych wartoÅ›ci i bezpoÅ›redniego doÅ›wiadczenia",
+                "RO": "Obserwacji sytuacji i przemyÅ›leÅ„",
+                "AC": "Logicznej analizy i racjonalnych przesÅ‚anek",
+                "AE": "Praktycznych testÃ³w i sprawdzania w dziaÅ‚aniu"
             }
         },
         {
             "id": 7,
             "question": "W sytuacji nowej/stresowej:",
             "options": {
-                "CE": "Kierujê siê emocjami i bezpoœrednim odczuciem",
-                "RO": "Wycofujê siê i najpierw obserwujê",
-                "AC": "Szukam racjonalnych wyjaœnieñ i teorii",
-                "AE": "Dzia³am szybko i sprawdzam co zadzia³a"
+                "CE": "KierujÄ™ siÄ™ emocjami i bezpoÅ›rednim odczuciem",
+                "RO": "WycofujÄ™ siÄ™ i najpierw obserwujÄ™",
+                "AC": "Szukam racjonalnych wyjaÅ›nieÅ„ i teorii",
+                "AE": "DziaÅ‚am szybko i sprawdzam co zadziaÅ‚a"
             }
         },
         {
             "id": 8,
-            "question": "Moja najwiêksza mocna strona to:",
+            "question": "Moja najwiÄ™ksza mocna strona to:",
             "options": {
-                "CE": "Empatia i wra¿liwoœæ na ludzi",
-                "RO": "Umiejêtnoœæ s³uchania i refleksji",
-                "AC": "Zdolnoœci analityczne i logiczne myœlenie",
-                "AE": "Praktycznoœæ i skutecznoœæ dzia³ania"
+                "CE": "Empatia i wraÅ¼liwoÅ›Ä‡ na ludzi",
+                "RO": "UmiejÄ™tnoÅ›Ä‡ sÅ‚uchania i refleksji",
+                "AC": "ZdolnoÅ›ci analityczne i logiczne myÅ›lenie",
+                "AE": "PraktycznoÅ›Ä‡ i skutecznoÅ›Ä‡ dziaÅ‚ania"
             }
         },
         {
             "id": 9,
-            "question": "Przy nauce nowego narzêdzia/programu:",
+            "question": "Przy nauce nowego narzÄ™dzia/programu:",
             "options": {
-                "CE": "Eksperymentujê swobodnie i uczê siê przez próby",
-                "RO": "Obserwujê innych i czytam opinie",
-                "AC": "Czytam dokumentacjê i poznajê strukturê",
-                "AE": "Od razu zaczynam u¿ywaæ i testujê funkcje"
+                "CE": "EksperymentujÄ™ swobodnie i uczÄ™ siÄ™ przez prÃ³by",
+                "RO": "ObserwujÄ™ innych i czytam opinie",
+                "AC": "Czytam dokumentacjÄ™ i poznajÄ™ strukturÄ™",
+                "AE": "Od razu zaczynam uÅ¼ywaÄ‡ i testujÄ™ funkcje"
             }
         },
         {
             "id": 10,
-            "question": "W projektach zawodowych najbardziej lubiê:",
+            "question": "W projektach zawodowych najbardziej lubiÄ™:",
             "options": {
-                "CE": "Pracê z ludŸmi i budowanie relacji",
-                "RO": "Analizowanie danych i integracjê ró¿nych perspektyw",
-                "AC": "Tworzenie strategii i systemów",
-                "AE": "Realizacjê konkretnych zadañ i wdra¿anie"
+                "CE": "PracÄ™ z ludÅºmi i budowanie relacji",
+                "RO": "Analizowanie danych i integracjÄ™ rÃ³Å¼nych perspektyw",
+                "AC": "Tworzenie strategii i systemÃ³w",
+                "AE": "RealizacjÄ™ konkretnych zadaÅ„ i wdraÅ¼anie"
             }
         },
         {
             "id": 11,
-            "question": "Najlepiej pamiêtam, gdy:",
+            "question": "Najlepiej pamiÄ™tam, gdy:",
             "options": {
-                "CE": "Czujê emocjonalne po³¹czenie z tematem",
-                "RO": "Mam czas na obserwacjê i rozwa¿anie",
-                "AC": "Rozumiem logikê i teoriê stoj¹c¹ za tym",
-                "AE": "Praktykujê i wielokrotnie testujê"
+                "CE": "CzujÄ™ emocjonalne poÅ‚Ä…czenie z tematem",
+                "RO": "Mam czas na obserwacjÄ™ i rozwaÅ¼anie",
+                "AC": "Rozumiem logikÄ™ i teoriÄ™ stojÄ…cÄ… za tym",
+                "AE": "PraktykujÄ™ i wielokrotnie testujÄ™"
             }
         },
         {
             "id": 12,
-            "question": "Mój naturalny sposób dzia³ania to:",
+            "question": "MÃ³j naturalny sposÃ³b dziaÅ‚ania to:",
             "options": {
                 "CE": "Spontaniczne reagowanie na sytuacje",
-                "RO": "Cierpliwe obserwowanie przed dzia³aniem",
+                "RO": "Cierpliwe obserwowanie przed dziaÅ‚aniem",
                 "AC": "Systematyczne planowanie i analizowanie",
-                "AE": "Szybkie podejmowanie decyzji i dzia³anie"
+                "AE": "Szybkie podejmowanie decyzji i dziaÅ‚anie"
             }
         }
     ]
     
-    # Wyœwietl pytania TYLKO jeœli test nie zosta³ ukoñczony
+    # WyÅ›wietl pytania TYLKO jeÅ›li test nie zostaÅ‚ ukoÅ„czony
     if not st.session_state.kolb_completed:
         st.markdown("---")
         st.markdown("""
@@ -516,8 +516,8 @@ def show_kolb_test():
                     padding: 15px; 
                     margin: 20px 0; 
                     text-align: center;'>
-            <h4 style='margin: 0; color: #2c3e50;'>?? Odpowiedz na poni¿sze pytania</h4>
-            <p style='margin: 5px 0 0 0; color: #555;'>Wybierz opcjê najbardziej do Ciebie pasuj¹c¹</p>
+            <h4 style='margin: 0; color: #2c3e50;'>ğŸ“ Odpowiedz na poniÅ¼sze pytania</h4>
+            <p style='margin: 5px 0 0 0; color: #555;'>Wybierz opcjÄ™ najbardziej do Ciebie pasujÄ…cÄ…</p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -547,20 +547,20 @@ def show_kolb_test():
             st.markdown("<div style='margin-bottom: 10px;'></div>", unsafe_allow_html=True)
         
         # Przycisk do obliczenia wyniku
-        if st.button("?? Oblicz mój styl uczenia siê", type="primary", width="stretch"):
+        if st.button("ğŸ“Š Oblicz mÃ³j styl uczenia siÄ™", type="primary", width="stretch"):
             if len(st.session_state.kolb_answers) == len(questions):
                 calculate_kolb_results()
                 st.session_state.kolb_completed = True
                 st.rerun()
             else:
-                st.warning("?? Proszê odpowiedzieæ na wszystkie pytania")
+                st.warning("âš ï¸ ProszÄ™ odpowiedzieÄ‡ na wszystkie pytania")
     
-    # Wyœwietl wyniki jeœli test zosta³ ukoñczony
+    # WyÅ›wietl wyniki jeÅ›li test zostaÅ‚ ukoÅ„czony
     if st.session_state.kolb_completed:
         display_kolb_results()
 
 def generate_kolb_ai_tips(learning_style: str, profession: str):
-    """Generuje spersonalizowane wskazówki AI na podstawie stylu uczenia siê i zawodu"""
+    """Generuje spersonalizowane wskazÃ³wki AI na podstawie stylu uczenia siÄ™ i zawodu"""
     try:
         import google.generativeai as genai
         
@@ -568,7 +568,7 @@ def generate_kolb_ai_tips(learning_style: str, profession: str):
         api_key = st.secrets.get("GOOGLE_API_KEY")
         
         if not api_key:
-            st.error("? Klucz API Google Gemini nie jest skonfigurowany. Skontaktuj siê z administratorem.")
+            st.error("? Klucz API Google Gemini nie jest skonfigurowany. Skontaktuj siÄ™ z administratorem.")
             return
         
         # Konfiguruj Gemini
@@ -577,47 +577,47 @@ def generate_kolb_ai_tips(learning_style: str, profession: str):
             st.secrets.get("AI_SETTINGS", {}).get("gemini_model", "gemini-2.5-flash")
         )
         
-        # Mapowanie stylów na opisy (zgodnie z naukow¹ dokumentacj¹ ELT)
+        # Mapowanie stylÃ³w na opisy (zgodnie z naukowÄ… dokumentacjÄ… ELT)
         style_descriptions = {
-            "Diverging (WyobraŸnia/Imagination)": "osoba ucz¹ca siê przez konkretne doœwiadczenia i refleksyjn¹ obserwacjê, postrzegaj¹ca sytuacje z wielu perspektyw, ceni¹ca wyobraŸniê i emocjonalne zaanga¿owanie",
-            "Assimilating (Teoria/Thinking)": "osoba ucz¹ca siê przez abstrakcyjn¹ konceptualizacjê i refleksyjn¹ obserwacjê, ceni¹ca logiczne modele i systematyczne podejœcie teoretyczne",
-            "Converging (Decyzja/Decision)": "osoba ucz¹ca siê przez abstrakcyjn¹ konceptualizacjê i aktywne eksperymentowanie, skupiona na praktycznym zastosowaniu teorii i rozwi¹zywaniu problemów",
-            "Accommodating (Dzia³anie/Action)": "osoba ucz¹ca siê przez konkretne doœwiadczenia i aktywne eksperymentowanie, ceni¹ca intuicjê, elastycznoœæ i praktyczne dzia³anie"
+            "Diverging (WyobraÅºnia/Imagination)": "osoba uczÄ…ca siÄ™ przez konkretne doÅ›wiadczenia i refleksyjnÄ… obserwacjÄ™, postrzegajÄ…ca sytuacje z wielu perspektyw, ceniÄ…ca wyobraÅºniÄ™ i emocjonalne zaangaÅ¼owanie",
+            "Assimilating (Teoria/Thinking)": "osoba uczÄ…ca siÄ™ przez abstrakcyjnÄ… konceptualizacjÄ™ i refleksyjnÄ… obserwacjÄ™, ceniÄ…ca logiczne modele i systematyczne podejÅ›cie teoretyczne",
+            "Converging (Decyzja/Decision)": "osoba uczÄ…ca siÄ™ przez abstrakcyjnÄ… konceptualizacjÄ™ i aktywne eksperymentowanie, skupiona na praktycznym zastosowaniu teorii i rozwiÄ…zywaniu problemÃ³w",
+            "Accommodating (DziaÅ‚anie/Action)": "osoba uczÄ…ca siÄ™ przez konkretne doÅ›wiadczenia i aktywne eksperymentowanie, ceniÄ…ca intuicjÄ™, elastycznoÅ›Ä‡ i praktyczne dziaÅ‚anie"
         }
         
-        prompt = f"""Jesteœ ekspertem od rozwoju zawodowego i stylów uczenia siê wed³ug teorii Experiential Learning Theory (ELT) Davida Kolba.
+        prompt = f"""JesteÅ› ekspertem od rozwoju zawodowego i stylÃ³w uczenia siÄ™ wedÅ‚ug teorii Experiential Learning Theory (ELT) Davida Kolba.
 
-U¿ytkownik to {profession}, którego dominuj¹cym stylem uczenia siê jest: **{learning_style}**
+UÅ¼ytkownik to {profession}, ktÃ³rego dominujÄ…cym stylem uczenia siÄ™ jest: **{learning_style}**
 ({style_descriptions.get(learning_style, '')})
 
-Wygeneruj **konkretne, praktyczne wskazówki** dostosowane do tego stylu uczenia siê.
+Wygeneruj **konkretne, praktyczne wskazÃ³wki** dostosowane do tego stylu uczenia siÄ™.
 
 KRYTYCZNE WYMAGANIA FORMATOWANIA:
 
-1. Utwórz dok³adnie 3 sekcje z nag³ówkami:
+1. UtwÃ³rz dokÅ‚adnie 3 sekcje z nagÅ‚Ã³wkami:
    **Optymalne warunki dla Twojej nauki:**
-   **Jak wzmacniaæ swoje mocne strony:**
-   **Jak rozwijaæ obszary do rozwoju:**
+   **Jak wzmacniaÄ‡ swoje mocne strony:**
+   **Jak rozwijaÄ‡ obszary do rozwoju:**
 
-2. Ka¿dy nag³ówek MUSI byæ w osobnej linii i po nim MUSI byæ pusta linia
+2. KaÅ¼dy nagÅ‚Ã³wek MUSI byÄ‡ w osobnej linii i po nim MUSI byÄ‡ pusta linia
 
-3. Pod ka¿dym nag³ówkiem utwórz dok³adnie 3 punkty rozpoczynaj¹ce siê od "- "
+3. Pod kaÅ¼dym nagÅ‚Ã³wkiem utwÃ³rz dokÅ‚adnie 3 punkty rozpoczynajÄ…ce siÄ™ od "- "
 
-4. W sekcji "Jak wzmacniaæ swoje mocne strony" ka¿dy punkt powinien zaczynaæ siê od pogrubionej nazwy mocnej strony, np:
-   - **Empatia:** Wykorzystuj swoj¹ wra¿liwoœæ do...
-   - **Kreatywnoœæ:** Twoja wyobraŸnia pozwala na...
+4. W sekcji "Jak wzmacniaÄ‡ swoje mocne strony" kaÅ¼dy punkt powinien zaczynaÄ‡ siÄ™ od pogrubionej nazwy mocnej strony, np:
+   - **Empatia:** Wykorzystuj swojÄ… wraÅ¼liwoÅ›Ä‡ do...
+   - **KreatywnoÅ›Ä‡:** Twoja wyobraÅºnia pozwala na...
 
-5. W sekcji "Jak rozwijaæ obszary do rozwoju" ka¿dy punkt powinien zaczynaæ siê od pogrubionej nazwy obszaru, np:
-   - **Podejmowanie decyzji:** Aby szybciej decydowaæ, wypróbuj...
-   - **Praktyczne wdra¿anie:** Rozwijaj tê umiejêtnoœæ przez...
+5. W sekcji "Jak rozwijaÄ‡ obszary do rozwoju" kaÅ¼dy punkt powinien zaczynaÄ‡ siÄ™ od pogrubionej nazwy obszaru, np:
+   - **Podejmowanie decyzji:** Aby szybciej decydowaÄ‡, wyprÃ³buj...
+   - **Praktyczne wdraÅ¼anie:** Rozwijaj tÄ™ umiejÄ™tnoÅ›Ä‡ przez...
 
-TREŒÆ:
-- Bardzo konkretne wskazówki mo¿liwe do wdro¿enia natychmiast
+TREÅšÄ†:
+- Bardzo konkretne wskazÃ³wki moÅ¼liwe do wdroÅ¼enia natychmiast
 - Dostosowane do stylu {learning_style} i zawodu {profession}
-- Ka¿dy punkt max 2-3 zdania
-- W jêzyku polskim
+- KaÅ¼dy punkt max 2-3 zdania
+- W jÄ™zyku polskim
 - BEZ formatowania HTML
-- NIE u¿ywaj zwrotów typu "Warunek 1", "Mocna strona 2", "Obszar rozwoju 3" - pisz bezpoœrednio o konkretnej umiejêtnoœci/warunku
+- NIE uÅ¼ywaj zwrotÃ³w typu "Warunek 1", "Mocna strona 2", "Obszar rozwoju 3" - pisz bezpoÅ›rednio o konkretnej umiejÄ™tnoÅ›ci/warunku
 """
         
         response = model.generate_content(prompt)
@@ -625,23 +625,23 @@ TREŒÆ:
         if response and response.text:
             ai_tips = response.text
             st.session_state.kolb_ai_tips = ai_tips
-            st.success("? Wskazówki zosta³y wygenerowane!")
+            st.success("? WskazÃ³wki zostaÅ‚y wygenerowane!")
         else:
             st.error("? Nie otrzymano odpowiedzi od AI")
             st.session_state.kolb_ai_tips = None
         
     except Exception as e:
-        st.error(f"? B³¹d generowania wskazówek: {str(e)}")
+        st.error(f"? BÅ‚Ä…d generowania wskazÃ³wek: {str(e)}")
         import traceback
-        st.error(f"Szczegó³y: {traceback.format_exc()}")
+        st.error(f"SzczegÃ³Å‚y: {traceback.format_exc()}")
         st.session_state.kolb_ai_tips = None
 
 def calculate_kolb_results():
-    """Oblicza wyniki testu Kolba zgodnie z metodologi¹ LSI"""
+    """Oblicza wyniki testu Kolba zgodnie z metodologiÄ… LSI"""
     answers = st.session_state.kolb_answers
     
-    # Liczenie punktów dla ka¿dej zdolnoœci uczenia siê
-    # CE = Konkretne Doœwiadczenie (Concrete Experience - Feeling)
+    # Liczenie punktÃ³w dla kaÅ¼dej zdolnoÅ›ci uczenia siÄ™
+    # CE = Konkretne DoÅ›wiadczenie (Concrete Experience - Feeling)
     # RO = Refleksyjna Obserwacja (Reflective Observation - Watching)
     # AC = Abstrakcyjna Konceptualizacja (Abstract Conceptualization - Thinking)
     # AE = Aktywne Eksperymentowanie (Active Experimentation - Doing)
@@ -651,14 +651,14 @@ def calculate_kolb_results():
     for answer in answers.values():
         scores[answer] += 1
     
-    # Obliczanie wymiarów ró¿nicowych (zgodnie z metodologi¹ LSI)
-    # Wymiar Postrzegania (Oœ Abstrakcja-Konkret)
+    # Obliczanie wymiarÃ³w rÃ³Å¼nicowych (zgodnie z metodologiÄ… LSI)
+    # Wymiar Postrzegania (OÅ› Abstrakcja-Konkret)
     ac_ce = scores["AC"] - scores["CE"]  # Dodatni = preferencja AC, Ujemny = preferencja CE
     
-    # Wymiar Przetwarzania (Oœ Aktywnoœæ-Refleksja)
+    # Wymiar Przetwarzania (OÅ› AktywnoÅ›Ä‡-Refleksja)
     ae_ro = scores["AE"] - scores["RO"]  # Dodatni = preferencja AE, Ujemny = preferencja RO
     
-    # Okreœlenie stylu na podstawie wymiarów (siatka 2x2)
+    # OkreÅ›lenie stylu na podstawie wymiarÃ³w (siatka 2x2)
     if ac_ce > 0 and ae_ro > 0:
         dominant_style = "Converging (Konwergent)"
         quadrant = "AC/AE"
@@ -672,10 +672,10 @@ def calculate_kolb_results():
         dominant_style = "Diverging (Dywergent)"
         quadrant = "CE/RO"
     
-    # Obliczenie elastycznoœci uczenia siê (odleg³oœæ od centrum siatki)
-    # Im bli¿ej centrum (0,0), tym wiêksza elastycznoœæ
+    # Obliczenie elastycznoÅ›ci uczenia siÄ™ (odlegÅ‚oÅ›Ä‡ od centrum siatki)
+    # Im bliÅ¼ej centrum (0,0), tym wiÄ™ksza elastycznoÅ›Ä‡
     distance_from_center = math.sqrt(ac_ce**2 + ae_ro**2)
-    max_distance = math.sqrt(12**2 + 12**2)  # Maksymalna odleg³oœæ przy 12 pytaniach
+    max_distance = math.sqrt(12**2 + 12**2)  # Maksymalna odlegÅ‚oÅ›Ä‡ przy 12 pytaniach
     flexibility_score = 100 - (distance_from_center / max_distance * 100)
     
     # Zapisz wyniki w session state
@@ -688,7 +688,7 @@ def calculate_kolb_results():
     st.session_state.kolb_quadrant = quadrant
     st.session_state.kolb_flexibility = flexibility_score
     
-    # Zapisz wyniki do danych u¿ytkownika (persistent storage)
+    # Zapisz wyniki do danych uÅ¼ytkownika (persistent storage)
     if st.session_state.get('logged_in') and st.session_state.get('username'):
         from data.users import load_user_data, save_user_data
         from datetime import datetime
@@ -712,13 +712,13 @@ def calculate_kolb_results():
             
             save_user_data(users_data)
             
-            # Zaloguj ukoñczenie testu i przyznaj XP
+            # Zaloguj ukoÅ„czenie testu i przyznaj XP
             try:
                 from data.users import award_xp_for_activity
                 award_xp_for_activity(
                     username,
                     'test_completed',
-                    5,  # 5 XP za ukoñczenie testu Kolba
+                    5,  # 5 XP za ukoÅ„czenie testu Kolba
                     {
                         'test_name': 'Kolb Learning Styles',
                         'dominant_style': dominant_style,
@@ -728,48 +728,48 @@ def calculate_kolb_results():
             except Exception:
                 pass
     
-    # Wyczyœæ flagê reset po zapisaniu nowych wyników (pozwól na auto-load przy kolejnym logowaniu)
+    # WyczyÅ›Ä‡ flagÄ™ reset po zapisaniu nowych wynikÃ³w (pozwÃ³l na auto-load przy kolejnym logowaniu)
     st.session_state.kolb_reset = False
 
 def format_ai_tips_compact(ai_tips_text: str) -> str:
     """
-    Formatuje tekst AI na kompaktow¹ strukturê z kategoriami i punktami.
-    Wykrywa sekcje i przekszta³ca je w wizualne boxy.
-    Radzi sobie z ró¿nymi formatami AI (wieloliniowe i jednoliniowe punkty).
+    Formatuje tekst AI na kompaktowÄ… strukturÄ™ z kategoriami i punktami.
+    Wykrywa sekcje i przeksztaÅ‚ca je w wizualne boxy.
+    Radzi sobie z rÃ³Å¼nymi formatami AI (wieloliniowe i jednoliniowe punkty).
     """
     import re
     
-    # Ikony dla ró¿nych kategorii
+    # Ikony dla rÃ³Å¼nych kategorii
     category_icons = {
-        'optymalne warunki': '??',
-        'warunki': '??',
-        'nauki': '??',
-        'mocne strony': '??',
-        'wzmacniaæ': '??',
-        'silne': '??',
-        'obszary do rozwoju': '??',
-        'rozwijaæ': '??',
-        's³abe': '??',
-        'rozwój': '??',
-        'metody': '??',
-        'technik': '??',
-        'narzêdzi': '???',
-        'strategi': '??',
-        'æwicz': '??',
-        'przyk³ad': '?',
-        'zalec': '??',
-        'unikaj': '??',
-        'rozwój': '??',
+        'optymalne warunki': 'âœ¨',
+        'warunki': 'ğŸŒŸ',
+        'nauki': 'ğŸ“š',
+        'mocne strony': 'ğŸ’ª',
+        'wzmacniaÄ‡': 'â¬†ï¸',
+        'silne': 'ğŸ”¥',
+        'obszary do rozwoju': 'ğŸ¯',
+        'rozwijaÄ‡': 'ğŸŒ±',
+        'sÅ‚abe': 'âš¡',
+        'rozwÃ³j': 'ğŸ“ˆ',
+        'metody': 'ğŸ› ï¸',
+        'technik': 'âš™ï¸',
+        'narzÄ™dzi': 'ğŸ”§',
+        'strategi': 'ğŸ¯',
+        'Ä‡wicz': 'ğŸ’ª',
+        'przykÅ‚ad': '?',
+        'zalec': 'âœ…',
+        'unikaj': 'âŒ',
+        'rozwÃ³j': 'ğŸ“ˆ',
         'praktyk': '?',
-        'tips': '??',
-        'wskazówk': '??',
-        'zastosow': '??',
-        'sposób': '??',
-        'korzyœæ': '??'
+        'tips': 'ğŸ’¡',
+        'wskazÃ³wk': 'ğŸ“Œ',
+        'zastosow': 'ğŸ¯',
+        'sposÃ³b': 'ğŸ“',
+        'korzyÅ›Ä‡': 'ğŸ¯'
     }
     
-    # Najpierw podziel tekst na sekcje przez nag³ówki **Header**:
-    # U¿yj regex aby znaleŸæ sekcje - TYLKO te które s¹ na pocz¹tku linii i koñcz¹ siê dwukropkiem + newline
+    # Najpierw podziel tekst na sekcje przez nagÅ‚Ã³wki **Header**:
+    # UÅ¼yj regex aby znaleÅºÄ‡ sekcje - TYLKO te ktÃ³re sÄ… na poczÄ…tku linii i koÅ„czÄ… siÄ™ dwukropkiem + newline
     section_pattern = r'^\*\*(.+?)\*\*:\s*$'
     
     lines = ai_tips_text.strip().split('\n')
@@ -782,37 +782,37 @@ def format_ai_tips_compact(ai_tips_text: str) -> str:
         if not line_stripped:
             continue
         
-        # SprawdŸ czy to nag³ówek sekcji (linia zawiera TYLKO **Nag³ówek**: i nic wiêcej)
+        # SprawdÅº czy to nagÅ‚Ã³wek sekcji (linia zawiera TYLKO **NagÅ‚Ã³wek**: i nic wiÄ™cej)
         header_match = re.match(section_pattern, line_stripped)
         
-        if header_match and len(line_stripped) < 80:  # Nag³ówki s¹ krótkie (max 80 znaków)
-            # To jest nag³ówek sekcji
+        if header_match and len(line_stripped) < 80:  # NagÅ‚Ã³wki sÄ… krÃ³tkie (max 80 znakÃ³w)
+            # To jest nagÅ‚Ã³wek sekcji
             if current_section and current_items:
                 formatted_sections.append((current_section, current_items))
             
             current_section = header_match.group(1).strip()
             current_items = []
         else:
-            # To jest zawartoœæ (mo¿e zawieraæ **bold:** wewn¹trz)
-            # Usuñ bullet points z pocz¹tku
-            clean_line = re.sub(r'^[-•*]+\s*', '', line_stripped)
+            # To jest zawartoÅ›Ä‡ (moÅ¼e zawieraÄ‡ **bold:** wewnÄ…trz)
+            # UsuÅ„ bullet points z poczÄ…tku
+            clean_line = re.sub(r'^[-â€¢*]+\s*', '', line_stripped)
             clean_line = clean_line.strip()
             
             if clean_line:
                 if not current_section:
-                    current_section = "Wskazówki"
+                    current_section = "WskazÃ³wki"
                 current_items.append(clean_line)
     
-    # Dodaj ostatni¹ sekcjê
+    # Dodaj ostatniÄ… sekcjÄ™
     if current_section and current_items:
         formatted_sections.append((current_section, current_items))
     
-    # Jeœli nadal nic nie wykryto, fallback
+    # JeÅ›li nadal nic nie wykryto, fallback
     if not formatted_sections and ai_tips_text.strip():
         # Podziel po kropkach lub nowych liniach
         items = [item.strip() for item in re.split(r'[.\n]+', ai_tips_text) if item.strip()]
         if items:
-            formatted_sections.append(("Wskazówki AI", items))
+            formatted_sections.append(("WskazÃ³wki AI", items))
     
     # Generuj HTML
     html_parts = []
@@ -824,7 +824,7 @@ def format_ai_tips_compact(ai_tips_text: str) -> str:
         # Fallback - surowy tekst
         return f'''
         <div class="ai-tip-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; border-radius: 8px;">
-            <h3 style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold;">?? Wskazówki AI</h3>
+            <h3 style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold;">ğŸ’¡ WskazÃ³wki AI</h3>
             <div style="margin: 0; padding-left: 10px;">
                 {ai_tips_text.replace(chr(10), '<br>')}
             </div>
@@ -832,11 +832,11 @@ def format_ai_tips_compact(ai_tips_text: str) -> str:
         '''
     
     for i, (title, items) in enumerate(formatted_sections):
-        # Usuñ emoji z tytu³u jeœli ju¿ jest
+        # UsuÅ„ emoji z tytuÅ‚u jeÅ›li juÅ¼ jest
         title = re.sub(r'^[\U0001F300-\U0001F9FF]\s*', '', title)
         
-        # Wybierz ikonê
-        icon = '??'
+        # Wybierz ikonÄ™
+        icon = 'ğŸ¯'
         title_lower = title.lower()
         for key, emoji in category_icons.items():
             if key in title_lower:
@@ -853,7 +853,7 @@ def format_ai_tips_compact(ai_tips_text: str) -> str:
         ]
         bg, text_color = colors[i % len(colors)]
         
-        # Box z nag³ówkiem i klas¹ CSS - u¿ywamy div zamiast ul/li dla lepszego renderowania w PDF
+        # Box z nagÅ‚Ã³wkiem i klasÄ… CSS - uÅ¼ywamy div zamiast ul/li dla lepszego renderowania w PDF
         html_parts.append(f'''
         <div class="ai-tip-box" style="background: {bg}; color: {text_color}; padding: 12px 18px; border-radius: 8px; margin-bottom: 15px;">
             <h3 style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold;">{icon} {title}</h3>
@@ -861,7 +861,7 @@ def format_ai_tips_compact(ai_tips_text: str) -> str:
         ''')
         
         for item in items:
-            # SprawdŸ czy punkt zaczyna siê od **Bold tekst:**
+            # SprawdÅº czy punkt zaczyna siÄ™ od **Bold tekst:**
             bold_prefix_match = re.match(r'^\*\*(.+?)\*\*:\s*(.+)', item)
             
             if bold_prefix_match:
@@ -870,14 +870,14 @@ def format_ai_tips_compact(ai_tips_text: str) -> str:
                 rest_text = bold_prefix_match.group(2).strip()
                 clean_item = f'<strong>{bold_text}:</strong> {rest_text}'
             else:
-                # Zwyk³y punkt - usuñ gwiazdki z tekstu i zamieñ na <strong>
+                # ZwykÅ‚y punkt - usuÅ„ gwiazdki z tekstu i zamieÅ„ na <strong>
                 clean_item = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', item)
             
-            # Usuñ ewentualne podwójne spacje
+            # UsuÅ„ ewentualne podwÃ³jne spacje
             clean_item = re.sub(r'\s+', ' ', clean_item).strip()
             
             if clean_item:
-                # Ka¿dy punkt jako osobny div z margin-bottom dla separacji
+                # KaÅ¼dy punkt jako osobny div z margin-bottom dla separacji
                 html_parts.append(f'<div style="margin-bottom: 8px; line-height: 1.6; font-size: 14px;">? {clean_item}</div>')
         
         html_parts.append('</div></div>')
@@ -886,12 +886,12 @@ def format_ai_tips_compact(ai_tips_text: str) -> str:
 
 def format_ai_tips_for_streamlit(ai_tips_text: str) -> str:
     """
-    Formatuje tekst AI dla Streamlit (bez HTML, u¿ywa markdown i emoji).
-    Zwraca czysty tekst z emoji i struktur¹ do wyœwietlenia przez st.markdown().
+    Formatuje tekst AI dla Streamlit (bez HTML, uÅ¼ywa markdown i emoji).
+    Zwraca czysty tekst z emoji i strukturÄ… do wyÅ›wietlenia przez st.markdown().
     """
     import re
     
-    # Podziel tekst na sekcje - nag³ówki to linie z **Tekst:**
+    # Podziel tekst na sekcje - nagÅ‚Ã³wki to linie z **Tekst:**
     section_pattern = r'^\*\*(.+?)\*\*:?\s*$'
     
     lines = ai_tips_text.strip().split('\n')
@@ -902,42 +902,42 @@ def format_ai_tips_for_streamlit(ai_tips_text: str) -> str:
     for line in lines:
         line_stripped = line.strip()
         
-        # Pomiñ puste linie miêdzy sekcjami
+        # PomiÅ„ puste linie miÄ™dzy sekcjami
         if not line_stripped:
             continue
         
-        # SprawdŸ czy to nag³ówek sekcji
+        # SprawdÅº czy to nagÅ‚Ã³wek sekcji
         header_match = re.match(section_pattern, line_stripped)
         
-        # Nag³ówek = krótka linia (max 100 znaków) z **Tekst:**
+        # NagÅ‚Ã³wek = krÃ³tka linia (max 100 znakÃ³w) z **Tekst:**
         if header_match and len(line_stripped) < 100:
-            # To jest nag³ówek - zapisz poprzedni¹ sekcjê
+            # To jest nagÅ‚Ã³wek - zapisz poprzedniÄ… sekcjÄ™
             if current_section and current_items:
                 sections.append((current_section, current_items))
             
             current_section = header_match.group(1).strip().rstrip(':')
             current_items = []
         else:
-            # To jest zawartoœæ punktu
-            # Usuñ bullet points i spacje
-            clean_line = re.sub(r'^[-•*]\s*', '', line_stripped)
+            # To jest zawartoÅ›Ä‡ punktu
+            # UsuÅ„ bullet points i spacje
+            clean_line = re.sub(r'^[-â€¢*]\s*', '', line_stripped)
             clean_line = clean_line.strip()
             
             if clean_line:
                 if not current_section:
-                    # Jeœli nie ma sekcji, utwórz domyœln¹
-                    current_section = "Wskazówki"
+                    # JeÅ›li nie ma sekcji, utwÃ³rz domyÅ›lnÄ…
+                    current_section = "WskazÃ³wki"
                 current_items.append(clean_line)
     
-    # Dodaj ostatni¹ sekcjê
+    # Dodaj ostatniÄ… sekcjÄ™
     if current_section and current_items:
         sections.append((current_section, current_items))
     
-    # Jeœli nie wykryto sekcji, spróbuj przetworzyæ jako jeden blok
+    # JeÅ›li nie wykryto sekcji, sprÃ³buj przetworzyÄ‡ jako jeden blok
     if not sections:
-        # Spróbuj podzieliæ po pustych liniach i nag³ówkach inline
+        # SprÃ³buj podzieliÄ‡ po pustych liniach i nagÅ‚Ã³wkach inline
         fallback_sections = []
-        current_section = "Wskazówki"
+        current_section = "WskazÃ³wki"
         current_items = []
         
         for line in lines:
@@ -945,7 +945,7 @@ def format_ai_tips_for_streamlit(ai_tips_text: str) -> str:
             if not line:
                 continue
             
-            # SprawdŸ czy linia zawiera inline nag³ówek **Tekst:** tekst
+            # SprawdÅº czy linia zawiera inline nagÅ‚Ã³wek **Tekst:** tekst
             inline_match = re.match(r'^\*\*(.+?)\*\*:\s*(.+)', line)
             if inline_match and len(inline_match.group(1)) < 50:
                 if current_items:
@@ -953,7 +953,7 @@ def format_ai_tips_for_streamlit(ai_tips_text: str) -> str:
                 current_section = inline_match.group(1).strip()
                 current_items = [inline_match.group(2).strip()]
             else:
-                clean_line = re.sub(r'^[-•*]\s*', '', line)
+                clean_line = re.sub(r'^[-â€¢*]\s*', '', line)
                 if clean_line:
                     current_items.append(clean_line)
         
@@ -962,7 +962,7 @@ def format_ai_tips_for_streamlit(ai_tips_text: str) -> str:
         
         sections = fallback_sections if fallback_sections else []
     
-    # Jeœli nadal nie ma sekcji, zwróæ surowy tekst
+    # JeÅ›li nadal nie ma sekcji, zwrÃ³Ä‡ surowy tekst
     if not sections:
         return ai_tips_text
     
@@ -970,22 +970,22 @@ def format_ai_tips_for_streamlit(ai_tips_text: str) -> str:
     result_parts = []
     
     for section_title, items in sections:
-        # Wybierz emoji na podstawie tytu³u sekcji
-        icon = '??'
+        # Wybierz emoji na podstawie tytuÅ‚u sekcji
+        icon = 'ğŸ¯'
         title_lower = section_title.lower()
         if 'warunki' in title_lower or 'optymalne' in title_lower:
-            icon = '??'
+            icon = 'ğŸ¯'
         elif 'mocn' in title_lower or 'wzmacnia' in title_lower or 'siln' in title_lower:
-            icon = '??'
-        elif 'rozwój' in title_lower or 'rozwija' in title_lower or 's³ab' in title_lower or 'obszar' in title_lower:
-            icon = '??'
+            icon = 'ğŸ¯'
+        elif 'rozwÃ³j' in title_lower or 'rozwija' in title_lower or 'sÅ‚ab' in title_lower or 'obszar' in title_lower:
+            icon = 'ğŸ¯'
         
-        # Dodaj nag³ówek sekcji
+        # Dodaj nagÅ‚Ã³wek sekcji
         result_parts.append(f"\n#### {icon} {section_title}\n")
         
         # Dodaj punkty
         for item in items:
-            # SprawdŸ czy punkt ma bold prefix **Tekst:**
+            # SprawdÅº czy punkt ma bold prefix **Tekst:**
             bold_prefix_match = re.match(r'^\*\*(.+?)\*\*:\s*(.+)', item)
             
             if bold_prefix_match:
@@ -994,7 +994,7 @@ def format_ai_tips_for_streamlit(ai_tips_text: str) -> str:
                 rest_text = bold_prefix_match.group(2).strip()
                 result_parts.append(f"- **{bold_text}:** {rest_text}")
             else:
-                # Zwyk³y punkt - zostaw **bold** jak jest
+                # ZwykÅ‚y punkt - zostaw **bold** jak jest
                 result_parts.append(f"- {item}")
         
         result_parts.append("")  # Pusta linia po sekcji
@@ -1010,33 +1010,33 @@ def generate_kolb_html_report() -> str:
     dominant = st.session_state.kolb_dominant
     quadrant = st.session_state.kolb_quadrant
     flexibility = st.session_state.kolb_flexibility
-    username = st.session_state.get('username', 'U¿ytkownik')
+    username = st.session_state.get('username', 'UÅ¼ytkownik')
     
-    # Przygotuj dane dla wykresów
+    # Przygotuj dane dla wykresÃ³w
     ability_info = {
-        "CE": {"name": "Konkretne Doœwiadczenie", "emoji": "??", "color": "#E74C3C", "desc": "Feeling"},
-        "RO": {"name": "Refleksyjna Obserwacja", "emoji": "???", "color": "#4A90E2", "desc": "Watching"},
-        "AC": {"name": "Abstrakcyjna Konceptualizacja", "emoji": "??", "color": "#9B59B6", "desc": "Thinking"},
-        "AE": {"name": "Aktywne Eksperymentowanie", "emoji": "??", "color": "#2ECC71", "desc": "Doing"}
+        "CE": {"name": "Konkretne DoÅ›wiadczenie", "emoji": "ğŸ¯", "color": "#E74C3C", "desc": "Feeling"},
+        "RO": {"name": "Refleksyjna Obserwacja", "emoji": "ğŸ”§", "color": "#4A90E2", "desc": "Watching"},
+        "AC": {"name": "Abstrakcyjna Konceptualizacja", "emoji": "ğŸ¯", "color": "#9B59B6", "desc": "Thinking"},
+        "AE": {"name": "Aktywne Eksperymentowanie", "emoji": "ğŸ¯", "color": "#2ECC71", "desc": "Doing"}
     }
     
-    # Wygeneruj wykres s³upkowy jako HTML (Plotly offline)
+    # Wygeneruj wykres sÅ‚upkowy jako HTML (Plotly offline)
     abilities_order = ['CE', 'RO', 'AC', 'AE']
     scores = [results[a] for a in abilities_order]
     colors = [ability_info[a]['color'] for a in abilities_order]
     
-    # Etykiety w dwóch liniach dla lepszej czytelnoœci
+    # Etykiety w dwÃ³ch liniach dla lepszej czytelnoÅ›ci
     labels_multiline = [
-        'Konkretne<br>Doœwiadczenie',
+        'Konkretne<br>DoÅ›wiadczenie',
         'Refleksyjna<br>Obserwacja',
         'Abstrakcyjna<br>Konceptualizacja',
         'Aktywne<br>Eksperymentowanie'
     ]
     
-    # Wykres s³upkowy
+    # Wykres sÅ‚upkowy
     fig_bar = go.Figure(data=[
         go.Bar(
-            x=labels_multiline,  # Etykiety w dwóch liniach
+            x=labels_multiline,  # Etykiety w dwÃ³ch liniach
             y=scores,
             marker=dict(color=colors),
             text=scores,
@@ -1045,11 +1045,11 @@ def generate_kolb_html_report() -> str:
         )
     ])
     fig_bar.update_layout(
-        title='Zdolnoœci Podstawowe w Cyklu Kolba',
+        title='ZdolnoÅ›ci Podstawowe w Cyklu Kolba',
         xaxis=dict(tickangle=0, tickfont=dict(size=12)),  # Poziome etykiety
         yaxis=dict(title='Wynik (punkty)', range=[0, 13]),
-        width=650,  # Fixed width - bezpieczna szerokoœæ dla A4
-        height=350,  # Zwiêkszone z 300 dla etykiet X
+        width=650,  # Fixed width - bezpieczna szerokoÅ›Ä‡ dla A4
+        height=350,  # ZwiÄ™kszone z 300 dla etykiet X
         margin=dict(t=50, b=80, l=50, r=40),  # Zmniejszony dolny margines (etykiety 2-liniowe)
         plot_bgcolor='white',
         paper_bgcolor='white'
@@ -1057,7 +1057,7 @@ def generate_kolb_html_report() -> str:
     
     # Konwertuj wykres do HTML (inline, bez CDN)
     bar_chart_html = fig_bar.to_html(
-        include_plotlyjs='inline',  # OsadŸ plotly.js w HTML
+        include_plotlyjs='inline',  # OsadÅº plotly.js w HTML
         div_id='bar_chart',
         config={'displayModeBar': False}  # Ukryj toolbar
     )
@@ -1068,7 +1068,7 @@ def generate_kolb_html_report() -> str:
     
     fig_grid = go.Figure()
     
-    # Dodaj t³o æwiartek
+    # Dodaj tÅ‚o Ä‡wiartek
     quadrant_colors = {
         'Diverging': 'rgba(231, 76, 60, 0.15)',
         'Assimilating': 'rgba(155, 89, 182, 0.15)',
@@ -1098,7 +1098,7 @@ def generate_kolb_html_report() -> str:
             font=dict(size=12, color='rgba(0,0,0,0.5)')
         )
     
-    # Dodaj punkt u¿ytkownika
+    # Dodaj punkt uÅ¼ytkownika
     fig_grid.add_trace(go.Scatter(
         x=[x_coord], y=[y_coord],
         mode='markers+text',
@@ -1113,91 +1113,91 @@ def generate_kolb_html_report() -> str:
     fig_grid.add_vline(x=0, line_dash="dash", line_color="gray")
     
     fig_grid.update_layout(
-        title='Siatka Stylów Uczenia siê',
+        title='Siatka StylÃ³w Uczenia siÄ™',
         xaxis=dict(title='Przetwarzanie (AE - RO)', range=[-13, 13]),
         yaxis=dict(title='Postrzeganie (AC - CE)', range=[-13, 13]),
-        width=650,  # Fixed width - bezpieczna szerokoœæ dla A4
+        width=650,  # Fixed width - bezpieczna szerokoÅ›Ä‡ dla A4
         height=400,  
         showlegend=False,
         plot_bgcolor='white',
         paper_bgcolor='white',
-        margin=dict(t=60, b=60, l=70, r=70)  # Wiêksze boczne marginesy
+        margin=dict(t=60, b=60, l=70, r=70)  # WiÄ™ksze boczne marginesy
     )
     
     # Konwertuj wykres siatki do HTML
     grid_chart_html = fig_grid.to_html(
-        include_plotlyjs=False,  # Plotly.js ju¿ jest w pierwszym wykresie
+        include_plotlyjs=False,  # Plotly.js juÅ¼ jest w pierwszym wykresie
         div_id='grid_chart',
         config={'displayModeBar': False, 'responsive': True}  # Responsive
     )
     
-    # Opisy stylów
+    # Opisy stylÃ³w
     style_descriptions = {
         "Diverging (Dywergent)": {
-            "icon": "??",
-            "desc": "Uczysz siê poprzez obserwacjê i refleksjê. Preferujesz kreatywne podejœcie i wieloœæ perspektyw.",
-            "strengths": "Kreatywnoœæ, empatia, wyobraŸnia, generowanie pomys³ów",
-            "development": "Praca w grupach, burze mózgów, case studies, dyskusje"
+            "icon": "ğŸ¯",
+            "desc": "Uczysz siÄ™ poprzez obserwacjÄ™ i refleksjÄ™. Preferujesz kreatywne podejÅ›cie i wieloÅ›Ä‡ perspektyw.",
+            "strengths": "KreatywnoÅ›Ä‡, empatia, wyobraÅºnia, generowanie pomysÅ‚Ã³w",
+            "development": "Praca w grupach, burze mÃ³zgÃ³w, case studies, dyskusje"
         },
         "Assimilating (Asymilator)": {
-            "icon": "??",
-            "desc": "Uczysz siê poprzez logiczne myœlenie i teoriê. Preferujesz systematyczne podejœcie.",
-            "strengths": "Analiza, organizacja informacji, myœlenie konceptualne",
-            "development": "Wyk³ady, czytanie, badania, modele teoretyczne"
+            "icon": "ğŸ¯",
+            "desc": "Uczysz siÄ™ poprzez logiczne myÅ›lenie i teoriÄ™. Preferujesz systematyczne podejÅ›cie.",
+            "strengths": "Analiza, organizacja informacji, myÅ›lenie konceptualne",
+            "development": "WykÅ‚ady, czytanie, badania, modele teoretyczne"
         },
         "Converging (Konwergent)": {
-            "icon": "??",
-            "desc": "Uczysz siê poprzez praktyczne zastosowanie teorii. Preferujesz rozwi¹zywanie konkretnych problemów.",
-            "strengths": "Rozwi¹zywanie problemów, podejmowanie decyzji, praktyczne zastosowania",
-            "development": "Æwiczenia praktyczne, symulacje, eksperymenty, projekty"
+            "icon": "ğŸ¯",
+            "desc": "Uczysz siÄ™ poprzez praktyczne zastosowanie teorii. Preferujesz rozwiÄ…zywanie konkretnych problemÃ³w.",
+            "strengths": "RozwiÄ…zywanie problemÃ³w, podejmowanie decyzji, praktyczne zastosowania",
+            "development": "Ä†wiczenia praktyczne, symulacje, eksperymenty, projekty"
         },
         "Accommodating (Akomodator)": {
             "icon": "?",
-            "desc": "Uczysz siê poprzez dzia³anie i eksperymentowanie. Preferujesz intuicyjne podejœcie.",
-            "strengths": "Adaptacja, dzia³anie, branie ryzyka, realizacja planów",
+            "desc": "Uczysz siÄ™ poprzez dziaÅ‚anie i eksperymentowanie. Preferujesz intuicyjne podejÅ›cie.",
+            "strengths": "Adaptacja, dziaÅ‚anie, branie ryzyka, realizacja planÃ³w",
             "development": "Praktyka w terenie, trial-and-error, projekty terenowe"
         }
     }
     
     style_info = style_descriptions.get(dominant, style_descriptions["Diverging (Dywergent)"])
     
-    # Szczegó³owe opisy stylów (pe³na wersja dla PDF)
+    # SzczegÃ³Å‚owe opisy stylÃ³w (peÅ‚na wersja dla PDF)
     detailed_style_descriptions = {
         "Diverging (Dywergent)": {
-            "icon": "??",
+            "icon": "ğŸ¯",
             "quadrant": "CE/RO",
-            "description": "£¹czysz Konkretne Doœwiadczenie i Refleksyjn¹ Obserwacjê. Jesteœ wra¿liwy i potrafisz spojrzeæ na sytuacje z wielu ró¿nych perspektyw. Twoja g³ówna mocna strona to wyobraŸnia i zdolnoœæ do generowania wielu pomys³ów.",
-            "strengths": ["WyobraŸnia i kreatywnoœæ", "Zdolnoœæ do widzenia sytuacji z ró¿nych perspektyw", "Empatia i wra¿liwoœæ", "Doskona³oœæ w burzy mózgów i generowaniu pomys³ów", "Umiejêtnoœæ integracji ró¿nych obserwacji"],
-            "weaknesses": ["Trudnoœci z podejmowaniem szybkich decyzji", "Problemy z przek³adaniem teorii na dzia³anie", "Tendencja do nadmiernego analizowania"],
+            "description": "ÅÄ…czysz Konkretne DoÅ›wiadczenie i RefleksyjnÄ… ObserwacjÄ™. JesteÅ› wraÅ¼liwy i potrafisz spojrzeÄ‡ na sytuacje z wielu rÃ³Å¼nych perspektyw. Twoja gÅ‚Ã³wna mocna strona to wyobraÅºnia i zdolnoÅ›Ä‡ do generowania wielu pomysÅ‚Ã³w.",
+            "strengths": ["WyobraÅºnia i kreatywnoÅ›Ä‡", "ZdolnoÅ›Ä‡ do widzenia sytuacji z rÃ³Å¼nych perspektyw", "Empatia i wraÅ¼liwoÅ›Ä‡", "DoskonaÅ‚oÅ›Ä‡ w burzy mÃ³zgÃ³w i generowaniu pomysÅ‚Ã³w", "UmiejÄ™tnoÅ›Ä‡ integracji rÃ³Å¼nych obserwacji"],
+            "weaknesses": ["TrudnoÅ›ci z podejmowaniem szybkich decyzji", "Problemy z przekÅ‚adaniem teorii na dziaÅ‚anie", "Tendencja do nadmiernego analizowania"],
             "careers": "Doradztwo, sztuka, HR, psychologia, dziennikarstwo",
-            "learning_methods": "Studia przypadków, dyskusje grupowe, feedback, introspekcja, obserwacja dzia³ania innych"
+            "learning_methods": "Studia przypadkÃ³w, dyskusje grupowe, feedback, introspekcja, obserwacja dziaÅ‚ania innych"
         },
         "Assimilating (Asymilator)": {
-            "icon": "??",
+            "icon": "ğŸ¯",
             "quadrant": "AC/RO",
-            "description": "£¹czysz Abstrakcyjn¹ Konceptualizacjê i Refleksyjn¹ Obserwacjê. Preferujesz zwiêz³e, logiczne i systematyczne podejœcie. Wykazujesz du¿¹ zdolnoœæ do tworzenia modeli teoretycznych i scalania licznych obserwacji w zintegrowane wyjaœnienia.",
-            "strengths": ["Tworzenie modeli teoretycznych", "Logiczne i systematyczne myœlenie", "Precyzja i spójnoœæ teorii", "Zdolnoœæ do scalania wielu obserwacji", "Planowanie strategiczne"],
-            "weaknesses": ["Mniejsze zainteresowanie problemami praktycznymi", "Trudnoœci w pracy z ludŸmi", "Preferencja teorii nad zastosowaniem"],
+            "description": "ÅÄ…czysz AbstrakcyjnÄ… KonceptualizacjÄ™ i RefleksyjnÄ… ObserwacjÄ™. Preferujesz zwiÄ™zÅ‚e, logiczne i systematyczne podejÅ›cie. Wykazujesz duÅ¼Ä… zdolnoÅ›Ä‡ do tworzenia modeli teoretycznych i scalania licznych obserwacji w zintegrowane wyjaÅ›nienia.",
+            "strengths": ["Tworzenie modeli teoretycznych", "Logiczne i systematyczne myÅ›lenie", "Precyzja i spÃ³jnoÅ›Ä‡ teorii", "ZdolnoÅ›Ä‡ do scalania wielu obserwacji", "Planowanie strategiczne"],
+            "weaknesses": ["Mniejsze zainteresowanie problemami praktycznymi", "TrudnoÅ›ci w pracy z ludÅºmi", "Preferencja teorii nad zastosowaniem"],
             "careers": "Nauka, informatyka, planowanie strategiczne, badania, matematyka",
-            "learning_methods": "Wyk³ady teoretyczne, modele i schematy, analiza koncepcji, dociekliwe pytania, prace nad systemami"
+            "learning_methods": "WykÅ‚ady teoretyczne, modele i schematy, analiza koncepcji, dociekliwe pytania, prace nad systemami"
         },
         "Converging (Konwergent)": {
-            "icon": "??",
+            "icon": "ğŸ¯",
             "quadrant": "AC/AE",
-            "description": "£¹czysz Abstrakcyjn¹ Konceptualizacjê i Aktywne Eksperymentowanie. Doskonale radzisz sobie z praktycznym zastosowaniem teorii do rozwi¹zywania konkretnych problemów. Skupiasz siê na zadaniach i rzeczach, a nie na kwestiach miêdzyludzkich.",
-            "strengths": ["Praktyczne zastosowanie teorii", "Efektywnoœæ i sprawnoœæ dzia³ania", "Zdolnoœæ do podejmowania decyzji", "Umiejêtnoœci techniczne", "Rozwi¹zywanie konkretnych problemów"],
-            "weaknesses": ["Mniejsze zainteresowanie relacjami miêdzyludzkimi", "Skupienie na zadaniach kosztem ludzi", "Preferencja dla jednoznacznych rozwi¹zañ"],
-            "careers": "In¿ynieria, technologia, medycyna, ekonomia, zawody techniczne",
-            "learning_methods": "Æwiczenia praktyczne, wdro¿enia, testowanie umiejêtnoœci, konkretne przyk³ady zawodowe, zadania aplikacyjne"
+            "description": "ÅÄ…czysz AbstrakcyjnÄ… KonceptualizacjÄ™ i Aktywne Eksperymentowanie. Doskonale radzisz sobie z praktycznym zastosowaniem teorii do rozwiÄ…zywania konkretnych problemÃ³w. Skupiasz siÄ™ na zadaniach i rzeczach, a nie na kwestiach miÄ™dzyludzkich.",
+            "strengths": ["Praktyczne zastosowanie teorii", "EfektywnoÅ›Ä‡ i sprawnoÅ›Ä‡ dziaÅ‚ania", "ZdolnoÅ›Ä‡ do podejmowania decyzji", "UmiejÄ™tnoÅ›ci techniczne", "RozwiÄ…zywanie konkretnych problemÃ³w"],
+            "weaknesses": ["Mniejsze zainteresowanie relacjami miÄ™dzyludzkimi", "Skupienie na zadaniach kosztem ludzi", "Preferencja dla jednoznacznych rozwiÄ…zaÅ„"],
+            "careers": "InÅ¼ynieria, technologia, medycyna, ekonomia, zawody techniczne",
+            "learning_methods": "Ä†wiczenia praktyczne, wdroÅ¼enia, testowanie umiejÄ™tnoÅ›ci, konkretne przykÅ‚ady zawodowe, zadania aplikacyjne"
         },
         "Accommodating (Akomodator)": {
             "icon": "?",
             "quadrant": "CE/AE",
-            "description": "£¹czysz Konkretne Doœwiadczenie i Aktywne Eksperymentowanie. To styl 'hands-on', który polega na intuicji. Jesteœ elastyczny, zdolny do wprowadzania planów w ¿ycie, chêtnie eksperymentujesz i adaptujesz siê do nowych warunków.",
-            "strengths": ["Elastycznoœæ i adaptacja", "Podejmowanie ryzyka", "Szybka reakcja na zmiany", "Osobiste zaanga¿owanie", "Umiejêtnoœæ wprowadzania planów w ¿ycie"],
-            "weaknesses": ["Tendencja do dzia³ania bez planu", "Niecierpliwoœæ wobec teorii", "Ryzyko podejmowania pochopnych decyzji"],
-            "careers": "Zarz¹dzanie operacyjne, sprzeda¿, marketing, przedsiêbiorczoœæ",
-            "learning_methods": "Gry, symulacje, ró¿norodne æwiczenia, odgrywanie ról, zadania niestandardowe wymagaj¹ce ryzyka"
+            "description": "ÅÄ…czysz Konkretne DoÅ›wiadczenie i Aktywne Eksperymentowanie. To styl 'hands-on', ktÃ³ry polega na intuicji. JesteÅ› elastyczny, zdolny do wprowadzania planÃ³w w Å¼ycie, chÄ™tnie eksperymentujesz i adaptujesz siÄ™ do nowych warunkÃ³w.",
+            "strengths": ["ElastycznoÅ›Ä‡ i adaptacja", "Podejmowanie ryzyka", "Szybka reakcja na zmiany", "Osobiste zaangaÅ¼owanie", "UmiejÄ™tnoÅ›Ä‡ wprowadzania planÃ³w w Å¼ycie"],
+            "weaknesses": ["Tendencja do dziaÅ‚ania bez planu", "NiecierpliwoÅ›Ä‡ wobec teorii", "Ryzyko podejmowania pochopnych decyzji"],
+            "careers": "ZarzÄ…dzanie operacyjne, sprzedaÅ¼, marketing, przedsiÄ™biorczoÅ›Ä‡",
+            "learning_methods": "Gry, symulacje, rÃ³Å¼norodne Ä‡wiczenia, odgrywanie rÃ³l, zadania niestandardowe wymagajÄ…ce ryzyka"
         }
     }
     
@@ -1262,14 +1262,14 @@ def generate_kolb_html_report() -> str:
             .abilities-grid {{
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);  /* Jeden wiersz, cztery kolumny */
-                gap: 15px;  /* Mniejsza przerwa miêdzy kartami */
+                gap: 15px;  /* Mniejsza przerwa miÄ™dzy kartami */
                 margin-bottom: 30px;
             }}
             
             .ability-card {{
                 border: 2px solid #e0e0e0;
                 border-radius: 10px;
-                padding: 15px 10px;  /* Mniejszy padding dla wê¿szych kart */
+                padding: 15px 10px;  /* Mniejszy padding dla wÄ™Å¼szych kart */
                 text-align: center;
                 background: #f8f9fa;
             }}
@@ -1370,7 +1370,7 @@ def generate_kolb_html_report() -> str:
                 margin: 20px 0;
             }}
             
-            /* Style dla kompaktowych wskazówek AI */
+            /* Style dla kompaktowych wskazÃ³wek AI */
             .ai-tip-box {{
                 page-break-inside: avoid;
                 margin-bottom: 15px;
@@ -1393,7 +1393,7 @@ def generate_kolb_html_report() -> str:
                 line-height: 1.5;
             }}
             
-            /* Style dla wykresów Plotly */
+            /* Style dla wykresÃ³w Plotly */
             .plotly, .js-plotly-plot {{
                 max-width: 100%;
                 overflow: visible;
@@ -1427,7 +1427,7 @@ def generate_kolb_html_report() -> str:
                     page-break-inside: avoid;
                 }}
                 
-                /* Karty zdolnoœci - kompaktowe w druku */
+                /* Karty zdolnoÅ›ci - kompaktowe w druku */
                 .abilities-grid {{
                     gap: 10px !important;  /* Mniejsza przerwa */
                 }}
@@ -1467,7 +1467,7 @@ def generate_kolb_html_report() -> str:
                 
                 .chart-container {{
                     margin: 15px auto !important;
-                    max-width: 680px !important;  /* Szerokoœæ dopasowana do wykresów */
+                    max-width: 680px !important;  /* SzerokoÅ›Ä‡ dopasowana do wykresÃ³w */
                     overflow: visible !important;
                 }}
                 
@@ -1483,7 +1483,7 @@ def generate_kolb_html_report() -> str:
                     max-width: 680px !important;
                 }}
                 
-                /* Kontenery wykresów */
+                /* Kontenery wykresÃ³w */
                 #bar_chart, #grid_chart {{
                     page-break-inside: avoid !important;
                     max-width: 680px !important;
@@ -1532,16 +1532,16 @@ def generate_kolb_html_report() -> str:
     </head>
     <body>
         <!-- Przycisk do drukowania -->
-        <button class="print-button" onclick="window.print()">??? Drukuj / Zapisz jako PDF</button>
+        <button class="print-button" onclick="window.print()">ğŸ”§ Drukuj / Zapisz jako PDF</button>
         
         <div class="header">
-            <h1>?? Raport Kolb Learning Style Inventory</h1>
-            <p>U¿ytkownik: {username}</p>
+            <h1>ğŸ“Š Raport Kolb Learning Style Inventory</h1>
+            <p>UÅ¼ytkownik: {username}</p>
             <p>Data: {datetime.now().strftime('%d.%m.%Y %H:%M')}</p>
         </div>
         
         <div class="section">
-            <h2 class="section-title">?? Twoje Zdolnoœci Uczenia siê</h2>
+            <h2 class="section-title">ğŸ“‹ Twoje ZdolnoÅ›ci Uczenia siÄ™</h2>
             
             <div class="abilities-grid">
                 <div class="ability-card" style="border-left: 5px solid {ability_info['CE']['color']}">
@@ -1575,18 +1575,18 @@ def generate_kolb_html_report() -> str:
         </div>
         
         <div class="section">
-            <h2 class="section-title">?? Wizualizacja Wyników</h2>
+            <h2 class="section-title">ğŸ“‹ Wizualizacja WynikÃ³w</h2>
             <div class="chart-container" style="max-width: 95%; margin: 0 auto;">
                 {bar_chart_html}
             </div>
         </div>
         
         <div class="section" style="page-break-before: always;">
-            <h2 class="section-title">?? Twój Dominuj¹cy Styl Uczenia siê</h2>
+            <h2 class="section-title">ğŸ“‹ TwÃ³j DominujÄ…cy Styl Uczenia siÄ™</h2>
             
             <div class="dominant-style">
                 <h2>{detailed_style_info['icon']} {dominant}</h2>
-                <p><strong>Æwiartka:</strong> {detailed_style_info['quadrant']}</p>
+                <p><strong>Ä†wiartka:</strong> {detailed_style_info['quadrant']}</p>
                 <p style="margin-top: 15px; font-size: 16px; line-height: 1.8;">{detailed_style_info['description']}</p>
             </div>
             
@@ -1596,14 +1596,14 @@ def generate_kolb_html_report() -> str:
             
             <div class="two-column" style="margin-top: 30px;">
                 <div class="info-box" style="border-left-color: #2ECC71; background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, rgba(39, 174, 96, 0.1) 100%);">
-                    <h3 style="color: #2ECC71;">?? Twoje mocne strony:</h3>
+                    <h3 style="color: #2ECC71;">ğŸ’ª Twoje mocne strony:</h3>
                     <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
                         {''.join([f'<li>{s}</li>' for s in detailed_style_info['strengths']])}
                     </ul>
                 </div>
                 
                 <div class="info-box" style="border-left-color: #E67E22; background: linear-gradient(135deg, rgba(230, 126, 34, 0.1) 0%, rgba(211, 84, 0, 0.1) 100%);">
-                    <h3 style="color: #E67E22;">?? Obszary do rozwoju:</h3>
+                    <h3 style="color: #E67E22;">ğŸ¯ Obszary do rozwoju:</h3>
                     <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
                         {''.join([f'<li>{w}</li>' for w in detailed_style_info['weaknesses']])}
                     </ul>
@@ -1612,27 +1612,27 @@ def generate_kolb_html_report() -> str:
             
             <div class="two-column" style="margin-top: 20px;">
                 <div class="info-box" style="border-left-color: #3498DB;">
-                    <h3 style="color: #3498DB;">?? Typowe zawody:</h3>
+                    <h3 style="color: #3498DB;">ğŸ‘” Typowe zawody:</h3>
                     <p>{detailed_style_info['careers']}</p>
                 </div>
                 
                 <div class="info-box" style="border-left-color: #9B59B6;">
-                    <h3 style="color: #9B59B6;">?? Rekomendowane metody uczenia siê:</h3>
+                    <h3 style="color: #9B59B6;">ğŸ“š Rekomendowane metody uczenia siÄ™:</h3>
                     <p>{detailed_style_info['learning_methods']}</p>
                 </div>
             </div>
         </div>
         
         <div class="section">
-            <h2 class="section-title">?? Elastycznoœæ Uczenia siê</h2>
+            <h2 class="section-title">ğŸ“‹ ElastycznoÅ›Ä‡ Uczenia siÄ™</h2>
             
             <div class="flexibility-meter">
                 <div class="score">{flexibility:.1f}%</div>
-                <p>Twoja elastycznoœæ w uczeniu siê</p>
+                <p>Twoja elastycznoÅ›Ä‡ w uczeniu siÄ™</p>
                 <p style="color: #666; font-size: 14px;">
-                    {"?? Wysoka elastycznoœæ! Potrafisz ³¹czyæ ró¿ne style uczenia siê." if flexibility > 70 
-                     else "? Dobra elastycznoœæ. Masz zrównowa¿one podejœcie." if flexibility > 50
-                     else "?? Silne preferencje w okreœlonym stylu. Rozwa¿ rozwijanie innych zdolnoœci."}
+                    {"âœ… Wysoka elastycznoÅ›Ä‡! Potrafisz Å‚Ä…czyÄ‡ rÃ³Å¼ne style uczenia siÄ™." if flexibility > 70 
+                     else "? Dobra elastycznoÅ›Ä‡. Masz zrÃ³wnowaÅ¼one podejÅ›cie." if flexibility > 50
+                     else "?? Silne preferencje w okreÅ›lonym stylu. RozwaÅ¼ rozwijanie innych zdolnoÅ›ci."}
                 </p>
             </div>
             
@@ -1657,57 +1657,57 @@ def generate_kolb_html_report() -> str:
             
             <div class="abilities-grid" style="grid-template-columns: repeat(3, 1fr);">
                 <div class="ability-card" style="border-left: 5px solid #667eea; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">
-                    <h3>Oœ Postrzegania</h3>
+                    <h3>OÅ› Postrzegania</h3>
                     <div style="color: #666; font-size: 14px; margin: 5px 0;">AC-CE</div>
                     <div class="score" style="color: #667eea">{dimensions['AC-CE']:+d}</div>
-                    <div style="color: #666; font-size: 14px;">{'Preferencja: Myœlenie (AC)' if dimensions['AC-CE'] > 0 else 'Preferencja: Czucie (CE)'}</div>
+                    <div style="color: #666; font-size: 14px;">{'Preferencja: MyÅ›lenie (AC)' if dimensions['AC-CE'] > 0 else 'Preferencja: Czucie (CE)'}</div>
                 </div>
                 
                 <div class="ability-card" style="border-left: 5px solid #f5576c; background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);">
-                    <h3>Oœ Przetwarzania</h3>
+                    <h3>OÅ› Przetwarzania</h3>
                     <div style="color: #666; font-size: 14px; margin: 5px 0;">AE-RO</div>
                     <div class="score" style="color: #f5576c">{dimensions['AE-RO']:+d}</div>
-                    <div style="color: #666; font-size: 14px;">{'Preferencja: Dzia³anie (AE)' if dimensions['AE-RO'] > 0 else 'Preferencja: Obserwacja (RO)'}</div>
+                    <div style="color: #666; font-size: 14px;">{'Preferencja: DziaÅ‚anie (AE)' if dimensions['AE-RO'] > 0 else 'Preferencja: Obserwacja (RO)'}</div>
                 </div>
                 
                 <div class="ability-card" style="border-left: 5px solid #38f9d7; background: linear-gradient(135deg, rgba(67, 233, 123, 0.1) 0%, rgba(56, 249, 215, 0.1) 100%);">
-                    <h3>Elastycznoœæ</h3>
+                    <h3>ElastycznoÅ›Ä‡</h3>
                     <div style="color: #666; font-size: 14px; margin: 5px 0;">Learning Flexibility</div>
                     <div class="score" style="color: #38f9d7">{flexibility:.0f}%</div>
-                    <div style="color: #666; font-size: 14px;">{'Wysoka - Zrównowa¿ony' if flexibility > 60 else 'Œrednia - Umiarkowana' if flexibility > 30 else 'Niska - WyraŸna preferencja'}</div>
+                    <div style="color: #666; font-size: 14px;">{'Wysoka - ZrÃ³wnowaÅ¼ony' if flexibility > 60 else 'Åšrednia - Umiarkowana' if flexibility > 30 else 'Niska - WyraÅºna preferencja'}</div>
                 </div>
             </div>
             
             <div class="info-box" style="margin-top: 20px;">
-                <h3>?? Interpretacja wymiarów:</h3>
-                <p><strong>AC-CE (Postrzeganie):</strong> Pokazuje jak preferujesz postrzegaæ informacje - poprzez abstrakcyjne myœlenie (AC) czy konkretne doœwiadczenie (CE).</p>
-                <p><strong>AE-RO (Przetwarzanie):</strong> Pokazuje jak preferujesz przetwarzaæ informacje - poprzez aktywne eksperymentowanie (AE) czy refleksyjn¹ obserwacjê (RO).</p>
-                <p><strong>Elastycznoœæ:</strong> Im bli¿ej centrum siatki, tym wiêksza elastycznoœæ w prze³¹czaniu miêdzy stylami uczenia siê.</p>
+                <h3>?? Interpretacja wymiarÃ³w:</h3>
+                <p><strong>AC-CE (Postrzeganie):</strong> Pokazuje jak preferujesz postrzegaÄ‡ informacje - poprzez abstrakcyjne myÅ›lenie (AC) czy konkretne doÅ›wiadczenie (CE).</p>
+                <p><strong>AE-RO (Przetwarzanie):</strong> Pokazuje jak preferujesz przetwarzaÄ‡ informacje - poprzez aktywne eksperymentowanie (AE) czy refleksyjnÄ… obserwacjÄ™ (RO).</p>
+                <p><strong>ElastycznoÅ›Ä‡:</strong> Im bliÅ¼ej centrum siatki, tym wiÄ™ksza elastycznoÅ›Ä‡ w przeÅ‚Ä…czaniu miÄ™dzy stylami uczenia siÄ™.</p>
             </div>
         </div>
         
         <div class="section">
-            <h2 class="section-title">??? Rekomendacje Rozwojowe</h2>
+            <h2 class="section-title">ğŸ”§ Rekomendacje Rozwojowe</h2>
             
             <div class="info-box" style="border-left-color: #2ECC71;">
-                <h3>? Co robiæ wiêcej:</h3>
+                <h3>? Co robiÄ‡ wiÄ™cej:</h3>
                 <p>{style_info['development']}</p>
             </div>
             
             <div class="info-box" style="border-left-color: #E74C3C;">
-                <h3>?? Obszary do rozwiniêcia:</h3>
-                <p>Rozwa¿ æwiczenie pozosta³ych stylów uczenia siê, aby zwiêkszyæ swoj¹ elastycznoœæ i efektywnoœæ.</p>
+                <h3>?? Obszary do rozwiniÄ™cia:</h3>
+                <p>RozwaÅ¼ Ä‡wiczenie pozostaÅ‚ych stylÃ³w uczenia siÄ™, aby zwiÄ™kszyÄ‡ swojÄ… elastycznoÅ›Ä‡ i efektywnoÅ›Ä‡.</p>
             </div>
         </div>
         """
     
-    # Dodaj sekcjê AI jeœli jest dostêpna
+    # Dodaj sekcjÄ™ AI jeÅ›li jest dostÄ™pna
     ai_section = ""
     if st.session_state.get('kolb_profession') and st.session_state.get('kolb_ai_tips'):
         profession = st.session_state.kolb_profession
         ai_tips_raw = st.session_state.kolb_ai_tips
         
-        # Parsuj wskazówki AI na sekcje (taka sama logika jak w Streamlit)
+        # Parsuj wskazÃ³wki AI na sekcje (taka sama logika jak w Streamlit)
         section_pattern = r'^\*\*(.+?)\*\*:?\s*$'
         lines = ai_tips_raw.strip().split('\n')
         sections = []
@@ -1727,7 +1727,7 @@ def generate_kolb_html_report() -> str:
                 current_section = header_match.group(1).strip().rstrip(':')
                 current_items = []
             else:
-                clean_line = re.sub(r'^[-•*]\s*', '', line_stripped)
+                clean_line = re.sub(r'^[-â€¢*]\s*', '', line_stripped)
                 clean_line = clean_line.strip()
                 if clean_line:
                     current_items.append(clean_line)
@@ -1740,31 +1740,31 @@ def generate_kolb_html_report() -> str:
         for idx, (section_title, items) in enumerate(sections):
             # Automatyczne wybieranie koloru i ikony
             if 'warunki' in section_title.lower() or 'optymalne' in section_title.lower():
-                icon = '??'
+                icon = 'ğŸ¯'
                 bg = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
                 text_color = 'white'
             elif 'mocn' in section_title.lower() or 'wzmacnia' in section_title.lower():
-                icon = '??'
+                icon = 'ğŸ¯'
                 bg = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
                 text_color = 'white'
-            elif 'rozwój' in section_title.lower() or 'rozwija' in section_title.lower():
-                icon = '??'
+            elif 'rozwÃ³j' in section_title.lower() or 'rozwija' in section_title.lower():
+                icon = 'ğŸ¯'
                 bg = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
                 text_color = '#333'
             else:
-                icon = '??'
+                icon = 'ğŸ¯'
                 bg = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
                 text_color = 'white'
             
-            # Buduj HTML dla punktów z numeracj¹
+            # Buduj HTML dla punktÃ³w z numeracjÄ…
             items_html = "<ol style='margin: 10px 0 0 20px; padding-left: 0;'>"
             for item in items:
-                # Zamieñ **tekst** na <strong>tekst</strong>
+                # ZamieÅ„ **tekst** na <strong>tekst</strong>
                 formatted_item = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', item)
                 items_html += f"<li style='margin: 10px 0; line-height: 1.6;'>{formatted_item}</li>"
             items_html += "</ol>"
             
-            # Dodaj kartê z klas¹ dla zachowania kolorów w druku
+            # Dodaj kartÄ™ z klasÄ… dla zachowania kolorÃ³w w druku
             ai_cards_html += f"""
             <div class='ai-card-color' style='background: {bg}; 
                         color: {text_color}; 
@@ -1782,7 +1782,7 @@ def generate_kolb_html_report() -> str:
         
         ai_section = f"""
         <div class="section" style="page-break-before: always;">
-            <h2 class="section-title">?? Jak Uczyæ siê Efektywnie</h2>
+            <h2 class="section-title">ğŸ“‹ Jak UczyÄ‡ siÄ™ Efektywnie</h2>
             
             <div class='ai-header-color' style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                         color: white; 
@@ -1792,13 +1792,13 @@ def generate_kolb_html_report() -> str:
                         -webkit-print-color-adjust: exact;
                         print-color-adjust: exact;
                         color-adjust: exact;">
-                <p style="margin: 0; font-size: 16px;"><strong>?? Zawód:</strong> {profession} | <strong>?? Styl uczenia siê:</strong> {dominant}</p>
+                <p style="margin: 0; font-size: 16px;"><strong>?? ZawÃ³d:</strong> {profession} | <strong>?? Styl uczenia siÄ™:</strong> {dominant}</p>
             </div>
             
             {ai_cards_html}
             
             <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; border-radius: 5px; margin-top: 20px;">
-                <p style="margin: 0; font-size: 13px; color: #1565c0;"><strong>?? Pamiêtaj:</strong> Te wskazówki s¹ dopasowane do Twojego stylu uczenia siê. Testuj je w praktyce i obserwuj co dzia³a najlepiej w Twojej sytuacji.</p>
+                <p style="margin: 0; font-size: 13px; color: #1565c0;"><strong>?? PamiÄ™taj:</strong> Te wskazÃ³wki sÄ… dopasowane do Twojego stylu uczenia siÄ™. Testuj je w praktyce i obserwuj co dziaÅ‚a najlepiej w Twojej sytuacji.</p>
             </div>
         </div>
         """
@@ -1807,19 +1807,19 @@ def generate_kolb_html_report() -> str:
         
         <div class="footer">
             <p>Raport wygenerowany przez BrainVenture Academy</p>
-            <p>Test Kolba - Experiential Learning Theory © David A. Kolb</p>
+            <p>Test Kolba - Experiential Learning Theory Â© David A. Kolb</p>
         </div>
     </body>
     </html>
     """
     
-    # Zwróæ HTML - przegl¹darka u¿ytkownika wygeneruje PDF
+    # ZwrÃ³Ä‡ HTML - przeglÄ…darka uÅ¼ytkownika wygeneruje PDF
     return html_content
 
 def display_kolb_results():
-    """Wyœwietla wyniki testu Kolba zgodnie z metodologi¹ ELT"""
+    """WyÅ›wietla wyniki testu Kolba zgodnie z metodologiÄ… ELT"""
     st.markdown("---")
-    st.markdown("## ?? Twoje wyniki - Kolb Experiential Learning Profile")
+    st.markdown("## ğŸ¯ Twoje wyniki - Kolb Experiential Learning Profile")
     
     results = st.session_state.kolb_results
     dimensions = st.session_state.kolb_dimensions
@@ -1827,15 +1827,15 @@ def display_kolb_results():
     quadrant = st.session_state.kolb_quadrant
     flexibility = st.session_state.kolb_flexibility
     
-    # Wyœwietl wyniki dla czterech zdolnoœci uczenia siê
-    st.markdown("### ?? Twoje zdolnoœci uczenia siê")
+    # WyÅ›wietl wyniki dla czterech zdolnoÅ›ci uczenia siÄ™
+    st.markdown("### ğŸ¯ Twoje zdolnoÅ›ci uczenia siÄ™")
     cols = st.columns(4)
     
     ability_info = {
-        "CE": {"name": "Konkretne Doœwiadczenie", "emoji": "??", "color": "#E74C3C", "desc": "Feeling"},
-        "RO": {"name": "Refleksyjna Obserwacja", "emoji": "???", "color": "#4A90E2", "desc": "Watching"},
-        "AC": {"name": "Abstrakcyjna Konceptualizacja", "emoji": "??", "color": "#9B59B6", "desc": "Thinking"},
-        "AE": {"name": "Aktywne Eksperymentowanie", "emoji": "??", "color": "#2ECC71", "desc": "Doing"}
+        "CE": {"name": "Konkretne DoÅ›wiadczenie", "emoji": "ğŸ¯", "color": "#E74C3C", "desc": "Feeling"},
+        "RO": {"name": "Refleksyjna Obserwacja", "emoji": "ğŸ”§", "color": "#4A90E2", "desc": "Watching"},
+        "AC": {"name": "Abstrakcyjna Konceptualizacja", "emoji": "ğŸ¯", "color": "#9B59B6", "desc": "Thinking"},
+        "AE": {"name": "Aktywne Eksperymentowanie", "emoji": "ğŸ¯", "color": "#2ECC71", "desc": "Doing"}
     }
     
     for idx, (ability, score) in enumerate(results.items()):
@@ -1851,15 +1851,15 @@ def display_kolb_results():
             </div>
             """, unsafe_allow_html=True)
     
-    # Wizualizacja 1: Wykres S³upkowy dla Zdolnoœci Podstawowych
+    # Wizualizacja 1: Wykres SÅ‚upkowy dla ZdolnoÅ›ci Podstawowych
     st.markdown("---")
-    st.markdown("### ?? Wykres Zdolnoœci Podstawowych (Bar Chart)")
-    st.markdown("*Twoje preferencje do poszczególnych etapów Cyklu Kolba*")
+    st.markdown("### ğŸ¯ Wykres ZdolnoÅ›ci Podstawowych (Bar Chart)")
+    st.markdown("*Twoje preferencje do poszczegÃ³lnych etapÃ³w Cyklu Kolba*")
     
-    # Przygotuj dane do wykresu s³upkowego
+    # Przygotuj dane do wykresu sÅ‚upkowego
     abilities_order = ['CE', 'RO', 'AC', 'AE']
     ability_labels = {
-        'CE': 'Konkretne Doœwiadczenie<br>(Feeling)',
+        'CE': 'Konkretne DoÅ›wiadczenie<br>(Feeling)',
         'RO': 'Refleksyjna Obserwacja<br>(Watching)',
         'AC': 'Abstrakcyjna Konceptualizacja<br>(Thinking)',
         'AE': 'Aktywne Eksperymentowanie<br>(Doing)'
@@ -1892,7 +1892,7 @@ def display_kolb_results():
     
     fig_bar.update_layout(
         title=dict(
-            text='Zdolnoœci Podstawowe w Cyklu Kolba',
+            text='ZdolnoÅ›ci Podstawowe w Cyklu Kolba',
             font=dict(size=18, color='#333', family='Arial')
         ),
         yaxis=dict(
@@ -1913,29 +1913,29 @@ def display_kolb_results():
     
     st.plotly_chart(fig_bar, width="stretch")
     
-    # Interpretacja wykresu s³upkowego
+    # Interpretacja wykresu sÅ‚upkowego
     strongest = max(results.items(), key=lambda x: x[1])
     weakest = min(results.items(), key=lambda x: x[1])
     
     col_int1, col_int2 = st.columns(2)
     with col_int1:
-        st.success(f"**?? Twoja najsilniejsza zdolnoœæ:** {ability_info[strongest[0]]['name']} ({strongest[1]}/12)")
+        st.success(f"**?? Twoja najsilniejsza zdolnoÅ›Ä‡:** {ability_info[strongest[0]]['name']} ({strongest[1]}/12)")
     with col_int2:
         st.warning(f"**?? Obszar do rozwoju:** {ability_info[weakest[0]]['name']} ({weakest[1]}/12)")
     
-    # Wizualizacja 2: Siatka Stylów Uczenia siê (Learning Style Grid)
+    # Wizualizacja 2: Siatka StylÃ³w Uczenia siÄ™ (Learning Style Grid)
     st.markdown("---")
-    st.markdown("### ?? Siatka Stylów Uczenia siê (Learning Style Grid)")
-    st.markdown("*Twoja pozycja w matrycy stylów ELT - im bli¿ej œrodka, tym wiêksza elastycznoœæ*")
+    st.markdown("### ğŸ¯ Siatka StylÃ³w Uczenia siÄ™ (Learning Style Grid)")
+    st.markdown("*Twoja pozycja w matrycy stylÃ³w ELT - im bliÅ¼ej Å›rodka, tym wiÄ™ksza elastycznoÅ›Ä‡*")
     
-    # Pobierz wspó³rzêdne
-    x_coord = dimensions['AE-RO']  # Oœ pozioma (Przetwarzanie)
-    y_coord = dimensions['AC-CE']  # Oœ pionowa (Postrzeganie)
+    # Pobierz wspÃ³Å‚rzÄ™dne
+    x_coord = dimensions['AE-RO']  # OÅ› pozioma (Przetwarzanie)
+    y_coord = dimensions['AC-CE']  # OÅ› pionowa (Postrzeganie)
     
-    # Utwórz wykres siatki
+    # UtwÃ³rz wykres siatki
     fig_grid = go.Figure()
     
-    # Dodaj t³o æwiartek z nazwami stylów
+    # Dodaj tÅ‚o Ä‡wiartek z nazwami stylÃ³w
     quadrant_info = {
         'Diverging': {'x': [-12, 0], 'y': [-12, 0], 'color': 'rgba(231, 76, 60, 0.15)', 'label_x': -6, 'label_y': -6},
         'Assimilating': {'x': [-12, 0], 'y': [0, 12], 'color': 'rgba(155, 89, 182, 0.15)', 'label_x': -6, 'label_y': 6},
@@ -1943,7 +1943,7 @@ def display_kolb_results():
         'Accommodating': {'x': [0, 12], 'y': [-12, 0], 'color': 'rgba(46, 204, 113, 0.15)', 'label_x': 6, 'label_y': -6}
     }
     
-    # Rysuj prostok¹ty æwiartek
+    # Rysuj prostokÄ…ty Ä‡wiartek
     for style_name, info in quadrant_info.items():
         fig_grid.add_shape(
             type="rect",
@@ -1953,7 +1953,7 @@ def display_kolb_results():
             line=dict(width=0)
         )
         
-        # Dodaj etykiety stylów
+        # Dodaj etykiety stylÃ³w
         fig_grid.add_annotation(
             x=info['label_x'], y=info['label_y'],
             text=f"<b>{style_name}</b>",
@@ -1963,7 +1963,7 @@ def display_kolb_results():
             yanchor='middle'
         )
     
-    # Strefa Zrównowa¿onego Uczenia siê (centralna)
+    # Strefa ZrÃ³wnowaÅ¼onego Uczenia siÄ™ (centralna)
     balanced_zone_radius = 4
     theta = [i for i in range(0, 361, 10)]
     balanced_x = [balanced_zone_radius * math.cos(math.radians(t)) for t in theta]
@@ -1974,7 +1974,7 @@ def display_kolb_results():
         fill='toself',
         fillcolor='rgba(255, 193, 7, 0.2)',
         line=dict(color='rgba(255, 193, 7, 0.6)', width=2, dash='dash'),
-        name='Strefa Zrównowa¿onego<br>Uczenia siê',
+        name='Strefa ZrÃ³wnowaÅ¼onego<br>Uczenia siÄ™',
         hoverinfo='name',
         showlegend=True
     ))
@@ -1985,7 +1985,7 @@ def display_kolb_results():
     fig_grid.add_shape(type="line", x0=0, x1=0, y0=-12, y1=12, 
                        line=dict(color="rgba(0,0,0,0.4)", width=2))
     
-    # Punkt u¿ytkownika
+    # Punkt uÅ¼ytkownika
     fig_grid.add_trace(go.Scatter(
         x=[x_coord], y=[y_coord],
         mode='markers+text',
@@ -1995,11 +1995,11 @@ def display_kolb_results():
             line=dict(color='white', width=3),
             symbol='circle'
         ),
-        text=['TWÓJ<br>WYNIK'],
+        text=['TWÃ“J<br>WYNIK'],
         textposition='top center',
         textfont=dict(size=12, color='#FF5722', family='Arial Black'),
         name='Twoja pozycja',
-        hovertemplate=f'<b>Twoja pozycja</b><br>AE-RO: {x_coord:+d}<br>AC-CE: {y_coord:+d}<br>Elastycznoœæ: {flexibility:.0f}%<extra></extra>'
+        hovertemplate=f'<b>Twoja pozycja</b><br>AE-RO: {x_coord:+d}<br>AC-CE: {y_coord:+d}<br>ElastycznoÅ›Ä‡: {flexibility:.0f}%<extra></extra>'
     ))
     
     # Etykiety osi
@@ -2014,20 +2014,20 @@ def display_kolb_results():
     
     fig_grid.update_layout(
         title=dict(
-            text=f'Twój Styl: {dominant} | Elastycznoœæ: {flexibility:.0f}%',
+            text=f'TwÃ³j Styl: {dominant} | ElastycznoÅ›Ä‡: {flexibility:.0f}%',
             font=dict(size=18, color='#333', family='Arial Black'),
             x=0.5,
             xanchor='center'
         ),
         xaxis=dict(
-            title='<b>Oœ Przetwarzania (AE-RO)</b>',
+            title='<b>OÅ› Przetwarzania (AE-RO)</b>',
             range=[-14, 14],
             zeroline=False,
             gridcolor='rgba(0,0,0,0.1)',
             tickfont=dict(size=10)
         ),
         yaxis=dict(
-            title='<b>Oœ Postrzegania (AC-CE)</b>',
+            title='<b>OÅ› Postrzegania (AC-CE)</b>',
             range=[-14, 14],
             zeroline=False,
             gridcolor='rgba(0,0,0,0.1)',
@@ -2058,13 +2058,13 @@ def display_kolb_results():
     
     if distance_from_center <= 4:
         interpretation_color = "success"
-        interpretation = f"?? **Gratulacje!** Twój wynik znajduje siê w **Strefie Zrównowa¿onego Uczenia siê**. Oznacza to wysok¹ elastycznoœæ i zdolnoœæ do wykorzystania wszystkich faz cyklu Kolba w zale¿noœci od sytuacji."
+        interpretation = f"?? **Gratulacje!** TwÃ³j wynik znajduje siÄ™ w **Strefie ZrÃ³wnowaÅ¼onego Uczenia siÄ™**. Oznacza to wysokÄ… elastycznoÅ›Ä‡ i zdolnoÅ›Ä‡ do wykorzystania wszystkich faz cyklu Kolba w zaleÅ¼noÅ›ci od sytuacji."
     elif distance_from_center <= 8:
         interpretation_color = "info"
-        interpretation = f"? **Umiarkowana preferencja** - Twój styl jest wyraŸnie okreœlony ({dominant}), ale zachowujesz dobr¹ elastycznoœæ. Mo¿esz efektywnie adaptowaæ siê do ró¿nych sytuacji uczenia siê."
+        interpretation = f"? **Umiarkowana preferencja** - TwÃ³j styl jest wyraÅºnie okreÅ›lony ({dominant}), ale zachowujesz dobrÄ… elastycznoÅ›Ä‡. MoÅ¼esz efektywnie adaptowaÄ‡ siÄ™ do rÃ³Å¼nych sytuacji uczenia siÄ™."
     else:
         interpretation_color = "warning"
-        interpretation = f"?? **Silna preferencja** - Twój wynik znajduje siê daleko od centrum siatki, co wskazuje na wyraŸn¹ tendencjê do stylu **{dominant}**. Rozwa¿ celowe rozwijanie s³abszych zdolnoœci, aby zwiêkszyæ elastycznoœæ uczenia siê."
+        interpretation = f"?? **Silna preferencja** - TwÃ³j wynik znajduje siÄ™ daleko od centrum siatki, co wskazuje na wyraÅºnÄ… tendencjÄ™ do stylu **{dominant}**. RozwaÅ¼ celowe rozwijanie sÅ‚abszych zdolnoÅ›ci, aby zwiÄ™kszyÄ‡ elastycznoÅ›Ä‡ uczenia siÄ™."
     
     if interpretation_color == "success":
         st.success(interpretation)
@@ -2075,7 +2075,7 @@ def display_kolb_results():
     
     # Wymiary liczbowe
     st.markdown("---")
-    st.markdown("### ?? Wymiary Liczbowe (LSI Dimensions)")
+    st.markdown("### ğŸ¯ Wymiary Liczbowe (LSI Dimensions)")
     
     col1, col2, col3 = st.columns(3)
     
@@ -2083,10 +2083,10 @@ def display_kolb_results():
         st.markdown(f"""
         <div style='padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                     border-radius: 12px; text-align: center; color: white;'>
-            <h4 style='color: white; margin-bottom: 10px;'>Oœ Postrzegania</h4>
+            <h4 style='color: white; margin-bottom: 10px;'>OÅ› Postrzegania</h4>
             <p style='font-size: 0.9em; margin: 5px 0;'>AC-CE</p>
             <div style='font-size: 2em; font-weight: bold; margin: 10px 0;'>{dimensions['AC-CE']:+d}</div>
-            <p style='font-size: 0.85em;'>{'Preferencja: Myœlenie (AC)' if dimensions['AC-CE'] > 0 else 'Preferencja: Czucie (CE)'}</p>
+            <p style='font-size: 0.85em;'>{'Preferencja: MyÅ›lenie (AC)' if dimensions['AC-CE'] > 0 else 'Preferencja: Czucie (CE)'}</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -2094,10 +2094,10 @@ def display_kolb_results():
         st.markdown(f"""
         <div style='padding: 20px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
                     border-radius: 12px; text-align: center; color: white;'>
-            <h4 style='color: white; margin-bottom: 10px;'>Oœ Przetwarzania</h4>
+            <h4 style='color: white; margin-bottom: 10px;'>OÅ› Przetwarzania</h4>
             <p style='font-size: 0.9em; margin: 5px 0;'>AE-RO</p>
             <div style='font-size: 2em; font-weight: bold; margin: 10px 0;'>{dimensions['AE-RO']:+d}</div>
-            <p style='font-size: 0.85em;'>{'Preferencja: Dzia³anie (AE)' if dimensions['AE-RO'] > 0 else 'Preferencja: Obserwacja (RO)'}</p>
+            <p style='font-size: 0.85em;'>{'Preferencja: DziaÅ‚anie (AE)' if dimensions['AE-RO'] > 0 else 'Preferencja: Obserwacja (RO)'}</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -2106,97 +2106,97 @@ def display_kolb_results():
         st.markdown(f"""
         <div style='padding: 20px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); 
                     border-radius: 12px; text-align: center; color: white;'>
-            <h4 style='color: white; margin-bottom: 10px;'>Elastycznoœæ</h4>
+            <h4 style='color: white; margin-bottom: 10px;'>ElastycznoÅ›Ä‡</h4>
             <p style='font-size: 0.9em; margin: 5px 0;'>Learning Flexibility</p>
             <div style='font-size: 2em; font-weight: bold; margin: 10px 0;'>{flexibility:.0f}%</div>
-            <p style='font-size: 0.85em;'>{'Wysoka - Zrównowa¿ony profil' if flexibility > 60 else 'Œrednia - Umiarkowana' if flexibility > 30 else 'Niska - WyraŸna preferencja'}</p>
+            <p style='font-size: 0.85em;'>{'Wysoka - ZrÃ³wnowaÅ¼ony profil' if flexibility > 60 else 'Åšrednia - Umiarkowana' if flexibility > 30 else 'Niska - WyraÅºna preferencja'}</p>
         </div>
         """, unsafe_allow_html=True)
     
-    # Wyœwietl dominuj¹cy styl
+    # WyÅ›wietl dominujÄ…cy styl
     st.markdown("---")
-    st.markdown(f"### ? Twój dominuj¹cy styl: **{dominant}**")
-    st.markdown(f"**Æwiartka:** {quadrant}")
+    st.markdown(f"### ? TwÃ³j dominujÄ…cy styl: **{dominant}**")
+    st.markdown(f"**Ä†wiartka:** {quadrant}")
     
-    # Opisy stylów zgodnie z dokumentacj¹ naukow¹
+    # Opisy stylÃ³w zgodnie z dokumentacjÄ… naukowÄ…
     style_descriptions = {
         "Diverging (Dywergent)": {
             "quadrant": "CE/RO",
-            "description": "£¹czysz Konkretne Doœwiadczenie i Refleksyjn¹ Obserwacjê. Jesteœ wra¿liwy i potrafisz spojrzeæ na sytuacje z wielu ró¿nych perspektyw. Twoja g³ówna mocna strona to wyobraŸnia i zdolnoœæ do generowania wielu pomys³ów.",
+            "description": "ÅÄ…czysz Konkretne DoÅ›wiadczenie i RefleksyjnÄ… ObserwacjÄ™. JesteÅ› wraÅ¼liwy i potrafisz spojrzeÄ‡ na sytuacje z wielu rÃ³Å¼nych perspektyw. Twoja gÅ‚Ã³wna mocna strona to wyobraÅºnia i zdolnoÅ›Ä‡ do generowania wielu pomysÅ‚Ã³w.",
             "strengths": [
-                "WyobraŸnia i kreatywnoœæ",
-                "Zdolnoœæ do widzenia sytuacji z ró¿nych perspektyw",
-                "Empatia i wra¿liwoœæ",
-                "Doskona³oœæ w burzy mózgów i generowaniu pomys³ów",
-                "Umiejêtnoœæ integracji ró¿nych obserwacji"
+                "WyobraÅºnia i kreatywnoÅ›Ä‡",
+                "ZdolnoÅ›Ä‡ do widzenia sytuacji z rÃ³Å¼nych perspektyw",
+                "Empatia i wraÅ¼liwoÅ›Ä‡",
+                "DoskonaÅ‚oÅ›Ä‡ w burzy mÃ³zgÃ³w i generowaniu pomysÅ‚Ã³w",
+                "UmiejÄ™tnoÅ›Ä‡ integracji rÃ³Å¼nych obserwacji"
             ],
             "weaknesses": [
-                "Trudnoœci z podejmowaniem szybkich decyzji",
-                "Problemy z przek³adaniem teorii na dzia³anie",
+                "TrudnoÅ›ci z podejmowaniem szybkich decyzji",
+                "Problemy z przekÅ‚adaniem teorii na dziaÅ‚anie",
                 "Tendencja do nadmiernego analizowania"
             ],
             "careers": "Doradztwo, sztuka, HR, psychologia, dziennikarstwo",
-            "learning_methods": "Studia przypadków, dyskusje grupowe, feedback, introspekcja, obserwacja dzia³ania innych"
+            "learning_methods": "Studia przypadkÃ³w, dyskusje grupowe, feedback, introspekcja, obserwacja dziaÅ‚ania innych"
         },
         "Assimilating (Asymilator)": {
             "quadrant": "AC/RO",
-            "description": "£¹czysz Abstrakcyjn¹ Konceptualizacjê i Refleksyjn¹ Obserwacjê. Preferujesz zwiêz³e, logiczne i systematyczne podejœcie. Wykazujesz du¿¹ zdolnoœæ do tworzenia modeli teoretycznych i scalania licznych obserwacji w zintegrowane wyjaœnienia.",
+            "description": "ÅÄ…czysz AbstrakcyjnÄ… KonceptualizacjÄ™ i RefleksyjnÄ… ObserwacjÄ™. Preferujesz zwiÄ™zÅ‚e, logiczne i systematyczne podejÅ›cie. Wykazujesz duÅ¼Ä… zdolnoÅ›Ä‡ do tworzenia modeli teoretycznych i scalania licznych obserwacji w zintegrowane wyjaÅ›nienia.",
             "strengths": [
                 "Tworzenie modeli teoretycznych",
-                "Logiczne i systematyczne myœlenie",
-                "Precyzja i spójnoœæ teorii",
-                "Zdolnoœæ do scalania wielu obserwacji",
+                "Logiczne i systematyczne myÅ›lenie",
+                "Precyzja i spÃ³jnoÅ›Ä‡ teorii",
+                "ZdolnoÅ›Ä‡ do scalania wielu obserwacji",
                 "Planowanie strategiczne"
             ],
             "weaknesses": [
                 "Mniejsze zainteresowanie problemami praktycznymi",
-                "Trudnoœci w pracy z ludŸmi",
+                "TrudnoÅ›ci w pracy z ludÅºmi",
                 "Preferencja teorii nad zastosowaniem"
             ],
             "careers": "Nauka, informatyka, planowanie strategiczne, badania, matematyka",
-            "learning_methods": "Wyk³ady teoretyczne, modele i schematy, analiza koncepcji, dociekliwe pytania, prace nad systemami"
+            "learning_methods": "WykÅ‚ady teoretyczne, modele i schematy, analiza koncepcji, dociekliwe pytania, prace nad systemami"
         },
         "Converging (Konwergent)": {
             "quadrant": "AC/AE",
-            "description": "£¹czysz Abstrakcyjn¹ Konceptualizacjê i Aktywne Eksperymentowanie. Doskonale radzisz sobie z praktycznym zastosowaniem teorii do rozwi¹zywania konkretnych problemów. Skupiasz siê na zadaniach i rzeczach, a nie na kwestiach miêdzyludzkich.",
+            "description": "ÅÄ…czysz AbstrakcyjnÄ… KonceptualizacjÄ™ i Aktywne Eksperymentowanie. Doskonale radzisz sobie z praktycznym zastosowaniem teorii do rozwiÄ…zywania konkretnych problemÃ³w. Skupiasz siÄ™ na zadaniach i rzeczach, a nie na kwestiach miÄ™dzyludzkich.",
             "strengths": [
                 "Praktyczne zastosowanie teorii",
-                "Efektywnoœæ i sprawnoœæ dzia³ania",
-                "Zdolnoœæ do podejmowania decyzji",
-                "Umiejêtnoœci techniczne",
-                "Rozwi¹zywanie konkretnych problemów"
+                "EfektywnoÅ›Ä‡ i sprawnoÅ›Ä‡ dziaÅ‚ania",
+                "ZdolnoÅ›Ä‡ do podejmowania decyzji",
+                "UmiejÄ™tnoÅ›ci techniczne",
+                "RozwiÄ…zywanie konkretnych problemÃ³w"
             ],
             "weaknesses": [
-                "Mniejsze zainteresowanie relacjami miêdzyludzkimi",
+                "Mniejsze zainteresowanie relacjami miÄ™dzyludzkimi",
                 "Skupienie na zadaniach kosztem ludzi",
-                "Preferencja dla jednoznacznych rozwi¹zañ"
+                "Preferencja dla jednoznacznych rozwiÄ…zaÅ„"
             ],
-            "careers": "In¿ynieria, technologia, medycyna, ekonomia, zawody techniczne",
-            "learning_methods": "Æwiczenia praktyczne, wdro¿enia, testowanie umiejêtnoœci, konkretne przyk³ady zawodowe, zadania aplikacyjne"
+            "careers": "InÅ¼ynieria, technologia, medycyna, ekonomia, zawody techniczne",
+            "learning_methods": "Ä†wiczenia praktyczne, wdroÅ¼enia, testowanie umiejÄ™tnoÅ›ci, konkretne przykÅ‚ady zawodowe, zadania aplikacyjne"
         },
         "Accommodating (Akomodator)": {
             "quadrant": "CE/AE",
-            "description": "£¹czysz Konkretne Doœwiadczenie i Aktywne Eksperymentowanie. To styl 'hands-on', który polega na intuicji. Jesteœ elastyczny, zdolny do wprowadzania planów w ¿ycie, chêtnie eksperymentujesz i adaptujesz siê do nowych warunków.",
+            "description": "ÅÄ…czysz Konkretne DoÅ›wiadczenie i Aktywne Eksperymentowanie. To styl 'hands-on', ktÃ³ry polega na intuicji. JesteÅ› elastyczny, zdolny do wprowadzania planÃ³w w Å¼ycie, chÄ™tnie eksperymentujesz i adaptujesz siÄ™ do nowych warunkÃ³w.",
             "strengths": [
-                "Elastycznoœæ i adaptacja",
+                "ElastycznoÅ›Ä‡ i adaptacja",
                 "Podejmowanie ryzyka",
                 "Szybka reakcja na zmiany",
-                "Osobiste zaanga¿owanie",
-                "Umiejêtnoœæ wprowadzania planów w ¿ycie"
+                "Osobiste zaangaÅ¼owanie",
+                "UmiejÄ™tnoÅ›Ä‡ wprowadzania planÃ³w w Å¼ycie"
             ],
             "weaknesses": [
-                "Tendencja do dzia³ania bez planu",
-                "Niecierpliwoœæ wobec teorii",
+                "Tendencja do dziaÅ‚ania bez planu",
+                "NiecierpliwoÅ›Ä‡ wobec teorii",
                 "Ryzyko podejmowania pochopnych decyzji"
             ],
-            "careers": "Zarz¹dzanie operacyjne, sprzeda¿, marketing, przedsiêbiorczoœæ",
-            "learning_methods": "Gry, symulacje, ró¿norodne æwiczenia, odgrywanie ról, zadania niestandardowe wymagaj¹ce ryzyka"
+            "careers": "ZarzÄ…dzanie operacyjne, sprzedaÅ¼, marketing, przedsiÄ™biorczoÅ›Ä‡",
+            "learning_methods": "Gry, symulacje, rÃ³Å¼norodne Ä‡wiczenia, odgrywanie rÃ³l, zadania niestandardowe wymagajÄ…ce ryzyka"
         }
     }
     
     desc = style_descriptions[dominant]
     
-    # G³ówna karta z opisem stylu
+    # GÅ‚Ã³wna karta z opisem stylu
     st.markdown(f"""
     <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                 box-shadow: 0 4px 15px rgba(102,126,234,0.4); 
@@ -2204,15 +2204,15 @@ def display_kolb_results():
                 padding: 30px; 
                 margin: 25px 0; 
                 color: white;'>
-        <div style='font-size: 2.5em; margin-bottom: 10px;'>??</div>
-        <h4 style='color: white; margin: 0 0 15px 0;'>Twój Styl Uczenia siê</h4>
+        <div style='font-size: 2.5em; margin-bottom: 10px;'>ğŸ¯</div>
+        <h4 style='color: white; margin: 0 0 15px 0;'>TwÃ³j Styl Uczenia siÄ™</h4>
         <p style='font-size: 1.15em; line-height: 1.8; margin: 0;'>
             {desc['description']}
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Szczegó³owe karty w 2 kolumnach
+    # SzczegÃ³Å‚owe karty w 2 kolumnach
     col1, col2 = st.columns(2)
     
     with col1:
@@ -2231,7 +2231,7 @@ def display_kolb_results():
         </div>
         """, unsafe_allow_html=True)
         
-        # Karta zawodów
+        # Karta zawodÃ³w
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); 
                     box-shadow: 0 3px 12px rgba(52,152,219,0.3); 
@@ -2246,7 +2246,7 @@ def display_kolb_results():
         """, unsafe_allow_html=True)
     
     with col2:
-        # Karta obszarów rozwoju
+        # Karta obszarÃ³w rozwoju
         weaknesses_html = "<br>".join([f"?? {w}" for w in desc['weaknesses']])
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); 
@@ -2275,16 +2275,16 @@ def display_kolb_results():
         </div>
         """, unsafe_allow_html=True)
     
-    # Karta ze strategi¹ rozwoju elastycznoœci
+    # Karta ze strategiÄ… rozwoju elastycznoÅ›ci
     st.markdown("---")
     
-    # Identyfikacja s³abych zdolnoœci
+    # Identyfikacja sÅ‚abych zdolnoÅ›ci
     weak_abilities = [ability for ability, score in results.items() if score < 4]
     strong_abilities = [ability for ability, score in results.items() if score > 8]
     
     if weak_abilities:
         weak_abilities_names = ', '.join([ability_info[a]['name'] for a in weak_abilities])
-        weak_tips_html = "<br>".join([f"• Dla <b>{ability_info[a]['name']} ({a})</b>: æwicz {ability_info[a]['desc'].lower()}" for a in weak_abilities])
+        weak_tips_html = "<br>".join([f"â€¢ Dla <b>{ability_info[a]['name']} ({a})</b>: Ä‡wicz {ability_info[a]['desc'].lower()}" for a in weak_abilities])
         
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); 
@@ -2294,9 +2294,9 @@ def display_kolb_results():
                     margin: 20px 0; 
                     color: #222;'>
             <div style='font-size: 2em; margin-bottom: 10px;'></div>
-            <h4 style='margin: 0 0 15px 0; color: #e17055;'>Zdolnoœci do wzmocnienia</h4>
+            <h4 style='margin: 0 0 15px 0; color: #e17055;'>ZdolnoÅ›ci do wzmocnienia</h4>
             <p style='margin: 0 0 15px 0; font-size: 1.05em;'>
-                Twoje s³absze zdolnoœci to: <b>{weak_abilities_names}</b>
+                Twoje sÅ‚absze zdolnoÅ›ci to: <b>{weak_abilities_names}</b>
             </p>
             <div style='background: rgba(255,255,255,0.3); 
                         border-radius: 10px; 
@@ -2304,15 +2304,15 @@ def display_kolb_results():
                         margin-top: 15px;'>
                 <p style='margin: 0 0 10px 0; font-weight: bold;'>?? Zalecenia rozwojowe:</p>
                 <p style='margin: 0; line-height: 1.8;'>
-                    Celowo anga¿uj siê w sytuacje, które wymagaj¹ u¿ywania tych zdolnoœci:<br><br>
+                    Celowo angaÅ¼uj siÄ™ w sytuacje, ktÃ³re wymagajÄ… uÅ¼ywania tych zdolnoÅ›ci:<br><br>
                     {weak_tips_html}
                 </p>
             </div>
         </div>
         """, unsafe_allow_html=True)
     
-    # Karta z pe³nym cyklem Kolba
-    flexibility_message = "Im bli¿ej centrum siatki, tym wiêksza zdolnoœæ adaptacji do ró¿nych sytuacji uczenia siê." if flexibility > 50 else "Rozwijaj s³absze zdolnoœci, aby zwiêkszyæ elastycznoœæ i efektywnoœæ uczenia siê w ró¿nych kontekstach."
+    # Karta z peÅ‚nym cyklem Kolba
+    flexibility_message = "Im bliÅ¼ej centrum siatki, tym wiÄ™ksza zdolnoÅ›Ä‡ adaptacji do rÃ³Å¼nych sytuacji uczenia siÄ™." if flexibility > 50 else "Rozwijaj sÅ‚absze zdolnoÅ›ci, aby zwiÄ™kszyÄ‡ elastycznoÅ›Ä‡ i efektywnoÅ›Ä‡ uczenia siÄ™ w rÃ³Å¼nych kontekstach."
     
     st.markdown(f"""
     <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
@@ -2321,20 +2321,20 @@ def display_kolb_results():
                 padding: 30px; 
                 margin: 20px 0; 
                 color: white;'>
-        <div style='font-size: 2em; margin-bottom: 10px;'>??</div>
-        <h4 style='color: white; margin: 0 0 20px 0;'>Pe³ny Cykl Uczenia siê Kolba (ELT Cycle)</h4>
+        <div style='font-size: 2em; margin-bottom: 10px;'>ğŸ¯</div>
+        <h4 style='color: white; margin: 0 0 20px 0;'>PeÅ‚ny Cykl Uczenia siÄ™ Kolba (ELT Cycle)</h4>
         <p style='font-size: 1.05em; line-height: 1.7; margin-bottom: 20px;'>
-            Najbardziej efektywne uczenie siê wykorzystuje <b>wszystkie cztery fazy</b> w cyklu:
+            Najbardziej efektywne uczenie siÄ™ wykorzystuje <b>wszystkie cztery fazy</b> w cyklu:
         </p>
         <div style='background: rgba(255,255,255,0.15); 
                     border-radius: 12px; 
                     padding: 20px; 
                     margin: 15px 0;'>
             <ol style='margin: 0; padding-left: 20px; line-height: 2;'>
-                <li><b>Konkretne Doœwiadczenie (CE)</b> › Zetkniêcie siê z now¹ sytuacj¹ (Feeling)</li>
-                <li><b>Refleksyjna Obserwacja (RO)</b> › Obserwacja i refleksja (Watching)</li>
-                <li><b>Abstrakcyjna Konceptualizacja (AC)</b> › Tworzenie teorii (Thinking)</li>
-                <li><b>Aktywne Eksperymentowanie (AE)</b> › Testowanie w praktyce (Doing)</li>
+                <li><b>Konkretne DoÅ›wiadczenie (CE)</b> â€º ZetkniÄ™cie siÄ™ z nowÄ… sytuacjÄ… (Feeling)</li>
+                <li><b>Refleksyjna Obserwacja (RO)</b> â€º Obserwacja i refleksja (Watching)</li>
+                <li><b>Abstrakcyjna Konceptualizacja (AC)</b> â€º Tworzenie teorii (Thinking)</li>
+                <li><b>Aktywne Eksperymentowanie (AE)</b> â€º Testowanie w praktyce (Doing)</li>
             </ol>
         </div>
         <div style='background: rgba(255,193,7,0.3); 
@@ -2343,29 +2343,29 @@ def display_kolb_results():
                     padding: 15px; 
                     margin-top: 20px;'>
             <p style='margin: 0; font-size: 1.05em;'>
-                <b>?? Kluczowa wskazówka:</b> Twój wynik elastycznoœci (<b>{flexibility:.0f}%</b>) pokazuje, 
-                jak dobrze potrafisz prze³¹czaæ siê miêdzy stylami. {flexibility_message}
+                <b>?? Kluczowa wskazÃ³wka:</b> TwÃ³j wynik elastycznoÅ›ci (<b>{flexibility:.0f}%</b>) pokazuje, 
+                jak dobrze potrafisz przeÅ‚Ä…czaÄ‡ siÄ™ miÄ™dzy stylami. {flexibility_message}
             </p>
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Sekcja AI - Praktyczne wskazówki dla zawodu
+    # Sekcja AI - Praktyczne wskazÃ³wki dla zawodu
     st.markdown("---")
-    st.markdown("### ?? AI: Wskazówki praktyczne dla Twojego zawodu")
-    st.markdown("Wybierz swój zawód, aby otrzymaæ spersonalizowane wskazówki, jak wykorzystaæ swój styl uczenia siê w praktyce:")
+    st.markdown("### ğŸ¯ AI: WskazÃ³wki praktyczne dla Twojego zawodu")
+    st.markdown("Wybierz swÃ³j zawÃ³d, aby otrzymaÄ‡ spersonalizowane wskazÃ³wki, jak wykorzystaÄ‡ swÃ³j styl uczenia siÄ™ w praktyce:")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("????? Trener", width="stretch", type="secondary", key="prof_trainer"):
+        if st.button("ğŸ”§?? Trener", width="stretch", type="secondary", key="prof_trainer"):
             st.session_state.kolb_profession = "Trener"
             st.session_state.kolb_ai_generated = False
             st.rerun()
     
     with col2:
-        if st.button("?? Mened¿er", width="stretch", type="secondary", key="prof_manager"):
-            st.session_state.kolb_profession = "Mened¿er"
+        if st.button("?? MenedÅ¼er", width="stretch", type="secondary", key="prof_manager"):
+            st.session_state.kolb_profession = "MenedÅ¼er"
             st.session_state.kolb_ai_generated = False
             st.rerun()
     
@@ -2375,14 +2375,14 @@ def display_kolb_results():
             st.session_state.kolb_ai_generated = False
             st.rerun()
     
-    # Wyœwietl wybrany zawód i wygeneruj wskazówki
+    # WyÅ›wietl wybrany zawÃ³d i wygeneruj wskazÃ³wki
     if 'kolb_profession' in st.session_state and st.session_state.kolb_profession:
-        st.info(f"? Wybrany zawód: **{st.session_state.kolb_profession}**")
+        st.info(f"? Wybrany zawÃ³d: **{st.session_state.kolb_profession}**")
         
-        # Wyœwietl wygenerowane wskazówki lub przycisk do generowania
+        # WyÅ›wietl wygenerowane wskazÃ³wki lub przycisk do generowania
         if st.session_state.get('kolb_ai_generated') and 'kolb_ai_tips' in st.session_state and st.session_state.kolb_ai_tips:
             st.markdown("---")
-            st.markdown(f"### ?? Jak Uczyæ siê Efektywnie")
+            st.markdown(f"### ğŸ¯ Jak UczyÄ‡ siÄ™ Efektywnie")
             
             # Header z zawodem i stylem
             st.markdown(f"""
@@ -2392,11 +2392,11 @@ def display_kolb_results():
                         border-radius: 15px; 
                         margin: 20px 0;
                         box-shadow: 0 4px 15px rgba(102,126,234,0.3);'>
-                <h4 style='margin: 0; color: white;'>?? Zawód: {st.session_state.kolb_profession} | ?? Styl uczenia siê: {dominant}</h4>
+                <h4 style='margin: 0; color: white;'>?? ZawÃ³d: {st.session_state.kolb_profession} | ğŸ¯ Styl uczenia siÄ™: {dominant}</h4>
             </div>
             """, unsafe_allow_html=True)
             
-            # Parsuj wskazówki AI na sekcje dla kart
+            # Parsuj wskazÃ³wki AI na sekcje dla kart
             ai_tips_text = st.session_state.kolb_ai_tips
             section_pattern = r'^\*\*(.+?)\*\*:?\s*$'
             lines = ai_tips_text.strip().split('\n')
@@ -2417,7 +2417,7 @@ def display_kolb_results():
                     current_section = header_match.group(1).strip().rstrip(':')
                     current_items = []
                 else:
-                    clean_line = re.sub(r'^[-•*]\s*', '', line_stripped)
+                    clean_line = re.sub(r'^[-â€¢*]\s*', '', line_stripped)
                     clean_line = clean_line.strip()
                     if clean_line:
                         current_items.append(clean_line)
@@ -2425,20 +2425,20 @@ def display_kolb_results():
             if current_section and current_items:
                 sections.append((current_section, current_items))
             
-            # Wyœwietl sekcje jako karty
+            # WyÅ›wietl sekcje jako karty
             if sections:
                 for idx, (section_title, items) in enumerate(sections):
-                    # Automatyczne wybieranie koloru i ikony na podstawie tytu³u sekcji
+                    # Automatyczne wybieranie koloru i ikony na podstawie tytuÅ‚u sekcji
                     if 'warunki' in section_title.lower() or 'optymalne' in section_title.lower():
-                        icon = '??'
+                        icon = 'ğŸ¯'
                         bg = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
                         text_color = 'white'
                     elif 'mocn' in section_title.lower() or 'wzmacnia' in section_title.lower():
-                        icon = '??'
+                        icon = 'ğŸ¯'
                         bg = 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
                         text_color = 'white'
-                    elif 'rozwój' in section_title.lower() or 'rozwija' in section_title.lower():
-                        icon = '??'
+                    elif 'rozwÃ³j' in section_title.lower() or 'rozwija' in section_title.lower():
+                        icon = 'ğŸ¯'
                         bg = 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
                         text_color = '#333'
                     else:
@@ -2446,18 +2446,18 @@ def display_kolb_results():
                         bg = 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
                         text_color = 'white'
                     
-                    # Buduj HTML dla wszystkich punktów w jednej karcie z numeracj¹
+                    # Buduj HTML dla wszystkich punktÃ³w w jednej karcie z numeracjÄ…
                     items_html = "<ol style='margin: 10px 0 0 20px; padding-left: 0;'>"
                     for item in items:
-                        # Przetwórz tekst aby zamieniæ **tekst** na <strong>tekst</strong>
-                        # U¿yj regex do zamiany wszystkich wyst¹pieñ **coœ** na <strong>coœ</strong>
+                        # PrzetwÃ³rz tekst aby zamieniÄ‡ **tekst** na <strong>tekst</strong>
+                        # UÅ¼yj regex do zamiany wszystkich wystÄ…pieÅ„ **coÅ›** na <strong>coÅ›</strong>
                         formatted_item = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', item)
                         
                         items_html += f"<li style='margin: 10px 0; line-height: 1.6;'>{formatted_item}</li>"
                     
                     items_html += "</ol>"
                     
-                    # Jedna karta z nag³ówkiem i wszystkimi punktami
+                    # Jedna karta z nagÅ‚Ã³wkiem i wszystkimi punktami
                     with st.container():
                         st.markdown(f"""
                         <div style='background: {bg}; 
@@ -2471,14 +2471,14 @@ def display_kolb_results():
                         </div>
                         """, unsafe_allow_html=True)
             else:
-                # Fallback - wyœwietl surowy tekst jeœli parsowanie nie zadzia³a³o
+                # Fallback - wyÅ›wietl surowy tekst jeÅ›li parsowanie nie zadziaÅ‚aÅ‚o
                 st.markdown(ai_tips_text)
             
-            # Debug ekspander - poka¿ surowy tekst AI
+            # Debug ekspander - pokaÅ¼ surowy tekst AI
             with st.expander("?? Debug: Zobacz surowy tekst AI"):
                 st.code(st.session_state.kolb_ai_tips, language="text")
             
-            # Stopka z informacj¹
+            # Stopka z informacjÄ…
             st.markdown("""
             <div style='background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
                         padding: 20px; 
@@ -2486,14 +2486,14 @@ def display_kolb_results():
                         margin: 20px 0;
                         border-left: 4px solid #667eea;'>
                 <p style='margin: 0; color: #2c3e50; font-size: 1.05em;'>
-                    ?? <strong>Pamiêtaj:</strong> Te wskazówki s¹ dopasowane do Twojego stylu uczenia siê. 
-                    Testuj je w praktyce i obserwuj co dzia³a najlepiej w Twojej sytuacji.
+                    ğŸ¯ <strong>PamiÄ™taj:</strong> Te wskazÃ³wki sÄ… dopasowane do Twojego stylu uczenia siÄ™. 
+                    Testuj je w praktyce i obserwuj co dziaÅ‚a najlepiej w Twojej sytuacji.
                 </p>
             </div>
             """, unsafe_allow_html=True)
         else:
-            if st.button("? Wygeneruj wskazówki AI", type="primary", width="stretch", key="generate_ai_tips"):
-                with st.spinner("?? AI generuje spersonalizowane wskazówki..."):
+            if st.button("? Wygeneruj wskazÃ³wki AI", type="primary", width="stretch", key="generate_ai_tips"):
+                with st.spinner("ğŸ¤– AI generuje spersonalizowane wskazÃ³wki..."):
                     generate_kolb_ai_tips(dominant, st.session_state.kolb_profession)
                     st.session_state.kolb_ai_generated = True
                     st.rerun()
@@ -2511,7 +2511,7 @@ def display_kolb_results():
                 report_filename = f"Kolb_Raport_{st.session_state.username}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
                 report_path = os.path.join("temp", report_filename)
                 
-                # Upewnij siê ¿e folder temp istnieje
+                # Upewnij siÄ™ Å¼e folder temp istnieje
                 os.makedirs("temp", exist_ok=True)
                 
                 with open(report_path, "w", encoding="utf-8") as f:
@@ -2529,19 +2529,19 @@ def display_kolb_results():
                 
                 st.success("? Raport wygenerowany!")
                 st.info(
-                    "?? **Jak zapisaæ jako PDF:**\n\n"
-                    "1. Otwórz pobrany plik HTML w przegl¹darce\n"
-                    "2. Naciœnij **Ctrl+P** (Windows) lub **Cmd+P** (Mac)\n"
+                    "?? **Jak zapisaÄ‡ jako PDF:**\n\n"
+                    "1. OtwÃ³rz pobrany plik HTML w przeglÄ…darce\n"
+                    "2. NaciÅ›nij **Ctrl+P** (Windows) lub **Cmd+P** (Mac)\n"
                     "3. Wybierz **'Zapisz jako PDF'**\n"
                     "4. Kliknij **Zapisz**"
                 )
                     
             except Exception as e:
-                st.error(f"? B³¹d podczas generowania raportu: {str(e)}")
+                st.error(f"? BÅ‚Ä…d podczas generowania raportu: {str(e)}")
     
     with col_reset:
-        if st.button("?? Rozpocznij test od nowa", width="stretch", key="restart_kolb_test"):
-            # Ustaw flagê reset, aby zapobiec automatycznemu wczytywaniu wyników z bazy
+        if st.button("â–¶ï¸ Rozpocznij test od nowa", width="stretch", key="restart_kolb_test"):
+            # Ustaw flagÄ™ reset, aby zapobiec automatycznemu wczytywaniu wynikÃ³w z bazy
             st.session_state.kolb_reset = True
             st.session_state.kolb_answers = {}
             st.session_state.kolb_completed = False
@@ -2562,38 +2562,38 @@ def display_kolb_results():
 
 def show_tools_page():
 
-    """G³ówna strona narzêdzi AI"""
+    """GÅ‚Ã³wna strona narzÄ™dzi AI"""
     
     # Zastosuj style Material 3
     apply_material3_theme()
     
-    # Opcja wyboru urz¹dzenia w trybie deweloperskim
+    # Opcja wyboru urzÄ…dzenia w trybie deweloperskim
     if st.session_state.get('dev_mode', False):
         toggle_device_view()
     
-    # Pobierz aktualny typ urz¹dzenia
+    # Pobierz aktualny typ urzÄ…dzenia
     device_type = get_device_type()
     
-    # Przewiñ na górê strony
+    # PrzewiÅ„ na gÃ³rÄ™ strony
     scroll_to_top()
     
     # Header strony
-    zen_header("??? Narzêdzia AI")
+    zen_header("ğŸ§  NarzÄ™dzia AI")
     
-    # SprawdŸ czy u¿ytkownik zosta³ przekierowany z Dashboard do Autodiagnozy
+    # SprawdÅº czy uÅ¼ytkownik zostaÅ‚ przekierowany z Dashboard do Autodiagnozy
     if st.session_state.get('tools_tab') == 'autodiagnoza':
-        st.info("?? Jesteœ w zak³adce **?? Autodiagnoza** - pierwsza zak³adka poni¿ej")
-        # Wyczyœæ flagê po wyœwietleniu
+        st.info("ğŸ’¡ JesteÅ› w zakÅ‚adce **ğŸ” Autodiagnoza** - pierwsza zakÅ‚adka poniÅ¼ej")
+        # WyczyÅ›Ä‡ flagÄ™ po wyÅ›wietleniu
         st.session_state.tools_tab = None
     
-    # G³ówne kategorie w tabach
+    # GÅ‚Ã³wne kategorie w tabach
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-        "?? Autodiagnoza",
-        "?? C-IQ Tools", 
-        "?? Symulatory",
-        "?? Kreatywnoœæ",
-        "?? Analityki", 
-        "?? AI Asystent"
+        "ğŸ” Autodiagnoza",
+        "ğŸ’¬ C-IQ Tools", 
+        "ğŸ­ Symulatory",
+        "ğŸ’¡ KreatywnoÅ›Ä‡",
+        "ğŸ“Š Analityki", 
+        "ğŸ¤– AI Asystent"
     ])
     
     with tab1:
@@ -2615,11 +2615,11 @@ def show_tools_page():
         show_ai_assistant()
 
 def show_ciq_tools():
-    """Narzêdzia Conversational Intelligence"""
-    st.markdown("### ?? Narzêdzia Conversational Intelligence")
+    """NarzÄ™dzia Conversational Intelligence"""
+    st.markdown("### ğŸ¯ NarzÄ™dzia Conversational Intelligence")
     st.markdown("Wykorzystaj moc AI do analizy i doskonalenia komunikacji na poziomach C-IQ")
     
-    # Siatka narzêdzi
+    # Siatka narzÄ™dzi
     col1, col2 = st.columns(2)
     
     with col1:
@@ -2627,19 +2627,19 @@ def show_ciq_tools():
         with st.container():
             scanner_html = '''
             <div style='padding: 20px; border: 2px solid #4CAF50; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);'>
-                <h4>?? C-IQ Scanner</h4>
-                <p><strong>Zeskanuj poziom komunikacji I otrzymaj wersje na wy¿szych poziomach C-IQ</strong></p>
+                <h4>ğŸ¯ C-IQ Scanner</h4>
+                <p><strong>Zeskanuj poziom komunikacji I otrzymaj wersje na wyÅ¼szych poziomach C-IQ</strong></p>
                 <ul style='margin: 10px 0; padding-left: 20px;'>
-                    <li>?? Szybkie skanowanie poziomów komunikacji (I, II, III)</li>
-                    <li>? B³yskawiczna konwersja na wy¿sze poziomy</li>
-                    <li>?? Analiza wp³ywu neurobiologicznego</li>
-                    <li>?? Gotowe alternatywne wersje do u¿ycia</li>
+                    <li>âœ… Szybkie skanowanie poziomÃ³w komunikacji (I, II, III)</li>
+                    <li>? BÅ‚yskawiczna konwersja na wyÅ¼sze poziomy</li>
+                    <li>âœ… Analiza wpÅ‚ywu neurobiologicznego</li>
+                    <li>âœ… Gotowe alternatywne wersje do uÅ¼ycia</li>
                 </ul>
             </div>
             '''
             st.markdown(scanner_html, unsafe_allow_html=True)
             
-            if zen_button("?? Uruchom C-IQ Scanner", key="level_detector", width='stretch'):
+            if zen_button("ğŸš€ Uruchom C-IQ Scanner", key="level_detector", width='stretch'):
                 st.session_state.active_tool = "level_detector"
         
     with col2:
@@ -2647,42 +2647,42 @@ def show_ciq_tools():
         with st.container():
             pro_html = '''
             <div style='padding: 20px; border: 2px solid #E91E63; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #ffeef8 0%, #f8bbd9 100%);'>
-                <h4>?? Conversation Intelligence Pro</h4>
-                <p><strong>Zaawansowana analiza rozmów biznesowych w czasie rzeczywistym</strong></p>
+                <h4>ğŸ¯ Conversation Intelligence Pro</h4>
+                <p><strong>Zaawansowana analiza rozmÃ³w biznesowych w czasie rzeczywistym</strong></p>
                 <ul style='margin: 10px 0; padding-left: 20px;'>
-                    <li>?? Sentiment i emocje + wp³yw neurobiologiczny</li>
-                    <li>?? Wykrywanie intencji sprzeda¿owych i biznesowych</li>
-                    <li>?? Ostrze¿enia o eskalacji problemów</li>
-                    <li>?? Sugestie real-time dla agentów</li>
-                    <li>?? Automatyczna kategoryzacja problemów</li>
+                    <li>âœ… Sentiment i emocje + wpÅ‚yw neurobiologiczny</li>
+                    <li>âœ… Wykrywanie intencji sprzedaÅ¼owych i biznesowych</li>
+                    <li>âœ… OstrzeÅ¼enia o eskalacji problemÃ³w</li>
+                    <li>âœ… Sugestie real-time dla agentÃ³w</li>
+                    <li>âœ… Automatyczna kategoryzacja problemÃ³w</li>
                 </ul>
             </div>
             '''
             st.markdown(pro_html, unsafe_allow_html=True)
             
-            if zen_button("?? Uruchom CI Pro", key="emotion_detector", width='stretch'):
+            if zen_button("ğŸš€ Uruchom CI Pro", key="emotion_detector", width='stretch'):
                 st.session_state.active_tool = "emotion_detector"
         
         # C-IQ Leadership Profile
         with st.container():
             leadership_html = '''
             <div style='padding: 20px; border: 2px solid #2196F3; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #e3f2fd 0%, #90caf9 100%);'>
-                <h4>?? C-IQ Leadership Profile</h4>
-                <p><strong>D³ugoterminowa analiza stylu przywództwa przez pryzmat C-IQ</strong></p>
+                <h4>ğŸ¯ C-IQ Leadership Profile</h4>
+                <p><strong>DÅ‚ugoterminowa analiza stylu przywÃ³dztwa przez pryzmat C-IQ</strong></p>
                 <ul style='margin: 10px 0; padding-left: 20px;'>
-                    <li>?? Trend rozwoju C-IQ w czasie</li>
-                    <li>?? Profil przywódczy (dominuj¹ce poziomy)</li>
-                    <li>?? Plan rozwoju komunikacyjnego</li>
-                    <li>?? Benchmark z innymi liderami</li>
+                    <li>âœ… Trend rozwoju C-IQ w czasie</li>
+                    <li>âœ… Profil przywÃ³dczy (dominujÄ…ce poziomy)</li>
+                    <li>âœ… Plan rozwoju komunikacyjnego</li>
+                    <li>âœ… Benchmark z innymi liderami</li>
                 </ul>
             </div>
             '''
             st.markdown(leadership_html, unsafe_allow_html=True)
             
-            if zen_button("?? Utwórz Profil Lidera", key="communication_analyzer", width='stretch'):
+            if zen_button("?? UtwÃ³rz Profil Lidera", key="communication_analyzer", width='stretch'):
                 st.session_state.active_tool = "communication_analyzer"
     
-    # Wyœwietl aktywne narzêdzie
+    # WyÅ›wietl aktywne narzÄ™dzie
     active_tool = st.session_state.get('active_tool')
     if active_tool:
         st.markdown("---")
@@ -2690,7 +2690,7 @@ def show_ciq_tools():
         # Przycisk resetowania
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if zen_button("? Zamknij narzêdzie", key="close_tool", width='stretch'):
+            if zen_button("? Zamknij narzÄ™dzie", key="close_tool", width='stretch'):
                 del st.session_state.active_tool
                 st.rerun()
         
@@ -2704,45 +2704,45 @@ def show_ciq_tools():
             show_communication_analyzer()
 
 def show_level_detector():
-    """C-IQ Scanner - g³ówna funkcjonalnoœæ"""
-    st.markdown("## ?? C-IQ Scanner")
-    st.markdown("**Zeskanuj poziom komunikacji** i **zobacz alternatywne wersje** na wy¿szych poziomach Conversational Intelligence")
+    """C-IQ Scanner - gÅ‚Ã³wna funkcjonalnoÅ›Ä‡"""
+    st.markdown("## ğŸ¯ C-IQ Scanner")
+    st.markdown("**Zeskanuj poziom komunikacji** i **zobacz alternatywne wersje** na wyÅ¼szych poziomach Conversational Intelligence")
     
-    # Tabs z ró¿nymi trybami
+    # Tabs z rÃ³Å¼nymi trybami
     tab1, tab2, tab3 = st.tabs([
-        "?? Analiza tekstu", 
-        "?? Przyk³ady poziomów", 
+        "ğŸ“Š Analiza tekstu", 
+        "?? PrzykÅ‚ady poziomÃ³w", 
         "?? Szablony emaili"
     ])
     
     with tab1:
         st.markdown("#### Wklej dowolny tekst do analizy C-IQ")
         
-        # Przyk³ady do szybkiego testowania
-        with st.expander("?? Przyk³ady do przetestowania", expanded=False):
+        # PrzykÅ‚ady do szybkiego testowania
+        with st.expander("?? PrzykÅ‚ady do przetestowania", expanded=False):
             col1, col2 = st.columns(2)
             
             with col1:
                 st.markdown("**Poziom I (Transakcyjny):**")
-                example_1 = "Wyœlij raport do koñca dnia. Brak dyskusji."
-                if st.button("?? U¿yj przyk³adu", key="example_1"):
+                example_1 = "WyÅ›lij raport do koÅ„ca dnia. Brak dyskusji."
+                if st.button("?? UÅ¼yj przykÅ‚adu", key="example_1"):
                     st.session_state.level_detector_input = example_1
                 
                 st.markdown("**Poziom II (Pozycyjny):**") 
-                example_2 = "Uwa¿am, ¿e ten pomys³ nie ma sensu. Moja propozycja jest lepsza bo..."
-                if st.button("?? U¿yj przyk³adu", key="example_2"):
+                example_2 = "UwaÅ¼am, Å¼e ten pomysÅ‚ nie ma sensu. Moja propozycja jest lepsza bo..."
+                if st.button("?? UÅ¼yj przykÅ‚adu", key="example_2"):
                     st.session_state.level_detector_input = example_2
             
             with col2:
                 st.markdown("**Poziom III (Transformacyjny):**")
-                example_3 = "Jakie widzisz mo¿liwoœci w tej sytuacji? Jak mo¿emy razem wypracowaæ rozwi¹zanie, które bêdzie dzia³aæ dla wszystkich?"
-                if st.button("?? U¿yj przyk³adu", key="example_3"):
+                example_3 = "Jakie widzisz moÅ¼liwoÅ›ci w tej sytuacji? Jak moÅ¼emy razem wypracowaÄ‡ rozwiÄ…zanie, ktÃ³re bÄ™dzie dziaÅ‚aÄ‡ dla wszystkich?"
+                if st.button("?? UÅ¼yj przykÅ‚adu", key="example_3"):
                     st.session_state.level_detector_input = example_3
         
         text_input = st.text_area(
             "Tekst do analizy:",
             value=st.session_state.get('level_detector_input', ''),
-            placeholder="Wklej tutaj email, transkrypcjê rozmowy, lub planowan¹ wypowiedŸ...",
+            placeholder="Wklej tutaj email, transkrypcjÄ™ rozmowy, lub planowanÄ… wypowiedÅº...",
             height=200,
             key="level_detector_input"
         )
@@ -2756,38 +2756,38 @@ def show_level_detector():
                         if result:
                             st.session_state.last_analysis_result = result
                             
-                            # Przyznaj XP za u¿ycie narzêdzia CIQ Scanner
+                            # Przyznaj XP za uÅ¼ycie narzÄ™dzia CIQ Scanner
                             try:
                                 from data.users import award_xp_for_activity
                                 award_xp_for_activity(
                                     st.session_state.username,
                                     'tool_used',
-                                    1,  # 1 XP za u¿ycie narzêdzia
+                                    1,  # 1 XP za uÅ¼ycie narzÄ™dzia
                                     {
                                         'tool_name': 'CIQ Scanner',
                                         'detected_level': result.get('detected_level', 'unknown'),
                                         'confidence': result.get('confidence', 0)
                                     }
                                 )
-                                st.success("? Analiza ukoñczona! +1 XP")
+                                st.success("? Analiza ukoÅ„czona! +1 XP")
                             except Exception:
-                                pass  # Nie przerywaj jeœli tracking siê nie powiedzie
+                                pass  # Nie przerywaj jeÅ›li tracking siÄ™ nie powiedzie
                         else:
-                            st.error("Nie uda³o siê przeanalizowaæ tekstu. Spróbuj ponownie.")
+                            st.error("Nie udaÅ‚o siÄ™ przeanalizowaÄ‡ tekstu. SprÃ³buj ponownie.")
                 else:
-                    st.warning("?? Wpisz tekst do analizy")
+                    st.warning("âš ï¸ Wpisz tekst do analizy")
         
         with col2:
             if text_input:
                 word_count = len(text_input.split())
-                st.metric("S³owa", word_count)
+                st.metric("SÅ‚owa", word_count)
         
-        # Wyœwietl wynik analizy jeœli istnieje
+        # WyÅ›wietl wynik analizy jeÅ›li istnieje
         if 'last_analysis_result' in st.session_state and text_input and text_input.strip():
             st.markdown("---")
             
             if st.session_state.last_analysis_result.get('analyzed_text') != text_input:
-                st.warning("?? Pokazujê wynik dla poprzedniego tekstu. Kliknij 'Analizuj' ponownie.")
+                st.warning("âš ï¸ PokazujÄ™ wynik dla poprzedniego tekstu. Kliknij 'Analizuj' ponownie.")
                 
             display_level_analysis(st.session_state.last_analysis_result)
     
@@ -2798,72 +2798,72 @@ def show_level_detector():
         show_email_templates()
 
 def analyze_conversation_level(text: str) -> Optional[Dict]:
-    """Analizuje poziom C-IQ w tekœcie"""
+    """Analizuje poziom C-IQ w tekÅ›cie"""
     
     evaluator = AIExerciseEvaluator()
     
-    # SprawdŸ czy evaluator jest w demo mode
+    # SprawdÅº czy evaluator jest w demo mode
     if hasattr(evaluator, 'demo_mode') and evaluator.demo_mode:
-        st.info("?? C-IQ Scanner w trybie demo - u¿ywam analizy heurystycznej")
+        st.info("ğŸ’¡ C-IQ Scanner w trybie demo - uÅ¼ywam analizy heurystycznej")
         return create_fallback_analysis(text)
     
     prompt = f"""
-Jesteœ ekspertem w Conversational Intelligence. Przeanalizuj nastêpuj¹cy tekst i okreœl jego poziom C-IQ.
+JesteÅ› ekspertem w Conversational Intelligence. Przeanalizuj nastÄ™pujÄ…cy tekst i okreÅ›l jego poziom C-IQ.
 
 TEKST DO ANALIZY:
 "{text}"
 
 POZIOMY C-IQ:
-- **Poziom I (Transakcyjny)**: Wymiana informacji, fokus na zadania, jêzyk dyrektywny, brak emocji, jednokierunkowa komunikacja
-- **Poziom II (Pozycyjny)**: Obrona stanowisk, argumentowanie, "my vs oni", konfrontacja, przekonywanie, walka o racjê  
-- **Poziom III (Transformacyjny)**: Wspó³tworzenie, pytania otwarte, "wspólny cel", budowanie zaufania, jêzyk partnerski
+- **Poziom I (Transakcyjny)**: Wymiana informacji, fokus na zadania, jÄ™zyk dyrektywny, brak emocji, jednokierunkowa komunikacja
+- **Poziom II (Pozycyjny)**: Obrona stanowisk, argumentowanie, "my vs oni", konfrontacja, przekonywanie, walka o racjÄ™  
+- **Poziom III (Transformacyjny)**: WspÃ³Å‚tworzenie, pytania otwarte, "wspÃ³lny cel", budowanie zaufania, jÄ™zyk partnerski
 
-WA¯NE: 
+WAÅ»NE: 
 1. Odpowiedz TYLKO w poprawnym formacie JSON, bez dodatkowych komentarzy.
-2. MUSISZ wybraæ JEDEN dominuj¹cy poziom - nie mo¿na wykrywaæ wielu poziomów jednoczeœnie:
-   - "detected_level" mo¿e byæ tylko: "Poziom I" lub "Poziom II" lub "Poziom III"
-   - Wybierz poziom który najlepiej charakteryzuje CA£OŒÆ tekstu
-   - Jeœli tekst zawiera elementy ró¿nych poziomów, wybierz ten który DOMINUJE
-3. W sekcji "alternative_versions" podaj alternatywy TYLKO dla poziomów wy¿szych ni¿ wykryty:
-   - Jeœli wykryjesz Poziom I: podaj wersje dla II i III
-   - Jeœli wykryjesz Poziom II: podaj wersjê tylko dla III  
-   - Jeœli wykryjesz Poziom III: pozostaw alternative_versions puste {{}}
+2. MUSISZ wybraÄ‡ JEDEN dominujÄ…cy poziom - nie moÅ¼na wykrywaÄ‡ wielu poziomÃ³w jednoczeÅ›nie:
+   - "detected_level" moÅ¼e byÄ‡ tylko: "Poziom I" lub "Poziom II" lub "Poziom III"
+   - Wybierz poziom ktÃ³ry najlepiej charakteryzuje CAÅOÅšÄ† tekstu
+   - JeÅ›li tekst zawiera elementy rÃ³Å¼nych poziomÃ³w, wybierz ten ktÃ³ry DOMINUJE
+3. W sekcji "alternative_versions" podaj alternatywy TYLKO dla poziomÃ³w wyÅ¼szych niÅ¼ wykryty:
+   - JeÅ›li wykryjesz Poziom I: podaj wersje dla II i III
+   - JeÅ›li wykryjesz Poziom II: podaj wersjÄ™ tylko dla III  
+   - JeÅ›li wykryjesz Poziom III: pozostaw alternative_versions puste {{}}
 
 {{
     "detected_level": "Poziom I/II/III",
     "confidence": [1-10],
-    "explanation": "Szczegó³owe wyjaœnienie dlaczego to ten poziom - cytuj konkretne fragmenty",
-    "key_indicators": ["konkretny wskaŸnik jêzykowy 1", "konkretny wskaŸnik jêzykowy 2"],
-    "neurobiological_impact": "Przewidywany wp³yw na hormony - czy wzbudza kortyzol (stres) czy oksytocynê (zaufanie)",
-    "improvement_suggestions": ["jak podnieœæ na wy¿szy poziom - konkretne zmiany"],
+    "explanation": "SzczegÃ³Å‚owe wyjaÅ›nienie dlaczego to ten poziom - cytuj konkretne fragmenty",
+    "key_indicators": ["konkretny wskaÅºnik jÄ™zykowy 1", "konkretny wskaÅºnik jÄ™zykowy 2"],
+    "neurobiological_impact": "Przewidywany wpÅ‚yw na hormony - czy wzbudza kortyzol (stres) czy oksytocynÄ™ (zaufanie)",
+    "improvement_suggestions": ["jak podnieÅ›Ä‡ na wyÅ¼szy poziom - konkretne zmiany"],
     "alternative_versions": {{
-        "level_ii": "Jak brzmia³by ten tekst przepisany na poziom II (tylko jeœli wykryty poziom to I)",
-        "level_iii": "Jak brzmia³by ten tekst przepisany na poziom III (jeœli wykryty poziom to I lub II)"
+        "level_ii": "Jak brzmiaÅ‚by ten tekst przepisany na poziom II (tylko jeÅ›li wykryty poziom to I)",
+        "level_iii": "Jak brzmiaÅ‚by ten tekst przepisany na poziom III (jeÅ›li wykryty poziom to I lub II)"
     }},
-    "practical_tips": ["konkretna wskazówka komunikacyjna 1", "konkretna wskazówka 2"],
+    "practical_tips": ["konkretna wskazÃ³wka komunikacyjna 1", "konkretna wskazÃ³wka 2"],
     "emotional_tone": "neutralny/pozytywny/negatywny/agresywny/partnerski",
     "trust_building_score": [1-10],
-    "language_patterns": ["wzorzec jêzykowy 1", "wzorzec jêzykowy 2"]
+    "language_patterns": ["wzorzec jÄ™zykowy 1", "wzorzec jÄ™zykowy 2"]
 }}
 """
     
     try:
-        # U¿yj bezpoœrednio funkcji z AIExerciseEvaluator
+        # UÅ¼yj bezpoÅ›rednio funkcji z AIExerciseEvaluator
         if hasattr(evaluator, 'gemini_model'):
             response = evaluator.gemini_model.generate_content(prompt)
             
             if response and response.text:
                 content = response.text.strip()
                 
-                # Usuñ markdown formatowanie jeœli jest
+                # UsuÅ„ markdown formatowanie jeÅ›li jest
                 if content.startswith("```json"):
                     content = content.replace("```json", "").replace("```", "").strip()
                 
-                # Spróbuj sparsowaæ JSON
+                # SprÃ³buj sparsowaÄ‡ JSON
                 import json
                 import re
                 
-                # ZnajdŸ JSON w odpowiedzi
+                # ZnajdÅº JSON w odpowiedzi
                 json_match = re.search(r'\{.*\}', content, re.DOTALL)
                 if json_match:
                     json_str = json_match.group(0)
@@ -2871,45 +2871,45 @@ WA¯NE:
                     try:
                         result = json.loads(json_str)
                         
-                        # SprawdŸ czy mamy wymagane pola dla detektora C-IQ
+                        # SprawdÅº czy mamy wymagane pola dla detektora C-IQ
                         if 'detected_level' in result and 'confidence' in result:
-                            st.success("? Skanowanie C-IQ ukoñczone!")
+                            st.success("? Skanowanie C-IQ ukoÅ„czone!")
                             # Dodaj analizowany tekst do wyniku
                             result['analyzed_text'] = text
                             return result
                         else:
-                            st.warning("?? AI zwróci³o niepe³n¹ analizê")
-                            st.json(result)  # Poka¿ co zwróci³o
+                            st.warning("âš ï¸ AI zwrÃ³ciÅ‚o niepeÅ‚nÄ… analizÄ™")
+                            st.json(result)  # PokaÅ¼ co zwrÃ³ciÅ‚o
                             return create_fallback_analysis(text)
                             
                     except json.JSONDecodeError as json_err:
-                        st.error(f"? B³¹d parsowania JSON: {str(json_err)}")
-                        st.warning("U¿ywam analizy backup zamiast niepoprawnego JSON")
+                        st.error(f"? BÅ‚Ä…d parsowania JSON: {str(json_err)}")
+                        st.warning("UÅ¼ywam analizy backup zamiast niepoprawnego JSON")
                         return create_fallback_analysis(text)
                 else:
-                    st.warning("?? Nie uda³o siê znaleŸæ JSON w odpowiedzi AI")
+                    st.warning("âš ï¸ Nie udaÅ‚o siÄ™ znaleÅºÄ‡ JSON w odpowiedzi AI")
                     return create_fallback_analysis(text)
             else:
-                st.warning("?? AI nie zwróci³o odpowiedzi")
+                st.warning("âš ï¸ AI nie zwrÃ³ciÅ‚o odpowiedzi")
                 return create_fallback_analysis(text)
         else:
-            st.warning("?? Model AI niedostêpny")
+            st.warning("âš ï¸ Model AI niedostÄ™pny")
             return create_fallback_analysis(text)
             
     except Exception as e:
-        st.error(f"? B³¹d podczas analizy: {str(e)}")
+        st.error(f"? BÅ‚Ä…d podczas analizy: {str(e)}")
         return create_fallback_analysis(text)
 
 def create_fallback_analysis(text: str) -> Dict:
-    """Tworzy fallback analizê gdy AI nie dzia³a"""
+    """Tworzy fallback analizÄ™ gdy AI nie dziaÅ‚a"""
     
     text_lower = text.lower()
     word_count = len(text.split())
     
-    # Prosta heurystyka do okreœlenia poziomu
-    level_iii_keywords = ['jak', 'mo¿emy', 'razem', 'wspólnie', 'jakie', 'czy moglibyœmy', 'co myœlisz', 'jak widzisz']
-    level_ii_keywords = ['uwa¿am', 'myœlê ¿e', 'nie zgadzam siê', 'moja propozycja', 'lepiej by by³o']
-    level_i_keywords = ['wyœlij', 'zrób', 'musisz', 'wykonaj', 'deadline', 'koniec']
+    # Prosta heurystyka do okreÅ›lenia poziomu
+    level_iii_keywords = ['jak', 'moÅ¼emy', 'razem', 'wspÃ³lnie', 'jakie', 'czy moglibyÅ›my', 'co myÅ›lisz', 'jak widzisz']
+    level_ii_keywords = ['uwaÅ¼am', 'myÅ›lÄ™ Å¼e', 'nie zgadzam siÄ™', 'moja propozycja', 'lepiej by byÅ‚o']
+    level_i_keywords = ['wyÅ›lij', 'zrÃ³b', 'musisz', 'wykonaj', 'deadline', 'koniec']
     
     level_iii_score = sum(1 for keyword in level_iii_keywords if keyword in text_lower)
     level_ii_score = sum(1 for keyword in level_ii_keywords if keyword in text_lower)
@@ -2919,7 +2919,7 @@ def create_fallback_analysis(text: str) -> Dict:
         detected_level = "Poziom III"
         confidence = min(9, 6 + level_iii_score)
         trust_score = min(9, 7 + level_iii_score)
-        explanation = "Tekst zawiera elementy wspó³tworzenia i pytania otwarte charakterystyczne dla Poziomu III."
+        explanation = "Tekst zawiera elementy wspÃ³Å‚tworzenia i pytania otwarte charakterystyczne dla Poziomu III."
     elif level_ii_score > level_i_score:
         detected_level = "Poziom II" 
         confidence = min(8, 5 + level_ii_score)
@@ -2931,44 +2931,44 @@ def create_fallback_analysis(text: str) -> Dict:
         trust_score = max(2, 5 - level_i_score)
         explanation = "Tekst ma charakter transakcyjny i dyrektywny charakterystyczny dla Poziomu I."
     
-    # Twórz alternatywne wersje zale¿nie od wykrytego poziomu
+    # TwÃ³rz alternatywne wersje zaleÅ¼nie od wykrytego poziomu
     alternative_versions = {}
     
     if detected_level == "Poziom I":
         alternative_versions = {
-            "level_ii": f"Uwa¿am, ¿e ta sytuacja wymaga analizy. Moja perspektywa jest taka, ¿e...",
-            "level_iii": f"Jakie widzimy mo¿liwoœci w tej sytuacji? Jak mo¿emy razem wypracowaæ najlepsze rozwi¹zanie?"
+            "level_ii": f"UwaÅ¼am, Å¼e ta sytuacja wymaga analizy. Moja perspektywa jest taka, Å¼e...",
+            "level_iii": f"Jakie widzimy moÅ¼liwoÅ›ci w tej sytuacji? Jak moÅ¼emy razem wypracowaÄ‡ najlepsze rozwiÄ…zanie?"
         }
     elif detected_level == "Poziom II":
         alternative_versions = {
-            "level_iii": f"Jakie widzimy mo¿liwoœci w tej sytuacji? Jak mo¿emy razem wypracowaæ rozwi¹zanie, które bêdzie dzia³aæ dla wszystkich?"
+            "level_iii": f"Jakie widzimy moÅ¼liwoÅ›ci w tej sytuacji? Jak moÅ¼emy razem wypracowaÄ‡ rozwiÄ…zanie, ktÃ³re bÄ™dzie dziaÅ‚aÄ‡ dla wszystkich?"
         }
-    # Poziom III nie ma alternatyw - to ju¿ najwy¿szy poziom
+    # Poziom III nie ma alternatyw - to juÅ¼ najwyÅ¼szy poziom
     
     return {
         "analyzed_text": text,
         "detected_level": detected_level,
         "confidence": confidence,
         "explanation": explanation,
-        "key_indicators": [f"D³ugoœæ tekstu: {word_count} s³ów", "Analiza heurystyczna s³ów kluczowych"],
-        "neurobiological_impact": f"Przewidywany wp³yw odpowiada charakterystyce {detected_level}",
-        "improvement_suggestions": ["Dodaj wiêcej pytañ otwartych", "U¿yj jêzyka wspó³tworzenia"] if detected_level != "Poziom III" else ["Kontynuuj u¿ywanie transformacyjnego stylu komunikacji"],
+        "key_indicators": [f"DÅ‚ugoÅ›Ä‡ tekstu: {word_count} sÅ‚Ã³w", "Analiza heurystyczna sÅ‚Ã³w kluczowych"],
+        "neurobiological_impact": f"Przewidywany wpÅ‚yw odpowiada charakterystyce {detected_level}",
+        "improvement_suggestions": ["Dodaj wiÄ™cej pytaÅ„ otwartych", "UÅ¼yj jÄ™zyka wspÃ³Å‚tworzenia"] if detected_level != "Poziom III" else ["Kontynuuj uÅ¼ywanie transformacyjnego stylu komunikacji"],
         "alternative_versions": alternative_versions,
-        "practical_tips": ["Zadawaj wiêcej pytañ otwartych", "U¿ywaj jêzyka 'my' zamiast 'ty'"] if detected_level != "Poziom III" else ["Wykorzystuj moc wspó³tworzenia", "Buduj na osi¹gniêtym wysokim poziomie"],
+        "practical_tips": ["Zadawaj wiÄ™cej pytaÅ„ otwartych", "UÅ¼ywaj jÄ™zyka 'my' zamiast 'ty'"] if detected_level != "Poziom III" else ["Wykorzystuj moc wspÃ³Å‚tworzenia", "Buduj na osiÄ…gniÄ™tym wysokim poziomie"],
         "emotional_tone": "neutralny",
         "trust_building_score": trust_score,
-        "language_patterns": ["Wykryte wzorce na podstawie analizy s³ów kluczowych"]
+        "language_patterns": ["Wykryte wzorce na podstawie analizy sÅ‚Ã³w kluczowych"]
     }
 
 def display_level_analysis(result: Dict):
-    """Wyœwietla wyniki analizy poziom C-IQ"""
+    """WyÅ›wietla wyniki analizy poziom C-IQ"""
     
     if not result:
-        st.error("Brak wyników analizy")
+        st.error("Brak wynikÃ³w analizy")
         return
     
-    # G³ówny wynik w metrykach
-    level = result.get('detected_level', 'Nie okreœlono')
+    # GÅ‚Ã³wny wynik w metrykach
+    level = result.get('detected_level', 'Nie okreÅ›lono')
     confidence = result.get('confidence', 0)
     trust_score = result.get('trust_building_score', 0)
     
@@ -2976,24 +2976,24 @@ def display_level_analysis(result: Dict):
     with col1:
         st.metric("?? Wykryty poziom", level)
     with col2:
-        st.metric("?? Pewnoœæ analizy", f"{confidence}/10")
+        st.metric("?? PewnoÅ›Ä‡ analizy", f"{confidence}/10")
     with col3:
         st.metric("?? Budowanie zaufania", f"{trust_score}/10")
     
-    # Wizualizacja poziomów z kolorami - poprawiona logika wykrywania
-    st.markdown("### ?? Analiza poziomów C-IQ")
+    # Wizualizacja poziomÃ³w z kolorami - poprawiona logika wykrywania
+    st.markdown("### ğŸ¯ Analiza poziomÃ³w C-IQ")
     
     level_info = {
-        "Poziom I": {"color": "??", "desc": "Transakcyjny - wymiana informacji", "bg": "#ffebee"},
-        "Poziom II": {"color": "??", "desc": "Pozycyjny - obrona stanowisk", "bg": "#fff8e1"}, 
-        "Poziom III": {"color": "??", "desc": "Transformacyjny - wspó³tworzenie", "bg": "#e8f5e8"}
+        "Poziom I": {"color": "ğŸ¯", "desc": "Transakcyjny - wymiana informacji", "bg": "#ffebee"},
+        "Poziom II": {"color": "ğŸ¯", "desc": "Pozycyjny - obrona stanowisk", "bg": "#fff8e1"}, 
+        "Poziom III": {"color": "ğŸ¯", "desc": "Transformacyjny - wspÃ³Å‚tworzenie", "bg": "#e8f5e8"}
     }
     
-    # Lepsze wykrywanie dominuj¹cego poziomu  
+    # Lepsze wykrywanie dominujÄ…cego poziomu  
     detected_level = result.get('detected_level', '').strip()
     
     for lvl, info in level_info.items():
-        # Precyzyjne wykrywanie - tylko jeden poziom mo¿e byæ aktywny
+        # Precyzyjne wykrywanie - tylko jeden poziom moÅ¼e byÄ‡ aktywny
         is_detected = False
         
         if "III" in detected_level and lvl == "Poziom III":
@@ -3013,78 +3013,78 @@ def display_level_analysis(result: Dict):
         </div>
         """, unsafe_allow_html=True)
     
-    # Szczegó³owe wyjaœnienie
+    # SzczegÃ³Å‚owe wyjaÅ›nienie
     if 'explanation' in result:
-        st.markdown("### ?? Szczegó³owa analiza")
+        st.markdown("### ğŸ¯ SzczegÃ³Å‚owa analiza")
         st.info(result['explanation'])
     
-    # WskaŸniki w dwóch kolumnach
+    # WskaÅºniki w dwÃ³ch kolumnach
     col1, col2 = st.columns(2)
     
     with col1:
-        # WskaŸniki kluczowe
+        # WskaÅºniki kluczowe
         if 'key_indicators' in result:
-            st.markdown("### ?? Kluczowe wskaŸniki jêzykowe")
+            st.markdown("### ğŸ¯ Kluczowe wskaÅºniki jÄ™zykowe")
             for indicator in result['key_indicators']:
-                st.markdown(f"• {indicator}")
+                st.markdown(f"â€¢ {indicator}")
         
-        # Wzorce jêzykowe
+        # Wzorce jÄ™zykowe
         if 'language_patterns' in result:
-            st.markdown("### ?? Wzorce jêzykowe")
+            st.markdown("### ğŸ¯ Wzorce jÄ™zykowe")
             for pattern in result['language_patterns']:
-                st.markdown(f"• {pattern}")
+                st.markdown(f"â€¢ {pattern}")
     
     with col2:
         # Ton emocjonalny
         if 'emotional_tone' in result:
-            st.markdown("### ?? Ton emocjonalny")
+            st.markdown("### ğŸ¯ Ton emocjonalny")
             tone = result['emotional_tone']
             tone_colors = {
-                'pozytywny': '??', 'neutralny': '??', 'negatywny': '??',
-                'agresywny': '??', 'partnerski': '??'
+                'pozytywny': 'ğŸ¯', 'neutralny': 'ğŸ¯', 'negatywny': 'ğŸ¯',
+                'agresywny': 'ğŸ¯', 'partnerski': 'ğŸ¯'
             }
             color = tone_colors.get(tone.lower(), '?')
             st.markdown(f"{color} **{tone.title()}**")
         
-        # Wp³yw neurobiologiczny
+        # WpÅ‚yw neurobiologiczny
         if 'neurobiological_impact' in result:
-            st.markdown("### ?? Wp³yw neurobiologiczny")
+            st.markdown("### ğŸ¯ WpÅ‚yw neurobiologiczny")
             st.warning(result['neurobiological_impact'])
     
     # Sugestie poprawy
     if 'improvement_suggestions' in result:
-        st.markdown("### ?? Jak podnieœæ poziom komunikacji")
+        st.markdown("### ğŸ¯ Jak podnieÅ›Ä‡ poziom komunikacji")
         for suggestion in result['improvement_suggestions']:
-            st.markdown(f"• {suggestion}")
+            st.markdown(f"â€¢ {suggestion}")
     
-    # Alternatywne wersje w expanderach - pokazuj tylko wy¿sze poziomy
+    # Alternatywne wersje w expanderach - pokazuj tylko wyÅ¼sze poziomy
     if 'alternative_versions' in result:
         alt_versions = result['alternative_versions']
         detected_level = result.get('detected_level', '')
         
-        # Logika: WA¯NE - sprawdzaj od najd³u¿szego do najkrótszego ci¹gu!
+        # Logika: WAÅ»NE - sprawdzaj od najdÅ‚uÅ¼szego do najkrÃ³tszego ciÄ…gu!
         if 'Poziom III' in detected_level:
-            # Dla poziomu III: BRAK nag³ówka, tylko gratulacje
-            st.success("?? **Gratulacje!** To ju¿ najwy¿szy poziom C-IQ - Transformacyjny!")
-            st.info("?? **Twoja komunikacja wykorzystuje:**\n"
-                   "• Jêzyk wspó³tworzenia\n"
-                   "• Pytania otwarte\n" 
-                   "• Budowanie wspólnych celów\n"
-                   "• Stymulacjê oksytocyny (zaufanie)")
+            # Dla poziomu III: BRAK nagÅ‚Ã³wka, tylko gratulacje
+            st.success("âœ… **Gratulacje!** To juÅ¼ najwyÅ¼szy poziom C-IQ - Transformacyjny!")
+            st.info("ğŸ’¡ **Twoja komunikacja wykorzystuje:**\n"
+                   "â€¢ JÄ™zyk wspÃ³Å‚tworzenia\n"
+                   "â€¢ Pytania otwarte\n" 
+                   "â€¢ Budowanie wspÃ³lnych celÃ³w\n"
+                   "â€¢ StymulacjÄ™ oksytocyny (zaufanie)")
                    
         elif 'Poziom II' in detected_level:
-            # Dla poziomu II: poka¿ nag³ówek i alternatywê III
-            st.markdown("### ?? Jak brzmia³oby na wy¿szym poziomie C-IQ")
+            # Dla poziomu II: pokaÅ¼ nagÅ‚Ã³wek i alternatywÄ™ III
+            st.markdown("### ğŸ¯ Jak brzmiaÅ‚oby na wyÅ¼szym poziomie C-IQ")
             
             if 'level_iii' in alt_versions and alt_versions['level_iii']:
                 with st.expander("?? Poziom III - Transformacyjny", expanded=False):
                     st.success(alt_versions['level_iii'])
             else:
-                st.info("?? To ju¿ wysoki poziom komunikacji! Poziom III to najwy¿szy dostêpny poziom.")
+                st.info("ğŸ’¡ To juÅ¼ wysoki poziom komunikacji! Poziom III to najwyÅ¼szy dostÄ™pny poziom.")
                 
         elif 'Poziom I' in detected_level:
-            # Dla poziomu I: poka¿ nag³ówek i alternatywy II + III
-            st.markdown("### ?? Jak brzmia³oby na wy¿szych poziomach C-IQ")
+            # Dla poziomu I: pokaÅ¼ nagÅ‚Ã³wek i alternatywy II + III
+            st.markdown("### ğŸ¯ Jak brzmiaÅ‚oby na wyÅ¼szych poziomach C-IQ")
             
             if 'level_ii' in alt_versions and alt_versions['level_ii']:
                 with st.expander("?? Poziom II - Pozycyjny", expanded=False):
@@ -3094,8 +3094,8 @@ def display_level_analysis(result: Dict):
                 with st.expander("?? Poziom III - Transformacyjny", expanded=False):
                     st.success(alt_versions['level_iii'])
         else:
-            # Fallback dla nieokreœlonych poziomów - poka¿ nag³ówek
-            st.markdown("### ?? Jak brzmia³oby na wy¿szych poziomach C-IQ")
+            # Fallback dla nieokreÅ›lonych poziomÃ³w - pokaÅ¼ nagÅ‚Ã³wek
+            st.markdown("### ğŸ¯ Jak brzmiaÅ‚oby na wyÅ¼szych poziomach C-IQ")
             
             if 'level_ii' in alt_versions and alt_versions['level_ii']:
                 with st.expander("?? Poziom II - Pozycyjny", expanded=False):
@@ -3105,33 +3105,33 @@ def display_level_analysis(result: Dict):
                 with st.expander("?? Poziom III - Transformacyjny", expanded=False):
                     st.success(alt_versions['level_iii'])
     
-    # Praktyczne wskazówki
+    # Praktyczne wskazÃ³wki
     if 'practical_tips' in result:
-        st.markdown("### ?? Praktyczne wskazówki do zastosowania")
+        st.markdown("### ğŸ¯ Praktyczne wskazÃ³wki do zastosowania")
         for i, tip in enumerate(result['practical_tips'], 1):
             st.markdown(f"**{i}.** {tip}")
 
 def show_ciq_examples():
-    """Pokazuje przyk³ady ró¿nych poziomów C-IQ"""
-    st.markdown("#### ?? Przyk³ady poziomów C-IQ w praktyce")
+    """Pokazuje przykÅ‚ady rÃ³Å¼nych poziomÃ³w C-IQ"""
+    st.markdown("#### ğŸ¯ PrzykÅ‚ady poziomÃ³w C-IQ w praktyce")
     
     examples = [
         {
             "scenario": "Informowanie o problemie w projekcie",
-            "level_1": "Projekt siê opóŸnia. Deadline za tydzieñ. Pracujcie d³u¿ej.",
-            "level_2": "Uwa¿am, ¿e zespó³ nie wywi¹zuje siê z zobowi¹zañ. To wina s³abego planowania z waszej strony.",
-            "level_3": "Widzê, ¿e projekt mo¿e siê opóŸniæ. Jakie widzicie przyczyny tej sytuacji? Jak mo¿emy razem znaleŸæ rozwi¹zanie?"
+            "level_1": "Projekt siÄ™ opÃ³Åºnia. Deadline za tydzieÅ„. Pracujcie dÅ‚uÅ¼ej.",
+            "level_2": "UwaÅ¼am, Å¼e zespÃ³Å‚ nie wywiÄ…zuje siÄ™ z zobowiÄ…zaÅ„. To wina sÅ‚abego planowania z waszej strony.",
+            "level_3": "WidzÄ™, Å¼e projekt moÅ¼e siÄ™ opÃ³ÅºniÄ‡. Jakie widzicie przyczyny tej sytuacji? Jak moÅ¼emy razem znaleÅºÄ‡ rozwiÄ…zanie?"
         },
         {
             "scenario": "Feedback dla pracownika",
-            "level_1": "Twój raport ma b³êdy. Popraw i wyœlij ponownie.",
-            "level_2": "Nie zgadzam siê z Twoim podejœciem. Moja metoda jest lepsza, poniewa¿...",
-            "level_3": "Zauwa¿y³em kilka obszarów w raporcie, które mo¿emy razem ulepszyæ. Co myœlisz o tych aspektach?"
+            "level_1": "TwÃ³j raport ma bÅ‚Ä™dy. Popraw i wyÅ›lij ponownie.",
+            "level_2": "Nie zgadzam siÄ™ z Twoim podejÅ›ciem. Moja metoda jest lepsza, poniewaÅ¼...",
+            "level_3": "ZauwaÅ¼yÅ‚em kilka obszarÃ³w w raporcie, ktÃ³re moÅ¼emy razem ulepszyÄ‡. Co myÅ›lisz o tych aspektach?"
         }
     ]
     
     for i, example in enumerate(examples, 1):
-        st.markdown(f"### Przyk³ad {i}: {example['scenario']}")
+        st.markdown(f"### PrzykÅ‚ad {i}: {example['scenario']}")
         
         col1, col2, col3 = st.columns(3)
         
@@ -3166,20 +3166,20 @@ def show_ciq_examples():
             )
 
 def show_email_templates():
-    """Pokazuje szablony emaili na ró¿nych poziomach C-IQ"""
-    st.markdown("#### ?? Szablony emaili biznesowych")
-    st.info("?? Funkcja w przygotowaniu - biblioteka szablonów emaili na ró¿nych poziomach C-IQ")
+    """Pokazuje szablony emaili na rÃ³Å¼nych poziomach C-IQ"""
+    st.markdown("#### ğŸ¯ Szablony emaili biznesowych")
+    st.info("ğŸ’¡ Funkcja w przygotowaniu - biblioteka szablonÃ³w emaili na rÃ³Å¼nych poziomach C-IQ")
 
 def show_emotion_detector():
-    """Conversation Intelligence Pro - Analiza rozmów mened¿erskich"""
-    st.markdown("## ?? Conversation Intelligence Pro")
-    st.markdown("**Zaawansowana analiza rozmów mened¿erskich** - C-IQ w kontekœcie przywództwa i zarz¹dzania zespo³em")
+    """Conversation Intelligence Pro - Analiza rozmÃ³w menedÅ¼erskich"""
+    st.markdown("## ğŸ¯ Conversation Intelligence Pro")
+    st.markdown("**Zaawansowana analiza rozmÃ³w menedÅ¼erskich** - C-IQ w kontekÅ›cie przywÃ³dztwa i zarzÄ…dzania zespoÅ‚em")
     
-    # Tabs dla ró¿nych funkcji CI w kontekœcie mened¿erskim
+    # Tabs dla rÃ³Å¼nych funkcji CI w kontekÅ›cie menedÅ¼erskim
     tab1, tab2, tab3, tab4 = st.tabs([
-        "?? Analiza Rozmowy", 
-        "?? Dynamika Zespo³u", 
-        "?? Sygna³y Problemów", 
+        "ğŸ“Š Analiza Rozmowy", 
+        "?? Dynamika ZespoÅ‚u", 
+        "?? SygnaÅ‚y ProblemÃ³w", 
         "?? Leadership Coach"
     ])
     
@@ -3196,28 +3196,28 @@ def show_emotion_detector():
         show_ai_coach()
 
 def show_sentiment_analysis():
-    """Analiza rozmów mened¿erskich"""
-    st.markdown("### ?? Analiza Rozmowy Mened¿er-Pracownik")
+    """Analiza rozmÃ³w menedÅ¼erskich"""
+    st.markdown("### ğŸ¯ Analiza Rozmowy MenedÅ¼er-Pracownik")
     
     conversation_text = st.text_area(
-        "?? Wklej transkrypcjê rozmowy mened¿erskiej:",
-        placeholder="""Przyk³ad rozmowy mened¿er-pracownik:
-Mened¿er: Chcia³bym porozmawiaæ o Twoich ostatnich projektach.
-Pracownik: Okej, ale muszê powiedzieæ, ¿e czujê siê przeci¹¿ony zadaniami...
-Mened¿er: Rozumiem, opowiedz mi wiêcej o tym przeci¹¿eniu...""",
+        "?? Wklej transkrypcjÄ™ rozmowy menedÅ¼erskiej:",
+        placeholder="""PrzykÅ‚ad rozmowy menedÅ¼er-pracownik:
+MenedÅ¼er: ChciaÅ‚bym porozmawiaÄ‡ o Twoich ostatnich projektach.
+Pracownik: Okej, ale muszÄ™ powiedzieÄ‡, Å¼e czujÄ™ siÄ™ przeciÄ…Å¼ony zadaniami...
+MenedÅ¼er: Rozumiem, opowiedz mi wiÄ™cej o tym przeciÄ…Å¼eniu...""",
         height=120,
         key="sentiment_input"
     )
     
     if conversation_text and len(conversation_text) > 10:
         if zen_button("?? Analizuj Sentiment + C-IQ", key="analyze_sentiment", width='stretch'):
-            with st.spinner("?? Analizujê sentiment i poziomy C-IQ..."):
+            with st.spinner("?? AnalizujÄ™ sentiment i poziomy C-IQ..."):
                 # Analiza C-IQ + sentiment
                 result = analyze_conversation_sentiment(conversation_text)
                 if result:
                     display_sentiment_results(result)
                     
-                    # Przyznaj XP za u¿ycie narzêdzia
+                    # Przyznaj XP za uÅ¼ycie narzÄ™dzia
                     try:
                         from data.users import award_xp_for_activity
                         award_xp_for_activity(
@@ -3230,29 +3230,29 @@ Mened¿er: Rozumiem, opowiedz mi wiêcej o tym przeci¹¿eniu...""",
                         pass
 
 def show_intent_detection():
-    """Wykrywanie dynamiki zespo³owej i potrzeb pracowników"""
-    st.markdown("### ?? Analiza Dynamiki Zespo³u i Motywacji")
+    """Wykrywanie dynamiki zespoÅ‚owej i potrzeb pracownikÃ³w"""
+    st.markdown("### ğŸ¯ Analiza Dynamiki ZespoÅ‚u i Motywacji")
     
     col1, col2 = st.columns(2)
     
     with col1:
         st.markdown("**?? Wykrywane potrzeby pracownika:**")
-        st.markdown("• ?? Potrzeba jasnych celów")
-        st.markdown("• ?? Chêæ rozwoju i szkoleñ") 
-        st.markdown("• ?? Potrzeba wsparcia/mentoringu")
-        st.markdown("• ?? Sygna³y wypalenia zawodowego")
-        st.markdown("• ?? Ambicje i aspiracje kariery")
+        st.markdown("â€¢ ğŸ¯ Potrzeba jasnych celÃ³w")
+        st.markdown("â€¢ ğŸ¯ ChÄ™Ä‡ rozwoju i szkoleÅ„") 
+        st.markdown("â€¢ ğŸ¯ Potrzeba wsparcia/mentoringu")
+        st.markdown("â€¢ ğŸ¯ SygnaÅ‚y wypalenia zawodowego")
+        st.markdown("â€¢ ğŸ¯ Ambicje i aspiracje kariery")
         
     with col2:
         st.markdown("**?? Wyniki analizy:**")
-        st.markdown("• Poziom zaanga¿owania zespo³u")
-        st.markdown("• Rekomendowane akcje mened¿erskie")  
-        st.markdown("• Optymalne momenty na feedback")
-        st.markdown("• Przewidywane reakcje pracownika")
+        st.markdown("â€¢ Poziom zaangaÅ¼owania zespoÅ‚u")
+        st.markdown("â€¢ Rekomendowane akcje menedÅ¼erskie")  
+        st.markdown("â€¢ Optymalne momenty na feedback")
+        st.markdown("â€¢ Przewidywane reakcje pracownika")
     
     intent_text = st.text_area(
-        "Tekst do analizy dynamiki zespo³u:",
-        placeholder="Wklej fragment rozmowy mened¿er-pracownik o zadaniach, celach, problemach...",
+        "Tekst do analizy dynamiki zespoÅ‚u:",
+        placeholder="Wklej fragment rozmowy menedÅ¼er-pracownik o zadaniach, celach, problemach...",
         height=100,
         key="intent_input"
     )
@@ -3263,7 +3263,7 @@ def show_intent_detection():
             if result:
                 display_intent_results(result)
                 
-                # Przyznaj XP za u¿ycie narzêdzia
+                # Przyznaj XP za uÅ¼ycie narzÄ™dzia
                 try:
                     from data.users import award_xp_for_activity
                     award_xp_for_activity(
@@ -3276,47 +3276,47 @@ def show_intent_detection():
                     pass
 
 def show_escalation_monitoring():
-    """Monitoring sygna³ów problemów w zespole"""
-    st.markdown("### ?? Wykrywanie Sygna³ów Problemów Zespo³owych")
+    """Monitoring sygnaÅ‚Ã³w problemÃ³w w zespole"""
+    st.markdown("### ğŸ¯ Wykrywanie SygnaÅ‚Ã³w ProblemÃ³w ZespoÅ‚owych")
     
-    st.info("?? **Early warning system** dla problemów zespo³owych: wypalenie, konflikty, spadek motywacji")
+    st.info("ğŸ’¡ **Early warning system** dla problemÃ³w zespoÅ‚owych: wypalenie, konflikty, spadek motywacji")
     
     escalation_text = st.text_area(
-        "?? Tekst do analizy sygna³ów problemów:",
-        placeholder="Wklej fragment rozmowy z pracownikiem, który mo¿e sygnalizowaæ problemy zespo³owe...",
+        "?? Tekst do analizy sygnaÅ‚Ã³w problemÃ³w:",
+        placeholder="Wklej fragment rozmowy z pracownikiem, ktÃ³ry moÅ¼e sygnalizowaÄ‡ problemy zespoÅ‚owe...",
         height=100,
         key="escalation_input"
     )
     
-    # Ustawienia czu³oœci
+    # Ustawienia czuÅ‚oÅ›ci
     sensitivity = st.slider(
-        "??? Czu³oœæ wykrywania eskalacji:",
+        "ğŸ”§ CzuÅ‚oÅ›Ä‡ wykrywania eskalacji:",
         min_value=1, max_value=10, value=5,
-        help="1 = tylko oczywiste sygna³y, 10 = bardzo wyczulone wykrywanie"
+        help="1 = tylko oczywiste sygnaÅ‚y, 10 = bardzo wyczulone wykrywanie"
     )
     
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("**?? Sygna³y eskalacji:**")
-        st.markdown("• Spadek motywacji i zaanga¿owania")
-        st.markdown("• Sygna³y wypalenia zawodowego") 
-        st.markdown("• Konflikty interpersonalne")
-        st.markdown("• Rozwa¿anie zmiany pracy")
+        st.markdown("**?? SygnaÅ‚y eskalacji:**")
+        st.markdown("â€¢ Spadek motywacji i zaangaÅ¼owania")
+        st.markdown("â€¢ SygnaÅ‚y wypalenia zawodowego") 
+        st.markdown("â€¢ Konflikty interpersonalne")
+        st.markdown("â€¢ RozwaÅ¼anie zmiany pracy")
         
     with col2:
         st.markdown("**?? Rekomendowane akcje:**")
-        st.markdown("• Rozmowa 1-on-1 z pracownikiem")
-        st.markdown("• Przegl¹d obci¹¿enia i zadañ")
-        st.markdown("• Plan rozwoju i wsparcia")
-        st.markdown("• Poprawa warunków pracy")
+        st.markdown("â€¢ Rozmowa 1-on-1 z pracownikiem")
+        st.markdown("â€¢ PrzeglÄ…d obciÄ…Å¼enia i zadaÅ„")
+        st.markdown("â€¢ Plan rozwoju i wsparcia")
+        st.markdown("â€¢ Poprawa warunkÃ³w pracy")
     
     if escalation_text and len(escalation_text) > 10:
-        if zen_button("?? SprawdŸ Ryzyko Eskalacji", key="check_escalation", width='stretch'):
+        if zen_button("?? SprawdÅº Ryzyko Eskalacji", key="check_escalation", width='stretch'):
             result = analyze_escalation_risk(escalation_text, sensitivity)
             if result:
                 display_escalation_results(result)
                 
-                # Przyznaj XP za u¿ycie narzêdzia
+                # Przyznaj XP za uÅ¼ycie narzÄ™dzia
                 try:
                     from data.users import award_xp_for_activity
                     award_xp_for_activity(
@@ -3329,40 +3329,40 @@ def show_escalation_monitoring():
                     pass
 
 def show_ai_coach():
-    """Real-time coach dla mened¿erów"""
-    st.markdown("### ?? Leadership Coach - Wsparcie Real-time")
+    """Real-time coach dla menedÅ¼erÃ³w"""
+    st.markdown("### ğŸ¯ Leadership Coach - Wsparcie Real-time")
     
-    st.info("?? **Inteligentny coach przywództwa** podpowiadaj¹cy najlepsze odpowiedzi w trudnych sytuacjach mened¿erskich")
+    st.info("ğŸ’¡ **Inteligentny coach przywÃ³dztwa** podpowiadajÄ…cy najlepsze odpowiedzi w trudnych sytuacjach menedÅ¼erskich")
     
-    # Kontekst rozmowy mened¿erskiej
+    # Kontekst rozmowy menedÅ¼erskiej
     context = st.selectbox(
-        "?? Typ rozmowy mened¿erskiej:",
+        "?? Typ rozmowy menedÅ¼erskiej:",
         [
-            "?? Ustawienie celów i oczekiwañ",
-            "?? Feedback o wydajnoœci", 
+            "?? Ustawienie celÃ³w i oczekiwaÅ„",
+            "?? Feedback o wydajnoÅ›ci", 
             "?? Rozmowa z demotywowanym pracownikiem",
-            "? Zarz¹dzanie konfliktem w zespole",
+            "? ZarzÄ…dzanie konfliktem w zespole",
             "?? Rozmowa rozwojowa i kariera",
-            "?? Delegowanie zadañ i odpowiedzialnoœci",
-            "?? Zarz¹dzanie zmian¹ organizacyjn¹",
-            "?? Rozmowa dyscyplinuj¹ca"
+            "?? Delegowanie zadaÅ„ i odpowiedzialnoÅ›ci",
+            "?? ZarzÄ…dzanie zmianÄ… organizacyjnÄ…",
+            "?? Rozmowa dyscyplinujÄ…ca"
         ]
     )
     
     coach_text = st.text_area(
-        "?? Ostatnia wypowiedŸ pracownika:",
-        placeholder="Wklej co w³aœnie powiedzia³ pracownik, a AI zasugeruje najlepsz¹ odpowiedŸ mened¿ersk¹...",
+        "?? Ostatnia wypowiedÅº pracownika:",
+        placeholder="Wklej co wÅ‚aÅ›nie powiedziaÅ‚ pracownik, a AI zasugeruje najlepszÄ… odpowiedÅº menedÅ¼erskÄ…...",
         height=100,
         key="coach_input"
     )
     
     if coach_text and len(coach_text) > 5:
-        if zen_button("?? Podpowiedz OdpowiedŸ", key="suggest_response", width='stretch'):
+        if zen_button("?? Podpowiedz OdpowiedÅº", key="suggest_response", width='stretch'):
             result = get_ai_coaching(coach_text, context)
             if result:
                 display_coaching_results(result)
                 
-                # Przyznaj XP za u¿ycie narzêdzia
+                # Przyznaj XP za uÅ¼ycie narzÄ™dzia
                 try:
                     from data.users import award_xp_for_activity
                     award_xp_for_activity(
@@ -3376,11 +3376,11 @@ def show_ai_coach():
 
 
 def show_communication_analyzer():
-    """C-IQ Leadership Profile - d³ugoterminowa analiza stylu przywództwa"""
-    st.markdown("## ?? C-IQ Leadership Profile")
-    st.markdown("**D³ugoterminowa analiza Twojego stylu przywództwa** przez pryzmat Conversational Intelligence")
+    """C-IQ Leadership Profile - dÅ‚ugoterminowa analiza stylu przywÃ³dztwa"""
+    st.markdown("## ğŸ¯ C-IQ Leadership Profile")
+    st.markdown("**DÅ‚ugoterminowa analiza Twojego stylu przywÃ³dztwa** przez pryzmat Conversational Intelligence")
     
-    st.info("?? **Unikalnoœæ:** To jedyne narzêdzie które analizuje **wzorce d³ugoterminowe** w Twoim stylu przywództwa, zamiast pojedynczych rozmów")
+    st.info("ğŸ’¡ **UnikalnoÅ›Ä‡:** To jedyne narzÄ™dzie ktÃ³re analizuje **wzorce dÅ‚ugoterminowe** w Twoim stylu przywÃ³dztwa, zamiast pojedynczych rozmÃ³w")
     
     # Auto-wczytywanie zapisanego profilu
     if hasattr(st.session_state, 'username') and st.session_state.username:
@@ -3388,120 +3388,120 @@ def show_communication_analyzer():
             saved_profile = load_leadership_profile(st.session_state.username)
             if saved_profile:
                 st.session_state['leadership_profile'] = saved_profile
-                st.success(f"?? Wczytano Twój zapisany profil przywódczy z {saved_profile.get('created_at', 'wczeœniej')[:10]}")
+                st.success(f"?? Wczytano TwÃ³j zapisany profil przywÃ³dczy z {saved_profile.get('created_at', 'wczeÅ›niej')[:10]}")
     
-    # Tabs dla ró¿nych aspektów profilu
+    # Tabs dla rÃ³Å¼nych aspektÃ³w profilu
     tab1, tab2, tab3 = st.tabs([
         "?? Upload Danych", 
-        "?? Profil Przywódczy", 
+        "?? Profil PrzywÃ³dczy", 
         "?? Plan Rozwoju"
     ])
     
     with tab1:
-        st.markdown("### ?? Wgraj próbki swojej komunikacji")
-        st.markdown("Im wiêcej danych, tym dok³adniejszy profil przywódczy!")
+        st.markdown("### ğŸ¯ Wgraj prÃ³bki swojej komunikacji")
+        st.markdown("Im wiÄ™cej danych, tym dokÅ‚adniejszy profil przywÃ³dczy!")
         
-        # Opis co bêdzie w raporcie
-        st.markdown("**?? Twój raport bêdzie zawiera³:**")
+        # Opis co bÄ™dzie w raporcie
+        st.markdown("**?? TwÃ³j raport bÄ™dzie zawieraÅ‚:**")
         col1, col2, col3 = st.columns(3)
         
         with col1:
             st.markdown("**?? Poziomy C-IQ**")
-            st.markdown("• Dominuj¹cy poziom")
-            st.markdown("• Rozk³ad procentowy")
-            st.markdown("• Rekomendacje")
+            st.markdown("â€¢ DominujÄ…cy poziom")
+            st.markdown("â€¢ RozkÅ‚ad procentowy")
+            st.markdown("â€¢ Rekomendacje")
         
         with col2:
             st.markdown("**?? Neurobiologia**") 
-            st.markdown("• Wp³yw na kortyzol")
-            st.markdown("• Stymulacja oksytocyny")
-            st.markdown("• Bezpieczeñstwo psychologiczne")
+            st.markdown("â€¢ WpÅ‚yw na kortyzol")
+            st.markdown("â€¢ Stymulacja oksytocyny")
+            st.markdown("â€¢ BezpieczeÅ„stwo psychologiczne")
         
         with col3:
-            st.markdown("**?? Skutecznoœæ**")
-            st.markdown("• Clarnoœæ przekazu")
-            st.markdown("• Potencja³ zaufania")
-            st.markdown("• Ryzyko konfliktu")
+            st.markdown("**?? SkutecznoÅ›Ä‡**")
+            st.markdown("â€¢ ClarnoÅ›Ä‡ przekazu")
+            st.markdown("â€¢ PotencjaÅ‚ zaufania")
+            st.markdown("â€¢ Ryzyko konfliktu")
             
         st.markdown("---")
         
-        # Przycisk do przyk³adowych danych
+        # Przycisk do przykÅ‚adowych danych
         col_demo, col_info = st.columns([1, 3])
         with col_demo:
             demo_col1, demo_col2 = st.columns(2)
             with demo_col1:
-                if zen_button("?? U¿yj przyk³adów", key="fill_demo_data"):
-                    # Bezpoœrednio ustawiamy wartoœci w session_state
-                    team_conv_text = '''Mened¿er: Kasia, muszê wiedzieæ co siê dzieje z projektem ABC. Deadline jest za tydzieñ!
-Pracownik: Mam problem z terminem, klient ci¹gle zmienia wymagania
-Mened¿er: To nie jest wymówka. Musisz lepiej planowaæ. Co konkretnie robi³aœ przez ostatnie dni?
-Pracownik: Próbowa³am dopasowaæ siê do nowych wymagañ, ale...
-Mened¿er: S³uchaj, potrzebujê rozwi¹zañ, nie problemów. Jak zamierzasz to naprawiæ?
-Pracownik: Mo¿e gdybym mia³a wiêcej wsparcia od zespo³u?
-Mened¿er: Dobrze, porozmawiam z Tomkiem ¿eby ci pomóg³. Ale chcê codzienne raporty z postêpów.'''
+                if zen_button("?? UÅ¼yj przykÅ‚adÃ³w", key="fill_demo_data"):
+                    # BezpoÅ›rednio ustawiamy wartoÅ›ci w session_state
+                    team_conv_text = '''MenedÅ¼er: Kasia, muszÄ™ wiedzieÄ‡ co siÄ™ dzieje z projektem ABC. Deadline jest za tydzieÅ„!
+Pracownik: Mam problem z terminem, klient ciÄ…gle zmienia wymagania
+MenedÅ¼er: To nie jest wymÃ³wka. Musisz lepiej planowaÄ‡. Co konkretnie robiÅ‚aÅ› przez ostatnie dni?
+Pracownik: PrÃ³bowaÅ‚am dopasowaÄ‡ siÄ™ do nowych wymagaÅ„, ale...
+MenedÅ¼er: SÅ‚uchaj, potrzebujÄ™ rozwiÄ…zaÅ„, nie problemÃ³w. Jak zamierzasz to naprawiÄ‡?
+Pracownik: MoÅ¼e gdybym miaÅ‚a wiÄ™cej wsparcia od zespoÅ‚u?
+MenedÅ¼er: Dobrze, porozmawiam z Tomkiem Å¼eby ci pomÃ³gÅ‚. Ale chcÄ™ codzienne raporty z postÄ™pÃ³w.'''
                     st.session_state['team_conv'] = team_conv_text
                     
-                    feedback_conv_text = '''Mened¿er: Tomek, muszê z tob¹ porozmawiaæ o ocenach. Twoje wyniki techniczne s¹ ok, ale komunikacja kuleje
-Pracownik: Czyli co dok³adnie robiê Ÿle?
-Mened¿er: Za ma³o komunikujesz siê z zespo³em. Ludzie nie wiedz¹ nad czym pracujesz
-Pracownik: Ale skupiam siê na pracy, ¿eby by³a jakoœæ...
-Mened¿er: To nie usprawiedliwia braku komunikacji. Od nastêpnego tygodnia codzienne updaty na kanale zespo³owym. Rozumiesz?
+                    feedback_conv_text = '''MenedÅ¼er: Tomek, muszÄ™ z tobÄ… porozmawiaÄ‡ o ocenach. Twoje wyniki techniczne sÄ… ok, ale komunikacja kuleje
+Pracownik: Czyli co dokÅ‚adnie robiÄ™ Åºle?
+MenedÅ¼er: Za maÅ‚o komunikujesz siÄ™ z zespoÅ‚em. Ludzie nie wiedzÄ… nad czym pracujesz
+Pracownik: Ale skupiam siÄ™ na pracy, Å¼eby byÅ‚a jakoÅ›Ä‡...
+MenedÅ¼er: To nie usprawiedliwia braku komunikacji. Od nastÄ™pnego tygodnia codzienne updaty na kanale zespoÅ‚owym. Rozumiesz?
 Pracownik: Tak, rozumiem
-Mened¿er: I jeszcze jedno - wiêcej inicjatywy. Nie czekaj a¿ ktoœ ci ka¿e coœ zrobiæ.'''
+MenedÅ¼er: I jeszcze jedno - wiÄ™cej inicjatywy. Nie czekaj aÅ¼ ktoÅ› ci kaÅ¼e coÅ› zrobiÄ‡.'''
                     st.session_state['feedback_conv'] = feedback_conv_text
                     
-                    conflict_conv_text = '''Mened¿er: Ania, s³ysza³em ¿e wczoraj k³óci³aœ siê z Markiem o dane do raportu
-Pracownik: To by³ stres, przepraszam. Deadline naciska i...
-Mened¿er: Nie obchodz¹ mnie wymówki. W biurze nie krzyczy siê na wspó³pracowników. Kropka.
-Pracownik: Ale Marek mia³ dostarczyæ dane tydzieñ temu, a...
-Mened¿er: To nie usprawiedliwia takiego zachowania. Nastêpnym razem przychodzisz do mnie, zamiast robiæ scenê
+                    conflict_conv_text = '''MenedÅ¼er: Ania, sÅ‚yszaÅ‚em Å¼e wczoraj kÅ‚Ã³ciÅ‚aÅ› siÄ™ z Markiem o dane do raportu
+Pracownik: To byÅ‚ stres, przepraszam. Deadline naciska i...
+MenedÅ¼er: Nie obchodzÄ… mnie wymÃ³wki. W biurze nie krzyczy siÄ™ na wspÃ³Å‚pracownikÃ³w. Kropka.
+Pracownik: Ale Marek miaÅ‚ dostarczyÄ‡ dane tydzieÅ„ temu, a...
+MenedÅ¼er: To nie usprawiedliwia takiego zachowania. NastÄ™pnym razem przychodzisz do mnie, zamiast robiÄ‡ scenÄ™
 Pracownik: Dobrze, ale co z tymi danymi?
-Mened¿er: Porozmawiam z Markiem. A ty przeprosisz go jutro. I ¿eby wiêcej takich sytuacji nie by³o.'''
+MenedÅ¼er: Porozmawiam z Markiem. A ty przeprosisz go jutro. I Å¼eby wiÄ™cej takich sytuacji nie byÅ‚o.'''
                     st.session_state['conflict_conv'] = conflict_conv_text
                     
-                    motivation_conv_text = '''Mened¿er: Pawe³, dobra robota z tym automatycznym raportem. Dzia³a jak nale¿y
-Pracownik: Dziêki, stara³em siê...
-Mened¿er: No w³aœnie. Trzeba by³o tylko trochê nacisn¹æ. Widzisz? Jak siê chce, to siê mo¿na
-Pracownik: Tak, chocia¿ trochê czasu mi to zajê³o
-Mened¿er: Czas to pieni¹dz. Nastêpnym razem rób szybciej, ale tak samo dok³adnie. Mo¿e dostaniesz wiêcej takich projektów
-Pracownik: To brzmi dobrze. Co mam teraz robiæ?
-Mened¿er: SprawdŸ czy wszystko dzia³a i zrób dokumentacjê. Do koñca tygodnia ma byæ gotowe.'''
+                    motivation_conv_text = '''MenedÅ¼er: PaweÅ‚, dobra robota z tym automatycznym raportem. DziaÅ‚a jak naleÅ¼y
+Pracownik: DziÄ™ki, staraÅ‚em siÄ™...
+MenedÅ¼er: No wÅ‚aÅ›nie. Trzeba byÅ‚o tylko trochÄ™ nacisnÄ…Ä‡. Widzisz? Jak siÄ™ chce, to siÄ™ moÅ¼na
+Pracownik: Tak, chociaÅ¼ trochÄ™ czasu mi to zajÄ™Å‚o
+MenedÅ¼er: Czas to pieniÄ…dz. NastÄ™pnym razem rÃ³b szybciej, ale tak samo dokÅ‚adnie. MoÅ¼e dostaniesz wiÄ™cej takich projektÃ³w
+Pracownik: To brzmi dobrze. Co mam teraz robiÄ‡?
+MenedÅ¼er: SprawdÅº czy wszystko dziaÅ‚a i zrÃ³b dokumentacjÄ™. Do koÅ„ca tygodnia ma byÄ‡ gotowe.'''
                     st.session_state['motivation_conv'] = motivation_conv_text
                     
-                    st.success("? Wype³niono pola przyk³adowymi danymi! Przewiñ w dó³ ¿eby zobaczyæ dane.")
+                    st.success("? WypeÅ‚niono pola przykÅ‚adowymi danymi! PrzewiÅ„ w dÃ³Å‚ Å¼eby zobaczyÄ‡ dane.")
                     
             with demo_col2:
-                if zen_button("?? Wyczyœæ pola", key="clear_data"):
-                    # Czyœcimy wartoœci w session_state
+                if zen_button("?? WyczyÅ›Ä‡ pola", key="clear_data"):
+                    # CzyÅ›cimy wartoÅ›ci w session_state
                     st.session_state['team_conv'] = ""
                     st.session_state['feedback_conv'] = ""
                     st.session_state['conflict_conv'] = ""
                     st.session_state['motivation_conv'] = ""
-                    st.success("?? Wyczyszczono wszystkie pola! Przewiñ w dó³ ¿eby sprawdziæ.")
+                    st.success("âœ… Wyczyszczono wszystkie pola! PrzewiÅ„ w dÃ³Å‚ Å¼eby sprawdziÄ‡.")
         
         with col_info:
-            st.info("?? **Wskazówka:** Wklej rzeczywiste fragmenty swoich rozmów (minimum 2-3 zdania na pole). Mo¿esz te¿ klikn¹æ 'U¿yj przyk³adów' ¿eby zobaczyæ jak dzia³a narzêdzie.")
+            st.info("ğŸ’¡ **WskazÃ³wka:** Wklej rzeczywiste fragmenty swoich rozmÃ³w (minimum 2-3 zdania na pole). MoÅ¼esz teÅ¼ kliknÄ…Ä‡ 'UÅ¼yj przykÅ‚adÃ³w' Å¼eby zobaczyÄ‡ jak dziaÅ‚a narzÄ™dzie.")
             
             # Debug info
             if st.session_state.get('team_conv'):
-                st.write(f"?? Debug: team_conv ma {len(st.session_state.get('team_conv', ''))} znaków")
+                st.write(f"?? Debug: team_conv ma {len(st.session_state.get('team_conv', ''))} znakÃ³w")
         
-        # Multiple text areas dla ró¿nych sytuacji
+        # Multiple text areas dla rÃ³Å¼nych sytuacji
         col1, col2 = st.columns(2)
 
         with col1:
-            st.markdown("**?? Rozmowy z zespo³em:**")
+            st.markdown("**?? Rozmowy z zespoÅ‚em:**")
             team_conversations = st.text_area(
-                "Wklej fragmenty rozmów z pracownikami:",
-                placeholder="Wklej tutaj rzeczywiste fragmenty swoich rozmów z zespo³em...",
+                "Wklej fragmenty rozmÃ³w z pracownikami:",
+                placeholder="Wklej tutaj rzeczywiste fragmenty swoich rozmÃ³w z zespoÅ‚em...",
                 height=150,
                 key="team_conv"
             )
             
             st.markdown("**?? Feedback i oceny:**")
             feedback_conversations = st.text_area(
-                "Fragmenty rozmów feedbackowych:",
-                placeholder="Wklej tutaj fragmenty rozmów dotycz¹cych ocen i feedbacku...", 
+                "Fragmenty rozmÃ³w feedbackowych:",
+                placeholder="Wklej tutaj fragmenty rozmÃ³w dotyczÄ…cych ocen i feedbacku...", 
                 height=150,
                 key="feedback_conv"
             )
@@ -3510,99 +3510,99 @@ Mened¿er: SprawdŸ czy wszystko dzia³a i zrób dokumentacjê. Do koñca tygodnia ma 
             st.markdown("**? Sytuacje konfliktowe:**")
             conflict_conversations = st.text_area(
                 "Rozmowy w trudnych sytuacjach:",
-                placeholder="Wklej tutaj fragmenty trudnych rozmów i rozwi¹zywania konfliktów...",
+                placeholder="Wklej tutaj fragmenty trudnych rozmÃ³w i rozwiÄ…zywania konfliktÃ³w...",
                 height=150,
                 key="conflict_conv"
             )
             
-            st.markdown("**?? Motywowanie zespo³u:**")
+            st.markdown("**?? Motywowanie zespoÅ‚u:**")
             motivation_conversations = st.text_area(
-                "Fragmenty motywuj¹ce i inspiruj¹ce:",
-                placeholder="Wklej tutaj fragmenty motywuj¹cych rozmów z zespo³em...",
+                "Fragmenty motywujÄ…ce i inspirujÄ…ce:",
+                placeholder="Wklej tutaj fragmenty motywujÄ…cych rozmÃ³w z zespoÅ‚em...",
                 height=150,
                 key="motivation_conv"
             )
         
         st.markdown("---")
-        st.markdown("#### ?? Wskazówki do wype³nienia:")
+        st.markdown("#### ğŸ¯ WskazÃ³wki do wypeÅ‚nienia:")
         tip_col1, tip_col2, tip_col3 = st.columns(3)
         
         with tip_col1:
-            st.markdown("**? Dobre przyk³ady:**")
-            st.markdown("• Pe³ne dialogi (2-6 wymian)")
-            st.markdown("• Rzeczywiste sytuacje")
-            st.markdown("• Ró¿norodne scenariusze")
+            st.markdown("**? Dobre przykÅ‚ady:**")
+            st.markdown("â€¢ PeÅ‚ne dialogi (2-6 wymian)")
+            st.markdown("â€¢ Rzeczywiste sytuacje")
+            st.markdown("â€¢ RÃ³Å¼norodne scenariusze")
         
         with tip_col2:
             st.markdown("**? Unikaj:**")
-            st.markdown("• Pojedynczych zdañ")
-            st.markdown("• Zbyt ogólnych opisów")
-            st.markdown("• Danych osobowych")
+            st.markdown("â€¢ Pojedynczych zdaÅ„")
+            st.markdown("â€¢ Zbyt ogÃ³lnych opisÃ³w")
+            st.markdown("â€¢ Danych osobowych")
             
         with tip_col3:
-            st.markdown("**?? Minimalna iloœæ:**")
-            st.markdown("• Przynajmniej 2 pola wype³nione")
-            st.markdown("• Po 3-5 zdañ w ka¿dym")
-            st.markdown("• £¹cznie ~200 s³ów")
+            st.markdown("**?? Minimalna iloÅ›Ä‡:**")
+            st.markdown("â€¢ Przynajmniej 2 pola wypeÅ‚nione")
+            st.markdown("â€¢ Po 3-5 zdaÅ„ w kaÅ¼dym")
+            st.markdown("â€¢ ÅÄ…cznie ~200 sÅ‚Ã³w")
         
-        # Licznik s³ów i status gotowoœci
+        # Licznik sÅ‚Ã³w i status gotowoÅ›ci
         all_conversations = [team_conversations, feedback_conversations, conflict_conversations, motivation_conversations]
         filled_fields = sum(1 for conv in all_conversations if conv.strip())
         total_words = sum(len(conv.split()) for conv in all_conversations if conv.strip())
         
         col_stats1, col_stats2, col_stats3 = st.columns(3)
         with col_stats1:
-            st.metric("Wype³nione pola", f"{filled_fields}/4")
+            st.metric("WypeÅ‚nione pola", f"{filled_fields}/4")
         with col_stats2:
-            st.metric("£¹czna liczba s³ów", total_words)
+            st.metric("ÅÄ…czna liczba sÅ‚Ã³w", total_words)
         with col_stats3:
             if filled_fields >= 2 and total_words >= 150:
                 st.success("? Gotowe do analizy!")
             elif total_words < 150:
-                st.warning(f"? Potrzeba jeszcze {150-total_words} s³ów")
+                st.warning(f"? Potrzeba jeszcze {150-total_words} sÅ‚Ã³w")
             else:
-                st.info("?? Wype³nij wiêcej pól")
+                st.info("ğŸ’¡ WypeÅ‚nij wiÄ™cej pÃ³l")
         
-        # Pole na nazwê profilu (opcjonalne)
+        # Pole na nazwÄ™ profilu (opcjonalne)
         profile_name = st.text_input(
             "?? Nazwa profilu (opcjonalnie):",
-            placeholder="np. 'PaŸdziernik 2024' lub 'Po szkoleniu C-IQ'",
-            help="Opcjonalna nazwa u³atwiaj¹ca rozpoznanie profilu w przysz³oœci"
+            placeholder="np. 'PaÅºdziernik 2024' lub 'Po szkoleniu C-IQ'",
+            help="Opcjonalna nazwa uÅ‚atwiajÄ…ca rozpoznanie profilu w przyszÅ‚oÅ›ci"
         )
         
         # Przycisk analizy
         analysis_ready = filled_fields >= 2 and total_words >= 150
-        if zen_button("?? Analizuj Mój Styl Przywództwa", 
+        if zen_button("?? Analizuj MÃ³j Styl PrzywÃ³dztwa", 
                      key="analyze_leadership", 
                      width='stretch',
                      disabled=not analysis_ready):
             conversations_text = "\n---\n".join([conv for conv in all_conversations if conv.strip()])
             
             if conversations_text:
-                with st.spinner("?? Tworzê Twój profil przywódczy..."):
+                with st.spinner("?? TworzÄ™ TwÃ³j profil przywÃ³dczy..."):
                     leadership_profile = create_leadership_profile(conversations_text)
                     if leadership_profile:
                         st.session_state['leadership_profile'] = leadership_profile
                         
-                        # Auto-zapis profilu dla zalogowanego u¿ytkownika
+                        # Auto-zapis profilu dla zalogowanego uÅ¼ytkownika
                         if hasattr(st.session_state, 'username') and st.session_state.username:
                             profile_title = profile_name.strip() if (profile_name and profile_name.strip()) else None
                             if save_leadership_profile(st.session_state.username, leadership_profile, profile_title):
                                 saved_name = profile_title or f"Profil {datetime.now().strftime('%Y-%m-%d %H:%M')}"
-                                st.success(f"? Profil '{saved_name}' gotowy i zapisany! Zobacz zak³adkê 'Profil Przywódczy'")
+                                st.success(f"? Profil '{saved_name}' gotowy i zapisany! Zobacz zakÅ‚adkÄ™ 'Profil PrzywÃ³dczy'")
                             else:
-                                st.success("? Profil przywódczy gotowy! Zobacz zak³adkê 'Profil Przywódczy'")
-                                st.warning("?? Nie uda³o siê zapisaæ profilu do pliku")
+                                st.success("? Profil przywÃ³dczy gotowy! Zobacz zakÅ‚adkÄ™ 'Profil PrzywÃ³dczy'")
+                                st.warning("âš ï¸ Nie udaÅ‚o siÄ™ zapisaÄ‡ profilu do pliku")
                         else:
-                            st.success("? Profil przywódczy gotowy! Zobacz zak³adkê 'Profil Przywódczy'")
-                            st.info("?? Zaloguj siê, aby automatycznie zapisywaæ swoje profile")
+                            st.success("? Profil przywÃ³dczy gotowy! Zobacz zakÅ‚adkÄ™ 'Profil PrzywÃ³dczy'")
+                            st.info("ğŸ’¡ Zaloguj siÄ™, aby automatycznie zapisywaÄ‡ swoje profile")
             else:
-                st.warning("?? Dodaj przynajmniej jeden fragment rozmowy do analizy")
+                st.warning("âš ï¸ Dodaj przynajmniej jeden fragment rozmowy do analizy")
     
     with tab2:
-        # Sekcja zarz¹dzania zapisanymi profilami
+        # Sekcja zarzÄ…dzania zapisanymi profilami
         if hasattr(st.session_state, 'username') and st.session_state.username:
-            st.markdown("### ?? Twoje zapisane profile")
+            st.markdown("### ğŸ¯ Twoje zapisane profile")
             
             profiles_history = get_user_profiles_history(st.session_state.username)
             if profiles_history:
@@ -3617,7 +3617,7 @@ Mened¿er: SprawdŸ czy wszystko dzia³a i zrób dokumentacjê. Do koñca tygodnia ma 
                         profile_date = profile.get('created_at', 'Nieznana data')[:16].replace('T', ' ')
                         dominant_level = profile.get('dominant_ciq_level', '?')
                         
-                        # SprawdŸ czy to aktualnie wczytany profil
+                        # SprawdÅº czy to aktualnie wczytany profil
                         is_current = ('leadership_profile' in st.session_state and 
                                     st.session_state['leadership_profile'].get('created_at') == profile.get('created_at'))
                         
@@ -3626,7 +3626,7 @@ Mened¿er: SprawdŸ czy wszystko dzia³a i zrób dokumentacjê. Do koñca tygodnia ma 
                         else:
                             st.info(f"?? **{profile_name}**")
                         
-                        st.caption(f"?? {profile_date} | ?? Poziom dominuj¹cy: {dominant_level}")
+                        st.caption(f"?? {profile_date} | ğŸ¯ Poziom dominujÄ…cy: {dominant_level}")
                         
                     with col_actions:
                         if not is_current:
@@ -3635,19 +3635,19 @@ Mened¿er: SprawdŸ czy wszystko dzia³a i zrób dokumentacjê. Do koñca tygodnia ma 
                                 st.success(f"? Wczytano profil: {profile_name}")
                                 st.rerun()
                         
-                        if zen_button("??? Usuñ", key=f"delete_profile_{i}"):
+                        if zen_button("ğŸ”§ UsuÅ„", key=f"delete_profile_{i}"):
                             if delete_user_profile(st.session_state.username, i):
                                 if is_current:
                                     del st.session_state['leadership_profile']
-                                st.success(f"??? Usuniêto profil: {profile_name}")
+                                st.success(f"ğŸ”§ UsuniÄ™to profil: {profile_name}")
                                 st.rerun()
                     
                     st.markdown("---")
             else:
-                st.info("?? Nie masz jeszcze ¿adnych zapisanych profili")
+                st.info("ğŸ’¡ Nie masz jeszcze Å¼adnych zapisanych profili")
                 st.markdown("?? Po stworzeniu pierwszego profilu zostanie automatycznie zapisany")
         else:
-            st.info("?? Zaloguj siê, aby automatycznie zapisywaæ swoje profile")
+            st.info("ğŸ’¡ Zaloguj siÄ™, aby automatycznie zapisywaÄ‡ swoje profile")
             
         st.markdown("---")
         
@@ -3657,10 +3657,10 @@ Mened¿er: SprawdŸ czy wszystko dzia³a i zrób dokumentacjê. Do koñca tygodnia ma 
             with col_export:
                 if zen_button("?? Eksportuj PDF", key="export_leadership_pdf"):
                     try:
-                        username = getattr(st.session_state, 'username', 'U¿ytkownik')
+                        username = getattr(st.session_state, 'username', 'UÅ¼ytkownik')
                         pdf_data = generate_leadership_pdf(st.session_state['leadership_profile'], username)
                         
-                        # Przygotuj nazwê pliku
+                        # Przygotuj nazwÄ™ pliku
                         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
                         filename = f"raport_przywodczy_{username}_{timestamp}.pdf"
                         
@@ -3674,31 +3674,31 @@ Mened¿er: SprawdŸ czy wszystko dzia³a i zrób dokumentacjê. Do koñca tygodnia ma 
                         st.success("? Raport PDF gotowy do pobrania!")
                         
                     except Exception as e:
-                        st.error(f"? B³¹d podczas generowania PDF: {str(e)}")
+                        st.error(f"? BÅ‚Ä…d podczas generowania PDF: {str(e)}")
             
             with col_info:
-                st.info("?? Eksport zawiera pe³ny raport przywódczy + plan rozwoju")
+                st.info("ğŸ’¡ Eksport zawiera peÅ‚ny raport przywÃ³dczy + plan rozwoju")
             
             st.markdown("---")
             
             display_leadership_profile(st.session_state['leadership_profile'])
         else:
-            st.info("?? Najpierw wgraj dane w zak³adce 'Upload Danych'")
+            st.info("ğŸ’¡ Najpierw wgraj dane w zakÅ‚adce 'Upload Danych'")
             
     with tab3:
         if 'leadership_profile' in st.session_state:
             display_leadership_development_plan(st.session_state['leadership_profile'])
         else:
-            st.info("?? Profil przywódczy jest potrzebny do stworzenia planu rozwoju")
+            st.info("ğŸ’¡ Profil przywÃ³dczy jest potrzebny do stworzenia planu rozwoju")
 
 # ===============================================
-# BUSINESS CONVERSATION SIMULATOR - TYMCZASOWO WY£¥CZONY
+# BUSINESS CONVERSATION SIMULATOR - TYMCZASOWO WYÅÄ„CZONY
 # ===============================================
-# Funkcje symulatora zosta³y tymczasowo wy³¹czone z powodu b³êdów parsowania.
-# Pe³na dokumentacja koncepcji w: docs/BUSINESS_SIMULATOR_CONCEPT.md
+# Funkcje symulatora zostaÅ‚y tymczasowo wyÅ‚Ä…czone z powodu bÅ‚Ä™dÃ³w parsowania.
+# PeÅ‚na dokumentacja koncepcji w: docs/BUSINESS_SIMULATOR_CONCEPT.md
 # Kod zostanie przepisany od nowa w osobnym module.
 #
-# Usuniête funkcje (linie 3690-4817):
+# UsuniÄ™te funkcje (linie 3690-4817):
 # - generate_case_context()
 # - get_fallback_context()
 # - generate_initial_message()
@@ -3707,7 +3707,7 @@ Mened¿er: SprawdŸ czy wszystko dzia³a i zrób dokumentacjê. Do koñca tygodnia ma 
 # - generate_fallback_report()
 # - generate_conversation_transcript()
 # - show_conversation_report()
-# - show_business_conversation_simulator() [G£ÓWNA FUNKCJA - 700+ linii]
+# - show_business_conversation_simulator() [GÅÃ“WNA FUNKCJA - 700+ linii]
 # - analyze_ciq_level()
 # - analyze_ciq_level_fallback()
 # - generate_ai_response()
@@ -3728,7 +3728,7 @@ def show_simulators():
             model = genai.GenerativeModel(
                 "gemini-2.0-flash-exp",
                 generation_config=genai.GenerationConfig(
-                    temperature=0.8,  # Œrednia kreatywnoœæ
+                    temperature=0.8,  # Åšrednia kreatywnoÅ›Ä‡
                     top_p=0.9,
                 )
             )
@@ -3745,20 +3745,20 @@ def show_simulators():
         return response.text.strip()
         
     except Exception as e:
-        # W razie b³êdu u¿yj fallbacku
+        # W razie bÅ‚Ä™du uÅ¼yj fallbacku
         return get_fallback_context(scenario)
 
 def get_fallback_context(scenario):
-    """Zwraca predefiniowany kontekst gdy AI nie dzia³a"""
+    """Zwraca predefiniowany kontekst gdy AI nie dziaÅ‚a"""
     fallback_contexts = {
-        "salary_raise": "Jesteœ Project Managerem w firmie IT. Pracujesz od 18 miesiêcy bez podwy¿ki, a niedawno przej¹³eœ dodatkowe obowi¹zki po zwolnionym koledze. S³ysza³eœ, ¿e firma ma dobry kwarta³ finansowy.",
-        "difficult_feedback": "Marek pracuje jako Junior Developer. Ostatnio jego projekty s¹ opóŸnione o œrednio 2 tygodnie, a kod wymaga wielu poprawek. Problem trwa od 3 miesiêcy. Ma potencja³, ale wydaje siê byæ przyt³oczony zadaniami.",
-        "team_conflict": "Konflikt miêdzy Ani¹ (Senior Designer) a Tomkiem (Frontend Developer). Problem: Ania czuje ¿e Tomek ignoruje jej wskazówki designerskie i samowolnie zmienia projekty. To trwa od 2 miesiêcy i wp³ywa na jakoœæ produktu. Twoja perspektywa (Ania): czujesz siê lekcewa¿ona i sfrustrowana."
+        "salary_raise": "JesteÅ› Project Managerem w firmie IT. Pracujesz od 18 miesiÄ™cy bez podwyÅ¼ki, a niedawno przejÄ…Å‚eÅ› dodatkowe obowiÄ…zki po zwolnionym koledze. SÅ‚yszaÅ‚eÅ›, Å¼e firma ma dobry kwartaÅ‚ finansowy.",
+        "difficult_feedback": "Marek pracuje jako Junior Developer. Ostatnio jego projekty sÄ… opÃ³Åºnione o Å›rednio 2 tygodnie, a kod wymaga wielu poprawek. Problem trwa od 3 miesiÄ™cy. Ma potencjaÅ‚, ale wydaje siÄ™ byÄ‡ przytÅ‚oczony zadaniami.",
+        "team_conflict": "Konflikt miÄ™dzy AniÄ… (Senior Designer) a Tomkiem (Frontend Developer). Problem: Ania czuje Å¼e Tomek ignoruje jej wskazÃ³wki designerskie i samowolnie zmienia projekty. To trwa od 2 miesiÄ™cy i wpÅ‚ywa na jakoÅ›Ä‡ produktu. Twoja perspektywa (Ania): czujesz siÄ™ lekcewaÅ¼ona i sfrustrowana."
     }
     
     scenario_id = None
     for sid, sc in {"salary_raise": {}, "difficult_feedback": {}, "team_conflict": {}}.items():
-        if scenario.get('name') == {"salary_raise": "?? Rozmowa o podwy¿kê", "difficult_feedback": "?? Feedback dla pracownika", "team_conflict": "? Rozwi¹zanie konfliktu"}.get(sid):
+        if scenario.get('name') == {"salary_raise": "?? Rozmowa o podwyÅ¼kÄ™", "difficult_feedback": "?? Feedback dla pracownika", "team_conflict": "? RozwiÄ…zanie konfliktu"}.get(sid):
             scenario_id = sid
             break
     
@@ -3768,7 +3768,7 @@ def get_fallback_context(scenario):
         return "Kontekst rozmowy biznesowej."
 
 def generate_initial_message(scenario, case_context):
-    """Generuje pierwsz¹ wiadomoœæ AI uwzglêdniaj¹c¹ kontekst"""
+    """Generuje pierwszÄ… wiadomoÅ›Ä‡ AI uwzglÄ™dniajÄ…cÄ… kontekst"""
     try:
         api_key = st.secrets.get("API_KEYS", {}).get("gemini")
         if not api_key:
@@ -3788,19 +3788,19 @@ def generate_initial_message(scenario, case_context):
                 generation_config=genai.GenerationConfig(temperature=0.7)
             )
         
-        prompt = f"""Jesteœ {scenario['ai_role']} w symulacji biznesowej.
+        prompt = f"""JesteÅ› {scenario['ai_role']} w symulacji biznesowej.
 
 KONTEKST SYTUACJI:
 {case_context}
 
-TWOJA POSTAÆ: {scenario['ai_persona']}
+TWOJA POSTAÄ†: {scenario['ai_persona']}
 
-Wygeneruj pierwsz¹ naturaln¹ wypowiedŸ rozpoczynaj¹c¹ tê rozmowê. 
+Wygeneruj pierwszÄ… naturalnÄ… wypowiedÅº rozpoczynajÄ…cÄ… tÄ™ rozmowÄ™. 
 - 1-2 zdania
 - Naturalny ton odpowiedni do roli
-- Mo¿esz nawi¹zaæ do kontekstu jeœli to naturalne
+- MoÅ¼esz nawiÄ…zaÄ‡ do kontekstu jeÅ›li to naturalne
 
-Tylko treœæ wypowiedzi, bez opisów:"""
+Tylko treÅ›Ä‡ wypowiedzi, bez opisÃ³w:"""
 
         response = model.generate_content(prompt)
         return response.text.strip()
@@ -3809,16 +3809,16 @@ Tylko treœæ wypowiedzi, bez opisów:"""
         return get_fallback_initial_message(scenario)
 
 def get_fallback_initial_message(scenario):
-    """Zwraca prost¹ pierwsz¹ wiadomoœæ jako fallback"""
+    """Zwraca prostÄ… pierwszÄ… wiadomoÅ›Ä‡ jako fallback"""
     fallback_messages = {
-        "Szef": "Dzieñ dobry. S³ucham, o co chodzi? Mam tylko 10 minut.",
-        "Pracownik": "Czeœæ! Co tam? Wszystko w porz¹dku?",
-        "Cz³onek zespo³u": "No dobra, to o co w koñcu chodzi? I tak nikt mnie tu nie s³ucha..."
+        "Szef": "DzieÅ„ dobry. SÅ‚ucham, o co chodzi? Mam tylko 10 minut.",
+        "Pracownik": "CzeÅ›Ä‡! Co tam? Wszystko w porzÄ…dku?",
+        "CzÅ‚onek zespoÅ‚u": "No dobra, to o co w koÅ„cu chodzi? I tak nikt mnie tu nie sÅ‚ucha..."
     }
-    return fallback_messages.get(scenario.get('ai_role'), "Dzieñ dobry, s³ucham.")
+    return fallback_messages.get(scenario.get('ai_role'), "DzieÅ„ dobry, sÅ‚ucham.")
 
 def generate_conversation_report(messages, scenario, case_context):
-    """Generuje koñcowy raport z rozmowy u¿ywaj¹c AI"""
+    """Generuje koÅ„cowy raport z rozmowy uÅ¼ywajÄ…c AI"""
     try:
         api_key = st.secrets.get("API_KEYS", {}).get("gemini")
         if not api_key:
@@ -3838,7 +3838,7 @@ def generate_conversation_report(messages, scenario, case_context):
                 generation_config=genai.GenerationConfig(temperature=0.3)
             )
         
-        # Przygotuj historiê rozmowy dla AI
+        # Przygotuj historiÄ™ rozmowy dla AI
         conversation_text = f"SCENARIUSZ: {scenario['name']}\nKONTEKST: {case_context}\n\nROZMOWA:\n"
         user_messages = []
         
@@ -3871,34 +3871,34 @@ def generate_conversation_report(messages, scenario, case_context):
         prompt = f"""{conversation_text}
 
 ZADANIE:
-Oceñ ca³¹ rozmowê i wygeneruj raport rozwojowy. Zwróæ JSON:
+OceÅ„ caÅ‚Ä… rozmowÄ™ i wygeneruj raport rozwojowy. ZwrÃ³Ä‡ JSON:
 
 {{
-    "outcome": "Pozytywny|Czêœciowy|Negatywny",
+    "outcome": "Pozytywny|CzÄ™Å›ciowy|Negatywny",
     "outcome_reason": "1-2 zdania dlaczego taki wynik",
     "strengths": ["mocna strona 1 (konkret, nr wymiany)", "mocna strona 2"],
     "improvements": ["obszar rozwoju 1 (konkret, nr wymiany)", "obszar rozwoju 2"],
     "key_moment": "Najbardziej krytyczny moment rozmowy i dlaczego",
-    "next_steps": "Co u¿ytkownik powinien æwiczyæ dalej"
+    "next_steps": "Co uÅ¼ytkownik powinien Ä‡wiczyÄ‡ dalej"
 }}
 
 KRYTERIA OCENY:
-- Pozytywny: osi¹gniêto porozumienie, zbudowano rapport, konstruktywne rozwi¹zanie
-- Czêœciowy: kompromis, nierozstrzygniêta kwestia, ale bez eskalacji
-- Negatywny: konflikt, pat, przerwanie rozmowy, brak postêpu
+- Pozytywny: osiÄ…gniÄ™to porozumienie, zbudowano rapport, konstruktywne rozwiÄ…zanie
+- CzÄ™Å›ciowy: kompromis, nierozstrzygniÄ™ta kwestia, ale bez eskalacji
+- Negatywny: konflikt, pat, przerwanie rozmowy, brak postÄ™pu
 
-WA¯NE:
-- B¹dŸ konkretny: "wymiana 3" zamiast "na pocz¹tku"
-- Doceniaj u¿ycie Transformacyjnego C-IQ
-- Zwróæ uwagê na progression - czy poziom C-IQ siê poprawia³?
-- Max 15 s³ów na punkt
+WAÅ»NE:
+- BÄ…dÅº konkretny: "wymiana 3" zamiast "na poczÄ…tku"
+- Doceniaj uÅ¼ycie Transformacyjnego C-IQ
+- ZwrÃ³Ä‡ uwagÄ™ na progression - czy poziom C-IQ siÄ™ poprawiaÅ‚?
+- Max 15 sÅ‚Ã³w na punkt
 
 TYLKO JSON:"""
 
         response = model.generate_content(prompt)
         result_text = response.text.strip()
         
-        # Wyczyœæ JSON
+        # WyczyÅ›Ä‡ JSON
         if "```json" in result_text:
             result_text = result_text.split("```json")[1].split("```")[0].strip()
         elif "```" in result_text:
@@ -3917,7 +3917,7 @@ TYLKO JSON:"""
         return generate_fallback_report(messages)
 
 def generate_fallback_report(messages):
-    """Prosty raport gdy AI nie dzia³a"""
+    """Prosty raport gdy AI nie dziaÅ‚a"""
     total_turns = len([m for m in messages if m['role'] == 'user'])
     ciq_stats = {
         'Transformacyjny': 0,
@@ -3931,18 +3931,18 @@ def generate_fallback_report(messages):
                 ciq_stats[level] += 1
     
     return {
-        'outcome': 'Czêœciowy',
-        'outcome_reason': 'Rozmowa zosta³a zakoñczona.',
-        'strengths': ['Ukoñczy³eœ scenariusz', 'Przeæwiczy³eœ komunikacjê C-IQ'],
-        'improvements': ['Spróbuj wiêcej pytañ otwartych', 'Buduj na odpowiedziach rozmówcy'],
-        'key_moment': 'Ca³a rozmowa by³a æwiczeniem umiejêtnoœci.',
-        'next_steps': 'Spróbuj innego scenariusza i zwróæ uwagê na poziomy C-IQ.',
+        'outcome': 'CzÄ™Å›ciowy',
+        'outcome_reason': 'Rozmowa zostaÅ‚a zakoÅ„czona.',
+        'strengths': ['UkoÅ„czyÅ‚eÅ› scenariusz', 'PrzeÄ‡wiczyÅ‚eÅ› komunikacjÄ™ C-IQ'],
+        'improvements': ['SprÃ³buj wiÄ™cej pytaÅ„ otwartych', 'Buduj na odpowiedziach rozmÃ³wcy'],
+        'key_moment': 'CaÅ‚a rozmowa byÅ‚a Ä‡wiczeniem umiejÄ™tnoÅ›ci.',
+        'next_steps': 'SprÃ³buj innego scenariusza i zwrÃ³Ä‡ uwagÄ™ na poziomy C-IQ.',
         'total_turns': total_turns,
         'ciq_stats': ciq_stats
     }
 
 def generate_conversation_transcript(messages, scenario):
-    """Generuje transkrypcjê rozmowy w formacie tekstowym"""
+    """Generuje transkrypcjÄ™ rozmowy w formacie tekstowym"""
     transcript_lines = []
     transcript_lines.append("=" * 60)
     transcript_lines.append("TRANSKRYPCJA ROZMOWY")
@@ -3961,7 +3961,7 @@ def generate_conversation_transcript(messages, scenario):
         transcript_lines.append("-" * 60)
         transcript_lines.append("")
     
-    # Historia rozmowy z analiz¹ C-IQ
+    # Historia rozmowy z analizÄ… C-IQ
     exchange_num = 0
     for i, msg in enumerate(messages):
         if msg['role'] == 'user':
@@ -3977,7 +3977,7 @@ def generate_conversation_transcript(messages, scenario):
             transcript_lines.append(f"{scenario.get('user_role', 'TY').upper()}:")
             transcript_lines.append(msg['content'])
             
-            # Dodaj analizê C-IQ
+            # Dodaj analizÄ™ C-IQ
             if msg.get('ciq_level'):
                 ciq = msg['ciq_level']
                 level = ciq.get('level', 'Brak')
@@ -3985,16 +3985,16 @@ def generate_conversation_transcript(messages, scenario):
                 
                 appropriate_text = ""
                 if is_appropriate is not None:
-                    appropriate_text = " ? (odpowiedni w kontekœcie)" if is_appropriate else " ? (nieodpowiedni)"
+                    appropriate_text = " ? (odpowiedni w kontekÅ›cie)" if is_appropriate else " ? (nieodpowiedni)"
                 
-                transcript_lines.append(f"   L¦ C-IQ: {level}{appropriate_text}")
+                transcript_lines.append(f"   LÂ¦ C-IQ: {level}{appropriate_text}")
                 
                 # Opcjonalnie dodaj feedback
                 feedback = ciq.get('feedback', '')
                 if feedback:
-                    # Skróæ feedback do 100 znaków
+                    # SkrÃ³Ä‡ feedback do 100 znakÃ³w
                     short_feedback = feedback[:100] + "..." if len(feedback) > 100 else feedback
-                    transcript_lines.append(f"   L¦ {short_feedback}")
+                    transcript_lines.append(f"   LÂ¦ {short_feedback}")
             
             transcript_lines.append("")
             transcript_lines.append("-" * 60)
@@ -4007,26 +4007,26 @@ def generate_conversation_transcript(messages, scenario):
     return "\n".join(transcript_lines)
 
 def show_conversation_report(report, scenario):
-    """Wyœwietla koñcowy raport z rozmowy"""
+    """WyÅ›wietla koÅ„cowy raport z rozmowy"""
     st.markdown("---")
-    st.markdown("## ?? PODSUMOWANIE ROZMOWY")
-    st.markdown("?????????????????????????????????")
+    st.markdown("## ğŸ¯ PODSUMOWANIE ROZMOWY")
+    st.markdown("ğŸ”§ğŸ”§ğŸ”§ğŸ”§ğŸ”§ğŸ”§ğŸ”§ğŸ”§ğŸ”§ğŸ”§ğŸ”§")
     
     # Wynik rozmowy z emoji
     outcome_emoji = {
         'Pozytywny': '?',
-        'Czêœciowy': '??',
+        'CzÄ™Å›ciowy': 'ğŸ¯',
         'Negatywny': '?'
     }
-    outcome = report.get('outcome', 'Czêœciowy')
-    emoji = outcome_emoji.get(outcome, '??')
+    outcome = report.get('outcome', 'CzÄ™Å›ciowy')
+    emoji = outcome_emoji.get(outcome, 'ğŸ¯')
     
     col1, col2 = st.columns([1, 2])
     with col1:
         st.markdown(f"### {emoji} Wynik")
         outcome_color = {
             'Pozytywny': 'green',
-            'Czêœciowy': 'orange',
+            'CzÄ™Å›ciowy': 'orange',
             'Negatywny': 'red'
         }
         color = outcome_color.get(outcome, 'blue')
@@ -4037,7 +4037,7 @@ def show_conversation_report(report, scenario):
         else:
             st.error(f"**{outcome}**")
     with col2:
-        st.markdown("### ?? Dlaczego?")
+        st.markdown("### ğŸ¯ Dlaczego?")
         st.info(report.get('outcome_reason', 'Brak opisu'))
     
     # Statystyki
@@ -4057,72 +4057,72 @@ def show_conversation_report(report, scenario):
     
     # Mocne strony
     st.markdown("---")
-    st.markdown("### ?? Twoje mocne strony")
+    st.markdown("### ğŸ¯ Twoje mocne strony")
     strengths = report.get('strengths', [])
     if strengths:
         for strength in strengths:
             st.success(f"? {strength}")
     else:
-        st.info("Brak szczegó³ów")
+        st.info("Brak szczegÃ³Å‚Ã³w")
     
     # Obszary rozwoju
-    st.markdown("### ?? Obszary do rozwoju")
+    st.markdown("### ğŸ¯ Obszary do rozwoju")
     improvements = report.get('improvements', [])
     if improvements:
         for improvement in improvements:
-            st.warning(f"› {improvement}")
+            st.warning(f"â€º {improvement}")
     else:
-        st.info("Brak szczegó³ów")
+        st.info("Brak szczegÃ³Å‚Ã³w")
     
     # Kluczowy moment
     st.markdown("---")
-    st.markdown("### ?? Kluczowy moment rozmowy")
+    st.markdown("### ğŸ¯ Kluczowy moment rozmowy")
     st.info(report.get('key_moment', 'Brak analizy'))
     
-    # Nastêpne kroki
-    st.markdown("### ?? Co dalej?")
-    st.success(report.get('next_steps', 'Kontynuuj æwiczenia z innymi scenariuszami'))
+    # NastÄ™pne kroki
+    st.markdown("### ğŸ¯ Co dalej?")
+    st.success(report.get('next_steps', 'Kontynuuj Ä‡wiczenia z innymi scenariuszami'))
     
     st.markdown("---")
     
     # TRANSKRYPCJA ROZMOWY
-    st.markdown("### ?? Transkrypcja rozmowy")
-    st.caption("Pe³ny zapis Twojej rozmowy z analiz¹ poziomów C-IQ")
+    st.markdown("### ğŸ¯ Transkrypcja rozmowy")
+    st.caption("PeÅ‚ny zapis Twojej rozmowy z analizÄ… poziomÃ³w C-IQ")
     
-    # Generuj transkrypcjê
+    # Generuj transkrypcjÄ™
     messages = st.session_state.get('simulator_messages', [])
     transcript = generate_conversation_transcript(messages, scenario)
     
-    # Wyœwietl w expander (domyœlnie zwiniêty)
-    with st.expander("?? Zobacz pe³n¹ transkrypcjê", expanded=False):
+    # WyÅ›wietl w expander (domyÅ›lnie zwiniÄ™ty)
+    with st.expander("?? Zobacz peÅ‚nÄ… transkrypcjÄ™", expanded=False):
         st.text(transcript)
         
         # Przycisk do pobrania
         st.download_button(
-            label="?? Pobierz transkrypcjê (.txt)",
+            label="?? Pobierz transkrypcjÄ™ (.txt)",
             data=transcript,
             file_name=f"transkrypcja_{scenario['name'].replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
             mime="text/plain",
-            help="Zapisz transkrypcjê na swoim komputerze"
+            help="Zapisz transkrypcjÄ™ na swoim komputerze"
         )
     
     st.markdown("---")
 
 def show_business_conversation_simulator():
-    """Symulator rozmów biznesowych z analiz¹ C-IQ"""
-    st.markdown("### ?? Symulator Rozmów Biznesowych")
+    """Symulator rozmÃ³w biznesowych z analizÄ… C-IQ"""
+    st.markdown("### ğŸ¯ Symulator RozmÃ³w Biznesowych")
     
     # DIAGNOSTYKA - ZAWSZE WIDOCZNA
     try:
         api_key = st.secrets.get("API_KEYS", {}).get("gemini")
         if api_key:
-            st.success(f"? API OK - Klucz znaleziony ({len(api_key)} znaków) - U¿ywam prawdziwego AI")
+            st.success(f"? API OK - Klucz znaleziony ({len(api_key)} znakÃ³w) - UÅ¼ywam prawdziwego AI")
         else:
             st.error("? BRAK KLUCZA API - Dodaj 'gemini' do secrets w [API_KEYS]")
-            st.warning("?? U¿ywam prostych odpowiedzi fallback zamiast AI")
+            st.warning("âš ï¸ UÅ¼ywam prostych odpowiedzi fallback zamiast AI")
     except Exception as e:
-        st.error(f"? B£¥D SECRETS: {type(e).__name__}: {str(e)}")
-        st.warning("?? Nie mogê odczytaæ konfiguracji - u¿ywam fallback")
+        st.error(f"? BÅÄ„D SECRETS: {type(e).__name__}: {str(e)}")
+        st.warning("âš ï¸ Nie mogÄ™ odczytaÄ‡ konfiguracji - uÅ¼ywam fallback")
     
     st.markdown("---")
     
@@ -4136,7 +4136,7 @@ def show_business_conversation_simulator():
     if 'simulator_case_context' not in st.session_state:
         st.session_state.simulator_case_context = None
     if 'simulator_max_turns' not in st.session_state:
-        st.session_state.simulator_max_turns = 10  # Maksymalnie 10 wymian (20 wiadomoœci)
+        st.session_state.simulator_max_turns = 10  # Maksymalnie 10 wymian (20 wiadomoÅ›ci)
     if 'simulator_completed' not in st.session_state:
         st.session_state.simulator_completed = False
     if 'simulator_final_report' not in st.session_state:
@@ -4145,120 +4145,120 @@ def show_business_conversation_simulator():
     # Definicja scenariuszy z promptami do generowania kontekstu
     scenarios = {
         "salary_raise": {
-            "name": "?? Rozmowa o podwy¿kê",
-            "description": "Prosisz szefa o podwy¿kê. Twój szef jest wymagaj¹cy i skupiony na wynikach.",
-            "ai_persona": "Jesteœ wymagaj¹cym dyrektorem firmy. Cenisz konkretne wyniki i liczby. Jesteœ sceptyczny wobec próœb o podwy¿kê, chyba ¿e rozmówca przedstawi mocne argumenty biznesowe. Nie jesteœ wrogi, ale wymagasz przekonuj¹cych dowodów wartoœci pracownika.",
+            "name": "?? Rozmowa o podwyÅ¼kÄ™",
+            "description": "Prosisz szefa o podwyÅ¼kÄ™. TwÃ³j szef jest wymagajÄ…cy i skupiony na wynikach.",
+            "ai_persona": "JesteÅ› wymagajÄ…cym dyrektorem firmy. Cenisz konkretne wyniki i liczby. JesteÅ› sceptyczny wobec prÃ³Å›b o podwyÅ¼kÄ™, chyba Å¼e rozmÃ³wca przedstawi mocne argumenty biznesowe. Nie jesteÅ› wrogi, ale wymagasz przekonujÄ…cych dowodÃ³w wartoÅ›ci pracownika.",
             "ai_role": "Szef",
             "user_role": "Pracownik",
-            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst biznesowy dla rozmowy pracownik-szef o podwy¿kê:
+            "context_prompt": """Wygeneruj krÃ³tki (3-4 zdania), konkretny kontekst biznesowy dla rozmowy pracownik-szef o podwyÅ¼kÄ™:
 - Nazwa stanowiska pracownika
-- Bran¿a/firma
-- Dlaczego pracownik chce podwy¿ki (np. rok bez podwy¿ki, nowe obowi¹zki, oferta z innej firmy)
-- Dodatkowy szczegó³ zwiêkszaj¹cy trudnoœæ (np. firma ma trudnoœci finansowe, ostatnio by³o zwolnienie kogoœ)
+- BranÅ¼a/firma
+- Dlaczego pracownik chce podwyÅ¼ki (np. rok bez podwyÅ¼ki, nowe obowiÄ…zki, oferta z innej firmy)
+- Dodatkowy szczegÃ³Å‚ zwiÄ™kszajÄ…cy trudnoÅ›Ä‡ (np. firma ma trudnoÅ›ci finansowe, ostatnio byÅ‚o zwolnienie kogoÅ›)
 
-Odpowiedz TYLKO kontekstem, bez dodatków. Format: "Jesteœ [stanowisko] w [firma/bran¿a]. [sytuacja]. [wyzwanie]."
+Odpowiedz TYLKO kontekstem, bez dodatkÃ³w. Format: "JesteÅ› [stanowisko] w [firma/branÅ¼a]. [sytuacja]. [wyzwanie]."
 """
         },
         "difficult_feedback": {
             "name": "?? Feedback dla pracownika",
-            "description": "Musisz przekazaæ trudny feedback pracownikowi, który nie spe³nia oczekiwañ.",
-            "ai_persona": "Jesteœ pracownikiem, który nie zdaje sobie sprawy z problemów w swojej pracy. Pocz¹tkowo mo¿esz byæ defensywny, ale jeœli rozmówca u¿yje empatii i konkretów (poziom Transformacyjny C-IQ), stajesz siê otwarty na feedback.",
+            "description": "Musisz przekazaÄ‡ trudny feedback pracownikowi, ktÃ³ry nie speÅ‚nia oczekiwaÅ„.",
+            "ai_persona": "JesteÅ› pracownikiem, ktÃ³ry nie zdaje sobie sprawy z problemÃ³w w swojej pracy. PoczÄ…tkowo moÅ¼esz byÄ‡ defensywny, ale jeÅ›li rozmÃ³wca uÅ¼yje empatii i konkretÃ³w (poziom Transformacyjny C-IQ), stajesz siÄ™ otwarty na feedback.",
             "ai_role": "Pracownik",
-            "user_role": "Mened¿er",
-            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst dla trudnej rozmowy feedbackowej:
-- Imiê pracownika i stanowisko
-- Konkretny problem z wydajnoœci¹ (np. spóŸnione projekty, konflikty w zespole, b³êdy w pracy)
-- Jak d³ugo problem trwa
-- Dodatkowy kontekst (np. pracownik ma potencja³ ale ostatnio siê pogubi³, albo nie przyjmuje feedbacku)
+            "user_role": "MenedÅ¼er",
+            "context_prompt": """Wygeneruj krÃ³tki (3-4 zdania), konkretny kontekst dla trudnej rozmowy feedbackowej:
+- ImiÄ™ pracownika i stanowisko
+- Konkretny problem z wydajnoÅ›ciÄ… (np. spÃ³Åºnione projekty, konflikty w zespole, bÅ‚Ä™dy w pracy)
+- Jak dÅ‚ugo problem trwa
+- Dodatkowy kontekst (np. pracownik ma potencjaÅ‚ ale ostatnio siÄ™ pogubiÅ‚, albo nie przyjmuje feedbacku)
 
-Odpowiedz TYLKO kontekstem. Format: "[Imiê] pracuje jako [stanowisko]. Problem: [konkret]. [dodatkowy szczegó³]."
+Odpowiedz TYLKO kontekstem. Format: "[ImiÄ™] pracuje jako [stanowisko]. Problem: [konkret]. [dodatkowy szczegÃ³Å‚]."
 """
         },
         "team_conflict": {
-            "name": "? Rozwi¹zanie konfliktu",
-            "description": "Dwóch cz³onków zespo³u ma konflikt. Musisz pomóc im siê porozumieæ.",
-            "ai_persona": "Jesteœ sfrustrowanym cz³onkiem zespo³u, który czuje siê niedoceniony. Jesteœ lekko agresywny i obwiniasz innych. Mo¿esz siê uspokoiæ tylko jeœli rozmówca wyka¿e empatiê i pomo¿e znaleŸæ wspólne rozwi¹zanie (C-IQ Transformacyjny).",
-            "ai_role": "Cz³onek zespo³u",
+            "name": "? RozwiÄ…zanie konfliktu",
+            "description": "DwÃ³ch czÅ‚onkÃ³w zespoÅ‚u ma konflikt. Musisz pomÃ³c im siÄ™ porozumieÄ‡.",
+            "ai_persona": "JesteÅ› sfrustrowanym czÅ‚onkiem zespoÅ‚u, ktÃ³ry czuje siÄ™ niedoceniony. JesteÅ› lekko agresywny i obwiniasz innych. MoÅ¼esz siÄ™ uspokoiÄ‡ tylko jeÅ›li rozmÃ³wca wykaÅ¼e empatiÄ™ i pomoÅ¼e znaleÅºÄ‡ wspÃ³lne rozwiÄ…zanie (C-IQ Transformacyjny).",
+            "ai_role": "CzÅ‚onek zespoÅ‚u",
             "user_role": "Mediator",
-            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst konfliktu zespo³owego:
-- Imiona dwóch skonfliktowanych osób i ich role
-- O co dok³adnie chodzi w konflikcie (np. podzia³ zadañ, ró¿ne style pracy, nieporozumienie)
-- Jak d³ugo to trwa i jaki ma wp³yw na zespó³
-- Perspektywa osoby z któr¹ rozmawiasz (czuje siê niedoceniona/wykorzystana)
+            "context_prompt": """Wygeneruj krÃ³tki (3-4 zdania), konkretny kontekst konfliktu zespoÅ‚owego:
+- Imiona dwÃ³ch skonfliktowanych osÃ³b i ich role
+- O co dokÅ‚adnie chodzi w konflikcie (np. podziaÅ‚ zadaÅ„, rÃ³Å¼ne style pracy, nieporozumienie)
+- Jak dÅ‚ugo to trwa i jaki ma wpÅ‚yw na zespÃ³Å‚
+- Perspektywa osoby z ktÃ³rÄ… rozmawiasz (czuje siÄ™ niedoceniona/wykorzystana)
 
-Odpowiedz TYLKO kontekstem. Format: "Konflikt miêdzy [osoba1] a [osoba2]. Problem: [konkret]. Twoja perspektywa: [uczucia]."
+Odpowiedz TYLKO kontekstem. Format: "Konflikt miÄ™dzy [osoba1] a [osoba2]. Problem: [konkret]. Twoja perspektywa: [uczucia]."
 """
         },
         "delegation": {
             "name": "?? Delegowanie zadania",
-            "description": "Delegujesz wa¿ne zadanie pracownikowi, który ma ju¿ du¿e obci¹¿enie prac¹.",
-            "ai_persona": "Jesteœ przeci¹¿onym pracownikiem, który ma ju¿ pe³ne rêce roboty. Czujesz siê zmêczony i obawiasz siê, ¿e kolejne zadanie Ciê przyt³oczy. Jesteœ otwarty na rozmowê, ale potrzebujesz wsparcia i jasnych priorytetów.",
+            "description": "Delegujesz waÅ¼ne zadanie pracownikowi, ktÃ³ry ma juÅ¼ duÅ¼e obciÄ…Å¼enie pracÄ….",
+            "ai_persona": "JesteÅ› przeciÄ…Å¼onym pracownikiem, ktÃ³ry ma juÅ¼ peÅ‚ne rÄ™ce roboty. Czujesz siÄ™ zmÄ™czony i obawiasz siÄ™, Å¼e kolejne zadanie CiÄ™ przytÅ‚oczy. JesteÅ› otwarty na rozmowÄ™, ale potrzebujesz wsparcia i jasnych priorytetÃ³w.",
             "ai_role": "Pracownik",
-            "user_role": "Mened¿er",
-            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst delegowania zadania:
-- Imiê pracownika i jego stanowisko
-- Jakie zadanie chcesz delegowaæ i dlaczego jest wa¿ne
-- Obecne obci¹¿enie pracownika (np. 3 projekty równoczeœnie, deadline za tydzieñ)
-- Dodatkowy szczegó³ (np. brak innej osoby do zadania, klient czeka)
+            "user_role": "MenedÅ¼er",
+            "context_prompt": """Wygeneruj krÃ³tki (3-4 zdania), konkretny kontekst delegowania zadania:
+- ImiÄ™ pracownika i jego stanowisko
+- Jakie zadanie chcesz delegowaÄ‡ i dlaczego jest waÅ¼ne
+- Obecne obciÄ…Å¼enie pracownika (np. 3 projekty rÃ³wnoczeÅ›nie, deadline za tydzieÅ„)
+- Dodatkowy szczegÃ³Å‚ (np. brak innej osoby do zadania, klient czeka)
 
-Odpowiedz TYLKO kontekstem. Format: "Chcesz delegowaæ [zadanie] do [imiê]. Obecna sytuacja: [obci¹¿enie]. [wyzwanie]."
+Odpowiedz TYLKO kontekstem. Format: "Chcesz delegowaÄ‡ [zadanie] do [imiÄ™]. Obecna sytuacja: [obciÄ…Å¼enie]. [wyzwanie]."
 """
         },
         "motivation": {
             "name": "?? Motywowanie zdemotywowanego",
-            "description": "Pracownik straci³ motywacjê i rozwa¿a zmianê pracy. Musisz go zmotywowaæ.",
-            "ai_persona": "Jesteœ zdemotywowanym pracownikiem, który czuje siê wypalony i niedoceniany. Praca przesta³a Ciê inspirowaæ. Jesteœ otwarty na rozmowê, ale potrzebujesz szczeroœci, zrozumienia i konkretnych zmian, nie pustych obietnic.",
+            "description": "Pracownik straciÅ‚ motywacjÄ™ i rozwaÅ¼a zmianÄ™ pracy. Musisz go zmotywowaÄ‡.",
+            "ai_persona": "JesteÅ› zdemotywowanym pracownikiem, ktÃ³ry czuje siÄ™ wypalony i niedoceniany. Praca przestaÅ‚a CiÄ™ inspirowaÄ‡. JesteÅ› otwarty na rozmowÄ™, ale potrzebujesz szczeroÅ›ci, zrozumienia i konkretnych zmian, nie pustych obietnic.",
             "ai_role": "Pracownik",
-            "user_role": "Mened¿er",
-            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst rozmowy motywacyjnej:
-- Imiê pracownika i stanowisko
-- Dlaczego straci³ motywacjê (np. rutyna, brak rozwoju, nieudane projekty)
-- Jak d³ugo to trwa i jakie s¹ objawy (np. gorsze wyniki, brak zaanga¿owania)
-- Dodatkowy kontekst (np. dosta³ ofertê z innej firmy, jest wartoœciowym pracownikiem)
+            "user_role": "MenedÅ¼er",
+            "context_prompt": """Wygeneruj krÃ³tki (3-4 zdania), konkretny kontekst rozmowy motywacyjnej:
+- ImiÄ™ pracownika i stanowisko
+- Dlaczego straciÅ‚ motywacjÄ™ (np. rutyna, brak rozwoju, nieudane projekty)
+- Jak dÅ‚ugo to trwa i jakie sÄ… objawy (np. gorsze wyniki, brak zaangaÅ¼owania)
+- Dodatkowy kontekst (np. dostaÅ‚ ofertÄ™ z innej firmy, jest wartoÅ›ciowym pracownikiem)
 
-Odpowiedz TYLKO kontekstem. Format: "[Imiê] jest [stanowisko]. Problem: [demotywacja]. [sygna³y i sytuacja]."
+Odpowiedz TYLKO kontekstem. Format: "[ImiÄ™] jest [stanowisko]. Problem: [demotywacja]. [sygnaÅ‚y i sytuacja]."
 """
         },
         "change_resistance": {
-            "name": "?? Opór wobec zmian",
-            "description": "Przekonujesz zespó³ do du¿ej zmiany organizacyjnej, na któr¹ s¹ opory.",
-            "ai_persona": "Jesteœ sceptycznym cz³onkiem zespo³u, który obawia siê zmian. Masz doœwiadczenie z nieudanymi zmianami w przesz³oœci. Jesteœ ostro¿ny i potrzebujesz przekonuj¹cych argumentów oraz poczucia bezpieczeñstwa.",
-            "ai_role": "Cz³onek zespo³u",
+            "name": "?? OpÃ³r wobec zmian",
+            "description": "Przekonujesz zespÃ³Å‚ do duÅ¼ej zmiany organizacyjnej, na ktÃ³rÄ… sÄ… opory.",
+            "ai_persona": "JesteÅ› sceptycznym czÅ‚onkiem zespoÅ‚u, ktÃ³ry obawia siÄ™ zmian. Masz doÅ›wiadczenie z nieudanymi zmianami w przeszÅ‚oÅ›ci. JesteÅ› ostroÅ¼ny i potrzebujesz przekonujÄ…cych argumentÃ³w oraz poczucia bezpieczeÅ„stwa.",
+            "ai_role": "CzÅ‚onek zespoÅ‚u",
             "user_role": "Lider zmiany",
-            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst wprowadzania zmiany:
+            "context_prompt": """Wygeneruj krÃ³tki (3-4 zdania), konkretny kontekst wprowadzania zmiany:
 - Jaka zmiana jest wprowadzana (np. nowy system, restrukturyzacja, nowa metodologia)
-- Dlaczego zespó³ siê obawia (np. poprzednie z³e doœwiadczenia, niepewnoœæ)
-- Jakie s¹ realne obawy (np. wiêcej pracy, utrata kontroli, zwolnienia)
-- Twoja perspektywa jako cz³onka zespo³u
+- Dlaczego zespÃ³Å‚ siÄ™ obawia (np. poprzednie zÅ‚e doÅ›wiadczenia, niepewnoÅ›Ä‡)
+- Jakie sÄ… realne obawy (np. wiÄ™cej pracy, utrata kontroli, zwolnienia)
+- Twoja perspektywa jako czÅ‚onka zespoÅ‚u
 
 Odpowiedz TYLKO kontekstem. Format: "Firma wprowadza [zmiana]. Twoje obawy: [konkret]. [dodatkowy kontekst]."
 """
         },
         "difficult_client": {
             "name": "?? Rozmowa z trudnym klientem",
-            "description": "Klient jest niezadowolony z realizacji projektu i grozi rezygnacj¹.",
-            "ai_persona": "Jesteœ sfrustrowanym klientem, który czuje ¿e jego projekt jest zaniedbywany. Jesteœ niezadowolony z komunikacji i wyników. Mo¿esz byæ osch³y i wymagaj¹cy, ale jeœli zobaczysz autentyczn¹ chêæ rozwi¹zania problemu, stajesz siê bardziej otwarty.",
+            "description": "Klient jest niezadowolony z realizacji projektu i grozi rezygnacjÄ….",
+            "ai_persona": "JesteÅ› sfrustrowanym klientem, ktÃ³ry czuje Å¼e jego projekt jest zaniedbywany. JesteÅ› niezadowolony z komunikacji i wynikÃ³w. MoÅ¼esz byÄ‡ oschÅ‚y i wymagajÄ…cy, ale jeÅ›li zobaczysz autentycznÄ… chÄ™Ä‡ rozwiÄ…zania problemu, stajesz siÄ™ bardziej otwarty.",
             "ai_role": "Klient",
             "user_role": "Account Manager",
-            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst rozmowy z trudnym klientem:
-- Nazwa klienta/firmy i bran¿a
-- Co posz³o nie tak w projekcie (np. opóŸnienie, b³êdy, z³a komunikacja)
-- Jak powa¿na jest sytuacja (np. klient grozi odejœciem, z³e recenzje)
-- Dodatkowy kontekst (np. du¿y kontrakt, presti¿owy klient)
+            "context_prompt": """Wygeneruj krÃ³tki (3-4 zdania), konkretny kontekst rozmowy z trudnym klientem:
+- Nazwa klienta/firmy i branÅ¼a
+- Co poszÅ‚o nie tak w projekcie (np. opÃ³Åºnienie, bÅ‚Ä™dy, zÅ‚a komunikacja)
+- Jak powaÅ¼na jest sytuacja (np. klient grozi odejÅ›ciem, zÅ‚e recenzje)
+- Dodatkowy kontekst (np. duÅ¼y kontrakt, prestiÅ¼owy klient)
 
-Odpowiedz TYLKO kontekstem. Format: "Klient [nazwa] z bran¿y [bran¿a]. Problem: [konkret]. Sytuacja: [powaga]."
+Odpowiedz TYLKO kontekstem. Format: "Klient [nazwa] z branÅ¼y [branÅ¼a]. Problem: [konkret]. Sytuacja: [powaga]."
 """
         },
         "negotiation": {
-            "name": "?? Negocjacje warunków",
-            "description": "Negocjujesz warunki wspó³pracy z wymagaj¹cym partnerem biznesowym.",
-            "ai_persona": "Jesteœ twardym negocjatorem, który zna swoj¹ wartoœæ. Chcesz najlepszych warunków i nie boisz siê odejœæ, jeœli oferta nie jest satysfakcjonuj¹ca. Szanujesz profesjonalizm i konkretne argumenty biznesowe.",
+            "name": "?? Negocjacje warunkÃ³w",
+            "description": "Negocjujesz warunki wspÃ³Å‚pracy z wymagajÄ…cym partnerem biznesowym.",
+            "ai_persona": "JesteÅ› twardym negocjatorem, ktÃ³ry zna swojÄ… wartoÅ›Ä‡. Chcesz najlepszych warunkÃ³w i nie boisz siÄ™ odejÅ›Ä‡, jeÅ›li oferta nie jest satysfakcjonujÄ…ca. Szanujesz profesjonalizm i konkretne argumenty biznesowe.",
             "ai_role": "Partner biznesowy",
             "user_role": "Negocjator",
-            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst negocjacji biznesowych:
-- Kim jest partner (firma, bran¿a, skala dzia³alnoœci)
-- Co jest przedmiotem negocjacji (np. cena, terminy, zakres wspó³pracy)
-- Jakie s¹ kluczowe punkty sporne (np. bud¿et, harmonogram, warunki p³atnoœci)
+            "context_prompt": """Wygeneruj krÃ³tki (3-4 zdania), konkretny kontekst negocjacji biznesowych:
+- Kim jest partner (firma, branÅ¼a, skala dziaÅ‚alnoÅ›ci)
+- Co jest przedmiotem negocjacji (np. cena, terminy, zakres wspÃ³Å‚pracy)
+- Jakie sÄ… kluczowe punkty sporne (np. budÅ¼et, harmonogram, warunki pÅ‚atnoÅ›ci)
 - Dodatkowy kontekst (np. partner ma alternatywne oferty, presja czasowa)
 
 Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Punkt sporny: [konkret]. [sytuacja]."
@@ -4266,9 +4266,9 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
         }
     }
     
-    # Wybór scenariusza - NOWA KONSTRUKCJA Z SELECTBOX
+    # WybÃ³r scenariusza - NOWA KONSTRUKCJA Z SELECTBOX
     if not st.session_state.simulator_started:
-        st.markdown("### ?? Wybierz scenariusz rozmowy:")
+        st.markdown("### ğŸ¯ Wybierz scenariusz rozmowy:")
         
         # Przygotuj opcje dla selectbox
         scenario_options = {scenario['name']: scenario_id for scenario_id, scenario in scenarios.items()}
@@ -4278,14 +4278,14 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
             "Scenariusz:",
             options=list(scenario_options.keys()),
             key="scenario_selector",
-            help="Wybierz typ rozmowy biznesowej, któr¹ chcesz przeæwiczyæ"
+            help="Wybierz typ rozmowy biznesowej, ktÃ³rÄ… chcesz przeÄ‡wiczyÄ‡"
         )
         
         # Pobierz wybrany scenariusz
         selected_id = scenario_options[selected_name]
         selected_scenario = scenarios[selected_id]
         
-        # Wyœwietl szczegó³y wybranego scenariusza
+        # WyÅ›wietl szczegÃ³Å‚y wybranego scenariusza
         st.markdown("---")
         with st.container():
             st.markdown(f"#### {selected_scenario['name']}")
@@ -4295,21 +4295,21 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
             with col1:
                 st.markdown(f"**Twoja rola:** {selected_scenario['user_role']}")
             with col2:
-                st.markdown(f"**Rozmówca:** {selected_scenario['ai_role']}")
+                st.markdown(f"**RozmÃ³wca:** {selected_scenario['ai_role']}")
             
             st.markdown("")
-            if st.button("?? Rozpocznij symulacjê", type="primary", width="stretch", key=f"start_{selected_id}"):
+            if st.button("â–¶ï¸ Rozpocznij symulacjÄ™", type="primary", width="stretch", key=f"start_{selected_id}"):
                 st.session_state.simulator_scenario = selected_id
                 st.session_state.simulator_started = True
                 st.session_state.simulator_waiting_for_next = False  # Reset flagi
                 
-                # Zaloguj rozpoczêcie symulatora i przyznaj XP
+                # Zaloguj rozpoczÄ™cie symulatora i przyznaj XP
                 try:
                     from data.users import award_xp_for_activity
                     award_xp_for_activity(
                         st.session_state.username,
                         'tool_used',
-                        1,  # 1 XP za u¿ycie narzêdzia
+                        1,  # 1 XP za uÅ¼ycie narzÄ™dzia
                         {
                             'tool_name': 'Business Conversation Simulator',
                             'scenario': selected_id,
@@ -4320,11 +4320,11 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
                     pass
                 
                 # Generuj kontekst case study
-                with st.spinner("?? Generujê kontekst scenariusza..."):
+                with st.spinner("?? GenerujÄ™ kontekst scenariusza..."):
                     case_context = generate_case_context(selected_scenario)
                     st.session_state.simulator_case_context = case_context
                     
-                    # Wygeneruj pierwsz¹ wiadomoœæ AI z kontekstem
+                    # Wygeneruj pierwszÄ… wiadomoÅ›Ä‡ AI z kontekstem
                     initial_message = generate_initial_message(selected_scenario, case_context)
                     st.session_state.simulator_messages = [
                         {"role": "ai", "content": initial_message, "ciq_level": None}
@@ -4334,7 +4334,7 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
         
         # Instrukcja
         st.markdown("---")
-        st.markdown("#### ?? Poziomy C-IQ (Conversational Intelligence):")
+        st.markdown("#### ğŸ¯ Poziomy C-IQ (Conversational Intelligence):")
         
         ciq_col1, ciq_col2, ciq_col3 = st.columns(3)
         
@@ -4342,27 +4342,27 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
             st.markdown("""
             **?? Transakcyjny**
             - Wymiana informacji
-            - "Ty mówisz - ja s³ucham"
-            - Brak g³êbszego dialogu
-            - Przyk³ad: _"Chcê podwy¿ki o 20%"_
+            - "Ty mÃ³wisz - ja sÅ‚ucham"
+            - Brak gÅ‚Ä™bszego dialogu
+            - PrzykÅ‚ad: _"ChcÄ™ podwyÅ¼ki o 20%"_
             """)
         
         with ciq_col2:
             st.markdown("""
             **?? Pozycyjny**
             - Obrona swojej pozycji
-            - Walka o racjê
+            - Walka o racjÄ™
             - "Ja vs. Ty"
-            - Przyk³ad: _"Zas³ugujê na wiêcej, bo inni zarabiaj¹ wiêcej"_
+            - PrzykÅ‚ad: _"ZasÅ‚ugujÄ™ na wiÄ™cej, bo inni zarabiajÄ… wiÄ™cej"_
             """)
         
         with ciq_col3:
             st.markdown("""
             **?? Transformacyjny**
-            - Wspó³tworzenie rozwi¹zañ
+            - WspÃ³Å‚tworzenie rozwiÄ…zaÅ„
             - Empatia i zrozumienie
             - "My razem"
-            - Przyk³ad: _"Jak mo¿emy wspólnie znaleŸæ rozwi¹zanie?"_
+            - PrzykÅ‚ad: _"Jak moÅ¼emy wspÃ³lnie znaleÅºÄ‡ rozwiÄ…zanie?"_
             """)
         
         return
@@ -4373,14 +4373,14 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
         return
     scenario = scenarios[scenario_id]
     
-    # SPRAWD CZY ROZMOWA ZAKOÑCZONA - jeœli tak, poka¿ raport
+    # SPRAWDÅ¹ CZY ROZMOWA ZAKOÅƒCZONA - jeÅ›li tak, pokaÅ¼ raport
     if st.session_state.simulator_completed and st.session_state.simulator_final_report:
         show_conversation_report(st.session_state.simulator_final_report, scenario)
         
         # Przyciski: nowy scenariusz lub zamknij
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("?? Spróbuj innego scenariusza", type="primary", width="stretch"):
+            if st.button("?? SprÃ³buj innego scenariusza", type="primary", width="stretch"):
                 st.session_state.simulator_started = False
                 st.session_state.simulator_messages = []
                 st.session_state.simulator_scenario = None
@@ -4401,13 +4401,13 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
                 st.session_state.simulator_final_report = None
                 st.rerun()
         
-        return  # Zakoñcz funkcjê - nie pokazuj reszty interfejsu
+        return  # ZakoÅ„cz funkcjÄ™ - nie pokazuj reszty interfejsu
     
-    # Oblicz liczbê wymian (tylko wiadomoœci u¿ytkownika)
+    # Oblicz liczbÄ™ wymian (tylko wiadomoÅ›ci uÅ¼ytkownika)
     user_turns = len([m for m in st.session_state.simulator_messages if m['role'] == 'user'])
     max_turns = st.session_state.simulator_max_turns
     
-    # Nag³ówek z nazw¹ scenariusza i licznikiem
+    # NagÅ‚Ã³wek z nazwÄ… scenariusza i licznikiem
     col1, col2, col3 = st.columns([3, 1, 1])
     with col1:
         st.markdown(f"#### {scenario['name']}")
@@ -4418,15 +4418,15 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
         if progress < 0.6:
             color = "?"
         elif progress < 0.8:
-            color = "??"
+            color = "ğŸ¯"
         else:
-            color = "??"
+            color = "ğŸ¯"
         st.metric("Wymiana", f"{color} {user_turns}/{max_turns}")
     with col3:
-        # Przycisk zakoñczenia
-        if st.button("?? Zakoñcz", help="Zakoñcz rozmowê i zobacz raport"):
+        # Przycisk zakoÅ„czenia
+        if st.button("?? ZakoÅ„cz", help="ZakoÅ„cz rozmowÄ™ i zobacz raport"):
             # Generuj raport
-            with st.spinner("?? Generujê raport..."):
+            with st.spinner("?? GenerujÄ™ raport..."):
                 report = generate_conversation_report(
                     st.session_state.simulator_messages,
                     scenario,
@@ -4435,13 +4435,13 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
                 st.session_state.simulator_final_report = report
                 st.session_state.simulator_completed = True
                 
-                # Zaloguj ukoñczenie æwiczenia AI i przyznaj XP
+                # Zaloguj ukoÅ„czenie Ä‡wiczenia AI i przyznaj XP
                 try:
                     from data.users import award_xp_for_activity
                     award_xp_for_activity(
                         st.session_state.username,
                         'ai_exercise',
-                        15,  # 15 XP za ukoñczenie æwiczenia AI
+                        15,  # 15 XP za ukoÅ„czenie Ä‡wiczenia AI
                         {
                             'exercise_name': 'Business Conversation Simulator',
                             'scenario': st.session_state.simulator_scenario,
@@ -4453,42 +4453,42 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
                     pass
             st.rerun()
     
-    # Wyœwietl kontekst case study
+    # WyÅ›wietl kontekst case study
     if st.session_state.simulator_case_context:
         with st.expander("?? Kontekst scenariusza", expanded=False):
             st.info(st.session_state.simulator_case_context)
     
     st.markdown("---")
     
-    # Wyœwietl historiê rozmowy
+    # WyÅ›wietl historiÄ™ rozmowy
     for idx, msg in enumerate(st.session_state.simulator_messages):
         if msg['role'] == 'ai':
-            with st.chat_message("assistant", avatar="??"):
+            with st.chat_message("assistant", avatar="ğŸ¯"):
                 st.markdown(msg['content'])
         else:
-            with st.chat_message("user", avatar="??"):
+            with st.chat_message("user", avatar="ğŸ¯"):
                 st.markdown(msg['content'])
                 if msg.get('ciq_level'):
-                    # Wyœwietl analizê C-IQ z odpowiednim kolorem
+                    # WyÅ›wietl analizÄ™ C-IQ z odpowiednim kolorem
                     level_info = msg['ciq_level']
                     color = level_info.get('color', 'blue')
                     is_appropriate = level_info.get('is_appropriate', None)
                     
-                    # Wybierz funkcjê Streamlit bazuj¹c na kolorze i kontekœcie
+                    # Wybierz funkcjÄ™ Streamlit bazujÄ…c na kolorze i kontekÅ›cie
                     feedback_text = f"?? **C-IQ: {level_info['level']}** - {level_info['feedback']}"
                     
                     if color == 'green':
                         st.success(feedback_text)
                     elif color == 'blue':
-                        # Niebieski = odpowiedni w kontekœcie
+                        # Niebieski = odpowiedni w kontekÅ›cie
                         st.info(feedback_text)
                     elif color == 'orange':
                         st.warning(feedback_text)
                     else:  # red
                         st.error(feedback_text) if not is_appropriate else st.info(feedback_text)
                     
-                    # Jeœli to ostatnia wiadomoœæ u¿ytkownika, poka¿ przyciski akcji
-                    # SprawdŸ czy nastêpna wiadomoœæ to odpowiedŸ AI (wtedy mo¿emy "powtórzyæ")
+                    # JeÅ›li to ostatnia wiadomoÅ›Ä‡ uÅ¼ytkownika, pokaÅ¼ przyciski akcji
+                    # SprawdÅº czy nastÄ™pna wiadomoÅ›Ä‡ to odpowiedÅº AI (wtedy moÅ¼emy "powtÃ³rzyÄ‡")
                     is_last_user_msg = (idx == len(st.session_state.simulator_messages) - 2 
                                        and idx + 1 < len(st.session_state.simulator_messages)
                                        and st.session_state.simulator_messages[idx + 1]['role'] == 'ai')
@@ -4496,24 +4496,24 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
                     if is_last_user_msg and not st.session_state.get('simulator_waiting_for_next', False):
                         col1, col2, col3 = st.columns([1, 1, 3])
                         with col1:
-                            if st.button("?? Powtórz", key=f"retry_{idx}", help="Usuñ tê wypowiedŸ i spróbuj ponownie"):
-                                # Usuñ ostatni¹ parê wiadomoœci (user + AI)
+                            if st.button("?? PowtÃ³rz", key=f"retry_{idx}", help="UsuÅ„ tÄ™ wypowiedÅº i sprÃ³buj ponownie"):
+                                # UsuÅ„ ostatniÄ… parÄ™ wiadomoÅ›ci (user + AI)
                                 st.session_state.simulator_messages = st.session_state.simulator_messages[:-2]
                                 st.rerun()
                         with col2:
-                            if st.button("? Dalej", key=f"continue_{idx}", help="Kontynuuj konwersacjê"):
-                                # Oznacz ¿e u¿ytkownik zaakceptowa³ i chce iœæ dalej
+                            if st.button("? Dalej", key=f"continue_{idx}", help="Kontynuuj konwersacjÄ™"):
+                                # Oznacz Å¼e uÅ¼ytkownik zaakceptowaÅ‚ i chce iÅ›Ä‡ dalej
                                 st.session_state.simulator_waiting_for_next = True
                                 st.rerun()
     
-    # Input u¿ytkownika - dostêpny tylko gdy:
-    # 1. To pocz¹tek rozmowy (brak wiadomoœci)
-    # 2. Ostatnia wiadomoœæ to AI (user odpowiedzia³ na feedback i klikn¹³ "Dalej")
-    # 3. User klikn¹³ "Dalej" (flaga simulator_waiting_for_next)
+    # Input uÅ¼ytkownika - dostÄ™pny tylko gdy:
+    # 1. To poczÄ…tek rozmowy (brak wiadomoÅ›ci)
+    # 2. Ostatnia wiadomoÅ›Ä‡ to AI (user odpowiedziaÅ‚ na feedback i kliknÄ…Å‚ "Dalej")
+    # 3. User kliknÄ…Å‚ "Dalej" (flaga simulator_waiting_for_next)
     can_send_message = (
-        len(st.session_state.simulator_messages) == 0 or  # Pocz¹tek
+        len(st.session_state.simulator_messages) == 0 or  # PoczÄ…tek
         st.session_state.simulator_messages[-1]['role'] == 'ai' or  # Ostatnia to AI
-        st.session_state.get('simulator_waiting_for_next', False)  # User klikn¹³ "Dalej"
+        st.session_state.get('simulator_waiting_for_next', False)  # User kliknÄ…Å‚ "Dalej"
     )
     
     if can_send_message:
@@ -4521,38 +4521,38 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
         if st.session_state.get('simulator_waiting_for_next'):
             st.session_state.simulator_waiting_for_next = False
         
-        user_input = st.chat_input("Twoja odpowiedŸ...")
+        user_input = st.chat_input("Twoja odpowiedÅº...")
         
         if user_input:
-            # SprawdŸ czy to bêdzie ostatnia wymiana (osi¹gniêcie limitu)
+            # SprawdÅº czy to bÄ™dzie ostatnia wymiana (osiÄ…gniÄ™cie limitu)
             user_turns = len([m for m in st.session_state.simulator_messages if m['role'] == 'user'])
             will_reach_limit = (user_turns + 1) >= st.session_state.simulator_max_turns
             
             # Analiza C-IQ przed dodaniem do historii
             ciq_analysis = analyze_ciq_level(user_input)
             
-            # Generuj odpowiedŸ AI (PRZED dodaniem wiadomoœci u¿ytkownika do historii)
+            # Generuj odpowiedÅº AI (PRZED dodaniem wiadomoÅ›ci uÅ¼ytkownika do historii)
             ai_response = generate_ai_response(
                 user_input, 
-                st.session_state.simulator_messages,  # Historia BEZ obecnej wiadomoœci
+                st.session_state.simulator_messages,  # Historia BEZ obecnej wiadomoÅ›ci
                 scenario,
                 ciq_analysis
             )
             
-            # Teraz dodaj wiadomoœæ u¿ytkownika
+            # Teraz dodaj wiadomoÅ›Ä‡ uÅ¼ytkownika
             user_message = {"role": "user", "content": user_input, "ciq_level": ciq_analysis}
             st.session_state.simulator_messages.append(user_message)
             
-            # Dodaj odpowiedŸ AI
+            # Dodaj odpowiedÅº AI
             st.session_state.simulator_messages.append({
                 "role": "ai", 
                 "content": ai_response,
                 "ciq_level": None
             })
             
-            # Jeœli osi¹gniêto limit, automatycznie zakoñcz i generuj raport
+            # JeÅ›li osiÄ…gniÄ™to limit, automatycznie zakoÅ„cz i generuj raport
             if will_reach_limit:
-                with st.spinner("?? Osi¹gniêto limit wymian. Generujê raport..."):
+                with st.spinner("?? OsiÄ…gniÄ™to limit wymian. GenerujÄ™ raport..."):
                     report = generate_conversation_report(
                         st.session_state.simulator_messages,
                         scenario,
@@ -4563,13 +4563,13 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
             
             st.rerun()
     else:
-        # U¿ytkownik musi przeczytaæ feedback i wybraæ akcjê
-        st.info("?? **Przeczytaj feedback powy¿ej i wybierz:**\n- ?? **Powtórz** - spróbuj przeformu³owaæ swoj¹ odpowiedŸ\n- ? **Dalej** - kontynuuj konwersacjê")
+        # UÅ¼ytkownik musi przeczytaÄ‡ feedback i wybraÄ‡ akcjÄ™
+        st.info("ğŸ’¡ **Przeczytaj feedback powyÅ¼ej i wybierz:**\n- ğŸ¯ **PowtÃ³rz** - sprÃ³buj przeformuÅ‚owaÄ‡ swojÄ… odpowiedÅº\n- ? **Dalej** - kontynuuj konwersacjÄ™")
 
 def analyze_ciq_level(user_message):
-    """Analizuje poziom C-IQ w wiadomoœci u¿ytkownika za pomoc¹ AI"""
+    """Analizuje poziom C-IQ w wiadomoÅ›ci uÅ¼ytkownika za pomocÄ… AI"""
     
-    # SprawdŸ czy API jest dostêpne
+    # SprawdÅº czy API jest dostÄ™pne
     try:
         api_key = st.secrets.get("API_KEYS", {}).get("gemini")
         if not api_key:
@@ -4591,7 +4591,7 @@ def analyze_ciq_level(user_message):
                 generation_config=genai.GenerationConfig(temperature=0.3)
             )
         
-        # Pobierz kontekst rozmowy i historiê
+        # Pobierz kontekst rozmowy i historiÄ™
         conversation_history = st.session_state.get('simulator_messages', [])
         case_context = st.session_state.get('simulator_case_context', '')
         
@@ -4599,9 +4599,9 @@ def analyze_ciq_level(user_message):
         recent_context = "\n".join([
             f"{'AI' if msg['role'] == 'ai' else 'Ty'}: {msg['content']}" 
             for msg in conversation_history[-4:]  # Ostatnie 2 wymiany
-        ]) if conversation_history else "Pocz¹tek rozmowy"
+        ]) if conversation_history else "PoczÄ…tek rozmowy"
         
-        prompt = f"""Przeanalizuj tê wypowiedŸ pod k¹tem Conversational Intelligence (C-IQ) w kontekœcie trwaj¹cej rozmowy:
+        prompt = f"""Przeanalizuj tÄ™ wypowiedÅº pod kÄ…tem Conversational Intelligence (C-IQ) w kontekÅ›cie trwajÄ…cej rozmowy:
 
 KONTEKST SYTUACJI:
 {case_context if case_context else 'Rozmowa biznesowa'}
@@ -4609,32 +4609,32 @@ KONTEKST SYTUACJI:
 OSTATNIE WYPOWIEDZI:
 {recent_context}
 
-AKTUALNA WYPOWIED: "{user_message}"
+AKTUALNA WYPOWIEDÅ¹: "{user_message}"
 
 POZIOMY C-IQ:
 ?? **Transakcyjny** - wymiana informacji, pytania o fakty, jasne komunikaty ("co/kiedy/ile")
-   › Odpowiedni gdy: ustalamy fakty, planujemy dzia³ania, wymieniamy dane
-   › Nieodpowiedni gdy: sytuacja wymaga empatii, rozwi¹zania konfliktu, budowania relacji
+   â€º Odpowiedni gdy: ustalamy fakty, planujemy dziaÅ‚ania, wymieniamy dane
+   â€º Nieodpowiedni gdy: sytuacja wymaga empatii, rozwiÄ…zania konfliktu, budowania relacji
 
-?? **Pozycyjny** - obrona stanowiska, argumentowanie, "ja vs ty" ("zas³ugujê/powinienem")
-   › Czasem potrzebny gdy: musimy byæ asertywni, broniæ granic
-   › Problematyczny gdy: eskaluje konflikt, niszczy zaufanie
+?? **Pozycyjny** - obrona stanowiska, argumentowanie, "ja vs ty" ("zasÅ‚ugujÄ™/powinienem")
+   â€º Czasem potrzebny gdy: musimy byÄ‡ asertywni, broniÄ‡ granic
+   â€º Problematyczny gdy: eskaluje konflikt, niszczy zaufanie
 
-?? **Transformacyjny** - wspó³tworzenie, empatia, "my/razem" ("jak mo¿emy/co myœlisz")
-   › Najlepszy gdy: trudne rozmowy, budowanie relacji, rozwi¹zywanie problemów
-   › Rzadko nieodpowiedni (mo¿e byæ postrzegany jako "za miêkki" w niektórych kulturach)
+?? **Transformacyjny** - wspÃ³Å‚tworzenie, empatia, "my/razem" ("jak moÅ¼emy/co myÅ›lisz")
+   â€º Najlepszy gdy: trudne rozmowy, budowanie relacji, rozwiÄ…zywanie problemÃ³w
+   â€º Rzadko nieodpowiedni (moÅ¼e byÄ‡ postrzegany jako "za miÄ™kki" w niektÃ³rych kulturach)
 
-Oceñ:
+OceÅ„:
 1. Jaki to poziom?
 2. Czy jest odpowiedni do KONTEKSTU rozmowy?
-3. Jak mo¿na poprawiæ (jeœli warto)?
+3. Jak moÅ¼na poprawiÄ‡ (jeÅ›li warto)?
 
 Odpowiedz w formacie JSON:
 {{
     "level": "Transakcyjny|Pozycyjny|Transformacyjny",
     "is_appropriate": true/false,
-    "reasoning": "Dlaczego to ten poziom i czy jest OK w tym kontekœcie",
-    "tip": "Wskazówka - jeœli poziom odpowiedni: 'Dobry wybór! ...' lub 'OK w tym momencie, ale...' / jeœli nieodpowiedni: 'Spróbuj...' "
+    "reasoning": "Dlaczego to ten poziom i czy jest OK w tym kontekÅ›cie",
+    "tip": "WskazÃ³wka - jeÅ›li poziom odpowiedni: 'Dobry wybÃ³r! ...' lub 'OK w tym momencie, ale...' / jeÅ›li nieodpowiedni: 'SprÃ³buj...' "
 }}
 
 TYLKO JSON:"""
@@ -4642,7 +4642,7 @@ TYLKO JSON:"""
         response = model.generate_content(prompt)
         result_text = response.text.strip()
         
-        # Wyczyœæ JSON z markdown
+        # WyczyÅ›Ä‡ JSON z markdown
         if "```json" in result_text:
             result_text = result_text.split("```json")[1].split("```")[0].strip()
         elif "```" in result_text:
@@ -4651,116 +4651,116 @@ TYLKO JSON:"""
         import json
         result = json.loads(result_text)
         
-        # Mapuj kolor bazuj¹c na poziomie I czy jest odpowiedni
+        # Mapuj kolor bazujÄ…c na poziomie I czy jest odpowiedni
         is_appropriate = result.get("is_appropriate", False)
         level = result["level"]
         
-        # Logika kolorów:
+        # Logika kolorÃ³w:
         # - Transformacyjny: zawsze zielony (prawie zawsze dobry)
-        # - Transakcyjny/Pozycyjny: niebieski jeœli odpowiedni, czerwony/pomarañczowy jeœli nie
+        # - Transakcyjny/Pozycyjny: niebieski jeÅ›li odpowiedni, czerwony/pomaraÅ„czowy jeÅ›li nie
         if level == "Transformacyjny":
             color = "green"
         elif is_appropriate:
-            color = "blue"  # Niebieski = OK w tym kontekœcie
+            color = "blue"  # Niebieski = OK w tym kontekÅ›cie
         else:
             # Standardowe kolory ostrzegawcze
             color = "red" if level == "Transakcyjny" else "orange"
         
         return {
             "level": result["level"],
-            "feedback": f"{result['reasoning']} ?? {result['tip']}",
+            "feedback": f"{result['reasoning']} ğŸ¯ {result['tip']}",
             "color": color,
             "is_appropriate": is_appropriate
         }
         
     except Exception as e:
-        # Fallback na prost¹ heurystykê
+        # Fallback na prostÄ… heurystykÄ™
         return analyze_ciq_level_fallback(user_message)
 
 def analyze_ciq_level_fallback(user_message):
-    """Prosta heurystyka analizy C-IQ gdy AI nie dzia³a"""
+    """Prosta heurystyka analizy C-IQ gdy AI nie dziaÅ‚a"""
     user_message_lower = user_message.lower()
     
-    # S³owa kluczowe dla ka¿dego poziomu
+    # SÅ‚owa kluczowe dla kaÅ¼dego poziomu
     transformational_keywords = [
-        'razem', 'wspólnie', 'jak mo¿emy', 'zrozumiem', 'pomó¿ mi zrozumieæ',
-        'jakie masz', 'co myœlisz', 'wspó³praca', 'oboje', 'nasz cel',
-        's³ucham', 'rozumiem', 'doceniam', 'ceniê'
+        'razem', 'wspÃ³lnie', 'jak moÅ¼emy', 'zrozumiem', 'pomÃ³Å¼ mi zrozumieÄ‡',
+        'jakie masz', 'co myÅ›lisz', 'wspÃ³Å‚praca', 'oboje', 'nasz cel',
+        'sÅ‚ucham', 'rozumiem', 'doceniam', 'ceniÄ™'
     ]
     
     positional_keywords = [
-        'ale', 'jednak', 'zas³ugujê', 'powinienem', 'musisz', 'masz obowi¹zek',
-        'to niesprawiedliwe', 'inni maj¹', 'dlaczego ja nie', 'to twoja wina'
+        'ale', 'jednak', 'zasÅ‚ugujÄ™', 'powinienem', 'musisz', 'masz obowiÄ…zek',
+        'to niesprawiedliwe', 'inni majÄ…', 'dlaczego ja nie', 'to twoja wina'
     ]
     
     transactional_keywords = [
-        'chcê', 'potrzebujê', 'daj mi', 'kiedy', 'ile', 'co dostanê'
+        'chcÄ™', 'potrzebujÄ™', 'daj mi', 'kiedy', 'ile', 'co dostanÄ™'
     ]
     
-    # Analiza obecnoœci s³ów kluczowych
+    # Analiza obecnoÅ›ci sÅ‚Ã³w kluczowych
     transformational_score = sum(1 for keyword in transformational_keywords if keyword in user_message_lower)
     positional_score = sum(1 for keyword in positional_keywords if keyword in user_message_lower)
     transactional_score = sum(1 for keyword in transactional_keywords if keyword in user_message_lower)
     
-    # Dodatkowe wskaŸniki
+    # Dodatkowe wskaÅºniki
     has_question = '?' in user_message
-    has_we_language = any(word in user_message_lower for word in ['my', 'nam', 'nasz', 'wspólnie', 'razem'])
-    has_i_focus = any(word in user_message_lower.split()[:3] for word in ['ja', 'chcê', 'potrzebujê', 'muszê'])
+    has_we_language = any(word in user_message_lower for word in ['my', 'nam', 'nasz', 'wspÃ³lnie', 'razem'])
+    has_i_focus = any(word in user_message_lower.split()[:3] for word in ['ja', 'chcÄ™', 'potrzebujÄ™', 'muszÄ™'])
     
-    # Okreœl poziom
+    # OkreÅ›l poziom
     if transformational_score >= 2 or (has_question and has_we_language):
         return {
             "level": "Transformacyjny",
-            "feedback": "Œwietnie! Budujesz wspó³pracê i pokazujesz empatiê. To buduje zaufanie.",
+            "feedback": "Åšwietnie! Budujesz wspÃ³Å‚pracÄ™ i pokazujesz empatiÄ™. To buduje zaufanie.",
             "color": "green"
         }
     elif positional_score >= 2 or (has_i_focus and positional_score >= 1):
         return {
             "level": "Pozycyjny",
-            "feedback": "Bronisz swojej pozycji. ?? Spróbuj skupiæ siê na wspólnych celach zamiast 'ja vs. ty'.",
+            "feedback": "Bronisz swojej pozycji. ğŸ¯ SprÃ³buj skupiÄ‡ siÄ™ na wspÃ³lnych celach zamiast 'ja vs. ty'.",
             "color": "orange"
         }
     else:
         return {
             "level": "Transakcyjny",
-            "feedback": "Wymieniasz informacje. ?? Mo¿esz pog³êbiæ rozmowê pytaj¹c o perspektywê drugiej strony.",
+            "feedback": "Wymieniasz informacje. ğŸ¯ MoÅ¼esz pogÅ‚Ä™biÄ‡ rozmowÄ™ pytajÄ…c o perspektywÄ™ drugiej strony.",
             "color": "red"
         }
 
 def generate_ai_response(user_input, conversation_history, scenario, ciq_analysis):
-    """Generuje odpowiedŸ AI na podstawie kontekstu rozmowy"""
+    """Generuje odpowiedÅº AI na podstawie kontekstu rozmowy"""
     
-    # SprawdŸ czy API jest dostêpne (BEZ wyœwietlania komunikatów w UI)
+    # SprawdÅº czy API jest dostÄ™pne (BEZ wyÅ›wietlania komunikatÃ³w w UI)
     try:
         api_key = st.secrets.get("API_KEYS", {}).get("gemini")
     except Exception:
         api_key = None
     
     if not api_key:
-        # Fallback na prost¹ odpowiedŸ bez AI
+        # Fallback na prostÄ… odpowiedÅº bez AI
         if ciq_analysis['level'] == 'Transformacyjny':
-            return "Doceniam twoje podejœcie. Zgadzam siê, ¿e warto to omówiæ szczegó³owo. Co proponujesz?"
+            return "Doceniam twoje podejÅ›cie. Zgadzam siÄ™, Å¼e warto to omÃ³wiÄ‡ szczegÃ³Å‚owo. Co proponujesz?"
         elif ciq_analysis['level'] == 'Pozycyjny':
-            return "Rozumiem twój punkt widzenia, ale muszê spojrzeæ na to szerzej. Czy mo¿emy porozmawiaæ o faktach?"
+            return "Rozumiem twÃ³j punkt widzenia, ale muszÄ™ spojrzeÄ‡ na to szerzej. Czy moÅ¼emy porozmawiaÄ‡ o faktach?"
         else:
-            return "Okej, s³ucham. Opowiedz wiêcej."
+            return "Okej, sÅ‚ucham. Opowiedz wiÄ™cej."
         if ciq_analysis['level'] == 'Transformacyjny':
-            return "Doceniam twoje podejœcie. Zgadzam siê, ¿e warto to omówiæ szczegó³owo. Co proponujesz?"
+            return "Doceniam twoje podejÅ›cie. Zgadzam siÄ™, Å¼e warto to omÃ³wiÄ‡ szczegÃ³Å‚owo. Co proponujesz?"
         elif ciq_analysis['level'] == 'Pozycyjny':
-            return "Rozumiem twój punkt widzenia, ale muszê spojrzeæ na to szerzej. Czy mo¿emy porozmawiaæ o faktach?"
+            return "Rozumiem twÃ³j punkt widzenia, ale muszÄ™ spojrzeÄ‡ na to szerzej. Czy moÅ¼emy porozmawiaÄ‡ o faktach?"
         else:
-            return "Okej, s³ucham. Opowiedz wiêcej."
+            return "Okej, sÅ‚ucham. Opowiedz wiÄ™cej."
     
     try:
         import google.generativeai as genai
         genai.configure(api_key=api_key)
         
-        # Spróbuj u¿yæ najbardziej dostêpnego modelu
+        # SprÃ³buj uÅ¼yÄ‡ najbardziej dostÄ™pnego modelu
         try:
             model = genai.GenerativeModel(
                 "gemini-2.0-flash-exp",
                 generation_config=genai.GenerationConfig(
-                    temperature=0.9,  # Wysoka kreatywnoœæ
+                    temperature=0.9,  # Wysoka kreatywnoÅ›Ä‡
                     top_p=0.95,
                     top_k=40,
                 )
@@ -4776,74 +4776,74 @@ def generate_ai_response(user_input, conversation_history, scenario, ciq_analysi
                 )
             )
         
-        # Przygotuj historiê rozmowy z odpowiednimi rolami
+        # Przygotuj historiÄ™ rozmowy z odpowiednimi rolami
         history_text = "\n".join([
             f"{scenario.get('ai_role', 'AI') if msg['role'] == 'ai' else scenario.get('user_role', 'Ty')}: {msg['content']}" 
             for msg in conversation_history[-8:]  # Ostatnie 4 wymiany
         ])
         
-        # Pobierz kontekst case study jeœli istnieje
+        # Pobierz kontekst case study jeÅ›li istnieje
         case_context = st.session_state.get('simulator_case_context', '')
         
-        # SprawdŸ liczbê wymian - czy zbli¿amy siê do koñca?
+        # SprawdÅº liczbÄ™ wymian - czy zbliÅ¼amy siÄ™ do koÅ„ca?
         user_turns = len([m for m in conversation_history if m['role'] == 'user']) + 1  # +1 bo obecna
         max_turns = st.session_state.get('simulator_max_turns', 10)
-        approaching_end = user_turns >= 6  # Po 6 wymianach sugeruj zakoñczenie
+        approaching_end = user_turns >= 6  # Po 6 wymianach sugeruj zakoÅ„czenie
         
         # Prompt dla AI - z kontekstem case study
         end_hint = ""
         if approaching_end:
-            end_hint = "\n\nWSKAZÓWKA: To ju¿ wymiana {}/{}. Subtelnie sugeruj zakoñczenie rozmowy - np. 'Myœlê ¿e ustaliliœmy...', 'Wydaje mi siê ¿e dobrze by³oby teraz...', itp.".format(user_turns, max_turns)
+            end_hint = "\n\nWSKAZÃ“WKA: To juÅ¼ wymiana {}/{}. Subtelnie sugeruj zakoÅ„czenie rozmowy - np. 'MyÅ›lÄ™ Å¼e ustaliliÅ›my...', 'Wydaje mi siÄ™ Å¼e dobrze byÅ‚oby teraz...', itp.".format(user_turns, max_turns)
         
-        prompt = f"""Wcielasz siê w rolê: {scenario.get('ai_role', 'rozmówcy')} w symulacji biznesowej.
+        prompt = f"""Wcielasz siÄ™ w rolÄ™: {scenario.get('ai_role', 'rozmÃ³wcy')} w symulacji biznesowej.
 
 KONTEKST SYTUACJI:
 {case_context}
 
-TWOJA POSTAÆ: {scenario['ai_persona']}
+TWOJA POSTAÄ†: {scenario['ai_persona']}
 
 DOTYCHCZASOWA ROZMOWA:
 {history_text}
 
-{scenario.get('user_role', 'Rozmówca').upper()} W£AŒNIE POWIEDZIA£: "{user_input}"
+{scenario.get('user_role', 'RozmÃ³wca').upper()} WÅAÅšNIE POWIEDZIAÅ: "{user_input}"
 
-Odpowiedz jako {scenario.get('ai_role', 'rozmówca')} - naturalnie, bezpoœrednio, w 1-2 zdaniach.
+Odpowiedz jako {scenario.get('ai_role', 'rozmÃ³wca')} - naturalnie, bezpoÅ›rednio, w 1-2 zdaniach.
 
-WSKAZÓWKI:
-- Pamiêtaj o kontekœcie sytuacji i u¿ywaj go w odpowiedziach gdy to naturalne
-- Jeœli rozmówca u¿ywa s³ów "my", "razem", "wspólnie" › b¹dŸ bardziej otwarty i wspó³pracuj
-- Jeœli atakuje lub oskar¿a › b¹dŸ defensywny lub zdecydowany  
-- Jeœli zadaje pytanie › odpowiedz konkretnie na nie
-- Zachowuj swoj¹ postaæ ale reaguj naturalnie na ton rozmówcy
+WSKAZÃ“WKI:
+- PamiÄ™taj o kontekÅ›cie sytuacji i uÅ¼ywaj go w odpowiedziach gdy to naturalne
+- JeÅ›li rozmÃ³wca uÅ¼ywa sÅ‚Ã³w "my", "razem", "wspÃ³lnie" â€º bÄ…dÅº bardziej otwarty i wspÃ³Å‚pracuj
+- JeÅ›li atakuje lub oskarÅ¼a â€º bÄ…dÅº defensywny lub zdecydowany  
+- JeÅ›li zadaje pytanie â€º odpowiedz konkretnie na nie
+- Zachowuj swojÄ… postaÄ‡ ale reaguj naturalnie na ton rozmÃ³wcy
 - NIE powtarzaj poprzednich odpowiedzi{end_hint}
 
-OdpowiedŸ ({scenario.get('ai_role', 'AI')}):"""
+OdpowiedÅº ({scenario.get('ai_role', 'AI')}):"""
 
         response = model.generate_content(prompt)
         ai_text = response.text.strip()
         
-        # Zwróæ odpowiedŸ AI
+        # ZwrÃ³Ä‡ odpowiedÅº AI
         if len(ai_text) > 0:
             return ai_text
         else:
-            # Pusta odpowiedŸ - u¿yj fallbacku
-            raise Exception("AI zwróci³o pust¹ odpowiedŸ")
+            # Pusta odpowiedÅº - uÅ¼yj fallbacku
+            raise Exception("AI zwrÃ³ciÅ‚o pustÄ… odpowiedÅº")
         
     except Exception as e:
-        # Ciche logowanie b³êdu (bez wyœwietlania u¿ytkownikowi)
-        # Mo¿na dodaæ print(f"AI Error: {e}") do debugowania lokalnie
+        # Ciche logowanie bÅ‚Ä™du (bez wyÅ›wietlania uÅ¼ytkownikowi)
+        # MoÅ¼na dodaÄ‡ print(f"AI Error: {e}") do debugowania lokalnie
         
-        # Fallback jeœli API zawiedzie - lepsze odpowiedzi bazowane na C-IQ
+        # Fallback jeÅ›li API zawiedzie - lepsze odpowiedzi bazowane na C-IQ
         if ciq_analysis['level'] == 'Transformacyjny':
-            return "Naprawdê doceniam twoje podejœcie. Zastanówmy siê razem, jak to rozwi¹zaæ."
+            return "NaprawdÄ™ doceniam twoje podejÅ›cie. ZastanÃ³wmy siÄ™ razem, jak to rozwiÄ…zaÄ‡."
         elif ciq_analysis['level'] == 'Pozycyjny':
-            return "Hmm, widzê ¿e masz swoje zdanie. Ale czy mo¿emy spojrzeæ na to z innej perspektywy?"
+            return "Hmm, widzÄ™ Å¼e masz swoje zdanie. Ale czy moÅ¼emy spojrzeÄ‡ na to z innej perspektywy?"
         else:
-            return "Dobrze, co jeszcze chcia³byœ powiedzieæ?"
+            return "Dobrze, co jeszcze chciaÅ‚byÅ› powiedzieÄ‡?"
 
 def show_simulators():
     """Symulatory komunikacyjne"""
-    # Wymuœ prze³adowanie modu³u w trybie dev
+    # WymuÅ› przeÅ‚adowanie moduÅ‚u w trybie dev
     import sys
     if 'views.simulators.business_simulator_v2' in sys.modules:
         import importlib
@@ -4851,49 +4851,49 @@ def show_simulators():
     
     from views.simulators.business_simulator_v2 import show_business_simulator
     
-    st.markdown("### ?? Symulatory Komunikacyjne")
-    st.markdown("Interaktywne symulacje ró¿nych scenariuszy komunikacyjnych")
+    st.markdown("### ğŸ¯ Symulatory Komunikacyjne")
+    st.markdown("Interaktywne symulacje rÃ³Å¼nych scenariuszy komunikacyjnych")
     
-    # Siatka symulatorów
+    # Siatka symulatorÃ³w
     col1, col2 = st.columns(2)
     
     with col1:
         business_sim_html = '''
         <div style='padding: 20px; border: 2px solid #9C27B0; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #f3e5f5 0%, #ce93d8 100%);'>
-            <h4>?? Symulator Rozmów Biznesowych v2.0</h4>
+            <h4>ğŸ¯ Symulator RozmÃ³w Biznesowych v2.0</h4>
             <p><strong>? Nowa wersja z AI-generowanym kontekstem!</strong></p>
             <ul style='margin: 10px 0; padding-left: 20px;'>
-                <li>?? 8 scenariuszy biznesowych</li>
-                <li>?? 3 poziomy trudnoœci (³atwy/œredni/trudny)</li>
-                <li>?? AI generuje realistyczny kontekst</li>
-                <li>?? Analiza C-IQ + feedback</li>
-                <li>?? Mo¿liwoœæ poprawiania odpowiedzi</li>
+                <li>âœ… 8 scenariuszy biznesowych</li>
+                <li>âœ… 3 poziomy trudnoÅ›ci (Å‚atwy/Å›redni/trudny)</li>
+                <li>âœ… AI generuje realistyczny kontekst</li>
+                <li>âœ… Analiza C-IQ + feedback</li>
+                <li>âœ… MoÅ¼liwoÅ›Ä‡ poprawiania odpowiedzi</li>
             </ul>
         </div>
         '''
         st.markdown(business_sim_html, unsafe_allow_html=True)
         
-        if zen_button("?? Uruchom Symulator v2.0", key="business_simulator", width='stretch'):
+        if zen_button("ğŸš€ Uruchom Symulator v2.0", key="business_simulator", width='stretch'):
             st.session_state.active_simulator = "business_conversation"
     
     with col2:
         negotiation_html = '''
         <div style='padding: 20px; border: 2px solid #795548; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #efebe9 0%, #bcaaa4 100%); opacity: 0.6;'>
-            <h4>?? Trener Negocjacji</h4>
+            <h4>ğŸ¯ Trener Negocjacji</h4>
             <p><strong>?? W przygotowaniu ??</strong></p>
             <ul style='margin: 10px 0; padding-left: 20px;'>
-                <li>?? Scenariusze negocjacyjne</li>
-                <li>?? Techniki C-IQ w negocjacjach</li>
-                <li>?? Analiza skutecznoœci</li>
+                <li>âœ… Scenariusze negocjacyjne</li>
+                <li>âœ… Techniki C-IQ w negocjacjach</li>
+                <li>âœ… Analiza skutecznoÅ›ci</li>
             </ul>
         </div>
         '''
         st.markdown(negotiation_html, unsafe_allow_html=True)
         
-        if zen_button("?? Uruchom Trenera", key="negotiation_trainer", width='stretch'):
-            st.info("?? W przygotowaniu - trening umiejêtnoœci negocjacyjnych")
+        if zen_button("ğŸš€ Uruchom Trenera", key="negotiation_trainer", width='stretch'):
+            st.info("ğŸ’¡ W przygotowaniu - trening umiejÄ™tnoÅ›ci negocjacyjnych")
     
-    # Wyœwietl aktywny symulator
+    # WyÅ›wietl aktywny symulator
     active_simulator = st.session_state.get('active_simulator')
     
     if active_simulator == "business_conversation":
@@ -4901,54 +4901,54 @@ def show_simulators():
         show_business_simulator()
 
 def show_creative_tools():
-    """Narzêdzia kreatywne i innowacyjne"""
+    """NarzÄ™dzia kreatywne i innowacyjne"""
     from views.creative_tools.six_hats_team import show_six_hats_team
     
-    st.markdown("### ?? Narzêdzia Kreatywne")
-    st.markdown("Techniki innowacyjnego myœlenia i generowania pomys³ów")
+    st.markdown("### ğŸ¯ NarzÄ™dzia Kreatywne")
+    st.markdown("Techniki innowacyjnego myÅ›lenia i generowania pomysÅ‚Ã³w")
     
-    # Siatka narzêdzi
+    # Siatka narzÄ™dzi
     col1, col2 = st.columns(2)
     
     with col1:
         six_hats_html = '''
         <div style='padding: 20px; border: 2px solid #FF9800; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%);'>
-            <h4>?? Wirtualny Zespó³ Kreatywny</h4>
+            <h4>ğŸ¯ Wirtualny ZespÃ³Å‚ Kreatywny</h4>
             <p><strong>6 Kapeluszy de Bono z AI</strong></p>
             <ul style='margin: 10px 0; padding-left: 20px;'>
-                <li>?? Bia³y - Fakty i dane</li>
-                <li>?? Czerwony - Emocje i intuicja</li>
+                <li>âœ… BiaÅ‚y - Fakty i dane</li>
+                <li>âœ… Czerwony - Emocje i intuicja</li>
                 <li>? Czarny - Ryzyka i problemy</li>
-                <li>?? ¯ó³ty - Szanse i korzyœci</li>
-                <li>?? Zielony - Kreatywne pomys³y</li>
-                <li>?? Niebieski - Moderacja i synteza</li>
+                <li>âœ… Å»Ã³Å‚ty - Szanse i korzyÅ›ci</li>
+                <li>âœ… Zielony - Kreatywne pomysÅ‚y</li>
+                <li>âœ… Niebieski - Moderacja i synteza</li>
             </ul>
-            <p><strong>? Tryb auto i interaktywny | Konflikty miêdzy kapeluszami | Portfolio sesji</strong></p>
+            <p><strong>? Tryb auto i interaktywny | Konflikty miÄ™dzy kapeluszami | Portfolio sesji</strong></p>
         </div>
         '''
         st.markdown(six_hats_html, unsafe_allow_html=True)
         
-        if zen_button("?? Uruchom Zespó³ Kreatywny", key="six_hats_team", width='stretch'):
+        if zen_button("ğŸš€ Uruchom ZespÃ³Å‚ Kreatywny", key="six_hats_team", width='stretch'):
             st.session_state.active_creative_tool = "six_hats"
     
     with col2:
         brainstorm_html = '''
         <div style='padding: 20px; border: 2px solid #3F51B5; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #e8eaf6 0%, #9fa8da 100%); opacity: 0.6;'>
-            <h4>?? AI Brainstorm Facilitator</h4>
+            <h4>ğŸ¯ AI Brainstorm Facilitator</h4>
             <p><strong>?? W przygotowaniu ??</strong></p>
             <ul style='margin: 10px 0; padding-left: 20px;'>
-                <li>? Facylitacja burzy mózgów</li>
-                <li>?? SCAMPER, Mind Mapping</li>
-                <li>?? Generowanie innowacji</li>
+                <li>? Facylitacja burzy mÃ³zgÃ³w</li>
+                <li>âœ… SCAMPER, Mind Mapping</li>
+                <li>âœ… Generowanie innowacji</li>
             </ul>
         </div>
         '''
         st.markdown(brainstorm_html, unsafe_allow_html=True)
         
-        if zen_button("?? Uruchom Brainstorm", key="brainstorm_tool", width='stretch'):
-            st.info("?? W przygotowaniu - zaawansowany facylitator burzy mózgów")
+        if zen_button("ğŸš€ Uruchom Brainstorm", key="brainstorm_tool", width='stretch'):
+            st.info("ğŸ’¡ W przygotowaniu - zaawansowany facylitator burzy mÃ³zgÃ³w")
     
-    # Wyœwietl aktywne narzêdzie
+    # WyÅ›wietl aktywne narzÄ™dzie
     active_tool = st.session_state.get('active_creative_tool')
     
     if active_tool == "six_hats":
@@ -4956,122 +4956,122 @@ def show_creative_tools():
         show_six_hats_team()
 
 def show_analytics():
-    """Analityki i tracking postêpów"""
-    st.markdown("### ?? Analityki i Tracking")
-    st.markdown("Zaawansowane analityki postêpów w rozwoju umiejêtnoœci komunikacyjnych")
+    """Analityki i tracking postÄ™pÃ³w"""
+    st.markdown("### ğŸ¯ Analityki i Tracking")
+    st.markdown("Zaawansowane analityki postÄ™pÃ³w w rozwoju umiejÄ™tnoÅ›ci komunikacyjnych")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
         tracker_html = '''
         <div style='padding: 15px; border: 1px solid #4CAF50; border-radius: 10px; background: #f8fff8;'>
-            <h4>?? Tracker Postêpów</h4>
-            <p>Monitoruj rozwój umiejêtnoœci C-IQ w czasie</p>
+            <h4>ğŸ¯ Tracker PostÄ™pÃ³w</h4>
+            <p>Monitoruj rozwÃ³j umiejÄ™tnoÅ›ci C-IQ w czasie</p>
         </div>
         '''
         st.markdown(tracker_html, unsafe_allow_html=True)
         
-        if zen_button("?? Zobacz Postêpy", key="progress_tracker", width='stretch'):
-            st.info("?? W przygotowaniu - szczegó³owy tracking postêpów w nauce")
+        if zen_button("?? Zobacz PostÄ™py", key="progress_tracker", width='stretch'):
+            st.info("ğŸ’¡ W przygotowaniu - szczegÃ³Å‚owy tracking postÄ™pÃ³w w nauce")
     
     with col2:
         goals_html = '''
         <div style='padding: 15px; border: 1px solid #FF9800; border-radius: 10px; background: #fffbf0;'>
-            <h4>?? Cele Rozwoju</h4>
-            <p>Ustaw i œledŸ osobiste cele komunikacyjne</p>
+            <h4>ğŸ¯ Cele Rozwoju</h4>
+            <p>Ustaw i Å›ledÅº osobiste cele komunikacyjne</p>
         </div>
         '''
         st.markdown(goals_html, unsafe_allow_html=True)
         
         if zen_button("?? Ustaw Cele", key="development_goals", width='stretch'):
-            st.info("?? W przygotowaniu - system celów rozwojowych")
+            st.info("ğŸ’¡ W przygotowaniu - system celÃ³w rozwojowych")
     
     with col3:
         report_html = '''
         <div style='padding: 15px; border: 1px solid #2196F3; border-radius: 10px; background: #f0f8ff;'>
-            <h4>?? Raport Umiejêtnoœci</h4>
+            <h4>ğŸ¯ Raport UmiejÄ™tnoÅ›ci</h4>
             <p>Kompleksowy raport Twoich kompetencji</p>
         </div>
         '''
         st.markdown(report_html, unsafe_allow_html=True)
         
         if zen_button("?? Zobacz Raport", key="skills_report", width='stretch'):
-            st.info("?? W przygotowaniu - szczegó³owy raport umiejêtnoœci")
+            st.info("ğŸ’¡ W przygotowaniu - szczegÃ³Å‚owy raport umiejÄ™tnoÅ›ci")
 
 def show_ai_assistant():
     """AI Asystent personalny"""
-    st.markdown("### ?? AI Asystent Personalny")
-    st.markdown("Twój osobisty coach AI do rozwoju umiejêtnoœci komunikacyjnych")
+    st.markdown("### ğŸ¯ AI Asystent Personalny")
+    st.markdown("TwÃ³j osobisty coach AI do rozwoju umiejÄ™tnoÅ›ci komunikacyjnych")
     
     # Placeholder dla chatbota
-    st.info("?? **W przygotowaniu** - inteligentny asystent AI dostêpny 24/7")
+    st.info("ğŸ’¡ **W przygotowaniu** - inteligentny asystent AI dostÄ™pny 24/7")
     
     # Demo interfejsu chatbota
-    st.markdown("#### ?? Przyk³ad rozmowy z AI Asystenem:")
+    st.markdown("#### ğŸ¯ PrzykÅ‚ad rozmowy z AI Asystenem:")
     
-    # Przyk³adowe wiadomoœci
+    # PrzykÅ‚adowe wiadomoÅ›ci
     with st.chat_message("assistant"):
-        st.markdown("Czeœæ! Jestem Twoim AI Asystenem do rozwoju komunikacji. W czym mogê Ci pomóc?")
+        st.markdown("CzeÅ›Ä‡! Jestem Twoim AI Asystenem do rozwoju komunikacji. W czym mogÄ™ Ci pomÃ³c?")
     
     with st.chat_message("user"):
-        st.markdown("Jak przygotowaæ siê do trudnej rozmowy z szefem?")
+        st.markdown("Jak przygotowaÄ‡ siÄ™ do trudnej rozmowy z szefem?")
     
     with st.chat_message("assistant"):
         ai_response = '''
-        Œwietne pytanie! Oto moja strategia oparta na C-IQ:
+        Åšwietne pytanie! Oto moja strategia oparta na C-IQ:
         
         **?? Przygotowanie:**
-        1. Zidentyfikuj cel rozmowy (co chcesz osi¹gn¹æ)
-        2. Przygotuj pytania otwarte zamiast oskar¿eñ
-        3. Zastanów siê nad wspólnymi celami
+        1. Zidentyfikuj cel rozmowy (co chcesz osiÄ…gnÄ…Ä‡)
+        2. Przygotuj pytania otwarte zamiast oskarÅ¼eÅ„
+        3. ZastanÃ³w siÄ™ nad wspÃ³lnymi celami
         
         **?? Podczas rozmowy:**
-        - Zacznij od poziomu III: "Chcia³bym porozmawiaæ o..."
-        - Unikaj jêzyka "ty" na rzecz "my", "nas"
-        - Zadawaj pytania: "Jak widzisz tê sytuacjê?"
+        - Zacznij od poziomu III: "ChciaÅ‚bym porozmawiaÄ‡ o..."
+        - Unikaj jÄ™zyka "ty" na rzecz "my", "nas"
+        - Zadawaj pytania: "Jak widzisz tÄ™ sytuacjÄ™?"
         
-        Chcesz przeæwiczyæ konkretny scenariusz?
+        Chcesz przeÄ‡wiczyÄ‡ konkretny scenariusz?
         '''
         st.markdown(ai_response)
     
-    # Wy³¹czony input
-    chat_input = st.chat_input("Napisz wiadomoœæ do AI Asystenta...", disabled=True)
+    # WyÅ‚Ä…czony input
+    chat_input = st.chat_input("Napisz wiadomoÅ›Ä‡ do AI Asystenta...", disabled=True)
     
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("**?? Planowane funkcje:**")
-        st.markdown("• Rozmowy w czasie rzeczywistym")
-        st.markdown("• Personalizowane porady")
-        st.markdown("• Analiza postêpów")
-        st.markdown("• Przypomnienia o æwiczeniach")
+        st.markdown("â€¢ Rozmowy w czasie rzeczywistym")
+        st.markdown("â€¢ Personalizowane porady")
+        st.markdown("â€¢ Analiza postÄ™pÃ³w")
+        st.markdown("â€¢ Przypomnienia o Ä‡wiczeniach")
     
     with col2:
         st.markdown("**?? Obszary wsparcia:**")
-        st.markdown("• Przygotowanie do trudnych rozmów")
-        st.markdown("• Analiza komunikacji")
-        st.markdown("• Strategie C-IQ")
-        st.markdown("• Budowanie pewnoœci siebie")
+        st.markdown("â€¢ Przygotowanie do trudnych rozmÃ³w")
+        st.markdown("â€¢ Analiza komunikacji")
+        st.markdown("â€¢ Strategie C-IQ")
+        st.markdown("â€¢ Budowanie pewnoÅ›ci siebie")
 
 # ===============================================
 # CONVERSATION INTELLIGENCE PRO - FUNKCJE AI
 # ===============================================
 
 def analyze_conversation_sentiment(text: str) -> Optional[Dict]:
-    """Analizuje sentiment rozmowy mened¿er-pracownik + poziomy C-IQ"""
+    """Analizuje sentiment rozmowy menedÅ¼er-pracownik + poziomy C-IQ"""
     evaluator = AIExerciseEvaluator()
     
     prompt = f"""
-Jesteœ ekspertem w Conversational Intelligence i analizie rozmów przywódczych miêdzy mened¿erem a pracownikiem.
-Przeanalizuj nastêpuj¹c¹ transkrypcjê rozmowy mened¿erskiej:
+JesteÅ› ekspertem w Conversational Intelligence i analizie rozmÃ³w przywÃ³dczych miÄ™dzy menedÅ¼erem a pracownikiem.
+Przeanalizuj nastÄ™pujÄ…cÄ… transkrypcjÄ™ rozmowy menedÅ¼erskiej:
 
 TRANSKRYPCJA:
 "{text}"
 
-PrzeprowadŸ kompleksow¹ analizê z perspektywy przywództwa zawieraj¹c¹:
-1. SENTIMENT ANALYSIS - emocje mened¿era i pracownika
-2. C-IQ LEVELS - poziomy komunikacji przywódczej
-3. NEUROBIOLOGICAL IMPACT - wp³yw na kortyzol/oksytocynê w kontekœcie zespo³u
-4. LEADERSHIP INSIGHTS - wnioski dla rozwoju przywództwa
+PrzeprowadÅº kompleksowÄ… analizÄ™ z perspektywy przywÃ³dztwa zawierajÄ…cÄ…:
+1. SENTIMENT ANALYSIS - emocje menedÅ¼era i pracownika
+2. C-IQ LEVELS - poziomy komunikacji przywÃ³dczej
+3. NEUROBIOLOGICAL IMPACT - wpÅ‚yw na kortyzol/oksytocynÄ™ w kontekÅ›cie zespoÅ‚u
+4. LEADERSHIP INSIGHTS - wnioski dla rozwoju przywÃ³dztwa
 
 Odpowiedz w formacie JSON:
 {{
@@ -5080,27 +5080,27 @@ Odpowiedz w formacie JSON:
     "ciq_analysis": {{
         "manager_level": "Poziom I/II/III",
         "employee_level": "Poziom I/II/III", 
-        "leadership_effectiveness": "niska/œrednia/wysoka",
-        "conversation_flow": "buduje_zaufanie/neutralna/tworzy_napiêcie"
+        "leadership_effectiveness": "niska/Å›rednia/wysoka",
+        "conversation_flow": "buduje_zaufanie/neutralna/tworzy_napiÄ™cie"
     }},
     "emotions_detected": {{
         "manager": ["emocja1", "emocja2"],
         "employee": ["emocja1", "emocja2"]
     }},
     "neurobiological_impact": {{
-        "cortisol_triggers": ["sytuacja powoduj¹ca stres"],
-        "oxytocin_builders": ["sytuacja buduj¹ca zaufanie"]
+        "cortisol_triggers": ["sytuacja powodujÄ…ca stres"],
+        "oxytocin_builders": ["sytuacja budujÄ…ca zaufanie"]
     }},
     "leadership_insights": {{
         "team_engagement_risk": [1-10],
         "leadership_effectiveness": [1-10],
-        "key_moments": ["wa¿ny moment w rozmowie przywódczej"],
-        "development_opportunities": ["obszar rozwoju przywództwa"]
+        "key_moments": ["waÅ¼ny moment w rozmowie przywÃ³dczej"],
+        "development_opportunities": ["obszar rozwoju przywÃ³dztwa"]
     }},
     "recommendations": {{
-        "immediate_actions": ["natychmiastowe dzia³anie"],
-        "long_term_improvements": ["d³ugoterminowa poprawa"],
-        "coaching_points": ["wskazówka dla mened¿era"]
+        "immediate_actions": ["natychmiastowe dziaÅ‚anie"],
+        "long_term_improvements": ["dÅ‚ugoterminowa poprawa"],
+        "coaching_points": ["wskazÃ³wka dla menedÅ¼era"]
     }}
 }}
 """
@@ -5121,7 +5121,7 @@ Odpowiedz w formacie JSON:
         
         return create_fallback_sentiment_analysis(text)
     except Exception as e:
-        st.error(f"? B³¹d analizy sentiment: {str(e)}")
+        st.error(f"? BÅ‚Ä…d analizy sentiment: {str(e)}")
         return create_fallback_sentiment_analysis(text)
 
 def analyze_business_intent(text: str) -> Optional[Dict]:
@@ -5129,8 +5129,8 @@ def analyze_business_intent(text: str) -> Optional[Dict]:
     evaluator = AIExerciseEvaluator()
     
     prompt = f"""
-Jesteœ ekspertem w wykrywaniu intencji biznesowych w rozmowach.
-Przeanalizuj nastêpuj¹cy tekst pod k¹tem potrzeb i motywacji pracownika:
+JesteÅ› ekspertem w wykrywaniu intencji biznesowych w rozmowach.
+Przeanalizuj nastÄ™pujÄ…cy tekst pod kÄ…tem potrzeb i motywacji pracownika:
 
 TEKST: "{text}"
 
@@ -5159,7 +5159,7 @@ Wykryj i ocen potrzeby pracownika oraz dynamike zespolowa. Odpowiedz w JSON:
         "konkretne dzialanie menedzerskie 1",
         "konkretne dzialanie menedzerskie 2"
     ],
-    "key_phrases": ["wa¿na fraza1", "wa¿na fraza2"]
+    "key_phrases": ["waÅ¼na fraza1", "waÅ¼na fraza2"]
 }}
 """
     
@@ -5181,34 +5181,34 @@ Wykryj i ocen potrzeby pracownika oraz dynamike zespolowa. Odpowiedz w JSON:
         return create_fallback_intent_analysis(text)
 
 def analyze_escalation_risk(text: str, sensitivity: int) -> Optional[Dict]:
-    """Analizuje ryzyko problemów zespo³owych i wypalenia"""
+    """Analizuje ryzyko problemÃ³w zespoÅ‚owych i wypalenia"""
     evaluator = AIExerciseEvaluator()
     
     prompt = f"""
-Jesteœ ekspertem w wykrywaniu sygna³ów problemów zespo³owych i wypalenia zawodowego w kontekœcie przywództwa.
-Czu³oœæ wykrywania: {sensitivity}/10 (1=bardzo konserwatywne, 10=bardzo wyczulone)
+JesteÅ› ekspertem w wykrywaniu sygnaÅ‚Ã³w problemÃ³w zespoÅ‚owych i wypalenia zawodowego w kontekÅ›cie przywÃ³dztwa.
+CzuÅ‚oÅ›Ä‡ wykrywania: {sensitivity}/10 (1=bardzo konserwatywne, 10=bardzo wyczulone)
 
 FRAGMENT ROZMOWY Z PRACOWNIKIEM: "{text}"
 
-Przeanalizuj ryzyko problemów zespo³owych i odpowiedz w JSON:
+Przeanalizuj ryzyko problemÃ³w zespoÅ‚owych i odpowiedz w JSON:
 {{
     "team_problem_risk": [1-10],
     "risk_level": "low/medium/high/critical", 
     "warning_signals": [
         {{
-            "signal": "konkretny sygna³ problemu zespo³owego",
+            "signal": "konkretny sygnaÅ‚ problemu zespoÅ‚owego",
             "severity": [1-10],
-            "fragment": "fragment tekstu pokazuj¹cy sygna³"
+            "fragment": "fragment tekstu pokazujÄ…cy sygnaÅ‚"
         }}
     ],
     "employee_state": {{
-        "current_emotion": "motywacja/frustracja/wypalenie/zaanga¿owanie",
+        "current_emotion": "motywacja/frustracja/wypalenie/zaangaÅ¼owanie",
         "engagement_level": [1-10],
         "progression": "improving/stable/deteriorating"
     }},
     "leadership_actions": [
-        "rekomendowane dzia³anie przywódcze 1",
-        "rekomendowane dzia³anie przywódcze 2"
+        "rekomendowane dziaÅ‚anie przywÃ³dcze 1",
+        "rekomendowane dziaÅ‚anie przywÃ³dcze 2"
     ],
     "support_strategies": [
         "strategia wsparcia pracownika 1", 
@@ -5216,7 +5216,7 @@ Przeanalizuj ryzyko problemów zespo³owych i odpowiedz w JSON:
     ],
     "hr_escalation": {{
         "recommended": true/false,
-        "reason": "powód przekazania do HR lub wy¿szego managementu",
+        "reason": "powÃ³d przekazania do HR lub wyÅ¼szego managementu",
         "urgency": "immediate/within_week/monitor"
     }}
 }}
@@ -5240,36 +5240,36 @@ Przeanalizuj ryzyko problemów zespo³owych i odpowiedz w JSON:
         return create_fallback_escalation_analysis(text, sensitivity)
 
 def get_ai_coaching(text: str, context: str) -> Optional[Dict]:
-    """Generuje coaching przywódczy w czasie rzeczywistym dla mened¿erów"""
+    """Generuje coaching przywÃ³dczy w czasie rzeczywistym dla menedÅ¼erÃ³w"""
     evaluator = AIExerciseEvaluator()
     
     prompt = f"""
-Jesteœ ekspertem w Conversational Intelligence i coachem przywódczym dla mened¿erów.
+JesteÅ› ekspertem w Conversational Intelligence i coachem przywÃ³dczym dla menedÅ¼erÃ³w.
 
-TYP ROZMOWY MENED¯ERSKIEJ: {context}
-OSTATNIA WYPOWIED PRACOWNIKA: "{text}"
+TYP ROZMOWY MENEDÅ»ERSKIEJ: {context}
+OSTATNIA WYPOWIEDÅ¹ PRACOWNIKA: "{text}"
 
-Zasugeruj najlepsz¹ odpowiedŸ mened¿ersk¹ na poziomie III C-IQ (Transformacyjnym), która buduje zaufanie i zaanga¿owanie w zespole.
+Zasugeruj najlepszÄ… odpowiedÅº menedÅ¼erskÄ… na poziomie III C-IQ (Transformacyjnym), ktÃ³ra buduje zaufanie i zaangaÅ¼owanie w zespole.
 
 Odpowiedz w JSON:
 {{
     "suggested_responses": [
         {{
-            "response": "konkretna sugerowana odpowiedŸ",
+            "response": "konkretna sugerowana odpowiedÅº",
             "ciq_level": "III",
-            "rationale": "dlaczego ta odpowiedŸ jest dobra",
+            "rationale": "dlaczego ta odpowiedÅº jest dobra",
             "expected_outcome": "oczekiwany rezultat"
         }}
     ],
     "alternative_approaches": [
         {{
-            "approach": "alternatywne podejœcie",
-            "when_to_use": "kiedy u¿yæ tego podejœcia"
+            "approach": "alternatywne podejÅ›cie",
+            "when_to_use": "kiedy uÅ¼yÄ‡ tego podejÅ›cia"
         }}
     ],
     "what_to_avoid": [
-        "czego unikaæ w odpowiedzi 1",
-        "czego unikaæ w odpowiedzi 2"
+        "czego unikaÄ‡ w odpowiedzi 1",
+        "czego unikaÄ‡ w odpowiedzi 2"
     ],
     "ciq_techniques": [
         "konkretna technika C-IQ do zastosowania",
@@ -5281,8 +5281,8 @@ Odpowiedz w JSON:
     ],
     "leadership_strategy": {{
         "employee_emotion": "rozpoznana emocja pracownika",
-        "desired_team_state": "po¿¹dany stan zespo³u", 
-        "leadership_approach": "jak mened¿er mo¿e wspieraæ przejœcie do lepszego stanu"
+        "desired_team_state": "poÅ¼Ä…dany stan zespoÅ‚u", 
+        "leadership_approach": "jak menedÅ¼er moÅ¼e wspieraÄ‡ przejÅ›cie do lepszego stanu"
     }}
 }}
 """
@@ -5305,15 +5305,15 @@ Odpowiedz w JSON:
         return create_fallback_coaching(context)
 
 # ===============================================
-# FALLBACK FUNCTIONS (gdy AI nie dzia³a)
+# FALLBACK FUNCTIONS (gdy AI nie dziaÅ‚a)
 # ===============================================
 
 def create_fallback_sentiment_analysis(text: str) -> Dict:
-    """Fallback analiza sentiment gdy AI nie dzia³a"""
+    """Fallback analiza sentiment gdy AI nie dziaÅ‚a"""
     text_lower = text.lower()
     
-    negative_words = ['problem', 'b³¹d', 'nie dzia³a', 'z³y', 's³aby', 'frustracja', 'Ÿle']
-    positive_words = ['dobrze', 'super', 'œwietnie', 'dziêkujê', 'pomocy', 'mi³o']
+    negative_words = ['problem', 'bÅ‚Ä…d', 'nie dziaÅ‚a', 'zÅ‚y', 'sÅ‚aby', 'frustracja', 'Åºle']
+    positive_words = ['dobrze', 'super', 'Å›wietnie', 'dziÄ™kujÄ™', 'pomocy', 'miÅ‚o']
     
     neg_count = sum(1 for word in negative_words if word in text_lower)
     pos_count = sum(1 for word in positive_words if word in text_lower)
@@ -5341,11 +5341,11 @@ def create_fallback_sentiment_analysis(text: str) -> Dict:
             "escalation_risk": neg_count * 2,
             "satisfaction_prediction": score,
             "key_moments": ["Analiza heurystyczna"],
-            "improvement_opportunities": ["U¿yj wiêcej pytañ otwartych"]
+            "improvement_opportunities": ["UÅ¼yj wiÄ™cej pytaÅ„ otwartych"]
         },
         "recommendations": {
             "immediate_actions": ["Zastosuj techniki C-IQ poziom III"],
-            "coaching_points": ["Fokus na wspó³tworzeniu rozwi¹zañ"]
+            "coaching_points": ["Fokus na wspÃ³Å‚tworzeniu rozwiÄ…zaÅ„"]
         }
     }
 
@@ -5353,8 +5353,8 @@ def create_fallback_intent_analysis(text: str) -> Dict:
     """Fallback analiza intencji"""
     text_lower = text.lower()
     
-    development_signals = ['rozwój', 'szkolenie', 'nauka', 'kariera', 'awans']
-    support_signals = ['pomoc', 'wsparcie', 'trudnoœci', 'przeci¹¿enie', 'stres']
+    development_signals = ['rozwÃ³j', 'szkolenie', 'nauka', 'kariera', 'awans']
+    support_signals = ['pomoc', 'wsparcie', 'trudnoÅ›ci', 'przeciÄ…Å¼enie', 'stres']
     
     need = "general_support"
     if any(word in text_lower for word in development_signals):
@@ -5366,7 +5366,7 @@ def create_fallback_intent_analysis(text: str) -> Dict:
         "detected_intents": [{
             "need": need,
             "confidence": 7,
-            "evidence": ["Analiza s³ów kluczowych"],
+            "evidence": ["Analiza sÅ‚Ã³w kluczowych"],
             "urgency": "medium"
         }],
         "team_dynamics": {
@@ -5380,9 +5380,9 @@ def create_fallback_intent_analysis(text: str) -> Dict:
     }
 
 def create_fallback_escalation_analysis(text: str, sensitivity: int) -> Dict:
-    """Fallback analiza problemów zespo³owych"""
+    """Fallback analiza problemÃ³w zespoÅ‚owych"""
     text_lower = text.lower()
-    problem_words = ['przeci¹¿enie', 'stres', 'wypalenie', 'frustracja', 'demotywacja', 'rezygnacja']
+    problem_words = ['przeciÄ…Å¼enie', 'stres', 'wypalenie', 'frustracja', 'demotywacja', 'rezygnacja']
     
     problem_count = sum(1 for word in problem_words if word in text_lower)
     risk = min(10, problem_count * sensitivity)
@@ -5391,47 +5391,47 @@ def create_fallback_escalation_analysis(text: str, sensitivity: int) -> Dict:
         "team_problem_risk": risk,
         "risk_level": "high" if risk > 7 else "medium" if risk > 4 else "low",
         "warning_signals": [{
-            "signal": f"Wykryto {problem_count} sygna³ów problemów zespo³owych",
+            "signal": f"Wykryto {problem_count} sygnaÅ‚Ã³w problemÃ³w zespoÅ‚owych",
             "severity": min(8, problem_count * 2)
         }],
         "leadership_actions": [
-            "PrzeprowadŸ rozmowê 1-on-1 z pracownikiem",
+            "PrzeprowadÅº rozmowÄ™ 1-on-1 z pracownikiem",
             "Zastosuj techniki C-IQ Poziom III"
         ],
         "support_strategies": [
-            "Zaoferuj wsparcie w zarz¹dzaniu obci¹¿eniem",
-            "Skup siê na wspólnych celach zespo³u"
+            "Zaoferuj wsparcie w zarzÄ…dzaniu obciÄ…Å¼eniem",
+            "Skup siÄ™ na wspÃ³lnych celach zespoÅ‚u"
         ],
         "hr_escalation": {
             "recommended": risk > 8,
-            "reason": "Wysokie ryzyko problemów zespo³owych wymagaj¹cych interwencji HR"
+            "reason": "Wysokie ryzyko problemÃ³w zespoÅ‚owych wymagajÄ…cych interwencji HR"
         }
     }
 
 def create_fallback_coaching(context: str) -> Dict:
-    """Fallback coaching przywódczy"""
+    """Fallback coaching przywÃ³dczy"""
     return {
         "suggested_responses": [{
-            "response": "Rozumiem Twoj¹ sytuacjê. Jak mo¿emy wspólnie pracowaæ nad tym wyzwaniem?",
+            "response": "Rozumiem TwojÄ… sytuacjÄ™. Jak moÅ¼emy wspÃ³lnie pracowaÄ‡ nad tym wyzwaniem?",
             "ciq_level": "III",
-            "rationale": "Pytanie otwarte + jêzyk wspó³tworzenia + empatia przywódcza"
+            "rationale": "Pytanie otwarte + jÄ™zyk wspÃ³Å‚tworzenia + empatia przywÃ³dcza"
         }],
         "ciq_techniques": [
-            "U¿ywaj pytañ otwartych z pracownikami",
-            "Jêzyk 'my' i 'wspólnie' zamiast 'ty musisz'",
-            "Fokus na wspólnych celach zespo³u"
+            "UÅ¼ywaj pytaÅ„ otwartych z pracownikami",
+            "JÄ™zyk 'my' i 'wspÃ³lnie' zamiast 'ty musisz'",
+            "Fokus na wspÃ³lnych celach zespoÅ‚u"
         ],
         "what_to_avoid": [
-            "Jêzyk dyrektywny mened¿erski (Poziom I)",
+            "JÄ™zyk dyrektywny menedÅ¼erski (Poziom I)",
             "Argumentowanie i przekonywanie (Poziom II)"
         ],
         "follow_up_questions": [
-            "Co mogê zrobiæ, ¿eby Ci pomóc?",
-            "Jakie wsparcie by³oby dla Ciebie najcenniejsze?"
+            "Co mogÄ™ zrobiÄ‡, Å¼eby Ci pomÃ³c?",
+            "Jakie wsparcie byÅ‚oby dla Ciebie najcenniejsze?"
         ],
         "leadership_strategy": {
             "employee_emotion": "analiza w trybie offline",
-            "desired_team_state": "zaanga¿owany i zmotywowany zespó³",
+            "desired_team_state": "zaangaÅ¼owany i zmotywowany zespÃ³Å‚",
             "leadership_approach": "coaching i wsparcie zamiast kontroli"
         }
     }
@@ -5441,17 +5441,17 @@ def create_fallback_coaching(context: str) -> Dict:
 # ===============================================
 
 def create_leadership_profile(conversations_text: str) -> Optional[Dict]:
-    """Tworzy d³ugoterminowy profil przywódczy na podstawie wielu rozmów"""
+    """Tworzy dÅ‚ugoterminowy profil przywÃ³dczy na podstawie wielu rozmÃ³w"""
     evaluator = AIExerciseEvaluator()
     
     prompt = f"""
-Jesteœ ekspertem w analizie d³ugoterminowych wzorców przywódczych przez pryzmat Conversational Intelligence.
-Przeanalizuj zbiór rozmów mened¿erskich i stwórz kompletny profil przywódczy.
+JesteÅ› ekspertem w analizie dÅ‚ugoterminowych wzorcÃ³w przywÃ³dczych przez pryzmat Conversational Intelligence.
+Przeanalizuj zbiÃ³r rozmÃ³w menedÅ¼erskich i stwÃ³rz kompletny profil przywÃ³dczy.
 
-ZBIÓR ROZMÓW MENED¯ERSKICH:
+ZBIÃ“R ROZMÃ“W MENEDÅ»ERSKICH:
 "{conversations_text}"
 
-Stwórz d³ugoterminowy profil przywódczy w JSON:
+StwÃ³rz dÅ‚ugoterminowy profil przywÃ³dczy w JSON:
 {{
     "dominant_ciq_level": "I/II/III",
     "ciq_distribution": {{
@@ -5475,8 +5475,8 @@ Stwórz d³ugoterminowy profil przywódczy w JSON:
         "psychological_safety": [1-10]
     }},
     "strengths": [
-        "silna strona przywódcza 1",
-        "silna strona przywódcza 2"
+        "silna strona przywÃ³dcza 1",
+        "silna strona przywÃ³dcza 2"
     ],
     "development_areas": [
         "obszar do rozwoju 1", 
@@ -5513,7 +5513,7 @@ Stwórz d³ugoterminowy profil przywódczy w JSON:
         return create_fallback_leadership_profile()
 
 def create_fallback_leadership_profile() -> Dict:
-    """Fallback profil gdy AI nie dzia³a - mened¿er poziom I-II"""
+    """Fallback profil gdy AI nie dziaÅ‚a - menedÅ¼er poziom I-II"""
     return {
         "dominant_ciq_level": "I",
         "ciq_distribution": {
@@ -5528,7 +5528,7 @@ def create_fallback_leadership_profile() -> Dict:
         },
         "communication_patterns": {
             "question_types": "closed_dominant",
-            "language_patterns": ["Polecenia i instrukcje", "Kontrola wykonania", "Wymagania rezultatów"],
+            "language_patterns": ["Polecenia i instrukcje", "Kontrola wykonania", "Wymagania rezultatÃ³w"],
             "emotional_intelligence": 4
         },
         "neurobiological_impact": {
@@ -5537,15 +5537,15 @@ def create_fallback_leadership_profile() -> Dict:
             "psychological_safety": 4
         },
         "strengths": [
-            "Jasne komunikowanie oczekiwañ",
+            "Jasne komunikowanie oczekiwaÅ„",
             "Zdecydowanie w podejmowaniu decyzji",
             "Orientacja na wyniki",
             "Reagowanie na problemy operacyjne"
         ],
         "development_areas": [
-            "Redukcja stylu dyrektywnego (za du¿o poziomu I)",
-            "Rozwijanie umiejêtnoœci s³uchania aktywnego",
-            "Wiêcej pytañ otwartych zamiast poleceñ",
+            "Redukcja stylu dyrektywnego (za duÅ¼o poziomu I)",
+            "Rozwijanie umiejÄ™tnoÅ›ci sÅ‚uchania aktywnego",
+            "WiÄ™cej pytaÅ„ otwartych zamiast poleceÅ„",
             "Budowanie bezpiecznej przestrzeni do dialogu",
             "Mniej presji czasowej w komunikacji"
         ],
@@ -5562,17 +5562,17 @@ def create_fallback_leadership_profile() -> Dict:
     }
 
 def safe_get_numeric(data: dict, key: str, default: int) -> int:
-    """Bezpieczne pobieranie wartoœci liczbowej z domyœln¹ wartoœci¹"""
+    """Bezpieczne pobieranie wartoÅ›ci liczbowej z domyÅ›lnÄ… wartoÅ›ciÄ…"""
     value = data.get(key, default)
     return default if value is None else value
 
 def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
-    """Generuje raport przywódczy w formacie PDF"""
+    """Generuje raport przywÃ³dczy w formacie PDF"""
     from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
     import os
     
-    # Utwórz buffer dla PDF
+    # UtwÃ³rz buffer dla PDF
     buffer = io.BytesIO()
     
     # Zarejestruj font systemowy Windows z polskim wsparciem
@@ -5586,7 +5586,7 @@ def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
             unicode_font = 'Times-Roman'
             unicode_font_bold = 'Times-Bold'
     except Exception as e:
-        print(f"B³¹d ³adowania fontu: {e}")
+        print(f"BÅ‚Ä…d Å‚adowania fontu: {e}")
         unicode_font = 'Times-Roman'
         unicode_font_bold = 'Times-Bold'
     
@@ -5595,7 +5595,7 @@ def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
                           rightMargin=72, leftMargin=72,
                           topMargin=72, bottomMargin=18)
     
-    # Style tekstu z obs³ug¹ polskich znaków
+    # Style tekstu z obsÅ‚ugÄ… polskich znakÃ³w
     styles = getSampleStyleSheet()
     title_style = ParagraphStyle(
         'CustomTitle',
@@ -5625,10 +5625,10 @@ def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
         spaceAfter=8
     )
     
-    # Zawartoœæ PDF
+    # ZawartoÅ›Ä‡ PDF
     story = []
     
-    # Upewnij siê, ¿e wszystkie stringi s¹ w UTF-8 z polskimi znakami
+    # Upewnij siÄ™, Å¼e wszystkie stringi sÄ… w UTF-8 z polskimi znakami
     def ensure_unicode(text):
         if text is None:
             return ""
@@ -5638,37 +5638,37 @@ def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
         # Konwertuj na string i zachowaj polskie znaki
         text_str = str(text)
         
-        # Upewnij siê, ¿e string jest w UTF-8
+        # Upewnij siÄ™, Å¼e string jest w UTF-8
         try:
             if isinstance(text_str, bytes):
                 text_str = text_str.decode('utf-8', errors='ignore')
             else:
-                # Test enkodowania - jeœli siê udaje, znaczy ¿e string jest OK
+                # Test enkodowania - jeÅ›li siÄ™ udaje, znaczy Å¼e string jest OK
                 text_str.encode('utf-8')
         except (UnicodeDecodeError, UnicodeEncodeError):
-            # Fallback - usuñ problematyczne znaki
+            # Fallback - usuÅ„ problematyczne znaki
             text_str = str(text).encode('utf-8', errors='ignore').decode('utf-8')
             
         return text_str
     
-    # Nag³ówek
-    story.append(Paragraph(ensure_unicode("?? Raport Przywódczy C-IQ"), title_style))
-    story.append(Paragraph(f"<b>U¿ytkownik:</b> {ensure_unicode(username)}", normal_style))
+    # NagÅ‚Ã³wek
+    story.append(Paragraph(ensure_unicode("?? Raport PrzywÃ³dczy C-IQ"), title_style))
+    story.append(Paragraph(f"<b>UÅ¼ytkownik:</b> {ensure_unicode(username)}", normal_style))
     story.append(Paragraph(f"<b>Data wygenerowania:</b> {datetime.now().strftime('%Y-%m-%d %H:%M')}", normal_style))
     story.append(Spacer(1, 20))
     
-    # Sekcja 1: Dominuj¹cy poziom
-    story.append(Paragraph(ensure_unicode("?? Dominuj¹cy Poziom C-IQ"), subtitle_style))
+    # Sekcja 1: DominujÄ…cy poziom
+    story.append(Paragraph(ensure_unicode("?? DominujÄ…cy Poziom C-IQ"), subtitle_style))
     dominant_level = ensure_unicode(profile.get('dominant_ciq_level', 'Brak danych'))
     story.append(Paragraph(f"<b>{dominant_level}</b>", normal_style))
     story.append(Spacer(1, 15))
     
-    # Sekcja 2: Rozk³ad poziomów
-    story.append(Paragraph(ensure_unicode("?? Rozk³ad Poziomów C-IQ"), subtitle_style))
+    # Sekcja 2: RozkÅ‚ad poziomÃ³w
+    story.append(Paragraph(ensure_unicode("?? RozkÅ‚ad PoziomÃ³w C-IQ"), subtitle_style))
     distribution = profile.get('ciq_distribution', {})
     
     level_data = [
-        [ensure_unicode('Poziom'), ensure_unicode('Wartoœæ')],
+        [ensure_unicode('Poziom'), ensure_unicode('WartoÅ›Ä‡')],
         [ensure_unicode('Level I (Transakcyjny)'), f"{safe_get_numeric(distribution, 'level_i_percentage', 30)}%"],
         [ensure_unicode('Level II (Pozycyjny)'), f"{safe_get_numeric(distribution, 'level_ii_percentage', 50)}%"], 
         [ensure_unicode('Level III (Transformacyjny)'), f"{safe_get_numeric(distribution, 'level_iii_percentage', 20)}%"]
@@ -5691,14 +5691,14 @@ def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
     story.append(Spacer(1, 20))
     
     # Sekcja 3: Neurobiologia 
-    story.append(Paragraph(ensure_unicode("?? Wp³yw Neurobiologiczny"), subtitle_style))
+    story.append(Paragraph(ensure_unicode("?? WpÅ‚yw Neurobiologiczny"), subtitle_style))
     neurobiological = profile.get('neurobiological_impact', {})
     
     neuro_data = [
         [ensure_unicode('Aspekt'), ensure_unicode('Poziom (1-10)')],
         [ensure_unicode('Wyzwalacze kortyzolu'), str(safe_get_numeric(neurobiological, 'cortisol_triggers', 5))],
         [ensure_unicode('Budowanie oksytocyny'), str(safe_get_numeric(neurobiological, 'oxytocin_builders', 5))],
-        [ensure_unicode('Bezpieczeñstwo psychologiczne'), str(safe_get_numeric(neurobiological, 'psychological_safety', 5))]
+        [ensure_unicode('BezpieczeÅ„stwo psychologiczne'), str(safe_get_numeric(neurobiological, 'psychological_safety', 5))]
     ]
     
     neuro_table = Table(neuro_data, colWidths=[3.5*inch, 1.5*inch])
@@ -5721,19 +5721,19 @@ def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
     story.append(Paragraph("?? Mocne Strony", subtitle_style))
     strengths = profile.get('strengths', ['Brak danych'])
     for strength in strengths[:5]:  # Max 5 pozycji
-        story.append(Paragraph(f"• {ensure_unicode(strength)}", normal_style))
+        story.append(Paragraph(f"â€¢ {ensure_unicode(strength)}", normal_style))
     story.append(Spacer(1, 15))
     
     # Sekcja 5: Obszary rozwoju
     story.append(Paragraph(ensure_unicode("?? Obszary Rozwoju"), subtitle_style))
     development_areas = profile.get('development_areas', ['Brak danych'])
     for area in development_areas[:5]:  # Max 5 pozycji  
-        story.append(Paragraph(f"• {ensure_unicode(area)}", normal_style))
+        story.append(Paragraph(f"â€¢ {ensure_unicode(area)}", normal_style))
     story.append(Spacer(1, 20))
     
     # Nowa strona dla planu rozwoju
     story.append(PageBreak())
-    story.append(Paragraph(ensure_unicode("?? Plan Rozwoju Przywódczego"), title_style))
+    story.append(Paragraph(ensure_unicode("?? Plan Rozwoju PrzywÃ³dczego"), title_style))
     story.append(Spacer(1, 20))
     
     # Plan rozwoju - cele
@@ -5750,15 +5750,15 @@ def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
     story.append(Paragraph("?? Kluczowe Rekomendacje", subtitle_style))
     
     recommendations = [
-        "Praktykuj zadawanie pytañ otwartych zamiast zamkniêtych",
-        "Rozwijaj umiejêtnoœci aktywnego s³uchania", 
-        "Wprowadzaj wiêcej empatii w codziennej komunikacji",
-        "Eksperymentuj z ró¿nymi stylami komunikacyjnymi",
-        "Regularne sesje feedbacku z zespo³em"
+        "Praktykuj zadawanie pytaÅ„ otwartych zamiast zamkniÄ™tych",
+        "Rozwijaj umiejÄ™tnoÅ›ci aktywnego sÅ‚uchania", 
+        "Wprowadzaj wiÄ™cej empatii w codziennej komunikacji",
+        "Eksperymentuj z rÃ³Å¼nymi stylami komunikacyjnymi",
+        "Regularne sesje feedbacku z zespoÅ‚em"
     ]
     
     for rec in recommendations:
-        story.append(Paragraph(f"• {ensure_unicode(rec)}", normal_style))
+        story.append(Paragraph(f"â€¢ {ensure_unicode(rec)}", normal_style))
     
     story.append(Spacer(1, 20))
     
@@ -5780,34 +5780,34 @@ def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
     # Zbuduj PDF
     doc.build(story)
     
-    # Zwróæ dane PDF
+    # ZwrÃ³Ä‡ dane PDF
     pdf_data = buffer.getvalue()
     buffer.close()
     
     return pdf_data
 
 def display_leadership_profile(profile: Dict):
-    """Wyœwietla profil przywódczy"""
-    st.markdown("## ?? Twój Profil Przywódczy C-IQ")
+    """WyÅ›wietla profil przywÃ³dczy"""
+    st.markdown("## ğŸ¯ TwÃ³j Profil PrzywÃ³dczy C-IQ")
     
-    # G³ówne metryki
+    # GÅ‚Ã³wne metryki
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         dominant_level = profile.get('dominant_ciq_level', 'II')
-        st.metric("?? Dominuj¹cy poziom C-IQ", f"Poziom {dominant_level}")
+        st.metric("?? DominujÄ…cy poziom C-IQ", f"Poziom {dominant_level}")
         
     with col2:
         leadership_style = profile.get('leadership_style', {})
         style = leadership_style.get('primary_style', 'collaborative')
-        st.metric("?? Styl przywództwa", style.title())
+        st.metric("?? Styl przywÃ³dztwa", style.title())
         
     with col3:
         team_impact = profile.get('team_impact', {})
         engagement = team_impact.get('predicted_engagement', 6)
         if engagement is None:
             engagement = 6
-        st.metric("?? Wp³yw na zaanga¿owanie", f"{engagement}/10")
+        st.metric("?? WpÅ‚yw na zaangaÅ¼owanie", f"{engagement}/10")
         
     with col4:
         trust_building = team_impact.get('trust_building_capability', 6)
@@ -5815,8 +5815,8 @@ def display_leadership_profile(profile: Dict):
             trust_building = 6
         st.metric("?? Budowanie zaufania", f"{trust_building}/10")
     
-    # Rozk³ad poziomów C-IQ
-    st.markdown("### ?? Rozk³ad Twoich poziomów C-IQ")
+    # RozkÅ‚ad poziomÃ³w C-IQ
+    st.markdown("### ğŸ¯ RozkÅ‚ad Twoich poziomÃ³w C-IQ")
     distribution = profile.get('ciq_distribution', {})
     
     col1, col2, col3 = st.columns(3)
@@ -5834,15 +5834,15 @@ def display_leadership_profile(profile: Dict):
         
     with col3:
         level_iii = distribution.get('level_iii_percentage', 20)
-        # Walidacja - upewniamy siê ¿e to liczba
+        # Walidacja - upewniamy siÄ™ Å¼e to liczba
         if level_iii is None:
             level_iii = 20
         st.metric("?? Poziom III (Transformacyjny)", f"{level_iii}%")
         
-    # Rekomendacje na podstawie rozk³adu C-IQ
-    st.markdown("#### ?? Rekomendacje na podstawie Twoich poziomów C-IQ:")
+    # Rekomendacje na podstawie rozkÅ‚adu C-IQ
+    st.markdown("#### ğŸ¯ Rekomendacje na podstawie Twoich poziomÃ³w C-IQ:")
     
-    # Walidacja wszystkich wartoœci przed porównaniem
+    # Walidacja wszystkich wartoÅ›ci przed porÃ³wnaniem
     level_i = distribution.get('level_i_percentage', 30)
     if level_i is None:
         level_i = 30
@@ -5853,35 +5853,35 @@ def display_leadership_profile(profile: Dict):
         level_iii = 20
     
     if level_iii < 30:
-        st.warning("?? **Prioritet:** Zwiêksz u¿ywanie poziomu III - zadawaj wiêcej pytañ otwartych, s³uchaj aktywnie, wspó³twórz rozwi¹zania")
+        st.warning("âš ï¸ **Prioritet:** ZwiÄ™ksz uÅ¼ywanie poziomu III - zadawaj wiÄ™cej pytaÅ„ otwartych, sÅ‚uchaj aktywnie, wspÃ³Å‚twÃ³rz rozwiÄ…zania")
     elif level_iii < 50:
-        st.info("?? **Kierunek rozwoju:** Kontynuuj pracê nad poziomem III - doskona³ umiejêtnoœci budowania dialogu")
+        st.info("ğŸ’¡ **Kierunek rozwoju:** Kontynuuj pracÄ™ nad poziomem III - doskonaÅ‚ umiejÄ™tnoÅ›ci budowania dialogu")
     else:
-        st.success("?? **Gratulacje!** Masz silny poziom III - teraz skup siê na konsystentnoœci i rozwijaniu innych")
+        st.success("âœ… **Gratulacje!** Masz silny poziom III - teraz skup siÄ™ na konsystentnoÅ›ci i rozwijaniu innych")
         
     if level_i > 50:
-        st.warning("?? **Uwaga:** Za du¿o poziomu I (transakcyjnego) - spróbuj wiêcej s³uchaæ ni¿ mówiæ")
+        st.warning("âš ï¸ **Uwaga:** Za duÅ¼o poziomu I (transakcyjnego) - sprÃ³buj wiÄ™cej sÅ‚uchaÄ‡ niÅ¼ mÃ³wiÄ‡")
         
     if level_ii > 60:
-        st.info("?? **Wskazówka:** Du¿o poziomu II - rozwijaj umiejêtnoœci przejœcia do poziomu III")
+        st.info("ğŸ’¡ **WskazÃ³wka:** DuÅ¼o poziomu II - rozwijaj umiejÄ™tnoÅ›ci przejÅ›cia do poziomu III")
     
     # Mocne strony i obszary rozwoju
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("### ?? Twoje mocne strony przywódcze")
+        st.markdown("### ğŸ¯ Twoje mocne strony przywÃ³dcze")
         strengths = profile.get('strengths', [])
         for strength in strengths:
             st.markdown(f"? {strength}")
             
     with col2:
-        st.markdown("### ?? Obszary do rozwoju")
+        st.markdown("### ğŸ¯ Obszary do rozwoju")
         development_areas = profile.get('development_areas', [])
         for area in development_areas:
             st.markdown(f"?? {area}")
             
     # Sekcja neurobiologiczna
-    st.markdown("### ?? Wp³yw neurobiologiczny Twojej komunikacji")
+    st.markdown("### ğŸ¯ WpÅ‚yw neurobiologiczny Twojej komunikacji")
     neurobiological = profile.get('neurobiological_impact', {})
     
     col1, col2, col3 = st.columns(3)
@@ -5893,11 +5893,11 @@ def display_leadership_profile(profile: Dict):
             st.success(f"?? **Niski cortyzol** {cortisol}/10")
             st.write("Twoja komunikacja minimalizuje stres")
         elif cortisol <= 7:
-            st.warning(f"?? **Œredni cortyzol** {cortisol}/10") 
-            st.write("Czasami mo¿esz wywo³ywaæ napiêcie")
+            st.warning(f"?? **Åšredni cortyzol** {cortisol}/10") 
+            st.write("Czasami moÅ¼esz wywoÅ‚ywaÄ‡ napiÄ™cie")
         else:
             st.error(f"?? **Wysoki cortyzol** {cortisol}/10")
-            st.write("Komunikacja mo¿e stresowaæ zespó³")
+            st.write("Komunikacja moÅ¼e stresowaÄ‡ zespÃ³Å‚")
             
     with col2:
         oxytocin = neurobiological.get('oxytocin_builders', 5)
@@ -5905,30 +5905,30 @@ def display_leadership_profile(profile: Dict):
             oxytocin = 5
         if oxytocin >= 7:
             st.success(f"?? **Wysoka oksytocyna** {oxytocin}/10")
-            st.write("Œwietnie budujesz wiêzi i zaufanie")
+            st.write("Åšwietnie budujesz wiÄ™zi i zaufanie")
         elif oxytocin >= 4:
-            st.info(f"?? **Œrednia oksytocyna** {oxytocin}/10")
+            st.info(f"?? **Åšrednia oksytocyna** {oxytocin}/10")
             st.write("Umiarkowanie budujesz relacje") 
         else:
             st.error(f"?? **Niska oksytocyna** {oxytocin}/10")
-            st.write("Potrzeba wiêcej budowania wiêzi")
+            st.write("Potrzeba wiÄ™cej budowania wiÄ™zi")
             
     with col3:
         safety = neurobiological.get('psychological_safety', 5)
         if safety is None:
             safety = 5
         if safety >= 7:
-            st.success(f"?? **Wysokie bezpieczeñstwo** {safety}/10")
-            st.write("Zespó³ czuje siê bezpiecznie")
+            st.success(f"?? **Wysokie bezpieczeÅ„stwo** {safety}/10")
+            st.write("ZespÃ³Å‚ czuje siÄ™ bezpiecznie")
         elif safety >= 4:
-            st.info(f"?? **Œrednie bezpieczeñstwo** {safety}/10")
-            st.write("Jest miejsce na poprawê bezpieczeñstwa")
+            st.info(f"?? **Åšrednie bezpieczeÅ„stwo** {safety}/10")
+            st.write("Jest miejsce na poprawÄ™ bezpieczeÅ„stwa")
         else:
-            st.error(f"?? **Niskie bezpieczeñstwo** {safety}/10") 
-            st.write("Zespó³ mo¿e czuæ siê niepewnie")
+            st.error(f"?? **Niskie bezpieczeÅ„stwo** {safety}/10") 
+            st.write("ZespÃ³Å‚ moÅ¼e czuÄ‡ siÄ™ niepewnie")
     
-    # Sekcja skutecznoœci komunikacji
-    st.markdown("### ?? Skutecznoœæ Twojej komunikacji")
+    # Sekcja skutecznoÅ›ci komunikacji
+    st.markdown("### ğŸ¯ SkutecznoÅ›Ä‡ Twojej komunikacji")
     
     communication = profile.get('communication_patterns', {})
     team_impact = profile.get('team_impact', {})
@@ -5936,38 +5936,38 @@ def display_leadership_profile(profile: Dict):
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        # Clarnoœæ przekazu - wyliczamy na podstawie poziomu C-IQ
+        # ClarnoÅ›Ä‡ przekazu - wyliczamy na podstawie poziomu C-IQ
         level_iii = profile.get('ciq_distribution', {}).get('level_iii_percentage', 20)
         if level_iii is None:
             level_iii = 20
         clarity_score = min(10, max(3, int(level_iii / 10 + 3)))
         
         if clarity_score >= 7:
-            st.success(f"?? **Clarnoœæ przekazu** {clarity_score}/10")
+            st.success(f"?? **ClarnoÅ›Ä‡ przekazu** {clarity_score}/10")
             st.write("Komunikujesz jasno i zrozumiale")
         elif clarity_score >= 5:
-            st.info(f"?? **Clarnoœæ przekazu** {clarity_score}/10")
-            st.write("Przekaz jest w miarê jasny")
+            st.info(f"?? **ClarnoÅ›Ä‡ przekazu** {clarity_score}/10")
+            st.write("Przekaz jest w miarÄ™ jasny")
         else:
-            st.warning(f"?? **Clarnoœæ przekazu** {clarity_score}/10")
-            st.write("Przekaz wymaga uœciœlenia")
+            st.warning(f"?? **ClarnoÅ›Ä‡ przekazu** {clarity_score}/10")
+            st.write("Przekaz wymaga uÅ›ciÅ›lenia")
             
     with col2:
         trust_potential = team_impact.get('trust_building_capability', 6)
         if trust_potential is None:
             trust_potential = 6
         if trust_potential >= 7:
-            st.success(f"?? **Potencja³ zaufania** {trust_potential}/10")
-            st.write("Silnie budujesz zaufanie zespo³u")
+            st.success(f"?? **PotencjaÅ‚ zaufania** {trust_potential}/10")
+            st.write("Silnie budujesz zaufanie zespoÅ‚u")
         elif trust_potential >= 5:
-            st.info(f"?? **Potencja³ zaufania** {trust_potential}/10") 
+            st.info(f"?? **PotencjaÅ‚ zaufania** {trust_potential}/10") 
             st.write("Umiarkowanie budujesz zaufanie")
         else:
-            st.warning(f"?? **Potencja³ zaufania** {trust_potential}/10")
+            st.warning(f"?? **PotencjaÅ‚ zaufania** {trust_potential}/10")
             st.write("Zaufanie wymaga wzmocnienia")
             
     with col3:
-        # Ryzyko konfliktu - odwrotnoœæ conflict_resolution
+        # Ryzyko konfliktu - odwrotnoÅ›Ä‡ conflict_resolution
         conflict_resolution = team_impact.get('conflict_resolution', 6)
         if conflict_resolution is None:
             conflict_resolution = 6
@@ -5975,89 +5975,89 @@ def display_leadership_profile(profile: Dict):
         
         if conflict_risk <= 3:
             st.success(f"? **Ryzyko konfliktu** {conflict_risk}/10")
-            st.write("Bardzo niskie ryzyko konfliktów")
+            st.write("Bardzo niskie ryzyko konfliktÃ³w")
         elif conflict_risk <= 6:
             st.info(f"? **Ryzyko konfliktu** {conflict_risk}/10")
-            st.write("Umiarkowane ryzyko konfliktów") 
+            st.write("Umiarkowane ryzyko konfliktÃ³w") 
         else:
             st.warning(f"? **Ryzyko konfliktu** {conflict_risk}/10")
-            st.write("Wysokie ryzyko napiêæ w zespole")
+            st.write("Wysokie ryzyko napiÄ™Ä‡ w zespole")
 
 def display_leadership_development_plan(profile: Dict):
-    """Wyœwietla plan rozwoju przywódczego"""
-    st.markdown("## ?? Twój Plan Rozwoju Przywódczego")
+    """WyÅ›wietla plan rozwoju przywÃ³dczego"""
+    st.markdown("## ğŸ¯ TwÃ³j Plan Rozwoju PrzywÃ³dczego")
     
     # Analiza obecnego poziomu
     dominant_level = profile.get('dominant_ciq_level', 'II')
     distribution = profile.get('ciq_distribution', {})
     level_iii_percentage = safe_get_numeric(distribution, 'level_iii_percentage', 20)
     
-    st.markdown("### ?? Analiza obecnej sytuacji")
+    st.markdown("### ğŸ¯ Analiza obecnej sytuacji")
     if level_iii_percentage < 30:
-        st.warning(f"?? **Poziom III stanowi tylko {level_iii_percentage}%** Twojej komunikacji. To g³ówny obszar rozwoju!")
+        st.warning(f"?? **Poziom III stanowi tylko {level_iii_percentage}%** Twojej komunikacji. To gÅ‚Ã³wny obszar rozwoju!")
     elif level_iii_percentage < 50:
-        st.info(f"?? **Poziom III: {level_iii_percentage}%** - dobry start, ale jest miejsce na poprawê")
+        st.info(f"?? **Poziom III: {level_iii_percentage}%** - dobry start, ale jest miejsce na poprawÄ™")
     else:
-        st.success(f"?? **Poziom III: {level_iii_percentage}%** - œwietny poziom transformacyjnego przywództwa!")
+        st.success(f"?? **Poziom III: {level_iii_percentage}%** - Å›wietny poziom transformacyjnego przywÃ³dztwa!")
     
-    # Plan rozwoju na najbli¿sze 3 miesi¹ce
-    st.markdown("### ??? Plan rozwoju - najbli¿sze 3 miesi¹ce")
+    # Plan rozwoju na najbliÅ¼sze 3 miesiÄ…ce
+    st.markdown("### ğŸ”§ Plan rozwoju - najbliÅ¼sze 3 miesiÄ…ce")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("**?? Cele do osi¹gniêcia:**")
+        st.markdown("**?? Cele do osiÄ…gniÄ™cia:**")
         target_level_iii = min(level_iii_percentage + 20, 80)
-        st.markdown(f"• Zwiêksz poziom III z {level_iii_percentage}% do {target_level_iii}%")
-        st.markdown("• Stosuj wiêcej pytañ otwartych")
-        st.markdown("• Praktykuj jêzyk wspó³tworzenia")
-        st.markdown("• Buduj psychologiczne bezpieczeñstwo")
+        st.markdown(f"â€¢ ZwiÄ™ksz poziom III z {level_iii_percentage}% do {target_level_iii}%")
+        st.markdown("â€¢ Stosuj wiÄ™cej pytaÅ„ otwartych")
+        st.markdown("â€¢ Praktykuj jÄ™zyk wspÃ³Å‚tworzenia")
+        st.markdown("â€¢ Buduj psychologiczne bezpieczeÅ„stwo")
         
     with col2:
-        st.markdown("**?? Konkretne æwiczenia:**")
-        st.markdown("• **Tygodniowo:** 3 rozmowy 1-on-1 z fokusem na C-IQ III")
-        st.markdown("• **Dziennie:** Zadaj 5+ pytañ otwartych zespo³owi") 
-        st.markdown("• **Miesiêcznie:** Przeanalizuj swoje rozmowy tym narzêdziem")
-        st.markdown("• **Kwartalne:** Feedback 360° o stylu komunikacji")
+        st.markdown("**?? Konkretne Ä‡wiczenia:**")
+        st.markdown("â€¢ **Tygodniowo:** 3 rozmowy 1-on-1 z fokusem na C-IQ III")
+        st.markdown("â€¢ **Dziennie:** Zadaj 5+ pytaÅ„ otwartych zespoÅ‚owi") 
+        st.markdown("â€¢ **MiesiÄ™cznie:** Przeanalizuj swoje rozmowy tym narzÄ™dziem")
+        st.markdown("â€¢ **Kwartalne:** Feedback 360Â° o stylu komunikacji")
     
     # Benchmark z innymi liderami
-    st.markdown("### ?? Benchmark z innymi liderami")
+    st.markdown("### ğŸ¯ Benchmark z innymi liderami")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("**?? Lider Pocz¹tkuj¹cy**")
-        st.markdown("• Poziom III: 15-25%")
-        st.markdown("• Fokus na zadania")
-        st.markdown("• Komunikacja dyrektywna")
+        st.markdown("**?? Lider PoczÄ…tkujÄ…cy**")
+        st.markdown("â€¢ Poziom III: 15-25%")
+        st.markdown("â€¢ Fokus na zadania")
+        st.markdown("â€¢ Komunikacja dyrektywna")
         
     with col2:
-        st.markdown("**?? Lider Doœwiadczony**") 
-        st.markdown("• Poziom III: 40-60%")
-        st.markdown("• Balans zadania-relacje")
-        st.markdown("• Rozwój zespo³u")
+        st.markdown("**?? Lider DoÅ›wiadczony**") 
+        st.markdown("â€¢ Poziom III: 40-60%")
+        st.markdown("â€¢ Balans zadania-relacje")
+        st.markdown("â€¢ RozwÃ³j zespoÅ‚u")
         
     with col3:
         st.markdown("**?? Lider Transformacyjny**")
-        st.markdown("• Poziom III: 65%+")
-        st.markdown("• Inspiruje i motywuje")
-        st.markdown("• Buduje kultur zaufania")
+        st.markdown("â€¢ Poziom III: 65%+")
+        st.markdown("â€¢ Inspiruje i motywuje")
+        st.markdown("â€¢ Buduje kultur zaufania")
     
-    # Gdzie jesteœ
+    # Gdzie jesteÅ›
     if level_iii_percentage < 25:
-        st.info("?? **Jesteœ na poziomie:** Lider Pocz¹tkuj¹cy - œwietny moment na rozwój!")
+        st.info("ğŸ’¡ **JesteÅ› na poziomie:** Lider PoczÄ…tkujÄ…cy - Å›wietny moment na rozwÃ³j!")
     elif level_iii_percentage < 60:
-        st.success("?? **Jesteœ na poziomie:** Lider Doœwiadczony - bardzo dobry wynik!")
+        st.success("âœ… **JesteÅ› na poziomie:** Lider DoÅ›wiadczony - bardzo dobry wynik!")
     else:
-        st.success("?? **Jesteœ na poziomie:** Lider Transformacyjny - gratulacje! ??")
+        st.success("âœ… **JesteÅ› na poziomie:** Lider Transformacyjny - gratulacje! ??")
 
 # ===============================================
-# DISPLAY FUNCTIONS - WYŒWIETLANIE REZULTATÓW  
+# DISPLAY FUNCTIONS - WYÅšWIETLANIE REZULTATÃ“W  
 # ===============================================
 
 def display_sentiment_results(result: Dict):
-    """Wyœwietla wyniki analizy sentymentu"""
-    st.markdown("## ?? Wyniki Analizy Sentiment + C-IQ")
+    """WyÅ›wietla wyniki analizy sentymentu"""
+    st.markdown("## ğŸ¯ Wyniki Analizy Sentiment + C-IQ")
     
     col1, col2, col3 = st.columns(3)
     
@@ -6065,54 +6065,54 @@ def display_sentiment_results(result: Dict):
         sentiment = result.get('overall_sentiment', 'neutralny')
         score = result.get('sentiment_score', 5)
         
-        color = "??" if sentiment == "pozytywny" else "??" if sentiment == "negatywny" else "??"
-        st.metric(f"{color} Sentiment ogólny", f"{sentiment.title()}", f"Ocena: {score}/10")
+        color = "ğŸ¯" if sentiment == "pozytywny" else "ğŸ¯" if sentiment == "negatywny" else "ğŸ¯"
+        st.metric(f"{color} Sentiment ogÃ³lny", f"{sentiment.title()}", f"Ocena: {score}/10")
         
     with col2:
         ciq = result.get('ciq_analysis', {})
         manager_level = ciq.get('manager_level', 'N/A')
-        st.metric("?? Poziom mened¿era", manager_level)
+        st.metric("?? Poziom menedÅ¼era", manager_level)
         
     with col3:
         business = result.get('business_insights', {})
         escalation = business.get('escalation_risk', 0)
-        color = "??" if escalation < 4 else "??" if escalation < 7 else "??"
+        color = "ğŸ¯" if escalation < 4 else "ğŸ¯" if escalation < 7 else "ğŸ¯"
         st.metric(f"{color} Ryzyko eskalacji", f"{escalation}/10")
     
-    # Szczegó³y
+    # SzczegÃ³Å‚y
     if 'emotions_detected' in result:
-        st.markdown("### ?? Wykryte emocje")
+        st.markdown("### ğŸ¯ Wykryte emocje")
         emotions = result['emotions_detected']
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("** Mened¿er:**")
+            st.markdown("** MenedÅ¼er:**")
             for emotion in emotions.get('manager', []):
-                st.markdown(f"• {emotion}")
+                st.markdown(f"â€¢ {emotion}")
                 
         with col2:
             st.markdown("**?? Pracownik:**")
             for emotion in emotions.get('employee', []):
-                st.markdown(f"• {emotion}")
+                st.markdown(f"â€¢ {emotion}")
     
     # Rekomendacje
     if 'recommendations' in result:
-        st.markdown("### ?? Rekomendacje")
+        st.markdown("### ğŸ¯ Rekomendacje")
         recommendations = result['recommendations']
         
         if 'immediate_actions' in recommendations:
-            st.markdown("**?? Natychmiastowe dzia³ania:**")
+            st.markdown("**?? Natychmiastowe dziaÅ‚ania:**")
             for action in recommendations['immediate_actions']:
-                st.markdown(f"• {action}")
+                st.markdown(f"â€¢ {action}")
                 
         if 'coaching_points' in recommendations:
-            st.markdown("**?? Wskazówki coachingowe:**")
+            st.markdown("**?? WskazÃ³wki coachingowe:**")
             for point in recommendations['coaching_points']:
-                st.markdown(f"• {point}")
+                st.markdown(f"â€¢ {point}")
 
 def display_intent_results(result: Dict):
-    """Wyœwietla wyniki detekcji intencji"""
-    st.markdown("## ?? Wykryte Intencje Biznesowe")
+    """WyÅ›wietla wyniki detekcji intencji"""
+    st.markdown("## ğŸ¯ Wykryte Intencje Biznesowe")
     
     if 'detected_intents' in result:
         for intent_data in result['detected_intents']:
@@ -6120,13 +6120,13 @@ def display_intent_results(result: Dict):
             confidence = intent_data.get('confidence', 0)
             urgency = intent_data.get('urgency', 'medium')
             
-            # Kolory dla ró¿nych intencji
+            # Kolory dla rÃ³Å¼nych intencji
             intent_colors = {
-                'purchase': '??',
-                'complaint': '??', 
+                'purchase': 'ğŸ¯',
+                'complaint': 'ğŸ¯', 
                 'cancellation': '?',
-                'upsell_opportunity': '??',
-                'feature_request': '??'
+                'upsell_opportunity': 'ğŸ¯',
+                'feature_request': 'ğŸ¯'
             }
             
             color = intent_colors.get(intent, '?')
@@ -6135,33 +6135,33 @@ def display_intent_results(result: Dict):
             with col1:
                 st.metric(f"{color} Intencja", intent.replace('_', ' ').title())
             with col2:
-                st.metric("?? Pewnoœæ", f"{confidence}/10")
+                st.metric("?? PewnoÅ›Ä‡", f"{confidence}/10")
             with col3:
-                urgency_color = "??" if urgency == "high" else "??" if urgency == "medium" else "??"
-                st.metric(f"{urgency_color} Pilnoœæ", urgency.title())
+                urgency_color = "ğŸ¯" if urgency == "high" else "ğŸ¯" if urgency == "medium" else "ğŸ¯"
+                st.metric(f"{urgency_color} PilnoÅ›Ä‡", urgency.title())
     
     # Rekomendacje biznesowe
     if 'next_best_actions' in result:
-        st.markdown("### ?? Rekomendowane dzia³ania")
+        st.markdown("### ğŸ¯ Rekomendowane dziaÅ‚ania")
         for action in result['next_best_actions']:
-            st.markdown(f"• {action}")
+            st.markdown(f"â€¢ {action}")
 
 def display_escalation_results(result: Dict):
-    """Wyœwietla wyniki analizy problemów zespo³owych"""
-    st.markdown("## ?? Analiza Problemów Zespo³owych")
+    """WyÅ›wietla wyniki analizy problemÃ³w zespoÅ‚owych"""
+    st.markdown("## ğŸ¯ Analiza ProblemÃ³w ZespoÅ‚owych")
     
     risk_level = result.get('risk_level', 'medium')
     team_risk = result.get('team_problem_risk', result.get('escalation_risk', 5))
     
-    # Kolory dla poziomów ryzyka
+    # Kolory dla poziomÃ³w ryzyka
     risk_colors = {
-        'low': '??',
-        'medium': '??', 
-        'high': '??',
-        'critical': '??'
+        'low': 'ğŸ¯',
+        'medium': 'ğŸ¯', 
+        'high': 'ğŸ¯',
+        'critical': 'ğŸ¯'
     }
     
-    color = risk_colors.get(risk_level, '??')
+    color = risk_colors.get(risk_level, 'ğŸ¯')
     
     col1, col2 = st.columns(2)
     with col1:
@@ -6170,63 +6170,63 @@ def display_escalation_results(result: Dict):
     with col2:
         hr_esc = result.get('hr_escalation', result.get('manager_escalation', {}))
         if hr_esc.get('recommended', False):
-            st.error("?? ZALECANE PRZEKAZANIE DO HR/WY¯SZEGO MANAGEMENTU")
+            st.error("?? ZALECANE PRZEKAZANIE DO HR/WYÅ»SZEGO MANAGEMENTU")
         else:
-            st.success("? Mened¿er mo¿e kontynuowaæ wsparcie zespo³u")
+            st.success("? MenedÅ¼er moÅ¼e kontynuowaÄ‡ wsparcie zespoÅ‚u")
     
-    # Sygna³y ostrzegawcze
+    # SygnaÅ‚y ostrzegawcze
     if 'warning_signals' in result:
-        st.markdown("### ?? Wykryte sygna³y ostrzegawcze")
+        st.markdown("### ğŸ¯ Wykryte sygnaÅ‚y ostrzegawcze")
         for signal in result['warning_signals']:
             severity = signal.get('severity', 0)
             signal_text = signal.get('signal', '')
-            severity_color = "??" if severity > 7 else "??" if severity > 4 else "??"
-            st.markdown(f"{severity_color} **{signal_text}** (Intensywnoœæ: {severity}/10)")
+            severity_color = "ğŸ¯" if severity > 7 else "ğŸ¯" if severity > 4 else "ğŸ¯"
+            st.markdown(f"{severity_color} **{signal_text}** (IntensywnoÅ›Ä‡: {severity}/10)")
     
     # Strategie wsparcia
     if 'support_strategies' in result:
-        st.markdown("### ?? Strategie wsparcia pracownika")
+        st.markdown("### ğŸ¯ Strategie wsparcia pracownika")
         for strategy in result['support_strategies']:
-            st.markdown(f"• {strategy}")
+            st.markdown(f"â€¢ {strategy}")
     
-    # Dzia³ania przywódcze
+    # DziaÅ‚ania przywÃ³dcze
     if 'leadership_actions' in result:
-        st.markdown("### ?? Rekomendowane dzia³ania mened¿erskie")
+        st.markdown("### ğŸ¯ Rekomendowane dziaÅ‚ania menedÅ¼erskie")
         for action in result['leadership_actions']:
-            st.markdown(f"• {action}")
+            st.markdown(f"â€¢ {action}")
 
 def display_coaching_results(result: Dict):
-    """Wyœwietla wyniki coachingu przywódczego"""
-    st.markdown("## ?? Leadership Coach - Sugerowane odpowiedzi")
+    """WyÅ›wietla wyniki coachingu przywÃ³dczego"""
+    st.markdown("## ğŸ¯ Leadership Coach - Sugerowane odpowiedzi")
     
-    # G³ówne sugestie
+    # GÅ‚Ã³wne sugestie
     if 'suggested_responses' in result:
         for i, suggestion in enumerate(result['suggested_responses']):
-            st.markdown(f"### ?? Sugerowana odpowiedŸ {i+1}")
+            st.markdown(f"### ğŸ¯ Sugerowana odpowiedÅº {i+1}")
             
             response = suggestion.get('response', '')
             rationale = suggestion.get('rationale', '')
             
-            st.success(f"**?? OdpowiedŸ:** {response}")
+            st.success(f"**?? OdpowiedÅº:** {response}")
             st.info(f"**?? Uzasadnienie:** {rationale}")
     
     # Techniki C-IQ
     if 'ciq_techniques' in result:
-        st.markdown("### ?? Techniki C-IQ do zastosowania")
+        st.markdown("### ğŸ¯ Techniki C-IQ do zastosowania")
         for technique in result['ciq_techniques']:
-            st.markdown(f"• {technique}")
+            st.markdown(f"â€¢ {technique}")
     
-    # Czego unikaæ
+    # Czego unikaÄ‡
     if 'what_to_avoid' in result:
-        st.markdown("### ? Czego unikaæ")
+        st.markdown("### ? Czego unikaÄ‡")
         for avoid in result['what_to_avoid']:
-            st.markdown(f"• {avoid}")
+            st.markdown(f"â€¢ {avoid}")
     
     # Pytania otwarte
     if 'follow_up_questions' in result:
         st.markdown("### ? Sugerowane pytania otwarte")
         for question in result['follow_up_questions']:
-            st.markdown(f"• {question}")
+            st.markdown(f"â€¢ {question}")
 
 if __name__ == "__main__":
     show_tools_page()

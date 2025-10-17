@@ -125,7 +125,7 @@ def show_lessons_by_category(lessons_by_category, completed_lessons, device_type
                 else:
                     # Lekcja niedostępna - użyj lesson_card z odpowiednimi parametrami
                     lesson_card(
-                        title=f"?? {lesson.get('title', 'Lekcja')}",
+                        title=f"📚 {lesson.get('title', 'Lekcja')}",
                         description=lesson.get('description', 'Ta lekcja wprowadza podstawowe zasady...'),
                         xp=lesson.get('xp_reward', 30),
                         difficulty=lesson.get('difficulty', 'beginner'),
@@ -178,7 +178,7 @@ def show_lessons_content():
             unavailable_lessons[category].sort(key=lambda x: (x[0] in completed_lessons, x[0]))
         
         # Utwórz tabs dla dostępnych i niedostępnych lekcji
-        tab_available, tab_unavailable = st.tabs(["?? Lekcje dostępne", "?? Lekcje niedostępne"])
+        tab_available, tab_unavailable = st.tabs(["📚 Lekcje dostępne", "🔒 Lekcje niedostępne"])
         
         with tab_available:
             scroll_to_top()
@@ -211,11 +211,11 @@ def show_lessons_content():
         # Sprawdź dostępność lekcji
         username = st.session_state.get('username')
         if username and not is_lesson_accessible(username, lesson_id):
-            st.error("?? **Dostęp do tej lekcji jest ograniczony**")
+            st.error("🚫 **Dostęp do tej lekcji jest ograniczony**")
             st.warning("Ta lekcja nie jest obecnie dostępna dla Twojego konta. Skontaktuj się z administratorem, aby uzyskać dostęp.")
             
             # Przycisk powrotu do listy lekcji
-            if st.button("?? Wróć do listy lekcji"):
+            if st.button("⬅️ Wróć do listy lekcji"):
                 st.session_state.current_lesson = None
                 st.rerun()
             return
@@ -510,7 +510,7 @@ def show_lessons_content():
             """, unsafe_allow_html=True)
             
             st.markdown('<div class="lesson-nav-container">', unsafe_allow_html=True)
-            st.markdown('<div class="lesson-nav-title">?? Nawigacja lekcji</div>', unsafe_allow_html=True)
+            st.markdown('<div class="lesson-nav-title">🗺️ Nawigacja lekcji</div>', unsafe_allow_html=True)
             
             # Stwórz kolumny dla przycisków nawigacji z responsive grid
             available_steps_in_order = [step for step in step_order if step in available_steps]
@@ -551,17 +551,17 @@ def show_lessons_content():
                                 # Dla lekcji "Wprowadzenie do neuroprzywództwa" nie ma blokowania
                                 if lesson_title != "Wprowadzenie do neuroprzywództwa" and not quiz_passed and not is_current:
                                     # Blokuj dostęp do podsumowania jeśli quiz nie został zdany
-                                    button_text = f"?? {step_number}. {step_name}"
+                                    button_text = f"🔄 {step_number}. {step_name}"
                                     button_type = "secondary"
                                     disabled = True
                                     help_text = "Musisz zaliczyć quiz końcowy (min. 75%) w sekcji 'Praktyka', aby odblokować podsumowanie"
                                 elif is_current:
-                                    button_text = f"?? {step_number}. {step_name}"
+                                    button_text = f"🔄 {step_number}. {step_name}"
                                     button_type = "primary"
                                     disabled = False
                                     help_text = f"Przejdź do: {step_name}"
                                 elif is_completed:
-                                    button_text = f"? {step_number}. {step_name}"
+                                    button_text = f"✅ {step_number}. {step_name}"
                                     button_type = "secondary"
                                     disabled = False
                                     help_text = f"Przejdź do: {step_name}"
@@ -574,13 +574,13 @@ def show_lessons_content():
                                 # Standardowa logika dla innych kroków
                                 if is_current:
                                     # Aktualny krok - niebieski
-                                    button_text = f"?? {step_number}. {step_name}"
+                                    button_text = f"🔄 {step_number}. {step_name}"
                                     button_type = "primary"
                                     disabled = False
                                     help_text = f"Przejdź do: {step_name}"
                                 elif is_completed:
                                     # Ukończony krok - zielony z checkmarkiem
-                                    button_text = f"? {step_number}. {step_name}"
+                                    button_text = f"✅ {step_number}. {step_name}"
                                     button_type = "secondary"
                                     disabled = False
                                     help_text = f"Przejdź do: {step_name}"
@@ -632,7 +632,7 @@ def show_lessons_content():
                         st.warning("Brak treści wprowadzenia.")
             else:
                 # Dla wszystkich innych lekcji pokazuj pełne tabs
-                intro_tabs = tabs_with_fallback(["Wprowadzenie", "Case Study", "?? Quiz Samodiagnozy"])
+                intro_tabs = tabs_with_fallback(["Wprowadzenie", "Case Study", "🔍 Quiz Samodiagnozy"])
                 
                 with intro_tabs[0]:
                     # Wyświetl główne wprowadzenie
@@ -656,7 +656,7 @@ def show_lessons_content():
                         "quiz_samodiagnozy" in lesson["intro"] and 
                         "questions" in lesson["intro"]["quiz_samodiagnozy"]):
                         
-                        st.info("?? **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako lidera. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
+                        st.info("💡 **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako lidera. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
                         
                         quiz_data = lesson["intro"]["quiz_samodiagnozy"]
                         quiz_complete, _, earned_points = display_quiz(quiz_data)
@@ -675,7 +675,7 @@ def show_lessons_content():
                     
                     elif 'sections' in lesson and 'opening_quiz' in lesson.get('sections', {}):
                         # Backward compatibility - stary format
-                        st.info("?? **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako inwestora. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
+                        st.info("💡 **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako inwestora. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
                         
                         quiz_data = lesson['sections']['opening_quiz']
                         quiz_complete, _, earned_points = display_quiz(quiz_data)
@@ -696,7 +696,7 @@ def show_lessons_content():
                             st.markdown("---")
                             col1, col2, col3 = st.columns([1, 1, 1])
                             with col2:
-                                if st.button("?? Przystąp ponownie", key=f"retry_self_diagnosis_legacy_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
+                                if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_legacy_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
                                     # Reset stanu quizu samodiagnozy
                                     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                     
@@ -759,7 +759,7 @@ def show_lessons_content():
                 
                 # Nowa struktura z tabs (jak w lekcji 11)
                 if 'tabs' in learning_data:
-                    st.markdown("### ?? Materiał do nauki")
+                    st.markdown("### 📖 Materiał do nauki")
                     
                     # CSS dla pełnej szerokości expanderów w tabsie "Tekst"
                     st.markdown("""
@@ -934,7 +934,7 @@ def show_lessons_content():
                             
                             # Sprawdź czy sekcja zawiera wiele filmów YouTube (videos)
                             if 'videos' in section and section['videos']:
-                                st.markdown("### ?? Materiały wideo")
+                                st.markdown("### 🎥 Materiały wideo")
                                 for j, video_data in enumerate(section['videos']):
                                     video_url = video_data.get('url')
                                     video_title = video_data.get('title', f'Film {j+1}')
@@ -1004,11 +1004,11 @@ def show_lessons_content():
                     for part in case_study_data['parts']:
                         with st.expander(f"**Część {part['id']}: {part['title']}**", expanded=False):
                             # Pole tekstowe z case content
-                            st.markdown("#### ?? Opis sytuacji")
+                            st.markdown("#### 📋 Opis sytuacji")
                             st.markdown(f"<div style='background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff; margin: 15px 0;'>{part['case_content']}</div>", unsafe_allow_html=True)
                             
                             # Film omawiający tę część
-                            st.markdown("#### ?? Analiza neurobiologiczna")
+                            st.markdown("#### 📌 Analiza neurobiologiczna")
                             
                             # Wyświetl video jeśli URL nie jest placeholder
                             video_url = part['video']['url']
@@ -1020,7 +1020,7 @@ def show_lessons_content():
                                     part['video']['description']
                                 )
                             else:
-                                st.info(f"?? **{part['video']['title']}**\n\n{part['video']['description']}\n\n*Film będzie dostępny wkrótce.*")
+                                st.info(f"📌 **{part['video']['title']}**\n\n{part['video']['description']}\n\n*Film będzie dostępny wkrótce.*")
                             
                             st.markdown("---")
                 
@@ -1033,53 +1033,53 @@ def show_lessons_content():
                     
                     # Fiszki - sprawdzanie wiedzy (nowa funkcjonalność)
                     if 'flashcards' in practical_data:
-                        available_tabs.append("?? Fiszki")
+                        available_tabs.append("📌 Fiszki")
                         tab_keys.append('flashcards')
                         sub_tabs_data['flashcards'] = practical_data['flashcards']
                     
                     # Nowa struktura z 'exercises' i 'closing_quiz'
                     if 'exercises' in practical_data:
-                        available_tabs.append("?? Ćwiczenia")
+                        available_tabs.append("📌 Ćwiczenia")
                         tab_keys.append('exercises')
                         sub_tabs_data['exercises'] = practical_data['exercises']
                     
                     # Case Studies - interaktywne przypadki do analizy
                     if 'case_studies' in practical_data:
-                        available_tabs.append("?? Case Studies")
+                        available_tabs.append("📌 Case Studies")
                         tab_keys.append('case_studies')
                         sub_tabs_data['case_studies'] = practical_data['case_studies']
                     
                     # AI Exercises - interaktywne ćwiczenia sprawdzane przez AI
                     if 'ai_exercises' in practical_data:
-                        available_tabs.append("?? Ćwiczenia AI")
+                        available_tabs.append("📌 Ćwiczenia AI")
                         tab_keys.append('ai_exercises')
                         sub_tabs_data['ai_exercises'] = practical_data['ai_exercises']
                     
                     # Pytania otwarte z oceną AI
                     if 'ai_questions' in practical_data:
-                        available_tabs.append("?? Pytania AI")
+                        available_tabs.append("📌 Pytania AI")
                         tab_keys.append('ai_questions')
                         sub_tabs_data['ai_questions'] = practical_data['ai_questions']
                     
                     # Challenge - AI generuje przypadki do rozwiązania
                     if 'generated_case_studies' in practical_data:
-                        available_tabs.append("?? Challenge")
+                        available_tabs.append("📌 Challenge")
                         tab_keys.append('generated_case_studies')
                         sub_tabs_data['generated_case_studies'] = practical_data['generated_case_studies']
                     
                     if 'closing_quiz' in practical_data:
-                        available_tabs.append("?? Quiz końcowy")
+                        available_tabs.append("📌 Quiz końcowy")
                         tab_keys.append('closing_quiz')
                         sub_tabs_data['closing_quiz'] = practical_data['closing_quiz']
                     
                     # Backward compatibility - stara struktura bezpośrednia (reflection, application, closing_quiz)
                     if 'reflection' in practical_data:
-                        available_tabs.append("?? Refleksja")
+                        available_tabs.append("📌 Refleksja")
                         tab_keys.append('reflection')
                         sub_tabs_data['reflection'] = practical_data['reflection']
                     
                     if 'application' in practical_data:
-                        available_tabs.append("?? Zadania Praktyczne")
+                        available_tabs.append("📌 Zadania Praktyczne")
                         tab_keys.append('application')
                         sub_tabs_data['application'] = practical_data['application']
                     
@@ -1095,7 +1095,7 @@ def show_lessons_content():
                                     lesson_title = lesson.get("title", "")
                                     if lesson_title == "Wprowadzenie do neuroprzywództwa":
                                         # Dla tej lekcji quiz autodiagnozy bez wymogu 75%
-                                        st.info("?? **Quiz autodiagnozy** - Ten quiz pomoże Ci lepiej poznać swoje podejście do przywództwa. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję.")
+                                        st.info("💡 **Quiz autodiagnozy** - Ten quiz pomoże Ci lepiej poznać swoje podejście do przywództwa. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję.")
                                         
                                         quiz_data = sub_tabs_data['closing_quiz']
                                         quiz_completed, quiz_passed, earned_points = display_quiz(quiz_data, passing_threshold=0)  # Brak wymogu minimum
@@ -1126,7 +1126,7 @@ def show_lessons_content():
                                         st.markdown("---")
                                         col1, col2, col3 = st.columns([1, 1, 1])
                                         with col2:
-                                            if st.button("?? Przystąp ponownie", key=f"retry_autodiag_quiz_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
+                                            if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
                                                 # Reset stanu quizu
                                                 quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                 closing_quiz_key = f"closing_quiz_{lesson_id}"  # Definiuj tutaj
@@ -1153,7 +1153,7 @@ def show_lessons_content():
                                                 st.rerun()
                                     else:
                                         # Dla wszystkich innych lekcji standardowy quiz końcowy
-                                        st.info("?? **Quiz końcowy** - Sprawdź swoją wiedzę z tej lekcji. Musisz uzyskać minimum 75% poprawnych odpowiedzi, aby przejść dalej.")
+                                        st.info("💡 **Quiz końcowy** - Sprawdź swoją wiedzę z tej lekcji. Musisz uzyskać minimum 75% poprawnych odpowiedzi, aby przejść dalej.")
                                         
                                         quiz_data = sub_tabs_data['closing_quiz']
                                         quiz_completed, quiz_passed, earned_points = display_quiz(quiz_data, passing_threshold=75)
@@ -1234,7 +1234,7 @@ def show_lessons_content():
                                             # Wyświetl kartę
                                             if not flashcard_state['show_back']:
                                                 # Przód karty
-                                                st.markdown(f"### ?? Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
+                                                st.markdown(f"### 📌 Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
                                                 
                                                 # Pytanie
                                                 st.markdown(f"""
@@ -1251,13 +1251,13 @@ def show_lessons_content():
                                                 # Przycisk pokazania odpowiedzi
                                                 col1, col2, col3 = st.columns([1, 2, 1])
                                                 with col2:
-                                                    if st.button("?? Pokaż odpowiedź", key=f"show_back_{card_id}", type="primary", width="stretch"):
+                                                    if st.button("📌 Pokaż odpowiedź", key=f"show_back_{card_id}", type="primary", width="stretch"):
                                                         flashcard_state['show_back'] = True
                                                         st.rerun()
                                             
                                             else:
                                                 # Tył karty
-                                                st.markdown(f"### ?? Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
+                                                st.markdown(f"### 📌 Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
                                                 
                                                 # Pytanie (mniejsze)
                                                 st.markdown(f"""
@@ -1293,7 +1293,7 @@ def show_lessons_content():
                                                         st.rerun()
                                                 
                                                 with col2:
-                                                    if st.button("?? Częściowo", key=f"partial_{card_id}", width="stretch"):
+                                                    if st.button("📌 Częściowo", key=f"partial_{card_id}", width="stretch"):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         # Częściowa wiedza = nie dodawaj do żadnej kategorii
                                                         flashcard_state['show_back'] = False
@@ -1314,7 +1314,7 @@ def show_lessons_content():
                                             col1, col2 = st.columns(2)
                                             
                                             with col1:
-                                                if st.button("?? Reset postępu", key=f"reset_flashcards_{lesson_id}"):
+                                                if st.button("📌 Reset postępu", key=f"reset_flashcards_{lesson_id}"):
                                                     flashcard_state['current_card'] = 0
                                                     flashcard_state['show_back'] = False
                                                     flashcard_state['studied_cards'] = set()
@@ -1324,7 +1324,7 @@ def show_lessons_content():
                                                     st.rerun()
                                             
                                             with col2:
-                                                if st.button("?? Tylko niepoprawne", key=f"review_incorrect_{lesson_id}", disabled=len(flashcard_state['incorrect_answers']) == 0):
+                                                if st.button("📌 Tylko niepoprawne", key=f"review_incorrect_{lesson_id}", disabled=len(flashcard_state['incorrect_answers']) == 0):
                                                     # Znajdź pierwszą niepoprawną kartę
                                                     for i, card in enumerate(cards):
                                                         if card['id'] in flashcard_state['incorrect_answers']:
@@ -1335,7 +1335,7 @@ def show_lessons_content():
                                             
                                             # Statystyki nauki na dole
                                             st.markdown("---")
-                                            st.markdown("### ?? Statystyki nauki")
+                                            st.markdown("### 📌 Statystyki nauki")
                                             
                                             studied_count = len(flashcard_state['studied_cards'])
                                             correct_count = len(flashcard_state['correct_answers'])
@@ -1365,7 +1365,7 @@ def show_lessons_content():
                                                     success, earned_xp = award_fragment_xp(lesson_id, 'flashcards', flashcards_xp)
                                                     st.session_state[flashcards_xp_key] = True
                                                     if success and earned_xp > 0:
-                                                        st.success(f"?? Przejrzałeś wszystkie fiszki! Zdobyłeś {earned_xp} XP!")
+                                                        st.success(f"📌 Przejrzałeś wszystkie fiszki! Zdobyłeś {earned_xp} XP!")
                                         
                                         else:
                                             st.warning("Brak fiszek do wyświetlenia.")
@@ -1389,11 +1389,11 @@ def show_lessons_content():
                                         for study in studies:
                                             with st.expander(f"**Case Study {study['id']}: {study['title']}**", expanded=False):
                                                 # Opis scenariusza
-                                                st.markdown("#### ?? Scenariusz")
+                                                st.markdown("#### 📌 Scenariusz")
                                                 st.markdown(study['scenario'], unsafe_allow_html=True)
                                                 
                                                 # Pytania do przemyślenia
-                                                st.markdown("#### ?? Pytania do przemyślenia")
+                                                st.markdown("#### 📌 Pytania do przemyślenia")
                                                 for i, question in enumerate(study['questions'], 1):
                                                     st.markdown(f"**{i}.** {question}")
                                                 
@@ -1401,7 +1401,7 @@ def show_lessons_content():
                                                 st.markdown(study['user_space'], unsafe_allow_html=True)
                                                 
                                                 # Rozwijane rozwiązanie
-                                                with st.expander("?? **Pokaż przykładowe rozwiązanie**", expanded=False):
+                                                with st.expander("📌 **Pokaż przykładowe rozwiązanie**", expanded=False):
                                                     st.markdown(study['solution'], unsafe_allow_html=True)
                                                 
                                                 st.markdown("---")
@@ -1442,7 +1442,7 @@ def show_lessons_content():
                                             
                                             # Podsumowanie wyników
                                             if answered_questions > 0:
-                                                st.markdown("### ?? Podsumowanie wyników")
+                                                st.markdown("### 📌 Podsumowanie wyników")
                                                 percentage = (total_score / max_total_score) * 100 if max_total_score > 0 else 0
                                                 
                                                 col1, col2, col3 = st.columns(3)
@@ -1461,7 +1461,7 @@ def show_lessons_content():
                                                         success, earned_xp = award_fragment_xp(lesson_id, 'ai_questions', ai_xp)
                                                         st.session_state[ai_questions_xp_key] = True
                                                         if success and earned_xp > 0:
-                                                            st.success(f"?? Ukończyłeś wszystkie pytania AI! Zdobyłeś {earned_xp} XP!")
+                                                            st.success(f"📌 Ukończyłeś wszystkie pytania AI! Zdobyłeś {earned_xp} XP!")
                                         else:
                                             st.warning("Brak pytań do wyświetlenia.")
                                     
@@ -1570,7 +1570,7 @@ def show_lessons_content():
                                                     except Exception as e:
                                                         st.error(f"Błąd podczas ładowania ćwiczenia AI: {str(e)}")
                                                         # Fallback - podstawowy interfejs
-                                                        st.markdown("### ?? Feedback AI")
+                                                        st.markdown("### 📌 Feedback AI")
                                                         st.info("Funkcjonalność oceny AI będzie dostępna wkrótce. Na razie możesz przeanalizować swoje odpowiedzi samodzielnie używając wskazówek z lekcji.")
                                                         
                                                         # Wyświetl kryteria oceny jeśli dostępne
@@ -1588,7 +1588,7 @@ def show_lessons_content():
                                         
                                         # Podsumowanie ćwiczeń AI
                                         st.markdown("---")
-                                        st.markdown("### ?? Postęp ćwiczeń AI")
+                                        st.markdown("### 📌 Postęp ćwiczeń AI")
                                         
                                         completed_exercises = 0
                                         # Liczymy tylko prawdziwe ćwiczenia AI (z ai_config)
@@ -1625,16 +1625,16 @@ def show_lessons_content():
                                                 st.session_state[ai_exercises_xp_key] = True
                                                 if success and earned_xp > 0:
                                                     st.balloons()
-                                                    st.success(f"?? Gratulacje! Ukończyłeś wszystkie ćwiczenia AI! Zdobyłeś {earned_xp} XP!")
+                                                    st.success(f"📌 Gratulacje! Ukończyłeś wszystkie ćwiczenia AI! Zdobyłeś {earned_xp} XP!")
                                         
                                         # Motywująca wiadomość
                                         if completed_exercises > 0:
                                             if completed_exercises == total_exercises:
-                                                st.success("?? Doskonale! Ukończyłeś wszystkie ćwiczenia AI. Twoje umiejętności C-IQ są teraz znacznie lepsze!")
+                                                st.success("✅ Doskonale! Ukończyłeś wszystkie ćwiczenia AI. Twoje umiejętności C-IQ są teraz znacznie lepsze!")
                                             else:
-                                                st.info(f"?? Świetna robota! Ukończyłeś już {completed_exercises} z {total_exercises} ćwiczeń. Kontynuuj rozwój!")
+                                                st.info(f"📌 Świetna robota! Ukończyłeś już {completed_exercises} z {total_exercises} ćwiczeń. Kontynuuj rozwój!")
                                         else:
-                                            st.info("?? Zacznij od pierwszego ćwiczenia, aby rozwijać swoje umiejętności Conversational Intelligence!")
+                                            st.info("💡 Zacznij od pierwszego ćwiczenia, aby rozwijać swoje umiejętności Conversational Intelligence!")
                                         
                                         # Przycisk resetowania ćwiczeń
                                         from utils.ai_exercises import display_reset_all_button
@@ -1678,7 +1678,7 @@ def show_lessons_content():
                                                 except Exception as e:
                                                     st.error(f"Błąd podczas ładowania dynamicznego case study: {str(e)}")
                                                     # Fallback - podstawowy interfejs
-                                                    st.markdown("### ?? Challenge")
+                                                    st.markdown("### 📌 Challenge")
                                                     st.info("Funkcjonalność generowania challenge będzie dostępna wkrótce.")
                                                     
                                                     # Wyświetl kryteria oceny jeśli dostępne
@@ -1721,25 +1721,25 @@ def show_lessons_content():
                     # Sprawdź które zakładki są dostępne i przygotuj je w logicznej kolejności uczenia się
                     # 1. Autotest - sprawdzenie aktualnego stanu
                     if 'autotest' in old_tabs:
-                        available_tabs.append("?? Autotest")
+                        available_tabs.append("📌 Autotest")
                         tab_keys.append('autotest')
                         sub_tabs_data['autotest'] = old_tabs['autotest']
                     
                     # 2. Refleksja - przemyślenie własnych doświadczeń
                     if 'reflection' in old_tabs:
-                        available_tabs.append("?? Refleksja")
+                        available_tabs.append("📌 Refleksja")
                         tab_keys.append('reflection')
                         sub_tabs_data['reflection'] = old_tabs['reflection']
                     
                     # 3. Analiza - case studies i scenariusze
                     if 'analysis' in old_tabs:
-                        available_tabs.append("?? Analiza")
+                        available_tabs.append("📌 Analiza")
                         tab_keys.append('analysis')
                         sub_tabs_data['analysis'] = old_tabs['analysis']
                     
                     # 4. Wdrożenie - konkretny plan działania
                     if 'implementation' in old_tabs:
-                        available_tabs.append("?? Wdrożenie")
+                        available_tabs.append("📌 Wdrożenie")
                         tab_keys.append('implementation')
                         sub_tabs_data['implementation'] = old_tabs['implementation']
                     
@@ -1748,9 +1748,9 @@ def show_lessons_content():
                         # Sprawdź tytuł lekcji dla specjalnej nazwy tabu
                         lesson_title = lesson.get("title", "")
                         if lesson_title == "Wprowadzenie do neuroprzywództwa":
-                            available_tabs.append("?? Quiz autodiagnozy")
+                            available_tabs.append("📌 Quiz autodiagnozy")
                         else:
-                            available_tabs.append("?? Quiz końcowy")
+                            available_tabs.append("📌 Quiz końcowy")
                         tab_keys.append('closing_quiz')
                         sub_tabs_data['closing_quiz'] = lesson['sections']['closing_quiz']
                     
@@ -1765,7 +1765,7 @@ def show_lessons_content():
                                     lesson_title = lesson.get("title", "")
                                     if lesson_title == "Wprowadzenie do neuroprzywództwa":
                                         # Dla tej lekcji quiz autodiagnozy bez wymogu 75%
-                                        st.info("?? **Quiz autodiagnozy** - Ten quiz pomoże Ci lepiej poznać swoje podejście do przywództwa. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję.")
+                                        st.info("💡 **Quiz autodiagnozy** - Ten quiz pomoże Ci lepiej poznać swoje podejście do przywództwa. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję.")
                                         
                                         quiz_data = sub_tabs_data['closing_quiz']
                                         quiz_completed, quiz_passed, earned_points = display_quiz(quiz_data, passing_threshold=0)  # Brak wymogu minimum
@@ -1796,7 +1796,7 @@ def show_lessons_content():
                                             st.markdown("---")
                                             col1, col2, col3 = st.columns([1, 1, 1])
                                             with col2:
-                                                if st.button("?? Przystąp ponownie", key=f"retry_autodiag_quiz_practical_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
+                                                if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_practical_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
                                                     # Reset stanu quizu autodiagnozy
                                                     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                     if quiz_id in st.session_state:
@@ -1808,7 +1808,7 @@ def show_lessons_content():
                                                     st.rerun()
                                     else:
                                         # Dla wszystkich innych lekcji standardowy quiz końcowy
-                                        st.info("?? **Quiz końcowy** - Sprawdź swoją wiedzę z tej lekcji. Musisz uzyskać minimum 75% poprawnych odpowiedzi, aby przejść dalej.")
+                                        st.info("💡 **Quiz końcowy** - Sprawdź swoją wiedzę z tej lekcji. Musisz uzyskać minimum 75% poprawnych odpowiedzi, aby przejść dalej.")
                                         
                                         quiz_data = sub_tabs_data['closing_quiz']
                                         quiz_completed, quiz_passed, earned_points = display_quiz(quiz_data, passing_threshold=75)
@@ -1923,12 +1923,12 @@ def show_lessons_content():
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
                         zen_button(
-                            f"?? Dalej: {step_names.get(next_step, next_step.capitalize())}",
+                            f"📌 Dalej: {step_names.get(next_step, next_step.capitalize())}",
                             disabled=True,
                             width='stretch',
                             help="Musisz zaliczyć quiz końcowy (min. 75%) aby przejść do podsumowania"
                         )
-                    st.warning("?? Aby przejść do podsumowania, musisz najpierw zaliczyć quiz końcowy z wynikiem minimum 75%. Przejdź do zakładki '?? Quiz końcowy' powyżej.")
+                    st.warning("⚠️ Aby przejść do podsumowania, musisz najpierw zaliczyć quiz końcowy z wynikiem minimum 75%. Przejdź do zakładki '📌 Quiz końcowy' powyżej.")
             else:                # Normalny przycisk dla innych kroków (nie-summary)
                 col1, col2, col3 = st.columns([1, 1, 1])
                 with col2:
@@ -2038,12 +2038,12 @@ def show_lessons_content():
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
                         zen_button(
-                            f"?? Dalej: {step_names.get(next_step, next_step.capitalize())}",
+                            f"📌 Dalej: {step_names.get(next_step, next_step.capitalize())}",
                             disabled=True,
                             width='stretch',
                             help="Musisz zaliczyć quiz końcowy (min. 75%) aby przejść do podsumowania"
                         )
-                    st.warning("?? Aby przejść do podsumowania, musisz najpierw zaliczyć quiz końcowy z wynikiem minimum 75%. Quiz znajdziesz w sekcji 'Praktyka' › '?? Quiz końcowy'.")
+                    st.warning("⚠️ Aby przejść do podsumowania, musisz najpierw zaliczyć quiz końcowy z wynikiem minimum 75%. Quiz znajdziesz w sekcji 'Praktyka' › '📌 Quiz końcowy'.")
             else:
                 # Normalny przycisk dla innych kroków (nie-summary)
                 col1, col2, col3 = st.columns([1, 1, 1])
@@ -2149,12 +2149,12 @@ def show_lessons_content():
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
                         zen_button(
-                            f"?? Dalej: {step_names.get(next_step, next_step.capitalize())}",
+                            f"📌 Dalej: {step_names.get(next_step, next_step.capitalize())}",
                             disabled=True,
                             width='stretch',
                             help="Musisz zaliczyć quiz końcowy (min. 75%) aby przejść do podsumowania"
                         )
-                    st.warning("?? Aby przejść do podsumowania, musisz najpierw zaliczyć quiz końcowy z wynikiem minimum 75%. Quiz znajdziesz w sekcji 'Praktyka' › '?? Quiz końcowy'.")
+                    st.warning("⚠️ Aby przejść do podsumowania, musisz najpierw zaliczyć quiz końcowy z wynikiem minimum 75%. Quiz znajdziesz w sekcji 'Praktyka' › '📌 Quiz końcowy'.")
             else:
                 # Normalny przycisk dla innych kroków (nie-summary)
                 col1, col2, col3 = st.columns([1, 1, 1])
@@ -2189,7 +2189,7 @@ def show_lessons_content():
                 
                 if lesson_title == "Wprowadzenie do neuroprzywództwa":
                     # Dla tej lekcji pokazuj dwie zakładki: Quiz Autodiagnozy i Podsumowanie
-                    summary_tabs = tabs_with_fallback(["?? Quiz Autodiagnozy", "?? Podsumowanie"])
+                    summary_tabs = tabs_with_fallback(["📌 Quiz Autodiagnozy", "📌 Podsumowanie"])
                     
                     with summary_tabs[0]:
                         # Wyświetl quiz autodiagnozy
@@ -2228,7 +2228,7 @@ def show_lessons_content():
                 else:
                     # Dla wszystkich innych lekcji pokazuj pełne tabs
                     # Podziel podsumowanie na cztery zakładki - dodajemy Cheatsheet
-                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "??? Mapa myśli", "?? Cheatsheet"])
+                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli", "📌 Cheatsheet"])
                     
                     with summary_tabs[0]:
                         # Wyświetl główne podsumowanie
@@ -2246,7 +2246,7 @@ def show_lessons_content():
                 
                     with summary_tabs[2]:
                         # Wyświetl interaktywną mapę myśli
-                        st.markdown("### ??? Interaktywna mapa myśli")
+                        st.markdown("### 🗺️ Interaktywna mapa myśli")
                         st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji. Możesz klikać na węzły aby je przesuwać i lepiej eksplorować powiązania między różnymi tematami.")
                         
                         try:
@@ -2254,9 +2254,9 @@ def show_lessons_content():
                             mind_map_result = create_lesson_mind_map(lesson)
                             
                             if mind_map_result is None:
-                                st.info("?? **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
+                                st.info("💡 **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
                         except Exception as e:
-                            st.warning("?? Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
+                            st.warning("⚠️ Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
                             st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
                     
                     with summary_tabs[3]:
@@ -2270,7 +2270,7 @@ def show_lessons_content():
                             col_export, col_info = st.columns([1, 3])
                             with col_export:
                                 # Przycisk PDF
-                                if zen_button("?? Eksportuj PDF", key="export_cheatsheet_pdf"):
+                                if zen_button("📌 Eksportuj PDF", key="export_cheatsheet_pdf"):
                                     try:
                                         from utils.cheatsheet_pdf_v5 import generate_cheatsheet_pdf
                                         
@@ -2291,7 +2291,7 @@ def show_lessons_content():
                                         filename = f"cheatsheet_{lesson_id}_{timestamp}.pdf"
                                         
                                         st.download_button(
-                                            label="?? Pobierz PDF",
+                                            label="📌 Pobierz PDF",
                                             data=pdf_data,
                                             file_name=filename,
                                             mime="application/pdf",
@@ -2306,7 +2306,7 @@ def show_lessons_content():
                                             st.expander("Szczegóły błędu (dla deweloperów)").code(traceback.format_exc())
                                 
                                 # Przycisk PNG
-                                if zen_button("??? Eksportuj Obraz", key="export_cheatsheet_image"):
+                                if zen_button("📸 Eksportuj Obraz", key="export_cheatsheet_image"):
                                     try:
                                         from utils.cheatsheet_image_generator import generate_cheatsheet_image
                                         
@@ -2327,7 +2327,7 @@ def show_lessons_content():
                                             filename = f"cheatsheet_{lesson_id}_{timestamp}.png"
                                             
                                             st.download_button(
-                                                label="?? Pobierz PNG",
+                                                label="📌 Pobierz PNG",
                                                 data=image_data,
                                                 file_name=filename,
                                                 mime="image/png",
@@ -2344,7 +2344,7 @@ def show_lessons_content():
                                             st.expander("Szczegóły błędu (dla deweloperów)").code(traceback.format_exc())
                             
                             with col_info:
-                                st.info("?? Wybierz format: PDF lub Obraz (PNG)")
+                                st.info("💡 Wybierz format: PDF lub Obraz (PNG)")
                         else:
                             st.warning("Brak cheatsheet w podsumowaniu.")
 
@@ -2359,7 +2359,7 @@ def show_lessons_content():
                     st.markdown("<div class='next-button'>", unsafe_allow_html=True)
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
-                        if zen_button("?? Zakończ lekcję", width='stretch'):
+                        if zen_button("📌 Zakończ lekcję", width='stretch'):
                             # Sprawdź czy XP za podsumowanie już zostało przyznane
                             progress = get_lesson_fragment_progress(lesson_id)
                             if not progress.get('summary_completed', False):
@@ -2397,7 +2397,7 @@ def show_lessons_content():
                                 
                             # Show completion notification - wyświetl faktyczne całkowite XP
                             final_total_xp = st.session_state.lesson_progress.get('total_xp_earned', 0)
-                            show_xp_notification(0, f"?? Gratulacje! Ukończyłeś całą lekcję i zdobyłeś {final_total_xp} XP!")
+                            show_xp_notification(0, f"📌 Gratulacje! Ukończyłeś całą lekcję i zdobyłeś {final_total_xp} XP!")
                             
                             # Oznacz lekcję jako zakończoną w sesji
                             st.session_state.lesson_finished = True
@@ -2410,7 +2410,7 @@ def show_lessons_content():
                     <div style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); 
                                 color: white; padding: 20px; border-radius: 15px; margin: 20px 0;
                                 text-align: center; box-shadow: 0 4px 15px rgba(76,175,80,0.3);">
-                        <h2 style="margin: 0 0 10px 0;">?? Lekcja ukończona!</h2>
+                        <h2 style="margin: 0 0 10px 0;">🎉 Lekcja ukończona!</h2>
                         <p style="margin: 0; font-size: 18px;">Świetna robota! Możesz teraz przejść do kolejnych lekcji.</p>
                     </div>
                     """, unsafe_allow_html=True)
@@ -2419,7 +2419,7 @@ def show_lessons_content():
                     st.markdown("<div class='next-button'>", unsafe_allow_html=True)
                     col1, col2, col3 = st.columns([1, 1, 1])
                     with col2:
-                        if zen_button("?? Wróć do wszystkich lekcji", width='stretch'):
+                        if zen_button("📌 Wróć do wszystkich lekcji", width='stretch'):
                             # Wyczyść stan zakończenia lekcji
                             st.session_state.lesson_finished = False
                             # Powrót do przeglądu lekcji
@@ -2442,7 +2442,7 @@ def show_lessons_content():
                             st.warning("Brak głównego podsumowania.")
                 else:
                     # Dla wszystkich innych lekcji pokazuj pełne tabs
-                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "??? Mapa myśli"])
+                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli"])
                     
                     with summary_tabs[0]:
                         # Wyświetl główne podsumowanie
@@ -2460,7 +2460,7 @@ def show_lessons_content():
                 
                     with summary_tabs[2]:
                         # Wyświetl interaktywną mapę myśli
-                        st.markdown("### ??? Interaktywna mapa myśli")
+                        st.markdown("### 🗺️ Interaktywna mapa myśli")
                         st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji. Możesz klikać na węzły aby je przesuwać i lepiej eksplorować powiązania między różnymi tematami.")
                         
                         try:
@@ -2468,9 +2468,9 @@ def show_lessons_content():
                             mind_map_result = create_lesson_mind_map(lesson)
                             
                             if mind_map_result is None:
-                                st.info("?? **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
+                                st.info("💡 **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
                         except Exception as e:
-                            st.warning("?? Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
+                            st.warning("⚠️ Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
                             st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
             else:
                 # Brak podsumowania w danych lekcji
@@ -2500,38 +2500,38 @@ def show_lessons_content():
         key_steps_info = []
         if 'intro' in step_order:
             completed = fragment_progress.get('intro_completed', False)
-            key_steps_info.append(f"?? Intro: {step_xp_values['intro']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"📌 Intro: {step_xp_values['intro']} XP {'?' if completed else ''}")
         
         # opening_quiz usunięte - jest teraz zintegrowane w zakładce intro
         
         if 'content' in step_order:
             completed = fragment_progress.get('content_completed', False)
-            key_steps_info.append(f"?? Treść: {step_xp_values['content']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"📌 Treść: {step_xp_values['content']} XP {'?' if completed else ''}")
         
         if 'practical_exercises' in step_order:
             completed = fragment_progress.get('practical_exercises_completed', False)
-            key_steps_info.append(f"?? Ćwiczenia praktyczne: {step_xp_values['practical_exercises']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"📌 Ćwiczenia praktyczne: {step_xp_values['practical_exercises']} XP {'?' if completed else ''}")
         
         if 'reflection' in step_order:
             completed = fragment_progress.get('reflection_completed', False)
-            key_steps_info.append(f"?? Refleksja: {step_xp_values['reflection']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"📌 Refleksja: {step_xp_values['reflection']} XP {'?' if completed else ''}")
         
         if 'application' in step_order:
             completed = fragment_progress.get('application_completed', False)
-            key_steps_info.append(f"?? Zadania: {step_xp_values['application']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"📌 Zadania: {step_xp_values['application']} XP {'?' if completed else ''}")
         
         if 'summary' in step_order:
             completed = fragment_progress.get('summary_completed', False)
-            key_steps_info.append(f"?? Podsumowanie: {step_xp_values['summary']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"📌 Podsumowanie: {step_xp_values['summary']} XP {'?' if completed else ''}")
         
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                     border-radius: 15px; padding: 20px; margin-bottom: 20px; color: white;">
-            <h3 style="margin: 0 0 10px 0;">?? {lesson.get('title', 'Lekcja')}</h3>
+            <h3 style="margin: 0 0 10px 0;">📚 {lesson.get('title', 'Lekcja')}</h3>
             <div style="background: rgba(255,255,255,0.2); border-radius: 10px; padding: 10px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <span style="font-weight: bold;">Postęp lekcji: {completion_percent:.0f}%</span>
-                    <span>?? {current_xp}/{max_xp} XP</span>
+                    <span>⭐ {current_xp}/{max_xp} XP</span>
                 </div>
                 <div style="background: rgba(255,255,255,0.3); border-radius: 5px; height: 12px; overflow: hidden;">
                     <div style="background: linear-gradient(90deg, #4caf50, #2196f3); 
@@ -2704,7 +2704,7 @@ def display_quiz(quiz_data, passing_threshold=60):
         
         # Wyświetl poprzednie wyniki
         if 'answers' in completed_quiz_data:
-            with st.expander("?? Zobacz raport z quizu"):
+            with st.expander("📌 Zobacz raport z quizu"):
                 quiz_type = quiz_data.get('type', 'buttons')
                 
                 # Sprawdź czy mamy szczegółowe wyniki
@@ -2762,7 +2762,7 @@ def display_quiz(quiz_data, passing_threshold=60):
         # Przycisk ponownego przystąpienia na końcu
         st.markdown("---")
         help_text = "Możesz ponownie wypełnić quiz aby zaktualizować swoją autorefleksję" if is_self_diagnostic else "Możesz ponownie przystąpić do quizu aby poprawić swój wynik"
-        if st.button("?? Przystąp do quizu ponownie", key=f"{quiz_id}_restart", help=help_text):
+        if st.button("📌 Przystąp do quizu ponownie", key=f"{quiz_id}_restart", help=help_text):
             # Wyczyść dane sesji dla tego quizu
             if quiz_id in st.session_state:
                 del st.session_state[quiz_id]
@@ -2932,7 +2932,7 @@ def display_quiz(quiz_data, passing_threshold=60):
     # Przycisk zatwierdzenia wszystkich odpowiedzi
     if all_answered:
         st.markdown('<div style="text-align: center; margin: 30px 0;">', unsafe_allow_html=True)
-        if st.button("?? Zatwierdź wszystkie odpowiedzi", key=f"{quiz_id}_submit_all", help="Zatwierdź quiz i zapisz wyniki"):
+        if st.button("📌 Zatwierdź wszystkie odpowiedzi", key=f"{quiz_id}_submit_all", help="Zatwierdź quiz i zapisz wyniki"):
             # Oblicz wyniki
             total_points = 0
             correct_answers = 0
@@ -3053,7 +3053,7 @@ def display_quiz(quiz_data, passing_threshold=60):
             
         st.markdown('</div>', unsafe_allow_html=True)
     else:
-        st.warning("?? Odpowiedz na wszystkie pytania, aby móc zatwierdzić quiz.")
+        st.warning("⚠️ Odpowiedz na wszystkie pytania, aby móc zatwierdzić quiz.")
     
     # Zwróć status ukończenia
     quiz_completed = st.session_state[quiz_id].get("completed", False)
@@ -3349,7 +3349,7 @@ def get_lesson_requirements(lesson_id):
             
             st.markdown(f"""
             <div class="quiz-summary">
-                <h3>?? Twój wynik: {total_points}/{max_possible_points} punktów</h3>
+                <h3>📊 Twój wynik: {total_points}/{max_possible_points} punktów</h3>
             </div>
             """, unsafe_allow_html=True)
             
@@ -3361,14 +3361,14 @@ def get_lesson_requirements(lesson_id):
                     if '-' in score_range:
                         min_score, max_score = map(int, score_range.split('-'))
                         if min_score <= total_points <= max_score:
-                            st.success(f"?? **Interpretacja wyników:**\n\n{interpretation}")
+                            st.success(f"📌 **Interpretacja wyników:**\n\n{interpretation}")
                             interpretation_found = True
                             break
                 
                 if not interpretation_found:
-                    st.info("?? Dziękujemy za szczerą samorefleksję! Twoje odpowiedzi pomogą nam lepiej dopasować materiał do Twojego stylu inwestowania.")
+                    st.info("💡 Dziękujemy za szczerą samorefleksję! Twoje odpowiedzi pomogą nam lepiej dopasować materiał do Twojego stylu inwestowania.")
             else:
-                st.info("?? Dziękujemy za szczerą samorefleksję! Twoje odpowiedzi pomogą nam lepiej dopasować materiał do Twojego stylu inwestowania.")
+                st.info("💡 Dziękujemy za szczerą samorefleksję! Twoje odpowiedzi pomogą nam lepiej dopasować materiał do Twojego stylu inwestowania.")
               # Zawsze "zdany" dla quizu samodiagnozy
             return is_completed, True, total_points
             
@@ -3467,7 +3467,7 @@ def display_neuroleadership_autodiagnosis(quiz_data, answers):
         1: {"label": "W ogóle nieważne", "color": "#1976d2", "priority": "NISKI PRIORYTET"}
     }
     
-    st.markdown("### ?? Twój Profil Rozwojowy w Neuroprzywództwie")
+    st.markdown("### 📌 Twój Profil Rozwojowy w Neuroprzywództwie")
     st.markdown("Na podstawie Twoich odpowiedzi przygotowaliśmy spersonalizowany raport pokazujący, które zagadnienia z neuroprzywództwa są dla Ciebie najważniejsze.")
     
     # Sortuj zagadnienia według ważności (od najwyższej do najniższej)
@@ -3491,19 +3491,19 @@ def display_neuroleadership_autodiagnosis(quiz_data, answers):
     for priority_name, group_topics in priority_groups.items():
         if group_topics:  # Tylko jeśli grupa nie jest pusta
             if priority_name == "PRIORYTET 1":
-                st.markdown(f"#### ?? {priority_name} - Zagadnienia kluczowe dla Twojego rozwoju")
+                st.markdown(f"#### 📌 {priority_name} - Zagadnienia kluczowe dla Twojego rozwoju")
                 st.markdown("Te obszary wymagają Twojej szczególnej uwagi i mogą przynieść największe korzyści w Twojej pracy menedżerskiej.")
             elif priority_name == "PRIORYTET 2":
                 st.markdown(f"#### ? {priority_name} - Ważne obszary rozwoju")
                 st.markdown("Te zagadnienia również zasługują na uwagę i mogą znacząco wpłynąć na Twoją skuteczność jako lidera.")
             elif priority_name == "DO PRZEMYŚLENIA":
-                st.markdown(f"#### ?? {priority_name}")
+                st.markdown(f"#### 📌 {priority_name}")
                 st.markdown("W tych obszarach warto pogłębić wiedzę, aby lepiej ocenić ich znaczenie dla Twojej pracy.")
             elif priority_name == "MNIEJSZA WAGA":
                 st.markdown(f"#### ? {priority_name}")
                 st.markdown("Te zagadnienia mogą być mniej priorytetowe w Twoim obecnym kontekście zawodowym.")
             else:  # NISKI PRIORYTET
-                st.markdown(f"#### ?? {priority_name}")
+                st.markdown(f"#### 📌 {priority_name}")
                 st.markdown("Te obszary obecnie nie stanowią dla Ciebie wyzwania.")
             
             for topic, score in group_topics:
@@ -3521,11 +3521,11 @@ def display_neuroleadership_autodiagnosis(quiz_data, answers):
     high_priority_count = len(priority_groups["PRIORYTET 1"]) + len(priority_groups["PRIORYTET 2"])
     
     st.markdown("---")
-    st.markdown("### ?? Rekomendacje dla Twojego rozwoju")
+    st.markdown("### 📌 Rekomendacje dla Twojego rozwoju")
     
     if high_priority_count >= 7:
         st.info("""
-        ?? **Kompleksowy rozwój:** Identyfikujesz wiele obszarów jako ważne. Rozważ systematyczne przejście przez cały kurs, 
+        🎯 **Kompleksowy rozwój:** Identyfikujesz wiele obszarów jako ważne. Rozważ systematyczne przejście przez cały kurs, 
         koncentrując się szczególnie na zagadnieniach oznaczonych jako Priorytet 1.
         """)
     elif high_priority_count >= 4:
@@ -3535,13 +3535,13 @@ def display_neuroleadership_autodiagnosis(quiz_data, answers):
         """)
     else:
         st.info("""
-        ?? **Selektywny rozwój:** Identyfikujesz konkretne obszary do rozwoju. To dobra strategia - skup się na tych 
+        🎯 **Selektywny rozwój:** Identyfikujesz konkretne obszary do rozwoju. To dobra strategia - skup się na tych 
         zagadnieniach, które są dla Ciebie najbardziej istotne.
         """)
     
     # Następne kroki
     if priority_groups["PRIORYTET 1"]:
-        st.markdown("#### ?? Sugerowane kolejne kroki:")
+        st.markdown("#### 📌 Sugerowane kolejne kroki:")
         st.markdown("1. **Zacznij od zagadnień Priorytetu 1** - te obszary mogą przynieść Ci największe korzyści")
         st.markdown("2. **Przejdź przez odpowiednie lekcje kursu** - każde zagadnienie ma dedykowaną lekcję z praktycznymi ćwiczeniami")
         st.markdown("3. **Zastosuj wiedzę w praktyce** - po każdej lekcji wypróbuj poznane techniki w swojej pracy")
@@ -3558,7 +3558,7 @@ def display_self_diagnostic_results(quiz_data, answers):
     interpretation = quiz_data['results_interpretation']
     
     st.markdown("---")
-    st.markdown("## ?? Twoje spersonalizowane wyniki")
+    st.markdown("## 📊 Twoje spersonalizowane wyniki")
     
     # Oblicz wynik na podstawie tej samej metody co główny system
     # Opcje 0-4 = 1-5 punktów (answer + 1)
@@ -3586,12 +3586,12 @@ def display_self_diagnostic_results(quiz_data, answers):
     
     # Główny wynik
     relevance_icons = {
-        "Bardzo wysoka": "??",
+        "Bardzo wysoka": "🔥",
         "Wysoka": "?", 
-        "Średnia": "??",
-        "Niska": "??"
+        "Średnia": "⚡",
+        "Niska": "💡"
     }
-    icon = relevance_icons.get(matching_level['name'], "??")
+    icon = relevance_icons.get(matching_level['name'], "📌")
     
     st.markdown(f"""
     <div style='background: linear-gradient(135deg, {level_color} 0%, {level_color}CC 100%); 
@@ -3612,19 +3612,19 @@ def display_self_diagnostic_results(quiz_data, answers):
     
     # Kluczowe wnioski
     if 'insights' in matching_level and matching_level['insights']:
-        st.markdown("#### ?? Kluczowe wnioski dla Ciebie:")
+        st.markdown("#### 📌 Kluczowe wnioski dla Ciebie:")
         for insight in matching_level['insights']:
             st.markdown(f"• {insight}")
     
     # Rekomendacje
     if 'recommendations' in matching_level and matching_level['recommendations']:
-        st.markdown("#### ?? Konkretne rekomendacje:")
+        st.markdown("#### 📌 Konkretne rekomendacje:")
         for i, recommendation in enumerate(matching_level['recommendations'], 1):
             st.markdown(f"{i}. {recommendation}")
     
     # Następne kroki
     if 'next_steps' in matching_level:
-        st.markdown("#### ?? Twoje następne kroki:")
+        st.markdown("#### 📌 Twoje następne kroki:")
         st.info(matching_level['next_steps'])
 
 
@@ -3632,7 +3632,7 @@ def display_conversational_intelligence_results(answers, questions):
     """Wyświetla spersonalizowane wyniki quizu samodiagnozy dla Conversational Intelligence"""
     
     st.markdown("---")
-    st.markdown("## ?? Twoje spersonalizowane wyniki")
+    st.markdown("## 📊 Twoje spersonalizowane wyniki")
     
     # Oblicz punkty dla każdej kategorii
     high_relevance_count = sum(1 for answer in answers if answer >= 2)  # odpowiedzi 2 i 3 (indeksy)
@@ -3646,7 +3646,7 @@ def display_conversational_intelligence_results(answers, questions):
     if high_percentage >= 75:
         relevance_level = "BARDZO WYSOKA"
         relevance_color = "#d32f2f"
-        relevance_icon = "??"
+        relevance_icon = "📌"
     elif high_percentage >= 50:
         relevance_level = "WYSOKA"
         relevance_color = "#f57c00"
@@ -3654,7 +3654,7 @@ def display_conversational_intelligence_results(answers, questions):
     elif high_percentage >= 25:
         relevance_level = "ŚREDNIA"
         relevance_color = "#1976d2"
-        relevance_icon = "??"
+        relevance_icon = "📌"
     else:
         relevance_level = "NISKA"
         relevance_color = "#388e3c"
@@ -3677,7 +3677,7 @@ def display_conversational_intelligence_results(answers, questions):
     # Szczegółowa analiza na podstawie odpowiedzi
     if high_percentage >= 75:
         st.markdown("""
-        ### ?? Conversational Intelligence to dla Ciebie GAME CHANGER!
+        ### 📌 Conversational Intelligence to dla Ciebie GAME CHANGER!
         
         **Twoja diagnoza pokazuje, że:**
         - Borykasz się z wyzwaniami komunikacyjnymi, które wpływają na Twoje cele zawodowe
@@ -3707,7 +3707,7 @@ def display_conversational_intelligence_results(answers, questions):
         
     elif high_percentage >= 25:
         st.markdown("""
-        ### ?? Conversational Intelligence to użyteczne uzupełnienie Twoich umiejętności
+        ### 📌 Conversational Intelligence to użyteczne uzupełnienie Twoich umiejętności
         
         **Twoja diagnoza pokazuje, że:**
         - Masz solidne podstawy komunikacyjne
@@ -3736,7 +3736,7 @@ def display_conversational_intelligence_results(answers, questions):
         """)
     
     # Kluczowe wnioski i następne kroki
-    st.markdown("### ?? Twoje następne kroki")
+    st.markdown("### 📌 Twoje następne kroki")
     
     # Analizuj konkretne odpowiedzi i daj spersonalizowane wskazówki
     problem_areas = []
@@ -3766,13 +3766,13 @@ def display_conversational_intelligence_results(answers, questions):
     
     # Konkretne rekomendacje akcji
     st.markdown("""
-    ### ?? Konkretne akcje na najbliższy tydzień:
+    ### 📌 Konkretne akcje na najbliższy tydzień:
     
     1. **Jedna świadoma rozmowa dziennie** - wybierz jedną interakcję i zastosuj zasady Poziomu III (ciekawość zamiast oceny)
     2. **Obserwuj neurochemię** - zwracaj uwagę, kiedy widzisz napięcie u rozmówcy i jak możesz je rozładować
     3. **Eksperymentuj z pytaniami** - zamiast mówić "nie", pytaj "jak moglibyśmy to rozwiązać?"
     
-    **Pamiętaj:** Według Judith Glaser, każda rozmowa to szansa na mikro-zmianę. Już jedna świadoma interakcja dziennie może zacząć transformować Twoją rzeczywistość zawodową! ??
+    **Pamiętaj:** Według Judith Glaser, każda rozmowa to szansa na mikro-zmianę. Już jedna świadoma interakcja dziennie może zacząć transformować Twoją rzeczywistość zawodową! 💪🚀
     """)
     
     # Dodaj motywujący cytat
@@ -3796,15 +3796,15 @@ def display_quiz_results(quiz_data, question_results, total_points, correct_answ
         # Określ kolor na podstawie wyniku
         if percentage >= 75:
             color = "#4CAF50"  # zielony
-            status_icon = "??"
+            status_icon = "✅"
             status_text = "Świetny wynik!"
         elif percentage >= 60:
             color = "#FF9800"  # pomarańczowy
-            status_icon = "??"
+            status_icon = "✅"
             status_text = "Dobry wynik!"
         else:
             color = "#f44336"  # czerwony
-            status_icon = "??"
+            status_icon = "✅"
             status_text = "Możesz lepiej!"
         
         st.markdown(f"""
@@ -3826,7 +3826,7 @@ def display_quiz_results(quiz_data, question_results, total_points, correct_answ
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #2196F320 0%, #2196F310 100%); 
                     padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #2196F3;'>
-            <h3 style='color: #2196F3; margin: 0;'>?? Łączna suma punktów</h3>
+            <h3 style='color: #2196F3; margin: 0;'>📊 Łączna suma punktów</h3>
             <p style='font-size: 1.2rem; margin: 10px 0; color: #333;'>
                 <strong>{total_points}/{max_possible} punktów</strong>
             </p>
@@ -3839,7 +3839,7 @@ def display_quiz_results(quiz_data, question_results, total_points, correct_answ
     
     # Szczegółowa analiza pytań
     if not is_self_diagnostic:
-        st.markdown("### ?? Analiza odpowiedzi na poszczególne pytania")
+        st.markdown("### 📌 Analiza odpowiedzi na poszczególne pytania")
         
         for i, result in enumerate(question_results):
             with st.expander(f"Pytanie {i+1}: {result['question'][:60]}..." if len(result['question']) > 60 else f"Pytanie {i+1}: {result['question']}", expanded=False):
@@ -3879,11 +3879,11 @@ def display_quiz_results(quiz_data, question_results, total_points, correct_answ
                     
                     # Dodaj wyjaśnienie, jeśli jest dostępne
                     if 'explanation' in question_data:
-                        st.info(f"?? **Wyjaśnienie:** {question_data['explanation']}")
+                        st.info(f"📌 **Wyjaśnienie:** {question_data['explanation']}")
     
     else:
         # Dla quizów autodiagnozy - pokaż podsumowanie odpowiedzi i spersonalizowane wyniki
-        st.markdown("### ?? Twoje odpowiedzi")
+        st.markdown("### 📌 Twoje odpowiedzi")
         
         with st.expander("Zobacz szczegóły swoich odpowiedzi", expanded=False):
             # Podstawowe szczegóły odpowiedzi
@@ -3921,25 +3921,25 @@ def display_quiz_results(quiz_data, question_results, total_points, correct_answ
         if correct_answers == total_questions:
             st.balloons()
             st.markdown("""
-            ### ?? Gratulacje!
+            ### 📌 Gratulacje!
             Uzyskałeś/aś maksymalny wynik! Doskonale opanowałeś/aś materiał z tej lekcji.
             """)
         elif correct_answers / total_questions >= 0.75:
             st.markdown("""
-            ### ?? Bardzo dobry wynik!
+            ### 📌 Bardzo dobry wynik!
             Świetnie radzisz sobie z materiałem. Może warto przejrzeć pytania, na które odpowiedziałeś/aś niepoprawnie.
             """)
         elif correct_answers / total_questions >= 0.5:
             st.markdown("""
-            ### ?? Dobra robota!
+            ### 📌 Dobra robota!
             Masz solidne podstawy, ale warto jeszcze raz przejrzeć materiał lekcji, szczególnie tematy z pytań, na które odpowiedziałeś/aś niepoprawnie.
             """)
         else:
             st.markdown("""
-            ### ?? Czas na powtórkę!
+            ### 📌 Czas na powtórkę!
             Warto wrócić do materiału lekcji i przejrzeć go jeszcze raz. Nie martw się - uczenie się to proces!
             """)
     
     # Wskazówka o ponownym przystąpieniu
     st.markdown("---")
-    st.markdown("?? **Wskazówka:** Możesz przystąpić do quizu ponownie, klikając przycisk '?? Przystąp do quizu ponownie'.")
+    st.markdown("📌 **Wskazówka:** Możesz przystąpić do quizu ponownie, klikając przycisk '📌 Przystąp do quizu ponownie'.")
