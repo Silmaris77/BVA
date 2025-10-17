@@ -1,185 +1,185 @@
-ï»¿# Typy neuroliderÃ³w - transformacja z degenÃ³w na neuroliderÃ³w
+# Typy neuroliderów - transformacja z degenów na neuroliderów
 NEUROLEADER_TYPES = {
     "Neuroanalityk": {
-        "description": "RozwaÅ¼ny, skrupulatny, czÄ™sto paraliÅ¼owany nadmiarem analiz. Lider, ktÃ³ry ma trudnoÅ›ci z podejmowaniem decyzji.",
-        "tagline": "UnikajÄ…cy Ryzyka",
-        "icon": "ğŸ§ ",
-        "strengths": ["Wyczuwa zagroÅ¼enia", "Analizuje scenariusze ryzyka", "DokÅ‚adnoÅ›Ä‡ w analizie", "OstroÅ¼noÅ›Ä‡ w decyzjach"],
-        "challenges": ["ParaliÅ¼ decyzyjny", "OdkÅ‚ada decyzje na pÃ³Åºniej", "LÄ™k przed bÅ‚Ä™dami", "Traci okazje przez zwÅ‚okÄ™"],
-        "strategy": "Ustal limity czasowe na analizÄ™. Stosuj zasadÄ™ 'wystarczajÄ…co dobrej decyzji'. Praktykuj podejmowanie maÅ‚ych decyzji.",
+        "description": "Rozwa¿ny, skrupulatny, czêsto parali¿owany nadmiarem analiz. Lider, który ma trudnoœci z podejmowaniem decyzji.",
+        "tagline": "Unikaj¹cy Ryzyka",
+        "icon": "??",
+        "strengths": ["Wyczuwa zagro¿enia", "Analizuje scenariusze ryzyka", "Dok³adnoœæ w analizie", "Ostro¿noœæ w decyzjach"],
+        "challenges": ["Parali¿ decyzyjny", "Odk³ada decyzje na póŸniej", "Lêk przed b³êdami", "Traci okazje przez zw³okê"],
+        "strategy": "Ustal limity czasowe na analizê. Stosuj zasadê 'wystarczaj¹co dobrej decyzji'. Praktykuj podejmowanie ma³ych decyzji.",
         "color": "#2c3e50",
-        "supermoc": "Wyczuwa zagroÅ¼enia i analizuje scenariusze ryzyka jak nikt inny",
-        "slaboÅ›Ä‡": "Traci okazje przez zwÅ‚okÄ™"
+        "supermoc": "Wyczuwa zagro¿enia i analizuje scenariusze ryzyka jak nikt inny",
+        "slaboœæ": "Traci okazje przez zw³okê"
     },
     "Neuroreaktor": {
-        "description": "Lider, ktÃ³ry reaguje impulsywnie na stres i emocje, dziaÅ‚a bÅ‚yskawicznie i emocjonalnie, czÄ™sto bez peÅ‚nych danych.",
-        "tagline": "Impulsywny StraÅ¼nik", 
-        "icon": "ğŸ”¥",
-        "strengths": ["Szybkie reakcje w kryzysie", "DziaÅ‚anie pod presjÄ…", "Natychmiastowe rozwiÄ…zywanie problemÃ³w", "Energia w trudnych sytuacjach"],
-        "challenges": ["Impulsywne decyzje", "DziaÅ‚anie pod wpÅ‚ywem emocji", "Brak peÅ‚nej analizy", "Ryzykowne wybory"],
-        "strategy": "Techniki oddechowe i mindfulness. Zasada 24 godzin na waÅ¼ne decyzje. Konsultuj decyzje z zaufanÄ… osobÄ….",
+        "description": "Lider, który reaguje impulsywnie na stres i emocje, dzia³a b³yskawicznie i emocjonalnie, czêsto bez pe³nych danych.",
+        "tagline": "Impulsywny Stra¿nik", 
+        "icon": "??",
+        "strengths": ["Szybkie reakcje w kryzysie", "Dzia³anie pod presj¹", "Natychmiastowe rozwi¹zywanie problemów", "Energia w trudnych sytuacjach"],
+        "challenges": ["Impulsywne decyzje", "Dzia³anie pod wp³ywem emocji", "Brak pe³nej analizy", "Ryzykowne wybory"],
+        "strategy": "Techniki oddechowe i mindfulness. Zasada 24 godzin na wa¿ne decyzje. Konsultuj decyzje z zaufan¹ osob¹.",
         "color": "#e74c3c",
-        "supermoc": "ZdolnoÅ›Ä‡ do dziaÅ‚ania w kryzysie",
-        "slaboÅ›Ä‡": "Podejmuje ryzykowne decyzje"
+        "supermoc": "Zdolnoœæ do dzia³ania w kryzysie",
+        "slaboœæ": "Podejmuje ryzykowne decyzje"
     },
     "Neurobalanser": {
-        "description": "Liderzy, ktÃ³rzy potrafiÄ… Å‚Ä…czyÄ‡ racjonalnoÅ›Ä‡ z empatiÄ…, podejmujÄ…c decyzje w oparciu o dane oraz intuicjÄ™.",
+        "description": "Liderzy, którzy potrafi¹ ³¹czyæ racjonalnoœæ z empati¹, podejmuj¹c decyzje w oparciu o dane oraz intuicjê.",
         "tagline": "Zbalansowany Integrator",
-        "icon": "âš–ï¸", 
-        "strengths": ["Inteligencja emocjonalna", "Logiczne myÅ›lenie", "ElastycznoÅ›Ä‡", "ZrÃ³wnowaÅ¼one podejÅ›cie"],
-        "challenges": ["MoÅ¼e zbyt dÅ‚ugo analizowaÄ‡", "Wahanie w decyzjach", "Potrzeba znalezienia balansu", "Czasem zbyt ostroÅ¼ny"],
-        "strategy": "Ustal jasne kryteria decyzyjne. Rozwijaj umiejÄ™tnoÅ›Ä‡ facylitacji. Praktykuj podejmowanie decyzji w ograniczonym czasie.",
+        "icon": "??", 
+        "strengths": ["Inteligencja emocjonalna", "Logiczne myœlenie", "Elastycznoœæ", "Zrównowa¿one podejœcie"],
+        "challenges": ["Mo¿e zbyt d³ugo analizowaæ", "Wahanie w decyzjach", "Potrzeba znalezienia balansu", "Czasem zbyt ostro¿ny"],
+        "strategy": "Ustal jasne kryteria decyzyjne. Rozwijaj umiejêtnoœæ facylitacji. Praktykuj podejmowanie decyzji w ograniczonym czasie.",
         "color": "#3498db",
         "supermoc": "Inteligencja emocjonalna + logika",
-        "slaboÅ›Ä‡": "MoÅ¼e zbyt dÅ‚ugo siÄ™ wahaÄ‡"
+        "slaboœæ": "Mo¿e zbyt d³ugo siê wahaæ"
     },
     "Neuroempata": {
-        "description": "Lider, ktÃ³ry skupia siÄ™ na emocjonalnych potrzebach zespoÅ‚u. Ceni zaufanie, dobre relacje i komunikacjÄ™ w zespole.",
+        "description": "Lider, który skupia siê na emocjonalnych potrzebach zespo³u. Ceni zaufanie, dobre relacje i komunikacjê w zespole.",
         "tagline": "Architekt Relacji",
-        "icon": "ğŸŒ±",
-        "strengths": ["Budowanie wiÄ™zi", "Empatia", "Zrozumienie potrzeb zespoÅ‚u", "Tworzenie atmosfery zaufania"],
-        "challenges": ["Zbyt emocjonalne podejÅ›cie", "TrudnoÅ›Ä‡ z obiektywizmem", "Problem z granicami", "Preferencje osobiste"],
-        "strategy": "Rozwijaj umiejÄ™tnoÅ›ci analityczne. Ustal jasne granice. Ucz siÄ™ asertywnoÅ›ci. Korzystaj z zewnÄ™trznych opinii.",
+        "icon": "??",
+        "strengths": ["Budowanie wiêzi", "Empatia", "Zrozumienie potrzeb zespo³u", "Tworzenie atmosfery zaufania"],
+        "challenges": ["Zbyt emocjonalne podejœcie", "Trudnoœæ z obiektywizmem", "Problem z granicami", "Preferencje osobiste"],
+        "strategy": "Rozwijaj umiejêtnoœci analityczne. Ustal jasne granice. Ucz siê asertywnoœci. Korzystaj z zewnêtrznych opinii.",
         "color": "#27ae60",
-        "supermoc": "WiÄ™zi emocjonalne i zaangaÅ¼owanie zespoÅ‚u",
-        "slaboÅ›Ä‡": "TrudnoÅ›Ä‡ z obiektywizmem"
+        "supermoc": "Wiêzi emocjonalne i zaanga¿owanie zespo³u",
+        "slaboœæ": "Trudnoœæ z obiektywizmem"
     },
     "Neuroinnowator": {
-        "description": "Liderzy, ktÃ³rzy potrafiÄ… dostosowaÄ‡ swoje podejÅ›cie do zmieniajÄ…cej siÄ™ sytuacji. SÄ… otwarci na nowe rozwiÄ…zania, gotowi do eksperymentÃ³w.",
+        "description": "Liderzy, którzy potrafi¹ dostosowaæ swoje podejœcie do zmieniaj¹cej siê sytuacji. S¹ otwarci na nowe rozwi¹zania, gotowi do eksperymentów.",
         "tagline": "Nawigator Zmiany",
-        "icon": "ğŸŒŠ",
-        "strengths": ["Adaptacja do zmian", "InnowacyjnoÅ›Ä‡", "Eksperymentowanie", "ElastycznoÅ›Ä‡ strategii"],
-        "challenges": ["Brak stabilnoÅ›ci", "Zbyt czÄ™ste zmiany", "MoÅ¼e frustrowaÄ‡ zespÃ³Å‚", "Brak konsekwencji"],
-        "strategy": "WprowadÅº strukturÄ™ do swoich innowacji. Rozwijaj umiejÄ™tnoÅ›Ä‡ priorytetyzacji. Komunikuj zmiany efektywnie.",
+        "icon": "??",
+        "strengths": ["Adaptacja do zmian", "Innowacyjnoœæ", "Eksperymentowanie", "Elastycznoœæ strategii"],
+        "challenges": ["Brak stabilnoœci", "Zbyt czêste zmiany", "Mo¿e frustrowaæ zespó³", "Brak konsekwencji"],
+        "strategy": "WprowadŸ strukturê do swoich innowacji. Rozwijaj umiejêtnoœæ priorytetyzacji. Komunikuj zmiany efektywnie.",
         "color": "#9b59b6",
-        "supermoc": "Adaptacja i innowacyjnoÅ›Ä‡", 
-        "slaboÅ›Ä‡": "Brak konsekwencji i cierpliwoÅ›ci"
+        "supermoc": "Adaptacja i innowacyjnoœæ", 
+        "slaboœæ": "Brak konsekwencji i cierpliwoœci"
     },
     "Neuroinspirator": {
-        "description": "Liderzy, ktÃ³rzy potrafiÄ… zmotywowaÄ‡ innych do dziaÅ‚ania dziÄ™ki swojej osobowoÅ›ci, wizji i entuzjazmowi.",
+        "description": "Liderzy, którzy potrafi¹ zmotywowaæ innych do dzia³ania dziêki swojej osobowoœci, wizji i entuzjazmowi.",
         "tagline": "Charyzmatyczny Wizjoner",
-        "icon": "ğŸŒŸ",
-        "strengths": ["Charyzma", "Motywowanie zespoÅ‚u", "Wizja przyszÅ‚oÅ›ci", "Energia i entuzjazm"],
-        "challenges": ["MoÅ¼e zdominowaÄ‡ zespÃ³Å‚", "ZaleÅ¼noÅ›Ä‡ od charyzmy", "Zaniedbywanie autonomii zespoÅ‚u", "Nadmierna pewnoÅ›Ä‡ siebie"],
-        "strategy": "Rozwijaj zdolnoÅ›Ä‡ do sÅ‚uchania. Åšwiadomie buduj autonomiÄ™ zespoÅ‚u. Naucz siÄ™ korzystaÄ‡ z danych w decyzjach.",
+        "icon": "??",
+        "strengths": ["Charyzma", "Motywowanie zespo³u", "Wizja przysz³oœci", "Energia i entuzjazm"],
+        "challenges": ["Mo¿e zdominowaæ zespó³", "Zale¿noœæ od charyzmy", "Zaniedbywanie autonomii zespo³u", "Nadmierna pewnoœæ siebie"],
+        "strategy": "Rozwijaj zdolnoœæ do s³uchania. Œwiadomie buduj autonomiê zespo³u. Naucz siê korzystaæ z danych w decyzjach.",
         "color": "#f39c12",
-        "supermoc": "WpÅ‚yw, energia, wizja",
-        "slaboÅ›Ä‡": "MoÅ¼e zdominowaÄ‡ zespÃ³Å‚"
+        "supermoc": "Wp³yw, energia, wizja",
+        "slaboœæ": "Mo¿e zdominowaæ zespó³"
     }
 }
 
-# Alias dla kompatybilnoÅ›ci z resztÄ… aplikacji - bÄ™dzie stopniowo zastÄ™powany
+# Alias dla kompatybilnoœci z reszt¹ aplikacji - bêdzie stopniowo zastêpowany
 DEGEN_TYPES = NEUROLEADER_TYPES
 
 TEST_QUESTIONS = [
     {
-        "question": "Jak podejmujesz waÅ¼ne decyzje w zespole?",
+        "question": "Jak podejmujesz wa¿ne decyzje w zespole?",
         "options": [
-            {"text": "DziaÅ‚am szybko na podstawie intuicji, bez dÅ‚ugiej analizy.", "scores": {"Neuroreaktor": 3}},
-            {"text": "AnalizujÄ™ wszystkie moÅ¼liwe scenariusze i ryzyka.", "scores": {"Neuroanalityk": 3}},
-            {"text": "ÅÄ…czÄ™ dane z intuicjÄ… i emocjami zespoÅ‚u.", "scores": {"Neurobalanser": 3}},
-            {"text": "Skupiam siÄ™ na tym, jak decyzja wpÅ‚ynie na zespÃ³Å‚.", "scores": {"Neuroempata": 3}},
-            {"text": "TestujÄ™ rÃ³Å¼ne podejÅ›cia i adaptujÄ™ siÄ™ do sytuacji.", "scores": {"Neuroinnowator": 3}},
-            {"text": "InspirujÄ™ zespÃ³Å‚ wizjÄ… i motywujÄ™ do dziaÅ‚ania.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Dzia³am szybko na podstawie intuicji, bez d³ugiej analizy.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Analizujê wszystkie mo¿liwe scenariusze i ryzyka.", "scores": {"Neuroanalityk": 3}},
+            {"text": "£¹czê dane z intuicj¹ i emocjami zespo³u.", "scores": {"Neurobalanser": 3}},
+            {"text": "Skupiam siê na tym, jak decyzja wp³ynie na zespó³.", "scores": {"Neuroempata": 3}},
+            {"text": "Testujê ró¿ne podejœcia i adaptujê siê do sytuacji.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Inspirujê zespó³ wizj¹ i motywujê do dzia³ania.", "scores": {"Neuroinspirator": 3}}
         ]
     },
     {
         "question": "Jak reagujesz w sytuacji kryzysu w zespole?",
         "options": [
-            {"text": "ReagujÄ™ natychmiast, dziaÅ‚am pod wpÅ‚ywem adrenaliny.", "scores": {"Neuroreaktor": 3}},
-            {"text": "AnalizujÄ™ sytuacjÄ™, szukam wszystkich moÅ¼liwych rozwiÄ…zaÅ„.", "scores": {"Neuroanalityk": 3}},
-            {"text": "ZachowujÄ™ spokÃ³j i Å‚Ä…czÄ™ logikÄ™ z empatiÄ….", "scores": {"Neurobalanser": 3}},
-            {"text": "KoncentrujÄ™ siÄ™ na wspieraniu zespoÅ‚u emocjonalnie.", "scores": {"Neuroempata": 3}},
-            {"text": "Szybko dostosowujÄ™ plan i wprowadzam innowacje.", "scores": {"Neuroinnowator": 3}},
-            {"text": "MobilizujÄ™ zespÃ³Å‚ przez inspiracjÄ™ i wizjÄ™.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Reagujê natychmiast, dzia³am pod wp³ywem adrenaliny.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Analizujê sytuacjê, szukam wszystkich mo¿liwych rozwi¹zañ.", "scores": {"Neuroanalityk": 3}},
+            {"text": "Zachowujê spokój i ³¹czê logikê z empati¹.", "scores": {"Neurobalanser": 3}},
+            {"text": "Koncentrujê siê na wspieraniu zespo³u emocjonalnie.", "scores": {"Neuroempata": 3}},
+            {"text": "Szybko dostosowujê plan i wprowadzam innowacje.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Mobilizujê zespó³ przez inspiracjê i wizjê.", "scores": {"Neuroinspirator": 3}}
         ]
     },
     {
-        "question": "Jak motywujesz swÃ³j zespÃ³Å‚?",
+        "question": "Jak motywujesz swój zespó³?",
         "options": [
-            {"text": "Poprzez szybkie dziaÅ‚anie i energiÄ™ w trudnych momentach.", "scores": {"Neuroreaktor": 3}},
-            {"text": "Przez dokÅ‚adne planowanie i analizÄ™ zagroÅ¼eÅ„.", "scores": {"Neuroanalityk": 3}},
-            {"text": "ÅÄ…czÄ…c logiczne argumenty z emocjonalnym wsparciem.", "scores": {"Neurobalanser": 3}},
-            {"text": "BudujÄ…c silne relacje i atmosferÄ™ zaufania.", "scores": {"Neuroempata": 3}},
-            {"text": "WprowadzajÄ…c innowacje i nowe sposoby pracy.", "scores": {"Neuroinnowator": 3}},
-            {"text": "Poprzez charyzmÄ™, wizjÄ™ i inspirujÄ…ce przemÃ³wienia.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Poprzez szybkie dzia³anie i energiê w trudnych momentach.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Przez dok³adne planowanie i analizê zagro¿eñ.", "scores": {"Neuroanalityk": 3}},
+            {"text": "£¹cz¹c logiczne argumenty z emocjonalnym wsparciem.", "scores": {"Neurobalanser": 3}},
+            {"text": "Buduj¹c silne relacje i atmosferê zaufania.", "scores": {"Neuroempata": 3}},
+            {"text": "Wprowadzaj¹c innowacje i nowe sposoby pracy.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Poprzez charyzmê, wizjê i inspiruj¹ce przemówienia.", "scores": {"Neuroinspirator": 3}}
         ]
     },
     {
-        "question": "Jak podchodzisz do zarzÄ…dzania zmianami w organizacji?",
+        "question": "Jak podchodzisz do zarz¹dzania zmianami w organizacji?",
         "options": [
-            {"text": "Wprowadzam zmiany szybko, reagujÄ…c na bieÅ¼Ä…co.", "scores": {"Neuroreaktor": 3}},
-            {"text": "DokÅ‚adnie analizujÄ™ wszystkie ryzyka przed zmianÄ….", "scores": {"Neuroanalityk": 3}},
-            {"text": "BalansujÄ™ miÄ™dzy potrzebÄ… zmiany a stabilnoÅ›ciÄ….", "scores": {"Neurobalanser": 3}},
-            {"text": "Skupiam siÄ™ na tym, jak zmiany wpÅ‚ynÄ… na ludzi.", "scores": {"Neuroempata": 3}},
-            {"text": "EksperymentujÄ™ z rÃ³Å¼nymi podejÅ›ciami do zmiany.", "scores": {"Neuroinnowator": 3}},
-            {"text": "InspirujÄ™ zespÃ³Å‚ wizjÄ… przyszÅ‚oÅ›ci po zmianie.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Wprowadzam zmiany szybko, reaguj¹c na bie¿¹co.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Dok³adnie analizujê wszystkie ryzyka przed zmian¹.", "scores": {"Neuroanalityk": 3}},
+            {"text": "Balansujê miêdzy potrzeb¹ zmiany a stabilnoœci¹.", "scores": {"Neurobalanser": 3}},
+            {"text": "Skupiam siê na tym, jak zmiany wp³yn¹ na ludzi.", "scores": {"Neuroempata": 3}},
+            {"text": "Eksperymentujê z ró¿nymi podejœciami do zmiany.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Inspirujê zespó³ wizj¹ przysz³oœci po zmianie.", "scores": {"Neuroinspirator": 3}}
         ]
     },
     {
-        "question": "Jaki jest TwÃ³j styl komunikacji z zespoÅ‚em?",
+        "question": "Jaki jest Twój styl komunikacji z zespo³em?",
         "options": [
-            {"text": "BezpoÅ›redni i szybki, szczegÃ³lnie w sytuacjach kryzysowych.", "scores": {"Neuroreaktor": 3}},
-            {"text": "OstroÅ¼ny i przemyÅ›lany, przedstawiam wszystkie fakty.", "scores": {"Neuroanalityk": 3}},
-            {"text": "ÅÄ…czÄ™ logiczne argumenty z uwzglÄ™dnieniem emocji.", "scores": {"Neurobalanser": 3}},
-            {"text": "Empatyczny i wspierajÄ…cy, sÅ‚ucham potrzeb zespoÅ‚u.", "scores": {"Neuroempata": 3}},
-            {"text": "Elastyczny, dostosowujÄ™ styl do sytuacji i osoby.", "scores": {"Neuroinnowator": 3}},
-            {"text": "Charyzmatyczny i inspirujÄ…cy, motywujÄ™ przez wizjÄ™.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Bezpoœredni i szybki, szczególnie w sytuacjach kryzysowych.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Ostro¿ny i przemyœlany, przedstawiam wszystkie fakty.", "scores": {"Neuroanalityk": 3}},
+            {"text": "£¹czê logiczne argumenty z uwzglêdnieniem emocji.", "scores": {"Neurobalanser": 3}},
+            {"text": "Empatyczny i wspieraj¹cy, s³ucham potrzeb zespo³u.", "scores": {"Neuroempata": 3}},
+            {"text": "Elastyczny, dostosowujê styl do sytuacji i osoby.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Charyzmatyczny i inspiruj¹cy, motywujê przez wizjê.", "scores": {"Neuroinspirator": 3}}
         ]
     },
     {
-        "question": "Jak zarzÄ…dzasz konfliktami w zespole?",
+        "question": "Jak zarz¹dzasz konfliktami w zespole?",
         "options": [
-            {"text": "ReagujÄ™ natychmiast, chcÄ™ szybko rozwiÄ…zaÄ‡ problem.", "scores": {"Neuroreaktor": 3}},
-            {"text": "AnalizujÄ™ przyczyny konfliktu i szukam optymalnego rozwiÄ…zania.", "scores": {"Neuroanalityk": 3}},
-            {"text": "Szukam rozwiÄ…zaÅ„ uwzglÄ™dniajÄ…cych zarÃ³wno fakty jak i emocje.", "scores": {"Neurobalanser": 3}},
-            {"text": "KoncentrujÄ™ siÄ™ na budowaniu porozumienia i mediacji.", "scores": {"Neuroempata": 3}},
-            {"text": "TestujÄ™ rÃ³Å¼ne sposoby rozwiÄ…zania, dostosowujÄ…c podejÅ›cie.", "scores": {"Neuroinnowator": 3}},
-            {"text": "InspirujÄ™ strony do wspÃ³lnej wizji i celÃ³w.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Reagujê natychmiast, chcê szybko rozwi¹zaæ problem.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Analizujê przyczyny konfliktu i szukam optymalnego rozwi¹zania.", "scores": {"Neuroanalityk": 3}},
+            {"text": "Szukam rozwi¹zañ uwzglêdniaj¹cych zarówno fakty jak i emocje.", "scores": {"Neurobalanser": 3}},
+            {"text": "Koncentrujê siê na budowaniu porozumienia i mediacji.", "scores": {"Neuroempata": 3}},
+            {"text": "Testujê ró¿ne sposoby rozwi¹zania, dostosowuj¹c podejœcie.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Inspirujê strony do wspólnej wizji i celów.", "scores": {"Neuroinspirator": 3}}
         ]
     },
     {
-        "question": "Jak budujemy strategiÄ™ zespoÅ‚u?",
+        "question": "Jak budujemy strategiê zespo³u?",
         "options": [
-            {"text": "Szybko reagujemy na sytuacjÄ™, dziaÅ‚amy intuicyjnie.", "scores": {"Neuroreaktor": 3}},
-            {"text": "DokÅ‚adnie analizujemy wszystkie moÅ¼liwe scenariusze.", "scores": {"Neuroanalityk": 3}},
-            {"text": "ÅÄ…czymy analizÄ™ danych z intuicjÄ… i opiniami zespoÅ‚u.", "scores": {"Neurobalanser": 3}},
-            {"text": "UwzglÄ™dniamy potrzeby i moÅ¼liwoÅ›ci kaÅ¼dego czÅ‚onka zespoÅ‚u.", "scores": {"Neuroempata": 3}},
-            {"text": "Pozostajemy elastyczni i gotowi na adaptacjÄ™ strategii.", "scores": {"Neuroinnowator": 3}},
-            {"text": "Tworzymy inspirujÄ…cÄ… wizjÄ™, ktÃ³ra motywuje do dziaÅ‚ania.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Szybko reagujemy na sytuacjê, dzia³amy intuicyjnie.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Dok³adnie analizujemy wszystkie mo¿liwe scenariusze.", "scores": {"Neuroanalityk": 3}},
+            {"text": "£¹czymy analizê danych z intuicj¹ i opiniami zespo³u.", "scores": {"Neurobalanser": 3}},
+            {"text": "Uwzglêdniamy potrzeby i mo¿liwoœci ka¿dego cz³onka zespo³u.", "scores": {"Neuroempata": 3}},
+            {"text": "Pozostajemy elastyczni i gotowi na adaptacjê strategii.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Tworzymy inspiruj¹c¹ wizjê, która motywuje do dzia³ania.", "scores": {"Neuroinspirator": 3}}
         ]
     },
     {
-        "question": "Jak reagujesz na niepowodzenia zespoÅ‚u?",
+        "question": "Jak reagujesz na niepowodzenia zespo³u?",
         "options": [
-            {"text": "DziaÅ‚am natychmiast, by jak najszybciej naprawiÄ‡ sytuacjÄ™.", "scores": {"Neuroreaktor": 3}},
-            {"text": "AnalizujÄ™ dokÅ‚adnie przyczyny niepowodzenia.", "scores": {"Neuroanalityk": 3}},
-            {"text": "WyciÄ…gam wnioski i rÃ³wnowaÅ¼Ä™ uczenie siÄ™ z wsparciem zespoÅ‚u.", "scores": {"Neurobalanser": 3}},
-            {"text": "Skupiam siÄ™ na wspieraniu zespoÅ‚u i odbudowie morale.", "scores": {"Neuroempata": 3}},
-            {"text": "TraktujÄ™ to jako okazjÄ™ do innowacji i zmiany podejÅ›cia.", "scores": {"Neuroinnowator": 3}},
-            {"text": "InspirujÄ™ zespÃ³Å‚ do wyciÄ…gniÄ™cia wnioskÃ³w i dalszego rozwoju.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Dzia³am natychmiast, by jak najszybciej naprawiæ sytuacjê.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Analizujê dok³adnie przyczyny niepowodzenia.", "scores": {"Neuroanalityk": 3}},
+            {"text": "Wyci¹gam wnioski i równowa¿ê uczenie siê z wsparciem zespo³u.", "scores": {"Neurobalanser": 3}},
+            {"text": "Skupiam siê na wspieraniu zespo³u i odbudowie morale.", "scores": {"Neuroempata": 3}},
+            {"text": "Traktujê to jako okazjê do innowacji i zmiany podejœcia.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Inspirujê zespó³ do wyci¹gniêcia wniosków i dalszego rozwoju.", "scores": {"Neuroinspirator": 3}}
         ]
     },
     {
-        "question": "Jak podejmujesz decyzje pod presjÄ… czasu?",
+        "question": "Jak podejmujesz decyzje pod presj¹ czasu?",
         "options": [
-            {"text": "DziaÅ‚am instynktownie i szybko, ufam intuicji.", "scores": {"Neuroreaktor": 3}},
-            {"text": "StresujÄ™ siÄ™, potrzebujÄ™ wiÄ™cej czasu na analizÄ™.", "scores": {"Neuroanalityk": 3}},
-            {"text": "Szybko analizujÄ™ kluczowe fakty i uwzglÄ™dniam intuicjÄ™.", "scores": {"Neurobalanser": 3}},
-            {"text": "KonsultujÄ™ siÄ™ z zespoÅ‚em, uwzglÄ™dniam ich opinie.", "scores": {"Neuroempata": 3}},
-            {"text": "TestujÄ™ szybkie rozwiÄ…zania i dostosowujÄ™ w locie.", "scores": {"Neuroinnowator": 3}},
-            {"text": "MobilizujÄ™ zespÃ³Å‚ energiÄ… i wizjÄ… szybkiego dziaÅ‚ania.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Dzia³am instynktownie i szybko, ufam intuicji.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Stresujê siê, potrzebujê wiêcej czasu na analizê.", "scores": {"Neuroanalityk": 3}},
+            {"text": "Szybko analizujê kluczowe fakty i uwzglêdniam intuicjê.", "scores": {"Neurobalanser": 3}},
+            {"text": "Konsultujê siê z zespo³em, uwzglêdniam ich opinie.", "scores": {"Neuroempata": 3}},
+            {"text": "Testujê szybkie rozwi¹zania i dostosowujê w locie.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Mobilizujê zespó³ energi¹ i wizj¹ szybkiego dzia³ania.", "scores": {"Neuroinspirator": 3}}
         ]
     },
     {
-        "question": "Jak rozwijasz swÃ³j zespÃ³Å‚?",
+        "question": "Jak rozwijasz swój zespó³?",
         "options": [
-            {"text": "Przez wyzwania i sytuacje kryzysowe, ktÃ³re hartujÄ….", "scores": {"Neuroreaktor": 3}},
-            {"text": "Poprzez dokÅ‚adnÄ… analizÄ™ mocnych stron i planowanie rozwoju.", "scores": {"Neuroanalityk": 3}},
-            {"text": "ÅÄ…czÄ…c rozwÃ³j zawodowy z rozwojem osobistym.", "scores": {"Neurobalanser": 3}},
-            {"text": "BudujÄ…c silne relacje i wspierajÄ…c indywidualnie.", "scores": {"Neuroempata": 3}},
-            {"text": "WprowadzajÄ…c innowacyjne metody i eksperymentujÄ…c.", "scores": {"Neuroinnowator": 3}},
-            {"text": "InspirujÄ…c do ciÄ…gÅ‚ego rozwoju i osiÄ…gania celÃ³w.", "scores": {"Neuroinspirator": 3}}
+            {"text": "Przez wyzwania i sytuacje kryzysowe, które hartuj¹.", "scores": {"Neuroreaktor": 3}},
+            {"text": "Poprzez dok³adn¹ analizê mocnych stron i planowanie rozwoju.", "scores": {"Neuroanalityk": 3}},
+            {"text": "£¹cz¹c rozwój zawodowy z rozwojem osobistym.", "scores": {"Neurobalanser": 3}},
+            {"text": "Buduj¹c silne relacje i wspieraj¹c indywidualnie.", "scores": {"Neuroempata": 3}},
+            {"text": "Wprowadzaj¹c innowacyjne metody i eksperymentuj¹c.", "scores": {"Neuroinnowator": 3}},
+            {"text": "Inspiruj¹c do ci¹g³ego rozwoju i osi¹gania celów.", "scores": {"Neuroinspirator": 3}}
         ]
     }
 ]
@@ -187,185 +187,185 @@ TEST_QUESTIONS = [
 
 TEST_QUESTIONS = [
     {
-        "question": "Jak reagujesz, gdy cena aktywa gwaÅ‚townie wzrasta?",
+        "question": "Jak reagujesz, gdy cena aktywa gwa³townie wzrasta?",
         "options": [
-            {"text": "Natychmiast kupujÄ™, nie analizujÄ…c zbyt duÅ¼o.", "scores": {"YOLO Degen": 3, "Hype Degen": 1}},
-            {"text": "Zastanawiam siÄ™, czy to zgodne z mojÄ… strategiÄ….", "scores": {"Strategist Degen": 3}},
-            {"text": "CzujÄ™ euforiÄ™ i szybko kupujÄ™.", "scores": {"Emo Degen": 3, "YOLO Degen": 1}},
+            {"text": "Natychmiast kupujê, nie analizuj¹c zbyt du¿o.", "scores": {"YOLO Degen": 3, "Hype Degen": 1}},
+            {"text": "Zastanawiam siê, czy to zgodne z moj¹ strategi¹.", "scores": {"Strategist Degen": 3}},
+            {"text": "Czujê euforiê i szybko kupujê.", "scores": {"Emo Degen": 3, "YOLO Degen": 1}},
             {"text": "Czekam na spokojniejszy moment na rynku.", "scores": {"Zen Degen": 3}},
-            {"text": "AnalizujÄ™ dane, by przewidzieÄ‡ kolejny ruch.", "scores": {"Mad Scientist Degen": 3, "Spreadsheet Degen": 1}},
+            {"text": "Analizujê dane, by przewidzieæ kolejny ruch.", "scores": {"Mad Scientist Degen": 3, "Spreadsheet Degen": 1}},
             {"text": "Sprawdzam dane historyczne i ryzyko.", "scores": {"Spreadsheet Degen": 3, "Strategist Degen": 1}},
-            {"text": "AnalizujÄ™ kontekst i wiÄ™kszy trend.", "scores": {"Meta Degen": 3}},
-            {"text": "KupujÄ™, bo widzÄ™, Å¼e wszyscy o tym mÃ³wiÄ….", "scores": {"Hype Degen": 3, "YOLO Degen": 1}}
+            {"text": "Analizujê kontekst i wiêkszy trend.", "scores": {"Meta Degen": 3}},
+            {"text": "Kupujê, bo widzê, ¿e wszyscy o tym mówi¹.", "scores": {"Hype Degen": 3, "YOLO Degen": 1}}
         ]
     },
     {
-        "question": "Co robisz, gdy rynek zaczyna siÄ™ zmieniaÄ‡ w sposÃ³b nieprzewidywalny?",
+        "question": "Co robisz, gdy rynek zaczyna siê zmieniaæ w sposób nieprzewidywalny?",
         "options": [
-            {"text": "DziaÅ‚am natychmiast  instynkt to podstawa.", "scores": {"YOLO Degen": 3, "Emo Degen": 1}},
-            {"text": "AnalizujÄ™ dane, zanim coÅ› zrobiÄ™.", "scores": {"Strategist Degen": 3, "Spreadsheet Degen": 1}},
-            {"text": "Wpadam w panikÄ™, sprzedajÄ™ wszystko.", "scores": {"Emo Degen": 3}},
-            {"text": "ZachowujÄ™ spokÃ³j, nic nie zmieniam.", "scores": {"Zen Degen": 3}},
-            {"text": "TworzÄ™ wÅ‚asny model predykcyjny.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "OdÅ›wieÅ¼am arkusze z analizami.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "Szukam gÅ‚Ä™bszego sensu zmian.", "scores": {"Meta Degen": 3}},
-            {"text": "ReagujÄ™ tak, jak spoÅ‚ecznoÅ›Ä‡ Twittera.", "scores": {"Hype Degen": 3}}
+            {"text": "Dzia³am natychmiast  instynkt to podstawa.", "scores": {"YOLO Degen": 3, "Emo Degen": 1}},
+            {"text": "Analizujê dane, zanim coœ zrobiê.", "scores": {"Strategist Degen": 3, "Spreadsheet Degen": 1}},
+            {"text": "Wpadam w panikê, sprzedajê wszystko.", "scores": {"Emo Degen": 3}},
+            {"text": "Zachowujê spokój, nic nie zmieniam.", "scores": {"Zen Degen": 3}},
+            {"text": "Tworzê w³asny model predykcyjny.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Odœwie¿am arkusze z analizami.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Szukam g³êbszego sensu zmian.", "scores": {"Meta Degen": 3}},
+            {"text": "Reagujê tak, jak spo³ecznoœæ Twittera.", "scores": {"Hype Degen": 3}}
         ]
     },
     {
-        "question": "Jak czÄ™sto zmieniasz swoje decyzje inwestycyjne?",
+        "question": "Jak czêsto zmieniasz swoje decyzje inwestycyjne?",
         "options": [
-            {"text": "CiÄ…gle  kaÅ¼da okazja to nowy ruch.", "scores": {"YOLO Degen": 3, "Hype Degen": 1}},
+            {"text": "Ci¹gle  ka¿da okazja to nowy ruch.", "scores": {"YOLO Degen": 3, "Hype Degen": 1}},
             {"text": "Tylko gdy plan tego wymaga.", "scores": {"Strategist Degen": 3}},
-            {"text": "Za kaÅ¼dym razem, gdy siÄ™ zestresujÄ™.", "scores": {"Emo Degen": 3}},
-            {"text": "Prawie nigdy  spokÃ³j to podstawa.", "scores": {"Zen Degen": 3}},
-            {"text": "Kiedy dane dajÄ… zielone Å›wiatÅ‚o.", "scores": {"Mad Scientist Degen": 3, "Spreadsheet Degen": 1}},
-            {"text": "Gdy model pokazuje, Å¼e to uzasadnione.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Za ka¿dym razem, gdy siê zestresujê.", "scores": {"Emo Degen": 3}},
+            {"text": "Prawie nigdy  spokój to podstawa.", "scores": {"Zen Degen": 3}},
+            {"text": "Kiedy dane daj¹ zielone œwiat³o.", "scores": {"Mad Scientist Degen": 3, "Spreadsheet Degen": 1}},
+            {"text": "Gdy model pokazuje, ¿e to uzasadnione.", "scores": {"Spreadsheet Degen": 3}},
             {"text": "W rytmie zmian rynkowych i geopolitycznych.", "scores": {"Meta Degen": 3}},
-            {"text": "Gdy coÅ› trenduje  wchodzÄ™!", "scores": {"Hype Degen": 3, "YOLO Degen": 1}}
+            {"text": "Gdy coœ trenduje  wchodzê!", "scores": {"Hype Degen": 3, "YOLO Degen": 1}}
         ]
     },
     {
-        "question": "Jak wyglÄ…da Twoje poranne podejÅ›cie do inwestowania?",
+        "question": "Jak wygl¹da Twoje poranne podejœcie do inwestowania?",
         "options": [
-            {"text": "WÅ‚Ä…czam aplikacjÄ™ i kupujÄ™ na Å›lepo.", "scores": {"YOLO Degen": 3}},
-            {"text": "Sprawdzam mojÄ… strategiÄ™ i wykonujÄ™ plan.", "scores": {"Strategist Degen": 3}},
-            {"text": "Sprawdzam nastroje i kierujÄ™ siÄ™ emocjami.", "scores": {"Emo Degen": 3}},
-            {"text": "MedytujÄ™, zanim podejmÄ™ decyzjÄ™.", "scores": {"Zen Degen": 3}},
+            {"text": "W³¹czam aplikacjê i kupujê na œlepo.", "scores": {"YOLO Degen": 3}},
+            {"text": "Sprawdzam moj¹ strategiê i wykonujê plan.", "scores": {"Strategist Degen": 3}},
+            {"text": "Sprawdzam nastroje i kierujê siê emocjami.", "scores": {"Emo Degen": 3}},
+            {"text": "Medytujê, zanim podejmê decyzjê.", "scores": {"Zen Degen": 3}},
             {"text": "Odpalam skrypty z analizami.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "AktualizujÄ™ swÃ³j Excel z danymi.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "PrzeglÄ…dam Å›wiatowe wydarzenia.", "scores": {"Meta Degen": 3}},
+            {"text": "Aktualizujê swój Excel z danymi.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Przegl¹dam œwiatowe wydarzenia.", "scores": {"Meta Degen": 3}},
             {"text": "Sprawdzam TikToka i Twittera.", "scores": {"Hype Degen": 3}}
         ]
     },
     {
-        "question": "Jak siÄ™ czujesz, gdy Twoja inwestycja traci na wartoÅ›ci?",
+        "question": "Jak siê czujesz, gdy Twoja inwestycja traci na wartoœci?",
         "options": [
-            {"text": "Trudno, YOLO  lecÄ™ dalej.", "scores": {"YOLO Degen": 3}},
-            {"text": "To czÄ™Å›Ä‡ planu, mam to pod kontrolÄ….", "scores": {"Strategist Degen": 3}},
-            {"text": "Jestem zaÅ‚amany, nie mogÄ™ spaÄ‡.", "scores": {"Emo Degen": 3}},
-            {"text": "AkceptujÄ™ to. Taki jest rynek.", "scores": {"Zen Degen": 3}},
-            {"text": "AnalizujÄ™, dlaczego tak siÄ™ staÅ‚o.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "AktualizujÄ™ plik i zmieniam parametry.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "Sprawdzam, czy to nie wynik globalnych trendÃ³w.", "scores": {"Meta Degen": 3}},
-            {"text": "Obwiniam influencerÃ³w z internetu.", "scores": {"Hype Degen": 3}}
+            {"text": "Trudno, YOLO  lecê dalej.", "scores": {"YOLO Degen": 3}},
+            {"text": "To czêœæ planu, mam to pod kontrol¹.", "scores": {"Strategist Degen": 3}},
+            {"text": "Jestem za³amany, nie mogê spaæ.", "scores": {"Emo Degen": 3}},
+            {"text": "Akceptujê to. Taki jest rynek.", "scores": {"Zen Degen": 3}},
+            {"text": "Analizujê, dlaczego tak siê sta³o.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Aktualizujê plik i zmieniam parametry.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Sprawdzam, czy to nie wynik globalnych trendów.", "scores": {"Meta Degen": 3}},
+            {"text": "Obwiniam influencerów z internetu.", "scores": {"Hype Degen": 3}}
         ]
     },
     {
-        "question": "Jak wybierasz projekt lub spÃ³Å‚kÄ™ do inwestycji?",
+        "question": "Jak wybierasz projekt lub spó³kê do inwestycji?",
         "options": [
-            {"text": "Klikam w to, co akurat wyglÄ…da fajnie.", "scores": {"YOLO Degen": 3}},
-            {"text": "Szukam zgodnoÅ›ci z mojÄ… strategiÄ….", "scores": {"Strategist Degen": 3}},
+            {"text": "Klikam w to, co akurat wygl¹da fajnie.", "scores": {"YOLO Degen": 3}},
+            {"text": "Szukam zgodnoœci z moj¹ strategi¹.", "scores": {"Strategist Degen": 3}},
             {"text": "Wybieram to, co wzbudza emocje.", "scores": {"Emo Degen": 3}},
-            {"text": "Wybieram intuicyjnie, po przemyÅ›leniu.", "scores": {"Zen Degen": 3}},
-            {"text": "PatrzÄ™ na technologiÄ™ i innowacyjnoÅ›Ä‡.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "AnalizujÄ™ wskaÅºniki i liczby.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "Czytam biaÅ‚Ä… ksiÄ™gÄ™ i analizujÄ™ ekosystem.", "scores": {"Meta Degen": 3}},
+            {"text": "Wybieram intuicyjnie, po przemyœleniu.", "scores": {"Zen Degen": 3}},
+            {"text": "Patrzê na technologiê i innowacyjnoœæ.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Analizujê wskaŸniki i liczby.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Czytam bia³¹ ksiêgê i analizujê ekosystem.", "scores": {"Meta Degen": 3}},
             {"text": "To, co trenduje na socialach.", "scores": {"Hype Degen": 3}}
         ]
     },
     {
         "question": "Jak planujesz swoje portfolio?",
         "options": [
-            {"text": "Nie planujÄ™  peÅ‚en spontan.", "scores": {"YOLO Degen": 3}},
+            {"text": "Nie planujê  pe³en spontan.", "scores": {"YOLO Degen": 3}},
             {"text": "Mam rozpisany plan i cel.", "scores": {"Strategist Degen": 3}},
-            {"text": "DodajÄ™ i usuwam po impulsie.", "scores": {"Emo Degen": 3}},
-            {"text": "Portfolio to droga  zmienia siÄ™ naturalnie.", "scores": {"Zen Degen": 3}},
-            {"text": "SymulujÄ™ wiele scenariuszy.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "OptymalizujÄ™ strukturÄ™ w arkuszu kalkulacyjnym.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "UkÅ‚adam pod mega trendy i narracje.", "scores": {"Meta Degen": 3}},
-            {"text": "KupujÄ™ to, co polecajÄ… inni.", "scores": {"Hype Degen": 3}}
+            {"text": "Dodajê i usuwam po impulsie.", "scores": {"Emo Degen": 3}},
+            {"text": "Portfolio to droga  zmienia siê naturalnie.", "scores": {"Zen Degen": 3}},
+            {"text": "Symulujê wiele scenariuszy.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Optymalizujê strukturê w arkuszu kalkulacyjnym.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Uk³adam pod mega trendy i narracje.", "scores": {"Meta Degen": 3}},
+            {"text": "Kupujê to, co polecaj¹ inni.", "scores": {"Hype Degen": 3}}
         ]
     },
     {
-        "question": "Co robisz w dniu duÅ¼ej korekty rynkowej?",
+        "question": "Co robisz w dniu du¿ej korekty rynkowej?",
         "options": [
-            {"text": "WchodzÄ™ all-in w doÅ‚ku.", "scores": {"YOLO Degen": 3}},
-            {"text": "Trzymam siÄ™ planu.", "scores": {"Strategist Degen": 3}},
-            {"text": "Wpadam w panikÄ™ i wyprzedajÄ™.", "scores": {"Emo Degen": 3}},
-            {"text": "ObserwujÄ™ i nie dziaÅ‚am pochopnie.", "scores": {"Zen Degen": 3}},
-            {"text": "WeryfikujÄ™ modele i dane.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "Uaktualniam wyceny i alokacjÄ™.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "SzacujÄ™ konsekwencje makroekonomiczne.", "scores": {"Meta Degen": 3}},
-            {"text": "PatrzÄ™ co robiÄ… znani YouTuberzy.", "scores": {"Hype Degen": 3}}
+            {"text": "Wchodzê all-in w do³ku.", "scores": {"YOLO Degen": 3}},
+            {"text": "Trzymam siê planu.", "scores": {"Strategist Degen": 3}},
+            {"text": "Wpadam w panikê i wyprzedajê.", "scores": {"Emo Degen": 3}},
+            {"text": "Obserwujê i nie dzia³am pochopnie.", "scores": {"Zen Degen": 3}},
+            {"text": "Weryfikujê modele i dane.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Uaktualniam wyceny i alokacjê.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Szacujê konsekwencje makroekonomiczne.", "scores": {"Meta Degen": 3}},
+            {"text": "Patrzê co robi¹ znani YouTuberzy.", "scores": {"Hype Degen": 3}}
         ]
     },
     {
-        "question": "Jaki jest TwÃ³j ulubiony sposÃ³b zdobywania wiedzy o inwestowaniu?",
+        "question": "Jaki jest Twój ulubiony sposób zdobywania wiedzy o inwestowaniu?",
         "options": [
-            {"text": "Z memÃ³w i shortÃ³w.", "scores": {"YOLO Degen": 3}},
-            {"text": "Z ksiÄ…Å¼ek i analiz.", "scores": {"Strategist Degen": 3}},
-            {"text": "Z podcastÃ³w o sukcesach i poraÅ¼kach.", "scores": {"Emo Degen": 3}},
-            {"text": "Z doÅ›wiadczenia i uwaÅ¼noÅ›ci.", "scores": {"Zen Degen": 3}},
-            {"text": "Z badaÅ„ naukowych.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "Z raportÃ³w i arkuszy.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "Z rozmÃ³w i debat o przyszÅ‚oÅ›ci.", "scores": {"Meta Degen": 3}},
-            {"text": "Z komentarzy pod filmami influencerÃ³w.", "scores": {"Hype Degen": 3}}
+            {"text": "Z memów i shortów.", "scores": {"YOLO Degen": 3}},
+            {"text": "Z ksi¹¿ek i analiz.", "scores": {"Strategist Degen": 3}},
+            {"text": "Z podcastów o sukcesach i pora¿kach.", "scores": {"Emo Degen": 3}},
+            {"text": "Z doœwiadczenia i uwa¿noœci.", "scores": {"Zen Degen": 3}},
+            {"text": "Z badañ naukowych.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Z raportów i arkuszy.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Z rozmów i debat o przysz³oœci.", "scores": {"Meta Degen": 3}},
+            {"text": "Z komentarzy pod filmami influencerów.", "scores": {"Hype Degen": 3}}
         ]
     },
     {
         "question": "Jak oceniasz sukces swojej inwestycji?",
         "options": [
-            {"text": "Czy zrobiÅ‚em szybki zysk?", "scores": {"YOLO Degen": 3}},
-            {"text": "Czy osiÄ…gnÄ…Å‚em cel zgodnie z planem?", "scores": {"Strategist Degen": 3}},
-            {"text": "Czy poczuÅ‚em siÄ™ z tym dobrze?", "scores": {"Emo Degen": 3}},
-            {"text": "Czy nie cierpiaÅ‚em w procesie?", "scores": {"Zen Degen": 3}},
-            {"text": "Czy moja hipoteza siÄ™ potwierdziÅ‚a?", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "Czy ROI byÅ‚o zgodne z kalkulacjÄ…?", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "Czy wpisaÅ‚o siÄ™ to w wiÄ™kszy trend?", "scores": {"Meta Degen": 3}},
-            {"text": "Czy znajomi byli pod wraÅ¼eniem?", "scores": {"Hype Degen": 3}}
+            {"text": "Czy zrobi³em szybki zysk?", "scores": {"YOLO Degen": 3}},
+            {"text": "Czy osi¹gn¹³em cel zgodnie z planem?", "scores": {"Strategist Degen": 3}},
+            {"text": "Czy poczu³em siê z tym dobrze?", "scores": {"Emo Degen": 3}},
+            {"text": "Czy nie cierpia³em w procesie?", "scores": {"Zen Degen": 3}},
+            {"text": "Czy moja hipoteza siê potwierdzi³a?", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Czy ROI by³o zgodne z kalkulacj¹?", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Czy wpisa³o siê to w wiêkszy trend?", "scores": {"Meta Degen": 3}},
+            {"text": "Czy znajomi byli pod wra¿eniem?", "scores": {"Hype Degen": 3}}
         ]
     },
     {
-        "question": "Jak podejmujesz decyzjÄ™ o sprzedaÅ¼y aktywÃ³w?",
+        "question": "Jak podejmujesz decyzjê o sprzeda¿y aktywów?",
         "options": [
-            {"text": "SprzedajÄ™ wszystko nagle, gdy tylko czujÄ™ siÄ™ zagroÅ¼ony.", "scores": {"Emo Degen": 3}},
-            {"text": "SprzedajÄ™ tylko wtedy, gdy osiÄ…gnÄ™ planowany cel.", "scores": {"Strategist Degen": 3}},
-            {"text": "SprzedajÄ™ od razu po duÅ¼ym wzroÅ›cie  lepiej nie ryzykowaÄ‡.", "scores": {"YOLO Degen": 3}},
-            {"text": "SprzedajÄ™ spokojnie i bez emocji, zgodnie z filozofiÄ… spokoju.", "scores": {"Zen Degen": 3}},
-            {"text": "TworzÄ™ modele ryzyka i podejmujÄ™ decyzjÄ™ na podstawie wynikÃ³w.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "Najpierw aktualizujÄ™ dane, potem analizujÄ™.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "PrÃ³bujÄ™ przewidzieÄ‡ przyszÅ‚oÅ›Ä‡ rynku i na tej podstawie decydujÄ™.", "scores": {"Meta Degen": 3}},
-            {"text": "SprzedajÄ™, gdy widzÄ™, Å¼e wszyscy to robiÄ….", "scores": {"Hype Degen": 3}}
+            {"text": "Sprzedajê wszystko nagle, gdy tylko czujê siê zagro¿ony.", "scores": {"Emo Degen": 3}},
+            {"text": "Sprzedajê tylko wtedy, gdy osi¹gnê planowany cel.", "scores": {"Strategist Degen": 3}},
+            {"text": "Sprzedajê od razu po du¿ym wzroœcie  lepiej nie ryzykowaæ.", "scores": {"YOLO Degen": 3}},
+            {"text": "Sprzedajê spokojnie i bez emocji, zgodnie z filozofi¹ spokoju.", "scores": {"Zen Degen": 3}},
+            {"text": "Tworzê modele ryzyka i podejmujê decyzjê na podstawie wyników.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Najpierw aktualizujê dane, potem analizujê.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Próbujê przewidzieæ przysz³oœæ rynku i na tej podstawie decydujê.", "scores": {"Meta Degen": 3}},
+            {"text": "Sprzedajê, gdy widzê, ¿e wszyscy to robi¹.", "scores": {"Hype Degen": 3}}
         ]
     },
     {
-        "question": "Co motywuje CiÄ™ najbardziej do inwestowania?",
+        "question": "Co motywuje Ciê najbardziej do inwestowania?",
         "options": [
-            {"text": "MoÅ¼liwoÅ›Ä‡ zysku tu i teraz.", "scores": {"YOLO Degen": 3}},
-            {"text": "Realizacja dÅ‚ugoterminowej strategii.", "scores": {"Strategist Degen": 3}},
+            {"text": "Mo¿liwoœæ zysku tu i teraz.", "scores": {"YOLO Degen": 3}},
+            {"text": "Realizacja d³ugoterminowej strategii.", "scores": {"Strategist Degen": 3}},
             {"text": "Emocje  ekscytacja, adrenalina.", "scores": {"Emo Degen": 3}},
-            {"text": "Praktyka spokoju i cierpliwoÅ›ci.", "scores": {"Zen Degen": 3}},
-            {"text": "ChÄ™Ä‡ przetestowania wÅ‚asnych hipotez.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "Obliczenia pokazujÄ…ce potencjalny zwrot.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "Wiara w przeÅ‚omowe technologie.", "scores": {"Meta Degen": 3}},
+            {"text": "Praktyka spokoju i cierpliwoœci.", "scores": {"Zen Degen": 3}},
+            {"text": "Chêæ przetestowania w³asnych hipotez.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Obliczenia pokazuj¹ce potencjalny zwrot.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Wiara w prze³omowe technologie.", "scores": {"Meta Degen": 3}},
             {"text": "Trendy, memy, hype i to, co popularne.", "scores": {"Hype Degen": 3}}
         ]
     },
     {
         "question": "Co robisz po udanej inwestycji?",
         "options": [
-            {"text": "CzujÄ™ euforiÄ™ i szukam kolejnej szansy!", "scores": {"Emo Degen": 3}},
-            {"text": "AnalizujÄ™, czy byÅ‚o to zgodne z planem.", "scores": {"Strategist Degen": 3}},
-            {"text": "WypÅ‚acam zyski i idÄ™ dalej  YOLO.", "scores": {"YOLO Degen": 3}},
-            {"text": "PraktykujÄ™ wdziÄ™cznoÅ›Ä‡ i pozostajÄ™ spokojny.", "scores": {"Zen Degen": 3}},
-            {"text": "ZapisujÄ™ dane i aktualizujÄ™ model.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "Zastanawiam siÄ™, jak to powtÃ³rzyÄ‡ na poziomie systemowym.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "SnujÄ™ wizje przyszÅ‚oÅ›ci i szukam czegoÅ› jeszcze bardziej innowacyjnego.", "scores": {"Meta Degen": 3}},
-            {"text": "ChwalÄ™ siÄ™ znajomym  niech wiedzÄ…!", "scores": {"Hype Degen": 3}}
+            {"text": "Czujê euforiê i szukam kolejnej szansy!", "scores": {"Emo Degen": 3}},
+            {"text": "Analizujê, czy by³o to zgodne z planem.", "scores": {"Strategist Degen": 3}},
+            {"text": "Wyp³acam zyski i idê dalej  YOLO.", "scores": {"YOLO Degen": 3}},
+            {"text": "Praktykujê wdziêcznoœæ i pozostajê spokojny.", "scores": {"Zen Degen": 3}},
+            {"text": "Zapisujê dane i aktualizujê model.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Zastanawiam siê, jak to powtórzyæ na poziomie systemowym.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Snujê wizje przysz³oœci i szukam czegoœ jeszcze bardziej innowacyjnego.", "scores": {"Meta Degen": 3}},
+            {"text": "Chwalê siê znajomym  niech wiedz¹!", "scores": {"Hype Degen": 3}}
         ]
     },
     {
-        "question": "Co robisz, gdy masz zainwestowaÄ‡ wiÄ™kszÄ… sumÄ™?",
+        "question": "Co robisz, gdy masz zainwestowaæ wiêksz¹ sumê?",
         "options": [
-            {"text": "WchodzÄ™ od razu, bez zastanowienia.", "scores": {"YOLO Degen": 3}},
+            {"text": "Wchodzê od razu, bez zastanowienia.", "scores": {"YOLO Degen": 3}},
             {"text": "Sprawdzam, czy to pasuje do mojego planu i alokacji.", "scores": {"Strategist Degen": 3}},
-            {"text": "Waham siÄ™, analizujÄ™ i w koÅ„cu nic nie robiÄ™.", "scores": {"Mad Scientist Degen": 3}},
-            {"text": "MedytujÄ™, a potem podejmujÄ™ decyzjÄ™ w zgodzie ze sobÄ….", "scores": {"Zen Degen": 3}},
-            {"text": "EkscytujÄ™ siÄ™, ale potem siÄ™ bojÄ™ i dziaÅ‚am impulsywnie.", "scores": {"Emo Degen": 3}},
-            {"text": "TworzÄ™ peÅ‚nÄ… analizÄ™ w Excelu, zanim zrobiÄ™ cokolwiek.", "scores": {"Spreadsheet Degen": 3}},
-            {"text": "Zastanawiam siÄ™, jak ta inwestycja wpisuje siÄ™ w przyszÅ‚oÅ›Ä‡.", "scores": {"Meta Degen": 3}},
-            {"text": "WpisujÄ™ nazwÄ™ aktywa w Google Trends i Twittera.", "scores": {"Hype Degen": 3}}
+            {"text": "Waham siê, analizujê i w koñcu nic nie robiê.", "scores": {"Mad Scientist Degen": 3}},
+            {"text": "Medytujê, a potem podejmujê decyzjê w zgodzie ze sob¹.", "scores": {"Zen Degen": 3}},
+            {"text": "Ekscytujê siê, ale potem siê bojê i dzia³am impulsywnie.", "scores": {"Emo Degen": 3}},
+            {"text": "Tworzê pe³n¹ analizê w Excelu, zanim zrobiê cokolwiek.", "scores": {"Spreadsheet Degen": 3}},
+            {"text": "Zastanawiam siê, jak ta inwestycja wpisuje siê w przysz³oœæ.", "scores": {"Meta Degen": 3}},
+            {"text": "Wpisujê nazwê aktywa w Google Trends i Twittera.", "scores": {"Hype Degen": 3}}
         ]
     }
 ]

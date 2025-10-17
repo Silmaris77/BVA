@@ -310,7 +310,7 @@ def create_data_driven_mind_map(mind_map_data):
                     help="Wybierz format do eksportu"
                 )
                 
-                if st.button("📸 Instrukcje zrzutu ekranu", use_container_width=True):
+                if st.button("📸 Instrukcje zrzutu ekranu", width="stretch"):
                     st.markdown("""
                     **Jak zrobić zrzut ekranu mapy:**
                     
@@ -330,7 +330,7 @@ def create_data_driven_mind_map(mind_map_data):
                     """)
                 
                 if export_format == "JSON":
-                    if st.button("⬇️ Pobierz JSON", use_container_width=True):
+                    if st.button("⬇️ Pobierz JSON", width="stretch"):
                         import json
                         json_str = json.dumps(mind_map_data, ensure_ascii=False, indent=2)
                         b64 = base64.b64encode(json_str.encode()).decode()

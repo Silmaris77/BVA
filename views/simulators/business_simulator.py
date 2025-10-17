@@ -414,7 +414,7 @@ def show_business_simulator():
         
         # Przycisk start
         st.markdown("")
-        if st.button("▶️ Rozpocznij symulację", type="primary", use_container_width=True):
+        if st.button("▶️ Rozpocznij symulację", type="primary", width="stretch"):
             st.session_state.sim_scenario = selected_id
             st.session_state.sim_started = True
             st.session_state.sim_messages = []
@@ -564,11 +564,11 @@ def show_business_simulator():
         st.markdown("---")
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("🎯 Spróbuj innego scenariusza", type="primary", use_container_width=True):
+            if st.button("🎯 Spróbuj innego scenariusza", type="primary", width="stretch"):
                 reset_simulator()
                 st.rerun()
         with col2:
-            if st.button("❌ Zamknij", use_container_width=True):
+            if st.button("❌ Zamknij", width="stretch"):
                 reset_simulator()
                 # Jeśli jest active_simulator w session_state, wyczyść
                 if 'active_simulator' in st.session_state:

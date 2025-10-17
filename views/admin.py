@@ -506,7 +506,7 @@ def show_admin_dashboard():
                 title='Rozkład stylów uczenia się wśród użytkowników'
             )
             
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(chart, width="stretch")
             
             # GŁÓWNA WIZUALIZACJA: Siatka wszystkich użytkowników
             st.markdown("---")
@@ -659,7 +659,7 @@ def show_admin_dashboard():
                 )
             )
             
-            st.plotly_chart(fig_all, use_container_width=True)
+            st.plotly_chart(fig_all, width="stretch")
             
             # Tabela szczegółowa
             st.markdown("---")
@@ -689,7 +689,7 @@ def show_admin_dashboard():
                     "completed_date": "Data ukończenia"
                 },
                 hide_index=True,
-                use_container_width=True
+                width="stretch"
             )
             
             # Opcja eksportu

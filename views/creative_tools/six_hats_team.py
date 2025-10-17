@@ -94,7 +94,7 @@ def show_problem_selection():
                 template["name"],
                 key=f"template_{key}",
                 help=template["description"],
-                use_container_width=True
+                width="stretch"
             ):
                 st.session_state.sht_problem_type = key
                 st.rerun()
@@ -115,7 +115,7 @@ def show_problem_selection():
         if template['prompts']:
             st.markdown("**Przykładowe pytania:**")
             for prompt in template['prompts']:
-                if st.button(f"💡 {prompt}", key=f"prompt_{prompt}", use_container_width=True):
+                if st.button(f"💡 {prompt}", key=f"prompt_{prompt}", width="stretch"):
                     st.session_state.sht_problem = prompt
         
         st.markdown("---")
@@ -148,7 +148,7 @@ def show_problem_selection():
             if st.button(
                 "🤖 Automatyczny",
                 help="AI przeprowadzi całą sesję automatycznie - obserwuj dyskusję",
-                use_container_width=True,
+                width="stretch",
                 type="primary" if st.session_state.sht_mode == "auto" else "secondary"
             ):
                 st.session_state.sht_mode = "auto"
@@ -157,7 +157,7 @@ def show_problem_selection():
             if st.button(
                 "💬 Interaktywny",
                 help="Możesz zadawać pytania i prosić o wyjaśnienia",
-                use_container_width=True,
+                width="stretch",
                 type="primary" if st.session_state.sht_mode == "interactive" else "secondary"
             ):
                 st.session_state.sht_mode = "interactive"
@@ -173,7 +173,7 @@ def show_problem_selection():
         
         # Start sesji
         if problem_input and problem_input.strip():
-            if st.button("🚀 Rozpocznij sesję kreatywną", type="primary", use_container_width=True):
+            if st.button("🚀 Rozpocznij sesję kreatywną", type="primary", width="stretch"):
                 st.session_state.sht_problem = problem_input.strip()
                 st.session_state.sht_context = context_input.strip() if context_input else ""
                 st.session_state.sht_started = True
@@ -290,7 +290,7 @@ def show_session():
                 if st.button(
                     f"👉 Wysłuchaj {next_hat_def['name']}",
                     type="primary",
-                    use_container_width=True,
+                    width="stretch",
                     key="next_hat_btn"
                 ):
                     response = get_engine().generate_hat_response(
@@ -306,7 +306,7 @@ def show_session():
                     st.rerun()
             
             with col_btn2:
-                if st.button("⏭️ Przejdź do syntezy", key="skip_btn", use_container_width=True):
+                if st.button("⏭️ Przejdź do syntezy", key="skip_btn", width="stretch"):
                     st.session_state.sht_current_hat_index = len(HATS_ORDER)
                     st.session_state.sht_completed = True
                     st.rerun()
@@ -349,7 +349,7 @@ def show_session():
     
     # Przycisk zakończenia dla trybu interaktywnego
     if st.session_state.sht_mode == "interactive" and st.session_state.sht_current_hat_index >= len(HATS_ORDER) and not st.session_state.sht_completed:
-        if st.button("✅ Zakończ sesję i zobacz syntezę", type="primary", use_container_width=True):
+        if st.button("✅ Zakończ sesję i zobacz syntezę", type="primary", width="stretch"):
             st.session_state.sht_completed = True
             st.rerun()
 
@@ -419,7 +419,7 @@ def show_synthesis():
     col_save1, col_save2 = st.columns([2, 1])
     
     with col_save1:
-        if st.button("💾 Zapisz sesję do portfolio", use_container_width=True):
+        if st.button("💾 Zapisz sesję do portfolio", width="stretch"):
             session_data = {
                 "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
                 "problem_type": st.session_state.sht_problem_type,
@@ -450,7 +450,7 @@ def show_synthesis():
             data=transcript,
             file_name=filename,
             mime="text/plain",
-            use_container_width=True
+            width="stretch"
         )
     
     st.markdown("---")
@@ -459,12 +459,12 @@ def show_synthesis():
     col_act1, col_act2 = st.columns(2)
     
     with col_act1:
-        if st.button("🔄 Nowa sesja", use_container_width=True, type="primary"):
+        if st.button("🔄 Nowa sesja", width="stretch", type="primary"):
             reset_six_hats()
             st.rerun()
     
     with col_act2:
-        if st.button("📚 Zobacz portfolio", use_container_width=True):
+        if st.button("📚 Zobacz portfolio", width="stretch"):
             st.session_state.show_sht_portfolio = True
             st.rerun()
 
@@ -574,6 +574,6 @@ def show_portfolio():
                     key=f"download_{idx}"
                 )
     
-    if st.button("⬅️ Powrót", use_container_width=True):
+    if st.button("⬅️ Powrót", width="stretch"):
         st.session_state.show_sht_portfolio = False
         st.rerun()

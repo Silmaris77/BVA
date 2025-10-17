@@ -39,7 +39,7 @@ st.download_button(
     file_name=filename,
     mime="text/html",
     help="Pobierz cheatsheet jako HTML, otwórz w przeglądarce i zapisz jako PDF (Ctrl+P)",
-    use_container_width=True
+    width="stretch"
 )
 st.caption("💡 Po pobraniu: otwórz plik → Ctrl+P → Zapisz jako PDF")
 ```
@@ -91,7 +91,7 @@ Test funkcjonalności przeprowadzony pomyślnie:
 ## 🎨 Wygląd przycisku
 
 Przycisk używa natywnego stylu Streamlit:
-- Szerokość: pełna (use_container_width=True)
+- Szerokość: pełna (width="stretch")
 - Ikona: 📄
 - Tooltip: wyświetla się po najechaniu
 - Caption: krótka podpowiedź pod przyciskiem

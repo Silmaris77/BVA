@@ -911,7 +911,7 @@ def display_ai_exercise_interface(exercise: Dict, lesson_context: str = "") -> b
             # Przycisk Reset pod expanderem
             col1, col2, col3 = st.columns([2, 1, 2])
             with col2:
-                if st.button("🔄 Reset", key=f"reset_{exercise_id}", help="Resetuj to ćwiczenie i zrób je ponownie", use_container_width=True):
+                if st.button("🔄 Reset", key=f"reset_{exercise_id}", help="Resetuj to ćwiczenie i zrób je ponownie", width="stretch"):
                     reset_single_exercise(exercise_id)
                     st.rerun()
         
@@ -1009,7 +1009,7 @@ def display_ai_exercise_interface(exercise: Dict, lesson_context: str = "") -> b
             if not has_feedback:
                 col1, col2, col3 = st.columns([2, 1, 2])
                 with col2:
-                    if st.button("🔄 Wygeneruj nowy", key=f"regenerate_{exercise_id}", help="Nie podoba Ci się ten case? Wygeneruj nowy!", use_container_width=True):
+                    if st.button("🔄 Wygeneruj nowy", key=f"regenerate_{exercise_id}", help="Nie podoba Ci się ten case? Wygeneruj nowy!", width="stretch"):
                         # Usuń wygenerowany case
                         if case_key in st.session_state:
                             del st.session_state[case_key]
