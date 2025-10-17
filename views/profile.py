@@ -270,12 +270,24 @@ def show_profile():
     add_animations_css()
 
     # Main Profile Tabs - usunięto Personalizację, Eksplorator Typów i Typ Neurolidera
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "💰 Historia XP", "📈 Raporty"])
+    # Historia XP przeniesiona jako sub-tab w Statystykach
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "📈 Raporty"])
     
-    # Tab 1: Statistics - podobnie jak w Dashboard
+    # Tab 1: Statistics - z sub-tabami
     with tab1:
         scroll_to_top()
-        show_profile_stats_section(user_data, device_type)
+        # Sub-taby w Statystykach
+        stats_subtab1, stats_subtab2 = st.tabs(["📈 Przegląd", "💰 Historia XP"])
+        
+        # Sub-tab 1: Przegląd statystyk
+        with stats_subtab1:
+            show_profile_stats_section(user_data, device_type)
+        
+        # Sub-tab 2: Historia XP
+        with stats_subtab2:
+            st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
+            show_xp_history_section()
+            st.markdown("</div>", unsafe_allow_html=True)
     
     # Tab 2: Inventory/Equipment
     with tab2:
@@ -639,7 +651,8 @@ def show_profile():
                                     st.error(message)
         
         st.markdown("</div>", unsafe_allow_html=True)
-    # Tab 3: Badges
+    
+    # Tab 3: Badges (poprzednio tab3, bez zmian)
     with tab3:
         scroll_to_top()
         st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
@@ -647,15 +660,8 @@ def show_profile():
         show_badges_section()
         st.markdown("</div>", unsafe_allow_html=True)
     
-    # Tab 4: XP History
+    # Tab 4: Reports (poprzednio tab5, teraz tab4)
     with tab4:
-        scroll_to_top()
-        st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
-        show_xp_history_section()
-        st.markdown("</div>", unsafe_allow_html=True)
-    
-    # Tab 5: Reports
-    with tab5:
         scroll_to_top()
         st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
         show_reports_section()
@@ -697,6 +703,178 @@ def show_xp_history_section():
             f"{int(progress)}%",
             help=f"Do następnego poziomu: {next_level_xp - (current_xp % next_level_xp)} XP"
         )
+    
+    st.markdown("---")
+    
+    # Wykres XP w czasie z regulacją okresu
+    st.markdown("### 📊 Wykres Zdobywania XP")
+    
+    # Kontrolka okresu dla wykresu
+    chart_period_col1, chart_period_col2 = st.columns([3, 1])
+    
+    with chart_period_col1:
+        chart_period = st.select_slider(
+            "Wybierz okres do wyświetlenia:",
+            options=["7 dni", "30 dni", "90 dni", "6 miesięcy", "1 rok", "Wszystko"],
+            value="30 dni",
+            key="chart_period_slider"
+        )
+    
+    with chart_period_col2:
+        show_cumulative = st.checkbox("Skumulowane", value=False, help="Pokaż sumę skumulowaną XP zamiast dziennych przyrostów")
+    
+    # Mapuj okres na dni
+    chart_period_days = {
+        "7 dni": 7,
+        "30 dni": 30,
+        "90 dni": 90,
+        "6 miesięcy": 180,
+        "1 rok": 365,
+        "Wszystko": 3650  # ~10 lat
+    }
+    chart_days = chart_period_days[chart_period]
+    
+    # Pobierz activity_log
+    activity_log = user_data.get('activity_log', [])
+    
+    # Przygotuj dane do wykresu
+    from datetime import datetime, timedelta
+    import pandas as pd
+    
+    chart_cutoff_date = datetime.now() - timedelta(days=chart_days)
+    
+    # Agreguj XP po dniach
+    daily_xp = {}
+    
+    for entry in activity_log:
+        try:
+            timestamp = datetime.fromisoformat(entry['timestamp'])
+            if timestamp >= chart_cutoff_date:
+                date_key = timestamp.date()
+                
+                # Pobierz XP z details lub użyj domyślnych wartości
+                details = entry.get('details', {})
+                xp = details.get('xp_earned', 0)
+                
+                # Fallback dla starych wpisów bez xp_earned
+                if xp == 0:
+                    xp_mapping = {
+                        'lesson_started': 5,
+                        'lesson_completed': 50,
+                        'quiz_completed': 20,
+                        'ai_exercise': 15,
+                        'inspiration_read': 1,
+                        'test_completed': 5,
+                        'tool_used': 1
+                    }
+                    xp = xp_mapping.get(entry['type'], 0)
+                
+                if date_key not in daily_xp:
+                    daily_xp[date_key] = 0
+                daily_xp[date_key] += xp
+        except:
+            continue
+    
+    if daily_xp:
+        # Stwórz DataFrame z pełnym zakresem dat (wypełnij brakujące dni zerami)
+        all_dates = pd.date_range(
+            start=chart_cutoff_date.date(),
+            end=datetime.now().date(),
+            freq='D'
+        )
+        
+        chart_data = pd.DataFrame({
+            'Data': all_dates,
+            'XP': [daily_xp.get(date.date(), 0) for date in all_dates]
+        })
+        
+        # Jeśli skumulowane, oblicz sumę narastającą
+        if show_cumulative:
+            chart_data['XP'] = chart_data['XP'].cumsum()
+            y_label = "Skumulowane XP"
+            chart_title = f"📈 Skumulowane XP w czasie ({chart_period})"
+        else:
+            y_label = "Dzienne XP"
+            chart_title = f"📊 Dzienne zdobywanie XP ({chart_period})"
+        
+        # Wykres z Plotly dla lepszej interaktywności
+        try:
+            import plotly.express as px
+            
+            fig = px.area(
+                chart_data,
+                x='Data',
+                y='XP',
+                title=chart_title,
+                labels={'XP': y_label, 'Data': 'Data'},
+                color_discrete_sequence=['#667eea']
+            )
+            
+            fig.update_traces(
+                line=dict(width=2),
+                fillcolor='rgba(102, 126, 234, 0.2)',
+                hovertemplate='<b>%{x|%Y-%m-%d}</b><br>XP: %{y}<extra></extra>'
+            )
+            
+            fig.update_layout(
+                hovermode='x unified',
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                xaxis=dict(
+                    showgrid=True,
+                    gridcolor='rgba(128,128,128,0.2)',
+                    title_font=dict(size=14)
+                ),
+                yaxis=dict(
+                    showgrid=True,
+                    gridcolor='rgba(128,128,128,0.2)',
+                    title_font=dict(size=14)
+                ),
+                title_font=dict(size=18, color='#667eea'),
+                height=400
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Statystyki pod wykresem
+            col_chart1, col_chart2, col_chart3, col_chart4 = st.columns(4)
+            with col_chart1:
+                total_chart_xp = chart_data['XP'].sum() if not show_cumulative else chart_data['XP'].iloc[-1]
+                st.metric("Łącznie XP", f"{int(total_chart_xp)}")
+            with col_chart2:
+                try:
+                    if not show_cumulative:
+                        avg_daily_xp = chart_data['XP'].mean()
+                    else:
+                        daily_diff = chart_data['XP'].diff()
+                        avg_daily_xp = daily_diff[daily_diff.notna()].mean() if len(daily_diff) > 1 else 0
+                    avg_val = int(avg_daily_xp) if avg_daily_xp and str(avg_daily_xp) != 'nan' else 0
+                except:
+                    avg_val = 0
+                st.metric("Średnio dziennie", f"{avg_val}")
+            with col_chart3:
+                try:
+                    if not show_cumulative:
+                        max_daily_xp = chart_data['XP'].max()
+                    else:
+                        daily_diff = chart_data['XP'].diff()
+                        max_daily_xp = daily_diff[daily_diff.notna()].max() if len(daily_diff) > 1 else 0
+                    max_val = int(max_daily_xp) if max_daily_xp and str(max_daily_xp) != 'nan' else 0
+                except:
+                    max_val = 0
+                st.metric("Najlepszy dzień", f"{max_val}")
+            with col_chart4:
+                days_with_activity = (chart_data['XP'] > 0).sum() if not show_cumulative else None
+                if days_with_activity is not None:
+                    st.metric("Dni aktywnych", f"{days_with_activity}/{len(chart_data)}")
+                else:
+                    st.metric("Trend", "📈" if chart_data['XP'].iloc[-1] > chart_data['XP'].iloc[0] else "📉")
+            
+        except ImportError:
+            # Fallback do prostego wykresu Streamlit
+            st.line_chart(chart_data.set_index('Data')['XP'])
+    else:
+        st.info(f"Brak danych XP w wybranym okresie ({chart_period}). Zacznij zdobywać doświadczenie!")
     
     st.markdown("---")
     

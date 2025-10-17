@@ -195,5 +195,63 @@
       }
     ],
     "current_profile": 0
+  },
+  "Basia": {
+    "profiles": [
+      {
+        "dominant_ciq_level": "I",
+        "ciq_distribution": {
+          "level_i_percentage": 75,
+          "level_ii_percentage": 25,
+          "level_iii_percentage": 0
+        },
+        "leadership_style": {
+          "primary_style": "directive_aggressive",
+          "flexibility_score": 1,
+          "adaptability": "low"
+        },
+        "communication_patterns": {
+          "question_types": "closed",
+          "language_patterns": [
+            "Bezpośredni i żądający ton, brak budowania kontekstu.",
+            "Agresywne i obraźliwe słownictwo (np. 'spierdalaj').",
+            "Powierzchowne przeprosiny bez głębszej refleksji nad przyczyną ani konsekwencjami ('Nie wiem, co we mnie wstąpiło').",
+            "Brak empatii i ignorowanie perspektywy rozmówcy."
+          ],
+          "emotional_intelligence": 1
+        },
+        "neurobiological_impact": {
+          "cortisol_triggers": 10,
+          "oxytocin_builders": 1,
+          "psychological_safety": 1
+        },
+        "strengths": [
+          "Zdolność do inicjowania kontaktu (choć cel i sposób są nieefektywne).",
+          "Minimalna, aczkolwiek opóźniona, świadomość niewłaściwego zachowania wyrażona przeprosinami."
+        ],
+        "development_areas": [
+          "Emocjonalna regulacja i kontrola impulsów.",
+          "Rozwijanie empatii i umiejętności aktywnego słuchania.",
+          "Przejście od komunikacji transakcyjnej do transformacyjnej (C-IQ Level III).",
+          "Budowanie zaufania i bezpieczeństwa psychologicznego w zespole.",
+          "Profesjonalizm w komunikacji i unikanie języka obraźliwego.",
+          "Zarządzanie konfliktem w konstruktywny sposób."
+        ],
+        "leadership_evolution": {
+          "trajectory": "declining",
+          "consistency": 10,
+          "growth_potential": 1
+        },
+        "team_impact": {
+          "predicted_engagement": 1,
+          "trust_building_capability": 1,
+          "conflict_resolution": 1
+        },
+        "created_at": "2025-10-17T15:45:30.431628",
+        "username": "Basia",
+        "profile_name": "Profil 2025-10-17 15:45"
+      }
+    ],
+    "current_profile": 0
   }
 }

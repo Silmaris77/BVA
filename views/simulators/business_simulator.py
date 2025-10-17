@@ -9,45 +9,37 @@ import json
 import re
 
 # ===============================================
-# SCENARIUSZE ROZMÓW
+# SCENARIUSZE ROZMÓW - SZABLON
 # ===============================================
 
 SCENARIOS = {
     "salary_raise": {
         "name": "💰 Rozmowa o podwyżkę",
-        "description": "Prosisz szefa o podwyżkę. Twój szef jest wymagający i skupiony na wynikach.",
-        "ai_persona": "Jesteś wymagającym dyrektorem firmy. Cenisz konkretne wyniki i liczby. Jesteś sceptyczny wobec próśb o podwyżkę, chyba że rozmówca przedstawi mocne argumenty biznesowe. Nie jesteś wrogi, ale wymagasz przekonujących dowodów wartości pracownika.",
+        "description": "Prosisz szefa o podwyżkę",
         "ai_role": "Szef",
         "user_role": "Pracownik",
         "initiator": "user",
-        "context": "Jesteś Senior Developer w firmie technologicznej. Pracujesz od 2 lat bez podwyżki, a konkurencja oferuje o 30% więcej. Niedawno firma miała rundę zwolnień, ale Ty przynosisz kluczowe rezultaty dla kluczowego projektu."
     },
     "difficult_feedback": {
         "name": "📢 Feedback dla pracownika",
-        "description": "Musisz przekazać trudny feedback pracownikowi, który nie spełnia oczekiwań.",
-        "ai_persona": "Jesteś pracownikiem o imieniu Marek, który nie zdaje sobie sprawy z problemów w swojej pracy. Początkowo możesz być defensywny i szukać wymówek, ale jeśli rozmówca użyje empatii i konkretnych przykładów (poziom Transformacyjny C-IQ), stopniowo stajesz się otwarty na feedback i chętny do poprawy.",
+        "description": "Musisz przekazać trudny feedback pracownikowi",
         "ai_role": "Pracownik",
         "user_role": "Menedżer",
         "initiator": "user",
-        "context": "Jesteś menedżerem zespołu developerów. Twój pracownik Marek (3 lata w firmie) ostatnio spóźnia projekty o 2-3 tygodnie i popełnia błędy w kodzie. Zauważyłeś że jest rozproszony i nie prosi o pomoc. Musisz przekazać mu konstruktywny feedback."
     },
     "team_conflict": {
         "name": "⚡ Rozwiązanie konfliktu",
-        "description": "Dwóch członków zespołu ma konflikt. Musisz pomóc im się porozumieć.",
-        "ai_persona": "Jesteś Anią, sfrustrowaną członkinią zespołu, która czuje się niedoceniona. Uważasz że Twój kolega Tomek przerzuca na Ciebie swoją pracę i odbiera uznanie za Twoje pomysły. Jesteś lekko agresywna i obwiniasz innych. Możesz się uspokoić tylko jeśli rozmówca wykaże empatię i pomoże znaleźć wspólne rozwiązanie (C-IQ Transformacyjny).",
+        "description": "Dwóch członków zespołu ma konflikt",
         "ai_role": "Członek zespołu",
         "user_role": "Mediator",
         "initiator": "user",
-        "context": "Jesteś mediatorem w konflikcie między Anią (UX Designer) a Tomkiem (Frontend Dev). Oboje pracują nad tym samym projektem od 3 miesięcy. Ania czuje się niedoceniona i przytłoczona, Tomek jest sfrustrowany brakiem współpracy. Konflikt wpływa na cały zespół."
     },
     "delegation": {
         "name": "📋 Delegowanie zadania",
-        "description": "Delegujesz ważne zadanie pracownikowi, który ma już duże obciążenie pracą.",
-        "ai_persona": "Jesteś Kasią, przeciążoną pracownicą, która ma już pełne ręce roboty - prowadzisz 3 projekty z deadline'ami w tym tygodniu. Czujesz się zmęczona i obawiasz się, że kolejne zadanie Cię przytłoczy i wszystko się posypie. Jesteś otwarta na rozmowę, ale potrzebujesz wsparcia, jasnych priorytetów i konkretnego planu.",
+        "description": "Delegujesz ważne zadanie pracownikowi",
         "ai_role": "Pracownik",
         "user_role": "Menedżer",
         "initiator": "user",
-        "context": "Jesteś menedżerem. Masz pilny projekt od CEO który trzeba oddać w 5 dni - migracja krytycznego systemu. Kasia jest jedyną osobą w zespole która zna tę technologię, ale już prowadzi 3 projekty. Nie ma innych opcji - klient czeka."
     },
     "motivation": {
         "name": "🔥 Motywowanie zdemotywowanego",

@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 901,
+    "xp": 1623,
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-17 13:40:30",
+    "last_login": "2025-10-17 22:32:11",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -817,7 +817,7 @@
         "completed_lessons": 2
       },
       "2025-10-17": {
-        "xp": 901,
+        "xp": 1623,
         "degencoins": 563,
         "level": 1,
         "completed_lessons": 2
@@ -1091,6 +1091,574 @@
           "scenario": "salary_raise",
           "scenario_name": "💰 Rozmowa o podwyżkę",
           "xp_earned": 1
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T16:44:17.596310",
+        "details": {
+          "timestamp": "2025-10-17T16:44:17.591798"
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T16:45:18.137607",
+        "details": {
+          "tool_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T20:36:42.946287",
+        "details": {
+          "timestamp": "2025-10-17T20:36:42.938241"
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T20:53:14.202330",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T20:54:54.098313",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T20:55:37.651321",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T20:56:16.775707",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T20:56:38.407352",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T20:57:52.354351",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T20:58:48.560894",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T20:59:12.804128",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T20:59:37.415026",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:00:07.588494",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:00:39.548027",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:01:11.044631",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:01:44.459953",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:02:13.952547",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:02:44.667822",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:03:15.029375",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:03:40.948565",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:13:20.885885",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:14:44.028076",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:15:40.128107",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:16:44.847358",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:17:19.305373",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:18:12.709276",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:19:01.213326",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:19:27.948689",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:19:49.954664",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:20:45.929120",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:26:03.146820",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:26:55.782265",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:27:46.967294",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:28:45.322565",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:29:08.409341",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:29:30.680235",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:30:28.044420",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:30:56.441539",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:31:26.314451",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:31:46.624162",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:32:34.909126",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:32:57.419226",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:33:37.822680",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:34:07.177608",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:35:38.920469",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:36:09.572079",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:37:06.560217",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:37:37.253467",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:38:33.611169",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:39:00.961681",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T21:40:44.134341",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "difficult_client",
+          "difficulty": "medium",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T21:48:42.419704",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom I",
+          "confidence": 9,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T22:32:11.214618",
+        "details": {
+          "timestamp": "2025-10-17T22:32:11.202486"
         }
       }
     ],
@@ -1400,6 +1968,57 @@
         "period_end": "2025-10-17",
         "report_type": "weekly",
         "username": "Max"
+      },
+      {
+        "summary_headline": "Wykorzystaj potencjał: Sesje AI to Twój atut!",
+        "engagement_score": 5,
+        "engagement_trend": "stabilny",
+        "strengths": [
+          "Intensywne korzystanie z sesji AI (56 w ciągu tygodnia) świadczy o zaangażowaniu w praktyczne ćwiczenia.",
+          "Aktywność w narzędziach Business Conversation Simulator i Business Simulator v2 wskazuje na zainteresowanie symulacjami biznesowymi.",
+          "Ukończone 2 lekcje z 14 to solidny fundament wiedzy."
+        ],
+        "concerns": [
+          "Niska częstotliwość logowania (1 dzień na 7) ogranicza regularny kontakt z materiałami.",
+          "Brak ukończonych lekcji w ostatnim tygodniu sugeruje potrzebę skupienia się na dokończeniu rozpoczętych kursów.",
+          "Niski wskaźnik zdawalności quizów (0%) i ukończenie tylko jednego quizu w ciągu 30 dni wskazuje na potrzebę powtórki materiału."
+        ],
+        "insights": [
+          "Dominująca aktywność w sesjach AI w piątek o godzinie 13:00 może wskazywać na preferowany czas na naukę.",
+          "Profil Kolba (Dywergent) sugeruje preferencje dla burzy mózgów i generowania pomysłów, co pasuje do korzystania z symulatorów biznesowych."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Wyznacz sobie cel ukończenia jednej lekcji dziennie przez najbliższe 3 dni.",
+            "why": "Regularne ukończone lekcje pomogą utrwalić wiedzę i zwiększyć poczucie postępu.",
+            "estimated_time": "30 minut"
+          },
+          {
+            "priority": "wysoki",
+            "action": "Powtórz materiał z lekcji, które są 'w trakcie' i spróbuj ponownie rozwiązać quiz.",
+            "why": "Poprawa wyników quizów wzmocni Twoją pewność siebie i utrwali wiedzę.",
+            "estimated_time": "60 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Wykorzystaj swoją preferencję dla generowania pomysłów (profil Dywergenta) do poszukiwania kreatywnych rozwiązań w symulacjach biznesowych.",
+            "why": "Pozwoli to lepiej wykorzystać Twoje mocne strony i zwiększyć satysfakcję z nauki.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Spróbuj zalogować się na platformę w inne dni tygodnia, aby sprawdzić, czy znajdziesz dodatkowy czas na naukę.",
+            "why": "Rozszerzenie aktywności na inne dni może pomóc w bardziej równomiernym rozłożeniu nauki.",
+            "estimated_time": "5 minut"
+          }
+        ],
+        "motivational_message": "Wykorzystaj swój potencjał w sesjach AI do praktycznego treningu! Skup się na małych krokach i regularnym logowaniu, a szybko zobaczysz postępy. Pamiętaj, że każdy ukończony quiz to krok bliżej do celu!",
+        "generated_at": "2025-10-17T21:42:10.557455",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Max"
       }
     ]
   },
@@ -1411,7 +2030,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-16 09:24:33",
+    "last_login": "2025-10-17 17:41:58",
     "completed_lessons": [
       "2. Chemia mózgu"
     ],
@@ -1950,6 +2569,12 @@
         "degencoins": 236,
         "level": 1,
         "completed_lessons": 1
+      },
+      "2025-10-17": {
+        "xp": 236,
+        "degencoins": 236,
+        "level": 1,
+        "completed_lessons": 1
       }
     },
     "kolb_test": {
@@ -1967,7 +2592,16 @@
       "quadrant": "AC/RO",
       "flexibility": 83.33,
       "completed_date": "2025-10-16 10:02:03"
-    }
+    },
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T17:41:59.076432",
+        "details": {
+          "timestamp": "2025-10-17T17:41:59.067073"
+        }
+      }
+    ]
   },
   "Piotr": {
     "user_id": "2686f4c8-e6dd-4463-9d39-b5724604ad4c",
@@ -3082,7 +3716,7 @@
     "user_id": "fd17159b-23c8-4730-bf28-80afeeb1f797",
     "password": "Basia",
     "degen_type": null,
-    "xp": 239,
+    "xp": 545,
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-10-17",
@@ -3098,7 +3732,7 @@
     },
     "daily_stats": {
       "2025-10-17": {
-        "xp": 239,
+        "xp": 545,
         "degencoins": 0,
         "level": 1,
         "completed_lessons": 0
@@ -3420,6 +4054,282 @@
           "scenario_name": "🔄 Opór wobec zmian",
           "turns": 1,
           "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:41:34.800083",
+        "details": {
+          "tool_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:45:46.574678",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "easy",
+          "turns": 0,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:45:50.972038",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "easy",
+          "turns": 0,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:46:39.318011",
+        "details": {
+          "tool_name": "Business Simulator v2",
+          "scenario": "delegation",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:51:39.185643",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "delegation",
+          "difficulty": "easy",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:51:50.433589",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "delegation",
+          "difficulty": "easy",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:51:56.234234",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "delegation",
+          "difficulty": "easy",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:52:25.522281",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom III",
+          "confidence": 7,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:52:25.721465",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "delegation",
+          "difficulty": "easy",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:54:19.651461",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "delegation",
+          "difficulty": "easy",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:54:22.568728",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "delegation",
+          "difficulty": "easy",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:54:30.297640",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "delegation",
+          "difficulty": "easy",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:54:47.645479",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "delegation",
+          "difficulty": "easy",
+          "turns": 1,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:58:37.880583",
+        "details": {
+          "tool_name": "Business Simulator v2",
+          "scenario": "salary_raise",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T15:12:09.210330",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "salary_raise",
+          "difficulty": "medium",
+          "turns": 7,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T15:12:35.173767",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "salary_raise",
+          "difficulty": "medium",
+          "turns": 7,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T15:14:43.786209",
+        "details": {
+          "tool_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T15:23:19.061296",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "medium",
+          "turns": 3,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T15:44:07.502447",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "medium",
+          "turns": 3,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T15:45:58.113353",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "medium",
+          "turns": 3,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T15:47:11.714781",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "medium",
+          "turns": 3,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T15:49:04.339455",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "medium",
+          "turns": 3,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T16:01:31.711619",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom I",
+          "confidence": 7,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T16:02:16.224473",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "medium",
+          "turns": 3,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T16:41:35.511038",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "medium",
+          "turns": 3,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T16:43:24.063513",
+        "details": {
+          "exercise_name": "Business Simulator v2",
+          "scenario": "team_conflict",
+          "difficulty": "medium",
+          "turns": 3,
           "xp_earned": 15
         }
       }

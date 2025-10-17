@@ -2587,10 +2587,11 @@ def show_tools_page():
         st.session_state.tools_tab = None
     
     # Główne kategorie w tabach
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
         "🎯 Autodiagnoza",
         "🧠 C-IQ Tools", 
-        "🎭 Symulatory", 
+        "🎭 Symulatory",
+        "🎨 Kreatywność",
         "📊 Analityki", 
         "🤖 AI Asystent"
     ])
@@ -2603,11 +2604,14 @@ def show_tools_page():
     
     with tab3:
         show_simulators()
-        
+    
     with tab4:
+        show_creative_tools()
+        
+    with tab5:
         show_analytics()
     
-    with tab5:
+    with tab6:
         show_ai_assistant()
 
 def show_ciq_tools():
@@ -4841,11 +4845,11 @@ def show_simulators():
     """Symulatory komunikacyjne"""
     # Wymuś przeładowanie modułu w trybie dev
     import sys
-    if 'views.simulators.business_simulator' in sys.modules:
+    if 'views.simulators.business_simulator_v2' in sys.modules:
         import importlib
-        importlib.reload(sys.modules['views.simulators.business_simulator'])
+        importlib.reload(sys.modules['views.simulators.business_simulator_v2'])
     
-    from views.simulators.business_simulator import show_business_simulator
+    from views.simulators.business_simulator_v2 import show_business_simulator
     
     st.markdown("### 🎭 Symulatory Komunikacyjne")
     st.markdown("Interaktywne symulacje różnych scenariuszy komunikacyjnych")
@@ -4856,18 +4860,20 @@ def show_simulators():
     with col1:
         business_sim_html = '''
         <div style='padding: 20px; border: 2px solid #9C27B0; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #f3e5f5 0%, #ce93d8 100%);'>
-            <h4>💼 Symulator Rozmów Biznesowych</h4>
-            <p><strong>Ćwicz trudne rozmowy z AI partnerem</strong></p>
+            <h4>💼 Symulator Rozmów Biznesowych v2.0</h4>
+            <p><strong>✨ Nowa wersja z AI-generowanym kontekstem!</strong></p>
             <ul style='margin: 10px 0; padding-left: 20px;'>
-                <li>🎯 8 różnych scenariuszy biznesowych</li>
-                <li>🤖 AI odgrywa różne role</li>
-                <li>📊 Analiza C-IQ w czasie rzeczywistym</li>
+                <li>🎯 8 scenariuszy biznesowych</li>
+                <li>⚙️ 3 poziomy trudności (łatwy/średni/trudny)</li>
+                <li>🤖 AI generuje realistyczny kontekst</li>
+                <li>📊 Analiza C-IQ + feedback</li>
+                <li>🔄 Możliwość poprawiania odpowiedzi</li>
             </ul>
         </div>
         '''
         st.markdown(business_sim_html, unsafe_allow_html=True)
         
-        if zen_button("💼 Uruchom Symulator", key="business_simulator", width='stretch'):
+        if zen_button("💼 Uruchom Symulator v2.0", key="business_simulator", width='stretch'):
             st.session_state.active_simulator = "business_conversation"
     
     with col2:
@@ -4893,6 +4899,61 @@ def show_simulators():
     if active_simulator == "business_conversation":
         st.markdown("---")
         show_business_simulator()
+
+def show_creative_tools():
+    """Narzędzia kreatywne i innowacyjne"""
+    from views.creative_tools.six_hats_team import show_six_hats_team
+    
+    st.markdown("### 🎨 Narzędzia Kreatywne")
+    st.markdown("Techniki innowacyjnego myślenia i generowania pomysłów")
+    
+    # Siatka narzędzi
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        six_hats_html = '''
+        <div style='padding: 20px; border: 2px solid #FF9800; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%);'>
+            <h4>🎩 Wirtualny Zespół Kreatywny</h4>
+            <p><strong>6 Kapeluszy de Bono z AI</strong></p>
+            <ul style='margin: 10px 0; padding-left: 20px;'>
+                <li>🤍 Biały - Fakty i dane</li>
+                <li>🔴 Czerwony - Emocje i intuicja</li>
+                <li>⚫ Czarny - Ryzyka i problemy</li>
+                <li>🟡 Żółty - Szanse i korzyści</li>
+                <li>🟢 Zielony - Kreatywne pomysły</li>
+                <li>🔵 Niebieski - Moderacja i synteza</li>
+            </ul>
+            <p><strong>✨ Tryb auto i interaktywny | Konflikty między kapeluszami | Portfolio sesji</strong></p>
+        </div>
+        '''
+        st.markdown(six_hats_html, unsafe_allow_html=True)
+        
+        if zen_button("🎩 Uruchom Zespół Kreatywny", key="six_hats_team", width='stretch'):
+            st.session_state.active_creative_tool = "six_hats"
+    
+    with col2:
+        brainstorm_html = '''
+        <div style='padding: 20px; border: 2px solid #3F51B5; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #e8eaf6 0%, #9fa8da 100%); opacity: 0.6;'>
+            <h4>🧠 AI Brainstorm Facilitator</h4>
+            <p><strong>🚧 W przygotowaniu 🚧</strong></p>
+            <ul style='margin: 10px 0; padding-left: 20px;'>
+                <li>⚡ Facylitacja burzy mózgów</li>
+                <li>🎯 SCAMPER, Mind Mapping</li>
+                <li>💡 Generowanie innowacji</li>
+            </ul>
+        </div>
+        '''
+        st.markdown(brainstorm_html, unsafe_allow_html=True)
+        
+        if zen_button("🧠 Uruchom Brainstorm", key="brainstorm_tool", width='stretch'):
+            st.info("🚧 W przygotowaniu - zaawansowany facylitator burzy mózgów")
+    
+    # Wyświetl aktywne narzędzie
+    active_tool = st.session_state.get('active_creative_tool')
+    
+    if active_tool == "six_hats":
+        st.markdown("---")
+        show_six_hats_team()
 
 def show_analytics():
     """Analityki i tracking postępów"""
