@@ -7,7 +7,7 @@
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-16 20:18:11",
+    "last_login": "2025-10-17 02:09:29",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -806,6 +806,12 @@
         "degencoins": 563,
         "level": 1,
         "completed_lessons": 2
+      },
+      "2025-10-17": {
+        "xp": 773,
+        "degencoins": 563,
+        "level": 1,
+        "completed_lessons": 2
       }
     },
     "inventory": {
@@ -828,7 +834,110 @@
       "quadrant": "CE/RO",
       "flexibility": 81.37,
       "completed_date": "2025-10-16 13:29:28"
-    }
+    },
+    "activity_log": [],
+    "reports": [
+      {
+        "summary_headline": "Odśwież motywację i wróć do rozwoju!",
+        "engagement_score": 1,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Ukończyłeś 2 lekcje, pokazując potencjał do nauki.",
+          "Posiadasz profil Kolba (Dywergent), co ułatwia personalizację ścieżki.",
+          "Masz 6 lekcji w toku, co wskazuje na zainteresowanie materiałem."
+        ],
+        "concerns": [
+          "Brak logowań w ciągu ostatnich 7 dni (0/7) sugeruje spadek motywacji.",
+          "Niska liczba ukończonych lekcji (2/14) może hamować postęp."
+        ],
+        "insights": [
+          "Profil Dywergent sugeruje, że preferujesz naukę przez doświadczenie i dyskusje.",
+          "Porzucone lekcje (6) mogą wskazywać na trudności z dopasowaniem materiału do Twoich potrzeb."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaloguj się na platformę i poświęć 10 minut na przejrzenie jednej lekcji 'W toku'.",
+            "why": "Pomaga to przywrócić nawyk i odświeżyć wiedzę.",
+            "estimated_time": "10 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Skup się na ukończeniu jednej z lekcji 'W toku' w tym tygodniu.",
+            "why": "Małe zwycięstwo wzmocni motywację i poczucie sprawczości.",
+            "estimated_time": "30-60 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Wykorzystaj swój styl uczenia się (Dywergent) – spróbuj podyskutować o treści lekcji z kolegą lub na forum.",
+            "why": "Aktywne zaangażowanie w dyskusję pomoże lepiej zrozumieć materiał.",
+            "estimated_time": "30 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Zastanów się, dlaczego porzuciłeś 6 lekcji i spróbuj znaleźć alternatywne materiały o podobnej tematyce.",
+            "why": "Pozwoli to zidentyfikować przeszkody i dostosować ścieżkę nauki.",
+            "estimated_time": "15 minut"
+          }
+        ],
+        "motivational_message": "Każdy krok, nawet najmniejszy, przybliża Cię do celu. Zacznij od małego, a zobaczysz, jak szybko wrócisz na właściwe tory! Pamiętaj, że Twój profil Dywergent to Twój atut – wykorzystaj go.",
+        "generated_at": "2025-10-17T02:09:53.695077",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Max"
+      },
+      {
+        "summary_headline": "Małe kroki prowadzą do wielkich sukcesów! Zacznijmy.",
+        "engagement_score": 1,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Ukończyłeś 2 lekcje, pokazując potencjał do nauki.",
+          "Masz 6 lekcji w toku, co wskazuje na zainteresowanie tematem.",
+          "Twój styl uczenia się (Dywergent) sprzyja kreatywności i generowaniu pomysłów."
+        ],
+        "concerns": [
+          "Brak aktywności w ciągu ostatnich 7 dni (0 logowań).",
+          "Wysoki odsetek porzuconych lekcji (6/14) może wskazywać na brak motywacji lub trudności."
+        ],
+        "insights": [
+          "Brak regularnych logowań negatywnie wpływa na postępy w nauce.",
+          "Profil Dywergenta sugeruje, że możesz czerpać korzyści z zajęć angażujących kreatywność i dyskusje."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaloguj się na platformę i poświęć 5 minut na przeczytanie jednej inspiracji.",
+            "why": "Regularne, nawet krótkie sesje pomogą odzyskać nawyk nauki.",
+            "estimated_time": "5 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Wybierz jedną z lekcji 'w toku' i spróbuj ukończyć jeden moduł.",
+            "why": "Osiągnięcie małego celu zwiększy motywację i poczucie sprawczości.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Zastanów się, dlaczego porzuciłeś poprzednie lekcje i spróbuj zidentyfikować przeszkody.",
+            "why": "Świadomość problemów pomoże w ich rozwiązaniu i uniknięciu w przyszłości.",
+            "estimated_time": "10 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Zapoznaj się z materiałami dotyczącymi stylu uczenia się 'Dywergent' i spróbuj dostosować metody nauki.",
+            "why": "Wykorzystanie mocnych stron Twojego stylu uczenia się zwiększy efektywność nauki.",
+            "estimated_time": "20 minut"
+          }
+        ],
+        "motivational_message": "Każdy krok, nawet najmniejszy, przybliża Cię do celu. Pamiętaj, że jesteś Dywergentem - wykorzystaj swoją kreatywność i otwartość na pomysły, by uczyć się efektywniej! Zacznij już dziś.",
+        "generated_at": "2025-10-17T02:13:58.221618",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Max"
+      }
+    ]
   },
   "admin": {
     "user_id": "4c552312-1787-4a02-a06f-b6538e83adb7",
@@ -2310,6 +2419,184 @@
       "quadrant": "CE/RO",
       "flexibility": 83.33,
       "completed_date": "2025-10-16 19:37:44"
+    }
+  },
+  "Maja": {
+    "user_id": "330cd2c4-9973-4090-90da-3ee713bde060",
+    "password": "Maja",
+    "degen_type": null,
+    "xp": 56,
+    "degencoins": 56,
+    "level": 1,
+    "joined_date": "2025-10-17",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [
+        "forrest_gump_neuroleadership"
+      ],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-17": {
+        "xp": 56,
+        "degencoins": 56,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "activity_log": [
+      {
+        "type": "inspiration_read",
+        "timestamp": "2025-10-17T08:49:23.014311",
+        "details": {
+          "inspiration_id": "forrest_gump_neuroleadership",
+          "inspiration_title": "Co Forrest Gump wiedział o neuroprzywództwie?"
+        }
+      }
+    ],
+    "reports": [
+      {
+        "summary_headline": "Czas zacząć przygodę z rozwojem osobistym, Maja!",
+        "engagement_score": 1,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Gotowość do rozpoczęcia - masz założone konto!",
+          "Potencjał do rozwoju - system oferuje szeroki zakres materiałów."
+        ],
+        "concerns": [
+          "Brak logowań w ciągu ostatnich 7 dni (0/7).",
+          "Brak ukończonych i rozpoczętych lekcji.",
+          "Brak wykonanych testów profilowych (Kolba, Neurolidera)."
+        ],
+        "insights": [
+          "Brak aktywności sugeruje potencjalny brak czasu, motywacji lub dopasowania do oferowanych treści.",
+          "Wykonanie testów profilowych pomoże w lepszym dopasowaniu treści do Twojego stylu uczenia się."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaloguj się do platformy i poświęć 5 minut na przegląd dostępnych lekcji.",
+            "why": "Pierwszy krok to przełamanie bariery i zobaczenie, co oferuje platforma.",
+            "estimated_time": "5 minut"
+          },
+          {
+            "priority": "wysoki",
+            "action": "Wykonaj Test Kolba, aby lepiej zrozumieć swój styl uczenia się.",
+            "why": "Dzięki temu system dopasuje rekomendacje do Twoich preferencji.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Wybierz jedną, krótką lekcję (poniżej 10 minut) z interesującego Cię obszaru i ukończ ją.",
+            "why": "Poczucie ukończenia zadania zwiększy motywację i pokaże, że rozwój osobisty nie musi być czasochłonny.",
+            "estimated_time": "10 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Przejrzyj dział inspiracji - może znajdziesz coś, co Cię zmotywuje.",
+            "why": "Inspiracja od innych może pomóc w znalezieniu własnej ścieżki rozwoju.",
+            "estimated_time": "5 minut"
+          }
+        ],
+        "motivational_message": "Każdy, nawet najmniejszy krok, ma znaczenie! Zacznij od małych, łatwych zadań i zobacz, jak szybko zaczniesz się rozwijać. Pamiętaj, że jesteś w stanie osiągnąć swoje cele!",
+        "generated_at": "2025-10-17T08:48:16.493829",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Maja"
+      },
+      {
+        "summary_headline": "Małe kroki, wielkie zmiany! Zacznijmy razem tydzień.",
+        "engagement_score": 1,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Zacząłeś tydzień od przeczytania inspiracji!",
+          "Gotowość do rozwoju osobistego jest kluczowa."
+        ],
+        "concerns": [
+          "Brak logowań w ciągu ostatnich 7 dni wskazuje na brak aktywności.",
+          "Niezrealizowane lekcje oznaczają brak postępów w nauce."
+        ],
+        "insights": [
+          "Wygląda na to, że potrzebujesz więcej motywacji lub czasu na rozwój.",
+          "Ukończenie testów Kolba i Neurolidera pomogłoby spersonalizować ścieżkę nauki."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaloguj się jutro i poświęć 5 minut na platformie.",
+            "why": "Regularność jest kluczem do wyrobienia nawyku.",
+            "estimated_time": "5 minut"
+          },
+          {
+            "priority": "wysoki",
+            "action": "Wykonaj test Kolba i Neurolidera.",
+            "why": "Dzięki nim lepiej zrozumiesz swój styl uczenia się i preferencje.",
+            "estimated_time": "20 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Wybierz jedną, krótką lekcję i postaraj się ją ukończyć w tym tygodniu.",
+            "why": "Małe sukcesy budują motywację do dalszej nauki.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Ustaw przypomnienie w telefonie o codziennym logowaniu się do platformy.",
+            "why": "Przypomnienie pomoże Ci pamiętać o regularnym korzystaniu z platformy.",
+            "estimated_time": "2 minuty"
+          }
+        ],
+        "motivational_message": "Pamiętaj, że każdy krok, nawet najmniejszy, przybliża Cię do celu. Skup się na małych, regularnych działaniach, a zobaczysz rezultaty. Wierzymy w Ciebie!",
+        "generated_at": "2025-10-17T08:49:47.134435",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Maja"
+      }
+    ],
+    "recent_activities": [
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "forrest_gump_neuroleadership",
+          "inspiration_title": "Co Forrest Gump wiedział o neuroprzywództwie?"
+        },
+        "timestamp": "2025-10-17T06:49:22.977474+00:00"
+      }
+    ],
+    "lesson_progress": {
+      "11. Od słów do zaufania - Conversational Intelligence": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 8,
+        "intro_degencoins": 8,
+        "intro_timestamp": "2025-10-17 08:51:05",
+        "content_xp_awarded": true,
+        "content_completed": true,
+        "content_xp": 48,
+        "content_degencoins": 48,
+        "content_timestamp": "2025-10-17 08:53:56"
+      }
     }
   }
 }

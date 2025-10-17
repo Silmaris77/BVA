@@ -711,6 +711,17 @@ def calculate_kolb_results():
             }
             
             save_user_data(users_data)
+            
+            # Zaloguj ukończenie testu
+            try:
+                from utils.activity_tracker import log_activity
+                log_activity(username, 'test_completed', {
+                    'test_name': 'Kolb Learning Styles',
+                    'dominant_style': dominant_style,
+                    'quadrant': quadrant
+                })
+            except Exception:
+                pass
     
     # Wyczyść flagę reset po zapisaniu nowych wyników (pozwól na auto-load przy kolejnym logowaniu)
     st.session_state.kolb_reset = False
@@ -4101,6 +4112,17 @@ Odpowiedz TYLKO kontekstem. Format: "Konflikt między [osoba1] a [osoba2]. Probl
                         st.session_state.simulator_started = True
                         st.session_state.simulator_waiting_for_next = False  # Reset flagi
                         
+                        # Zaloguj rozpoczęcie symulatora
+                        try:
+                            from utils.activity_tracker import log_activity
+                            log_activity(st.session_state.username, 'tool_used', {
+                                'tool_name': 'Business Conversation Simulator',
+                                'scenario': scenario_id,
+                                'scenario_name': scenario['name']
+                            })
+                        except Exception:
+                            pass
+                        
                         # Generuj kontekst case study
                         with st.spinner("🎬 Generuję kontekst scenariusza..."):
                             case_context = generate_case_context(scenario)
@@ -4203,6 +4225,18 @@ Odpowiedz TYLKO kontekstem. Format: "Konflikt między [osoba1] a [osoba2]. Probl
                 )
                 st.session_state.simulator_final_report = report
                 st.session_state.simulator_completed = True
+                
+                # Zaloguj ukończenie ćwiczenia AI
+                try:
+                    from utils.activity_tracker import log_activity
+                    log_activity(st.session_state.username, 'ai_exercise', {
+                        'exercise_name': 'Business Conversation Simulator',
+                        'scenario': st.session_state.simulator_scenario,
+                        'turns': len(st.session_state.simulator_messages) // 2,
+                        'completed': True
+                    })
+                except Exception:
+                    pass
             st.rerun()
     
     # Wyświetl kontekst case study

@@ -5,6 +5,8 @@ import re
 import os
 import numpy as np
 import json
+from datetime import datetime
+from typing import Dict
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, RegularPolygon
 from matplotlib.path import Path
@@ -268,7 +270,7 @@ def show_profile():
     add_animations_css()
 
     # Main Profile Tabs - usunięto Personalizację, Eksplorator Typów i Typ Neurolidera
-    tab1, tab2, tab3 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "📈 Raporty"])
     
     # Tab 1: Statistics - podobnie jak w Dashboard
     with tab1:
@@ -644,6 +646,268 @@ def show_profile():
         # Use Step 5 badge display system
         show_badges_section()
         st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Tab 4: Reports
+    with tab4:
+        scroll_to_top()
+        st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
+        show_reports_section()
+        st.markdown("</div>", unsafe_allow_html=True)
+
+def show_reports_section():
+    """Wyświetla sekcję raportów rozwojowych użytkownika"""
+    from utils.activity_tracker import (
+        get_activity_summary,
+        get_login_pattern,
+        get_lesson_completion_stats,
+        initialize_activity_tracking
+    )
+    from utils.report_generator import (
+        generate_weekly_report_ai,
+        save_report_to_user_profile,
+        get_user_reports,
+        should_generate_auto_report
+    )
+    
+    st.header("📈 Twoje Raporty Rozwojowe")
+    
+    username = st.session_state.username
+    
+    # Inicjalizuj tracking jeśli nie istnieje
+    initialize_activity_tracking(username)
+    
+    # Sprawdź czy powinien zostać wygenerowany automatyczny raport
+    auto_report_due = should_generate_auto_report(username)
+    
+    if auto_report_due:
+        st.info("📅 **Automatyczny raport tygodniowy** jest gotowy do wygenerowania! Kliknij przycisk poniżej.")
+    
+    # Przyciski akcji
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        if st.button("📊 Wygeneruj nowy raport tygodniowy", type="primary", use_container_width=True):
+            with st.spinner("🤖 AI analizuje Twoją aktywność..."):
+                # Zbierz dane
+                activity_summary = get_activity_summary(username, days=7)
+                login_pattern = get_login_pattern(username, days=30)
+                lesson_stats = get_lesson_completion_stats(username)
+                
+                # Generuj raport AI
+                report = generate_weekly_report_ai(username, activity_summary, login_pattern, lesson_stats)
+                
+                # Zapisz do profilu
+                save_report_to_user_profile(username, report)
+                
+                st.success("✅ Raport został wygenerowany!")
+                st.rerun()
+    
+    with col2:
+        # Przycisk do pobrania ostatniego raportu
+        reports = get_user_reports(username, limit=1)
+        if reports:
+            latest_report = reports[0]
+            report_json = json.dumps(latest_report, indent=2, ensure_ascii=False)
+            st.download_button(
+                label="💾 Pobierz JSON",
+                data=report_json,
+                file_name=f"raport_{username}_{datetime.now().strftime('%Y%m%d')}.json",
+                mime="application/json",
+                use_container_width=True
+            )
+    
+    st.markdown("---")
+    
+    # Pobierz historyczne raporty
+    reports = get_user_reports(username, limit=10)
+    
+    if not reports:
+        st.info("📝 Nie masz jeszcze żadnych raportów. Kliknij przycisk powyżej aby wygenerować pierwszy raport tygodniowy!")
+        
+        # Pokaż przykładowy raport
+        with st.expander("🔍 Co zawiera raport rozwojowy?", expanded=True):
+            st.markdown("""
+            Twój spersonalizowany raport tygodniowy analizuje:
+            
+            **📊 Twarde dane:**
+            - Liczba dni z logowaniem
+            - Ukończone i rozpoczęte lekcje
+            - Sesje ćwiczeń AI
+            - Użycie narzędzi i symulatorów
+            - Przeczytane inspiracje
+            
+            **🧠 Analiza AI:**
+            - Ocena zaangażowania (1-10)
+            - Wykryte wzorce aktywności
+            - Mocne strony w nauce
+            - Obszary do poprawy
+            
+            **🎯 Rekomendacje:**
+            - 3-5 spersonalizowanych akcji
+            - Priorytety (wysoki/średni/niski)
+            - Szacowany czas realizacji
+            - Uzasadnienie każdej rekomendacji
+            
+            **💬 Motywacja:**
+            - Osobista wiadomość od AI
+            - Dopasowana do Twojego profilu (Kolb/Neuroleader)
+            """)
+        
+        return
+    
+    # Wyświetl najnowszy raport szczegółowo
+    st.markdown("### 📊 Najnowszy raport")
+    display_report_detailed(reports[0])
+    
+    # Historia raportów
+    if len(reports) > 1:
+        st.markdown("---")
+        st.markdown("### 📚 Historia raportów")
+        
+        for i, report in enumerate(reports[1:], 1):
+            with st.expander(
+                f"📅 Raport z {datetime.fromisoformat(report['generated_at']).strftime('%d.%m.%Y')} "
+                f"- {report.get('engagement_score', 0)}/10 zaangażowania",
+                expanded=False
+            ):
+                display_report_compact(report)
+
+def display_report_detailed(report: Dict):
+    """Wyświetla szczegółowy raport"""
+    
+    # Nagłówek
+    st.markdown(f"### {report.get('summary_headline', 'Raport tygodniowy')}")
+    
+    period_start = datetime.fromisoformat(report['period_start']).strftime('%d.%m.%Y')
+    period_end = datetime.fromisoformat(report['period_end']).strftime('%d.%m.%Y')
+    st.caption(f"Okres: {period_start} - {period_end}")
+    
+    # Engagement score
+    score = report.get('engagement_score', 0)
+    trend = report.get('engagement_trend', 'stabilny')
+    
+    trend_emoji = {
+        'rosnący': '📈',
+        'stabilny': '➡️',
+        'spadający': '📉'
+    }
+    
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        st.metric(
+            "Zaangażowanie",
+            f"{score}/10",
+            f"{trend_emoji.get(trend, '➡️')} {trend}"
+        )
+    with col2:
+        # Progress bar
+        progress_html = f"""
+        <div style="background: #e0e0e0; border-radius: 10px; height: 25px; margin-top: 10px;">
+            <div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); 
+                        width: {score * 10}%; 
+                        height: 100%; 
+                        border-radius: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-weight: bold;">
+                {score}/10
+            </div>
+        </div>
+        """
+        st.markdown(progress_html, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # Mocne strony
+    st.markdown("### 💪 Twoje mocne strony")
+    strengths = report.get('strengths', [])
+    if strengths:
+        for strength in strengths:
+            st.success(f"✓ {strength}")
+    else:
+        st.info("Brak danych")
+    
+    # Obszary do poprawy
+    st.markdown("### 🎓 Obszary do poprawy")
+    concerns = report.get('concerns', [])
+    if concerns:
+        for concern in concerns:
+            st.warning(f"→ {concern}")
+    else:
+        st.info("Świetnie! Nie wykryto istotnych obszarów do poprawy.")
+    
+    # Insights
+    insights = report.get('insights', [])
+    if insights:
+        st.markdown("### 🔍 Wykryte wzorce")
+        for insight in insights:
+            st.info(f"💡 {insight}")
+    
+    # Rekomendacje
+    st.markdown("### 🎯 Twój plan działania na następny tydzień")
+    recommendations = report.get('recommendations', [])
+    
+    if recommendations:
+        priority_colors = {
+            'wysoki': '🔴',
+            'średni': '🟡',
+            'niski': '🟢'
+        }
+        
+        for i, rec in enumerate(recommendations, 1):
+            priority = rec.get('priority', 'średni')
+            action = rec.get('action', '')
+            why = rec.get('why', '')
+            time = rec.get('estimated_time', '')
+            
+            st.markdown(f"""
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; 
+                        border-left: 4px solid {'#e74c3c' if priority == 'wysoki' else '#f39c12' if priority == 'średni' else '#27ae60'};">
+                <div style="font-weight: bold; margin-bottom: 5px;">
+                    {priority_colors.get(priority, '🟡')} {i}. {action}
+                </div>
+                <div style="font-size: 0.9em; color: #7f8c8d; margin-bottom: 3px;">
+                    <strong>Dlaczego:</strong> {why}
+                </div>
+                <div style="font-size: 0.85em; color: #95a5a6;">
+                    ⏱️ Szacowany czas: {time}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+    else:
+        st.info("Brak rekomendacji")
+    
+    # Wiadomość motywacyjna
+    motivational_message = report.get('motivational_message', '')
+    if motivational_message:
+        st.markdown("---")
+        st.markdown("### 💬 Wiadomość dla Ciebie")
+        st.success(motivational_message)
+
+def display_report_compact(report: Dict):
+    """Wyświetla skróconą wersję raportu"""
+    
+    # Podstawowe info
+    score = report.get('engagement_score', 0)
+    trend = report.get('engagement_trend', 'stabilny')
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Zaangażowanie", f"{score}/10")
+    with col2:
+        st.metric("Trend", trend)
+    with col3:
+        recommendations_count = len(report.get('recommendations', []))
+        st.metric("Rekomendacje", recommendations_count)
+    
+    # Najważniejsza rekomendacja
+    recommendations = report.get('recommendations', [])
+    if recommendations:
+        high_priority = [r for r in recommendations if r.get('priority') == 'wysoki']
+        if high_priority:
+            st.info(f"🎯 Priorytet: {high_priority[0].get('action', '')}")
 
 def show_badges_section():
     """Wyświetl sekcję odznak w profilu - Step 5 Implementation"""
@@ -653,6 +917,7 @@ def show_badges_section():
     users_data = load_user_data()
     user_data = users_data.get(st.session_state.username, {})
     user_badges = set(user_data.get('badges', []))
+
     
     # CSS dla odznak
     st.markdown("""

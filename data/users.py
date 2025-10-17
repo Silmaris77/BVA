@@ -98,6 +98,15 @@ def login_user(username, password):
         from views.dashboard import save_daily_stats
         save_daily_stats(username)
         
+        # Zaloguj aktywność - logowanie
+        try:
+            from utils.activity_tracker import log_activity
+            log_activity(username, 'login', {
+                'timestamp': datetime.now().isoformat()
+            })
+        except ImportError:
+            pass  # Ignore if activity_tracker is not available
+        
         return users_data[username]
     return None
 
@@ -222,6 +231,13 @@ def mark_inspiration_as_read_for_user(inspiration_id, username=None):
                 add_recent_activity(username, "inspiration_read", {
                     "inspiration_id": inspiration_id,
                     "inspiration_title": inspiration_title
+                })
+                
+                # Zaloguj także w nowym systemie activity tracking
+                from utils.activity_tracker import log_activity
+                log_activity(username, 'inspiration_read', {
+                    'inspiration_id': inspiration_id,
+                    'inspiration_title': inspiration_title
                 })
             except Exception as e:
                 print(f"Error adding inspiration read activity: {e}")

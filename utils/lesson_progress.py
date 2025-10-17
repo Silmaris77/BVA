@@ -217,6 +217,17 @@ def mark_lesson_as_completed(lesson_id):
             except Exception:
                 pass
             
+            # Zaloguj także w nowym systemie activity tracking
+            try:
+                from utils.activity_tracker import log_activity
+                log_activity(username, 'lesson_complete', {
+                    'lesson_id': lesson_id
+                })
+            except ImportError:
+                pass
+            except Exception:
+                pass
+            
             # Aktualizuj dzisiejsze statystyki
             try:
                 from views.dashboard import update_daily_stats_if_needed
