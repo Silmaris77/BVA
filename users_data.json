@@ -7,7 +7,7 @@
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-17 22:32:11",
+    "last_login": "2025-10-17 23:10:52",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -1659,6 +1659,20 @@
         "timestamp": "2025-10-17T22:32:11.214618",
         "details": {
           "timestamp": "2025-10-17T22:32:11.202486"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T23:09:17.439112",
+        "details": {
+          "timestamp": "2025-10-17T23:09:17.436091"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T23:10:52.348593",
+        "details": {
+          "timestamp": "2025-10-17T23:10:52.345031"
         }
       }
     ],
