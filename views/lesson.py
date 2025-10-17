@@ -3000,6 +3000,43 @@ def display_quiz(quiz_data, passing_threshold=60):
             st.session_state[quiz_id]["total_points"] = total_points
             st.session_state[quiz_id]["correct_answers"] = correct_answers  # Dodaj dla sprawdzania zaliczenia
             
+            # Zaloguj ukończenie quizu w systemie activity tracking
+            try:
+                from utils.activity_tracker import log_activity
+                
+                # Oblicz procent poprawnych odpowiedzi
+                total_questions = len(quiz_data['questions'])
+                score_percentage = (correct_answers / total_questions * 100) if total_questions > 0 and not is_self_diagnostic else 0
+                
+                # Określ typ quizu
+                if is_self_diagnostic:
+                    quiz_category = 'self_diagnostic'
+                elif 'opening' in quiz_id.lower() or quiz_id.startswith('opening'):
+                    quiz_category = 'opening'
+                elif 'closing' in quiz_id.lower() or quiz_id.startswith('closing'):
+                    quiz_category = 'closing'
+                else:
+                    quiz_category = 'practice'
+                
+                # Sprawdź czy zdany (dla quizów testowych)
+                passed = score_percentage >= passing_threshold if not is_self_diagnostic else True
+                
+                log_activity(st.session_state.username, 'quiz_completed', {
+                    'quiz_id': quiz_id,
+                    'quiz_title': quiz_data.get('title', 'Quiz'),
+                    'quiz_category': quiz_category,
+                    'total_questions': total_questions,
+                    'correct_answers': correct_answers,
+                    'score_percentage': round(score_percentage, 1),
+                    'total_points': total_points,
+                    'passed': passed,
+                    'passing_threshold': passing_threshold,
+                    'is_self_diagnostic': is_self_diagnostic
+                })
+            except Exception as e:
+                # Nie przerywaj procesu jeśli tracking nie działa
+                print(f"Warning: Could not log quiz completion: {e}")
+            
             st.success(f"✅ Quiz został ukończony! Twoje wyniki zostały zapisane.")
             
             # Dla quizów autodiagnozy wyświetl spersonalizowane wyniki jeśli dostępne

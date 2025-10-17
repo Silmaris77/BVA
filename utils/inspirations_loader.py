@@ -237,11 +237,29 @@ def get_random_inspiration():
     return None
 
 def mark_inspiration_as_read(inspiration_id):
-    """Oznacza inspirację jako przeczytaną"""
+    """Oznacza inspirację jako przeczytaną i przyznaje XP"""
     user_funcs = get_user_functions()
-    if user_funcs and st.session_state.get('username'):
+    username = st.session_state.get('username')
+    
+    if user_funcs and username:
+        # Sprawdź czy nie była już przeczytana (żeby nie dawać XP wielokrotnie)
+        already_read = user_funcs['is_read'](inspiration_id)
+        
         # Use persistent user data
         user_funcs['mark_read'](inspiration_id)
+        
+        # Przyznaj XP tylko za pierwsze przeczytanie
+        if not already_read:
+            try:
+                from data.users import award_xp_for_activity
+                award_xp_for_activity(
+                    username,
+                    'inspiration_read',
+                    1,  # 1 XP za przeczytanie inspiracji
+                    {'inspiration_id': inspiration_id}
+                )
+            except ImportError:
+                pass
     else:
         # Fallback to session state for guests
         if 'read_inspirations' not in st.session_state:

@@ -7,7 +7,7 @@
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-17 02:09:29",
+    "last_login": "2025-10-17 09:04:03",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -32,7 +32,8 @@
         "neuroinnowator_guide",
         "stress_decision_making",
         "stress_reduction_techniques",
-        "neurobalanser_guide"
+        "neurobalanser_guide",
+        "shower_ideas"
       ],
       "favorites": []
     },
@@ -195,6 +196,14 @@
       }
     },
     "recent_activities": [
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "shower_ideas",
+          "inspiration_title": "Dlaczego najlepsze pomysły przychodzą pod prysznicem?"
+        },
+        "timestamp": "2025-10-17T07:16:57.695193+00:00"
+      },
       {
         "type": "neuroleader_type_discovered",
         "details": {
@@ -835,7 +844,39 @@
       "flexibility": 81.37,
       "completed_date": "2025-10-16 13:29:28"
     },
-    "activity_log": [],
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T09:04:03.142949",
+        "details": {
+          "timestamp": "2025-10-17T09:04:03.137864"
+        }
+      },
+      {
+        "type": "quiz_completed",
+        "timestamp": "2025-10-17T09:10:04.665754",
+        "details": {
+          "quiz_id": "quiz_quiz_końcowy_-_conversational_intelligence",
+          "quiz_title": "Quiz końcowy - Conversational Intelligence",
+          "quiz_category": "practice",
+          "total_questions": 10,
+          "correct_answers": 7,
+          "score_percentage": 70.0,
+          "total_points": 0,
+          "passed": false,
+          "passing_threshold": 75,
+          "is_self_diagnostic": false
+        }
+      },
+      {
+        "type": "inspiration_read",
+        "timestamp": "2025-10-17T09:16:57.740052",
+        "details": {
+          "inspiration_id": "shower_ideas",
+          "inspiration_title": "Dlaczego najlepsze pomysły przychodzą pod prysznicem?"
+        }
+      }
+    ],
     "reports": [
       {
         "summary_headline": "Odśwież motywację i wróć do rozwoju!",
@@ -932,6 +973,212 @@
         ],
         "motivational_message": "Każdy krok, nawet najmniejszy, przybliża Cię do celu. Pamiętaj, że jesteś Dywergentem - wykorzystaj swoją kreatywność i otwartość na pomysły, by uczyć się efektywniej! Zacznij już dziś.",
         "generated_at": "2025-10-17T02:13:58.221618",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Max"
+      },
+      {
+        "summary_headline": "Małe kroki, wielkie efekty! Kontynuuj w swoim tempie.",
+        "engagement_score": 2,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Wytrwałość w rozpoczynaniu kursów (6 w toku).",
+          "Aktywność w piątki, co sugeruje czas na rozwój w weekend.",
+          "Zdobyte 773 XP, co wskazuje na wcześniejsze zaangażowanie."
+        ],
+        "concerns": [
+          "Niska aktywność w ostatnim tygodniu (logowanie tylko 1/7 dni).",
+          "Brak ukończonych lekcji w ostatnim tygodniu.",
+          "Duża liczba porzuconych lekcji (6/14)."
+        ],
+        "insights": [
+          "Spadek aktywności może wynikać z braku czasu lub utraty motywacji.",
+          "Profil 'Dywergent' (Kolb) sugeruje preferencję dla burzy mózgów i generowania pomysłów – warto szukać elementów kreatywnych w nauce.",
+          "Warto powrócić do kursów 'w toku' i spróbować je dokończyć."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Ukończ jedną z rozpoczętych lekcji.",
+            "why": "Dokończenie rozpoczętego zadania zwiększy Twoją motywację i poczucie sprawczości.",
+            "estimated_time": "30 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Zaplanuj 15 minut dziennie na naukę, zaczynając od piątku o 9:00.",
+            "why": "Regularność, nawet w krótkich sesjach, buduje nawyk i ułatwia postęp.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Przejrzyj listę 'Porzuconych' lekcji i zastanów się, czy któraś z nich jest wciąż dla Ciebie interesująca.",
+            "why": "Może znajdziesz tam ukryty diament, który zmotywuje Cię do dalszej nauki.",
+            "estimated_time": "10 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Wykonaj test Neurolidera, aby lepiej poznać swoje style przywództwa i preferowane metody uczenia się.",
+            "why": "Poznanie swoich preferencji pomoże Ci dostosować proces nauki do Twoich potrzeb.",
+            "estimated_time": "15 minut"
+          }
+        ],
+        "motivational_message": "Każdy krok, nawet najmniejszy, przybliża Cię do celu. Pamiętaj o swoich mocnych stronach i wykorzystaj swój dywergencyjny potencjał! Skup się na małych, regularnych działaniach, a zobaczysz postęp.",
+        "generated_at": "2025-10-17T09:04:28.185190",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Max"
+      },
+      {
+        "summary_headline": "Mały krok w piątek może prowadzić do wielkich zmian!",
+        "engagement_score": 2,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Wykazałeś aktywność w piątek, co świadczy o potencjale do regularności.",
+          "Ukończyłeś 2 lekcje, co pokazuje zdolność do osiągania celów.",
+          "Jesteś osobą o stylu uczenia się Dywergenta, co oznacza kreatywność i myślenie poza schematami."
+        ],
+        "concerns": [
+          "Tylko 1 dzień z logowaniem w ciągu ostatniego tygodnia (3.3% aktywności).",
+          "Brak ukończonych lekcji w ciągu ostatnich 7 dni.",
+          "Duża liczba porzuconych lekcji (6/14) może wskazywać na trudności z utrzymaniem koncentracji lub brakiem dopasowania tematu."
+        ],
+        "insights": [
+          "Piątek to Twój najbardziej aktywny dzień – spróbuj to wykorzystać.",
+          "Styl uczenia się Dywergenta sugeruje, że możesz czerpać korzyści z burzy mózgów i dyskusji na temat materiału."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Ustal konkretny, krótki cel: np. ukończenie jednej lekcji w tym tygodniu.",
+            "why": "Małe, osiągalne cele pomogą odbudować motywację i poczucie sprawczości.",
+            "estimated_time": "30 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Wybierz jedną lekcję z 'W trakcie' i zaplanuj jej ukończenie do końca tygodnia.",
+            "why": "Wykorzystasz już zainwestowany czas i poczujesz satysfakcję z zamknięcia tematu.",
+            "estimated_time": "60 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Poświęć 15 minut na ponowne zapoznanie się z ukończonymi lekcjami (2/14).",
+            "why": "Odświeżenie wiedzy wzmocni Twoje fundamenty i przygotuje do kolejnych wyzwań.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Wykorzystaj swoją kreatywność Dywergenta: spróbuj przedyskutować materiał z ukończonej lekcji z kimś innym.",
+            "why": "Dzielenie się wiedzą i perspektywami może wzmocnić Twoje zrozumienie i utrwalić informacje.",
+            "estimated_time": "20 minut"
+          }
+        ],
+        "motivational_message": "Pamiętaj, że każdy krok, nawet najmniejszy, przybliża Cię do celu. Wykorzystaj swój potencjał Dywergenta i znajdź kreatywne sposoby na naukę! Zacznij od małego i świętuj każdy sukces.",
+        "generated_at": "2025-10-17T09:08:26.944235",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Max"
+      },
+      {
+        "summary_headline": "Małe kroki prowadzą do wielkich sukcesów! Zacznijmy ten tydzień.",
+        "engagement_score": 2,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Wykazałeś/aś się aktywnością w piątek o godzinie 9:00, co sugeruje potencjalny czas na naukę.",
+          "Ukończony quiz z wynikiem 70% pokazuje zrozumienie podstaw materiału.",
+          "Posiadasz profil Kolba 'Dywergent', co oznacza, że możesz czerpać korzyści z burzy mózgów i grupowych dyskusji."
+        ],
+        "concerns": [
+          "Bardzo niska aktywność w ciągu ostatnich 7 dni (logowanie tylko 1 dzień).",
+          "Brak ukończonych lekcji w ciągu ostatnich 7 dni.",
+          "Wysoki odsetek lekcji porzuconych (6/14) może wskazywać na trudności z koncentracją lub niezrozumienie materiału."
+        ],
+        "insights": [
+          "Niska aktywność może wynikać z braku czasu lub motywacji. Spróbuj zaplanować regularne, krótkie sesje nauki.",
+          "Preferujesz piątkowe poranki, wykorzystaj to do zaplanowania nauki właśnie wtedy.",
+          "Twój profil Kolba sugeruje, że lubisz kreatywne podejście do nauki, spróbuj poszukać niestandardowych metod."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaplanuj 15 minut na naukę w piątek o 9:00.",
+            "why": "Wykorzystaj swoją naturalną tendencję do nauki w tym czasie.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "wysoki",
+            "action": "Wybierz jedną lekcję 'w trakcie' i poświęć 20 minut na jej ukończenie.",
+            "why": "Ukończenie jednej lekcji może dać Ci poczucie sukcesu i zmotywować do dalszej nauki.",
+            "estimated_time": "20 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Przejrzyj materiał z quizu, w którym uzyskałeś/aś 70%.",
+            "why": "Utrwalenie wiedzy pomoże w lepszym zrozumieniu tematu.",
+            "estimated_time": "10 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Znajdź forum lub grupę dyskusyjną związaną z tematyką, którą się uczysz.",
+            "why": "Wymiana myśli z innymi może pomóc w zrozumieniu trudnych zagadnień (profil Kolba).",
+            "estimated_time": "30 minut"
+          }
+        ],
+        "motivational_message": "Każdy krok, nawet najmniejszy, przybliża Cię do celu. Nie zniechęcaj się początkowymi trudnościami. Pamiętaj, że jesteś w stanie osiągnąć sukces, a my jesteśmy tutaj, aby Ci w tym pomóc!",
+        "generated_at": "2025-10-17T09:10:20.536593",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Max"
+      },
+      {
+        "summary_headline": "Małe kroki prowadzą do wielkich celów! Zacznij od dziś.",
+        "engagement_score": 2,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Wytrwałość: ukończono 2 lekcje pomimo niskiej aktywności.",
+          "Solidny start: Uzyskano 70% w ukończonym quizie.",
+          "Zidentyfikowany styl uczenia się: Test Kolba wskazuje na styl dywergentny."
+        ],
+        "concerns": [
+          "Niska aktywność: Tylko 1 dzień logowania w ciągu ostatnich 7 dni.",
+          "Brak postępów: Brak ukończonych lekcji w ostatnim tygodniu.",
+          "Zbyt mało danych: Brak możliwości oceny trendu w wynikach quizów."
+        ],
+        "insights": [
+          "Piątek o 9:00 to potencjalnie najlepszy czas na naukę dla Ciebie.",
+          "Styl uczenia się dywergent (wg Kolba) preferuje obserwację i refleksję – spróbuj tworzyć mapy myśli lub notatki podczas nauki."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaplanuj 15 minut na naukę w piątek o 9:00.",
+            "why": "Wykorzystaj swoją najaktywniejszą godzinę, aby odnowić nawyk uczenia się.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "wysoki",
+            "action": "Powtórz materiał, z którego był quiz z wynikiem 70%.",
+            "why": "Utrwalisz wiedzę i przygotujesz się do kolejnych wyzwań.",
+            "estimated_time": "30 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Ukończ jedną z 6 rozpoczętych lekcji.",
+            "why": "Poczujesz satysfakcję z postępu i zmotywujesz się do dalszej nauki.",
+            "estimated_time": "60 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Wykonaj Test Neurolidera.",
+            "why": "Poznasz swoje mocne strony jako lider i dowiesz się, jak efektywnie współpracować z innymi.",
+            "estimated_time": "15 minut"
+          }
+        ],
+        "motivational_message": "Każdy krok, nawet najmniejszy, przybliża Cię do celu. Pamiętaj, że regularność jest kluczem do sukcesu. Wykorzystaj swój styl dywergentny do głębszego zrozumienia materiału i ciesz się procesem nauki!",
+        "generated_at": "2025-10-17T09:15:38.041275",
         "period_start": "2025-10-10",
         "period_end": "2025-10-17",
         "report_type": "weekly",
@@ -1513,7 +1760,7 @@
     "degencoins": 95,
     "level": 1,
     "joined_date": "2025-09-03",
-    "last_login": "2025-10-09 17:53:54",
+    "last_login": "2025-10-17 09:27:54",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -1643,8 +1890,23 @@
         "degencoins": 95,
         "level": 1,
         "completed_lessons": 0
+      },
+      "2025-10-17": {
+        "xp": 95,
+        "degencoins": 95,
+        "level": 1,
+        "completed_lessons": 0
       }
-    }
+    },
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T09:27:55.042178",
+        "details": {
+          "timestamp": "2025-10-17T09:27:55.023472"
+        }
+      }
+    ]
   },
   "Degen": {
     "user_id": "9b7cddd3-1d97-4821-8192-1e43d35348ff",
@@ -2598,5 +2860,197 @@
         "content_timestamp": "2025-10-17 08:53:56"
       }
     }
+  },
+  "Basia": {
+    "user_id": "fd17159b-23c8-4730-bf28-80afeeb1f797",
+    "password": "Basia",
+    "degen_type": null,
+    "xp": 24,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-17",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [
+        "forrest_gump_neuroleadership"
+      ],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-17": {
+        "xp": 24,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "recent_activities": [
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "forrest_gump_neuroleadership",
+          "inspiration_title": "Co Forrest Gump wiedział o neuroprzywództwie?"
+        },
+        "timestamp": "2025-10-17T07:29:05.529270+00:00"
+      }
+    ],
+    "activity_log": [
+      {
+        "type": "inspiration_read",
+        "timestamp": "2025-10-17T09:29:05.567545",
+        "details": {
+          "inspiration_id": "forrest_gump_neuroleadership",
+          "inspiration_title": "Co Forrest Gump wiedział o neuroprzywództwie?"
+        }
+      },
+      {
+        "type": "inspiration_read",
+        "timestamp": "2025-10-17T09:29:05.709701",
+        "details": {
+          "inspiration_id": "forrest_gump_neuroleadership",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "test_completed",
+        "timestamp": "2025-10-17T09:30:00.867146",
+        "details": {
+          "test_name": "Kolb Learning Styles",
+          "dominant_style": "Assimilating (Asymilator)",
+          "quadrant": "AC/RO",
+          "xp_earned": 5
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T09:51:43.007851",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom II",
+          "confidence": 8,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T10:05:43.777949",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "scenario": "change_resistance",
+          "scenario_name": "🔄 Opór wobec zmian",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T10:06:26.092454",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "change_resistance",
+          "turns": 0,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T10:09:52.043961",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "scenario": "team_conflict",
+          "scenario_name": "⚡ Rozwiązanie konfliktu",
+          "xp_earned": 1
+        }
+      }
+    ],
+    "kolb_test": {
+      "scores": {
+        "CE": 2,
+        "RO": 2,
+        "AC": 7,
+        "AE": 1
+      },
+      "dimensions": {
+        "AC-CE": 5,
+        "AE-RO": -1
+      },
+      "dominant_style": "Assimilating (Asymilator)",
+      "quadrant": "AC/RO",
+      "flexibility": 69.95,
+      "completed_date": "2025-10-17 09:30:00"
+    },
+    "reports": [
+      {
+        "summary_headline": "Małe kroki prowadzą do wielkich celów, Basiu!",
+        "engagement_score": 2,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Wykorzystanie narzędzia CIQ Scanner wskazuje na chęć rozwoju.",
+          "Zapoznawanie się z inspiracjami świadczy o poszukiwaniu motywacji.",
+          "Jesteś na poziomie 1 z 7 XP, co pokazuje, że zaczęłaś swoją podróż."
+        ],
+        "concerns": [
+          "Brak logowań w ciągu ostatnich 7 dni to sygnał, że warto wrócić do regularności.",
+          "Brak rozpoczętych i ukończonych lekcji sugeruje, że warto znaleźć czas na naukę.",
+          "Niska aktywność może spowalniać Twój rozwój."
+        ],
+        "insights": [
+          "Twój styl uczenia się jako Asymilator (Test Kolba) wskazuje na preferencję logicznego i analitycznego podejścia do wiedzy.",
+          "Brak logowań może wynikać z braku czasu lub motywacji – zidentyfikuj przyczynę i spróbuj jej zaradzić.",
+          "Wykorzystanie CIQ Scanner, pomimo niskiej aktywności, sugeruje, że szukasz konkretnych narzędzi do rozwoju."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaloguj się do platformy i ukończ jedną krótką lekcję (np. 5-10 minut).",
+            "why": "Regularność jest kluczem do sukcesu, a małe kroki budują nawyk.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Zastanów się, jakie tematy najbardziej Cię interesują i wybierz lekcję z tej dziedziny.",
+            "why": "Nauka powinna być przyjemnością, a wybór interesującego tematu zwiększy Twoje zaangażowanie.",
+            "estimated_time": "5 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Wykorzystaj swój styl uczenia się Asymilatora i skup się na zrozumieniu teorii w wybranej lekcji.",
+            "why": "Twój styl uczenia się pozwala na efektywne przyswajanie wiedzy poprzez analizę i syntezę.",
+            "estimated_time": "20 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Wykorzystaj CIQ Scanner do identyfikacji obszarów, w których chcesz się rozwijać.",
+            "why": "Koncentracja na obszarach, które uważasz za ważne, zwiększy Twoją motywację.",
+            "estimated_time": "10 minut"
+          }
+        ],
+        "motivational_message": "Pamiętaj, że każda, nawet najmniejsza aktywność, przybliża Cię do celu. Wykorzystaj swój potencjał Asymilatora i zacznij od małych kroków. Jesteśmy tu, aby Cię wspierać!",
+        "generated_at": "2025-10-17T09:52:53.707606",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Basia"
+      }
+    ]
   }
 }

@@ -712,14 +712,19 @@ def calculate_kolb_results():
             
             save_user_data(users_data)
             
-            # Zaloguj ukończenie testu
+            # Zaloguj ukończenie testu i przyznaj XP
             try:
-                from utils.activity_tracker import log_activity
-                log_activity(username, 'test_completed', {
-                    'test_name': 'Kolb Learning Styles',
-                    'dominant_style': dominant_style,
-                    'quadrant': quadrant
-                })
+                from data.users import award_xp_for_activity
+                award_xp_for_activity(
+                    username,
+                    'test_completed',
+                    5,  # 5 XP za ukończenie testu Kolba
+                    {
+                        'test_name': 'Kolb Learning Styles',
+                        'dominant_style': dominant_style,
+                        'quadrant': quadrant
+                    }
+                )
             except Exception:
                 pass
     
@@ -2746,7 +2751,23 @@ def show_level_detector():
                         result = analyze_conversation_level(text_input)
                         if result:
                             st.session_state.last_analysis_result = result
-                            # Usunięto duplikację - wynik pojawi się poniżej
+                            
+                            # Przyznaj XP za użycie narzędzia CIQ Scanner
+                            try:
+                                from data.users import award_xp_for_activity
+                                award_xp_for_activity(
+                                    st.session_state.username,
+                                    'tool_used',
+                                    1,  # 1 XP za użycie narzędzia
+                                    {
+                                        'tool_name': 'CIQ Scanner',
+                                        'detected_level': result.get('detected_level', 'unknown'),
+                                        'confidence': result.get('confidence', 0)
+                                    }
+                                )
+                                st.success("✅ Analiza ukończona! +1 XP")
+                            except Exception:
+                                pass  # Nie przerywaj jeśli tracking się nie powiedzie
                         else:
                             st.error("Nie udało się przeanalizować tekstu. Spróbuj ponownie.")
                 else:
@@ -3191,6 +3212,18 @@ Menedżer: Rozumiem, opowiedz mi więcej o tym przeciążeniu...""",
                 result = analyze_conversation_sentiment(conversation_text)
                 if result:
                     display_sentiment_results(result)
+                    
+                    # Przyznaj XP za użycie narzędzia
+                    try:
+                        from data.users import award_xp_for_activity
+                        award_xp_for_activity(
+                            st.session_state.username,
+                            'tool_used',
+                            1,
+                            {'tool_name': 'Conversation Intelligence Pro - Sentiment Analysis'}
+                        )
+                    except Exception:
+                        pass
 
 def show_intent_detection():
     """Wykrywanie dynamiki zespołowej i potrzeb pracowników"""
@@ -3225,6 +3258,18 @@ def show_intent_detection():
             result = analyze_business_intent(intent_text)
             if result:
                 display_intent_results(result)
+                
+                # Przyznaj XP za użycie narzędzia
+                try:
+                    from data.users import award_xp_for_activity
+                    award_xp_for_activity(
+                        st.session_state.username,
+                        'tool_used',
+                        1,
+                        {'tool_name': 'Conversation Intelligence Pro - Intent Detection'}
+                    )
+                except Exception:
+                    pass
 
 def show_escalation_monitoring():
     """Monitoring sygnałów problemów w zespole"""
@@ -3266,6 +3311,18 @@ def show_escalation_monitoring():
             result = analyze_escalation_risk(escalation_text, sensitivity)
             if result:
                 display_escalation_results(result)
+                
+                # Przyznaj XP za użycie narzędzia
+                try:
+                    from data.users import award_xp_for_activity
+                    award_xp_for_activity(
+                        st.session_state.username,
+                        'tool_used',
+                        1,
+                        {'tool_name': 'Conversation Intelligence Pro - Escalation Monitoring'}
+                    )
+                except Exception:
+                    pass
 
 def show_ai_coach():
     """Real-time coach dla menedżerów"""
@@ -3300,6 +3357,18 @@ def show_ai_coach():
             result = get_ai_coaching(coach_text, context)
             if result:
                 display_coaching_results(result)
+                
+                # Przyznaj XP za użycie narzędzia
+                try:
+                    from data.users import award_xp_for_activity
+                    award_xp_for_activity(
+                        st.session_state.username,
+                        'tool_used',
+                        1,
+                        {'tool_name': 'Conversation Intelligence Pro - AI Coach'}
+                    )
+                except Exception:
+                    pass
 
 
 def show_communication_analyzer():
@@ -4093,48 +4162,149 @@ Odpowiedz TYLKO kontekstem. Format: "[Imię] pracuje jako [stanowisko]. Problem:
 
 Odpowiedz TYLKO kontekstem. Format: "Konflikt między [osoba1] a [osoba2]. Problem: [konkret]. Twoja perspektywa: [uczucia]."
 """
+        },
+        "delegation": {
+            "name": "📋 Delegowanie zadania",
+            "description": "Delegujesz ważne zadanie pracownikowi, który ma już duże obciążenie pracą.",
+            "ai_persona": "Jesteś przeciążonym pracownikiem, który ma już pełne ręce roboty. Czujesz się zmęczony i obawiasz się, że kolejne zadanie Cię przytłoczy. Jesteś otwarty na rozmowę, ale potrzebujesz wsparcia i jasnych priorytetów.",
+            "ai_role": "Pracownik",
+            "user_role": "Menedżer",
+            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst delegowania zadania:
+- Imię pracownika i jego stanowisko
+- Jakie zadanie chcesz delegować i dlaczego jest ważne
+- Obecne obciążenie pracownika (np. 3 projekty równocześnie, deadline za tydzień)
+- Dodatkowy szczegół (np. brak innej osoby do zadania, klient czeka)
+
+Odpowiedz TYLKO kontekstem. Format: "Chcesz delegować [zadanie] do [imię]. Obecna sytuacja: [obciążenie]. [wyzwanie]."
+"""
+        },
+        "motivation": {
+            "name": "🔥 Motywowanie zdemotywowanego",
+            "description": "Pracownik stracił motywację i rozważa zmianę pracy. Musisz go zmotywować.",
+            "ai_persona": "Jesteś zdemotywowanym pracownikiem, który czuje się wypalony i niedoceniany. Praca przestała Cię inspirować. Jesteś otwarty na rozmowę, ale potrzebujesz szczerości, zrozumienia i konkretnych zmian, nie pustych obietnic.",
+            "ai_role": "Pracownik",
+            "user_role": "Menedżer",
+            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst rozmowy motywacyjnej:
+- Imię pracownika i stanowisko
+- Dlaczego stracił motywację (np. rutyna, brak rozwoju, nieudane projekty)
+- Jak długo to trwa i jakie są objawy (np. gorsze wyniki, brak zaangażowania)
+- Dodatkowy kontekst (np. dostał ofertę z innej firmy, jest wartościowym pracownikiem)
+
+Odpowiedz TYLKO kontekstem. Format: "[Imię] jest [stanowisko]. Problem: [demotywacja]. [sygnały i sytuacja]."
+"""
+        },
+        "change_resistance": {
+            "name": "🔄 Opór wobec zmian",
+            "description": "Przekonujesz zespół do dużej zmiany organizacyjnej, na którą są opory.",
+            "ai_persona": "Jesteś sceptycznym członkiem zespołu, który obawia się zmian. Masz doświadczenie z nieudanymi zmianami w przeszłości. Jesteś ostrożny i potrzebujesz przekonujących argumentów oraz poczucia bezpieczeństwa.",
+            "ai_role": "Członek zespołu",
+            "user_role": "Lider zmiany",
+            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst wprowadzania zmiany:
+- Jaka zmiana jest wprowadzana (np. nowy system, restrukturyzacja, nowa metodologia)
+- Dlaczego zespół się obawia (np. poprzednie złe doświadczenia, niepewność)
+- Jakie są realne obawy (np. więcej pracy, utrata kontroli, zwolnienia)
+- Twoja perspektywa jako członka zespołu
+
+Odpowiedz TYLKO kontekstem. Format: "Firma wprowadza [zmiana]. Twoje obawy: [konkret]. [dodatkowy kontekst]."
+"""
+        },
+        "difficult_client": {
+            "name": "😤 Rozmowa z trudnym klientem",
+            "description": "Klient jest niezadowolony z realizacji projektu i grozi rezygnacją.",
+            "ai_persona": "Jesteś sfrustrowanym klientem, który czuje że jego projekt jest zaniedbywany. Jesteś niezadowolony z komunikacji i wyników. Możesz być oschły i wymagający, ale jeśli zobaczysz autentyczną chęć rozwiązania problemu, stajesz się bardziej otwarty.",
+            "ai_role": "Klient",
+            "user_role": "Account Manager",
+            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst rozmowy z trudnym klientem:
+- Nazwa klienta/firmy i branża
+- Co poszło nie tak w projekcie (np. opóźnienie, błędy, zła komunikacja)
+- Jak poważna jest sytuacja (np. klient grozi odejściem, złe recenzje)
+- Dodatkowy kontekst (np. duży kontrakt, prestiżowy klient)
+
+Odpowiedz TYLKO kontekstem. Format: "Klient [nazwa] z branży [branża]. Problem: [konkret]. Sytuacja: [powaga]."
+"""
+        },
+        "negotiation": {
+            "name": "💼 Negocjacje warunków",
+            "description": "Negocjujesz warunki współpracy z wymagającym partnerem biznesowym.",
+            "ai_persona": "Jesteś twardym negocjatorem, który zna swoją wartość. Chcesz najlepszych warunków i nie boisz się odejść, jeśli oferta nie jest satysfakcjonująca. Szanujesz profesjonalizm i konkretne argumenty biznesowe.",
+            "ai_role": "Partner biznesowy",
+            "user_role": "Negocjator",
+            "context_prompt": """Wygeneruj krótki (3-4 zdania), konkretny kontekst negocjacji biznesowych:
+- Kim jest partner (firma, branża, skala działalności)
+- Co jest przedmiotem negocjacji (np. cena, terminy, zakres współpracy)
+- Jakie są kluczowe punkty sporne (np. budżet, harmonogram, warunki płatności)
+- Dodatkowy kontekst (np. partner ma alternatywne oferty, presja czasowa)
+
+Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Punkt sporny: [konkret]. [sytuacja]."
+"""
         }
     }
     
-    # Wybór scenariusza
+    # Wybór scenariusza - NOWA KONSTRUKCJA Z SELECTBOX
     if not st.session_state.simulator_started:
-        st.markdown("#### 🎯 Wybierz scenariusz:")
+        st.markdown("### 🎯 Wybierz scenariusz rozmowy:")
         
-        for scenario_id, scenario in scenarios.items():
-            with st.container():
-                col1, col2 = st.columns([3, 1])
-                with col1:
-                    st.markdown(f"**{scenario['name']}**")
-                    st.markdown(f"_{scenario['description']}_")
-                with col2:
-                    if st.button("Rozpocznij", key=f"start_{scenario_id}"):
-                        st.session_state.simulator_scenario = scenario_id
-                        st.session_state.simulator_started = True
-                        st.session_state.simulator_waiting_for_next = False  # Reset flagi
-                        
-                        # Zaloguj rozpoczęcie symulatora
-                        try:
-                            from utils.activity_tracker import log_activity
-                            log_activity(st.session_state.username, 'tool_used', {
-                                'tool_name': 'Business Conversation Simulator',
-                                'scenario': scenario_id,
-                                'scenario_name': scenario['name']
-                            })
-                        except Exception:
-                            pass
-                        
-                        # Generuj kontekst case study
-                        with st.spinner("🎬 Generuję kontekst scenariusza..."):
-                            case_context = generate_case_context(scenario)
-                            st.session_state.simulator_case_context = case_context
-                            
-                            # Wygeneruj pierwszą wiadomość AI z kontekstem
-                            initial_message = generate_initial_message(scenario, case_context)
-                            st.session_state.simulator_messages = [
-                                {"role": "ai", "content": initial_message, "ciq_level": None}
-                            ]
-                        
-                        st.rerun()
+        # Przygotuj opcje dla selectbox
+        scenario_options = {scenario['name']: scenario_id for scenario_id, scenario in scenarios.items()}
+        
+        # Selectbox z opisem wybranego scenariusza
+        selected_name = st.selectbox(
+            "Scenariusz:",
+            options=list(scenario_options.keys()),
+            key="scenario_selector",
+            help="Wybierz typ rozmowy biznesowej, którą chcesz przećwiczyć"
+        )
+        
+        # Pobierz wybrany scenariusz
+        selected_id = scenario_options[selected_name]
+        selected_scenario = scenarios[selected_id]
+        
+        # Wyświetl szczegóły wybranego scenariusza
+        st.markdown("---")
+        with st.container():
+            st.markdown(f"#### {selected_scenario['name']}")
+            st.info(f"📋 **Scenariusz:** {selected_scenario['description']}")
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown(f"**Twoja rola:** {selected_scenario['user_role']}")
+            with col2:
+                st.markdown(f"**Rozmówca:** {selected_scenario['ai_role']}")
+            
+            st.markdown("")
+            if st.button("▶️ Rozpocznij symulację", type="primary", use_container_width=True, key=f"start_{selected_id}"):
+                st.session_state.simulator_scenario = selected_id
+                st.session_state.simulator_started = True
+                st.session_state.simulator_waiting_for_next = False  # Reset flagi
+                
+                # Zaloguj rozpoczęcie symulatora i przyznaj XP
+                try:
+                    from data.users import award_xp_for_activity
+                    award_xp_for_activity(
+                        st.session_state.username,
+                        'tool_used',
+                        1,  # 1 XP za użycie narzędzia
+                        {
+                            'tool_name': 'Business Conversation Simulator',
+                            'scenario': selected_id,
+                            'scenario_name': selected_scenario['name']
+                        }
+                    )
+                except Exception:
+                    pass
+                
+                # Generuj kontekst case study
+                with st.spinner("🎬 Generuję kontekst scenariusza..."):
+                    case_context = generate_case_context(selected_scenario)
+                    st.session_state.simulator_case_context = case_context
+                    
+                    # Wygeneruj pierwszą wiadomość AI z kontekstem
+                    initial_message = generate_initial_message(selected_scenario, case_context)
+                    st.session_state.simulator_messages = [
+                        {"role": "ai", "content": initial_message, "ciq_level": None}
+                    ]
+                
+                st.rerun()
         
         # Instrukcja
         st.markdown("---")
@@ -4226,15 +4396,20 @@ Odpowiedz TYLKO kontekstem. Format: "Konflikt między [osoba1] a [osoba2]. Probl
                 st.session_state.simulator_final_report = report
                 st.session_state.simulator_completed = True
                 
-                # Zaloguj ukończenie ćwiczenia AI
+                # Zaloguj ukończenie ćwiczenia AI i przyznaj XP
                 try:
-                    from utils.activity_tracker import log_activity
-                    log_activity(st.session_state.username, 'ai_exercise', {
-                        'exercise_name': 'Business Conversation Simulator',
-                        'scenario': st.session_state.simulator_scenario,
-                        'turns': len(st.session_state.simulator_messages) // 2,
-                        'completed': True
-                    })
+                    from data.users import award_xp_for_activity
+                    award_xp_for_activity(
+                        st.session_state.username,
+                        'ai_exercise',
+                        15,  # 15 XP za ukończenie ćwiczenia AI
+                        {
+                            'exercise_name': 'Business Conversation Simulator',
+                            'scenario': st.session_state.simulator_scenario,
+                            'turns': len(st.session_state.simulator_messages) // 2,
+                            'completed': True
+                        }
+                    )
                 except Exception:
                     pass
             st.rerun()

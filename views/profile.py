@@ -270,7 +270,7 @@ def show_profile():
     add_animations_css()
 
     # Main Profile Tabs - usunięto Personalizację, Eksplorator Typów i Typ Neurolidera
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "📈 Raporty"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "💰 Historia XP", "📈 Raporty"])
     
     # Tab 1: Statistics - podobnie jak w Dashboard
     with tab1:
@@ -647,12 +647,277 @@ def show_profile():
         show_badges_section()
         st.markdown("</div>", unsafe_allow_html=True)
     
-    # Tab 4: Reports
+    # Tab 4: XP History
     with tab4:
+        scroll_to_top()
+        st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
+        show_xp_history_section()
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Tab 5: Reports
+    with tab5:
         scroll_to_top()
         st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
         show_reports_section()
         st.markdown("</div>", unsafe_allow_html=True)
+
+def show_xp_history_section():
+    """Wyświetla szczegółową historię zdobywania XP"""
+    from utils.activity_tracker import get_xp_history
+    from data.users import load_user_data
+    
+    zen_header("💰 Historia Zdobywania XP")
+    
+    username = st.session_state.username
+    users_data = load_user_data()
+    user_data = users_data.get(username, {})
+    
+    # Podsumowanie na górze
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric(
+            "Całkowite XP",
+            user_data.get('xp', 0),
+            help="Suma wszystkich zdobytych punktów doświadczenia"
+        )
+    with col2:
+        st.metric(
+            "Poziom",
+            user_data.get('level', 1),
+            help="Twój obecny poziom"
+        )
+    with col3:
+        # Oblicz postęp do następnego poziomu
+        current_xp = user_data.get('xp', 0)
+        current_level = user_data.get('level', 1)
+        next_level_xp = current_level * 100  # Uproszczony wzór
+        progress = min(100, (current_xp % next_level_xp) / next_level_xp * 100)
+        st.metric(
+            "Postęp",
+            f"{int(progress)}%",
+            help=f"Do następnego poziomu: {next_level_xp - (current_xp % next_level_xp)} XP"
+        )
+    
+    st.markdown("---")
+    
+    # Filtry
+    st.markdown("### 🔍 Filtry")
+    col_filter1, col_filter2 = st.columns(2)
+    
+    with col_filter1:
+        period = st.selectbox(
+            "Okres",
+            ["Ostatnie 7 dni", "Ostatnie 30 dni", "Ostatnie 90 dni", "Wszystko"],
+            index=1
+        )
+    
+    with col_filter2:
+        activity_types = {
+            "Wszystkie": None,
+            "Lekcje": ["lesson_started", "lesson_completed"],
+            "Quizy": ["quiz_completed"],
+            "Inspiracje": ["inspiration_read"],
+            "Narzędzia": ["tool_used"],
+            "Ćwiczenia AI": ["ai_exercise"],
+            "Testy diagnostyczne": ["test_completed"]
+        }
+        filter_type = st.selectbox("Typ aktywności", list(activity_types.keys()))
+    
+    # Mapuj okres na dni
+    period_days = {
+        "Ostatnie 7 dni": 7,
+        "Ostatnie 30 dni": 30,
+        "Ostatnie 90 dni": 90,
+        "Wszystko": 365
+    }
+    days = period_days[period]
+    
+    # Pobierz activity_log
+    activity_log = user_data.get('activity_log', [])
+    
+    # Filtruj po dacie
+    from datetime import datetime, timedelta
+    cutoff_date = datetime.now() - timedelta(days=days)
+    
+    filtered_activities = []
+    for entry in activity_log:
+        try:
+            timestamp = datetime.fromisoformat(entry['timestamp'])
+            if timestamp >= cutoff_date:
+                # Filtruj po typie aktywności
+                if activity_types[filter_type] is None or entry['type'] in activity_types[filter_type]:
+                    # Sprawdź czy ma XP (albo z details, albo domyślne)
+                    xp_earned = entry.get('details', {}).get('xp_earned', 0)
+                    if xp_earned > 0 or entry['type'] in ['lesson_started', 'lesson_completed', 'quiz_completed', 
+                                                            'inspiration_read', 'tool_used', 'ai_exercise', 'test_completed']:
+                        filtered_activities.append(entry)
+        except:
+            continue
+    
+    # Statystyki przefiltrowanych danych
+    st.markdown("---")
+    st.markdown(f"### 📊 Statystyki: {period}")
+    
+    # Oblicz statystyki
+    total_xp_period = 0
+    activity_breakdown = {}
+    
+    for entry in filtered_activities:
+        # Pobierz XP z details lub użyj domyślnych wartości
+        details = entry.get('details', {})
+        xp = details.get('xp_earned', 0)
+        
+        # Fallback dla starych wpisów bez xp_earned
+        if xp == 0:
+            xp_mapping = {
+                'lesson_started': 5,
+                'lesson_completed': 50,
+                'quiz_completed': 20,
+                'ai_exercise': 15,
+                'inspiration_read': 1,
+                'test_completed': 5,
+                'tool_used': 1
+            }
+            xp = xp_mapping.get(entry['type'], 0)
+        
+        total_xp_period += xp
+        
+        # Grupuj po typie
+        activity_type = entry['type']
+        if activity_type not in activity_breakdown:
+            activity_breakdown[activity_type] = {'count': 0, 'xp': 0}
+        activity_breakdown[activity_type]['count'] += 1
+        activity_breakdown[activity_type]['xp'] += xp
+    
+    col_stat1, col_stat2, col_stat3 = st.columns(3)
+    with col_stat1:
+        st.metric("Zdobyte XP", f"{total_xp_period} XP")
+    with col_stat2:
+        st.metric("Liczba aktywności", len(filtered_activities))
+    with col_stat3:
+        avg_xp = total_xp_period / len(filtered_activities) if filtered_activities else 0
+        st.metric("Średnio na aktywność", f"{avg_xp:.1f} XP")
+    
+    # Wykres breakdown po typach
+    if activity_breakdown:
+        st.markdown("### 📈 Rozkład XP według typu aktywności")
+        
+        # Mapowanie nazw typów aktywności
+        type_names = {
+            'lesson_started': '📖 Lekcje rozpoczęte',
+            'lesson_completed': '✅ Lekcje ukończone',
+            'quiz_completed': '📝 Quizy',
+            'inspiration_read': '💡 Inspiracje',
+            'tool_used': '🛠️ Narzędzia',
+            'ai_exercise': '🤖 Ćwiczenia AI',
+            'test_completed': '🎯 Testy diagnostyczne'
+        }
+        
+        # Przygotuj dane do wyświetlenia
+        breakdown_data = []
+        for act_type, stats in activity_breakdown.items():
+            breakdown_data.append({
+                'Typ': type_names.get(act_type, act_type),
+                'Liczba': stats['count'],
+                'XP': stats['xp'],
+                'Średnio': f"{stats['xp'] / stats['count']:.1f}"
+            })
+        
+        # Sortuj po XP
+        breakdown_data.sort(key=lambda x: x['XP'], reverse=True)
+        
+        # Wyświetl jako DataFrame
+        import pandas as pd
+        df_breakdown = pd.DataFrame(breakdown_data)
+        st.dataframe(df_breakdown, use_container_width=True, hide_index=True)
+    
+    st.markdown("---")
+    
+    # Szczegółowa tabela aktywności
+    st.markdown("### 📜 Szczegółowa Historia")
+    
+    if not filtered_activities:
+        st.info(f"Brak aktywności w wybranym okresie ({period}).")
+    else:
+        # Przygotuj dane do tabeli
+        table_data = []
+        
+        for entry in sorted(filtered_activities, key=lambda x: x['timestamp'], reverse=True):
+            timestamp = datetime.fromisoformat(entry['timestamp'])
+            activity_type = entry['type']
+            details = entry.get('details', {})
+            
+            # Pobierz XP
+            xp = details.get('xp_earned', 0)
+            if xp == 0:
+                xp_mapping = {
+                    'lesson_started': 5,
+                    'lesson_completed': 50,
+                    'quiz_completed': 20,
+                    'ai_exercise': 15,
+                    'inspiration_read': 1,
+                    'test_completed': 5,
+                    'tool_used': 1
+                }
+                xp = xp_mapping.get(activity_type, 0)
+            
+            # Nazwa aktywności
+            type_names = {
+                'lesson_started': '📖 Rozpoczęcie lekcji',
+                'lesson_completed': '✅ Ukończenie lekcji',
+                'quiz_completed': '📝 Quiz',
+                'inspiration_read': '💡 Przeczytanie inspiracji',
+                'tool_used': '🛠️ Użycie narzędzia',
+                'ai_exercise': '🤖 Ćwiczenie AI',
+                'test_completed': '🎯 Test diagnostyczny'
+            }
+            activity_name = type_names.get(activity_type, activity_type)
+            
+            # Dodatkowe szczegóły
+            extra_info = ""
+            if activity_type == 'quiz_completed':
+                score = details.get('score_percentage', 0)
+                extra_info = f"Wynik: {score}%"
+            elif activity_type == 'test_completed':
+                test_name = details.get('test_name', '')
+                extra_info = f"{test_name}"
+            elif activity_type == 'tool_used':
+                tool_name = details.get('tool_name', '')
+                extra_info = f"{tool_name}"
+            elif activity_type == 'ai_exercise':
+                exercise_name = details.get('exercise_name', '')
+                extra_info = f"{exercise_name}"
+            elif activity_type == 'inspiration_read':
+                insp_id = details.get('inspiration_id', '')
+                extra_info = f"ID: {insp_id}"
+            
+            table_data.append({
+                'Data': timestamp.strftime('%Y-%m-%d %H:%M'),
+                'Aktywność': activity_name,
+                'Szczegóły': extra_info,
+                'XP': f"+{xp}"
+            })
+        
+        # Wyświetl jako DataFrame z paginacją
+        import pandas as pd
+        df = pd.DataFrame(table_data)
+        
+        # Dodaj paginację
+        items_per_page = 20
+        total_pages = (len(table_data) - 1) // items_per_page + 1
+        
+        if total_pages > 1:
+            page = st.selectbox("Strona", range(1, total_pages + 1), key="xp_history_page")
+            start_idx = (page - 1) * items_per_page
+            end_idx = start_idx + items_per_page
+            df_page = df.iloc[start_idx:end_idx]
+        else:
+            df_page = df
+        
+        st.dataframe(df_page, use_container_width=True, hide_index=True)
+        
+        # Statystyka na końcu
+        st.caption(f"Wyświetlono {len(df_page)} z {len(table_data)} aktywności")
 
 def show_reports_section():
     """Wyświetla sekcję raportów rozwojowych użytkownika"""
@@ -660,6 +925,8 @@ def show_reports_section():
         get_activity_summary,
         get_login_pattern,
         get_lesson_completion_stats,
+        get_quiz_performance_stats,
+        get_xp_history,
         initialize_activity_tracking
     )
     from utils.report_generator import (
@@ -692,9 +959,10 @@ def show_reports_section():
                 activity_summary = get_activity_summary(username, days=7)
                 login_pattern = get_login_pattern(username, days=30)
                 lesson_stats = get_lesson_completion_stats(username)
+                quiz_stats = get_quiz_performance_stats(username, days=30)
                 
                 # Generuj raport AI
-                report = generate_weekly_report_ai(username, activity_summary, login_pattern, lesson_stats)
+                report = generate_weekly_report_ai(username, activity_summary, login_pattern, lesson_stats, quiz_stats)
                 
                 # Zapisz do profilu
                 save_report_to_user_profile(username, report)
@@ -772,6 +1040,135 @@ def show_reports_section():
             ):
                 display_report_compact(report)
 
+def display_xp_chart(username: str):
+    """Wyświetla wykres przyrostu XP z ostatnich 30 dni"""
+    from utils.activity_tracker import get_xp_history
+    import plotly.graph_objects as go
+    from datetime import datetime, timedelta
+    
+    # Pobierz dane XP
+    xp_data = get_xp_history(username, days=30)
+    
+    if not xp_data['daily_xp']:
+        st.info("📊 Brak danych o XP z ostatnich 30 dni. Zacznij wykonywać aktywności, aby zobaczyć wykres!")
+        return
+    
+    # Przygotuj dane - uzupełnij brakujące dni zerami
+    all_dates = []
+    current_date = datetime.now().date()
+    for i in range(29, -1, -1):  # 30 dni wstecz
+        all_dates.append((current_date - timedelta(days=i)).strftime('%Y-%m-%d'))
+    
+    # Mapuj XP na wszystkie dni
+    xp_dict = dict(xp_data['daily_xp'])
+    daily_values = [xp_dict.get(date, 0) for date in all_dates]
+    
+    # Oblicz skumulowany XP
+    cumulative_xp = []
+    total = 0
+    for xp in daily_values:
+        total += xp
+        cumulative_xp.append(total)
+    
+    # Stwórz wykres
+    fig = go.Figure()
+    
+    # Słupki - dzienny XP
+    fig.add_trace(go.Bar(
+        x=all_dates,
+        y=daily_values,
+        name='Dzienny XP',
+        marker_color='rgba(102, 126, 234, 0.6)',
+        hovertemplate='<b>%{x}</b><br>XP zdobyte: %{y}<extra></extra>'
+    ))
+    
+    # Linia - skumulowany XP
+    fig.add_trace(go.Scatter(
+        x=all_dates,
+        y=cumulative_xp,
+        name='Łączny XP',
+        mode='lines+markers',
+        line=dict(color='rgba(118, 75, 162, 0.8)', width=3),
+        marker=dict(size=6, color='rgba(118, 75, 162, 1)'),
+        yaxis='y2',
+        hovertemplate='<b>%{x}</b><br>Łącznie: %{y} XP<extra></extra>'
+    ))
+    
+    # Layout
+    fig.update_layout(
+        title=None,
+        xaxis=dict(
+            title='Data',
+            tickangle=-45,
+            tickmode='array',
+            tickvals=all_dates[::5],  # Co 5 dni
+            ticktext=[datetime.strptime(d, '%Y-%m-%d').strftime('%d.%m') for d in all_dates[::5]]
+        ),
+        yaxis=dict(
+            title='XP zdobyte dziennie',
+            side='left',
+            showgrid=True
+        ),
+        yaxis2=dict(
+            title='Łączny XP',
+            side='right',
+            overlaying='y',
+            showgrid=False
+        ),
+        legend=dict(
+            orientation='h',
+            yanchor='bottom',
+            y=1.02,
+            xanchor='right',
+            x=1
+        ),
+        hovermode='x unified',
+        height=400,
+        margin=dict(l=50, r=50, t=30, b=80),
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Statystyki pod wykresem
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric(
+            "Łącznie zdobyte",
+            f"{xp_data['total_xp_gained']} XP",
+            help="Suma XP zdobytych w ostatnich 30 dniach"
+        )
+    
+    with col2:
+        st.metric(
+            "Średnio dziennie",
+            f"{xp_data['avg_daily_xp']} XP",
+            help="Średnia dzienna zdobyta w ostatnich 30 dniach"
+        )
+    
+    with col3:
+        most_date, most_xp = xp_data['most_productive_day']
+        if most_date:
+            formatted_date = datetime.strptime(most_date, '%Y-%m-%d').strftime('%d.%m')
+            st.metric(
+                "Najlepszy dzień",
+                f"{most_xp} XP",
+                delta=formatted_date,
+                help=f"Najwięcej XP zdobytych w jednym dniu"
+            )
+        else:
+            st.metric("Najlepszy dzień", "—")
+    
+    with col4:
+        st.metric(
+            "Obecny poziom",
+            f"Level {xp_data['current_level']}",
+            delta=f"{xp_data['current_xp']} XP",
+            help="Twój aktualny poziom i całkowite XP"
+        )
+
 def display_report_detailed(report: Dict):
     """Wyświetla szczegółowy raport"""
     
@@ -817,6 +1214,12 @@ def display_report_detailed(report: Dict):
         </div>
         """
         st.markdown(progress_html, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # Wykres przyrostu XP
+    st.markdown("### 📈 Przyrost XP w ostatnich 30 dniach")
+    display_xp_chart(st.session_state.username)
     
     st.markdown("---")
     
@@ -1259,6 +1662,21 @@ def show_test_results():
                 "neuroleader_type_discovered", 
                 {"neuroleader_type": result}
             )
+            
+            # Przyznaj XP za ukończenie testu Neurolidera
+            try:
+                from data.users import award_xp_for_activity
+                award_xp_for_activity(
+                    st.session_state.username,
+                    'test_completed',
+                    5,  # 5 XP za ukończenie testu Neurolidera
+                    {
+                        'test_name': 'Neuroleader Type',
+                        'result': result
+                    }
+                )
+            except Exception:
+                pass
             
             # Check for achievements
             check_achievements(st.session_state.username)

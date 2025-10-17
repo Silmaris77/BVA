@@ -7,14 +7,14 @@ from datetime import datetime, timedelta
 from typing import Dict, Optional
 import json
 
-def generate_weekly_report_ai(username: str, activity_summary: Dict, login_pattern: Dict, lesson_stats: Dict) -> Dict:
+def generate_weekly_report_ai(username: str, activity_summary: Dict, login_pattern: Dict, lesson_stats: Dict, quiz_stats: Optional[Dict] = None) -> Dict:
     """
     Generuje tygodniowy raport rozwojowy używając AI
     """
     try:
         api_key = st.secrets.get("API_KEYS", {}).get("gemini")
         if not api_key:
-            return generate_fallback_report(username, activity_summary, login_pattern, lesson_stats)
+            return generate_fallback_report(username, activity_summary, login_pattern, lesson_stats, quiz_stats)
         
         import google.generativeai as genai
         genai.configure(api_key=api_key)
@@ -32,6 +32,21 @@ def generate_weekly_report_ai(username: str, activity_summary: Dict, login_patte
         
         # Przygotuj dane dla AI
         user_profile = activity_summary.get('user_profile', {})
+        
+        # Dodaj dane o quizach do promptu
+        quiz_section = ""
+        if quiz_stats and quiz_stats.get('total_quizzes', 0) > 0:
+            quiz_section = f"""
+WYNIKI QUIZÓW (OSTATNIE 30 DNI):
+- Ukończone quizy: {quiz_stats.get('total_quizzes', 0)}
+- Średni wynik: {quiz_stats.get('avg_score', 0)}%
+- Wskaźnik zdawalności: {quiz_stats.get('pass_rate', 0)}%
+- Wyniki 100%: {quiz_stats.get('perfect_scores', 0)}
+- Trend: {quiz_stats.get('improvement_trend', 'brak danych')}
+- Najwyższy wynik: {quiz_stats.get('highest_score', 0)}%
+- Najniższy wynik: {quiz_stats.get('lowest_score', 0)}%
+- Słabe obszary: {len(quiz_stats.get('weak_areas', []))} quizów poniżej 70%
+"""
         
         prompt = f"""Jesteś ekspertem od rozwoju osobistego i analizy danych uczenia się.
 
@@ -54,7 +69,7 @@ LEKCJE (OGÓŁEM):
 - Ukończone: {lesson_stats.get('completed', 0)}/{lesson_stats.get('total_available', 0)}
 - W trakcie: {lesson_stats.get('in_progress', 0)}
 - Porzucone: {lesson_stats.get('abandoned', 0)}
-
+{quiz_section}
 PROFIL:
 - Level: {user_profile.get('level', 1)}, XP: {user_profile.get('xp', 0)}
 - Test Kolba: {user_profile.get('kolb_test') or 'Nie wykonany'}
@@ -95,6 +110,9 @@ Wygeneruj **spersonalizowany raport tygodniowy** w formacie JSON:
 
 WYTYCZNE:
 - Bądź **konkretny** - używaj liczb z danych
+- Uwzględnij wyniki quizów w analizie (jeśli dostępne)
+- Jeśli quizy słabe - zasugeruj powtórkę materiału
+- Jeśli trend poprawy - doceń i zachęć do kontynuacji
 - Bądź **motywujący** ale **realistyczny**
 - Jeśli aktywność niska → skupij się na małych krokach
 - Jeśli aktywność wysoka → doceń i zasugeruj wyzwania
@@ -125,13 +143,40 @@ TYLKO JSON:"""
         
     except Exception as e:
         st.error(f"Błąd generowania raportu AI: {e}")
-        return generate_fallback_report(username, activity_summary, login_pattern, lesson_stats)
+        return generate_fallback_report(username, activity_summary, login_pattern, lesson_stats, quiz_stats)
 
-def generate_fallback_report(username: str, activity_summary: Dict, login_pattern: Dict, lesson_stats: Dict) -> Dict:
+def generate_fallback_report(username: str, activity_summary: Dict, login_pattern: Dict, lesson_stats: Dict, quiz_stats: Optional[Dict] = None) -> Dict:
     """
     Prosty raport gdy AI nie działa
     """
-    engagement_score = calculate_engagement_score(activity_summary, login_pattern)
+    engagement_score = calculate_engagement_score(activity_summary, login_pattern, quiz_stats)
+    
+    strengths = [
+        f"Zalogowałeś się {activity_summary.get('unique_login_days', 0)} razy w tym tygodniu",
+        f"Ukończone {activity_summary.get('lessons', {}).get('completed', 0)} lekcje"
+    ]
+    
+    # Dodaj informacje o quizach jeśli dostępne
+    if quiz_stats and quiz_stats.get('total_quizzes', 0) > 0:
+        avg_score = quiz_stats.get('avg_score', 0)
+        if avg_score >= 80:
+            strengths.append(f"Świetne wyniki w quizach - średnia {avg_score}%!")
+        elif avg_score >= 70:
+            strengths.append(f"Solidne wyniki w quizach - średnia {avg_score}%")
+    
+    concerns = []
+    if quiz_stats and quiz_stats.get('total_quizzes', 0) > 0:
+        avg_score = quiz_stats.get('avg_score', 0)
+        if avg_score < 70:
+            concerns.append(f"Średnia w quizach {avg_score}% - warto powtórzyć materiał")
+        if quiz_stats.get('weak_areas', []):
+            concerns.append(f"Wykryto {len(quiz_stats.get('weak_areas', []))} słabe obszary w quizach")
+    
+    if not concerns:
+        concerns = [
+            "Zbyt mało danych aby określić obszary do poprawy",
+            "Spróbuj być bardziej aktywny w kolejnym tygodniu"
+        ]
     
     return {
         'generated_at': datetime.now().isoformat(),
@@ -142,14 +187,8 @@ def generate_fallback_report(username: str, activity_summary: Dict, login_patter
         'summary_headline': f"Twój tydzień w BVA - {engagement_score}/10 zaangażowania",
         'engagement_score': engagement_score,
         'engagement_trend': 'stabilny',
-        'strengths': [
-            f"Zalogowałeś się {activity_summary.get('unique_login_days', 0)} razy w tym tygodniu",
-            f"Ukończone {activity_summary.get('lessons', {}).get('completed', 0)} lekcje"
-        ],
-        'concerns': [
-            "Zbyt mało danych aby określić obszary do poprawy",
-            "Spróbuj być bardziej aktywny w kolejnym tygodniu"
-        ],
+        'strengths': strengths,
+        'concerns': concerns,
         'insights': [
             "System jeszcze zbiera dane o Twoich wzorcach uczenia się",
             "Kontynuuj regularne logowanie aby otrzymać lepsze insighty"
@@ -171,7 +210,7 @@ def generate_fallback_report(username: str, activity_summary: Dict, login_patter
         'motivational_message': 'Każdy dzień to nowa szansa na rozwój. Kontynuuj swoją przygodę z BVA!'
     }
 
-def calculate_engagement_score(activity_summary: Dict, login_pattern: Dict) -> int:
+def calculate_engagement_score(activity_summary: Dict, login_pattern: Dict, quiz_stats: Optional[Dict] = None) -> int:
     """
     Oblicza score zaangażowania (1-10) na podstawie aktywności
     """
@@ -186,14 +225,20 @@ def calculate_engagement_score(activity_summary: Dict, login_pattern: Dict) -> i
     elif login_days >= 2:
         score += 1
     
-    # Lekcje (max 3 punkty)
+    # Lekcje (max 2 punkty)
     lessons_completed = activity_summary.get('lessons', {}).get('completed', 0)
     if lessons_completed >= 3:
-        score += 3
-    elif lessons_completed >= 2:
         score += 2
     elif lessons_completed >= 1:
         score += 1
+    
+    # Quizy (max 2 punkty) - NOWE
+    if quiz_stats and quiz_stats.get('total_quizzes', 0) > 0:
+        avg_score = quiz_stats.get('avg_score', 0)
+        if avg_score >= 80:
+            score += 2
+        elif avg_score >= 70:
+            score += 1
     
     # Różnorodność aktywności (max 2 punkty)
     ai_exercises = activity_summary.get('ai_exercises', {}).get('sessions', 0)
@@ -203,11 +248,9 @@ def calculate_engagement_score(activity_summary: Dict, login_pattern: Dict) -> i
     diverse_score = min(ai_exercises, 1) + min(tools_used, 1) + min(inspirations, 1)
     score += min(diverse_score, 2)
     
-    # Regularność (max 2 punkty)
+    # Regularność (max 1 punkt)
     activity_rate = login_pattern.get('activity_rate', 0)
     if activity_rate >= 80:
-        score += 2
-    elif activity_rate >= 50:
         score += 1
     
     return max(1, min(score, 10))  # Ograniczenie 1-10

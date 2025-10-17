@@ -2,6 +2,7 @@ import json
 import os
 import uuid
 from datetime import datetime, timezone
+from typing import Optional
 import streamlit as st
 
 def save_user_data(users_data):
@@ -126,6 +127,37 @@ def update_user_xp(username, xp_amount):
         
         return True
     return False
+
+def award_xp_for_activity(username: str, activity_type: str, xp_amount: int, details: Optional[dict] = None):
+    """
+    Zunifikowana funkcja do przyznawania XP i logowania aktywności
+    
+    Args:
+        username: Nazwa użytkownika
+        activity_type: Typ aktywności ('inspiration_read', 'tool_used', 'test_completed', etc.)
+        xp_amount: Ilość XP do przyznania
+        details: Dodatkowe szczegóły aktywności
+    
+    Returns:
+        bool: True jeśli udało się dodać XP, False w przeciwnym wypadku
+    """
+    if not username:
+        return False
+    
+    # Dodaj XP
+    success = update_user_xp(username, xp_amount)
+    
+    if success:
+        # Zaloguj aktywność
+        try:
+            from utils.activity_tracker import log_activity
+            activity_details = details or {}
+            activity_details['xp_earned'] = xp_amount
+            log_activity(username, activity_type, activity_details)
+        except ImportError:
+            pass  # Ignore if activity_tracker is not available
+    
+    return success
 
 def update_single_user_field(username, field_name, field_value):
     """Update a single field in a user's data"""
