@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 773,
+    "xp": 901,
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-17 09:04:03",
+    "last_login": "2025-10-17 13:40:30",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -817,7 +817,7 @@
         "completed_lessons": 2
       },
       "2025-10-17": {
-        "xp": 773,
+        "xp": 901,
         "degencoins": 563,
         "level": 1,
         "completed_lessons": 2
@@ -874,6 +874,223 @@
         "details": {
           "inspiration_id": "shower_ideas",
           "inspiration_title": "Dlaczego najlepsze pomysły przychodzą pod prysznicem?"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T13:26:21.446338",
+        "details": {
+          "timestamp": "2025-10-17T13:26:21.442569"
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T13:26:45.626821",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "category": "development",
+          "scenario": "delegation",
+          "scenario_name": "📋 Delegowanie zadania",
+          "difficulty": 2,
+          "modifiers": [],
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T13:26:54.001188",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "delegation",
+          "turns": 0,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T13:29:14.074364",
+        "details": {
+          "timestamp": "2025-10-17T13:29:14.071157"
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T13:29:26.967739",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "category": "development",
+          "scenario": "delegation",
+          "scenario_name": "📋 Delegowanie zadania",
+          "difficulty": 2,
+          "modifiers": [],
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T13:29:35.566522",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "delegation",
+          "turns": 0,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T13:29:55.979883",
+        "details": {
+          "timestamp": "2025-10-17T13:29:55.976493"
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T13:30:32.413133",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom II",
+          "confidence": 9,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T13:31:07.200356",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "category": "conflicts",
+          "scenario": "team_conflict",
+          "scenario_name": "⚡ Rozwiązanie konfliktu",
+          "difficulty": 2,
+          "modifiers": [],
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T13:31:54.830336",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "team_conflict",
+          "turns": 1,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T13:39:38.124889",
+        "details": {
+          "timestamp": "2025-10-17T13:39:38.123249"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T13:40:30.282454",
+        "details": {
+          "timestamp": "2025-10-17T13:40:30.280651"
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T13:41:26.288054",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom II",
+          "confidence": 9,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T13:51:13.565004",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "scenario": "difficult_feedback",
+          "scenario_name": "📢 Feedback dla pracownika",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T13:58:16.235131",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "difficult_feedback",
+          "scenario_name": "📢 Feedback dla pracownika",
+          "turns": 3,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T13:58:24.175724",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "difficult_feedback",
+          "scenario_name": "📢 Feedback dla pracownika",
+          "turns": 3,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T13:58:42.040338",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "scenario": "change_resistance",
+          "scenario_name": "🔄 Opór wobec zmian",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:00:49.589059",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "change_resistance",
+          "scenario_name": "🔄 Opór wobec zmian",
+          "turns": 10,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:02:09.316669",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "change_resistance",
+          "scenario_name": "🔄 Opór wobec zmian",
+          "turns": 10,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:02:14.567793",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "change_resistance",
+          "scenario_name": "🔄 Opór wobec zmian",
+          "turns": 10,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:02:45.715341",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "scenario": "salary_raise",
+          "scenario_name": "💰 Rozmowa o podwyżkę",
+          "xp_earned": 1
         }
       }
     ],
@@ -2865,11 +3082,11 @@
     "user_id": "fd17159b-23c8-4730-bf28-80afeeb1f797",
     "password": "Basia",
     "degen_type": null,
-    "xp": 24,
+    "xp": 239,
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-10-17",
-    "last_login": null,
+    "last_login": "2025-10-17 14:04:09",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -2881,7 +3098,7 @@
     },
     "daily_stats": {
       "2025-10-17": {
-        "xp": 24,
+        "xp": 239,
         "degencoins": 0,
         "level": 1,
         "completed_lessons": 0
@@ -2980,6 +3197,231 @@
           "scenario_name": "⚡ Rozwiązanie konfliktu",
           "xp_earned": 1
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-17T14:04:09.552225",
+        "details": {
+          "timestamp": "2025-10-17T14:04:09.550454"
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:04:36.090818",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:05:29.643877",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "turns": 10,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:06:15.003579",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "turns": 10,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:06:26.442480",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "turns": 10,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:07:01.474331",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom II",
+          "confidence": 8,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:07:01.713055",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "turns": 10,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:07:40.503902",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "turns": 10,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:07:55.537359",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "turns": 10,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:22:45.161670",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:24:13.262674",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "turns": 2,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:24:36.396668",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "turns": 2,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:24:59.237894",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "motivation",
+          "scenario_name": "🔥 Motywowanie zdemotywowanego",
+          "turns": 2,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:25:10.800204",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "scenario": "delegation",
+          "scenario_name": "📋 Delegowanie zadania",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:26:49.778012",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "delegation",
+          "scenario_name": "📋 Delegowanie zadania",
+          "turns": 1,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:26:53.093722",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "delegation",
+          "scenario_name": "📋 Delegowanie zadania",
+          "turns": 1,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:27:34.716967",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "delegation",
+          "scenario_name": "📋 Delegowanie zadania",
+          "turns": 1,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-17T14:27:51.995497",
+        "details": {
+          "tool_name": "Business Conversation Simulator",
+          "scenario": "change_resistance",
+          "scenario_name": "🔄 Opór wobec zmian",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:28:56.725040",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "change_resistance",
+          "scenario_name": "🔄 Opór wobec zmian",
+          "turns": 1,
+          "completed": true,
+          "xp_earned": 15
+        }
+      },
+      {
+        "type": "ai_exercise",
+        "timestamp": "2025-10-17T14:29:02.209098",
+        "details": {
+          "exercise_name": "Business Conversation Simulator",
+          "scenario": "change_resistance",
+          "scenario_name": "🔄 Opór wobec zmian",
+          "turns": 1,
+          "completed": true,
+          "xp_earned": 15
+        }
       }
     ],
     "kolb_test": {
@@ -3046,6 +3488,56 @@
         ],
         "motivational_message": "Pamiętaj, że każda, nawet najmniejsza aktywność, przybliża Cię do celu. Wykorzystaj swój potencjał Asymilatora i zacznij od małych kroków. Jesteśmy tu, aby Cię wspierać!",
         "generated_at": "2025-10-17T09:52:53.707606",
+        "period_start": "2025-10-10",
+        "period_end": "2025-10-17",
+        "report_type": "weekly",
+        "username": "Basia"
+      },
+      {
+        "summary_headline": "Małe kroki prowadzą do wielkich sukcesów!",
+        "engagement_score": 4,
+        "engagement_trend": "stabilny",
+        "strengths": [
+          "Wykorzystanie narzędzi CIQ Scanner i Business Conversation Simulator świadczy o chęci praktycznego rozwoju.",
+          "Regularne korzystanie z sesji ćwiczeń AI (7 sesji w ciągu tygodnia) pokazuje zaangażowanie w interaktywną naukę.",
+          "Przeczytanie 2 inspiracji wskazuje na poszukiwanie dodatkowej motywacji."
+        ],
+        "concerns": [
+          "Niska częstotliwość logowania (1/7 dni) może spowalniać postępy.",
+          "Brak ukończonych lekcji (0/14) sugeruje potrzebę skupienia się na systematycznym przechodzeniu przez materiał."
+        ],
+        "insights": [
+          "Największa aktywność w piątki o 14:00 może być dobrym momentem na planowanie dalszej nauki w tygodniu.",
+          "Profil Asymilatora Kolba sugeruje, że preferujesz analizę i syntezę informacji, co może być pomocne w sesjach AI."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaplanuj w kalendarzu 30 minut w piątek na przegląd i wybór jednej lekcji do ukończenia w kolejnym tygodniu.",
+            "why": "Regularność jest kluczem do sukcesu, a rozpoczęcie od jednej lekcji pomoże zbudować nawyk.",
+            "estimated_time": "30 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Poświęć 15 minut dziennie na jedną sesję ćwiczeń AI, skupiając się na konkretnym zagadnieniu.",
+            "why": "Krótkie, codzienne sesje są bardziej efektywne niż długie, sporadyczne.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Przejrzyj ponownie opis swojego profilu Asymilatora Kolba i zastanów się, jak możesz wykorzystać swoje mocne strony w procesie uczenia się.",
+            "why": "Zrozumienie swojego stylu uczenia się zwiększa efektywność nauki.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Znajdź jedną inspirację, która najbardziej Cię porusza i zastanów się, jak możesz wdrożyć jej przesłanie w swoim życiu zawodowym.",
+            "why": "Inspiracje mogą być świetnym źródłem motywacji i nowych pomysłów.",
+            "estimated_time": "10 minut"
+          }
+        ],
+        "motivational_message": "Pamiętaj, że każdy krok, nawet najmniejszy, przybliża Cię do celu. Wykorzystaj swoje mocne strony i skup się na regularności, a zobaczysz postępy szybciej niż myślisz! Jesteśmy tu, żeby Cię wspierać.",
+        "generated_at": "2025-10-17T14:09:11.277765",
         "period_start": "2025-10-10",
         "period_end": "2025-10-17",
         "report_type": "weekly",
