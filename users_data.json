@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 1623,
+    "xp": 1625,
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-18 00:08:49",
+    "last_login": "2025-10-18 08:28:52",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -823,7 +823,7 @@
         "completed_lessons": 2
       },
       "2025-10-18": {
-        "xp": 1623,
+        "xp": 1625,
         "degencoins": 563,
         "level": 1,
         "completed_lessons": 2
@@ -1721,6 +1721,33 @@
         "timestamp": "2025-10-18T00:08:49.535258",
         "details": {
           "timestamp": "2025-10-18T00:08:49.530286"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-18T08:28:53.044678",
+        "details": {
+          "timestamp": "2025-10-18T08:28:53.041297"
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-18T08:29:39.215560",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom I",
+          "confidence": 8,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-18T08:34:04.238153",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom II",
+          "confidence": 9,
+          "xp_earned": 1
         }
       }
     ],

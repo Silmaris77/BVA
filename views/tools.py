@@ -1632,12 +1632,12 @@ def generate_kolb_html_report() -> str:
                 <p style="color: #666; font-size: 14px;">
                     {"✅ Wysoka elastyczność! Potrafisz łączyć różne style uczenia się." if flexibility > 70 
                      else "? Dobra elastyczność. Masz zrównoważone podejście." if flexibility > 50
-                     else "?? Silne preferencje w określonym stylu. Rozważ rozwijanie innych zdolności."}
+                     else "⚡ Silne preferencje w określonym stylu. Rozważ rozwijanie innych zdolności."}
                 </p>
             </div>
             
             <div class="info-box">
-                <h3>?? Twoja pozycja na siatce</h3>
+                <h3>📍 Twoja pozycja na siatce</h3>
                 <div class="two-column">
                     <div>
                         <strong>Postrzeganie (AC-CE):</strong> {dimensions['AC-CE']:+.1f}
@@ -1679,7 +1679,7 @@ def generate_kolb_html_report() -> str:
             </div>
             
             <div class="info-box" style="margin-top: 20px;">
-                <h3>?? Interpretacja wymiarów:</h3>
+                <h3>📊 Interpretacja wymiarów:</h3>
                 <p><strong>AC-CE (Postrzeganie):</strong> Pokazuje jak preferujesz postrzegać informacje - poprzez abstrakcyjne myślenie (AC) czy konkretne doświadczenie (CE).</p>
                 <p><strong>AE-RO (Przetwarzanie):</strong> Pokazuje jak preferujesz przetwarzać informacje - poprzez aktywne eksperymentowanie (AE) czy refleksyjną obserwację (RO).</p>
                 <p><strong>Elastyczność:</strong> Im bliżej centrum siatki, tym większa elastyczność w przełączaniu między stylami uczenia się.</p>
@@ -1695,7 +1695,7 @@ def generate_kolb_html_report() -> str:
             </div>
             
             <div class="info-box" style="border-left-color: #E74C3C;">
-                <h3>?? Obszary do rozwinięcia:</h3>
+                <h3>🎯 Obszary do rozwinięcia:</h3>
                 <p>Rozważ ćwiczenie pozostałych stylów uczenia się, aby zwiększyć swoją elastyczność i efektywność.</p>
             </div>
         </div>
@@ -1792,13 +1792,13 @@ def generate_kolb_html_report() -> str:
                         -webkit-print-color-adjust: exact;
                         print-color-adjust: exact;
                         color-adjust: exact;">
-                <p style="margin: 0; font-size: 16px;"><strong>?? Zawód:</strong> {profession} | <strong>?? Styl uczenia się:</strong> {dominant}</p>
+                <p style="margin: 0; font-size: 16px;"><strong>👔 Zawód:</strong> {profession} | <strong>?? Styl uczenia się:</strong> {dominant}</p>
             </div>
             
             {ai_cards_html}
             
             <div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; border-radius: 5px; margin-top: 20px;">
-                <p style="margin: 0; font-size: 13px; color: #1565c0;"><strong>?? Pamiętaj:</strong> Te wskazówki są dopasowane do Twojego stylu uczenia się. Testuj je w praktyce i obserwuj co działa najlepiej w Twojej sytuacji.</p>
+                <p style="margin: 0; font-size: 13px; color: #1565c0;"><strong>💡 Pamiętaj:</strong> Te wskazówki są dopasowane do Twojego stylu uczenia się. Testuj je w praktyce i obserwuj co działa najlepiej w Twojej sytuacji.</p>
             </div>
         </div>
         """
@@ -1919,9 +1919,9 @@ def display_kolb_results():
     
     col_int1, col_int2 = st.columns(2)
     with col_int1:
-        st.success(f"**?? Twoja najsilniejsza zdolność:** {ability_info[strongest[0]]['name']} ({strongest[1]}/12)")
+        st.success(f"**💪 Twoja najsilniejsza zdolność:** {ability_info[strongest[0]]['name']} ({strongest[1]}/12)")
     with col_int2:
-        st.warning(f"**?? Obszar do rozwoju:** {ability_info[weakest[0]]['name']} ({weakest[1]}/12)")
+        st.warning(f"**🎯 Obszar do rozwoju:** {ability_info[weakest[0]]['name']} ({weakest[1]}/12)")
     
     # Wizualizacja 2: Siatka Stylów Uczenia się (Learning Style Grid)
     st.markdown("---")
@@ -2058,13 +2058,13 @@ def display_kolb_results():
     
     if distance_from_center <= 4:
         interpretation_color = "success"
-        interpretation = f"?? **Gratulacje!** Twój wynik znajduje się w **Strefie Zrównoważonego Uczenia się**. Oznacza to wysoką elastyczność i zdolność do wykorzystania wszystkich faz cyklu Kolba w zależności od sytuacji."
+        interpretation = f"🎉 **Gratulacje!** Twój wynik znajduje się w **Strefie Zrównoważonego Uczenia się**. Oznacza to wysoką elastyczność i zdolność do wykorzystania wszystkich faz cyklu Kolba w zależności od sytuacji."
     elif distance_from_center <= 8:
         interpretation_color = "info"
         interpretation = f"? **Umiarkowana preferencja** - Twój styl jest wyraźnie określony ({dominant}), ale zachowujesz dobrą elastyczność. Możesz efektywnie adaptować się do różnych sytuacji uczenia się."
     else:
         interpretation_color = "warning"
-        interpretation = f"?? **Silna preferencja** - Twój wynik znajduje się daleko od centrum siatki, co wskazuje na wyraźną tendencję do stylu **{dominant}**. Rozważ celowe rozwijanie słabszych zdolności, aby zwiększyć elastyczność uczenia się."
+        interpretation = f"⚡ **Silna preferencja** - Twój wynik znajduje się daleko od centrum siatki, co wskazuje na wyraźną tendencję do stylu **{dominant}**. Rozważ celowe rozwijanie słabszych zdolności, aby zwiększyć elastyczność uczenia się."
     
     if interpretation_color == "success":
         st.success(interpretation)
@@ -2247,7 +2247,7 @@ def display_kolb_results():
     
     with col2:
         # Karta obszarów rozwoju
-        weaknesses_html = "<br>".join([f"?? {w}" for w in desc['weaknesses']])
+        weaknesses_html = "<br>".join([f"• {w}" for w in desc['weaknesses']])
         st.markdown(f"""
         <div style='background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); 
                     box-shadow: 0 3px 12px rgba(230,126,34,0.3); 
@@ -2302,7 +2302,7 @@ def display_kolb_results():
                         border-radius: 10px; 
                         padding: 15px; 
                         margin-top: 15px;'>
-                <p style='margin: 0 0 10px 0; font-weight: bold;'>?? Zalecenia rozwojowe:</p>
+                <p style='margin: 0 0 10px 0; font-weight: bold;'>💡 Zalecenia rozwojowe:</p>
                 <p style='margin: 0; line-height: 1.8;'>
                     Celowo angażuj się w sytuacje, które wymagają używania tych zdolności:<br><br>
                     {weak_tips_html}
@@ -2343,7 +2343,7 @@ def display_kolb_results():
                     padding: 15px; 
                     margin-top: 20px;'>
             <p style='margin: 0; font-size: 1.05em;'>
-                <b>?? Kluczowa wskazówka:</b> Twój wynik elastyczności (<b>{flexibility:.0f}%</b>) pokazuje, 
+                <b>💡 Kluczowa wskazówka:</b> Twój wynik elastyczności (<b>{flexibility:.0f}%</b>) pokazuje, 
                 jak dobrze potrafisz przełączać się między stylami. {flexibility_message}
             </p>
         </div>
@@ -2358,19 +2358,19 @@ def display_kolb_results():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("🔧?? Trener", width="stretch", type="secondary", key="prof_trainer"):
+        if st.button("👨‍🏫 Trener", width="stretch", type="secondary", key="prof_trainer"):
             st.session_state.kolb_profession = "Trener"
             st.session_state.kolb_ai_generated = False
             st.rerun()
     
     with col2:
-        if st.button("?? Menedżer", width="stretch", type="secondary", key="prof_manager"):
+        if st.button("👔 Menedżer", width="stretch", type="secondary", key="prof_manager"):
             st.session_state.kolb_profession = "Menedżer"
             st.session_state.kolb_ai_generated = False
             st.rerun()
     
     with col3:
-        if st.button("?? Sprzedawca", width="stretch", type="secondary", key="prof_sales"):
+        if st.button("💼 Sprzedawca", width="stretch", type="secondary", key="prof_sales"):
             st.session_state.kolb_profession = "Sprzedawca"
             st.session_state.kolb_ai_generated = False
             st.rerun()
@@ -2392,7 +2392,7 @@ def display_kolb_results():
                         border-radius: 15px; 
                         margin: 20px 0;
                         box-shadow: 0 4px 15px rgba(102,126,234,0.3);'>
-                <h4 style='margin: 0; color: white;'>?? Zawód: {st.session_state.kolb_profession} | 🎯 Styl uczenia się: {dominant}</h4>
+                <h4 style='margin: 0; color: white;'>👔 Zawód: {st.session_state.kolb_profession} | 🎯 Styl uczenia się: {dominant}</h4>
             </div>
             """, unsafe_allow_html=True)
             
@@ -2475,7 +2475,7 @@ def display_kolb_results():
                 st.markdown(ai_tips_text)
             
             # Debug ekspander - pokaż surowy tekst AI
-            with st.expander("?? Debug: Zobacz surowy tekst AI"):
+            with st.expander("🔧 Debug: Zobacz surowy tekst AI"):
                 st.code(st.session_state.kolb_ai_tips, language="text")
             
             # Stopka z informacją
@@ -2503,7 +2503,7 @@ def display_kolb_results():
     col_pdf, col_reset, col_close = st.columns([1, 1, 1])
     
     with col_pdf:
-        if st.button("?? Wygeneruj raport PDF", width="stretch", type="primary", key="download_kolb_pdf"):
+        if st.button("📄 Wygeneruj raport PDF", width="stretch", type="primary", key="download_kolb_pdf"):
             try:
                 html_content = generate_kolb_html_report()
                 
@@ -2519,7 +2519,7 @@ def display_kolb_results():
                 
                 # Download button dla HTML
                 st.download_button(
-                    label="?? Pobierz raport HTML",
+                    label="📥 Pobierz raport HTML",
                     data=html_content,
                     file_name=report_filename,
                     mime="text/html",
@@ -2529,7 +2529,7 @@ def display_kolb_results():
                 
                 st.success("? Raport wygenerowany!")
                 st.info(
-                    "?? **Jak zapisać jako PDF:**\n\n"
+                    "💡 **Jak zapisać jako PDF:**\n\n"
                     "1. Otwórz pobrany plik HTML w przeglądarce\n"
                     "2. Naciśnij **Ctrl+P** (Windows) lub **Cmd+P** (Mac)\n"
                     "3. Wybierz **'Zapisz jako PDF'**\n"
@@ -2631,7 +2631,7 @@ def show_ciq_tools():
                 <p><strong>Zeskanuj poziom komunikacji I otrzymaj wersje na wyższych poziomach C-IQ</strong></p>
                 <ul style='margin: 10px 0; padding-left: 20px;'>
                     <li>✅ Szybkie skanowanie poziomów komunikacji (I, II, III)</li>
-                    <li>? Błyskawiczna konwersja na wyższe poziomy</li>
+                    <li>✅ Błyskawiczna konwersja na wyższe poziomy</li>
                     <li>✅ Analiza wpływu neurobiologicznego</li>
                     <li>✅ Gotowe alternatywne wersje do użycia</li>
                 </ul>
@@ -2679,7 +2679,7 @@ def show_ciq_tools():
             '''
             st.markdown(leadership_html, unsafe_allow_html=True)
             
-            if zen_button("?? Utwórz Profil Lidera", key="communication_analyzer", width='stretch'):
+            if zen_button("👤 Utwórz Profil Lidera", key="communication_analyzer", width='stretch'):
                 st.session_state.active_tool = "communication_analyzer"
     
     # Wyświetl aktywne narzędzie
@@ -2690,7 +2690,7 @@ def show_ciq_tools():
         # Przycisk resetowania
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if zen_button("? Zamknij narzędzie", key="close_tool", width='stretch'):
+            if zen_button("❌ Zamknij narzędzie", key="close_tool", width='stretch'):
                 del st.session_state.active_tool
                 st.rerun()
         
@@ -2711,32 +2711,32 @@ def show_level_detector():
     # Tabs z różnymi trybami
     tab1, tab2, tab3 = st.tabs([
         "📊 Analiza tekstu", 
-        "?? Przykłady poziomów", 
-        "?? Szablony emaili"
+        "📚 Przykłady poziomów", 
+        "📧 Szablony emaili"
     ])
     
     with tab1:
         st.markdown("#### Wklej dowolny tekst do analizy C-IQ")
         
         # Przykłady do szybkiego testowania
-        with st.expander("?? Przykłady do przetestowania", expanded=False):
+        with st.expander("💡 Przykłady do przetestowania", expanded=False):
             col1, col2 = st.columns(2)
             
             with col1:
                 st.markdown("**Poziom I (Transakcyjny):**")
                 example_1 = "Wyślij raport do końca dnia. Brak dyskusji."
-                if st.button("?? Użyj przykładu", key="example_1"):
+                if st.button("✨ Użyj przykładu", key="example_1"):
                     st.session_state.level_detector_input = example_1
                 
                 st.markdown("**Poziom II (Pozycyjny):**") 
                 example_2 = "Uważam, że ten pomysł nie ma sensu. Moja propozycja jest lepsza bo..."
-                if st.button("?? Użyj przykładu", key="example_2"):
+                if st.button("✨ Użyj przykładu", key="example_2"):
                     st.session_state.level_detector_input = example_2
             
             with col2:
                 st.markdown("**Poziom III (Transformacyjny):**")
                 example_3 = "Jakie widzisz możliwości w tej sytuacji? Jak możemy razem wypracować rozwiązanie, które będzie działać dla wszystkich?"
-                if st.button("?? Użyj przykładu", key="example_3"):
+                if st.button("✨ Użyj przykładu", key="example_3"):
                     st.session_state.level_detector_input = example_3
         
         text_input = st.text_area(
@@ -2749,9 +2749,9 @@ def show_level_detector():
         
         col1, col2 = st.columns([3, 1])
         with col1:
-            if zen_button("?? Skanuj poziom C-IQ", key="analyze_level", width='stretch'):
+            if zen_button("🔍 Skanuj poziom C-IQ", key="analyze_level", width='stretch'):
                 if text_input and text_input.strip():
-                    with st.spinner("?? Scanner analizuje poziom rozmowy..."):
+                    with st.spinner("🔍 Scanner analizuje poziom rozmowy..."):
                         result = analyze_conversation_level(text_input)
                         if result:
                             st.session_state.last_analysis_result = result
@@ -2974,11 +2974,11 @@ def display_level_analysis(result: Dict):
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("?? Wykryty poziom", level)
+        st.metric("📊 Wykryty poziom", level)
     with col2:
-        st.metric("?? Pewność analizy", f"{confidence}/10")
+        st.metric("🎯 Pewność analizy", f"{confidence}/10")
     with col3:
-        st.metric("?? Budowanie zaufania", f"{trust_score}/10")
+        st.metric("🤝 Budowanie zaufania", f"{trust_score}/10")
     
     # Wizualizacja poziomów z kolorami - poprawiona logika wykrywania
     st.markdown("### 🎯 Analiza poziomów C-IQ")
@@ -3004,7 +3004,7 @@ def display_level_analysis(result: Dict):
             is_detected = True
             
         border_style = "border: 2px solid #4CAF50;" if is_detected else "border: 1px solid #ddd;"
-        selected_indicator = "<strong>?? WYKRYTO</strong>" if is_detected else ""
+        selected_indicator = "<strong>✅ WYKRYTO</strong>" if is_detected else ""
         
         st.markdown(f"""
         <div style='padding: 15px; margin: 5px 0; border-radius: 10px; background-color: {info['bg']}; {border_style}'>
@@ -3077,7 +3077,7 @@ def display_level_analysis(result: Dict):
             st.markdown("### 🎯 Jak brzmiałoby na wyższym poziomie C-IQ")
             
             if 'level_iii' in alt_versions and alt_versions['level_iii']:
-                with st.expander("?? Poziom III - Transformacyjny", expanded=False):
+                with st.expander("🟢 Poziom III - Transformacyjny", expanded=False):
                     st.success(alt_versions['level_iii'])
             else:
                 st.info("💡 To już wysoki poziom komunikacji! Poziom III to najwyższy dostępny poziom.")
@@ -3087,22 +3087,22 @@ def display_level_analysis(result: Dict):
             st.markdown("### 🎯 Jak brzmiałoby na wyższych poziomach C-IQ")
             
             if 'level_ii' in alt_versions and alt_versions['level_ii']:
-                with st.expander("?? Poziom II - Pozycyjny", expanded=False):
+                with st.expander("🟡 Poziom II - Pozycyjny", expanded=False):
                     st.success(alt_versions['level_ii'])
             
             if 'level_iii' in alt_versions and alt_versions['level_iii']:
-                with st.expander("?? Poziom III - Transformacyjny", expanded=False):
+                with st.expander("🟢 Poziom III - Transformacyjny", expanded=False):
                     st.success(alt_versions['level_iii'])
         else:
             # Fallback dla nieokreślonych poziomów - pokaż nagłówek
             st.markdown("### 🎯 Jak brzmiałoby na wyższych poziomach C-IQ")
             
             if 'level_ii' in alt_versions and alt_versions['level_ii']:
-                with st.expander("?? Poziom II - Pozycyjny", expanded=False):
+                with st.expander("🟡 Poziom II - Pozycyjny", expanded=False):
                     st.success(alt_versions['level_ii'])
             
             if 'level_iii' in alt_versions and alt_versions['level_iii']:
-                with st.expander("?? Poziom III - Transformacyjny", expanded=False):
+                with st.expander("🟢 Poziom III - Transformacyjny", expanded=False):
                     st.success(alt_versions['level_iii'])
     
     # Praktyczne wskazówki
@@ -3136,7 +3136,7 @@ def show_ciq_examples():
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.markdown("**?? Poziom I - Transakcyjny**")
+            st.markdown("**🔴 Poziom I - Transakcyjny**")
             st.text_area(
                 "Poziom I",
                 value=example['level_1'],
@@ -3146,7 +3146,7 @@ def show_ciq_examples():
             )
             
         with col2:
-            st.markdown("**?? Poziom II - Pozycyjny**")
+            st.markdown("**🟡 Poziom II - Pozycyjny**")
             st.text_area(
                 "Poziom II",
                 value=example['level_2'],
@@ -3156,7 +3156,7 @@ def show_ciq_examples():
             )
         
         with col3:
-            st.markdown("**?? Poziom III - Transformacyjny**")
+            st.markdown("**🟢 Poziom III - Transformacyjny**")
             st.text_area(
                 "Poziom III",
                 value=example['level_3'],
@@ -3178,9 +3178,9 @@ def show_emotion_detector():
     # Tabs dla różnych funkcji CI w kontekście menedżerskim
     tab1, tab2, tab3, tab4 = st.tabs([
         "📊 Analiza Rozmowy", 
-        "?? Dynamika Zespołu", 
-        "?? Sygnały Problemów", 
-        "?? Leadership Coach"
+        "👥 Dynamika Zespołu", 
+        "⚠️ Sygnały Problemów", 
+        "🎓 Leadership Coach"
     ])
     
     with tab1:
@@ -3200,7 +3200,7 @@ def show_sentiment_analysis():
     st.markdown("### 🎯 Analiza Rozmowy Menedżer-Pracownik")
     
     conversation_text = st.text_area(
-        "?? Wklej transkrypcję rozmowy menedżerskiej:",
+        "📝 Wklej transkrypcję rozmowy menedżerskiej:",
         placeholder="""Przykład rozmowy menedżer-pracownik:
 Menedżer: Chciałbym porozmawiać o Twoich ostatnich projektach.
 Pracownik: Okej, ale muszę powiedzieć, że czuję się przeciążony zadaniami...
@@ -3210,8 +3210,8 @@ Menedżer: Rozumiem, opowiedz mi więcej o tym przeciążeniu...""",
     )
     
     if conversation_text and len(conversation_text) > 10:
-        if zen_button("?? Analizuj Sentiment + C-IQ", key="analyze_sentiment", width='stretch'):
-            with st.spinner("?? Analizuję sentiment i poziomy C-IQ..."):
+        if zen_button("🔍 Analizuj Sentiment + C-IQ", key="analyze_sentiment", width='stretch'):
+            with st.spinner("🔍 Analizuję sentiment i poziomy C-IQ..."):
                 # Analiza C-IQ + sentiment
                 result = analyze_conversation_sentiment(conversation_text)
                 if result:
@@ -3236,7 +3236,7 @@ def show_intent_detection():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("**?? Wykrywane potrzeby pracownika:**")
+        st.markdown("**💡 Wykrywane potrzeby pracownika:**")
         st.markdown("• 🎯 Potrzeba jasnych celów")
         st.markdown("• 🎯 Chęć rozwoju i szkoleń") 
         st.markdown("• 🎯 Potrzeba wsparcia/mentoringu")
@@ -3244,7 +3244,7 @@ def show_intent_detection():
         st.markdown("• 🎯 Ambicje i aspiracje kariery")
         
     with col2:
-        st.markdown("**?? Wyniki analizy:**")
+        st.markdown("**📊 Wyniki analizy:**")
         st.markdown("• Poziom zaangażowania zespołu")
         st.markdown("• Rekomendowane akcje menedżerskie")  
         st.markdown("• Optymalne momenty na feedback")
@@ -3258,7 +3258,7 @@ def show_intent_detection():
     )
     
     if intent_text and len(intent_text) > 10:
-        if zen_button("?? Wykryj Intencje", key="detect_intent", width='stretch'):
+        if zen_button("🎯 Wykryj Intencje", key="detect_intent", width='stretch'):
             result = analyze_business_intent(intent_text)
             if result:
                 display_intent_results(result)
@@ -3282,7 +3282,7 @@ def show_escalation_monitoring():
     st.info("💡 **Early warning system** dla problemów zespołowych: wypalenie, konflikty, spadek motywacji")
     
     escalation_text = st.text_area(
-        "?? Tekst do analizy sygnałów problemów:",
+        "⚠️ Tekst do analizy sygnałów problemów:",
         placeholder="Wklej fragment rozmowy z pracownikiem, który może sygnalizować problemy zespołowe...",
         height=100,
         key="escalation_input"
@@ -3297,7 +3297,7 @@ def show_escalation_monitoring():
     
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("**?? Sygnały eskalacji:**")
+        st.markdown("**⚠️ Sygnały eskalacji:**")
         st.markdown("• Spadek motywacji i zaangażowania")
         st.markdown("• Sygnały wypalenia zawodowego") 
         st.markdown("• Konflikty interpersonalne")
@@ -3388,13 +3388,13 @@ def show_communication_analyzer():
             saved_profile = load_leadership_profile(st.session_state.username)
             if saved_profile:
                 st.session_state['leadership_profile'] = saved_profile
-                st.success(f"?? Wczytano Twój zapisany profil przywódczy z {saved_profile.get('created_at', 'wcześniej')[:10]}")
+                st.success(f"✅ Wczytano Twój zapisany profil przywódczy z {saved_profile.get('created_at', 'wcześniej')[:10]}")
     
     # Tabs dla różnych aspektów profilu
     tab1, tab2, tab3 = st.tabs([
-        "?? Upload Danych", 
-        "?? Profil Przywódczy", 
-        "?? Plan Rozwoju"
+        "📤 Upload Danych", 
+        "👤 Profil Przywódczy", 
+        "📋 Plan Rozwoju"
     ])
     
     with tab1:
@@ -3402,7 +3402,7 @@ def show_communication_analyzer():
         st.markdown("Im więcej danych, tym dokładniejszy profil przywódczy!")
         
         # Opis co będzie w raporcie
-        st.markdown("**?? Twój raport będzie zawierał:**")
+        st.markdown("**📊 Twój raport będzie zawierał:**")
         col1, col2, col3 = st.columns(3)
         
         with col1:
@@ -3430,7 +3430,7 @@ def show_communication_analyzer():
         with col_demo:
             demo_col1, demo_col2 = st.columns(2)
             with demo_col1:
-                if zen_button("?? Użyj przykładów", key="fill_demo_data"):
+                if zen_button("💡 Użyj przykładów", key="fill_demo_data"):
                     # Bezpośrednio ustawiamy wartości w session_state
                     team_conv_text = '''Menedżer: Kasia, muszę wiedzieć co się dzieje z projektem ABC. Deadline jest za tydzień!
 Pracownik: Mam problem z terminem, klient ciągle zmienia wymagania
@@ -3471,7 +3471,7 @@ Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodn
                     st.success("? Wypełniono pola przykładowymi danymi! Przewiń w dół żeby zobaczyć dane.")
                     
             with demo_col2:
-                if zen_button("?? Wyczyść pola", key="clear_data"):
+                if zen_button("🗑️ Wyczyść pola", key="clear_data"):
                     # Czyścimy wartości w session_state
                     st.session_state['team_conv'] = ""
                     st.session_state['feedback_conv'] = ""
@@ -3579,7 +3579,7 @@ Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodn
             conversations_text = "\n---\n".join([conv for conv in all_conversations if conv.strip()])
             
             if conversations_text:
-                with st.spinner("?? Tworzę Twój profil przywódczy..."):
+                with st.spinner("🔄 Tworzę Twój profil przywódczy..."):
                     leadership_profile = create_leadership_profile(conversations_text)
                     if leadership_profile:
                         st.session_state['leadership_profile'] = leadership_profile
@@ -3589,12 +3589,12 @@ Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodn
                             profile_title = profile_name.strip() if (profile_name and profile_name.strip()) else None
                             if save_leadership_profile(st.session_state.username, leadership_profile, profile_title):
                                 saved_name = profile_title or f"Profil {datetime.now().strftime('%Y-%m-%d %H:%M')}"
-                                st.success(f"? Profil '{saved_name}' gotowy i zapisany! Zobacz zakładkę 'Profil Przywódczy'")
+                                st.success(f"✅ Profil '{saved_name}' gotowy i zapisany! Zobacz zakładkę 'Profil Przywódczy'")
                             else:
-                                st.success("? Profil przywódczy gotowy! Zobacz zakładkę 'Profil Przywódczy'")
+                                st.success("✅ Profil przywódczy gotowy! Zobacz zakładkę 'Profil Przywódczy'")
                                 st.warning("⚠️ Nie udało się zapisać profilu do pliku")
                         else:
-                            st.success("? Profil przywódczy gotowy! Zobacz zakładkę 'Profil Przywódczy'")
+                            st.success("✅ Profil przywódczy gotowy! Zobacz zakładkę 'Profil Przywódczy'")
                             st.info("💡 Zaloguj się, aby automatycznie zapisywać swoje profile")
             else:
                 st.warning("⚠️ Dodaj przynajmniej jeden fragment rozmowy do analizy")
@@ -5733,7 +5733,7 @@ def generate_leadership_pdf(profile: Dict, username: str) -> bytes:
     
     # Nowa strona dla planu rozwoju
     story.append(PageBreak())
-    story.append(Paragraph(ensure_unicode("?? Plan Rozwoju Przywódczego"), title_style))
+    story.append(Paragraph(ensure_unicode("📋 Plan Rozwoju Przywódczego"), title_style))
     story.append(Spacer(1, 20))
     
     # Plan rozwoju - cele
@@ -5813,7 +5813,7 @@ def display_leadership_profile(profile: Dict):
         trust_building = team_impact.get('trust_building_capability', 6)
         if trust_building is None:
             trust_building = 6
-        st.metric("?? Budowanie zaufania", f"{trust_building}/10")
+        st.metric("🤝 Budowanie zaufania", f"{trust_building}/10")
     
     # Rozkład poziomów C-IQ
     st.markdown("### 🎯 Rozkład Twoich poziomów C-IQ")
