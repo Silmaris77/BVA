@@ -3406,19 +3406,19 @@ def show_communication_analyzer():
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.markdown("**?? Poziomy C-IQ**")
+            st.markdown("**📊 Poziomy C-IQ**")
             st.markdown("• Dominujący poziom")
             st.markdown("• Rozkład procentowy")
             st.markdown("• Rekomendacje")
         
         with col2:
-            st.markdown("**?? Neurobiologia**") 
+            st.markdown("**🧠 Neurobiologia**") 
             st.markdown("• Wpływ na kortyzol")
             st.markdown("• Stymulacja oksytocyny")
             st.markdown("• Bezpieczeństwo psychologiczne")
         
         with col3:
-            st.markdown("**?? Skuteczność**")
+            st.markdown("**✅ Skuteczność**")
             st.markdown("• Clarność przekazu")
             st.markdown("• Potencjał zaufania")
             st.markdown("• Ryzyko konfliktu")
@@ -3490,7 +3490,7 @@ Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodn
         col1, col2 = st.columns(2)
 
         with col1:
-            st.markdown("**?? Rozmowy z zespołem:**")
+            st.markdown("**💬 Rozmowy z zespołem:**")
             team_conversations = st.text_area(
                 "Wklej fragmenty rozmów z pracownikami:",
                 placeholder="Wklej tutaj rzeczywiste fragmenty swoich rozmów z zespołem...",
@@ -3515,7 +3515,7 @@ Menedżer: Sprawdź czy wszystko działa i zrób dokumentację. Do końca tygodn
                 key="conflict_conv"
             )
             
-            st.markdown("**?? Motywowanie zespołu:**")
+            st.markdown("**🎯 Motywowanie zespołu:**")
             motivation_conversations = st.text_area(
                 "Fragmenty motywujące i inspirujące:",
                 placeholder="Wklej tutaj fragmenty motywujących rozmów z zespołem...",
