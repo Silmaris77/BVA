@@ -174,8 +174,8 @@ def show_autodiagnosis():
     st.markdown("### 🎯 Autodiagnoza")
     st.markdown("Poznaj swój styl uczenia się, typ neuroleadera i preferowane sposoby rozwoju")
     
-    # Wyświetl testy w dwóch kolumnach
-    col1, col2 = st.columns(2)
+    # Wyświetl testy w trzech kolumnach
+    col1, col2, col3 = st.columns(3)
     
     # Karta z testem Neurolidera
     with col1:
@@ -200,7 +200,7 @@ def show_autodiagnosis():
     with col2:
         st.markdown("""
         <div style='padding: 20px; border: 2px solid #9C27B0; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);'>
-            <h4>🎯 Test stylów uczenia się według Kolba</h4>
+            <h4>🔄 Test stylów uczenia się według Kolba</h4>
             <p><strong>Odkryj swój preferowany styl uczenia się i maksymalizuj efektywność rozwoju</strong></p>
             <ul style='margin: 10px 0; padding-left: 20px;'>
                 <li>✅ 12 pytań diagnostycznych</li>
@@ -215,6 +215,25 @@ def show_autodiagnosis():
         if zen_button("▶️ Rozpocznij Test Kolba", key="kolb_test", width='stretch'):
             st.session_state.active_tool = "kolb_test"
     
+    # Karta z testem wielorakich inteligencji
+    with col3:
+        st.markdown("""
+        <div style='padding: 20px; border: 2px solid #FF9800; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);'>
+            <h4>🧠 Test Wielorakich Inteligencji</h4>
+            <p><strong>Odkryj swoje naturalne talenty i optymalizuj sposób uczenia się</strong></p>
+            <ul style='margin: 10px 0; padding-left: 20px;'>
+                <li>✅ 8 typów inteligencji (Gardner)</li>
+                <li>✅ 40 pytań diagnostycznych</li>
+                <li>✅ Profil radarowy mocnych stron</li>
+                <li>✅ Spersonalizowane ścieżki rozwoju</li>
+                <li>✅ Dopasowanie narzędzi BVA do Twojego profilu</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if zen_button("▶️ Rozpocznij Test MI", key="mi_test_btn", width='stretch'):
+            st.session_state.active_tool = "mi_test"
+    
     # Wyświetl odpowiedni test jeśli jest aktywny
     active_tool = st.session_state.get('active_tool')
     
@@ -227,6 +246,10 @@ def show_autodiagnosis():
     elif active_tool == "kolb_test":
         st.markdown("---")
         show_kolb_test()
+    
+    elif active_tool == "mi_test":
+        st.markdown("---")
+        show_mi_test()
 
 def show_kolb_test():
     """Wyświetla test stylów uczenia się według Kolba"""
@@ -6224,9 +6247,604 @@ def display_coaching_results(result: Dict):
     
     # Pytania otwarte
     if 'follow_up_questions' in result:
-        st.markdown("### ? Sugerowane pytania otwarte")
+        st.markdown("### 🔍 Sugerowane pytania otwarte")
         for question in result['follow_up_questions']:
             st.markdown(f"• {question}")
+
+
+# ============================================================================
+# TEST WIELORAKICH INTELIGENCJI (GARDNER)
+# ============================================================================
+
+def show_mi_test():
+    """Wyświetla test wielorakich inteligencji Gardnera"""
+    from utils.mi_test import get_mi_test_questions, get_intelligence_descriptions
+    
+    st.markdown("# 🧠 Test Wielorakich Inteligencji Gardnera")
+    st.markdown("---")
+    
+    # Sprawdź czy użytkownik ma zapisane wyniki
+    if st.session_state.get('logged_in') and st.session_state.get('username'):
+        from data.users import load_user_data
+        
+        users_data = load_user_data()
+        username = st.session_state.username
+        
+        if username in users_data and users_data[username].get('mi_test'):
+            mi_data = users_data[username]['mi_test']
+            
+            if not st.session_state.get('mi_completed') and not st.session_state.get('mi_reset'):
+                st.session_state.mi_results = mi_data
+                st.session_state.mi_completed = True
+                
+                st.info(f"ℹ️ Wczytano Twoje wcześniejsze wyniki testu z dnia: {mi_data.get('timestamp', 'Nieznana')}")
+    
+    # Intro - teoria
+    with st.expander("ℹ️ O teście - Teoria Wielorakich Inteligencji", expanded=not st.session_state.get('mi_completed')):
+        st.markdown("""
+        ### Czym jest teoria wielorakich inteligencji?
+        
+        Według **Howarda Gardnera** (Harvard University, 1983), inteligencja nie jest jedną zdolnością,
+        ale **zestawem 8 różnych typów inteligencji**. Każdy z nas ma unikalny profil mocnych i słabszych stron.
+        
+        ### 8 typów inteligencji:
+        
+        1. **🗣️ Językowa (Verbal-Linguistic)** - słowa, pisanie, czytanie, opowiadanie
+        2. **🔢 Logiczno-matematyczna (Logical-Mathematical)** - liczby, wzorce, analiza, rozumowanie
+        3. **🎨 Wizualno-przestrzenna (Visual-Spatial)** - obrazy, mapy, wizualizacja, projektowanie
+        4. **🎵 Muzyczna (Musical-Rhythmic)** - dźwięki, rytm, melodie, harmonie
+        5. **🤸 Kinestetyczna (Bodily-Kinesthetic)** - ruch, sprawność fizyczna, koordynacja
+        6. **👥 Interpersonalna (Interpersonal)** - relacje, empatia, komunikacja z innymi
+        7. **🧘 Intrapersonalna (Intrapersonal)** - samoświadomość, refleksja, introspekcja
+        8. **🌿 Przyrodnicza (Naturalistic)** - natura, środowisko, klasyfikacja, obserwacja przyrody
+        
+        ### Po co ci ten test?
+        
+        ✅ **Poznaj swoje naturalne talenty** - w czym jesteś najlepszy  
+        ✅ **Optymalizuj sposób uczenia się** - dopasuj metody do swojego profilu  
+        ✅ **Rozwijaj słabsze obszary** - świadomy rozwój  
+        ✅ **Lepiej komunikuj się** - zrozum różnice w myśleniu innych  
+        ✅ **Wybieraj właściwe narzędzia** - materiały i ćwiczenia dopasowane do Ciebie  
+        
+        ### Jak działa test?
+        
+        - **40 pytań** (5 pytań na każdą inteligencję)
+        - **Czas:** 10-15 minut
+        - **Ocena:** 1-5 (całkowicie się nie zgadzam → całkowicie się zgadzam)
+        - **Raport:** Profil graficzny + opis + rekomendacje dla BrainVenture Academy
+        
+        ---
+        **📊 Badania:** Teoria Gardnera jest stosowana w edukacji, biznesie i rozwoju osobistym od ponad 40 lat.
+        """)
+    
+    # Sprawdź czy test został ukończony
+    if st.session_state.get('mi_completed'):
+        show_mi_results()
+    else:
+        # Przycisk start
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if st.button("🚀 Rozpocznij Test (10-15 min)", use_container_width=True, type="primary", key="start_mi_test"):
+                st.session_state.mi_test_started = True
+                st.rerun()
+        
+        # Jeśli test rozpoczęty, pokaż pytania
+        if st.session_state.get('mi_test_started'):
+            show_mi_test_questions()
+
+
+def show_mi_test_questions():
+    """Wyświetla pytania testowe MI"""
+    from utils.mi_test import get_mi_test_questions
+    
+    st.markdown("## 📝 Test Wielorakich Inteligencji")
+    st.markdown("**Oceń każde stwierdzenie w skali 1-5:**")
+    st.markdown("1 = Całkowicie się nie zgadzam | 5 = Całkowicie się zgadzam")
+    st.markdown("---")
+    
+    # Pobierz pytania
+    questions = get_mi_test_questions()
+    total_questions = len(questions)
+    
+    # Inicjalizacja odpowiedzi
+    if 'mi_answers' not in st.session_state:
+        st.session_state.mi_answers = {}
+    
+    # Progress bar
+    answered = len(st.session_state.mi_answers)
+    progress = answered / total_questions
+    st.progress(progress, text=f"Postęp: {answered}/{total_questions}")
+    
+    # Wyświetl pytania w grupach po 8 (każda inteligencja osobno)
+    categories = {
+        "linguistic": {"name": "🗣️ Inteligencja Językowa", "color": "#3498db"},
+        "logical": {"name": "🔢 Inteligencja Logiczno-matematyczna", "color": "#9b59b6"},
+        "visual": {"name": "🎨 Inteligencja Wizualno-przestrzenna", "color": "#e74c3c"},
+        "musical": {"name": "🎵 Inteligencja Muzyczna", "color": "#1abc9c"},
+        "kinesthetic": {"name": "🤸 Inteligencja Kinestetyczna", "color": "#f39c12"},
+        "interpersonal": {"name": "👥 Inteligencja Interpersonalna", "color": "#2ecc71"},
+        "intrapersonal": {"name": "🧘 Inteligencja Intrapersonalna", "color": "#34495e"},
+        "naturalistic": {"name": "🌿 Inteligencja Przyrodnicza", "color": "#16a085"}
+    }
+    
+    # Grupuj pytania po kategoriach
+    questions_by_category = {}
+    for q in questions:
+        cat = q['category']
+        if cat not in questions_by_category:
+            questions_by_category[cat] = []
+        questions_by_category[cat].append(q)
+    
+    # Wyświetl pytania dla każdej kategorii
+    for category, cat_questions in questions_by_category.items():
+        cat_info = categories[category]
+        
+        with st.container():
+            st.markdown(f"### {cat_info['name']}")
+            
+            for q in cat_questions:
+                st.markdown(f"**{q['id']}.** {q['text']}")
+                
+                # Skalowanie odpowiedzi - używamy slider dla lepszego UX
+                default_value = st.session_state.mi_answers.get(q['id'], 3)
+                
+                answer = st.select_slider(
+                    f"Odpowiedź ({q['id']})",
+                    options=[1, 2, 3, 4, 5],
+                    value=default_value,
+                    format_func=lambda x: {
+                        1: "1 - Całkowicie nie",
+                        2: "2 - Raczej nie",
+                        3: "3 - Neutralnie",
+                        4: "4 - Raczej tak",
+                        5: "5 - Całkowicie tak"
+                    }[x],
+                    key=f"q_{q['id']}"
+                )
+                
+                # Zapisz odpowiedź
+                st.session_state.mi_answers[q['id']] = answer
+            
+            st.markdown("---")
+    
+    # Przycisk do zakończenia
+    if len(st.session_state.mi_answers) == total_questions:
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if st.button("✅ Zakończ test i zobacz wyniki", use_container_width=True, type="primary", key="finish_mi_test"):
+                calculate_and_save_mi_results()
+                st.session_state.mi_completed = True
+                st.rerun()
+    else:
+        st.info(f"⏳ Odpowiedz na wszystkie pytania ({total_questions - len(st.session_state.mi_answers)} pozostało)")
+
+
+def calculate_and_save_mi_results():
+    """Oblicza i zapisuje wyniki testu MI"""
+    from utils.mi_test import calculate_mi_scores
+    
+    # Oblicz wyniki
+    results = calculate_mi_scores(st.session_state.mi_answers)
+    
+    # Zapisz w session state
+    st.session_state.mi_results = results
+    
+    # Zapisz w bazie danych jeśli użytkownik zalogowany
+    if st.session_state.get('logged_in') and st.session_state.get('username'):
+        from data.users import load_user_data, save_user_data
+        
+        users_data = load_user_data()
+        username = st.session_state.username
+        
+        if username in users_data:
+            users_data[username]['mi_test'] = results
+            save_user_data(users_data)
+
+
+def show_mi_results():
+    """Wyświetla raport z wynikami testu MI"""
+    from utils.mi_test import get_intelligence_descriptions, get_bva_recommendations
+    import plotly.graph_objects as go
+    
+    if 'mi_results' not in st.session_state:
+        st.warning("Najpierw ukończ test!")
+        return
+    
+    results = st.session_state.mi_results
+    
+    st.markdown("# 🎉 Twój Profil Wielorakich Inteligencji")
+    st.markdown(f"*Wygenerowano: {results['timestamp']}*")
+    st.markdown("---")
+    
+    # 1. WYKRES RADAROWY
+    st.markdown("## 📊 Twój Profil - Wykres Radarowy")
+    
+    categories_pl = {
+        "linguistic": "🗣️ Językowa",
+        "logical": "🔢 Logiczno-matematyczna",
+        "visual": "🎨 Wizualno-przestrzenna",
+        "musical": "🎵 Muzyczna",
+        "kinesthetic": "🤸 Kinestetyczna",
+        "interpersonal": "👥 Interpersonalna",
+        "intrapersonal": "🧘 Intrapersonalna",
+        "naturalistic": "🌿 Przyrodnicza"
+    }
+    
+    fig = go.Figure()
+    
+    fig.add_trace(go.Scatterpolar(
+        r=list(results['percentages'].values()),
+        theta=[categories_pl[cat] for cat in results['percentages'].keys()],
+        fill='toself',
+        name='Twój profil',
+        line_color='#1f77b4',
+        fillcolor='rgba(31, 119, 180, 0.3)'
+    ))
+    
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, 100],
+                ticksuffix='%'
+            )
+        ),
+        showlegend=False,
+        height=500,
+        title="Profil Wielorakich Inteligencji"
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # 2. INTERPRETACJA PROFILU
+    st.markdown("## 🎯 Interpretacja Profilu")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Poziom zrównoważenia", f"{100 - results['balance_score']:.0f}%")
+    with col2:
+        st.info(results['balance_interpretation'])
+    
+    # 3. TWOJE TOP 3 INTELIGENCJE
+    st.markdown("## 🏆 Twoje Dominujące Inteligencje (Top 3)")
+    
+    intelligence_descriptions = get_intelligence_descriptions()
+    
+    for rank, (category, percentage) in enumerate(results['top_3'], 1):
+        info = intelligence_descriptions[category]
+        
+        with st.expander(f"#{rank} {info['icon']} {info['name']} - {percentage:.0f}%", expanded=(rank==1)):
+            st.markdown(f"### {info['icon']} {info['name']}")
+            st.progress(percentage / 100)
+            st.markdown(f"**Twój wynik: {percentage:.0f}% ({results['scores'][category]}/25 punktów)**")
+            
+            st.markdown(f"*{info['short_desc']}*")
+            
+            st.markdown("#### 💪 Twoje mocne strony:")
+            for strength in info['strengths']:
+                st.markdown(f"- {strength}")
+            
+            st.markdown(f"#### 💼 Przykładowe kariery:")
+            st.markdown(f"*{info['careers']}*")
+            
+            st.markdown(f"#### 📚 Jak się uczyć:")
+            st.markdown(f"*{info['learning']}*")
+            
+            st.markdown(f"#### 🌟 Znane osoby z tą inteligencją:")
+            st.markdown(f"*{info['famous']}*")
+    
+    # 4. OBSZARY DO ROZWOJU
+    st.markdown("## 🌱 Obszary do Rozwoju")
+    
+    col1, col2 = st.columns(2)
+    for i, (category, percentage) in enumerate(results['bottom_2']):
+        info = intelligence_descriptions[category]
+        with (col1 if i == 0 else col2):
+            st.markdown(f"**{info['icon']} {info['name']}** - {percentage:.0f}%")
+            st.progress(percentage / 100)
+            st.markdown(f"💡 *Wskazówka: {info['learning']}*")
+    
+    st.markdown("---")
+    
+    # 5. TABELA SZCZEGÓŁOWA
+    with st.expander("📋 Szczegółowe wyniki (wszystkie kategorie)"):
+        import pandas as pd
+        
+        df_results = pd.DataFrame({
+            "Inteligencja": [intelligence_descriptions[cat]["name"] for cat in results['percentages'].keys()],
+            "Punkty": [f"{results['scores'][cat]}/25" for cat in results['scores'].keys()],
+            "Procent": [f"{results['percentages'][cat]:.0f}%" for cat in results['percentages'].keys()]
+        })
+        
+        # Sortuj po procentach malejąco
+        df_results['Sort'] = [results['percentages'][cat] for cat in results['percentages'].keys()]
+        df_results = df_results.sort_values('Sort', ascending=False).drop('Sort', axis=1)
+        df_results.index = range(1, len(df_results) + 1)
+        
+        st.dataframe(df_results, use_container_width=True)
+    
+    # 6. IMPLIKACJE DLA BVA
+    show_mi_bva_recommendations(results)
+    
+    # 7. PRZYCISKI AKCJI
+    st.markdown("---")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("📥 Pobierz raport PDF", use_container_width=True, key="download_mi_pdf"):
+            pdf_bytes = generate_mi_pdf_report(results)
+            if pdf_bytes:
+                st.download_button(
+                    label="⬇️ Kliknij aby pobrać",
+                    data=pdf_bytes,
+                    file_name=f"MI_Profile_{st.session_state.get('username', 'user')}.pdf",
+                    mime="application/pdf",
+                    key="download_mi_pdf_btn"
+                )
+    
+    with col2:
+        if st.button("✅ Zastosuj rekomendacje w profilu", use_container_width=True, key="apply_mi_recs"):
+            apply_mi_recommendations_to_profile(results)
+            st.success("✅ Profil zaktualizowany!")
+            st.balloons()
+    
+    with col3:
+        if st.button("🔄 Wykonaj test ponownie", use_container_width=True, key="reset_mi_test"):
+            # Reset testu
+            for key in ['mi_test_started', 'mi_answers', 'mi_results', 'mi_completed']:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.session_state.mi_reset = True
+            st.rerun()
+
+
+def show_mi_bva_recommendations(results: Dict):
+    """Pokazuje jak wykorzystać wyniki w aplikacji BVA"""
+    from utils.mi_test import get_bva_recommendations, get_intelligence_descriptions
+    
+    st.markdown("## 🚀 Jak wykorzystać swój profil w BrainVenture Academy?")
+    st.markdown("---")
+    
+    top_intelligences = [cat for cat, _ in results['top_3']]
+    recommendations = get_bva_recommendations(top_intelligences)
+    intelligence_descriptions = get_intelligence_descriptions()
+    
+    # Podsumowanie rekomendacji
+    st.markdown("### 🎯 Spersonalizowane Rekomendacje")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("#### 📚 Polecane moduły:")
+        for module in recommendations['modules'][:5]:
+            st.markdown(f"- {module}")
+    
+    with col2:
+        st.markdown("#### 🛠️ Narzędzia dla Ciebie:")
+        for tool in recommendations['tools'][:5]:
+            st.markdown(f"- {tool}")
+    
+    # Szczegółowe rekomendacje dla każdej z top 3 inteligencji
+    st.markdown("---")
+    st.markdown("### ✨ Szczegółowe wskazówki dla Twoich mocnych stron")
+    
+    for i, intelligence in enumerate(top_intelligences, 1):
+        if intelligence in recommendations['detailed_recommendations']:
+            recs = recommendations['detailed_recommendations'][intelligence]
+            info = intelligence_descriptions[intelligence]
+            
+            with st.expander(f"💡 Wskazówki dla: {info['icon']} {info['name']}", expanded=(i==1)):
+                
+                st.markdown("#### 📚 Polecane moduły:")
+                for module in recs['modules']:
+                    st.markdown(f"- {module}")
+                
+                st.markdown("#### 🛠️ Narzędzia:")
+                for tool in recs['tools']:
+                    st.markdown(f"- {tool}")
+                
+                st.markdown("#### 💡 Praktyczne wskazówki:")
+                for tip in recs['tips']:
+                    st.markdown(f"- {tip}")
+    
+    # Preferowane typy treści
+    st.markdown("---")
+    st.markdown("### 📊 Twoje preferowane formaty uczenia się:")
+    
+    content_types_pl = {
+        "text": "📝 Tekst i artykuły",
+        "articles": "📰 Artykuły i e-booki",
+        "ebooks": "📚 E-booki i przewodniki",
+        "discussions": "💬 Dyskusje i forum",
+        "data": "📊 Dane i statystyki",
+        "charts": "📈 Wykresy i dashboardy",
+        "analytics": "🔍 Analityka i raporty",
+        "models": "🧮 Modele i schematy",
+        "infographics": "🎨 Infografiki",
+        "videos": "🎬 Wideo",
+        "diagrams": "📐 Diagramy i schematy",
+        "mindmaps": "🗺️ Mapy myśli",
+        "audio": "🎧 Audio i podcasty",
+        "podcasts": "🎙️ Podcasty",
+        "recordings": "🔊 Nagrania",
+        "voice_analysis": "🗣️ Analiza głosu",
+        "simulations": "🎮 Symulacje",
+        "exercises": "💪 Ćwiczenia praktyczne",
+        "practice": "🏃 Praktyka i działanie",
+        "interactive": "🎯 Interaktywne zadania",
+        "case_studies": "📖 Case studies",
+        "group_work": "👥 Praca grupowa",
+        "networking": "🤝 Networking",
+        "self_reflection": "🧘 Autorefleksja",
+        "journaling": "📔 Dziennik rozwoju",
+        "solo_practice": "🎯 Samodzielna praca",
+        "goals": "🎯 Cele i planowanie",
+        "patterns": "🔄 Wzorce i systemy",
+        "systems": "⚙️ Systemy i procesy",
+        "metaphors": "🌿 Metafory i analogie",
+        "holistic": "🌍 Podejście holistyczne"
+    }
+    
+    cols = st.columns(3)
+    for i, content_type in enumerate(recommendations['content_types'][:9]):
+        with cols[i % 3]:
+            st.markdown(f"- {content_types_pl.get(content_type, content_type)}")
+
+
+def apply_mi_recommendations_to_profile(results: Dict):
+    """Zapisuje preferencje MI w profilu użytkownika"""
+    from utils.mi_test import get_bva_recommendations
+    
+    if not st.session_state.get('logged_in') or not st.session_state.get('username'):
+        return
+    
+    from data.users import load_user_data, save_user_data
+    
+    users_data = load_user_data()
+    username = st.session_state.username
+    
+    if username in users_data:
+        top_intelligences = [cat for cat, _ in results['top_3']]
+        recommendations = get_bva_recommendations(top_intelligences)
+        
+        # Aktualizuj profil
+        users_data[username]['mi_profile'] = {
+            'top_intelligences': top_intelligences,
+            'preferred_content_types': recommendations['content_types'],
+            'recommended_modules': recommendations['modules'],
+            'recommended_tools': recommendations['tools'],
+            'learning_tips': recommendations['tips'],
+            'updated_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        
+        # Zapisz
+        save_user_data(users_data)
+
+
+def generate_mi_pdf_report(results: Dict) -> bytes:
+    """Generuje raport PDF z wynikami testu MI"""
+    from utils.mi_test import get_intelligence_descriptions
+    
+    try:
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=A4, topMargin=0.5*inch, bottomMargin=0.5*inch)
+        story = []
+        styles = getSampleStyleSheet()
+        
+        # Zarejestruj polską czcionkę
+        try:
+            font_path = "assets/fonts/DejaVuSans.ttf"
+            if os.path.exists(font_path):
+                pdfmetrics.registerFont(TTFont('DejaVuSans', font_path))
+                
+                # Zdefiniuj nowe style z polską czcionką
+                title_style = ParagraphStyle(
+                    'CustomTitle',
+                    parent=styles['Heading1'],
+                    fontName='DejaVuSans',
+                    fontSize=22,
+                    textColor=HexColor('#1f77b4'),
+                    spaceAfter=20,
+                    alignment=1  # CENTER
+                )
+                
+                heading_style = ParagraphStyle(
+                    'CustomHeading',
+                    parent=styles['Heading2'],
+                    fontName='DejaVuSans',
+                    fontSize=14,
+                    textColor=HexColor('#333333'),
+                    spaceAfter=12
+                )
+                
+                normal_style = ParagraphStyle(
+                    'CustomNormal',
+                    parent=styles['Normal'],
+                    fontName='DejaVuSans',
+                    fontSize=10,
+                    leading=14
+                )
+            else:
+                title_style = styles['Heading1']
+                heading_style = styles['Heading2']
+                normal_style = styles['Normal']
+        except:
+            title_style = styles['Heading1']
+            heading_style = styles['Heading2']
+            normal_style = styles['Normal']
+        
+        # Tytuł
+        story.append(Paragraph("Profil Wielorakich Inteligencji", title_style))
+        story.append(Paragraph(f"Data: {results['timestamp']}", normal_style))
+        if st.session_state.get('username'):
+            story.append(Paragraph(f"Uzytkownik: {st.session_state.username}", normal_style))
+        story.append(Spacer(1, 0.3*inch))
+        
+        # Interpretacja
+        story.append(Paragraph("Interpretacja Profilu", heading_style))
+        story.append(Paragraph(results['balance_interpretation'], normal_style))
+        story.append(Spacer(1, 0.2*inch))
+        
+        # Top 3 inteligencje
+        story.append(Paragraph("Twoje Dominujace Inteligencje (Top 3)", heading_style))
+        
+        intelligence_descriptions = get_intelligence_descriptions()
+        
+        for rank, (category, percentage) in enumerate(results['top_3'], 1):
+            info = intelligence_descriptions[category]
+            
+            story.append(Paragraph(f"#{rank} {info['name']} - {percentage:.0f}%", heading_style))
+            story.append(Paragraph(f"<i>{info['short_desc']}</i>", normal_style))
+            
+            strengths_text = "<br/>".join([f"• {s}" for s in info['strengths']])
+            story.append(Paragraph(f"<b>Mocne strony:</b><br/>{strengths_text}", normal_style))
+            
+            story.append(Paragraph(f"<b>Jak sie uczyc:</b> {info['learning']}", normal_style))
+            story.append(Spacer(1, 0.2*inch))
+        
+        # Tabela z wynikami
+        story.append(PageBreak())
+        story.append(Paragraph("Szczegolowe Wyniki", heading_style))
+        
+        table_data = [["Inteligencja", "Punkty", "Procent"]]
+        for category in results['scores'].keys():
+            info = intelligence_descriptions[category]
+            table_data.append([
+                info['name'],
+                f"{results['scores'][category]}/25",
+                f"{results['percentages'][category]:.0f}%"
+            ])
+        
+        table = Table(table_data, colWidths=[3.5*inch, 1*inch, 1*inch])
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), HexColor('#666666')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 12),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), HexColor('#f0f0f0')),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, HexColor('#f9f9f9')])
+        ]))
+        
+        story.append(table)
+        
+        # Footer
+        story.append(Spacer(1, 0.5*inch))
+        story.append(Paragraph("BrainVenture Academy - Test Wielorakich Inteligencji Gardnera", 
+                               ParagraphStyle('Footer', parent=normal_style, fontSize=8, textColor=colors.grey, alignment=1)))
+        
+        # Build PDF
+        doc.build(story)
+        buffer.seek(0)
+        return buffer.getvalue()
+        
+    except Exception as e:
+        st.error(f"Blad generowania PDF: {e}")
+        return None
+
 
 if __name__ == "__main__":
     show_tools_page()

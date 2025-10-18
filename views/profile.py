@@ -1098,7 +1098,23 @@ def show_xp_history_section():
         st.caption(f"Wyświetlono {len(df_page)} z {len(table_data)} aktywności")
 
 def show_reports_section():
-    """Wyświetla sekcję raportów rozwojowych użytkownika"""
+    """Wyświetla sekcję raportów rozwojowych użytkownika z pod-tabami"""
+    st.header("📈 Twoje Raporty Rozwojowe")
+    
+    username = st.session_state.username
+    
+    # Taby dla różnych typów raportów
+    tab1, tab2 = st.tabs(["📊 Raporty Tygodniowe", "🪞 Kim Jestem?"])
+    
+    with tab1:
+        show_weekly_reports_tab(username)
+    
+    with tab2:
+        show_who_am_i_report_tab(username)
+
+
+def show_weekly_reports_tab(username: str):
+    """Wyświetla zakładkę z raportami tygodniowymi"""
     from utils.activity_tracker import (
         get_activity_summary,
         get_login_pattern,
@@ -1114,10 +1130,6 @@ def show_reports_section():
         should_generate_auto_report
     )
     
-    st.header("📈 Twoje Raporty Rozwojowe")
-    
-    username = st.session_state.username
-    
     # Inicjalizuj tracking jeśli nie istnieje
     initialize_activity_tracking(username)
     
@@ -1128,10 +1140,10 @@ def show_reports_section():
         st.info("📅 **Automatyczny raport tygodniowy** jest gotowy do wygenerowania! Kliknij przycisk poniżej.")
     
     # Przyciski akcji
-    col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([3, 1])
     
     with col1:
-        if st.button("📊 Wygeneruj nowy raport tygodniowy", type="primary", width="stretch"):
+        if st.button("📊 Wygeneruj nowy raport tygodniowy", type="primary", use_container_width=True):
             with st.spinner("🤖 AI analizuje Twoją aktywność..."):
                 # Zbierz dane
                 activity_summary = get_activity_summary(username, days=7)
@@ -1155,11 +1167,11 @@ def show_reports_section():
             latest_report = reports[0]
             report_json = json.dumps(latest_report, indent=2, ensure_ascii=False)
             st.download_button(
-                label="💾 Pobierz JSON",
+                label="💾 Pobierz",
                 data=report_json,
                 file_name=f"raport_{username}_{datetime.now().strftime('%Y%m%d')}.json",
                 mime="application/json",
-                width="stretch"
+                use_container_width=True
             )
     
     st.markdown("---")
@@ -1217,6 +1229,89 @@ def show_reports_section():
                 expanded=False
             ):
                 display_report_compact(report)
+
+
+def show_who_am_i_report_tab(username: str):
+    """Wyświetla zakładkę z raportem 'Kim Jestem?'"""
+    from data.users import load_user_data
+    from utils.profile_report import collect_user_profile_data
+    
+    # Pobierz dane użytkownika
+    users_data = load_user_data()
+    if username not in users_data:
+        st.error("❌ Nie znaleziono danych użytkownika")
+        return
+    
+    user_data = users_data[username]
+    user_data['username'] = username
+    
+    # Sprawdź czy są jakieś testy
+    has_tests = any([
+        'kolb_test' in user_data and user_data['kolb_test'],
+        'test_scores' in user_data and user_data['test_scores'],
+        'mi_test' in user_data and user_data['mi_test']
+    ])
+    
+    if not has_tests:
+        st.warning("⚠️ Nie wykonałeś jeszcze żadnego testu diagnostycznego. Wykonaj przynajmniej jeden test aby wygenerować raport.")
+        st.info("💡 Przejdź do sekcji **Narzędzia → Autodiagnoza** aby wykonać testy.")
+        
+        # Pokaż podgląd co zawiera raport
+        with st.expander("🔍 Co zawiera raport 'Kim Jestem?'", expanded=True):
+            st.markdown("""
+            Kompleksowy raport tożsamości zawiera:
+            
+            **🧭 Synteza Osobista:**
+            - Twój unikalny profil uczenia się
+            - Opis kim jesteś jako lider i uczeń
+            - Połączenie wszystkich wyników diagnostycznych
+            
+            **📊 Wyniki Testów:**
+            - Test Kolba (styl uczenia się)
+            - Test Neuroleader (typ przywództwa)
+            - Test MI (wielorakie inteligencje)
+            
+            **💪 Mocne Strony:**
+            - Top 5 Twoich największych atutów
+            - Źródło każdej mocnej strony
+            - Konkretne opisy jak je wykorzystać
+            
+            **📈 Aktywność:**
+            - Ukończone i rozpoczęte moduły
+            - Postęp w kursie
+            - Wynik zaangażowania
+            
+            **🚀 Rekomendacje:**
+            - Top 5 spersonalizowanych następnych kroków
+            - Priorytety (wysokie/średnie/niskie)
+            - Konkretne akcje do wykonania
+            
+            **📥 Eksport PDF:**
+            - Pobierz kompletny raport
+            - Profesjonalne formatowanie
+            - Gotowy do wydruku
+            """)
+        
+        return
+    
+    # Pokaż ile testów ma użytkownik
+    tests_count = sum([
+        bool('kolb_test' in user_data and user_data['kolb_test']),
+        bool('test_scores' in user_data and user_data['test_scores']),
+        bool('mi_test' in user_data and user_data['mi_test'])
+    ])
+    
+    # Informacja o testach i przycisk
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.info(f"✅ Masz ukończone **{tests_count}/3** testy diagnostyczne. Kliknij przycisk aby wygenerować kompleksowy raport.")
+    with col2:
+        generate_button = st.button("🔍 Wygeneruj raport", type="primary", use_container_width=True)
+    
+    # Generuj raport jeśli kliknięto przycisk
+    if generate_button:
+        st.markdown("---")
+        generate_who_am_i_report_ui(username)
 
 def display_xp_chart(username: str):
     """Wyświetla wykres przyrostu XP z ostatnich 30 dni"""
@@ -2093,3 +2188,205 @@ def plot_radar_chart(scores, device_type=None):
     fig.set_dpi(120 if device_type == 'mobile' else 100)
     
     return fig
+
+
+def generate_who_am_i_report_ui(username: str):
+    """UI do generowania i wyświetlania raportu 'Kim Jestem?'"""
+    from data.users import load_user_data
+    from utils.profile_report import (
+        collect_user_profile_data, 
+        generate_personal_synthesis, 
+        generate_recommendations,
+        create_kolb_radar_chart,
+        create_neuroleader_radar_chart,
+        create_mi_radar_chart,
+        create_engagement_gauge,
+        create_strengths_bars
+    )
+    from utils.profile_pdf import generate_who_am_i_pdf
+    
+    # Pobierz dane użytkownika
+    users_data = load_user_data()
+    if username not in users_data:
+        st.error("❌ Nie znaleziono danych użytkownika")
+        return
+    
+    user_data = users_data[username]
+    user_data['username'] = username
+    
+    # Generuj raport
+    with st.spinner("🔄 Analizuję Twój profil..."):
+        profile_data = collect_user_profile_data(user_data)
+    
+    # === NAGŁÓWEK RAPORTU ===
+    st.success("✅ Raport 'Kim Jestem?' został wygenerowany!")
+    
+    # Przycisk PDF na górze
+    col_left, col_right = st.columns([3, 1])
+    with col_right:
+        if st.button("📥 Pobierz PDF", type="secondary", use_container_width=True):
+            with st.spinner("Generuję PDF..."):
+                try:
+                    pdf_bytes = generate_who_am_i_pdf(profile_data)
+                    st.download_button(
+                        label="⬇️ Pobierz PDF",
+                        data=pdf_bytes,
+                        file_name=f"Kim_Jestem_{username}_{datetime.now().strftime('%Y%m%d')}.pdf",
+                        mime="application/pdf",
+                        use_container_width=True
+                    )
+                except Exception as e:
+                    st.error(f"❌ Błąd: {str(e)}")
+    
+    st.markdown("---")
+    
+    # === TRZY WYKRESY RADAROWE ===
+    st.markdown("### 🎯 Twoje Wyniki Diagnostyczne")
+    
+    # Sprawdź czy są jakiekolwiek testy
+    has_any_test = any([
+        profile_data['tests']['kolb'],
+        profile_data['tests']['neuroleader'],
+        profile_data['tests']['mi']
+    ])
+    
+    if has_any_test:
+        # Generuj wykresy
+        kolb_chart = create_kolb_radar_chart(profile_data)
+        neuroleader_chart = create_neuroleader_radar_chart(profile_data)
+        mi_chart = create_mi_radar_chart(profile_data)
+        
+        # Wyświetl w 3 kolumnach
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            if kolb_chart:
+                st.plotly_chart(kolb_chart, use_container_width=True)
+            else:
+                st.info("� **Test Kolba**\n\nWykonaj test aby zobaczyć wykres")
+        
+        with col2:
+            if neuroleader_chart:
+                st.plotly_chart(neuroleader_chart, use_container_width=True)
+            else:
+                st.info("� **Neuroleader**\n\nWykonaj test aby zobaczyć wykres")
+        
+        with col3:
+            if mi_chart:
+                st.plotly_chart(mi_chart, use_container_width=True)
+            else:
+                st.info("🧠 **MI Test**\n\nWykonaj test aby zobaczyć wykres")
+    else:
+        st.info("📊 Wykresy radarowe pojawią się po wykonaniu testów diagnostycznych")
+    
+    st.markdown("---")
+    
+    # === GAUGE ZAANGAŻOWANIA + TOP 5 MOCNYCH STRON ===
+    col_gauge, col_strengths = st.columns([1, 2])
+    
+    with col_gauge:
+        engagement_gauge = create_engagement_gauge(profile_data)
+        st.plotly_chart(engagement_gauge, use_container_width=True)
+    
+    with col_strengths:
+        strengths_bars = create_strengths_bars(profile_data)
+        if strengths_bars:
+            st.plotly_chart(strengths_bars, use_container_width=True)
+        else:
+            st.info("💪 **Mocne Strony**\n\nWykonaj testy aby odkryć swoje mocne strony!")
+    
+    st.markdown("---")
+    
+    # === SEKCJA 1: SYNTEZA I AKTYWNOŚĆ (2 kolumny) ===
+    col_main, col_stats = st.columns([2, 1])
+    
+    with col_main:
+        st.markdown("### 🧭 Kim Jestem?")
+        synthesis = generate_personal_synthesis(profile_data)
+        st.markdown(synthesis)
+    
+    with col_stats:
+        st.markdown("### 📈 Aktywność")
+        activity = profile_data['activity']
+        st.metric("Ukończone moduły", len(activity['modules_completed']))
+        st.metric("W trakcie", len(activity['modules_in_progress']))
+        st.metric("Postęp ogólny", f"{activity['total_progress']}%")
+        st.metric("Zaangażowanie", f"{activity['engagement_score']}/100")
+    
+    st.markdown("---")
+    
+    # === SEKCJA 2: TESTY (3 kolumny na pełną szerokość) ===
+    st.markdown("### 📊 Moje Wyniki Diagnostyczne")
+    
+    tests = profile_data['tests']
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if tests['kolb']:
+            st.markdown("#### 🔄 Test Kolba")
+            st.markdown(f"**{tests['kolb']['style']}**")
+            with st.expander("📖 Zobacz opis"):
+                st.markdown(tests['kolb']['description'])
+        else:
+            st.markdown("#### 🔄 Test Kolba")
+            st.caption("❌ Nie wykonano")
+    
+    with col2:
+        if tests['neuroleader']:
+            st.markdown("#### 🧬 Neuroleader")
+            st.markdown(f"**{tests['neuroleader']['type']}**")
+            with st.expander("📖 Zobacz opis"):
+                st.markdown(tests['neuroleader']['description'])
+        else:
+            st.markdown("#### 🧬 Neuroleader")
+            st.caption("❌ Nie wykonano")
+    
+    with col3:
+        if tests['mi']:
+            st.markdown("#### 🧠 MI Test")
+            from utils.profile_report import get_intelligence_name
+            top = tests['mi']['top_3'][0] if tests['mi']['top_3'] else ('unknown', 0)
+            st.markdown(f"**{get_intelligence_name(top[0])}**")
+            st.caption(f"Wynik: {top[1]:.1f}%")
+            if len(tests['mi']['top_3']) > 1:
+                with st.expander("📖 Top 3 inteligencje"):
+                    for intel, score in tests['mi']['top_3']:
+                        st.write(f"• {get_intelligence_name(intel)}: {score:.1f}%")
+        else:
+            st.markdown("#### 🧠 MI Test")
+            st.caption("❌ Nie wykonano")
+    
+    st.markdown("---")
+    
+    # === SEKCJA 3: MOCNE STRONY I REKOMENDACJE (2 kolumny) ===
+    col_strengths, col_recommendations = st.columns(2)
+    
+    with col_strengths:
+        st.markdown("### 💪 Moje Mocne Strony")
+        strengths = profile_data['strengths']
+        if strengths:
+            for i, strength in enumerate(strengths[:5], 1):  # Top 5
+                with st.expander(f"{i}. {strength['icon']} {strength['name']}", expanded=(i==1)):
+                    st.markdown(f"**{strength['description']}**")
+                    st.caption(f"📌 Źródło: {strength['source']}")
+        else:
+            st.info("Wykonaj więcej testów aby odkryć swoje mocne strony!")
+    
+    with col_recommendations:
+        st.markdown("### 🚀 Następne Kroki")
+        recommendations = generate_recommendations(profile_data)
+        if recommendations:
+            for i, rec in enumerate(recommendations, 1):
+                priority_colors = {
+                    'high': '🔴',
+                    'medium': '🟡',
+                    'low': '🟢'
+                }
+                
+                with st.expander(
+                    f"{i}. {priority_colors[rec['priority']]} {rec['icon']} {rec['title']}", 
+                    expanded=(i==1)
+                ):
+                    st.markdown(rec['description'])
+                    if 'action' in rec:
+                        st.caption(f"➡️ {rec['action']}")

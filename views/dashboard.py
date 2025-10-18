@@ -496,7 +496,7 @@ def show_main_content(user_data, device_type):
     
 
 def show_diagnostic_tests_widget(user_data):
-    """Widget testów diagnostycznych - Kolb i Neuroleader"""
+    """Widget testów diagnostycznych - Kolb, Neuroleader i MI"""
     # Nagłówek sekcji - taki sam jak "Twój Profil"
     st.markdown("""
     <div class="dashboard-section">
@@ -507,78 +507,182 @@ def show_diagnostic_tests_widget(user_data):
     """, unsafe_allow_html=True)
     
     # Sprawdź czy użytkownik wykonał testy
-    has_kolb = 'kolb_test' in user_data and user_data.get('kolb_test')
-    has_neuroleader = 'test_scores' in user_data and user_data.get('test_scores')
+    has_kolb = bool('kolb_test' in user_data and user_data.get('kolb_test'))
+    has_neuroleader = bool('test_scores' in user_data and user_data.get('test_scores'))
+    has_mi = bool('mi_test' in user_data and user_data.get('mi_test'))
     
-    # Jeśli ma oba testy - pokaż wyniki
-    if has_kolb and has_neuroleader:
+    # Zlicz ukończone testy
+    completed_tests = sum([has_kolb, has_neuroleader, has_mi])
+    total_tests = 3
+    
+    # Jeśli ma wszystkie 3 testy - pokaż pełny profil
+    if completed_tests == 3:
         # Pobierz wyniki Kolb
         kolb_style = user_data['kolb_test'].get('dominant_style', 'Nieznany')
-        # Skróć nazwę (np. "Diverging (Dywergent)" -> "Diverging")
         kolb_display = kolb_style.split('(')[0].strip()
         
-        # Pobierz dominujący typ Neuroleader
+        # Pobierz dominujący typ Neuroleader z pełną nazwą
         dominant_neuroleader = max(user_data['test_scores'].items(), key=lambda x: x[1])[0]
-        neuroleader_color = NEUROLEADER_TYPES.get(dominant_neuroleader, {}).get('color', '#3498db')
+        neuroleader_display = dominant_neuroleader  # Nazwa typu jest już czytelna
+        
+        # Pobierz top inteligencję MI
+        mi_results = user_data.get('mi_test', {})
+        if 'top_3' in mi_results and mi_results['top_3']:
+            top_intelligence = mi_results['top_3'][0][0]
+            # Mapowanie nazw inteligencji
+            intelligence_names = {
+                'linguistic': '🗣️ Językowa',
+                'logical': '🔢 Logiczna',
+                'visual': '🎨 Wizualna',
+                'musical': '🎵 Muzyczna',
+                'kinesthetic': '🤸 Kinestetyczna',
+                'interpersonal': '👥 Interpersonalna',
+                'intrapersonal': '🧘 Intrapersonalna',
+                'naturalistic': '🌿 Przyrodnicza'
+            }
+            mi_display = intelligence_names.get(top_intelligence, top_intelligence.title())
+        else:
+            mi_display = 'Nieznana'
         
         st.markdown(f"""
 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; color: white; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
     <div style="text-align: center; margin-bottom: 15px;">
         <div style="font-size: 2.2rem; margin-bottom: 8px;">✅</div>
-        <div style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Profil kompletny</div>
+        <div style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Profil kompletny ({completed_tests}/{total_tests})</div>
     </div>
-    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.2);">
-        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🔄 Styl uczenia się Kolba:</div>
-        <div style="font-size: 1.1rem; font-weight: 600;">{kolb_display}</div>
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🔄 Styl uczenia się:</div>
+        <div style="font-size: 1.05rem; font-weight: 600;">{kolb_display}</div>
+    </div>
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🧬 Typ neuroleadera:</div>
+        <div style="font-size: 1.05rem; font-weight: 600;">{neuroleader_display}</div>
     </div>
     <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.2);">
-        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🧬 Typ Neuroleadera:</div>
-        <div style="font-size: 1.1rem; font-weight: 600;">{dominant_neuroleader}</div>
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🧠 Dominująca inteligencja:</div>
+        <div style="font-size: 1.05rem; font-weight: 600;">{mi_display}</div>
     </div>
 </div>
         """, unsafe_allow_html=True)
         
-    # Jeśli ma tylko jeden test
-    elif has_kolb or has_neuroleader:
+    # Jeśli ma 2 z 3 testów
+    elif completed_tests == 2:
+        # Przygotuj karty dla ukończonych testów
+        cards_html = []
+        missing_tests = []
+        
         if has_kolb:
             kolb_style = user_data['kolb_test'].get('dominant_style', 'Nieznany')
             kolb_display = kolb_style.split('(')[0].strip()
-            
-            st.markdown(f"""
-<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; color: white; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
-    <div style="text-align: center; margin-bottom: 15px;">
-        <div style="font-size: 2.2rem; margin-bottom: 8px;">🔄</div>
-        <div style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Częściowy profil</div>
-    </div>
-    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.2);">
+            cards_html.append(f'''
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.2);">
         <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🔄 Styl uczenia się:</div>
-        <div style="font-size: 1.1rem; font-weight: 600;">{kolb_display}</div>
-    </div>
-    <div style="background: rgba(255, 193, 7, 0.2); border-radius: 8px; padding: 10px; border: 1px solid rgba(255, 193, 7, 0.4);">
-        <div style="font-size: 0.8rem; text-align: center;">⚡ Uzupełnij profil testem Neuroleadera</div>
-    </div>
-</div>
-            """, unsafe_allow_html=True)
+        <div style="font-size: 1.05rem; font-weight: 600;">{kolb_display}</div>
+    </div>''')
+        else:
+            missing_tests.append("Kolba")
             
         if has_neuroleader:
             dominant_neuroleader = max(user_data['test_scores'].items(), key=lambda x: x[1])[0]
-            neuroleader_color = NEUROLEADER_TYPES.get(dominant_neuroleader, {}).get('color', '#3498db')
+            neuroleader_display = dominant_neuroleader  # Nazwa typu jest już czytelna
+            cards_html.append(f'''
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🧬 Typ neuroleadera:</div>
+        <div style="font-size: 1.05rem; font-weight: 600;">{neuroleader_display}</div>
+    </div>''')
+        else:
+            missing_tests.append("Neuroleadera")
             
-            st.markdown(f"""
+        if has_mi:
+            mi_results = user_data.get('mi_test', {})
+            if 'top_3' in mi_results and mi_results['top_3']:
+                top_intelligence = mi_results['top_3'][0][0]
+                intelligence_names = {
+                    'linguistic': '🗣️ Językowa',
+                    'logical': '🔢 Logiczna',
+                    'visual': '🎨 Wizualna',
+                    'musical': '🎵 Muzyczna',
+                    'kinesthetic': '🤸 Kinestetyczna',
+                    'interpersonal': '👥 Interpersonalna',
+                    'intrapersonal': '🧘 Intrapersonalna',
+                    'naturalistic': '🌿 Przyrodnicza'
+                }
+                mi_display = intelligence_names.get(top_intelligence, top_intelligence.title())
+                cards_html.append(f'''
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🧠 Dominująca inteligencja:</div>
+        <div style="font-size: 1.05rem; font-weight: 600;">{mi_display}</div>
+    </div>''')
+        else:
+            missing_tests.append("Wielorakich Inteligencji")
+        
+        # Połącz wszystkie karty
+        all_cards = '\n'.join(cards_html)
+        missing_test_name = missing_tests[0] if missing_tests else "nieznany"
+        
+        st.markdown(f'''
 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; color: white; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
     <div style="text-align: center; margin-bottom: 15px;">
-        <div style="font-size: 2.2rem; margin-bottom: 8px;">🧬</div>
-        <div style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Częściowy profil</div>
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🎯</div>
+        <div style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Profil prawie kompletny ({completed_tests}/{total_tests})</div>
     </div>
-    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.2);">
-        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">🧬 Typ Neuroleadera:</div>
-        <div style="font-size: 1.1rem; font-weight: 600;">{dominant_neuroleader}</div>
-    </div>
+    {all_cards}
     <div style="background: rgba(255, 193, 7, 0.2); border-radius: 8px; padding: 10px; border: 1px solid rgba(255, 193, 7, 0.4);">
-        <div style="font-size: 0.8rem; text-align: center;">⚡ Uzupełnij profil testem Kolba</div>
+        <div style="font-size: 0.8rem; text-align: center;">⚡ Uzupełnij profil testem {missing_test_name}</div>
     </div>
 </div>
-            """, unsafe_allow_html=True)
+        ''', unsafe_allow_html=True)
+        
+    # Jeśli ma tylko 1 test
+    elif completed_tests == 1:
+        test_icon = ""
+        test_label = ""
+        test_value = ""
+        
+        if has_kolb:
+            kolb_style = user_data['kolb_test'].get('dominant_style', 'Nieznany')
+            test_icon = "🔄"
+            test_label = "Styl uczenia się"
+            test_value = kolb_style.split('(')[0].strip()
+        elif has_neuroleader:
+            dominant_neuroleader = max(user_data['test_scores'].items(), key=lambda x: x[1])[0]
+            neuroleader_display = dominant_neuroleader  # Nazwa typu jest już czytelna
+            test_icon = "🧬"
+            test_label = "Typ neuroleadera"
+            test_value = neuroleader_display
+        elif has_mi:
+            mi_results = user_data.get('mi_test', {})
+            if 'top_3' in mi_results and mi_results['top_3']:
+                top_intelligence = mi_results['top_3'][0][0]
+                intelligence_names = {
+                    'linguistic': '🗣️ Językowa',
+                    'logical': '🔢 Logiczna',
+                    'visual': '🎨 Wizualna',
+                    'musical': '🎵 Muzyczna',
+                    'kinesthetic': '🤸 Kinestetyczna',
+                    'interpersonal': '👥 Interpersonalna',
+                    'intrapersonal': '🧘 Intrapersonalna',
+                    'naturalistic': '🌿 Przyrodnicza'
+                }
+                test_icon = "🧠"
+                test_label = "Dominująca inteligencja"
+                test_value = intelligence_names.get(top_intelligence, top_intelligence.title())
+        
+        st.markdown(f"""
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; color: white; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
+    <div style="text-align: center; margin-bottom: 15px;">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">{test_icon}</div>
+        <div style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Częściowy profil ({completed_tests}/{total_tests})</div>
+    </div>
+    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 5px;">{test_icon} {test_label}:</div>
+        <div style="font-size: 1.1rem; font-weight: 600;">{test_value}</div>
+    </div>
+    <div style="background: rgba(255, 193, 7, 0.2); border-radius: 8px; padding: 10px; border: 1px solid rgba(255, 193, 7, 0.4);">
+        <div style="font-size: 0.8rem; text-align: center;">⚡ Wykonaj pozostałe 2 testy</div>
+    </div>
+</div>
+        """, unsafe_allow_html=True)
     
     # Jeśli nie ma żadnego testu - CTA
     else:
@@ -587,15 +691,18 @@ def show_diagnostic_tests_widget(user_data):
     <div style="font-size: 3rem; margin-bottom: 10px;">🎯</div>
     <div style="font-size: 1.1rem; font-weight: 600; color: #2c3e50; margin-bottom: 8px;">Poznaj siebie!</div>
     <div style="font-size: 0.9rem; color: #555; line-height: 1.6;">
-        Odkryj swój styl uczenia się i typ przywódcy.<br>
-        <b>2 testy • 10 minut • Spersonalizowane wyniki</b>
+        Odkryj swój styl uczenia się, typ przywódcy i dominującą inteligencję.<br>
+        <b>3 testy • 25 minut • Spersonalizowane wyniki</b>
     </div>
 </div>
         """, unsafe_allow_html=True)
     
     # Przycisk "Zobacz szczegóły" / "Wykonaj testy" - zawsze pełna szerokość
-    if has_kolb or has_neuroleader:
-        button_text = "🔍 Zobacz pełne wyniki"
+    if completed_tests > 0:
+        if completed_tests == 3:
+            button_text = "🔍 Zobacz pełne wyniki"
+        else:
+            button_text = f"📊 Zobacz wyniki ({completed_tests}/3)"
         button_key = "diagnostic_details"
     else:
         button_text = "🚀 Wykonaj testy"

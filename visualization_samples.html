@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Próbki Wizualizacji Profilu - BVA</title>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .option-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        .option-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .option-title {
+            flex: 1;
+            margin-left: 20px;
+        }
+        
+        .option-title h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+        
+        .option-title .subtitle {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .badges {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .badge-recommended {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .badge-pro {
+            background: #3498db;
+            color: white;
+        }
+        
+        .badge-simple {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .pros {
+            background: #d5f4e6;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .cons {
+            background: #fadbd8;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .pros h3, .cons h3 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .pros h3 { color: #27ae60; }
+        .cons h3 { color: #c0392b; }
+        
+        .pros ul, .cons ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .pros li:before {
+            content: "✓ ";
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .cons li:before {
+            content: "✗ ";
+            color: #c0392b;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .chart-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 400px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .gauge {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            margin: 20px auto;
+        }
+        
+        .gauge-bg {
+            width: 200px;
+            height: 100px;
+            background: linear-gradient(to right, #e74c3c 0%, #f39c12 25%, #f1c40f 50%, #2ecc71 100%);
+            border-radius: 100px 100px 0 0;
+            position: relative;
+        }
+        
+        .gauge-overlay {
+            position: absolute;
+            width: 160px;
+            height: 80px;
+            background: white;
+            border-radius: 80px 80px 0 0;
+            bottom: 0;
+            left: 20px;
+        }
+        
+        .gauge-needle {
+            position: absolute;
+            width: 4px;
+            height: 90px;
+            background: #2c3e50;
+            bottom: 0;
+            left: 98px;
+            transform-origin: bottom;
+            animation: swingNeedle 2s ease-in-out infinite;
+        }
+        
+        @keyframes swingNeedle {
+            0%, 100% { transform: rotate(-45deg); }
+            50% { transform: rotate(45deg); }
+        }
+        
+        .treemap-cell {
+            display: inline-block;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .sunburst-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+        
+        .sunburst-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 30px solid;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .sunburst-center {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-3, .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Próbki Wizualizacji Profilu 360°</h1>
+            <p>Porównaj różne podejścia do wizualizacji wyników testów diagnostycznych</p>
+        </div>
+
+        <!-- OPCJA 1: Trzy oddzielne radary -->
+        <div class="option-card">
+            <div class="option-header">
+                <div class="option-number">1</div>
+                <div class="option-title">
+                    <h2>Trzy Oddzielne Wykresy Radarowe</h2>
+                    <p class="subtitle">Osobny wykres dla każdego testu</p>
+                </div>
+                <div class="badges">
+                    <span class="badge badge-recommended">⭐ REKOMENDOWANE</span>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>👍 Zalety</h3>
+                    <ul>
+                        <li>Maksymalna czytelność</li>
+                        <li>Łatwe porównanie w czasie</li>
+                        <li>Każdy test ma swoją przestrzeń</li>
+                        <li>Profesjonalny wygląd</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>👎 Wady</h3>
+                    <ul>
+                        <li>Zajmuje więcej miejsca</li>
+                        <li>Brak jednego "unified" widoku</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="grid-3">
+                    <div id="radar1"></div>
+                    <div id="radar2"></div>
+                    <div id="radar3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPCJA 2: Karty + Gauge -->
+        <div class="option-card">
+            <div class="option-header">
+                <div class="option-number">2</div>
+                <div class="option-title">
+                    <h2>Karty Scoreboard + Gauge Charts</h2>
+                    <p class="subtitle">Minimalistyczne karty z półkolami</p>
+                </div>
+                <div class="badges">
+                    <span class="badge badge-simple">🎯 PROSTE</span>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>👍 Zalety</h3>
+                    <ul>
+                        <li>Minimalistyczne i nowoczesne</li>
+                        <li>Szybkie zrozumienie</li>
+                        <li>Mobilny-friendly</li>
+                        <li>Eleganckie</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>👎 Wady</h3>
+                    <ul>
+                        <li>Mniej szczegółów</li>
+                        <li>Tylko dominujące wymiary</li>
+                        <li>Brak porównania wszystkich wymiarów</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="grid-3">
+                    <div class="card">
+                        <h3>🔄 Test Kolba</h3>
+                        <div class="gauge">
+                            <div class="gauge-bg">
+                                <div class="gauge-overlay"></div>
+                                <div class="gauge-needle"></div>
+                            </div>
+                        </div>
+                        <h2 style="color: #667eea;">Diverging</h2>
+                        <p>Styl uczenia się</p>
+                    </div>
+                    <div class="card">
+                        <h3>🧬 Neuroleader</h3>
+                        <div class="gauge">
+                            <div class="gauge-bg">
+                                <div class="gauge-overlay"></div>
+                                <div class="gauge-needle" style="animation-delay: 0.5s;"></div>
+                            </div>
+                        </div>
+                        <h2 style="color: #f093fb;">Neuroempata</h2>
+                        <p>Typ przywództwa</p>
+                    </div>
+                    <div class="card">
+                        <h3>🧠 MI Test</h3>
+                        <div class="gauge">
+                            <div class="gauge-bg">
+                                <div class="gauge-overlay"></div>
+                                <div class="gauge-needle" style="animation-delay: 1s;"></div>
+                            </div>
+                        </div>
+                        <h2 style="color: #4facfe;">Interpersonalna</h2>
+                        <p>Dominująca inteligencja</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPCJA 3: Heksagonalny spider -->
+        <div class="option-card">
+            <div class="option-header">
+                <div class="option-number">3</div>
+                <div class="option-title">
+                    <h2>Heksagonalny Spider Chart (TOP cechy)</h2>
+                    <p class="subtitle">Tylko najważniejsze wymiary z każdego testu</p>
+                </div>
+                <div class="badges">
+                    <span class="badge badge-pro">⚡ ZWIĘZŁY</span>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>👍 Zalety</h3>
+                    <ul>
+                        <li>Kompaktowy (9 wymiarów)</li>
+                        <li>Jeden spójny wykres</li>
+                        <li>Czytelniejszy niż 14 kategorii</li>
+                        <li>Pokazuje TOP cechy</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>👎 Wady</h3>
+                    <ul>
+                        <li>Pomija słabsze wymiary</li>
+                        <li>Wciąż może być zatłoczony</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div id="spider"></div>
+            </div>
+        </div>
+
+        <!-- OPCJA 4: 3D Surface -->
+        <div class="option-card">
+            <div class="option-header">
+                <div class="option-number">4</div>
+                <div class="option-title">
+                    <h2>Interaktywny 3D Surface Plot</h2>
+                    <p class="subtitle">Trójwymiarowa powierzchnia z możliwością obracania</p>
+                </div>
+                <div class="badges">
+                    <span class="badge badge-pro">🚀 ZAAWANSOWANE</span>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>👍 Zalety</h3>
+                    <ul>
+                        <li>Efektowne wizualnie</li>
+                        <li>Interaktywne</li>
+                        <li>Pokazuje relacje 3D</li>
+                        <li>"Wow effect"</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>👎 Wady</h3>
+                    <ul>
+                        <li>Może być przesadą</li>
+                        <li>Trudniejsze do zrozumienia</li>
+                        <li>Nie drukuje się dobrze</li>
+                        <li>Wymaga więcej mocy obliczeniowej</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div id="surface3d"></div>
+            </div>
+        </div>
+
+        <!-- OPCJA 5: Sunburst -->
+        <div class="option-card">
+            <div class="option-header">
+                <div class="option-number">5</div>
+                <div class="option-title">
+                    <h2>Sunburst Chart (Wykres Słoneczny)</h2>
+                    <p class="subtitle">Hierarchiczna wizualizacja koncentryczna</p>
+                </div>
+                <div class="badges">
+                    <span class="badge badge-pro">🎨 PIĘKNY</span>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>👍 Zalety</h3>
+                    <ul>
+                        <li>Bardzo estetyczny</li>
+                        <li>Hierarchiczny (centrum → zewnątrz)</li>
+                        <li>Dobrze pokazuje proporcje</li>
+                        <li>Kompaktowy</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>👎 Wady</h3>
+                    <ul>
+                        <li>Trudniejszy do implementacji</li>
+                        <li>Może być mniej intuicyjny</li>
+                        <li>Etykiety mogą się nakładać</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div id="sunburst"></div>
+            </div>
+        </div>
+
+        <!-- OPCJA 6: Treemap -->
+        <div class="option-card">
+            <div class="option-header">
+                <div class="option-number">6</div>
+                <div class="option-title">
+                    <h2>Treemap z Kolorami</h2>
+                    <p class="subtitle">Prostokąty proporcjonalne do wyników</p>
+                </div>
+                <div class="badges">
+                    <span class="badge badge-simple">📊 PROSTY</span>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>👍 Zalety</h3>
+                    <ul>
+                        <li>Najprostszy do zrozumienia</li>
+                        <li>Doskonały dla porównań</li>
+                        <li>Dobrze wykorzystuje przestrzeń</li>
+                        <li>Łatwy w implementacji</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>👎 Wady</h3>
+                    <ul>
+                        <li>Mniej efektowny</li>
+                        <li>Trudniej pokazać relacje</li>
+                        <li>Może wyglądać "płasko"</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div id="treemap"></div>
+            </div>
+        </div>
+
+        <!-- Podsumowanie -->
+        <div class="option-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="color: white; text-align: center; margin-bottom: 20px;">🎯 Moja Rekomendacja</h2>
+            <div style="font-size: 1.2em; line-height: 1.8; text-align: center;">
+                <p><strong>OPCJA 1: Trzy Oddzielne Wykresy Radarowe</strong></p>
+                <p style="margin-top: 15px;">
+                    ➕ Dodaj: Mini gauge dla zaangażowania + Top 5 Mocnych Stron (poziome paski)
+                </p>
+                <p style="margin-top: 15px; opacity: 0.9; font-size: 0.9em;">
+                    Ta kombinacja daje najlepszy balans między czytelnością, profesjonalizmem i kompletnością informacji.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // OPCJA 1: Trzy oddzielne radary
+        var radar1Data = [{
+            type: 'scatterpolar',
+            r: [66.7, 79.2, 50.0, 58.3],
+            theta: ['CE (Konkretne<br>doświadczenie)', 'RO (Refleksyjna<br>obserwacja)', 
+                    'AC (Abstrakcyjna<br>konceptualizacja)', 'AE (Aktywne<br>eksperymentowanie)'],
+            fill: 'toself',
+            fillcolor: 'rgba(102, 126, 234, 0.3)',
+            line: {color: 'rgba(102, 126, 234, 0.8)', width: 2},
+            marker: {size: 8, color: '#667eea'},
+            name: 'Kolb'
+        }];
+
+        var radar1Layout = {
+            polar: {
+                radialaxis: {visible: true, range: [0, 100]},
+                bgcolor: 'white'
+            },
+            showlegend: false,
+            title: '🔄 Test Kolba',
+            margin: {l: 60, r: 60, t: 60, b: 60}
+        };
+
+        Plotly.newPlot('radar1', radar1Data, radar1Layout, {responsive: true});
+
+        var radar2Data = [{
+            type: 'scatterpolar',
+            r: [60, 50, 63, 80, 67],
+            theta: ['Neuroanalityk', 'Neuroreaktor', 'Neurobalanser', 'Neuroempata', 'Neuroinnowator'],
+            fill: 'toself',
+            fillcolor: 'rgba(240, 147, 251, 0.3)',
+            line: {color: 'rgba(240, 147, 251, 0.8)', width: 2},
+            marker: {size: 8, color: '#f093fb'},
+            name: 'Neuroleader'
+        }];
+
+        var radar2Layout = {
+            polar: {
+                radialaxis: {visible: true, range: [0, 100]},
+                bgcolor: 'white'
+            },
+            showlegend: false,
+            title: '🧬 Neuroleader',
+            margin: {l: 60, r: 60, t: 60, b: 60}
+        };
+
+        Plotly.newPlot('radar2', radar2Data, radar2Layout, {responsive: true});
+
+        var radar3Data = [{
+            type: 'scatterpolar',
+            r: [85.5, 78.2, 72.8, 65.3, 58.7],
+            theta: ['Interpersonalna', 'Językowa', 'Intrapersonalna', 'Logiczno-mat.', 'Kinestetyczna'],
+            fill: 'toself',
+            fillcolor: 'rgba(79, 172, 254, 0.3)',
+            line: {color: 'rgba(79, 172, 254, 0.8)', width: 2},
+            marker: {size: 8, color: '#4facfe'},
+            name: 'MI'
+        }];
+
+        var radar3Layout = {
+            polar: {
+                radialaxis: {visible: true, range: [0, 100]},
+                bgcolor: 'white'
+            },
+            showlegend: false,
+            title: '🧠 MI Test (Top 5)',
+            margin: {l: 60, r: 60, t: 60, b: 60}
+        };
+
+        Plotly.newPlot('radar3', radar3Data, radar3Layout, {responsive: true});
+
+        // OPCJA 3: Spider chart (TOP 9)
+        var spiderData = [{
+            type: 'scatterpolar',
+            r: [79.2, 80, 85.5, 78.2, 72.8, 66.7, 63, 67, 58.3],
+            theta: ['RO (Kolb)', 'Neuroempata', 'Interpersonalna (MI)', 
+                    'Językowa (MI)', 'Intrapersonalna (MI)',
+                    'CE (Kolb)', 'Neurobalanser', 'Neuroinnowator', 'AE (Kolb)'],
+            fill: 'toself',
+            fillcolor: 'rgba(102, 126, 234, 0.3)',
+            line: {color: 'rgba(102, 126, 234, 0.8)', width: 3},
+            marker: {size: 10, 
+                     color: ['#667eea', '#f093fb', '#4facfe', '#4facfe', '#4facfe',
+                             '#667eea', '#f093fb', '#f093fb', '#667eea']},
+            name: 'TOP Cechy'
+        }];
+
+        var spiderLayout = {
+            polar: {
+                radialaxis: {visible: true, range: [0, 100]},
+                bgcolor: 'rgba(248, 249, 250, 0.9)'
+            },
+            showlegend: false,
+            title: '🎯 TOP 9 Cech (3+3+3 z każdego testu)',
+            height: 500,
+            margin: {l: 100, r: 100, t: 80, b: 100}
+        };
+
+        Plotly.newPlot('spider', spiderData, spiderLayout, {responsive: true});
+
+        // OPCJA 4: 3D Surface
+        var zData = [];
+        for (var i = 0; i < 20; i++) {
+            var row = [];
+            for (var j = 0; j < 20; j++) {
+                row.push(Math.sin(i/5) * Math.cos(j/5) * 50 + 50);
+            }
+            zData.push(row);
+        }
+
+        var surface3dData = [{
+            type: 'surface',
+            z: zData,
+            colorscale: [
+                [0, '#667eea'],
+                [0.5, '#f093fb'],
+                [1, '#4facfe']
+            ],
+            showscale: false
+        }];
+
+        var surface3dLayout = {
+            title: '3D Profil (przykładowa wizualizacja)',
+            scene: {
+                camera: {eye: {x: 1.5, y: 1.5, z: 1.3}},
+                xaxis: {title: 'Kolb', showgrid: true},
+                yaxis: {title: 'Neuroleader', showgrid: true},
+                zaxis: {title: 'MI', showgrid: true}
+            },
+            height: 500,
+            margin: {l: 0, r: 0, t: 40, b: 0}
+        };
+
+        Plotly.newPlot('surface3d', surface3dData, surface3dLayout, {responsive: true});
+
+        // OPCJA 5: Sunburst
+        var sunburstData = [{
+            type: "sunburst",
+            labels: ["Profil", 
+                     "Kolb", "Neuroleader", "MI",
+                     "CE", "RO", "AC", "AE",
+                     "Analityk", "Reaktor", "Balanser", "Empata", "Innowator",
+                     "Interpers.", "Językowa", "Intrapers.", "Logiczna", "Kinestet."],
+            parents: ["", 
+                      "Profil", "Profil", "Profil",
+                      "Kolb", "Kolb", "Kolb", "Kolb",
+                      "Neuroleader", "Neuroleader", "Neuroleader", "Neuroleader", "Neuroleader",
+                      "MI", "MI", "MI", "MI", "MI"],
+            values: [0,
+                     4, 5, 5,
+                     66.7, 79.2, 50.0, 58.3,
+                     60, 50, 63, 80, 67,
+                     85.5, 78.2, 72.8, 65.3, 58.7],
+            marker: {
+                colors: ['#ffffff',
+                         '#667eea', '#f093fb', '#4facfe',
+                         '#7b8df7', '#8594f7', '#9099f7', '#9ba1f7',
+                         '#f5a7fc', '#f7b0fc', '#f9bafc', '#fbc4fc', '#fdcdfc',
+                         '#6ab9fe', '#7dc2fe', '#91cbfe', '#a4d3fe', '#b8dcfe']
+            },
+            branchvalues: "total",
+            hovertemplate: '<b>%{label}</b><br>Wynik: %{value:.1f}%<extra></extra>'
+        }];
+
+        var sunburstLayout = {
+            title: '☀️ Hierarchiczny Profil 360°',
+            height: 500,
+            margin: {l: 0, r: 0, t: 40, b: 0}
+        };
+
+        Plotly.newPlot('sunburst', sunburstData, sunburstLayout, {responsive: true});
+
+        // OPCJA 6: Treemap
+        var treemapData = [{
+            type: "treemap",
+            labels: ["Profil",
+                     "Test Kolba", "Neuroleader", "MI Test",
+                     "CE: 66.7%", "RO: 79.2%", "AC: 50.0%", "AE: 58.3%",
+                     "Analityk: 60%", "Reaktor: 50%", "Balanser: 63%", "Empata: 80%", "Innowator: 67%",
+                     "Interpers: 85.5%", "Językowa: 78.2%", "Intrapers: 72.8%", "Logiczna: 65.3%", "Kinestet: 58.7%"],
+            parents: ["",
+                      "Profil", "Profil", "Profil",
+                      "Test Kolba", "Test Kolba", "Test Kolba", "Test Kolba",
+                      "Neuroleader", "Neuroleader", "Neuroleader", "Neuroleader", "Neuroleader",
+                      "MI Test", "MI Test", "MI Test", "MI Test", "MI Test"],
+            values: [0,
+                     4, 5, 5,
+                     66.7, 79.2, 50.0, 58.3,
+                     60, 50, 63, 80, 67,
+                     85.5, 78.2, 72.8, 65.3, 58.7],
+            marker: {
+                colors: ['#ffffff',
+                         '#667eea', '#f093fb', '#4facfe',
+                         '#7b8df7', '#8594f7', '#9099f7', '#9ba1f7',
+                         '#f5a7fc', '#f7b0fc', '#f9bafc', '#fbc4fc', '#fdcdfc',
+                         '#6ab9fe', '#7dc2fe', '#91cbfe', '#a4d3fe', '#b8dcfe'],
+                line: {width: 2, color: 'white'}
+            },
+            textposition: "middle center",
+            hovertemplate: '<b>%{label}</b><extra></extra>'
+        }];
+
+        var treemapLayout = {
+            title: '📊 Treemap - Wszystkie Wyniki',
+            height: 500,
+            margin: {l: 0, r: 0, t: 40, b: 0}
+        };
+
+        Plotly.newPlot('treemap', treemapData, treemapLayout, {responsive: true});
+    </script>
+</body>
+</html>

@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 1625,
+    "xp": 1626,
     "degencoins": 563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-18 08:28:52",
+    "last_login": "2025-10-18 18:37:30",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -33,7 +33,8 @@
         "stress_decision_making",
         "stress_reduction_techniques",
         "neurobalanser_guide",
-        "shower_ideas"
+        "shower_ideas",
+        "neuroanalityk_guide"
       ],
       "favorites": []
     },
@@ -196,6 +197,14 @@
       }
     },
     "recent_activities": [
+      {
+        "type": "inspiration_read",
+        "details": {
+          "inspiration_id": "neuroanalityk_guide",
+          "inspiration_title": "Neuroanalityk: Mistrz Wyczuwania Zagrożeń"
+        },
+        "timestamp": "2025-10-18T12:31:40.580168+00:00"
+      },
       {
         "type": "inspiration_read",
         "details": {
@@ -823,7 +832,7 @@
         "completed_lessons": 2
       },
       "2025-10-18": {
-        "xp": 1625,
+        "xp": 1626,
         "degencoins": 563,
         "level": 1,
         "completed_lessons": 2
@@ -1749,6 +1758,57 @@
           "confidence": 9,
           "xp_earned": 1
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-18T13:31:05.033333",
+        "details": {
+          "timestamp": "2025-10-18T13:31:05.020855"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-18T14:25:29.650532",
+        "details": {
+          "timestamp": "2025-10-18T14:25:29.642379"
+        }
+      },
+      {
+        "type": "inspiration_read",
+        "timestamp": "2025-10-18T14:31:40.643644",
+        "details": {
+          "inspiration_id": "neuroanalityk_guide",
+          "inspiration_title": "Neuroanalityk: Mistrz Wyczuwania Zagrożeń"
+        }
+      },
+      {
+        "type": "inspiration_read",
+        "timestamp": "2025-10-18T14:31:40.826318",
+        "details": {
+          "inspiration_id": "neuroanalityk_guide",
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-18T14:59:15.963947",
+        "details": {
+          "timestamp": "2025-10-18T14:59:15.950221"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-18T15:07:09.778415",
+        "details": {
+          "timestamp": "2025-10-18T15:07:09.766242"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-18T18:37:30.234764",
+        "details": {
+          "timestamp": "2025-10-18T18:37:30.228395"
+        }
       }
     ],
     "reports": [
@@ -2109,7 +2169,56 @@
         "report_type": "weekly",
         "username": "Max"
       }
-    ]
+    ],
+    "mi_test": {
+      "scores": {
+        "linguistic": 15,
+        "logical": 15,
+        "visual": 15,
+        "musical": 15,
+        "kinesthetic": 15,
+        "interpersonal": 15,
+        "intrapersonal": 11,
+        "naturalistic": 19
+      },
+      "percentages": {
+        "linguistic": 60.0,
+        "logical": 60.0,
+        "visual": 60.0,
+        "musical": 60.0,
+        "kinesthetic": 60.0,
+        "interpersonal": 60.0,
+        "intrapersonal": 44.0,
+        "naturalistic": 76.0
+      },
+      "top_3": [
+        [
+          "naturalistic",
+          76.0
+        ],
+        [
+          "linguistic",
+          60.0
+        ],
+        [
+          "logical",
+          60.0
+        ]
+      ],
+      "bottom_2": [
+        [
+          "interpersonal",
+          60.0
+        ],
+        [
+          "intrapersonal",
+          44.0
+        ]
+      ],
+      "balance_score": 32.0,
+      "balance_interpretation": "Umiarkowanie wyspecjalizowany - wyraźne preferencje z dobrą elastycznością",
+      "timestamp": "2025-10-18 13:43:54"
+    }
   },
   "admin": {
     "user_id": "4c552312-1787-4a02-a06f-b6538e83adb7",
@@ -2889,7 +2998,7 @@
     "degencoins": 5,
     "level": 1,
     "joined_date": "2025-10-09",
-    "last_login": null,
+    "last_login": "2025-10-18 14:00:04",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -2922,6 +3031,12 @@
         "degencoins": 5,
         "level": 1,
         "completed_lessons": 0
+      },
+      "2025-10-18": {
+        "xp": 5,
+        "degencoins": 5,
+        "level": 1,
+        "completed_lessons": 0
       }
     },
     "lesson_progress": {
@@ -2950,7 +3065,130 @@
         },
         "timestamp": "2025-10-09T15:44:17.139147+00:00"
       }
-    ]
+    ],
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-10-18T14:00:05.082338",
+        "details": {
+          "timestamp": "2025-10-18T14:00:05.074283"
+        }
+      }
+    ],
+    "mi_test": {
+      "scores": {
+        "linguistic": 14,
+        "logical": 16,
+        "visual": 15,
+        "musical": 15,
+        "kinesthetic": 15,
+        "interpersonal": 15,
+        "intrapersonal": 15,
+        "naturalistic": 15
+      },
+      "percentages": {
+        "linguistic": 56.00000000000001,
+        "logical": 64.0,
+        "visual": 60.0,
+        "musical": 60.0,
+        "kinesthetic": 60.0,
+        "interpersonal": 60.0,
+        "intrapersonal": 60.0,
+        "naturalistic": 60.0
+      },
+      "top_3": [
+        [
+          "logical",
+          64.0
+        ],
+        [
+          "visual",
+          60.0
+        ],
+        [
+          "musical",
+          60.0
+        ]
+      ],
+      "bottom_2": [
+        [
+          "naturalistic",
+          60.0
+        ],
+        [
+          "linguistic",
+          56.00000000000001
+        ]
+      ],
+      "balance_score": 7.999999999999993,
+      "balance_interpretation": "Zrównoważony - masz dobrze rozwinięte różne inteligencje",
+      "timestamp": "2025-10-18 14:05:24"
+    },
+    "mi_profile": {
+      "top_intelligences": [
+        "logical",
+        "visual",
+        "musical"
+      ],
+      "preferred_content_types": [
+        "data",
+        "charts",
+        "analytics",
+        "models",
+        "infographics",
+        "videos",
+        "diagrams",
+        "mindmaps",
+        "audio",
+        "podcasts",
+        "recordings",
+        "voice_analysis"
+      ],
+      "recommended_modules": [
+        "📊 Analytics & Metrics",
+        "🎯 Level Detector",
+        "📈 Progress Tracking",
+        "🔢 Dashboard",
+        "🎨 Infografiki CIQ",
+        "🗺️ Mind Maps",
+        "📊 Dashboard wizualny",
+        "🖼️ Schematy",
+        "🎵 Audiobooki",
+        "🎧 Podcasty o przywództwie",
+        "🔊 Nagrania rozmów"
+      ],
+      "recommended_tools": [
+        "Sentiment Analysis (dane liczbowe)",
+        "Escalation Monitoring (wskaźniki)",
+        "Statystyki CIQ",
+        "Wykresy radarowe",
+        "Color-coded feedback",
+        "Wizualne raporty PDF",
+        "Diagramy poziomów",
+        "Analiza tonu głosu",
+        "Rytm konwersacji",
+        "Intonacja w CIQ",
+        "Audio feedback"
+      ],
+      "learning_tips": [
+        "Śledź swoje statystyki i wykresy postępów",
+        "Analizuj wzorce w swoich rozmowach",
+        "Twórz własne systemy oceny skuteczności",
+        "Eksperymentuj z parametrami AI",
+        "Buduj modele predykcyjne swoich wyników",
+        "Używaj kolorowych notatek i highlightów",
+        "Twórz schematy i flowcharty rozmów",
+        "Wizualizuj swoje cele rozwojowe",
+        "Zapisuj screenshoty kluczowych postępów",
+        "Projektuj własne dashboardy",
+        "Słuchaj nagrań przykładowych rozmów",
+        "Zwracaj uwagę na ton i intonację w symulacjach",
+        "Nagraj własne odpowiedzi i odsłuchaj je",
+        "Ucz się z muzyką w tle (jeśli pomaga)",
+        "Analizuj 'melodię' skutecznej komunikacji"
+      ],
+      "updated_at": "2025-10-18 14:06:41"
+    }
   },
   "Asia": {
     "user_id": "977d007f-906c-402b-96c0-6f5421e9844b",
@@ -3131,7 +3369,7 @@
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-10-16",
-    "last_login": null,
+    "last_login": "2025-10-18 13:54:57",
     "completed_lessons": [],
     "badges": [
       "welcome",
@@ -3144,6 +3382,12 @@
     },
     "daily_stats": {
       "2025-10-16": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-10-18": {
         "xp": 0,
         "degencoins": 0,
         "level": 1,
@@ -3621,7 +3865,16 @@
       "quadrant": "CE/RO",
       "flexibility": 83.33,
       "completed_date": "2025-10-16 19:37:44"
-    }
+    },
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-10-18T13:54:57.233423",
+        "details": {
+          "timestamp": "2025-10-18T13:54:57.225314"
+        }
+      }
+    ]
   },
   "Maja": {
     "user_id": "330cd2c4-9973-4090-90da-3ee713bde060",
