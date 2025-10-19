@@ -58,6 +58,7 @@ try:
     from views.admin import show_admin_dashboard
     from views.inspirations import show_inspirations_page
     from views.tools import show_tools_page
+    from views.business_games import show_business_games
     
     # Import shop module is done within the routing section
 except Exception as e:
@@ -114,6 +115,12 @@ def main():
             show_lesson()
         elif st.session_state.page == 'tools':
             show_tools_page()
+        elif st.session_state.page == 'business_games':
+            # Pobierz dane użytkownika
+            from data.users import load_user_data
+            users_data = load_user_data()
+            user_data = users_data.get(st.session_state.username, {})
+            show_business_games(st.session_state.username, user_data)
         elif st.session_state.page == 'inspirations':
             show_inspirations_page()
         elif st.session_state.page == 'profile':

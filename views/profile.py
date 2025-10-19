@@ -834,7 +834,7 @@ def show_xp_history_section():
                 height=400
             )
             
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
             
             # Statystyki pod wykresem
             col_chart1, col_chart2, col_chart3, col_chart4 = st.columns(4)
@@ -1007,7 +1007,7 @@ def show_xp_history_section():
         # Wyświetl jako DataFrame
         import pandas as pd
         df_breakdown = pd.DataFrame(breakdown_data)
-        st.dataframe(df_breakdown, width="stretch", hide_index=True)
+        st.dataframe(df_breakdown, use_container_width=True, hide_index=True)
     
     st.markdown("---")
     
@@ -1092,7 +1092,7 @@ def show_xp_history_section():
         else:
             df_page = df
         
-        st.dataframe(df_page, width="stretch", hide_index=True)
+        st.dataframe(df_page, use_container_width=True, hide_index=True)
         
         # Statystyka na końcu
         st.caption(f"Wyświetlono {len(df_page)} z {len(table_data)} aktywności")
@@ -1402,7 +1402,7 @@ def display_xp_chart(username: str):
         paper_bgcolor='rgba(0,0,0,0)'
     )
     
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
     
     # Statystyki pod wykresem
     col1, col2, col3, col4 = st.columns(4)

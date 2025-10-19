@@ -263,6 +263,7 @@ def navigation_menu():
         {"id": "dashboard", "name": "Dashboard", "icon": "🏠"},
         {"id": "lesson", "name": "Lekcje", "icon": "📚"},
         {"id": "tools", "name": "Narzędzia", "icon": "🛠️"},
+        {"id": "business_games", "name": "Business Games", "icon": "🎮"},
         {"id": "inspirations", "name": "Inspiracje", "icon": "💡"},
         {"id": "profile", "name": "Profil", "icon": "👤"}
     ]
@@ -309,10 +310,12 @@ def navigation_menu():
                     // Sprawdź czy przycisk ma tekst nawigacyjny
                     const buttonText = button.textContent || button.innerText || '';
                     if (buttonText.includes('Dashboard') || buttonText.includes('Lekcje') || 
-                        buttonText.includes('Narzędzia') || buttonText.includes('Inspiracje') || 
+                        buttonText.includes('Narzędzia') || buttonText.includes('Business Games') ||
+                        buttonText.includes('Inspiracje') || 
                         buttonText.includes('Profil') || buttonText.includes('Admin') || 
                         buttonText.includes('🏠') || buttonText.includes('📚') || 
-                        buttonText.includes('�️') || buttonText.includes('💡') || 
+                        buttonText.includes('🛠') || buttonText.includes('🎮') ||
+                        buttonText.includes('💡') || 
                         buttonText.includes('👤') || buttonText.includes('⚙️')) {
                         
                         // Usuń poprzednie event listenery aby uniknąć duplikatów

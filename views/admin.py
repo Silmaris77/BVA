@@ -182,7 +182,7 @@ def show_admin_dashboard():
         st.rerun()
     
     # Zakładki główne panelu administratora
-    admin_tabs = st.tabs(["Przegląd", "Użytkownicy", "Lekcje", "Dostępność", "Testy", "Zarządzanie"])
+    admin_tabs = st.tabs(["Przegląd", "Użytkownicy", "Lekcje", "Dostępność", "Testy", "Zarządzanie", "Business Games"])
     
     # 1. Zakładka Przegląd
     with admin_tabs[0]:
@@ -327,7 +327,7 @@ def show_admin_dashboard():
                 "test_taken": "Test wykonany",
                 "streak": "Seria dni"
             },
-            width='stretch'
+            use_container_width=True
         )
         
         # Dodaj opcję eksportu danych
@@ -367,7 +367,7 @@ def show_admin_dashboard():
                     format="%{value:.2f}"
                 )
             },
-            width='stretch'
+            use_container_width=True
         )
         
         # Wykres popularności lekcji (top 10)
@@ -444,7 +444,7 @@ def show_admin_dashboard():
                     "neuroleader_type": "Typ neuroleader",
                     "score": "Wynik"
                 },
-                width='stretch'
+                use_container_width=True
             )
         else:
             st.info("Brak danych o wynikach testów.")
@@ -506,7 +506,7 @@ def show_admin_dashboard():
                 title='Rozkład stylów uczenia się wśród użytkowników'
             )
             
-            st.altair_chart(chart, width="stretch")
+            st.altair_chart(chart, use_container_width=True)
             
             # GŁÓWNA WIZUALIZACJA: Siatka wszystkich użytkowników
             st.markdown("---")
@@ -659,7 +659,7 @@ def show_admin_dashboard():
                 )
             )
             
-            st.plotly_chart(fig_all, width="stretch")
+            st.plotly_chart(fig_all, use_container_width=True)
             
             # Tabela szczegółowa
             st.markdown("---")
@@ -689,7 +689,7 @@ def show_admin_dashboard():
                     "completed_date": "Data ukończenia"
                 },
                 hide_index=True,
-                width="stretch"
+                use_container_width=True
             )
             
             # Opcja eksportu
@@ -804,6 +804,10 @@ def show_admin_dashboard():
                 file_name=f"neuroleader_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                 mime="application/json"
             )
+    
+    # 7. Zakładka Business Games
+    with admin_tabs[6]:
+        show_business_games_admin_panel()
 
 def manage_lesson_access():
     """Panel zarządzania dostępnością lekcji dla użytkowników"""
@@ -917,6 +921,328 @@ def manage_lesson_access():
                 st.success("Zablokowano wszystkie lekcje!")
                 time.sleep(1)
                 st.rerun()
+
+def show_business_games_admin_panel():
+    """Panel administracyjny Business Games"""
+    from utils.business_game_evaluation import (
+        get_active_evaluation_mode,
+        set_active_evaluation_mode,
+        get_pending_reviews_count,
+        get_pending_contract_reviews,
+        submit_game_master_review,
+        get_evaluation_stats,
+        save_gemini_api_key,
+        load_gemini_api_key
+    )
+    from config.business_games_settings import EVALUATION_MODES
+    
+    st.subheader("⚙️ Business Games - Panel Administracyjny")
+    
+    # Sub-tabs dla różnych sekcji
+    bg_tabs = st.tabs(["🎯 Ustawienia Oceny", "👨‍💼 Kolejka Mistrza Gry", "📊 Statystyki"])
+    
+    # --- TAB 1: USTAWIENIA OCENY ---
+    with bg_tabs[0]:
+        st.markdown("### 🎯 Tryb Oceny Kontraktów")
+        
+        current_mode = get_active_evaluation_mode()
+        
+        st.info(f"**Aktualny tryb:** {EVALUATION_MODES[current_mode]['name']}")
+        
+        # Wybór trybu
+        mode_options = {
+            "heuristic": f"{EVALUATION_MODES['heuristic']['name']} - {EVALUATION_MODES['heuristic']['subtitle']}",
+            "ai": f"{EVALUATION_MODES['ai']['name']} - {EVALUATION_MODES['ai']['subtitle']}",
+            "game_master": f"{EVALUATION_MODES['game_master']['name']} - {EVALUATION_MODES['game_master']['subtitle']}"
+        }
+        
+        selected_mode = st.selectbox(
+            "Wybierz tryb oceny:",
+            options=list(mode_options.keys()),
+            format_func=lambda x: mode_options[x],
+            index=list(mode_options.keys()).index(current_mode)
+        )
+        
+        # Info o wybranym trybie
+        st.markdown("---")
+        
+        if selected_mode == "heuristic":
+            st.success("""
+            **⚡ Heurystyka:**
+            - ✅ Natychmiastowa ocena po przesłaniu
+            - ✅ Oparta na długości i strukturze tekstu
+            - ✅ Brak kosztów
+            - ✅ Dobra dla testów i MVP
+            - ⚠️ Niska jakość merytoryczna
+            """)
+        
+        elif selected_mode == "ai":
+            st.warning("""
+            **🤖 Ocena AI (Google Gemini):**
+            - ✅ Szczegółowa analiza merytoryczna
+            - ✅ Automatyczny feedback dla uczestników
+            - ✅ Ocena według 5 kryteriów
+            - ⚠️ Wymaga klucza API Google Gemini
+            - ⚠️ Koszt: ~$0.01-0.03 per ocena
+            - ⚠️ Czas oceny: 5-10 sekund
+            """)
+            
+            st.markdown("**Konfiguracja API Google Gemini:**")
+            
+            # Sprawdź klucz w różnych miejscach
+            key_in_secrets = False
+            key_in_file = False
+            
+            # 1. Sprawdź Streamlit secrets (preferowany)
+            try:
+                if st.secrets.get("GOOGLE_API_KEY"):
+                    key_in_secrets = True
+                    st.success("✅ Klucz API skonfigurowany w Streamlit secrets (preferowany)")
+                    st.info("💡 Używasz tego samego klucza co w innych narzędziach AI aplikacji")
+            except:
+                pass
+            
+            # 2. Sprawdź plik konfiguracyjny (backward compatibility)
+            existing_key = load_gemini_api_key()
+            if existing_key:
+                key_in_file = True
+                st.success("✅ Klucz API skonfigurowany w pliku config/gemini_api_key.txt")
+                if st.checkbox("Pokaż klucz z pliku"):
+                    st.code(existing_key)
+                if st.button("🗑️ Usuń klucz z pliku"):
+                    import os
+                    try:
+                        os.remove("config/gemini_api_key.txt")
+                        st.success("Klucz usunięty z pliku")
+                        time.sleep(1)
+                        st.rerun()
+                    except:
+                        pass
+            
+            # 3. Brak klucza
+            if not key_in_secrets and not key_in_file:
+                st.warning("⚠️ Brak klucza API")
+                st.info("""
+                **Opcja 1 (Zalecana):** Klucz już jest w `st.secrets["GOOGLE_API_KEY"]`
+                - Używany w innych narzędziach AI
+                - Wystarczy wybrać tryb AI i zapisać
+                
+                **Opcja 2:** Dodaj klucz ręcznie poniżej (zostanie zapisany do pliku)
+                """)
+            
+            # Formularz dodawania klucza
+            with st.form("api_key_form"):
+                api_key_input = st.text_input(
+                    "Wpisz klucz API Google Gemini:",
+                    type="password",
+                    help="Znajdziesz go na: https://aistudio.google.com/app/apikey"
+                )
+                
+                if st.form_submit_button("💾 Zapisz klucz API"):
+                    if api_key_input and len(api_key_input) > 10:
+                        save_gemini_api_key(api_key_input)
+                        st.success("✅ Klucz API zapisany!")
+                        time.sleep(1)
+                        st.rerun()
+                    else:
+                        st.error("❌ Nieprawidłowy format klucza (klucz jest za krótki)")
+        
+        elif selected_mode == "game_master":
+            pending_count = get_pending_reviews_count()
+            
+            st.info(f"""
+            **👨‍💼 Mistrz Gry:**
+            - ✅ Pełna kontrola jakości
+            - ✅ Spersonalizowany feedback
+            - ✅ Najlepsza jakość edukacyjna
+            - ⚠️ Wymaga czasu Admina
+            - ⚠️ Opóźnienie w otrzymaniu nagrody
+            - ⚠️ Zalecane dla małych grup (do 20 osób)
+            """)
+            
+            if pending_count > 0:
+                st.warning(f"⏳ **Oczekujące oceny: {pending_count}**")
+                if st.button("📋 Przejdź do kolejki ocen"):
+                    st.session_state.bg_admin_tab = 1  # Przełącz na zakładkę kolejki
+                    st.rerun()
+            else:
+                st.success("✅ Brak oczekujących rozwiązań")
+        
+        # Zapisz ustawienia
+        st.markdown("---")
+        if st.button("💾 Zapisz ustawienia", type="primary", key="save_bg_settings"):
+            if set_active_evaluation_mode(selected_mode):
+                st.success(f"✅ Tryb oceny zmieniony na: {EVALUATION_MODES[selected_mode]['name']}")
+                time.sleep(1)
+                st.rerun()
+            else:
+                st.error("❌ Błąd podczas zapisywania ustawień")
+    
+    # --- TAB 2: KOLEJKA MISTRZA GRY ---
+    with bg_tabs[1]:
+        st.markdown("### 👨‍💼 Kolejka Mistrza Gry")
+        
+        pending_reviews = get_pending_contract_reviews()
+        
+        if not pending_reviews:
+            st.success("🎉 Brak oczekujących rozwiązań do oceny!")
+            st.info("Rozwiązania pojawią się tutaj gdy użytkownicy prześlą kontrakty w trybie 'Mistrz Gry'")
+            return
+        
+        st.info(f"📋 Oczekujące rozwiązania: **{len(pending_reviews)}**")
+        
+        # Filtry
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            filter_category = st.selectbox(
+                "Kategoria:",
+                ["Wszystkie", "Konflikt", "Coaching", "Leadership", "Zarządzanie", "Strategia"]
+            )
+        with col2:
+            filter_difficulty = st.selectbox("Trudność:", ["Wszystkie", "1⭐", "2⭐", "3⭐", "4⭐", "5⭐"])
+        with col3:
+            sort_by = st.selectbox("Sortuj:", ["Najstarsze", "Najnowsze", "Trudność", "Pilne"])
+        
+        # Filtrowanie
+        filtered_reviews = pending_reviews.copy()
+        
+        if filter_category != "Wszystkie":
+            filtered_reviews = [r for r in filtered_reviews if r["contract_category"] == filter_category]
+        
+        if filter_difficulty != "Wszystkie":
+            diff_level = int(filter_difficulty[0])
+            filtered_reviews = [r for r in filtered_reviews if r["contract_difficulty"] == diff_level]
+        
+        # Lista rozwiązań
+        st.markdown("---")
+        
+        for idx, review in enumerate(filtered_reviews, 1):
+            # Oznaczenie pilności
+            urgent_badge = "🔴 PILNE" if review.get("is_urgent", False) else ""
+            
+            with st.expander(
+                f"#{idx} {urgent_badge} {review['username']} - {review['contract_title']} "
+                f"({'⭐' * review['contract_difficulty']})",
+                expanded=(idx == 1)  # Pierwszy rozwinięty
+            ):
+                # Informacje podstawowe
+                col1, col2 = st.columns([2, 1])
+                
+                with col1:
+                    st.markdown(f"**👤 Użytkownik:** {review['user_display_name']} (@{review['username']})")
+                    st.markdown(f"**📝 Kontrakt:** {review['contract_title']}")
+                    st.markdown(f"**🏷️ Kategoria:** {review['contract_category']}")
+                    st.markdown(f"**⭐ Trudność:** {'⭐' * review['contract_difficulty']}")
+                    st.markdown(f"**📅 Przesłano:** {review['submitted_at']}")
+                
+                with col2:
+                    st.metric("📊 Długość", f"{review['word_count']} słów")
+                    st.metric("⏱️ Czeka", f"{review['waiting_hours']}h")
+                    
+                    if review.get("is_urgent"):
+                        st.error("🔴 PILNE!")
+                
+                # Opis kontraktu
+                st.markdown("---")
+                st.markdown("**📋 Opis Kontraktu:**")
+                st.info(review['contract_description'])
+                
+                # Rozwiązanie uczestnika
+                st.markdown("**📝 Rozwiązanie Uczestnika:**")
+                st.text_area(
+                    "Treść rozwiązania:",
+                    value=review['solution'],
+                    height=300,
+                    disabled=True,
+                    key=f"solution_{review['id']}"
+                )
+                
+                # Formularz oceny
+                st.markdown("---")
+                st.markdown("### ⭐ Twoja Ocena")
+                
+                col1, col2 = st.columns([1, 2])
+                
+                with col1:
+                    rating = st.slider(
+                        "Oceń jakość rozwiązania:",
+                        min_value=1,
+                        max_value=5,
+                        value=3,
+                        help="1⭐ = słabe, 5⭐ = doskonałe",
+                        key=f"rating_{review['id']}"
+                    )
+                    
+                    st.write(f"**Wybrano: {rating}⭐**")
+                
+                with col2:
+                    feedback = st.text_area(
+                        "Komentarz dla uczestnika (opcjonalny):",
+                        placeholder="Mocne strony:\n- ...\n\nDo poprawy:\n- ...\n\nPodsumowanie:\n...",
+                        height=200,
+                        key=f"feedback_{review['id']}"
+                    )
+                
+                # Przyciski akcji
+                col1, col2 = st.columns([1, 3])
+                
+                with col1:
+                    if st.button(
+                        "✅ Zatwierdź ocenę",
+                        key=f"approve_{review['id']}",
+                        type="primary",
+                        use_container_width=True
+                    ):
+                        admin_username = st.session_state.get('username', 'admin')
+                        
+                        if submit_game_master_review(
+                            review_id=review['id'],
+                            rating=rating,
+                            feedback=feedback,
+                            admin_username=admin_username
+                        ):
+                            st.success(f"✅ Ocena zatwierdzona! {review['username']} otrzymał {rating}⭐")
+                            time.sleep(2)
+                            st.rerun()
+                        else:
+                            st.error("❌ Błąd podczas zatwierdzania oceny")
+                
+                with col2:
+                    if st.button(
+                        "⏭️ Pomiń na później",
+                        key=f"skip_{review['id']}",
+                        use_container_width=True
+                    ):
+                        st.info("Przeskoczono do następnego")
+    
+    # --- TAB 3: STATYSTYKI ---
+    with bg_tabs[2]:
+        st.markdown("### 📊 Statystyki Business Games")
+        
+        stats = get_evaluation_stats()
+        
+        # Metryki
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            stat_card("Wszystkie oceny", stats['total_reviews'], "📋")
+        
+        with col2:
+            stat_card("Oczekujące", stats['pending'], "⏳")
+        
+        with col3:
+            stat_card("Ocenione", stats['reviewed'], "✅")
+        
+        with col4:
+            avg_rating = round(stats['avg_rating'], 2)
+            stat_card("Średnia ocena", f"{avg_rating}⭐", "⭐")
+        
+        # Aktualny tryb
+        st.markdown("---")
+        st.markdown("**Aktualny tryb oceny:**")
+        current_mode = stats['active_mode']
+        st.info(f"{EVALUATION_MODES[current_mode]['name']} - {EVALUATION_MODES[current_mode]['description']}")
+
 
 def get_lesson_access_status(username, lesson_id):
     """Sprawdź czy użytkownik ma dostęp do lekcji"""

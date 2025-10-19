@@ -1934,7 +1934,7 @@ def display_kolb_results():
         showlegend=False
     )
     
-    st.plotly_chart(fig_bar, width="stretch")
+    st.plotly_chart(fig_bar, use_container_width=True)
     
     # Interpretacja wykresu słupkowego
     strongest = max(results.items(), key=lambda x: x[1])
@@ -2074,7 +2074,7 @@ def display_kolb_results():
         )
     )
     
-    st.plotly_chart(fig_grid, width="stretch")
+    st.plotly_chart(fig_grid, use_container_width=True)
     
     # Interpretacja siatki
     distance_from_center = math.sqrt(x_coord**2 + y_coord**2)
