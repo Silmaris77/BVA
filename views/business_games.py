@@ -53,7 +53,7 @@ def show_business_games(username, user_data):
     st.markdown("---")
     
     # Główne zakładki
-    tabs = st.tabs(["🏢 Dashboard", "💼 Rynek Kontraktów", "👥 Pracownicy", "📜 Historia", "🏆 Rankingi"])
+    tabs = st.tabs(["🏢 Dashboard", "💼 Rynek Kontraktów", "👥 Pracownicy", "📜 Historia", "� Wydarzenia", "�🏆 Rankingi"])
     
     with tabs[0]:
         show_dashboard_tab(username, user_data)
@@ -68,6 +68,9 @@ def show_business_games(username, user_data):
         show_history_tab(username, user_data)
     
     with tabs[4]:
+        show_events_tab(username, user_data)
+    
+    with tabs[5]:
         show_rankings_tab(username, user_data)
 
 # =============================================================================
@@ -118,6 +121,98 @@ def render_header(user_data):
 def show_dashboard_tab(username, user_data):
     """Zakładka Dashboard - podsumowanie firmy"""
     bg_data = user_data["business_game"]
+    
+    # BACKWARD COMPATIBILITY: Zainicjalizuj events jeśli nie istnieje
+    if "events" not in bg_data:
+        bg_data["events"] = {
+            "history": [],
+            "last_roll": None,
+            "active_effects": []
+        }
+        user_data["business_game"] = bg_data
+        save_user_data(username, user_data)
+    
+    # =============================================================================
+    # SEKCJA LOSOWANIA WYDARZEŃ - NA POCZĄTKU DASHBOARDU
+    # =============================================================================
+    
+    from utils.business_game_events import get_random_event, apply_event_effects
+    from datetime import datetime, timedelta
+    
+    st.markdown("### 🎲 Losowanie Zdarzenia")
+    
+    # Sprawdź cooldown
+    last_roll = bg_data.get("events", {}).get("last_roll")
+    can_roll = True
+    hours_left = 0
+    minutes_left = 0
+    
+    if last_roll:
+        last_dt = datetime.strptime(last_roll, "%Y-%m-%d %H:%M:%S")
+        next_roll = last_dt + timedelta(hours=24)
+        now = datetime.now()
+        
+        if now < next_roll:
+            can_roll = False
+            time_until_next = next_roll - now
+            hours_left = int(time_until_next.total_seconds() / 3600)
+            minutes_left = int((time_until_next.total_seconds() % 3600) / 60)
+    
+    col1, col2 = st.columns([3, 1])
+    
+    with col1:
+        if can_roll:
+            st.success("✅ **Możesz wylosować zdarzenie!** (Szansa: 20%)")
+        else:
+            st.warning(f"⏰ **Następne losowanie za: {hours_left}h {minutes_left}min**")
+    
+    with col2:
+        if st.button("🎲 LOSUJ!", disabled=not can_roll, type="primary", key="dashboard_roll_event"):
+            # Losuj zdarzenie
+            event_result = get_random_event(bg_data, user_data.get("degencoins", 0))
+            
+            if event_result:
+                event_id, event_data = event_result
+                
+                # Sprawdź czy wymaga wyboru
+                if event_data["type"] == "neutral" and "choices" in event_data:
+                    # Zapisz zdarzenie tymczasowo w session_state
+                    st.session_state["pending_event"] = (event_id, event_data)
+                    st.rerun()
+                else:
+                    # Bezpośrednio aplikuj
+                    user_data = apply_event_effects(event_id, event_data, None, user_data)
+                    save_user_data(username, user_data)
+                    st.success(f"{event_data['emoji']} **{event_data['title']}**")
+                    st.balloons() if event_data["type"] == "positive" else None
+                    st.rerun()
+            else:
+                # Brak zdarzenia (80% przypadków)
+                bg_data.setdefault("events", {})["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                user_data["business_game"] = bg_data
+                save_user_data(username, user_data)
+                st.info("😐 Tym razem nic się nie wydarzyło. Spokojny dzień!")
+                st.rerun()
+    
+    # Pending event (jeśli neutralne wymaga wyboru)
+    if "pending_event" in st.session_state:
+        event_id, event_data = st.session_state["pending_event"]
+        render_event_choice_modal(event_id, event_data, username, user_data)
+    
+    st.markdown("---")
+    
+    # Sprawdź i wyświetl najnowsze zdarzenie (jeśli jest)
+    from utils.business_game_events import get_latest_event, get_active_effects
+    latest_event = get_latest_event(bg_data)
+    if latest_event:
+        render_latest_event_card(latest_event)
+        st.markdown("---")
+    
+    # Pokaż aktywne efekty z wydarzeń
+    active_effects = get_active_effects(bg_data)
+    if active_effects:
+        render_active_effects_badge(active_effects)
+        st.markdown("---")
     
     st.subheader("📊 Podsumowanie Firmy")
     
@@ -232,13 +327,34 @@ def render_active_contract_card(contract, username, user_data, bg_data):
         
         deadline_color = "🟢" if hours_left > 24 else "🟡" if hours_left > 6 else "🔴"
         
+        # Sprawdź czy kontrakt był dotknięty zdarzeniem
+        event_affected = contract.get("affected_by_event")
+        
+        # Ustal kolor ramki na podstawie typu zdarzenia
+        if event_affected:
+            if event_affected.get("type") == "deadline_reduction":
+                border_color = "#ff6b6b"  # Czerwony dla skróconego
+            elif event_affected.get("type") == "deadline_extension":
+                border_color = "#10b981"  # Zielony dla przedłużonego
+            else:
+                border_color = "#667eea"  # Domyślny niebieski
+        else:
+            border_color = "#667eea"  # Domyślny niebieski
+        
         # Header (tylko stylowanie ramki)
         st.markdown(f"""
-        <div style='border: 2px solid #667eea; border-radius: 10px; 
+        <div style='border: 2px solid {border_color}; border-radius: 10px; 
                     padding: 15px; margin: 10px 0; background: #f8f9fa;'>
             <h4>{contract['emoji']} {contract['tytul']}</h4>
         </div>
         """, unsafe_allow_html=True)
+        
+        # ALERT jeśli dotknięty zdarzeniem
+        if event_affected:
+            if event_affected.get("type") == "deadline_reduction":
+                st.warning(f"⚠️ **Zdarzenie: {event_affected.get('event_title')}** - Deadline skrócony o {event_affected.get('days_reduced')} dzień!")
+            elif event_affected.get("type") == "deadline_extension":
+                st.success(f"✨ **Zdarzenie: {event_affected.get('event_title')}** - Deadline przedłużony o {event_affected.get('days_added')} dzień!")
         
         # Informacje - natywny Markdown
         st.markdown(f"**Klient:** {contract['klient']} | **Kategoria:** {contract['kategoria']}")
@@ -255,11 +371,21 @@ def render_active_contract_card(contract, username, user_data, bg_data):
             st.markdown("---")
             
             st.markdown(f"**Wymagana wiedza:** {', '.join(contract['wymagana_wiedza'])}")
-            st.markdown(f"**Trudność:** {'⭐' * contract['trudnosc']}")
+            st.markdown(f"**Trudność:** {'🔥' * contract['trudnosc']}")
             st.markdown(f"**Minimalnie:** {contract.get('min_slow', 300)} słów")
             
             st.markdown("---")
             st.subheader("✍️ Twoje rozwiązanie")
+            
+            # ANTI-CHEAT: Zapisz czas rozpoczęcia pisania
+            solution_start_key = f"solution_start_{contract['id']}"
+            if solution_start_key not in st.session_state:
+                st.session_state[solution_start_key] = datetime.now()
+            
+            # ANTI-CHEAT: Tracking paste events
+            paste_events_key = f"paste_events_{contract['id']}"
+            if paste_events_key not in st.session_state:
+                st.session_state[paste_events_key] = []
             
             solution_key = f"solution_{contract['id']}"
             solution = st.text_area(
@@ -269,6 +395,36 @@ def render_active_contract_card(contract, username, user_data, bg_data):
                 key=solution_key,
                 placeholder="Zacznij pisać swoje rozwiązanie tutaj..."
             )
+            
+            # ANTI-CHEAT: Dodaj JavaScript do śledzenia wklejania
+            st.markdown(f"""
+            <script>
+            (function() {{
+                const textarea = document.querySelector('textarea[aria-label="Przygotuj kompleksowe rozwiązanie zgodnie z wymaganiami:"]');
+                if (textarea) {{
+                    textarea.addEventListener('paste', function(e) {{
+                        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                        const pasteLength = pastedText.length;
+                        const totalLength = textarea.value.length + pasteLength;
+                        
+                        // Wyślij event do Streamlit (przez hidden input)
+                        const event = {{
+                            'length': pasteLength,
+                            'total_solution_length': totalLength,
+                            'timestamp': new Date().toISOString()
+                        }};
+                        
+                        console.log('Paste detected:', event);
+                        
+                        // Zapisz w localStorage (Streamlit może to odczytać)
+                        const existingEvents = JSON.parse(localStorage.getItem('paste_events_{contract['id']}') || '[]');
+                        existingEvents.push(event);
+                        localStorage.setItem('paste_events_{contract['id']}', JSON.stringify(existingEvents));
+                    }});
+                }}
+            }})();
+            </script>
+            """, unsafe_allow_html=True)
             
             if solution is None:
                 solution = ""
@@ -287,14 +443,27 @@ def render_active_contract_card(contract, username, user_data, bg_data):
                     if word_count < min_words:
                         st.error(f"Rozwiązanie zbyt krótkie! Minimum: {min_words} słów")
                     else:
-                        # Prześlij rozwiązanie
+                        # Pobierz dane anti-cheat
+                        start_time = st.session_state.get(solution_start_key)
+                        paste_events = st.session_state.get(paste_events_key, [])
+                        
+                        # Prześlij rozwiązanie z danymi anti-cheat
                         updated_user_data, success, message = submit_contract_solution(
-                            user_data, contract['id'], solution
+                            user_data, contract['id'], solution,
+                            start_time=start_time,
+                            paste_events=paste_events if paste_events else None
                         )
                         
                         if success:
                             user_data.update(updated_user_data)
                             save_user_data(username, user_data)
+                            
+                            # Wyczyść tracking anti-cheat
+                            if solution_start_key in st.session_state:
+                                del st.session_state[solution_start_key]
+                            if paste_events_key in st.session_state:
+                                del st.session_state[paste_events_key]
+                            
                             st.success(message)
                             st.balloons()
                             st.rerun()
@@ -366,7 +535,7 @@ def show_contracts_tab(username, user_data):
     with col_filter2:
         difficulty_filter = st.selectbox(
             "Trudność:",
-            ["Wszystkie", "⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"],
+            ["Wszystkie", "🔥", "🔥🔥", "🔥🔥🔥", "🔥🔥🔥🔥", "🔥🔥🔥🔥🔥"],
             key="contracts_filter_difficulty"
         )
     
@@ -409,15 +578,35 @@ def show_contracts_tab(username, user_data):
 def render_contract_card(contract, username, user_data, bg_data, can_accept_new):
     """Renderuje kartę dostępnego kontraktu"""
     
+    # Sprawdź czy jest aktywny bonus next_contract
+    from utils.business_game_events import get_active_effects
+    active_effects = get_active_effects(bg_data)
+    has_bonus = any(e.get("type") == "next_contract_bonus" for e in active_effects)
+    bonus_multiplier = 1.0
+    
+    if has_bonus:
+        bonus_effect = next((e for e in active_effects if e.get("type") == "next_contract_bonus"), None)
+        if bonus_effect:
+            bonus_multiplier = bonus_effect.get("multiplier", 1.0)
+    
     with st.container():
         # Header z ramką (tylko stylowanie, bez treści kontraktu)
+        border_color = "#fbbf24" if has_bonus else "#667eea"  # Złoty dla bonusu
+        
         st.markdown(f"""
-        <div style='border: 2px solid #667eea; border-radius: 10px; 
+        <div style='border: 2px solid {border_color}; border-radius: 10px; 
                     padding: 20px; margin: 10px 0; background: white;'>
             <h3>{contract['emoji']} {contract['tytul']}</h3>
             <p><strong>Klient:</strong> {contract['klient']}</p>
         </div>
         """, unsafe_allow_html=True)
+        
+        # Pokaż bonus jeśli aktywny
+        if has_bonus:
+            bonus_percent = int((bonus_multiplier - 1) * 100)
+            bonus_base = int(contract['nagroda_base'] * bonus_multiplier)
+            bonus_5star = int(contract['nagroda_5star'] * bonus_multiplier)
+            st.success(f"🌟 **BONUS AKTYWNY: +{bonus_percent}%!** Nagroda: {bonus_base}-{bonus_5star} monet")
         
         # Opis - zwykły Markdown (renderowany przez Streamlit, nie w HTML)
         st.markdown(f"*{contract['opis'][:200]}...*")
@@ -429,7 +618,7 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new)
         with col_time:
             st.markdown(f"**⏱️ Czas:** {contract['czas_realizacji_dni']} dni")
         with col_diff:
-            st.markdown(f"**Trudność:** {'⭐' * contract['trudnosc']}")
+            st.markdown(f"**Trudność:** {'🔥' * contract['trudnosc']}")
         
         st.markdown(f"📚 **Wymagana wiedza:** {', '.join(contract['wymagana_wiedza'][:2])}...")
         
@@ -737,7 +926,310 @@ def render_completed_contract_card(contract):
         st.markdown("---")
 
 # =============================================================================
-# TAB 5: RANKINGI
+# TAB 5: WYDARZENIA
+# =============================================================================
+
+def show_events_tab(username, user_data):
+    """Zakładka Wydarzenia - losowe zdarzenia"""
+    bg_data = user_data["business_game"]
+    
+    # BACKWARD COMPATIBILITY: Zainicjalizuj events jeśli nie istnieje
+    if "events" not in bg_data:
+        bg_data["events"] = {
+            "history": [],
+            "last_roll": None,
+            "active_effects": []
+        }
+        user_data["business_game"] = bg_data
+        save_user_data(username, user_data)
+    
+    st.subheader("🎲 Wydarzenia Losowe")
+    
+    # Info
+    st.info("""
+    📰 **Jak działają wydarzenia?**
+    - Co 24h możesz wylosować nowe zdarzenie (20% szansa)
+    - Zdarzenia mogą być **pozytywne** 🎉, **neutralne** ⚖️ lub **negatywne** 💥
+    - Niektóre wymagają od Ciebie decyzji!
+    - Historia ostatnich wydarzeń poniżej
+    """)
+    
+    st.markdown("---")
+    
+    # Sekcja losowania
+    from utils.business_game_events import should_trigger_event, get_random_event, apply_event_effects
+    from datetime import datetime, timedelta
+    
+    # Sprawdź cooldown
+    last_roll = bg_data.get("events", {}).get("last_roll")
+    can_roll = True
+    hours_left = 0
+    minutes_left = 0
+    
+    if last_roll:
+        last_dt = datetime.strptime(last_roll, "%Y-%m-%d %H:%M:%S")
+        next_roll = last_dt + timedelta(hours=24)
+        now = datetime.now()
+        
+        if now < next_roll:
+            can_roll = False
+            time_until_next = next_roll - now
+            hours_left = int(time_until_next.total_seconds() / 3600)
+            minutes_left = int((time_until_next.total_seconds() % 3600) / 60)
+    
+    st.markdown("### 🎰 Losowanie Zdarzenia")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        if can_roll:
+            st.success("✅ **Możesz wylosować zdarzenie!**")
+            st.caption("Szansa: 20% na zdarzenie, 80% na brak")
+        else:
+            st.warning(f"⏰ **Następne losowanie za: {hours_left}h {minutes_left}min**")
+            st.caption("Zdarzenia można losować raz na 24 godziny")
+    
+    with col2:
+        if st.button("🎲 LOSUJ!", disabled=not can_roll, type="primary", key="roll_event"):
+            # Losuj zdarzenie
+            event_result = get_random_event(bg_data, user_data.get("degencoins", 0))
+            
+            if event_result:
+                event_id, event_data = event_result
+                
+                # Sprawdź czy wymaga wyboru
+                if event_data["type"] == "neutral" and "choices" in event_data:
+                    # Zapisz zdarzenie tymczasowo w session_state
+                    st.session_state["pending_event"] = (event_id, event_data)
+                    st.rerun()
+                else:
+                    # Bezpośrednio aplikuj
+                    user_data = apply_event_effects(event_id, event_data, None, user_data)
+                    save_user_data(username, user_data)
+                    st.success(f"{event_data['emoji']} **{event_data['title']}**")
+                    st.balloons() if event_data["type"] == "positive" else None
+                    st.rerun()
+            else:
+                # Brak zdarzenia (80% przypadków)
+                bg_data.setdefault("events", {})["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                user_data["business_game"] = bg_data
+                save_user_data(username, user_data)
+                st.info("😐 Tym razem nic się nie wydarzyło. Spokojny dzień!")
+                st.rerun()
+    
+    # Pending event (jeśli neutralne wymaga wyboru)
+    if "pending_event" in st.session_state:
+        event_id, event_data = st.session_state["pending_event"]
+        render_event_choice_modal(event_id, event_data, username, user_data)
+    
+    st.markdown("---")
+    
+    # Historia wydarzeń
+    st.markdown("### 📜 Historia Wydarzeń")
+    
+    if "events" not in bg_data or not bg_data["events"].get("history"):
+        st.info("Brak wydarzeń w historii. Wylosuj pierwsze zdarzenie powyżej!")
+    else:
+        history = bg_data["events"]["history"]
+        history_sorted = sorted(history, key=lambda x: x["timestamp"], reverse=True)
+        
+        # Pokazuj tylko ostatnie 10
+        for event in history_sorted[:10]:
+            render_event_history_card(event)
+
+def render_active_effects_badge(active_effects: list):
+    """Renderuje badge z aktywnymi efektami wydarzeń"""
+    
+    from datetime import datetime
+    
+    st.markdown("### ✨ Aktywne Efekty Wydarzenia")
+    
+    for effect in active_effects:
+        effect_type = effect.get("type")
+        expires = effect.get("expires")
+        hours_left = 0
+        
+        # Oblicz pozostały czas
+        if expires:
+            expires_dt = datetime.strptime(expires, "%Y-%m-%d %H:%M:%S")
+            now = datetime.now()
+            time_left = expires_dt - now
+            hours_left = int(time_left.total_seconds() / 3600)
+            
+            if hours_left < 0:
+                continue  # Pomiń wygasłe
+        
+        # Ustal emoji i opis w zależności od typu
+        if effect_type == "capacity_boost":
+            emoji = "🎓"
+            title = f"+{effect['value']} pojemności"
+            bg_color = "#f0fdf4"
+            border_color = "#10b981"
+            time_text = f"Wygasa za: {hours_left}h"
+        elif effect_type == "capacity_penalty":
+            emoji = "🤒"
+            title = f"{effect['value']} pojemności"
+            bg_color = "#fef2f2"
+            border_color = "#ef4444"
+            time_text = f"Wygasa za: {hours_left}h"
+        elif effect_type == "next_contract_bonus":
+            emoji = "🤝"
+            title = f"+{int((effect['multiplier'] - 1) * 100)}% nagrody za następny kontrakt"
+            bg_color = "#fffbeb"
+            border_color = "#f59e0b"
+            time_text = "Jednorazowy bonus"
+        else:
+            continue
+        
+        st.markdown(f"""
+        <div style='border-left: 5px solid {border_color}; 
+                    background: {bg_color};
+                    padding: 12px; 
+                    margin: 8px 0; 
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;'>
+            <span style='font-size: 24px;'>{emoji}</span>
+            <div style='flex: 1;'>
+                <strong>{title}</strong><br>
+                <small style='color: #666;'>{time_text}</small>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+def render_latest_event_card(event: dict):
+    """Renderuje małą kartę z najnowszym zdarzeniem na Dashboard"""
+    
+    # Kolor w zależności od typu
+    if event["type"] == "positive":
+        border_color = "#10b981"
+        bg_color = "#f0fdf4"
+    elif event["type"] == "negative":
+        border_color = "#ef4444"
+        bg_color = "#fef2f2"
+    else:  # neutral
+        border_color = "#f59e0b"
+        bg_color = "#fffbeb"
+    
+    st.markdown(f"""
+    <div style='border-left: 5px solid {border_color}; 
+                background: {bg_color};
+                padding: 15px; 
+                margin: 10px 0; 
+                border-radius: 8px;'>
+        <div style='display: flex; align-items: center; gap: 10px;'>
+            <span style='font-size: 32px;'>{event['emoji']}</span>
+            <div>
+                <h4 style='margin: 0;'>Ostatnie Zdarzenie: {event['title']}</h4>
+                <p style='margin: 5px 0 0 0; color: #666; font-size: 14px;'>{event['timestamp']}</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.caption(f"💬 {event['description']}")
+    
+    # Dodaj informację o dotkniętym kontrakcie
+    if event.get("affected_contract"):
+        st.caption(f"⚠️ Dotknięty kontrakt: **{event['affected_contract']}**")
+    
+    # Dodaj informację o przedłużonych kontraktach
+    if event.get("affected_contracts_extended"):
+        contracts_list = ", ".join(event["affected_contracts_extended"])
+        st.caption(f"✨ Przedłużone kontrakty: **{contracts_list}**")
+
+def render_event_choice_modal(event_id: str, event_data: dict, username: str, user_data: dict):
+    """Renderuje modal z wyborem dla neutralnego zdarzenia"""
+    
+    from utils.business_game_events import apply_event_effects
+    
+    st.markdown("---")
+    st.markdown("## ⚖️ Wymagana Decyzja!")
+    
+    st.markdown(f"""
+    <div style='border: 2px solid #f59e0b; 
+                background: #fffbeb;
+                padding: 20px; 
+                border-radius: 10px;
+                text-align: center;'>
+        <div style='font-size: 48px; margin-bottom: 10px;'>{event_data['emoji']}</div>
+        <h2 style='margin: 0;'>{event_data['title']}</h2>
+        <p style='margin: 10px 0; color: #666;'>{event_data['description']}</p>
+        <p style='margin: 10px 0; font-style: italic; color: #999;'>"{event_data['flavor_text']}"</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("### 🤔 Co robisz?")
+    
+    # Wyświetl opcje
+    cols = st.columns(len(event_data["choices"]))
+    
+    for idx, (col, choice) in enumerate(zip(cols, event_data["choices"])):
+        with col:
+            if st.button(choice["text"], key=f"choice_{idx}", type="primary" if idx == 0 else "secondary", use_container_width=True):
+                # Aplikuj wybór
+                user_data = apply_event_effects(event_id, event_data, idx, user_data)
+                save_user_data(username, user_data)
+                
+                # Usuń pending
+                del st.session_state["pending_event"]
+                
+                st.success(f"✅ Wybrano: {choice['text']}")
+                st.rerun()
+
+def render_event_history_card(event: dict):
+    """Renderuje kartę zdarzenia w historii"""
+    
+    # Kolor w zależności od typu
+    if event["type"] == "positive":
+        border_color = "#10b981"
+        icon = "🎉"
+    elif event["type"] == "negative":
+        border_color = "#ef4444"
+        icon = "💥"
+    else:
+        border_color = "#f59e0b"
+        icon = "⚖️"
+    
+    with st.expander(f"{event['emoji']} {event['title']} - {event['timestamp']}"):
+        st.markdown(f"**Opis:** {event['description']}")
+        
+        if event.get("choice"):
+            st.markdown(f"**Twój wybór:** {event['choice']}")
+        
+        # Informacja o dotkniętym kontrakcie
+        if event.get("affected_contract"):
+            st.warning(f"⚠️ **Dotknięty kontrakt:** {event['affected_contract']}")
+        
+        # Informacja o przedłużonych kontraktach
+        if event.get("affected_contracts_extended"):
+            contracts_list = ", ".join(event["affected_contracts_extended"])
+            st.success(f"✨ **Przedłużone kontrakty:** {contracts_list}")
+        
+        # Efekty
+        effects = event.get("effects", {})
+        if effects:
+            st.markdown("**Efekty:**")
+            for key, value in effects.items():
+                if key == "coins":
+                    st.markdown(f"- 💰 Monety: {value:+d}")
+                elif key == "reputation":
+                    st.markdown(f"- 📈 Reputacja: {value:+d}")
+                elif key == "capacity_boost":
+                    st.markdown(f"- 📊 Pojemność: +{value} (na {effects.get('duration_days', 1)} dni)")
+                elif key == "capacity_penalty":
+                    st.markdown(f"- 📉 Pojemność: {value} (na {effects.get('duration_days', 1)} dni)")
+                elif key == "deadline_reduction":
+                    st.markdown(f"- ⏰ Deadline: {value} dzień")
+                elif key == "deadline_extension":
+                    st.markdown(f"- ✨ Deadline: +{value} dzień (dla wszystkich aktywnych)")
+                elif key == "next_contract_bonus":
+                    bonus_percent = int((value - 1) * 100)
+                    st.markdown(f"- 🌟 Bonus: +{bonus_percent}% do następnego kontraktu")
+
+# =============================================================================
+# TAB 6: RANKINGI
 # =============================================================================
 
 def show_rankings_tab(username, user_data):
@@ -764,76 +1256,117 @@ def show_rankings_tab(username, user_data):
     
     st.markdown("---")
     
-    # Informacja o rankingach (mock data dla MVP)
-    st.info(f"""
-    ℹ️ **Rankingi będą dostępne, gdy więcej użytkowników będzie aktywnych w Business Games.**
+    # Pobierz PRAWDZIWE dane wszystkich użytkowników
+    from data.users import load_user_data
+    all_users = load_user_data()
     
-    Obecnie w systemie jest tylko Twoja firma. Zachęć innych do dołączenia!
+    # Zbierz firmy z business_game
+    all_firms = []
     
-    **Jak działają rankingi:**
-    - Aktualizacja co 1 godzinę
-    - Uwzględniamy: przychody, jakość pracy, reputację, poziom firmy
-    - Brak barier wejścia - każdy może się ścigać od pierwszego kontraktu!
-    """)
-    
-    # Mock ranking data
-    st.markdown("### 🥇 TOP 10 (Demo)")
-    
-    # Przygotuj dane w zależności od typu rankingu
+    # Określ typ rankingu (label i suffix)
     if ranking_type == "💰 Przychody":
-        user_score = bg_data["stats"]["total_revenue"]
-        demo_firms = [
-            {"name": bg_data["firm"]["name"], "score": user_score, "is_user": True},
-            {"name": "Startup Consulting", "score": 250, "is_user": False},
-            {"name": "NewBiz Solutions", "score": 180, "is_user": False},
-            {"name": "Fresh Leaders", "score": 120, "is_user": False},
-            {"name": "Junior Advisors", "score": 80, "is_user": False},
-            {"name": "Beginning Consultants", "score": 40, "is_user": False},
-        ]
         score_label = "Przychody"
         score_suffix = " 💰"
     elif ranking_type == "⭐ Jakość (średnia ocena)":
-        user_score = bg_data["stats"]["avg_rating"]
-        demo_firms = [
-            {"name": bg_data["firm"]["name"], "score": user_score, "is_user": True},
-            {"name": "Startup Consulting", "score": 4.2, "is_user": False},
-            {"name": "NewBiz Solutions", "score": 3.8, "is_user": False},
-            {"name": "Fresh Leaders", "score": 3.5, "is_user": False},
-            {"name": "Junior Advisors", "score": 3.0, "is_user": False},
-            {"name": "Beginning Consultants", "score": 2.5, "is_user": False},
-        ]
         score_label = "Średnia ocena"
         score_suffix = " ⭐"
     elif ranking_type == "🔥 Produktywność (30 dni)":
-        user_score = bg_data["stats"].get("last_30_days", {}).get("contracts", 0)
-        demo_firms = [
-            {"name": bg_data["firm"]["name"], "score": user_score, "is_user": True},
-            {"name": "Startup Consulting", "score": 8, "is_user": False},
-            {"name": "NewBiz Solutions", "score": 6, "is_user": False},
-            {"name": "Fresh Leaders", "score": 4, "is_user": False},
-            {"name": "Junior Advisors", "score": 2, "is_user": False},
-            {"name": "Beginning Consultants", "score": 1, "is_user": False},
-        ]
         score_label = "Kontrakty (30 dni)"
         score_suffix = ""
     else:  # Overall Score (domyślnie)
-        user_score = bg_data["ranking"]["overall_score"]
-        demo_firms = [
-            {"name": bg_data["firm"]["name"], "score": user_score, "is_user": True},
-            {"name": "Startup Consulting", "score": 85, "is_user": False},
-            {"name": "NewBiz Solutions", "score": 62, "is_user": False},
-            {"name": "Fresh Leaders", "score": 45, "is_user": False},
-            {"name": "Junior Advisors", "score": 28, "is_user": False},
-            {"name": "Beginning Consultants", "score": 12, "is_user": False},
-        ]
         score_label = "Overall Score"
         score_suffix = ""
     
-    demo_firms.sort(key=lambda x: x["score"], reverse=True)
+    for user, data in all_users.items():
+        if data.get("business_game"):
+            bg = data["business_game"]
+            
+            # WAŻNE: Przelicz overall_score dla każdego użytkownika (może być nieaktualny)
+            from utils.business_game import calculate_overall_score
+            bg["ranking"]["overall_score"] = calculate_overall_score(bg)
+            
+            # WAŻNE: Przelicz statystyki 30-dniowe na podstawie ukończonych kontraktów
+            from datetime import datetime, timedelta
+            now = datetime.now()
+            thirty_days_ago = now - timedelta(days=30)
+            
+            contracts_30d = 0
+            revenue_30d = 0
+            ratings_30d = []
+            
+            for contract in bg.get("contracts", {}).get("completed", []):
+                completed_date_str = contract.get("completed_date")
+                if completed_date_str:
+                    try:
+                        completed_date = datetime.strptime(completed_date_str, "%Y-%m-%d %H:%M:%S")
+                        if completed_date >= thirty_days_ago:
+                            contracts_30d += 1
+                            revenue_30d += contract.get("reward", {}).get("coins", 0)
+                            rating = contract.get("rating", 0)
+                            if rating > 0:
+                                ratings_30d.append(rating)
+                    except:
+                        pass  # Ignoruj błędy parsowania dat
+            
+            # Aktualizuj statystyki 30-dniowe
+            bg["stats"]["last_30_days"]["contracts"] = contracts_30d
+            bg["stats"]["last_30_days"]["revenue"] = revenue_30d
+            bg["stats"]["last_30_days"]["avg_rating"] = round(sum(ratings_30d) / len(ratings_30d), 2) if ratings_30d else 0.0
+            
+            firm = bg.get("firm", {})
+            stats = bg.get("stats", {})
+            ranking = bg.get("ranking", {})
+            
+            # Oblicz score w zależności od typu rankingu
+            if ranking_type == "💰 Przychody":
+                score = stats.get("total_revenue", 0)
+            elif ranking_type == "⭐ Jakość (średnia ocena)":
+                score = stats.get("avg_rating", 0.0)
+            elif ranking_type == "🔥 Produktywność (30 dni)":
+                score = stats.get("last_30_days", {}).get("contracts", 0)
+            else:  # Overall Score
+                score = ranking.get("overall_score", 0)
+            
+            all_firms.append({
+                "name": firm.get("name", f"{user}'s Consulting"),
+                "username": user,
+                "score": score,
+                "is_user": user == username
+            })
     
-    # Pokaż wszystkie firmy (nie tylko top 5)
-    for idx, firm in enumerate(demo_firms, 1):
-        medal = "🥇" if idx == 1 else "🥈" if idx == 2 else "🥉" if idx == 3 else f"#{idx}"
+    # Sortuj malejąco
+    all_firms.sort(key=lambda x: x["score"], reverse=True)
+    
+    # Informacja o rankingach
+    total_active = len(all_firms)
+    user_rank = next((i+1 for i, f in enumerate(all_firms) if f["is_user"]), None)
+    
+    st.info(f"""
+    ℹ️ **Ranking aktywnych firm: {total_active}**
+    
+    {"🎉 Gratulacje! Jesteś na pozycji #" + str(user_rank) + "!" if user_rank else "Ukończ pierwszy kontrakt, aby pojawić się w rankingu!"}
+    
+    **Jak działają rankingi:**
+    - Aktualizacja na żywo (przy każdym odświeżeniu)
+    - Uwzględniamy: przychody, jakość pracy, reputację, poziom firmy
+    - Rywalizuj z {total_active-1} innymi firmami!
+    """)
+    
+    # Tytuł rankingu
+    st.markdown(f"### 🥇 TOP {min(10, total_active)} - {ranking_type}")
+    
+    # Pokaż TOP 10 + Twoją firmę (jeśli poza TOP 10)
+    top_10 = all_firms[:10]
+    
+    # Dodaj użytkownika jeśli jest poza TOP 10
+    user_firm = next((f for f in all_firms if f["is_user"]), None)
+    if user_firm and user_firm not in top_10:
+        top_10.append(user_firm)
+    
+    for idx, firm in enumerate(top_10, 1):
+        # Znajdź prawdziwą pozycję w pełnym rankingu
+        actual_rank = next((i+1 for i, f in enumerate(all_firms) if f["username"] == firm["username"]), idx)
+        medal = "🥇" if actual_rank == 1 else "🥈" if actual_rank == 2 else "🥉" if actual_rank == 3 else f"#{actual_rank}"
         
         # Format score zależnie od typu (liczba całkowita vs z przecinkiem)
         if ranking_type == "⭐ Jakość (średnia ocena)":

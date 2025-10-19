@@ -78,6 +78,11 @@ def initialize_business_game(username: str) -> Dict:
             "previous_positions": {},
             "badges": []
         },
+        "events": {
+            "history": [],  # Historia zdarzeń losowych
+            "last_roll": None,  # Ostatnie losowanie
+            "active_effects": []  # Aktywne efekty (buffs/debuffs)
+        },
         "history": {
             "transactions": [],  # Historia finansowa
             "level_ups": []  # Historia awansów
@@ -234,12 +239,18 @@ def accept_contract(business_data: Dict, contract_id: str) -> Tuple[Dict, bool, 
 def submit_contract_solution(
     user_data: Dict, 
     contract_id: str, 
-    solution: str
+    solution: str,
+    start_time: Optional[datetime] = None,
+    paste_events: Optional[list] = None
 ) -> Tuple[Dict, bool, str]:
     """Przesyła rozwiązanie kontraktu (bez oceny AI - uproszczona wersja MVP)
     
     Args:
         user_data: Pełne dane użytkownika (modyfikuje degencoins)
+        contract_id: ID kontraktu
+        solution: Tekst rozwiązania
+        start_time: Kiedy użytkownik rozpoczął pisanie (dla anti-cheat)
+        paste_events: Lista zdarzeń paste (dla anti-cheat)
     """
     business_data = user_data["business_game"]
     
@@ -259,6 +270,20 @@ def submit_contract_solution(
     if word_count < min_words:
         return user_data, False, f"Rozwiązanie zbyt krótkie. Minimum: {min_words} słów (masz: {word_count})"
     
+    # ANTI-CHEAT: Sprawdź oszustwa PRZED oceną
+    anti_cheat_result = None
+    if start_time:
+        from utils.anti_cheat import check_for_cheating
+        
+        submit_time = datetime.now()
+        anti_cheat_result = check_for_cheating(
+            solution=solution,
+            start_time=start_time,
+            submit_time=submit_time,
+            paste_events=paste_events,
+            use_ai_detection=True  # Włącz Gemini AI detection
+        )
+    
     # NOWY SYSTEM OCENY - używa evaluate_contract_solution()
     # Obsługuje 3 tryby: heuristic, ai, game_master
     from utils.business_game_evaluation import evaluate_contract_solution
@@ -268,6 +293,25 @@ def submit_contract_solution(
         contract=contract,
         solution=solution
     )
+    
+    # ANTI-CHEAT: Aplikuj karę do oceny jeśli wykryto oszustwa
+    if anti_cheat_result and anti_cheat_result["is_suspicious"]:
+        from utils.anti_cheat import apply_anti_cheat_penalty, format_anti_cheat_warning
+        
+        original_rating = rating
+        rating = apply_anti_cheat_penalty(rating, anti_cheat_result["total_penalty"])
+        
+        # Dodaj ostrzeżenie do feedbacku
+        cheat_warning = format_anti_cheat_warning(anti_cheat_result)
+        feedback = f"⚠️ **WYKRYTO PODEJRZANĄ AKTYWNOŚĆ**\n\n{cheat_warning}\n\n---\n\n{feedback}"
+        
+        # Zapisz w details
+        details["anti_cheat"] = {
+            "original_rating": original_rating,
+            "penalized_rating": rating,
+            "flags": anti_cheat_result["flags"],
+            "penalty": anti_cheat_result["total_penalty"]
+        }
     
     # Jeśli rating=0, oznacza to że trafiło do kolejki Mistrza Gry
     # W tym przypadku NIE finalizujemy kontraktu od razu

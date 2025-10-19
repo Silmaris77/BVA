@@ -8,31 +8,21 @@ Obsługuje 3 tryby: Heurystyka, AI, Mistrz Gry
 # =============================================================================
 
 EVALUATION_MODES = {
-    "heuristic": {
-        "name": "⚡ Heurystyka",
-        "description": "Prosta automatyczna ocena oparta na długości tekstu",
-        "subtitle": "(Szybka, darmowa, dobra dla MVP)",
-        "enabled": True,
-        "requires": [],
-        "instant": True,
-        "cost_per_eval": 0,
-        "quality": "Podstawowa"
-    },
     "ai": {
         "name": "🤖 Ocena AI",
         "description": "Szczegółowa ocena przez model Google Gemini",
-        "subtitle": "(Wolniejsza, płatna, wysoka jakość)",
-        "enabled": False,
+        "subtitle": "(Automatyczna, płatna, wysoka jakość)",
+        "enabled": True,  # Zmieniono na True - AI jest teraz domyślne
         "requires": ["GOOGLE_API_KEY"],
-        "instant": False,
+        "instant": True,  # Zmieniono na True - jest wystarczająco szybkie (2-5s)
         "cost_per_eval": 0.02,  # średnio $0.01-0.03
         "quality": "Wysoka"
     },
     "game_master": {
         "name": "👨‍💼 Mistrz Gry",
-        "description": "Ręczna ocena przez Admina",
-        "subtitle": "(Najlepsza jakość, wymaga czasu Admina)",
-        "enabled": False,
+        "description": "Ręczna ocena przez Admina (fallback gdy AI nie działa)",
+        "subtitle": "(Najwyższa jakość, wymaga czasu Admina)",
+        "enabled": True,  # Zmieniono na True - używane jako fallback
         "requires": ["admin_availability"],
         "instant": False,
         "cost_per_eval": 0,
@@ -41,7 +31,7 @@ EVALUATION_MODES = {
 }
 
 # Domyślny tryb oceny
-DEFAULT_EVALUATION_MODE = "ai"  # Zmieniono z "heuristic" na "ai" dla oceny Google Gemini
+DEFAULT_EVALUATION_MODE = "ai"  # AI z fallbackiem do Game Master (usunięto heurystykę)
 
 # =============================================================================
 # KONFIGURACJA OCENY AI (Google Gemini)
@@ -51,71 +41,73 @@ AI_EVALUATION_CONFIG = {
     # Model Google Gemini (zmieniono na gemini-2.5-flash - stabilny, szybki, dostępny)
     "model": "gemini-2.5-flash",  # Stabilna wersja Gemini 2.5 Flash
     "temperature": 0.3,           # Niska temperatura = bardziej konsystentne oceny
-    "max_tokens": 800,            # Limit dla odpowiedzi
+    "max_tokens": 2000,           # Limit dla odpowiedzi (zwiększono z 800 do 2000)
     
     # System instruction dla Gemini
-    "system_instruction": """Jesteś ekspertem od Conversational Intelligence i Business Coaching, 
-oceniającym rozwiązania kontraktów konsultingowych. Jesteś obiektywny, konstruktywny i pomocny.
+    "system_instruction": """Jesteś klientem biznesowym, który zlecił wykonanie projektu konsultingowego.
+Oceniasz pracę zleceniobiorcy z perspektywy biznesowej - czy rozwiązanie spełnia Twoje oczekiwania,
+czy jest praktyczne i czy możesz je wdrożyć w swojej firmie. Jesteś wymagający ale sprawiedliwy.
 Zwracasz odpowiedzi TYLKO w formacie JSON.""",
     
     # Prompt template
-    "prompt_template": """Oceń poniższe rozwiązanie kontraktu konsultingowego.
+    "prompt_template": """Jesteś klientem, który zlecił wykonanie projektu. Oceń otrzymaną pracę.
 
-KONTRAKT DO OCENY:
+TWOJE ZLECENIE:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Tytuł: {contract_title}
+Tytuł kontraktu: {contract_title}
 Kategoria: {contract_category}
-Poziom trudności: {contract_difficulty}/5 ⭐
-Opis: {contract_description}
-Minimalne słowa: {min_words}
+Poziom skomplikowania: {contract_difficulty}/5 ⭐
+Szczegóły zlecenia: {contract_description}
+Oczekiwana objętość: min. {min_words} słów
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-ROZWIĄZANIE UCZESTNIKA:
+ROZWIĄZANIE OD ZLECENIOBIORCY:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 {user_solution}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-KRYTERIA OCENY (0-100 punktów):
+OCEŃ PRACĘ JAK KLIENT BIZNESOWY (0-100 punktów):
 
-1. **Merytoryczna wartość treści** (0-25 pkt)
-   - Czy rozwiązanie odnosi się do teorii CIQ?
-   - Czy zawiera konkretne techniki konwersacyjne?
-   - Czy pokazuje zrozumienie problemu?
+1. **Zrozumienie naszych potrzeb** (0-25 pkt)
+   - Czy zleceniobiorca zrozumiał, czego potrzebujemy?
+   - Czy rozwiązanie pasuje do naszej sytuacji?
+   - Czy uwzględniono kontekst naszego biznesu?
 
-2. **Kompletność odpowiedzi** (0-25 pkt)
-   - Czy odpowiada na wszystkie aspekty kontraktu?
-   - Czy pokrywa wymagane minimum słów?
-   - Czy zawiera konkretne przykłady?
+2. **Kompletność realizacji zlecenia** (0-25 pkt)
+   - Czy wszystkie punkty zlecenia zostały wykonane?
+   - Czy objętość pracy jest zgodna z umową?
+   - Czy dostaliśmy konkretne rozwiązania, nie tylko teorię?
 
-3. **Struktura i organizacja** (0-20 pkt)
-   - Czy tekst jest logicznie zorganizowany?
-   - Czy jest czytelny i zrozumiały?
-   - Czy używa odpowiedniego formatowania?
+3. **Jakość i przejrzystość** (0-20 pkt)
+   - Czy praca jest profesjonalnie przygotowana?
+   - Czy wszystko jest jasno i zrozumiale opisane?
+   - Czy łatwo nam znaleźć kluczowe informacje?
 
-4. **Praktyczne zastosowanie** (0-20 pkt)
-   - Czy rozwiązanie jest wykonalne?
-   - Czy zawiera konkretne kroki działania?
-   - Czy jest przydatne dla klienta?
+4. **Możliwość wdrożenia** (0-20 pkt)
+   - Czy możemy to wdrożyć w naszej firmie?
+   - Czy są konkretne kroki działania?
+   - Czy rozwiązanie jest realistyczne (czas, budżet, zasoby)?
 
-5. **Innowacyjność** (0-10 pkt)
-   - Czy zawiera oryginalne pomysły?
-   - Czy wykracza poza standardowe rozwiązania?
+5. **Wartość dodana** (0-10 pkt)
+   - Czy dostaliśmy coś więcej niż podstawy?
+   - Czy są ciekawe/innowacyjne pomysły?
+   - Czy praca wyróżnia się jakością?
 
-INSTRUKCJE:
-- Oceń rozwiązanie według powyższych kryteriów
+NAPISZ FEEDBACK JAK KLIENT DO ZLECENIOBIORCY:
 - Suma punktów: 0-100
 - Przelicz na gwiazdki: 0-20=1⭐, 21-40=2⭐, 41-60=3⭐, 61-80=4⭐, 81-100=5⭐
-- Podaj krótki (2-3 zdania) feedback dla uczestnika
-- Wymień 2-3 mocne strony
-- Wymień 2-3 sugestie do poprawy
+- Feedback ogólny: 2-3 zdania JAK KLIENT ("Dziękujemy za...", "Jesteśmy zadowoleni/niezadowoleni...", "Praca spełnia/nie spełnia...")
+- Co nam się podobało: 2-3 konkretne punkty z perspektywy klienta
+- Co mogłoby być lepsze: 2-3 konstruktywne uwagi dotyczące tego, czego nam brakowało lub co wymaga dopracowania
 
+Pisz w 1. osobie liczby mnogiej ("nam się podoba", "oczekiwaliśmy", "chcielibyśmy").
 Zwróć odpowiedź TYLKO w formacie JSON (bez markdown, bez ```json):
 {{
   "total_score": <0-100>,
   "rating": <1-5>,
-  "feedback": "krótki komentarz ogólny",
-  "strengths": ["mocna strona 1", "mocna strona 2"],
-  "improvements": ["sugestia 1", "sugestia 2"]
+  "feedback": "Twój komentarz ogólny jako klient (2-3 zdania)",
+  "strengths": ["co nam się podobało 1", "co nam się podobało 2"],
+  "improvements": ["czego nam brakowało/co poprawić 1", "czego nam brakowało/co poprawić 2"]
 }}
 """,
     
@@ -140,7 +132,7 @@ Zwróć odpowiedź TYLKO w formacie JSON (bez markdown, bez ```json):
         "temperature": 0.3,
         "top_p": 0.95,
         "top_k": 40,
-        "max_output_tokens": 2048,  # Zwiększono z 800 na 2048 - JSON był ucinany
+        "max_output_tokens": 4096,  # Zwiększono z 2048 na 4096 - JSON był nadal ucinany
     }
 }
 
@@ -174,27 +166,13 @@ GAME_MASTER_CONFIG = {
 }
 
 # =============================================================================
-# KONFIGURACJA HEURYSTYKI (obecny system)
+# KONFIGURACJA HEURYSTYKI (USUNIĘTA - zastąpiona przez Game Master fallback)
 # =============================================================================
 
-HEURISTIC_CONFIG = {
-    # Próg słów dla różnych ocen
-    "word_thresholds": {
-        "min_multiplier": 0.5,   # 50% min_words = 1 gwiazdka
-        "low_multiplier": 0.8,   # 80% min_words = 2 gwiazdki
-        "med_multiplier": 1.0,   # 100% min_words = 3 gwiazdki
-        "high_multiplier": 1.5,  # 150% min_words = 4 gwiazdki
-        # >150% min_words = 5 gwiazdek
-    },
-    
-    # Losowość (±1 gwiazdka)
-    "randomness_enabled": True,
-    "randomness_range": (-1, 1),
-    
-    # Feedback automatyczny
-    "auto_feedback": True,
-    "feedback_template": "Rozwiązanie zawiera {word_count} słów. Automatyczna ocena: {rating}/5 ⭐"
-}
+# HEURISTIC_CONFIG = {
+#     # USUNIĘTA - heurystyka była zbyt losowa bez feedbacku
+#     # Teraz: AI działa → pełny feedback | AI nie działa → kolejka do GM
+# }
 
 # =============================================================================
 # PERSISTENCE
@@ -261,7 +239,7 @@ __all__ = [
     'DEFAULT_EVALUATION_MODE',
     'AI_EVALUATION_CONFIG',
     'GAME_MASTER_CONFIG',
-    'HEURISTIC_CONFIG',
+    # 'HEURISTIC_CONFIG',  # USUNIĘTA - heurystyka już nie istnieje
     'SETTINGS_FILE',
     'get_evaluation_mode_info',
     'is_mode_available',

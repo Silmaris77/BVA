@@ -14,7 +14,7 @@ from config.business_games_settings import (
     DEFAULT_EVALUATION_MODE,
     AI_EVALUATION_CONFIG,
     GAME_MASTER_CONFIG,
-    HEURISTIC_CONFIG,
+    # HEURISTIC_CONFIG,  # USUNIĘTA - heurystyka już nie istnieje
     SETTINGS_FILE
 )
 
@@ -35,7 +35,7 @@ def evaluate_contract_solution(
         user_data: Dane użytkownika (potrzebne dla kolejki GM)
         contract: Dane kontraktu do oceny
         solution: Tekst rozwiązania przesłany przez użytkownika
-        evaluation_mode: "heuristic" / "ai" / "game_master" (None = użyj domyślnego)
+        evaluation_mode: "ai" / "game_master" (None = użyj domyślnego)
     
     Returns:
         Tuple[rating, feedback, details]:
@@ -45,7 +45,7 @@ def evaluate_contract_solution(
     
     Example:
         >>> rating, feedback, details = evaluate_contract_solution(
-        ...     user_data, contract, solution, "heuristic"
+        ...     user_data, contract, solution, "ai"
         ... )
         >>> print(f"Ocena: {rating}/5")
         >>> print(f"Feedback: {feedback}")
@@ -66,101 +66,39 @@ def evaluate_contract_solution(
     
     # Walidacja trybu
     if evaluation_mode not in EVALUATION_MODES:
-        print(f"⚠️ Nieznany tryb oceny: {evaluation_mode}, fallback do heurystyki")
-        log_debug(f"⚠️ Nieznany tryb oceny: {evaluation_mode}, fallback do heurystyki")
-        evaluation_mode = "heuristic"
+        print(f"⚠️ Nieznany tryb oceny: {evaluation_mode}, używam domyślnego AI")
+        log_debug(f"⚠️ Nieznany tryb oceny: {evaluation_mode}, używam domyślnego AI")
+        evaluation_mode = "ai"
     
     # Wybór metody oceny
-    if evaluation_mode == "heuristic":
-        return evaluate_heuristic(solution, contract)
-    
-    elif evaluation_mode == "ai":
-        return evaluate_with_ai(solution, contract)
+    if evaluation_mode == "ai":
+        return evaluate_with_ai(solution, contract, user_data)
     
     elif evaluation_mode == "game_master":
         return queue_for_game_master(user_data, contract, solution)
     
     else:
-        # Fallback do heurystyki
-        return evaluate_heuristic(solution, contract)
+        # Fallback do AI
+        return evaluate_with_ai(solution, contract, user_data)
 
 
 # =============================================================================
-# TRYB 1: HEURYSTYKA (prosta automatyczna ocena)
+# TRYB 1: HEURYSTYKA (USUNIĘTA - zastąpiona przez Game Master fallback)
 # =============================================================================
 
-def evaluate_heuristic(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
-    """
-    Prosta ocena oparta na długości tekstu i losowości
-    
-    Algorytm:
-    1. Policz słowa w rozwiązaniu
-    2. Porównaj z minimum wymaganym dla kontraktu
-    3. Przypisz bazową ocenę według progów
-    4. Dodaj losowość ±1 gwiazdka
-    5. Zwróć ocenę 1-5
-    
-    Args:
-        solution: Tekst rozwiązania
-        contract: Dane kontraktu (zawiera min_slow)
-    
-    Returns:
-        (rating, feedback, details)
-    """
-    word_count = len(solution.split())
-    min_words = contract.get("min_slow", 300)
-    
-    # Progi z konfiguracji
-    thresholds = HEURISTIC_CONFIG["word_thresholds"]
-    
-    # Bazowa ocena na podstawie długości
-    if word_count < min_words * thresholds["min_multiplier"]:
-        base_score = 1
-    elif word_count < min_words * thresholds["low_multiplier"]:
-        base_score = 2
-    elif word_count < min_words * thresholds["med_multiplier"]:
-        base_score = 3
-    elif word_count < min_words * thresholds["high_multiplier"]:
-        base_score = 4
-    else:
-        base_score = 5
-    
-    # Losowość (jeśli włączona)
-    if HEURISTIC_CONFIG["randomness_enabled"]:
-        randomness_range = HEURISTIC_CONFIG["randomness_range"]
-        randomness = random.randint(*randomness_range)
-        rating = max(1, min(5, base_score + randomness))
-    else:
-        rating = base_score
-    
-    # Feedback
-    if HEURISTIC_CONFIG["auto_feedback"]:
-        feedback = HEURISTIC_CONFIG["feedback_template"].format(
-            word_count=word_count,
-            rating=rating
-        )
-    else:
-        feedback = f"Ocena: {rating}/5 ⭐"
-    
-    # Szczegóły
-    details = {
-        "method": "heuristic",
-        "word_count": word_count,
-        "min_required": min_words,
-        "base_score": base_score,
-        "randomness": rating - base_score if HEURISTIC_CONFIG["randomness_enabled"] else 0,
-        "final_rating": rating,
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }
-    
-    return rating, feedback, details
+# FUNKCJA USUNIĘTA - heurystyka była zbyt losowa i bez feedbacku
+# Teraz: AI działa → pełny feedback | AI nie działa → kolejka do GM
+# 
+# def evaluate_heuristic(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
+#     """Stara heurystyka - USUNIĘTA"""
+#     pass
 
 
 # =============================================================================
 # TRYB 2: OCENA AI (Google Gemini)
 # =============================================================================
 
-def evaluate_with_ai(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
+def evaluate_with_ai(solution: str, contract: Dict, user_data: Dict = None) -> Tuple[int, str, Dict]:
     """
     Ocena przez model Google Gemini
     
@@ -179,6 +117,7 @@ def evaluate_with_ai(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
     Args:
         solution: Tekst rozwiązania
         contract: Dane kontraktu
+        user_data: Dane użytkownika (dla fallbacku do GM)
     
     Returns:
         (rating, feedback, details)
@@ -212,11 +151,11 @@ def evaluate_with_ai(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
         # 1. Najpierw sprawdź Streamlit secrets (standardowy sposób w aplikacji)
         try:
             import streamlit as st
-            api_key = st.secrets.get("GOOGLE_API_KEY")
-            if api_key:
-                log_debug("✅ API key pobrane z st.secrets")
+            api_key = st.secrets["GOOGLE_API_KEY"]
+            log_debug("✅ API key pobrane z st.secrets")
         except Exception as e:
             log_debug(f"❌ Nie udało się pobrać z st.secrets: {e}")
+            api_key = None
         
         # 2. Jeśli nie ma w secrets, sprawdź zmienną środowiskową
         if not api_key:
@@ -266,7 +205,14 @@ def evaluate_with_ai(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
         
         # Sprawdź czy odpowiedź jest zablokowana przez safety
         if not response.candidates or not response.candidates[0].content.parts:
+            log_debug("⚠️ Odpowiedź zablokowana przez safety settings lub pusta")
+            # Sprawdź finish_reason
+            if response.candidates:
+                finish_reason = response.candidates[0].finish_reason
+                log_debug(f"finish_reason: {finish_reason}")
+            
             # Odpowiedź zablokowana - spróbuj bez safety settings
+            log_debug("Próbuję ponownie BEZ safety settings...")
             print("⚠️ Odpowiedź zablokowana przez safety settings, próbuję ponownie bez nich...")
             model_no_safety = genai.GenerativeModel(
                 model_name=AI_EVALUATION_CONFIG["model"],
@@ -274,10 +220,22 @@ def evaluate_with_ai(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
                 system_instruction=AI_EVALUATION_CONFIG["system_instruction"]
             )
             response = model_no_safety.generate_content(prompt)
+            log_debug("✅ Otrzymano odpowiedź z Gemini (bez safety)")
         
         # Parse odpowiedzi JSON
-        result_text = response.text.strip()
-        log_debug(f"Długość odpowiedzi: {len(result_text)} znaków")
+        result_text = ""
+        try:
+            result_text = response.text.strip()
+            log_debug(f"Długość odpowiedzi: {len(result_text)} znaków")
+        except Exception as e:
+            log_debug(f"❌ Błąd pobierania response.text: {e}")
+            # Prawdopodobnie safety block - przekieruj do GM
+            log_debug("Fallback do Game Master (safety block)")
+            print("⚠️ Ocena AI zablokowana przez safety. Przekierowuję do Mistrza Gry...")
+            if user_data:
+                return queue_for_game_master(user_data, contract, solution)
+            else:
+                return 0, "❌ Błąd: Safety block i brak możliwości kolejki GM", {"method": "error", "error": "safety_block"}
         
         # Usuń markdown formatting jeśli jest
         if result_text.startswith("```json"):
@@ -288,6 +246,20 @@ def evaluate_with_ai(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
         # Spróbuj naprawić ucięty JSON (dodaj brakujące zamknięcia)
         if not result_text.endswith("}"):
             log_debug("⚠️ JSON nie kończy się }, próbuję naprawić...")
+            
+            # Znajdź ostatni kompletny element
+            # Jeśli JSON urywa się w środku stringa, obetnij do ostatniego kompletnego
+            last_comma_pos = result_text.rfind('",')
+            last_bracket_pos = result_text.rfind(']')
+            
+            # Usuń ucięte fragmenty
+            if last_comma_pos > last_bracket_pos:
+                # Ucięło w środku obiektu - obetnij do ostatniego kompletnego pola
+                result_text = result_text[:last_comma_pos + 1]
+            elif last_bracket_pos > 0:
+                # Ucięło po tablicy - obetnij do końca tablicy
+                result_text = result_text[:last_bracket_pos + 1]
+            
             # Policz otwarte/zamknięte nawiasy
             open_braces = result_text.count("{")
             close_braces = result_text.count("}")
@@ -300,7 +272,7 @@ def evaluate_with_ai(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
             if open_braces > close_braces:
                 result_text += "}" * (open_braces - close_braces)
             
-            log_debug(f"Naprawiony JSON: {result_text[-100:]}")
+            log_debug(f"Naprawiony JSON (ostatnie 200 znaków): ...{result_text[-200:]}")
         
         result = json.loads(result_text)
         log_debug("✅ JSON sparsowany pomyślnie")
@@ -312,16 +284,17 @@ def evaluate_with_ai(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
         strengths = result.get("strengths", [])
         improvements = result.get("improvements", [])
         
-        # Sformatuj feedback (bez redundantnego nagłówka - ocena jest już widoczna w UI)
+        # Sformatuj feedback jako opinię klienta
         feedback = feedback_text
         
         if strengths:
-            feedback += "\n\n**✅ Mocne strony:**\n"
-            feedback += "\n".join([f"- {s}" for s in strengths])
+            feedback += "\n\n**👍 Co nam się podobało:**\n"
+            feedback += "\n".join([f"• {s}" for s in strengths])
         
         if improvements:
-            feedback += "\n\n**💡 Do poprawy:**\n"
-            feedback += "\n".join([f"- {i}" for i in improvements])
+            feedback += "\n\n**� Co mogłoby być lepsze:**\n"
+            feedback += "\n".join([f"• {i}" for i in improvements])
+
         
         # Szczegóły
         details = {
@@ -340,30 +313,41 @@ def evaluate_with_ai(solution: str, contract: Dict) -> Tuple[int, str, Dict]:
         
     except ImportError as e:
         log_debug(f"❌ ImportError: {e}")
-        print("⚠️ Brak biblioteki google-generativeai. Instaluj: pip install google-generativeai")
-        log_debug("Fallback do heurystyki (ImportError)")
-        return evaluate_heuristic(solution, contract)
+        print("⚠️ Brak biblioteki google-generativeai. Przekierowuję do kolejki Mistrza Gry.")
+        log_debug("Fallback do Game Master (ImportError)")
+        if user_data:
+            return queue_for_game_master(user_data, contract, solution)
+        else:
+            # Jeśli brak user_data, zwróć error
+            return 0, "❌ Błąd: Brak biblioteki AI i nie można utworzyć kolejki GM", {"method": "error", "error": "ImportError"}
     
     except json.JSONDecodeError as e:
         log_debug(f"❌ JSONDecodeError: {e}")
         print(f"⚠️ Błąd parsowania JSON z Gemini: {e}")
         try:
-            print(f"Odpowiedź: {result_text[:200]}")
-            log_debug(f"Odpowiedź Gemini: {result_text[:500]}")
+            if result_text:  # Sprawdź czy result_text istnieje
+                print(f"Odpowiedź: {result_text[:200]}")
+                log_debug(f"Odpowiedź Gemini: {result_text[:500]}")
         except:
             print("Odpowiedź: brak")
             log_debug("Odpowiedź Gemini: brak")
-        print("Fallback do heurystyki...")
-        log_debug("Fallback do heurystyki (JSONDecodeError)")
-        return evaluate_heuristic(solution, contract)
+        print("⚠️ JSON ucięty/błędny. Przekierowuję do kolejki Mistrza Gry.")
+        log_debug("Fallback do Game Master (JSONDecodeError)")
+        if user_data:
+            return queue_for_game_master(user_data, contract, solution)
+        else:
+            return 0, "❌ Błąd: JSON ucięty i nie można utworzyć kolejki GM", {"method": "error", "error": "JSONDecodeError"}
     
     except Exception as e:
-        # Fallback do heurystyki w razie błędu
+        # Fallback do Game Master w razie błędu
         log_debug(f"❌ Exception: {type(e).__name__}: {e}")
         print(f"⚠️ Błąd oceny AI: {e}")
-        print("Fallback do heurystyki...")
-        log_debug("Fallback do heurystyki (Exception)")
-        return evaluate_heuristic(solution, contract)
+        print("⚠️ Przekierowuję do kolejki Mistrza Gry...")
+        log_debug("Fallback do Game Master (Exception)")
+        if user_data:
+            return queue_for_game_master(user_data, contract, solution)
+        else:
+            return 0, "❌ Błąd AI i nie można utworzyć kolejki GM", {"method": "error", "error": str(e)}
 
 
 # =============================================================================
@@ -422,9 +406,14 @@ def queue_for_game_master(
     pending_count = len([r for r in queue if r["status"] == "pending"])
     
     if pending_count >= max_pending:
-        # Kolejka pełna - fallback do heurystyki
-        print(f"⚠️ Kolejka Mistrza Gry pełna ({pending_count}/{max_pending}). Fallback do heurystyki.")
-        return evaluate_heuristic(solution, contract)
+        # Kolejka pełna - zwróć tymczasową ocenę i zaloguj ostrzeżenie
+        print(f"⚠️ Kolejka Mistrza Gry pełna ({pending_count}/{max_pending}). Rozwiązanie zostanie ocenione później.")
+        # Zwróć neutralną ocenę 3/5 z informacją o kolejce
+        return 3, f"⏳ Rozwiązanie dodane do kolejki (pozycja {pending_count+1}). Ocena zostanie przeprowadzona przez Mistrza Gry.", {
+            "method": "queued_full",
+            "queue_position": pending_count + 1,
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
     
     # Dodaj do kolejki
     queue.append(pending_review)
@@ -776,7 +765,7 @@ def get_evaluation_stats() -> dict:
 
 __all__ = [
     'evaluate_contract_solution',
-    'evaluate_heuristic',
+    # 'evaluate_heuristic',  # USUNIĘTA - zastąpiona przez Game Master fallback
     'evaluate_with_ai',
     'queue_for_game_master',
     'submit_game_master_review',

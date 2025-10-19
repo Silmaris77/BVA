@@ -141,3 +141,212 @@
 [2025-10-19 02:17:01] ✅ Otrzymano odpowiedź z Gemini
 [2025-10-19 02:17:01] Długość odpowiedzi: 985 znaków
 [2025-10-19 02:17:01] ✅ JSON sparsowany pomyślnie
+[2025-10-19 03:31:38] ============================================================
+[2025-10-19 03:31:38] evaluate_contract_solution() wywołane
+[2025-10-19 03:31:38] get_active_evaluation_mode() wywołane
+[2025-10-19 03:31:38] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-19 03:31:38] DEFAULT_EVALUATION_MODE = ai
+[2025-10-19 03:31:38] Plik config/business_games_active_mode.json istnieje
+[2025-10-19 03:31:38] Z pliku odczytano tryb: 'ai'
+[2025-10-19 03:31:38] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-19 03:31:38] Używam trybu oceny: 'ai'
+[2025-10-19 03:31:38] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-19 03:31:38] Importuję google.generativeai...
+[2025-10-19 03:31:38] ✅ Import google.generativeai OK
+[2025-10-19 03:31:38] Przygotowuję prompt...
+[2025-10-19 03:31:38] ✅ Prompt przygotowany (długość: 2221 znaków)
+[2025-10-19 03:31:38] Pobieram API key...
+[2025-10-19 03:31:38] ✅ API key pobrane z st.secrets
+[2025-10-19 03:31:38] Konfiguruję genai.configure()...
+[2025-10-19 03:31:38] ✅ genai.configure() OK
+[2025-10-19 03:31:38] Ustawiam safety_settings...
+[2025-10-19 03:31:38] ✅ safety_settings ustawione
+[2025-10-19 03:31:38] Tworzę model: gemini-2.5-flash...
+[2025-10-19 03:31:38] ✅ Model utworzony
+[2025-10-19 03:31:38] Wywołuję model.generate_content()...
+[2025-10-19 03:31:47] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-19 03:31:47] Długość odpowiedzi: 80 znaków
+[2025-10-19 03:31:47] ⚠️ JSON nie kończy się }, próbuję naprawić...
+[2025-10-19 03:31:47] Naprawiony JSON: {
+  "total_score": 30,
+  "rating": 2,
+  "feedback": "Rozwiązanie poprawnie ident}
+[2025-10-19 03:31:47] ❌ JSONDecodeError: Unterminated string starting at: line 4 column 15 (char 52)
+[2025-10-19 03:31:47] Odpowiedź Gemini: {
+  "total_score": 30,
+  "rating": 2,
+  "feedback": "Rozwiązanie poprawnie ident}
+[2025-10-19 03:31:47] Fallback do heurystyki (JSONDecodeError)
+[2025-10-19 09:30:53] ============================================================
+[2025-10-19 09:30:53] evaluate_contract_solution() wywołane
+[2025-10-19 09:30:53] get_active_evaluation_mode() wywołane
+[2025-10-19 09:30:53] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-19 09:30:53] DEFAULT_EVALUATION_MODE = ai
+[2025-10-19 09:30:53] Plik config/business_games_active_mode.json istnieje
+[2025-10-19 09:30:53] Z pliku odczytano tryb: 'ai'
+[2025-10-19 09:30:53] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-19 09:30:53] Używam trybu oceny: 'ai'
+[2025-10-19 09:30:53] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-19 09:30:53] Importuję google.generativeai...
+[2025-10-19 09:30:54] ✅ Import google.generativeai OK
+[2025-10-19 09:30:54] Przygotowuję prompt...
+[2025-10-19 09:30:54] ✅ Prompt przygotowany (długość: 4987 znaków)
+[2025-10-19 09:30:54] Pobieram API key...
+[2025-10-19 09:30:54] ✅ API key pobrane z st.secrets
+[2025-10-19 09:30:54] Konfiguruję genai.configure()...
+[2025-10-19 09:30:54] ✅ genai.configure() OK
+[2025-10-19 09:30:54] Ustawiam safety_settings...
+[2025-10-19 09:30:54] ✅ safety_settings ustawione
+[2025-10-19 09:30:54] Tworzę model: gemini-2.5-flash...
+[2025-10-19 09:30:54] ✅ Model utworzony
+[2025-10-19 09:30:54] Wywołuję model.generate_content()...
+[2025-10-19 09:30:59] ============================================================
+[2025-10-19 09:30:59] evaluate_contract_solution() wywołane
+[2025-10-19 09:30:59] get_active_evaluation_mode() wywołane
+[2025-10-19 09:30:59] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-19 09:30:59] DEFAULT_EVALUATION_MODE = ai
+[2025-10-19 09:30:59] Plik config/business_games_active_mode.json istnieje
+[2025-10-19 09:30:59] Z pliku odczytano tryb: 'ai'
+[2025-10-19 09:30:59] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-19 09:30:59] Używam trybu oceny: 'ai'
+[2025-10-19 09:30:59] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-19 09:30:59] Importuję google.generativeai...
+[2025-10-19 09:30:59] ✅ Import google.generativeai OK
+[2025-10-19 09:30:59] Przygotowuję prompt...
+[2025-10-19 09:30:59] ✅ Prompt przygotowany (długość: 4095 znaków)
+[2025-10-19 09:30:59] Pobieram API key...
+[2025-10-19 09:30:59] ✅ API key pobrane z st.secrets
+[2025-10-19 09:30:59] Konfiguruję genai.configure()...
+[2025-10-19 09:30:59] ✅ genai.configure() OK
+[2025-10-19 09:30:59] Ustawiam safety_settings...
+[2025-10-19 09:30:59] ✅ safety_settings ustawione
+[2025-10-19 09:30:59] Tworzę model: gemini-2.5-flash...
+[2025-10-19 09:30:59] ✅ Model utworzony
+[2025-10-19 09:30:59] Wywołuję model.generate_content()...
+[2025-10-19 09:31:00] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-19 09:31:00] Długość odpowiedzi: 906 znaków
+[2025-10-19 09:31:00] ✅ JSON sparsowany pomyślnie
+[2025-10-19 09:31:07] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-19 09:31:07] Długość odpowiedzi: 675 znaków
+[2025-10-19 09:31:07] ✅ JSON sparsowany pomyślnie
+[2025-10-19 15:16:58] ============================================================
+[2025-10-19 15:16:58] evaluate_contract_solution() wywołane
+[2025-10-19 15:16:58] get_active_evaluation_mode() wywołane
+[2025-10-19 15:16:58] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-19 15:16:58] DEFAULT_EVALUATION_MODE = ai
+[2025-10-19 15:16:58] Plik config/business_games_active_mode.json istnieje
+[2025-10-19 15:16:58] Z pliku odczytano tryb: 'ai'
+[2025-10-19 15:16:58] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-19 15:16:58] Używam trybu oceny: 'ai'
+[2025-10-19 15:16:58] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-19 15:16:58] Importuję google.generativeai...
+[2025-10-19 15:16:58] ✅ Import google.generativeai OK
+[2025-10-19 15:16:58] Przygotowuję prompt...
+[2025-10-19 15:16:58] ✅ Prompt przygotowany (długość: 6744 znaków)
+[2025-10-19 15:16:58] Pobieram API key...
+[2025-10-19 15:16:58] ✅ API key pobrane z st.secrets
+[2025-10-19 15:16:58] Konfiguruję genai.configure()...
+[2025-10-19 15:16:58] ✅ genai.configure() OK
+[2025-10-19 15:16:58] Ustawiam safety_settings...
+[2025-10-19 15:16:58] ✅ safety_settings ustawione
+[2025-10-19 15:16:58] Tworzę model: gemini-2.5-flash...
+[2025-10-19 15:16:58] ✅ Model utworzony
+[2025-10-19 15:16:58] Wywołuję model.generate_content()...
+[2025-10-19 15:17:15] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-19 15:17:27] ❌ Exception: ValueError: Invalid operation: The `response.text` quick accessor requires the response to contain a valid `Part`, but none were returned. The candidate's [finish_reason](https://ai.google.dev/api/generate-content#finishreason) is 2.
+[2025-10-19 15:17:27] Fallback do heurystyki (Exception)
+[2025-10-19 15:48:48] ============================================================
+[2025-10-19 15:48:48] evaluate_contract_solution() wywołane
+[2025-10-19 15:48:48] get_active_evaluation_mode() wywołane
+[2025-10-19 15:48:48] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-19 15:48:48] DEFAULT_EVALUATION_MODE = ai
+[2025-10-19 15:48:48] Plik config/business_games_active_mode.json istnieje
+[2025-10-19 15:48:48] Z pliku odczytano tryb: 'ai'
+[2025-10-19 15:48:48] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-19 15:48:48] Używam trybu oceny: 'ai'
+[2025-10-19 15:48:48] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-19 15:48:48] Importuję google.generativeai...
+[2025-10-19 15:48:48] ✅ Import google.generativeai OK
+[2025-10-19 15:48:48] Przygotowuję prompt...
+[2025-10-19 15:48:48] ✅ Prompt przygotowany (długość: 6744 znaków)
+[2025-10-19 15:48:48] Pobieram API key...
+[2025-10-19 15:48:48] ✅ API key pobrane z st.secrets
+[2025-10-19 15:48:48] Konfiguruję genai.configure()...
+[2025-10-19 15:48:48] ✅ genai.configure() OK
+[2025-10-19 15:48:48] Ustawiam safety_settings...
+[2025-10-19 15:48:48] ✅ safety_settings ustawione
+[2025-10-19 15:48:48] Tworzę model: gemini-2.5-flash...
+[2025-10-19 15:48:48] ✅ Model utworzony
+[2025-10-19 15:48:48] Wywołuję model.generate_content()...
+[2025-10-19 15:49:03] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-19 15:49:03] ⚠️ Odpowiedź zablokowana przez safety settings lub pusta
+[2025-10-19 15:49:03] finish_reason: 2
+[2025-10-19 15:49:03] Próbuję ponownie BEZ safety settings...
+[2025-10-19 15:49:19] ✅ Otrzymano odpowiedź z Gemini (bez safety)
+[2025-10-19 15:49:19] Długość odpowiedzi: 870 znaków
+[2025-10-19 15:49:19] ⚠️ JSON nie kończy się }, próbuję naprawić...
+[2025-10-19 15:49:19] Naprawiony JSON: 
+  ],
+  "improvements": [
+    "Większe podkreślenie roli aktywnego słuchania i zadawania otwartych]}
+[2025-10-19 15:49:19] ❌ JSONDecodeError: Unterminated string starting at: line 11 column 5 (char 802)
+[2025-10-19 15:49:19] Odpowiedź Gemini: {
+  "total_score": 97,
+  "rating": 5,
+  "feedback": "Rozwiązanie jest wyjątkowo kompleksowe i przemyślane, oferując szczegółowy plan działania w niezwykle trudnej sytuacji. Wykazuje głębokie zrozumienie zarówno aspektów komunikacyjnych, jak i psychologicznych związanych ze zwolnieniami grupowymi, z silnym naciskiem na empatię i odbudowę zaufania.",
+  "strengths": [
+    "Szczegółowe przygotowanie managerów, w tym warsztaty z symulacjami i zarządzaniem własnymi emocjami, co jest kluczowe w CIQ.",
+
+[2025-10-19 15:49:19] Fallback do heurystyki (JSONDecodeError)
+[2025-10-19 16:46:56] ============================================================
+[2025-10-19 16:46:56] evaluate_contract_solution() wywołane
+[2025-10-19 16:46:56] get_active_evaluation_mode() wywołane
+[2025-10-19 16:46:56] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-19 16:46:56] DEFAULT_EVALUATION_MODE = ai
+[2025-10-19 16:46:56] Plik config/business_games_active_mode.json istnieje
+[2025-10-19 16:46:56] Z pliku odczytano tryb: 'ai'
+[2025-10-19 16:46:56] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-19 16:46:56] Używam trybu oceny: 'ai'
+[2025-10-19 16:46:56] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-19 16:46:56] Importuję google.generativeai...
+[2025-10-19 16:46:56] ✅ Import google.generativeai OK
+[2025-10-19 16:46:56] Przygotowuję prompt...
+[2025-10-19 16:46:57] ✅ Prompt przygotowany (długość: 6744 znaków)
+[2025-10-19 16:46:57] Pobieram API key...
+[2025-10-19 16:46:57] ✅ API key pobrane z st.secrets
+[2025-10-19 16:46:57] Konfiguruję genai.configure()...
+[2025-10-19 16:46:57] ✅ genai.configure() OK
+[2025-10-19 16:46:57] Ustawiam safety_settings...
+[2025-10-19 16:46:57] ✅ safety_settings ustawione
+[2025-10-19 16:46:57] Tworzę model: gemini-2.5-flash...
+[2025-10-19 16:46:57] ✅ Model utworzony
+[2025-10-19 16:46:57] Wywołuję model.generate_content()...
+[2025-10-19 16:47:19] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-19 16:47:19] Długość odpowiedzi: 1530 znaków
+[2025-10-19 16:47:19] ✅ JSON sparsowany pomyślnie
+[2025-10-19 17:08:08] ============================================================
+[2025-10-19 17:08:08] evaluate_contract_solution() wywołane
+[2025-10-19 17:08:08] get_active_evaluation_mode() wywołane
+[2025-10-19 17:08:08] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-19 17:08:08] DEFAULT_EVALUATION_MODE = ai
+[2025-10-19 17:08:08] Plik config/business_games_active_mode.json istnieje
+[2025-10-19 17:08:09] Z pliku odczytano tryb: 'ai'
+[2025-10-19 17:08:09] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-19 17:08:09] Używam trybu oceny: 'ai'
+[2025-10-19 17:08:09] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-19 17:08:09] Importuję google.generativeai...
+[2025-10-19 17:08:09] ✅ Import google.generativeai OK
+[2025-10-19 17:08:09] Przygotowuję prompt...
+[2025-10-19 17:08:09] ✅ Prompt przygotowany (długość: 2741 znaków)
+[2025-10-19 17:08:09] Pobieram API key...
+[2025-10-19 17:08:09] ✅ API key pobrane z st.secrets
+[2025-10-19 17:08:09] Konfiguruję genai.configure()...
+[2025-10-19 17:08:09] ✅ genai.configure() OK
+[2025-10-19 17:08:09] Ustawiam safety_settings...
+[2025-10-19 17:08:09] ✅ safety_settings ustawione
+[2025-10-19 17:08:09] Tworzę model: gemini-2.5-flash...
+[2025-10-19 17:08:09] ✅ Model utworzony
+[2025-10-19 17:08:09] Wywołuję model.generate_content()...
+[2025-10-19 17:08:25] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-19 17:08:25] Długość odpowiedzi: 1090 znaków
+[2025-10-19 17:08:25] ✅ JSON sparsowany pomyślnie

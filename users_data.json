@@ -4,10 +4,10 @@
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
     "xp": 1626,
-    "degencoins": 563,
+    "degencoins": 2063,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-19 02:57:12",
+    "last_login": "2025-10-19 15:15:02",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -1892,6 +1892,27 @@
         "details": {
           "timestamp": "2025-10-19T02:57:13.028788"
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T09:28:06.690898",
+        "details": {
+          "timestamp": "2025-10-19T09:28:06.678756"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T11:24:52.875251",
+        "details": {
+          "timestamp": "2025-10-19T11:24:52.849535"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T15:15:02.814315",
+        "details": {
+          "timestamp": "2025-10-19T15:15:02.786814"
+        }
       }
     ],
     "reports": [
@@ -2306,41 +2327,13 @@
       "firm": {
         "name": "Megacomp",
         "founded": "2025-10-18",
-        "level": 1,
+        "level": 2,
         "coins": 1300,
-        "reputation": 20
+        "reputation": 105
       },
       "employees": [],
       "contracts": {
-        "active": [
-          {
-            "id": "CIQ-KRYZYS-002",
-            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
-            "kategoria": "Kryzys",
-            "klient": "CorporateInc",
-            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
-            "zadanie": "Przygotuj kompleksowy plan komunikacji:\n\n1. **Komunikacja przed announcement** (250 słów)\n   - Kto, kiedy i jak powinien się dowiedzieć?\n   - Przygotowanie managerów - szkolenie\n   - Anticipated questions & answers\n   \n2. **Announcement day** (300 słów)\n   - Timeline wydarzeń\n   - Komunikat od CEO - draft\n   - Indywidualne rozmowy - framework\n   \n3. **Post-layoff** (350 słów)\n   - Wsparcie dla pozostałego zespołu (survivor guilt)\n   - Rebuilding trust - plan na 60 dni\n   - Monitoring morale i zaangażowania",
-            "wymagana_wiedza": [
-              "Change Management",
-              "Crisis Communication",
-              "Difficult Conversations"
-            ],
-            "trudnosc": 5,
-            "nagroda_base": 1500,
-            "nagroda_4star": 2000,
-            "nagroda_5star": 2500,
-            "reputacja": 90,
-            "czas_realizacji_dni": 3,
-            "wymagany_poziom": 1,
-            "min_slow": 500,
-            "emoji": "🚨",
-            "available_until": "2025-10-19 20:53:48",
-            "accepted_date": "2025-10-18 21:07:53",
-            "deadline": "2025-10-21 21:07:53",
-            "status": "in_progress",
-            "solution": ""
-          }
-        ],
+        "active": [],
         "completed": [
           {
             "id": "CIQ-STARTER-001",
@@ -2375,9 +2368,7 @@
               "bonus_multiplier": 1.0
             },
             "completed_date": "2025-10-18 20:55:02"
-          }
-        ],
-        "available_pool": [
+          },
           {
             "id": "CIQ-LEADERSHIP-001",
             "tytul": "Framework dla efektywnych 1:1",
@@ -2399,8 +2390,87 @@
             "wymagany_poziom": 1,
             "min_slow": 350,
             "emoji": "🤝",
-            "available_until": "2025-10-19 20:53:48"
+            "available_until": "2025-10-19 20:53:48",
+            "accepted_date": "2025-10-19 09:28:55",
+            "deadline": "2025-10-20 09:28:55",
+            "status": "completed",
+            "solution": " nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem nie wiem nie wiem  nie wiem nie wiem nie wiem ",
+            "rating": 1,
+            "feedback": "Rozwiązanie składa się wyłącznie z powtórzeń frazy 'nie wiem', co oznacza całkowity brak merytorycznej odpowiedzi na kontrakt. Nie zawiera żadnych propozycji ani analiz problemu, co uniemożliwia jakąkolwiek ocenę merytoryczną.\n\n**✅ Mocne strony:**\n- Brak\n\n**💡 Do poprawy:**\n- Przedstawienie konkretnego frameworku dla spotkań 1:1, uwzględniającego cele, strukturę i kluczowe elementy.\n- Zastosowanie technik z zakresu Conversational Intelligence do budowania efektywnych dialogów menedżer-pracownik.\n- Opracowanie praktycznych wskazówek i przykładów dostosowanych do specyfiki firmy MarketPro (50 osób).",
+            "evaluation_details": {
+              "method": "ai",
+              "model": "gemini-2.5-flash",
+              "total_score": 0,
+              "rating": 1,
+              "strengths": [
+                "Brak"
+              ],
+              "improvements": [
+                "Przedstawienie konkretnego frameworku dla spotkań 1:1, uwzględniającego cele, strukturę i kluczowe elementy.",
+                "Zastosowanie technik z zakresu Conversational Intelligence do budowania efektywnych dialogów menedżer-pracownik.",
+                "Opracowanie praktycznych wskazówek i przykładów dostosowanych do specyfiki firmy MarketPro (50 osób)."
+              ],
+              "word_count": 486,
+              "timestamp": "2025-10-19 09:31:07",
+              "provider": "google_gemini"
+            },
+            "reward": {
+              "coins": 0,
+              "reputation": -5,
+              "base": 0,
+              "bonus_multiplier": 0,
+              "rejection_penalty": true
+            },
+            "completed_date": "2025-10-19 09:31:07"
           },
+          {
+            "id": "CIQ-KRYZYS-002",
+            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+            "kategoria": "Kryzys",
+            "klient": "CorporateInc",
+            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+            "zadanie": "Przygotuj kompleksowy plan komunikacji:\n\n1. **Komunikacja przed announcement** (250 słów)\n   - Kto, kiedy i jak powinien się dowiedzieć?\n   - Przygotowanie managerów - szkolenie\n   - Anticipated questions & answers\n   \n2. **Announcement day** (300 słów)\n   - Timeline wydarzeń\n   - Komunikat od CEO - draft\n   - Indywidualne rozmowy - framework\n   \n3. **Post-layoff** (350 słów)\n   - Wsparcie dla pozostałego zespołu (survivor guilt)\n   - Rebuilding trust - plan na 60 dni\n   - Monitoring morale i zaangażowania",
+            "wymagana_wiedza": [
+              "Change Management",
+              "Crisis Communication",
+              "Difficult Conversations"
+            ],
+            "trudnosc": 5,
+            "nagroda_base": 1500,
+            "nagroda_4star": 2000,
+            "nagroda_5star": 2500,
+            "reputacja": 90,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 500,
+            "emoji": "🚨",
+            "available_until": "2025-10-19 20:53:48",
+            "accepted_date": "2025-10-18 21:07:53",
+            "deadline": "2025-10-20 21:07:53",
+            "status": "completed",
+            "solution": "🧭 I. Komunikacja przed ogłoszeniem (do 250 słów)\n\n1. Kto, kiedy i jak powinien się dowiedzieć?\n\nPierwszą grupą, która musi poznać szczegóły decyzji, są managerowie średniego szczebla – na 7 dni przed ogłoszeniem. To oni będą odpowiedzialni za komunikację 1:1 z pracownikami. Dzień później (T-6) informowani są dział HR i komunikacji wewnętrznej, którzy przygotują komunikaty i wsparcie formalne.\n\nW dniu ogłoszenia (T=0), komunikat kierownictwa zostanie przekazany wszystkim pracownikom równocześnie – poprzez spotkanie all-hands i mail od CEO. Osoby objęte zwolnieniami dowiedzą się w tym samym dniu – w rozmowach indywidualnych z managerami i HR.\n\n2. Przygotowanie managerów – szkolenie (T-5)\n\nManagerowie przechodzą intensywne 2-godzinne warsztaty z HR i działem komunikacji, które obejmują:\n\nSymulację trudnych rozmów (role-play)\n\nTechniki komunikacji empatycznej\n\nScenariusze pytań i odpowiedzi\n\nJak radzić sobie z własnymi emocjami\n\n3. Anticipated Questions & Answers (FAQ dla managerów)\n\nPrzykładowe pytania:\n\nDlaczego właśnie ja?\n\nDecyzja nie wynika z wyników indywidualnych, lecz z konieczności dostosowania struktury organizacyjnej.\n\nCzy są opcje wewnętrznych transferów?\n\nRozważamy wszystkie możliwości redeploymentu tam, gdzie to możliwe.\n\nJakie świadczenia otrzymam?\n\nSzczegółowy pakiet odpraw, wsparcia i doradztwa zawodowego zostanie przedstawiony podczas rozmowy.\n\n📅 II. Dzień ogłoszenia (do 300 słów)\n1. Timeline wydarzeń (T=0):\n\n09:00 – Spotkanie all-hands (CEO + Executive Team) – oficjalne ogłoszenie zmian\n\n09:30 – Mail od CEO z podsumowaniem i dokumentacją (link do FAQ)\n\n10:00-14:00 – Indywidualne rozmowy z pracownikami objętymi zwolnieniem\n\n15:00 – Spotkania zespołowe prowadzone przez managerów (adresowanie emocji i obaw)\n\n16:00 – Otwarte Q&A z HR i CEO (online)\n\n2. Komunikat od CEO – Draft:\n\nDrodzy Pracownicy,\n\nZ bólem informuję, że dziś podejmujemy jedną z najtrudniejszych decyzji w historii naszej firmy. W związku z głęboką restrukturyzacją, konieczne jest rozstanie się z około 20% naszych kolegów i koleżanek.\n\nTa decyzja nie odzwierciedla ich wartości ani pracy – są to osoby utalentowane, zaangażowane i zasługujące na pełne uznanie. Zrobiliśmy wszystko, co możliwe, by tego uniknąć, ale obecne realia biznesowe wymusiły zmiany strukturalne.\n\nDla osób, których dotyczy to bezpośrednio, przygotowaliśmy odprawy, wsparcie psychologiczne i doradztwo zawodowe. Managerowie przekażą szczegóły w rozmowach indywidualnych.\n\nDla tych, którzy zostają – zdajemy sobie sprawę, że to trudny moment. Przed nami nowy etap, ale wspólnie odbudujemy zaufanie i kierunek.\n\nDziękuję każdemu za dotychczasowy wkład.\n\nZ szacunkiem,\n[Imię i Nazwisko]\nCEO\n\n3. Indywidualne rozmowy – framework (na bazie modelu SPIKES):\n\nS – Setting: Prywatne miejsce, czas na rozmowę, bez pośpiechu\n\nP – Perception: Krótkie wprowadzenie, by zrozumieć poziom świadomości pracownika\n\nI – Invitation: Zapytanie, czy pracownik chce usłyszeć szczegóły\n\nK – Knowledge: Jasne, empatyczne przekazanie decyzji\n\nE – Emotion: Zatrzymanie się przy emocjach, aktywne słuchanie\n\nS – Strategy: Przedstawienie kolejnych kroków, pakietów, możliwości wsparcia\n\n🤝 III. Po zwolnieniach – do 350 słów\n1. Wsparcie dla pozostałych (survivor guilt)\n\nPo masowych zwolnieniach często występuje tzw. „guilt of staying” – poczucie winy u osób, które nie zostały zwolnione. By zapobiec demotywacji:\n\nGrupy wsparcia – organizowane w ciągu tygodnia od ogłoszenia (facylitowane przez psychologa lub HR)\n\nSesje „Ask Me Anything” z Leadershipem – raz na tydzień przez 4 tygodnie\n\nTransparentna komunikacja – regularne aktualizacje, jasny przekaz, co się zmienia i dlaczego\n\n2. Rebuilding Trust – plan na 60 dni\n\nTydzień 1-2\n\nSpotkania zespołów z leadershipem: otwarte rozmowy, zbieranie opinii\n\nWysłanie anonimowej ankiety „Pulse Survey” – poziom zaufania, obawy, propozycje\n\nTydzień 3-4\n\nPublikacja roadmapy zmian (nowa struktura, procesy, cele)\n\n„New Culture Circles” – warsztaty na temat kultury i wartości firmy\n\nTydzień 5-8\n\nFeedback loop: omawianie wyników ankiet, aktualizacja działań\n\nWdrożenie planów rozwojowych (szkolenia, mentoring dla pozostałych)\n\nŚwiętowanie małych sukcesów (quick wins) – odbudowa morale\n\n3. Monitoring morale i zaangażowania\n\nWdrażamy systematyczne monitorowanie:\n\nTygodniowe Pulse Surveys (krótkie, anonimowe)\n\nOne-on-one check-ins co 2 tygodnie (szczególnie z kluczowymi pracownikami)\n\nHR Sentiment Report – zbiorcze raporty dla leadershipu co miesiąc\n\nKanał zaufania (anonimowy feedback box online)\n\n✅ Podsumowanie\n\nKomunikacja przy zwolnieniach wymaga transparentności, empatii i ciągłości. Kluczem jest odpowiednie przygotowanie kadry kierowniczej, wsparcie dla odchodzących oraz aktywne działania na rzecz odbudowy zaufania wśród pozostających. Strategiczne podejście przez 60 dni po ogłoszeniu jest kluczowe dla utrzymania zaangażowania i odbudowy morale.",
+            "rating": 3,
+            "feedback": "Rozwiązanie zawiera 657 słów. Automatyczna ocena: 3/5 ⭐",
+            "evaluation_details": {
+              "method": "heuristic",
+              "word_count": 657,
+              "min_required": 500,
+              "base_score": 4,
+              "randomness": -1,
+              "final_rating": 3,
+              "timestamp": "2025-10-19 15:17:27"
+            },
+            "reward": {
+              "coins": 1500,
+              "reputation": 90,
+              "base": 1500,
+              "bonus_multiplier": 1.0,
+              "rejection_penalty": false
+            },
+            "completed_date": "2025-10-19 15:17:27"
+          }
+        ],
+        "available_pool": [
           {
             "id": "CIQ-KULTURA-001",
             "tytul": "Audit kultury komunikacji w zespole",
@@ -2451,16 +2521,16 @@
         "last_refresh": "2025-10-18 20:53:48"
       },
       "stats": {
-        "total_revenue": 300,
+        "total_revenue": 1800,
         "total_costs": 0,
         "net_profit": 0,
-        "contracts_completed": 1,
+        "contracts_completed": 2,
         "contracts_5star": 0,
         "contracts_4star": 0,
-        "contracts_3star": 0,
+        "contracts_3star": 1,
         "contracts_2star": 1,
-        "contracts_1star": 0,
-        "avg_rating": 2.0,
+        "contracts_1star": 1,
+        "avg_rating": 3.0,
         "category_stats": {
           "Konflikt": {
             "completed": 0,
@@ -2478,14 +2548,14 @@
             "avg_rating": 0.0
           },
           "Kryzys": {
-            "completed": 0,
-            "total_earned": 0,
-            "avg_rating": 0.0
+            "completed": 1,
+            "total_earned": 1500,
+            "avg_rating": 3.0
           },
           "Leadership": {
-            "completed": 1,
+            "completed": 2,
             "total_earned": 300,
-            "avg_rating": 2.0
+            "avg_rating": 1.5
           }
         },
         "last_30_days": {
@@ -2497,7 +2567,8 @@
           "revenue": 0,
           "contracts": 0,
           "avg_rating": 0.0
-        }
+        },
+        "contracts_rejected": 1
       },
       "ranking": {
         "overall_score": 0.0,
@@ -2519,9 +2590,49 @@
             "amount": 300,
             "rating": 2,
             "timestamp": "2025-10-18 20:55:02"
+          },
+          {
+            "type": "contract_reward",
+            "contract_id": "CIQ-LEADERSHIP-001",
+            "contract_title": "Framework dla efektywnych 1:1",
+            "amount": 0,
+            "rating": 1,
+            "timestamp": "2025-10-19 09:31:07"
+          },
+          {
+            "type": "contract_reward",
+            "contract_id": "CIQ-KRYZYS-002",
+            "contract_title": "Zarządzanie zmianą - zwolnienia grupowe",
+            "amount": 1500,
+            "rating": 3,
+            "timestamp": "2025-10-19 15:17:27"
           }
         ],
-        "level_ups": []
+        "level_ups": [
+          {
+            "from_level": 1,
+            "to_level": 2,
+            "timestamp": "2025-10-19 15:17:27"
+          }
+        ]
+      },
+      "events": {
+        "history": [
+          {
+            "event_id": "deadline_pressure",
+            "timestamp": "2025-10-19 11:33:53",
+            "title": "Skrócony Deadline",
+            "emoji": "⏰",
+            "type": "negative",
+            "description": "Klient zmienił plany i potrzebuje rezultatów szybciej. Jeden z aktywnych kontraktów ma -1 dzień na realizację!",
+            "choice": null,
+            "effects": {
+              "deadline_reduction": -1
+            }
+          }
+        ],
+        "last_roll": "2025-10-19 11:33:53",
+        "active_effects": []
       }
     }
   },
@@ -2533,7 +2644,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-19 01:13:19",
+    "last_login": "2025-10-19 11:48:28",
     "completed_lessons": [
       "2. Chemia mózgu"
     ],
@@ -3136,6 +3247,13 @@
         "details": {
           "timestamp": "2025-10-19T01:13:19.614801"
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T11:48:28.540617",
+        "details": {
+          "timestamp": "2025-10-19T11:48:28.525160"
+        }
       }
     ],
     "business_game": {
@@ -3336,6 +3454,26 @@
       "history": {
         "transactions": [],
         "level_ups": []
+      },
+      "events": {
+        "history": [
+          {
+            "event_id": "renegotiation",
+            "timestamp": "2025-10-19 11:49:23",
+            "title": "Prośba o Renegocjację",
+            "emoji": "🔄",
+            "type": "neutral",
+            "description": "Klient z aktywnym kontraktem chce renegocjować warunki: -20% nagrody, ale +3 dni na realizację.",
+            "choice": "✅ Zgadzam się",
+            "effects": {
+              "modify_active_contract": true,
+              "reward_multiplier": 0.8,
+              "time_bonus": 3
+            }
+          }
+        ],
+        "last_roll": "2025-10-19 11:49:23",
+        "active_effects": []
       }
     }
   },
@@ -3344,10 +3482,10 @@
     "password": "Piotr",
     "degen_type": null,
     "xp": 95,
-    "degencoins": 1595,
+    "degencoins": 2095,
     "level": 1,
     "joined_date": "2025-09-03",
-    "last_login": "2025-10-19 01:20:17",
+    "last_login": "2025-10-19 11:52:03",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -3505,6 +3643,20 @@
         "details": {
           "timestamp": "2025-10-19T01:20:17.368686"
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T09:41:24.191856",
+        "details": {
+          "timestamp": "2025-10-19T09:41:24.183695"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T11:52:03.817124",
+        "details": {
+          "timestamp": "2025-10-19T11:52:03.798441"
+        }
       }
     ],
     "business_game": {
@@ -3512,7 +3664,7 @@
         "name": "Piotr's Consulting",
         "founded": "2025-10-19",
         "level": 1,
-        "reputation": 90
+        "reputation": 92
       },
       "employees": [],
       "contracts": {
@@ -3731,6 +3883,25 @@
           }
         ],
         "level_ups": []
+      },
+      "events": {
+        "history": [
+          {
+            "event_id": "bonus_payment",
+            "timestamp": "2025-10-19 11:52:22",
+            "title": "Niespodziewana Premia!",
+            "emoji": "💰",
+            "type": "positive",
+            "description": "Jeden z Twoich wcześniejszych klientów był tak zadowolony z rezultatów, że postanowił wysłać dodatkową premię.",
+            "choice": null,
+            "effects": {
+              "coins": 500,
+              "reputation": 2
+            }
+          }
+        ],
+        "last_roll": "2025-10-19 11:52:22",
+        "active_effects": []
       }
     }
   },
@@ -4228,7 +4399,7 @@
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-10-16",
-    "last_login": null,
+    "last_login": "2025-10-19 11:54:18",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -4238,6 +4409,12 @@
     },
     "daily_stats": {
       "2025-10-16": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-10-19": {
         "xp": 0,
         "degencoins": 0,
         "level": 1,
@@ -4275,6 +4452,238 @@
       "quadrant": "AC/AE",
       "flexibility": 62.73,
       "completed_date": "2025-10-16 09:09:27"
+    },
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T11:54:19.080861",
+        "details": {
+          "timestamp": "2025-10-19T11:54:19.063110"
+        }
+      }
+    ],
+    "business_game": {
+      "firm": {
+        "name": "Asia's Consulting",
+        "founded": "2025-10-19",
+        "level": 1,
+        "reputation": 0
+      },
+      "employees": [],
+      "contracts": {
+        "active": [
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 11:54:31",
+            "accepted_date": "2025-10-19 11:54:31",
+            "deadline": "2025-10-19 11:54:31",
+            "status": "in_progress",
+            "solution": "",
+            "affected_by_event": {
+              "type": "deadline_reduction",
+              "event_title": "Skrócony Deadline",
+              "days_reduced": 1
+            }
+          }
+        ],
+        "completed": [],
+        "available_pool": [
+          {
+            "id": "CIQ-KONFLIKT-001",
+            "tytul": "Mediacja w konflikcie zespołowym",
+            "kategoria": "Konflikt",
+            "klient": "TechCorp",
+            "opis": "Zespół projektowy w firmie TechCorp jest podzielony. \nLider projektu i główny developer mają odmienne wizje dotyczące architektury systemu. \nNapięcie wpływa na terminowość i morale zespołu.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Co prawdopodobnie jest źródłem konfliktu?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę spotkania mediacyjnego.** (3-4 punkty, krótko)\n   \n3. **Jakie 3 kluczowe pytania zadasz obu stronom?** (lista pytań)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Zarządzanie konfliktem",
+              "Ladder of Inference"
+            ],
+            "trudnosc": 2,
+            "nagroda_base": 450,
+            "nagroda_4star": 600,
+            "nagroda_5star": 750,
+            "reputacja": 30,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 50,
+            "emoji": "⚔️",
+            "available_until": "2025-10-20 11:54:31"
+          },
+          {
+            "id": "CIQ-KULTURA-001",
+            "tytul": "Audit kultury komunikacji w zespole",
+            "kategoria": "Kultura",
+            "klient": "DesignHub",
+            "opis": "Remote team w firmie DesignHub ma niskie zaangażowanie. \nLudzie boją się zadawać pytania na spotkaniach. Atmosfera jest sztywna i formalna.",
+            "zadanie": "Krótka analiza:\n\n1. **Wymień 5 pytań diagnostycznych, które zadasz w wywiadach z zespołem**\n   \n2. **Jakie są 3 główne bariery w psychological safety tego zespołu?** (po 1 zdaniu na każdą)\n   \n3. **Zaproponuj 3 konkretne inicjatywy (rituały/procesy) do wdrożenia** (po 1-2 zdania na każdą)",
+            "wymagana_wiedza": [
+              "Psychological Safety",
+              "Team Dynamics",
+              "Remote Work Best Practices"
+            ],
+            "trudnosc": 3,
+            "nagroda_base": 750,
+            "nagroda_4star": 1000,
+            "nagroda_5star": 1300,
+            "reputacja": 50,
+            "czas_realizacji_dni": 2,
+            "wymagany_poziom": 1,
+            "min_slow": 80,
+            "emoji": "🛡️",
+            "available_until": "2025-10-20 11:54:31"
+          },
+          {
+            "id": "CIQ-COACHING-002",
+            "tytul": "Executive coaching - transformacja lidera",
+            "kategoria": "Coaching",
+            "klient": "InnovateCorp",
+            "opis": "C-level executive ma problemy z komunikacją w stresie. \nZespół odbiera go jako agresywnego i nieprzewidywalnego. Board chce interwencji.",
+            "zadanie": "Program coachingowy (3 miesiące):\n\n1. **Jakie narzędzia diagnostyczne wykorzystasz?** (wymień 5 + krótko dlaczego każde)\n   \n2. **Podaj 5 przykładowych pytań z 360-degree feedback**\n   \n3. **Określ 3 główne cele transformacji** (po 2-3 zdania na każdy)\n   \n4. **Zaproponuj po 2 konkretne działania na każdy miesiąc** (6 działań total)\n   \n5. **Jak zmierzysz sukces programu?** (3 KPI + jak je mierzyć)",
+            "wymagana_wiedza": [
+              "Executive Coaching",
+              "Emotional Intelligence",
+              "Leadership Development"
+            ],
+            "trudnosc": 4,
+            "nagroda_base": 1200,
+            "nagroda_4star": 1600,
+            "nagroda_5star": 2000,
+            "reputacja": 70,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 120,
+            "emoji": "🎯",
+            "available_until": "2025-10-20 11:54:31"
+          },
+          {
+            "id": "CIQ-KRYZYS-002",
+            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+            "kategoria": "Kryzys",
+            "klient": "CorporateInc",
+            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+            "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+            "wymagana_wiedza": [
+              "Change Management",
+              "Crisis Communication",
+              "Difficult Conversations"
+            ],
+            "trudnosc": 5,
+            "nagroda_base": 1500,
+            "nagroda_4star": 2000,
+            "nagroda_5star": 2500,
+            "reputacja": 90,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 200,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 11:54:31"
+          }
+        ],
+        "last_refresh": "2025-10-19 11:54:31"
+      },
+      "stats": {
+        "total_revenue": 0,
+        "total_costs": 0,
+        "net_profit": 0,
+        "contracts_completed": 0,
+        "contracts_5star": 0,
+        "contracts_4star": 0,
+        "contracts_3star": 0,
+        "contracts_2star": 0,
+        "contracts_1star": 0,
+        "avg_rating": 0.0,
+        "category_stats": {
+          "Konflikt": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Coaching": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kultura": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kryzys": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Leadership": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          }
+        },
+        "last_30_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        },
+        "last_7_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        }
+      },
+      "ranking": {
+        "overall_score": 0.0,
+        "current_positions": {
+          "overall": null,
+          "revenue": null,
+          "quality": null,
+          "productivity_30d": null
+        },
+        "previous_positions": {},
+        "badges": []
+      },
+      "events": {
+        "history": [
+          {
+            "event_id": "deadline_pressure",
+            "timestamp": "2025-10-19 11:54:44",
+            "title": "Skrócony Deadline",
+            "emoji": "⏰",
+            "type": "negative",
+            "description": "Klient zmienił plany i potrzebuje rezultatów szybciej. Jeden z aktywnych kontraktów ma -1 dzień na realizację!",
+            "choice": null,
+            "effects": {
+              "deadline_reduction": -1
+            },
+            "affected_contract": "Poprawa komunikacji w zespole 2-osobowym"
+          }
+        ],
+        "last_roll": "2025-10-19 11:54:44",
+        "active_effects": []
+      },
+      "history": {
+        "transactions": [],
+        "level_ups": []
+      }
     }
   },
   "Pawel": {
@@ -7457,7 +7866,7 @@
     "degencoins": 1500,
     "level": 1,
     "joined_date": "2025-10-19",
-    "last_login": null,
+    "last_login": "2025-10-19 11:53:09",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -7498,7 +7907,34 @@
       },
       "employees": [],
       "contracts": {
-        "active": [],
+        "active": [
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 02:03:08",
+            "accepted_date": "2025-10-19 11:53:18",
+            "deadline": "2025-10-20 11:53:18",
+            "status": "in_progress",
+            "solution": ""
+          }
+        ],
         "completed": [
           {
             "id": "CIQ-KRYZYS-002",
@@ -7555,28 +7991,6 @@
           }
         ],
         "available_pool": [
-          {
-            "id": "CIQ-STARTER-001",
-            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
-            "kategoria": "Leadership",
-            "klient": "StartupDuo",
-            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
-            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
-            "wymagana_wiedza": [
-              "Conversational Intelligence",
-              "Podstawy komunikacji"
-            ],
-            "trudnosc": 1,
-            "nagroda_base": 300,
-            "nagroda_4star": 400,
-            "nagroda_5star": 500,
-            "reputacja": 20,
-            "czas_realizacji_dni": 1,
-            "wymagany_poziom": 1,
-            "min_slow": 30,
-            "emoji": "🤝",
-            "available_until": "2025-10-20 02:03:08"
-          },
           {
             "id": "CIQ-KONFLIKT-001",
             "tytul": "Mediacja w konflikcie zespołowym",
@@ -7721,8 +8135,37 @@
           }
         ],
         "level_ups": []
+      },
+      "events": {
+        "history": [
+          {
+            "event_id": "renegotiation",
+            "timestamp": "2025-10-19 11:53:38",
+            "title": "Prośba o Renegocjację",
+            "emoji": "🔄",
+            "type": "neutral",
+            "description": "Klient z aktywnym kontraktem chce renegocjować warunki: -20% nagrody, ale +3 dni na realizację.",
+            "choice": "✅ Zgadzam się",
+            "effects": {
+              "modify_active_contract": true,
+              "reward_multiplier": 0.8,
+              "time_bonus": 3
+            }
+          }
+        ],
+        "last_roll": "2025-10-19 11:53:38",
+        "active_effects": []
       }
-    }
+    },
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T11:53:09.865633",
+        "details": {
+          "timestamp": "2025-10-19T11:53:09.857679"
+        }
+      }
+    ]
   },
   "c": {
     "user_id": "cda5143e-c051-4193-86c8-e1ead8237aa2",
@@ -8276,6 +8719,1680 @@
             "timestamp": "2025-10-19 02:17:01"
           }
         ],
+        "level_ups": []
+      }
+    }
+  },
+  "Tomek": {
+    "user_id": "e084bcb9-2bec-43d0-8cd1-fcbc1037efc8",
+    "password": "Tomek",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 900,
+    "level": 1,
+    "joined_date": "2025-10-19",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-19": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "business_game": {
+      "firm": {
+        "name": "Tomek's Consulting",
+        "founded": "2025-10-19",
+        "level": 1,
+        "reputation": 35
+      },
+      "employees": [],
+      "contracts": {
+        "active": [],
+        "completed": [
+          {
+            "id": "CIQ-COACHING-001",
+            "tytul": "Sesja coachingowa dla middle managera",
+            "kategoria": "Coaching",
+            "klient": "MarketPro",
+            "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+            "wymagana_wiedza": [
+              "Coaching conversations",
+              "GROW Model",
+              "COIN Framework"
+            ],
+            "trudnosc": 2,
+            "nagroda_base": 550,
+            "nagroda_4star": 720,
+            "nagroda_5star": 900,
+            "reputacja": 35,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 50,
+            "emoji": "🎯",
+            "available_until": "2025-10-20 03:29:15",
+            "accepted_date": "2025-10-19 03:29:15",
+            "deadline": "2025-10-20 03:29:15",
+            "status": "completed",
+            "solution": "cel jest przyjrzeć się mikrozarządzaniu i poszukać sposobów na jego ograniczenie\nco słychać? jak ludziom sie z tobą pracuje?\npowiem, że mikromanagement ma swoje korzyści wady dla obu stron. Wazne by poznać zjawisko i jego konsekwencje, a potem świadomie nim zarządzić. Wazne by poznać zjawisko i jego konsekwencje, a potem świadomie nim zarządzić.",
+            "rating": 5,
+            "feedback": "Rozwiązanie zawiera 53 słów. Automatyczna ocena: 5/5 ⭐",
+            "evaluation_details": {
+              "method": "heuristic",
+              "word_count": 53,
+              "min_required": 50,
+              "base_score": 4,
+              "randomness": 1,
+              "final_rating": 5,
+              "timestamp": "2025-10-19 03:31:47"
+            },
+            "reward": {
+              "coins": 900,
+              "reputation": 35,
+              "base": 900,
+              "bonus_multiplier": 1.0,
+              "rejection_penalty": false
+            },
+            "completed_date": "2025-10-19 03:31:47"
+          }
+        ],
+        "available_pool": [
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 03:29:15"
+          },
+          {
+            "id": "CIQ-KONFLIKT-002",
+            "tytul": "Negocjacje z trudnym stakeholderem",
+            "kategoria": "Konflikt",
+            "klient": "FinanceHub",
+            "opis": "Kluczowy stakeholder w projekcie blokuje ważne decyzje. \nMa silne opinie i nie słucha argumentów zespołu. CEO prosi o wsparcie.",
+            "zadanie": "Krótka strategia:\n\n1. **Jakie mogą być jego ukryte motywacje i obawy?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę rozmowy** (5 kroków, krótko)\n   \n3. **Wymień 5 kluczowych pytań otwartych do zadania**\n\n4. **Best case i worst case - jak się zachowasz?** (po 1 zdaniu na każdy)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Techniki negocjacyjne",
+              "Active Listening"
+            ],
+            "trudnosc": 3,
+            "nagroda_base": 650,
+            "nagroda_4star": 850,
+            "nagroda_5star": 1100,
+            "reputacja": 45,
+            "czas_realizacji_dni": 2,
+            "wymagany_poziom": 1,
+            "min_slow": 80,
+            "emoji": "⚔️",
+            "available_until": "2025-10-20 03:29:15"
+          },
+          {
+            "id": "CIQ-COACHING-002",
+            "tytul": "Executive coaching - transformacja lidera",
+            "kategoria": "Coaching",
+            "klient": "InnovateCorp",
+            "opis": "C-level executive ma problemy z komunikacją w stresie. \nZespół odbiera go jako agresywnego i nieprzewidywalnego. Board chce interwencji.",
+            "zadanie": "Program coachingowy (3 miesiące):\n\n1. **Jakie narzędzia diagnostyczne wykorzystasz?** (wymień 5 + krótko dlaczego każde)\n   \n2. **Podaj 5 przykładowych pytań z 360-degree feedback**\n   \n3. **Określ 3 główne cele transformacji** (po 2-3 zdania na każdy)\n   \n4. **Zaproponuj po 2 konkretne działania na każdy miesiąc** (6 działań total)\n   \n5. **Jak zmierzysz sukces programu?** (3 KPI + jak je mierzyć)",
+            "wymagana_wiedza": [
+              "Executive Coaching",
+              "Emotional Intelligence",
+              "Leadership Development"
+            ],
+            "trudnosc": 4,
+            "nagroda_base": 1200,
+            "nagroda_4star": 1600,
+            "nagroda_5star": 2000,
+            "reputacja": 70,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 120,
+            "emoji": "🎯",
+            "available_until": "2025-10-20 03:29:15"
+          },
+          {
+            "id": "CIQ-KRYZYS-002",
+            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+            "kategoria": "Kryzys",
+            "klient": "CorporateInc",
+            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+            "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+            "wymagana_wiedza": [
+              "Change Management",
+              "Crisis Communication",
+              "Difficult Conversations"
+            ],
+            "trudnosc": 5,
+            "nagroda_base": 1500,
+            "nagroda_4star": 2000,
+            "nagroda_5star": 2500,
+            "reputacja": 90,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 200,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 03:29:15"
+          }
+        ],
+        "last_refresh": "2025-10-19 03:29:15"
+      },
+      "stats": {
+        "total_revenue": 900,
+        "total_costs": 0,
+        "net_profit": 0,
+        "contracts_completed": 1,
+        "contracts_5star": 1,
+        "contracts_4star": 0,
+        "contracts_3star": 0,
+        "contracts_2star": 0,
+        "contracts_1star": 0,
+        "avg_rating": 5.0,
+        "category_stats": {
+          "Konflikt": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Coaching": {
+            "completed": 1,
+            "total_earned": 900,
+            "avg_rating": 5.0
+          },
+          "Kultura": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kryzys": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Leadership": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          }
+        },
+        "last_30_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        },
+        "last_7_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        }
+      },
+      "ranking": {
+        "overall_score": 0.0,
+        "current_positions": {
+          "overall": null,
+          "revenue": null,
+          "quality": null,
+          "productivity_30d": null
+        },
+        "previous_positions": {},
+        "badges": []
+      },
+      "history": {
+        "transactions": [
+          {
+            "type": "contract_reward",
+            "contract_id": "CIQ-COACHING-001",
+            "contract_title": "Sesja coachingowa dla middle managera",
+            "amount": 900,
+            "rating": 5,
+            "timestamp": "2025-10-19 03:31:47"
+          }
+        ],
+        "level_ups": []
+      }
+    }
+  },
+  "q": {
+    "user_id": "b4b5b6ba-41fd-4c65-b454-eb496df795e8",
+    "password": "q",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 2500,
+    "level": 1,
+    "joined_date": "2025-10-19",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-19": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "business_game": {
+      "firm": {
+        "name": "q's Consulting",
+        "founded": "2025-10-19",
+        "level": 2,
+        "reputation": 90
+      },
+      "employees": [],
+      "contracts": {
+        "active": [],
+        "completed": [
+          {
+            "id": "CIQ-KRYZYS-002",
+            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+            "kategoria": "Kryzys",
+            "klient": "CorporateInc",
+            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+            "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+            "wymagana_wiedza": [
+              "Change Management",
+              "Crisis Communication",
+              "Difficult Conversations"
+            ],
+            "trudnosc": 5,
+            "nagroda_base": 1500,
+            "nagroda_4star": 2000,
+            "nagroda_5star": 2500,
+            "reputacja": 90,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 200,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 15:48:20",
+            "accepted_date": "2025-10-19 15:48:20",
+            "deadline": "2025-10-22 15:48:20",
+            "status": "completed",
+            "solution": "🧭 I. Komunikacja przed ogłoszeniem (do 250 słów)\n\n1. Kto, kiedy i jak powinien się dowiedzieć?\n\nPierwszą grupą, która musi poznać szczegóły decyzji, są managerowie średniego szczebla – na 7 dni przed ogłoszeniem. To oni będą odpowiedzialni za komunikację 1:1 z pracownikami. Dzień później (T-6) informowani są dział HR i komunikacji wewnętrznej, którzy przygotują komunikaty i wsparcie formalne.\n\nW dniu ogłoszenia (T=0), komunikat kierownictwa zostanie przekazany wszystkim pracownikom równocześnie – poprzez spotkanie all-hands i mail od CEO. Osoby objęte zwolnieniami dowiedzą się w tym samym dniu – w rozmowach indywidualnych z managerami i HR.\n\n2. Przygotowanie managerów – szkolenie (T-5)\n\nManagerowie przechodzą intensywne 2-godzinne warsztaty z HR i działem komunikacji, które obejmują:\n\nSymulację trudnych rozmów (role-play)\n\nTechniki komunikacji empatycznej\n\nScenariusze pytań i odpowiedzi\n\nJak radzić sobie z własnymi emocjami\n\n3. Anticipated Questions & Answers (FAQ dla managerów)\n\nPrzykładowe pytania:\n\nDlaczego właśnie ja?\n\nDecyzja nie wynika z wyników indywidualnych, lecz z konieczności dostosowania struktury organizacyjnej.\n\nCzy są opcje wewnętrznych transferów?\n\nRozważamy wszystkie możliwości redeploymentu tam, gdzie to możliwe.\n\nJakie świadczenia otrzymam?\n\nSzczegółowy pakiet odpraw, wsparcia i doradztwa zawodowego zostanie przedstawiony podczas rozmowy.\n\n📅 II. Dzień ogłoszenia (do 300 słów)\n1. Timeline wydarzeń (T=0):\n\n09:00 – Spotkanie all-hands (CEO + Executive Team) – oficjalne ogłoszenie zmian\n\n09:30 – Mail od CEO z podsumowaniem i dokumentacją (link do FAQ)\n\n10:00-14:00 – Indywidualne rozmowy z pracownikami objętymi zwolnieniem\n\n15:00 – Spotkania zespołowe prowadzone przez managerów (adresowanie emocji i obaw)\n\n16:00 – Otwarte Q&A z HR i CEO (online)\n\n2. Komunikat od CEO – Draft:\n\nDrodzy Pracownicy,\n\nZ bólem informuję, że dziś podejmujemy jedną z najtrudniejszych decyzji w historii naszej firmy. W związku z głęboką restrukturyzacją, konieczne jest rozstanie się z około 20% naszych kolegów i koleżanek.\n\nTa decyzja nie odzwierciedla ich wartości ani pracy – są to osoby utalentowane, zaangażowane i zasługujące na pełne uznanie. Zrobiliśmy wszystko, co możliwe, by tego uniknąć, ale obecne realia biznesowe wymusiły zmiany strukturalne.\n\nDla osób, których dotyczy to bezpośrednio, przygotowaliśmy odprawy, wsparcie psychologiczne i doradztwo zawodowe. Managerowie przekażą szczegóły w rozmowach indywidualnych.\n\nDla tych, którzy zostają – zdajemy sobie sprawę, że to trudny moment. Przed nami nowy etap, ale wspólnie odbudujemy zaufanie i kierunek.\n\nDziękuję każdemu za dotychczasowy wkład.\n\nZ szacunkiem,\n[Imię i Nazwisko]\nCEO\n\n3. Indywidualne rozmowy – framework (na bazie modelu SPIKES):\n\nS – Setting: Prywatne miejsce, czas na rozmowę, bez pośpiechu\n\nP – Perception: Krótkie wprowadzenie, by zrozumieć poziom świadomości pracownika\n\nI – Invitation: Zapytanie, czy pracownik chce usłyszeć szczegóły\n\nK – Knowledge: Jasne, empatyczne przekazanie decyzji\n\nE – Emotion: Zatrzymanie się przy emocjach, aktywne słuchanie\n\nS – Strategy: Przedstawienie kolejnych kroków, pakietów, możliwości wsparcia\n\n🤝 III. Po zwolnieniach – do 350 słów\n1. Wsparcie dla pozostałych (survivor guilt)\n\nPo masowych zwolnieniach często występuje tzw. „guilt of staying” – poczucie winy u osób, które nie zostały zwolnione. By zapobiec demotywacji:\n\nGrupy wsparcia – organizowane w ciągu tygodnia od ogłoszenia (facylitowane przez psychologa lub HR)\n\nSesje „Ask Me Anything” z Leadershipem – raz na tydzień przez 4 tygodnie\n\nTransparentna komunikacja – regularne aktualizacje, jasny przekaz, co się zmienia i dlaczego\n\n2. Rebuilding Trust – plan na 60 dni\n\nTydzień 1-2\n\nSpotkania zespołów z leadershipem: otwarte rozmowy, zbieranie opinii\n\nWysłanie anonimowej ankiety „Pulse Survey” – poziom zaufania, obawy, propozycje\n\nTydzień 3-4\n\nPublikacja roadmapy zmian (nowa struktura, procesy, cele)\n\n„New Culture Circles” – warsztaty na temat kultury i wartości firmy\n\nTydzień 5-8\n\nFeedback loop: omawianie wyników ankiet, aktualizacja działań\n\nWdrożenie planów rozwojowych (szkolenia, mentoring dla pozostałych)\n\nŚwiętowanie małych sukcesów (quick wins) – odbudowa morale\n\n3. Monitoring morale i zaangażowania\n\nWdrażamy systematyczne monitorowanie:\n\nTygodniowe Pulse Surveys (krótkie, anonimowe)\n\nOne-on-one check-ins co 2 tygodnie (szczególnie z kluczowymi pracownikami)\n\nHR Sentiment Report – zbiorcze raporty dla leadershipu co miesiąc\n\nKanał zaufania (anonimowy feedback box online)\n\n✅ Podsumowanie\n\nKomunikacja przy zwolnieniach wymaga transparentności, empatii i ciągłości. Kluczem jest odpowiednie przygotowanie kadry kierowniczej, wsparcie dla odchodzących oraz aktywne działania na rzecz odbudowy zaufania wśród pozostających. Strategiczne podejście przez 60 dni po ogłoszeniu jest kluczowe dla utrzymania zaangażowania i odbudowy morale.",
+            "rating": 5,
+            "feedback": "⚠️ **WYKRYTO PODEJRZANĄ AKTYWNOŚĆ**\n\n⚠️ Podejrzanie szybkie wypełnienie: 27s dla 657 słów (oczekiwano min. 100s)\n\n⚠️ **KARA: --1 ⭐ do oceny**\n\n---\n\nRozwiązanie zawiera 657 słów. Automatyczna ocena: 4/5 ⭐",
+            "evaluation_details": {
+              "method": "heuristic",
+              "word_count": 657,
+              "min_required": 200,
+              "base_score": 5,
+              "randomness": -1,
+              "final_rating": 4,
+              "timestamp": "2025-10-19 15:49:19",
+              "anti_cheat": {
+                "original_rating": 4,
+                "penalized_rating": 5,
+                "flags": [
+                  "time_suspicious"
+                ],
+                "penalty": -1
+              }
+            },
+            "reward": {
+              "coins": 2500,
+              "reputation": 90,
+              "base": 2500,
+              "bonus_multiplier": 1.0,
+              "rejection_penalty": false
+            },
+            "completed_date": "2025-10-19 15:49:19"
+          }
+        ],
+        "available_pool": [
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 15:48:20"
+          },
+          {
+            "id": "CIQ-LEADERSHIP-001",
+            "tytul": "Framework dla efektywnych 1:1",
+            "kategoria": "Leadership",
+            "klient": "MarketPro",
+            "opis": "Firma MarketPro (50 osób) nie ma struktury 1:1 meetings. \nLeadership chce wprowadzić best practices dla wszystkich managerów.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Jak często i jak długo powinny trwać 1:1?** (1 zdanie)\n   \n2. **Wymień 5 tematów, które należy poruszać na 1:1** (lista)\n   \n3. **Jakie 3 błędy managerowie najczęściej popełniają na 1:1?** (lista)",
+            "wymagana_wiedza": [
+              "1:1 Conversations",
+              "Active Listening",
+              "Coaching"
+            ],
+            "trudnosc": 2,
+            "nagroda_base": 500,
+            "nagroda_4star": 650,
+            "nagroda_5star": 850,
+            "reputacja": 40,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 40,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 15:48:20"
+          },
+          {
+            "id": "CIQ-LEADERSHIP-002",
+            "tytul": "Skip-level meetings strategy",
+            "kategoria": "Leadership",
+            "klient": "GrowthCorp",
+            "opis": "VP Engineering chce wprowadzić skip-level meetings aby lepiej rozumieć \nco się dzieje w zespołach. Nie wie jak to zrobić, żeby nie podważyć autytetu managerów.",
+            "zadanie": "Strategia skip-level:\n\n1. **Jakie są cele skip-level meetings?** (3 cele, po 1 zdaniu)\n   \n2. **Jak przedstawić to managerom, żeby nie czuli zagrożenia?** (3-4 zdania)\n   \n3. **Wymień 10 kluczowych pytań do zadania na skip-level**\n   \n4. **Czego NIE poruszać na skip-level?** (3 tematy z wyjaśnieniem)",
+            "wymagana_wiedza": [
+              "Skip-level meetings",
+              "Leadership",
+              "Trust Building"
+            ],
+            "trudnosc": 3,
+            "nagroda_base": 700,
+            "nagroda_4star": 900,
+            "nagroda_5star": 1150,
+            "reputacja": 50,
+            "czas_realizacji_dni": 2,
+            "wymagany_poziom": 1,
+            "min_slow": 80,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 15:48:20"
+          },
+          {
+            "id": "CIQ-KRYZYS-001",
+            "tytul": "Komunikacja po błędzie projektowym",
+            "kategoria": "Kryzys",
+            "klient": "TechStart",
+            "opis": "Startup wprowadził feature, który spowodował bug u 30% użytkowników. \nSocial media buzują negatywnymi komentarzami. CEO jest w panice.",
+            "zadanie": "Plan komunikacji kryzysowej:\n\n1. **Napisz krótki komunikat do klientów (email)** - max 150 słów\n   \n2. **Jakie elementy MUSI zawierać komunikat kryzysowy?** (5 elementów)\n   \n3. **Co powiedzieć zespołowi engineering?** (3-4 zdania)\n   \n4. **Przygotuj 5 talking points dla CEO na rozmowy z inwestorami**\n   \n5. **Plan follow-up na 7 dni** (5 kroków)",
+            "wymagana_wiedza": [
+              "Crisis Communication",
+              "Stakeholder Management",
+              "Psychological Safety"
+            ],
+            "trudnosc": 4,
+            "nagroda_base": 950,
+            "nagroda_4star": 1250,
+            "nagroda_5star": 1600,
+            "reputacja": 65,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 120,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 15:48:20"
+          }
+        ],
+        "last_refresh": "2025-10-19 15:48:20"
+      },
+      "stats": {
+        "total_revenue": 2500,
+        "total_costs": 0,
+        "net_profit": 0,
+        "contracts_completed": 1,
+        "contracts_5star": 1,
+        "contracts_4star": 0,
+        "contracts_3star": 0,
+        "contracts_2star": 0,
+        "contracts_1star": 0,
+        "avg_rating": 5.0,
+        "category_stats": {
+          "Konflikt": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Coaching": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kultura": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kryzys": {
+            "completed": 1,
+            "total_earned": 2500,
+            "avg_rating": 5.0
+          },
+          "Leadership": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          }
+        },
+        "last_30_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        },
+        "last_7_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        }
+      },
+      "ranking": {
+        "overall_score": 0.0,
+        "current_positions": {
+          "overall": null,
+          "revenue": null,
+          "quality": null,
+          "productivity_30d": null
+        },
+        "previous_positions": {},
+        "badges": []
+      },
+      "events": {
+        "history": [],
+        "last_roll": null,
+        "active_effects": []
+      },
+      "history": {
+        "transactions": [
+          {
+            "type": "contract_reward",
+            "contract_id": "CIQ-KRYZYS-002",
+            "contract_title": "Zarządzanie zmianą - zwolnienia grupowe",
+            "amount": 2500,
+            "rating": 5,
+            "timestamp": "2025-10-19 15:49:19"
+          }
+        ],
+        "level_ups": [
+          {
+            "from_level": 1,
+            "to_level": 2,
+            "timestamp": "2025-10-19 15:49:19"
+          }
+        ]
+      }
+    }
+  },
+  "w": {
+    "user_id": "621d122e-f9aa-4ae1-ad71-4a66e9980935",
+    "password": "w",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-19",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-19": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    }
+  },
+  "e": {
+    "user_id": "ccf6ccf9-518f-4b12-9097-bd3df3948289",
+    "password": "e",
+    "degen_type": null,
+    "xp": 1,
+    "degencoins": 1500,
+    "level": 1,
+    "joined_date": "2025-10-19",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-19": {
+        "xp": 1,
+        "degencoins": 1500,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "business_game": {
+      "firm": {
+        "name": "e's Consulting",
+        "founded": "2025-10-19",
+        "level": 1,
+        "reputation": 90
+      },
+      "employees": [],
+      "contracts": {
+        "active": [],
+        "completed": [
+          {
+            "id": "CIQ-KRYZYS-002",
+            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+            "kategoria": "Kryzys",
+            "klient": "CorporateInc",
+            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+            "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+            "wymagana_wiedza": [
+              "Change Management",
+              "Crisis Communication",
+              "Difficult Conversations"
+            ],
+            "trudnosc": 5,
+            "nagroda_base": 1500,
+            "nagroda_4star": 2000,
+            "nagroda_5star": 2500,
+            "reputacja": 90,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 200,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 16:46:39",
+            "accepted_date": "2025-10-19 16:46:39",
+            "deadline": "2025-10-22 16:46:39",
+            "status": "completed",
+            "solution": "🧭 I. Komunikacja przed ogłoszeniem (do 250 słów)\n\n1. Kto, kiedy i jak powinien się dowiedzieć?\n\nPierwszą grupą, która musi poznać szczegóły decyzji, są managerowie średniego szczebla – na 7 dni przed ogłoszeniem. To oni będą odpowiedzialni za komunikację 1:1 z pracownikami. Dzień później (T-6) informowani są dział HR i komunikacji wewnętrznej, którzy przygotują komunikaty i wsparcie formalne.\n\nW dniu ogłoszenia (T=0), komunikat kierownictwa zostanie przekazany wszystkim pracownikom równocześnie – poprzez spotkanie all-hands i mail od CEO. Osoby objęte zwolnieniami dowiedzą się w tym samym dniu – w rozmowach indywidualnych z managerami i HR.\n\n2. Przygotowanie managerów – szkolenie (T-5)\n\nManagerowie przechodzą intensywne 2-godzinne warsztaty z HR i działem komunikacji, które obejmują:\n\nSymulację trudnych rozmów (role-play)\n\nTechniki komunikacji empatycznej\n\nScenariusze pytań i odpowiedzi\n\nJak radzić sobie z własnymi emocjami\n\n3. Anticipated Questions & Answers (FAQ dla managerów)\n\nPrzykładowe pytania:\n\nDlaczego właśnie ja?\n\nDecyzja nie wynika z wyników indywidualnych, lecz z konieczności dostosowania struktury organizacyjnej.\n\nCzy są opcje wewnętrznych transferów?\n\nRozważamy wszystkie możliwości redeploymentu tam, gdzie to możliwe.\n\nJakie świadczenia otrzymam?\n\nSzczegółowy pakiet odpraw, wsparcia i doradztwa zawodowego zostanie przedstawiony podczas rozmowy.\n\n📅 II. Dzień ogłoszenia (do 300 słów)\n1. Timeline wydarzeń (T=0):\n\n09:00 – Spotkanie all-hands (CEO + Executive Team) – oficjalne ogłoszenie zmian\n\n09:30 – Mail od CEO z podsumowaniem i dokumentacją (link do FAQ)\n\n10:00-14:00 – Indywidualne rozmowy z pracownikami objętymi zwolnieniem\n\n15:00 – Spotkania zespołowe prowadzone przez managerów (adresowanie emocji i obaw)\n\n16:00 – Otwarte Q&A z HR i CEO (online)\n\n2. Komunikat od CEO – Draft:\n\nDrodzy Pracownicy,\n\nZ bólem informuję, że dziś podejmujemy jedną z najtrudniejszych decyzji w historii naszej firmy. W związku z głęboką restrukturyzacją, konieczne jest rozstanie się z około 20% naszych kolegów i koleżanek.\n\nTa decyzja nie odzwierciedla ich wartości ani pracy – są to osoby utalentowane, zaangażowane i zasługujące na pełne uznanie. Zrobiliśmy wszystko, co możliwe, by tego uniknąć, ale obecne realia biznesowe wymusiły zmiany strukturalne.\n\nDla osób, których dotyczy to bezpośrednio, przygotowaliśmy odprawy, wsparcie psychologiczne i doradztwo zawodowe. Managerowie przekażą szczegóły w rozmowach indywidualnych.\n\nDla tych, którzy zostają – zdajemy sobie sprawę, że to trudny moment. Przed nami nowy etap, ale wspólnie odbudujemy zaufanie i kierunek.\n\nDziękuję każdemu za dotychczasowy wkład.\n\nZ szacunkiem,\n[Imię i Nazwisko]\nCEO\n\n3. Indywidualne rozmowy – framework (na bazie modelu SPIKES):\n\nS – Setting: Prywatne miejsce, czas na rozmowę, bez pośpiechu\n\nP – Perception: Krótkie wprowadzenie, by zrozumieć poziom świadomości pracownika\n\nI – Invitation: Zapytanie, czy pracownik chce usłyszeć szczegóły\n\nK – Knowledge: Jasne, empatyczne przekazanie decyzji\n\nE – Emotion: Zatrzymanie się przy emocjach, aktywne słuchanie\n\nS – Strategy: Przedstawienie kolejnych kroków, pakietów, możliwości wsparcia\n\n🤝 III. Po zwolnieniach – do 350 słów\n1. Wsparcie dla pozostałych (survivor guilt)\n\nPo masowych zwolnieniach często występuje tzw. „guilt of staying” – poczucie winy u osób, które nie zostały zwolnione. By zapobiec demotywacji:\n\nGrupy wsparcia – organizowane w ciągu tygodnia od ogłoszenia (facylitowane przez psychologa lub HR)\n\nSesje „Ask Me Anything” z Leadershipem – raz na tydzień przez 4 tygodnie\n\nTransparentna komunikacja – regularne aktualizacje, jasny przekaz, co się zmienia i dlaczego\n\n2. Rebuilding Trust – plan na 60 dni\n\nTydzień 1-2\n\nSpotkania zespołów z leadershipem: otwarte rozmowy, zbieranie opinii\n\nWysłanie anonimowej ankiety „Pulse Survey” – poziom zaufania, obawy, propozycje\n\nTydzień 3-4\n\nPublikacja roadmapy zmian (nowa struktura, procesy, cele)\n\n„New Culture Circles” – warsztaty na temat kultury i wartości firmy\n\nTydzień 5-8\n\nFeedback loop: omawianie wyników ankiet, aktualizacja działań\n\nWdrożenie planów rozwojowych (szkolenia, mentoring dla pozostałych)\n\nŚwiętowanie małych sukcesów (quick wins) – odbudowa morale\n\n3. Monitoring morale i zaangażowania\n\nWdrażamy systematyczne monitorowanie:\n\nTygodniowe Pulse Surveys (krótkie, anonimowe)\n\nOne-on-one check-ins co 2 tygodnie (szczególnie z kluczowymi pracownikami)\n\nHR Sentiment Report – zbiorcze raporty dla leadershipu co miesiąc\n\nKanał zaufania (anonimowy feedback box online)\n\n✅ Podsumowanie\n\nKomunikacja przy zwolnieniach wymaga transparentności, empatii i ciągłości. Kluczem jest odpowiednie przygotowanie kadry kierowniczej, wsparcie dla odchodzących oraz aktywne działania na rzecz odbudowy zaufania wśród pozostających. Strategiczne podejście przez 60 dni po ogłoszeniu jest kluczowe dla utrzymania zaangażowania i odbudowy morale.",
+            "rating": 6,
+            "feedback": "⚠️ **WYKRYTO PODEJRZANĄ AKTYWNOŚĆ**\n\n⚠️ Podejrzanie szybkie wypełnienie: 15s dla 657 słów (oczekiwano min. 100s)\n\n⚠️ **KARA: --1 ⭐ do oceny**\n\n---\n\nRozwiązanie jest wyjątkowo kompleksowe i przemyślane, oferując szczegółowy plan działania na każdym etapie kryzysu. Wykazuje głębokie zrozumienie zarówno aspektów operacyjnych, jak i emocjonalnych związanych ze zwolnieniami grupowymi, skutecznie odpowiadając na wszystkie wymagania kontraktu.\n\n**✅ Mocne strony:**\n- Zastosowanie frameworku SPIKES do indywidualnych rozmów, co jest doskonałym przykładem Conversational Intelligence w praktyce, zapewniającym empatyczne i strukturalne podejście.\n- Szczegółowy plan odbudowy zaufania i monitorowania morale po zwolnieniach, w tym adresowanie 'survivor guilt' oraz 60-dniowa roadmapa, co świadczy o dalekosiężnym myśleniu.\n- Kompleksowe przygotowanie managerów poprzez warsztaty i FAQ, co jest kluczowe dla spójnej i empatycznej komunikacji w tak trudnej sytuacji.\n\n**💡 Do poprawy:**\n- Wzmocnienie explicite odniesień do kluczowych zasad Conversational Intelligence (np. budowanie zaufania, redukcja zagrożenia, tworzenie bezpiecznej przestrzeni dialogu) w opisie technik komunikacyjnych.\n- Rozważenie dodatkowego, dedykowanego wsparcia coachingowego dla kadry zarządzającej (poza szkoleniem), aby pomóc im w utrzymaniu odporności emocjonalnej i efektywności komunikacyjnej w długoterminowej perspektywie.\n- Wprowadzenie krótkiego planu awaryjnego lub scenariuszy eskalacji dla managerów w przypadku szczególnie trudnych lub nieprzewidzianych reakcji pracowników podczas rozmów indywidualnych.",
+            "evaluation_details": {
+              "method": "ai",
+              "model": "gemini-2.5-flash",
+              "total_score": 98,
+              "rating": 5,
+              "strengths": [
+                "Zastosowanie frameworku SPIKES do indywidualnych rozmów, co jest doskonałym przykładem Conversational Intelligence w praktyce, zapewniającym empatyczne i strukturalne podejście.",
+                "Szczegółowy plan odbudowy zaufania i monitorowania morale po zwolnieniach, w tym adresowanie 'survivor guilt' oraz 60-dniowa roadmapa, co świadczy o dalekosiężnym myśleniu.",
+                "Kompleksowe przygotowanie managerów poprzez warsztaty i FAQ, co jest kluczowe dla spójnej i empatycznej komunikacji w tak trudnej sytuacji."
+              ],
+              "improvements": [
+                "Wzmocnienie explicite odniesień do kluczowych zasad Conversational Intelligence (np. budowanie zaufania, redukcja zagrożenia, tworzenie bezpiecznej przestrzeni dialogu) w opisie technik komunikacyjnych.",
+                "Rozważenie dodatkowego, dedykowanego wsparcia coachingowego dla kadry zarządzającej (poza szkoleniem), aby pomóc im w utrzymaniu odporności emocjonalnej i efektywności komunikacyjnej w długoterminowej perspektywie.",
+                "Wprowadzenie krótkiego planu awaryjnego lub scenariuszy eskalacji dla managerów w przypadku szczególnie trudnych lub nieprzewidzianych reakcji pracowników podczas rozmów indywidualnych."
+              ],
+              "word_count": 657,
+              "timestamp": "2025-10-19 16:47:19",
+              "provider": "google_gemini",
+              "anti_cheat": {
+                "original_rating": 5,
+                "penalized_rating": 6,
+                "flags": [
+                  "time_suspicious"
+                ],
+                "penalty": -1
+              }
+            },
+            "reward": {
+              "coins": 1500,
+              "reputation": 90,
+              "base": 1500,
+              "bonus_multiplier": 1.0,
+              "rejection_penalty": false
+            },
+            "completed_date": "2025-10-19 16:47:19"
+          }
+        ],
+        "available_pool": [
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 16:46:39"
+          },
+          {
+            "id": "CIQ-COACHING-001",
+            "tytul": "Sesja coachingowa dla middle managera",
+            "kategoria": "Coaching",
+            "klient": "MarketPro",
+            "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+            "wymagana_wiedza": [
+              "Coaching conversations",
+              "GROW Model",
+              "COIN Framework"
+            ],
+            "trudnosc": 2,
+            "nagroda_base": 550,
+            "nagroda_4star": 720,
+            "nagroda_5star": 900,
+            "reputacja": 35,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 50,
+            "emoji": "🎯",
+            "available_until": "2025-10-20 16:46:39"
+          },
+          {
+            "id": "CIQ-KONFLIKT-002",
+            "tytul": "Negocjacje z trudnym stakeholderem",
+            "kategoria": "Konflikt",
+            "klient": "FinanceHub",
+            "opis": "Kluczowy stakeholder w projekcie blokuje ważne decyzje. \nMa silne opinie i nie słucha argumentów zespołu. CEO prosi o wsparcie.",
+            "zadanie": "Krótka strategia:\n\n1. **Jakie mogą być jego ukryte motywacje i obawy?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę rozmowy** (5 kroków, krótko)\n   \n3. **Wymień 5 kluczowych pytań otwartych do zadania**\n\n4. **Best case i worst case - jak się zachowasz?** (po 1 zdaniu na każdy)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Techniki negocjacyjne",
+              "Active Listening"
+            ],
+            "trudnosc": 3,
+            "nagroda_base": 650,
+            "nagroda_4star": 850,
+            "nagroda_5star": 1100,
+            "reputacja": 45,
+            "czas_realizacji_dni": 2,
+            "wymagany_poziom": 1,
+            "min_slow": 80,
+            "emoji": "⚔️",
+            "available_until": "2025-10-20 16:46:39"
+          },
+          {
+            "id": "CIQ-COACHING-002",
+            "tytul": "Executive coaching - transformacja lidera",
+            "kategoria": "Coaching",
+            "klient": "InnovateCorp",
+            "opis": "C-level executive ma problemy z komunikacją w stresie. \nZespół odbiera go jako agresywnego i nieprzewidywalnego. Board chce interwencji.",
+            "zadanie": "Program coachingowy (3 miesiące):\n\n1. **Jakie narzędzia diagnostyczne wykorzystasz?** (wymień 5 + krótko dlaczego każde)\n   \n2. **Podaj 5 przykładowych pytań z 360-degree feedback**\n   \n3. **Określ 3 główne cele transformacji** (po 2-3 zdania na każdy)\n   \n4. **Zaproponuj po 2 konkretne działania na każdy miesiąc** (6 działań total)\n   \n5. **Jak zmierzysz sukces programu?** (3 KPI + jak je mierzyć)",
+            "wymagana_wiedza": [
+              "Executive Coaching",
+              "Emotional Intelligence",
+              "Leadership Development"
+            ],
+            "trudnosc": 4,
+            "nagroda_base": 1200,
+            "nagroda_4star": 1600,
+            "nagroda_5star": 2000,
+            "reputacja": 70,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 120,
+            "emoji": "🎯",
+            "available_until": "2025-10-20 16:46:39"
+          }
+        ],
+        "last_refresh": "2025-10-19 16:46:39"
+      },
+      "stats": {
+        "total_revenue": 1500,
+        "total_costs": 0,
+        "net_profit": 0,
+        "contracts_completed": 1,
+        "contracts_5star": 0,
+        "contracts_4star": 0,
+        "contracts_3star": 0,
+        "contracts_2star": 0,
+        "contracts_1star": 0,
+        "avg_rating": 0.0,
+        "category_stats": {
+          "Konflikt": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Coaching": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kultura": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kryzys": {
+            "completed": 1,
+            "total_earned": 1500,
+            "avg_rating": 6.0
+          },
+          "Leadership": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          }
+        },
+        "last_30_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        },
+        "last_7_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        }
+      },
+      "ranking": {
+        "overall_score": 0.0,
+        "current_positions": {
+          "overall": null,
+          "revenue": null,
+          "quality": null,
+          "productivity_30d": null
+        },
+        "previous_positions": {},
+        "badges": []
+      },
+      "events": {
+        "history": [],
+        "last_roll": null,
+        "active_effects": []
+      },
+      "history": {
+        "transactions": [
+          {
+            "type": "contract_reward",
+            "contract_id": "CIQ-KRYZYS-002",
+            "contract_title": "Zarządzanie zmianą - zwolnienia grupowe",
+            "amount": 1500,
+            "rating": 6,
+            "timestamp": "2025-10-19 16:47:19"
+          }
+        ],
+        "level_ups": []
+      }
+    },
+    "activity_log": [
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-19T16:57:14.462578",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom I",
+          "confidence": 9,
+          "xp_earned": 1
+        }
+      }
+    ]
+  },
+  "t": {
+    "user_id": "0305d6a3-d8ca-40ff-b710-d4177467ad76",
+    "password": "t",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 400,
+    "level": 1,
+    "joined_date": "2025-10-19",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-19": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "business_game": {
+      "firm": {
+        "name": "t's Consulting",
+        "founded": "2025-10-19",
+        "level": 1,
+        "reputation": 20
+      },
+      "employees": [],
+      "contracts": {
+        "active": [],
+        "completed": [
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 17:03:57",
+            "accepted_date": "2025-10-19 17:03:57",
+            "deadline": "2025-10-20 17:03:57",
+            "status": "completed",
+            "solution": "Panowie nie mają do siebie zaufania, nie mają też utrwalonych zwyczajów komunikacyjnych.\nMogliby np. planować codziennie 15-minutowe daily na temat tego, co robili wczoraj i co planują zrobić dziś. \nJak zaczną chętnie brać aktywny udział w daily, to będzie to znak, że komunikacja się poprawia.",
+            "rating": 4,
+            "feedback": "Dziękujemy za szybką odpowiedź i konkretną propozycję. Rozwiązanie jest proste do wdrożenia, jednak oczekiwaliśmy nieco głębszej analizy i szerszego wachlarza rekomendacji, biorąc pod uwagę specyfikę naszego problemu.\n\n**👍 Co nam się podobało:**\n• Prosta i konkretna propozycja wdrożenia codziennych spotkań, łatwa do zastosowania od zaraz.\n• Rozwiązanie jest bardzo realistyczne, nie generuje dodatkowych kosztów ani dużego nakładu czasu.\n• Zleceniobiorca poprawnie zdiagnozował brak zaufania jako jedną z głównych przyczyn problemów komunikacyjnych.\n\n**� Co mogłoby być lepsze:**\n• Brakowało nam głębszej analizy problemu braku zaufania i konkretnych sposobów na jego odbudowanie, poza samym daily.\n• Oczekiwaliśmy szerszego wachlarza narzędzi i technik komunikacyjnych, dostosowanych do specyfiki dwuosobowego startupu, a nie tylko jednej, podstawowej metody.\n• Chcielibyśmy otrzymać bardziej rozbudowane rekomendacje dotyczące otwartych rozmów o priorytetach i oczekiwaniach, które wykraczałyby poza ogólne daily.",
+            "evaluation_details": {
+              "method": "ai",
+              "model": "gemini-2.5-flash",
+              "total_score": 71,
+              "rating": 4,
+              "strengths": [
+                "Prosta i konkretna propozycja wdrożenia codziennych spotkań, łatwa do zastosowania od zaraz.",
+                "Rozwiązanie jest bardzo realistyczne, nie generuje dodatkowych kosztów ani dużego nakładu czasu.",
+                "Zleceniobiorca poprawnie zdiagnozował brak zaufania jako jedną z głównych przyczyn problemów komunikacyjnych."
+              ],
+              "improvements": [
+                "Brakowało nam głębszej analizy problemu braku zaufania i konkretnych sposobów na jego odbudowanie, poza samym daily.",
+                "Oczekiwaliśmy szerszego wachlarza narzędzi i technik komunikacyjnych, dostosowanych do specyfiki dwuosobowego startupu, a nie tylko jednej, podstawowej metody.",
+                "Chcielibyśmy otrzymać bardziej rozbudowane rekomendacje dotyczące otwartych rozmów o priorytetach i oczekiwaniach, które wykraczałyby poza ogólne daily."
+              ],
+              "word_count": 45,
+              "timestamp": "2025-10-19 17:08:25",
+              "provider": "google_gemini"
+            },
+            "reward": {
+              "coins": 400,
+              "reputation": 20,
+              "base": 400,
+              "bonus_multiplier": 1.0,
+              "rejection_penalty": false
+            },
+            "completed_date": "2025-10-19 17:08:25"
+          }
+        ],
+        "available_pool": [
+          {
+            "id": "CIQ-COACHING-001",
+            "tytul": "Sesja coachingowa dla middle managera",
+            "kategoria": "Coaching",
+            "klient": "MarketPro",
+            "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+            "wymagana_wiedza": [
+              "Coaching conversations",
+              "GROW Model",
+              "COIN Framework"
+            ],
+            "trudnosc": 2,
+            "nagroda_base": 550,
+            "nagroda_4star": 720,
+            "nagroda_5star": 900,
+            "reputacja": 35,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 50,
+            "emoji": "🎯",
+            "available_until": "2025-10-20 17:03:57"
+          },
+          {
+            "id": "CIQ-KONFLIKT-002",
+            "tytul": "Negocjacje z trudnym stakeholderem",
+            "kategoria": "Konflikt",
+            "klient": "FinanceHub",
+            "opis": "Kluczowy stakeholder w projekcie blokuje ważne decyzje. \nMa silne opinie i nie słucha argumentów zespołu. CEO prosi o wsparcie.",
+            "zadanie": "Krótka strategia:\n\n1. **Jakie mogą być jego ukryte motywacje i obawy?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę rozmowy** (5 kroków, krótko)\n   \n3. **Wymień 5 kluczowych pytań otwartych do zadania**\n\n4. **Best case i worst case - jak się zachowasz?** (po 1 zdaniu na każdy)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Techniki negocjacyjne",
+              "Active Listening"
+            ],
+            "trudnosc": 3,
+            "nagroda_base": 650,
+            "nagroda_4star": 850,
+            "nagroda_5star": 1100,
+            "reputacja": 45,
+            "czas_realizacji_dni": 2,
+            "wymagany_poziom": 1,
+            "min_slow": 80,
+            "emoji": "⚔️",
+            "available_until": "2025-10-20 17:03:57"
+          },
+          {
+            "id": "CIQ-KRYZYS-001",
+            "tytul": "Komunikacja po błędzie projektowym",
+            "kategoria": "Kryzys",
+            "klient": "TechStart",
+            "opis": "Startup wprowadził feature, który spowodował bug u 30% użytkowników. \nSocial media buzują negatywnymi komentarzami. CEO jest w panice.",
+            "zadanie": "Plan komunikacji kryzysowej:\n\n1. **Napisz krótki komunikat do klientów (email)** - max 150 słów\n   \n2. **Jakie elementy MUSI zawierać komunikat kryzysowy?** (5 elementów)\n   \n3. **Co powiedzieć zespołowi engineering?** (3-4 zdania)\n   \n4. **Przygotuj 5 talking points dla CEO na rozmowy z inwestorami**\n   \n5. **Plan follow-up na 7 dni** (5 kroków)",
+            "wymagana_wiedza": [
+              "Crisis Communication",
+              "Stakeholder Management",
+              "Psychological Safety"
+            ],
+            "trudnosc": 4,
+            "nagroda_base": 950,
+            "nagroda_4star": 1250,
+            "nagroda_5star": 1600,
+            "reputacja": 65,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 120,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 17:03:57"
+          },
+          {
+            "id": "CIQ-KRYZYS-002",
+            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+            "kategoria": "Kryzys",
+            "klient": "CorporateInc",
+            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+            "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+            "wymagana_wiedza": [
+              "Change Management",
+              "Crisis Communication",
+              "Difficult Conversations"
+            ],
+            "trudnosc": 5,
+            "nagroda_base": 1500,
+            "nagroda_4star": 2000,
+            "nagroda_5star": 2500,
+            "reputacja": 90,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 200,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 17:03:57"
+          }
+        ],
+        "last_refresh": "2025-10-19 17:03:57"
+      },
+      "stats": {
+        "total_revenue": 400,
+        "total_costs": 0,
+        "net_profit": 0,
+        "contracts_completed": 1,
+        "contracts_5star": 0,
+        "contracts_4star": 1,
+        "contracts_3star": 0,
+        "contracts_2star": 0,
+        "contracts_1star": 0,
+        "avg_rating": 4.0,
+        "category_stats": {
+          "Konflikt": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Coaching": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kultura": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kryzys": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Leadership": {
+            "completed": 1,
+            "total_earned": 400,
+            "avg_rating": 4.0
+          }
+        },
+        "last_30_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        },
+        "last_7_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        }
+      },
+      "ranking": {
+        "overall_score": 0.0,
+        "current_positions": {
+          "overall": null,
+          "revenue": null,
+          "quality": null,
+          "productivity_30d": null
+        },
+        "previous_positions": {},
+        "badges": []
+      },
+      "events": {
+        "history": [
+          {
+            "event_id": "renegotiation",
+            "timestamp": "2025-10-19 17:06:00",
+            "title": "Prośba o Renegocjację",
+            "emoji": "🔄",
+            "type": "neutral",
+            "description": "Klient z aktywnym kontraktem chce renegocjować warunki: -20% nagrody, ale +3 dni na realizację.",
+            "choice": "✅ Zgadzam się",
+            "effects": {
+              "modify_active_contract": true,
+              "reward_multiplier": 0.8,
+              "time_bonus": 3
+            }
+          }
+        ],
+        "last_roll": "2025-10-19 17:06:00",
+        "active_effects": []
+      },
+      "history": {
+        "transactions": [
+          {
+            "type": "contract_reward",
+            "contract_id": "CIQ-STARTER-001",
+            "contract_title": "Poprawa komunikacji w zespole 2-osobowym",
+            "amount": 400,
+            "rating": 4,
+            "timestamp": "2025-10-19 17:08:25"
+          }
+        ],
+        "level_ups": []
+      }
+    }
+  },
+  "u": {
+    "user_id": "741e3c29-9474-4b04-b49f-200fde91e615",
+    "password": "u",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-19",
+    "last_login": "2025-10-19 17:41:39",
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-19": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "business_game": {
+      "firm": {
+        "name": "u's Consulting",
+        "founded": "2025-10-19",
+        "level": 1,
+        "reputation": 0
+      },
+      "employees": [],
+      "contracts": {
+        "active": [],
+        "completed": [],
+        "available_pool": [
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 17:42:00"
+          },
+          {
+            "id": "CIQ-KONFLIKT-001",
+            "tytul": "Mediacja w konflikcie zespołowym",
+            "kategoria": "Konflikt",
+            "klient": "TechCorp",
+            "opis": "Zespół projektowy w firmie TechCorp jest podzielony. \nLider projektu i główny developer mają odmienne wizje dotyczące architektury systemu. \nNapięcie wpływa na terminowość i morale zespołu.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Co prawdopodobnie jest źródłem konfliktu?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę spotkania mediacyjnego.** (3-4 punkty, krótko)\n   \n3. **Jakie 3 kluczowe pytania zadasz obu stronom?** (lista pytań)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Zarządzanie konfliktem",
+              "Ladder of Inference"
+            ],
+            "trudnosc": 2,
+            "nagroda_base": 450,
+            "nagroda_4star": 600,
+            "nagroda_5star": 750,
+            "reputacja": 30,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 50,
+            "emoji": "⚔️",
+            "available_until": "2025-10-20 17:42:00"
+          },
+          {
+            "id": "CIQ-KRYZYS-001",
+            "tytul": "Komunikacja po błędzie projektowym",
+            "kategoria": "Kryzys",
+            "klient": "TechStart",
+            "opis": "Startup wprowadził feature, który spowodował bug u 30% użytkowników. \nSocial media buzują negatywnymi komentarzami. CEO jest w panice.",
+            "zadanie": "Plan komunikacji kryzysowej:\n\n1. **Napisz krótki komunikat do klientów (email)** - max 150 słów\n   \n2. **Jakie elementy MUSI zawierać komunikat kryzysowy?** (5 elementów)\n   \n3. **Co powiedzieć zespołowi engineering?** (3-4 zdania)\n   \n4. **Przygotuj 5 talking points dla CEO na rozmowy z inwestorami**\n   \n5. **Plan follow-up na 7 dni** (5 kroków)",
+            "wymagana_wiedza": [
+              "Crisis Communication",
+              "Stakeholder Management",
+              "Psychological Safety"
+            ],
+            "trudnosc": 4,
+            "nagroda_base": 950,
+            "nagroda_4star": 1250,
+            "nagroda_5star": 1600,
+            "reputacja": 65,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 120,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 17:42:00"
+          },
+          {
+            "id": "CIQ-KRYZYS-002",
+            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+            "kategoria": "Kryzys",
+            "klient": "CorporateInc",
+            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+            "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+            "wymagana_wiedza": [
+              "Change Management",
+              "Crisis Communication",
+              "Difficult Conversations"
+            ],
+            "trudnosc": 5,
+            "nagroda_base": 1500,
+            "nagroda_4star": 2000,
+            "nagroda_5star": 2500,
+            "reputacja": 90,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 200,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 17:42:00"
+          }
+        ],
+        "last_refresh": "2025-10-19 17:42:00"
+      },
+      "stats": {
+        "total_revenue": 0,
+        "total_costs": 0,
+        "net_profit": 0,
+        "contracts_completed": 0,
+        "contracts_5star": 0,
+        "contracts_4star": 0,
+        "contracts_3star": 0,
+        "contracts_2star": 0,
+        "contracts_1star": 0,
+        "avg_rating": 0.0,
+        "category_stats": {
+          "Konflikt": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Coaching": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kultura": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kryzys": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Leadership": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          }
+        },
+        "last_30_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        },
+        "last_7_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        }
+      },
+      "ranking": {
+        "overall_score": 0.0,
+        "current_positions": {
+          "overall": null,
+          "revenue": null,
+          "quality": null,
+          "productivity_30d": null
+        },
+        "previous_positions": {},
+        "badges": []
+      },
+      "events": {
+        "history": [
+          {
+            "event_id": "contract_stolen",
+            "timestamp": "2025-10-19 17:42:00",
+            "title": "Konkurencja Podbiła Ofertę",
+            "emoji": "🚫",
+            "type": "negative",
+            "description": "Inna firma złożyła lepszą ofertę i jeden z dostępnych kontraktów zniknął z puli.",
+            "choice": null,
+            "effects": {
+              "remove_contract_from_pool": true
+            }
+          }
+        ],
+        "last_roll": "2025-10-19 17:42:00",
+        "active_effects": []
+      },
+      "history": {
+        "transactions": [],
+        "level_ups": []
+      }
+    },
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T17:39:43.945782",
+        "details": {
+          "timestamp": "2025-10-19T17:39:43.917177"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-19T17:41:40.130913",
+        "details": {
+          "timestamp": "2025-10-19T17:41:40.095983"
+        }
+      }
+    ]
+  },
+  "i": {
+    "user_id": "e96c1ffc-cb4e-44b2-aa09-87d1b0d17e9b",
+    "password": "i",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-19",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-19": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "business_game": {
+      "firm": {
+        "name": "i's Consulting",
+        "founded": "2025-10-19",
+        "level": 1,
+        "reputation": 0
+      },
+      "employees": [],
+      "contracts": {
+        "active": [],
+        "completed": [],
+        "available_pool": [
+          {
+            "id": "CIQ-KONFLIKT-001",
+            "tytul": "Mediacja w konflikcie zespołowym",
+            "kategoria": "Konflikt",
+            "klient": "TechCorp",
+            "opis": "Zespół projektowy w firmie TechCorp jest podzielony. \nLider projektu i główny developer mają odmienne wizje dotyczące architektury systemu. \nNapięcie wpływa na terminowość i morale zespołu.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Co prawdopodobnie jest źródłem konfliktu?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę spotkania mediacyjnego.** (3-4 punkty, krótko)\n   \n3. **Jakie 3 kluczowe pytania zadasz obu stronom?** (lista pytań)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Zarządzanie konfliktem",
+              "Ladder of Inference"
+            ],
+            "trudnosc": 2,
+            "nagroda_base": 450,
+            "nagroda_4star": 600,
+            "nagroda_5star": 750,
+            "reputacja": 30,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 50,
+            "emoji": "⚔️",
+            "available_until": "2025-10-20 17:43:23"
+          },
+          {
+            "id": "CIQ-KULTURA-002",
+            "tytul": "Wdrożenie kultury feedbacku",
+            "kategoria": "Kultura",
+            "klient": "StartupXYZ",
+            "opis": "Startup (30 osób) rośnie szybko, ale nie ma kultury feedbacku. \nLudzie dowiadują się o problemach dopiero na performance review.",
+            "zadanie": "Zaprojektuj prosty system:\n\n1. **Wybierz framework feedbacku (COIN lub SBI) i wyjaśnij dlaczego** (2-3 zdania)\n   \n2. **Podaj 5 zasad dawania i przyjmowania feedbacku**\n   \n3. **Zaproponuj plan wdrożenia** (5 kroków, krótko)\n   \n4. **Jak utrzymać momentum?** (3 konkretne działania)",
+            "wymagana_wiedza": [
+              "Feedback Frameworks",
+              "Psychological Safety",
+              "Change Management"
+            ],
+            "trudnosc": 3,
+            "nagroda_base": 800,
+            "nagroda_4star": 1050,
+            "nagroda_5star": 1350,
+            "reputacja": 55,
+            "czas_realizacji_dni": 2,
+            "wymagany_poziom": 1,
+            "min_slow": 80,
+            "emoji": "🛡️",
+            "available_until": "2025-10-20 17:43:23"
+          },
+          {
+            "id": "CIQ-COACHING-002",
+            "tytul": "Executive coaching - transformacja lidera",
+            "kategoria": "Coaching",
+            "klient": "InnovateCorp",
+            "opis": "C-level executive ma problemy z komunikacją w stresie. \nZespół odbiera go jako agresywnego i nieprzewidywalnego. Board chce interwencji.",
+            "zadanie": "Program coachingowy (3 miesiące):\n\n1. **Jakie narzędzia diagnostyczne wykorzystasz?** (wymień 5 + krótko dlaczego każde)\n   \n2. **Podaj 5 przykładowych pytań z 360-degree feedback**\n   \n3. **Określ 3 główne cele transformacji** (po 2-3 zdania na każdy)\n   \n4. **Zaproponuj po 2 konkretne działania na każdy miesiąc** (6 działań total)\n   \n5. **Jak zmierzysz sukces programu?** (3 KPI + jak je mierzyć)",
+            "wymagana_wiedza": [
+              "Executive Coaching",
+              "Emotional Intelligence",
+              "Leadership Development"
+            ],
+            "trudnosc": 4,
+            "nagroda_base": 1200,
+            "nagroda_4star": 1600,
+            "nagroda_5star": 2000,
+            "reputacja": 70,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 120,
+            "emoji": "🎯",
+            "available_until": "2025-10-20 17:43:23"
+          },
+          {
+            "id": "CIQ-KRYZYS-002",
+            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+            "kategoria": "Kryzys",
+            "klient": "CorporateInc",
+            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+            "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+            "wymagana_wiedza": [
+              "Change Management",
+              "Crisis Communication",
+              "Difficult Conversations"
+            ],
+            "trudnosc": 5,
+            "nagroda_base": 1500,
+            "nagroda_4star": 2000,
+            "nagroda_5star": 2500,
+            "reputacja": 90,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 200,
+            "emoji": "🚨",
+            "available_until": "2025-10-20 17:43:23"
+          }
+        ],
+        "last_refresh": "2025-10-19 17:43:23"
+      },
+      "stats": {
+        "total_revenue": 0,
+        "total_costs": 0,
+        "net_profit": 0,
+        "contracts_completed": 0,
+        "contracts_5star": 0,
+        "contracts_4star": 0,
+        "contracts_3star": 0,
+        "contracts_2star": 0,
+        "contracts_1star": 0,
+        "avg_rating": 0.0,
+        "category_stats": {
+          "Konflikt": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Coaching": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kultura": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Kryzys": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          },
+          "Leadership": {
+            "completed": 0,
+            "total_earned": 0,
+            "avg_rating": 0.0
+          }
+        },
+        "last_30_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        },
+        "last_7_days": {
+          "revenue": 0,
+          "contracts": 0,
+          "avg_rating": 0.0
+        }
+      },
+      "ranking": {
+        "overall_score": 0.0,
+        "current_positions": {
+          "overall": null,
+          "revenue": null,
+          "quality": null,
+          "productivity_30d": null
+        },
+        "previous_positions": {},
+        "badges": []
+      },
+      "events": {
+        "history": [
+          {
+            "event_id": "contract_stolen",
+            "timestamp": "2025-10-19 17:43:23",
+            "title": "Konkurencja Podbiła Ofertę",
+            "emoji": "🚫",
+            "type": "negative",
+            "description": "Inna firma złożyła lepszą ofertę i jeden z dostępnych kontraktów zniknął z puli.",
+            "choice": null,
+            "effects": {
+              "remove_contract_from_pool": true
+            }
+          }
+        ],
+        "last_roll": "2025-10-19 17:43:23",
+        "active_effects": []
+      },
+      "history": {
+        "transactions": [],
         "level_ups": []
       }
     }
