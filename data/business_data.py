@@ -46,6 +46,41 @@ FIRM_LEVELS = {
 # TYPY PRACOWNIKÓW
 # =============================================================================
 
+# =============================================================================
+# LOGO FIRMY - Dostępne emoji/ikony
+# =============================================================================
+
+FIRM_LOGOS = {
+    "basic": {
+        "free": ["🏢", "🏛️", "🏰", "🏪", "🏬", "🏭", "🏗️", "🏙️"],
+        "premium": []  # Na przyszłość - odblokowane za osiągnięcia
+    },
+    "business": {
+        "free": ["💼", "📊", "📈", "💰", "🎯", "🚀", "⚡", "💎"],
+        "premium": []
+    },
+    "creative": {
+        "free": ["🎨", "🎭", "🎪", "🎬", "🎮", "🎲", "🎯", "✨"],
+        "premium": []
+    },
+    "nature": {
+        "free": ["🌍", "🌟", "⭐", "🌈", "🔥", "💧", "🌊", "🌺"],
+        "premium": []
+    },
+    "tech": {
+        "free": ["💻", "🖥️", "📱", "🔧", "⚙️", "🔬", "🛠️", "🤖"],
+        "premium": []
+    },
+    "animals": {
+        "free": ["🦁", "🦅", "🐉", "🦄", "🐺", "🦊", "🦈", "🐙"],
+        "premium": []
+    }
+}
+
+# =============================================================================
+# TYPY PRACOWNIKÓW
+# =============================================================================
+
 EMPLOYEE_TYPES = {
     "junior": {
         "nazwa": "Junior Consultant",
@@ -531,12 +566,34 @@ EVALUATION_CRITERIA = {
 # =============================================================================
 
 def get_firm_level(coins, reputation):
-    """Określa poziom firmy na podstawie monet i reputacji"""
-    for level in sorted(FIRM_LEVELS.keys(), reverse=True):
-        min_coins, max_coins = FIRM_LEVELS[level]["zakres_monet"]
-        if coins >= min_coins and coins < max_coins:
-            return level
-    return 4  # Maksymalny poziom
+    """Określa poziom firmy na podstawie monet i reputacji
+    
+    Aby awansować na wyższy poziom, musisz spełnić OBA warunki:
+    1. Mieć wystarczającą ilość monet (zakres_monet)
+    2. Zdobyć wymaganą reputację (reputation_to_level_X)
+    
+    Args:
+        coins: Liczba monet użytkownika
+        reputation: Punkty reputacji użytkownika
+        
+    Returns:
+        int: Poziom firmy (1-4)
+    """
+    # Sprawdź poziomy od najwyższego do najniższego
+    # Poziom 4: Global CIQ Partners
+    if coins >= 25000 and reputation >= GAME_CONFIG["reputation_to_level_4"]:
+        return 4
+    
+    # Poziom 3: CIQ Advisory Group  
+    if coins >= 8000 and reputation >= GAME_CONFIG["reputation_to_level_3"]:
+        return 3
+    
+    # Poziom 2: Boutique Consulting
+    if coins >= 2000 and reputation >= GAME_CONFIG["reputation_to_level_2"]:
+        return 2
+    
+    # Poziom 1: Solo Consultant (domyślny)
+    return 1
 
 def get_available_contracts(user_level, completed_lessons):
     """Zwraca kontrakty dostępne dla użytkownika"""

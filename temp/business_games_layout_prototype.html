@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Games - Nowy Layout Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* NAGŁÓWEK Z KARTAMI */
+        .header-section {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .firm-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+            grid-row: 1 / 3;
+        }
+        
+        .firm-logo {
+            font-size: 72px;
+            margin-bottom: 16px;
+        }
+        
+        .firm-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .firm-level {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            height: 10px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+        
+        .progress-fill {
+            background: white;
+            height: 100%;
+            width: 45%;
+            border-radius: 8px;
+        }
+        
+        .stats-grid-top, .stats-grid-bottom {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        }
+        
+        /* DETAILS ANIMATION */
+        details summary span:first-child {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        details[open] summary span:first-child {
+            transform: rotate(90deg);
+        }
+        
+        /* CHART CONTROLS */
+        .period-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .period-btn:hover {
+            color: #3b82f6 !important;
+        }
+        
+        .period-btn.active:hover {
+            transform: none;
+        }
+        
+        .stat-card.gold { border-left-color: #f59e0b; }
+        .stat-card.purple { border-left-color: #8b5cf6; }
+        .stat-card.blue { border-left-color: #3b82f6; }
+        .stat-card.green { border-left-color: #10b981; }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .stat-unit {
+            font-size: 12px;
+            color: #64748b;
+        }
+        
+        /* GŁÓWNA SEKCJA - 2 KOLUMNY */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        /* LEWA KOLUMNA - KONTRAKTY */
+        .contracts-section {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .contract-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 0 20px rgba(102, 126, 234, 0.3);
+            border-left: 6px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .contract-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        
+        .contract-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .contract-title-area {
+            flex: 1;
+        }
+        
+        .contract-emoji {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        
+        .contract-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .contract-client {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .deadline-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 120px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .deadline-hours {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .deadline-status {
+            font-size: 11px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .contract-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .contract-stat {
+            text-align: center;
+        }
+        
+        .contract-stat-label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        
+        .contract-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .no-contracts {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+        
+        .no-contracts-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .no-contracts-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        /* PRAWA KOLUMNA - SIDEBAR */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .sidebar-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        /* LOSOWANIE - KOMPAKTOWE */
+        .roll-card {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+        }
+        
+        .roll-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .roll-icon {
+            font-size: 40px;
+        }
+        
+        .roll-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .roll-status {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .roll-button {
+            width: 100%;
+            background: white;
+            color: #10b981;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .roll-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .roll-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* QUICK STATS */
+        .quick-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .quick-stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-stat-item:hover {
+            background: #e2e8f0;
+            transform: translateX(4px);
+        }
+        
+        .quick-stat-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 600;
+        }
+        
+        .quick-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        /* ACTIVE EVENT */
+        .active-event {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .event-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .event-description {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        /* QUICK ACTIONS */
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .action-button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-button:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        /* FOOTER */
+        .footer-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .firm-card {
+                grid-row: auto;
+            }
+            
+            .stats-grid-top, .stats-grid-bottom {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- NAGŁÓWEK -->
+        <div class="header-section">
+            <div class="header-grid">
+                <!-- KARTA FIRMY -->
+                <div class="firm-card">
+                    <div class="firm-logo">🚀</div>
+                    <div class="firm-name">MaxSoft Consulting</div>
+                    <div class="firm-level">Poziom 2: Boutique Consulting</div>
+                    <div style="opacity: 0.8; font-size: 13px; margin-bottom: 8px;">EXP do kolejnego poziomu</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div style="opacity: 0.8; font-size: 12px; margin-top: 12px;">Założona: 2025-10-01</div>
+                </div>
+                
+                <!-- STATYSTYKI - GÓRNY RZĄD -->
+                <div class="stats-grid-top">
+                    <div class="stat-card gold">
+                        <div class="stat-label">💰 Saldo</div>
+                        <div class="stat-value">3,450</div>
+                        <div class="stat-unit">monet</div>
+                    </div>
+                    <div class="stat-card purple">
+                        <div class="stat-label">📈 Reputacja</div>
+                        <div class="stat-value">120</div>
+                        <div class="stat-unit">punktów</div>
+                        <div style="margin-top: 8px;">
+                            <div style="background: #e2e8f0; border-radius: 4px; height: 4px; overflow: hidden;">
+                                <div style="background: #8b5cf6; height: 100%; width: 60%;"></div>
+                            </div>
+                            <div style="font-size: 10px; color: #64748b; margin-top: 2px;">Do CIQ Advisory: 500</div>
+                        </div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-label">✅ Kontrakty</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-unit">ukończone</div>
+                    </div>
+                    <div class="stat-card blue">
+                        <div class="stat-label">⭐ Średnia ocena</div>
+                        <div class="stat-value">4.3</div>
+                        <div class="stat-unit">/ 5.0</div>
+                    </div>
+                </div>
+                
+                <!-- STATYSTYKI - DOLNY RZĄD - WYKRES FINANSOWY -->
+                <div class="stats-grid-bottom">
+                    <div style="grid-column: 1 / -1; background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                        <!-- Nagłówek z kontrolkami -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div style="font-size: 14px; font-weight: 600; color: #64748b;">📊 Przychody vs Koszty</div>
+                            
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <!-- Przełącznik okresu -->
+                                <div style="display: flex; background: #f1f5f9; border-radius: 8px; padding: 4px;">
+                                    <button class="period-btn active" data-period="7" style="padding: 6px 14px; border: none; background: white; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #3b82f6; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">7 dni</button>
+                                    <button class="period-btn" data-period="14" style="padding: 6px 14px; border: none; background: transparent; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #64748b;">14 dni</button>
+                                    <button class="period-btn" data-period="30" style="padding: 6px 14px; border: none; background: transparent; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #64748b;">30 dni</button>
+                                </div>
+                                
+                                <!-- Przełącznik wartości skumulowanej -->
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #475569;">
+                                    <input type="checkbox" id="cumulative-toggle" style="width: 16px; height: 16px; cursor: pointer; accent-color: #3b82f6;">
+                                    <span style="font-weight: 500;">Wartość skumulowana</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Placeholder for chart -->
+                        <div id="chart-container" style="position: relative; height: 120px; background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border-radius: 12px; padding: 16px; display: flex; align-items: flex-end; gap: 8px;">
+                            <!-- Fake bars -->
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                <div style="width: 100%; height: 60px; background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-radius: 4px; opacity: 0.8;"></div>
+                                <div style="font-size: 10px; color: #64748b;">Pn</div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                <div style="width: 100%; height: 80px; background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-radius: 4px; opacity: 0.8;"></div>
+                                <div style="font-size: 10px; color: #64748b;">Wt</div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                <div style="width: 100%; height: 50px; background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-radius: 4px; opacity: 0.8;"></div>
+                                <div style="font-size: 10px; color: #64748b;">Śr</div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                <div style="width: 100%; height: 95px; background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-radius: 4px; opacity: 0.8;"></div>
+                                <div style="font-size: 10px; color: #64748b;">Cz</div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                <div style="width: 100%; height: 70px; background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-radius: 4px; opacity: 0.8;"></div>
+                                <div style="font-size: 10px; color: #64748b;">Pt</div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                <div style="width: 100%; height: 40px; background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-radius: 4px; opacity: 0.8;"></div>
+                                <div style="font-size: 10px; color: #64748b;">So</div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                <div style="width: 100%; height: 30px; background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-radius: 4px; opacity: 0.8;"></div>
+                                <div style="font-size: 10px; color: #64748b;">Nd</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Legenda z aktualnymi wartościami -->
+                        <div style="display: flex; justify-content: space-around; margin-top: 12px; font-size: 13px;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <div style="width: 12px; height: 12px; background: #10b981; border-radius: 3px;"></div>
+                                <span style="color: #64748b;">Przychody: <strong id="revenue-total" style="color: #1e293b;">8,750</strong></span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <div style="width: 12px; height: 12px; background: #ef4444; border-radius: 3px;"></div>
+                                <span style="color: #64748b;">Koszty: <strong id="costs-total" style="color: #1e293b;">5,300</strong></span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <div style="width: 12px; height: 12px; background: #8b5cf6; border-radius: 3px;"></div>
+                                <span style="color: #64748b;">Zysk: <strong id="profit-total" style="color: #10b981;">+3,450</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GŁÓWNA TREŚĆ - 2 KOLUMNY -->
+        <div class="main-content">
+            <!-- LEWA KOLUMNA - AKTYWNE KONTRAKTY -->
+            <div class="contracts-section">
+                <!-- SEKCJA WYDARZENIA LOSOWEGO (jeśli jest) -->
+                <div class="active-event" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);">
+                    <div style="display: flex; align-items: start; gap: 16px;">
+                        <div style="font-size: 48px;">✨</div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">🎉 Wydarzenie: Boom na konsulting!</div>
+                            <div style="font-size: 14px; opacity: 0.95; line-height: 1.6; margin-bottom: 12px;">
+                                Rynek przeżywa rozkwit! Wszystkie firmy szukają konsultantów. Twój <strong>następny kontrakt</strong> przyniesie <strong>+50% nagrody</strong>!
+                            </div>
+                            <div style="display: flex; gap: 12px; font-size: 13px;">
+                                <div style="background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px;">
+                                    <strong>Bonus:</strong> +50% nagrody
+                                </div>
+                                <div style="background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px;">
+                                    <strong>Ważne:</strong> Następny kontrakt
+                                </div>
+                            </div>
+                        </div>
+                        <button style="background: white; color: #f59e0b; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
+                            Szczegóły
+                        </button>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">📋 Aktywne Kontrakty (2/3)</h2>
+                
+                <!-- KONTRAKT 1 -->
+                <div class="contract-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 4px;">
+                                💬 Trudne Rozmowy z Pracownikiem
+                            </div>
+                            <div style="font-size: 14px; color: #64748b;">TechStart Solutions</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; white-space: nowrap; margin-left: 12px;">
+                            🟢 36h
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 16px;">
+                        Pracownik ma problemy z terminowością. Musisz poprowadzić trudną rozmowę jako jego przełożony.
+                    </div>
+                    
+                    <!-- Rozwijane szczegóły -->
+                    <details style="margin: 12px 0; padding: 12px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #3b82f6; user-select: none; list-style: none; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 12px;">▶</span> Szczegóły kontraktu i kryteria oceny
+                        </summary>
+                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb; font-size: 13px; line-height: 1.6;">
+                            <div style="margin-bottom: 12px;">
+                                <strong style="color: #1e293b;">📋 Wymagania:</strong>
+                                <ul style="margin: 8px 0; padding-left: 24px; color: #475569;">
+                                    <li>Minimalna długość: <strong>500 słów</strong></li>
+                                    <li>Model komunikacji: CIQ (Coaching, Inquiry, Questioning)</li>
+                                    <li>Konkretne przykłady i scenariusze</li>
+                                </ul>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <strong style="color: #1e293b;">🎯 Kryteria oceny:</strong>
+                                <ul style="margin: 8px 0; padding-left: 24px; color: #475569;">
+                                    <li>Zastosowanie CIQ (30%)</li>
+                                    <li>Empatia i asertywność (25%)</li>
+                                    <li>Konkretność rozwiązań (25%)</li>
+                                    <li>Profesjonalizm (20%)</li>
+                                </ul>
+                            </div>
+                            <div style="background: #dbeafe; padding: 10px; border-radius: 6px; border-left: 3px solid #3b82f6;">
+                                <strong style="color: #1e40af;">💡 Wskazówka:</strong>
+                                <div style="color: #1e40af; margin-top: 4px; font-size: 12px;">
+                                    Skoncentruj się na budowaniu relacji i zadawaniu pytań otwartych.
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <div style="display: flex; gap: 16px; margin: 16px 0; padding: 16px; background: #f8f9fa; border-radius: 12px;">
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #f59e0b;">💰 400-800</div>
+                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Nagroda</div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #3b82f6;">⭐⭐⭐</div>
+                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Trudność</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px;">
+                            <span style="color: #64748b;">Twoja odpowiedź: <strong style="color: #1e293b;">0 słów</strong></span>
+                            <span style="color: #64748b;">Minimum: 500 słów</span>
+                        </div>
+                        <textarea placeholder="Rozpocznij pisanie swojego rozwiązania tutaj..." style="width: 100%; min-height: 120px; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-family: inherit; font-size: 14px; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px; margin-top: 16px;">
+                        <button class="btn-primary" style="flex: 1;">
+                            📤 Wyślij rozwiązanie
+                        </button>
+                        <button class="btn-secondary">
+                            💾 Zapisz
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- KONTRAKT 2 -->
+                <div class="contract-card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 4px;">
+                                🔥 Konflikt w Zarządzie
+                            </div>
+                            <div style="font-size: 14px; color: #64748b;">Global Finance Inc</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; white-space: nowrap; margin-left: 12px;">
+                            🟡 8h
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 16px;">
+                        Poważny konflikt między CEO a CFO paraliżuje firmę. Potrzebna mediacja i rozwiązanie kryzysu.
+                    </div>
+                    
+                    <!-- Rozwijane szczegóły -->
+                    <details style="margin: 12px 0; padding: 12px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                        <summary style="cursor: pointer; font-weight: 600; color: #3b82f6; user-select: none; list-style: none; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 12px;">▶</span> Szczegóły kontraktu i kryteria oceny
+                        </summary>
+                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb; font-size: 13px; line-height: 1.6;">
+                            <div style="margin-bottom: 12px;">
+                                <strong style="color: #1e293b;">📋 Wymagania:</strong>
+                                <ul style="margin: 8px 0; padding-left: 24px; color: #475569;">
+                                    <li>Minimalna długość: <strong>700 słów</strong></li>
+                                    <li>Analiza źródeł konfliktu</li>
+                                    <li>Plan mediacji krok po kroku</li>
+                                    <li>Długoterminowe rozwiązania</li>
+                                </ul>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <strong style="color: #1e293b;">🎯 Kryteria oceny:</strong>
+                                <ul style="margin: 8px 0; padding-left: 24px; color: #475569;">
+                                    <li>Głębia analizy (30%)</li>
+                                    <li>Strategia mediacji (30%)</li>
+                                    <li>Realizm rozwiązań (25%)</li>
+                                    <li>Profesjonalizm (15%)</li>
+                                </ul>
+                            </div>
+                            <div style="background: #fef3c7; padding: 10px; border-radius: 6px; border-left: 3px solid #f59e0b;">
+                                <strong style="color: #92400e;">⚠️ Uwaga:</strong>
+                                <div style="color: #92400e; margin-top: 4px; font-size: 12px;">
+                                    Wysoki poziom trudności! Klient oczekuje głębokiej analizy i konkretnych kroków.
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <div style="display: flex; gap: 16px; margin: 16px 0; padding: 16px; background: #f8f9fa; border-radius: 12px;">
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #f59e0b;">💰 600-1200</div>
+                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Nagroda</div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 24px; font-weight: 700; color: #ef4444;">⭐⭐⭐⭐</div>
+                            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Trudność</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 16px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px;">
+                            <span style="color: #64748b;">Twoja odpowiedź: <strong style="color: #1e293b;">0 słów</strong></span>
+                            <span style="color: #64748b;">Minimum: 700 słów</span>
+                        </div>
+                        <textarea placeholder="Rozpocznij pisanie swojego rozwiązania tutaj..." style="width: 100%; min-height: 120px; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-family: inherit; font-size: 14px; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px; margin-top: 16px;">
+                        <button class="btn-primary" style="flex: 1;">
+                            📤 Wyślij rozwiązanie
+                        </button>
+                        <button class="btn-secondary">
+                            💾 Zapisz
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- PRZYKŁAD BRAKU KONTRAKTÓW (zakomentowane) -->
+                <!--
+                <div class="no-contracts">
+                    <div class="no-contracts-icon">📭</div>
+                    <div class="no-contracts-text">Brak aktywnych kontraktów</div>
+                    <button class="btn-primary">💼 Zobacz Rynek Kontraktów</button>
+                </div>
+                -->
+            </div>
+            
+            <!-- PRAWA KOLUMNA - SIDEBAR -->
+            <div class="sidebar">
+                <!-- LOSOWANIE WYDARZENIA -->
+                <div class="roll-card">
+                    <div class="roll-header">
+                        <div class="roll-icon">🎰</div>
+                        <div>
+                            <div class="roll-title">Losowanie</div>
+                            <div class="roll-status">Gotowe!</div>
+                        </div>
+                    </div>
+                    <button class="roll-button">🎲 LOSUJ!</button>
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 8px; text-align: center;">
+                        Szansa: 20% • Cooldown: 24h
+                    </div>
+                </div>
+                
+                <!-- AKTYWNE WYDARZENIE (jeśli jest) -->
+                <div class="sidebar-card" style="padding: 0; overflow: hidden;">
+                    <div class="active-event">
+                        <div class="event-title">✨ Aktywne: +50% nagrody</div>
+                        <div class="event-description">Następny kontrakt przyniesie zwiększoną nagrodę!</div>
+                    </div>
+                </div>
+                
+                <!-- QUICK STATS -->
+                <div class="sidebar-card">
+                    <h3 style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 16px;">📊 Quick Stats</h3>
+                    <div class="quick-stats">
+                        <div class="quick-stat-item">
+                            <span class="quick-stat-label">⭐ Średnia ocena</span>
+                            <span class="quick-stat-value">4.3/5.0</span>
+                        </div>
+                        <div class="quick-stat-item">
+                            <span class="quick-stat-label">🌟 Kontrakty 5⭐</span>
+                            <span class="quick-stat-value">3</span>
+                        </div>
+                        <div class="quick-stat-item">
+                            <span class="quick-stat-label">📊 Pojemność</span>
+                            <span class="quick-stat-value">3/dzień</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- QUICK ACTIONS -->
+                <div class="sidebar-card">
+                    <h3 style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 16px;">⚡ Szybkie akcje</h3>
+                    <div class="quick-actions">
+                        <button class="action-button">
+                            <span>💼</span>
+                            <span>Rynek Kontraktów</span>
+                        </button>
+                        <button class="action-button">
+                            <span>👥</span>
+                            <span>Zatrudnij Pracownika</span>
+                        </button>
+                        <button class="action-button">
+                            <span>⚙️</span>
+                            <span>Ustawienia Firmy</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="footer-section">
+            💡 <strong>Tip:</strong> Ukończ kontrakty na czas, aby zdobywać reputację i awansować na wyższe poziomy!
+        </div>
+    </div>
+    
+    <script>
+        // Animacja strzałek w details
+        document.querySelectorAll('details').forEach(details => {
+            const summary = details.querySelector('summary');
+            const arrow = summary.querySelector('span');
+            
+            details.addEventListener('toggle', () => {
+                if (details.open) {
+                    arrow.style.transform = 'rotate(90deg)';
+                } else {
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            });
+        });
+        
+        // Obsługa przełącznika okresu
+        let currentPeriod = 7;
+        let isCumulative = false;
+        
+        document.querySelectorAll('.period-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Usuń active z wszystkich
+                document.querySelectorAll('.period-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.background = 'transparent';
+                    b.style.color = '#64748b';
+                    b.style.boxShadow = 'none';
+                });
+                
+                // Dodaj active do klikniętego
+                this.classList.add('active');
+                this.style.background = 'white';
+                this.style.color = '#3b82f6';
+                this.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                
+                currentPeriod = parseInt(this.dataset.period);
+                updateChart();
+            });
+        });
+        
+        // Obsługa przełącznika wartości skumulowanej
+        document.getElementById('cumulative-toggle').addEventListener('change', function() {
+            isCumulative = this.checked;
+            updateChart();
+        });
+        
+        // Funkcja aktualizacji wykresu
+        function updateChart() {
+            console.log(`Okres: ${currentPeriod} dni, Skumulowana: ${isCumulative}`);
+            
+            // Tutaj w Streamlit będzie wywołanie do Plotly
+            // Na razie tylko aktualizujemy komunikat w konsoli
+            
+            // Przykładowa aktualizacja sum
+            if (isCumulative) {
+                document.getElementById('revenue-total').textContent = (8750 * (currentPeriod / 7)).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById('costs-total').textContent = (5300 * (currentPeriod / 7)).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                document.getElementById('profit-total').textContent = '+' + (3450 * (currentPeriod / 7)).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            } else {
+                document.getElementById('revenue-total').textContent = '8,750';
+                document.getElementById('costs-total').textContent = '5,300';
+                document.getElementById('profit-total').textContent = '+3,450';
+            }
+        }
+    </script>
+</body>
+</html>

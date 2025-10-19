@@ -220,6 +220,15 @@ def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[in
             }
             
             affected_contracts_extended.append(contract["tytul"])
+        
+        # Jeśli jest boost_count, dodaj aktywny efekt na przyszłe kontrakty
+        if "boost_count" in effects:
+            bg_data["events"]["active_effects"].append({
+                "type": "deadline_boost",
+                "days": effects["deadline_extension"],
+                "remaining_contracts": effects["boost_count"],
+                "expires": None  # Nie wygasa na czas, tylko po użyciu
+            })
     
     # Skrócenie deadline
     affected_contract_title = None
@@ -244,6 +253,55 @@ def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[in
     if effects.get("remove_contract_from_pool"):
         if bg_data["contracts"]["available_pool"]:
             bg_data["contracts"]["available_pool"].pop(random.randint(0, len(bg_data["contracts"]["available_pool"]) - 1))
+    
+    # Modyfikuj aktywny kontrakt (renegocjacja)
+    if effects.get("modify_active_contract"):
+        if bg_data["contracts"]["active"]:
+            # Wybierz losowy aktywny kontrakt
+            contract = random.choice(bg_data["contracts"]["active"])
+            
+            # Zmień nagrodę (jeśli określono)
+            if "reward_multiplier" in effects:
+                multiplier = effects["reward_multiplier"]
+                contract["nagroda_base"] = int(contract["nagroda_base"] * multiplier)
+                contract["nagroda_4star"] = int(contract.get("nagroda_4star", contract["nagroda_base"]) * multiplier)
+                contract["nagroda_5star"] = int(contract["nagroda_5star"] * multiplier)
+            
+            # Dodaj czas (jeśli określono)
+            if "time_bonus" in effects:
+                old_deadline = datetime.strptime(contract["deadline"], "%Y-%m-%d %H:%M:%S")
+                new_deadline = old_deadline + timedelta(days=effects["time_bonus"])
+                contract["deadline"] = new_deadline.strftime("%Y-%m-%d %H:%M:%S")
+            
+            # Zaznacz kontrakt jako zmodyfikowany
+            contract["affected_by_event"] = {
+                "type": "renegotiation",
+                "event_title": event_data["title"],
+                "reward_multiplier": effects.get("reward_multiplier", 1.0),
+                "time_bonus": effects.get("time_bonus", 0)
+            }
+            
+            affected_contract_title = contract["tytul"]
+    
+    # Dodaj ryzykowny kontrakt (risky_offer)
+    if effects.get("add_risky_contract"):
+        # Wybierz losowy kontrakt z puli jako bazę
+        if bg_data["contracts"]["available_pool"]:
+            base_contract = random.choice(bg_data["contracts"]["available_pool"]).copy()
+            
+            # Zmodyfikuj: trudność max (5), podwójna nagroda, unikalny ID
+            base_contract["id"] = f"RISKY-{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            base_contract["tytul"] = f"🎰 RYZYKO: {base_contract['tytul']}"
+            base_contract["trudnosc"] = 5
+            base_contract["nagroda_base"] = base_contract["nagroda_base"] * 2
+            base_contract["nagroda_4star"] = base_contract.get("nagroda_4star", base_contract["nagroda_base"]) * 2
+            base_contract["nagroda_5star"] = base_contract["nagroda_5star"] * 2
+            base_contract["emoji"] = "🎰"
+            
+            # Dodaj do puli dostępnych kontraktów
+            bg_data["contracts"]["available_pool"].append(base_contract)
+            
+            affected_contract_title = base_contract["tytul"]
     
     # Zapisz zdarzenie w historii
     event_entry = {
@@ -319,3 +377,127 @@ def clean_expired_effects(bg_data: Dict) -> None:
             active_effects.append(effect)
     
     bg_data["events"]["active_effects"] = active_effects
+
+
+def auto_trigger_event_on_action(action_type: str, user_data: Dict) -> Tuple[Optional[str], Optional[Dict], Dict]:
+    """
+    Automatyczne triggerowanie wydarzenia przy określonych akcjach
+    
+    Args:
+        action_type: "login", "accept_contract", "submit_solution"
+        user_data: Pełne dane użytkownika
+        
+    Returns:
+        (event_id, event_data, updated_user_data) lub (None, None, user_data)
+        Jeśli event wymaga wyboru - zwraca event_data, jeśli nie - aplikuje i zwraca None
+    """
+    bg_data = user_data["business_game"]
+    
+    # Sprawdź czy powinno się wydarzenie wystąpić
+    if not should_trigger_event(bg_data):
+        return None, None, user_data
+    
+    # Losuj wydarzenie
+    event_result = get_random_event(bg_data, user_data.get("degencoins", 0))
+    
+    if not event_result:
+        # Brak wydarzenia (80% przypadków lub brak spełnionych warunków)
+        bg_data["events"]["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        return None, None, user_data
+    
+    event_id, event_data = event_result
+    
+    # NEGATYWNE - aplikuj automatycznie
+    if event_data["type"] == "negative":
+        user_data = apply_event_effects(event_id, event_data, None, user_data)
+        # Zwróć None - nie wymaga UI reaction (toast wyświetli się w widoku)
+        return event_id, event_data, user_data
+    
+    # POZYTYWNE - dodaj do pending z TTL 24h
+    elif event_data["type"] == "positive":
+        add_pending_positive_event(bg_data, event_id, event_data, hours=24)
+        return event_id, event_data, user_data
+    
+    # NEUTRALNE (wybory) - ZWRÓĆ do UI (wymaga blocking modal)
+    elif event_data["type"] == "neutral":
+        return event_id, event_data, user_data
+    
+    return None, None, user_data
+
+
+def add_pending_positive_event(bg_data: Dict, event_id: str, event_data: Dict, hours: int = 24) -> None:
+    """Dodaje pozytywne wydarzenie do listy oczekujących (z TTL)"""
+    if "events" not in bg_data:
+        bg_data["events"] = {"history": [], "last_roll": None, "active_effects": [], "pending_positive": []}
+    
+    if "pending_positive" not in bg_data["events"]:
+        bg_data["events"]["pending_positive"] = []
+    
+    expires = datetime.now() + timedelta(hours=hours)
+    
+    bg_data["events"]["pending_positive"].append({
+        "event_id": event_id,
+        "event_data": event_data,
+        "triggered_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "expires": expires.strftime("%Y-%m-%d %H:%M:%S")
+    })
+
+
+def get_pending_positive_events(bg_data: Dict) -> list:
+    """Pobiera listę nieodebranych pozytywnych wydarzeń (nie wygasłych)"""
+    if "events" not in bg_data or "pending_positive" not in bg_data["events"]:
+        return []
+    
+    now = datetime.now()
+    valid_events = []
+    
+    for pending in bg_data["events"]["pending_positive"]:
+        expires_dt = datetime.strptime(pending["expires"], "%Y-%m-%d %H:%M:%S")
+        if now < expires_dt:
+            valid_events.append(pending)
+    
+    return valid_events
+
+
+def claim_positive_event(event_id: str, user_data: Dict) -> Dict:
+    """Odbiera (claim) pozytywne wydarzenie i aplikuje efekty"""
+    bg_data = user_data["business_game"]
+    
+    if "events" not in bg_data or "pending_positive" not in bg_data["events"]:
+        return user_data
+    
+    # Znajdź wydarzenie
+    pending = next(
+        (e for e in bg_data["events"]["pending_positive"] if e["event_id"] == event_id),
+        None
+    )
+    
+    if not pending:
+        return user_data
+    
+    # Aplikuj efekty
+    user_data = apply_event_effects(event_id, pending["event_data"], None, user_data)
+    
+    # Usuń z pending
+    bg_data["events"]["pending_positive"] = [
+        e for e in bg_data["events"]["pending_positive"] if e["event_id"] != event_id
+    ]
+    
+    return user_data
+
+
+def clean_expired_positive_events(bg_data: Dict) -> int:
+    """Usuwa wygasłe pozytywne wydarzenia (zwraca liczbę przepadłych)"""
+    if "events" not in bg_data or "pending_positive" not in bg_data["events"]:
+        return 0
+    
+    now = datetime.now()
+    original_count = len(bg_data["events"]["pending_positive"])
+    
+    bg_data["events"]["pending_positive"] = [
+        e for e in bg_data["events"]["pending_positive"]
+        if datetime.strptime(e["expires"], "%Y-%m-%d %H:%M:%S") > now
+    ]
+    
+    expired_count = original_count - len(bg_data["events"]["pending_positive"])
+    return expired_count

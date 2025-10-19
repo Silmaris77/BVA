@@ -7,7 +7,7 @@ import streamlit as st
 from datetime import datetime, timedelta
 import plotly.graph_objects as go
 
-from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG
+from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG, FIRM_LOGOS
 from utils.business_game import (
     initialize_business_game, refresh_contract_pool, accept_contract,
     submit_contract_solution, hire_employee, fire_employee,
@@ -78,41 +78,311 @@ def show_business_games(username, user_data):
 # =============================================================================
 
 def render_header(user_data):
-    """Renderuje nagłówek z podstawowymi info o firmie"""
+    """Renderuje nagłówek z profesjonalnymi kartami w stylu gamifikacji"""
     bg_data = user_data["business_game"]
     firm = bg_data["firm"]
     level_info = FIRM_LEVELS[firm["level"]]
     
-    col1, col2, col3, col4, col5 = st.columns([2, 1.5, 1.5, 1.5, 1.5])
+    # BACKWARD COMPATIBILITY: Dodaj logo jeśli nie istnieje
+    if "logo" not in firm:
+        firm["logo"] = level_info['ikona']  # Użyj ikony poziomu jako domyślnej
+    
+    # CSS dla profesjonalnych kart z efektami
+    st.markdown("""
+    <style>
+    .game-card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+        height: 100%;
+    }
+    .game-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+    .firm-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+    }
+    .firm-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(102, 126, 234, 0.6);
+    }
+    .stat-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        transition: all 0.3s ease;
+        border-left: 4px solid;
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+    }
+    .stat-card.gold { border-left-color: #f59e0b; }
+    .stat-card.purple { border-left-color: #8b5cf6; }
+    .stat-card.blue { border-left-color: #3b82f6; }
+    .stat-card.green { border-left-color: #10b981; }
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 8px 0;
+        color: #1e293b;
+    }
+    .stat-label {
+        font-size: 13px;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # JEDEN WIERSZ: Logo+Nazwa | Saldo | Reputacja | Ogólny Score
+    summary = get_firm_summary(user_data)
+    
+    col_firm, col1, col2, col3 = st.columns([1.5, 1, 1, 1])
+    
+    with col_firm:
+        st.markdown(f"""
+        <div class='firm-card' style='padding: 20px; display: flex; align-items: center; gap: 16px; min-height: 140px; height: 100%;'>
+            <div style='font-size: 48px;'>{firm['logo']}</div>
+            <div style='flex: 1;'>
+                <h2 style='margin:0; font-size: 22px; font-weight: 700;'>{firm['name']}</h2>
+                <p style='margin:4px 0 0 0; opacity:0.9; font-size: 14px;'>
+                    Poziom {firm['level']}: {level_info['nazwa']}
+                </p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     with col1:
         st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white; padding: 20px; border-radius: 10px;'>
-            <h2 style='margin:0;'>{level_info['ikona']} {firm['name']}</h2>
-            <p style='margin:5px 0 0 0; opacity:0.9;'>
-                Poziom {firm['level']}: {level_info['nazwa']}
-            </p>
+        <div class='stat-card gold'>
+            <div class='stat-label'>💰 Saldo</div>
+            <div class='stat-value'>{user_data.get('degencoins', 0):,}</div>
+            <div style='font-size: 12px; color: #64748b;'>monet</div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
-        st.metric("💰 Saldo", f"{user_data.get('degencoins', 0):,} monet", 
-                 delta=None)
+        # Oblicz następny próg reputacji
+        current_rep = firm['reputation']
+        next_level_rep = None
+        if firm['level'] == 1:
+            next_level_rep = GAME_CONFIG["reputation_to_level_2"]
+            next_level_name = "Boutique Consulting"
+        elif firm['level'] == 2:
+            next_level_rep = GAME_CONFIG["reputation_to_level_3"]
+            next_level_name = "CIQ Advisory Group"
+        elif firm['level'] == 3:
+            next_level_rep = GAME_CONFIG["reputation_to_level_4"]
+            next_level_name = "Global CIQ Partners"
+        else:
+            next_level_rep = None
+            next_level_name = "MAX"
+        
+        progress_info = ""
+        if next_level_rep:
+            progress_pct = min(100, (current_rep / next_level_rep) * 100)
+            progress_info = f"<div style='margin-top: 8px;'><div style='background: #e2e8f0; border-radius: 4px; height: 4px; overflow: hidden;'><div style='background: #8b5cf6; height: 100%; width: {progress_pct}%;'></div></div><div style='font-size: 10px; color: #64748b; margin-top: 2px;'>Do {next_level_name}: {next_level_rep}</div></div>"
+        
+        st.markdown(f"""
+        <div class='stat-card purple'>
+            <div class='stat-label'>📈 Reputacja</div>
+            <div class='stat-value'>{current_rep}</div>
+            <div style='font-size: 12px; color: #64748b;'>punktów</div>
+            {progress_info}
+        </div>
+        """, unsafe_allow_html=True)
     
     with col3:
-        st.metric("📈 Reputacja", f"{firm['reputation']}", 
-                 delta=None)
+        # Ogólny Score - obliczamy z avg_rating i contracts_completed
+        overall_score = (summary['avg_rating'] * 10) + (bg_data['stats']['contracts_completed'] * 2)
+        st.markdown(f"""
+        <div class='stat-card blue'>
+            <div class='stat-label'>🏆 Ogólny</div>
+            <div class='stat-value'>{overall_score:.0f}</div>
+            <div style='font-size: 12px; color: #64748b;'>punktów</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+# =============================================================================
+# WYKRES FINANSOWY
+# =============================================================================
+
+def create_financial_chart(bg_data, period=7, cumulative=False):
+    """Tworzy wykres finansowy z przychodami, kosztami i zyskiem
     
-    with col4:
-        employees_count = len(bg_data["employees"])
-        max_employees = level_info["max_pracownikow"]
-        st.metric("👥 Zespół", f"{employees_count}/{max_employees}",
-                 delta=None)
+    Args:
+        bg_data: business_game data
+        period: liczba dni do wyświetlenia (7, 14, 30)
+        cumulative: czy pokazać wartości skumulowane
     
-    with col5:
-        st.metric("✅ Kontrakty", f"{bg_data['stats']['contracts_completed']}",
-                 delta=None)
+    Returns:
+        Plotly figure object
+    """
+    from datetime import datetime, timedelta
+    import plotly.graph_objects as go
+    import pandas as pd
+    
+    # Pobierz transakcje
+    transactions = bg_data.get("history", {}).get("transactions", [])
+    
+    if not transactions:
+        # Pusty wykres jeśli brak danych
+        fig = go.Figure()
+        fig.add_annotation(
+            text="Brak danych finansowych<br>Ukończ pierwszy kontrakt!",
+            xref="paper", yref="paper",
+            x=0.5, y=0.5, showarrow=False,
+            font=dict(size=16, color="#64748b")
+        )
+        fig.update_layout(
+            height=300,
+            xaxis=dict(visible=False),
+            yaxis=dict(visible=False),
+            plot_bgcolor='white'
+        )
+        return fig
+    
+    # Przygotuj dane dzienne
+    daily_data = {}
+    for trans in transactions:
+        try:
+            date = trans["timestamp"][:10]  # YYYY-MM-DD
+            if date not in daily_data:
+                daily_data[date] = {"revenue": 0, "costs": 0}
+            
+            amount = trans["amount"]
+            trans_type = trans["type"]
+            
+            if trans_type == "contract_reward":
+                daily_data[date]["revenue"] += amount
+            elif trans_type in ["daily_costs", "employee_hire"]:
+                daily_data[date]["costs"] += abs(amount)
+        except:
+            continue
+    
+    # Stwórz range dat dla wybranego okresu
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=period - 1)
+    
+    dates = []
+    revenues = []
+    costs = []
+    
+    for i in range(period):
+        date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
+        dates.append(date)
+        
+        day_data = daily_data.get(date, {"revenue": 0, "costs": 0})
+        revenues.append(day_data["revenue"])
+        costs.append(day_data["costs"])
+    
+    # Oblicz zysk
+    profits = [r - c for r, c in zip(revenues, costs)]
+    
+    # Jeśli cumulative, oblicz wartości narastające
+    if cumulative:
+        revenues_cum = []
+        costs_cum = []
+        profits_cum = []
+        
+        rev_sum = 0
+        cost_sum = 0
+        
+        for r, c in zip(revenues, costs):
+            rev_sum += r
+            cost_sum += c
+            revenues_cum.append(rev_sum)
+            costs_cum.append(cost_sum)
+            profits_cum.append(rev_sum - cost_sum)
+        
+        revenues = revenues_cum
+        costs = costs_cum
+        profits = profits_cum
+    
+    # Formatuj daty (krótko)
+    dates_formatted = [datetime.strptime(d, "%Y-%m-%d").strftime("%d.%m") for d in dates]
+    
+    # Twórz wykres
+    fig = go.Figure()
+    
+    fig.add_trace(go.Scatter(
+        x=dates_formatted,
+        y=revenues,
+        name='Przychody',
+        mode='lines+markers',
+        line=dict(color='#10b981', width=3),
+        marker=dict(size=8),
+        fill='tozeroy',
+        fillcolor='rgba(16, 185, 129, 0.1)'
+    ))
+    
+    fig.add_trace(go.Scatter(
+        x=dates_formatted,
+        y=costs,
+        name='Koszty',
+        mode='lines+markers',
+        line=dict(color='#ef4444', width=3),
+        marker=dict(size=8),
+        fill='tozeroy',
+        fillcolor='rgba(239, 68, 68, 0.1)'
+    ))
+    
+    fig.add_trace(go.Scatter(
+        x=dates_formatted,
+        y=profits,
+        name='Zysk',
+        mode='lines+markers',
+        line=dict(color='#8b5cf6', width=3, dash='dot'),
+        marker=dict(size=8)
+    ))
+    
+    # Layout
+    title_text = f"{'Skumulowane ' if cumulative else ''}Finanse (ostatnie {period} dni)"
+    
+    fig.update_layout(
+        title=dict(text=title_text, font=dict(size=14, color='#64748b')),
+        xaxis=dict(
+            title="",
+            showgrid=True,
+            gridcolor='#f1f5f9'
+        ),
+        yaxis=dict(
+            title="Monety 💰",
+            showgrid=True,
+            gridcolor='#f1f5f9'
+        ),
+        height=300,
+        hovermode='x unified',
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
+        margin=dict(l=50, r=20, t=60, b=40)
+    )
+    
+    return fig
 
 # =============================================================================
 # TAB 1: DASHBOARD
@@ -132,191 +402,193 @@ def show_dashboard_tab(username, user_data):
         user_data["business_game"] = bg_data
         save_user_data(username, user_data)
     
+    st.markdown("---")
     # =============================================================================
-    # SEKCJA LOSOWANIA WYDARZEŃ - NA POCZĄTKU DASHBOARDU
+    # SEKCJA DZIENNEGO WYDARZENIA - RAZ NA DOBĘ
     # =============================================================================
     
-    from utils.business_game_events import get_random_event, apply_event_effects
+    from utils.business_game_events import get_random_event, apply_event_effects, get_latest_event
     from datetime import datetime, timedelta
     
-    st.markdown("### 🎲 Losowanie Zdarzenia")
-    
-    # Sprawdź cooldown
+    # Sprawdź czy dzisiaj było już losowanie
     last_roll = bg_data.get("events", {}).get("last_roll")
-    can_roll = True
-    hours_left = 0
-    minutes_left = 0
+    today = datetime.now().strftime("%Y-%m-%d")
+    should_roll = True
     
     if last_roll:
-        last_dt = datetime.strptime(last_roll, "%Y-%m-%d %H:%M:%S")
-        next_roll = last_dt + timedelta(hours=24)
-        now = datetime.now()
+        last_roll_date = last_roll.split(" ")[0]  # Pobierz tylko datę (bez godziny)
+        if last_roll_date == today:
+            should_roll = False
+    
+    # Jeśli jeszcze dziś nie było losowania - WYLOSUJ TERAZ
+    if should_roll:
+        event_result = get_random_event(bg_data, user_data.get("degencoins", 0))
         
-        if now < next_roll:
-            can_roll = False
-            time_until_next = next_roll - now
-            hours_left = int(time_until_next.total_seconds() / 3600)
-            minutes_left = int((time_until_next.total_seconds() % 3600) / 60)
-    
-    col1, col2 = st.columns([3, 1])
-    
-    with col1:
-        if can_roll:
-            st.success("✅ **Możesz wylosować zdarzenie!** (Szansa: 20%)")
-        else:
-            st.warning(f"⏰ **Następne losowanie za: {hours_left}h {minutes_left}min**")
-    
-    with col2:
-        if st.button("🎲 LOSUJ!", disabled=not can_roll, type="primary", key="dashboard_roll_event"):
-            # Losuj zdarzenie
-            event_result = get_random_event(bg_data, user_data.get("degencoins", 0))
+        if event_result:
+            event_id, event_data = event_result
             
-            if event_result:
-                event_id, event_data = event_result
-                
-                # Sprawdź czy wymaga wyboru
-                if event_data["type"] == "neutral" and "choices" in event_data:
-                    # Zapisz zdarzenie tymczasowo w session_state
-                    st.session_state["pending_event"] = (event_id, event_data)
-                    st.rerun()
-                else:
-                    # Bezpośrednio aplikuj
-                    user_data = apply_event_effects(event_id, event_data, None, user_data)
-                    save_user_data(username, user_data)
-                    st.success(f"{event_data['emoji']} **{event_data['title']}**")
-                    st.balloons() if event_data["type"] == "positive" else None
-                    st.rerun()
+            # Sprawdź czy wymaga wyboru
+            if event_data["type"] == "neutral" and "choices" in event_data:
+                # Zapisz w session_state i wyświetl modal
+                st.session_state["pending_event"] = (event_id, event_data)
             else:
-                # Brak zdarzenia (80% przypadków)
-                bg_data.setdefault("events", {})["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                user_data["business_game"] = bg_data
+                # Bezpośrednio aplikuj (positive i negative)
+                user_data = apply_event_effects(event_id, event_data, None, user_data)
                 save_user_data(username, user_data)
-                st.info("😐 Tym razem nic się nie wydarzyło. Spokojny dzień!")
-                st.rerun()
+                
+                if event_data["type"] == "positive":
+                    st.balloons()
+        
+        # Przeładuj bg_data po zapisie
+        bg_data = user_data["business_game"]
+        last_roll = bg_data.get("events", {}).get("last_roll")
     
-    # Pending event (jeśli neutralne wymaga wyboru)
+    # Pending event (jeśli neutralne wymaga wyboru - blocking modal)
     if "pending_event" in st.session_state:
         event_id, event_data = st.session_state["pending_event"]
         render_event_choice_modal(event_id, event_data, username, user_data)
     
-    st.markdown("---")
-    
-    # Sprawdź i wyświetl najnowsze zdarzenie (jeśli jest)
-    from utils.business_game_events import get_latest_event, get_active_effects
+    # Pokaż dzisiejsze wydarzenie (jeśli jest)
     latest_event = get_latest_event(bg_data)
     if latest_event:
-        render_latest_event_card(latest_event)
-        st.markdown("---")
+        # Sprawdź czy wydarzenie jest z dzisiaj
+        event_date = latest_event.get("timestamp", "").split(" ")[0]
+        if event_date == today:
+            st.markdown("### 🎲 Dzisiejsze Wydarzenie")
+            show_active_event_card(latest_event)
+            st.markdown("---")
     
-    # Pokaż aktywne efekty z wydarzeń
-    active_effects = get_active_effects(bg_data)
-    if active_effects:
-        render_active_effects_badge(active_effects)
-        st.markdown("---")
+    st.markdown("---")
     
-    st.subheader("📊 Podsumowanie Firmy")
-    
+    # Pobierz podsumowanie
     summary = get_firm_summary(user_data)
     
-    # Metryki finansowe
-    col1, col2, col3, col4 = st.columns(4)
+    # SEKCJA AKTYWNYCH KONTRAKTÓW
+    st.subheader("📋 Aktywne Kontrakty")
     
-    with col1:
-        st.metric("💵 Łączne przychody", f"{summary['total_revenue']:,} 💰")
+    # Lista aktywnych kontraktów
+    active_contracts = bg_data["contracts"]["active"]
     
-    with col2:
-        st.metric("💸 Łączne koszty", f"{summary['total_costs']:,} 💰")
-    
-    with col3:
-        profit_color = "normal" if summary['net_profit'] >= 0 else "inverse"
-        st.metric("💎 Zysk netto", f"{summary['net_profit']:,} 💰",
-                 delta=None)
-    
-    with col4:
-        st.metric("📉 Koszty dzienne", f"{summary['daily_costs']:.0f} 💰/dzień")
-    
-    st.markdown("---")
-    
-    # Sekcja aktywnych kontraktów
-    col_left, col_right = st.columns([2, 1])
-    
-    with col_left:
-        st.subheader("📋 Aktywne Kontrakty")
-        
-        active_contracts = bg_data["contracts"]["active"]
-        
-        if len(active_contracts) == 0:
-            st.info("Brak aktywnych kontraktów. Przejdź do zakładki 'Rynek Kontraktów' aby przyjąć nowe zlecenie!")
-        else:
-            for contract in active_contracts:
-                render_active_contract_card(contract, username, user_data, bg_data)
-    
-    with col_right:
-        st.subheader("📈 Statystyki")
-        
-        stats = bg_data["stats"]
-        
-        st.metric("⭐ Średnia ocena", f"{stats['avg_rating']:.1f}/5.0")
-        st.metric("🌟 Kontrakty 5⭐", stats["contracts_5star"])
-        st.metric("📊 Pojemność dzienna", f"{summary['daily_capacity']} kontraktów")
-        
-        st.markdown("---")
-        
-        st.markdown("### 🎯 Rozkład kontraktów")
-        category_dist = get_category_distribution(bg_data)
-        
-        if category_dist:
-            for cat, count in category_dist.items():
-                cat_stats = stats["category_stats"][cat]
-                st.markdown(f"""
-                **{cat}**: {count} kontraktów  
-                Średnia: {cat_stats['avg_rating']:.1f}⭐ | Zarobek: {cat_stats['total_earned']:,} 💰
-                """)
-        else:
-            st.info("Brak danych")
-    
-    st.markdown("---")
-    
-    # Wykres przychodów (uproszczony)
-    st.subheader("💹 Historia przychodów (ostatnie 7 dni)")
-    
-    revenue_data = get_revenue_chart_data(bg_data, days=7)
-    
-    if revenue_data["dates"]:
-        fig = go.Figure()
-        fig.add_trace(go.Bar(
-            x=revenue_data["dates"],
-            y=revenue_data["revenue"],
-            marker_color='#667eea',
-            text=revenue_data["revenue"],
-            textposition='auto',
-        ))
-        fig.update_layout(
-            title="Dzienne przychody",
-            xaxis_title="Data",
-            yaxis_title="Monety",
-            height=300,
-            showlegend=False
-        )
-        st.plotly_chart(fig, use_container_width=True)
+    if len(active_contracts) == 0:
+        st.info("Brak aktywnych kontraktów. Przejdź do zakładki 'Rynek Kontraktów' aby przyjąć nowe zlecenie!")
     else:
-        st.info("Brak danych - ukończ pierwszy kontrakt!")
+        for contract in active_contracts:
+            render_active_contract_card(contract, username, user_data, bg_data)
     
-    # Edycja nazwy firmy
     st.markdown("---")
-    st.subheader("⚙️ Ustawienia")
     
-    with st.expander("Zmień nazwę firmy"):
-        new_name = st.text_input("Nowa nazwa firmy", value=bg_data["firm"]["name"], key="dashboard_firm_name_input")
-        if st.button("💾 Zapisz nazwę", key="dashboard_save_firm_name"):
-            bg_data["firm"]["name"] = new_name
-            user_data["business_game"] = bg_data
-            save_user_data(username, user_data)
-            st.success("Nazwa firmy zaktualizowana!")
-            st.rerun()
+    # NOWY WYKRES FINANSOWY z kontrolkami
+    st.subheader("� Analiza Finansowa")
+    
+    # Kontrolki
+    col_chart1, col_chart2 = st.columns([3, 1])
+    
+    with col_chart2:
+        st.markdown("**Okres:**")
+        period = st.radio(
+            "Wybierz okres",
+            options=[7, 14, 30],
+            format_func=lambda x: f"{x} dni",
+            key="financial_chart_period",
+            label_visibility="collapsed"
+        )
+        
+        cumulative = st.checkbox(
+            "📈 Wartość skumulowana",
+            value=False,
+            key="financial_chart_cumulative"
+        )
+    
+    with col_chart1:
+        # Generuj i wyświetl wykres
+        fig = create_financial_chart(bg_data, period=period, cumulative=cumulative)
+        st.plotly_chart(fig, use_container_width=True)
+        
+        # Podsumowanie sum
+        if cumulative:
+            transactions = bg_data.get("history", {}).get("transactions", [])
+            total_rev = sum(t["amount"] for t in transactions if t["type"] == "contract_reward")
+            total_cost = sum(abs(t["amount"]) for t in transactions if t["type"] in ["daily_costs", "employee_hire"])
+            total_profit = total_rev - total_cost
+            
+            st.markdown(f"""
+            <div style='background: #f8f9fa; padding: 12px; border-radius: 8px; margin-top: 8px;'>
+                <div style='display: flex; justify-content: space-around; font-size: 14px;'>
+                    <div><strong>📊 Suma przychodów:</strong> {total_rev:,} 💰</div>
+                    <div><strong>💸 Suma kosztów:</strong> {total_cost:,} 💰</div>
+                    <div><strong>💎 Suma zysku:</strong> <span style='color: {"#10b981" if total_profit >= 0 else "#ef4444"}'>{total_profit:,} 💰</span></div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    st.subheader("⚙️ Ustawienia Firmy")
+    
+    col_settings1, col_settings2 = st.columns(2)
+    
+    with col_settings1:
+        with st.expander("✏️ Zmień nazwę firmy"):
+            new_name = st.text_input("Nowa nazwa firmy", value=bg_data["firm"]["name"], key="dashboard_firm_name_input")
+            if st.button("💾 Zapisz nazwę", key="dashboard_save_firm_name"):
+                bg_data["firm"]["name"] = new_name
+                user_data["business_game"] = bg_data
+                save_user_data(username, user_data)
+                st.success("✅ Nazwa firmy zaktualizowana!")
+                st.rerun()
+    
+    with col_settings2:
+        with st.expander("🎨 Zmień logo firmy"):
+            # Pokaż kategorie
+            st.markdown("**Wybierz kategorię:**")
+            categories = list(FIRM_LOGOS.keys())
+            category_names = {
+                "basic": "🏢 Budynki",
+                "business": "💼 Biznes",
+                "creative": "🎨 Kreatywne",
+                "nature": "🌍 Natura",
+                "tech": "💻 Technologia",
+                "animals": "🦁 Zwierzęta"
+            }
+            
+            selected_category = st.selectbox(
+                "Kategoria:",
+                categories,
+                format_func=lambda x: category_names.get(x, x),
+                key="logo_category"
+            )
+            
+            # Wyświetl dostępne logo w gridzie
+            st.markdown("**Wybierz logo:**")
+            available_logos = FIRM_LOGOS[selected_category]["free"]
+            
+            # Grid 8 kolumn
+            cols = st.columns(8)
+            for idx, logo in enumerate(available_logos):
+                with cols[idx % 8]:
+                    if st.button(
+                        logo,
+                        key=f"logo_{selected_category}_{idx}",
+                        help=f"Kliknij aby wybrać {logo}",
+                        use_container_width=True
+                    ):
+                        bg_data["firm"]["logo"] = logo
+                        user_data["business_game"] = bg_data
+                        save_user_data(username, user_data)
+                        st.success(f"✅ Logo zmienione na {logo}!")
+                        st.rerun()
+            
+            # Podgląd aktualnego logo
+            st.markdown("---")
+            current_logo = bg_data["firm"].get("logo", "🏢")
+            st.markdown(f"""
+            <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; color: white;'>
+                <div style='font-size: 64px; margin-bottom: 8px;'>{current_logo}</div>
+                <p style='margin: 0; opacity: 0.9;'>Aktualne logo</p>
+            </div>
+            """, unsafe_allow_html=True)
 
 def render_active_contract_card(contract, username, user_data, bg_data):
-    """Renderuje kartę aktywnego kontraktu"""
+    """Renderuje profesjonalną kartę aktywnego kontraktu w stylu game UI"""
     
     with st.container():
         # Oblicz pozostały czas
@@ -325,57 +597,118 @@ def render_active_contract_card(contract, username, user_data, bg_data):
         time_left = deadline - now
         hours_left = int(time_left.total_seconds() / 3600)
         
-        deadline_color = "🟢" if hours_left > 24 else "🟡" if hours_left > 6 else "🔴"
+        # Kolory i ikony dla deadline
+        if hours_left > 24:
+            deadline_status = "� Na czasie"
+            deadline_bg = "linear-gradient(135deg, #10b981 0%, #059669 100%)"
+        elif hours_left > 6:
+            deadline_status = "🟡 Kończy się"
+            deadline_bg = "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
+        else:
+            deadline_status = "🔴 Pilne!"
+            deadline_bg = "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
         
         # Sprawdź czy kontrakt był dotknięty zdarzeniem
         event_affected = contract.get("affected_by_event")
         
-        # Ustal kolor ramki na podstawie typu zdarzenia
+        # Ustal kolor akcent na podstawie typu zdarzenia
         if event_affected:
             if event_affected.get("type") == "deadline_reduction":
-                border_color = "#ff6b6b"  # Czerwony dla skróconego
+                accent_color = "#ef4444"
+                glow = "0 0 20px rgba(239, 68, 68, 0.4)"
             elif event_affected.get("type") == "deadline_extension":
-                border_color = "#10b981"  # Zielony dla przedłużonego
+                accent_color = "#10b981"
+                glow = "0 0 20px rgba(16, 185, 129, 0.4)"
             else:
-                border_color = "#667eea"  # Domyślny niebieski
+                accent_color = "#667eea"
+                glow = "0 0 20px rgba(102, 126, 234, 0.3)"
         else:
-            border_color = "#667eea"  # Domyślny niebieski
+            accent_color = "#667eea"
+            glow = "0 0 20px rgba(102, 126, 234, 0.3)"
         
-        # Header (tylko stylowanie ramki)
-        st.markdown(f"""
-        <div style='border: 2px solid {border_color}; border-radius: 10px; 
-                    padding: 15px; margin: 10px 0; background: #f8f9fa;'>
-            <h4>{contract['emoji']} {contract['tytul']}</h4>
-        </div>
-        """, unsafe_allow_html=True)
+        # Karta kontraktu - profesjonalny design
+        difficulty_stars = "🔥" * contract['trudnosc']
+        reward_min = contract['nagroda_base']
+        reward_max = contract['nagroda_5star']
         
-        # ALERT jeśli dotknięty zdarzeniem
+        # Render HTML card
+        # Przygotuj HTML dla alertu wydarzenia (jeśli jest)
+        event_alert_html = ""
         if event_affected:
             if event_affected.get("type") == "deadline_reduction":
-                st.warning(f"⚠️ **Zdarzenie: {event_affected.get('event_title')}** - Deadline skrócony o {event_affected.get('days_reduced')} dzień!")
+                alert_bg = "#fef2f2"
+                alert_border = "#ef4444"
+                alert_icon = "⚠️"
+                alert_text = f"<strong>Zdarzenie: {event_affected.get('event_title')}</strong><br>Deadline skrócony o {event_affected.get('days_reduced')} dzień!"
             elif event_affected.get("type") == "deadline_extension":
-                st.success(f"✨ **Zdarzenie: {event_affected.get('event_title')}** - Deadline przedłużony o {event_affected.get('days_added')} dzień!")
+                alert_bg = "#f0fdf4"
+                alert_border = "#10b981"
+                alert_icon = "✨"
+                alert_text = f"<strong>Zdarzenie: {event_affected.get('event_title')}</strong><br>Deadline przedłużony o {event_affected.get('days_added')} dzień!"
+            elif event_affected.get("type") == "deadline_boost":
+                alert_bg = "#f0f9ff"
+                alert_border = "#3b82f6"
+                alert_icon = "⚡"
+                alert_text = f"<strong>Boost Energii: {event_affected.get('event_title')}</strong><br>Bonus +{event_affected.get('days_added')} dni do realizacji!"
+            elif event_affected.get("type") == "renegotiation":
+                alert_bg = "#eff6ff"
+                alert_border = "#3b82f6"
+                alert_icon = "🔄"
+                reward_change = int((event_affected.get('reward_multiplier', 1.0) - 1) * 100)
+                time_bonus = event_affected.get('time_bonus', 0)
+                if reward_change < 0 and time_bonus > 0:
+                    alert_text = f"<strong>Renegocjacja: {event_affected.get('event_title')}</strong><br>Nagroda {reward_change}%, ale +{time_bonus} dni na realizację!"
+                else:
+                    alert_text = f"<strong>Renegocjacja: {event_affected.get('event_title')}</strong><br>Zmieniono warunki kontraktu"
+            else:
+                alert_bg = "#f9fafb"
+                alert_border = "#9ca3af"
+                alert_icon = "ℹ️"
+                alert_text = f"<strong>Wydarzenie aktywne</strong>"
+            
+            event_alert_html = f"""<div style="background: {alert_bg}; border-left: 4px solid {alert_border}; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;"><div style="font-size: 24px;">{alert_icon}</div><div style="font-size: 13px; color: #1e293b; line-height: 1.4;">{alert_text}</div></div>"""
         
-        # Informacje - natywny Markdown
-        st.markdown(f"**Klient:** {contract['klient']} | **Kategoria:** {contract['kategoria']}")
-        st.markdown(f"**{deadline_color} Deadline:** {hours_left}h pozostało")
-        st.markdown(f"**💰 Nagroda:** {contract['nagroda_base']}-{contract['nagroda_5star']} monet")
+        html_content = f"""<div style="background: white; border-radius: 20px; padding: 24px; margin: 16px 0; box-shadow: 0 8px 32px rgba(0,0,0,0.1), {glow}; border-left: 6px solid {accent_color}; transition: all 0.3s ease;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+<div style="flex: 1;">
+<div style="font-size: 32px; margin-bottom: 8px;">{contract['emoji']}</div>
+<h3 style="margin: 0; color: #1e293b; font-size: 20px; font-weight: 700;">{contract['tytul']}</h3>
+<p style="margin: 4px 0 0 0; color: #64748b; font-size: 14px;">Klient: <strong>{contract['klient']}</strong> • {contract['kategoria']}</p>
+</div>
+<div style="background: {deadline_bg}; color: white; padding: 12px 20px; border-radius: 12px; text-align: center; min-width: 120px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+<div style="font-size: 24px; font-weight: 700; margin-bottom: 4px;">{hours_left}h</div>
+<div style="font-size: 11px; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px;">{deadline_status}</div>
+</div>
+</div>
+<div style="background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+<div style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600;">📝 Opis sytuacji</div>
+<div style="color: #334155; font-size: 14px; line-height: 1.6;">{contract['opis']}</div>
+</div>
+{event_alert_html}
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+<div style="text-align: center;">
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Nagroda</div>
+<div style="color: #f59e0b; font-size: 20px; font-weight: 700;">💰 {reward_min}-{reward_max}</div>
+</div>
+<div style="text-align: center;">
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Trudność</div>
+<div style="font-size: 20px;">{difficulty_stars}</div>
+</div>
+<div style="text-align: center;">
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Reputacja</div>
+<div style="color: #8b5cf6; font-size: 20px; font-weight: 700;">⭐ +{contract['reputacja']}</div>
+</div>
+</div>
+</div>"""
         
-        with st.expander(f"🔍 Szczegóły i realizacja: {contract['tytul']}"):
-            # Renderuj opis i zadanie jako czysty Markdown (bez HTML wrappera)
-            st.markdown(f"**Opis sytuacji:**")
-            st.markdown(contract['opis'])
-            st.markdown("---")
-            st.markdown(f"**Zadanie:**")
+        st.markdown(html_content, unsafe_allow_html=True)
+        
+        # ROZWIĄZANIE - expander
+        with st.expander("✍️ Pracuj nad rozwiązaniem", expanded=True):
+            # Wyświetl zadanie na górze
+            st.markdown("### 🎯 Zadanie")
             st.markdown(contract['zadanie'])
             st.markdown("---")
-            
-            st.markdown(f"**Wymagana wiedza:** {', '.join(contract['wymagana_wiedza'])}")
-            st.markdown(f"**Trudność:** {'🔥' * contract['trudnosc']}")
-            st.markdown(f"**Minimalnie:** {contract.get('min_slow', 300)} słów")
-            
-            st.markdown("---")
-            st.subheader("✍️ Twoje rozwiązanie")
             
             # ANTI-CHEAT: Zapisz czas rozpoczęcia pisania
             solution_start_key = f"solution_start_{contract['id']}"
@@ -448,7 +781,7 @@ def render_active_contract_card(contract, username, user_data, bg_data):
                         paste_events = st.session_state.get(paste_events_key, [])
                         
                         # Prześlij rozwiązanie z danymi anti-cheat
-                        updated_user_data, success, message = submit_contract_solution(
+                        updated_user_data, success, message, _ = submit_contract_solution(
                             user_data, contract['id'], solution,
                             start_time=start_time,
                             paste_events=paste_events if paste_events else None
@@ -576,7 +909,7 @@ def show_contracts_tab(username, user_data):
             render_contract_card(contract, username, user_data, bg_data, can_accept)
 
 def render_contract_card(contract, username, user_data, bg_data, can_accept_new):
-    """Renderuje kartę dostępnego kontraktu"""
+    """Renderuje profesjonalną kartę dostępnego kontraktu - taki sam layout jak aktywne"""
     
     # Sprawdź czy jest aktywny bonus next_contract
     from utils.business_game_events import get_active_effects
@@ -590,63 +923,96 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new)
             bonus_multiplier = bonus_effect.get("multiplier", 1.0)
     
     with st.container():
-        # Header z ramką (tylko stylowanie, bez treści kontraktu)
-        border_color = "#fbbf24" if has_bonus else "#667eea"  # Złoty dla bonusu
+        # Kolory i style - jednolite jak aktywne kontrakty
+        if has_bonus:
+            accent_color = "#fbbf24"
+            glow = "0 0 24px rgba(251, 191, 36, 0.5)"
+        else:
+            accent_color = "#667eea"
+            glow = "0 0 20px rgba(102, 126, 234, 0.3)"
         
-        st.markdown(f"""
-        <div style='border: 2px solid {border_color}; border-radius: 10px; 
-                    padding: 20px; margin: 10px 0; background: white;'>
-            <h3>{contract['emoji']} {contract['tytul']}</h3>
-            <p><strong>Klient:</strong> {contract['klient']}</p>
-        </div>
-        """, unsafe_allow_html=True)
+        # Oblicz nagrody z bonusem
+        reward_min = int(contract['nagroda_base'] * bonus_multiplier) if has_bonus else contract['nagroda_base']
+        reward_max = int(contract['nagroda_5star'] * bonus_multiplier) if has_bonus else contract['nagroda_5star']
         
-        # Pokaż bonus jeśli aktywny
+        # Difficulty
+        difficulty_stars = "🔥" * contract['trudnosc']
+        
+        # Czas realizacji jako "deadline badge"
+        deadline_days = contract['czas_realizacji_dni']
+        deadline_bg = "linear-gradient(135deg, #10b981 0%, #059669 100%)"  # Zielony dla dostępnych
+        
+        # Alert bonusu (jeśli aktywny)
+        bonus_alert_html = ""
         if has_bonus:
             bonus_percent = int((bonus_multiplier - 1) * 100)
-            bonus_base = int(contract['nagroda_base'] * bonus_multiplier)
-            bonus_5star = int(contract['nagroda_5star'] * bonus_multiplier)
-            st.success(f"🌟 **BONUS AKTYWNY: +{bonus_percent}%!** Nagroda: {bonus_base}-{bonus_5star} monet")
+            bonus_alert_html = f"""<div style="background: #fef3c7; border-left: 4px solid #fbbf24; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;"><div style="font-size: 24px;">🌟</div><div style="font-size: 13px; color: #1e293b; line-height: 1.4;"><strong>BONUS AKTYWNY: +{bonus_percent}%!</strong><br>Zwiększona nagroda za ten kontrakt</div></div>"""
         
-        # Opis - zwykły Markdown (renderowany przez Streamlit, nie w HTML)
-        st.markdown(f"*{contract['opis'][:200]}...*")
+        # Karta kontraktu - IDENTYCZNY LAYOUT jak aktywne
+        html_content = f"""<div style="background: white; border-radius: 20px; padding: 24px; margin: 16px 0; box-shadow: 0 8px 32px rgba(0,0,0,0.1), {glow}; border-left: 6px solid {accent_color}; transition: all 0.3s ease;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+<div style="flex: 1;">
+<div style="font-size: 32px; margin-bottom: 8px;">{contract['emoji']}</div>
+<h3 style="margin: 0; color: #1e293b; font-size: 20px; font-weight: 700;">{contract['tytul']}</h3>
+<p style="margin: 4px 0 0 0; color: #64748b; font-size: 14px;">Klient: <strong>{contract['klient']}</strong> • {contract['kategoria']}</p>
+</div>
+<div style="background: {deadline_bg}; color: white; padding: 12px 20px; border-radius: 12px; text-align: center; min-width: 120px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+<div style="font-size: 24px; font-weight: 700; margin-bottom: 4px;">{deadline_days}d</div>
+<div style="font-size: 11px; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px;">Czas realizacji</div>
+</div>
+</div>
+<div style="background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+<div style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600;">📝 Opis sytuacji</div>
+<div style="color: #334155; font-size: 14px; line-height: 1.6;">{contract['opis']}</div>
+</div>
+{bonus_alert_html}
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+<div style="text-align: center;">
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Nagroda</div>
+<div style="color: #f59e0b; font-size: 20px; font-weight: 700;">💰 {reward_min}-{reward_max}</div>
+</div>
+<div style="text-align: center;">
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Trudność</div>
+<div style="font-size: 20px;">{difficulty_stars}</div>
+</div>
+<div style="text-align: center;">
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Reputacja</div>
+<div style="color: #8b5cf6; font-size: 20px; font-weight: 700;">⭐ +{contract['reputacja']}</div>
+</div>
+</div>
+</div>"""
         
-        # Metryki w kolumnach
-        col_reward, col_time, col_diff = st.columns(3)
-        with col_reward:
-            st.markdown(f"**💰 Nagroda:** {contract['nagroda_base']}-{contract['nagroda_5star']} monet")
-        with col_time:
-            st.markdown(f"**⏱️ Czas:** {contract['czas_realizacji_dni']} dni")
-        with col_diff:
-            st.markdown(f"**Trudność:** {'🔥' * contract['trudnosc']}")
+        st.markdown(html_content, unsafe_allow_html=True)
         
-        st.markdown(f"📚 **Wymagana wiedza:** {', '.join(contract['wymagana_wiedza'][:2])}...")
+        # Expander ze szczegółami zadania
+        with st.expander("👁️ Zobacz szczegóły zadania"):
+            st.markdown("### 🎯 Zadanie do wykonania")
+            st.markdown(contract['zadanie'])
+            
+            st.markdown("---")
+            
+            st.markdown("### 📚 Wymagana wiedza z lekcji")
+            for req in contract['wymagana_wiedza']:
+                st.markdown(f"- {req}")
+            
+            st.markdown("---")
+            
+            col_a, col_b = st.columns(2)
+            with col_a:
+                st.markdown(f"**🏆 Wymagany poziom firmy:** {contract['wymagany_poziom']}")
+            with col_b:
+                st.markdown(f"**📂 Kategoria:** {contract['kategoria']}")
         
-        col1, col2 = st.columns([3, 1])
-        
-        with col1:
-            with st.expander(f"👁️ Zobacz pełne szczegóły"):
-                # Renderuj opis i zadanie jako czysty Markdown (bez HTML wrappera)
-                st.markdown(f"**Opis sytuacji:**")
-                st.markdown(contract['opis'])
-                st.markdown("---")
-                st.markdown(f"**Zadanie do wykonania:**")
-                st.markdown(contract['zadanie'])
-                st.markdown("---")
-                st.markdown(f"**Wymagana wiedza z lekcji:**")
-                for req in contract['wymagana_wiedza']:
-                    st.markdown(f"- {req}")
-                st.markdown(f"\n**Wymagany poziom firmy:** {contract['wymagany_poziom']}")
+        # Przycisk przyjęcia
+        col1, col2, col3 = st.columns([2, 1, 2])
         
         with col2:
-            # Sprawdź poziom
-            if bg_data["firm"]["level"] < contract["wymagany_poziom"]:
-                st.warning(f"🔒 Poziom {contract['wymagany_poziom']}")
-            elif not can_accept_new:
+            # Sprawdź możliwość przyjęcia
+            if not can_accept_new:
                 st.error("❌ Brak miejsca")
             else:
-                if st.button("✅ Przyjmij", key=f"accept_{contract['id']}", type="primary"):
-                    updated_bg, success, message = accept_contract(bg_data, contract['id'])
+                if st.button("✅ Przyjmij", key=f"accept_{contract['id']}", type="primary", use_container_width=True):
+                    updated_bg, success, message, _ = accept_contract(bg_data, contract['id'], user_data)
                     
                     if success:
                         user_data["business_game"] = updated_bg
@@ -655,8 +1021,6 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new)
                         st.rerun()
                     else:
                         st.error(message)
-        
-        st.markdown("---")
 
 # =============================================================================
 # TAB 3: PRACOWNICY
@@ -1099,7 +1463,7 @@ def render_active_effects_badge(active_effects: list):
         """, unsafe_allow_html=True)
 
 def render_latest_event_card(event: dict):
-    """Renderuje małą kartę z najnowszym zdarzeniem na Dashboard"""
+    """Renderuje małą kartę z najnowszym zdarzeniem na Dashboard (stara wersja)"""
     
     # Kolor w zależności od typu
     if event["type"] == "positive":
@@ -1138,6 +1502,55 @@ def render_latest_event_card(event: dict):
     if event.get("affected_contracts_extended"):
         contracts_list = ", ".join(event["affected_contracts_extended"])
         st.caption(f"✨ Przedłużone kontrakty: **{contracts_list}**")
+
+def show_active_event_card(event: dict):
+    """Wyświetla aktywne wydarzenie jako wyróżnioną kartę (Material Design)
+    
+    Args:
+        event: Słownik z danymi wydarzenia (latest_event)
+    """
+    from utils.business_game_events import get_active_effects
+    
+    # Kolory w zależności od typu
+    if event["type"] == "positive":
+        gradient_start = "#10b981"
+        gradient_end = "#059669"
+        emoji_bg = "rgba(255,255,255,0.2)"
+    elif event["type"] == "negative":
+        gradient_start = "#ef4444"
+        gradient_end = "#dc2626"
+        emoji_bg = "rgba(255,255,255,0.2)"
+    else:  # neutral
+        gradient_start = "#f59e0b"
+        gradient_end = "#d97706"
+        emoji_bg = "rgba(255,255,255,0.2)"
+    
+    # Pobierz aktywne efekty
+    effects_text = ""
+    if event.get("effect"):
+        effect = event["effect"]
+        if effect.get("bonus_multiplier"):
+            effects_text += f"<div style='background: {emoji_bg}; padding: 8px 12px; border-radius: 8px; margin-right: 8px;'><strong>Bonus:</strong> +{int((effect['bonus_multiplier'] - 1) * 100)}% nagrody</div>"
+        if effect.get("deadline_extension"):
+            effects_text += f"<div style='background: {emoji_bg}; padding: 8px 12px; border-radius: 8px; margin-right: 8px;'><strong>Przedłużenie:</strong> +{effect['deadline_extension']}h</div>"
+        if effect.get("all_deadlines_extended"):
+            effects_text += f"<div style='background: {emoji_bg}; padding: 8px 12px; border-radius: 8px;'><strong>Ważne:</strong> Wszystkie kontrakty</div>"
+        if effect.get("next_contract_only"):
+            effects_text += f"<div style='background: {emoji_bg}; padding: 8px 12px; border-radius: 8px;'><strong>Ważne:</strong> Następny kontrakt</div>"
+    
+    # Wyświetl kartę
+    event_card_html = f"""<div style="background: linear-gradient(135deg, {gradient_start} 0%, {gradient_end} 100%); color: white; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+<div style="display: flex; align-items: start; gap: 16px;">
+<div style="font-size: 48px;">{event['emoji']}</div>
+<div style="flex: 1;">
+<div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">🎉 Wydarzenie: {event['title']}</div>
+<div style="font-size: 14px; opacity: 0.95; line-height: 1.6; margin-bottom: 12px;">{event['description']}</div>
+<div style="display: flex; gap: 12px; font-size: 13px; flex-wrap: wrap;">{effects_text}</div>
+</div>
+</div>
+</div>"""
+    
+    st.markdown(event_card_html, unsafe_allow_html=True)
 
 def render_event_choice_modal(event_id: str, event_data: dict, username: str, user_data: dict):
     """Renderuje modal z wyborem dla neutralnego zdarzenia"""

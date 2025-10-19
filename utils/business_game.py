@@ -26,6 +26,7 @@ def initialize_business_game(username: str) -> Dict:
     return {
         "firm": {
             "name": f"{username}'s Consulting",
+            "logo": "🏢",  # Domyślne logo - można zmienić w ustawieniach
             "founded": datetime.now().strftime("%Y-%m-%d"),
             "level": GAME_CONFIG["starting_level"],
             # coins - USUNIĘTE! Teraz używamy user_data['degencoins']
@@ -203,11 +204,16 @@ def can_accept_contract(business_data: Dict) -> Tuple[bool, str]:
     
     return True, ""
 
-def accept_contract(business_data: Dict, contract_id: str) -> Tuple[Dict, bool, str]:
-    """Przyjmuje kontrakt"""
+def accept_contract(business_data: Dict, contract_id: str, user_data: Optional[Dict] = None) -> Tuple[Dict, bool, str, Optional[Tuple]]:
+    """Przyjmuje kontrakt i opcjonalnie triggeruje wydarzenie
+    
+    Returns:
+        (updated_business_data, success, message, triggered_event)
+        triggered_event = (event_id, event_data) lub None
+    """
     can_accept, reason = can_accept_contract(business_data)
     if not can_accept:
-        return business_data, False, reason
+        return business_data, False, reason, None
     
     # Znajdź kontrakt w dostępnej puli
     contract = next(
@@ -216,13 +222,40 @@ def accept_contract(business_data: Dict, contract_id: str) -> Tuple[Dict, bool, 
     )
     
     if not contract:
-        return business_data, False, "Kontrakt nie znaleziony"
+        return business_data, False, "Kontrakt nie znaleziony", None
     
     # Przenieś do aktywnych
     active_contract = contract.copy()
     active_contract["accepted_date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Oblicz deadline z uwzględnieniem deadline_boost
+    base_days = contract["czas_realizacji_dni"]
+    bonus_days = 0
+    
+    # Sprawdź aktywne efekty deadline_boost
+    if "events" in business_data:
+        active_effects = business_data["events"].get("active_effects", [])
+        for i, effect in enumerate(active_effects):
+            if effect.get("type") == "deadline_boost" and effect.get("remaining_contracts", 0) > 0:
+                bonus_days = effect.get("days", 0)
+                # Zmniejsz licznik pozostałych kontraktów
+                business_data["events"]["active_effects"][i]["remaining_contracts"] -= 1
+                
+                # Zaznacz kontrakt jako zboostowany
+                active_contract["affected_by_event"] = {
+                    "type": "deadline_boost",
+                    "event_title": "Energy Burst",
+                    "days_added": bonus_days
+                }
+                
+                # Usuń efekt jeśli licznik osiągnął 0
+                if business_data["events"]["active_effects"][i]["remaining_contracts"] == 0:
+                    business_data["events"]["active_effects"].pop(i)
+                
+                break
+    
     active_contract["deadline"] = (
-        datetime.now() + timedelta(days=contract["czas_realizacji_dni"])
+        datetime.now() + timedelta(days=base_days + bonus_days)
     ).strftime("%Y-%m-%d %H:%M:%S")
     active_contract["status"] = "in_progress"
     active_contract["solution"] = ""
@@ -234,7 +267,7 @@ def accept_contract(business_data: Dict, contract_id: str) -> Tuple[Dict, bool, 
         c for c in business_data["contracts"]["available_pool"] if c["id"] != contract_id
     ]
     
-    return business_data, True, "Kontrakt przyjęty!"
+    return business_data, True, "Kontrakt przyjęty!", None
 
 def submit_contract_solution(
     user_data: Dict, 
@@ -242,7 +275,7 @@ def submit_contract_solution(
     solution: str,
     start_time: Optional[datetime] = None,
     paste_events: Optional[list] = None
-) -> Tuple[Dict, bool, str]:
+) -> Tuple[Dict, bool, str, Optional[Tuple[str, Dict]]]:
     """Przesyła rozwiązanie kontraktu (bez oceny AI - uproszczona wersja MVP)
     
     Args:
@@ -251,6 +284,10 @@ def submit_contract_solution(
         solution: Tekst rozwiązania
         start_time: Kiedy użytkownik rozpoczął pisanie (dla anti-cheat)
         paste_events: Lista zdarzeń paste (dla anti-cheat)
+        
+    Returns:
+        Tuple[user_data, success, message, triggered_event]
+        triggered_event: None lub (event_id, event_data) jeśli wydarzenie się wylosowało
     """
     business_data = user_data["business_game"]
     
@@ -261,14 +298,14 @@ def submit_contract_solution(
     )
     
     if not contract:
-        return user_data, False, "Kontrakt nie znaleziony w aktywnych"
+        return user_data, False, "Kontrakt nie znaleziony w aktywnych", None
     
     # Sprawdź minimalną długość rozwiązania
     word_count = len(solution.split())
     min_words = contract.get("min_slow", 300)
     
     if word_count < min_words:
-        return user_data, False, f"Rozwiązanie zbyt krótkie. Minimum: {min_words} słów (masz: {word_count})"
+        return user_data, False, f"Rozwiązanie zbyt krótkie. Minimum: {min_words} słów (masz: {word_count})", None
     
     # ANTI-CHEAT: Sprawdź oszustwa PRZED oceną
     anti_cheat_result = None
@@ -321,7 +358,7 @@ def submit_contract_solution(
         contract["status"] = "pending_review"
         contract["pending_review_id"] = details.get("review_id")
         user_data["business_game"] = business_data
-        return user_data, True, feedback
+        return user_data, True, feedback, None
     
     # Oblicz nagrodę (dla ocen 1-5)
     reward = calculate_contract_reward(contract, rating, business_data)
@@ -414,7 +451,7 @@ def submit_contract_solution(
     if leveled_up:
         success_msg += f"\n\n🎉 GRATULACJE! Awansowałeś na poziom {user_data['business_game']['firm']['level']}!"
     
-    return user_data, True, success_msg
+    return user_data, True, success_msg, None
 
 def simulate_contract_evaluation(solution: str, contract: Dict) -> int:
     """Symuluje ocenę kontraktu (uproszczona wersja dla MVP)"""
