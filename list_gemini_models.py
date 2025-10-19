@@ -5,12 +5,17 @@ Lista dostępnych modeli Google Gemini
 import google.generativeai as genai
 import os
 
-# Konfiguruj API key
+# Konfiguruj API key - BEZPIECZNIE (bez hardcoded klucza)
 try:
     import streamlit as st
     api_key = st.secrets.get("GOOGLE_API_KEY")
 except:
-    api_key = "AIzaSyDJu4fJoICZCe9O8shCN18SSq9t_gFH8nM"  # Z pliku secrets.toml
+    api_key = os.getenv("GOOGLE_API_KEY")
+
+if not api_key:
+    print("❌ BŁĄD: Brak klucza API!")
+    print("Dodaj GOOGLE_API_KEY do .streamlit/secrets.toml lub zmiennej środowiskowej")
+    exit(1)
 
 genai.configure(api_key=api_key)
 
