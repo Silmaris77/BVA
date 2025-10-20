@@ -720,14 +720,100 @@ def render_active_contract_card(contract, username, user_data, bg_data):
             if paste_events_key not in st.session_state:
                 st.session_state[paste_events_key] = []
             
-            solution_key = f"solution_{contract['id']}"
-            solution = st.text_area(
-                "Przygotuj kompleksowe rozwiązanie zgodnie z wymaganiami:",
-                value=contract.get("solution", ""),
-                height=400,
-                key=solution_key,
-                placeholder="Zacznij pisać swoje rozwiązanie tutaj..."
+            # Wybór metody wprowadzania
+            st.markdown("### 📝 Sposób wprowadzania")
+            input_method = st.radio(
+                "Wybierz metodę:",
+                ["✍️ Pisz", "🎤 Mów"],
+                key=f"input_method_{contract['id']}",
+                horizontal=True
             )
+            
+            solution_key = f"solution_{contract['id']}"
+            
+            # To wklej do business_games.py zamiast linii 733-808
+
+            if input_method == "🎤 Mów":
+                st.markdown("**Nagraj swoje rozwiązanie** (naciśnij przycisk i zacznij mówić):")
+                
+                # Inicjalizuj klucze session_state
+                transcription_key = f"transcription_{contract['id']}"
+                transcription_version_key = f"transcription_version_{contract['id']}"
+                if transcription_key not in st.session_state:
+                    st.session_state[transcription_key] = ""
+                if transcription_version_key not in st.session_state:
+                    st.session_state[transcription_version_key] = 0
+                
+                audio_data = st.audio_input(
+                    "🎤 Nagrywanie...",
+                    key=f"audio_input_{contract['id']}"
+                )
+                
+                if audio_data is not None:
+                    import speech_recognition as sr
+                    import tempfile
+                    import os
+                    from pydub import AudioSegment
+                    
+                    with st.spinner("🤖 Rozpoznaję mowę..."):
+                        try:
+                            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+                                tmp_file.write(audio_data.getvalue())
+                                tmp_path = tmp_file.name
+                            
+                            wav_path = None
+                            try:
+                                audio = AudioSegment.from_file(tmp_path)
+                                wav_path = tmp_path.replace(".wav", "_converted.wav")
+                                audio.export(wav_path, format="wav")
+                                
+                                recognizer = sr.Recognizer()
+                                with sr.AudioFile(wav_path) as source:
+                                    audio_data_sr = recognizer.record(source)
+                                    
+                                transcription = recognizer.recognize_google(audio_data_sr, language="pl-PL")
+                                
+                                # Zapisz i zwiększ wersję
+                                st.session_state[transcription_key] = transcription
+                                st.session_state[transcription_version_key] += 1
+                                
+                                st.success("✅ Transkrypcja zakończona! Tekst pojawił się w polu poniżej.")
+                                
+                            except sr.UnknownValueError:
+                                st.error("❌ Nie udało się rozpoznać mowy. Spróbuj ponownie lub mów wyraźniej.")
+                            except sr.RequestError as e:
+                                st.error(f"❌ Błąd połączenia z usługą rozpoznawania mowy: {str(e)}")
+                            finally:
+                                if os.path.exists(tmp_path):
+                                    os.unlink(tmp_path)
+                                if wav_path and os.path.exists(wav_path):
+                                    os.unlink(wav_path)
+                                
+                        except Exception as e:
+                            st.error(f"❌ Błąd podczas transkrypcji: {str(e)}")
+                            st.info("Możesz użyć opcji '✍️ Pisz' aby wprowadzić tekst ręcznie.")
+                
+                # Dynamiczny klucz który zmienia się po transkrypcji
+                text_area_key = f"{solution_key}_v{st.session_state[transcription_version_key]}"
+                current_text = st.session_state.get(transcription_key, contract.get("solution", ""))
+                
+                solution = st.text_area(
+                    "📝 Edytuj transkrypcję (możesz poprawić lub uzupełnić):",
+                    value=current_text,
+                    height=400,
+                    key=text_area_key,
+                    placeholder="Transkrypcja pojawi się tutaj po nagraniu..."
+                )
+
+                
+            else:  # Pisz
+                solution = st.text_area(
+                    "Przygotuj kompleksowe rozwiązanie zgodnie z wymaganiami:",
+                    value=contract.get("solution", ""),
+                    height=400,
+                    key=solution_key,
+                    placeholder="Zacznij pisać swoje rozwiązanie tutaj..."
+                )
             
             # ANTI-CHEAT: Dodaj JavaScript do śledzenia wklejania
             st.markdown(f"""
@@ -1516,36 +1602,81 @@ def show_active_event_card(event: dict):
         gradient_start = "#10b981"
         gradient_end = "#059669"
         emoji_bg = "rgba(255,255,255,0.2)"
+        icon = "✨"
     elif event["type"] == "negative":
         gradient_start = "#ef4444"
         gradient_end = "#dc2626"
         emoji_bg = "rgba(255,255,255,0.2)"
+        icon = "⚠️"
     else:  # neutral
         gradient_start = "#f59e0b"
         gradient_end = "#d97706"
         emoji_bg = "rgba(255,255,255,0.2)"
+        icon = "⚖️"
     
-    # Pobierz aktywne efekty
-    effects_text = ""
-    if event.get("effect"):
-        effect = event["effect"]
-        if effect.get("bonus_multiplier"):
-            effects_text += f"<div style='background: {emoji_bg}; padding: 8px 12px; border-radius: 8px; margin-right: 8px;'><strong>Bonus:</strong> +{int((effect['bonus_multiplier'] - 1) * 100)}% nagrody</div>"
-        if effect.get("deadline_extension"):
-            effects_text += f"<div style='background: {emoji_bg}; padding: 8px 12px; border-radius: 8px; margin-right: 8px;'><strong>Przedłużenie:</strong> +{effect['deadline_extension']}h</div>"
-        if effect.get("all_deadlines_extended"):
-            effects_text += f"<div style='background: {emoji_bg}; padding: 8px 12px; border-radius: 8px;'><strong>Ważne:</strong> Wszystkie kontrakty</div>"
-        if effect.get("next_contract_only"):
-            effects_text += f"<div style='background: {emoji_bg}; padding: 8px 12px; border-radius: 8px;'><strong>Ważne:</strong> Następny kontrakt</div>"
+    # Buduj HTML z efektami
+    effects_html = ""
+    if event.get("effects"):
+        effects = event["effects"]
+        effects_items = []
+        
+        # Monety
+        if effects.get("coins"):
+            coin_value = effects["coins"]
+            if coin_value > 0:
+                effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>💰</span><div><strong>+{coin_value}</strong><br><span style='font-size: 11px; opacity: 0.9;'>monet</span></div></div>")
+            else:
+                effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>💸</span><div><strong>{coin_value}</strong><br><span style='font-size: 11px; opacity: 0.9;'>monet</span></div></div>")
+        
+        # Reputacja
+        if effects.get("reputation"):
+            rep_value = effects["reputation"]
+            if rep_value > 0:
+                effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>⭐</span><div><strong>+{rep_value}</strong><br><span style='font-size: 11px; opacity: 0.9;'>reputacji</span></div></div>")
+            else:
+                effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>📉</span><div><strong>{rep_value}</strong><br><span style='font-size: 11px; opacity: 0.9;'>reputacji</span></div></div>")
+        
+        # Bonus do kontraktu
+        if effects.get("next_contract_bonus"):
+            bonus_pct = int((effects["next_contract_bonus"] - 1) * 100)
+            effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>🎁</span><div><strong>+{bonus_pct}%</strong><br><span style='font-size: 11px; opacity: 0.9;'>bonus nagrody</span></div></div>")
+        
+        # Przedłużenie deadline
+        if effects.get("deadline_extension"):
+            ext_hours = effects["deadline_extension"]
+            effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>⏰</span><div><strong>+{ext_hours}h</strong><br><span style='font-size: 11px; opacity: 0.9;'>dodatkowy czas</span></div></div>")
+        
+        # Boost pojemności
+        if effects.get("capacity_boost"):
+            boost = effects["capacity_boost"]
+            duration = effects.get("duration_days", "?")
+            effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>📈</span><div><strong>+{boost}</strong><br><span style='font-size: 11px; opacity: 0.9;'>pojemność ({duration}d)</span></div></div>")
+        
+        # Skrócenie deadline (negatywne)
+        if effects.get("deadline_reduction"):
+            red_hours = effects["deadline_reduction"]
+            effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>⏱️</span><div><strong>-{red_hours}h</strong><br><span style='font-size: 11px; opacity: 0.9;'>mniej czasu</span></div></div>")
+        
+        if effects_items:
+            effects_html = f"<div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 16px;'>{''.join(effects_items)}</div>"
+    
+    # Flavor text (jeśli istnieje)
+    flavor_html = ""
+    if event.get("flavor_text"):
+        flavor_html = f"""<div style='background: rgba(0,0,0,0.15); border-left: 3px solid rgba(255,255,255,0.5); padding: 12px 16px; border-radius: 8px; margin-top: 16px; font-style: italic; font-size: 13px; line-height: 1.5;'>
+"{event['flavor_text']}"
+</div>"""
     
     # Wyświetl kartę
-    event_card_html = f"""<div style="background: linear-gradient(135deg, {gradient_start} 0%, {gradient_end} 100%); color: white; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
-<div style="display: flex; align-items: start; gap: 16px;">
-<div style="font-size: 48px;">{event['emoji']}</div>
+    event_card_html = f"""<div style="background: linear-gradient(135deg, {gradient_start} 0%, {gradient_end} 100%); color: white; border-radius: 20px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+<div style="display: flex; align-items: start; gap: 20px;">
+<div style="font-size: 56px; line-height: 1;">{event['emoji']}</div>
 <div style="flex: 1;">
-<div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">🎉 Wydarzenie: {event['title']}</div>
-<div style="font-size: 14px; opacity: 0.95; line-height: 1.6; margin-bottom: 12px;">{event['description']}</div>
-<div style="display: flex; gap: 12px; font-size: 13px; flex-wrap: wrap;">{effects_text}</div>
+<div style="font-size: 14px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">{icon} Wydarzenie dnia</div>
+<div style="font-size: 22px; font-weight: 700; margin-bottom: 12px;">{event['title']}</div>
+<div style="font-size: 15px; opacity: 0.95; line-height: 1.7;">{event['description']}</div>
+{flavor_html}
+{effects_html}
 </div>
 </div>
 </div>"""

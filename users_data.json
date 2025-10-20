@@ -7,7 +7,7 @@
     "degencoins": 1563,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-19 21:23:29",
+    "last_login": "2025-10-20 10:07:03",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -840,6 +840,12 @@
       "2025-10-19": {
         "xp": 1626,
         "degencoins": 563,
+        "level": 1,
+        "completed_lessons": 2
+      },
+      "2025-10-20": {
+        "xp": 1626,
+        "degencoins": 1563,
         "level": 1,
         "completed_lessons": 2
       }
@@ -1927,6 +1933,27 @@
         "details": {
           "timestamp": "2025-10-19T21:23:29.948131"
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-20T09:07:52.784401",
+        "details": {
+          "timestamp": "2025-10-20T09:07:52.735278"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-20T09:11:02.055722",
+        "details": {
+          "timestamp": "2025-10-20T09:11:02.008975"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-20T10:07:03.729071",
+        "details": {
+          "timestamp": "2025-10-20T10:07:03.692030"
+        }
       }
     ],
     "reports": [
@@ -2354,7 +2381,34 @@
         }
       ],
       "contracts": {
-        "active": [],
+        "active": [
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-20 21:30:11",
+            "accepted_date": "2025-10-20 10:07:30",
+            "deadline": "2025-10-21 10:07:30",
+            "status": "in_progress",
+            "solution": ""
+          }
+        ],
         "completed": [
           {
             "id": "CIQ-STARTER-001",
@@ -2492,28 +2546,6 @@
           }
         ],
         "available_pool": [
-          {
-            "id": "CIQ-STARTER-001",
-            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
-            "kategoria": "Leadership",
-            "klient": "StartupDuo",
-            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
-            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
-            "wymagana_wiedza": [
-              "Conversational Intelligence",
-              "Podstawy komunikacji"
-            ],
-            "trudnosc": 1,
-            "nagroda_base": 300,
-            "nagroda_4star": 400,
-            "nagroda_5star": 500,
-            "reputacja": 20,
-            "czas_realizacji_dni": 1,
-            "wymagany_poziom": 1,
-            "min_slow": 30,
-            "emoji": "🤝",
-            "available_until": "2025-10-20 21:30:11"
-          },
           {
             "id": "CIQ-KONFLIKT-001",
             "tytul": "Mediacja w konflikcie zespołowym",
@@ -2724,10 +2756,29 @@
             "effects": {
               "deadline_reduction": -1
             }
+          },
+          {
+            "event_id": "sick_employee",
+            "timestamp": "2025-10-20 09:08:06",
+            "title": "Pracownik Zachorował",
+            "emoji": "🤒",
+            "type": "negative",
+            "description": "Ktoś z Twojego zespołu zachorował i musi zostać w domu. Pojemność dzienną zmniejszona na 2 dni.",
+            "choice": null,
+            "effects": {
+              "capacity_penalty": -1,
+              "duration_days": 2
+            }
           }
         ],
-        "last_roll": "2025-10-19 11:33:53",
-        "active_effects": []
+        "last_roll": "2025-10-20 09:08:06",
+        "active_effects": [
+          {
+            "type": "capacity_penalty",
+            "value": -1,
+            "expires": "2025-10-22 09:08:06"
+          }
+        ]
       }
     }
   },
@@ -7694,7 +7745,7 @@
     "degencoins": 1500,
     "level": 1,
     "joined_date": "2025-10-19",
-    "last_login": "2025-10-20 01:09:08",
+    "last_login": "2025-10-20 09:11:37",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -8016,6 +8067,13 @@
         "timestamp": "2025-10-20T01:09:09.067148",
         "details": {
           "timestamp": "2025-10-20T01:09:09.049206"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-20T09:11:37.420783",
+        "details": {
+          "timestamp": "2025-10-20T09:11:37.393074"
         }
       }
     ]
