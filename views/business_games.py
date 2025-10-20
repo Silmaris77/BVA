@@ -720,106 +720,126 @@ def render_active_contract_card(contract, username, user_data, bg_data):
             if paste_events_key not in st.session_state:
                 st.session_state[paste_events_key] = []
             
-            # Wybór metody wprowadzania
-            st.markdown("### 📝 Sposób wprowadzania")
-            input_method = st.radio(
-                "Wybierz metodę:",
-                ["✍️ Pisz", "🎤 Mów"],
-                key=f"input_method_{contract['id']}",
-                horizontal=True
-            )
+            # Wprowadzanie rozwiązania - mówienie + pisanie
+            st.markdown("### 📝 Twoje rozwiązanie")
             
             solution_key = f"solution_{contract['id']}"
             
-            # To wklej do business_games.py zamiast linii 733-808
-
-            if input_method == "🎤 Mów":
-                st.markdown("**Nagraj swoje rozwiązanie** (naciśnij przycisk i zacznij mówić):")
+            # Inicjalizuj klucze session_state
+            transcription_key = f"transcription_{contract['id']}"
+            transcription_version_key = f"transcription_version_{contract['id']}"
+            if transcription_key not in st.session_state:
+                st.session_state[transcription_key] = ""
+            if transcription_version_key not in st.session_state:
+                st.session_state[transcription_version_key] = 0
+            
+            st.markdown("**🎤 Nagraj** (wielokrotnie, jeśli chcesz) **lub ✍️ pisz bezpośrednio w polu poniżej:**")
+            
+            audio_data = st.audio_input(
+                "🎤 Nagrywanie...",
+                key=f"audio_input_{contract['id']}"
+            )
+            
+            if audio_data is not None:
+                import speech_recognition as sr
+                import tempfile
+                import os
+                from pydub import AudioSegment
                 
-                # Inicjalizuj klucze session_state
-                transcription_key = f"transcription_{contract['id']}"
-                transcription_version_key = f"transcription_version_{contract['id']}"
-                if transcription_key not in st.session_state:
-                    st.session_state[transcription_key] = ""
-                if transcription_version_key not in st.session_state:
-                    st.session_state[transcription_version_key] = 0
-                
-                audio_data = st.audio_input(
-                    "🎤 Nagrywanie...",
-                    key=f"audio_input_{contract['id']}"
-                )
-                
-                if audio_data is not None:
-                    import speech_recognition as sr
-                    import tempfile
-                    import os
-                    from pydub import AudioSegment
-                    
-                    with st.spinner("🤖 Rozpoznaję mowę..."):
+                with st.spinner("🤖 Rozpoznaję mowę..."):
+                    try:
+                        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+                            tmp_file.write(audio_data.getvalue())
+                            tmp_path = tmp_file.name
+                        
+                        wav_path = None
                         try:
-                            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
-                                tmp_file.write(audio_data.getvalue())
-                                tmp_path = tmp_file.name
+                            audio = AudioSegment.from_file(tmp_path)
+                            wav_path = tmp_path.replace(".wav", "_converted.wav")
+                            audio.export(wav_path, format="wav")
                             
-                            wav_path = None
+                            recognizer = sr.Recognizer()
+                            with sr.AudioFile(wav_path) as source:
+                                audio_data_sr = recognizer.record(source)
+                                
+                            transcription = recognizer.recognize_google(audio_data_sr, language="pl-PL")
+                            
+                            # Post-processing: Dodaj interpunkcję przez Gemini
                             try:
-                                audio = AudioSegment.from_file(tmp_path)
-                                wav_path = tmp_path.replace(".wav", "_converted.wav")
-                                audio.export(wav_path, format="wav")
+                                import google.generativeai as genai
                                 
-                                recognizer = sr.Recognizer()
-                                with sr.AudioFile(wav_path) as source:
-                                    audio_data_sr = recognizer.record(source)
-                                    
-                                transcription = recognizer.recognize_google(audio_data_sr, language="pl-PL")
+                                # Konfiguracja Gemini (z secrets.toml)
+                                api_key = st.secrets["API_KEYS"]["gemini"]
+                                genai.configure(api_key=api_key)
                                 
-                                # Zapisz i zwiększ wersję
-                                st.session_state[transcription_key] = transcription
-                                st.session_state[transcription_version_key] += 1
-                                
-                                st.success("✅ Transkrypcja zakończona! Tekst pojawił się w polu poniżej.")
-                                
-                            except sr.UnknownValueError:
-                                st.error("❌ Nie udało się rozpoznać mowy. Spróbuj ponownie lub mów wyraźniej.")
-                            except sr.RequestError as e:
-                                st.error(f"❌ Błąd połączenia z usługą rozpoznawania mowy: {str(e)}")
-                            finally:
-                                if os.path.exists(tmp_path):
-                                    os.unlink(tmp_path)
-                                if wav_path and os.path.exists(wav_path):
-                                    os.unlink(wav_path)
-                                
-                        except Exception as e:
-                            st.error(f"❌ Błąd podczas transkrypcji: {str(e)}")
-                            st.info("Możesz użyć opcji '✍️ Pisz' aby wprowadzić tekst ręcznie.")
-                
-                # Dynamiczny klucz który zmienia się po transkrypcji
-                text_area_key = f"{solution_key}_v{st.session_state[transcription_version_key]}"
-                current_text = st.session_state.get(transcription_key, contract.get("solution", ""))
-                
-                solution = st.text_area(
-                    "📝 Edytuj transkrypcję (możesz poprawić lub uzupełnić):",
-                    value=current_text,
-                    height=400,
-                    key=text_area_key,
-                    placeholder="Transkrypcja pojawi się tutaj po nagraniu..."
-                )
+                                # Dodaj interpunkcję - użyj najnowszego stabilnego modelu
+                                model = genai.GenerativeModel("models/gemini-2.5-flash")
+                                prompt = f"""Dodaj interpunkcję (kropki, przecinki, pytajniki, wykrzykniki) do poniższego tekstu.
+Nie zmieniaj słów, tylko dodaj znaki interpunkcyjne. Zachowaj strukturę i podział na zdania.
+Zwróć tylko poprawiony tekst, bez dodatkowych komentarzy.
 
-                
-            else:  # Pisz
-                solution = st.text_area(
-                    "Przygotuj kompleksowe rozwiązanie zgodnie z wymaganiami:",
-                    value=contract.get("solution", ""),
-                    height=400,
-                    key=solution_key,
-                    placeholder="Zacznij pisać swoje rozwiązanie tutaj..."
-                )
+Tekst do poprawy:
+{transcription}"""
+                                
+                                response = model.generate_content(prompt)
+                                transcription_with_punctuation = response.text.strip()
+                                
+                                st.info("🤖 Gemini dodał interpunkcję do transkrypcji.")
+                                transcription = transcription_with_punctuation
+                                
+                            except Exception as gemini_error:
+                                st.warning(f"⚠️ Nie udało się dodać interpunkcji: {str(gemini_error)}")
+                                # Kontynuuj z transkrypcją bez interpunkcji
+                            
+                            # DOPISZ do istniejącego tekstu (zamiast nadpisywać)
+                            existing_text = st.session_state.get(transcription_key, "")
+                            if existing_text.strip():
+                                # Jeśli jest już jakiś tekst, dodaj nową linię i dopisz
+                                st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
+                            else:
+                                # Jeśli to pierwsze nagranie, po prostu zapisz
+                                st.session_state[transcription_key] = transcription
+                            
+                            st.session_state[transcription_version_key] += 1
+                            
+                            st.success("✅ Transkrypcja zakończona! Tekst pojawił się w polu poniżej.")
+                            
+                        except sr.UnknownValueError:
+                            st.error("❌ Nie udało się rozpoznać mowy. Spróbuj ponownie lub mów wyraźniej.")
+                        except sr.RequestError as e:
+                            st.error(f"❌ Błąd połączenia z usługą rozpoznawania mowy: {str(e)}")
+                        finally:
+                            if os.path.exists(tmp_path):
+                                os.unlink(tmp_path)
+                            if wav_path and os.path.exists(wav_path):
+                                os.unlink(wav_path)
+                            
+                    except Exception as e:
+                        st.error(f"❌ Błąd podczas transkrypcji: {str(e)}")
+                        st.info("💡 Możesz wprowadzić tekst ręcznie w polu poniżej.")
+            
+            # Dynamiczny klucz który zmienia się po transkrypcji
+            text_area_key = f"{solution_key}_v{st.session_state[transcription_version_key]}"
+            current_text = st.session_state.get(transcription_key, contract.get("solution", ""))
+            
+            solution = st.text_area(
+                "📝 Możesz edytować transkrypcję lub pisać bezpośrednio:",
+                value=current_text,
+                height=400,
+                key=text_area_key,
+                placeholder="Nagrywaj wielokrotnie lub pisz bezpośrednio tutaj..."
+            )
+            
+            # WAŻNE: Synchronizuj wartość z pola tekstowego do session_state
+            # Żeby zapisać to co użytkownik napisał ręcznie przed nagraniem
+            if text_area_key in st.session_state:
+                st.session_state[transcription_key] = st.session_state[text_area_key]
             
             # ANTI-CHEAT: Dodaj JavaScript do śledzenia wklejania
             st.markdown(f"""
             <script>
             (function() {{
-                const textarea = document.querySelector('textarea[aria-label="Przygotuj kompleksowe rozwiązanie zgodnie z wymaganiami:"]');
+                const textarea = document.querySelector('textarea[aria-label="📝 Możesz edytować transkrypcję lub pisać bezpośrednio:"]');
                 if (textarea) {{
                     textarea.addEventListener('paste', function(e) {{
                         const pastedText = (e.clipboardData || window.clipboardData).getData('text');
@@ -1873,6 +1893,7 @@ def show_rankings_tab(username, user_data):
             
             all_firms.append({
                 "name": firm.get("name", f"{user}'s Consulting"),
+                "logo": firm.get("logo", "🏢"),  # Dodaj logo firmy
                 "username": user,
                 "score": score,
                 "is_user": user == username
@@ -1922,14 +1943,14 @@ def show_rankings_tab(username, user_data):
             st.markdown(f"""
             <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                         color: white; padding: 15px; border-radius: 10px; margin: 10px 0;'>
-                <h3 style='margin:0;'>{medal} {firm['name']} (Ty!)</h3>
+                <h3 style='margin:0;'>{medal} <span style='font-size: 1.2em;'>{firm['logo']}</span> {firm['name']} (Ty!)</h3>
                 <p style='margin:5px 0 0 0;'>{score_label}: {score_display}{score_suffix}</p>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
             <div style='border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin: 10px 0;'>
-                <h4 style='margin:0;'>{medal} {firm['name']}</h4>
+                <h4 style='margin:0;'>{medal} <span style='font-size: 1.2em;'>{firm['logo']}</span> {firm['name']}</h4>
                 <p style='margin:5px 0 0 0; color: #666;'>{score_label}: {score_display}{score_suffix}</p>
             </div>
             """, unsafe_allow_html=True)

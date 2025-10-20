@@ -65,3 +65,10 @@ venv.bak/
 # OS
 .DS_Store
 Thumbs.db
+
+# API Keys & Secrets (IMPORTANT!)
+config/gemini_api_key.txt
+config/*_api_key.txt
+*.secret
+.env.local
+
