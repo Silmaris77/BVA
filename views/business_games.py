@@ -23,6 +23,28 @@ from utils.scroll_utils import scroll_to_top
 # FUNKCJE POMOCNICZE
 # =============================================================================
 
+def get_game_data(user_data, industry_id="consulting"):
+    """Pobiera dane gry dla wybranej branży (z backward compatibility)"""
+    # Najpierw spróbuj nowej struktury
+    if "business_games" in user_data and industry_id in user_data["business_games"]:
+        return user_data["business_games"][industry_id]
+    # Fallback na starą strukturę (backward compatibility)
+    elif "business_game" in user_data:
+        return user_data["business_game"]
+    # Jeśli nic nie znaleziono - zwróć pustą strukturę (nie None!)
+    return {}
+
+def save_game_data(user_data, bg_data, industry_id="consulting"):
+    """Zapisuje dane gry dla wybranej branży (z backward compatibility)"""
+    # Zapisz w nowej strukturze
+    if "business_games" not in user_data:
+        user_data["business_games"] = {}
+    user_data["business_games"][industry_id] = bg_data
+    # Dla backward compatibility - zapisz też w starej strukturze jeśli istnieje
+    if "business_game" in user_data and industry_id == "consulting":
+        user_data["business_game"] = bg_data
+    return user_data
+
 def play_coin_sound():
     """Odtwarza dźwięk brzęczących monet przy nagrodzie"""
     # Prosty dźwięk za pomocą HTML audio z CDN
@@ -37,11 +59,11 @@ def play_coin_sound():
     )
 
 # =============================================================================
-# GŁÓWNA FUNKCJA
+# GŁÓWNA FUNKCJA - META WIDOK
 # =============================================================================
 
 def show_business_games(username, user_data):
-    """Główny widok Business Games"""
+    """Meta-widok Business Games Suite - wybór branży lub gra"""
     
     # Przewiń na górę strony
     scroll_to_top()
@@ -49,31 +71,223 @@ def show_business_games(username, user_data):
     # Zastosuj style Material 3
     apply_material3_theme()
     
-    # Używamy standardowego nagłówka - tak jak w innych zakładkach
-    zen_header("Business Games")
-    
-    # Inicjalizacja jeśli pierwszy raz
-    if "business_game" not in user_data:
-        user_data["business_game"] = initialize_business_game(username)
-        st.success("🎉 Witaj w Business Games! Twoja firma została założona!")
+    # MIGRACJA: Stara struktura business_game → business_games.consulting
+    if "business_game" in user_data and "business_games" not in user_data:
+        user_data["business_games"] = {
+            "consulting": user_data["business_game"]
+        }
+        # Nie usuwamy starego klucza dla backward compatibility podczas przejścia
         save_user_data(username, user_data)
     
-    bg_data = user_data["business_game"]
+    # Inicjalizacja nowej struktury
+    if "business_games" not in user_data:
+        user_data["business_games"] = {}
+    
+    # Sprawdź czy jest aktywna branża w session_state
+    if "selected_industry" not in st.session_state:
+        # Sprawdź czy gracz ma już rozpoczętą grę w jakiejś branży
+        if "consulting" in user_data["business_games"]:
+            st.session_state["selected_industry"] = "consulting"
+        else:
+            st.session_state["selected_industry"] = None
+    
+    # ROUTING: Jeśli wybrano branżę → idź do gry, inaczej → selector
+    if st.session_state["selected_industry"]:
+        show_industry_game(username, user_data, st.session_state["selected_industry"])
+    else:
+        show_industry_selector(username, user_data)
+
+# =============================================================================
+# SELECTOR BRANŻY
+# =============================================================================
+
+def show_industry_selector(username, user_data):
+    """Ekran wyboru branży - karty z różnymi grami branżowymi"""
+    
+    zen_header("Business Games Suite")
+    
+    st.markdown("""
+    <div style='text-align: center; padding: 20px 0;'>
+        <h2 style='color: #667eea;'>🎯 Wybierz swoją specjalizację biznesową</h2>
+        <p style='color: #64748b; font-size: 16px;'>Każda branża to unikalna gra z własnymi wyzwaniami i możliwościami</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # Pierwsza linia - 3 karty branż
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        render_industry_card(
+            industry_id="consulting",
+            title="💼 Consulting",
+            slogan="Od freelancera do lidera rynku - zbuduj swoją konsultingową potęgę!",
+            description="Prowadź firmę konsultingową. Realizuj projekty, zatrudniaj ekspertów, buduj reputację.",
+            features=["🎯 Projekty strategiczne", "👥 Team management", "📈 Reputation system"],
+            available=True,
+            username=username,
+            user_data=user_data
+        )
+    
+    with col2:
+        render_industry_card(
+            industry_id="fmcg",
+            title="🛒 FMCG",
+            slogan="Od debiutu na półce do brand leadera - zdobądź serca konsumentów!",
+            description="Zarządzaj markami konsumenckimi. Wprowadzaj produkty, prowadź kampanie, zdobywaj rynek.",
+            features=["📦 Product launches", "📺 Marketing campaigns", "🏪 Distribution"],
+            available=False,
+            username=username,
+            user_data=user_data
+        )
+    
+    with col3:
+        render_industry_card(
+            industry_id="pharma",
+            title="💊 Pharma",
+            slogan="Od przedstawiciela do lidera sprzedaży - zdominuj rynek farmaceutyczny!",
+            description="Zarządzaj sprzedażą farmaceutyczną. Buduj relacje z lekarzami, zdobywaj apteki, ekspanduj.",
+            features=["💊 Medical reps", "🏥 KOL relations", "🌍 Market expansion"],
+            available=False,
+            username=username,
+            user_data=user_data
+        )
+    
+    # Druga linia - 3 nowe karty
+    st.markdown("<div style='margin: 20px 0;'></div>", unsafe_allow_html=True)
+    col4, col5, col6 = st.columns(3)
+    
+    with col4:
+        render_industry_card(
+            industry_id="banking",
+            title="🏦 Banking",
+            slogan="Od doradcy do prezesa banku - zbuduj imperium finansowe!",
+            description="Kieruj bankiem. Oferuj produkty finansowe, zarządzaj kredytami, buduj sieć oddziałów.",
+            features=["� Produkty bankowe", "👥 Obsługa klientów", "📊 Portfel kredytowy"],
+            available=False,
+            username=username,
+            user_data=user_data
+        )
+    
+    with col5:
+        render_industry_card(
+            industry_id="insurance",
+            title="🛡️ Insurance",
+            slogan="Od agenta do lidera ubezpieczeń - chroń i zarabiaj!",
+            description="Rozwijaj firmę ubezpieczeniową. Sprzedawaj polisy, buduj sieć agentów, zarządzaj ryzykiem.",
+            features=["📋 Polisy i produkty", "🤝 Sieć agentów", "📈 Zarządzanie ryzykiem"],
+            available=False,
+            username=username,
+            user_data=user_data
+        )
+    
+    with col6:
+        render_industry_card(
+            industry_id="automotive",
+            title="🚗 Automotive",
+            slogan="Od dealera do lidera rynku - sprzedaj każdy model!",
+            description="Prowadź salon motoryzacyjny. Sprzedawaj pojazdy, zarządzaj serwisem, buduj sieć dealerską.",
+            features=["🚙 Sprzedaż pojazdów", "🔧 Serwis i parts", "🏪 Sieć dealerska"],
+            available=False,
+            username=username,
+            user_data=user_data
+        )
+
+def render_industry_card(industry_id, title, slogan, description, features, available, username, user_data):
+    """Renderuje kartę branży"""
+    
+    # Sprawdź czy gracz ma dane w tej branży
+    has_progress = industry_id in user_data.get("business_games", {})
+    
+    if available:
+        card_style = "background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: 2px solid #667eea;"
+        text_color = "white"
+        button_disabled = False
+        status_badge = "✅ Dostępne" if not has_progress else "▶️ Kontynuuj"
+    else:
+        card_style = "background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); border: 2px solid #cbd5e1;"
+        text_color = "#475569"
+        button_disabled = True
+        status_badge = "🔒 Wkrótce"
+    
+    # Karta
+    st.markdown(f"""
+    <div style='{card_style} padding: 24px; border-radius: 16px; min-height: 450px; 
+                display: flex; flex-direction: column; color: {text_color};'>
+        <h2 style='margin: 0 0 12px 0; font-size: 28px;'>{title}</h2>
+        <div style='padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 8px; 
+                    display: inline-block; margin-bottom: 12px; font-size: 13px; font-weight: 600;'>
+            {status_badge}
+        </div>
+        <p style='margin: 0 0 16px 0; font-size: 15px; font-weight: 600; font-style: italic; line-height: 1.4; 
+                   opacity: 0.95; border-left: 3px solid rgba(255,255,255,0.3); padding-left: 12px;'>
+            {slogan}
+        </p>
+        <p style='margin: 16px 0; line-height: 1.6; flex: 1; font-size: 14px;'>{description}</p>
+        <div style='margin: 16px 0 0 0;'>
+            {''.join([f"<div style='margin: 8px 0; font-size: 13px;'>• {feature}</div>" for feature in features])}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Przycisk
+    if available:
+        button_label = "🎮 Kontynuuj" if has_progress else "🚀 Zacznij grę"
+        if st.button(button_label, key=f"start_{industry_id}", type="primary", use_container_width=True):
+            # Inicjalizuj grę jeśli nowa
+            if not has_progress:
+                user_data["business_games"][industry_id] = initialize_business_game(username)
+                save_user_data(username, user_data)
+                st.success(f"🎉 Witaj w {title}! Twoja firma została założona!")
+            
+            # Ustaw aktywną branżę
+            st.session_state["selected_industry"] = industry_id
+            st.rerun()
+    else:
+        st.button("🔒 Wkrótce dostępne", key=f"locked_{industry_id}", disabled=True, use_container_width=True)
+
+# =============================================================================
+# GRA BRANŻOWA
+# =============================================================================
+
+def show_industry_game(username, user_data, industry_id):
+    """Widok gry dla wybranej branży"""
+    
+    # Przycisk powrotu
+    col_back, col_space = st.columns([1, 5])
+    with col_back:
+        if st.button("⬅️ Zmień branżę", key="back_to_selector"):
+            st.session_state["selected_industry"] = None
+            st.rerun()
+    
+    # Nagłówek z nazwą branży
+    industry_names = {
+        "consulting": "💼 Consulting Game",
+        "fmcg": "🛒 FMCG Game",
+        "pharma": "💊 Pharma Game",
+        "banking": "🏦 Banking Game",
+        "insurance": "🛡️ Insurance Game",
+        "automotive": "🚗 Automotive Game"
+    }
+    zen_header(industry_names.get(industry_id, "Business Game"))
+    
+    # Pobierz dane branży
+    bg_data = user_data["business_games"][industry_id]
     
     # MIGRACJA: Dodaj brakujące transakcje dla starych wydarzeń z monetami
     from utils.business_game import migrate_event_transactions
-    user_data, migrated_count = migrate_event_transactions(user_data)
+    user_data, migrated_count = migrate_event_transactions(user_data, industry_id)
     if migrated_count > 0:
-        # Zapisz zmigrowane dane (cicho, bez komunikatu dla użytkownika)
         save_user_data(username, user_data)
-        bg_data = user_data["business_game"]  # Odśwież referencję
+        bg_data = user_data["business_games"][industry_id]
     
     # Odśwież pulę kontraktów
     bg_data = refresh_contract_pool(bg_data)
-    user_data["business_game"] = bg_data
+    user_data["business_games"][industry_id] = bg_data
     
     # Nagłówek z podsumowaniem firmy
-    render_header(user_data)
+    render_header(user_data, industry_id)
     
     st.markdown("---")
     
@@ -84,30 +298,30 @@ def show_business_games(username, user_data):
         show_instructions_tab()
     
     with tabs[1]:
-        show_dashboard_tab(username, user_data)
+        show_dashboard_tab(username, user_data, industry_id)
     
     with tabs[2]:
-        show_contracts_tab(username, user_data)
+        show_contracts_tab(username, user_data, industry_id)
     
     with tabs[3]:
-        show_employees_tab(username, user_data)
+        show_employees_tab(username, user_data, industry_id)
     
     with tabs[4]:
-        show_financial_reports_tab(username, user_data)
+        show_financial_reports_tab(username, user_data, industry_id)
     
     with tabs[5]:
-        show_history_tab(username, user_data)
+        show_history_tab(username, user_data, industry_id)
     
     with tabs[6]:
-        show_rankings_tab(username, user_data)
+        show_rankings_tab(username, user_data, industry_id)
 
 # =============================================================================
 # NAGŁÓWEK
 # =============================================================================
 
-def render_header(user_data):
+def render_header(user_data, industry_id="consulting"):
     """Renderuje nagłówek z profesjonalnymi kartami w stylu gamifikacji"""
-    bg_data = user_data["business_game"]
+    bg_data = user_data["business_games"][industry_id]
     firm = bg_data["firm"]
     level_info = FIRM_LEVELS[firm["level"]]
     
@@ -419,9 +633,9 @@ def create_financial_chart(bg_data, period=7, cumulative=False):
 # TAB 1: DASHBOARD
 # =============================================================================
 
-def show_dashboard_tab(username, user_data):
+def show_dashboard_tab(username, user_data, industry_id="consulting"):
     """Zakładka Dashboard - podsumowanie firmy"""
-    bg_data = user_data["business_game"]
+    bg_data = get_game_data(user_data, industry_id)
     
     # BACKWARD COMPATIBILITY: Zainicjalizuj events jeśli nie istnieje
     if "events" not in bg_data:
@@ -430,7 +644,7 @@ def show_dashboard_tab(username, user_data):
             "last_roll": None,
             "active_effects": []
         }
-        user_data["business_game"] = bg_data
+        save_game_data(user_data, bg_data, industry_id)
         save_user_data(username, user_data)
     
     st.markdown("---")
@@ -574,7 +788,7 @@ def show_dashboard_tab(username, user_data):
             new_name = st.text_input("Nowa nazwa firmy", value=bg_data["firm"]["name"], key="dashboard_firm_name_input")
             if st.button("💾 Zapisz nazwę", key="dashboard_save_firm_name"):
                 bg_data["firm"]["name"] = new_name
-                user_data["business_game"] = bg_data
+                save_game_data(user_data, bg_data, industry_id)
                 save_user_data(username, user_data)
                 st.success("✅ Nazwa firmy zaktualizowana!")
                 st.rerun()
@@ -615,7 +829,7 @@ def show_dashboard_tab(username, user_data):
                         use_container_width=True
                     ):
                         bg_data["firm"]["logo"] = logo
-                        user_data["business_game"] = bg_data
+                        save_game_data(user_data, bg_data, industry_id)
                         save_user_data(username, user_data)
                         st.success(f"✅ Logo zmienione na {logo}!")
                         st.rerun()
@@ -959,9 +1173,9 @@ Tekst do poprawy:
 # TAB 2: RYNEK KONTRAKTÓW
 # =============================================================================
 
-def show_contracts_tab(username, user_data):
+def show_contracts_tab(username, user_data, industry_id="consulting"):
     """Zakładka Rynek Kontraktów"""
-    bg_data = user_data["business_game"]
+    bg_data = get_game_data(user_data, industry_id)
     
     st.subheader("💼 Dostępne Kontrakty")
     
@@ -997,7 +1211,7 @@ def show_contracts_tab(username, user_data):
     with col_refresh2:
         if st.button("🔄 Wymuś odświeżenie", help="Pobierz nowe kontrakty teraz (aktualizuje pulę)"):
             bg_data = refresh_contract_pool(bg_data, force=True)
-            user_data["business_game"] = bg_data
+            save_game_data(user_data, bg_data, industry_id)
             save_user_data(username, user_data)
             st.success("✅ Pula kontraktów została odświeżona!")
             st.rerun()
@@ -1183,9 +1397,9 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new)
 # TAB 3: PRACOWNICY
 # =============================================================================
 
-def show_employees_tab(username, user_data):
+def show_employees_tab(username, user_data, industry_id="consulting"):
     """Zakładka Biuro i Pracownicy"""
-    bg_data = user_data["business_game"]
+    bg_data = get_game_data(user_data, industry_id)
     
     # Inicjalizacja biura jeśli nie istnieje (dla starych zapisów)
     if "office" not in bg_data:
@@ -1193,7 +1407,7 @@ def show_employees_tab(username, user_data):
             "type": "home_office",
             "upgraded_at": None
         }
-        user_data["business_game"] = bg_data
+        save_game_data(user_data, bg_data, industry_id)
         save_user_data(username, user_data)
     
     # =============================================================================
@@ -1261,7 +1475,7 @@ def show_employees_tab(username, user_data):
                         "amount": -next_office['koszt_ulepszenia']
                     })
                     
-                    user_data["business_game"] = bg_data
+                    save_game_data(user_data, bg_data, industry_id)
                     save_user_data(username, user_data)
                     st.success(f"🎉 Biuro ulepszone do: {next_office['nazwa']}!")
                     st.balloons()
@@ -1405,9 +1619,9 @@ def render_hire_card(emp_type, emp_data, username, user_data, bg_data):
 # TAB 4: RAPORTY FINANSOWE
 # =============================================================================
 
-def show_financial_reports_tab(username, user_data):
+def show_financial_reports_tab(username, user_data, industry_id="consulting"):
     """Zakładka Raporty Finansowe - zaawansowana analiza P&L i KPI"""
-    bg_data = user_data["business_game"]
+    bg_data = get_game_data(user_data, industry_id)
     
     st.subheader("📊 Raporty Finansowe")
     st.markdown("Zaawansowana analiza wyników finansowych Twojej firmy")
@@ -2150,9 +2364,9 @@ def show_category_analysis(financial_data, bg_data):
 # TAB 5: HISTORIA KONTRAKTÓW
 # =============================================================================
 
-def show_history_tab(username, user_data):
+def show_history_tab(username, user_data, industry_id="consulting"):
     """Zakładka Historia & Wydarzenia - chronologiczna oś czasu"""
-    bg_data = user_data["business_game"]
+    bg_data = get_game_data(user_data, industry_id)
     
     st.subheader("📜 Historia & Wydarzenia Firmy")
     
@@ -2166,7 +2380,7 @@ def show_history_tab(username, user_data):
             "last_roll": None,
             "active_effects": []
         }
-        user_data["business_game"] = bg_data
+        save_game_data(user_data, bg_data, industry_id)
         save_user_data(username, user_data)
     
     from utils.business_game_events import should_trigger_event, get_random_event, apply_event_effects
@@ -2806,15 +3020,15 @@ def render_event_history_card(event: dict):
 # TAB 7: RANKINGI
 # =============================================================================
 
-def show_rankings_tab(username, user_data):
+def show_rankings_tab(username, user_data, industry_id="consulting"):
     """Zakładka Rankingi"""
-    bg_data = user_data["business_game"]
+    bg_data = get_game_data(user_data, industry_id)
     
     st.subheader("🏆 Rankingi Firm Konsultingowych")
     
     # Aktualizuj overall score
     bg_data = update_user_ranking(bg_data)
-    user_data["business_game"] = bg_data
+    save_game_data(user_data, bg_data, industry_id)
     
     # Selector
     ranking_type = st.selectbox(

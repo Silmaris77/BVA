@@ -840,7 +840,7 @@ def get_firm_summary(user_data: Dict) -> Dict:
 # MIGRACJA DANYCH - Wydarzenia do transakcji
 # =============================================================================
 
-def migrate_event_transactions(user_data: Dict) -> Tuple[Dict, int]:
+def migrate_event_transactions(user_data: Dict, industry_id: str = "consulting") -> Tuple[Dict, int]:
     """Migruje stare wydarzenia z monetami do transakcji finansowych
     
     Przeszukuje events.history i dodaje brakujące transakcje event_reward/event_cost
@@ -848,12 +848,17 @@ def migrate_event_transactions(user_data: Dict) -> Tuple[Dict, int]:
     
     Args:
         user_data: Pełne dane użytkownika
+        industry_id: ID branży (domyślnie consulting)
         
     Returns:
         (updated_user_data, liczba_dodanych_transakcji)
     """
-    business_data = user_data.get("business_game")
-    if not business_data:
+    # Pobierz dane gry (z backward compatibility)
+    if "business_games" in user_data and industry_id in user_data["business_games"]:
+        business_data = user_data["business_games"][industry_id]
+    elif "business_game" in user_data:
+        business_data = user_data["business_game"]
+    else:
         return user_data, 0
     
     # Sprawdź czy są wydarzenia
@@ -900,6 +905,12 @@ def migrate_event_transactions(user_data: Dict) -> Tuple[Dict, int]:
     
     # Zapisz zmiany
     if added_count > 0:
-        user_data["business_game"] = business_data
+        # Zapisz w nowej strukturze
+        if "business_games" not in user_data:
+            user_data["business_games"] = {}
+        user_data["business_games"][industry_id] = business_data
+        # Backward compatibility - zapisz też w starej strukturze
+        if "business_game" in user_data and industry_id == "consulting":
+            user_data["business_game"] = business_data
     
     return user_data, added_count
