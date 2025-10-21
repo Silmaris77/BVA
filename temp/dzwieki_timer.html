@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔔 Dźwięki Zakończenia Timera</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .sound-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .sound-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+        .sound-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sound-desc {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 15px;
+        }
+        button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        .recommended {
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .badge {
+            background: #ffd700;
+            color: #333;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔔 Dźwięki Zakończenia Timera</h1>
+    
+    <div class="sound-card recommended">
+        <div class="sound-title">
+            🔔 1. Dzwonek dzwon (elegancki)
+            <span class="badge">TERAZ</span>
+        </div>
+        <div class="sound-desc">Pojedynczy dzwon - profesjonalny, elegancki</div>
+        <button onclick="playSound('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3')">▶ Odtwórz</button>
+    </div>
+
+    <div class="sound-card">
+        <div class="sound-title">⏰ 2. Dzwonek budzika</div>
+        <div class="sound-desc">Klasyczny alarm budzika - wyraźny sygnał</div>
+        <button onclick="playSound('https://assets.mixkit.co/active_storage/sfx/2863/2863-preview.mp3')">▶ Odtwórz</button>
+    </div>
+
+    <div class="sound-card">
+        <div class="sound-title">� 3. Dzwonek recepcji (ding)</div>
+        <div class="sound-desc">Krótki, wyraźny - jak w hotelowej recepcji</div>
+        <button onclick="playSound('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3')">▶ Odtwórz</button>
+    </div>
+
+    <div class="sound-card recommended">
+        <div class="sound-title">
+            🎵 4. Pozytywny dźwięk (achievement)
+            <span class="badge">POLECANY</span>
+        </div>
+        <div class="sound-desc">Melodyjny, pozytywny - super dla gamifikacji</div>
+        <button onclick="playSound('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3')">▶ Odtwórz</button>
+    </div>
+
+    <div class="sound-card">
+        <div class="sound-title">🔔 5. Dzwonek kościelny</div>
+        <div class="sound-desc">Głęboki, uroczysty dzwon kościelny</div>
+        <button onclick="playSound('https://assets.mixkit.co/active_storage/sfx/1491/1491-preview.mp3')">▶ Odtwórz</button>
+    </div>
+
+    <div class="sound-card recommended">
+        <div class="sound-title">
+            � 6. Trąbka fanfary
+            <span class="badge">POLECANY</span>
+        </div>
+        <div class="sound-desc">Krótka fanfara - świąteczny, uroczysty</div>
+        <button onclick="playSound('https://assets.mixkit.co/active_storage/sfx/1399/1399-preview.mp3')">▶ Odtwórz</button>
+    </div>
+
+    <div class="sound-card">
+        <div class="sound-title">✨ 7. Magiczny efekt</div>
+        <div class="sound-desc">Lekki, magiczny - przyjemny dla ucha</div>
+        <button onclick="playSound('https://assets.mixkit.co/active_storage/sfx/1468/1468-preview.mp3')">▶ Odtwórz</button>
+    </div>
+
+    <div class="sound-card recommended">
+        <div class="sound-title">
+            📣 8. Alert/Notyfikacja
+            <span class="badge">POLECANY</span>
+        </div>
+        <div class="sound-desc">Nowoczesny alert - wyraźny ale nie irytujący</div>
+        <button onclick="playSound('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3')">▶ Odtwórz</button>
+    </div>
+
+    <script>
+        let currentAudio = null;
+
+        function playSound(url) {
+            // Zatrzymaj poprzedni dźwięk jeśli gra
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+            
+            // Odtwórz nowy dźwięk
+            currentAudio = new Audio(url);
+            currentAudio.volume = 0.7;
+            currentAudio.play();
+        }
+    </script>
+</body>
+</html>

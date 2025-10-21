@@ -172,7 +172,23 @@ def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[in
     # Aplikuj efekty
     # Monety
     if "coins" in effects:
-        user_data["degencoins"] = user_data.get("degencoins", 0) + effects["coins"]
+        coins_amount = effects["coins"]
+        user_data["degencoins"] = user_data.get("degencoins", 0) + coins_amount
+        
+        # WAŻNE: Rejestruj transakcję w historii finansowej
+        bg_data["history"]["transactions"].append({
+            "type": "event_reward" if coins_amount > 0 else "event_cost",
+            "amount": coins_amount,
+            "event_id": event_id,
+            "event_title": event_data["title"],
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
+        
+        # Aktualizuj statystyki
+        if coins_amount > 0:
+            bg_data["stats"]["total_revenue"] += coins_amount
+        else:
+            bg_data["stats"]["total_costs"] += abs(coins_amount)
     
     # Reputacja
     if "reputation" in effects:

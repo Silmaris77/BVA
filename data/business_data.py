@@ -43,6 +43,67 @@ FIRM_LEVELS = {
 }
 
 # =============================================================================
+# TYPY BIUR
+# =============================================================================
+
+OFFICE_TYPES = {
+    "home_office": {
+        "nazwa": "Home Office",
+        "max_pracownikow": 2,
+        "koszt_dzienny": 0,
+        "koszt_ulepszenia": 0,
+        "bonus_reputacji": 0,
+        "opis": "Praca z domu - wystarczy na początek",
+        "ikona": "🏠"
+    },
+    "small_office": {
+        "nazwa": "Small Office",
+        "max_pracownikow": 5,
+        "koszt_dzienny": 50,
+        "koszt_ulepszenia": 1000,
+        "bonus_reputacji": 5,
+        "opis": "Małe biuro w centrum miasta",
+        "ikona": "🏢"
+    },
+    "medium_office": {
+        "nazwa": "Medium Office",
+        "max_pracownikow": 10,
+        "koszt_dzienny": 100,
+        "koszt_ulepszenia": 3000,
+        "bonus_reputacji": 15,
+        "opis": "Przestronne biuro z salą konferencyjną",
+        "ikona": "🏛️"
+    },
+    "large_office": {
+        "nazwa": "Large Office",
+        "max_pracownikow": 20,
+        "koszt_dzienny": 200,
+        "koszt_ulepszenia": 7000,
+        "bonus_reputacji": 30,
+        "opis": "Duże biuro z wieloma pokojami",
+        "ikona": "🏰"
+    },
+    "headquarters": {
+        "nazwa": "Headquarters",
+        "max_pracownikow": 50,
+        "koszt_dzienny": 400,
+        "koszt_ulepszenia": float('inf'),  # Maksymalny poziom
+        "bonus_reputacji": 50,
+        "opis": "Prestiżowa siedziba firmy",
+        "ikona": "🌆"
+    }
+}
+
+# Kolejność ulepszeń biura
+OFFICE_UPGRADE_PATH = [
+    "home_office",
+    "small_office", 
+    "medium_office",
+    "large_office",
+    "headquarters"
+]
+
+# =============================================================================
 # TYPY PRACOWNIKÓW
 # =============================================================================
 

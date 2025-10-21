@@ -2610,13 +2610,14 @@ def show_tools_page():
         st.session_state.tools_tab = None
     
     # Główne kategorie w tabach
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
         "🔍 Autodiagnoza",
         "💬 C-IQ Tools", 
         "🎭 Symulatory",
         "💡 Kreatywność",
         "📊 Analityki", 
-        "🤖 AI Asystent"
+        "🤖 AI Asystent",
+        "⏱️ Zarządzanie Szkoleniem"
     ])
     
     with tab1:
@@ -2636,6 +2637,10 @@ def show_tools_page():
     
     with tab6:
         show_ai_assistant()
+    
+    with tab7:
+        from views.training_manager import show_training_manager
+        show_training_manager()
 
 def show_ciq_tools():
     """Narzędzia Conversational Intelligence"""

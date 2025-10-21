@@ -11,7 +11,7 @@ import random
 from data.business_data import (
     FIRM_LEVELS, EMPLOYEE_TYPES, CONTRACTS_POOL, GAME_CONFIG,
     get_firm_level, get_available_contracts, calculate_daily_capacity,
-    calculate_employee_costs, get_contract_by_id
+    calculate_employee_costs, get_contract_by_id, OFFICE_TYPES
 )
 
 # =============================================================================
@@ -33,6 +33,10 @@ def initialize_business_game(username: str) -> Dict:
             "reputation": GAME_CONFIG["starting_reputation"]
         },
         "employees": [],
+        "office": {
+            "type": "home_office",  # Wszyscy zaczynają z home office
+            "upgraded_at": None
+        },
         "contracts": {
             "active": [],
             "completed": [],
@@ -551,12 +555,23 @@ def can_hire_employee(user_data: Dict, employee_type: str) -> Tuple[bool, str]:
     if business_data["firm"]["level"] < emp_data["wymagany_poziom"]:
         return False, f"Wymagany poziom firmy: {emp_data['wymagany_poziom']}"
     
-    # Sprawdź limit pracowników
+    # Sprawdź limit pracowników na podstawie BIURA (nie poziomu firmy)
     current_count = len(business_data["employees"])
-    max_employees = FIRM_LEVELS[business_data["firm"]["level"]]["max_pracownikow"]
+    
+    # Pobierz typ biura (domyślnie home_office dla starych zapisów)
+    office_type = business_data.get("office", {}).get("type", "home_office")
+    max_employees = OFFICE_TYPES[office_type]["max_pracownikow"]
     
     if current_count >= max_employees:
-        return False, f"Maksimum pracowników na tym poziomie: {max_employees}"
+        # Znajdź następne biuro w ścieżce upgrade'u
+        from data.business_data import OFFICE_UPGRADE_PATH
+        current_index = OFFICE_UPGRADE_PATH.index(office_type)
+        if current_index < len(OFFICE_UPGRADE_PATH) - 1:
+            next_office = OFFICE_UPGRADE_PATH[current_index + 1]
+            next_office_info = OFFICE_TYPES[next_office]
+            return False, f"Limit pracowników osiągnięty ({max_employees}). Ulepsz biuro do {next_office_info['nazwa']} (koszt: {next_office_info['koszt_ulepszenia']} zł)"
+        else:
+            return False, f"Maksimum pracowników: {max_employees}"
     
     # Sprawdź monety (teraz z user_data)
     if user_data.get('degencoins', 0) < emp_data["koszt_zatrudnienia"]:
@@ -628,6 +643,7 @@ def fire_employee(user_data: Dict, employee_id: str) -> Tuple[Dict, bool, str]:
     business_data["history"]["transactions"].append({
         "type": "employee_fired",
         "employee_type": employee["type"],
+        "amount": 0,  # Zwolnienie nie ma kosztu finansowego, ale zapisujemy dla kompletności
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     })
     
@@ -637,8 +653,18 @@ def fire_employee(user_data: Dict, employee_id: str) -> Tuple[Dict, bool, str]:
     return user_data, True, f"Zwolniono: {emp_data['nazwa']}"
 
 def calculate_daily_costs(business_data: Dict) -> float:
-    """Oblicza dzienny koszt pracowników"""
+    """Oblicza dzienny koszt pracowników (bez biura)"""
     return calculate_employee_costs(business_data["employees"])
+
+def calculate_total_daily_costs(business_data: Dict) -> float:
+    """Oblicza łączne dzienne koszty: pracownicy + biuro"""
+    employee_costs = calculate_employee_costs(business_data["employees"])
+    
+    # Dodaj koszty biura
+    office_type = business_data.get("office", {}).get("type", "home_office")
+    office_costs = OFFICE_TYPES[office_type]["koszt_dzienny"]
+    
+    return employee_costs + office_costs
 
 def process_daily_costs(user_data: Dict) -> Dict:
     """Przetwarza dzienne koszty (wywoływane raz dziennie)
@@ -647,17 +673,37 @@ def process_daily_costs(user_data: Dict) -> Dict:
         user_data: Pełne dane użytkownika (modyfikuje degencoins)
     """
     business_data = user_data["business_game"]
-    daily_cost = calculate_daily_costs(business_data)
     
-    if daily_cost > 0:
-        user_data['degencoins'] = user_data.get('degencoins', 0) - daily_cost
-        business_data["stats"]["total_costs"] += daily_cost
+    # Koszty pracowników
+    employee_cost = calculate_daily_costs(business_data)
+    
+    # Koszty biura
+    office_type = business_data.get("office", {}).get("type", "home_office")
+    office_cost = OFFICE_TYPES[office_type]["koszt_dzienny"]
+    
+    total_cost = employee_cost + office_cost
+    
+    if total_cost > 0:
+        user_data['degencoins'] = user_data.get('degencoins', 0) - total_cost
+        business_data["stats"]["total_costs"] += total_cost
         
-        business_data["history"]["transactions"].append({
-            "type": "daily_costs",
-            "amount": -daily_cost,
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        })
+        # Transakcja dla pracowników (jeśli > 0)
+        if employee_cost > 0:
+            business_data["history"]["transactions"].append({
+                "type": "daily_costs",
+                "amount": -employee_cost,
+                "description": "Koszty dzienne: pracownicy",
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            })
+        
+        # Transakcja dla biura (jeśli > 0)
+        if office_cost > 0:
+            business_data["history"]["transactions"].append({
+                "type": "office_rent",
+                "amount": -office_cost,
+                "description": f"Koszty dzienne: {OFFICE_TYPES[office_type]['nazwa']}",
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            })
         
         user_data["business_game"] = business_data
     
@@ -673,11 +719,14 @@ def calculate_overall_score(business_data: Dict) -> float:
     firm = business_data["firm"]
     weights = GAME_CONFIG["ranking_weights"]["overall"]
     
+    # Poziom 1 = 0 punktów bazowych (tylko awanse na wyższe poziomy dają bonus)
+    level_bonus = max(0, firm["level"] - 1) * 5000
+    
     score = (
         weights["revenue"] * stats["total_revenue"] +
         weights["avg_rating"] * (stats["avg_rating"] * 1000) +
         weights["reputation"] * firm["reputation"] +
-        weights["level"] * (firm["level"] * 5000) +
+        weights["level"] * level_bonus +
         weights["contracts"] * (stats["contracts_completed"] * 100)
     )
     
@@ -786,3 +835,71 @@ def get_firm_summary(user_data: Dict) -> Dict:
         "daily_capacity": calculate_daily_capacity(firm["level"], business_data["employees"]),
         "daily_costs": calculate_daily_costs(business_data)
     }
+
+# =============================================================================
+# MIGRACJA DANYCH - Wydarzenia do transakcji
+# =============================================================================
+
+def migrate_event_transactions(user_data: Dict) -> Tuple[Dict, int]:
+    """Migruje stare wydarzenia z monetami do transakcji finansowych
+    
+    Przeszukuje events.history i dodaje brakujące transakcje event_reward/event_cost
+    do history.transactions dla wydarzeń, które miały efekt 'coins'.
+    
+    Args:
+        user_data: Pełne dane użytkownika
+        
+    Returns:
+        (updated_user_data, liczba_dodanych_transakcji)
+    """
+    business_data = user_data.get("business_game")
+    if not business_data:
+        return user_data, 0
+    
+    # Sprawdź czy są wydarzenia
+    events_history = business_data.get("events", {}).get("history", [])
+    if not events_history:
+        return user_data, 0
+    
+    # Pobierz istniejące transakcje event_reward/event_cost
+    existing_transactions = business_data.get("history", {}).get("transactions", [])
+    existing_event_ids = set()
+    for trans in existing_transactions:
+        if trans.get("type") in ["event_reward", "event_cost"] and "event_id" in trans:
+            existing_event_ids.add(trans["event_id"])
+    
+    # Przejdź przez wydarzenia i dodaj brakujące transakcje
+    added_count = 0
+    for event in events_history:
+        event_id = event.get("event_id")
+        effects = event.get("effects", {})
+        
+        # Sprawdź czy wydarzenie ma efekt coins
+        if "coins" not in effects:
+            continue
+        
+        # Sprawdź czy już jest transakcja dla tego wydarzenia
+        if event_id in existing_event_ids:
+            continue
+        
+        coins_amount = effects["coins"]
+        timestamp = event.get("timestamp", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        
+        # Dodaj transakcję
+        new_transaction = {
+            "type": "event_reward" if coins_amount > 0 else "event_cost",
+            "amount": coins_amount,
+            "event_id": event_id,
+            "event_title": event.get("title", "Unknown Event"),
+            "timestamp": timestamp,
+            "migrated": True  # Oznacz jako zmigrowane
+        }
+        
+        business_data["history"]["transactions"].append(new_transaction)
+        added_count += 1
+    
+    # Zapisz zmiany
+    if added_count > 0:
+        user_data["business_game"] = business_data
+    
+    return user_data, added_count

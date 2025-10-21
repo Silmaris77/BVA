@@ -1,4 +1,4 @@
-"""
+﻿"""
 Business Games - UI
 Widok główny z zakładkami: Dashboard, Rynek Kontraktów, Pracownicy, Rankingi
 """
@@ -7,17 +7,34 @@ import streamlit as st
 from datetime import datetime, timedelta
 import plotly.graph_objects as go
 
-from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG, FIRM_LOGOS
+from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG, FIRM_LOGOS, OFFICE_TYPES, OFFICE_UPGRADE_PATH
 from utils.business_game import (
     initialize_business_game, refresh_contract_pool, accept_contract,
     submit_contract_solution, hire_employee, fire_employee,
-    calculate_daily_costs, get_firm_summary, get_revenue_chart_data,
+    calculate_daily_costs, calculate_total_daily_costs, get_firm_summary, get_revenue_chart_data,
     get_category_distribution, calculate_overall_score, can_accept_contract,
     can_hire_employee, update_user_ranking
 )
 from utils.components import zen_header
 from utils.material3_components import apply_material3_theme
 from utils.scroll_utils import scroll_to_top
+
+# =============================================================================
+# FUNKCJE POMOCNICZE
+# =============================================================================
+
+def play_coin_sound():
+    """Odtwarza dźwięk brzęczących monet przy nagrodzie"""
+    # Prosty dźwięk za pomocą HTML audio z CDN
+    # Użyj darmowego dźwięku monet z freesound.org lub podobnego
+    st.markdown(
+        """
+        <audio autoplay>
+            <source src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" type="audio/mpeg">
+        </audio>
+        """,
+        unsafe_allow_html=True
+    )
 
 # =============================================================================
 # GŁÓWNA FUNKCJA
@@ -43,6 +60,14 @@ def show_business_games(username, user_data):
     
     bg_data = user_data["business_game"]
     
+    # MIGRACJA: Dodaj brakujące transakcje dla starych wydarzeń z monetami
+    from utils.business_game import migrate_event_transactions
+    user_data, migrated_count = migrate_event_transactions(user_data)
+    if migrated_count > 0:
+        # Zapisz zmigrowane dane (cicho, bez komunikatu dla użytkownika)
+        save_user_data(username, user_data)
+        bg_data = user_data["business_game"]  # Odśwież referencję
+    
     # Odśwież pulę kontraktów
     bg_data = refresh_contract_pool(bg_data)
     user_data["business_game"] = bg_data
@@ -53,24 +78,27 @@ def show_business_games(username, user_data):
     st.markdown("---")
     
     # Główne zakładki
-    tabs = st.tabs(["🏢 Dashboard", "💼 Rynek Kontraktów", "👥 Pracownicy", "📜 Historia", "� Wydarzenia", "�🏆 Rankingi"])
+    tabs = st.tabs(["📖 Instrukcja", "🏢 Dashboard", "💼 Rynek Kontraktów", "🏢 Biuro i Pracownicy", "📊 Raporty Finansowe", "📜 Historia & Wydarzenia", "🏆 Rankingi"])
     
     with tabs[0]:
-        show_dashboard_tab(username, user_data)
+        show_instructions_tab()
     
     with tabs[1]:
-        show_contracts_tab(username, user_data)
+        show_dashboard_tab(username, user_data)
     
     with tabs[2]:
-        show_employees_tab(username, user_data)
+        show_contracts_tab(username, user_data)
     
     with tabs[3]:
-        show_history_tab(username, user_data)
+        show_employees_tab(username, user_data)
     
     with tabs[4]:
-        show_events_tab(username, user_data)
+        show_financial_reports_tab(username, user_data)
     
     with tabs[5]:
+        show_history_tab(username, user_data)
+    
+    with tabs[6]:
         show_rankings_tab(username, user_data)
 
 # =============================================================================
@@ -151,7 +179,7 @@ def render_header(user_data):
     </style>
     """, unsafe_allow_html=True)
     
-    # JEDEN WIERSZ: Logo+Nazwa | Saldo | Reputacja | Ogólny Score
+    # JEDEN WIERSZ: Logo+Nazwa | Saldo | Reputacja | Rating
     summary = get_firm_summary(user_data)
     
     col_firm, col1, col2, col3 = st.columns([1.5, 1, 1, 1])
@@ -210,12 +238,12 @@ def render_header(user_data):
         """, unsafe_allow_html=True)
     
     with col3:
-        # Ogólny Score - obliczamy z avg_rating i contracts_completed
-        overall_score = (summary['avg_rating'] * 10) + (bg_data['stats']['contracts_completed'] * 2)
+        # Rating - używamy oficjalnej funkcji z business_game
+        overall_score = calculate_overall_score(bg_data)
         st.markdown(f"""
         <div class='stat-card blue'>
-            <div class='stat-label'>🏆 Ogólny</div>
-            <div class='stat-value'>{overall_score:.0f}</div>
+            <div class='stat-label'>🏆 Rating</div>
+            <div class='stat-value'>{overall_score:,.0f}</div>
             <div style='font-size: 12px; color: #64748b;'>punktów</div>
         </div>
         """, unsafe_allow_html=True)
@@ -267,14 +295,17 @@ def create_financial_chart(bg_data, period=7, cumulative=False):
             if date not in daily_data:
                 daily_data[date] = {"revenue": 0, "costs": 0}
             
-            amount = trans["amount"]
-            trans_type = trans["type"]
+            trans_type = trans.get("type", "")
+            amount = trans.get("amount", 0)  # Bezpieczne pobieranie amount
             
-            if trans_type == "contract_reward":
+            if trans_type in ["contract_reward", "event_reward"]:
+                # Przychody z kontraktów i pozytywnych wydarzeń
                 daily_data[date]["revenue"] += amount
-            elif trans_type in ["daily_costs", "employee_hire"]:
+            elif trans_type in ["daily_costs", "employee_hired", "employee_hire", "event_cost", "office_rent", "office_upgrade"]:
+                # Koszty: pracownicy + biuro + negatywne wydarzenia
                 daily_data[date]["costs"] += abs(amount)
-        except:
+            # employee_fired nie wpływa na wykres (amount = 0), ale jest w historii
+        except Exception as e:
             continue
     
     # Stwórz range dat dla wybranego okresu
@@ -448,32 +479,42 @@ def show_dashboard_tab(username, user_data):
         event_id, event_data = st.session_state["pending_event"]
         render_event_choice_modal(event_id, event_data, username, user_data)
     
-    # Pokaż dzisiejsze wydarzenie (jeśli jest)
-    latest_event = get_latest_event(bg_data)
-    if latest_event:
-        # Sprawdź czy wydarzenie jest z dzisiaj
-        event_date = latest_event.get("timestamp", "").split(" ")[0]
-        if event_date == today:
-            st.markdown("### 🎲 Dzisiejsze Wydarzenie")
-            show_active_event_card(latest_event)
-            st.markdown("---")
-    
     st.markdown("---")
     
     # Pobierz podsumowanie
     summary = get_firm_summary(user_data)
     
-    # SEKCJA AKTYWNYCH KONTRAKTÓW
-    st.subheader("📋 Aktywne Kontrakty")
+    # Dwie kolumny: Aktywne kontrakty i Wydarzenie
+    col_contracts, col_event = st.columns([2, 1])
     
-    # Lista aktywnych kontraktów
-    active_contracts = bg_data["contracts"]["active"]
+    # LEWA KOLUMNA - AKTYWNE KONTRAKTY
+    with col_contracts:
+        st.subheader("📋 Aktywne Kontrakty")
+        
+        # Lista aktywnych kontraktów
+        active_contracts = bg_data["contracts"]["active"]
+        
+        if len(active_contracts) == 0:
+            st.info("Brak aktywnych kontraktów. Przejdź do zakładki 'Rynek Kontraktów' aby przyjąć nowe zlecenie!")
+        else:
+            for contract in active_contracts:
+                render_active_contract_card(contract, username, user_data, bg_data)
     
-    if len(active_contracts) == 0:
-        st.info("Brak aktywnych kontraktów. Przejdź do zakładki 'Rynek Kontraktów' aby przyjąć nowe zlecenie!")
-    else:
-        for contract in active_contracts:
-            render_active_contract_card(contract, username, user_data, bg_data)
+    # PRAWA KOLUMNA - DZISIEJSZE WYDARZENIE
+    with col_event:
+        st.subheader("🎲 Dzisiejsze Wydarzenie")
+        
+        # Pokaż dzisiejsze wydarzenie (jeśli jest)
+        latest_event = get_latest_event(bg_data)
+        if latest_event:
+            # Sprawdź czy wydarzenie jest z dzisiaj
+            event_date = latest_event.get("timestamp", "").split(" ")[0]
+            if event_date == today:
+                show_active_event_card(latest_event)
+            else:
+                st.info("Dzisiaj nie ma żadnego wydarzenia.")
+        else:
+            st.info("Dzisiaj nie ma żadnego wydarzenia.")
     
     st.markdown("---")
     
@@ -507,8 +548,10 @@ def show_dashboard_tab(username, user_data):
         # Podsumowanie sum
         if cumulative:
             transactions = bg_data.get("history", {}).get("transactions", [])
-            total_rev = sum(t["amount"] for t in transactions if t["type"] == "contract_reward")
-            total_cost = sum(abs(t["amount"]) for t in transactions if t["type"] in ["daily_costs", "employee_hire"])
+            # Przychody: kontrakty + pozytywne wydarzenia
+            total_rev = sum(t.get("amount", 0) for t in transactions if t.get("type") in ["contract_reward", "event_reward"])
+            # Koszty: pracownicy + negatywne wydarzenia
+            total_cost = sum(abs(t.get("amount", 0)) for t in transactions if t.get("type") in ["daily_costs", "employee_hired", "employee_hire", "event_cost"])
             total_profit = total_rev - total_cost
             
             st.markdown(f"""
@@ -903,6 +946,9 @@ Tekst do poprawy:
                             if paste_events_key in st.session_state:
                                 del st.session_state[paste_events_key]
                             
+                            # 💰 Odtwórz dźwięk monet!
+                            play_coin_sound()
+                            
                             st.success(message)
                             st.balloons()
                             st.rerun()
@@ -1011,8 +1057,13 @@ def show_contracts_tab(username, user_data):
     if len(available_contracts) == 0:
         st.info("Brak dostępnych kontraktów spełniających kryteria. Zmień filtry lub poczekaj na odświeżenie puli.")
     else:
-        for contract in available_contracts:
-            render_contract_card(contract, username, user_data, bg_data, can_accept)
+        # Podziel kontrakty na 2 kolumny
+        col1, col2 = st.columns(2)
+        
+        for idx, contract in enumerate(available_contracts):
+            # Naprzemienne kolumny
+            with col1 if idx % 2 == 0 else col2:
+                render_contract_card(contract, username, user_data, bg_data, can_accept)
 
 def render_contract_card(contract, username, user_data, bg_data, can_accept_new):
     """Renderuje profesjonalną kartę dostępnego kontraktu - taki sam layout jak aktywne"""
@@ -1133,13 +1184,103 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new)
 # =============================================================================
 
 def show_employees_tab(username, user_data):
-    """Zakładka Pracownicy"""
+    """Zakładka Biuro i Pracownicy"""
     bg_data = user_data["business_game"]
+    
+    # Inicjalizacja biura jeśli nie istnieje (dla starych zapisów)
+    if "office" not in bg_data:
+        bg_data["office"] = {
+            "type": "home_office",
+            "upgraded_at": None
+        }
+        user_data["business_game"] = bg_data
+        save_user_data(username, user_data)
+    
+    # =============================================================================
+    # SEKCJA BIURA
+    # =============================================================================
+    
+    st.subheader("🏢 Twoje Biuro")
+    
+    office_type = bg_data["office"]["type"]
+    office_info = OFFICE_TYPES[office_type]
+    
+    # Kompaktowa karta informacyjna o biurze
+    with st.container():
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); 
+                    padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 48px;">{office_info['ikona']}</div>
+                <div style="flex: 1;">
+                    <h3 style="margin: 0; color: #1a1a1a;">{office_info['nazwa']}</h3>
+                    <p style="margin: 5px 0; color: #2a2a2a; font-size: 14px;">{office_info['opis']}</p>
+                    <div style="display: flex; gap: 20px; margin-top: 10px; font-size: 13px; color: #333;">
+                        <span>👥 Max: {office_info['max_pracownikow']} pracowników</span>
+                        <span>💰 Koszt: {office_info['koszt_dzienny']} zł/dzień</span>
+                        <span>⭐ Reputacja: +{office_info['bonus_reputacji']}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Przycisk ulepszenia (jeśli dostępny)
+    current_index = OFFICE_UPGRADE_PATH.index(office_type)
+    if current_index < len(OFFICE_UPGRADE_PATH) - 1:
+        next_office_type = OFFICE_UPGRADE_PATH[current_index + 1]
+        next_office = OFFICE_TYPES[next_office_type]
+        
+        col1, col2, col3 = st.columns([2, 1, 1])
+        with col1:
+            st.write(f"💡 **Dostępne ulepszenie:** {next_office['ikona']} {next_office['nazwa']}")
+        with col2:
+            st.write(f"💰 Koszt: **{next_office['koszt_ulepszenia']} zł**")
+        with col3:
+            # Pobierz monety z user_data (nie z bg_data)
+            current_coins = user_data.get('degencoins', 0)
+            
+            if current_coins >= next_office['koszt_ulepszenia']:
+                if st.button("⬆️ Ulepsz biuro", type="primary", use_container_width=True):
+                    # Ulepsz biuro
+                    user_data['degencoins'] -= next_office['koszt_ulepszenia']
+                    bg_data["office"]["type"] = next_office_type
+                    bg_data["office"]["upgraded_at"] = datetime.now().isoformat()
+                    bg_data["stats"]["total_costs"] += next_office['koszt_ulepszenia']
+                    
+                    # Dodaj transakcję
+                    if "transactions" not in bg_data.get("history", {}):
+                        if "history" not in bg_data:
+                            bg_data["history"] = {}
+                        bg_data["history"]["transactions"] = []
+                    
+                    bg_data["history"]["transactions"].append({
+                        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "type": "office_upgrade",
+                        "description": f"Ulepszenie biura: {next_office['nazwa']}",
+                        "amount": -next_office['koszt_ulepszenia']
+                    })
+                    
+                    user_data["business_game"] = bg_data
+                    save_user_data(username, user_data)
+                    st.success(f"🎉 Biuro ulepszone do: {next_office['nazwa']}!")
+                    st.balloons()
+                    st.rerun()
+            else:
+                st.button("⬆️ Ulepsz biuro", disabled=True, use_container_width=True)
+                st.caption(f"Potrzebujesz: {next_office['koszt_ulepszenia'] - current_coins:.0f} 💰")
+    else:
+        st.success("🌟 Posiadasz najlepsze możliwe biuro!")
+    
+    st.markdown("---")
+    
+    # =============================================================================
+    # SEKCJA PRACOWNIKÓW
+    # =============================================================================
     
     st.subheader("👥 Zarządzanie Zespołem")
     
-    firm_level = bg_data["firm"]["level"]
-    max_employees = FIRM_LEVELS[firm_level]["max_pracownikow"]
+    max_employees = office_info['max_pracownikow']
     current_count = len(bg_data["employees"])
     
     col1, col2, col3 = st.columns(3)
@@ -1147,53 +1288,70 @@ def show_employees_tab(username, user_data):
         st.metric("👥 Zespół", f"{current_count}/{max_employees}")
     with col2:
         daily_cost = calculate_daily_costs(bg_data)
-        st.metric("💸 Koszty dzienne", f"{daily_cost:.0f} 💰")
+        st.metric("💸 Koszty dzienne (pracownicy)", f"{daily_cost:.0f} 💰")
     with col3:
-        monthly_cost = daily_cost * 30
-        st.metric("📅 Koszty miesięczne", f"{monthly_cost:.0f} 💰")
+        total_daily = daily_cost + office_info['koszt_dzienny']
+        st.metric("� Łączne koszty dzienne", f"{total_daily:.0f} 💰")
     
     st.markdown("---")
     
-    # Zatrudnieni pracownicy
+    # SEKCJA 1: Obecnie zatrudnieni (2 kolumny)
     st.subheader("🏢 Obecnie zatrudnieni")
     
     if len(bg_data["employees"]) == 0:
-        st.info("Nie masz jeszcze pracowników. Zatrudnij kogoś z listy poniżej!")
+        st.info("Nie masz jeszcze pracowników. Zatrudnij kogoś z sekcji poniżej!")
     else:
-        for employee in bg_data["employees"]:
-            render_employee_card(employee, username, user_data, bg_data)
+        # Wyświetl zatrudnionych w 2 kolumnach
+        cols = st.columns(2)
+        for idx, employee in enumerate(bg_data["employees"]):
+            with cols[idx % 2]:
+                render_employee_card(employee, username, user_data, bg_data)
     
     st.markdown("---")
     
-    # Dostępni do zatrudnienia
+    # SEKCJA 2: Dostępni do zatrudnienia (2 kolumny)
     st.subheader("💼 Dostępni do zatrudnienia")
     
     if current_count >= max_employees:
-        st.warning(f"⚠️ Osiągnąłeś limit pracowników na poziomie {firm_level}. Zwiększ poziom firmy aby zatrudnić więcej osób!")
+        st.warning(f"⚠️ Osiągnięto limit pracowników: {max_employees}")
     
-    for emp_type, emp_data in EMPLOYEE_TYPES.items():
-        render_hire_card(emp_type, emp_data, username, user_data, bg_data)
+    # Wyświetl dostępnych w 2 kolumnach
+    available_employees = [emp_type for emp_type in EMPLOYEE_TYPES.keys() 
+                          if not any(e["type"] == emp_type for e in bg_data["employees"])]
+    
+    if available_employees:
+        cols = st.columns(2)
+        for idx, emp_type in enumerate(available_employees):
+            with cols[idx % 2]:
+                render_hire_card(emp_type, EMPLOYEE_TYPES[emp_type], username, user_data, bg_data)
+    else:
+        st.success("✅ Wszystkie dostępne typy pracowników są już zatrudnione!")
 
 def render_employee_card(employee, username, user_data, bg_data):
-    """Renderuje kartę zatrudnionego pracownika"""
+    """Renderuje kartę zatrudnionego pracownika - kompaktowa"""
     
     emp_data = EMPLOYEE_TYPES[employee["type"]]
     
-    col1, col2, col3, col4 = st.columns([3, 2, 2, 1])
-    
-    with col1:
-        st.markdown(f"### {emp_data['ikona']} {emp_data['nazwa']}")
-        st.caption(emp_data['opis'])
-    
-    with col2:
-        st.markdown(f"**Bonus:**  \n{emp_data['bonus']}")
-    
-    with col3:
-        st.markdown(f"**Koszt:**  \n{emp_data['koszt_dzienny']} 💰/dzień")
-        st.caption(f"Zatrudniony: {employee['hired_date']}")
-    
-    with col4:
-        if st.button("🗑️", key=f"fire_{employee['id']}", help="Zwolnij"):
+    # Kompaktowa karta
+    with st.container():
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    padding: 15px; border-radius: 10px; margin-bottom: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 18px; font-weight: bold;">{emp_data['ikona']} {emp_data['nazwa']}</div>
+                    <div style="font-size: 12px; opacity: 0.9; margin-top: 4px;">{emp_data['bonus']}</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 14px; font-weight: bold;">{emp_data['koszt_dzienny']} 💰/dzień</div>
+                    <div style="font-size: 11px; opacity: 0.8;">od {employee['hired_date']}</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Przycisk zwolnienia
+        if st.button("🗑️ Zwolnij", key=f"fire_{employee['id']}", type="secondary", use_container_width=True):
             updated_user_data, success, message = fire_employee(user_data, employee['id'])
             if success:
                 user_data.update(updated_user_data)
@@ -1202,110 +1360,962 @@ def render_employee_card(employee, username, user_data, bg_data):
                 st.rerun()
             else:
                 st.error(message)
-    
-    st.markdown("---")
 
 def render_hire_card(emp_type, emp_data, username, user_data, bg_data):
-    """Renderuje kartę dostępnego pracownika"""
-    
-    # Sprawdź czy już zatrudniony
-    already_hired = any(e["type"] == emp_type for e in bg_data["employees"])
-    if already_hired:
-        return  # Nie pokazuj
+    """Renderuje kartę dostępnego pracownika - kompaktowa"""
     
     can_hire, reason = can_hire_employee(user_data, emp_type)
     
     with st.container():
-        col1, col2, col3, col4 = st.columns([3, 2, 2, 1])
+        # Kompaktowa karta z gradientem (szary)
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%); 
+                    padding: 15px; border-radius: 10px; margin-bottom: 10px; color: #424242;">
+            <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                {emp_data['ikona']} {emp_data['nazwa']}
+            </div>
+            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px;">
+                {emp_data['bonus']}
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                <div>💰 Zatrudnienie: <strong>{emp_data['koszt_zatrudnienia']}</strong></div>
+                <div>📅 Dzienny: <strong>{emp_data['koszt_dzienny']}</strong></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
         
-        with col1:
-            st.markdown(f"### {emp_data['ikona']} {emp_data['nazwa']}")
-            st.caption(emp_data['opis'])
-        
-        with col2:
-            st.markdown(f"**Bonus:**  \n{emp_data['bonus']}")
-            if emp_data['specjalizacja']:
-                st.caption(f"Specjalizacja: {emp_data['specjalizacja']}")
-        
-        with col3:
-            st.markdown(f"**Koszt zatrudnienia:**  \n{emp_data['koszt_zatrudnienia']} 💰")
-            st.markdown(f"**Koszt dzienny:**  \n{emp_data['koszt_dzienny']} 💰/dzień")
-        
-        with col4:
-            if not can_hire:
-                st.button("🔒", key=f"hire_{emp_type}_locked", disabled=True, help=reason)
-            else:
-                if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary"):
-                    updated_user_data, success, message = hire_employee(user_data, emp_type)
-                    if success:
-                        user_data.update(updated_user_data)
-                        save_user_data(username, user_data)
-                        st.success(message)
-                        st.rerun()
-                    else:
+        # Przycisk zatrudnienia
+        if not can_hire:
+            st.button("🔒 Niedostępny", key=f"hire_{emp_type}_locked", disabled=True, 
+                     help=reason, use_container_width=True)
+        else:
+            if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary", use_container_width=True):
+                updated_user_data, success, message = hire_employee(user_data, emp_type)
+                if success:
+                    user_data.update(updated_user_data)
+                    save_user_data(username, user_data)
+                    st.success(message)
+                    st.rerun()
+                else:
                         st.error(message)
         
         st.markdown("---")
 
 # =============================================================================
-# TAB 4: HISTORIA KONTRAKTÓW
+# TAB 4: RAPORTY FINANSOWE
+# =============================================================================
+
+def show_financial_reports_tab(username, user_data):
+    """Zakładka Raporty Finansowe - zaawansowana analiza P&L i KPI"""
+    bg_data = user_data["business_game"]
+    
+    st.subheader("📊 Raporty Finansowe")
+    st.markdown("Zaawansowana analiza wyników finansowych Twojej firmy")
+    
+    # Wybór okresu analizy
+    col1, col2, col3 = st.columns([2, 2, 1])
+    with col1:
+        period_type = st.selectbox(
+            "Okres analizy:",
+            ["Ostatni dzień", "Ostatnie 7 dni", "Ostatnie 14 dni", "Ostatnie 30 dni", "Ostatnie 90 dni", "Cały czas"],
+            index=1,  # Domyślnie "Ostatnie 7 dni"
+            key="financial_period"
+        )
+
+    
+    with col2:
+        comparison = st.checkbox("Porównaj z poprzednim okresem", value=True, key="financial_compare")
+    
+    with col3:
+        if st.button("🔄 Odśwież", key="refresh_reports"):
+            st.rerun()
+    
+    # Mapowanie okresu na dni
+    period_days = {
+        "Ostatni dzień": 1,
+        "Ostatnie 7 dni": 7,
+        "Ostatnie 14 dni": 14,
+        "Ostatnie 30 dni": 30,
+        "Ostatnie 90 dni": 90,
+        "Cały czas": 9999
+    }
+    days = period_days[period_type]
+    
+    # Pobierz dane finansowe
+    financial_data = calculate_financial_data(bg_data, days, comparison)
+    
+    st.markdown("---")
+    
+    # Sub-tabs w raportach
+    report_tabs = st.tabs(["📈 KPI Dashboard", "📋 P&L Statement", "💰 Analiza Rentowności", "👥 ROI Pracowników", "📊 Analiza Kategorii"])
+    
+    with report_tabs[0]:
+        show_kpi_dashboard(financial_data, bg_data)
+    
+    with report_tabs[1]:
+        show_pl_statement(financial_data, period_type, comparison)
+    
+    with report_tabs[2]:
+        show_profitability_analysis(financial_data, bg_data)
+    
+    with report_tabs[3]:
+        show_employee_roi_analysis(financial_data, bg_data)
+    
+    with report_tabs[4]:
+        show_category_analysis(financial_data, bg_data)
+
+
+def calculate_financial_data(bg_data, days, include_comparison=False):
+    """Oblicza wszystkie dane finansowe dla raportów"""
+    from datetime import datetime, timedelta
+    
+    transactions = bg_data.get("history", {}).get("transactions", [])
+    completed_contracts = bg_data.get("contracts", {}).get("completed", [])
+    
+    # Daty
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=days) if days < 9999 else datetime(2000, 1, 1)
+    
+    # Filtruj transakcje w okresie
+    current_transactions = [
+        t for t in transactions
+        if datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S") >= start_date
+    ]
+    
+    # Filtruj kontrakty w okresie (obsługa różnych formatów daty)
+    current_contracts = []
+    for c in completed_contracts:
+        completed_date_str = c.get("completed_date", "2000-01-01")
+        try:
+            # Spróbuj format z czasem
+            contract_date = datetime.strptime(completed_date_str, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            try:
+                # Spróbuj format tylko data
+                contract_date = datetime.strptime(completed_date_str, "%Y-%m-%d")
+            except ValueError:
+                # Jeśli niepoprawny format, pomiń
+                continue
+        
+        if contract_date >= start_date:
+            current_contracts.append(c)
+    
+    # CURRENT PERIOD
+    # Przychody: kontrakty + pozytywne wydarzenia
+    contract_revenue = sum(t.get("amount", 0) for t in current_transactions if t.get("type") == "contract_reward")
+    event_revenue = sum(t.get("amount", 0) for t in current_transactions if t.get("type") == "event_reward")
+    revenue = contract_revenue + event_revenue
+    
+    # Koszty: pracownicy + biuro + negatywne wydarzenia
+    employee_hire_costs = sum(abs(t.get("amount", 0)) for t in current_transactions if t.get("type") in ["employee_hired", "employee_hire"])
+    daily_costs = sum(abs(t.get("amount", 0)) for t in current_transactions if t.get("type") == "daily_costs")
+    office_costs = sum(abs(t.get("amount", 0)) for t in current_transactions if t.get("type") in ["office_rent", "office_upgrade"])
+    event_costs = sum(abs(t.get("amount", 0)) for t in current_transactions if t.get("type") == "event_cost")
+    total_costs = employee_hire_costs + daily_costs + office_costs + event_costs
+    profit = revenue - total_costs
+    
+    # Kontrakty
+    num_contracts = len(current_contracts)
+    avg_contract_value = revenue / num_contracts if num_contracts > 0 else 0
+    avg_rating = sum(c.get("rating", 0) for c in current_contracts) / num_contracts if num_contracts > 0 else 0
+    
+    # Pracownicy
+    num_employees = len(bg_data.get("employees", []))
+    revenue_per_employee = revenue / num_employees if num_employees > 0 else 0
+    
+    # Marże
+    profit_margin = (profit / revenue * 100) if revenue > 0 else 0
+    cost_to_revenue_ratio = (total_costs / revenue * 100) if revenue > 0 else 0
+    
+    result = {
+        "period": {
+            "revenue": revenue,
+            "revenue_breakdown": {
+                "contracts": contract_revenue,
+                "events": event_revenue
+            },
+            "costs": {
+                "employee_hire": employee_hire_costs,
+                "daily_costs": daily_costs,
+                "office": office_costs,
+                "events": event_costs,
+                "total": total_costs
+            },
+            "profit": profit,
+            "contracts": {
+                "count": num_contracts,
+                "avg_value": avg_contract_value,
+                "avg_rating": avg_rating
+            },
+            "employees": {
+                "count": num_employees,
+                "revenue_per_employee": revenue_per_employee
+            },
+            "metrics": {
+                "profit_margin": profit_margin,
+                "cost_to_revenue_ratio": cost_to_revenue_ratio
+            }
+        }
+    }
+    
+    # PREVIOUS PERIOD (dla porównania)
+    if include_comparison and days < 9999:
+        prev_end = start_date
+        prev_start = prev_end - timedelta(days=days)
+        
+        prev_transactions = [
+            t for t in transactions
+            if prev_start <= datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S") < prev_end
+        ]
+        
+        # Filtruj kontrakty z poprzedniego okresu (obsługa różnych formatów daty)
+        prev_contracts = []
+        for c in completed_contracts:
+            completed_date_str = c.get("completed_date", "2000-01-01")
+            try:
+                # Spróbuj format z czasem
+                contract_date = datetime.strptime(completed_date_str, "%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                try:
+                    # Spróbuj format tylko data
+                    contract_date = datetime.strptime(completed_date_str, "%Y-%m-%d")
+                except ValueError:
+                    # Jeśli niepoprawny format, pomiń
+                    continue
+            
+            if prev_start <= contract_date < prev_end:
+                prev_contracts.append(c)
+        
+        # Przychody: kontrakty + wydarzenia
+        prev_contract_revenue = sum(t.get("amount", 0) for t in prev_transactions if t.get("type") == "contract_reward")
+        prev_event_revenue = sum(t.get("amount", 0) for t in prev_transactions if t.get("type") == "event_reward")
+        prev_revenue = prev_contract_revenue + prev_event_revenue
+        
+        # Koszty: pracownicy + biuro + wydarzenia
+        prev_costs = sum(abs(t.get("amount", 0)) for t in prev_transactions if t.get("type") in ["employee_hired", "employee_hire", "daily_costs", "office_rent", "office_upgrade", "event_cost"])
+        prev_profit = prev_revenue - prev_costs
+        prev_num_contracts = len(prev_contracts)
+        
+        result["previous"] = {
+            "revenue": prev_revenue,
+            "costs": prev_costs,
+            "profit": prev_profit,
+            "contracts": prev_num_contracts
+        }
+    
+    return result
+
+
+def show_kpi_dashboard(financial_data, bg_data):
+    """Wyświetla dashboard z kluczowymi KPI"""
+    st.markdown("### 🎯 Kluczowe Wskaźniki Wydajności")
+    
+    period = financial_data["period"]
+    has_prev = "previous" in financial_data
+    
+    # Główne KPI w 3 kolumnach
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        revenue = period["revenue"]
+        revenue_change = 0
+        if has_prev and financial_data["previous"]["revenue"] > 0:
+            revenue_change = ((revenue - financial_data["previous"]["revenue"]) / financial_data["previous"]["revenue"]) * 100
+        
+        render_kpi_card(
+            "💰 Przychody",
+            f"{revenue:,.0f} 💰",
+            revenue_change if has_prev else None,
+            "positive"
+        )
+    
+    with col2:
+        profit = period["profit"]
+        profit_change = 0
+        if has_prev and financial_data["previous"]["profit"] != 0:
+            profit_change = ((profit - financial_data["previous"]["profit"]) / abs(financial_data["previous"]["profit"])) * 100
+        
+        render_kpi_card(
+            "💎 Zysk Netto",
+            f"{profit:,.0f} 💰",
+            profit_change if has_prev else None,
+            "positive" if profit >= 0 else "negative"
+        )
+    
+    with col3:
+        margin = period["metrics"]["profit_margin"]
+        render_kpi_card(
+            "📊 Marża Zysku",
+            f"{margin:.1f}%",
+            None,
+            "positive" if margin >= 20 else "neutral" if margin >= 10 else "negative"
+        )
+    
+    st.markdown("---")
+    
+    # Dodatkowe KPI w 4 kolumnach
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        render_kpi_card(
+            "📝 Kontrakty",
+            f"{period['contracts']['count']}",
+            None,
+            "neutral"
+        )
+    
+    with col2:
+        render_kpi_card(
+            "⭐ Śr. Ocena",
+            f"{period['contracts']['avg_rating']:.2f}",
+            None,
+            "positive" if period['contracts']['avg_rating'] >= 4 else "neutral"
+        )
+    
+    with col3:
+        render_kpi_card(
+            "👥 Pracownicy",
+            f"{period['employees']['count']}",
+            None,
+            "neutral"
+        )
+    
+    with col4:
+        rpe = period['employees']['revenue_per_employee']
+        render_kpi_card(
+            "💼 Rev/Employee",
+            f"{rpe:,.0f} 💰",
+            None,
+            "positive" if rpe > 1000 else "neutral"
+        )
+
+
+def render_kpi_card(title, value, change_percent=None, sentiment="neutral"):
+    """Renderuje kartę KPI z opcjonalnym trendem"""
+    
+    # Kolory na podstawie sentymentu
+    colors = {
+        "positive": {"bg": "#f0fdf4", "border": "#10b981", "text": "#065f46"},
+        "negative": {"bg": "#fef2f2", "border": "#ef4444", "text": "#991b1b"},
+        "neutral": {"bg": "#f8f9fa", "border": "#94a3b8", "text": "#475569"}
+    }
+    
+    color = colors.get(sentiment, colors["neutral"])
+    
+    # Strzałka trendu
+    trend_html = ""
+    if change_percent is not None:
+        if change_percent > 0:
+            trend_html = f"<div style='color: #10b981; font-size: 14px;'>▲ +{change_percent:.1f}%</div>"
+        elif change_percent < 0:
+            trend_html = f"<div style='color: #ef4444; font-size: 14px;'>▼ {change_percent:.1f}%</div>"
+        else:
+            trend_html = f"<div style='color: #94a3b8; font-size: 14px;'>➡ 0%</div>"
+    
+    st.markdown(f"""
+    <div style="background: {color['bg']}; 
+                border-left: 4px solid {color['border']}; 
+                padding: 16px; 
+                border-radius: 8px;
+                height: 100%;">
+        <div style="color: {color['text']}; font-size: 12px; font-weight: 600; margin-bottom: 8px;">
+            {title}
+        </div>
+        <div style="font-size: 24px; font-weight: bold; color: {color['text']}; margin-bottom: 4px;">
+            {value}
+        </div>
+        {trend_html}
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def show_pl_statement(financial_data, period_type, show_comparison):
+    """Wyświetla rachunek zysków i strat (P&L Statement)"""
+    st.markdown("### 📋 Rachunek Zysków i Strat (P&L)")
+    st.markdown(f"**Okres:** {period_type}")
+    
+    period = financial_data["period"]
+    has_prev = "previous" in financial_data and show_comparison
+    
+    # Tworzenie tabeli P&L
+    import pandas as pd
+    
+    pl_data = {
+        "Pozycja": [
+            "PRZYCHODY OPERACYJNE",
+            "  Przychody z kontraktów",
+            "  Przychody z wydarzeń",
+            "  RAZEM PRZYCHODY",
+            "",
+            "KOSZTY OPERACYJNE",
+            "  Koszty zatrudnienia (jednorazowe)",
+            "  Koszty pracowników (dzienne)",
+            "  Koszty biura (wynajem + ulepszenia)",
+            "  Koszty z wydarzeń",
+            "  RAZEM KOSZTY",
+            "",
+            "ZYSK/STRATA OPERACYJNA",
+            "",
+            "WSKAŹNIKI",
+            "  Marża zysku",
+            "  Stosunek kosztów do przychodów"
+        ],
+        "Bieżący okres": [
+            "",
+            f"{period['revenue_breakdown']['contracts']:,.0f} 💰",
+            f"{period['revenue_breakdown']['events']:,.0f} 💰",
+            f"{period['revenue']:,.0f} 💰",
+            "",
+            "",
+            f"-{period['costs']['employee_hire']:,.0f} 💰",
+            f"-{period['costs']['daily_costs']:,.0f} 💰",
+            f"-{period['costs']['office']:,.0f} 💰",
+            f"-{period['costs']['events']:,.0f} 💰",
+            f"-{period['costs']['total']:,.0f} 💰",
+            "",
+            f"{period['profit']:,.0f} 💰",
+            "",
+            "",
+            f"{period['metrics']['profit_margin']:.1f}%",
+            f"{period['metrics']['cost_to_revenue_ratio']:.1f}%"
+        ]
+    }
+    
+    if has_prev:
+        prev = financial_data["previous"]
+        pl_data["Poprzedni okres"] = [
+            "",
+            "-",  # Rozbicie przychodów niedostępne dla poprzedniego okresu
+            "-",
+            f"{prev['revenue']:,.0f} 💰",
+            "",
+            "",
+            "-",  # Rozbicie kosztów niedostępne
+            "-",
+            "-",
+            "-",
+            f"-{prev['costs']:,.0f} 💰",
+            "",
+            f"{prev['profit']:,.0f} 💰",
+            "",
+            "",
+            "-",
+            "-"
+        ]
+        
+        # Zmiana
+        rev_change = period['revenue'] - prev['revenue']
+        profit_change = period['profit'] - prev['profit']
+        cost_change = period['costs']['total'] - prev['costs']
+        
+        pl_data["Zmiana"] = [
+            "",
+            "-",
+            "-",
+            f"{rev_change:+,.0f} 💰",
+            "",
+            "",
+            "-",
+            "-",
+            "-",
+            "-",
+            f"{-cost_change:+,.0f} 💰",
+            "",
+            f"{profit_change:+,.0f} 💰",
+            "",
+            "",
+            "-",
+            "-"
+        ]
+    
+    df = pd.DataFrame(pl_data)
+    
+    # Stylowanie tabeli
+    st.dataframe(
+        df,
+        use_container_width=True,
+        hide_index=True,
+        height=500
+    )
+    
+    # Waterfall chart
+    st.markdown("#### 💧 Analiza Waterfall (Przepływ Środków)")
+    
+    import plotly.graph_objects as go
+    
+    # Buduj waterfall dynamicznie (tylko niezerowe pozycje)
+    x_labels = ["Przychody"]
+    y_values = [period['revenue']]
+    measures = ["relative"]
+    texts = [f"{period['revenue']:,.0f}"]
+    
+    if period['costs']['employee_hire'] > 0:
+        x_labels.append("Koszty<br>zatrudnienia")
+        y_values.append(-period['costs']['employee_hire'])
+        measures.append("relative")
+        texts.append(f"-{period['costs']['employee_hire']:,.0f}")
+    
+    if period['costs']['daily_costs'] > 0:
+        x_labels.append("Koszty<br>pracowników")
+        y_values.append(-period['costs']['daily_costs'])
+        measures.append("relative")
+        texts.append(f"-{period['costs']['daily_costs']:,.0f}")
+    
+    if period['costs']['office'] > 0:
+        x_labels.append("Koszty<br>biura")
+        y_values.append(-period['costs']['office'])
+        measures.append("relative")
+        texts.append(f"-{period['costs']['office']:,.0f}")
+    
+    if period['costs']['events'] > 0:
+        x_labels.append("Koszty<br>wydarzeń")
+        y_values.append(-period['costs']['events'])
+        measures.append("relative")
+        texts.append(f"-{period['costs']['events']:,.0f}")
+    
+    x_labels.append("Zysk Netto")
+    y_values.append(period['profit'])
+    measures.append("total")
+    texts.append(f"{period['profit']:,.0f}")
+    
+    fig = go.Figure(go.Waterfall(
+        x = x_labels,
+        y = y_values,
+        measure = measures,
+        text = texts,
+        textposition = "outside",
+        connector = {"line": {"color": "#cbd5e1"}},
+        decreasing = {"marker": {"color": "#ef4444"}},
+        increasing = {"marker": {"color": "#10b981"}},
+        totals = {"marker": {"color": "#8b5cf6"}}
+    ))
+    
+    fig.update_layout(
+        title="Przepływ środków: Od przychodów do zysku",
+        showlegend=False,
+        height=400,
+        yaxis_title="Monety 💰",
+        plot_bgcolor='white',
+        paper_bgcolor='white'
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def show_profitability_analysis(financial_data, bg_data):
+    """Analiza rentowności"""
+    st.markdown("### 💰 Analiza Rentowności")
+    
+    period = financial_data["period"]
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("#### 📊 Wskaźniki Rentowności")
+        
+        # Gross Profit Margin
+        st.metric(
+            "Marża Zysku Brutto",
+            f"{period['metrics']['profit_margin']:.1f}%",
+            help="Zysk / Przychody * 100"
+        )
+        
+        # Cost Efficiency
+        efficiency = 100 - period['metrics']['cost_to_revenue_ratio']
+        st.metric(
+            "Efektywność Kosztowa",
+            f"{efficiency:.1f}%",
+            help="Im wyższa, tym lepiej zarządzasz kosztami"
+        )
+        
+        # Average Contract Profitability
+        avg_profit_per_contract = period['profit'] / period['contracts']['count'] if period['contracts']['count'] > 0 else 0
+        st.metric(
+            "Średni Zysk na Kontrakt",
+            f"{avg_profit_per_contract:,.0f} 💰"
+        )
+        
+        # Break-even point
+        if period['costs']['daily_costs'] > 0:
+            contracts_completed = period['contracts']['count']
+            days_in_period = 7  # Można dynamicznie obliczyć
+            daily_revenue = period['revenue'] / days_in_period if days_in_period > 0 else 0
+            daily_op_costs = period['costs']['daily_costs'] / days_in_period if days_in_period > 0 else 0
+            
+            st.metric(
+                "Dzienny Przychód",
+                f"{daily_revenue:,.0f} 💰"
+            )
+            st.metric(
+                "Dzienny Koszt Operacyjny",
+                f"{daily_op_costs:,.0f} 💰"
+            )
+    
+    with col2:
+        st.markdown("#### 📈 Benchmark")
+        
+        # Porównanie z celami
+        targets = {
+            "Marża zysku": {"current": period['metrics']['profit_margin'], "target": 30, "unit": "%"},
+            "Ocena klientów": {"current": period['contracts']['avg_rating'], "target": 4.5, "unit": "⭐"},
+            "Rev per Employee": {"current": period['employees']['revenue_per_employee'], "target": 2000, "unit": "💰"}
+        }
+        
+        for name, data in targets.items():
+            current = data["current"]
+            target = data["target"]
+            # Ogranicz progress do zakresu 0-100 (obsługa wartości ujemnych)
+            progress = max(0, min((current / target) * 100, 100)) if target > 0 else 0
+            
+            st.markdown(f"**{name}**")
+            st.progress(progress / 100)
+            st.markdown(f"{current:.1f}{data['unit']} / {target}{data['unit']}")
+            st.markdown("")
+
+
+def show_employee_roi_analysis(financial_data, bg_data):
+    """Analiza ROI pracowników"""
+    st.markdown("### 👥 ROI Pracowników")
+    
+    from data.business_data import EMPLOYEE_TYPES
+    
+    employees = bg_data.get("employees", [])
+    period = financial_data["period"]
+    
+    if not employees:
+        st.info("📭 Nie masz jeszcze pracowników. Zatrudnij kogoś, aby zobaczyć analizę ROI!")
+        return
+    
+    st.markdown(f"""
+    **Analiza:** Czy Twoi pracownicy generują wystarczające przychody, aby pokryć swoje koszty?
+    
+    - **Przychody w okresie:** {period['revenue']:,.0f} 💰
+    - **Liczba pracowników:** {len(employees)}
+    - **Przychód na pracownika:** {period['employees']['revenue_per_employee']:,.0f} 💰
+    """)
+    
+    st.markdown("---")
+    
+    # Analiza per typ pracownika
+    st.markdown("#### 📊 Analiza per typ pracownika")
+    
+    employee_stats = {}
+    for emp in employees:
+        emp_type = emp["type"]
+        if emp_type not in employee_stats:
+            employee_stats[emp_type] = {
+                "count": 0,
+                "daily_cost": EMPLOYEE_TYPES[emp_type]["koszt_dzienny"],
+                "hire_cost": EMPLOYEE_TYPES[emp_type]["koszt_zatrudnienia"],
+                "bonus": EMPLOYEE_TYPES[emp_type]["bonus"]
+            }
+        employee_stats[emp_type]["count"] += 1
+    
+    # Tabela ROI
+    import pandas as pd
+    
+    roi_data = []
+    for emp_type, stats in employee_stats.items():
+        emp_data = EMPLOYEE_TYPES[emp_type]
+        total_daily_cost = stats["daily_cost"] * stats["count"] * 7  # Zakładając 7 dni
+        roi_data.append({
+            "Typ": f"{emp_data['ikona']} {emp_data['nazwa']}",
+            "Ilość": stats["count"],
+            "Koszt/dzień": f"{stats['daily_cost']} 💰",
+            "Koszt tygodniowy": f"{total_daily_cost:,.0f} 💰",
+            "Bonus": stats["bonus"]
+        })
+    
+    df = pd.DataFrame(roi_data)
+    st.dataframe(df, use_container_width=True, hide_index=True)
+    
+    # Wykres kosztów pracowników
+    if employee_stats:
+        import plotly.graph_objects as go
+        
+        labels = [f"{EMPLOYEE_TYPES[t]['ikona']} {EMPLOYEE_TYPES[t]['nazwa']}" for t in employee_stats.keys()]
+        values = [s['count'] * s['daily_cost'] * 7 for s in employee_stats.values()]
+        
+        fig = go.Figure(data=[go.Pie(
+            labels=labels,
+            values=values,
+            hole=0.4,
+            marker=dict(colors=['#667eea', '#764ba2', '#f093fb', '#f5576c'])
+        )])
+        
+        fig.update_layout(
+            title="Rozkład kosztów tygodniowych pracowników",
+            height=400
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+
+
+def show_category_analysis(financial_data, bg_data):
+    """Analiza wydajności kategorii kontraktów"""
+    st.markdown("### 📊 Analiza Kategorii Kontraktów")
+    
+    completed = bg_data.get("contracts", {}).get("completed", [])
+    
+    if not completed:
+        st.info("📭 Brak ukończonych kontraktów do analizy.")
+        return
+    
+    # Grupuj po kategoriach
+    import pandas as pd
+    
+    category_stats = {}
+    
+    for contract in completed:
+        category = contract.get("kategoria", "other")
+        reward = contract.get("reward", {}).get("coins", 0)
+        rating = contract.get("rating", 0)
+        
+        if category not in category_stats:
+            category_stats[category] = {"count": 0, "total_reward": 0, "total_rating": 0, "contracts": []}
+        
+        category_stats[category]["count"] += 1
+        category_stats[category]["total_reward"] += reward
+        category_stats[category]["total_rating"] += rating
+        category_stats[category]["contracts"].append(contract)
+    
+    # Przygotuj dane do tabeli
+    table_data = []
+    for category, stats in category_stats.items():
+        count = stats["count"]
+        avg_reward = stats["total_reward"] / count if count > 0 else 0
+        avg_rating = stats["total_rating"] / count if count > 0 else 0
+        
+        table_data.append({
+            "Kategoria": category.upper(),
+            "Liczba kontraktów": count,
+            "Łączny przychód": f"{stats['total_reward']:,.0f} 💰",
+            "Średni przychód": f"{avg_reward:,.0f} 💰",
+            "Średnia ocena": f"{avg_rating:.2f} ⭐"
+        })
+    
+    # Sortuj po przychodzie
+    table_data.sort(key=lambda x: float(x["Średni przychód"].replace(" 💰", "").replace(",", "")), reverse=True)
+    
+    df = pd.DataFrame(table_data)
+    st.dataframe(df, use_container_width=True, hide_index=True)
+    
+    # Wykres słupkowy - przychody per kategoria
+    import plotly.graph_objects as go
+    
+    categories = [d["Kategoria"] for d in table_data]
+    revenues = [float(d["Łączny przychód"].replace(" 💰", "").replace(",", "")) for d in table_data]
+    
+    fig = go.Figure(data=[
+        go.Bar(
+            x=categories,
+            y=revenues,
+            marker_color='#667eea',
+            text=revenues,
+            texttemplate='%{text:,.0f} 💰',
+            textposition='outside'
+        )
+    ])
+    
+    fig.update_layout(
+        title="Łączne przychody per kategoria",
+        xaxis_title="Kategoria",
+        yaxis_title="Przychód (💰)",
+        height=400,
+        showlegend=False,
+        plot_bgcolor='white',
+        paper_bgcolor='white'
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Top kontrakty
+    st.markdown("#### 🏆 Top 5 Najbardziej Dochodowych Kontraktów")
+    
+    all_contracts = []
+    for category, stats in category_stats.items():
+        all_contracts.extend(stats["contracts"])
+    
+    top_contracts = sorted(all_contracts, key=lambda x: x.get("reward", {}).get("coins", 0), reverse=True)[:5]
+    
+    for i, contract in enumerate(top_contracts, 1):
+        reward = contract.get("reward", {}).get("coins", 0)
+        rating = contract.get("rating", 0)
+        st.markdown(f"""
+        **{i}. {contract.get('emoji', '📋')} {contract.get('tytul', 'Nieznany')}**  
+        💰 {reward:,} monet | ⭐ {rating}/5 | 🏢 {contract.get('klient', 'Nieznany klient')}
+        """)
+
+# =============================================================================
+# TAB 5: HISTORIA KONTRAKTÓW
 # =============================================================================
 
 def show_history_tab(username, user_data):
-    """Zakładka Historia - ukończone kontrakty z feedbackiem"""
+    """Zakładka Historia & Wydarzenia - chronologiczna oś czasu"""
     bg_data = user_data["business_game"]
     
-    st.subheader("📜 Historia Ukończonych Kontraktów")
+    st.subheader("📜 Historia & Wydarzenia Firmy")
     
+    # Sekcja losowania wydarzeń na górze
+    st.markdown("### 🎲 Losowanie Wydarzenia")
+    
+    # BACKWARD COMPATIBILITY: Zainicjalizuj events jeśli nie istnieje
+    if "events" not in bg_data:
+        bg_data["events"] = {
+            "history": [],
+            "last_roll": None,
+            "active_effects": []
+        }
+        user_data["business_game"] = bg_data
+        save_user_data(username, user_data)
+    
+    from utils.business_game_events import should_trigger_event, get_random_event, apply_event_effects
+    from datetime import datetime, timedelta
+    
+    # Sprawdź cooldown
+    last_roll = bg_data.get("events", {}).get("last_roll")
+    can_roll = True
+    hours_left = 0
+    minutes_left = 0
+    
+    if last_roll:
+        last_dt = datetime.strptime(last_roll, "%Y-%m-%d %H:%M:%S")
+        next_roll = last_dt + timedelta(hours=24)
+        now = datetime.now()
+        
+        if now < next_roll:
+            can_roll = False
+            time_until_next = next_roll - now
+            hours_left = int(time_until_next.total_seconds() / 3600)
+            minutes_left = int((time_until_next.total_seconds() % 3600) / 60)
+    
+    col1, col2 = st.columns([3, 1])
+    
+    with col1:
+        if can_roll:
+            st.success("✅ **Możesz wylosować zdarzenie!** (Szansa: 20%)")
+        else:
+            st.warning(f"⏰ Następne losowanie za: **{hours_left}h {minutes_left}min**")
+    
+    with col2:
+        if st.button("🎲 LOSUJ!", disabled=not can_roll, type="primary", key="roll_event"):
+            # Losuj zdarzenie
+            event_result = get_random_event(bg_data, user_data.get("degencoins", 0))
+            
+            if event_result:
+                event_id, event_data = event_result
+                
+                # Sprawdź czy wymaga wyboru
+                if event_data["type"] == "neutral" and "choices" in event_data:
+                    # Zapisz zdarzenie tymczasowo w session_state
+                    st.session_state["pending_event"] = (event_id, event_data)
+                    st.rerun()
+                else:
+                    # Bezpośrednio aplikuj
+                    user_data = apply_event_effects(event_id, event_data, None, user_data)
+                    save_user_data(username, user_data)
+                    st.success(f"{event_data['emoji']} **{event_data['title']}**")
+                    st.balloons() if event_data["type"] == "positive" else None
+                    st.rerun()
+            else:
+                # Brak zdarzenia (80% przypadków)
+                bg_data.setdefault("events", {})["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                user_data["business_game"] = bg_data
+                save_user_data(username, user_data)
+                st.info("😐 Tym razem nic się nie wydarzyło. Spokojny dzień!")
+                st.rerun()
+    
+    # Pending event (jeśli neutralne wymaga wyboru)
+    if "pending_event" in st.session_state:
+        event_id, event_data = st.session_state["pending_event"]
+        render_event_choice_modal(event_id, event_data, username, user_data)
+    
+    st.markdown("---")
+    
+    # Zbierz wszystkie zdarzenia (kontrakty + wydarzenia)
+    timeline_items = []
+    
+    # Dodaj ukończone kontrakty
     completed = bg_data["contracts"]["completed"]
+    for contract in completed:
+        timeline_items.append({
+            "type": "contract",
+            "date": contract.get("completed_date", ""),
+            "data": contract
+        })
     
-    if len(completed) == 0:
-        st.info("📭 Nie masz jeszcze ukończonych kontraktów. Wykonaj pierwszy kontrakt aby zobaczyć feedback od klienta!")
+    # Dodaj wydarzenia
+    events_history = bg_data.get("events", {}).get("history", [])
+    for event in events_history:
+        timeline_items.append({
+            "type": "event",
+            "date": event.get("date", ""),
+            "data": event
+        })
+    
+    # Sortuj chronologicznie (najnowsze najpierw)
+    timeline_items.sort(key=lambda x: x["date"], reverse=True)
+    
+    if not timeline_items:
+        st.info("📭 Brak historii. Wykonuj kontrakty i losuj wydarzenia, aby wypełnić oś czasu!")
         return
     
-    # Sortuj od najnowszych
-    completed_sorted = sorted(completed, key=lambda x: x.get("completed_date", ""), reverse=True)
-    
     # Filtry
+    st.markdown("### 🔍 Filtry")
     col1, col2, col3 = st.columns(3)
     with col1:
-        filter_category = st.selectbox(
-            "Kategoria:",
-            ["Wszystkie"] + ["Konflikt", "Coaching", "Kultura", "Kryzys", "Leadership"],
-            key="history_filter_category"
+        filter_type = st.selectbox(
+            "Typ:",
+            ["Wszystko", "Tylko kontrakty", "Tylko wydarzenia"],
+            key="history_filter_type"
         )
     with col2:
-        filter_rating = st.selectbox(
-            "Ocena:",
-            ["Wszystkie", "⭐⭐⭐⭐⭐ (5)", "⭐⭐⭐⭐ (4)", "⭐⭐⭐ (3)", "⭐⭐ (2)", "⭐ (1)"],
-            key="history_filter_rating"
-        )
-    with col3:
         show_count = st.selectbox(
             "Pokaż:",
-            [10, 25, 50, "Wszystkie"],
+            [10, 25, 50, "Wszystko"],
             key="history_show_count"
+        )
+    with col3:
+        # Dodatkowy filtr dla kontraktów
+        filter_rating = st.selectbox(
+            "Ocena kontraktów:",
+            ["Wszystkie", "⭐⭐⭐⭐⭐ (5)", "⭐⭐⭐⭐ (4+)", "⭐⭐⭐ (3+)"],
+            key="history_filter_rating"
         )
     
     # Filtrowanie
-    filtered = completed_sorted
-    if filter_category != "Wszystkie":
-        filtered = [c for c in filtered if c["kategoria"] == filter_category]
+    filtered = timeline_items
+    
+    if filter_type == "Tylko kontrakty":
+        filtered = [item for item in filtered if item["type"] == "contract"]
+    elif filter_type == "Tylko wydarzenia":
+        filtered = [item for item in filtered if item["type"] == "event"]
+    
     if filter_rating != "Wszystkie":
-        rating_num = int(filter_rating.split("(")[1].split(")")[0])
-        filtered = [c for c in filtered if c.get("rating", 0) == rating_num]
+        if filter_rating == "⭐⭐⭐⭐⭐ (5)":
+            filtered = [item for item in filtered if item["type"] != "contract" or item["data"].get("rating", 0) == 5]
+        elif filter_rating == "⭐⭐⭐⭐ (4+)":
+            filtered = [item for item in filtered if item["type"] != "contract" or item["data"].get("rating", 0) >= 4]
+        elif filter_rating == "⭐⭐⭐ (3+)":
+            filtered = [item for item in filtered if item["type"] != "contract" or item["data"].get("rating", 0) >= 3]
     
     # Limit
-    if show_count != "Wszystkie":
+    if show_count != "Wszystko":
         filtered = filtered[:show_count]
     
     st.markdown("---")
-    st.markdown(f"**Znaleziono:** {len(filtered)} kontraktów")
+    st.markdown(f"**Znaleziono:** {len(filtered)} pozycji")
     st.markdown("---")
     
-    # Wyświetl kontrakty
-    for contract in filtered:
-        render_completed_contract_card(contract)
+    # Wyświetl chronologiczną oś czasu
+    st.markdown("### ⏰ Oś Czasu")
+    
+    for item in filtered:
+        if item["type"] == "contract":
+            render_completed_contract_card(item["data"])
+        else:  # event
+            render_event_history_card(item["data"])
+
 
 def render_completed_contract_card(contract):
     """Renderuje kartę ukończonego kontraktu z pełnym feedbackiem"""
@@ -1396,7 +2406,7 @@ def render_completed_contract_card(contract):
         st.markdown("---")
 
 # =============================================================================
-# TAB 5: WYDARZENIA
+# WYDARZENIA (HELPER FUNCTIONS)
 # =============================================================================
 
 def show_events_tab(username, user_data):
@@ -1793,7 +2803,7 @@ def render_event_history_card(event: dict):
                     st.markdown(f"- 🌟 Bonus: +{bonus_percent}% do następnego kontraktu")
 
 # =============================================================================
-# TAB 6: RANKINGI
+# TAB 7: RANKINGI
 # =============================================================================
 
 def show_rankings_tab(username, user_data):
@@ -1809,7 +2819,7 @@ def show_rankings_tab(username, user_data):
     # Selector
     ranking_type = st.selectbox(
         "Wybierz ranking:",
-        ["🏆 Ogólny (Overall Score)", "💰 Przychody", "⭐ Jakość (średnia ocena)", "🔥 Produktywność (30 dni)"],
+        ["🏆 Rating (Overall Score)", "💰 Przychody", "⭐ Jakość (średnia ocena)", "🔥 Produktywność (30 dni)"],
         key="rankings_type_selector"
     )
     
@@ -1837,8 +2847,8 @@ def show_rankings_tab(username, user_data):
     elif ranking_type == "🔥 Produktywność (30 dni)":
         score_label = "Kontrakty (30 dni)"
         score_suffix = ""
-    else:  # Overall Score (domyślnie)
-        score_label = "Overall Score"
+    else:  # Rating (domyślnie)
+        score_label = "Rating"
         score_suffix = ""
     
     for user, data in all_users.items():
@@ -1888,7 +2898,7 @@ def show_rankings_tab(username, user_data):
                 score = stats.get("avg_rating", 0.0)
             elif ranking_type == "🔥 Produktywność (30 dni)":
                 score = stats.get("last_30_days", {}).get("contracts", 0)
-            else:  # Overall Score
+            else:  # Rating
                 score = ranking.get("overall_score", 0)
             
             all_firms.append({
@@ -1967,7 +2977,7 @@ def render_user_rank_highlight(bg_data, ranking_type):
         <h3>🏢 Twoja Firma: {firm['name']}</h3>
         <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px;'>
             <div>
-                <strong>Overall Score</strong><br>
+                <strong>Rating</strong><br>
                 {bg_data['ranking']['overall_score']:.0f}
             </div>
             <div>
@@ -1985,6 +2995,192 @@ def render_user_rank_highlight(bg_data, ranking_type):
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+# =============================================================================
+# TAB 0: INSTRUKCJA GRY
+# =============================================================================
+
+def show_instructions_tab():
+    """Zakładka z instrukcją gry"""
+    
+    st.markdown("## 📖 Jak grać w Business Games?")
+    
+    st.markdown("---")
+    
+    # Cel gry
+    st.markdown("""
+    ### 🎯 Cel Gry
+    
+    Twoim celem jest **zbudowanie i rozwinięcie firmy konsultingowej**, realizując kontrakty dla klientów,
+    zarządzając zespołem pracowników i reagując na losowe wydarzenia rynkowe.
+    
+    **Wygrywasz, gdy:**
+    - Osiągniesz najwyższy poziom firmy
+    - Zdobędziesz najwięcej przychodów
+    - Uzyskasz najlepszą średnią ocenę kontraktów
+    """)
+    
+    st.markdown("---")
+    
+    # Podstawy rozgrywki
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        ### 💼 Kontrakty
+        
+        **Jak działają kontrakty?**
+        1. W zakładce **"Rynek Kontraktów"** wybierz dostępne zlecenia
+        2. Każdy kontrakt ma:
+           - 🔥 **Trudność** (1-5 płomyków)
+           - 💰 **Nagrodę** (zależną od oceny 1-5⭐)
+           - ⏱️ **Czas realizacji** (dni do deadline)
+           - 📋 **Kategorię** (Konflikt, Coaching, Kryzys, Leadership, Kultura)
+        
+        **Przyjmowanie kontraktów:**
+        - Możesz mieć max **3 aktywne kontrakty** jednocześnie
+        - Dziennie możesz przyjąć **2 nowe kontrakty** (zależy od poziomu firmy)
+        - Nie możesz przyjąć więcej niż masz pojemności
+        
+        **Wykonywanie kontraktów:**
+        1. Nagrywasz audio lub wpisujesz tekst
+        2. AI ocenia Twoją odpowiedź (1-5⭐)
+        3. Otrzymujesz nagrodę zgodnie z oceną
+        4. Masz **3 próby** na każdy kontrakt
+        """)
+    
+    with col2:
+        st.markdown("""
+        ### 👥 Pracownicy
+        
+        **Zatrudniaj specjalistów:**
+        - **Junior** (500💰) - podstawowe wsparcie
+        - **Mid** (1500💰) - lepsze bonusy
+        - **Senior** (3500💰) - najlepsze korzyści
+        
+        **Typy pracowników:**
+        - 📊 **Analityk** - bonus do oceny kontraktów (+0.5⭐)
+        - 💼 **Manager** - zwiększa pojemność dzienną (+1 kontrakt)
+        - 🎯 **Specjalista** - redukuje koszty dzienne (-20%)
+        - 🚀 **Ekspert** - zwiększa nagrody (+15%)
+        
+        **Pamiętaj:**
+        - Każdy pracownik generuje **koszty dzienne**
+        - Możesz zwolnić pracownika, ale stracisz bonusy
+        - Im wyższy poziom, tym lepsze korzyści
+        """)
+    
+    st.markdown("---")
+    
+    # Mechaniki gry
+    col3, col4 = st.columns(2)
+    
+    with col3:
+        st.markdown("""
+        ### 🎲 Wydarzenia Losowe
+        
+        Co jakiś czas wystąpią **wydarzenia rynkowe**:
+        
+        **Typy wydarzeń:**
+        - ✅ **Pozytywne** - bonusy, rabaty, nagrody
+        - ❌ **Negatywne** - koszty, trudności, ograniczenia
+        - ⚖️ **Neutralne** - wybierasz opcję A lub B
+        
+        **Przykłady:**
+        - 💰 Bonus do następnego kontraktu (+50% nagrody)
+        - 📉 Spadek na rynku (dodatkowe koszty)
+        - 🎁 Darmowy pracownik na 3 dni
+        - 🎯 Wybór: inwestycja lub oszczędności
+        
+        Wydarzenia są **losowe** i wpływają na strategię!
+        """)
+    
+    with col4:
+        st.markdown("""
+        ### 📈 Rozwój Firmy
+        
+        **Poziomy firmy (1-5):**
+        
+        Każdy poziom wymaga **określonej liczby monet** (💰):
+        - Poziom 2: 2000💰
+        - Poziom 3: 5000💰
+        - Poziom 4: 10000💰
+        - Poziom 5: 20000💰
+        
+        **Korzyści wyższego poziomu:**
+        - Więcej miejsc na pracowników
+        - Większa pojemność dzienna kontraktów
+        - Odblokowujesz trudniejsze (i lepiej płatne) zlecenia
+        
+        **Jak zdobywać monety?**
+        - Wykonuj kontrakty (nagrody)
+        - Unikaj zbyt wysokich kosztów
+        - Zarządzaj zespołem efektywnie
+        """)
+    
+    st.markdown("---")
+    
+    # Wskazówki strategiczne
+    st.markdown("""
+    ### 💡 Wskazówki i Strategia
+    
+    #### ✅ Dobre praktyki:
+    - **Na początku:** Bierz łatwe kontrakty (🔥), buduj kapitał i doświadczenie
+    - **Zatrudniaj mądrze:** Junior Analityk to świetny pierwszy pracownik (bonus do ocen)
+    - **Sprawdzaj deadline:** Nie przyjmuj więcej niż możesz wykonać w terminie
+    - **Wykorzystuj bonusy:** Gdy masz event z bonusem, weź najlepszy kontrakt
+    - **Balansuj koszty:** Zbyt wielu pracowników = wysokie koszty dzienne
+    
+    #### ❌ Unikaj:
+    - Przyjmowania kontraktów na ostatnią chwilę przed deadline
+    - Zatrudniania za dużo pracowników bez stabilnych przychodów
+    - Ignorowania wydarzeń - mogą dać duże korzyści!
+    - Marnowania wszystkich 3 prób na trudny kontrakt bez przygotowania
+    
+    #### 🎯 Pro tipy:
+    - **Senior Analityk** daje +1⭐ do oceny - świetna inwestycja!
+    - **Mid Manager** zwiększa pojemność - więcej kontraktów = więcej pieniędzy
+    - Obserwuj **Rankingi** - zobacz co robią najlepsi gracze
+    - **Historia transakcji** pokazuje Twoje przychody i koszty - analizuj!
+    """)
+    
+    st.markdown("---")
+    
+    # FAQ
+    with st.expander("❓ Najczęściej zadawane pytania (FAQ)"):
+        st.markdown("""
+        **Q: Ile razy mogę próbować wykonać kontrakt?**  
+        A: Masz **3 próby** na każdy kontrakt. Po 3 nieudanych próbach kontrakt przepada.
+        
+        **Q: Co się stanie jak przekroczę deadline?**  
+        A: Kontrakt automatycznie przepada i tracisz szansę na nagrodę. Uważaj na czas!
+        
+        **Q: Czy mogę zmienić pracownika?**  
+        A: Tak, możesz zwolnić i zatrudnić nowego, ale stracisz bonusy poprzedniego.
+        
+        **Q: Jak często odświeża się pula kontraktów?**  
+        A: Co **24 godziny** (o północy). Możesz też użyć przycisku "Wymuś odświeżenie".
+        
+        **Q: Co daje wyższy poziom firmy?**  
+        A: Więcej miejsc na pracowników, większa pojemność dzienna, dostęp do lepszych kontraktów.
+        
+        **Q: Czy wydarzenia są obowiązkowe?**  
+        A: Wydarzenia pozytywne/negatywne działają automatycznie. Neutralne wymagają wyboru.
+        
+        **Q: Jak zdobyć najwyższą ocenę kontraktu?**  
+        A: Odpowiedz szczegółowo, merytorycznie, użyj wiedzy z kursu. Analityk zwiększa szansę!
+        
+        **Q: Czy mogę mieć kilku pracowników tego samego typu?**  
+        A: Tak, ale pamiętaj o kosztach dziennych i limitach miejsc w firmie.
+        """)
+    
+    st.markdown("---")
+    
+    st.success("""
+    **🎮 Gotowy do gry?**  
+    Wróć do zakładki **Dashboard** i zacznij swoją przygodę biznesową!  
+    Powodzenia! 🚀
+    """)
 
 # =============================================================================
 # FUNKCJE POMOCNICZE
