@@ -4,10 +4,10 @@
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
     "xp": 1626,
-    "degencoins": 69643,
+    "degencoins": 89543,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-22 00:31:05",
+    "last_login": "2025-10-22 01:24:58",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -2050,6 +2050,13 @@
         "details": {
           "timestamp": "2025-10-22T00:31:05.824171"
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T01:24:58.658753",
+        "details": {
+          "timestamp": "2025-10-22T01:24:58.644806"
+        }
       }
     ],
     "reports": [
@@ -2461,32 +2468,38 @@
       "timestamp": "2025-10-18 13:43:54"
     },
     "business_game": {
-      "scenario_id": "standard",
+      "scenario_id": "startup_mode",
       "scenario_modifiers": {
-        "reputation_gain_multiplier": 1.0,
-        "revenue_multiplier": 1.0,
-        "cost_multiplier": 1.0,
-        "employee_salary_multiplier": 1.0,
-        "contract_difficulty_adjustment": 0
+        "reputation_gain_multiplier": 1.5,
+        "revenue_multiplier": 0.9,
+        "cost_multiplier": 1.2,
+        "employee_salary_multiplier": 1.1,
+        "contract_difficulty_adjustment": 5
       },
       "scenario_objectives": [
         {
           "type": "revenue_total",
-          "target": 1000000,
-          "description": "Osiągnij łącznie 1M PLN przychodu",
-          "reward_money": 50000
+          "target": 2000000,
+          "description": "Osiągnij łącznie 2M PLN przychodu mimo trudnego startu",
+          "reward_money": 100000
         },
         {
           "type": "reputation",
-          "target": 80,
-          "description": "Zbuduj reputację na poziomie 80+",
-          "reward_money": 30000
+          "target": 85,
+          "description": "Udowodnij swoją wartość - reputacja 85+",
+          "reward_money": 75000
         },
         {
           "type": "level",
+          "target": 6,
+          "description": "Osiągnij poziom 6",
+          "reward_money": 50000
+        },
+        {
+          "type": "employees",
           "target": 5,
-          "description": "Osiągnij poziom 5",
-          "reward_money": 20000
+          "description": "Zbuduj zespół minimum 5 pracowników",
+          "reward_money": 40000
         }
       ],
       "objectives_completed": [],
@@ -2507,50 +2520,177 @@
         "completed": [],
         "available_pool": [
           {
-            "id": "CIQ-COACHING-001",
-            "tytul": "Sesja coachingowa dla middle managera",
-            "kategoria": "Coaching",
-            "klient": "MarketPro",
-            "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
-            "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+            "id": "CIQ-EASY-001",
+            "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+            "kategoria": "Leadership",
+            "klient": "LocalCafe",
+            "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+            "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
             "wymagana_wiedza": [
-              "Coaching conversations",
-              "GROW Model",
-              "COIN Framework"
+              "Podstawy komunikacji"
             ],
-            "trudnosc": 2,
-            "nagroda_base": 550,
-            "nagroda_4star": 720,
-            "nagroda_5star": 900,
-            "reputacja": 35,
+            "trudnosc": 1,
+            "nagroda_base": 200,
+            "nagroda_4star": 250,
+            "nagroda_5star": 350,
+            "reputacja": 15,
             "czas_realizacji_dni": 1,
             "wymagany_poziom": 1,
-            "min_slow": 50,
-            "emoji": "🎯",
-            "available_until": "2025-10-23 00:58:41"
+            "min_slow": 20,
+            "emoji": "☕",
+            "available_until": "2025-10-23 01:31:22"
           },
           {
-            "id": "CIQ-KULTURA-001",
-            "tytul": "Audit kultury komunikacji w zespole",
-            "kategoria": "Kultura",
-            "klient": "DesignHub",
-            "opis": "Remote team w firmie DesignHub ma niskie zaangażowanie. \nLudzie boją się zadawać pytania na spotkaniach. Atmosfera jest sztywna i formalna.",
-            "zadanie": "Krótka analiza:\n\n1. **Wymień 5 pytań diagnostycznych, które zadasz w wywiadach z zespołem**\n   \n2. **Jakie są 3 główne bariery w psychological safety tego zespołu?** (po 1 zdaniu na każdą)\n   \n3. **Zaproponuj 3 konkretne inicjatywy (rituały/procesy) do wdrożenia** (po 1-2 zdania na każdą)",
+            "id": "CIQ-EASY-002",
+            "tytul": "Feedback dla nowego pracownika",
+            "kategoria": "Feedback",
+            "klient": "SmallShop",
+            "opis": "Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.",
+            "zadanie": "Napisz krótki feedback (3-5 zdań):\n\n- Co robi dobrze?\n- Co warto poprawić?\n- Jak może to zrobić?",
             "wymagana_wiedza": [
-              "Psychological Safety",
-              "Team Dynamics",
-              "Remote Work Best Practices"
+              "Podstawy feedbacku"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 180,
+            "nagroda_4star": 230,
+            "nagroda_5star": 300,
+            "reputacja": 12,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "🛒",
+            "available_until": "2025-10-23 01:31:22"
+          },
+          {
+            "id": "CIQ-EASY-004",
+            "tytul": "Pytania do zespołu na spotkaniu",
+            "kategoria": "Leadership",
+            "klient": "StartupTeam",
+            "opis": "Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.",
+            "zadanie": "Zaproponuj 5 pytań na spotkanie:\n\n- 3 pytania do poznania zespołu\n- 2 pytania o pracę/projekty\n\n(tylko lista pytań)",
+            "wymagana_wiedza": [
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 160,
+            "nagroda_4star": 210,
+            "nagroda_5star": 280,
+            "reputacja": 10,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "❓",
+            "available_until": "2025-10-23 01:31:22"
+          },
+          {
+            "id": "CIQ-EASY-005",
+            "tytul": "Pochwała za dobrą robotę",
+            "kategoria": "Feedback",
+            "klient": "TechStart",
+            "opis": "Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!",
+            "zadanie": "Napisz krótką wiadomość (3-4 zdania):\n\n- Co konkretnie zrobił dobrze?\n- Jaki to miało wpływ?\n- Co to dla Ciebie znaczy?",
+            "wymagana_wiedza": [
+              "Pozytywny feedback"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 150,
+            "nagroda_4star": 200,
+            "nagroda_5star": 270,
+            "reputacja": 8,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 10,
+            "emoji": "⭐",
+            "available_until": "2025-10-23 01:31:22"
+          },
+          {
+            "id": "CIQ-EASY-006",
+            "tytul": "Plan krótkiego spotkania 1:1",
+            "kategoria": "Leadership",
+            "klient": "RemoteTeam",
+            "opis": "Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.",
+            "zadanie": "Zaproponuj prosty plan spotkania (15 min):\n\n1. **Początek** - jak zacząć? (1 zdanie)\n\n2. **Środek** - o czym rozmawiać? (3 tematy)\n\n3. **Koniec** - jak zakończyć? (1 zdanie)",
+            "wymagana_wiedza": [
+              "1:1 meetings"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 190,
+            "nagroda_4star": 240,
+            "nagroda_5star": 320,
+            "reputacja": 14,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "📅",
+            "available_until": "2025-10-23 01:31:22"
+          },
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-23 01:31:22"
+          },
+          {
+            "id": "CIQ-LEADERSHIP-001",
+            "tytul": "Framework dla efektywnych 1:1",
+            "kategoria": "Leadership",
+            "klient": "MarketPro",
+            "opis": "Firma MarketPro (50 osób) nie ma struktury 1:1 meetings. \nLeadership chce wprowadzić best practices dla wszystkich managerów.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Jak często i jak długo powinny trwać 1:1?** (1 zdanie)\n   \n2. **Wymień 5 tematów, które należy poruszać na 1:1** (lista)\n   \n3. **Jakie 3 błędy managerowie najczęściej popełniają na 1:1?** (lista)",
+            "wymagana_wiedza": [
+              "1:1 Conversations",
+              "Active Listening",
+              "Coaching"
+            ],
+            "trudnosc": 2,
+            "nagroda_base": 500,
+            "nagroda_4star": 650,
+            "nagroda_5star": 850,
+            "reputacja": 40,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 40,
+            "emoji": "🤝",
+            "available_until": "2025-10-23 01:31:22"
+          },
+          {
+            "id": "CIQ-KONFLIKT-002",
+            "tytul": "Negocjacje z trudnym stakeholderem",
+            "kategoria": "Konflikt",
+            "klient": "FinanceHub",
+            "opis": "Kluczowy stakeholder w projekcie blokuje ważne decyzje. \nMa silne opinie i nie słucha argumentów zespołu. CEO prosi o wsparcie.",
+            "zadanie": "Krótka strategia:\n\n1. **Jakie mogą być jego ukryte motywacje i obawy?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę rozmowy** (5 kroków, krótko)\n   \n3. **Wymień 5 kluczowych pytań otwartych do zadania**\n\n4. **Best case i worst case - jak się zachowasz?** (po 1 zdaniu na każdy)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Techniki negocjacyjne",
+              "Active Listening"
             ],
             "trudnosc": 3,
-            "nagroda_base": 750,
-            "nagroda_4star": 1000,
-            "nagroda_5star": 1300,
-            "reputacja": 50,
+            "nagroda_base": 650,
+            "nagroda_4star": 850,
+            "nagroda_5star": 1100,
+            "reputacja": 45,
             "czas_realizacji_dni": 2,
             "wymagany_poziom": 1,
             "min_slow": 80,
-            "emoji": "🛡️",
-            "available_until": "2025-10-23 00:58:41"
+            "emoji": "⚔️",
+            "available_until": "2025-10-23 01:31:22"
           },
           {
             "id": "CIQ-COACHING-002",
@@ -2573,7 +2713,7 @@
             "wymagany_poziom": 1,
             "min_slow": 120,
             "emoji": "🎯",
-            "available_until": "2025-10-23 00:58:41"
+            "available_until": "2025-10-23 01:31:22"
           },
           {
             "id": "CIQ-KRYZYS-002",
@@ -2596,10 +2736,10 @@
             "wymagany_poziom": 1,
             "min_slow": 200,
             "emoji": "🚨",
-            "available_until": "2025-10-23 00:58:41"
+            "available_until": "2025-10-23 01:31:22"
           }
         ],
-        "last_refresh": "2025-10-22 00:58:41"
+        "last_refresh": "2025-10-22 01:31:22"
       },
       "stats": {
         "total_revenue": 0,
@@ -2665,7 +2805,7 @@
         "history": [
           {
             "event_id": "contract_stolen",
-            "timestamp": "2025-10-22 00:58:41",
+            "timestamp": "2025-10-22 01:31:22",
             "title": "Konkurencja Podbiła Ofertę",
             "emoji": "🚫",
             "type": "negative",
@@ -2676,7 +2816,7 @@
             }
           }
         ],
-        "last_roll": "2025-10-22 00:58:41",
+        "last_roll": "2025-10-22 01:31:22",
         "active_effects": []
       },
       "money": 0,
@@ -2688,32 +2828,38 @@
     },
     "business_games": {
       "consulting": {
-        "scenario_id": "standard",
+        "scenario_id": "startup_mode",
         "scenario_modifiers": {
-          "reputation_gain_multiplier": 1.0,
-          "revenue_multiplier": 1.0,
-          "cost_multiplier": 1.0,
-          "employee_salary_multiplier": 1.0,
-          "contract_difficulty_adjustment": 0
+          "reputation_gain_multiplier": 1.5,
+          "revenue_multiplier": 0.9,
+          "cost_multiplier": 1.2,
+          "employee_salary_multiplier": 1.1,
+          "contract_difficulty_adjustment": 5
         },
         "scenario_objectives": [
           {
             "type": "revenue_total",
-            "target": 1000000,
-            "description": "Osiągnij łącznie 1M PLN przychodu",
-            "reward_money": 50000
+            "target": 2000000,
+            "description": "Osiągnij łącznie 2M PLN przychodu mimo trudnego startu",
+            "reward_money": 100000
           },
           {
             "type": "reputation",
-            "target": 80,
-            "description": "Zbuduj reputację na poziomie 80+",
-            "reward_money": 30000
+            "target": 85,
+            "description": "Udowodnij swoją wartość - reputacja 85+",
+            "reward_money": 75000
           },
           {
             "type": "level",
+            "target": 6,
+            "description": "Osiągnij poziom 6",
+            "reward_money": 50000
+          },
+          {
+            "type": "employees",
             "target": 5,
-            "description": "Osiągnij poziom 5",
-            "reward_money": 20000
+            "description": "Zbuduj zespół minimum 5 pracowników",
+            "reward_money": 40000
           }
         ],
         "objectives_completed": [],
@@ -2734,50 +2880,177 @@
           "completed": [],
           "available_pool": [
             {
-              "id": "CIQ-COACHING-001",
-              "tytul": "Sesja coachingowa dla middle managera",
-              "kategoria": "Coaching",
-              "klient": "MarketPro",
-              "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
-              "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+              "id": "CIQ-EASY-001",
+              "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+              "kategoria": "Leadership",
+              "klient": "LocalCafe",
+              "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+              "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
               "wymagana_wiedza": [
-                "Coaching conversations",
-                "GROW Model",
-                "COIN Framework"
+                "Podstawy komunikacji"
               ],
-              "trudnosc": 2,
-              "nagroda_base": 550,
-              "nagroda_4star": 720,
-              "nagroda_5star": 900,
-              "reputacja": 35,
+              "trudnosc": 1,
+              "nagroda_base": 200,
+              "nagroda_4star": 250,
+              "nagroda_5star": 350,
+              "reputacja": 15,
               "czas_realizacji_dni": 1,
               "wymagany_poziom": 1,
-              "min_slow": 50,
-              "emoji": "🎯",
-              "available_until": "2025-10-23 00:58:41"
+              "min_slow": 20,
+              "emoji": "☕",
+              "available_until": "2025-10-23 01:31:22"
             },
             {
-              "id": "CIQ-KULTURA-001",
-              "tytul": "Audit kultury komunikacji w zespole",
-              "kategoria": "Kultura",
-              "klient": "DesignHub",
-              "opis": "Remote team w firmie DesignHub ma niskie zaangażowanie. \nLudzie boją się zadawać pytania na spotkaniach. Atmosfera jest sztywna i formalna.",
-              "zadanie": "Krótka analiza:\n\n1. **Wymień 5 pytań diagnostycznych, które zadasz w wywiadach z zespołem**\n   \n2. **Jakie są 3 główne bariery w psychological safety tego zespołu?** (po 1 zdaniu na każdą)\n   \n3. **Zaproponuj 3 konkretne inicjatywy (rituały/procesy) do wdrożenia** (po 1-2 zdania na każdą)",
+              "id": "CIQ-EASY-002",
+              "tytul": "Feedback dla nowego pracownika",
+              "kategoria": "Feedback",
+              "klient": "SmallShop",
+              "opis": "Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.",
+              "zadanie": "Napisz krótki feedback (3-5 zdań):\n\n- Co robi dobrze?\n- Co warto poprawić?\n- Jak może to zrobić?",
               "wymagana_wiedza": [
-                "Psychological Safety",
-                "Team Dynamics",
-                "Remote Work Best Practices"
+                "Podstawy feedbacku"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 180,
+              "nagroda_4star": 230,
+              "nagroda_5star": 300,
+              "reputacja": 12,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "🛒",
+              "available_until": "2025-10-23 01:31:22"
+            },
+            {
+              "id": "CIQ-EASY-004",
+              "tytul": "Pytania do zespołu na spotkaniu",
+              "kategoria": "Leadership",
+              "klient": "StartupTeam",
+              "opis": "Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.",
+              "zadanie": "Zaproponuj 5 pytań na spotkanie:\n\n- 3 pytania do poznania zespołu\n- 2 pytania o pracę/projekty\n\n(tylko lista pytań)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 160,
+              "nagroda_4star": 210,
+              "nagroda_5star": 280,
+              "reputacja": 10,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "❓",
+              "available_until": "2025-10-23 01:31:22"
+            },
+            {
+              "id": "CIQ-EASY-005",
+              "tytul": "Pochwała za dobrą robotę",
+              "kategoria": "Feedback",
+              "klient": "TechStart",
+              "opis": "Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!",
+              "zadanie": "Napisz krótką wiadomość (3-4 zdania):\n\n- Co konkretnie zrobił dobrze?\n- Jaki to miało wpływ?\n- Co to dla Ciebie znaczy?",
+              "wymagana_wiedza": [
+                "Pozytywny feedback"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 150,
+              "nagroda_4star": 200,
+              "nagroda_5star": 270,
+              "reputacja": 8,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 10,
+              "emoji": "⭐",
+              "available_until": "2025-10-23 01:31:22"
+            },
+            {
+              "id": "CIQ-EASY-006",
+              "tytul": "Plan krótkiego spotkania 1:1",
+              "kategoria": "Leadership",
+              "klient": "RemoteTeam",
+              "opis": "Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.",
+              "zadanie": "Zaproponuj prosty plan spotkania (15 min):\n\n1. **Początek** - jak zacząć? (1 zdanie)\n\n2. **Środek** - o czym rozmawiać? (3 tematy)\n\n3. **Koniec** - jak zakończyć? (1 zdanie)",
+              "wymagana_wiedza": [
+                "1:1 meetings"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 190,
+              "nagroda_4star": 240,
+              "nagroda_5star": 320,
+              "reputacja": 14,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "📅",
+              "available_until": "2025-10-23 01:31:22"
+            },
+            {
+              "id": "CIQ-STARTER-001",
+              "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+              "kategoria": "Leadership",
+              "klient": "StartupDuo",
+              "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+              "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 300,
+              "nagroda_4star": 400,
+              "nagroda_5star": 500,
+              "reputacja": 20,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 30,
+              "emoji": "🤝",
+              "available_until": "2025-10-23 01:31:22"
+            },
+            {
+              "id": "CIQ-LEADERSHIP-001",
+              "tytul": "Framework dla efektywnych 1:1",
+              "kategoria": "Leadership",
+              "klient": "MarketPro",
+              "opis": "Firma MarketPro (50 osób) nie ma struktury 1:1 meetings. \nLeadership chce wprowadzić best practices dla wszystkich managerów.",
+              "zadanie": "Odpowiedz krótko:\n\n1. **Jak często i jak długo powinny trwać 1:1?** (1 zdanie)\n   \n2. **Wymień 5 tematów, które należy poruszać na 1:1** (lista)\n   \n3. **Jakie 3 błędy managerowie najczęściej popełniają na 1:1?** (lista)",
+              "wymagana_wiedza": [
+                "1:1 Conversations",
+                "Active Listening",
+                "Coaching"
+              ],
+              "trudnosc": 2,
+              "nagroda_base": 500,
+              "nagroda_4star": 650,
+              "nagroda_5star": 850,
+              "reputacja": 40,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 40,
+              "emoji": "🤝",
+              "available_until": "2025-10-23 01:31:22"
+            },
+            {
+              "id": "CIQ-KONFLIKT-002",
+              "tytul": "Negocjacje z trudnym stakeholderem",
+              "kategoria": "Konflikt",
+              "klient": "FinanceHub",
+              "opis": "Kluczowy stakeholder w projekcie blokuje ważne decyzje. \nMa silne opinie i nie słucha argumentów zespołu. CEO prosi o wsparcie.",
+              "zadanie": "Krótka strategia:\n\n1. **Jakie mogą być jego ukryte motywacje i obawy?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę rozmowy** (5 kroków, krótko)\n   \n3. **Wymień 5 kluczowych pytań otwartych do zadania**\n\n4. **Best case i worst case - jak się zachowasz?** (po 1 zdaniu na każdy)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Techniki negocjacyjne",
+                "Active Listening"
               ],
               "trudnosc": 3,
-              "nagroda_base": 750,
-              "nagroda_4star": 1000,
-              "nagroda_5star": 1300,
-              "reputacja": 50,
+              "nagroda_base": 650,
+              "nagroda_4star": 850,
+              "nagroda_5star": 1100,
+              "reputacja": 45,
               "czas_realizacji_dni": 2,
               "wymagany_poziom": 1,
               "min_slow": 80,
-              "emoji": "🛡️",
-              "available_until": "2025-10-23 00:58:41"
+              "emoji": "⚔️",
+              "available_until": "2025-10-23 01:31:22"
             },
             {
               "id": "CIQ-COACHING-002",
@@ -2800,7 +3073,7 @@
               "wymagany_poziom": 1,
               "min_slow": 120,
               "emoji": "🎯",
-              "available_until": "2025-10-23 00:58:41"
+              "available_until": "2025-10-23 01:31:22"
             },
             {
               "id": "CIQ-KRYZYS-002",
@@ -2823,10 +3096,10 @@
               "wymagany_poziom": 1,
               "min_slow": 200,
               "emoji": "🚨",
-              "available_until": "2025-10-23 00:58:41"
+              "available_until": "2025-10-23 01:31:22"
             }
           ],
-          "last_refresh": "2025-10-22 00:58:41"
+          "last_refresh": "2025-10-22 01:31:22"
         },
         "stats": {
           "total_revenue": 0,
@@ -2892,7 +3165,7 @@
           "history": [
             {
               "event_id": "contract_stolen",
-              "timestamp": "2025-10-22 00:58:41",
+              "timestamp": "2025-10-22 01:31:22",
               "title": "Konkurencja Podbiła Ofertę",
               "emoji": "🚫",
               "type": "negative",
@@ -2903,7 +3176,7 @@
               }
             }
           ],
-          "last_roll": "2025-10-22 00:58:41",
+          "last_roll": "2025-10-22 01:31:22",
           "active_effects": []
         },
         "money": 0,
@@ -2928,6 +3201,36 @@
         "total_transfer": 80,
         "employees_count": 0,
         "closed_at": "2025-10-21 17:02:44",
+        "firm_name": "Max's Company"
+      },
+      {
+        "username": "Max",
+        "industry_id": "consulting",
+        "scenario_id": "corporate_rescue",
+        "final_score": -10.0,
+        "final_level": 1,
+        "final_reputation": 0,
+        "final_revenue": 0,
+        "final_money": 20000,
+        "rating_bonus": -100,
+        "total_transfer": 19900,
+        "employees_count": 0,
+        "closed_at": "2025-10-22 01:28:04",
+        "firm_name": "Max's Company"
+      },
+      {
+        "username": "Max",
+        "industry_id": "consulting",
+        "scenario_id": "lifetime",
+        "final_score": 0.0,
+        "final_level": 1,
+        "final_reputation": 0,
+        "final_revenue": 0,
+        "final_money": 0,
+        "rating_bonus": 0,
+        "total_transfer": 0,
+        "employees_count": 0,
+        "closed_at": "2025-10-22 01:31:13",
         "firm_name": "Max's Company"
       }
     ]
@@ -16256,5 +16559,443 @@
       }
     ],
     "activity_log": []
+  },
+  "Jola": {
+    "user_id": "9a93ee56-e334-425c-be31-921070564448",
+    "password": "Jola",
+    "degen_type": null,
+    "xp": 0,
+    "degencoins": 0,
+    "level": 1,
+    "joined_date": "2025-10-22",
+    "last_login": null,
+    "completed_lessons": [],
+    "badges": [],
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "daily_stats": {
+      "2025-10-22": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "10. Wyzwania menedżerskie": true,
+      "11. Od słów do zaufania - Conversational Intelligence": true,
+      "2. Chemia mózgu": true,
+      "3. Model SCARF": true,
+      "4. Model SEEDS": true,
+      "5. Stres i odporność psychiczna": true,
+      "6. Podejmowanie decyzji i ryzyko": true,
+      "7. Pamięć i uwaga": true,
+      "8. Kondycja mózgu": true,
+      "9. Kształtowanie nawyków": true,
+      "backup_lesson_11_20251007_004910": true,
+      "backup_lesson_11_20251007_010417": true
+    },
+    "business_games": {
+      "consulting": {
+        "scenario_id": "standard",
+        "scenario_modifiers": {
+          "reputation_gain_multiplier": 1.0,
+          "revenue_multiplier": 1.0,
+          "cost_multiplier": 1.0,
+          "employee_salary_multiplier": 1.0,
+          "contract_difficulty_adjustment": 0
+        },
+        "scenario_objectives": [
+          {
+            "type": "revenue_total",
+            "target": 1000000,
+            "description": "Osiągnij łącznie 1M PLN przychodu",
+            "reward_money": 50000
+          },
+          {
+            "type": "reputation",
+            "target": 80,
+            "description": "Zbuduj reputację na poziomie 80+",
+            "reward_money": 30000
+          },
+          {
+            "type": "level",
+            "target": 5,
+            "description": "Osiągnij poziom 5",
+            "reward_money": 20000
+          }
+        ],
+        "objectives_completed": [],
+        "firm": {
+          "name": "Jola's Consulting",
+          "logo": "🏢",
+          "founded": "2025-10-22",
+          "level": 1,
+          "reputation": 0
+        },
+        "employees": [],
+        "office": {
+          "type": "home_office",
+          "upgraded_at": null
+        },
+        "contracts": {
+          "active": [],
+          "completed": [],
+          "available_pool": [
+            {
+              "id": "CIQ-EASY-001",
+              "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+              "kategoria": "Leadership",
+              "klient": "LocalCafe",
+              "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+              "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 200,
+              "nagroda_4star": 250,
+              "nagroda_5star": 350,
+              "reputacja": 15,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 20,
+              "emoji": "☕",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-EASY-002",
+              "tytul": "Feedback dla nowego pracownika",
+              "kategoria": "Feedback",
+              "klient": "SmallShop",
+              "opis": "Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.",
+              "zadanie": "Napisz krótki feedback (3-5 zdań):\n\n- Co robi dobrze?\n- Co warto poprawić?\n- Jak może to zrobić?",
+              "wymagana_wiedza": [
+                "Podstawy feedbacku"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 180,
+              "nagroda_4star": 230,
+              "nagroda_5star": 300,
+              "reputacja": 12,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "🛒",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-EASY-003",
+              "tytul": "Rozwiązanie małego konfliktu",
+              "kategoria": "Konflikt",
+              "klient": "OfficeTeam",
+              "opis": "Dwóch pracowników biurowych kłóci się o to, kto ma sprzątać wspólną kuchnię.",
+              "zadanie": "Zaproponuj proste rozwiązanie:\n\n1. **Dlaczego się kłócą?** (1 zdanie)\n\n2. **Twoja propozycja** (2-3 zdania)\n\n3. **Jak to wdrożyć?** (1-2 zdania)",
+              "wymagana_wiedza": [
+                "Podstawy rozwiązywania konfliktów"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 220,
+              "nagroda_4star": 280,
+              "nagroda_5star": 380,
+              "reputacja": 18,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 20,
+              "emoji": "🧹",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-EASY-004",
+              "tytul": "Pytania do zespołu na spotkaniu",
+              "kategoria": "Leadership",
+              "klient": "StartupTeam",
+              "opis": "Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.",
+              "zadanie": "Zaproponuj 5 pytań na spotkanie:\n\n- 3 pytania do poznania zespołu\n- 2 pytania o pracę/projekty\n\n(tylko lista pytań)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 160,
+              "nagroda_4star": 210,
+              "nagroda_5star": 280,
+              "reputacja": 10,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "❓",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-EASY-005",
+              "tytul": "Pochwała za dobrą robotę",
+              "kategoria": "Feedback",
+              "klient": "TechStart",
+              "opis": "Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!",
+              "zadanie": "Napisz krótką wiadomość (3-4 zdania):\n\n- Co konkretnie zrobił dobrze?\n- Jaki to miało wpływ?\n- Co to dla Ciebie znaczy?",
+              "wymagana_wiedza": [
+                "Pozytywny feedback"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 150,
+              "nagroda_4star": 200,
+              "nagroda_5star": 270,
+              "reputacja": 8,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 10,
+              "emoji": "⭐",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-EASY-006",
+              "tytul": "Plan krótkiego spotkania 1:1",
+              "kategoria": "Leadership",
+              "klient": "RemoteTeam",
+              "opis": "Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.",
+              "zadanie": "Zaproponuj prosty plan spotkania (15 min):\n\n1. **Początek** - jak zacząć? (1 zdanie)\n\n2. **Środek** - o czym rozmawiać? (3 tematy)\n\n3. **Koniec** - jak zakończyć? (1 zdanie)",
+              "wymagana_wiedza": [
+                "1:1 meetings"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 190,
+              "nagroda_4star": 240,
+              "nagroda_5star": 320,
+              "reputacja": 14,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "📅",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-STARTER-001",
+              "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+              "kategoria": "Leadership",
+              "klient": "StartupDuo",
+              "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+              "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 300,
+              "nagroda_4star": 400,
+              "nagroda_5star": 500,
+              "reputacja": 20,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 30,
+              "emoji": "🤝",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-COACHING-001",
+              "tytul": "Sesja coachingowa dla middle managera",
+              "kategoria": "Coaching",
+              "klient": "MarketPro",
+              "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
+              "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+              "wymagana_wiedza": [
+                "Coaching conversations",
+                "GROW Model",
+                "COIN Framework"
+              ],
+              "trudnosc": 2,
+              "nagroda_base": 550,
+              "nagroda_4star": 720,
+              "nagroda_5star": 900,
+              "reputacja": 35,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 50,
+              "emoji": "🎯",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-KONFLIKT-002",
+              "tytul": "Negocjacje z trudnym stakeholderem",
+              "kategoria": "Konflikt",
+              "klient": "FinanceHub",
+              "opis": "Kluczowy stakeholder w projekcie blokuje ważne decyzje. \nMa silne opinie i nie słucha argumentów zespołu. CEO prosi o wsparcie.",
+              "zadanie": "Krótka strategia:\n\n1. **Jakie mogą być jego ukryte motywacje i obawy?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę rozmowy** (5 kroków, krótko)\n   \n3. **Wymień 5 kluczowych pytań otwartych do zadania**\n\n4. **Best case i worst case - jak się zachowasz?** (po 1 zdaniu na każdy)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Techniki negocjacyjne",
+                "Active Listening"
+              ],
+              "trudnosc": 3,
+              "nagroda_base": 650,
+              "nagroda_4star": 850,
+              "nagroda_5star": 1100,
+              "reputacja": 45,
+              "czas_realizacji_dni": 2,
+              "wymagany_poziom": 1,
+              "min_slow": 80,
+              "emoji": "⚔️",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-AI-002",
+              "tytul": "💬 Rozmowa: Trudne Negocjacje",
+              "kategoria": "AI Conversation",
+              "klient": "TechVentures LLC",
+              "opis": "Największy klient (40% revenue) grozi odejściem jeśli nie dostanie 40% zniżki. CEO Michael zadzwonił osobiście. Musisz wynegocjować rozwiązanie które uratuje kontrakt BEZ niszczenia marży.",
+              "zadanie": "🎭 SYMULACJA NEGOCJACJI Z AI\n\n**Twoja rola:** Senior Business Consultant - klient poprosił Cię o pomoc w trudnych negocjacjach\n\n**Rozmówca:** Michael (CEO TechVentures) - gra AI\n- Osobowość: twardy negocjator, ale otwarty na win-win jeśli pokażesz wartość\n- Sytuacja: zarząd wymaga obniżenia kosztów o 40%, konkurencja oferuje tańszą ofertę\n- Ukryty kontekst: wie że Twoja firma jest lepsza, ale ma presję zarządu (AI zareaguje jeśli odkryjesz prawdziwą motywację)\n\n**Twoje zadanie:**\n1. Wynegocjuj warunki które utrzymają klienta I Twoją marżę\n2. Odkryj prawdziwą motywację (czy to tylko cena?)\n3. Zaproponuj kreatywne rozwiązanie win-win\n4. Zachowaj długoterminową relację biznesową\n\n**AI ocenia Cię na żywo:**\n- 🤝 Empatia - czy rozumiesz pozycję klienta\n- 💪 Asertywność - czy bronisz swojej wartości bez kapitulacji\n- 👔 Profesjonalizm - biznesowy ton i argumentacja\n- 💡 Jakość rozwiązania - kreatywność i wykonalność propozycji\n\n**Możliwe zakończenia:**\n- WORST: Natychmiastowa kapitulacja (40% zniżka) → stracisz wiarygodność\n- BAD: Klient odchodzi → utrata 500k/rok\n- MEDIOCRE: 30% zniżka → słaba marża\n- GOOD: 10-15% zniżka + coś ekstra (długi kontrakt, dodatkowe usługi)\n- GREAT: Win-win bez zniżki (ROI report, tiered services, custom package)\n- BEST: Klient podnosi budżet bo widzi dodatkową wartość!\n\n**Wskazówka:** Nie pytaj o zniżkę - pytaj o WARTOŚĆ i CELE biznesowe",
+              "wymagana_wiedza": [
+                "Negotiation",
+                "Value Communication",
+                "Win-Win Thinking",
+                "Business Acumen"
+              ],
+              "trudnosc": 4,
+              "nagroda_base": 800,
+              "nagroda_4star": 1100,
+              "nagroda_5star": 1400,
+              "reputacja": 50,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "emoji": "💬",
+              "contract_type": "ai_conversation",
+              "npc_config": {
+                "name": "Michael",
+                "role": "CEO TechVentures LLC",
+                "personality": "tough negotiator, ROI-focused, respectful but firm",
+                "personality_notes": "Michael is under pressure from his board to cut costs by 40%. He received a competing offer that's 40% cheaper (but lower quality). He KNOWS your service is better (you saved them $880k last year through optimization), but needs to show the board he's fighting for cost reduction. If you demonstrate clear ROI and help him justify the premium to his board, he'll stay. If you just fold on price, he'll lose respect and demand more. If you're too rigid, he'll leave.",
+                "initial_emotion": "businesslike",
+                "current_emotion": "businesslike",
+                "goal": "Get a deal that satisfies the board (cost reduction or proven ROI) while keeping quality service. Ideally: pay same or less but get MORE value.",
+                "opening_message": "*Michael dzwoni do Ciebie osobiście - to rzadkość*\n\nMichael: \"Musimy porozmawiać o kontrakcie. Zarząd wymaga 40% cięcia kosztów. Mam ofertę od Twojej konkurencji - 40% taniej. Cenię naszą współpracę, ale biznes to biznes. Co możesz zaproponować?\"",
+                "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
+              },
+              "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
+              "available_until": "2025-10-23 01:34:29"
+            },
+            {
+              "id": "CIQ-KRYZYS-002",
+              "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+              "kategoria": "Kryzys",
+              "klient": "CorporateInc",
+              "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+              "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+              "wymagana_wiedza": [
+                "Change Management",
+                "Crisis Communication",
+                "Difficult Conversations"
+              ],
+              "trudnosc": 5,
+              "nagroda_base": 1500,
+              "nagroda_4star": 2000,
+              "nagroda_5star": 2500,
+              "reputacja": 90,
+              "czas_realizacji_dni": 3,
+              "wymagany_poziom": 1,
+              "min_slow": 200,
+              "emoji": "🚨",
+              "available_until": "2025-10-23 01:34:29"
+            }
+          ],
+          "last_refresh": "2025-10-22 01:34:29"
+        },
+        "stats": {
+          "total_revenue": 0,
+          "total_costs": 150,
+          "net_profit": 0,
+          "contracts_completed": 0,
+          "contracts_5star": 0,
+          "contracts_4star": 0,
+          "contracts_3star": 0,
+          "contracts_2star": 0,
+          "contracts_1star": 0,
+          "avg_rating": 0.0,
+          "category_stats": {
+            "Konflikt": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Coaching": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kultura": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kryzys": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Leadership": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            }
+          },
+          "last_30_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          },
+          "last_7_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          }
+        },
+        "ranking": {
+          "overall_score": 0.0,
+          "current_positions": {
+            "overall": null,
+            "revenue": null,
+            "quality": null,
+            "productivity_30d": null
+          },
+          "previous_positions": {},
+          "badges": []
+        },
+        "events": {
+          "history": [
+            {
+              "event_id": "internet_outage",
+              "timestamp": "2025-10-22 01:34:29",
+              "title": "Awaria Internetu",
+              "emoji": "📡",
+              "type": "negative",
+              "description": "Twój internet padł na cały dzień. Straciłeś cenny czas i musiałeś pracować z kawiarni.",
+              "choice": null,
+              "effects": {
+                "coins": -150
+              }
+            }
+          ],
+          "last_roll": "2025-10-22 01:34:29",
+          "active_effects": []
+        },
+        "money": -150,
+        "history": {
+          "transactions": [
+            {
+              "type": "event_cost",
+              "amount": -150,
+              "event_id": "internet_outage",
+              "event_title": "Awaria Internetu",
+              "timestamp": "2025-10-22 01:34:29"
+            }
+          ],
+          "level_ups": []
+        },
+        "initial_money": 0
+      }
+    }
   }
 }

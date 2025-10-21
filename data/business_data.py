@@ -18,27 +18,75 @@ FIRM_LEVELS = {
     },
     2: {
         "nazwa": "Boutique Consulting",
-        "zakres_monet": (2000, 8000),
+        "zakres_monet": (2000, 5000),
         "max_pracownikow": 2,
-        "limit_kontraktow_dzienny": 1,  # +1 na pracownika
+        "limit_kontraktow_dzienny": 1,
         "opis": "Mała firma z pierwszymi pracownikami. Czas na rozwój!",
         "ikona": "🏢"
     },
     3: {
-        "nazwa": "CIQ Advisory Group",
-        "zakres_monet": (8000, 25000),
-        "max_pracownikow": 5,
+        "nazwa": "CIQ Advisory",
+        "zakres_monet": (5000, 10000),
+        "max_pracownikow": 3,
         "limit_kontraktow_dzienny": 1,
-        "opis": "Renomowana firma konsultingowa z solidnym portfolio",
+        "opis": "Rozwijająca się firma konsultingowa z rosnącym portfolio",
         "ikona": "🏛️"
     },
     4: {
-        "nazwa": "Global CIQ Partners",
-        "zakres_monet": (25000, float('inf')),
+        "nazwa": "Strategic Partners",
+        "zakres_monet": (10000, 20000),
+        "max_pracownikow": 5,
+        "limit_kontraktow_dzienny": 2,
+        "opis": "Firma strategiczna z solidną bazą klientów",
+        "ikona": "🎯"
+    },
+    5: {
+        "nazwa": "Elite Consulting Group",
+        "zakres_monet": (20000, 35000),
+        "max_pracownikow": 7,
+        "limit_kontraktow_dzienny": 2,
+        "opis": "Elitarna grupa konsultingowa z prestiżowymi kontraktami",
+        "ikona": "💎"
+    },
+    6: {
+        "nazwa": "Regional CIQ Leaders",
+        "zakres_monet": (35000, 55000),
         "max_pracownikow": 10,
         "limit_kontraktow_dzienny": 2,
-        "opis": "Międzynarodowa firma z prestiżową klientelą",
+        "opis": "Liderzy regionalni z oddziałami w kilku miastach",
+        "ikona": "🌆"
+    },
+    7: {
+        "nazwa": "National CIQ Authority",
+        "zakres_monet": (55000, 80000),
+        "max_pracownikow": 15,
+        "limit_kontraktow_dzienny": 3,
+        "opis": "Autorytet w skali kraju - znana marka w branży",
+        "ikona": "�"
+    },
+    8: {
+        "nazwa": "Global CIQ Partners",
+        "zakres_monet": (80000, 120000),
+        "max_pracownikow": 20,
+        "limit_kontraktow_dzienny": 3,
+        "opis": "Międzynarodowa firma z prestiżową klientelą na wielu rynkach",
         "ikona": "🌍"
+    },
+    9: {
+        "nazwa": "Worldwide CIQ Corporation",
+        "zakres_monet": (120000, 180000),
+        "max_pracownikow": 30,
+        "limit_kontraktow_dzienny": 4,
+        "opis": "Globalna korporacja konsultingowa z oddziałami na 5 kontynentach",
+        "ikona": "🌐"
+    },
+    10: {
+        "nazwa": "CIQ Empire",
+        "zakres_monet": (180000, float('inf')),
+        "max_pracownikow": 50,
+        "limit_kontraktow_dzienny": 5,
+        "opis": "Imperium CIQ - absolutny lider rynku, legenda branży!",
+        "ikona": "👑"
     }
 }
 
@@ -875,8 +923,14 @@ GAME_CONFIG = {
     
     # Progresja
     "reputation_to_level_2": 100,
-    "reputation_to_level_3": 500,
-    "reputation_to_level_4": 1500,
+    "reputation_to_level_3": 300,
+    "reputation_to_level_4": 600,
+    "reputation_to_level_5": 1000,
+    "reputation_to_level_6": 1500,
+    "reputation_to_level_7": 2200,
+    "reputation_to_level_8": 3000,
+    "reputation_to_level_9": 4000,
+    "reputation_to_level_10": 5500,
     
     # Rankingi
     "min_contracts_for_ranking": 0,  # Brak bariery - rankingi widoczne od początku
@@ -958,15 +1012,39 @@ def get_firm_level(coins, reputation):
         reputation: Punkty reputacji użytkownika
         
     Returns:
-        int: Poziom firmy (1-4)
+        int: Poziom firmy (1-10)
     """
     # Sprawdź poziomy od najwyższego do najniższego
-    # Poziom 4: Global CIQ Partners
-    if coins >= 25000 and reputation >= GAME_CONFIG["reputation_to_level_4"]:
+    # Poziom 10: CIQ Empire
+    if coins >= 180000 and reputation >= GAME_CONFIG["reputation_to_level_10"]:
+        return 10
+    
+    # Poziom 9: Worldwide CIQ Corporation
+    if coins >= 120000 and reputation >= GAME_CONFIG["reputation_to_level_9"]:
+        return 9
+    
+    # Poziom 8: Global CIQ Partners
+    if coins >= 80000 and reputation >= GAME_CONFIG["reputation_to_level_8"]:
+        return 8
+    
+    # Poziom 7: National CIQ Authority
+    if coins >= 55000 and reputation >= GAME_CONFIG["reputation_to_level_7"]:
+        return 7
+    
+    # Poziom 6: Regional CIQ Leaders
+    if coins >= 35000 and reputation >= GAME_CONFIG["reputation_to_level_6"]:
+        return 6
+    
+    # Poziom 5: Elite Consulting Group
+    if coins >= 20000 and reputation >= GAME_CONFIG["reputation_to_level_5"]:
+        return 5
+    
+    # Poziom 4: Strategic Partners
+    if coins >= 10000 and reputation >= GAME_CONFIG["reputation_to_level_4"]:
         return 4
     
-    # Poziom 3: CIQ Advisory Group  
-    if coins >= 8000 and reputation >= GAME_CONFIG["reputation_to_level_3"]:
+    # Poziom 3: CIQ Advisory  
+    if coins >= 5000 and reputation >= GAME_CONFIG["reputation_to_level_3"]:
         return 3
     
     # Poziom 2: Boutique Consulting

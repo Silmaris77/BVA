@@ -197,19 +197,46 @@ RANDOM_EVENTS = {
         }
     },
     
-    "equipment_failure": {
+    "minor_equipment_issue": {
         "type": "negative",
         "emoji": "💸",
-        "title": "Awaria Sprzętu",
-        "description": "Twój główny komputer się zepsuł. Naprawy kosztowały 300 monet.",
+        "title": "Drobna Awaria Sprzętu",
+        "description": "Twój komputer potrzebuje drobnych napraw. Kosztowało to 300 monet.",
         "flavor_text": "\"Murphy's Law: Wszystko co może się popsuć, popsuje się w najmniej odpowiednim momencie.\"",
         "effects": {
             "coins": -300
         },
         "rarity": "common",
         "conditions": {
-            "min_coins": 400,
-            "min_contracts": 2
+            "min_coins": 400
+        }
+    },
+    
+    "internet_outage": {
+        "type": "negative",
+        "emoji": "📡",
+        "title": "Awaria Internetu",
+        "description": "Twój internet padł na cały dzień. Straciłeś cenny czas i musiałeś pracować z kawiarni.",
+        "flavor_text": "\"No signal... Provider nie odbiera telefonu. Świetnie.\"",
+        "effects": {
+            "coins": -150
+        },
+        "rarity": "common",
+        "conditions": {}
+    },
+    
+    "coffee_spill": {
+        "type": "negative",
+        "emoji": "☕",
+        "title": "Rozlana Kawa na Klawiaturze",
+        "description": "Klasyka. Kawa na klawiaturze. Nowa klawiatura to koszt i strata czasu.",
+        "flavor_text": "\"Nooo nie... Akurat teraz?!\"",
+        "effects": {
+            "coins": -200
+        },
+        "rarity": "common",
+        "conditions": {
+            "min_coins": 250
         }
     },
     
@@ -253,9 +280,412 @@ RANDOM_EVENTS = {
         "effects": {
             "remove_contract_from_pool": True
         },
+        "rarity": "uncommon",
+        "conditions": {
+            "min_available_contracts": 3,
+            "min_contracts": 1  # Wymaga przynajmniej 1 ukończonego kontraktu
+        }
+    },
+    
+    # =========================================================================
+    # NOWE WYDARZENIA - POZYTYWNE
+    # =========================================================================
+    
+    "viral_recommendation": {
+        "type": "positive",
+        "emoji": "🚀",
+        "title": "Viralna Rekomendacja!",
+        "description": "Twój post na LinkedIn o jednym z projektów stał się viralem! Setki firm chce z Tobą współpracować.",
+        "flavor_text": "\"Ten case study jest genialny! Musimy ich zatrudnić!\" - komentarze w social media",
+        "effects": {
+            "coins": 800,
+            "reputation": 15
+        },
         "rarity": "rare",
         "conditions": {
-            "min_available_contracts": 3
+            "min_contracts": 5,
+            "min_reputation": 40
+        }
+    },
+    
+    "award_nomination": {
+        "type": "positive",
+        "emoji": "🏆",
+        "title": "Nominacja do Nagrody Branżowej",
+        "description": "Twoja firma została nominowana do prestiżowej nagrody 'Consulting Firm of the Year'!",
+        "flavor_text": "\"W finale 5 najlepszych firm konsultingowych w kraju!\"",
+        "effects": {
+            "reputation": 20,
+            "coins": 300
+        },
+        "rarity": "rare",
+        "conditions": {
+            "min_contracts": 10,
+            "min_reputation": 60
+        }
+    },
+    
+    "talent_acquisition": {
+        "type": "positive",
+        "emoji": "⭐",
+        "title": "Top Talent Chce do Ciebie Dołączyć",
+        "description": "Uznany ekspert w branży usłyszał o Twojej firmie i chce u Ciebie pracować. Następny pracownik będzie taniej!",
+        "flavor_text": "\"Słyszałem same dobre rzeczy o Waszej kulturze pracy. Chciałbym się przyłączyć!\"",
+        "effects": {
+            "reputation": 8
+        },
+        "rarity": "uncommon",
+        "conditions": {
+            "min_contracts": 5,
+            "has_employees": True
+        }
+    },
+    
+    "partnership_offer": {
+        "type": "positive",
+        "emoji": "🤝",
+        "title": "Oferta Partnerstwa Strategicznego",
+        "description": "Duża firma konsultingowa proponuje partnership. Dostaniesz dostęp do ich sieci klientów!",
+        "flavor_text": "\"Możemy razem zrobić wielkie rzeczy. Co powiesz na współpracę?\"",
+        "effects": {
+            "coins": 1000,
+            "reputation": 12
+        },
+        "rarity": "rare",
+        "conditions": {
+            "min_contracts": 8,
+            "min_reputation": 50
+        }
+    },
+    
+    "grant_approved": {
+        "type": "positive",
+        "emoji": "💎",
+        "title": "Grant na Rozwój Otrzymany!",
+        "description": "Twój wniosek o grant z programu wspierania innowacyjnych firm został zaakceptowany!",
+        "flavor_text": "\"Gratulujemy! Komitet docenił innowacyjność Waszego podejścia.\"",
+        "effects": {
+            "coins": 1500
+        },
+        "rarity": "rare",
+        "conditions": {
+            "min_contracts": 7,
+            "min_reputation": 45
+        }
+    },
+    
+    "early_completion_bonus": {
+        "type": "positive",
+        "emoji": "⚡",
+        "title": "Bonus za Szybkość",
+        "description": "Ukończyłeś projekt wcześniej niż przewidywano. Klient dorzuca bonus i przedłuża deadline wszystkich aktywnych kontraktów!",
+        "flavor_text": "\"Niesamowite! Czekaliśmy 2 tygodnie, a Wy skończyliście w 3 dni!\"",
+        "effects": {
+            "coins": 600,
+            "deadline_extension": 2,
+            "boost_count": 2
+        },
+        "rarity": "uncommon",
+        "conditions": {
+            "has_active_contracts": True,
+            "min_avg_rating": 4.0
+        }
+    },
+    
+    # =========================================================================
+    # NOWE WYDARZENIA - NEUTRALNE (Z WYBORAMI)
+    # =========================================================================
+    
+    "conference_invitation": {
+        "type": "neutral",
+        "emoji": "🎤",
+        "title": "Zaproszenie na Konferencję",
+        "description": "Zostałeś zaproszony jako prelegent na dużą konferencję branżową. Co robisz?",
+        "flavor_text": "\"Chcielibyśmy, żebyś podzielił się swoimi doświadczeniami z 500 uczestnikami...\"",
+        "choices": [
+            {
+                "text": "Przyjmuję i prezentuję case study",
+                "effects": {
+                    "reputation": 15,
+                    "coins": -200  # Koszt przygotowania
+                }
+            },
+            {
+                "text": "Odmawiam - mam zbyt dużo pracy",
+                "effects": {
+                    "capacity_boost": 1,
+                    "duration_days": 3
+                }
+            },
+            {
+                "text": "Wysyłam swojego pracownika",
+                "effects": {
+                    "reputation": 8,
+                    "coins": -100
+                }
+            }
+        ],
+        "rarity": "uncommon",
+        "conditions": {
+            "min_contracts": 6,
+            "min_reputation": 40
+        }
+    },
+    
+    "equity_offer": {
+        "type": "neutral",
+        "emoji": "📊",
+        "title": "Inwestor Chce Kupić Udziały",
+        "description": "Angel investor oferuje dużą gotówkę w zamian za 30% udziałów w Twojej firmie. Co decydujesz?",
+        "flavor_text": "\"Widzę potencjał. 50,000 zł za 30% firmy. Deal?\"",
+        "choices": [
+            {
+                "text": "Sprzedaję udziały - biorę cash",
+                "effects": {
+                    "coins": 5000,
+                    "reputation": -5  # Niektórzy mówią, że 'wyprzedałeś się'
+                }
+            },
+            {
+                "text": "Odmawiam - zachowuję kontrolę",
+                "effects": {
+                    "reputation": 10  # Szacunek za niezależność
+                }
+            },
+            {
+                "text": "Negocjuję lepsze warunki (15%)",
+                "effects": {
+                    "coins": 2500,
+                    "reputation": 5
+                }
+            }
+        ],
+        "rarity": "rare",
+        "conditions": {
+            "min_contracts": 10,
+            "min_reputation": 55
+        }
+    },
+    
+    "pro_bono_request": {
+        "type": "neutral",
+        "emoji": "❤️",
+        "title": "Prośba o Pro Bono",
+        "description": "Lokalna NGO prosi o darmowe wsparcie w reorganizacji. To zajmie czas, ale może być PR-owo cenne.",
+        "flavor_text": "\"Nie mamy budżetu, ale naprawdę potrzebujemy pomocy ekspertów...\"",
+        "choices": [
+            {
+                "text": "Pomagam za darmo",
+                "effects": {
+                    "reputation": 12,
+                    "capacity_penalty": 1,
+                    "duration_days": 5
+                }
+            },
+            {
+                "text": "Odmawiam grzecznie",
+                "effects": {
+                    "coins": 0  # Neutralne
+                }
+            },
+            {
+                "text": "Oferuję rabat 50%",
+                "effects": {
+                    "coins": 300,
+                    "reputation": 6,
+                    "capacity_penalty": 1,
+                    "duration_days": 3
+                }
+            }
+        ],
+        "rarity": "common",
+        "conditions": {
+            "min_contracts": 3
+        }
+    },
+    
+    "merger_proposal": {
+        "type": "neutral",
+        "emoji": "🔗",
+        "title": "Propozycja Fuzji",
+        "description": "Podobna firma proponuje połączenie sił. Razem bylibyście silniejsi, ale stracisz część autonomii.",
+        "flavor_text": "\"Razem mamy 15 pracowników i moglibyśmy brać większe projekty!\"",
+        "choices": [
+            {
+                "text": "Łączę firmy",
+                "effects": {
+                    "coins": 2000,
+                    "reputation": 15,
+                    "capacity_boost": 2,
+                    "duration_days": 30
+                }
+            },
+            {
+                "text": "Odrzucam ofertę",
+                "effects": {
+                    "reputation": 5  # Szacunek za pewność siebie
+                }
+            },
+            {
+                "text": "Proponuję luźną współpracę zamiast fuzji",
+                "effects": {
+                    "coins": 800,
+                    "reputation": 8,
+                    "next_contract_bonus": 1.2
+                }
+            }
+        ],
+        "rarity": "rare",
+        "conditions": {
+            "min_contracts": 12,
+            "has_employees": True
+        }
+    },
+    
+    # =========================================================================
+    # NOWE WYDARZENIA - NEGATYWNE
+    # =========================================================================
+    
+    "employee_burnout": {
+        "type": "negative",
+        "emoji": "😰",
+        "title": "Wypalenie Pracownika",
+        "description": "Jeden z Twoich kluczowych pracowników jest wypalony. Potrzebujesz dać mu urlop lub ryzykujesz jego odejście.",
+        "flavor_text": "\"Nie mogę już więcej... Albo wezmę tydzień wolnego, albo odchodzę.\"",
+        "effects": {
+            "capacity_penalty": 1,
+            "duration_days": 7,
+            "coins": -500  # Koszt zastępstwa/urlopu
+        },
+        "rarity": "uncommon",
+        "conditions": {
+            "has_employees": True,
+            "has_active_contracts": True
+        }
+    },
+    
+    "tax_audit": {
+        "type": "negative",
+        "emoji": "🔍",
+        "title": "Kontrola Skarbowa",
+        "description": "Urząd skarbowy przeprowadza kontrolę. Musisz zatrudnić księgowego i poświęcić czas na dokumentację.",
+        "flavor_text": "\"Dzień dobry, jesteśmy z Urzędu Skarbowego. Kontrola rutynowa.\"",
+        "effects": {
+            "coins": -800,
+            "capacity_penalty": 1,
+            "duration_days": 5
+        },
+        "rarity": "uncommon",
+        "conditions": {
+            "min_contracts": 5,
+            "min_coins": 1000
+        }
+    },
+    
+    "negative_review_online": {
+        "type": "negative",
+        "emoji": "😡",
+        "title": "Negatywna Recenzja Online",
+        "description": "Niezadowolony (były) klient napisał ostrą recenzję na Glassdoor. Twoja reputacja oberwała.",
+        "flavor_text": "\"1/5 gwiazdek - nie polecam. Nieprofesjonalni i nieskuteczni!\"",
+        "effects": {
+            "reputation": -15,
+            "coins": -300  # Koszt PR crisis management
+        },
+        "rarity": "uncommon",
+        "conditions": {
+            "min_contracts": 4,
+            "has_low_rated_contract": True
+        }
+    },
+    
+    "equipment_failure": {
+        "type": "negative",
+        "emoji": "💻",
+        "title": "Awaria Sprzętu",
+        "description": "Twój komputer/serwer padł w najgorszym momencie. Musisz kupić nowy i odzyskać dane. To kosztuje czas i pieniądze.",
+        "flavor_text": "\"BSOD... Nie, nie, nie! Backup? Jaki backup?!\"",
+        "effects": {
+            "coins": -1000,
+            "deadline_reduction": -1  # Skrócenie deadline o 1 dzień dla losowego kontraktu
+        },
+        "rarity": "rare",
+        "conditions": {
+            "has_active_contracts": True
+        }
+    },
+    
+    "client_bankruptcy": {
+        "type": "negative",
+        "emoji": "💔",
+        "title": "Bankructwo Klienta",
+        "description": "Firma, z którą właśnie podpisałeś duży kontrakt, ogłosiła bankructwo. Nie dostaniesz zapłaty.",
+        "flavor_text": "\"Z przykrością informujemy, że złożyliśmy wniosek o upadłość...\"",
+        "effects": {
+            "coins": -1200,
+            "reputation": -5
+        },
+        "rarity": "rare",
+        "conditions": {
+            "has_active_contracts": True,
+            "min_contracts": 3
+        }
+    },
+    
+    "key_employee_leaves": {
+        "type": "negative",
+        "emoji": "👋",
+        "title": "Odejście Kluczowego Pracownika",
+        "description": "Twój najlepszy konsultant dostał ofertę od konkurencji i odchodzi. Tracisz capacity i musisz przeszkolić zastępstwo.",
+        "flavor_text": "\"Doceniam wszystko, ale dostałem ofertę której nie mogę odmówić...\"",
+        "effects": {
+            "capacity_penalty": 2,
+            "duration_days": 14,
+            "coins": -600,  # Koszt rekrutacji
+            "reputation": -8
+        },
+        "rarity": "rare",
+        "conditions": {
+            "has_employees": True,
+            "min_contracts": 8
+        }
+    },
+    
+    "cyber_attack": {
+        "type": "negative",
+        "emoji": "🔒",
+        "title": "Atak Hakerski",
+        "description": "Padłeś ofiarą ransomware. Musisz zapłacić za odzyskanie danych lub stracić wszystko i zacząć od nowa.",
+        "flavor_text": "\"Your files have been encrypted. Pay 2 BTC to decrypt...\"",
+        "effects": {
+            "coins": -1500,
+            "reputation": -10,
+            "capacity_penalty": 2,
+            "duration_days": 7
+        },
+        "rarity": "rare",
+        "conditions": {
+            "min_contracts": 6,
+            "min_coins": 2000
+        }
+    },
+    
+    "lawsuit_threat": {
+        "type": "negative",
+        "emoji": "⚖️",
+        "title": "Groźba Pozwu Sądowego",
+        "description": "Były klient grozi pozwem, twierdząc że Twoje porady spowodowały straty. Musisz zatrudnić prawnika.",
+        "flavor_text": "\"Otrzymacie wezwanie do sądu. Mój prawnik już przygotowuje dokumenty...\"",
+        "effects": {
+            "coins": -1000,
+            "reputation": -12,
+            "capacity_penalty": 1,
+            "duration_days": 10
+        },
+        "rarity": "rare",
+        "conditions": {
+            "min_contracts": 7,
+            "min_coins": 1500
         }
     }
 }
@@ -273,3 +703,4 @@ RARITY_WEIGHTS = {
     "uncommon": 30,    # 30%
     "rare": 10         # 10%
 }
+
