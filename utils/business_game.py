@@ -13,10 +13,119 @@ from data.business_data import (
     get_firm_level, get_available_contracts, calculate_daily_capacity,
     calculate_employee_costs, get_contract_by_id, OFFICE_TYPES
 )
+from data.scenarios import get_scenario, get_default_scenario_id
 
 # =============================================================================
 # INICJALIZACJA FIRMY
 # =============================================================================
+
+def initialize_business_game_with_scenario(username: str, industry_id: str, scenario_id: str) -> Dict:
+    """Inicjalizuje Business Games z wybranym scenariuszem
+    
+    Args:
+        username: Nazwa użytkownika
+        industry_id: ID branży (np. "consulting")
+        scenario_id: ID scenariusza (np. "startup_mode")
+    
+    Returns:
+        Dict z pełnymi danymi gry zainicjalizowanymi według scenariusza
+    """
+    scenario = get_scenario(industry_id, scenario_id)
+    if not scenario:
+        # Fallback do standardowego scenariusza
+        scenario_id = get_default_scenario_id(industry_id)
+        scenario = get_scenario(industry_id, scenario_id)
+        
+        # Jeśli nadal None, użyj domyślnych wartości
+        if not scenario:
+            raise ValueError(f"Nie można znaleźć scenariusza dla branży {industry_id}")
+    
+    initial = scenario['initial_conditions']
+    
+    return {
+        # Metadata scenariusza
+        "scenario_id": scenario_id,
+        "scenario_modifiers": scenario['modifiers'],
+        "scenario_objectives": scenario['objectives'],
+        "objectives_completed": [],  # Lista ID ukończonych celów
+        
+        "firm": {
+            "name": f"{username}'s Consulting",
+            "logo": "🏢",
+            "founded": datetime.now().strftime("%Y-%m-%d"),
+            "level": GAME_CONFIG["starting_level"],
+            "reputation": initial['reputation']
+        },
+        "employees": initial.get('employees', []),
+        "office": {
+            "type": initial['office_type'],
+            "upgraded_at": None if initial['office_type'] == "home_office" else datetime.now().strftime("%Y-%m-%d")
+        },
+        "contracts": {
+            "active": initial.get('contracts_in_progress', []),
+            "completed": [],
+            "available_pool": [],
+            "last_refresh": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        },
+        "stats": {
+            "total_revenue": 0,
+            "total_costs": 0,
+            "net_profit": 0,
+            "contracts_completed": 0,
+            "contracts_5star": 0,
+            "contracts_4star": 0,
+            "contracts_3star": 0,
+            "contracts_2star": 0,
+            "contracts_1star": 0,
+            "avg_rating": 0.0,
+            "category_stats": {
+                "Konflikt": {"completed": 0, "total_earned": 0, "avg_rating": 0.0},
+                "Coaching": {"completed": 0, "total_earned": 0, "avg_rating": 0.0},
+                "Kultura": {"completed": 0, "total_earned": 0, "avg_rating": 0.0},
+                "Kryzys": {"completed": 0, "total_earned": 0, "avg_rating": 0.0},
+                "Leadership": {"completed": 0, "total_earned": 0, "avg_rating": 0.0}
+            },
+            "last_30_days": {
+                "revenue": 0,
+                "contracts": 0,
+                "avg_rating": 0.0
+            },
+            "last_7_days": {
+                "revenue": 0,
+                "contracts": 0,
+                "avg_rating": 0.0
+            }
+        },
+        "ranking": {
+            "overall_score": 0.0,
+            "current_positions": {
+                "overall": None,
+                "revenue": None,
+                "quality": None,
+                "productivity_30d": None
+            },
+            "previous_positions": {},
+            "badges": []
+        },
+        "events": {
+            "history": [],
+            "last_roll": None,
+            "active_effects": []
+        },
+        "history": {
+            "transactions": [{
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "type": "initial_capital",
+                "amount": initial['money'],
+                "description": f"Kapitał początkowy - Scenariusz: {scenario['name']}",
+                "balance_after": initial['money']
+            }] if initial['money'] != 0 else [],
+            "level_ups": []
+        },
+        # Specjalne dane dla scenariusza
+        "initial_money": initial['money']  # Zachowaj dla referencji
+    }
+
 
 def initialize_business_game(username: str) -> Dict:
     """Inicjalizuje Business Games dla nowego użytkownika
@@ -540,13 +649,22 @@ def calculate_contract_reward(contract: Dict, rating: int, business_data: Dict) 
 # ZARZĄDZANIE PRACOWNIKAMI
 # =============================================================================
 
-def can_hire_employee(user_data: Dict, employee_type: str) -> Tuple[bool, str]:
+def can_hire_employee(user_data: Dict, employee_type: str, industry_id: str = "consulting") -> Tuple[bool, str]:
     """Sprawdza czy można zatrudnić pracownika
     
     Args:
         user_data: Pełne dane użytkownika (sprawdza degencoins)
+        employee_type: Typ pracownika do zatrudnienia
+        industry_id: ID branży (domyślnie "consulting")
     """
-    business_data = user_data["business_game"]
+    # Get game data for specific industry
+    if "business_games" in user_data and industry_id in user_data["business_games"]:
+        business_data = user_data["business_games"][industry_id]
+    elif "business_game" in user_data:
+        business_data = user_data["business_game"]
+    else:
+        return False, "Brak danych gry"
+    
     emp_data = EMPLOYEE_TYPES.get(employee_type)
     if not emp_data:
         return False, "Nieznany typ pracownika"
@@ -579,14 +697,23 @@ def can_hire_employee(user_data: Dict, employee_type: str) -> Tuple[bool, str]:
     
     return True, ""
 
-def hire_employee(user_data: Dict, employee_type: str) -> Tuple[Dict, bool, str]:
+def hire_employee(user_data: Dict, employee_type: str, industry_id: str = "consulting") -> Tuple[Dict, bool, str]:
     """Zatrudnia pracownika
     
     Args:
         user_data: Pełne dane użytkownika (modyfikuje degencoins)
+        employee_type: Typ pracownika do zatrudnienia
+        industry_id: ID branży (domyślnie "consulting")
     """
-    business_data = user_data["business_game"]
-    can_hire, reason = can_hire_employee(user_data, employee_type)
+    # Get game data for specific industry
+    if "business_games" in user_data and industry_id in user_data["business_games"]:
+        business_data = user_data["business_games"][industry_id]
+    elif "business_game" in user_data:
+        business_data = user_data["business_game"]
+    else:
+        return user_data, False, "Brak danych gry"
+    
+    can_hire, reason = can_hire_employee(user_data, employee_type, industry_id)
     if not can_hire:
         return user_data, False, reason
     
@@ -617,13 +744,22 @@ def hire_employee(user_data: Dict, employee_type: str) -> Tuple[Dict, bool, str]
     
     return user_data, True, f"Zatrudniono: {emp_data['nazwa']}!"
 
-def fire_employee(user_data: Dict, employee_id: str) -> Tuple[Dict, bool, str]:
+def fire_employee(user_data: Dict, employee_id: str, industry_id: str = "consulting") -> Tuple[Dict, bool, str]:
     """Zwalnia pracownika
     
     Args:
         user_data: Pełne dane użytkownika
+        employee_id: ID pracownika do zwolnienia
+        industry_id: ID branży (domyślnie "consulting")
     """
-    business_data = user_data["business_game"]
+    # Get game data for specific industry
+    if "business_games" in user_data and industry_id in user_data["business_games"]:
+        business_data = user_data["business_games"][industry_id]
+    elif "business_game" in user_data:
+        business_data = user_data["business_game"]
+    else:
+        return user_data, False, "Brak danych gry"
+    
     employee = next(
         (e for e in business_data["employees"] if e["id"] == employee_id),
         None
@@ -809,13 +945,207 @@ def get_category_distribution(business_data: Dict) -> Dict:
         if stats["completed"] > 0
     }
 
-def get_firm_summary(user_data: Dict) -> Dict:
+
+# =============================================================================
+# SYSTEM SCENARIUSZY - MODYFIKATORY I CELE
+# =============================================================================
+
+def apply_scenario_modifier(base_value: float, modifier_type: str, game_data: Dict) -> float:
+    """
+    Aplikuje modyfikator scenariusza do wartości bazowej
+    
+    Args:
+        base_value: Wartość bazowa do zmodyfikowania
+        modifier_type: Typ modyfikatora (np. "revenue_multiplier")
+        game_data: Dane gry zawierające scenario_modifiers
+    
+    Returns:
+        Zmodyfikowana wartość
+    """
+    modifiers = game_data.get("scenario_modifiers", {})
+    multiplier = modifiers.get(modifier_type, 1.0)
+    return base_value * multiplier
+
+
+def get_scenario_info(game_data: Dict) -> Optional[Dict]:
+    """
+    Pobiera informacje o aktywnym scenariuszu
+    
+    Args:
+        game_data: Dane gry
+    
+    Returns:
+        Dict z info o scenariuszu lub None
+    """
+    scenario_id = game_data.get("scenario_id")
+    if not scenario_id:
+        return None
+    
+    # TODO: Tutaj można dodać więcej info z SCENARIOS
+    return {
+        "id": scenario_id,
+        "modifiers": game_data.get("scenario_modifiers", {}),
+        "objectives": game_data.get("scenario_objectives", []),
+        "completed": game_data.get("objectives_completed", [])
+    }
+
+
+def check_objective_completion(game_data: Dict, user_data: Dict, objective: Dict) -> bool:
+    """
+    Sprawdza czy cel scenariusza został osiągnięty
+    
+    Args:
+        game_data: Dane gry (business_games[industry_id])
+        user_data: Pełne dane użytkownika
+        objective: Dict z celem do sprawdzenia
+    
+    Returns:
+        True jeśli cel osiągnięty
+    """
+    obj_type = objective.get("type")
+    target = objective.get("target")
+    
+    if obj_type == "revenue_total":
+        return game_data["stats"]["total_revenue"] >= target
+    
+    elif obj_type == "reputation":
+        return game_data["firm"]["reputation"] >= target
+    
+    elif obj_type == "level":
+        return game_data["firm"]["level"] >= target
+    
+    elif obj_type == "money":
+        # Dla "Corporate Rescue" - sprawdza czy wyszedł na zero
+        initial_money = game_data.get("initial_money", 0)
+        if initial_money < 0:
+            current_money = user_data.get("degencoins", 0)
+            return current_money >= target
+        return True
+    
+    elif obj_type == "employees":
+        target_count = target if target is not None else 0
+        return len(game_data.get("employees", [])) >= target_count
+    
+    return False
+
+
+def update_objectives_progress(game_data: Dict, user_data: Dict) -> List[Dict]:
+    """
+    Aktualizuje postęp celów i zwraca listę nowo ukończonych celów
+    
+    Args:
+        game_data: Dane gry
+        user_data: Pełne dane użytkownika
+    
+    Returns:
+        Lista nowo ukończonych celów z nagrodami
+    """
+    objectives = game_data.get("scenario_objectives", [])
+    completed = game_data.get("objectives_completed", [])
+    newly_completed = []
+    
+    for i, objective in enumerate(objectives):
+        obj_id = f"obj_{i}"
+        
+        # Już ukończony? Skip
+        if obj_id in completed:
+            continue
+        
+        # Sprawdź czy teraz ukończony
+        if check_objective_completion(game_data, user_data, objective):
+            completed.append(obj_id)
+            newly_completed.append({
+                "description": objective["description"],
+                "reward_money": objective.get("reward_money", 0)
+            })
+    
+    game_data["objectives_completed"] = completed
+    return newly_completed
+
+
+def get_objectives_summary(game_data: Dict, user_data: Dict) -> Dict:
+    """
+    Zwraca podsumowanie celów scenariusza z postępem
+    
+    Args:
+        game_data: Dane gry
+        user_data: Pełne dane użytkownika
+    
+    Returns:
+        Dict z celami i ich statusem
+    """
+    objectives = game_data.get("scenario_objectives", [])
+    completed_ids = game_data.get("objectives_completed", [])
+    
+    summary = []
+    for i, objective in enumerate(objectives):
+        obj_id = f"obj_{i}"
+        is_completed = obj_id in completed_ids
+        
+        # Pobierz aktualny postęp
+        obj_type = objective.get("type")
+        target = objective.get("target")
+        current = 0
+        
+        if obj_type == "revenue_total":
+            current = game_data["stats"]["total_revenue"]
+        elif obj_type == "reputation":
+            current = game_data["firm"]["reputation"]
+        elif obj_type == "level":
+            current = game_data["firm"]["level"]
+        elif obj_type == "money":
+            current = user_data.get("degencoins", 0)
+        elif obj_type == "employees":
+            current = len(game_data.get("employees", []))
+        
+        summary.append({
+            "id": obj_id,
+            "description": objective["description"],
+            "type": obj_type,
+            "current": current,
+            "target": target,
+            "completed": is_completed,
+            "reward": objective.get("reward_money", 0)
+        })
+    
+    return {
+        "objectives": summary,
+        "total": len(objectives),
+        "completed_count": len(completed_ids)
+    }
+
+
+def get_firm_summary(user_data: Dict, industry_id: str = "consulting") -> Dict:
     """Zwraca podsumowanie firmy
     
     Args:
         user_data: Pełne dane użytkownika (pobiera degencoins)
+        industry_id: ID branży (domyślnie consulting)
     """
-    business_data = user_data["business_game"]
+    # Pobierz dane gry z backward compatibility
+    if "business_games" in user_data and industry_id in user_data["business_games"]:
+        business_data = user_data["business_games"][industry_id]
+    elif "business_game" in user_data:
+        business_data = user_data["business_game"]
+    else:
+        # Fallback - zwróć minimalne dane
+        return {
+            "name": "Firma",
+            "level": 1,
+            "level_name": FIRM_LEVELS[1]["nazwa"],
+            "coins": user_data.get('degencoins', 0),
+            "reputation": 50,
+            "founded": "N/A",
+            "total_revenue": 0,
+            "total_costs": 0,
+            "net_profit": 0,
+            "contracts_completed": 0,
+            "avg_rating": 0.0,
+            "employees_count": 0,
+            "daily_capacity": 0,
+            "daily_costs": 0
+        }
+    
     firm = business_data["firm"]
     stats = business_data["stats"]
     

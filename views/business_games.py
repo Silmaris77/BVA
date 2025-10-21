@@ -8,12 +8,13 @@ from datetime import datetime, timedelta
 import plotly.graph_objects as go
 
 from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG, FIRM_LOGOS, OFFICE_TYPES, OFFICE_UPGRADE_PATH
+from data.scenarios import get_available_scenarios, get_scenario
 from utils.business_game import (
-    initialize_business_game, refresh_contract_pool, accept_contract,
+    initialize_business_game, initialize_business_game_with_scenario, refresh_contract_pool, accept_contract,
     submit_contract_solution, hire_employee, fire_employee,
     calculate_daily_costs, calculate_total_daily_costs, get_firm_summary, get_revenue_chart_data,
     get_category_distribution, calculate_overall_score, can_accept_contract,
-    can_hire_employee, update_user_ranking
+    can_hire_employee, update_user_ranking, get_objectives_summary, update_objectives_progress
 )
 from utils.components import zen_header
 from utils.material3_components import apply_material3_theme
@@ -93,7 +94,15 @@ def show_business_games(username, user_data):
     
     # ROUTING: Jeśli wybrano branżę → idź do gry, inaczej → selector
     if st.session_state["selected_industry"]:
-        show_industry_game(username, user_data, st.session_state["selected_industry"])
+        industry_id = st.session_state["selected_industry"]
+        
+        # Sprawdź czy gra dla tej branży już istnieje
+        if industry_id in user_data["business_games"]:
+            # Gra istnieje → pokaż rozgrywkę
+            show_industry_game(username, user_data, industry_id)
+        else:
+            # Gra nie istnieje → pokaż selektor scenariuszy
+            show_scenario_selector(username, user_data, industry_id)
     else:
         show_industry_selector(username, user_data)
 
@@ -235,17 +244,160 @@ def render_industry_card(industry_id, title, slogan, description, features, avai
     if available:
         button_label = "🎮 Kontynuuj" if has_progress else "🚀 Zacznij grę"
         if st.button(button_label, key=f"start_{industry_id}", type="primary", use_container_width=True):
-            # Inicjalizuj grę jeśli nowa
-            if not has_progress:
-                user_data["business_games"][industry_id] = initialize_business_game(username)
-                save_user_data(username, user_data)
-                st.success(f"🎉 Witaj w {title}! Twoja firma została założona!")
-            
-            # Ustaw aktywną branżę
+            # Ustaw aktywną branżę (routing w show_business_games zdecyduje czy pokazać scenariusze czy grę)
             st.session_state["selected_industry"] = industry_id
             st.rerun()
     else:
         st.button("🔒 Wkrótce dostępne", key=f"locked_{industry_id}", disabled=True, use_container_width=True)
+
+# =============================================================================
+# SELEKTOR SCENARIUSZY
+# =============================================================================
+
+def show_scenario_selector(username, user_data, industry_id):
+    """Widok wyboru scenariusza dla wybranej branży"""
+    from data.scenarios import get_available_scenarios
+    from utils.business_game import initialize_business_game_with_scenario
+    
+    # Przewiń na górę
+    scroll_to_top()
+    apply_material3_theme()
+    
+    # Nagłówek z możliwością powrotu
+    industry_names = {
+        "consulting": "🎯 Consulting",
+        "fmcg": "🛒 FMCG",
+        "pharma": "💊 Pharma",
+        "banking": "🏦 Banking",
+        "insurance": "🛡️ Insurance",
+        "automotive": "🚗 Automotive"
+    }
+    
+    st.markdown(f"""
+    <div style='text-align: center; padding: 20px 0;'>
+        <h1 style='font-size: 42px; margin: 0;'>{industry_names.get(industry_id, "Business Game")}</h1>
+        <p style='font-size: 18px; color: #666; margin: 8px 0;'>Wybierz scenariusz rozgrywki</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Przycisk powrotu
+    if st.button("← Powrót do wyboru branży", key="back_to_industries"):
+        st.session_state["selected_industry"] = None
+        st.rerun()
+    
+    st.markdown("---")
+    
+    # Pobierz dostępne scenariusze
+    scenarios = get_available_scenarios(industry_id)
+    
+    if not scenarios:
+        st.warning("Brak dostępnych scenariuszy dla tej branży.")
+        return
+    
+    # Wyświetl scenariusze w siatce 2x2
+    scenario_list = list(scenarios.items())
+    
+    for row in range(0, len(scenario_list), 2):
+        cols = st.columns(2)
+        
+        for col_idx in range(2):
+            idx = row + col_idx
+            if idx < len(scenario_list):
+                scenario_id, scenario_data = scenario_list[idx]
+                with cols[col_idx]:
+                    render_scenario_card(scenario_id, scenario_data, industry_id, username, user_data)
+
+def render_scenario_card(scenario_id, scenario_data, industry_id, username, user_data):
+    """Renderuje kartę pojedynczego scenariusza"""
+    
+    # Mapowanie trudności na kolory
+    difficulty_colors = {
+        "easy": ("linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)", "#155724"),
+        "medium": ("linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)", "#856404"),
+        "hard": ("linear-gradient(135deg, #ff9a56 0%, #ff6a00 100%)", "#fff"),
+        "expert": ("linear-gradient(135deg, #ee0979 0%, #ff6a00 100%)", "#fff")
+    }
+    
+    difficulty_badges = {
+        "easy": "🟢 Łatwy",
+        "medium": "🟡 Średni",
+        "hard": "🟠 Trudny",
+        "expert": "🔴 Ekspert"
+    }
+    
+    gradient, text_color = difficulty_colors.get(scenario_data.get("difficulty", "medium"), difficulty_colors["medium"])
+    difficulty_badge = difficulty_badges.get(scenario_data.get("difficulty", "medium"), "🟡 Średni")
+    
+    # Karta scenariusza
+    st.markdown(f"""
+    <div style='background: {gradient}; padding: 24px; border-radius: 16px; min-height: 400px; 
+                color: {text_color}; margin-bottom: 20px;'>
+        <div style='display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;'>
+            <h2 style='margin: 0; font-size: 28px;'>{scenario_data.get('icon', '🎮')} {scenario_data.get('name', 'Scenariusz')}</h2>
+            <div style='padding: 6px 12px; background: rgba(255,255,255,0.25); border-radius: 8px; 
+                        font-size: 12px; font-weight: 600; white-space: nowrap;'>
+                {difficulty_badge}
+            </div>
+        </div>
+        <p style='margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; opacity: 0.95;'>
+            {scenario_data.get('description', '')}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Warunki startowe w ekspanderze
+    with st.expander("📋 Warunki startowe", expanded=False):
+        initial = scenario_data.get('initial_conditions', {})
+        money = initial.get('money', 50000)
+        reputation = initial.get('reputation', 50)
+        office = initial.get('office_type', 'home_office')
+        
+        money_color = "green" if money >= 0 else "red"
+        
+        st.markdown(f"""
+        - 💰 **Kapitał:** <span style='color: {money_color}; font-weight: bold;'>{money:,} PLN</span>
+        - ⭐ **Reputacja:** {reputation}/100
+        - 🏢 **Biuro:** {office.replace('_', ' ').title()}
+        """, unsafe_allow_html=True)
+    
+    # Modyfikatory jeśli istnieją
+    modifiers = scenario_data.get('modifiers', {})
+    if any(v != 1.0 for v in modifiers.values() if isinstance(v, (int, float))):
+        with st.expander("⚙️ Modyfikatory", expanded=False):
+            if modifiers.get('reputation_gain_multiplier', 1.0) != 1.0:
+                mult = modifiers['reputation_gain_multiplier']
+                change = f"+{int((mult - 1) * 100)}%" if mult > 1 else f"{int((mult - 1) * 100)}%"
+                st.markdown(f"- ⭐ Wzrost reputacji: **{change}**")
+            
+            if modifiers.get('revenue_multiplier', 1.0) != 1.0:
+                mult = modifiers['revenue_multiplier']
+                change = f"+{int((mult - 1) * 100)}%" if mult > 1 else f"{int((mult - 1) * 100)}%"
+                st.markdown(f"- 💵 Przychody: **{change}**")
+            
+            if modifiers.get('cost_multiplier', 1.0) != 1.0:
+                mult = modifiers['cost_multiplier']
+                change = f"+{int((mult - 1) * 100)}%" if mult > 1 else f"{int((mult - 1) * 100)}%"
+                st.markdown(f"- 💸 Koszty: **{change}**")
+    
+    # Cele
+    objectives = scenario_data.get('objectives', [])
+    if objectives:
+        with st.expander("🎯 Cele do osiągnięcia", expanded=True):
+            for obj in objectives:
+                st.markdown(f"- {obj.get('description', 'Cel')}")
+    
+    # Przycisk rozpoczęcia
+    if st.button(f"🚀 Rozpocznij: {scenario_data.get('name', 'Scenariusz')}", 
+                 key=f"start_scenario_{scenario_id}", 
+                 type="primary", 
+                 use_container_width=True):
+        # Inicjalizuj grę z tym scenariuszem
+        user_data["business_games"][industry_id] = initialize_business_game_with_scenario(
+            username, industry_id, scenario_id
+        )
+        save_user_data(username, user_data)
+        st.success(f"🎉 Scenariusz '{scenario_data.get('name')}' rozpoczęty! Powodzenia!")
+        st.rerun()
 
 # =============================================================================
 # GRA BRANŻOWA
@@ -505,6 +657,8 @@ def create_financial_chart(bg_data, period=7, cumulative=False):
     daily_data = {}
     for trans in transactions:
         try:
+            if "timestamp" not in trans:
+                continue  # Pomiń transakcje bez timestamp
             date = trans["timestamp"][:10]  # YYYY-MM-DD
             if date not in daily_data:
                 daily_data[date] = {"revenue": 0, "costs": 0}
@@ -647,7 +801,126 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
         save_game_data(user_data, bg_data, industry_id)
         save_user_data(username, user_data)
     
-    st.markdown("---")
+    # =============================================================================
+    # SEKCJA CELÓW SCENARIUSZA
+    # =============================================================================
+    
+    # Sprawdź czy gra ma scenariusz i cele (klucze: scenario_id, scenario_objectives)
+    if "scenario_objectives" in bg_data and bg_data.get("scenario_objectives"):
+        try:
+            # Aktualizuj postęp celów (sprawdza automatycznie co zostało ukończone)
+            newly_completed = update_objectives_progress(bg_data, user_data)
+            
+            # Jeśli jakieś cele zostały właśnie ukończone - nagroda!
+            if newly_completed:
+                for obj in newly_completed:
+                    reward = obj.get("reward_money", 0)
+                    if reward > 0:
+                        user_data["degencoins"] = user_data.get("degencoins", 0) + reward
+                        st.success(f"🎉 Cel ukończony: {obj.get('description')}! Nagroda: +{reward:,} monet!")
+                        st.balloons()
+                
+                # Zapisz zmiany
+                save_game_data(user_data, bg_data, industry_id)
+                save_user_data(username, user_data)
+            
+            objectives_data = get_objectives_summary(bg_data, user_data)
+            
+            if objectives_data and objectives_data.get("total", 0) > 0:
+                # Material 3 style - kompaktowy widok celów
+                completed_count = objectives_data.get("completed_count", 0)
+                total = objectives_data["total"]
+                
+                # Emoji zależne od postępu
+                progress_pct = (completed_count / total) * 100 if total > 0 else 0
+                if progress_pct == 100:
+                    header_emoji = "�"
+                elif progress_pct >= 50:
+                    header_emoji = "🎯"
+                else:
+                    header_emoji = "📋"
+                
+                with st.expander(f"{header_emoji} **Cele** · {completed_count}/{total}", expanded=False):
+                    # Siatka celów - 1 lub 2 kolumny w zależności od ilości
+                    if total <= 2:
+                        cols = st.columns(1)
+                    else:
+                        cols = st.columns(2)
+                    
+                    for idx, obj_status in enumerate(objectives_data["objectives"]):
+                        is_completed = obj_status.get("completed", False)
+                        current_value = obj_status.get("current", 0)
+                        target = obj_status.get("target", 0)
+                        description = obj_status.get("description", "Cel")
+                        reward = obj_status.get("reward", 0)
+                        obj_type = obj_status.get("type", "")
+                        
+                        # Ikony typów
+                        type_icons = {
+                            "revenue_total": "💰",
+                            "reputation": "⭐",
+                            "level": "📈",
+                            "money": "💵",
+                            "employees": "👥"
+                        }
+                        icon = type_icons.get(obj_type, "🎯")
+                        
+                        # Progress
+                        obj_progress = min(1.0, current_value / target) if target > 0 else (1.0 if is_completed else 0.0)
+                        
+                        # Material 3 kompaktowa karta
+                        with cols[idx % len(cols)]:
+                            if is_completed:
+                                # Ukończony - zielona karta
+                                st.markdown(f"""
+                                <div style='background: linear-gradient(135deg, #00c853 0%, #00e676 100%); 
+                                            padding: 12px; border-radius: 12px; margin-bottom: 8px;
+                                            box-shadow: 0 2px 4px rgba(0,200,83,0.3);'>
+                                    <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                        <div style='flex: 1;'>
+                                            <div style='color: white; font-weight: 600; font-size: 0.9em; margin-bottom: 4px;'>
+                                                {icon} {description}
+                                            </div>
+                                            <div style='color: rgba(255,255,255,0.9); font-size: 0.75em;'>
+                                                ✅ Ukończono · {current_value:,}/{target:,}
+                                            </div>
+                                        </div>
+                                        <div style='background: rgba(255,255,255,0.3); padding: 6px 10px; 
+                                                    border-radius: 8px; color: white; font-weight: bold; font-size: 0.85em;'>
+                                            💎 {reward:,}
+                                        </div>
+                                    </div>
+                                </div>
+                                """, unsafe_allow_html=True)
+                            else:
+                                # Aktywny - niebieska/szara karta
+                                progress_color = "#2196f3" if obj_progress >= 0.5 else "#90a4ae"
+                                st.markdown(f"""
+                                <div style='background: #f5f5f5; border: 1px solid #e0e0e0;
+                                            padding: 12px; border-radius: 12px; margin-bottom: 8px;'>
+                                    <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;'>
+                                        <div style='flex: 1;'>
+                                            <div style='color: #212121; font-weight: 600; font-size: 0.9em;'>
+                                                {icon} {description}
+                                            </div>
+                                        </div>
+                                        <div style='background: #fff3e0; padding: 4px 8px; border-radius: 6px; 
+                                                    color: #f57c00; font-weight: bold; font-size: 0.75em;'>
+                                            🎁 {reward:,}
+                                        </div>
+                                    </div>
+                                    <div style='color: #616161; font-size: 0.75em; margin-bottom: 4px;'>
+                                        {current_value:,} / {target:,} · {obj_progress*100:.0f}%
+                                    </div>
+                                    <div style='background: #e0e0e0; height: 4px; border-radius: 2px; overflow: hidden;'>
+                                        <div style='background: {progress_color}; height: 100%; width: {obj_progress*100}%;
+                                                    transition: width 0.3s ease;'></div>
+                                    </div>
+                                </div>
+                                """, unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"⚠️ Błąd podczas ładowania celów scenariusza: {str(e)}")
+    
     # =============================================================================
     # SEKCJA DZIENNEGO WYDARZENIA - RAZ NA DOBĘ
     # =============================================================================
@@ -685,7 +958,7 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
                     st.balloons()
         
         # Przeładuj bg_data po zapisie
-        bg_data = user_data["business_game"]
+        bg_data = get_game_data(user_data, industry_id)
         last_roll = bg_data.get("events", {}).get("last_roll")
     
     # Pending event (jeśli neutralne wymaga wyboru - blocking modal)
@@ -696,7 +969,7 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
     st.markdown("---")
     
     # Pobierz podsumowanie
-    summary = get_firm_summary(user_data)
+    summary = get_firm_summary(user_data, industry_id)
     
     # Dwie kolumny: Aktywne kontrakty i Wydarzenie
     col_contracts, col_event = st.columns([2, 1])
@@ -1277,9 +1550,9 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
         for idx, contract in enumerate(available_contracts):
             # Naprzemienne kolumny
             with col1 if idx % 2 == 0 else col2:
-                render_contract_card(contract, username, user_data, bg_data, can_accept)
+                render_contract_card(contract, username, user_data, bg_data, can_accept, industry_id)
 
-def render_contract_card(contract, username, user_data, bg_data, can_accept_new):
+def render_contract_card(contract, username, user_data, bg_data, can_accept_new, industry_id="consulting"):
     """Renderuje profesjonalną kartę dostępnego kontraktu - taki sam layout jak aktywne"""
     
     # Sprawdź czy jest aktywny bonus next_contract
@@ -1386,7 +1659,7 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new)
                     updated_bg, success, message, _ = accept_contract(bg_data, contract['id'], user_data)
                     
                     if success:
-                        user_data["business_game"] = updated_bg
+                        save_game_data(user_data, updated_bg, industry_id)
                         save_user_data(username, user_data)
                         st.success(message)
                         st.rerun()
@@ -1519,7 +1792,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
         cols = st.columns(2)
         for idx, employee in enumerate(bg_data["employees"]):
             with cols[idx % 2]:
-                render_employee_card(employee, username, user_data, bg_data)
+                render_employee_card(employee, username, user_data, bg_data, industry_id)
     
     st.markdown("---")
     
@@ -1537,11 +1810,11 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
         cols = st.columns(2)
         for idx, emp_type in enumerate(available_employees):
             with cols[idx % 2]:
-                render_hire_card(emp_type, EMPLOYEE_TYPES[emp_type], username, user_data, bg_data)
+                render_hire_card(emp_type, EMPLOYEE_TYPES[emp_type], username, user_data, bg_data, industry_id)
     else:
         st.success("✅ Wszystkie dostępne typy pracowników są już zatrudnione!")
 
-def render_employee_card(employee, username, user_data, bg_data):
+def render_employee_card(employee, username, user_data, bg_data, industry_id="consulting"):
     """Renderuje kartę zatrudnionego pracownika - kompaktowa"""
     
     emp_data = EMPLOYEE_TYPES[employee["type"]]
@@ -1566,7 +1839,7 @@ def render_employee_card(employee, username, user_data, bg_data):
         
         # Przycisk zwolnienia
         if st.button("🗑️ Zwolnij", key=f"fire_{employee['id']}", type="secondary", use_container_width=True):
-            updated_user_data, success, message = fire_employee(user_data, employee['id'])
+            updated_user_data, success, message = fire_employee(user_data, employee['id'], industry_id)
             if success:
                 user_data.update(updated_user_data)
                 save_user_data(username, user_data)
@@ -1575,10 +1848,10 @@ def render_employee_card(employee, username, user_data, bg_data):
             else:
                 st.error(message)
 
-def render_hire_card(emp_type, emp_data, username, user_data, bg_data):
+def render_hire_card(emp_type, emp_data, username, user_data, bg_data, industry_id="consulting"):
     """Renderuje kartę dostępnego pracownika - kompaktowa"""
     
-    can_hire, reason = can_hire_employee(user_data, emp_type)
+    can_hire, reason = can_hire_employee(user_data, emp_type, industry_id)
     
     with st.container():
         # Kompaktowa karta z gradientem (szary)
@@ -1604,7 +1877,7 @@ def render_hire_card(emp_type, emp_data, username, user_data, bg_data):
                      help=reason, use_container_width=True)
         else:
             if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary", use_container_width=True):
-                updated_user_data, success, message = hire_employee(user_data, emp_type)
+                updated_user_data, success, message = hire_employee(user_data, emp_type, industry_id)
                 if success:
                     user_data.update(updated_user_data)
                     save_user_data(username, user_data)
@@ -1690,11 +1963,16 @@ def calculate_financial_data(bg_data, days, include_comparison=False):
     end_date = datetime.now()
     start_date = end_date - timedelta(days=days) if days < 9999 else datetime(2000, 1, 1)
     
-    # Filtruj transakcje w okresie
-    current_transactions = [
-        t for t in transactions
-        if datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S") >= start_date
-    ]
+    # Filtruj transakcje w okresie (z obsługą brakującego timestamp)
+    current_transactions = []
+    for t in transactions:
+        if "timestamp" not in t:
+            continue  # Pomiń transakcje bez timestamp
+        try:
+            if datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S") >= start_date:
+                current_transactions.append(t)
+        except (ValueError, KeyError):
+            continue  # Pomiń transakcje z niepoprawnym formatem
     
     # Filtruj kontrakty w okresie (obsługa różnych formatów daty)
     current_contracts = []
@@ -1777,10 +2055,16 @@ def calculate_financial_data(bg_data, days, include_comparison=False):
         prev_end = start_date
         prev_start = prev_end - timedelta(days=days)
         
-        prev_transactions = [
-            t for t in transactions
-            if prev_start <= datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S") < prev_end
-        ]
+        # Filtruj transakcje z poprzedniego okresu (z obsługą brakującego timestamp)
+        prev_transactions = []
+        for t in transactions:
+            if "timestamp" not in t:
+                continue
+            try:
+                if prev_start <= datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S") < prev_end:
+                    prev_transactions.append(t)
+            except (ValueError, KeyError):
+                continue
         
         # Filtruj kontrakty z poprzedniego okresu (obsługa różnych formatów daty)
         prev_contracts = []
@@ -2426,7 +2710,7 @@ def show_history_tab(username, user_data, industry_id="consulting"):
                     st.rerun()
                 else:
                     # Bezpośrednio aplikuj
-                    user_data = apply_event_effects(event_id, event_data, None, user_data)
+                    user_data = apply_event_effects(event_id, event_data, None, user_data, industry_id)
                     save_user_data(username, user_data)
                     st.success(f"{event_data['emoji']} **{event_data['title']}**")
                     st.balloons() if event_data["type"] == "positive" else None
@@ -2434,7 +2718,7 @@ def show_history_tab(username, user_data, industry_id="consulting"):
             else:
                 # Brak zdarzenia (80% przypadków)
                 bg_data.setdefault("events", {})["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                user_data["business_game"] = bg_data
+                save_game_data(user_data, bg_data, industry_id)
                 save_user_data(username, user_data)
                 st.info("😐 Tym razem nic się nie wydarzyło. Spokojny dzień!")
                 st.rerun()
@@ -2623,9 +2907,9 @@ def render_completed_contract_card(contract):
 # WYDARZENIA (HELPER FUNCTIONS)
 # =============================================================================
 
-def show_events_tab(username, user_data):
+def show_events_tab(username, user_data, industry_id="consulting"):
     """Zakładka Wydarzenia - losowe zdarzenia"""
-    bg_data = user_data["business_game"]
+    bg_data = get_game_data(user_data, industry_id)
     
     # BACKWARD COMPATIBILITY: Zainicjalizuj events jeśli nie istnieje
     if "events" not in bg_data:
@@ -2634,7 +2918,7 @@ def show_events_tab(username, user_data):
             "last_roll": None,
             "active_effects": []
         }
-        user_data["business_game"] = bg_data
+        save_game_data(user_data, bg_data, industry_id)
         save_user_data(username, user_data)
     
     st.subheader("🎲 Wydarzenia Losowe")
@@ -2698,7 +2982,7 @@ def show_events_tab(username, user_data):
                     st.rerun()
                 else:
                     # Bezpośrednio aplikuj
-                    user_data = apply_event_effects(event_id, event_data, None, user_data)
+                    user_data = apply_event_effects(event_id, event_data, None, user_data, industry_id)
                     save_user_data(username, user_data)
                     st.success(f"{event_data['emoji']} **{event_data['title']}**")
                     st.balloons() if event_data["type"] == "positive" else None
@@ -2706,7 +2990,7 @@ def show_events_tab(username, user_data):
             else:
                 # Brak zdarzenia (80% przypadków)
                 bg_data.setdefault("events", {})["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                user_data["business_game"] = bg_data
+                save_game_data(user_data, bg_data, industry_id)
                 save_user_data(username, user_data)
                 st.info("😐 Tym razem nic się nie wydarzyło. Spokojny dzień!")
                 st.rerun()
@@ -2725,7 +3009,9 @@ def show_events_tab(username, user_data):
         st.info("Brak wydarzeń w historii. Wylosuj pierwsze zdarzenie powyżej!")
     else:
         history = bg_data["events"]["history"]
-        history_sorted = sorted(history, key=lambda x: x["timestamp"], reverse=True)
+        # Filtruj elementy bez timestamp przed sortowaniem
+        history_with_timestamp = [h for h in history if "timestamp" in h]
+        history_sorted = sorted(history_with_timestamp, key=lambda x: x["timestamp"], reverse=True)
         
         # Pokazuj tylko ostatnie 10
         for event in history_sorted[:10]:

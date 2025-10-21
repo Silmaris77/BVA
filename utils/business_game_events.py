@@ -140,10 +140,25 @@ def should_trigger_event(bg_data: Dict) -> bool:
     return True
 
 
-def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[int], user_data: Dict) -> Dict:
-    """Aplikuje efekty zdarzenia do user_data"""
+def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[int], user_data: Dict, industry_id: str = "consulting") -> Dict:
+    """Aplikuje efekty zdarzenia do user_data
     
-    bg_data = user_data["business_game"]
+    Args:
+        event_id: ID wydarzenia
+        event_data: Dane wydarzenia
+        choice_idx: Indeks wyboru (dla neutralnych eventów)
+        user_data: Dane użytkownika
+        industry_id: ID branży (domyślnie consulting)
+    """
+    
+    # Pobierz dane gry z backward compatibility
+    if "business_games" in user_data and industry_id in user_data["business_games"]:
+        bg_data = user_data["business_games"][industry_id]
+    elif "business_game" in user_data:
+        bg_data = user_data["business_game"]
+    else:
+        # Jeśli nie ma gry, nie możemy aplikować efektów
+        return user_data
     
     # BACKWARD COMPATIBILITY: Zainicjalizuj events jeśli nie istnieje
     if "events" not in bg_data:
@@ -344,6 +359,15 @@ def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[in
     # Aktualizuj last_roll
     bg_data["events"]["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
+    # Zapisz dane gry z powrotem do odpowiedniej struktury
+    if "business_games" not in user_data:
+        user_data["business_games"] = {}
+    user_data["business_games"][industry_id] = bg_data
+    
+    # Backward compatibility - zapisz też w starej strukturze jeśli była używana
+    if "business_game" in user_data and industry_id == "consulting":
+        user_data["business_game"] = bg_data
+    
     return user_data
 
 
@@ -395,19 +419,27 @@ def clean_expired_effects(bg_data: Dict) -> None:
     bg_data["events"]["active_effects"] = active_effects
 
 
-def auto_trigger_event_on_action(action_type: str, user_data: Dict) -> Tuple[Optional[str], Optional[Dict], Dict]:
+def auto_trigger_event_on_action(action_type: str, user_data: Dict, industry_id: str = "consulting") -> Tuple[Optional[str], Optional[Dict], Dict]:
     """
     Automatyczne triggerowanie wydarzenia przy określonych akcjach
     
     Args:
         action_type: "login", "accept_contract", "submit_solution"
         user_data: Pełne dane użytkownika
+        industry_id: ID branży (domyślnie consulting)
         
     Returns:
         (event_id, event_data, updated_user_data) lub (None, None, user_data)
         Jeśli event wymaga wyboru - zwraca event_data, jeśli nie - aplikuje i zwraca None
     """
-    bg_data = user_data["business_game"]
+    # Pobierz dane gry z backward compatibility
+    if "business_games" in user_data and industry_id in user_data["business_games"]:
+        bg_data = user_data["business_games"][industry_id]
+    elif "business_game" in user_data:
+        bg_data = user_data["business_game"]
+    else:
+        # Jeśli nie ma gry, nie możemy triggerować eventów
+        return None, None, user_data
     
     # Sprawdź czy powinno się wydarzenie wystąpić
     if not should_trigger_event(bg_data):
@@ -425,13 +457,19 @@ def auto_trigger_event_on_action(action_type: str, user_data: Dict) -> Tuple[Opt
     
     # NEGATYWNE - aplikuj automatycznie
     if event_data["type"] == "negative":
-        user_data = apply_event_effects(event_id, event_data, None, user_data)
+        user_data = apply_event_effects(event_id, event_data, None, user_data, industry_id)
         # Zwróć None - nie wymaga UI reaction (toast wyświetli się w widoku)
         return event_id, event_data, user_data
     
     # POZYTYWNE - dodaj do pending z TTL 24h
     elif event_data["type"] == "positive":
         add_pending_positive_event(bg_data, event_id, event_data, hours=24)
+        # Zapisz dane gry
+        if "business_games" not in user_data:
+            user_data["business_games"] = {}
+        user_data["business_games"][industry_id] = bg_data
+        if "business_game" in user_data and industry_id == "consulting":
+            user_data["business_game"] = bg_data
         return event_id, event_data, user_data
     
     # NEUTRALNE (wybory) - ZWRÓĆ do UI (wymaga blocking modal)
@@ -475,9 +513,22 @@ def get_pending_positive_events(bg_data: Dict) -> list:
     return valid_events
 
 
-def claim_positive_event(event_id: str, user_data: Dict) -> Dict:
-    """Odbiera (claim) pozytywne wydarzenie i aplikuje efekty"""
-    bg_data = user_data["business_game"]
+def claim_positive_event(event_id: str, user_data: Dict, industry_id: str = "consulting") -> Dict:
+    """Odbiera (claim) pozytywne wydarzenie i aplikuje efekty
+    
+    Args:
+        event_id: ID wydarzenia
+        user_data: Dane użytkownika
+        industry_id: ID branży (domyślnie consulting)
+    """
+    # Pobierz dane gry z backward compatibility
+    if "business_games" in user_data and industry_id in user_data["business_games"]:
+        bg_data = user_data["business_games"][industry_id]
+    elif "business_game" in user_data:
+        bg_data = user_data["business_game"]
+    else:
+        # Jeśli nie ma gry, zwróć bez zmian
+        return user_data
     
     if "events" not in bg_data or "pending_positive" not in bg_data["events"]:
         return user_data
@@ -492,12 +543,19 @@ def claim_positive_event(event_id: str, user_data: Dict) -> Dict:
         return user_data
     
     # Aplikuj efekty
-    user_data = apply_event_effects(event_id, pending["event_data"], None, user_data)
+    user_data = apply_event_effects(event_id, pending["event_data"], None, user_data, industry_id)
     
     # Usuń z pending
     bg_data["events"]["pending_positive"] = [
         e for e in bg_data["events"]["pending_positive"] if e["event_id"] != event_id
     ]
+    
+    # Zapisz dane gry
+    if "business_games" not in user_data:
+        user_data["business_games"] = {}
+    user_data["business_games"][industry_id] = bg_data
+    if "business_game" in user_data and industry_id == "consulting":
+        user_data["business_game"] = bg_data
     
     return user_data
 
