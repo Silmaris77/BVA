@@ -12,7 +12,7 @@ from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG, FIRM_LO
 from data.scenarios import get_available_scenarios, get_scenario
 from utils.business_game import (
     initialize_business_game, initialize_business_game_with_scenario, refresh_contract_pool, accept_contract,
-    submit_contract_solution, hire_employee, fire_employee,
+    submit_contract_solution, submit_contract_ai_conversation, hire_employee, fire_employee,
     calculate_daily_costs, calculate_total_daily_costs, get_firm_summary, get_revenue_chart_data,
     get_category_distribution, calculate_overall_score, can_accept_contract,
     can_hire_employee, update_user_ranking, get_objectives_summary, update_objectives_progress
@@ -749,11 +749,12 @@ def render_header(user_data, industry_id="consulting"):
         """, unsafe_allow_html=True)
     
     with col1:
+        firm_money = bg_data.get('money', 0)
         st.markdown(f"""
         <div class='stat-card gold'>
-            <div class='stat-label'>💰 Saldo</div>
-            <div class='stat-value'>{user_data.get('degencoins', 0):,}</div>
-            <div style='font-size: 12px; color: #64748b;'>monet</div>
+            <div class='stat-label'>💰 Saldo firmy</div>
+            <div class='stat-value'>{firm_money:,}</div>
+            <div style='font-size: 12px; color: #64748b;'>PLN</div>
         </div>
         """, unsafe_allow_html=True)
     
@@ -1001,8 +1002,8 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
                 for obj in newly_completed:
                     reward = obj.get("reward_money", 0)
                     if reward > 0:
-                        user_data["degencoins"] = user_data.get("degencoins", 0) + reward
-                        st.success(f"🎉 Cel ukończony: {obj.get('description')}! Nagroda: +{reward:,} monet!")
+                        bg_data["money"] = bg_data.get("money", 0) + reward
+                        st.success(f"🎉 Cel ukończony: {obj.get('description')}! Nagroda: +{reward:,} PLN!")
                         st.balloons()
                 
                 # Zapisz zmiany
@@ -1305,6 +1306,19 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
 def render_active_contract_card(contract, username, user_data, bg_data):
     """Renderuje profesjonalną kartę aktywnego kontraktu w stylu game UI"""
     
+    # Sprawdź czy to Decision Tree Contract
+    if contract.get("contract_type") == "decision_tree":
+        industry_id = bg_data.get("industry", "consulting")
+        render_decision_tree_contract(contract, username, user_data, bg_data, industry_id)
+        return
+    
+    # Sprawdź czy to AI Conversation Contract
+    if contract.get("contract_type") == "ai_conversation":
+        industry_id = bg_data.get("industry", "consulting")
+        render_ai_conversation_contract(contract, username, user_data, bg_data, industry_id)
+        return
+    
+    # Standardowy kontrakt (pisanie/mówienie)
     with st.container():
         # Oblicz pozostały czas
         deadline = datetime.strptime(contract["deadline"], "%Y-%m-%d %H:%M:%S")
@@ -1631,6 +1645,232 @@ Tekst do poprawy:
 # TAB 2: RYNEK KONTRAKTÓW
 # =============================================================================
 
+def render_decision_tree_contract(contract, username, user_data, bg_data, industry_id="consulting"):
+    """Renderuje interaktywny Decision Tree Contract"""
+    from utils.decision_tree_engine import (
+        initialize_decision_tree_state,
+        get_current_node,
+        make_choice,
+        calculate_final_score,
+        reset_decision_tree,
+        get_decision_tree_summary,
+        calculate_replay_value
+    )
+    
+    contract_id = contract["id"]
+    nodes = contract.get("nodes", {})
+    start_node_id = contract.get("start_node", "scene_1")
+    scoring_config = contract.get("scoring", {})
+    
+    # Initialize state
+    initialize_decision_tree_state(contract_id, start_node_id)
+    
+    # Check if completed
+    is_completed = st.session_state.get(f"dt_{contract_id}_completed", False)
+    
+    if is_completed:
+        # Show final results
+        final_results = calculate_final_score(contract_id, nodes, scoring_config)
+        replay_info = calculate_replay_value(contract_id, nodes)
+        
+        st.success(f"🎉 **Ukończono Decision Tree Contract!**")
+        
+        # Beautiful results card
+        ending_node = nodes.get(final_results["ending_id"])
+        outcome = final_results.get("outcome", {})
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("⭐ Gwiazdki", f"{final_results['stars']}/5")
+        with col2:
+            st.metric("🎯 Punkty", final_results['total_points'])
+        with col3:
+            st.metric("🛤️ Długość ścieżki", final_results['path_length'])
+        
+        # Ending card
+        st.markdown(f"""
+        <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    color: white; padding: 24px; border-radius: 16px; margin: 16px 0;'>
+            <h2 style='margin: 0 0 12px 0;'>{final_results['ending_title']}</h2>
+            <p style='margin: 0; font-size: 14px; line-height: 1.6; opacity: 0.95;'>
+                {ending_node.get('text', '') if ending_node else ''}
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Outcome details
+        if outcome:
+            st.markdown("### 📊 Konsekwencje Twoich Decyzji")
+            outcome_cols = st.columns(3)
+            col_idx = 0
+            for key, value in outcome.items():
+                if key not in ['points', 'rating']:
+                    with outcome_cols[col_idx % 3]:
+                        if isinstance(value, (int, float)):
+                            st.metric(key.replace('_', ' ').title(), f"{value:+,}" if value != 0 else str(value))
+                        else:
+                            st.markdown(f"**{key.replace('_', ' ').title()}:** {value}")
+                        col_idx += 1
+        
+        # Journey summary
+        with st.expander("🗺️ Zobacz swoją ścieżkę decyzji"):
+            summary = get_decision_tree_summary(contract_id)
+            st.text(summary)
+        
+        # Replay value
+        if replay_info['replay_recommended']:
+            st.info(f"""
+            🔄 **Warto zagrać ponownie!**
+            
+            - Odkryłeś **1** z **{replay_info['total_endings']}** zakończeń
+            - To {'nie było najlepsze zakończenie' if not replay_info['is_best_ending'] else 'było najlepsze zakończenie! 🏆'}
+            - Pozostało **{replay_info['undiscovered_endings']}** innych zakończeń do odkrycia
+            
+            Każda ścieżka uczy innych lekcji przywództwa!
+            """)
+        else:
+            st.success(f"""
+            🏆 **Gratulacje! Osiągnąłeś najlepsze zakończenie!**
+            
+            Możesz zagrać ponownie aby odkryć {replay_info['undiscovered_endings']} innych zakończeń.
+            """)
+        
+        # Action buttons
+        col_action1, col_action2, col_action3 = st.columns(3)
+        
+        with col_action1:
+            if st.button("🔄 Zagraj ponownie", use_container_width=True, key=f"replay_{contract_id}"):
+                reset_decision_tree(contract_id, start_node_id)
+                st.rerun()
+        
+        with col_action2:
+            if st.button("✅ Prześlij wynik", type="primary", use_container_width=True, key=f"submit_{contract_id}"):
+                # Calculate reward based on stars
+                base_reward = contract.get("nagroda_base", 500)
+                reward_5star = contract.get("nagroda_5star", 1000)
+                
+                stars = final_results['stars']
+                if stars == 5:
+                    reward = reward_5star
+                elif stars == 4:
+                    reward = contract.get("nagroda_4star", int((base_reward + reward_5star) / 2))
+                elif stars == 3:
+                    reward = int((base_reward + reward_5star) / 2 * 0.8)
+                elif stars == 2:
+                    reward = int(base_reward * 0.8)
+                else:
+                    reward = base_reward
+                
+                # Mark contract as completed in bg_data
+                from utils.business_game import complete_contract_decision_tree
+                updated_bg, success, message = complete_contract_decision_tree(
+                    bg_data, 
+                    contract_id, 
+                    stars, 
+                    reward, 
+                    contract.get("reputacja", 20),
+                    final_results,
+                    user_data
+                )
+                
+                if success:
+                    save_game_data(user_data, updated_bg, industry_id)
+                    save_user_data(username, user_data)
+                    st.success(f"{message} 💰 +{reward} monet | ⭐ +{contract.get('reputacja', 20)} reputacji")
+                    time.sleep(2)
+                    st.rerun()
+                else:
+                    st.error(message)
+        
+        with col_action3:
+            if st.button("← Powrót", use_container_width=True, key=f"back_{contract_id}"):
+                st.session_state["view_contract"] = None
+                st.rerun()
+    
+    else:
+        # Show current scene
+        current_node = get_current_node(contract_id, nodes)
+        
+        if not current_node:
+            st.error("❌ Błąd: Nie znaleziono węzła w drzewie decyzji")
+            return
+        
+        # Progress indicator
+        path = st.session_state.get(f"dt_{contract_id}_path", [])
+        current_points = st.session_state.get(f"dt_{contract_id}_points", 0)
+        
+        col_prog1, col_prog2 = st.columns([3, 1])
+        with col_prog1:
+            st.progress(min(len(path) / 10, 1.0), text=f"Scena {len(path) + 1}")
+        with col_prog2:
+            st.metric("Punkty", current_points)
+        
+        # Scene card
+        st.markdown(f"""
+        <div style='background: white; border-radius: 20px; padding: 32px; margin: 24px 0; 
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.12); border-left: 6px solid #667eea;'>
+            <h2 style='margin: 0 0 16px 0; color: #1e293b; font-size: 24px;'>
+                {current_node.get('title', 'Scena')}
+            </h2>
+            <div style='color: #475569; font-size: 16px; line-height: 1.8; white-space: pre-wrap;'>
+                {current_node.get('text', '')}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Choices
+        if current_node.get('is_revelation'):
+            # Auto-advance for revelation nodes
+            st.info("ℹ️ *Mark się otwiera...*")
+            time.sleep(1)
+            choice = current_node['choices'][0]
+            make_choice(contract_id, choice, nodes)
+            st.rerun()
+        else:
+            st.markdown("### 🤔 Twój wybór:")
+            
+            for i, choice in enumerate(current_node.get('choices', [])):
+                choice_text = choice['text']
+                
+                # Button dla każdego wyboru
+                if st.button(
+                    choice_text, 
+                    key=f"{contract_id}_choice_{i}",
+                    use_container_width=True,
+                    type="secondary"
+                ):
+                    # Make choice
+                    make_choice(contract_id, choice, nodes)
+                    
+                    # Show immediate feedback
+                    feedback = choice.get('feedback', '')
+                    if feedback:
+                        if '✅' in feedback or '🏆' in feedback:
+                            st.success(feedback)
+                        elif '❌' in feedback:
+                            st.error(feedback)
+                        else:
+                            st.info(feedback)
+                        time.sleep(1.5)
+                    
+                    st.rerun()
+                
+                st.markdown("<div style='margin: 8px 0;'></div>", unsafe_allow_html=True)
+        
+        # Show path so far
+        if len(path) > 0:
+            with st.expander(f"📜 Twoja dotychczasowa ścieżka ({len(path)} decyzji)"):
+                for i, step in enumerate(path, 1):
+                    points_color = "green" if step['points'] > 0 else "red" if step['points'] < 0 else "gray"
+                    st.markdown(f"""
+                    **{i}.** {step['choice_text']}  
+                    <span style='color: {points_color}; font-weight: bold;'>
+                        {'+' if step['points'] > 0 else ''}{step['points']} pkt
+                    </span>
+                    """, unsafe_allow_html=True)
+                    if step.get('feedback'):
+                        st.caption(step['feedback'])
+
 def show_contracts_tab(username, user_data, industry_id="consulting"):
     """Zakładka Rynek Kontraktów"""
     bg_data = get_game_data(user_data, industry_id)
@@ -1736,6 +1976,306 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
             # Naprzemienne kolumny
             with col1 if idx % 2 == 0 else col2:
                 render_contract_card(contract, username, user_data, bg_data, can_accept, industry_id)
+
+
+def render_ai_conversation_contract(contract, username, user_data, bg_data, industry_id="consulting"):
+    """Renderuje interaktywny AI Conversation Contract - dynamiczna rozmowa z NPC"""
+    from utils.ai_conversation_engine import (
+        initialize_ai_conversation,
+        get_conversation_state,
+        process_player_message,
+        calculate_final_conversation_score,
+        reset_conversation
+    )
+    
+    contract_id = contract["id"]
+    npc_config = contract.get("npc_config", {})
+    scenario_context = contract.get("scenario_context", "")
+    
+    # Inicjalizacja
+    conversation = get_conversation_state(contract_id)
+    if not conversation:
+        initialize_ai_conversation(contract_id, npc_config, scenario_context)
+        conversation = get_conversation_state(contract_id)
+    
+    # Sprawdź czy zakończono
+    is_completed = not conversation.get("conversation_active", True)
+    
+    # === NAGŁÓWEK KONTRAKTU ===
+    st.markdown(f"""
+    <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                color: white; padding: 24px; border-radius: 16px; margin-bottom: 24px;'>
+        <h2 style='margin: 0 0 8px 0;'>💬 {contract['tytul']}</h2>
+        <p style='margin: 0; opacity: 0.9; font-size: 14px;'>{contract['opis']}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if is_completed:
+        # === WIDOK ZAKOŃCZENIA ===
+        final_results = calculate_final_conversation_score(contract_id)
+        
+        st.success(f"🎉 **Rozmowa zakończona!**")
+        
+        # Metryki
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("⭐ Ocena", f"{final_results['stars']}/5")
+        with col2:
+            st.metric("🎯 Punkty", final_results['total_points'])
+        with col3:
+            st.metric("💬 Tur", final_results['turn_count'])
+        with col4:
+            ending_emoji = {"SUCCESS": "🏆", "NEUTRAL": "🤝", "FAILURE": "❌"}.get(
+                final_results.get('ending_type', 'NEUTRAL'), "🤝"
+            )
+            st.metric("Wynik", f"{ending_emoji} {final_results.get('ending_type', 'NEUTRAL')}")
+        
+        # Podsumowanie
+        st.markdown(f"""
+        <div style='background: #f8fafc; border-left: 4px solid #667eea; 
+                    padding: 20px; border-radius: 8px; margin: 20px 0;'>
+            <h3 style='margin: 0 0 12px 0; color: #1e293b;'>📋 Podsumowanie</h3>
+            <p style='margin: 0; color: #475569; line-height: 1.6;'>{final_results.get('summary', '')}</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Szczegółowe metryki
+        metrics_data = final_results.get('metrics', {})
+        if metrics_data:
+            st.markdown("### 📊 Twoje kompetencje w rozmowie")
+            metric_cols = st.columns(4)
+            metric_labels = {
+                'empathy': ('🤝 Empatia', 'empathy'),
+                'assertiveness': ('💪 Asertywność', 'assertiveness'),
+                'professionalism': ('👔 Profesjonalizm', 'professionalism'),
+                'solution_quality': ('💡 Jakość rozwiązań', 'solution_quality')
+            }
+            for idx, (key, (label, metric_key)) in enumerate(metric_labels.items()):
+                value = metrics_data.get(metric_key, 0)
+                with metric_cols[idx]:
+                    st.metric(label, f"{value}/100")
+                    # Progress bar
+                    color = "#10b981" if value >= 70 else "#f59e0b" if value >= 50 else "#ef4444"
+                    st.markdown(f"""
+                    <div style='background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;'>
+                        <div style='background: {color}; width: {value}%; height: 100%;'></div>
+                    </div>
+                    """, unsafe_allow_html=True)
+        
+        # Historia rozmowy
+        with st.expander("💬 Zobacz całą rozmowę"):
+            messages = conversation.get("messages", [])
+            for msg in messages:
+                role = msg.get("role", "")
+                content = msg.get("content", "")
+                timestamp = msg.get("timestamp", "")
+                
+                if role == "npc":
+                    st.markdown(f"""
+                    <div style='background: #f1f5f9; padding: 12px; border-radius: 8px; 
+                                margin: 8px 0; border-left: 4px solid #667eea;'>
+                        <div style='font-size: 12px; color: #64748b; margin-bottom: 4px;'>
+                            👤 <strong>{npc_config.get('name', 'NPC')}</strong> · {timestamp}
+                        </div>
+                        <div style='color: #1e293b;'>{content}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                elif role == "player":
+                    st.markdown(f"""
+                    <div style='background: #dbeafe; padding: 12px; border-radius: 8px; 
+                                margin: 8px 0; border-left: 4px solid #3b82f6;'>
+                        <div style='font-size: 12px; color: #64748b; margin-bottom: 4px;'>
+                            🎮 <strong>Ty</strong> · {timestamp}
+                        </div>
+                        <div style='color: #1e293b;'>{content}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+        
+        # Przyciski akcji
+        col_replay, col_submit = st.columns(2)
+        with col_replay:
+            if st.button("🔄 Zagraj ponownie", key=f"replay_{contract_id}", use_container_width=True):
+                reset_conversation(contract_id, npc_config, scenario_context)
+                st.rerun()
+        
+        with col_submit:
+            if st.button("✅ Zakończ kontrakt", key=f"submit_{contract_id}", 
+                        type="primary", use_container_width=True):
+                # Wywołaj submit_contract_ai_conversation
+                updated_user_data, success, message, _ = submit_contract_ai_conversation(user_data, contract_id)
+                
+                if success:
+                    # Zapisz zaktualizowane dane
+                    save_user_data(username, updated_user_data)
+                    st.success(message)
+                    time.sleep(1)  # Krótka pauza dla UX
+                    st.rerun()
+                else:
+                    st.error(message)
+        
+    else:
+        # === WIDOK AKTYWNEJ ROZMOWY ===
+        
+        # Informacja o scenariuszu
+        with st.expander("📖 Kontekst sytuacji", expanded=False):
+            st.markdown(scenario_context)
+        
+        # === BOCZNY PANEL Z METRYKAMI ===
+        with st.sidebar:
+            st.markdown("### 📊 Postęp rozmowy")
+            current_turn = conversation.get("current_turn", 1)
+            total_score = conversation.get("total_score", 0)
+            relationship_health = conversation.get("relationship_health", 100)
+            
+            st.metric("Tura", f"{current_turn}")
+            st.metric("Punkty", f"{total_score}")
+            
+            # Relationship health bar
+            health_color = "#10b981" if relationship_health >= 70 else "#f59e0b" if relationship_health >= 40 else "#ef4444"
+            st.markdown(f"""
+            <div style='margin: 12px 0;'>
+                <div style='font-size: 14px; color: #475569; margin-bottom: 4px;'>
+                    ❤️ Relacja z {npc_config.get('name', 'NPC')}
+                </div>
+                <div style='background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden;'>
+                    <div style='background: {health_color}; width: {relationship_health}%; 
+                                height: 100%; transition: width 0.3s;'></div>
+                </div>
+                <div style='font-size: 12px; color: #64748b; margin-top: 4px;'>
+                    {relationship_health}/100
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Metryki szczegółowe
+            metrics = conversation.get("metrics", {})
+            if metrics:
+                st.markdown("#### 🎯 Twoje kompetencje")
+                for metric_key, metric_value in metrics.items():
+                    metric_label = {
+                        'empathy': '🤝 Empatia',
+                        'assertiveness': '💪 Asertywność',
+                        'professionalism': '👔 Profesjonalizm',
+                        'solution_quality': '💡 Rozwiązania'
+                    }.get(metric_key, metric_key.capitalize())
+                    
+                    st.markdown(f"**{metric_label}**: {metric_value}/100")
+        
+        # === HISTORIA KONWERSACJI ===
+        st.markdown("### 💬 Rozmowa")
+        
+        messages = conversation.get("messages", [])
+        
+        # Container dla wiadomości
+        chat_container = st.container()
+        with chat_container:
+            for msg in messages:
+                role = msg.get("role", "")
+                content = msg.get("content", "")
+                timestamp = msg.get("timestamp", "")
+                emotion = msg.get("emotion", "neutral")
+                
+                if role == "npc":
+                    # Emotikon dla emocji NPC
+                    emotion_emoji = {
+                        "happy": "😊", "concerned": "😟", "frustrated": "😤",
+                        "neutral": "😐", "thoughtful": "🤔", "relieved": "😌",
+                        "angry": "😠", "satisfied": "😌"
+                    }.get(emotion, "😐")
+                    
+                    st.markdown(f"""
+                    <div style='background: #f1f5f9; padding: 16px; border-radius: 12px; 
+                                margin: 12px 0; border-left: 4px solid #667eea; box-shadow: 0 2px 4px rgba(0,0,0,0.1);'>
+                        <div style='display: flex; align-items: center; margin-bottom: 8px;'>
+                            <span style='font-size: 24px; margin-right: 8px;'>{emotion_emoji}</span>
+                            <div>
+                                <div style='font-weight: 600; color: #1e293b;'>
+                                    {npc_config.get('name', 'NPC')} <span style='color: #64748b; font-size: 12px;'>({npc_config.get('role', 'Rozmówca')})</span>
+                                </div>
+                                <div style='font-size: 11px; color: #94a3b8;'>{timestamp}</div>
+                            </div>
+                        </div>
+                        <div style='color: #334155; line-height: 1.6;'>{content}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                elif role == "player":
+                    st.markdown(f"""
+                    <div style='background: #dbeafe; padding: 16px; border-radius: 12px; 
+                                margin: 12px 0; border-left: 4px solid #3b82f6; box-shadow: 0 2px 4px rgba(0,0,0,0.1);'>
+                        <div style='display: flex; align-items: center; margin-bottom: 8px;'>
+                            <span style='font-size: 24px; margin-right: 8px;'>🎮</span>
+                            <div>
+                                <div style='font-weight: 600; color: #1e293b;'>Ty</div>
+                                <div style='font-size: 11px; color: #64748b;'>{timestamp}</div>
+                            </div>
+                        </div>
+                        <div style='color: #1e3a8a; line-height: 1.6;'>{content}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                elif role == "evaluation":
+                    # Feedback od AI
+                    st.markdown(f"""
+                    <div style='background: #fef3c7; padding: 12px; border-radius: 8px; 
+                                margin: 8px 0; border-left: 4px solid #f59e0b;'>
+                        <div style='font-size: 12px; font-weight: 600; color: #92400e; margin-bottom: 4px;'>
+                            🎯 Feedback AI
+                        </div>
+                        <div style='color: #78350f; font-size: 13px;'>{content}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+        
+        # === INPUT GRACZA ===
+        st.markdown("---")
+        st.markdown("### ✍️ Twoja odpowiedź")
+        
+        # Wskazówki kontekstowe
+        if current_turn == 1:
+            st.info(f"💡 **Wskazówka**: {npc_config.get('name', 'Rozmówca')} ma swoją perspektywę i cele. Spróbuj zrozumieć sytuację z jego punktu widzenia.")
+        
+        # Text area dla odpowiedzi
+        player_message = st.text_area(
+            "Co powiesz?",
+            height=120,
+            placeholder=f"Wpisz swoją odpowiedź do {npc_config.get('name', 'rozmówcy')}...",
+            key=f"input_{contract_id}_{current_turn}",
+            label_visibility="collapsed"
+        )
+        
+        # Przyciski
+        col_send, col_end = st.columns([3, 1])
+        
+        with col_send:
+            if st.button("📤 Wyślij wiadomość", type="primary", use_container_width=True, 
+                        disabled=not player_message.strip()):
+                if player_message.strip():
+                    with st.spinner("🤖 AI analizuje Twoją odpowiedź i generuje reakcję..."):
+                        # Get Gemini API key
+                        api_key = st.secrets.get("API_KEYS", {}).get("gemini", "")
+                        if not api_key:
+                            st.error("❌ Brak klucza API Gemini. Skonfiguruj secrets.")
+                        else:
+                            try:
+                                # Process message through AI engine
+                                evaluation, npc_reaction = process_player_message(
+                                    contract_id, 
+                                    player_message, 
+                                    api_key
+                                )
+                                
+                                # Success - rerun to show new messages
+                                st.rerun()
+                                
+                            except Exception as e:
+                                st.error(f"❌ Błąd podczas przetwarzania: {str(e)}")
+        
+        with col_end:
+            if st.button("🏁 Zakończ", use_container_width=True):
+                # Force end conversation
+                st.session_state[f"dt_{contract_id}_conversation_active"] = False
+                st.rerun()
+
 
 def render_contract_card(contract, username, user_data, bg_data, can_accept_new, industry_id="consulting"):
     """Renderuje profesjonalną kartę dostępnego kontraktu - taki sam layout jak aktywne"""
@@ -2191,15 +2731,15 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
         with col1:
             st.write(f"💡 **Dostępne ulepszenie:** {next_office['ikona']} {next_office['nazwa']}")
         with col2:
-            st.write(f"💰 Koszt: **{next_office['koszt_ulepszenia']} zł**")
+            st.write(f"💰 Koszt: **{next_office['koszt_ulepszenia']} PLN**")
         with col3:
-            # Pobierz monety z user_data (nie z bg_data)
-            current_coins = user_data.get('degencoins', 0)
+            # Pobierz saldo firmy (nie osobiste DegenCoins!)
+            current_money = bg_data.get('money', 0)
             
-            if current_coins >= next_office['koszt_ulepszenia']:
+            if current_money >= next_office['koszt_ulepszenia']:
                 if st.button("⬆️ Ulepsz biuro", type="primary", use_container_width=True):
-                    # Ulepsz biuro
-                    user_data['degencoins'] -= next_office['koszt_ulepszenia']
+                    # Ulepsz biuro - płacimy Z FIRMY!
+                    bg_data["money"] = current_money - next_office['koszt_ulepszenia']
                     bg_data["office"]["type"] = next_office_type
                     bg_data["office"]["upgraded_at"] = datetime.now().isoformat()
                     bg_data["stats"]["total_costs"] += next_office['koszt_ulepszenia']
@@ -2224,7 +2764,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
                     st.rerun()
             else:
                 st.button("⬆️ Ulepsz biuro", disabled=True, use_container_width=True)
-                st.caption(f"Potrzebujesz: {next_office['koszt_ulepszenia'] - current_coins:.0f} 💰")
+                st.caption(f"Potrzebujesz: {next_office['koszt_ulepszenia'] - current_money:.0f} PLN więcej")
     else:
         st.success("🌟 Posiadasz najlepsze możliwe biuro!")
     
@@ -3668,16 +4208,16 @@ def show_active_event_card(event: dict):
     
     # Wyświetl kartę
     event_card_html = f"""<div style="background: linear-gradient(135deg, {gradient_start} 0%, {gradient_end} 100%); color: white; border-radius: 20px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
-<div style="display: flex; align-items: start; gap: 20px;">
+<div style="display: flex; align-items: start; gap: 20px; margin-bottom: 12px;">
 <div style="font-size: 56px; line-height: 1;">{event['emoji']}</div>
-<div style="flex: 1;">
+<div>
 <div style="font-size: 14px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">{icon} Wydarzenie dnia</div>
-<div style="font-size: 22px; font-weight: 700; margin-bottom: 12px;">{event['title']}</div>
+<div style="font-size: 22px; font-weight: 700;">{event['title']}</div>
+</div>
+</div>
 <div style="font-size: 15px; opacity: 0.95; line-height: 1.7;">{event['description']}</div>
 {flavor_html}
 {effects_html}
-</div>
-</div>
 </div>"""
     
     st.markdown(event_card_html, unsafe_allow_html=True)

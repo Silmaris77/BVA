@@ -112,6 +112,7 @@ def initialize_business_game_with_scenario(username: str, industry_id: str, scen
             "last_roll": None,
             "active_effects": []
         },
+        "money": initial['money'],  # SALDO FIRMY - oddzielne od DegenCoins gracza!
         "history": {
             "transactions": [{
                 "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -214,7 +215,15 @@ def get_current_firm_level(user_data: Dict) -> int:
         user_data: Pełne dane użytkownika (potrzebne do user_data['degencoins'])
     """
     coins = user_data.get('degencoins', 0)
-    reputation = user_data["business_game"]["firm"]["reputation"]
+    
+    # Backward compatibility: obsługa obu struktur
+    if "business_games" in user_data and "consulting" in user_data["business_games"]:
+        reputation = user_data["business_games"]["consulting"]["firm"]["reputation"]
+    elif "business_game" in user_data:
+        reputation = user_data["business_game"]["firm"]["reputation"]
+    else:
+        reputation = 0
+    
     return get_firm_level(coins, reputation)
 
 def update_firm_level(user_data: Dict) -> Tuple[Dict, bool]:
@@ -223,7 +232,16 @@ def update_firm_level(user_data: Dict) -> Tuple[Dict, bool]:
     Args:
         user_data: Pełne dane użytkownika
     """
-    business_data = user_data["business_game"]
+    # Backward compatibility: obsługa obu struktur
+    if "business_games" in user_data and "consulting" in user_data["business_games"]:
+        business_data = user_data["business_games"]["consulting"]
+        industry_id = "consulting"
+    elif "business_game" in user_data:
+        business_data = user_data["business_game"]
+        industry_id = None
+    else:
+        return user_data, False
+    
     old_level = business_data["firm"]["level"]
     new_level = get_current_firm_level(user_data)
     
@@ -234,10 +252,18 @@ def update_firm_level(user_data: Dict) -> Tuple[Dict, bool]:
             "to_level": new_level,
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         })
-        user_data["business_game"] = business_data
+        # Zapisz z powrotem do odpowiedniej struktury
+        if industry_id:
+            user_data["business_games"][industry_id] = business_data
+        else:
+            user_data["business_game"] = business_data
         return user_data, True
     
-    user_data["business_game"] = business_data
+    # Zapisz z powrotem nawet jeśli nie było level up
+    if industry_id:
+        user_data["business_games"][industry_id] = business_data
+    else:
+        user_data["business_game"] = business_data
     return user_data, False
 
 def rename_firm(business_data: Dict, new_name: str) -> Dict:
@@ -274,9 +300,16 @@ def refresh_contract_pool(business_data: Dict, force: bool = False) -> Dict:
                 contracts_by_difficulty[difficulty] = []
             contracts_by_difficulty[difficulty].append(contract)
         
-        # Wybierz po jednym z każdego poziomu trudności (1-5)
+        # Wybierz kontrakty
         new_pool = []
-        for difficulty in range(1, 6):  # 1, 2, 3, 4, 5 gwiazdek
+        
+        # TRUDNOŚĆ 1: Pokaż WSZYSTKIE proste kontrakty (dla początkujących)
+        if 1 in contracts_by_difficulty:
+            for contract in contracts_by_difficulty[1]:
+                new_pool.append(contract.copy())
+        
+        # TRUDNOŚĆ 2-5: Po jednym losowym z każdego poziomu
+        for difficulty in range(2, 6):  # 2, 3, 4, 5 gwiazdek
             if difficulty in contracts_by_difficulty and len(contracts_by_difficulty[difficulty]) > 0:
                 selected = random.choice(contracts_by_difficulty[difficulty])
                 new_pool.append(selected.copy())  # Copy aby nie modyfikować oryginału
@@ -402,7 +435,15 @@ def submit_contract_solution(
         Tuple[user_data, success, message, triggered_event]
         triggered_event: None lub (event_id, event_data) jeśli wydarzenie się wylosowało
     """
-    business_data = user_data["business_game"]
+    # Backward compatibility: obsługa obu struktur (business_game i business_games)
+    if "business_games" in user_data and "consulting" in user_data["business_games"]:
+        business_data = user_data["business_games"]["consulting"]
+        industry_id = "consulting"
+    elif "business_game" in user_data:
+        business_data = user_data["business_game"]
+        industry_id = None
+    else:
+        return user_data, False, "Brak danych gry w user_data", None
     
     # Znajdź aktywny kontrakt
     contract = next(
@@ -477,7 +518,8 @@ def submit_contract_solution(
     reward = calculate_contract_reward(contract, rating, business_data)
     
     # Zaktualizuj finanse i statystyki
-    user_data['degencoins'] = user_data.get('degencoins', 0) + reward["coins"]
+    # DODAJ DO SALDA FIRMY, nie do DegenCoins gracza!
+    business_data["money"] = business_data.get("money", 0) + reward["coins"]
     business_data["firm"]["reputation"] += reward["reputation"]
     
     # Statystyki zależą od tego czy kontrakt był płatny
@@ -542,8 +584,11 @@ def submit_contract_solution(
         c for c in business_data["contracts"]["active"] if c["id"] != contract_id
     ]
     
-    # Zapisz zaktualizowane business_data przed level up check
-    user_data["business_game"] = business_data
+    # Zapisz zaktualizowane business_data przed level up check (backward compatibility)
+    if industry_id:
+        user_data["business_games"][industry_id] = business_data
+    else:
+        user_data["business_game"] = business_data
     
     # Sprawdź level up
     user_data, leveled_up = update_firm_level(user_data)
@@ -645,6 +690,99 @@ def calculate_contract_reward(contract: Dict, rating: int, business_data: Dict) 
         "rejection_penalty": False
     }
 
+
+def submit_contract_ai_conversation(user_data: Dict, contract_id: str) -> Tuple[Dict, bool, str, Optional[Tuple[str, Dict]]]:
+    """Zakończ AI Conversation contract, policz nagrody i zaktualizuj dane użytkownika.
+
+    Uwaga: Funkcja używa utils.ai_conversation_engine.calculate_final_conversation_score
+    by pobrać końcowy wynik (gwiazdki, punkty, metryki) i aplikuje odpowiednie nagrody.
+    """
+    from utils.ai_conversation_engine import calculate_final_conversation_score
+
+    # Pobierz business_data dla domyślnej branży (backward compatibility)
+    if "business_games" in user_data and "consulting" in user_data["business_games"]:
+        business_data = user_data["business_games"]["consulting"]
+    elif "business_game" in user_data:
+        business_data = user_data["business_game"]
+    else:
+        return user_data, False, "Brak danych gry w user_data", None
+
+    # Znajdź aktywny kontrakt
+    contract = next((c for c in business_data["contracts"]["active"] if c["id"] == contract_id), None)
+    if not contract:
+        return user_data, False, "Kontrakt nie znaleziony w aktywnych", None
+
+    # Pobierz wynik z engine
+    try:
+        result = calculate_final_conversation_score(contract_id)
+    except Exception as e:
+        return user_data, False, f"Błąd przy obliczaniu wyniku rozmowy: {e}", None
+
+    stars = result.get("stars", 1)
+    total_points = result.get("total_points", 0)
+    metrics = result.get("metrics", {})
+
+    # Reward mapping - użyj nagród z kontraktu (zakładamy wartości base i 5star)
+    reward_base = contract.get("nagroda_base", 0)
+    reward_5star = contract.get("nagroda_5star", reward_base)
+
+    # Liniowa interpolacja nagrody w zależności od gwiazdek (1-5)
+    reward = int(reward_base + ((stars - 1) / 4.0) * (reward_5star - reward_base))
+
+    # DODAJ DO SALDA FIRMY, nie do DegenCoins gracza!
+    business_data["money"] = business_data.get("money", 0) + reward
+
+    # Zaktualizuj reputację firmy
+    rep_change = int((stars - 3) * 10)  # -20..+20
+    business_data["firm"]["reputation"] = business_data["firm"].get("reputation", 0) + rep_change
+
+    # Przenieś kontrakt do completed (z podstawowymi danymi)
+    completed_contract = contract.copy()
+    completed_contract["completed_date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    completed_contract["stars"] = stars
+    completed_contract["points"] = total_points
+    completed_contract["reward"] = reward
+    completed_contract["metrics"] = metrics
+    completed_contract["status"] = "completed"
+
+    business_data["contracts"]["completed"].append(completed_contract)
+
+    # Usuń z aktywnych
+    business_data["contracts"]["active"] = [c for c in business_data["contracts"]["active"] if c["id"] != contract_id]
+
+    # Zaktualizuj statystyki
+    business_data["stats"]["contracts_completed"] = business_data["stats"].get("contracts_completed", 0) + 1
+    rating_key = f"contracts_{stars}star"
+    if rating_key in business_data["stats"]:
+        business_data["stats"][rating_key] += 1
+
+    # Dodaj do historii transakcji
+    if "history" not in business_data:
+        business_data["history"] = {"transactions": []}
+    business_data["history"]["transactions"].append({
+        "type": "contract_reward",
+        "contract_id": contract_id,
+        "contract_title": contract.get("tytul", ""),
+        "amount": reward,
+        "rating": stars,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    })
+
+    # Zapisz zmiany z powrotem
+    if "business_games" in user_data and "consulting" in user_data["business_games"]:
+        user_data["business_games"]["consulting"] = business_data
+    else:
+        user_data["business_game"] = business_data
+
+    # Sprawdź level up
+    user_data, leveled_up = update_firm_level(user_data)
+
+    success_msg = f"✅ Kontrakt {contract_id} zakończony. Otrzymano {reward} monet. Gwiazdki: {stars}/5"
+    if leveled_up:
+        success_msg += f"\n\n🎉 Awansowałeś na poziom {user_data['business_game']['firm']['level']}!"
+
+    return user_data, True, success_msg, None
+
 # =============================================================================
 # ZARZĄDZANIE PRACOWNIKAMI
 # =============================================================================
@@ -691,9 +829,9 @@ def can_hire_employee(user_data: Dict, employee_type: str, industry_id: str = "c
         else:
             return False, f"Maksimum pracowników: {max_employees}"
     
-    # Sprawdź monety (teraz z user_data)
-    if user_data.get('degencoins', 0) < emp_data["koszt_zatrudnienia"]:
-        return False, f"Niewystarczające środki. Potrzebujesz: {emp_data['koszt_zatrudnienia']} monet"
+    # Sprawdź saldo firmy (nie osobiste DegenCoins!)
+    if business_data.get('money', 0) < emp_data["koszt_zatrudnienia"]:
+        return False, f"Niewystarczające środki. Potrzebujesz: {emp_data['koszt_zatrudnienia']} PLN"
     
     return True, ""
 
@@ -719,8 +857,8 @@ def hire_employee(user_data: Dict, employee_type: str, industry_id: str = "consu
     
     emp_data = EMPLOYEE_TYPES[employee_type]
     
-    # Odejmij koszt zatrudnienia (teraz z user_data)
-    user_data['degencoins'] = user_data.get('degencoins', 0) - emp_data["koszt_zatrudnienia"]
+    # Odejmij koszt zatrudnienia Z SALDA FIRMY (nie z osobistych DegenCoins!)
+    business_data["money"] = business_data.get("money", 0) - emp_data["koszt_zatrudnienia"]
     business_data["stats"]["total_costs"] += emp_data["koszt_zatrudnienia"]
     
     # Dodaj pracownika
@@ -820,7 +958,7 @@ def process_daily_costs(user_data: Dict) -> Dict:
     total_cost = employee_cost + office_cost
     
     if total_cost > 0:
-        user_data['degencoins'] = user_data.get('degencoins', 0) - total_cost
+        business_data["money"] = business_data.get("money", 0) - total_cost
         business_data["stats"]["total_costs"] += total_cost
         
         # Transakcja dla pracowników (jeśli > 0)
@@ -1244,3 +1382,46 @@ def migrate_event_transactions(user_data: Dict, industry_id: str = "consulting")
             user_data["business_game"] = business_data
     
     return user_data, added_count
+
+
+def close_business_game(username: str, user_data: Dict, industry_id: str) -> Dict:
+    """Zamyka firmę i przenosi saldo do DegenCoins gracza
+    
+    Args:
+        username: Nazwa użytkownika
+        user_data: Pełne dane użytkownika
+        industry_id: ID branży (np. "consulting")
+    
+    Returns:
+        Zaktualizowane user_data
+    """
+    if "business_games" not in user_data or industry_id not in user_data["business_games"]:
+        return user_data
+    
+    business_data = user_data["business_games"][industry_id]
+    firm_money = business_data.get("money", 0)
+    
+    # Jeśli firma ma dodatnie saldo, przekaż do DegenCoins
+    if firm_money > 0:
+        user_data["degencoins"] = user_data.get("degencoins", 0) + firm_money
+        
+        # Dodaj transakcję do historii
+        if "transaction_history" not in user_data:
+            user_data["transaction_history"] = []
+        
+        user_data["transaction_history"].append({
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "type": "business_closure",
+            "amount": firm_money,
+            "description": f"Zamknięcie firmy: {business_data['firm']['name']}",
+            "industry": industry_id
+        })
+    
+    # Usuń dane firmy
+    del user_data["business_games"][industry_id]
+    
+    # Backward compatibility
+    if "business_game" in user_data and industry_id == "consulting":
+        del user_data["business_game"]
+    
+    return user_data

@@ -97,10 +97,14 @@ def show_timer_tab():
                 st.session_state.training_timer_total = total_seconds_left
             
             total_seconds_initial = st.session_state.training_timer_total
-            progress = 1 - (total_seconds_left / total_seconds_initial)
             
-            # Progress bar zawsze zaczyna od zielonego (100%)
-            progress_ratio = total_seconds_left / total_seconds_initial
+            # Zabezpieczenie przed dzieleniem przez zero
+            if total_seconds_initial > 0:
+                progress = 1 - (total_seconds_left / total_seconds_initial)
+                progress_ratio = total_seconds_left / total_seconds_initial
+            else:
+                progress = 1.0
+                progress_ratio = 1.0
             
             # Użyj HTML + JavaScript do płynnego odliczania z kolorowym progress barem
             st.components.v1.html(f"""
@@ -302,6 +306,13 @@ def show_auction_tab():
         bids = [t['bid'] for t in sorted_for_chart]
         colors_list = [t.get('color', '#667eea') for t in sorted_for_chart]
         
+        # Oblicz maksymalną wartość osi Y
+        max_bid = max(bids) if bids else 0
+        if max_bid >= 1000:
+            y_axis_max = max_bid + 200
+        else:
+            y_axis_max = 1000
+        
         # Stwórz wykres 3D
         fig = go.Figure(data=[
             go.Bar(
@@ -334,12 +345,14 @@ def show_auction_tab():
                 gridcolor='lightgray',
                 zeroline=True,
                 zerolinewidth=2,
-                zerolinecolor='gray'
+                zerolinecolor='gray',
+                range=[0, y_axis_max]
             ),
             xaxis=dict(
                 tickangle=-45
             ),
-            margin=dict(t=80, b=80, l=60, r=40)
+            margin=dict(t=100, b=80, l=60, r=40),
+            uniformtext=dict(mode='hide', minsize=10)
         )
         
         st.plotly_chart(fig, use_container_width=True)
@@ -529,8 +542,6 @@ def show_rankings_tab():
             for r in range(max_display_rounds):
                 cumulative += team['revenue'][r]
                 row[f'R{r}'] = cumulative
-            # Suma końcowa (to samo co ostatnia runda skumulowana)
-            row['SUMA'] = cumulative
             revenue_data.append(row)
         
         df_revenue = pd.DataFrame(revenue_data)
@@ -538,8 +549,7 @@ def show_rankings_tab():
         # Konfiguracja kolumn - dynamicznie dla każdej rundy
         column_config = {
             'Logo': st.column_config.TextColumn('', width='small'),
-            'Zespół': st.column_config.TextColumn('Zespół', width='medium'),
-            'SUMA': st.column_config.NumberColumn('SUMA', disabled=True, format='%d zł')
+            'Zespół': st.column_config.TextColumn('Zespół', width='medium')
         }
         
         # Dodaj konfigurację dla kolumn rund
@@ -606,9 +616,6 @@ def show_rankings_tab():
             for r in range(max_display_rounds):
                 cumulative += team['efficiency'][r]
                 row[f'R{r}'] = cumulative
-            # Średnia
-            valid_values = [v for v in team['efficiency'][:max_display_rounds] if v > 0]
-            row['ŚR'] = round(sum(valid_values) / len(valid_values), 1) if valid_values else 0
             efficiency_data.append(row)
         
         df_efficiency = pd.DataFrame(efficiency_data)
@@ -616,8 +623,7 @@ def show_rankings_tab():
         # Konfiguracja kolumn - dynamicznie dla każdej rundy
         column_config = {
             'Logo': st.column_config.TextColumn('', width='small'),
-            'Zespół': st.column_config.TextColumn('Zespół', width='medium'),
-            'ŚR': st.column_config.NumberColumn('ŚR', disabled=True, format='%.1f')
+            'Zespół': st.column_config.TextColumn('Zespół', width='medium')
         }
         
         # Dodaj konfigurację dla kolumn rund
@@ -719,8 +725,8 @@ def show_rankings_tab():
             row=1, col=2
         )
     
-    fig.update_xaxes(title_text="Runda", row=1, col=1, gridcolor='lightgray')
-    fig.update_xaxes(title_text="Runda", row=1, col=2, gridcolor='lightgray')
+    fig.update_xaxes(title_text="Runda", row=1, col=1, gridcolor='lightgray', dtick=1)
+    fig.update_xaxes(title_text="Runda", row=1, col=2, gridcolor='lightgray', dtick=1)
     fig.update_yaxes(title_text="Dochód skumulowany (zł)", row=1, col=1, gridcolor='lightgray')
     fig.update_yaxes(title_text="Efektywność skumulowana", row=1, col=2, gridcolor='lightgray')
     
@@ -732,6 +738,100 @@ def show_rankings_tab():
         plot_bgcolor='white'
     )
     st.plotly_chart(fig, use_container_width=True)
+    
+    # Wykres kołowy - Market Share
+    st.markdown("---")
+    st.markdown("### 📊 Market Share (udział w rynku)")
+    
+    # Oblicz całkowity skumulowany dochód dla każdego zespołu
+    market_share_data = []
+    for team in teams:
+        total_revenue = sum(team['revenue'])
+        if total_revenue > 0:
+            market_share_data.append({
+                'team': f"{team.get('logo', '🏢')} {team['name']}",
+                'revenue': total_revenue,
+                'color': team.get('color', '#667eea')
+            })
+    
+    if market_share_data:
+        # Sortuj od największego do najmniejszego
+        market_share_data.sort(key=lambda x: x['revenue'], reverse=True)
+        
+        # Oblicz całkowity rynek
+        total_market = sum(item['revenue'] for item in market_share_data)
+        
+        # Stwórz wykres kołowy
+        fig_pie = go.Figure(data=[go.Pie(
+            labels=[item['team'] for item in market_share_data],
+            values=[item['revenue'] for item in market_share_data],
+            marker=dict(
+                colors=[item['color'] for item in market_share_data],
+                line=dict(color='white', width=3)
+            ),
+            textinfo='label+percent',
+            textfont=dict(size=16, color='white'),
+            hovertemplate='<b>%{label}</b><br>Dochód: %{value:,} zł<br>Udział: %{percent}<extra></extra>',
+            hole=0.4,  # Donut chart
+            pull=[0.05 if i == 0 else 0 for i in range(len(market_share_data))]  # Wysunięcie największego kawałka
+        )])
+        
+        # Dodaj tekst w środku
+        winner = market_share_data[0]
+        fig_pie.add_annotation(
+            text=f"<b>Lider:</b><br>{winner['team']}<br>{winner['revenue']:,} zł",
+            x=0.5, y=0.5,
+            font=dict(size=16, color='#333'),
+            showarrow=False
+        )
+        
+        fig_pie.update_layout(
+            title=dict(
+                text=f"Udział w rynku (całkowity rynek: {total_market:,} zł)",
+                font=dict(size=20, color='#667eea'),
+                x=0.5,
+                xanchor='center'
+            ),
+            showlegend=True,
+            legend=dict(
+                orientation="v",
+                yanchor="middle",
+                y=0.5,
+                xanchor="left",
+                x=1.05
+            ),
+            height=500,
+            margin=dict(t=80, b=40, l=40, r=200)
+        )
+        
+        st.plotly_chart(fig_pie, use_container_width=True)
+        
+        # Tabela z procentami
+        st.markdown("#### 📈 Szczegółowy udział w rynku:")
+        share_table = []
+        for idx, item in enumerate(market_share_data):
+            percentage = (item['revenue'] / total_market * 100) if total_market > 0 else 0
+            share_table.append({
+                'Miejsce': f"#{idx + 1}",
+                'Zespół': item['team'],
+                'Dochód': f"{item['revenue']:,} zł",
+                'Udział': f"{percentage:.1f}%"
+            })
+        
+        df_share = pd.DataFrame(share_table)
+        st.dataframe(
+            df_share,
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                'Miejsce': st.column_config.TextColumn('🏆', width='small'),
+                'Zespół': st.column_config.TextColumn('Zespół', width='medium'),
+                'Dochód': st.column_config.TextColumn('Dochód całkowity', width='medium'),
+                'Udział': st.column_config.TextColumn('Udział w rynku', width='small')
+            }
+        )
+    else:
+        st.info("Brak danych o przychodach. Dodaj dane w powyższych tabelach.")
 
 
 def show_settings_tab():
@@ -825,15 +925,26 @@ def show_settings_tab():
                     st.rerun()
             
             with col3:
-                # Wybór koloru
+                # Wybór koloru z kolorową ikonką
+                def format_color_option(color_name):
+                    color_hex = colors[color_name]
+                    return f'<span style="display:inline-block; width:16px; height:16px; background-color:{color_hex}; border:1px solid #ccc; margin-right:8px; vertical-align:middle;"></span>{color_name}'
+                
                 selected_color = st.selectbox(
                     "Kolor:",
                     options=list(colors.keys()),
                     index=list(colors.values()).index(team.get('color', list(colors.values())[0])) 
                         if team.get('color') in colors.values() else 0,
                     key=f"team_color_{idx}",
-                    format_func=lambda x: f"🎨 {x}"
+                    format_func=lambda x: f"■ {x}"  # Fallback dla zwykłego tekstu, ale użyjemy HTML poniżej
                 )
+                
+                # Wyświetl podgląd koloru pod selectboxem
+                st.markdown(
+                    f'<div style="background-color: {colors[selected_color]}; height: 30px; border-radius: 5px; margin-top: -10px;"></div>',
+                    unsafe_allow_html=True
+                )
+                
                 if colors[selected_color] != team.get('color'):
                     team['color'] = colors[selected_color]
                     st.rerun()

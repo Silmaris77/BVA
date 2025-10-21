@@ -222,6 +222,150 @@ EMPLOYEE_TYPES = {
 # =============================================================================
 
 CONTRACTS_POOL = [
+    # ===== BARDZO PROSTE KONTRAKTY DLA POCZĄTKUJĄCYCH (TRUDNOŚĆ 1) =====
+    
+    {
+        "id": "CIQ-EASY-001",
+        "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+        "kategoria": "Leadership",
+        "klient": "LocalCafe",
+        "opis": """Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.""",
+        "zadanie": """Odpowiedz BARDZO KRÓTKO:
+
+1. **Jak rozpoczniesz rozmowę?** (1 zdanie)
+
+2. **Jakie 2 pytania zadasz?** (lista)
+
+3. **Jak zakończysz spotkanie?** (1 zdanie)""",
+        "wymagana_wiedza": ["Podstawy komunikacji"],
+        "trudnosc": 1,
+        "nagroda_base": 200,
+        "nagroda_4star": 250,
+        "nagroda_5star": 350,
+        "reputacja": 15,
+        "czas_realizacji_dni": 1,
+        "wymagany_poziom": 1,
+        "min_slow": 20,
+        "emoji": "☕"
+    },
+    {
+        "id": "CIQ-EASY-002",
+        "tytul": "Feedback dla nowego pracownika",
+        "kategoria": "Feedback",
+        "klient": "SmallShop",
+        "opis": """Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.""",
+        "zadanie": """Napisz krótki feedback (3-5 zdań):
+
+- Co robi dobrze?
+- Co warto poprawić?
+- Jak może to zrobić?""",
+        "wymagana_wiedza": ["Podstawy feedbacku"],
+        "trudnosc": 1,
+        "nagroda_base": 180,
+        "nagroda_4star": 230,
+        "nagroda_5star": 300,
+        "reputacja": 12,
+        "czas_realizacji_dni": 1,
+        "wymagany_poziom": 1,
+        "min_slow": 15,
+        "emoji": "🛒"
+    },
+    {
+        "id": "CIQ-EASY-003",
+        "tytul": "Rozwiązanie małego konfliktu",
+        "kategoria": "Konflikt",
+        "klient": "OfficeTeam",
+        "opis": """Dwóch pracowników biurowych kłóci się o to, kto ma sprzątać wspólną kuchnię.""",
+        "zadanie": """Zaproponuj proste rozwiązanie:
+
+1. **Dlaczego się kłócą?** (1 zdanie)
+
+2. **Twoja propozycja** (2-3 zdania)
+
+3. **Jak to wdrożyć?** (1-2 zdania)""",
+        "wymagana_wiedza": ["Podstawy rozwiązywania konfliktów"],
+        "trudnosc": 1,
+        "nagroda_base": 220,
+        "nagroda_4star": 280,
+        "nagroda_5star": 380,
+        "reputacja": 18,
+        "czas_realizacji_dni": 1,
+        "wymagany_poziom": 1,
+        "min_slow": 20,
+        "emoji": "🧹"
+    },
+    {
+        "id": "CIQ-EASY-004",
+        "tytul": "Pytania do zespołu na spotkaniu",
+        "kategoria": "Leadership",
+        "klient": "StartupTeam",
+        "opis": """Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.""",
+        "zadanie": """Zaproponuj 5 pytań na spotkanie:
+
+- 3 pytania do poznania zespołu
+- 2 pytania o pracę/projekty
+
+(tylko lista pytań)""",
+        "wymagana_wiedza": ["Podstawy komunikacji"],
+        "trudnosc": 1,
+        "nagroda_base": 160,
+        "nagroda_4star": 210,
+        "nagroda_5star": 280,
+        "reputacja": 10,
+        "czas_realizacji_dni": 1,
+        "wymagany_poziom": 1,
+        "min_slow": 15,
+        "emoji": "❓"
+    },
+    {
+        "id": "CIQ-EASY-005",
+        "tytul": "Pochwała za dobrą robotę",
+        "kategoria": "Feedback",
+        "klient": "TechStart",
+        "opis": """Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!""",
+        "zadanie": """Napisz krótką wiadomość (3-4 zdania):
+
+- Co konkretnie zrobił dobrze?
+- Jaki to miało wpływ?
+- Co to dla Ciebie znaczy?""",
+        "wymagana_wiedza": ["Pozytywny feedback"],
+        "trudnosc": 1,
+        "nagroda_base": 150,
+        "nagroda_4star": 200,
+        "nagroda_5star": 270,
+        "reputacja": 8,
+        "czas_realizacji_dni": 1,
+        "wymagany_poziom": 1,
+        "min_slow": 10,
+        "emoji": "⭐"
+    },
+    {
+        "id": "CIQ-EASY-006",
+        "tytul": "Plan krótkiego spotkania 1:1",
+        "kategoria": "Leadership",
+        "klient": "RemoteTeam",
+        "opis": """Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.""",
+        "zadanie": """Zaproponuj prosty plan spotkania (15 min):
+
+1. **Początek** - jak zacząć? (1 zdanie)
+
+2. **Środek** - o czym rozmawiać? (3 tematy)
+
+3. **Koniec** - jak zakończyć? (1 zdanie)""",
+        "wymagana_wiedza": ["1:1 meetings"],
+        "trudnosc": 1,
+        "nagroda_base": 190,
+        "nagroda_4star": 240,
+        "nagroda_5star": 320,
+        "reputacja": 14,
+        "czas_realizacji_dni": 1,
+        "wymagany_poziom": 1,
+        "min_slow": 15,
+        "emoji": "📅"
+    },
+    
+    # ===== ORYGINALNE KONTRAKTY =====
+    
     # KATEGORIA: LEADERSHIP & 1:1 (STARTER - TRUDNOŚĆ 1)
     {
         "id": "CIQ-STARTER-001",
@@ -530,6 +674,182 @@ co się dzieje w zespołach. Nie wie jak to zrobić, żeby nie podważyć autyte
         "wymagany_poziom": 1,
         "min_slow": 80,
         "emoji": "🤝"
+    },
+    
+    # =============================================================================
+    # AI CONVERSATION CONTRACTS - Dynamic Simulations
+    # =============================================================================
+    
+    {
+        "id": "CIQ-AI-001",
+        "tytul": "💬 Rozmowa: Spóźniający się Talent",
+        "kategoria": "AI Conversation",
+        "klient": "TechVenture Sp. z o.o.",
+        "opis": """Twój najlepszy programista Mark jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu. Zespół to zauważa i atmosfera się pogarsza. Musisz przeprowadzić trudną rozmowę.""",
+        "zadanie": """🎭 SYMULACJA ROZMOWY Z AI
+
+**Twoja rola:** Lead konsultant HR - klient poprosił Cię o przeprowadzenie trudnej rozmowy z pracownikiem
+
+**Rozmówca:** Mark, senior developer (gra AI)
+- Osobowość: introwertyk, defensywny gdy atakowany, otwarty gdy czuje empatię
+- Sytuacja: spóźniony po raz trzeci w tym tygodniu
+- Ukryty kontekst: ma osobisty problem (AI zareaguje jeśli podejdziesz empatycznie)
+
+**Twoje zadanie:**
+1. Przeprowadź profesjonalną rozmowę coachingową
+2. Odkryj prawdziwy powód spóźnień
+3. Wypracuj rozwiązanie, które zadowoli obie strony
+4. Zachowaj dobrą relację z pracownikiem
+
+**AI ocenia Cię na żywo w 4 wymiarach:**
+- 🤝 Empatia - czy rozumiesz perspektywę rozmówcy
+- 💪 Asertywność - czy jasno stawiasz granice bez agresji
+- 👔 Profesjonalizm - ton, forma, struktura rozmowy
+- 💡 Jakość rozwiązania - czy propozycje są konstruktywne
+
+**Jak działa:**
+- Piszesz swoją wypowiedź → AI ocenia i reaguje jako Mark
+- Każda odpowiedź oceniana (0-20 pkt + wpływ na relację)
+- Rozmowa kończy się gdy wypracujecie rozwiązanie lub zepsujecie relację
+- Różne zakończenia w zależności od Twoich decyzji!
+
+**Wskazówka:** Zastosuj GROW model lub Conversational Intelligence""",
+        "wymagana_wiedza": ["Conversational Intelligence", "Empathy", "GROW Model", "Difficult Conversations"],
+        "trudnosc": 3,
+        "nagroda_base": 600,
+        "nagroda_4star": 850,
+        "nagroda_5star": 1100,
+        "reputacja": 40,
+        "czas_realizacji_dni": 1,
+        "wymagany_poziom": 1,  # Changed from 2 to 1 - dostępny od startu
+        "emoji": "💬",
+        
+        # AI Conversation specific fields
+        "contract_type": "ai_conversation",
+        "npc_config": {
+            "name": "Mark",
+            "role": "Senior Developer",
+            "personality": "introwerted, defensive when attacked, opens up with empathy",
+            "personality_notes": "Mark is a talented developer who becomes defensive under pressure. He's dealing with a personal crisis (his mother has cancer and needs daily chemo transport), but won't share this unless he feels safe and understood. If approached with empathy and genuine concern, he'll open up. If confronted aggressively, he'll shut down or quit.",
+            "initial_emotion": "anxious",
+            "current_emotion": "anxious",
+            "goal": "Keep his job while managing his mother's medical crisis. Hoping for understanding and flexibility.",
+            "opening_message": "*Mark siedzi przy biurku, unikając kontaktu wzrokowego. Widzisz jak napina się gdy się zbliżasz.*\n\nMark: \"Przepraszam za spóźnienie... Wiem, że to już trzeci raz w tym tygodniu.\"",
+            "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
+        },
+        "scenario_context": """**Kontekst scenariusza:**
+
+Mark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.
+
+**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**
+Mama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.
+
+**Cel rozmowy:**
+1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)
+2. Zachować relację i zaufanie
+3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)
+4. Pokazać empatię bez rezygnacji z standardów zespołowych
+
+**Możliwe zakończenia:**
+- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera
+- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia
+- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany
+
+**Wskaźniki sukcesu:**
+- Relacja Mark-Firma: czy zostanie i będzie zaangażowany
+- Morale zespołu: czy rozumieją sytuację i wspierają
+- Rozwiązanie: czy jest długofalowe i fair dla wszystkich"""
+    },
+    
+
+    {
+        "id": "CIQ-AI-002",
+        "tytul": "💬 Rozmowa: Trudne Negocjacje",
+        "kategoria": "AI Conversation",
+        "klient": "TechVentures LLC",
+        "opis": """Największy klient (40% revenue) grozi odejściem jeśli nie dostanie 40% zniżki. CEO Michael zadzwonił osobiście. Musisz wynegocjować rozwiązanie które uratuje kontrakt BEZ niszczenia marży.""",
+        "zadanie": """🎭 SYMULACJA NEGOCJACJI Z AI
+
+**Twoja rola:** Senior Business Consultant - klient poprosił Cię o pomoc w trudnych negocjacjach
+
+**Rozmówca:** Michael (CEO TechVentures) - gra AI
+- Osobowość: twardy negocjator, ale otwarty na win-win jeśli pokażesz wartość
+- Sytuacja: zarząd wymaga obniżenia kosztów o 40%, konkurencja oferuje tańszą ofertę
+- Ukryty kontekst: wie że Twoja firma jest lepsza, ale ma presję zarządu (AI zareaguje jeśli odkryjesz prawdziwą motywację)
+
+**Twoje zadanie:**
+1. Wynegocjuj warunki które utrzymają klienta I Twoją marżę
+2. Odkryj prawdziwą motywację (czy to tylko cena?)
+3. Zaproponuj kreatywne rozwiązanie win-win
+4. Zachowaj długoterminową relację biznesową
+
+**AI ocenia Cię na żywo:**
+- 🤝 Empatia - czy rozumiesz pozycję klienta
+- 💪 Asertywność - czy bronisz swojej wartości bez kapitulacji
+- 👔 Profesjonalizm - biznesowy ton i argumentacja
+- 💡 Jakość rozwiązania - kreatywność i wykonalność propozycji
+
+**Możliwe zakończenia:**
+- WORST: Natychmiastowa kapitulacja (40% zniżka) → stracisz wiarygodność
+- BAD: Klient odchodzi → utrata 500k/rok
+- MEDIOCRE: 30% zniżka → słaba marża
+- GOOD: 10-15% zniżka + coś ekstra (długi kontrakt, dodatkowe usługi)
+- GREAT: Win-win bez zniżki (ROI report, tiered services, custom package)
+- BEST: Klient podnosi budżet bo widzi dodatkową wartość!
+
+**Wskazówka:** Nie pytaj o zniżkę - pytaj o WARTOŚĆ i CELE biznesowe""",
+        "wymagana_wiedza": ["Negotiation", "Value Communication", "Win-Win Thinking", "Business Acumen"],
+        "trudnosc": 4,
+        "nagroda_base": 800,
+        "nagroda_4star": 1100,
+        "nagroda_5star": 1400,
+        "reputacja": 50,
+        "czas_realizacji_dni": 1,
+        "wymagany_poziom": 1,  # Changed from 3 to 1 - dostępny od startu
+        "emoji": "💬",
+        
+        # AI Conversation specific fields
+        "contract_type": "ai_conversation",
+        "npc_config": {
+            "name": "Michael",
+            "role": "CEO TechVentures LLC",
+            "personality": "tough negotiator, ROI-focused, respectful but firm",
+            "personality_notes": "Michael is under pressure from his board to cut costs by 40%. He received a competing offer that's 40% cheaper (but lower quality). He KNOWS your service is better (you saved them $880k last year through optimization), but needs to show the board he's fighting for cost reduction. If you demonstrate clear ROI and help him justify the premium to his board, he'll stay. If you just fold on price, he'll lose respect and demand more. If you're too rigid, he'll leave.",
+            "initial_emotion": "businesslike",
+            "current_emotion": "businesslike",
+            "goal": "Get a deal that satisfies the board (cost reduction or proven ROI) while keeping quality service. Ideally: pay same or less but get MORE value.",
+            "opening_message": "*Michael dzwoni do Ciebie osobiście - to rzadkość*\n\nMichael: \"Musimy porozmawiać o kontrakcie. Zarząd wymaga 40% cięcia kosztów. Mam ofertę od Twojej konkurencji - 40% taniej. Cenię naszą współpracę, ale biznes to biznes. Co możesz zaproponować?\"",
+            "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
+        },
+        "scenario_context": """**Kontekst scenariusza:**
+
+TechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). 
+
+**Ukryty kontekst:**
+- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%
+- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)
+- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem
+- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it
+- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet
+- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more
+- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice
+
+**Cel rozmowy:**
+1. Odkryć prawdziwą motywację (zarząd, nie Michael)
+2. Przypomnieć o wartości (880k ROI)
+3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)
+4. Pomóc Michaelowi zbudować argument dla zarządu
+
+**Możliwe rozwiązania (od najlepszego):**
+- ROI Report dla zarządu (0% zniżka, ale clear justification)
+- Custom package (ta sama cena, ale więcej value)
+- Tiered service model (basic cheaper, premium upsell)
+- Długoterminowy kontrakt (2-3 lata, 10% discount overall)
+- Performance-based pricing (pay for results)
+- Bundle z innymi usługami (percepcja oszczędności)
+
+**WORST solution:**
+- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility"""
     }
 ]
 

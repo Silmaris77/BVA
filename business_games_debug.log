@@ -428,3 +428,70 @@
 [2025-10-20 13:07:20] ✅ Otrzymano odpowiedź z Gemini
 [2025-10-20 13:07:20] Długość odpowiedzi: 1016 znaków
 [2025-10-20 13:07:20] ✅ JSON sparsowany pomyślnie
+[2025-10-21 22:10:59] ============================================================
+[2025-10-21 22:10:59] evaluate_contract_solution() wywołane
+[2025-10-21 22:10:59] get_active_evaluation_mode() wywołane
+[2025-10-21 22:10:59] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-21 22:10:59] DEFAULT_EVALUATION_MODE = ai
+[2025-10-21 22:10:59] Plik config/business_games_active_mode.json istnieje
+[2025-10-21 22:10:59] Z pliku odczytano tryb: 'ai'
+[2025-10-21 22:10:59] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-21 22:10:59] Używam trybu oceny: 'ai'
+[2025-10-21 22:10:59] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-21 22:10:59] Importuję google.generativeai...
+[2025-10-21 22:11:01] ✅ Import google.generativeai OK
+[2025-10-21 22:11:01] Przygotowuję prompt...
+[2025-10-21 22:11:01] ❌ Exception: KeyError: 'opis'
+[2025-10-21 22:11:01] Fallback do Game Master (Exception)
+[2025-10-21 22:26:58] ============================================================
+[2025-10-21 22:26:58] evaluate_contract_solution() wywołane
+[2025-10-21 22:26:58] get_active_evaluation_mode() wywołane
+[2025-10-21 22:26:58] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-21 22:26:58] DEFAULT_EVALUATION_MODE = ai
+[2025-10-21 22:26:58] Plik config/business_games_active_mode.json istnieje
+[2025-10-21 22:26:58] Z pliku odczytano tryb: 'ai'
+[2025-10-21 22:26:58] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-21 22:26:58] Używam trybu oceny: 'ai'
+[2025-10-21 22:26:58] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-21 22:26:58] Importuję google.generativeai...
+[2025-10-21 22:26:58] ✅ Import google.generativeai OK
+[2025-10-21 22:26:58] Przygotowuję prompt...
+[2025-10-21 22:26:58] ✅ Prompt przygotowany (długość: 3738 znaków)
+[2025-10-21 22:26:58] Pobieram API key...
+[2025-10-21 22:26:58] ✅ API key pobrane z st.secrets
+[2025-10-21 22:26:58] Konfiguruję genai.configure()...
+[2025-10-21 22:26:58] ✅ genai.configure() OK
+[2025-10-21 22:26:58] Ustawiam safety_settings...
+[2025-10-21 22:26:59] ✅ safety_settings ustawione
+[2025-10-21 22:26:59] Tworzę model: gemini-2.5-flash...
+[2025-10-21 22:26:59] ✅ Model utworzony
+[2025-10-21 22:26:59] Wywołuję model.generate_content()...
+[2025-10-21 22:27:11] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-21 22:27:11] Długość odpowiedzi: 873 znaków
+[2025-10-21 22:27:11] ✅ JSON sparsowany pomyślnie
+[2025-10-22 00:56:11] ============================================================
+[2025-10-22 00:56:11] evaluate_contract_solution() wywołane
+[2025-10-22 00:56:11] get_active_evaluation_mode() wywołane
+[2025-10-22 00:56:11] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-22 00:56:11] DEFAULT_EVALUATION_MODE = ai
+[2025-10-22 00:56:11] Plik config/business_games_active_mode.json istnieje
+[2025-10-22 00:56:11] Z pliku odczytano tryb: 'ai'
+[2025-10-22 00:56:11] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-22 00:56:11] Używam trybu oceny: 'ai'
+[2025-10-22 00:56:11] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-22 00:56:11] Importuję google.generativeai...
+[2025-10-22 00:56:11] ✅ Import google.generativeai OK
+[2025-10-22 00:56:11] Przygotowuję prompt...
+[2025-10-22 00:56:11] ✅ Prompt przygotowany (długość: 3433 znaków)
+[2025-10-22 00:56:11] Pobieram API key...
+[2025-10-22 00:56:11] ✅ API key pobrane z st.secrets
+[2025-10-22 00:56:11] Konfiguruję genai.configure()...
+[2025-10-22 00:56:11] ✅ genai.configure() OK
+[2025-10-22 00:56:11] Ustawiam safety_settings...
+[2025-10-22 00:56:11] ✅ safety_settings ustawione
+[2025-10-22 00:56:11] Tworzę model: gemini-2.5-flash...
+[2025-10-22 00:56:11] ✅ Model utworzony
+[2025-10-22 00:56:11] Wywołuję model.generate_content()...
+[2025-10-22 00:56:23] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-22 00:56:23] Długość odpowiedzi: 808 znaków
+[2025-10-22 00:56:23] ✅ JSON sparsowany pomyślnie

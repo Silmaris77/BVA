@@ -14,8 +14,8 @@ SCENARIOS = {
             "icon": "♾️",
             "difficulty": "open",  # Specjalny poziom dla trybu otwartego
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -37,8 +37,8 @@ SCENARIOS = {
             "icon": "⚖️",
             "difficulty": "medium",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -79,8 +79,8 @@ SCENARIOS = {
             "icon": "🚀",
             "difficulty": "hard",
             "initial_conditions": {
-                "money": 20000,  # -60% budżetu
-                "reputation": 30,  # -40% reputacji
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -128,7 +128,7 @@ SCENARIOS = {
             "difficulty": "expert",
             "initial_conditions": {
                 "money": -30000,  # Start z długiem!
-                "reputation": 40,  # Nadszarpnięta reputacja
+                "reputation": -50,  # Nadszarpnięta reputacja
                 "employees": [
                     # TODO: Dodać konkretnych pracowników przy pełnej implementacji
                     # Na razie będzie pusta lista, ale struktura gotowa
@@ -182,8 +182,8 @@ SCENARIOS = {
             "icon": "♾️",
             "difficulty": "open",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -205,8 +205,8 @@ SCENARIOS = {
             "icon": "⚖️",
             "difficulty": "medium",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -237,8 +237,8 @@ SCENARIOS = {
             "icon": "♾️",
             "difficulty": "open",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -260,8 +260,8 @@ SCENARIOS = {
             "icon": "⚖️",
             "difficulty": "medium",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -292,8 +292,8 @@ SCENARIOS = {
             "icon": "♾️",
             "difficulty": "open",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -315,8 +315,8 @@ SCENARIOS = {
             "icon": "⚖️",
             "difficulty": "medium",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -347,8 +347,8 @@ SCENARIOS = {
             "icon": "♾️",
             "difficulty": "open",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -370,8 +370,8 @@ SCENARIOS = {
             "icon": "⚖️",
             "difficulty": "medium",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -402,8 +402,8 @@ SCENARIOS = {
             "icon": "♾️",
             "difficulty": "open",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },
@@ -425,8 +425,8 @@ SCENARIOS = {
             "icon": "⚖️",
             "difficulty": "medium",
             "initial_conditions": {
-                "money": 50000,
-                "reputation": 50,
+                "money": 0,
+                "reputation": 0,
                 "employees": [],
                 "office_type": "home_office"
             },

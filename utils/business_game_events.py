@@ -185,10 +185,10 @@ def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[in
     affected_contract_title = None
     
     # Aplikuj efekty
-    # Monety
+    # Monety - IDĄ DO FIRMY, NIE DO OSOBISTEGO MAJĄTKU GRACZA!
     if "coins" in effects:
         coins_amount = effects["coins"]
-        user_data["degencoins"] = user_data.get("degencoins", 0) + coins_amount
+        bg_data["money"] = bg_data.get("money", 0) + coins_amount
         
         # WAŻNE: Rejestruj transakcję w historii finansowej
         bg_data["history"]["transactions"].append({
