@@ -7,6 +7,29 @@ modyfikatorami i celami do osiągnięcia.
 
 SCENARIOS = {
     "consulting": {
+        "lifetime": {
+            "id": "lifetime",
+            "name": "🌟 Lifetime Challenge",
+            "description": "Tryb nieskończony bez celów - rywalizuj z innymi graczami o najwyższy wynik! Idealny do długoterminowej zabawy i współzawodnictwa.",
+            "icon": "♾️",
+            "difficulty": "open",  # Specjalny poziom dla trybu otwartego
+            "initial_conditions": {
+                "money": 50000,
+                "reputation": 50,
+                "employees": [],
+                "office_type": "home_office"
+            },
+            "modifiers": {
+                "reputation_gain_multiplier": 1.0,
+                "revenue_multiplier": 1.0,
+                "cost_multiplier": 1.0,
+                "employee_salary_multiplier": 1.0,
+                "contract_difficulty_adjustment": 0
+            },
+            "objectives": [],  # BRAK CELÓW - tryb nieskończony!
+            "special_events": [],
+            "is_lifetime": True  # Flaga oznaczająca tryb lifetime
+        },
         "standard": {
             "id": "standard",
             "name": "Standard Start",
@@ -152,6 +175,29 @@ SCENARIOS = {
     
     # Placeholdery dla pozostałych branż - wypełnisz jak będziesz je implementować
     "fmcg": {
+        "lifetime": {
+            "id": "lifetime",
+            "name": "🌟 Lifetime Challenge",
+            "description": "Tryb nieskończony bez celów - rywalizuj z innymi graczami o najwyższy wynik!",
+            "icon": "♾️",
+            "difficulty": "open",
+            "initial_conditions": {
+                "money": 50000,
+                "reputation": 50,
+                "employees": [],
+                "office_type": "home_office"
+            },
+            "modifiers": {
+                "reputation_gain_multiplier": 1.0,
+                "revenue_multiplier": 1.0,
+                "cost_multiplier": 1.0,
+                "employee_salary_multiplier": 1.0,
+                "contract_difficulty_adjustment": 0
+            },
+            "objectives": [],
+            "special_events": [],
+            "is_lifetime": True
+        },
         "standard": {
             "id": "standard",
             "name": "Standard Start",
@@ -184,6 +230,29 @@ SCENARIOS = {
     },
     
     "pharma": {
+        "lifetime": {
+            "id": "lifetime",
+            "name": "🌟 Lifetime Challenge",
+            "description": "Tryb nieskończony bez celów - rywalizuj z innymi graczami o najwyższy wynik!",
+            "icon": "♾️",
+            "difficulty": "open",
+            "initial_conditions": {
+                "money": 50000,
+                "reputation": 50,
+                "employees": [],
+                "office_type": "home_office"
+            },
+            "modifiers": {
+                "reputation_gain_multiplier": 1.0,
+                "revenue_multiplier": 1.0,
+                "cost_multiplier": 1.0,
+                "employee_salary_multiplier": 1.0,
+                "contract_difficulty_adjustment": 0
+            },
+            "objectives": [],
+            "special_events": [],
+            "is_lifetime": True
+        },
         "standard": {
             "id": "standard",
             "name": "Standard Start",
@@ -216,6 +285,29 @@ SCENARIOS = {
     },
     
     "banking": {
+        "lifetime": {
+            "id": "lifetime",
+            "name": "🌟 Lifetime Challenge",
+            "description": "Tryb nieskończony bez celów - rywalizuj z innymi graczami o najwyższy wynik!",
+            "icon": "♾️",
+            "difficulty": "open",
+            "initial_conditions": {
+                "money": 50000,
+                "reputation": 50,
+                "employees": [],
+                "office_type": "home_office"
+            },
+            "modifiers": {
+                "reputation_gain_multiplier": 1.0,
+                "revenue_multiplier": 1.0,
+                "cost_multiplier": 1.0,
+                "employee_salary_multiplier": 1.0,
+                "contract_difficulty_adjustment": 0
+            },
+            "objectives": [],
+            "special_events": [],
+            "is_lifetime": True
+        },
         "standard": {
             "id": "standard",
             "name": "Standard Start",
@@ -248,6 +340,29 @@ SCENARIOS = {
     },
     
     "insurance": {
+        "lifetime": {
+            "id": "lifetime",
+            "name": "🌟 Lifetime Challenge",
+            "description": "Tryb nieskończony bez celów - rywalizuj z innymi graczami o najwyższy wynik!",
+            "icon": "♾️",
+            "difficulty": "open",
+            "initial_conditions": {
+                "money": 50000,
+                "reputation": 50,
+                "employees": [],
+                "office_type": "home_office"
+            },
+            "modifiers": {
+                "reputation_gain_multiplier": 1.0,
+                "revenue_multiplier": 1.0,
+                "cost_multiplier": 1.0,
+                "employee_salary_multiplier": 1.0,
+                "contract_difficulty_adjustment": 0
+            },
+            "objectives": [],
+            "special_events": [],
+            "is_lifetime": True
+        },
         "standard": {
             "id": "standard",
             "name": "Standard Start",
@@ -280,6 +395,29 @@ SCENARIOS = {
     },
     
     "automotive": {
+        "lifetime": {
+            "id": "lifetime",
+            "name": "🌟 Lifetime Challenge",
+            "description": "Tryb nieskończony bez celów - rywalizuj z innymi graczami o najwyższy wynik!",
+            "icon": "♾️",
+            "difficulty": "open",
+            "initial_conditions": {
+                "money": 50000,
+                "reputation": 50,
+                "employees": [],
+                "office_type": "home_office"
+            },
+            "modifiers": {
+                "reputation_gain_multiplier": 1.0,
+                "revenue_multiplier": 1.0,
+                "cost_multiplier": 1.0,
+                "employee_salary_multiplier": 1.0,
+                "contract_difficulty_adjustment": 0
+            },
+            "objectives": [],
+            "special_events": [],
+            "is_lifetime": True
+        },
         "standard": {
             "id": "standard",
             "name": "Standard Start",

@@ -5,6 +5,7 @@ Widok główny z zakładkami: Dashboard, Rynek Kontraktów, Pracownicy, Rankingi
 
 import streamlit as st
 from datetime import datetime, timedelta
+import time
 import plotly.graph_objects as go
 
 from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG, FIRM_LOGOS, OFFICE_TYPES, OFFICE_UPGRADE_PATH
@@ -202,6 +203,11 @@ def show_industry_selector(username, user_data):
             username=username,
             user_data=user_data
         )
+    
+    # Hall of Fame - Galeria legendarnych firm
+    st.markdown("---")
+    st.markdown("<div style='margin: 40px 0 20px 0;'></div>", unsafe_allow_html=True)
+    show_hall_of_fame()
 
 def render_industry_card(industry_id, title, slogan, description, features, available, username, user_data):
     """Renderuje kartę branży"""
@@ -249,6 +255,162 @@ def render_industry_card(industry_id, title, slogan, description, features, avai
             st.rerun()
     else:
         st.button("🔒 Wkrótce dostępne", key=f"locked_{industry_id}", disabled=True, use_container_width=True)
+    
+    st.markdown("<div style='margin: 20px 0;'></div>", unsafe_allow_html=True)
+
+# =============================================================================
+# HALL OF FAME - Globalny widok
+# =============================================================================
+
+def show_hall_of_fame():
+    """Hall of Fame - legendarne zamknięte firmy"""
+    
+    st.markdown("---")
+    st.markdown("## 🏛️ Hall of Fame - Legendarne Firmy")
+    st.caption("Firmy, które osiągnęły sukces i zostały zamknięte z honorem")
+    
+    # Zbierz wszystkie zamknięte firmy ze wszystkich użytkowników
+    from data.users import load_user_data
+    all_users = load_user_data()
+    
+    hall_entries = []
+    for user, data in all_users.items():
+        if "hall_of_fame" in data:
+            for entry in data["hall_of_fame"]:
+                hall_entries.append(entry)
+    
+    if not hall_entries:
+        st.info("🏛️ Hall of Fame jest jeszcze pusty. Bądź pierwszym, który zamknie firmę z sukcesem!")
+        return
+    
+    # Filtry
+    col_filter1, col_filter2, col_filter3 = st.columns(3)
+    
+    with col_filter1:
+        # Pobierz unikalne branże
+        industries = list(set(e.get("industry_id", "unknown") for e in hall_entries))
+        industry_names = {
+            "consulting": "💼 Consulting",
+            "fmcg": "🛒 FMCG",
+            "pharma": "💊 Pharma",
+            "banking": "🏦 Banking",
+            "insurance": "🛡️ Insurance",
+            "automotive": "🚗 Automotive"
+        }
+        selected_industry = st.selectbox(
+            "Branża:",
+            ["Wszystkie"] + [industry_names.get(i, i) for i in sorted(industries)],
+            key="hof_industry_filter"
+        )
+    
+    with col_filter2:
+        # Pobierz unikalne scenariusze
+        scenarios = list(set(e.get("scenario_id", "unknown") for e in hall_entries))
+        from data.scenarios import get_scenario
+        scenario_names_map = {}
+        for s_id in scenarios:
+            # Spróbuj znaleźć nazwę scenariusza
+            for ind_id in industries:
+                scenario = get_scenario(ind_id, s_id)
+                if scenario:
+                    scenario_names_map[s_id] = scenario.get("name", s_id)
+                    break
+            if s_id not in scenario_names_map:
+                scenario_names_map[s_id] = s_id
+        
+        selected_scenario = st.selectbox(
+            "Scenariusz:",
+            ["Wszystkie"] + sorted(list(set(scenario_names_map.values()))),
+            key="hof_scenario_filter"
+        )
+    
+    with col_filter3:
+        sort_by = st.selectbox(
+            "Sortuj według:",
+            ["Rating (najwyższy)", "Transfer (najwyższy)", "Data zamknięcia (najnowsze)"],
+            key="hof_sort"
+        )
+    
+    # Filtruj
+    filtered = hall_entries.copy()
+    
+    if selected_industry != "Wszystkie":
+        # Odwróć mapowanie
+        industry_id = next((k for k, v in industry_names.items() if v == selected_industry), None)
+        if industry_id:
+            filtered = [e for e in filtered if e.get("industry_id") == industry_id]
+    
+    if selected_scenario != "Wszystkie":
+        # Znajdź scenario_id dla wybranej nazwy
+        scenario_ids = [k for k, v in scenario_names_map.items() if v == selected_scenario]
+        if scenario_ids:
+            filtered = [e for e in filtered if e.get("scenario_id") in scenario_ids]
+    
+    # Sortuj
+    if sort_by == "Rating (najwyższy)":
+        filtered.sort(key=lambda x: x.get("final_score", 0), reverse=True)
+    elif sort_by == "Transfer (najwyższy)":
+        filtered.sort(key=lambda x: x.get("total_transfer", 0), reverse=True)
+    else:  # Data zamknięcia
+        filtered.sort(key=lambda x: x.get("closed_at", ""), reverse=True)
+    
+    st.markdown(f"**Znaleziono:** {len(filtered)} firm")
+    st.markdown("---")
+    
+    # Wyświetl firmy
+    for idx, entry in enumerate(filtered[:20], 1):  # Top 20
+        industry_icon = industry_names.get(entry.get("industry_id", ""), "🏢")
+        firm_name = entry.get("firm_name", "Firma")
+        username_display = entry.get("username", "Gracz")
+        
+        final_score = entry.get("final_score", 0)
+        final_level = entry.get("final_level", 1)
+        final_reputation = entry.get("final_reputation", 0)
+        final_money = entry.get("final_money", 0)
+        total_transfer = entry.get("total_transfer", 0)
+        closed_at = entry.get("closed_at", "N/A")
+        
+        # Medal dla TOP 3
+        if idx <= 3:
+            medal = "🥇" if idx == 1 else "🥈" if idx == 2 else "🥉"
+        else:
+            medal = f"#{idx}"
+        
+        # Kolor karty w zależności od transferu
+        if total_transfer >= 100000:
+            border_color = "#FFD700"  # Złoty - mega sukces
+        elif total_transfer >= 50000:
+            border_color = "#C0C0C0"  # Srebrny - duży sukces
+        elif total_transfer >= 0:
+            border_color = "#4CAF50"  # Zielony - sukces
+        else:
+            border_color = "#FF5722"  # Czerwony - strata
+        
+        st.markdown(f"""
+        <div style='border-left: 4px solid {border_color}; background: #f9f9f9; 
+                    padding: 16px; border-radius: 8px; margin-bottom: 12px;'>
+            <div style='display: flex; justify-content: space-between; align-items: start;'>
+                <div style='flex: 1;'>
+                    <h4 style='margin: 0 0 8px 0;'>{medal} {industry_icon} {firm_name}</h4>
+                    <p style='margin: 4px 0; color: #666; font-size: 13px;'>
+                        👤 {username_display} · 🎯 {scenario_names_map.get(entry.get('scenario_id', ''), 'Scenariusz')}
+                    </p>
+                    <p style='margin: 8px 0; font-size: 14px;'>
+                        🏆 Rating: <strong>{final_score}</strong> · 
+                        📈 Poziom: <strong>{final_level}</strong> · 
+                        ⭐ Reputacja: <strong>{final_reputation}</strong>
+                    </p>
+                    <p style='margin: 4px 0; font-size: 13px; color: #888;'>
+                        💼 Saldo końcowe: {final_money:,} PLN · 
+                        💰 Transfer: <strong style='color: {"green" if total_transfer >= 0 else "red"};'>{total_transfer:,}</strong> monet
+                    </p>
+                </div>
+                <div style='text-align: right; font-size: 11px; color: #999;'>
+                    🗓️ {closed_at}
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 # =============================================================================
 # SELEKTOR SCENARIUSZY
@@ -259,11 +421,7 @@ def show_scenario_selector(username, user_data, industry_id):
     from data.scenarios import get_available_scenarios
     from utils.business_game import initialize_business_game_with_scenario
     
-    # Przewiń na górę
-    scroll_to_top()
-    apply_material3_theme()
-    
-    # Nagłówek z możliwością powrotu
+    # Nazwy branż
     industry_names = {
         "consulting": "🎯 Consulting",
         "fmcg": "🛒 FMCG",
@@ -273,19 +431,11 @@ def show_scenario_selector(username, user_data, industry_id):
         "automotive": "🚗 Automotive"
     }
     
-    st.markdown(f"""
-    <div style='text-align: center; padding: 20px 0;'>
-        <h1 style='font-size: 42px; margin: 0;'>{industry_names.get(industry_id, "Business Game")}</h1>
-        <p style='font-size: 18px; color: #666; margin: 8px 0;'>Wybierz scenariusz rozgrywki</p>
-    </div>
-    """, unsafe_allow_html=True)
+    # Kompaktowy nagłówek bez zbędnej przestrzeni
+    st.markdown(f"<h2 style='margin: 0; padding: 0;'>{industry_names.get(industry_id, 'Business Game')}</h2>", unsafe_allow_html=True)
+    st.caption("Wybierz scenariusz rozgrywki")
     
-    # Przycisk powrotu
-    if st.button("← Powrót do wyboru branży", key="back_to_industries"):
-        st.session_state["selected_industry"] = None
-        st.rerun()
-    
-    st.markdown("---")
+    st.markdown("<div style='margin: 8px 0;'></div>", unsafe_allow_html=True)
     
     # Pobierz dostępne scenariusze
     scenarios = get_available_scenarios(industry_id)
@@ -294,9 +444,13 @@ def show_scenario_selector(username, user_data, industry_id):
         st.warning("Brak dostępnych scenariuszy dla tej branży.")
         return
     
-    # Wyświetl scenariusze w siatce 2x2
+    # Sortuj scenariusze - lifetime na końcu
     scenario_list = list(scenarios.items())
+    lifetime_scenarios = [s for s in scenario_list if s[1].get("is_lifetime", False)]
+    regular_scenarios = [s for s in scenario_list if not s[1].get("is_lifetime", False)]
+    scenario_list = regular_scenarios + lifetime_scenarios
     
+    # Wyświetl scenariusze w siatce 2x2
     for row in range(0, len(scenario_list), 2):
         cols = st.columns(2)
         
@@ -306,88 +460,121 @@ def show_scenario_selector(username, user_data, industry_id):
                 scenario_id, scenario_data = scenario_list[idx]
                 with cols[col_idx]:
                     render_scenario_card(scenario_id, scenario_data, industry_id, username, user_data)
+    
+    # Przycisk powrotu na dole
+    st.markdown("<div style='margin: 20px 0;'></div>", unsafe_allow_html=True)
+    if st.button("← Powrót do wyboru branży", key="back_to_industries", use_container_width=True):
+        st.session_state["selected_industry"] = None
+        st.rerun()
 
 def render_scenario_card(scenario_id, scenario_data, industry_id, username, user_data):
     """Renderuje kartę pojedynczego scenariusza"""
+    
+    # Sprawdź czy to tryb lifetime
+    is_lifetime = scenario_data.get("is_lifetime", False)
     
     # Mapowanie trudności na kolory
     difficulty_colors = {
         "easy": ("linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)", "#155724"),
         "medium": ("linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)", "#856404"),
         "hard": ("linear-gradient(135deg, #ff9a56 0%, #ff6a00 100%)", "#fff"),
-        "expert": ("linear-gradient(135deg, #ee0979 0%, #ff6a00 100%)", "#fff")
+        "expert": ("linear-gradient(135deg, #ee0979 0%, #ff6a00 100%)", "#fff"),
+        "open": ("linear-gradient(135deg, #667eea 0%, #764ba2 100%)", "#fff")  # Fioletowy dla lifetime
     }
     
     difficulty_badges = {
         "easy": "🟢 Łatwy",
         "medium": "🟡 Średni",
         "hard": "🟠 Trudny",
-        "expert": "🔴 Ekspert"
+        "expert": "🔴 Ekspert",
+        "open": "♾️ OPEN"  # Badge dla lifetime
     }
     
     gradient, text_color = difficulty_colors.get(scenario_data.get("difficulty", "medium"), difficulty_colors["medium"])
     difficulty_badge = difficulty_badges.get(scenario_data.get("difficulty", "medium"), "🟡 Średni")
     
-    # Karta scenariusza
+    # Karta scenariusza - kompaktowa wersja
     st.markdown(f"""
-    <div style='background: {gradient}; padding: 24px; border-radius: 16px; min-height: 400px; 
-                color: {text_color}; margin-bottom: 20px;'>
-        <div style='display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;'>
-            <h2 style='margin: 0; font-size: 28px;'>{scenario_data.get('icon', '🎮')} {scenario_data.get('name', 'Scenariusz')}</h2>
-            <div style='padding: 6px 12px; background: rgba(255,255,255,0.25); border-radius: 8px; 
-                        font-size: 12px; font-weight: 600; white-space: nowrap;'>
+    <div style='background: {gradient}; padding: 14px; border-radius: 12px; 
+                color: {text_color}; margin-bottom: 10px;'>
+        <div style='display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;'>
+            <h3 style='margin: 0; font-size: 17px;'>{scenario_data.get('icon', '🎮')} {scenario_data.get('name', 'Scenariusz')}</h3>
+            <div style='padding: 3px 7px; background: rgba(255,255,255,0.25); border-radius: 6px; 
+                        font-size: 9px; font-weight: 600; white-space: nowrap;'>
                 {difficulty_badge}
             </div>
         </div>
-        <p style='margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; opacity: 0.95;'>
+        <p style='margin: 0; font-size: 12px; line-height: 1.35; opacity: 0.95;'>
             {scenario_data.get('description', '')}
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Warunki startowe w ekspanderze
-    with st.expander("📋 Warunki startowe", expanded=False):
+    # Szczegóły scenariusza w jednym expanderze
+    with st.expander("📋 Szczegóły scenariusza", expanded=False):
+        # Warunki startowe
+        st.markdown("**💼 Warunki startowe:**")
         initial = scenario_data.get('initial_conditions', {})
         money = initial.get('money', 50000)
         reputation = initial.get('reputation', 50)
         office = initial.get('office_type', 'home_office')
         
-        money_color = "green" if money >= 0 else "red"
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("💰 Kapitał", f"{money:,} PLN")
+        with col2:
+            st.metric("⭐ Reputacja", f"{reputation}/100")
+        with col3:
+            st.metric("🏢 Biuro", office.replace('_', ' ').title())
         
-        st.markdown(f"""
-        - 💰 **Kapitał:** <span style='color: {money_color}; font-weight: bold;'>{money:,} PLN</span>
-        - ⭐ **Reputacja:** {reputation}/100
-        - 🏢 **Biuro:** {office.replace('_', ' ').title()}
-        """, unsafe_allow_html=True)
-    
-    # Modyfikatory jeśli istnieją
-    modifiers = scenario_data.get('modifiers', {})
-    if any(v != 1.0 for v in modifiers.values() if isinstance(v, (int, float))):
-        with st.expander("⚙️ Modyfikatory", expanded=False):
+        # Modyfikatory jeśli istnieją
+        modifiers = scenario_data.get('modifiers', {})
+        has_modifiers = any(v != 1.0 for v in modifiers.values() if isinstance(v, (int, float)))
+        
+        if has_modifiers:
+            st.markdown("---")
+            st.markdown("**⚙️ Modyfikatory:**")
+            mod_items = []
+            
             if modifiers.get('reputation_gain_multiplier', 1.0) != 1.0:
                 mult = modifiers['reputation_gain_multiplier']
                 change = f"+{int((mult - 1) * 100)}%" if mult > 1 else f"{int((mult - 1) * 100)}%"
-                st.markdown(f"- ⭐ Wzrost reputacji: **{change}**")
+                mod_items.append(f"⭐ Reputacja: **{change}**")
             
             if modifiers.get('revenue_multiplier', 1.0) != 1.0:
                 mult = modifiers['revenue_multiplier']
                 change = f"+{int((mult - 1) * 100)}%" if mult > 1 else f"{int((mult - 1) * 100)}%"
-                st.markdown(f"- 💵 Przychody: **{change}**")
+                mod_items.append(f"💵 Przychody: **{change}**")
             
             if modifiers.get('cost_multiplier', 1.0) != 1.0:
                 mult = modifiers['cost_multiplier']
                 change = f"+{int((mult - 1) * 100)}%" if mult > 1 else f"{int((mult - 1) * 100)}%"
-                st.markdown(f"- 💸 Koszty: **{change}**")
-    
-    # Cele
-    objectives = scenario_data.get('objectives', [])
-    if objectives:
-        with st.expander("🎯 Cele do osiągnięcia", expanded=True):
+                mod_items.append(f"💸 Koszty: **{change}**")
+            
+            for item in mod_items:
+                st.markdown(f"- {item}")
+        
+        # Cele - tylko jeśli to NIE jest tryb lifetime
+        objectives = scenario_data.get('objectives', [])
+        if objectives and not is_lifetime:
+            st.markdown("---")
+            st.markdown("**🎯 Cele do osiągnięcia:**")
             for obj in objectives:
-                st.markdown(f"- {obj.get('description', 'Cel')}")
+                reward = obj.get('reward_money', 0)
+                st.markdown(f"- {obj.get('description', 'Cel')} · 💎 **{reward:,}**")
+        elif is_lifetime:
+            st.markdown("---")
+            st.info("♾️ **Tryb nieskończony:** Graj bez ograniczeń i rywalizuj z innymi o najwyższy wynik w rankingu!")
     
-    # Przycisk rozpoczęcia
-    if st.button(f"🚀 Rozpocznij: {scenario_data.get('name', 'Scenariusz')}", 
+    # Status celów - kompaktowo poza expanderem
+    objectives = scenario_data.get('objectives', [])
+    if objectives and not is_lifetime:
+        st.caption(f"🎯 {len(objectives)} celów · 💎 {sum(obj.get('reward_money', 0) for obj in objectives):,} nagród")
+    elif is_lifetime:
+        st.caption("♾️ Tryb nieskończony - bez celów")
+    
+    # Przycisk rozpoczęcia - kompaktowy
+    if st.button(f"🚀 Rozpocznij", 
                  key=f"start_scenario_{scenario_id}", 
                  type="primary", 
                  use_container_width=True):
@@ -406,12 +593,10 @@ def render_scenario_card(scenario_id, scenario_data, industry_id, username, user
 def show_industry_game(username, user_data, industry_id):
     """Widok gry dla wybranej branży"""
     
-    # Przycisk powrotu
-    col_back, col_space = st.columns([1, 5])
-    with col_back:
-        if st.button("⬅️ Zmień branżę", key="back_to_selector"):
-            st.session_state["selected_industry"] = None
-            st.rerun()
+    # Pokaż wiadomość o przełączeniu (jeśli istnieje)
+    if "switch_message" in st.session_state:
+        st.success(st.session_state["switch_message"])
+        del st.session_state["switch_message"]
     
     # Nagłówek z nazwą branży
     industry_names = {
@@ -1682,6 +1867,290 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
         }
         save_game_data(user_data, bg_data, industry_id)
         save_user_data(username, user_data)
+    
+    # =============================================================================
+    # SEKCJA ZARZĄDZANIA GRĄ
+    # =============================================================================
+    
+    # Sprawdź czy to tryb lifetime
+    is_lifetime = bg_data.get("scenario_id") == "lifetime"
+    
+    with st.expander("⚙️ Zarządzanie Grą", expanded=False):
+        if is_lifetime:
+            st.markdown("### ♾️ Tryb Lifetime Challenge")
+            st.info("💡 Grasz w trybie nieskończonym! Rywalizuj z innymi w rankingu i buduj swoją firmę bez ograniczeń.")
+            st.markdown("---")
+        
+        # =============================================================================
+        # SEKCJA: OTWARTE FIRMY
+        # =============================================================================
+        st.markdown("### 🏢 Twoje otwarte firmy")
+        
+        # Pobierz wszystkie aktywne gry
+        active_games = user_data.get("business_games", {})
+        
+        if not active_games:
+            st.info("Nie masz jeszcze żadnych aktywnych firm.")
+        else:
+            # Nazwy branż i ikony
+            industry_info = {
+                "consulting": {"name": "Consulting", "icon": "💼"},
+                "fmcg": {"name": "FMCG", "icon": "🛒"},
+                "pharma": {"name": "Pharma", "icon": "💊"},
+                "banking": {"name": "Banking", "icon": "🏦"},
+                "insurance": {"name": "Insurance", "icon": "🛡️"},
+                "automotive": {"name": "Automotive", "icon": "🚗"}
+            }
+            
+            # Pobierz nazwy scenariuszy
+            from data.scenarios import get_scenario
+            
+            # Wyświetl każdą firmę jako kompaktową kartę
+            for game_industry_id, game_data in active_games.items():
+                info = industry_info.get(game_industry_id, {"name": game_industry_id, "icon": "🏢"})
+                scenario_id = game_data.get("scenario_id", "unknown")
+                scenario = get_scenario(game_industry_id, scenario_id)
+                scenario_name = scenario.get("name", "Nieznany scenariusz") if scenario else "Nieznany scenariusz"
+                
+                # Status firmy
+                level = game_data.get("level", 1)
+                reputation = game_data.get("reputation", 0)
+                
+                # Sprawdź czy to obecna firma
+                is_current = (game_industry_id == industry_id)
+                
+                # Karta firmy z możliwością przejścia
+                if is_current:
+                    # Obecna firma - wyróżniona
+                    st.markdown(f"""
+                    <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                padding: 12px; border-radius: 8px; margin-bottom: 8px; color: white;'>
+                        <div style='display: flex; justify-content: space-between; align-items: center;'>
+                            <div>
+                                <div style='font-weight: bold; font-size: 16px;'>{info['icon']} {info['name']}</div>
+                                <div style='font-size: 12px; opacity: 0.9;'>{scenario_name} · Poziom {level} · Reputacja {reputation}</div>
+                            </div>
+                            <div style='background: rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold;'>
+                                ▶ AKTYWNA
+                            </div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    # Inna firma - klikalna
+                    col_card, col_btn = st.columns([4, 1])
+                    with col_card:
+                        st.markdown(f"""
+                        <div style='background: #f5f5f5; border: 1px solid #e0e0e0;
+                                    padding: 12px; border-radius: 8px;'>
+                            <div style='font-weight: bold; font-size: 14px; color: #333;'>{info['icon']} {info['name']}</div>
+                            <div style='font-size: 11px; color: #666;'>{scenario_name} · Poziom {level} · Reputacja {reputation}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    with col_btn:
+                        if st.button("→", key=f"switch_to_{game_industry_id}", help=f"Przejdź do {info['name']}", use_container_width=True):
+                            # Przełącz branżę
+                            st.session_state["selected_industry"] = game_industry_id
+                            # Wyczyść stan zakładek, żeby wrócił do Dashboard
+                            if "active_tab" in st.session_state:
+                                del st.session_state["active_tab"]
+                            # Zapisz wiadomość o przełączeniu
+                            st.session_state["switch_message"] = f"Przełączono na {info['icon']} {info['name']}"
+                            st.rerun()
+        
+        st.markdown("---")
+        
+        # =============================================================================
+        # OPCJE ZARZĄDZANIA
+        # =============================================================================
+        st.markdown("### 🎮 Opcje zarządzania")
+        
+        # Siatka 2x2 dla 4 opcji
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("#### ➕ Otwórz nową firmę")
+            st.caption("Rozpocznij nową grę w innej branży. Obecna firma pozostanie aktywna.")
+            if st.button("➕ Nowa firma", type="secondary", use_container_width=True, key="new_firm_btn"):
+                st.session_state["selected_industry"] = None
+                st.rerun()
+        
+        with col2:
+            st.markdown("#### 🏆 Zamknij firmę")
+            st.caption("Zakończ tę firmę i przenieś ją do Hall of Fame z końcowym ratingiem.")
+            if st.button("🏆 Zamknij firmę", type="secondary", use_container_width=True, key="close_firm_btn"):
+                st.session_state["confirm_close_firm"] = True
+                st.rerun()
+        
+        # Dialog potwierdzenia zamknięcia firmy
+        if st.session_state.get("confirm_close_firm", False):
+            st.warning("⚠️ **Czy na pewno chcesz zamknąć tę firmę?**")
+            
+            # Oblicz końcowy rating
+            from utils.business_game import calculate_overall_score
+            final_score = calculate_overall_score(bg_data)
+            final_level = bg_data.get("level", 1)
+            final_reputation = bg_data.get("reputation", 0)
+            final_revenue = bg_data.get("stats", {}).get("total_revenue", 0)
+            final_money = bg_data.get("money", 0)  # Saldo firmy
+            
+            # Oblicz bonus za rating (im wyższy rating, tym wyższy bonus)
+            rating_bonus = int(final_score * 10)  # np. rating 100 = 1000 monet bonusu
+            
+            # Oblicz całkowity transfer do monet gracza
+            # Saldo firmy + bonus za rating
+            total_transfer = final_money + rating_bonus
+            
+            # Jeśli saldo ujemne, zastosuj "ochronę" - tylko 50% długu
+            if final_money < 0:
+                debt_protection = abs(final_money) * 0.5  # 50% długu odpuszczone
+                total_transfer = int(final_money * 0.5 + rating_bonus)  # połowa długu + bonus
+                protection_info = f"🛡️ Ochrona przed długiem: **{debt_protection:,.0f} PLN** odpuszczone (50%)"
+            else:
+                protection_info = ""
+            
+            st.markdown(f"""
+            **📊 Twój końcowy wynik:**
+            - 🏆 Rating: **{final_score}** punktów
+            - 📈 Poziom: **{final_level}**
+            - ⭐ Reputacja: **{final_reputation}**
+            - 💰 Łączny przychód: **{final_revenue:,} PLN**
+            - 💵 Saldo firmy: **{final_money:,} PLN**
+            - 🎁 Bonus za rating: **+{rating_bonus:,}** monet
+            
+            **💰 Realizacja zysków:**
+            - Transfer do portfela: **{total_transfer:,}** monet
+            {f"- {protection_info}" if protection_info else ""}
+            - Obecne monety: **{user_data.get('degencoins', 0):,}**
+            - Po zamknięciu: **{user_data.get('degencoins', 0) + total_transfer:,}** monet
+            
+            **Konsekwencje:**
+            - ✅ Firma trafi do **Hall of Fame** z Twoim wynikiem
+            - ❌ Nie będziesz już mógł w nią grać
+            - 💰 Otrzymasz przelew: **{total_transfer:,}** monet
+            - 🏢 Inne firmy pozostaną aktywne
+            """)
+            
+            col_confirm, col_cancel = st.columns(2)
+            with col_confirm:
+                if st.button("✅ TAK, zamknij firmę", type="primary", use_container_width=True, key="confirm_close_firm_yes"):
+                    # Oblicz transfer (ponownie, dla pewności)
+                    final_money = bg_data.get("money", 0)
+                    rating_bonus = int(final_score * 10)
+                    
+                    if final_money < 0:
+                        total_transfer = int(final_money * 0.5 + rating_bonus)
+                    else:
+                        total_transfer = final_money + rating_bonus
+                    
+                    # REALIZUJ ZYSKI/STRATY - przelew do portfela gracza
+                    user_data["degencoins"] = user_data.get("degencoins", 0) + total_transfer
+                    
+                    # Przygotuj dane do Hall of Fame
+                    if "hall_of_fame" not in user_data:
+                        user_data["hall_of_fame"] = []
+                    
+                    from datetime import datetime
+                    hall_entry = {
+                        "username": username,
+                        "industry_id": industry_id,
+                        "scenario_id": bg_data.get("scenario_id", "unknown"),
+                        "final_score": final_score,
+                        "final_level": final_level,
+                        "final_reputation": final_reputation,
+                        "final_revenue": final_revenue,
+                        "final_money": final_money,
+                        "rating_bonus": rating_bonus,
+                        "total_transfer": total_transfer,
+                        "employees_count": len(bg_data.get("employees", [])),
+                        "closed_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "firm_name": bg_data.get("firm_name", f"{username}'s Company")
+                    }
+                    
+                    user_data["hall_of_fame"].append(hall_entry)
+                    
+                    # Usuń firmę
+                    if industry_id in user_data.get("business_games", {}):
+                        del user_data["business_games"][industry_id]
+                    
+                    save_user_data(username, user_data)
+                    
+                    # Komunikat z wynikiem transferu
+                    if total_transfer >= 0:
+                        st.success(f"🏆 Firma zamknięta! Otrzymałeś **{total_transfer:,}** monet (saldo + bonus)!")
+                    else:
+                        st.warning(f"🏆 Firma zamknięta! Strata: **{total_transfer:,}** monet (50% długu po ochronie)")
+                    
+                    st.info(f"💰 Twoje nowe saldo: **{user_data['degencoins']:,}** monet")
+                    st.balloons()
+                    st.session_state["confirm_close_firm"] = False
+                    
+                    # Jeśli to była ostatnia firma, wróć do wyboru branży
+                    if not user_data.get("business_games", {}):
+                        st.session_state["selected_industry"] = None
+                    else:
+                        # Przejdź do pierwszej dostępnej firmy
+                        st.session_state["selected_industry"] = list(user_data["business_games"].keys())[0]
+                    
+                    time.sleep(2)
+                    st.rerun()
+            
+            with col_cancel:
+                if st.button("❌ Anuluj", use_container_width=True, key="confirm_close_firm_no"):
+                    st.session_state["confirm_close_firm"] = False
+                    st.rerun()
+        
+        st.markdown("---")
+        
+        # Pozostałe opcje w drugiej sekcji
+        st.markdown("### ⚙️ Zarządzanie scenariuszem")
+        
+        col3, col4 = st.columns(2)
+        
+        with col3:
+            st.markdown("#### 🔄 Zmień branżę")
+            st.caption("Przełącz się na inną branżę. Twoja aktualna gra zostanie zachowana.")
+            if st.button("🔄 Wybór branży", type="secondary", use_container_width=True, key="change_industry_btn2"):
+                st.session_state["selected_industry"] = None
+                st.rerun()
+        
+        with col4:
+            st.markdown("#### 🔄 Zresetuj scenariusz")
+            st.caption("Usuń obecny scenariusz i rozpocznij nowy w tej samej branży.")
+            
+            # Potwierdź akcję
+            if st.button("🔄 Resetuj", type="secondary", use_container_width=True, key="reset_scenario_btn"):
+                st.session_state["confirm_reset_scenario"] = True
+                st.rerun()
+        
+        # Dialog potwierdzenia resetowania scenariusza
+        if st.session_state.get("confirm_reset_scenario", False):
+            st.warning("⚠️ **Czy na pewno chcesz zresetować ten scenariusz?**")
+            st.markdown("""
+            Konsekwencje:
+            - ❌ Cała aktualna gra zostanie usunięta (NIE trafi do Hall of Fame)
+            - 🎯 Będziesz mógł wybrać nowy scenariusz w tej branży
+            - 💾 Inne branże pozostaną nienaruszone
+            - 💰 Zdobyte monety **zachowasz**
+            """)
+            
+            col_confirm, col_cancel = st.columns(2)
+            with col_confirm:
+                if st.button("✅ TAK, resetuj scenariusz", type="primary", use_container_width=True, key="confirm_reset_yes"):
+                    # Usuń grę z tej branży
+                    if industry_id in user_data.get("business_games", {}):
+                        del user_data["business_games"][industry_id]
+                        save_user_data(username, user_data)
+                        st.success("✅ Scenariusz zresetowany! Przekierowuję do wyboru nowego...")
+                        st.session_state["confirm_reset_scenario"] = False
+                        time.sleep(1)
+                        st.rerun()
+            with col_cancel:
+                if st.button("❌ Anuluj", use_container_width=True, key="confirm_reset_no"):
+                    st.session_state["confirm_reset_scenario"] = False
+                    st.rerun()
+    
+    st.markdown("---")
     
     # =============================================================================
     # SEKCJA BIURA
@@ -3464,7 +3933,7 @@ def show_rankings_tab(username, user_data, industry_id="consulting"):
                 <p style='margin:5px 0 0 0; color: #666;'>{score_label}: {score_display}{score_suffix}</p>
             </div>
             """, unsafe_allow_html=True)
-
+    
 def render_user_rank_highlight(bg_data, ranking_type):
     """Renderuje highlight pozycji użytkownika"""
     
