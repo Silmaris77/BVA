@@ -330,22 +330,33 @@ def can_accept_contract(business_data: Dict) -> Tuple[bool, str]:
     if active_count >= GAME_CONFIG["max_active_contracts"]:
         return False, f"Maksimum aktywnych kontraktów: {GAME_CONFIG['max_active_contracts']}"
     
-    # Sprawdź dzienny limit
+    # Sprawdź dzienny limit - liczymy WSZYSTKIE kontrakty dzisiaj (accepted + completed)
     today = datetime.now().strftime("%Y-%m-%d")
+    
+    # Kontrakty przyjęte dzisiaj (w active)
     today_accepted = sum(
         1 for c in business_data["contracts"]["active"] 
         if c.get("accepted_date", "").startswith(today)
     )
+    
+    # Kontrakty ukończone dzisiaj (w completed) - też się liczą do limitu!
+    today_completed = sum(
+        1 for c in business_data["contracts"]["completed"]
+        if c.get("completed_date", "").startswith(today)
+    )
+    
+    # Suma = przyjęte + ukończone dzisiaj
+    today_total = today_accepted + today_completed
     
     capacity = calculate_daily_capacity(
         business_data["firm"]["level"], 
         business_data["employees"]
     )
     
-    if today_accepted >= capacity:
-        return False, f"Dzienny limit kontraktów wyczerpany ({capacity})"
+    if today_total >= capacity:
+        return False, f"⏰ Dzienny limit kontraktów wyczerpany ({today_total}/{capacity}). Przyjęto/ukończono już {today_total} kontrakt(ów) dzisiaj. Wróć jutro lub awansuj firmę!"
     
-    if today_accepted >= GAME_CONFIG["max_daily_contracts"]:
+    if today_total >= GAME_CONFIG["max_daily_contracts"]:
         return False, f"Absolutny dzienny limit: {GAME_CONFIG['max_daily_contracts']}"
     
     return True, ""

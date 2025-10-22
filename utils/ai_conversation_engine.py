@@ -7,12 +7,73 @@ Zamiast klikać w gotowe odpowiedzi, gracz pisze swoje własne, a AI:
 - Ocenia jakość odpowiedzi (empathy, assertiveness, professionalism)
 - Generuje dynamiczną reakcję NPC
 - Prowadzi rozmowę dalej w oparciu o kontekst
+- Generuje głos dla odpowiedzi NPC (TTS)
 """
 
 import streamlit as st
 from datetime import datetime
 from typing import Dict, List, Tuple, Optional
 import google.generativeai as genai
+import os
+import base64
+from pathlib import Path
+
+# Dodatkowy import dla TTS
+try:
+    from gtts import gTTS
+    TTS_AVAILABLE = True
+except ImportError:
+    TTS_AVAILABLE = False
+
+
+def generate_npc_audio(text: str, npc_config: Dict) -> Optional[str]:
+    """
+    Generuje plik audio z tekstem NPC używając gTTS.
+    
+    Args:
+        text: Tekst do wypowiedzenia
+        npc_config: Konfiguracja NPC (dla dostosowania głosu)
+        
+    Returns:
+        Base64 encoded audio data lub None jeśli TTS niedostępne
+    """
+    if not TTS_AVAILABLE or not text:
+        return None
+    
+    try:
+        # Określ język i parametry głosu
+        lang = "pl"  # Polski
+        slow = False  # Normalna prędkość
+        
+        # Opcjonalnie: dostosuj parametry na podstawie emocji/roli NPC
+        # Dla przykładu - można rozszerzyć o różne głosy/tempo
+        
+        # Generuj audio
+        tts = gTTS(text=text, lang=lang, slow=slow)
+        
+        # Zapisz do tymczasowego pliku
+        temp_dir = Path("temp")
+        temp_dir.mkdir(exist_ok=True)
+        
+        audio_file = temp_dir / f"npc_audio_{datetime.now().timestamp()}.mp3"
+        tts.save(str(audio_file))
+        
+        # Odczytaj jako base64
+        with open(audio_file, "rb") as f:
+            audio_bytes = f.read()
+            audio_base64 = base64.b64encode(audio_bytes).decode()
+        
+        # Usuń tymczasowy plik
+        try:
+            audio_file.unlink()
+        except:
+            pass
+        
+        return audio_base64
+        
+    except Exception as e:
+        print(f"TTS Error: {e}")
+        return None
 
 
 def initialize_ai_conversation(contract_id: str, npc_config: Dict, scenario_context: str):
@@ -48,11 +109,14 @@ def initialize_ai_conversation(contract_id: str, npc_config: Dict, scenario_cont
         
         # NPC sends opening message
         opening_message = npc_config.get("opening_message", "Dzień dobry.")
+        opening_audio = generate_npc_audio(opening_message, npc_config)
+        
         st.session_state[conv_key]["messages"].append({
             "role": "npc",
             "text": opening_message,
             "timestamp": datetime.now().strftime("%H:%M:%S"),
-            "emotion": npc_config.get("initial_emotion", "neutral")
+            "emotion": npc_config.get("initial_emotion", "neutral"),
+            "audio": opening_audio
         })
 
 
@@ -248,6 +312,10 @@ Zwróć odpowiedź w DOKŁADNIE tym formacie JSON (tylko JSON, bez markdown):
         
         import json
         reaction = json.loads(result_text)
+        
+        # Generate audio for NPC response
+        audio_data = generate_npc_audio(reaction.get("text", ""), npc_config)
+        reaction["audio"] = audio_data
         return reaction
         
     except Exception as e:
@@ -322,7 +390,8 @@ def process_player_message(
         "role": "npc",
         "text": npc_reaction["text"],
         "timestamp": datetime.now().strftime("%H:%M:%S"),
-        "emotion": npc_reaction["emotion"]
+        "emotion": npc_reaction["emotion"],
+        "audio": npc_reaction.get("audio")  # Dodaj audio do historii
     })
     
     # Check if conversation should end

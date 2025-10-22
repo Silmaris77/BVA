@@ -5,6 +5,7 @@ Widok główny z zakładkami: Dashboard, Rynek Kontraktów, Pracownicy, Rankingi
 
 import streamlit as st
 from datetime import datetime, timedelta
+from typing import Dict, List, Optional
 import time
 import plotly.graph_objects as go
 
@@ -24,6 +25,22 @@ from utils.scroll_utils import scroll_to_top
 # =============================================================================
 # FUNKCJE POMOCNICZE
 # =============================================================================
+
+def get_contract_reward_coins(contract: Dict) -> int:
+    """Bezpieczne pobranie nagród w monetach z kontraktu (obsługa starych i nowych formatów)"""
+    reward_data = contract.get("reward", 0)
+    if isinstance(reward_data, dict):
+        return reward_data.get("coins", 0)
+    return reward_data  # Stary format - reward jako int
+
+
+def get_contract_reward_reputation(contract: Dict) -> int:
+    """Bezpieczne pobranie nagród w reputacji z kontraktu"""
+    reward_data = contract.get("reward", 0)
+    if isinstance(reward_data, dict):
+        return reward_data.get("reputation", 0)
+    return 0  # Stary format nie miał reputacji w reward
+
 
 def get_game_data(user_data, industry_id="consulting"):
     """Pobiera dane gry dla wybranej branży (z backward compatibility)"""
@@ -1191,8 +1208,80 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
     
     st.markdown("---")
     
+    # =============================================================================
+    # SEKCJA OSTATNIO UKOŃCZONYCH KONTRAKTÓW - NOWOŚĆ!
+    # =============================================================================
+    
+    completed_contracts = bg_data.get("contracts", {}).get("completed", [])
+    
+    # Pokaż maksymalnie 3 ostatnio ukończone kontrakty
+    recent_completed = sorted(
+        completed_contracts,
+        key=lambda x: x.get("completed_date", ""),
+        reverse=True
+    )[:3]
+    
+    if recent_completed:
+        st.subheader("🎯 Ostatnio Ukończone Kontrakty")
+        st.caption("Zobacz wyniki swoich ostatnich kontraktów - nie musisz wchodzić w Historię!")
+        
+        # Wyświetl w kompaktowej formie
+        for contract in recent_completed:
+            rating = contract.get("rating", 0)
+            reward_coins = get_contract_reward_coins(contract)
+            rep_change = get_contract_reward_reputation(contract)
+            
+            # Kolor na podstawie oceny
+            if rating >= 4:
+                border_color = "#10b981"
+                bg_color = "#f0fdf4"
+            elif rating >= 3:
+                border_color = "#f59e0b"
+                bg_color = "#fffbeb"
+            else:
+                border_color = "#ef4444"
+                bg_color = "#fef2f2"
+            
+            with st.expander(
+                f"{contract.get('emoji', '📋')} {contract.get('tytul', 'Kontrakt')} · {'⭐' * rating} · {reward_coins:,} 💰",
+                expanded=False
+            ):
+                # Kompaktowy widok wyniku
+                st.markdown(f"""
+                <div style='border-left: 5px solid {border_color}; 
+                            background: {bg_color};
+                            padding: 15px; 
+                            margin: 10px 0; 
+                            border-radius: 8px;'>
+                    <p style='margin: 0; color: #666; font-size: 0.9em;'>
+                        <strong>Klient:</strong> {contract.get('klient', 'N/A')} | 
+                        <strong>Ukończono:</strong> {contract.get('completed_date', 'N/A')}
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Metryki
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("⭐ Ocena", f"{rating}/5")
+                with col2:
+                    st.metric("💰 Zarobiono", f"{reward_coins:,}")
+                with col3:
+                    rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
+                    st.metric("📈 Reputacja", rep_display)
+                
+                # Feedback
+                st.markdown("### 💬 Feedback od klienta:")
+                feedback = contract.get("feedback", "Brak feedbacku")
+                st.markdown(feedback)
+                
+                # Link do pełnej historii
+                st.info("💡 Pełne szczegóły kontraktu (opis, zadanie, Twoje rozwiązanie) znajdziesz w zakładce **'📜 Historia & Wydarzenia'**")
+        
+        st.markdown("---")
+    
     # NOWY WYKRES FINANSOWY z kontrolkami
-    st.subheader("� Analiza Finansowa")
+    st.subheader("📊 Analiza Finansowa")
     
     # Kontrolki
     col_chart1, col_chart2 = st.columns([3, 1])
@@ -1939,7 +2028,7 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
     with col_filter3:
         sort_by = st.selectbox(
             "Sortuj:",
-            ["Nagroda: najwyższe", "Nagroda: najniższe", "Trudność: rosnąco", "Czas: najkrótsze"],
+            ["Trudność: rosnąco", "Nagroda: najwyższe", "Nagroda: najniższe", "Czas: najkrótsze"],
             key="contracts_sort_by"
         )
     
@@ -1956,13 +2045,13 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
         diff_level = len(difficulty_filter)
         available_contracts = [c for c in available_contracts if c["trudnosc"] == diff_level]
     
-    # Sortowanie
-    if sort_by == "Nagroda: najwyższe":
+    # Sortowanie (domyślnie: Trudność rosnąco - najłatwiejsze na początku)
+    if sort_by == "Trudność: rosnąco":
+        available_contracts = sorted(available_contracts, key=lambda x: x["trudnosc"])
+    elif sort_by == "Nagroda: najwyższe":
         available_contracts = sorted(available_contracts, key=lambda x: x["nagroda_5star"], reverse=True)
     elif sort_by == "Nagroda: najniższe":
         available_contracts = sorted(available_contracts, key=lambda x: x["nagroda_base"])
-    elif sort_by == "Trudność: rosnąco":
-        available_contracts = sorted(available_contracts, key=lambda x: x["trudnosc"])
     elif sort_by == "Czas: najkrótsze":
         available_contracts = sorted(available_contracts, key=lambda x: x["czas_realizacji_dni"])
     
@@ -2067,8 +2156,9 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
             messages = conversation.get("messages", [])
             for msg in messages:
                 role = msg.get("role", "")
-                content = msg.get("content", "")
+                content = msg.get("text", msg.get("content", ""))  # Obsługa obu kluczy
                 timestamp = msg.get("timestamp", "")
+                audio_data = msg.get("audio")
                 
                 if role == "npc":
                     st.markdown(f"""
@@ -2080,14 +2170,22 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
                         <div style='color: #1e293b;'>{content}</div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
+                    # Odtwórz audio jeśli dostępne
+                    if audio_data:
+                        import base64
+                        audio_bytes = base64.b64decode(audio_data)
+                        st.audio(audio_bytes, format="audio/mp3")
+                        
                 elif role == "player":
+                    content_text = msg.get("text", msg.get("content", ""))
                     st.markdown(f"""
                     <div style='background: #dbeafe; padding: 12px; border-radius: 8px; 
                                 margin: 8px 0; border-left: 4px solid #3b82f6;'>
                         <div style='font-size: 12px; color: #64748b; margin-bottom: 4px;'>
                             🎮 <strong>Ty</strong> · {timestamp}
                         </div>
-                        <div style='color: #1e293b;'>{content}</div>
+                        <div style='color: #1e293b;'>{content_text}</div>
                     </div>
                     """, unsafe_allow_html=True)
         
@@ -2171,7 +2269,7 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         with chat_container:
             for msg in messages:
                 role = msg.get("role", "")
-                content = msg.get("content", "")
+                content = msg.get("text", msg.get("content", ""))  # Obsługa obu kluczy
                 timestamp = msg.get("timestamp", "")
                 emotion = msg.get("emotion", "neutral")
                 
@@ -2198,6 +2296,14 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
                         <div style='color: #334155; line-height: 1.6;'>{content}</div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
+                    # Odtwórz audio jeśli dostępne
+                    audio_data = msg.get("audio")
+                    if audio_data:
+                        # Dekoduj base64 i wyświetl odtwarzacz
+                        import base64
+                        audio_bytes = base64.b64decode(audio_data)
+                        st.audio(audio_bytes, format="audio/mp3")
                     
                 elif role == "player":
                     st.markdown(f"""
@@ -2372,15 +2478,15 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new,
             with col_b:
                 st.markdown(f"**📂 Kategoria:** {contract['kategoria']}")
         
-        # Przycisk przyjęcia
-        col1, col2, col3 = st.columns([2, 1, 2])
+        # Przycisk przyjęcia - szerszy dla lepszej czytelności na laptopach
+        col1, col2, col3 = st.columns([1, 3, 1])
         
         with col2:
             # Sprawdź możliwość przyjęcia
             if not can_accept_new:
-                st.error("❌ Brak miejsca")
+                st.button("❌ Brak miejsca", key=f"no_space_{contract['id']}", disabled=True, use_container_width=True)
             else:
-                if st.button("✅ Przyjmij", key=f"accept_{contract['id']}", type="primary", use_container_width=True):
+                if st.button("✅ Przyjmij kontrakt", key=f"accept_{contract['id']}", type="primary", use_container_width=True):
                     updated_bg, success, message, _ = accept_contract(bg_data, contract['id'], user_data)
                     
                     if success:
@@ -3575,7 +3681,14 @@ def show_category_analysis(financial_data, bg_data):
     
     for contract in completed:
         category = contract.get("kategoria", "other")
-        reward = contract.get("reward", {}).get("coins", 0)
+        
+        # Obsługa różnych formatów reward (dict lub int)
+        reward_data = contract.get("reward", 0)
+        if isinstance(reward_data, dict):
+            reward = reward_data.get("coins", 0)
+        else:
+            reward = reward_data  # Stary format - reward jako int
+        
         rating = contract.get("rating", 0)
         
         if category not in category_stats:
@@ -3643,10 +3756,10 @@ def show_category_analysis(financial_data, bg_data):
     for category, stats in category_stats.items():
         all_contracts.extend(stats["contracts"])
     
-    top_contracts = sorted(all_contracts, key=lambda x: x.get("reward", {}).get("coins", 0), reverse=True)[:5]
+    top_contracts = sorted(all_contracts, key=lambda x: get_contract_reward_coins(x), reverse=True)[:5]
     
     for i, contract in enumerate(top_contracts, 1):
-        reward = contract.get("reward", {}).get("coins", 0)
+        reward = get_contract_reward_coins(contract)
         rating = contract.get("rating", 0)
         st.markdown(f"""
         **{i}. {contract.get('emoji', '📋')} {contract.get('tytul', 'Nieznany')}**  
@@ -3830,7 +3943,7 @@ def render_completed_contract_card(contract):
     rating = contract.get("rating", 0)
     feedback = contract.get("feedback", "Brak feedbacku")
     completed_date = contract.get("completed_date", "Nieznana data")
-    reward_coins = contract.get("reward", {}).get("coins", 0)
+    reward_coins = get_contract_reward_coins(contract)
     
     # Status koloru na podstawie oceny
     if rating >= 4:
@@ -3870,7 +3983,7 @@ def render_completed_contract_card(contract):
             coin_display = f"{reward_coins} monet" if reward_coins > 0 else "0 monet (odrzucono)"
             st.metric("💰 Zarobiono", coin_display)
         with col3:
-            rep_change = contract.get("reward", {}).get("reputation", 0)
+            rep_change = get_contract_reward_reputation(contract)
             # Wyświetl znak + lub - w zależności od wartości
             rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
             st.metric("📈 Reputacja", rep_display)
@@ -4384,7 +4497,7 @@ def show_rankings_tab(username, user_data, industry_id="consulting"):
                         completed_date = datetime.strptime(completed_date_str, "%Y-%m-%d %H:%M:%S")
                         if completed_date >= thirty_days_ago:
                             contracts_30d += 1
-                            revenue_30d += contract.get("reward", {}).get("coins", 0)
+                            revenue_30d += get_contract_reward_coins(contract)
                             rating = contract.get("rating", 0)
                             if rating > 0:
                                 ratings_30d.append(rating)
@@ -4520,11 +4633,11 @@ def show_instructions_tab():
     st.markdown("""
     ### 🎯 Cel Gry
     
-    Twoim celem jest **zbudowanie i rozwinięcie firmy konsultingowej**, realizując kontrakty dla klientów,
-    zarządzając zespołem pracowników i reagując na losowe wydarzenia rynkowe.
+    Twoim celem jest **zbudowanie i rozwinięcie firmy konsultingowej CIQ** od Solo Consultant do globalnego imperium,
+    realizując kontrakty dla klientów, zarządzając zespołem pracowników i reagując na losowe wydarzenia rynkowe.
     
     **Wygrywasz, gdy:**
-    - Osiągniesz najwyższy poziom firmy
+    - Osiągniesz poziom 10: **CIQ Empire** (180,000+ PLN, 5500+ reputacji)
     - Zdobędziesz najwięcej przychodów
     - Uzyskasz najlepszą średnią ocenę kontraktów
     """)
@@ -4538,27 +4651,90 @@ def show_instructions_tab():
         st.markdown("""
         ### 💼 Kontrakty
         
-        **Jak działają kontrakty?**
+        **Typy kontraktów:**
+        - 💼 **Standard** - podstawowe zlecenia (warsztaty, audyty)
+        - ⭐ **Premium** - wysokopłatne projekty (wymagają reputacji)
+        - 💬 **AI Conversation** - rozmowy z NPC + ocena komunikacji (NOWOŚĆ!)
+        
+        **Jak działają kontrakty Standard/Premium?**
         1. W zakładce **"Rynek Kontraktów"** wybierz dostępne zlecenia
         2. Każdy kontrakt ma:
            - 🔥 **Trudność** (1-5 płomyków)
            - 💰 **Nagrodę** (zależną od oceny 1-5⭐)
-           - ⏱️ **Czas realizacji** (dni do deadline)
-           - 📋 **Kategorię** (Konflikt, Coaching, Kryzys, Leadership, Kultura)
+           - ⭐ **Bonus reputacji**
+           - 📋 **Kategorię** (Konflikt, Coaching, Kryzys, Leadership)
         
-        **Przyjmowanie kontraktów:**
-        - Możesz mieć max **3 aktywne kontrakty** jednocześnie
-        - Dziennie możesz przyjąć **2 nowe kontrakty** (zależy od poziomu firmy)
-        - Nie możesz przyjąć więcej niż masz pojemności
+        **💬 AI Conversations - NOWOŚĆ!**
+        - **Ikona:** 💬 (łatwo rozpoznać na rynku)
+        - **Jak działa:** Prowadzisz rzeczywistą rozmowę z AI-sterowanym NPC
+        - **🔊 Text-to-Speech:** Każda odpowiedź NPC jest czytana polskim głosem!
+        - **Metryki na żywo:** Sidebar pokazuje empatię, asertywność, profesjonalizm
+        - **Dynamiczne reakcje:** AI reaguje na to co piszesz
+        - **Scenariusze:** Mark (spóźniający się programista), Michael (trudne negocjacje)
         
         **Wykonywanie kontraktów:**
-        1. Nagrywasz audio lub wpisujesz tekst
-        2. AI ocenia Twoją odpowiedź (1-5⭐)
-        3. Otrzymujesz nagrodę zgodnie z oceną
-        4. Masz **3 próby** na każdy kontrakt
+        1. Kliknij kontrakt w "Aktywne Kontrakty"
+        2. Standard/Premium: Audio/tekst → AI ocenia (1-5⭐)
+        3. AI Conversation: Prowadź rozmowę → końcowa ocena 1-5⭐
+        4. Masz **3 próby** na kontrakty Standard/Premium
         """)
     
     with col2:
+        st.markdown("""
+        ### 🏢 10 Poziomów Firmy
+        
+        **Twoja firma rozwija się przez 10 poziomów:**
+        
+        | Poziom | Nazwa | PLN | Reputacja | Pracownicy | Kontrakty/dzień |
+        |--------|-------|-----|-----------|------------|-----------------|
+        | 1 | Solo Consultant | 0 | 0 | 0 | 1 |
+        | 2 | Boutique Consulting | 2k | 100 | 2 | 1 |
+        | 3 | CIQ Advisory | 5k | 300 | 3 | 1 |
+        | 4 | Strategic Partners | 10k | 600 | 5 | 2 |
+        | 5 | Elite Consulting | 20k | 1000 | 7 | 2 |
+        | 6 | Regional Leaders | 35k | 1500 | 10 | 2 |
+        | 7 | National Authority | 55k | 2200 | 15 | 3 |
+        | 8 | Global Partners | 80k | 3000 | 20 | 3 |
+        | 9 | Worldwide Corp. | 120k | 4000 | 30 | 4 |
+        | 10 | CIQ Empire | 180k | 5500 | 50 | 5 |
+        
+        **Kluczowe mechaniki:**
+        - 💰 Zbieraj pieniądze realizując kontrakty
+        - ⭐ Buduj reputację wysokiej jakości pracą
+        - 👥 Zatrudniaj pracowników (koszt: 500 PLN/osoba/dzień)
+        - 📈 Wyższe poziomy = więcej możliwości!
+        """)
+    
+    st.markdown("---")
+    
+    # Mechaniki gry
+    col3, col4 = st.columns(2)
+    
+    with col3:
+        st.markdown("""
+        ### 🎲 Wydarzenia Losowe
+        
+        Co turę (dzień) jest **10% szans** na wydarzenie:
+        
+        **🌱 Dla początkujących (poziom 1-2):**
+        - ☕ "Kawa na klawiaturze" (-200 PLN)
+        - 📡 "Przerwa w internecie" (-150 PLN)
+        - 🔧 "Drobna awaria sprzętu" (-300 PLN)
+        
+        **📈 Dla rozwijających się (poziom 3-5):**
+        - 📋 "Konkurencja podbiła ofertę" (strata kontraktu)
+        - 💼 "Nieoczekiwany kontrakt premium" (+1500 PLN)
+        - 🎯 "Polecenie od klienta" (+300 reputacji)
+        
+        **🏆 Dla dużych firm (poziom 6+):**
+        - ⚡ "Poważna awaria" (-1000 PLN + opóźnienie)
+        - 🏆 "Nagroda branżowa" (+500 reputacji)
+        - 🌍 "Międzynarodowy projekt" (+3000 PLN)
+        
+        **System jest zbalansowany:** 60% pozytywne/neutralne, 40% negatywne
+        """)
+    
+    with col4:
         st.markdown("""
         ### 👥 Pracownicy
         
@@ -4574,57 +4750,9 @@ def show_instructions_tab():
         - 🚀 **Ekspert** - zwiększa nagrody (+15%)
         
         **Pamiętaj:**
-        - Każdy pracownik generuje **koszty dzienne**
-        - Możesz zwolnić pracownika, ale stracisz bonusy
-        - Im wyższy poziom, tym lepsze korzyści
-        """)
-    
-    st.markdown("---")
-    
-    # Mechaniki gry
-    col3, col4 = st.columns(2)
-    
-    with col3:
-        st.markdown("""
-        ### 🎲 Wydarzenia Losowe
-        
-        Co jakiś czas wystąpią **wydarzenia rynkowe**:
-        
-        **Typy wydarzeń:**
-        - ✅ **Pozytywne** - bonusy, rabaty, nagrody
-        - ❌ **Negatywne** - koszty, trudności, ograniczenia
-        - ⚖️ **Neutralne** - wybierasz opcję A lub B
-        
-        **Przykłady:**
-        - 💰 Bonus do następnego kontraktu (+50% nagrody)
-        - 📉 Spadek na rynku (dodatkowe koszty)
-        - 🎁 Darmowy pracownik na 3 dni
-        - 🎯 Wybór: inwestycja lub oszczędności
-        
-        Wydarzenia są **losowe** i wpływają na strategię!
-        """)
-    
-    with col4:
-        st.markdown("""
-        ### 📈 Rozwój Firmy
-        
-        **Poziomy firmy (1-5):**
-        
-        Każdy poziom wymaga **określonej liczby monet** (💰):
-        - Poziom 2: 2000💰
-        - Poziom 3: 5000💰
-        - Poziom 4: 10000💰
-        - Poziom 5: 20000💰
-        
-        **Korzyści wyższego poziomu:**
-        - Więcej miejsc na pracowników
-        - Większa pojemność dzienna kontraktów
-        - Odblokowujesz trudniejsze (i lepiej płatne) zlecenia
-        
-        **Jak zdobywać monety?**
-        - Wykonuj kontrakty (nagrody)
-        - Unikaj zbyt wysokich kosztów
-        - Zarządzaj zespołem efektywnie
+        - Każdy pracownik: **500 PLN/dzień**
+        - Limit zależy od poziomu firmy
+        - ROI: Pracownik powinien generować >500 PLN/dzień wartości
         """)
     
     st.markdown("---")
@@ -4634,23 +4762,30 @@ def show_instructions_tab():
     ### 💡 Wskazówki i Strategia
     
     #### ✅ Dobre praktyki:
-    - **Na początku:** Bierz łatwe kontrakty (🔥), buduj kapitał i doświadczenie
-    - **Zatrudniaj mądrze:** Junior Analityk to świetny pierwszy pracownik (bonus do ocen)
-    - **Sprawdzaj deadline:** Nie przyjmuj więcej niż możesz wykonać w terminie
-    - **Wykorzystuj bonusy:** Gdy masz event z bonusem, weź najlepszy kontrakt
-    - **Balansuj koszty:** Zbyt wielu pracowników = wysokie koszty dzienne
+    - **Poziom 1-2:** Zbieraj pieniądze z tanich kontraktów, NIE zatrudniaj (za drogie!)
+    - **Wypróbuj AI Conversations:** Ikona 💬 - trening komunikacji + dobre nagrody + słuchaj NPC!
+    - **Buduj reputację:** Poziom 4-5 wymaga 600-1000 reputacji - rób premium kontrakty
+    - **Zarządzaj kapitałem:** Trzymaj zawsze 3x więcej niż koszty dzienne (np. 3 pracowników = 1500 PLN/dzień → trzymaj 4500+ PLN)
+    - **Poziom 4+ (2 kontrakty/dzień):** Teraz możesz zatrudniać rentownie!
     
     #### ❌ Unikaj:
-    - Przyjmowania kontraktów na ostatnią chwilę przed deadline
-    - Zatrudniania za dużo pracowników bez stabilnych przychodów
-    - Ignorowania wydarzeń - mogą dać duże korzyści!
-    - Marnowania wszystkich 3 prób na trudny kontrakt bez przygotowania
+    - Zatrudniania za wcześnie (poziom 1-2) - spalenie kapitału
+    - Ignorowania reputacji - blokuje awans na wyższe poziomy
+    - Przyjmowania więcej kontraktów niż możesz wykonać
+    - Bankructwa - brak pieniędzy = automatyczne zwolnienia
     
-    #### 🎯 Pro tipy:
-    - **Senior Analityk** daje +1⭐ do oceny - świetna inwestycja!
-    - **Mid Manager** zwiększa pojemność - więcej kontraktów = więcej pieniędzy
-    - Obserwuj **Rankingi** - zobacz co robią najlepsi gracze
-    - **Historia transakcji** pokazuje Twoje przychody i koszty - analizuj!
+    #### 🎯 Pro tipy dla AI Conversations:
+    - **🔊 Słuchaj audio:** Każda odpowiedź NPC jest czytana polskim głosem - możesz odtworzyć ponownie!
+    - **Mark (Spóźniający się Talent):** Potrzebuje empatii + granic. Odkryj problem rodzinny.
+    - **Michael (Trudne Negocjacje):** Testuje Twoją pewność siebie. Komunikuj wartość, nie ulegaj.
+    - **Metryki:** Sidebar pokazuje na żywo jak sobie radzisz (empatia, asertywność, etc.)
+    - **Możesz grać ponownie:** Nie udało się? Kliknij "Zagraj ponownie" i spróbuj innej strategii!
+    
+    #### 🚀 Ścieżka Fast-Track (najszybsza droga do poziomu 10):
+    1. **Poziom 1:** 5 kontraktów standard → 2500 PLN
+    2. **Poziom 2:** Zatrudnij 1 pracownika, 2 kontrakty/dzień → 5000 PLN
+    3. **Poziom 3:** Zatrudnij 2, fokus premium → 10,000 PLN
+    4. **Poziom 4+:** Skaluj agresywnie - każdy poziom = więcej kontraktów = szybsza progresja!
     """)
     
     st.markdown("---")
@@ -4658,29 +4793,47 @@ def show_instructions_tab():
     # FAQ
     with st.expander("❓ Najczęściej zadawane pytania (FAQ)"):
         st.markdown("""
+        **Q: Gdzie zobaczę wyniki po wykonaniu kontraktu?**  
+        A: **Dashboard!** Po wykonaniu kontraktu wróć do zakładki "🏢 Dashboard". W sekcji **"🎯 Ostatnio ukończone kontrakty"** zobaczysz ocenę, zarobek, reputację i feedback od klienta. Nie musisz wchodzić w "Historia & Wydarzenia" - wszystko jest na Dashboard!
+        
+        **Q: Nie widzę kontraktów AI (💬) na rynku?**  
+        A: Kontrakty AI mają poziom trudności 1 - powinny być widoczne od razu. Spróbuj "🔄 Wymuś odświeżenie".
+        
+        **Q: Jak działa Text-to-Speech w AI Conversations?**  
+        A: Każda odpowiedź NPC jest automatycznie czytana polskim głosem (gTTS). Odtwarzacz pojawia się pod wiadomością - kliknij play!
+        
+        **Q: Czy mogę posłuchać odpowiedzi NPC ponownie?**  
+        A: Tak! Audio jest zachowane w historii rozmowy - możesz odtworzyć każdą wiadomość wielokrotnie.
+        
+        **Q: Ile poziomów firmy jest w grze?**  
+        A: **10 poziomów** - od "Solo Consultant" (poziom 1) do "CIQ Empire" (poziom 10). Wymagane: 180,000+ PLN i 5500+ reputacji.
+        
+        **Q: Co to jest reputacja i jak ją zdobyć?**  
+        A: Reputacja odblokowuje wyższe poziomy firmy. Zdobywasz ją wykonując kontrakty (+10-50 za każdy). Premium kontrakty dają więcej!
+        
         **Q: Ile razy mogę próbować wykonać kontrakt?**  
-        A: Masz **3 próby** na każdy kontrakt. Po 3 nieudanych próbach kontrakt przepada.
+        A: **3 próby** na kontrakty Standard/Premium. AI Conversations: możesz "Zagraj ponownie" bez limitu.
         
-        **Q: Co się stanie jak przekroczę deadline?**  
-        A: Kontrakt automatycznie przepada i tracisz szansę na nagrodę. Uważaj na czas!
+        **Q: Co się stanie jak zabraknie mi pieniędzy?**  
+        A: **Bankructwo** - system automatycznie zwolni pracowników aby pokryć koszty. Unikaj tego! Trzymaj zawsze zapas.
         
-        **Q: Czy mogę zmienić pracownika?**  
-        A: Tak, możesz zwolnić i zatrudnić nowego, ale stracisz bonusy poprzedniego.
+        **Q: Czy mogę zatrudnić więcej pracowników niż limit?**  
+        A: Nie. Każdy poziom firmy ma maksymalną pojemność pracowników. Musisz awansować firmę.
         
-        **Q: Jak często odświeża się pula kontraktów?**  
-        A: Co **24 godziny** (o północy). Możesz też użyć przycisku "Wymuś odświeżenie".
+        **Q: Jak działa dzienny limit kontraktów?**  
+        A: Limit liczy **WSZYSTKIE kontrakty dzisiaj** (przyjęte + ukończone). Poziom 1-3 = 1/dzień, poziom 4-6 = 2/dzień, itd. **WAŻNE:** Ukończenie kontraktu nie resetuje limitu - musisz poczekać do jutra!
         
-        **Q: Co daje wyższy poziom firmy?**  
-        A: Więcej miejsc na pracowników, większa pojemność dzienna, dostęp do lepszych kontraktów.
+        **Q: Kiedy powinienem zatrudnić pierwszego pracownika?**  
+        A: **Poziom 4+** gdy masz 2 kontrakty/dzień. Wcześniej (poziom 1-3) to strata pieniędzy - nie masz wystarczającej pojemności.
         
-        **Q: Czy wydarzenia są obowiązkowe?**  
-        A: Wydarzenia pozytywne/negatywne działają automatycznie. Neutralne wymagają wyboru.
+        **Q: Jak często pojawiają się wydarzenia?**  
+        A: **10% szans co turę** (dzień). Średnio 1 wydarzenie na 10 dni. System jest zbalansowany dla początkujących.
         
-        **Q: Jak zdobyć najwyższą ocenę kontraktu?**  
-        A: Odpowiedz szczegółowo, merytorycznie, użyj wiedzy z kursu. Analityk zwiększa szansę!
+        **Q: Jak szybko mogę osiągnąć poziom 10?**  
+        A: Zależy od strategii: Agresywna gra ~2-3h, Bezpieczna ~4-5h, Casual ~6-10h.
         
-        **Q: Czy mogę mieć kilku pracowników tego samego typu?**  
-        A: Tak, ale pamiętaj o kosztach dziennych i limitach miejsc w firmie.
+        **Q: Czy AI Conversations są trudniejsze?**  
+        A: To nie test wiedzy, ale umiejętności komunikacji. Jeśli potrafisz prowadzić trudne rozmowy - będzie łatwo (4-5⭐)!
         """)
     
     st.markdown("---")
@@ -4688,6 +4841,12 @@ def show_instructions_tab():
     st.success("""
     **🎮 Gotowy do gry?**  
     Wróć do zakładki **Dashboard** i zacznij swoją przygodę biznesową!  
+    
+    💡 **Wskazówki:**
+    - Wypróbuj kontrakty AI (💬) - świetny trening komunikacji + słuchaj NPC w polskim głosie!
+    - **Po wykonaniu kontraktu wróć do Dashboard** - zobaczysz swoje wyniki w sekcji "🎯 Ostatnio ukończone kontrakty"!
+    - Nie musisz wchodzić w "Historia & Wydarzenia" aby zobaczyć feedback - wszystko jest na Dashboard!
+    
     Powodzenia! 🚀
     """)
 

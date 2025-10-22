@@ -51,12 +51,22 @@ python -m streamlit run main.py
 
 ## 🎯 Główne Funkcjonalności
 
-### 🏠 **Dashboard (START)**
+### **🏠 **Dashboard (START)**
 - **Ostatnie aktywności** - historia działań użytkownika (lekcje, inspiracje, testy)
 - **Postęp w nauce** - wizualizacja ukończonych modułów
 - **Statystyki osobiste** - XP, poziom, odznaki
 - **Pasma dzienne** - motywacja do regularnej nauki
 - **Szybki dostęp** - kontynuuj ostatnią lekcję
+
+### **🏢 Dashboard Business Games**
+- **Aktywne kontrakty** - kontrakty w trakcie realizacji
+- **Dzisiejsze wydarzenie** - losowe wydarzenia wpływające na firmę
+- **🎯 Ostatnio ukończone kontrakty** - zobacz wyniki 3 ostatnich kontraktów (NOWOŚĆ!)
+  - Ocena, zarobek, reputacja
+  - Feedback od klienta
+  - Bez przechodzenia do zakładki Historia!
+- **Analiza finansowa** - wykres przychodów i kosztów (7/14/30 dni)
+- **Ustawienia firmy** - zmień nazwę i logo
 
 ### 📚 **System Edukacyjny (NAUKA)**
 - **Strukturalne lekcje** - 6-etapowy system nauki
@@ -308,6 +318,109 @@ ZenDegenAcademy/
 - Milestones w nauce
 - Specjalne wyzwania
 - Seasonal events
+
+---
+
+## 🎮 Business Games - Symulacja Firmy Konsultingowej
+
+### **Przegląd:**
+**Business Games** to immersywna symulacja zarządzania firmą konsultingową CIQ (Collective Intelligence Quotient). Gracze budują swoją firmę od podstaw, realizując kontrakty, zatrudniając pracowników, zarządzając budżetem i rozwijając reputację.
+
+### **🏢 System 10 Poziomów Firmy**
+
+Firma rozwija się przez **10 poziomów** na podstawie zasobków finansowych i reputacji:
+
+| Poziom | Nazwa Firmy | Zakres PLN | Pracownicy | Kontrakty/dzień | Reputacja |
+|--------|-------------|------------|------------|-----------------|-----------|
+| **1** | Solo Consultant | 0 - 2,000 | 0 | 1 | 0 |
+| **2** | Boutique Consulting | 2,000 - 5,000 | 2 | 1 | 100 |
+| **3** | CIQ Advisory | 5,000 - 10,000 | 3 | 1 | 300 |
+| **4** | Strategic Partners | 10,000 - 20,000 | 5 | 2 | 600 |
+| **5** | Elite Consulting Group | 20,000 - 35,000 | 7 | 2 | 1,000 |
+| **6** | Regional CIQ Leaders | 35,000 - 55,000 | 10 | 2 | 1,500 |
+| **7** | National CIQ Authority | 55,000 - 80,000 | 15 | 3 | 2,200 |
+| **8** | Global CIQ Partners | 80,000 - 120,000 | 20 | 3 | 3,000 |
+| **9** | Worldwide CIQ Corporation | 120,000 - 180,000 | 30 | 4 | 4,000 |
+| **10** | CIQ Empire | 180,000+ | 50 | 5 | 5,500 |
+
+**Kluczowe mechaniki:**
+- 💰 **Progresja finansowa** - zarabiaj pieniądze realizując kontrakty
+- ⭐ **System reputacji** - buduj renomę wysokiej jakości pracą
+- 👥 **Zarządzanie pracownikami** - zatrudniaj zespół (koszt: 500 PLN/osoba/dzień)
+- 📈 **Więcej możliwości** - wyższe poziomy = więcej kontraktów dziennie
+
+### **💬 AI Conversation Contracts - Rozmowy z NPC + Text-to-Speech**
+
+**Nowy typ kontraktów:** Konwersacyjne negocjacje i rozmowy z AI-sterowanymi postaciami!
+
+#### **Jak to działa:**
+1. **Przyjmij kontrakt** z ikoną 💬 (np. "Rozmowa: Spóźniający się Talent")
+2. **Przeczytaj scenariusz** - poznaj kontekst sytuacji
+3. **Prowadź rozmowę** - wpisuj swoje odpowiedzi, AI reaguje dynamicznie
+4. **Słuchaj NPC** - każda odpowiedź AI jest **czytana głosem** (polski lektor TTS)
+5. **Monitoruj metryki** - sidebar pokazuje na żywo: empatię, asertywność, profesjonalizm
+6. **Zdobądź gwiazdki** - końcowa ocena 1-5⭐ na podstawie Twojej komunikacji
+
+#### **Dostępne scenariusze:**
+- **CIQ-AI-001: "Spóźniający się Talent"**
+  - 👤 **NPC:** Mark (Senior Developer)
+  - 🎯 **Wyzwanie:** Pracownik się spóźnia, ma ukryty problem rodzinny
+  - 💡 **Wymaga:** Empatia + GROW Model
+  - 💰 **Nagrody:** 600-1100 PLN, +40 reputacji
+  - 🔊 **Głos:** Polski TTS (męski)
+
+- **CIQ-AI-002: "Trudne Negocjacje"**
+  - 👤 **NPC:** Michael (CEO TechVentures)
+  - 🎯 **Wyzwanie:** Klient żąda 40% zniżki lub odchodzi
+  - 💡 **Wymaga:** Negocjacje + komunikacja wartości
+  - 💰 **Nagrody:** 800-1400 PLN, +50 reputacji
+  - 🔊 **Głos:** Polski TTS (męski)
+
+**🔊 Text-to-Speech (TTS):**
+- Każda odpowiedź NPC jest automatycznie **czytana głosem** (technologia gTTS)
+- Odtwarzacz audio pojawia się pod każdą wiadomością NPC
+- Możesz słuchać lub czytać - jak wolisz!
+- Wszystkie nagrania w języku polskim
+
+### **🎲 Inteligentny System Wydarzeń**
+
+Losowe wydarzenia wpływają na Twoją firmę. System jest **zbalansowany dla początkujących**:
+
+#### **Dla nowych firm (poziom 1-2):**
+- ☕ **"Kawa na klawiaturze"** - drobna strata (-200 PLN)
+- 📡 **"Przerwa w internecie"** - koszt naprawy (-150 PLN)
+- 🔧 **"Drobna awaria sprzętu"** - naprawa (-300 PLN)
+
+#### **Dla rozwijających się firm (poziom 3+):**
+- 📋 **"Konkurencja podbiła ofertę"** - strata kontraktu
+- 💼 **"Nieoczekiwany kontrakt premium"** - bonus +1500 PLN
+- 🎯 **"Polecenie od klienta"** - +300 reputacji
+
+#### **Dla dużych firm (poziom 5+):**
+- ⚡ **"Poważna awaria sprzętu"** - strata -1000 PLN + ryzyko opóźnienia
+- 🏆 **"Nagroda branżowa"** - +500 reputacji
+- 🌍 **"Międzynarodowy projekt"** - mega kontrakt +3000 PLN
+
+**Częstotliwość:** 10% szans na wydarzenie każdego dnia
+
+### **📊 Typy Kontraktów**
+
+1. **💼 Standard** - podstawowe zlecenia (np. warsztaty, audyty)
+2. **⭐ Premium** - wysokopłatne projekty wymagające reputacji
+3. **💬 AI Conversation** - rozmowy z NPC + ocena komunikacji (NOWOŚĆ!)
+4. **⚡ Speed Challenge** - kontrakty z timerem (wkrótce)
+
+### **🎯 Jak zacząć grę?**
+
+1. **Zaloguj się** do aplikacji
+2. Przejdź do zakładki **"Business Games"**
+3. **Wybierz branżę** (np. Consulting, IT, Marketing)
+4. **Przyjmuj kontrakty** - zarabiaj pieniądze i reputację
+5. **Zatrudniaj pracowników** - zwiększ pojemność firmy
+6. **Awansuj poziomy** - od Solo Consultant do CIQ Empire!
+7. **Wypróbuj AI Conversations** - poszukaj kontraktów z ikoną 💬
+
+**💡 Wskazówka:** Na początku skup się na tanich kontraktach i budowaniu reputacji. Unikaj zatrudniania zbyt wielu pracowników - kosztują 500 PLN/dzień każdy!
 
 ---
 

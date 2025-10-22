@@ -763,7 +763,7 @@ co się dzieje w zespołach. Nie wie jak to zrobić, żeby nie podważyć autyte
 
 **Wskazówka:** Zastosuj GROW model lub Conversational Intelligence""",
         "wymagana_wiedza": ["Conversational Intelligence", "Empathy", "GROW Model", "Difficult Conversations"],
-        "trudnosc": 3,
+        "trudnosc": 1,  # Zmienione z 3 na 1 - aby był widoczny od startu
         "nagroda_base": 600,
         "nagroda_4star": 850,
         "nagroda_5star": 1100,
@@ -847,7 +847,7 @@ Mama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego tran
 
 **Wskazówka:** Nie pytaj o zniżkę - pytaj o WARTOŚĆ i CELE biznesowe""",
         "wymagana_wiedza": ["Negotiation", "Value Communication", "Win-Win Thinking", "Business Acumen"],
-        "trudnosc": 4,
+        "trudnosc": 1,  # Zmienione z 4 na 1 - aby był widoczny od startu
         "nagroda_base": 800,
         "nagroda_4star": 1100,
         "nagroda_5star": 1400,
