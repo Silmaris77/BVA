@@ -354,7 +354,7 @@ def can_accept_contract(business_data: Dict) -> Tuple[bool, str]:
     )
     
     if today_total >= capacity:
-        return False, f"⏰ Dzienny limit kontraktów wyczerpany ({today_total}/{capacity}). Przyjęto/ukończono już {today_total} kontrakt(ów) dzisiaj. Wróć jutro lub awansuj firmę!"
+        return False, f"⏰ Dzienny limit kontraktów wyczerpany! Wykonano już {today_total} z {capacity} dostępnych kontraktów dzisiaj. Wróć jutro lub awansuj firmę!"
     
     if today_total >= GAME_CONFIG["max_daily_contracts"]:
         return False, f"Absolutny dzienny limit: {GAME_CONFIG['max_daily_contracts']}"

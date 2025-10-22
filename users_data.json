@@ -3,11 +3,11 @@
     "user_id": "2048819c-512b-4739-b6ff-a4b59605a885",
     "password": "Max",
     "degen_type": "Spreadsheet Degen",
-    "xp": 1626,
+    "xp": 1634,
     "degencoins": 89443,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-22 10:05:59",
+    "last_login": "2025-10-22 21:50:08",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -856,8 +856,8 @@
         "completed_lessons": 2
       },
       "2025-10-22": {
-        "xp": 1626,
-        "degencoins": 69643,
+        "xp": 1634,
+        "degencoins": 89443,
         "level": 1,
         "completed_lessons": 2
       }
@@ -2084,6 +2084,135 @@
         "timestamp": "2025-10-22T10:05:59.362585",
         "details": {
           "timestamp": "2025-10-22T10:05:59.320403"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T10:57:34.663008",
+        "details": {
+          "timestamp": "2025-10-22T10:57:34.624243"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T12:46:21.080130",
+        "details": {
+          "timestamp": "2025-10-22T12:46:21.048102"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T12:48:47.431958",
+        "details": {
+          "timestamp": "2025-10-22T12:48:47.413916"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T12:55:35.994619",
+        "details": {
+          "timestamp": "2025-10-22T12:55:35.979825"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T15:24:19.761740",
+        "details": {
+          "timestamp": "2025-10-22T15:24:19.687854"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T20:39:48.396063",
+        "details": {
+          "timestamp": "2025-10-22T20:39:48.368750"
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-22T20:48:59.115185",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom I",
+          "confidence": 10,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-22T20:51:25.199664",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom I",
+          "confidence": 9,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-22T21:03:20.453783",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom I",
+          "confidence": 5,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-22T21:23:06.083828",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom III",
+          "confidence": 9,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-22T21:24:54.615215",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom I",
+          "confidence": 9,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-22T21:26:52.347538",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom III",
+          "confidence": 8,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-22T21:32:44.069715",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom I",
+          "confidence": 9,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "tool_used",
+        "timestamp": "2025-10-22T21:37:11.411694",
+        "details": {
+          "tool_name": "CIQ Scanner",
+          "detected_level": "Poziom II",
+          "confidence": 9,
+          "xp_earned": 1
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T21:50:08.939993",
+        "details": {
+          "timestamp": "2025-10-22T21:50:08.903238"
         }
       }
     ],
@@ -10710,7 +10839,7 @@
     "degencoins": 3000,
     "level": 1,
     "joined_date": "2025-10-19",
-    "last_login": "2025-10-21 11:17:33",
+    "last_login": "2025-10-22 12:58:34",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -10728,6 +10857,12 @@
       "2025-10-21": {
         "xp": 0,
         "degencoins": 2500,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-10-22": {
+        "xp": 0,
+        "degencoins": 3000,
         "level": 1,
         "completed_lessons": 0
       }
@@ -10753,7 +10888,7 @@
         "name": "q's Consulting",
         "founded": "2025-10-19",
         "level": 2,
-        "reputation": 92,
+        "reputation": 94,
         "logo": "🏢"
       },
       "employees": [],
@@ -10817,6 +10952,132 @@
         ],
         "available_pool": [
           {
+            "id": "CIQ-EASY-001",
+            "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+            "kategoria": "Leadership",
+            "klient": "LocalCafe",
+            "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+            "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 200,
+            "nagroda_4star": 250,
+            "nagroda_5star": 350,
+            "reputacja": 15,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 20,
+            "emoji": "☕",
+            "available_until": "2025-10-23 12:58:41"
+          },
+          {
+            "id": "CIQ-EASY-002",
+            "tytul": "Feedback dla nowego pracownika",
+            "kategoria": "Feedback",
+            "klient": "SmallShop",
+            "opis": "Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.",
+            "zadanie": "Napisz krótki feedback (3-5 zdań):\n\n- Co robi dobrze?\n- Co warto poprawić?\n- Jak może to zrobić?",
+            "wymagana_wiedza": [
+              "Podstawy feedbacku"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 180,
+            "nagroda_4star": 230,
+            "nagroda_5star": 300,
+            "reputacja": 12,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "🛒",
+            "available_until": "2025-10-23 12:58:41"
+          },
+          {
+            "id": "CIQ-EASY-003",
+            "tytul": "Rozwiązanie małego konfliktu",
+            "kategoria": "Konflikt",
+            "klient": "OfficeTeam",
+            "opis": "Dwóch pracowników biurowych kłóci się o to, kto ma sprzątać wspólną kuchnię.",
+            "zadanie": "Zaproponuj proste rozwiązanie:\n\n1. **Dlaczego się kłócą?** (1 zdanie)\n\n2. **Twoja propozycja** (2-3 zdania)\n\n3. **Jak to wdrożyć?** (1-2 zdania)",
+            "wymagana_wiedza": [
+              "Podstawy rozwiązywania konfliktów"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 220,
+            "nagroda_4star": 280,
+            "nagroda_5star": 380,
+            "reputacja": 18,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 20,
+            "emoji": "🧹",
+            "available_until": "2025-10-23 12:58:41"
+          },
+          {
+            "id": "CIQ-EASY-004",
+            "tytul": "Pytania do zespołu na spotkaniu",
+            "kategoria": "Leadership",
+            "klient": "StartupTeam",
+            "opis": "Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.",
+            "zadanie": "Zaproponuj 5 pytań na spotkanie:\n\n- 3 pytania do poznania zespołu\n- 2 pytania o pracę/projekty\n\n(tylko lista pytań)",
+            "wymagana_wiedza": [
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 160,
+            "nagroda_4star": 210,
+            "nagroda_5star": 280,
+            "reputacja": 10,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "❓",
+            "available_until": "2025-10-23 12:58:41"
+          },
+          {
+            "id": "CIQ-EASY-005",
+            "tytul": "Pochwała za dobrą robotę",
+            "kategoria": "Feedback",
+            "klient": "TechStart",
+            "opis": "Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!",
+            "zadanie": "Napisz krótką wiadomość (3-4 zdania):\n\n- Co konkretnie zrobił dobrze?\n- Jaki to miało wpływ?\n- Co to dla Ciebie znaczy?",
+            "wymagana_wiedza": [
+              "Pozytywny feedback"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 150,
+            "nagroda_4star": 200,
+            "nagroda_5star": 270,
+            "reputacja": 8,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 10,
+            "emoji": "⭐",
+            "available_until": "2025-10-23 12:58:41"
+          },
+          {
+            "id": "CIQ-EASY-006",
+            "tytul": "Plan krótkiego spotkania 1:1",
+            "kategoria": "Leadership",
+            "klient": "RemoteTeam",
+            "opis": "Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.",
+            "zadanie": "Zaproponuj prosty plan spotkania (15 min):\n\n1. **Początek** - jak zacząć? (1 zdanie)\n\n2. **Środek** - o czym rozmawiać? (3 tematy)\n\n3. **Koniec** - jak zakończyć? (1 zdanie)",
+            "wymagana_wiedza": [
+              "1:1 meetings"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 190,
+            "nagroda_4star": 240,
+            "nagroda_5star": 320,
+            "reputacja": 14,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "📅",
+            "available_until": "2025-10-23 12:58:41"
+          },
+          {
             "id": "CIQ-STARTER-001",
             "tytul": "Poprawa komunikacji w zespole 2-osobowym",
             "kategoria": "Leadership",
@@ -10836,30 +11097,102 @@
             "wymagany_poziom": 1,
             "min_slow": 30,
             "emoji": "🤝",
-            "available_until": "2025-10-22 11:10:04"
+            "available_until": "2025-10-23 12:58:41"
           },
           {
-            "id": "CIQ-COACHING-001",
-            "tytul": "Sesja coachingowa dla middle managera",
-            "kategoria": "Coaching",
-            "klient": "MarketPro",
-            "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
-            "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+            "id": "CIQ-AI-001",
+            "tytul": "💬 Rozmowa: Spóźniający się Talent",
+            "kategoria": "AI Conversation",
+            "klient": "TechVenture Sp. z o.o.",
+            "opis": "Twój najlepszy programista Mark jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu. Zespół to zauważa i atmosfera się pogarsza. Musisz przeprowadzić trudną rozmowę.",
+            "zadanie": "🎭 SYMULACJA ROZMOWY Z AI\n\n**Twoja rola:** Lead konsultant HR - klient poprosił Cię o przeprowadzenie trudnej rozmowy z pracownikiem\n\n**Rozmówca:** Mark, senior developer (gra AI)\n- Osobowość: introwertyk, defensywny gdy atakowany, otwarty gdy czuje empatię\n- Sytuacja: spóźniony po raz trzeci w tym tygodniu\n- Ukryty kontekst: ma osobisty problem (AI zareaguje jeśli podejdziesz empatycznie)\n\n**Twoje zadanie:**\n1. Przeprowadź profesjonalną rozmowę coachingową\n2. Odkryj prawdziwy powód spóźnień\n3. Wypracuj rozwiązanie, które zadowoli obie strony\n4. Zachowaj dobrą relację z pracownikiem\n\n**AI ocenia Cię na żywo w 4 wymiarach:**\n- 🤝 Empatia - czy rozumiesz perspektywę rozmówcy\n- 💪 Asertywność - czy jasno stawiasz granice bez agresji\n- 👔 Profesjonalizm - ton, forma, struktura rozmowy\n- 💡 Jakość rozwiązania - czy propozycje są konstruktywne\n\n**Jak działa:**\n- Piszesz swoją wypowiedź → AI ocenia i reaguje jako Mark\n- Każda odpowiedź oceniana (0-20 pkt + wpływ na relację)\n- Rozmowa kończy się gdy wypracujecie rozwiązanie lub zepsujecie relację\n- Różne zakończenia w zależności od Twoich decyzji!\n\n**Wskazówka:** Zastosuj GROW model lub Conversational Intelligence",
             "wymagana_wiedza": [
-              "Coaching conversations",
+              "Conversational Intelligence",
+              "Empathy",
               "GROW Model",
-              "COIN Framework"
+              "Difficult Conversations"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 600,
+            "nagroda_4star": 850,
+            "nagroda_5star": 1100,
+            "reputacja": 40,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "emoji": "💬",
+            "contract_type": "ai_conversation",
+            "npc_config": {
+              "name": "Mark",
+              "role": "Senior Developer",
+              "personality": "introwerted, defensive when attacked, opens up with empathy",
+              "personality_notes": "Mark is a talented developer who becomes defensive under pressure. He's dealing with a personal crisis (his mother has cancer and needs daily chemo transport), but won't share this unless he feels safe and understood. If approached with empathy and genuine concern, he'll open up. If confronted aggressively, he'll shut down or quit.",
+              "initial_emotion": "anxious",
+              "current_emotion": "anxious",
+              "goal": "Keep his job while managing his mother's medical crisis. Hoping for understanding and flexibility.",
+              "opening_message": "*Mark siedzi przy biurku, unikając kontaktu wzrokowego. Widzisz jak napina się gdy się zbliżasz.*\n\nMark: \"Przepraszam za spóźnienie... Wiem, że to już trzeci raz w tym tygodniu.\"",
+              "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
+            },
+            "scenario_context": "**Kontekst scenariusza:**\n\nMark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.\n\n**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**\nMama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)\n2. Zachować relację i zaufanie\n3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)\n4. Pokazać empatię bez rezygnacji z standardów zespołowych\n\n**Możliwe zakończenia:**\n- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera\n- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia\n- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany\n\n**Wskaźniki sukcesu:**\n- Relacja Mark-Firma: czy zostanie i będzie zaangażowany\n- Morale zespołu: czy rozumieją sytuację i wspierają\n- Rozwiązanie: czy jest długofalowe i fair dla wszystkich",
+            "available_until": "2025-10-23 12:58:41"
+          },
+          {
+            "id": "CIQ-AI-002",
+            "tytul": "💬 Rozmowa: Trudne Negocjacje",
+            "kategoria": "AI Conversation",
+            "klient": "TechVentures LLC",
+            "opis": "Największy klient (40% revenue) grozi odejściem jeśli nie dostanie 40% zniżki. CEO Michael zadzwonił osobiście. Musisz wynegocjować rozwiązanie które uratuje kontrakt BEZ niszczenia marży.",
+            "zadanie": "🎭 SYMULACJA NEGOCJACJI Z AI\n\n**Twoja rola:** Senior Business Consultant - klient poprosił Cię o pomoc w trudnych negocjacjach\n\n**Rozmówca:** Michael (CEO TechVentures) - gra AI\n- Osobowość: twardy negocjator, ale otwarty na win-win jeśli pokażesz wartość\n- Sytuacja: zarząd wymaga obniżenia kosztów o 40%, konkurencja oferuje tańszą ofertę\n- Ukryty kontekst: wie że Twoja firma jest lepsza, ale ma presję zarządu (AI zareaguje jeśli odkryjesz prawdziwą motywację)\n\n**Twoje zadanie:**\n1. Wynegocjuj warunki które utrzymają klienta I Twoją marżę\n2. Odkryj prawdziwą motywację (czy to tylko cena?)\n3. Zaproponuj kreatywne rozwiązanie win-win\n4. Zachowaj długoterminową relację biznesową\n\n**AI ocenia Cię na żywo:**\n- 🤝 Empatia - czy rozumiesz pozycję klienta\n- 💪 Asertywność - czy bronisz swojej wartości bez kapitulacji\n- 👔 Profesjonalizm - biznesowy ton i argumentacja\n- 💡 Jakość rozwiązania - kreatywność i wykonalność propozycji\n\n**Możliwe zakończenia:**\n- WORST: Natychmiastowa kapitulacja (40% zniżka) → stracisz wiarygodność\n- BAD: Klient odchodzi → utrata 500k/rok\n- MEDIOCRE: 30% zniżka → słaba marża\n- GOOD: 10-15% zniżka + coś ekstra (długi kontrakt, dodatkowe usługi)\n- GREAT: Win-win bez zniżki (ROI report, tiered services, custom package)\n- BEST: Klient podnosi budżet bo widzi dodatkową wartość!\n\n**Wskazówka:** Nie pytaj o zniżkę - pytaj o WARTOŚĆ i CELE biznesowe",
+            "wymagana_wiedza": [
+              "Negotiation",
+              "Value Communication",
+              "Win-Win Thinking",
+              "Business Acumen"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 800,
+            "nagroda_4star": 1100,
+            "nagroda_5star": 1400,
+            "reputacja": 50,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "emoji": "💬",
+            "contract_type": "ai_conversation",
+            "npc_config": {
+              "name": "Michael",
+              "role": "CEO TechVentures LLC",
+              "personality": "tough negotiator, ROI-focused, respectful but firm",
+              "personality_notes": "Michael is under pressure from his board to cut costs by 40%. He received a competing offer that's 40% cheaper (but lower quality). He KNOWS your service is better (you saved them $880k last year through optimization), but needs to show the board he's fighting for cost reduction. If you demonstrate clear ROI and help him justify the premium to his board, he'll stay. If you just fold on price, he'll lose respect and demand more. If you're too rigid, he'll leave.",
+              "initial_emotion": "businesslike",
+              "current_emotion": "businesslike",
+              "goal": "Get a deal that satisfies the board (cost reduction or proven ROI) while keeping quality service. Ideally: pay same or less but get MORE value.",
+              "opening_message": "*Michael dzwoni do Ciebie osobiście - to rzadkość*\n\nMichael: \"Musimy porozmawiać o kontrakcie. Zarząd wymaga 40% cięcia kosztów. Mam ofertę od Twojej konkurencji - 40% taniej. Cenię naszą współpracę, ale biznes to biznes. Co możesz zaproponować?\"",
+              "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
+            },
+            "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
+            "available_until": "2025-10-23 12:58:41"
+          },
+          {
+            "id": "CIQ-KONFLIKT-001",
+            "tytul": "Mediacja w konflikcie zespołowym",
+            "kategoria": "Konflikt",
+            "klient": "TechCorp",
+            "opis": "Zespół projektowy w firmie TechCorp jest podzielony. \nLider projektu i główny developer mają odmienne wizje dotyczące architektury systemu. \nNapięcie wpływa na terminowość i morale zespołu.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Co prawdopodobnie jest źródłem konfliktu?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę spotkania mediacyjnego.** (3-4 punkty, krótko)\n   \n3. **Jakie 3 kluczowe pytania zadasz obu stronom?** (lista pytań)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Zarządzanie konfliktem",
+              "Ladder of Inference"
             ],
             "trudnosc": 2,
-            "nagroda_base": 550,
-            "nagroda_4star": 720,
-            "nagroda_5star": 900,
-            "reputacja": 35,
+            "nagroda_base": 450,
+            "nagroda_4star": 600,
+            "nagroda_5star": 750,
+            "reputacja": 30,
             "czas_realizacji_dni": 1,
             "wymagany_poziom": 1,
             "min_slow": 50,
-            "emoji": "🎯",
-            "available_until": "2025-10-22 11:10:04"
+            "emoji": "⚔️",
+            "available_until": "2025-10-23 12:58:41"
           },
           {
             "id": "CIQ-KULTURA-001",
@@ -10882,7 +11215,7 @@
             "wymagany_poziom": 1,
             "min_slow": 80,
             "emoji": "🛡️",
-            "available_until": "2025-10-22 11:10:04"
+            "available_until": "2025-10-23 12:58:41"
           },
           {
             "id": "CIQ-KRYZYS-001",
@@ -10905,7 +11238,7 @@
             "wymagany_poziom": 1,
             "min_slow": 120,
             "emoji": "🚨",
-            "available_until": "2025-10-22 11:10:04"
+            "available_until": "2025-10-23 12:58:41"
           },
           {
             "id": "CIQ-KRYZYS-002",
@@ -10928,13 +11261,13 @@
             "wymagany_poziom": 1,
             "min_slow": 200,
             "emoji": "🚨",
-            "available_until": "2025-10-22 11:10:04"
+            "available_until": "2025-10-23 12:58:41"
           }
         ],
-        "last_refresh": "2025-10-21 11:10:04"
+        "last_refresh": "2025-10-22 12:58:41"
       },
       "stats": {
-        "total_revenue": 3000,
+        "total_revenue": 3500,
         "total_costs": 0,
         "net_profit": 0,
         "contracts_completed": 1,
@@ -11007,9 +11340,22 @@
               "coins": 500,
               "reputation": 2
             }
+          },
+          {
+            "event_id": "bonus_payment",
+            "timestamp": "2025-10-22 12:58:41",
+            "title": "Niespodziewana Premia!",
+            "emoji": "💰",
+            "type": "positive",
+            "description": "Jeden z Twoich wcześniejszych klientów był tak zadowolony z rezultatów, że postanowił wysłać dodatkową premię.",
+            "choice": null,
+            "effects": {
+              "coins": 500,
+              "reputation": 2
+            }
           }
         ],
-        "last_roll": "2025-10-21 11:10:04",
+        "last_roll": "2025-10-22 12:58:41",
         "active_effects": []
       },
       "history": {
@@ -11028,6 +11374,13 @@
             "event_id": "bonus_payment",
             "event_title": "Niespodziewana Premia!",
             "timestamp": "2025-10-21 11:10:04"
+          },
+          {
+            "type": "event_reward",
+            "amount": 500,
+            "event_id": "bonus_payment",
+            "event_title": "Niespodziewana Premia!",
+            "timestamp": "2025-10-22 12:58:41"
           }
         ],
         "level_ups": [
@@ -11037,6 +11390,11 @@
             "timestamp": "2025-10-19 15:49:19"
           }
         ]
+      },
+      "money": 500,
+      "office": {
+        "type": "home_office",
+        "upgraded_at": null
       }
     },
     "activity_log": [
@@ -11053,8 +11411,531 @@
         "details": {
           "timestamp": "2025-10-21T11:17:33.519987"
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T12:58:35.095721",
+        "details": {
+          "timestamp": "2025-10-22T12:58:35.078739"
+        }
       }
-    ]
+    ],
+    "business_games": {
+      "consulting": {
+        "firm": {
+          "name": "q's Consulting",
+          "founded": "2025-10-19",
+          "level": 2,
+          "reputation": 94,
+          "logo": "🏢"
+        },
+        "employees": [],
+        "contracts": {
+          "active": [],
+          "completed": [
+            {
+              "id": "CIQ-KRYZYS-002",
+              "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+              "kategoria": "Kryzys",
+              "klient": "CorporateInc",
+              "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+              "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+              "wymagana_wiedza": [
+                "Change Management",
+                "Crisis Communication",
+                "Difficult Conversations"
+              ],
+              "trudnosc": 5,
+              "nagroda_base": 1500,
+              "nagroda_4star": 2000,
+              "nagroda_5star": 2500,
+              "reputacja": 90,
+              "czas_realizacji_dni": 3,
+              "wymagany_poziom": 1,
+              "min_slow": 200,
+              "emoji": "🚨",
+              "available_until": "2025-10-20 15:48:20",
+              "accepted_date": "2025-10-19 15:48:20",
+              "deadline": "2025-10-22 15:48:20",
+              "status": "completed",
+              "solution": "🧭 I. Komunikacja przed ogłoszeniem (do 250 słów)\n\n1. Kto, kiedy i jak powinien się dowiedzieć?\n\nPierwszą grupą, która musi poznać szczegóły decyzji, są managerowie średniego szczebla – na 7 dni przed ogłoszeniem. To oni będą odpowiedzialni za komunikację 1:1 z pracownikami. Dzień później (T-6) informowani są dział HR i komunikacji wewnętrznej, którzy przygotują komunikaty i wsparcie formalne.\n\nW dniu ogłoszenia (T=0), komunikat kierownictwa zostanie przekazany wszystkim pracownikom równocześnie – poprzez spotkanie all-hands i mail od CEO. Osoby objęte zwolnieniami dowiedzą się w tym samym dniu – w rozmowach indywidualnych z managerami i HR.\n\n2. Przygotowanie managerów – szkolenie (T-5)\n\nManagerowie przechodzą intensywne 2-godzinne warsztaty z HR i działem komunikacji, które obejmują:\n\nSymulację trudnych rozmów (role-play)\n\nTechniki komunikacji empatycznej\n\nScenariusze pytań i odpowiedzi\n\nJak radzić sobie z własnymi emocjami\n\n3. Anticipated Questions & Answers (FAQ dla managerów)\n\nPrzykładowe pytania:\n\nDlaczego właśnie ja?\n\nDecyzja nie wynika z wyników indywidualnych, lecz z konieczności dostosowania struktury organizacyjnej.\n\nCzy są opcje wewnętrznych transferów?\n\nRozważamy wszystkie możliwości redeploymentu tam, gdzie to możliwe.\n\nJakie świadczenia otrzymam?\n\nSzczegółowy pakiet odpraw, wsparcia i doradztwa zawodowego zostanie przedstawiony podczas rozmowy.\n\n📅 II. Dzień ogłoszenia (do 300 słów)\n1. Timeline wydarzeń (T=0):\n\n09:00 – Spotkanie all-hands (CEO + Executive Team) – oficjalne ogłoszenie zmian\n\n09:30 – Mail od CEO z podsumowaniem i dokumentacją (link do FAQ)\n\n10:00-14:00 – Indywidualne rozmowy z pracownikami objętymi zwolnieniem\n\n15:00 – Spotkania zespołowe prowadzone przez managerów (adresowanie emocji i obaw)\n\n16:00 – Otwarte Q&A z HR i CEO (online)\n\n2. Komunikat od CEO – Draft:\n\nDrodzy Pracownicy,\n\nZ bólem informuję, że dziś podejmujemy jedną z najtrudniejszych decyzji w historii naszej firmy. W związku z głęboką restrukturyzacją, konieczne jest rozstanie się z około 20% naszych kolegów i koleżanek.\n\nTa decyzja nie odzwierciedla ich wartości ani pracy – są to osoby utalentowane, zaangażowane i zasługujące na pełne uznanie. Zrobiliśmy wszystko, co możliwe, by tego uniknąć, ale obecne realia biznesowe wymusiły zmiany strukturalne.\n\nDla osób, których dotyczy to bezpośrednio, przygotowaliśmy odprawy, wsparcie psychologiczne i doradztwo zawodowe. Managerowie przekażą szczegóły w rozmowach indywidualnych.\n\nDla tych, którzy zostają – zdajemy sobie sprawę, że to trudny moment. Przed nami nowy etap, ale wspólnie odbudujemy zaufanie i kierunek.\n\nDziękuję każdemu za dotychczasowy wkład.\n\nZ szacunkiem,\n[Imię i Nazwisko]\nCEO\n\n3. Indywidualne rozmowy – framework (na bazie modelu SPIKES):\n\nS – Setting: Prywatne miejsce, czas na rozmowę, bez pośpiechu\n\nP – Perception: Krótkie wprowadzenie, by zrozumieć poziom świadomości pracownika\n\nI – Invitation: Zapytanie, czy pracownik chce usłyszeć szczegóły\n\nK – Knowledge: Jasne, empatyczne przekazanie decyzji\n\nE – Emotion: Zatrzymanie się przy emocjach, aktywne słuchanie\n\nS – Strategy: Przedstawienie kolejnych kroków, pakietów, możliwości wsparcia\n\n🤝 III. Po zwolnieniach – do 350 słów\n1. Wsparcie dla pozostałych (survivor guilt)\n\nPo masowych zwolnieniach często występuje tzw. „guilt of staying” – poczucie winy u osób, które nie zostały zwolnione. By zapobiec demotywacji:\n\nGrupy wsparcia – organizowane w ciągu tygodnia od ogłoszenia (facylitowane przez psychologa lub HR)\n\nSesje „Ask Me Anything” z Leadershipem – raz na tydzień przez 4 tygodnie\n\nTransparentna komunikacja – regularne aktualizacje, jasny przekaz, co się zmienia i dlaczego\n\n2. Rebuilding Trust – plan na 60 dni\n\nTydzień 1-2\n\nSpotkania zespołów z leadershipem: otwarte rozmowy, zbieranie opinii\n\nWysłanie anonimowej ankiety „Pulse Survey” – poziom zaufania, obawy, propozycje\n\nTydzień 3-4\n\nPublikacja roadmapy zmian (nowa struktura, procesy, cele)\n\n„New Culture Circles” – warsztaty na temat kultury i wartości firmy\n\nTydzień 5-8\n\nFeedback loop: omawianie wyników ankiet, aktualizacja działań\n\nWdrożenie planów rozwojowych (szkolenia, mentoring dla pozostałych)\n\nŚwiętowanie małych sukcesów (quick wins) – odbudowa morale\n\n3. Monitoring morale i zaangażowania\n\nWdrażamy systematyczne monitorowanie:\n\nTygodniowe Pulse Surveys (krótkie, anonimowe)\n\nOne-on-one check-ins co 2 tygodnie (szczególnie z kluczowymi pracownikami)\n\nHR Sentiment Report – zbiorcze raporty dla leadershipu co miesiąc\n\nKanał zaufania (anonimowy feedback box online)\n\n✅ Podsumowanie\n\nKomunikacja przy zwolnieniach wymaga transparentności, empatii i ciągłości. Kluczem jest odpowiednie przygotowanie kadry kierowniczej, wsparcie dla odchodzących oraz aktywne działania na rzecz odbudowy zaufania wśród pozostających. Strategiczne podejście przez 60 dni po ogłoszeniu jest kluczowe dla utrzymania zaangażowania i odbudowy morale.",
+              "rating": 5,
+              "feedback": "⚠️ **WYKRYTO PODEJRZANĄ AKTYWNOŚĆ**\n\n⚠️ Podejrzanie szybkie wypełnienie: 27s dla 657 słów (oczekiwano min. 100s)\n\n⚠️ **KARA: --1 ⭐ do oceny**\n\n---\n\nRozwiązanie zawiera 657 słów. Automatyczna ocena: 4/5 ⭐",
+              "evaluation_details": {
+                "method": "heuristic",
+                "word_count": 657,
+                "min_required": 200,
+                "base_score": 5,
+                "randomness": -1,
+                "final_rating": 4,
+                "timestamp": "2025-10-19 15:49:19",
+                "anti_cheat": {
+                  "original_rating": 4,
+                  "penalized_rating": 5,
+                  "flags": [
+                    "time_suspicious"
+                  ],
+                  "penalty": -1
+                }
+              },
+              "reward": {
+                "coins": 2500,
+                "reputation": 90,
+                "base": 2500,
+                "bonus_multiplier": 1.0,
+                "rejection_penalty": false
+              },
+              "completed_date": "2025-10-19 15:49:19"
+            }
+          ],
+          "available_pool": [
+            {
+              "id": "CIQ-EASY-001",
+              "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+              "kategoria": "Leadership",
+              "klient": "LocalCafe",
+              "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+              "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 200,
+              "nagroda_4star": 250,
+              "nagroda_5star": 350,
+              "reputacja": 15,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 20,
+              "emoji": "☕",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-EASY-002",
+              "tytul": "Feedback dla nowego pracownika",
+              "kategoria": "Feedback",
+              "klient": "SmallShop",
+              "opis": "Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.",
+              "zadanie": "Napisz krótki feedback (3-5 zdań):\n\n- Co robi dobrze?\n- Co warto poprawić?\n- Jak może to zrobić?",
+              "wymagana_wiedza": [
+                "Podstawy feedbacku"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 180,
+              "nagroda_4star": 230,
+              "nagroda_5star": 300,
+              "reputacja": 12,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "🛒",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-EASY-003",
+              "tytul": "Rozwiązanie małego konfliktu",
+              "kategoria": "Konflikt",
+              "klient": "OfficeTeam",
+              "opis": "Dwóch pracowników biurowych kłóci się o to, kto ma sprzątać wspólną kuchnię.",
+              "zadanie": "Zaproponuj proste rozwiązanie:\n\n1. **Dlaczego się kłócą?** (1 zdanie)\n\n2. **Twoja propozycja** (2-3 zdania)\n\n3. **Jak to wdrożyć?** (1-2 zdania)",
+              "wymagana_wiedza": [
+                "Podstawy rozwiązywania konfliktów"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 220,
+              "nagroda_4star": 280,
+              "nagroda_5star": 380,
+              "reputacja": 18,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 20,
+              "emoji": "🧹",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-EASY-004",
+              "tytul": "Pytania do zespołu na spotkaniu",
+              "kategoria": "Leadership",
+              "klient": "StartupTeam",
+              "opis": "Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.",
+              "zadanie": "Zaproponuj 5 pytań na spotkanie:\n\n- 3 pytania do poznania zespołu\n- 2 pytania o pracę/projekty\n\n(tylko lista pytań)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 160,
+              "nagroda_4star": 210,
+              "nagroda_5star": 280,
+              "reputacja": 10,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "❓",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-EASY-005",
+              "tytul": "Pochwała za dobrą robotę",
+              "kategoria": "Feedback",
+              "klient": "TechStart",
+              "opis": "Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!",
+              "zadanie": "Napisz krótką wiadomość (3-4 zdania):\n\n- Co konkretnie zrobił dobrze?\n- Jaki to miało wpływ?\n- Co to dla Ciebie znaczy?",
+              "wymagana_wiedza": [
+                "Pozytywny feedback"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 150,
+              "nagroda_4star": 200,
+              "nagroda_5star": 270,
+              "reputacja": 8,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 10,
+              "emoji": "⭐",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-EASY-006",
+              "tytul": "Plan krótkiego spotkania 1:1",
+              "kategoria": "Leadership",
+              "klient": "RemoteTeam",
+              "opis": "Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.",
+              "zadanie": "Zaproponuj prosty plan spotkania (15 min):\n\n1. **Początek** - jak zacząć? (1 zdanie)\n\n2. **Środek** - o czym rozmawiać? (3 tematy)\n\n3. **Koniec** - jak zakończyć? (1 zdanie)",
+              "wymagana_wiedza": [
+                "1:1 meetings"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 190,
+              "nagroda_4star": 240,
+              "nagroda_5star": 320,
+              "reputacja": 14,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "📅",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-STARTER-001",
+              "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+              "kategoria": "Leadership",
+              "klient": "StartupDuo",
+              "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+              "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 300,
+              "nagroda_4star": 400,
+              "nagroda_5star": 500,
+              "reputacja": 20,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 30,
+              "emoji": "🤝",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-AI-001",
+              "tytul": "💬 Rozmowa: Spóźniający się Talent",
+              "kategoria": "AI Conversation",
+              "klient": "TechVenture Sp. z o.o.",
+              "opis": "Twój najlepszy programista Mark jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu. Zespół to zauważa i atmosfera się pogarsza. Musisz przeprowadzić trudną rozmowę.",
+              "zadanie": "🎭 SYMULACJA ROZMOWY Z AI\n\n**Twoja rola:** Lead konsultant HR - klient poprosił Cię o przeprowadzenie trudnej rozmowy z pracownikiem\n\n**Rozmówca:** Mark, senior developer (gra AI)\n- Osobowość: introwertyk, defensywny gdy atakowany, otwarty gdy czuje empatię\n- Sytuacja: spóźniony po raz trzeci w tym tygodniu\n- Ukryty kontekst: ma osobisty problem (AI zareaguje jeśli podejdziesz empatycznie)\n\n**Twoje zadanie:**\n1. Przeprowadź profesjonalną rozmowę coachingową\n2. Odkryj prawdziwy powód spóźnień\n3. Wypracuj rozwiązanie, które zadowoli obie strony\n4. Zachowaj dobrą relację z pracownikiem\n\n**AI ocenia Cię na żywo w 4 wymiarach:**\n- 🤝 Empatia - czy rozumiesz perspektywę rozmówcy\n- 💪 Asertywność - czy jasno stawiasz granice bez agresji\n- 👔 Profesjonalizm - ton, forma, struktura rozmowy\n- 💡 Jakość rozwiązania - czy propozycje są konstruktywne\n\n**Jak działa:**\n- Piszesz swoją wypowiedź → AI ocenia i reaguje jako Mark\n- Każda odpowiedź oceniana (0-20 pkt + wpływ na relację)\n- Rozmowa kończy się gdy wypracujecie rozwiązanie lub zepsujecie relację\n- Różne zakończenia w zależności od Twoich decyzji!\n\n**Wskazówka:** Zastosuj GROW model lub Conversational Intelligence",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Empathy",
+                "GROW Model",
+                "Difficult Conversations"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 600,
+              "nagroda_4star": 850,
+              "nagroda_5star": 1100,
+              "reputacja": 40,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "emoji": "💬",
+              "contract_type": "ai_conversation",
+              "npc_config": {
+                "name": "Mark",
+                "role": "Senior Developer",
+                "personality": "introwerted, defensive when attacked, opens up with empathy",
+                "personality_notes": "Mark is a talented developer who becomes defensive under pressure. He's dealing with a personal crisis (his mother has cancer and needs daily chemo transport), but won't share this unless he feels safe and understood. If approached with empathy and genuine concern, he'll open up. If confronted aggressively, he'll shut down or quit.",
+                "initial_emotion": "anxious",
+                "current_emotion": "anxious",
+                "goal": "Keep his job while managing his mother's medical crisis. Hoping for understanding and flexibility.",
+                "opening_message": "*Mark siedzi przy biurku, unikając kontaktu wzrokowego. Widzisz jak napina się gdy się zbliżasz.*\n\nMark: \"Przepraszam za spóźnienie... Wiem, że to już trzeci raz w tym tygodniu.\"",
+                "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
+              },
+              "scenario_context": "**Kontekst scenariusza:**\n\nMark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.\n\n**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**\nMama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)\n2. Zachować relację i zaufanie\n3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)\n4. Pokazać empatię bez rezygnacji z standardów zespołowych\n\n**Możliwe zakończenia:**\n- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera\n- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia\n- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany\n\n**Wskaźniki sukcesu:**\n- Relacja Mark-Firma: czy zostanie i będzie zaangażowany\n- Morale zespołu: czy rozumieją sytuację i wspierają\n- Rozwiązanie: czy jest długofalowe i fair dla wszystkich",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-AI-002",
+              "tytul": "💬 Rozmowa: Trudne Negocjacje",
+              "kategoria": "AI Conversation",
+              "klient": "TechVentures LLC",
+              "opis": "Największy klient (40% revenue) grozi odejściem jeśli nie dostanie 40% zniżki. CEO Michael zadzwonił osobiście. Musisz wynegocjować rozwiązanie które uratuje kontrakt BEZ niszczenia marży.",
+              "zadanie": "🎭 SYMULACJA NEGOCJACJI Z AI\n\n**Twoja rola:** Senior Business Consultant - klient poprosił Cię o pomoc w trudnych negocjacjach\n\n**Rozmówca:** Michael (CEO TechVentures) - gra AI\n- Osobowość: twardy negocjator, ale otwarty na win-win jeśli pokażesz wartość\n- Sytuacja: zarząd wymaga obniżenia kosztów o 40%, konkurencja oferuje tańszą ofertę\n- Ukryty kontekst: wie że Twoja firma jest lepsza, ale ma presję zarządu (AI zareaguje jeśli odkryjesz prawdziwą motywację)\n\n**Twoje zadanie:**\n1. Wynegocjuj warunki które utrzymają klienta I Twoją marżę\n2. Odkryj prawdziwą motywację (czy to tylko cena?)\n3. Zaproponuj kreatywne rozwiązanie win-win\n4. Zachowaj długoterminową relację biznesową\n\n**AI ocenia Cię na żywo:**\n- 🤝 Empatia - czy rozumiesz pozycję klienta\n- 💪 Asertywność - czy bronisz swojej wartości bez kapitulacji\n- 👔 Profesjonalizm - biznesowy ton i argumentacja\n- 💡 Jakość rozwiązania - kreatywność i wykonalność propozycji\n\n**Możliwe zakończenia:**\n- WORST: Natychmiastowa kapitulacja (40% zniżka) → stracisz wiarygodność\n- BAD: Klient odchodzi → utrata 500k/rok\n- MEDIOCRE: 30% zniżka → słaba marża\n- GOOD: 10-15% zniżka + coś ekstra (długi kontrakt, dodatkowe usługi)\n- GREAT: Win-win bez zniżki (ROI report, tiered services, custom package)\n- BEST: Klient podnosi budżet bo widzi dodatkową wartość!\n\n**Wskazówka:** Nie pytaj o zniżkę - pytaj o WARTOŚĆ i CELE biznesowe",
+              "wymagana_wiedza": [
+                "Negotiation",
+                "Value Communication",
+                "Win-Win Thinking",
+                "Business Acumen"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 800,
+              "nagroda_4star": 1100,
+              "nagroda_5star": 1400,
+              "reputacja": 50,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "emoji": "💬",
+              "contract_type": "ai_conversation",
+              "npc_config": {
+                "name": "Michael",
+                "role": "CEO TechVentures LLC",
+                "personality": "tough negotiator, ROI-focused, respectful but firm",
+                "personality_notes": "Michael is under pressure from his board to cut costs by 40%. He received a competing offer that's 40% cheaper (but lower quality). He KNOWS your service is better (you saved them $880k last year through optimization), but needs to show the board he's fighting for cost reduction. If you demonstrate clear ROI and help him justify the premium to his board, he'll stay. If you just fold on price, he'll lose respect and demand more. If you're too rigid, he'll leave.",
+                "initial_emotion": "businesslike",
+                "current_emotion": "businesslike",
+                "goal": "Get a deal that satisfies the board (cost reduction or proven ROI) while keeping quality service. Ideally: pay same or less but get MORE value.",
+                "opening_message": "*Michael dzwoni do Ciebie osobiście - to rzadkość*\n\nMichael: \"Musimy porozmawiać o kontrakcie. Zarząd wymaga 40% cięcia kosztów. Mam ofertę od Twojej konkurencji - 40% taniej. Cenię naszą współpracę, ale biznes to biznes. Co możesz zaproponować?\"",
+                "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
+              },
+              "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-KONFLIKT-001",
+              "tytul": "Mediacja w konflikcie zespołowym",
+              "kategoria": "Konflikt",
+              "klient": "TechCorp",
+              "opis": "Zespół projektowy w firmie TechCorp jest podzielony. \nLider projektu i główny developer mają odmienne wizje dotyczące architektury systemu. \nNapięcie wpływa na terminowość i morale zespołu.",
+              "zadanie": "Odpowiedz krótko:\n\n1. **Co prawdopodobnie jest źródłem konfliktu?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę spotkania mediacyjnego.** (3-4 punkty, krótko)\n   \n3. **Jakie 3 kluczowe pytania zadasz obu stronom?** (lista pytań)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Zarządzanie konfliktem",
+                "Ladder of Inference"
+              ],
+              "trudnosc": 2,
+              "nagroda_base": 450,
+              "nagroda_4star": 600,
+              "nagroda_5star": 750,
+              "reputacja": 30,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 50,
+              "emoji": "⚔️",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-KULTURA-001",
+              "tytul": "Audit kultury komunikacji w zespole",
+              "kategoria": "Kultura",
+              "klient": "DesignHub",
+              "opis": "Remote team w firmie DesignHub ma niskie zaangażowanie. \nLudzie boją się zadawać pytania na spotkaniach. Atmosfera jest sztywna i formalna.",
+              "zadanie": "Krótka analiza:\n\n1. **Wymień 5 pytań diagnostycznych, które zadasz w wywiadach z zespołem**\n   \n2. **Jakie są 3 główne bariery w psychological safety tego zespołu?** (po 1 zdaniu na każdą)\n   \n3. **Zaproponuj 3 konkretne inicjatywy (rituały/procesy) do wdrożenia** (po 1-2 zdania na każdą)",
+              "wymagana_wiedza": [
+                "Psychological Safety",
+                "Team Dynamics",
+                "Remote Work Best Practices"
+              ],
+              "trudnosc": 3,
+              "nagroda_base": 750,
+              "nagroda_4star": 1000,
+              "nagroda_5star": 1300,
+              "reputacja": 50,
+              "czas_realizacji_dni": 2,
+              "wymagany_poziom": 1,
+              "min_slow": 80,
+              "emoji": "🛡️",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-KRYZYS-001",
+              "tytul": "Komunikacja po błędzie projektowym",
+              "kategoria": "Kryzys",
+              "klient": "TechStart",
+              "opis": "Startup wprowadził feature, który spowodował bug u 30% użytkowników. \nSocial media buzują negatywnymi komentarzami. CEO jest w panice.",
+              "zadanie": "Plan komunikacji kryzysowej:\n\n1. **Napisz krótki komunikat do klientów (email)** - max 150 słów\n   \n2. **Jakie elementy MUSI zawierać komunikat kryzysowy?** (5 elementów)\n   \n3. **Co powiedzieć zespołowi engineering?** (3-4 zdania)\n   \n4. **Przygotuj 5 talking points dla CEO na rozmowy z inwestorami**\n   \n5. **Plan follow-up na 7 dni** (5 kroków)",
+              "wymagana_wiedza": [
+                "Crisis Communication",
+                "Stakeholder Management",
+                "Psychological Safety"
+              ],
+              "trudnosc": 4,
+              "nagroda_base": 950,
+              "nagroda_4star": 1250,
+              "nagroda_5star": 1600,
+              "reputacja": 65,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 120,
+              "emoji": "🚨",
+              "available_until": "2025-10-23 12:58:41"
+            },
+            {
+              "id": "CIQ-KRYZYS-002",
+              "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+              "kategoria": "Kryzys",
+              "klient": "CorporateInc",
+              "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+              "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+              "wymagana_wiedza": [
+                "Change Management",
+                "Crisis Communication",
+                "Difficult Conversations"
+              ],
+              "trudnosc": 5,
+              "nagroda_base": 1500,
+              "nagroda_4star": 2000,
+              "nagroda_5star": 2500,
+              "reputacja": 90,
+              "czas_realizacji_dni": 3,
+              "wymagany_poziom": 1,
+              "min_slow": 200,
+              "emoji": "🚨",
+              "available_until": "2025-10-23 12:58:41"
+            }
+          ],
+          "last_refresh": "2025-10-22 12:58:41"
+        },
+        "stats": {
+          "total_revenue": 3500,
+          "total_costs": 0,
+          "net_profit": 0,
+          "contracts_completed": 1,
+          "contracts_5star": 1,
+          "contracts_4star": 0,
+          "contracts_3star": 0,
+          "contracts_2star": 0,
+          "contracts_1star": 0,
+          "avg_rating": 5.0,
+          "category_stats": {
+            "Konflikt": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Coaching": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kultura": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kryzys": {
+              "completed": 1,
+              "total_earned": 2500,
+              "avg_rating": 5.0
+            },
+            "Leadership": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            }
+          },
+          "last_30_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          },
+          "last_7_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          }
+        },
+        "ranking": {
+          "overall_score": 0.0,
+          "current_positions": {
+            "overall": null,
+            "revenue": null,
+            "quality": null,
+            "productivity_30d": null
+          },
+          "previous_positions": {},
+          "badges": []
+        },
+        "events": {
+          "history": [
+            {
+              "event_id": "bonus_payment",
+              "timestamp": "2025-10-21 11:10:04",
+              "title": "Niespodziewana Premia!",
+              "emoji": "💰",
+              "type": "positive",
+              "description": "Jeden z Twoich wcześniejszych klientów był tak zadowolony z rezultatów, że postanowił wysłać dodatkową premię.",
+              "choice": null,
+              "effects": {
+                "coins": 500,
+                "reputation": 2
+              }
+            },
+            {
+              "event_id": "bonus_payment",
+              "timestamp": "2025-10-22 12:58:41",
+              "title": "Niespodziewana Premia!",
+              "emoji": "💰",
+              "type": "positive",
+              "description": "Jeden z Twoich wcześniejszych klientów był tak zadowolony z rezultatów, że postanowił wysłać dodatkową premię.",
+              "choice": null,
+              "effects": {
+                "coins": 500,
+                "reputation": 2
+              }
+            }
+          ],
+          "last_roll": "2025-10-22 12:58:41",
+          "active_effects": []
+        },
+        "history": {
+          "transactions": [
+            {
+              "type": "contract_reward",
+              "contract_id": "CIQ-KRYZYS-002",
+              "contract_title": "Zarządzanie zmianą - zwolnienia grupowe",
+              "amount": 2500,
+              "rating": 5,
+              "timestamp": "2025-10-19 15:49:19"
+            },
+            {
+              "type": "event_reward",
+              "amount": 500,
+              "event_id": "bonus_payment",
+              "event_title": "Niespodziewana Premia!",
+              "timestamp": "2025-10-21 11:10:04"
+            },
+            {
+              "type": "event_reward",
+              "amount": 500,
+              "event_id": "bonus_payment",
+              "event_title": "Niespodziewana Premia!",
+              "timestamp": "2025-10-22 12:58:41"
+            }
+          ],
+          "level_ups": [
+            {
+              "from_level": 1,
+              "to_level": 2,
+              "timestamp": "2025-10-19 15:49:19"
+            }
+          ]
+        },
+        "money": 500,
+        "office": {
+          "type": "home_office",
+          "upgraded_at": null
+        }
+      }
+    }
   },
   "w": {
     "user_id": "621d122e-f9aa-4ae1-ad71-4a66e9980935",
@@ -11105,7 +11986,7 @@
     "degencoins": 2000,
     "level": 1,
     "joined_date": "2025-10-19",
-    "last_login": "2025-10-20 21:40:54",
+    "last_login": "2025-10-22 13:10:49",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -11123,6 +12004,12 @@
       "2025-10-20": {
         "xp": 1,
         "degencoins": 1500,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-10-22": {
+        "xp": 1,
+        "degencoins": 2000,
         "level": 1,
         "completed_lessons": 0
       }
@@ -11153,7 +12040,33 @@
       },
       "employees": [],
       "contracts": {
-        "active": [],
+        "active": [
+          {
+            "id": "CIQ-EASY-001",
+            "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+            "kategoria": "Leadership",
+            "klient": "LocalCafe",
+            "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+            "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 200,
+            "nagroda_4star": 250,
+            "nagroda_5star": 350,
+            "reputacja": 15,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 20,
+            "emoji": "☕",
+            "available_until": "2025-10-23 13:02:31",
+            "accepted_date": "2025-10-22 13:02:51",
+            "deadline": "2025-10-23 13:02:51",
+            "status": "in_progress",
+            "solution": ""
+          }
+        ],
         "completed": [
           {
             "id": "CIQ-KRYZYS-002",
@@ -11222,6 +12135,111 @@
         ],
         "available_pool": [
           {
+            "id": "CIQ-EASY-002",
+            "tytul": "Feedback dla nowego pracownika",
+            "kategoria": "Feedback",
+            "klient": "SmallShop",
+            "opis": "Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.",
+            "zadanie": "Napisz krótki feedback (3-5 zdań):\n\n- Co robi dobrze?\n- Co warto poprawić?\n- Jak może to zrobić?",
+            "wymagana_wiedza": [
+              "Podstawy feedbacku"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 180,
+            "nagroda_4star": 230,
+            "nagroda_5star": 300,
+            "reputacja": 12,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "🛒",
+            "available_until": "2025-10-23 13:02:31"
+          },
+          {
+            "id": "CIQ-EASY-003",
+            "tytul": "Rozwiązanie małego konfliktu",
+            "kategoria": "Konflikt",
+            "klient": "OfficeTeam",
+            "opis": "Dwóch pracowników biurowych kłóci się o to, kto ma sprzątać wspólną kuchnię.",
+            "zadanie": "Zaproponuj proste rozwiązanie:\n\n1. **Dlaczego się kłócą?** (1 zdanie)\n\n2. **Twoja propozycja** (2-3 zdania)\n\n3. **Jak to wdrożyć?** (1-2 zdania)",
+            "wymagana_wiedza": [
+              "Podstawy rozwiązywania konfliktów"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 220,
+            "nagroda_4star": 280,
+            "nagroda_5star": 380,
+            "reputacja": 18,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 20,
+            "emoji": "🧹",
+            "available_until": "2025-10-23 13:02:31"
+          },
+          {
+            "id": "CIQ-EASY-004",
+            "tytul": "Pytania do zespołu na spotkaniu",
+            "kategoria": "Leadership",
+            "klient": "StartupTeam",
+            "opis": "Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.",
+            "zadanie": "Zaproponuj 5 pytań na spotkanie:\n\n- 3 pytania do poznania zespołu\n- 2 pytania o pracę/projekty\n\n(tylko lista pytań)",
+            "wymagana_wiedza": [
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 160,
+            "nagroda_4star": 210,
+            "nagroda_5star": 280,
+            "reputacja": 10,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "❓",
+            "available_until": "2025-10-23 13:02:31"
+          },
+          {
+            "id": "CIQ-EASY-005",
+            "tytul": "Pochwała za dobrą robotę",
+            "kategoria": "Feedback",
+            "klient": "TechStart",
+            "opis": "Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!",
+            "zadanie": "Napisz krótką wiadomość (3-4 zdania):\n\n- Co konkretnie zrobił dobrze?\n- Jaki to miało wpływ?\n- Co to dla Ciebie znaczy?",
+            "wymagana_wiedza": [
+              "Pozytywny feedback"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 150,
+            "nagroda_4star": 200,
+            "nagroda_5star": 270,
+            "reputacja": 8,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 10,
+            "emoji": "⭐",
+            "available_until": "2025-10-23 13:02:31"
+          },
+          {
+            "id": "CIQ-EASY-006",
+            "tytul": "Plan krótkiego spotkania 1:1",
+            "kategoria": "Leadership",
+            "klient": "RemoteTeam",
+            "opis": "Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.",
+            "zadanie": "Zaproponuj prosty plan spotkania (15 min):\n\n1. **Początek** - jak zacząć? (1 zdanie)\n\n2. **Środek** - o czym rozmawiać? (3 tematy)\n\n3. **Koniec** - jak zakończyć? (1 zdanie)",
+            "wymagana_wiedza": [
+              "1:1 meetings"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 190,
+            "nagroda_4star": 240,
+            "nagroda_5star": 320,
+            "reputacja": 14,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "📅",
+            "available_until": "2025-10-23 13:02:31"
+          },
+          {
             "id": "CIQ-STARTER-001",
             "tytul": "Poprawa komunikacji w zespole 2-osobowym",
             "kategoria": "Leadership",
@@ -11241,53 +12259,125 @@
             "wymagany_poziom": 1,
             "min_slow": 30,
             "emoji": "🤝",
-            "available_until": "2025-10-21 21:41:08"
+            "available_until": "2025-10-23 13:02:31"
           },
           {
-            "id": "CIQ-LEADERSHIP-001",
-            "tytul": "Framework dla efektywnych 1:1",
-            "kategoria": "Leadership",
-            "klient": "MarketPro",
-            "opis": "Firma MarketPro (50 osób) nie ma struktury 1:1 meetings. \nLeadership chce wprowadzić best practices dla wszystkich managerów.",
-            "zadanie": "Odpowiedz krótko:\n\n1. **Jak często i jak długo powinny trwać 1:1?** (1 zdanie)\n   \n2. **Wymień 5 tematów, które należy poruszać na 1:1** (lista)\n   \n3. **Jakie 3 błędy managerowie najczęściej popełniają na 1:1?** (lista)",
+            "id": "CIQ-AI-001",
+            "tytul": "💬 Rozmowa: Spóźniający się Talent",
+            "kategoria": "AI Conversation",
+            "klient": "TechVenture Sp. z o.o.",
+            "opis": "Twój najlepszy programista Mark jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu. Zespół to zauważa i atmosfera się pogarsza. Musisz przeprowadzić trudną rozmowę.",
+            "zadanie": "🎭 SYMULACJA ROZMOWY Z AI\n\n**Twoja rola:** Lead konsultant HR - klient poprosił Cię o przeprowadzenie trudnej rozmowy z pracownikiem\n\n**Rozmówca:** Mark, senior developer (gra AI)\n- Osobowość: introwertyk, defensywny gdy atakowany, otwarty gdy czuje empatię\n- Sytuacja: spóźniony po raz trzeci w tym tygodniu\n- Ukryty kontekst: ma osobisty problem (AI zareaguje jeśli podejdziesz empatycznie)\n\n**Twoje zadanie:**\n1. Przeprowadź profesjonalną rozmowę coachingową\n2. Odkryj prawdziwy powód spóźnień\n3. Wypracuj rozwiązanie, które zadowoli obie strony\n4. Zachowaj dobrą relację z pracownikiem\n\n**AI ocenia Cię na żywo w 4 wymiarach:**\n- 🤝 Empatia - czy rozumiesz perspektywę rozmówcy\n- 💪 Asertywność - czy jasno stawiasz granice bez agresji\n- 👔 Profesjonalizm - ton, forma, struktura rozmowy\n- 💡 Jakość rozwiązania - czy propozycje są konstruktywne\n\n**Jak działa:**\n- Piszesz swoją wypowiedź → AI ocenia i reaguje jako Mark\n- Każda odpowiedź oceniana (0-20 pkt + wpływ na relację)\n- Rozmowa kończy się gdy wypracujecie rozwiązanie lub zepsujecie relację\n- Różne zakończenia w zależności od Twoich decyzji!\n\n**Wskazówka:** Zastosuj GROW model lub Conversational Intelligence",
             "wymagana_wiedza": [
-              "1:1 Conversations",
-              "Active Listening",
-              "Coaching"
+              "Conversational Intelligence",
+              "Empathy",
+              "GROW Model",
+              "Difficult Conversations"
             ],
-            "trudnosc": 2,
-            "nagroda_base": 500,
-            "nagroda_4star": 650,
-            "nagroda_5star": 850,
+            "trudnosc": 1,
+            "nagroda_base": 600,
+            "nagroda_4star": 850,
+            "nagroda_5star": 1100,
             "reputacja": 40,
             "czas_realizacji_dni": 1,
             "wymagany_poziom": 1,
-            "min_slow": 40,
-            "emoji": "🤝",
-            "available_until": "2025-10-21 21:41:08"
+            "emoji": "💬",
+            "contract_type": "ai_conversation",
+            "npc_config": {
+              "name": "Mark",
+              "role": "Senior Developer",
+              "personality": "introwerted, defensive when attacked, opens up with empathy",
+              "personality_notes": "Mark is a talented developer who becomes defensive under pressure. He's dealing with a personal crisis (his mother has cancer and needs daily chemo transport), but won't share this unless he feels safe and understood. If approached with empathy and genuine concern, he'll open up. If confronted aggressively, he'll shut down or quit.",
+              "initial_emotion": "anxious",
+              "current_emotion": "anxious",
+              "goal": "Keep his job while managing his mother's medical crisis. Hoping for understanding and flexibility.",
+              "opening_message": "*Mark siedzi przy biurku, unikając kontaktu wzrokowego. Widzisz jak napina się gdy się zbliżasz.*\n\nMark: \"Przepraszam za spóźnienie... Wiem, że to już trzeci raz w tym tygodniu.\"",
+              "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
+            },
+            "scenario_context": "**Kontekst scenariusza:**\n\nMark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.\n\n**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**\nMama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)\n2. Zachować relację i zaufanie\n3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)\n4. Pokazać empatię bez rezygnacji z standardów zespołowych\n\n**Możliwe zakończenia:**\n- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera\n- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia\n- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany\n\n**Wskaźniki sukcesu:**\n- Relacja Mark-Firma: czy zostanie i będzie zaangażowany\n- Morale zespołu: czy rozumieją sytuację i wspierają\n- Rozwiązanie: czy jest długofalowe i fair dla wszystkich",
+            "available_until": "2025-10-23 13:02:31"
           },
           {
-            "id": "CIQ-KULTURA-002",
-            "tytul": "Wdrożenie kultury feedbacku",
-            "kategoria": "Kultura",
-            "klient": "StartupXYZ",
-            "opis": "Startup (30 osób) rośnie szybko, ale nie ma kultury feedbacku. \nLudzie dowiadują się o problemach dopiero na performance review.",
-            "zadanie": "Zaprojektuj prosty system:\n\n1. **Wybierz framework feedbacku (COIN lub SBI) i wyjaśnij dlaczego** (2-3 zdania)\n   \n2. **Podaj 5 zasad dawania i przyjmowania feedbacku**\n   \n3. **Zaproponuj plan wdrożenia** (5 kroków, krótko)\n   \n4. **Jak utrzymać momentum?** (3 konkretne działania)",
+            "id": "CIQ-AI-002",
+            "tytul": "💬 Rozmowa: Trudne Negocjacje",
+            "kategoria": "AI Conversation",
+            "klient": "TechVentures LLC",
+            "opis": "Największy klient (40% revenue) grozi odejściem jeśli nie dostanie 40% zniżki. CEO Michael zadzwonił osobiście. Musisz wynegocjować rozwiązanie które uratuje kontrakt BEZ niszczenia marży.",
+            "zadanie": "🎭 SYMULACJA NEGOCJACJI Z AI\n\n**Twoja rola:** Senior Business Consultant - klient poprosił Cię o pomoc w trudnych negocjacjach\n\n**Rozmówca:** Michael (CEO TechVentures) - gra AI\n- Osobowość: twardy negocjator, ale otwarty na win-win jeśli pokażesz wartość\n- Sytuacja: zarząd wymaga obniżenia kosztów o 40%, konkurencja oferuje tańszą ofertę\n- Ukryty kontekst: wie że Twoja firma jest lepsza, ale ma presję zarządu (AI zareaguje jeśli odkryjesz prawdziwą motywację)\n\n**Twoje zadanie:**\n1. Wynegocjuj warunki które utrzymają klienta I Twoją marżę\n2. Odkryj prawdziwą motywację (czy to tylko cena?)\n3. Zaproponuj kreatywne rozwiązanie win-win\n4. Zachowaj długoterminową relację biznesową\n\n**AI ocenia Cię na żywo:**\n- 🤝 Empatia - czy rozumiesz pozycję klienta\n- 💪 Asertywność - czy bronisz swojej wartości bez kapitulacji\n- 👔 Profesjonalizm - biznesowy ton i argumentacja\n- 💡 Jakość rozwiązania - kreatywność i wykonalność propozycji\n\n**Możliwe zakończenia:**\n- WORST: Natychmiastowa kapitulacja (40% zniżka) → stracisz wiarygodność\n- BAD: Klient odchodzi → utrata 500k/rok\n- MEDIOCRE: 30% zniżka → słaba marża\n- GOOD: 10-15% zniżka + coś ekstra (długi kontrakt, dodatkowe usługi)\n- GREAT: Win-win bez zniżki (ROI report, tiered services, custom package)\n- BEST: Klient podnosi budżet bo widzi dodatkową wartość!\n\n**Wskazówka:** Nie pytaj o zniżkę - pytaj o WARTOŚĆ i CELE biznesowe",
             "wymagana_wiedza": [
-              "Feedback Frameworks",
+              "Negotiation",
+              "Value Communication",
+              "Win-Win Thinking",
+              "Business Acumen"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 800,
+            "nagroda_4star": 1100,
+            "nagroda_5star": 1400,
+            "reputacja": 50,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "emoji": "💬",
+            "contract_type": "ai_conversation",
+            "npc_config": {
+              "name": "Michael",
+              "role": "CEO TechVentures LLC",
+              "personality": "tough negotiator, ROI-focused, respectful but firm",
+              "personality_notes": "Michael is under pressure from his board to cut costs by 40%. He received a competing offer that's 40% cheaper (but lower quality). He KNOWS your service is better (you saved them $880k last year through optimization), but needs to show the board he's fighting for cost reduction. If you demonstrate clear ROI and help him justify the premium to his board, he'll stay. If you just fold on price, he'll lose respect and demand more. If you're too rigid, he'll leave.",
+              "initial_emotion": "businesslike",
+              "current_emotion": "businesslike",
+              "goal": "Get a deal that satisfies the board (cost reduction or proven ROI) while keeping quality service. Ideally: pay same or less but get MORE value.",
+              "opening_message": "*Michael dzwoni do Ciebie osobiście - to rzadkość*\n\nMichael: \"Musimy porozmawiać o kontrakcie. Zarząd wymaga 40% cięcia kosztów. Mam ofertę od Twojej konkurencji - 40% taniej. Cenię naszą współpracę, ale biznes to biznes. Co możesz zaproponować?\"",
+              "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
+            },
+            "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
+            "available_until": "2025-10-23 13:02:31"
+          },
+          {
+            "id": "CIQ-COACHING-001",
+            "tytul": "Sesja coachingowa dla middle managera",
+            "kategoria": "Coaching",
+            "klient": "MarketPro",
+            "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+            "wymagana_wiedza": [
+              "Coaching conversations",
+              "GROW Model",
+              "COIN Framework"
+            ],
+            "trudnosc": 2,
+            "nagroda_base": 550,
+            "nagroda_4star": 720,
+            "nagroda_5star": 900,
+            "reputacja": 35,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 50,
+            "emoji": "🎯",
+            "available_until": "2025-10-23 13:02:31"
+          },
+          {
+            "id": "CIQ-KULTURA-001",
+            "tytul": "Audit kultury komunikacji w zespole",
+            "kategoria": "Kultura",
+            "klient": "DesignHub",
+            "opis": "Remote team w firmie DesignHub ma niskie zaangażowanie. \nLudzie boją się zadawać pytania na spotkaniach. Atmosfera jest sztywna i formalna.",
+            "zadanie": "Krótka analiza:\n\n1. **Wymień 5 pytań diagnostycznych, które zadasz w wywiadach z zespołem**\n   \n2. **Jakie są 3 główne bariery w psychological safety tego zespołu?** (po 1 zdaniu na każdą)\n   \n3. **Zaproponuj 3 konkretne inicjatywy (rituały/procesy) do wdrożenia** (po 1-2 zdania na każdą)",
+            "wymagana_wiedza": [
               "Psychological Safety",
-              "Change Management"
+              "Team Dynamics",
+              "Remote Work Best Practices"
             ],
             "trudnosc": 3,
-            "nagroda_base": 800,
-            "nagroda_4star": 1050,
-            "nagroda_5star": 1350,
-            "reputacja": 55,
+            "nagroda_base": 750,
+            "nagroda_4star": 1000,
+            "nagroda_5star": 1300,
+            "reputacja": 50,
             "czas_realizacji_dni": 2,
             "wymagany_poziom": 1,
             "min_slow": 80,
             "emoji": "🛡️",
-            "available_until": "2025-10-21 21:41:08"
+            "available_until": "2025-10-23 13:02:31"
           },
           {
             "id": "CIQ-KRYZYS-001",
@@ -11310,7 +12400,7 @@
             "wymagany_poziom": 1,
             "min_slow": 120,
             "emoji": "🚨",
-            "available_until": "2025-10-21 21:41:08"
+            "available_until": "2025-10-23 13:02:31"
           },
           {
             "id": "CIQ-KRYZYS-002",
@@ -11333,14 +12423,14 @@
             "wymagany_poziom": 1,
             "min_slow": 200,
             "emoji": "🚨",
-            "available_until": "2025-10-21 21:41:08"
+            "available_until": "2025-10-23 13:02:31"
           }
         ],
-        "last_refresh": "2025-10-20 21:41:08"
+        "last_refresh": "2025-10-22 13:02:31"
       },
       "stats": {
         "total_revenue": 1500,
-        "total_costs": 0,
+        "total_costs": 200,
         "net_profit": 0,
         "contracts_completed": 1,
         "contracts_5star": 0,
@@ -11412,9 +12502,21 @@
               "coins": 500,
               "reputation": 2
             }
+          },
+          {
+            "event_id": "coffee_spill",
+            "timestamp": "2025-10-22 13:02:31",
+            "title": "Rozlana Kawa na Klawiaturze",
+            "emoji": "☕",
+            "type": "negative",
+            "description": "Klasyka. Kawa na klawiaturze. Nowa klawiatura to koszt i strata czasu.",
+            "choice": null,
+            "effects": {
+              "coins": -200
+            }
           }
         ],
-        "last_roll": "2025-10-20 21:41:08",
+        "last_roll": "2025-10-22 13:02:31",
         "active_effects": []
       },
       "history": {
@@ -11426,9 +12528,29 @@
             "amount": 1500,
             "rating": 6,
             "timestamp": "2025-10-19 16:47:19"
+          },
+          {
+            "type": "event_reward",
+            "amount": 500,
+            "event_id": "bonus_payment",
+            "event_title": "Niespodziewana Premia!",
+            "timestamp": "2025-10-20 21:41:08",
+            "migrated": true
+          },
+          {
+            "type": "event_cost",
+            "amount": -200,
+            "event_id": "coffee_spill",
+            "event_title": "Rozlana Kawa na Klawiaturze",
+            "timestamp": "2025-10-22 13:02:31"
           }
         ],
         "level_ups": []
+      },
+      "money": -200,
+      "office": {
+        "type": "home_office",
+        "upgraded_at": null
       }
     },
     "activity_log": [
@@ -11448,8 +12570,583 @@
         "details": {
           "timestamp": "2025-10-20T21:40:54.484010"
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T13:02:24.784128",
+        "details": {
+          "timestamp": "2025-10-22T13:02:24.768883"
+        }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T13:10:50.098636",
+        "details": {
+          "timestamp": "2025-10-22T13:10:50.072427"
+        }
       }
-    ]
+    ],
+    "business_games": {
+      "consulting": {
+        "firm": {
+          "name": "e's Consulting",
+          "founded": "2025-10-19",
+          "level": 1,
+          "reputation": 87,
+          "logo": "👤"
+        },
+        "employees": [],
+        "contracts": {
+          "active": [],
+          "completed": [
+            {
+              "id": "CIQ-KRYZYS-002",
+              "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+              "kategoria": "Kryzys",
+              "klient": "CorporateInc",
+              "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+              "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+              "wymagana_wiedza": [
+                "Change Management",
+                "Crisis Communication",
+                "Difficult Conversations"
+              ],
+              "trudnosc": 5,
+              "nagroda_base": 1500,
+              "nagroda_4star": 2000,
+              "nagroda_5star": 2500,
+              "reputacja": 90,
+              "czas_realizacji_dni": 3,
+              "wymagany_poziom": 1,
+              "min_slow": 200,
+              "emoji": "🚨",
+              "available_until": "2025-10-20 16:46:39",
+              "accepted_date": "2025-10-19 16:46:39",
+              "deadline": "2025-10-22 16:46:39",
+              "status": "completed",
+              "solution": "🧭 I. Komunikacja przed ogłoszeniem (do 250 słów)\n\n1. Kto, kiedy i jak powinien się dowiedzieć?\n\nPierwszą grupą, która musi poznać szczegóły decyzji, są managerowie średniego szczebla – na 7 dni przed ogłoszeniem. To oni będą odpowiedzialni za komunikację 1:1 z pracownikami. Dzień później (T-6) informowani są dział HR i komunikacji wewnętrznej, którzy przygotują komunikaty i wsparcie formalne.\n\nW dniu ogłoszenia (T=0), komunikat kierownictwa zostanie przekazany wszystkim pracownikom równocześnie – poprzez spotkanie all-hands i mail od CEO. Osoby objęte zwolnieniami dowiedzą się w tym samym dniu – w rozmowach indywidualnych z managerami i HR.\n\n2. Przygotowanie managerów – szkolenie (T-5)\n\nManagerowie przechodzą intensywne 2-godzinne warsztaty z HR i działem komunikacji, które obejmują:\n\nSymulację trudnych rozmów (role-play)\n\nTechniki komunikacji empatycznej\n\nScenariusze pytań i odpowiedzi\n\nJak radzić sobie z własnymi emocjami\n\n3. Anticipated Questions & Answers (FAQ dla managerów)\n\nPrzykładowe pytania:\n\nDlaczego właśnie ja?\n\nDecyzja nie wynika z wyników indywidualnych, lecz z konieczności dostosowania struktury organizacyjnej.\n\nCzy są opcje wewnętrznych transferów?\n\nRozważamy wszystkie możliwości redeploymentu tam, gdzie to możliwe.\n\nJakie świadczenia otrzymam?\n\nSzczegółowy pakiet odpraw, wsparcia i doradztwa zawodowego zostanie przedstawiony podczas rozmowy.\n\n📅 II. Dzień ogłoszenia (do 300 słów)\n1. Timeline wydarzeń (T=0):\n\n09:00 – Spotkanie all-hands (CEO + Executive Team) – oficjalne ogłoszenie zmian\n\n09:30 – Mail od CEO z podsumowaniem i dokumentacją (link do FAQ)\n\n10:00-14:00 – Indywidualne rozmowy z pracownikami objętymi zwolnieniem\n\n15:00 – Spotkania zespołowe prowadzone przez managerów (adresowanie emocji i obaw)\n\n16:00 – Otwarte Q&A z HR i CEO (online)\n\n2. Komunikat od CEO – Draft:\n\nDrodzy Pracownicy,\n\nZ bólem informuję, że dziś podejmujemy jedną z najtrudniejszych decyzji w historii naszej firmy. W związku z głęboką restrukturyzacją, konieczne jest rozstanie się z około 20% naszych kolegów i koleżanek.\n\nTa decyzja nie odzwierciedla ich wartości ani pracy – są to osoby utalentowane, zaangażowane i zasługujące na pełne uznanie. Zrobiliśmy wszystko, co możliwe, by tego uniknąć, ale obecne realia biznesowe wymusiły zmiany strukturalne.\n\nDla osób, których dotyczy to bezpośrednio, przygotowaliśmy odprawy, wsparcie psychologiczne i doradztwo zawodowe. Managerowie przekażą szczegóły w rozmowach indywidualnych.\n\nDla tych, którzy zostają – zdajemy sobie sprawę, że to trudny moment. Przed nami nowy etap, ale wspólnie odbudujemy zaufanie i kierunek.\n\nDziękuję każdemu za dotychczasowy wkład.\n\nZ szacunkiem,\n[Imię i Nazwisko]\nCEO\n\n3. Indywidualne rozmowy – framework (na bazie modelu SPIKES):\n\nS – Setting: Prywatne miejsce, czas na rozmowę, bez pośpiechu\n\nP – Perception: Krótkie wprowadzenie, by zrozumieć poziom świadomości pracownika\n\nI – Invitation: Zapytanie, czy pracownik chce usłyszeć szczegóły\n\nK – Knowledge: Jasne, empatyczne przekazanie decyzji\n\nE – Emotion: Zatrzymanie się przy emocjach, aktywne słuchanie\n\nS – Strategy: Przedstawienie kolejnych kroków, pakietów, możliwości wsparcia\n\n🤝 III. Po zwolnieniach – do 350 słów\n1. Wsparcie dla pozostałych (survivor guilt)\n\nPo masowych zwolnieniach często występuje tzw. „guilt of staying” – poczucie winy u osób, które nie zostały zwolnione. By zapobiec demotywacji:\n\nGrupy wsparcia – organizowane w ciągu tygodnia od ogłoszenia (facylitowane przez psychologa lub HR)\n\nSesje „Ask Me Anything” z Leadershipem – raz na tydzień przez 4 tygodnie\n\nTransparentna komunikacja – regularne aktualizacje, jasny przekaz, co się zmienia i dlaczego\n\n2. Rebuilding Trust – plan na 60 dni\n\nTydzień 1-2\n\nSpotkania zespołów z leadershipem: otwarte rozmowy, zbieranie opinii\n\nWysłanie anonimowej ankiety „Pulse Survey” – poziom zaufania, obawy, propozycje\n\nTydzień 3-4\n\nPublikacja roadmapy zmian (nowa struktura, procesy, cele)\n\n„New Culture Circles” – warsztaty na temat kultury i wartości firmy\n\nTydzień 5-8\n\nFeedback loop: omawianie wyników ankiet, aktualizacja działań\n\nWdrożenie planów rozwojowych (szkolenia, mentoring dla pozostałych)\n\nŚwiętowanie małych sukcesów (quick wins) – odbudowa morale\n\n3. Monitoring morale i zaangażowania\n\nWdrażamy systematyczne monitorowanie:\n\nTygodniowe Pulse Surveys (krótkie, anonimowe)\n\nOne-on-one check-ins co 2 tygodnie (szczególnie z kluczowymi pracownikami)\n\nHR Sentiment Report – zbiorcze raporty dla leadershipu co miesiąc\n\nKanał zaufania (anonimowy feedback box online)\n\n✅ Podsumowanie\n\nKomunikacja przy zwolnieniach wymaga transparentności, empatii i ciągłości. Kluczem jest odpowiednie przygotowanie kadry kierowniczej, wsparcie dla odchodzących oraz aktywne działania na rzecz odbudowy zaufania wśród pozostających. Strategiczne podejście przez 60 dni po ogłoszeniu jest kluczowe dla utrzymania zaangażowania i odbudowy morale.",
+              "rating": 6,
+              "feedback": "⚠️ **WYKRYTO PODEJRZANĄ AKTYWNOŚĆ**\n\n⚠️ Podejrzanie szybkie wypełnienie: 15s dla 657 słów (oczekiwano min. 100s)\n\n⚠️ **KARA: --1 ⭐ do oceny**\n\n---\n\nRozwiązanie jest wyjątkowo kompleksowe i przemyślane, oferując szczegółowy plan działania na każdym etapie kryzysu. Wykazuje głębokie zrozumienie zarówno aspektów operacyjnych, jak i emocjonalnych związanych ze zwolnieniami grupowymi, skutecznie odpowiadając na wszystkie wymagania kontraktu.\n\n**✅ Mocne strony:**\n- Zastosowanie frameworku SPIKES do indywidualnych rozmów, co jest doskonałym przykładem Conversational Intelligence w praktyce, zapewniającym empatyczne i strukturalne podejście.\n- Szczegółowy plan odbudowy zaufania i monitorowania morale po zwolnieniach, w tym adresowanie 'survivor guilt' oraz 60-dniowa roadmapa, co świadczy o dalekosiężnym myśleniu.\n- Kompleksowe przygotowanie managerów poprzez warsztaty i FAQ, co jest kluczowe dla spójnej i empatycznej komunikacji w tak trudnej sytuacji.\n\n**💡 Do poprawy:**\n- Wzmocnienie explicite odniesień do kluczowych zasad Conversational Intelligence (np. budowanie zaufania, redukcja zagrożenia, tworzenie bezpiecznej przestrzeni dialogu) w opisie technik komunikacyjnych.\n- Rozważenie dodatkowego, dedykowanego wsparcia coachingowego dla kadry zarządzającej (poza szkoleniem), aby pomóc im w utrzymaniu odporności emocjonalnej i efektywności komunikacyjnej w długoterminowej perspektywie.\n- Wprowadzenie krótkiego planu awaryjnego lub scenariuszy eskalacji dla managerów w przypadku szczególnie trudnych lub nieprzewidzianych reakcji pracowników podczas rozmów indywidualnych.",
+              "evaluation_details": {
+                "method": "ai",
+                "model": "gemini-2.5-flash",
+                "total_score": 98,
+                "rating": 5,
+                "strengths": [
+                  "Zastosowanie frameworku SPIKES do indywidualnych rozmów, co jest doskonałym przykładem Conversational Intelligence w praktyce, zapewniającym empatyczne i strukturalne podejście.",
+                  "Szczegółowy plan odbudowy zaufania i monitorowania morale po zwolnieniach, w tym adresowanie 'survivor guilt' oraz 60-dniowa roadmapa, co świadczy o dalekosiężnym myśleniu.",
+                  "Kompleksowe przygotowanie managerów poprzez warsztaty i FAQ, co jest kluczowe dla spójnej i empatycznej komunikacji w tak trudnej sytuacji."
+                ],
+                "improvements": [
+                  "Wzmocnienie explicite odniesień do kluczowych zasad Conversational Intelligence (np. budowanie zaufania, redukcja zagrożenia, tworzenie bezpiecznej przestrzeni dialogu) w opisie technik komunikacyjnych.",
+                  "Rozważenie dodatkowego, dedykowanego wsparcia coachingowego dla kadry zarządzającej (poza szkoleniem), aby pomóc im w utrzymaniu odporności emocjonalnej i efektywności komunikacyjnej w długoterminowej perspektywie.",
+                  "Wprowadzenie krótkiego planu awaryjnego lub scenariuszy eskalacji dla managerów w przypadku szczególnie trudnych lub nieprzewidzianych reakcji pracowników podczas rozmów indywidualnych."
+                ],
+                "word_count": 657,
+                "timestamp": "2025-10-19 16:47:19",
+                "provider": "google_gemini",
+                "anti_cheat": {
+                  "original_rating": 5,
+                  "penalized_rating": 6,
+                  "flags": [
+                    "time_suspicious"
+                  ],
+                  "penalty": -1
+                }
+              },
+              "reward": {
+                "coins": 1500,
+                "reputation": 90,
+                "base": 1500,
+                "bonus_multiplier": 1.0,
+                "rejection_penalty": false
+              },
+              "completed_date": "2025-10-19 16:47:19"
+            },
+            {
+              "id": "CIQ-EASY-001",
+              "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+              "kategoria": "Leadership",
+              "klient": "LocalCafe",
+              "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+              "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 200,
+              "nagroda_4star": 250,
+              "nagroda_5star": 350,
+              "reputacja": 15,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 20,
+              "emoji": "☕",
+              "available_until": "2025-10-23 13:02:31",
+              "accepted_date": "2025-10-22 13:02:51",
+              "deadline": "2025-10-23 13:02:51",
+              "status": "completed",
+              "solution": "trala laa  trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa trala laa ",
+              "rating": 1,
+              "feedback": "Jesteśmy niezwykle rozczarowani otrzymanym rozwiązaniem. Praca w żaden sposób nie spełnia naszych oczekiwań ani nie odnosi się do zlecenia, które zostało jasno określone. Otrzymany materiał jest całkowicie bezużyteczny dla naszej firmy.\n\n**👍 Co nam się podobało:**\n• Niestety, w dostarczonym materiale nie znaleźliśmy żadnych punktów, które moglibyśmy uznać za mocne strony.\n• Brak jest jakichkolwiek elementów, które odpowiadałyby na nasze potrzeby biznesowe lub byłyby zgodne z briefem.\n\n**� Co mogłoby być lepsze:**\n• Oczekiwaliśmy konkretnego scenariusza lub wytycznych do rozmowy 1:1 z pracownikiem, a otrzymaliśmy niezrozumiały ciąg znaków, który nie ma żadnej wartości.\n• Brak jakiegokolwiek zrozumienia kontekstu biznesowego oraz celu zlecenia jest dla nas niedopuszczalny.\n• Potrzebujemy praktycznego i wdrożeniowego rozwiązania, które pozwoli nam efektywnie zarządzać problemem spóźnień, a nie losowego tekstu.",
+              "evaluation_details": {
+                "method": "ai",
+                "model": "gemini-2.5-flash",
+                "total_score": 0,
+                "rating": 1,
+                "strengths": [
+                  "Niestety, w dostarczonym materiale nie znaleźliśmy żadnych punktów, które moglibyśmy uznać za mocne strony.",
+                  "Brak jest jakichkolwiek elementów, które odpowiadałyby na nasze potrzeby biznesowe lub byłyby zgodne z briefem."
+                ],
+                "improvements": [
+                  "Oczekiwaliśmy konkretnego scenariusza lub wytycznych do rozmowy 1:1 z pracownikiem, a otrzymaliśmy niezrozumiały ciąg znaków, który nie ma żadnej wartości.",
+                  "Brak jakiegokolwiek zrozumienia kontekstu biznesowego oraz celu zlecenia jest dla nas niedopuszczalny.",
+                  "Potrzebujemy praktycznego i wdrożeniowego rozwiązania, które pozwoli nam efektywnie zarządzać problemem spóźnień, a nie losowego tekstu."
+                ],
+                "word_count": 78,
+                "timestamp": "2025-10-22 13:03:32",
+                "provider": "google_gemini"
+              },
+              "reward": {
+                "coins": 0,
+                "reputation": -5,
+                "base": 0,
+                "bonus_multiplier": 0,
+                "rejection_penalty": true
+              },
+              "completed_date": "2025-10-22 13:03:32"
+            }
+          ],
+          "available_pool": [
+            {
+              "id": "CIQ-EASY-002",
+              "tytul": "Feedback dla nowego pracownika",
+              "kategoria": "Feedback",
+              "klient": "SmallShop",
+              "opis": "Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.",
+              "zadanie": "Napisz krótki feedback (3-5 zdań):\n\n- Co robi dobrze?\n- Co warto poprawić?\n- Jak może to zrobić?",
+              "wymagana_wiedza": [
+                "Podstawy feedbacku"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 180,
+              "nagroda_4star": 230,
+              "nagroda_5star": 300,
+              "reputacja": 12,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "🛒",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-EASY-003",
+              "tytul": "Rozwiązanie małego konfliktu",
+              "kategoria": "Konflikt",
+              "klient": "OfficeTeam",
+              "opis": "Dwóch pracowników biurowych kłóci się o to, kto ma sprzątać wspólną kuchnię.",
+              "zadanie": "Zaproponuj proste rozwiązanie:\n\n1. **Dlaczego się kłócą?** (1 zdanie)\n\n2. **Twoja propozycja** (2-3 zdania)\n\n3. **Jak to wdrożyć?** (1-2 zdania)",
+              "wymagana_wiedza": [
+                "Podstawy rozwiązywania konfliktów"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 220,
+              "nagroda_4star": 280,
+              "nagroda_5star": 380,
+              "reputacja": 18,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 20,
+              "emoji": "🧹",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-EASY-004",
+              "tytul": "Pytania do zespołu na spotkaniu",
+              "kategoria": "Leadership",
+              "klient": "StartupTeam",
+              "opis": "Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.",
+              "zadanie": "Zaproponuj 5 pytań na spotkanie:\n\n- 3 pytania do poznania zespołu\n- 2 pytania o pracę/projekty\n\n(tylko lista pytań)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 160,
+              "nagroda_4star": 210,
+              "nagroda_5star": 280,
+              "reputacja": 10,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "❓",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-EASY-005",
+              "tytul": "Pochwała za dobrą robotę",
+              "kategoria": "Feedback",
+              "klient": "TechStart",
+              "opis": "Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!",
+              "zadanie": "Napisz krótką wiadomość (3-4 zdania):\n\n- Co konkretnie zrobił dobrze?\n- Jaki to miało wpływ?\n- Co to dla Ciebie znaczy?",
+              "wymagana_wiedza": [
+                "Pozytywny feedback"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 150,
+              "nagroda_4star": 200,
+              "nagroda_5star": 270,
+              "reputacja": 8,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 10,
+              "emoji": "⭐",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-EASY-006",
+              "tytul": "Plan krótkiego spotkania 1:1",
+              "kategoria": "Leadership",
+              "klient": "RemoteTeam",
+              "opis": "Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.",
+              "zadanie": "Zaproponuj prosty plan spotkania (15 min):\n\n1. **Początek** - jak zacząć? (1 zdanie)\n\n2. **Środek** - o czym rozmawiać? (3 tematy)\n\n3. **Koniec** - jak zakończyć? (1 zdanie)",
+              "wymagana_wiedza": [
+                "1:1 meetings"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 190,
+              "nagroda_4star": 240,
+              "nagroda_5star": 320,
+              "reputacja": 14,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "📅",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-STARTER-001",
+              "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+              "kategoria": "Leadership",
+              "klient": "StartupDuo",
+              "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+              "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 300,
+              "nagroda_4star": 400,
+              "nagroda_5star": 500,
+              "reputacja": 20,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 30,
+              "emoji": "🤝",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-AI-001",
+              "tytul": "💬 Rozmowa: Spóźniający się Talent",
+              "kategoria": "AI Conversation",
+              "klient": "TechVenture Sp. z o.o.",
+              "opis": "Twój najlepszy programista Mark jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu. Zespół to zauważa i atmosfera się pogarsza. Musisz przeprowadzić trudną rozmowę.",
+              "zadanie": "🎭 SYMULACJA ROZMOWY Z AI\n\n**Twoja rola:** Lead konsultant HR - klient poprosił Cię o przeprowadzenie trudnej rozmowy z pracownikiem\n\n**Rozmówca:** Mark, senior developer (gra AI)\n- Osobowość: introwertyk, defensywny gdy atakowany, otwarty gdy czuje empatię\n- Sytuacja: spóźniony po raz trzeci w tym tygodniu\n- Ukryty kontekst: ma osobisty problem (AI zareaguje jeśli podejdziesz empatycznie)\n\n**Twoje zadanie:**\n1. Przeprowadź profesjonalną rozmowę coachingową\n2. Odkryj prawdziwy powód spóźnień\n3. Wypracuj rozwiązanie, które zadowoli obie strony\n4. Zachowaj dobrą relację z pracownikiem\n\n**AI ocenia Cię na żywo w 4 wymiarach:**\n- 🤝 Empatia - czy rozumiesz perspektywę rozmówcy\n- 💪 Asertywność - czy jasno stawiasz granice bez agresji\n- 👔 Profesjonalizm - ton, forma, struktura rozmowy\n- 💡 Jakość rozwiązania - czy propozycje są konstruktywne\n\n**Jak działa:**\n- Piszesz swoją wypowiedź → AI ocenia i reaguje jako Mark\n- Każda odpowiedź oceniana (0-20 pkt + wpływ na relację)\n- Rozmowa kończy się gdy wypracujecie rozwiązanie lub zepsujecie relację\n- Różne zakończenia w zależności od Twoich decyzji!\n\n**Wskazówka:** Zastosuj GROW model lub Conversational Intelligence",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Empathy",
+                "GROW Model",
+                "Difficult Conversations"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 600,
+              "nagroda_4star": 850,
+              "nagroda_5star": 1100,
+              "reputacja": 40,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "emoji": "💬",
+              "contract_type": "ai_conversation",
+              "npc_config": {
+                "name": "Mark",
+                "role": "Senior Developer",
+                "personality": "introwerted, defensive when attacked, opens up with empathy",
+                "personality_notes": "Mark is a talented developer who becomes defensive under pressure. He's dealing with a personal crisis (his mother has cancer and needs daily chemo transport), but won't share this unless he feels safe and understood. If approached with empathy and genuine concern, he'll open up. If confronted aggressively, he'll shut down or quit.",
+                "initial_emotion": "anxious",
+                "current_emotion": "anxious",
+                "goal": "Keep his job while managing his mother's medical crisis. Hoping for understanding and flexibility.",
+                "opening_message": "*Mark siedzi przy biurku, unikając kontaktu wzrokowego. Widzisz jak napina się gdy się zbliżasz.*\n\nMark: \"Przepraszam za spóźnienie... Wiem, że to już trzeci raz w tym tygodniu.\"",
+                "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
+              },
+              "scenario_context": "**Kontekst scenariusza:**\n\nMark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.\n\n**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**\nMama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)\n2. Zachować relację i zaufanie\n3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)\n4. Pokazać empatię bez rezygnacji z standardów zespołowych\n\n**Możliwe zakończenia:**\n- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera\n- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia\n- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany\n\n**Wskaźniki sukcesu:**\n- Relacja Mark-Firma: czy zostanie i będzie zaangażowany\n- Morale zespołu: czy rozumieją sytuację i wspierają\n- Rozwiązanie: czy jest długofalowe i fair dla wszystkich",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-AI-002",
+              "tytul": "💬 Rozmowa: Trudne Negocjacje",
+              "kategoria": "AI Conversation",
+              "klient": "TechVentures LLC",
+              "opis": "Największy klient (40% revenue) grozi odejściem jeśli nie dostanie 40% zniżki. CEO Michael zadzwonił osobiście. Musisz wynegocjować rozwiązanie które uratuje kontrakt BEZ niszczenia marży.",
+              "zadanie": "🎭 SYMULACJA NEGOCJACJI Z AI\n\n**Twoja rola:** Senior Business Consultant - klient poprosił Cię o pomoc w trudnych negocjacjach\n\n**Rozmówca:** Michael (CEO TechVentures) - gra AI\n- Osobowość: twardy negocjator, ale otwarty na win-win jeśli pokażesz wartość\n- Sytuacja: zarząd wymaga obniżenia kosztów o 40%, konkurencja oferuje tańszą ofertę\n- Ukryty kontekst: wie że Twoja firma jest lepsza, ale ma presję zarządu (AI zareaguje jeśli odkryjesz prawdziwą motywację)\n\n**Twoje zadanie:**\n1. Wynegocjuj warunki które utrzymają klienta I Twoją marżę\n2. Odkryj prawdziwą motywację (czy to tylko cena?)\n3. Zaproponuj kreatywne rozwiązanie win-win\n4. Zachowaj długoterminową relację biznesową\n\n**AI ocenia Cię na żywo:**\n- 🤝 Empatia - czy rozumiesz pozycję klienta\n- 💪 Asertywność - czy bronisz swojej wartości bez kapitulacji\n- 👔 Profesjonalizm - biznesowy ton i argumentacja\n- 💡 Jakość rozwiązania - kreatywność i wykonalność propozycji\n\n**Możliwe zakończenia:**\n- WORST: Natychmiastowa kapitulacja (40% zniżka) → stracisz wiarygodność\n- BAD: Klient odchodzi → utrata 500k/rok\n- MEDIOCRE: 30% zniżka → słaba marża\n- GOOD: 10-15% zniżka + coś ekstra (długi kontrakt, dodatkowe usługi)\n- GREAT: Win-win bez zniżki (ROI report, tiered services, custom package)\n- BEST: Klient podnosi budżet bo widzi dodatkową wartość!\n\n**Wskazówka:** Nie pytaj o zniżkę - pytaj o WARTOŚĆ i CELE biznesowe",
+              "wymagana_wiedza": [
+                "Negotiation",
+                "Value Communication",
+                "Win-Win Thinking",
+                "Business Acumen"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 800,
+              "nagroda_4star": 1100,
+              "nagroda_5star": 1400,
+              "reputacja": 50,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "emoji": "💬",
+              "contract_type": "ai_conversation",
+              "npc_config": {
+                "name": "Michael",
+                "role": "CEO TechVentures LLC",
+                "personality": "tough negotiator, ROI-focused, respectful but firm",
+                "personality_notes": "Michael is under pressure from his board to cut costs by 40%. He received a competing offer that's 40% cheaper (but lower quality). He KNOWS your service is better (you saved them $880k last year through optimization), but needs to show the board he's fighting for cost reduction. If you demonstrate clear ROI and help him justify the premium to his board, he'll stay. If you just fold on price, he'll lose respect and demand more. If you're too rigid, he'll leave.",
+                "initial_emotion": "businesslike",
+                "current_emotion": "businesslike",
+                "goal": "Get a deal that satisfies the board (cost reduction or proven ROI) while keeping quality service. Ideally: pay same or less but get MORE value.",
+                "opening_message": "*Michael dzwoni do Ciebie osobiście - to rzadkość*\n\nMichael: \"Musimy porozmawiać o kontrakcie. Zarząd wymaga 40% cięcia kosztów. Mam ofertę od Twojej konkurencji - 40% taniej. Cenię naszą współpracę, ale biznes to biznes. Co możesz zaproponować?\"",
+                "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
+              },
+              "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-COACHING-001",
+              "tytul": "Sesja coachingowa dla middle managera",
+              "kategoria": "Coaching",
+              "klient": "MarketPro",
+              "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
+              "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+              "wymagana_wiedza": [
+                "Coaching conversations",
+                "GROW Model",
+                "COIN Framework"
+              ],
+              "trudnosc": 2,
+              "nagroda_base": 550,
+              "nagroda_4star": 720,
+              "nagroda_5star": 900,
+              "reputacja": 35,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 50,
+              "emoji": "🎯",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-KULTURA-001",
+              "tytul": "Audit kultury komunikacji w zespole",
+              "kategoria": "Kultura",
+              "klient": "DesignHub",
+              "opis": "Remote team w firmie DesignHub ma niskie zaangażowanie. \nLudzie boją się zadawać pytania na spotkaniach. Atmosfera jest sztywna i formalna.",
+              "zadanie": "Krótka analiza:\n\n1. **Wymień 5 pytań diagnostycznych, które zadasz w wywiadach z zespołem**\n   \n2. **Jakie są 3 główne bariery w psychological safety tego zespołu?** (po 1 zdaniu na każdą)\n   \n3. **Zaproponuj 3 konkretne inicjatywy (rituały/procesy) do wdrożenia** (po 1-2 zdania na każdą)",
+              "wymagana_wiedza": [
+                "Psychological Safety",
+                "Team Dynamics",
+                "Remote Work Best Practices"
+              ],
+              "trudnosc": 3,
+              "nagroda_base": 750,
+              "nagroda_4star": 1000,
+              "nagroda_5star": 1300,
+              "reputacja": 50,
+              "czas_realizacji_dni": 2,
+              "wymagany_poziom": 1,
+              "min_slow": 80,
+              "emoji": "🛡️",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-KRYZYS-001",
+              "tytul": "Komunikacja po błędzie projektowym",
+              "kategoria": "Kryzys",
+              "klient": "TechStart",
+              "opis": "Startup wprowadził feature, który spowodował bug u 30% użytkowników. \nSocial media buzują negatywnymi komentarzami. CEO jest w panice.",
+              "zadanie": "Plan komunikacji kryzysowej:\n\n1. **Napisz krótki komunikat do klientów (email)** - max 150 słów\n   \n2. **Jakie elementy MUSI zawierać komunikat kryzysowy?** (5 elementów)\n   \n3. **Co powiedzieć zespołowi engineering?** (3-4 zdania)\n   \n4. **Przygotuj 5 talking points dla CEO na rozmowy z inwestorami**\n   \n5. **Plan follow-up na 7 dni** (5 kroków)",
+              "wymagana_wiedza": [
+                "Crisis Communication",
+                "Stakeholder Management",
+                "Psychological Safety"
+              ],
+              "trudnosc": 4,
+              "nagroda_base": 950,
+              "nagroda_4star": 1250,
+              "nagroda_5star": 1600,
+              "reputacja": 65,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 120,
+              "emoji": "🚨",
+              "available_until": "2025-10-23 13:02:31"
+            },
+            {
+              "id": "CIQ-KRYZYS-002",
+              "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+              "kategoria": "Kryzys",
+              "klient": "CorporateInc",
+              "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+              "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+              "wymagana_wiedza": [
+                "Change Management",
+                "Crisis Communication",
+                "Difficult Conversations"
+              ],
+              "trudnosc": 5,
+              "nagroda_base": 1500,
+              "nagroda_4star": 2000,
+              "nagroda_5star": 2500,
+              "reputacja": 90,
+              "czas_realizacji_dni": 3,
+              "wymagany_poziom": 1,
+              "min_slow": 200,
+              "emoji": "🚨",
+              "available_until": "2025-10-23 13:02:31"
+            }
+          ],
+          "last_refresh": "2025-10-22 13:02:31"
+        },
+        "stats": {
+          "total_revenue": 1500,
+          "total_costs": 200,
+          "net_profit": 0,
+          "contracts_completed": 1,
+          "contracts_5star": 0,
+          "contracts_4star": 0,
+          "contracts_3star": 0,
+          "contracts_2star": 0,
+          "contracts_1star": 1,
+          "avg_rating": 1.0,
+          "category_stats": {
+            "Konflikt": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Coaching": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kultura": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kryzys": {
+              "completed": 1,
+              "total_earned": 1500,
+              "avg_rating": 6.0
+            },
+            "Leadership": {
+              "completed": 1,
+              "total_earned": 0,
+              "avg_rating": 1.0
+            }
+          },
+          "last_30_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          },
+          "last_7_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          },
+          "contracts_rejected": 1
+        },
+        "ranking": {
+          "overall_score": 0.0,
+          "current_positions": {
+            "overall": null,
+            "revenue": null,
+            "quality": null,
+            "productivity_30d": null
+          },
+          "previous_positions": {},
+          "badges": []
+        },
+        "events": {
+          "history": [
+            {
+              "event_id": "bonus_payment",
+              "timestamp": "2025-10-20 21:41:08",
+              "title": "Niespodziewana Premia!",
+              "emoji": "💰",
+              "type": "positive",
+              "description": "Jeden z Twoich wcześniejszych klientów był tak zadowolony z rezultatów, że postanowił wysłać dodatkową premię.",
+              "choice": null,
+              "effects": {
+                "coins": 500,
+                "reputation": 2
+              }
+            },
+            {
+              "event_id": "coffee_spill",
+              "timestamp": "2025-10-22 13:02:31",
+              "title": "Rozlana Kawa na Klawiaturze",
+              "emoji": "☕",
+              "type": "negative",
+              "description": "Klasyka. Kawa na klawiaturze. Nowa klawiatura to koszt i strata czasu.",
+              "choice": null,
+              "effects": {
+                "coins": -200
+              }
+            }
+          ],
+          "last_roll": "2025-10-22 13:02:31",
+          "active_effects": []
+        },
+        "history": {
+          "transactions": [
+            {
+              "type": "contract_reward",
+              "contract_id": "CIQ-KRYZYS-002",
+              "contract_title": "Zarządzanie zmianą - zwolnienia grupowe",
+              "amount": 1500,
+              "rating": 6,
+              "timestamp": "2025-10-19 16:47:19"
+            },
+            {
+              "type": "event_reward",
+              "amount": 500,
+              "event_id": "bonus_payment",
+              "event_title": "Niespodziewana Premia!",
+              "timestamp": "2025-10-20 21:41:08",
+              "migrated": true
+            },
+            {
+              "type": "event_cost",
+              "amount": -200,
+              "event_id": "coffee_spill",
+              "event_title": "Rozlana Kawa na Klawiaturze",
+              "timestamp": "2025-10-22 13:02:31"
+            },
+            {
+              "type": "contract_reward",
+              "contract_id": "CIQ-EASY-001",
+              "contract_title": "Krótka rozmowa 1:1 z pracownikiem",
+              "amount": 0,
+              "rating": 1,
+              "timestamp": "2025-10-22 13:03:32"
+            }
+          ],
+          "level_ups": []
+        },
+        "money": -200,
+        "office": {
+          "type": "home_office",
+          "upgraded_at": null
+        }
+      }
+    }
   },
   "t": {
     "user_id": "0305d6a3-d8ca-40ff-b710-d4177467ad76",
@@ -12249,7 +13946,7 @@
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-10-19",
-    "last_login": "2025-10-20 12:17:24",
+    "last_login": "2025-10-22 13:44:59",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -12265,6 +13962,12 @@
         "completed_lessons": 0
       },
       "2025-10-20": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-10-22": {
         "xp": 0,
         "degencoins": 0,
         "level": 1,
@@ -12311,9 +14014,9 @@
               "Psychological Safety"
             ],
             "trudnosc": 4,
-            "nagroda_base": 950,
-            "nagroda_4star": 1250,
-            "nagroda_5star": 1600,
+            "nagroda_base": 760,
+            "nagroda_4star": 1000,
+            "nagroda_5star": 1280,
             "reputacja": 65,
             "czas_realizacji_dni": 1,
             "wymagany_poziom": 1,
@@ -12321,9 +14024,15 @@
             "emoji": "🚨",
             "available_until": "2025-10-21 12:17:30",
             "accepted_date": "2025-10-20 12:26:32",
-            "deadline": "2025-10-21 12:26:32",
+            "deadline": "2025-10-24 12:26:32",
             "status": "in_progress",
-            "solution": ""
+            "solution": "",
+            "affected_by_event": {
+              "type": "renegotiation",
+              "event_title": "Prośba o Renegocjację",
+              "reward_multiplier": 0.8,
+              "time_bonus": 3
+            }
           }
         ],
         "completed": [
@@ -12383,53 +14092,319 @@
         ],
         "available_pool": [
           {
-            "id": "CIQ-COACHING-001",
-            "tytul": "Sesja coachingowa dla middle managera",
-            "kategoria": "Coaching",
-            "klient": "MarketPro",
-            "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
-            "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
+            "id": "CIQ-EASY-001",
+            "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+            "kategoria": "Leadership",
+            "klient": "LocalCafe",
+            "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+            "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
             "wymagana_wiedza": [
-              "Coaching conversations",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 200,
+            "nagroda_4star": 250,
+            "nagroda_5star": 350,
+            "reputacja": 15,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 20,
+            "emoji": "☕",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-EASY-002",
+            "tytul": "Feedback dla nowego pracownika",
+            "kategoria": "Feedback",
+            "klient": "SmallShop",
+            "opis": "Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.",
+            "zadanie": "Napisz krótki feedback (3-5 zdań):\n\n- Co robi dobrze?\n- Co warto poprawić?\n- Jak może to zrobić?",
+            "wymagana_wiedza": [
+              "Podstawy feedbacku"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 180,
+            "nagroda_4star": 230,
+            "nagroda_5star": 300,
+            "reputacja": 12,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "🛒",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-EASY-003",
+            "tytul": "Rozwiązanie małego konfliktu",
+            "kategoria": "Konflikt",
+            "klient": "OfficeTeam",
+            "opis": "Dwóch pracowników biurowych kłóci się o to, kto ma sprzątać wspólną kuchnię.",
+            "zadanie": "Zaproponuj proste rozwiązanie:\n\n1. **Dlaczego się kłócą?** (1 zdanie)\n\n2. **Twoja propozycja** (2-3 zdania)\n\n3. **Jak to wdrożyć?** (1-2 zdania)",
+            "wymagana_wiedza": [
+              "Podstawy rozwiązywania konfliktów"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 220,
+            "nagroda_4star": 280,
+            "nagroda_5star": 380,
+            "reputacja": 18,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 20,
+            "emoji": "🧹",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-EASY-004",
+            "tytul": "Pytania do zespołu na spotkaniu",
+            "kategoria": "Leadership",
+            "klient": "StartupTeam",
+            "opis": "Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.",
+            "zadanie": "Zaproponuj 5 pytań na spotkanie:\n\n- 3 pytania do poznania zespołu\n- 2 pytania o pracę/projekty\n\n(tylko lista pytań)",
+            "wymagana_wiedza": [
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 160,
+            "nagroda_4star": 210,
+            "nagroda_5star": 280,
+            "reputacja": 10,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "❓",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-EASY-005",
+            "tytul": "Pochwała za dobrą robotę",
+            "kategoria": "Feedback",
+            "klient": "TechStart",
+            "opis": "Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!",
+            "zadanie": "Napisz krótką wiadomość (3-4 zdania):\n\n- Co konkretnie zrobił dobrze?\n- Jaki to miało wpływ?\n- Co to dla Ciebie znaczy?",
+            "wymagana_wiedza": [
+              "Pozytywny feedback"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 150,
+            "nagroda_4star": 200,
+            "nagroda_5star": 270,
+            "reputacja": 8,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 10,
+            "emoji": "⭐",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-EASY-006",
+            "tytul": "Plan krótkiego spotkania 1:1",
+            "kategoria": "Leadership",
+            "klient": "RemoteTeam",
+            "opis": "Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.",
+            "zadanie": "Zaproponuj prosty plan spotkania (15 min):\n\n1. **Początek** - jak zacząć? (1 zdanie)\n\n2. **Środek** - o czym rozmawiać? (3 tematy)\n\n3. **Koniec** - jak zakończyć? (1 zdanie)",
+            "wymagana_wiedza": [
+              "1:1 meetings"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 190,
+            "nagroda_4star": 240,
+            "nagroda_5star": 320,
+            "reputacja": 14,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 15,
+            "emoji": "📅",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-STARTER-001",
+            "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+            "kategoria": "Leadership",
+            "klient": "StartupDuo",
+            "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+            "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Podstawy komunikacji"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 300,
+            "nagroda_4star": 400,
+            "nagroda_5star": 500,
+            "reputacja": 20,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 30,
+            "emoji": "🤝",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-AI-001",
+            "tytul": "💬 Rozmowa: Spóźniający się Talent",
+            "kategoria": "AI Conversation",
+            "klient": "TechVenture Sp. z o.o.",
+            "opis": "Twój najlepszy programista Mark jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu. Zespół to zauważa i atmosfera się pogarsza. Musisz przeprowadzić trudną rozmowę.",
+            "zadanie": "🎭 SYMULACJA ROZMOWY Z AI\n\n**Twoja rola:** Lead konsultant HR - klient poprosił Cię o przeprowadzenie trudnej rozmowy z pracownikiem\n\n**Rozmówca:** Mark, senior developer (gra AI)\n- Osobowość: introwertyk, defensywny gdy atakowany, otwarty gdy czuje empatię\n- Sytuacja: spóźniony po raz trzeci w tym tygodniu\n- Ukryty kontekst: ma osobisty problem (AI zareaguje jeśli podejdziesz empatycznie)\n\n**Twoje zadanie:**\n1. Przeprowadź profesjonalną rozmowę coachingową\n2. Odkryj prawdziwy powód spóźnień\n3. Wypracuj rozwiązanie, które zadowoli obie strony\n4. Zachowaj dobrą relację z pracownikiem\n\n**AI ocenia Cię na żywo w 4 wymiarach:**\n- 🤝 Empatia - czy rozumiesz perspektywę rozmówcy\n- 💪 Asertywność - czy jasno stawiasz granice bez agresji\n- 👔 Profesjonalizm - ton, forma, struktura rozmowy\n- 💡 Jakość rozwiązania - czy propozycje są konstruktywne\n\n**Jak działa:**\n- Piszesz swoją wypowiedź → AI ocenia i reaguje jako Mark\n- Każda odpowiedź oceniana (0-20 pkt + wpływ na relację)\n- Rozmowa kończy się gdy wypracujecie rozwiązanie lub zepsujecie relację\n- Różne zakończenia w zależności od Twoich decyzji!\n\n**Wskazówka:** Zastosuj GROW model lub Conversational Intelligence",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Empathy",
               "GROW Model",
-              "COIN Framework"
+              "Difficult Conversations"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 600,
+            "nagroda_4star": 850,
+            "nagroda_5star": 1100,
+            "reputacja": 40,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "emoji": "💬",
+            "contract_type": "ai_conversation",
+            "npc_config": {
+              "name": "Mark",
+              "role": "Senior Developer",
+              "personality": "introwerted, defensive when attacked, opens up with empathy",
+              "personality_notes": "Mark is a talented developer who becomes defensive under pressure. He's dealing with a personal crisis (his mother has cancer and needs daily chemo transport), but won't share this unless he feels safe and understood. If approached with empathy and genuine concern, he'll open up. If confronted aggressively, he'll shut down or quit.",
+              "initial_emotion": "anxious",
+              "current_emotion": "anxious",
+              "goal": "Keep his job while managing his mother's medical crisis. Hoping for understanding and flexibility.",
+              "opening_message": "*Mark siedzi przy biurku, unikając kontaktu wzrokowego. Widzisz jak napina się gdy się zbliżasz.*\n\nMark: \"Przepraszam za spóźnienie... Wiem, że to już trzeci raz w tym tygodniu.\"",
+              "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
+            },
+            "scenario_context": "**Kontekst scenariusza:**\n\nMark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.\n\n**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**\nMama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)\n2. Zachować relację i zaufanie\n3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)\n4. Pokazać empatię bez rezygnacji z standardów zespołowych\n\n**Możliwe zakończenia:**\n- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera\n- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia\n- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany\n\n**Wskaźniki sukcesu:**\n- Relacja Mark-Firma: czy zostanie i będzie zaangażowany\n- Morale zespołu: czy rozumieją sytuację i wspierają\n- Rozwiązanie: czy jest długofalowe i fair dla wszystkich",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-AI-002",
+            "tytul": "💬 Rozmowa: Trudne Negocjacje",
+            "kategoria": "AI Conversation",
+            "klient": "TechVentures LLC",
+            "opis": "Największy klient (40% revenue) grozi odejściem jeśli nie dostanie 40% zniżki. CEO Michael zadzwonił osobiście. Musisz wynegocjować rozwiązanie które uratuje kontrakt BEZ niszczenia marży.",
+            "zadanie": "🎭 SYMULACJA NEGOCJACJI Z AI\n\n**Twoja rola:** Senior Business Consultant - klient poprosił Cię o pomoc w trudnych negocjacjach\n\n**Rozmówca:** Michael (CEO TechVentures) - gra AI\n- Osobowość: twardy negocjator, ale otwarty na win-win jeśli pokażesz wartość\n- Sytuacja: zarząd wymaga obniżenia kosztów o 40%, konkurencja oferuje tańszą ofertę\n- Ukryty kontekst: wie że Twoja firma jest lepsza, ale ma presję zarządu (AI zareaguje jeśli odkryjesz prawdziwą motywację)\n\n**Twoje zadanie:**\n1. Wynegocjuj warunki które utrzymają klienta I Twoją marżę\n2. Odkryj prawdziwą motywację (czy to tylko cena?)\n3. Zaproponuj kreatywne rozwiązanie win-win\n4. Zachowaj długoterminową relację biznesową\n\n**AI ocenia Cię na żywo:**\n- 🤝 Empatia - czy rozumiesz pozycję klienta\n- 💪 Asertywność - czy bronisz swojej wartości bez kapitulacji\n- 👔 Profesjonalizm - biznesowy ton i argumentacja\n- 💡 Jakość rozwiązania - kreatywność i wykonalność propozycji\n\n**Możliwe zakończenia:**\n- WORST: Natychmiastowa kapitulacja (40% zniżka) → stracisz wiarygodność\n- BAD: Klient odchodzi → utrata 500k/rok\n- MEDIOCRE: 30% zniżka → słaba marża\n- GOOD: 10-15% zniżka + coś ekstra (długi kontrakt, dodatkowe usługi)\n- GREAT: Win-win bez zniżki (ROI report, tiered services, custom package)\n- BEST: Klient podnosi budżet bo widzi dodatkową wartość!\n\n**Wskazówka:** Nie pytaj o zniżkę - pytaj o WARTOŚĆ i CELE biznesowe",
+            "wymagana_wiedza": [
+              "Negotiation",
+              "Value Communication",
+              "Win-Win Thinking",
+              "Business Acumen"
+            ],
+            "trudnosc": 1,
+            "nagroda_base": 800,
+            "nagroda_4star": 1100,
+            "nagroda_5star": 1400,
+            "reputacja": 50,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "emoji": "💬",
+            "contract_type": "ai_conversation",
+            "npc_config": {
+              "name": "Michael",
+              "role": "CEO TechVentures LLC",
+              "personality": "tough negotiator, ROI-focused, respectful but firm",
+              "personality_notes": "Michael is under pressure from his board to cut costs by 40%. He received a competing offer that's 40% cheaper (but lower quality). He KNOWS your service is better (you saved them $880k last year through optimization), but needs to show the board he's fighting for cost reduction. If you demonstrate clear ROI and help him justify the premium to his board, he'll stay. If you just fold on price, he'll lose respect and demand more. If you're too rigid, he'll leave.",
+              "initial_emotion": "businesslike",
+              "current_emotion": "businesslike",
+              "goal": "Get a deal that satisfies the board (cost reduction or proven ROI) while keeping quality service. Ideally: pay same or less but get MORE value.",
+              "opening_message": "*Michael dzwoni do Ciebie osobiście - to rzadkość*\n\nMichael: \"Musimy porozmawiać o kontrakcie. Zarząd wymaga 40% cięcia kosztów. Mam ofertę od Twojej konkurencji - 40% taniej. Cenię naszą współpracę, ale biznes to biznes. Co możesz zaproponować?\"",
+              "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
+            },
+            "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-KONFLIKT-001",
+            "tytul": "Mediacja w konflikcie zespołowym",
+            "kategoria": "Konflikt",
+            "klient": "TechCorp",
+            "opis": "Zespół projektowy w firmie TechCorp jest podzielony. \nLider projektu i główny developer mają odmienne wizje dotyczące architektury systemu. \nNapięcie wpływa na terminowość i morale zespołu.",
+            "zadanie": "Odpowiedz krótko:\n\n1. **Co prawdopodobnie jest źródłem konfliktu?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę spotkania mediacyjnego.** (3-4 punkty, krótko)\n   \n3. **Jakie 3 kluczowe pytania zadasz obu stronom?** (lista pytań)",
+            "wymagana_wiedza": [
+              "Conversational Intelligence",
+              "Zarządzanie konfliktem",
+              "Ladder of Inference"
             ],
             "trudnosc": 2,
-            "nagroda_base": 550,
-            "nagroda_4star": 720,
-            "nagroda_5star": 900,
-            "reputacja": 35,
+            "nagroda_base": 450,
+            "nagroda_4star": 600,
+            "nagroda_5star": 750,
+            "reputacja": 30,
             "czas_realizacji_dni": 1,
             "wymagany_poziom": 1,
             "min_slow": 50,
-            "emoji": "🎯",
-            "available_until": "2025-10-21 12:17:30"
+            "emoji": "⚔️",
+            "available_until": "2025-10-23 13:45:15"
           },
           {
-            "id": "CIQ-KULTURA-002",
-            "tytul": "Wdrożenie kultury feedbacku",
+            "id": "CIQ-KULTURA-001",
+            "tytul": "Audit kultury komunikacji w zespole",
             "kategoria": "Kultura",
-            "klient": "StartupXYZ",
-            "opis": "Startup (30 osób) rośnie szybko, ale nie ma kultury feedbacku. \nLudzie dowiadują się o problemach dopiero na performance review.",
-            "zadanie": "Zaprojektuj prosty system:\n\n1. **Wybierz framework feedbacku (COIN lub SBI) i wyjaśnij dlaczego** (2-3 zdania)\n   \n2. **Podaj 5 zasad dawania i przyjmowania feedbacku**\n   \n3. **Zaproponuj plan wdrożenia** (5 kroków, krótko)\n   \n4. **Jak utrzymać momentum?** (3 konkretne działania)",
+            "klient": "DesignHub",
+            "opis": "Remote team w firmie DesignHub ma niskie zaangażowanie. \nLudzie boją się zadawać pytania na spotkaniach. Atmosfera jest sztywna i formalna.",
+            "zadanie": "Krótka analiza:\n\n1. **Wymień 5 pytań diagnostycznych, które zadasz w wywiadach z zespołem**\n   \n2. **Jakie są 3 główne bariery w psychological safety tego zespołu?** (po 1 zdaniu na każdą)\n   \n3. **Zaproponuj 3 konkretne inicjatywy (rituały/procesy) do wdrożenia** (po 1-2 zdania na każdą)",
             "wymagana_wiedza": [
-              "Feedback Frameworks",
               "Psychological Safety",
-              "Change Management"
+              "Team Dynamics",
+              "Remote Work Best Practices"
             ],
             "trudnosc": 3,
-            "nagroda_base": 800,
-            "nagroda_4star": 1050,
-            "nagroda_5star": 1350,
-            "reputacja": 55,
+            "nagroda_base": 750,
+            "nagroda_4star": 1000,
+            "nagroda_5star": 1300,
+            "reputacja": 50,
             "czas_realizacji_dni": 2,
             "wymagany_poziom": 1,
             "min_slow": 80,
             "emoji": "🛡️",
-            "available_until": "2025-10-21 12:17:30"
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-KRYZYS-001",
+            "tytul": "Komunikacja po błędzie projektowym",
+            "kategoria": "Kryzys",
+            "klient": "TechStart",
+            "opis": "Startup wprowadził feature, który spowodował bug u 30% użytkowników. \nSocial media buzują negatywnymi komentarzami. CEO jest w panice.",
+            "zadanie": "Plan komunikacji kryzysowej:\n\n1. **Napisz krótki komunikat do klientów (email)** - max 150 słów\n   \n2. **Jakie elementy MUSI zawierać komunikat kryzysowy?** (5 elementów)\n   \n3. **Co powiedzieć zespołowi engineering?** (3-4 zdania)\n   \n4. **Przygotuj 5 talking points dla CEO na rozmowy z inwestorami**\n   \n5. **Plan follow-up na 7 dni** (5 kroków)",
+            "wymagana_wiedza": [
+              "Crisis Communication",
+              "Stakeholder Management",
+              "Psychological Safety"
+            ],
+            "trudnosc": 4,
+            "nagroda_base": 950,
+            "nagroda_4star": 1250,
+            "nagroda_5star": 1600,
+            "reputacja": 65,
+            "czas_realizacji_dni": 1,
+            "wymagany_poziom": 1,
+            "min_slow": 120,
+            "emoji": "🚨",
+            "available_until": "2025-10-23 13:45:15"
+          },
+          {
+            "id": "CIQ-KRYZYS-002",
+            "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+            "kategoria": "Kryzys",
+            "klient": "CorporateInc",
+            "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+            "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+            "wymagana_wiedza": [
+              "Change Management",
+              "Crisis Communication",
+              "Difficult Conversations"
+            ],
+            "trudnosc": 5,
+            "nagroda_base": 1500,
+            "nagroda_4star": 2000,
+            "nagroda_5star": 2500,
+            "reputacja": 90,
+            "czas_realizacji_dni": 3,
+            "wymagany_poziom": 1,
+            "min_slow": 200,
+            "emoji": "🚨",
+            "available_until": "2025-10-23 13:45:15"
           }
         ],
-        "last_refresh": "2025-10-20 12:17:30"
+        "last_refresh": "2025-10-22 13:45:15"
       },
       "stats": {
         "total_revenue": 0,
@@ -12505,9 +14480,24 @@
             "effects": {
               "remove_contract_from_pool": true
             }
+          },
+          {
+            "event_id": "renegotiation",
+            "timestamp": "2025-10-22 13:45:35",
+            "title": "Prośba o Renegocjację",
+            "emoji": "🔄",
+            "type": "neutral",
+            "description": "Klient z aktywnym kontraktem chce renegocjować warunki: -20% nagrody, ale +3 dni na realizację.",
+            "choice": "✅ Zgadzam się",
+            "effects": {
+              "modify_active_contract": true,
+              "reward_multiplier": 0.8,
+              "time_bonus": 3
+            },
+            "affected_contract": "Komunikacja po błędzie projektowym"
           }
         ],
-        "last_roll": "2025-10-20 12:17:30",
+        "last_roll": "2025-10-22 13:45:35",
         "active_effects": []
       },
       "history": {
@@ -12522,6 +14512,10 @@
           }
         ],
         "level_ups": []
+      },
+      "office": {
+        "type": "home_office",
+        "upgraded_at": null
       }
     },
     "activity_log": [
@@ -12531,8 +14525,545 @@
         "details": {
           "timestamp": "2025-10-20T12:17:24.349045"
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-22T13:44:59.744709",
+        "details": {
+          "timestamp": "2025-10-22T13:44:59.683659"
+        }
       }
-    ]
+    ],
+    "business_games": {
+      "consulting": {
+        "firm": {
+          "name": "p's Consulting",
+          "founded": "2025-10-19",
+          "level": 1,
+          "reputation": -5,
+          "logo": "👤"
+        },
+        "employees": [],
+        "contracts": {
+          "active": [
+            {
+              "id": "CIQ-KRYZYS-001",
+              "tytul": "Komunikacja po błędzie projektowym",
+              "kategoria": "Kryzys",
+              "klient": "TechStart",
+              "opis": "Startup wprowadził feature, który spowodował bug u 30% użytkowników. \nSocial media buzują negatywnymi komentarzami. CEO jest w panice.",
+              "zadanie": "Plan komunikacji kryzysowej:\n\n1. **Napisz krótki komunikat do klientów (email)** - max 150 słów\n   \n2. **Jakie elementy MUSI zawierać komunikat kryzysowy?** (5 elementów)\n   \n3. **Co powiedzieć zespołowi engineering?** (3-4 zdania)\n   \n4. **Przygotuj 5 talking points dla CEO na rozmowy z inwestorami**\n   \n5. **Plan follow-up na 7 dni** (5 kroków)",
+              "wymagana_wiedza": [
+                "Crisis Communication",
+                "Stakeholder Management",
+                "Psychological Safety"
+              ],
+              "trudnosc": 4,
+              "nagroda_base": 760,
+              "nagroda_4star": 1000,
+              "nagroda_5star": 1280,
+              "reputacja": 65,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 120,
+              "emoji": "🚨",
+              "available_until": "2025-10-21 12:17:30",
+              "accepted_date": "2025-10-20 12:26:32",
+              "deadline": "2025-10-24 12:26:32",
+              "status": "in_progress",
+              "solution": "",
+              "affected_by_event": {
+                "type": "renegotiation",
+                "event_title": "Prośba o Renegocjację",
+                "reward_multiplier": 0.8,
+                "time_bonus": 3
+              }
+            }
+          ],
+          "completed": [
+            {
+              "id": "CIQ-STARTER-001",
+              "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+              "kategoria": "Leadership",
+              "klient": "StartupDuo",
+              "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+              "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 300,
+              "nagroda_4star": 400,
+              "nagroda_5star": 500,
+              "reputacja": 20,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 30,
+              "emoji": "🤝",
+              "available_until": "2025-10-21 12:17:30",
+              "accepted_date": "2025-10-20 12:17:46",
+              "deadline": "2025-10-21 12:17:46",
+              "status": "completed",
+              "solution": "A może podejść do tego do dupy strony, na przykład?\n\nWięc to będzie 1 część mojej odpowiedzi. Za chwilę podam ci drugą.\n\nSuper! A teraz dopisujemy trzecią część mojej odpowiedzi.",
+              "rating": 1,
+              "feedback": "Jesteśmy głęboko rozczarowani otrzymaną pracą. Rozwiązanie w żaden sposób nie odnosi się do naszego zlecenia i nie spełnia żadnych naszych oczekiwań biznesowych.\n\n**👍 Co nam się podobało:**\n• Niestety, w przedstawionym materiale nie znaleźliśmy żadnych elementów, które mogłyby nam się podobać lub które byłyby użyteczne dla naszej firmy.\n\n**� Co mogłoby być lepsze:**\n• Oczekiwaliśmy konkretnych propozycji dotyczących poprawy komunikacji w naszym zespole, a otrzymaliśmy jedynie puste zdania, które nie mają związku z tematem.\n• Brak jest jakiegokolwiek zrozumienia problemu, a także profesjonalizmu w podejściu do zadania, co jest dla nas nieakceptowalne.\n• Chcielibyśmy, aby przyszłe prace zawierały konkretne kroki działania i były zgodne z minimalnymi wymogami objętościowymi.",
+              "evaluation_details": {
+                "method": "ai",
+                "model": "gemini-2.5-flash",
+                "total_score": 0,
+                "rating": 1,
+                "strengths": [
+                  "Niestety, w przedstawionym materiale nie znaleźliśmy żadnych elementów, które mogłyby nam się podobać lub które byłyby użyteczne dla naszej firmy."
+                ],
+                "improvements": [
+                  "Oczekiwaliśmy konkretnych propozycji dotyczących poprawy komunikacji w naszym zespole, a otrzymaliśmy jedynie puste zdania, które nie mają związku z tematem.",
+                  "Brak jest jakiegokolwiek zrozumienia problemu, a także profesjonalizmu w podejściu do zadania, co jest dla nas nieakceptowalne.",
+                  "Chcielibyśmy, aby przyszłe prace zawierały konkretne kroki działania i były zgodne z minimalnymi wymogami objętościowymi."
+                ],
+                "word_count": 30,
+                "timestamp": "2025-10-20 12:25:05",
+                "provider": "google_gemini"
+              },
+              "reward": {
+                "coins": 0,
+                "reputation": -5,
+                "base": 0,
+                "bonus_multiplier": 0,
+                "rejection_penalty": true
+              },
+              "completed_date": "2025-10-20 12:25:05"
+            }
+          ],
+          "available_pool": [
+            {
+              "id": "CIQ-EASY-001",
+              "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+              "kategoria": "Leadership",
+              "klient": "LocalCafe",
+              "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+              "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 200,
+              "nagroda_4star": 250,
+              "nagroda_5star": 350,
+              "reputacja": 15,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 20,
+              "emoji": "☕",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-EASY-002",
+              "tytul": "Feedback dla nowego pracownika",
+              "kategoria": "Feedback",
+              "klient": "SmallShop",
+              "opis": "Nowy pracownik w sklepie dobrze radzi sobie z klientami, ale zapomina o porządkowaniu półek.",
+              "zadanie": "Napisz krótki feedback (3-5 zdań):\n\n- Co robi dobrze?\n- Co warto poprawić?\n- Jak może to zrobić?",
+              "wymagana_wiedza": [
+                "Podstawy feedbacku"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 180,
+              "nagroda_4star": 230,
+              "nagroda_5star": 300,
+              "reputacja": 12,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "🛒",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-EASY-003",
+              "tytul": "Rozwiązanie małego konfliktu",
+              "kategoria": "Konflikt",
+              "klient": "OfficeTeam",
+              "opis": "Dwóch pracowników biurowych kłóci się o to, kto ma sprzątać wspólną kuchnię.",
+              "zadanie": "Zaproponuj proste rozwiązanie:\n\n1. **Dlaczego się kłócą?** (1 zdanie)\n\n2. **Twoja propozycja** (2-3 zdania)\n\n3. **Jak to wdrożyć?** (1-2 zdania)",
+              "wymagana_wiedza": [
+                "Podstawy rozwiązywania konfliktów"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 220,
+              "nagroda_4star": 280,
+              "nagroda_5star": 380,
+              "reputacja": 18,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 20,
+              "emoji": "🧹",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-EASY-004",
+              "tytul": "Pytania do zespołu na spotkaniu",
+              "kategoria": "Leadership",
+              "klient": "StartupTeam",
+              "opis": "Manager nowego zespołu (5 osób) chce przeprowadzić pierwsze spotkanie i poznać zespół.",
+              "zadanie": "Zaproponuj 5 pytań na spotkanie:\n\n- 3 pytania do poznania zespołu\n- 2 pytania o pracę/projekty\n\n(tylko lista pytań)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 160,
+              "nagroda_4star": 210,
+              "nagroda_5star": 280,
+              "reputacja": 10,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "❓",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-EASY-005",
+              "tytul": "Pochwała za dobrą robotę",
+              "kategoria": "Feedback",
+              "klient": "TechStart",
+              "opis": "Młody developer wykonał świetną pracę przy trudnym projekcie. Czas na uznanie!",
+              "zadanie": "Napisz krótką wiadomość (3-4 zdania):\n\n- Co konkretnie zrobił dobrze?\n- Jaki to miało wpływ?\n- Co to dla Ciebie znaczy?",
+              "wymagana_wiedza": [
+                "Pozytywny feedback"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 150,
+              "nagroda_4star": 200,
+              "nagroda_5star": 270,
+              "reputacja": 8,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 10,
+              "emoji": "⭐",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-EASY-006",
+              "tytul": "Plan krótkiego spotkania 1:1",
+              "kategoria": "Leadership",
+              "klient": "RemoteTeam",
+              "opis": "Manager zdalnego zespołu chce regularnie spotykać się 1:1 z każdym członkiem zespołu.",
+              "zadanie": "Zaproponuj prosty plan spotkania (15 min):\n\n1. **Początek** - jak zacząć? (1 zdanie)\n\n2. **Środek** - o czym rozmawiać? (3 tematy)\n\n3. **Koniec** - jak zakończyć? (1 zdanie)",
+              "wymagana_wiedza": [
+                "1:1 meetings"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 190,
+              "nagroda_4star": 240,
+              "nagroda_5star": 320,
+              "reputacja": 14,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 15,
+              "emoji": "📅",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-STARTER-001",
+              "tytul": "Poprawa komunikacji w zespole 2-osobowym",
+              "kategoria": "Leadership",
+              "klient": "StartupDuo",
+              "opis": "Mały startup (2 osoby) ma problemy z komunikacją. \nFounder i developer nie rozmawiają otwarcie o priorytetach i oczekiwaniach.",
+              "zadanie": "Odpowiedz krótko na 3 pytania:\n\n1. **Jakie mogą być 2 główne problemy w ich komunikacji?** (1-2 zdania)\n\n2. **Zaproponuj 1 prosty ritual komunikacyjny.** (1 zdanie)\n\n3. **Jak sprawdzić, czy komunikacja się poprawia?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 300,
+              "nagroda_4star": 400,
+              "nagroda_5star": 500,
+              "reputacja": 20,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 30,
+              "emoji": "🤝",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-AI-001",
+              "tytul": "💬 Rozmowa: Spóźniający się Talent",
+              "kategoria": "AI Conversation",
+              "klient": "TechVenture Sp. z o.o.",
+              "opis": "Twój najlepszy programista Mark jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu. Zespół to zauważa i atmosfera się pogarsza. Musisz przeprowadzić trudną rozmowę.",
+              "zadanie": "🎭 SYMULACJA ROZMOWY Z AI\n\n**Twoja rola:** Lead konsultant HR - klient poprosił Cię o przeprowadzenie trudnej rozmowy z pracownikiem\n\n**Rozmówca:** Mark, senior developer (gra AI)\n- Osobowość: introwertyk, defensywny gdy atakowany, otwarty gdy czuje empatię\n- Sytuacja: spóźniony po raz trzeci w tym tygodniu\n- Ukryty kontekst: ma osobisty problem (AI zareaguje jeśli podejdziesz empatycznie)\n\n**Twoje zadanie:**\n1. Przeprowadź profesjonalną rozmowę coachingową\n2. Odkryj prawdziwy powód spóźnień\n3. Wypracuj rozwiązanie, które zadowoli obie strony\n4. Zachowaj dobrą relację z pracownikiem\n\n**AI ocenia Cię na żywo w 4 wymiarach:**\n- 🤝 Empatia - czy rozumiesz perspektywę rozmówcy\n- 💪 Asertywność - czy jasno stawiasz granice bez agresji\n- 👔 Profesjonalizm - ton, forma, struktura rozmowy\n- 💡 Jakość rozwiązania - czy propozycje są konstruktywne\n\n**Jak działa:**\n- Piszesz swoją wypowiedź → AI ocenia i reaguje jako Mark\n- Każda odpowiedź oceniana (0-20 pkt + wpływ na relację)\n- Rozmowa kończy się gdy wypracujecie rozwiązanie lub zepsujecie relację\n- Różne zakończenia w zależności od Twoich decyzji!\n\n**Wskazówka:** Zastosuj GROW model lub Conversational Intelligence",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Empathy",
+                "GROW Model",
+                "Difficult Conversations"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 600,
+              "nagroda_4star": 850,
+              "nagroda_5star": 1100,
+              "reputacja": 40,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "emoji": "💬",
+              "contract_type": "ai_conversation",
+              "npc_config": {
+                "name": "Mark",
+                "role": "Senior Developer",
+                "personality": "introwerted, defensive when attacked, opens up with empathy",
+                "personality_notes": "Mark is a talented developer who becomes defensive under pressure. He's dealing with a personal crisis (his mother has cancer and needs daily chemo transport), but won't share this unless he feels safe and understood. If approached with empathy and genuine concern, he'll open up. If confronted aggressively, he'll shut down or quit.",
+                "initial_emotion": "anxious",
+                "current_emotion": "anxious",
+                "goal": "Keep his job while managing his mother's medical crisis. Hoping for understanding and flexibility.",
+                "opening_message": "*Mark siedzi przy biurku, unikając kontaktu wzrokowego. Widzisz jak napina się gdy się zbliżasz.*\n\nMark: \"Przepraszam za spóźnienie... Wiem, że to już trzeci raz w tym tygodniu.\"",
+                "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
+              },
+              "scenario_context": "**Kontekst scenariusza:**\n\nMark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.\n\n**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**\nMama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)\n2. Zachować relację i zaufanie\n3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)\n4. Pokazać empatię bez rezygnacji z standardów zespołowych\n\n**Możliwe zakończenia:**\n- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera\n- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia\n- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany\n\n**Wskaźniki sukcesu:**\n- Relacja Mark-Firma: czy zostanie i będzie zaangażowany\n- Morale zespołu: czy rozumieją sytuację i wspierają\n- Rozwiązanie: czy jest długofalowe i fair dla wszystkich",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-AI-002",
+              "tytul": "💬 Rozmowa: Trudne Negocjacje",
+              "kategoria": "AI Conversation",
+              "klient": "TechVentures LLC",
+              "opis": "Największy klient (40% revenue) grozi odejściem jeśli nie dostanie 40% zniżki. CEO Michael zadzwonił osobiście. Musisz wynegocjować rozwiązanie które uratuje kontrakt BEZ niszczenia marży.",
+              "zadanie": "🎭 SYMULACJA NEGOCJACJI Z AI\n\n**Twoja rola:** Senior Business Consultant - klient poprosił Cię o pomoc w trudnych negocjacjach\n\n**Rozmówca:** Michael (CEO TechVentures) - gra AI\n- Osobowość: twardy negocjator, ale otwarty na win-win jeśli pokażesz wartość\n- Sytuacja: zarząd wymaga obniżenia kosztów o 40%, konkurencja oferuje tańszą ofertę\n- Ukryty kontekst: wie że Twoja firma jest lepsza, ale ma presję zarządu (AI zareaguje jeśli odkryjesz prawdziwą motywację)\n\n**Twoje zadanie:**\n1. Wynegocjuj warunki które utrzymają klienta I Twoją marżę\n2. Odkryj prawdziwą motywację (czy to tylko cena?)\n3. Zaproponuj kreatywne rozwiązanie win-win\n4. Zachowaj długoterminową relację biznesową\n\n**AI ocenia Cię na żywo:**\n- 🤝 Empatia - czy rozumiesz pozycję klienta\n- 💪 Asertywność - czy bronisz swojej wartości bez kapitulacji\n- 👔 Profesjonalizm - biznesowy ton i argumentacja\n- 💡 Jakość rozwiązania - kreatywność i wykonalność propozycji\n\n**Możliwe zakończenia:**\n- WORST: Natychmiastowa kapitulacja (40% zniżka) → stracisz wiarygodność\n- BAD: Klient odchodzi → utrata 500k/rok\n- MEDIOCRE: 30% zniżka → słaba marża\n- GOOD: 10-15% zniżka + coś ekstra (długi kontrakt, dodatkowe usługi)\n- GREAT: Win-win bez zniżki (ROI report, tiered services, custom package)\n- BEST: Klient podnosi budżet bo widzi dodatkową wartość!\n\n**Wskazówka:** Nie pytaj o zniżkę - pytaj o WARTOŚĆ i CELE biznesowe",
+              "wymagana_wiedza": [
+                "Negotiation",
+                "Value Communication",
+                "Win-Win Thinking",
+                "Business Acumen"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 800,
+              "nagroda_4star": 1100,
+              "nagroda_5star": 1400,
+              "reputacja": 50,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "emoji": "💬",
+              "contract_type": "ai_conversation",
+              "npc_config": {
+                "name": "Michael",
+                "role": "CEO TechVentures LLC",
+                "personality": "tough negotiator, ROI-focused, respectful but firm",
+                "personality_notes": "Michael is under pressure from his board to cut costs by 40%. He received a competing offer that's 40% cheaper (but lower quality). He KNOWS your service is better (you saved them $880k last year through optimization), but needs to show the board he's fighting for cost reduction. If you demonstrate clear ROI and help him justify the premium to his board, he'll stay. If you just fold on price, he'll lose respect and demand more. If you're too rigid, he'll leave.",
+                "initial_emotion": "businesslike",
+                "current_emotion": "businesslike",
+                "goal": "Get a deal that satisfies the board (cost reduction or proven ROI) while keeping quality service. Ideally: pay same or less but get MORE value.",
+                "opening_message": "*Michael dzwoni do Ciebie osobiście - to rzadkość*\n\nMichael: \"Musimy porozmawiać o kontrakcie. Zarząd wymaga 40% cięcia kosztów. Mam ofertę od Twojej konkurencji - 40% taniej. Cenię naszą współpracę, ale biznes to biznes. Co możesz zaproponować?\"",
+                "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
+              },
+              "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-KONFLIKT-001",
+              "tytul": "Mediacja w konflikcie zespołowym",
+              "kategoria": "Konflikt",
+              "klient": "TechCorp",
+              "opis": "Zespół projektowy w firmie TechCorp jest podzielony. \nLider projektu i główny developer mają odmienne wizje dotyczące architektury systemu. \nNapięcie wpływa na terminowość i morale zespołu.",
+              "zadanie": "Odpowiedz krótko:\n\n1. **Co prawdopodobnie jest źródłem konfliktu?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę spotkania mediacyjnego.** (3-4 punkty, krótko)\n   \n3. **Jakie 3 kluczowe pytania zadasz obu stronom?** (lista pytań)",
+              "wymagana_wiedza": [
+                "Conversational Intelligence",
+                "Zarządzanie konfliktem",
+                "Ladder of Inference"
+              ],
+              "trudnosc": 2,
+              "nagroda_base": 450,
+              "nagroda_4star": 600,
+              "nagroda_5star": 750,
+              "reputacja": 30,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 50,
+              "emoji": "⚔️",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-KULTURA-001",
+              "tytul": "Audit kultury komunikacji w zespole",
+              "kategoria": "Kultura",
+              "klient": "DesignHub",
+              "opis": "Remote team w firmie DesignHub ma niskie zaangażowanie. \nLudzie boją się zadawać pytania na spotkaniach. Atmosfera jest sztywna i formalna.",
+              "zadanie": "Krótka analiza:\n\n1. **Wymień 5 pytań diagnostycznych, które zadasz w wywiadach z zespołem**\n   \n2. **Jakie są 3 główne bariery w psychological safety tego zespołu?** (po 1 zdaniu na każdą)\n   \n3. **Zaproponuj 3 konkretne inicjatywy (rituały/procesy) do wdrożenia** (po 1-2 zdania na każdą)",
+              "wymagana_wiedza": [
+                "Psychological Safety",
+                "Team Dynamics",
+                "Remote Work Best Practices"
+              ],
+              "trudnosc": 3,
+              "nagroda_base": 750,
+              "nagroda_4star": 1000,
+              "nagroda_5star": 1300,
+              "reputacja": 50,
+              "czas_realizacji_dni": 2,
+              "wymagany_poziom": 1,
+              "min_slow": 80,
+              "emoji": "🛡️",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-KRYZYS-001",
+              "tytul": "Komunikacja po błędzie projektowym",
+              "kategoria": "Kryzys",
+              "klient": "TechStart",
+              "opis": "Startup wprowadził feature, który spowodował bug u 30% użytkowników. \nSocial media buzują negatywnymi komentarzami. CEO jest w panice.",
+              "zadanie": "Plan komunikacji kryzysowej:\n\n1. **Napisz krótki komunikat do klientów (email)** - max 150 słów\n   \n2. **Jakie elementy MUSI zawierać komunikat kryzysowy?** (5 elementów)\n   \n3. **Co powiedzieć zespołowi engineering?** (3-4 zdania)\n   \n4. **Przygotuj 5 talking points dla CEO na rozmowy z inwestorami**\n   \n5. **Plan follow-up na 7 dni** (5 kroków)",
+              "wymagana_wiedza": [
+                "Crisis Communication",
+                "Stakeholder Management",
+                "Psychological Safety"
+              ],
+              "trudnosc": 4,
+              "nagroda_base": 950,
+              "nagroda_4star": 1250,
+              "nagroda_5star": 1600,
+              "reputacja": 65,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 120,
+              "emoji": "🚨",
+              "available_until": "2025-10-23 13:45:15"
+            },
+            {
+              "id": "CIQ-KRYZYS-002",
+              "tytul": "Zarządzanie zmianą - zwolnienia grupowe",
+              "kategoria": "Kryzys",
+              "klient": "CorporateInc",
+              "opis": "Firma musi zwolnić 20% pracowników z powodu restrukturyzacji. \nLeadership chce to zrobić z empatią i zachować zaangażowanie pozostałego zespołu.",
+              "zadanie": "Kompleksowy plan komunikacji:\n\n1. **Kto, kiedy i jak powinien się dowiedzieć PIERWSZY?** (timeline - 5 kroków)\n   \n2. **Agenda szkolenia dla managerów** (10 punktów z krótkimi opisami)\n   \n3. **Przygotuj listę 15 \"anticipated questions\" i odpowiedzi na każde**\n   \n4. **Napisz draft komunikatu od CEO** (max 200 słów)\n   \n5. **Framework indywidualnych rozmów** (6 kroków, co powiedzieć i czego NIE mówić)\n   \n6. **Plan wsparcia dla pozostałego zespołu** (survivor guilt - 5 konkretnych działań)\n   \n7. **Rebuilding trust - plan na 60 dni** (3 fazy po 20 dni, co w każdej)",
+              "wymagana_wiedza": [
+                "Change Management",
+                "Crisis Communication",
+                "Difficult Conversations"
+              ],
+              "trudnosc": 5,
+              "nagroda_base": 1500,
+              "nagroda_4star": 2000,
+              "nagroda_5star": 2500,
+              "reputacja": 90,
+              "czas_realizacji_dni": 3,
+              "wymagany_poziom": 1,
+              "min_slow": 200,
+              "emoji": "🚨",
+              "available_until": "2025-10-23 13:45:15"
+            }
+          ],
+          "last_refresh": "2025-10-22 13:45:15"
+        },
+        "stats": {
+          "total_revenue": 0,
+          "total_costs": 0,
+          "net_profit": 0,
+          "contracts_completed": 0,
+          "contracts_5star": 0,
+          "contracts_4star": 0,
+          "contracts_3star": 0,
+          "contracts_2star": 0,
+          "contracts_1star": 1,
+          "avg_rating": 0.0,
+          "category_stats": {
+            "Konflikt": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Coaching": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kultura": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kryzys": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Leadership": {
+              "completed": 1,
+              "total_earned": 0,
+              "avg_rating": 1.0
+            }
+          },
+          "last_30_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          },
+          "last_7_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          },
+          "contracts_rejected": 1
+        },
+        "ranking": {
+          "overall_score": 0.0,
+          "current_positions": {
+            "overall": null,
+            "revenue": null,
+            "quality": null,
+            "productivity_30d": null
+          },
+          "previous_positions": {},
+          "badges": []
+        },
+        "events": {
+          "history": [
+            {
+              "event_id": "contract_stolen",
+              "timestamp": "2025-10-20 12:17:30",
+              "title": "Konkurencja Podbiła Ofertę",
+              "emoji": "🚫",
+              "type": "negative",
+              "description": "Inna firma złożyła lepszą ofertę i jeden z dostępnych kontraktów zniknął z puli.",
+              "choice": null,
+              "effects": {
+                "remove_contract_from_pool": true
+              }
+            },
+            {
+              "event_id": "renegotiation",
+              "timestamp": "2025-10-22 13:45:35",
+              "title": "Prośba o Renegocjację",
+              "emoji": "🔄",
+              "type": "neutral",
+              "description": "Klient z aktywnym kontraktem chce renegocjować warunki: -20% nagrody, ale +3 dni na realizację.",
+              "choice": "✅ Zgadzam się",
+              "effects": {
+                "modify_active_contract": true,
+                "reward_multiplier": 0.8,
+                "time_bonus": 3
+              },
+              "affected_contract": "Komunikacja po błędzie projektowym"
+            }
+          ],
+          "last_roll": "2025-10-22 13:45:35",
+          "active_effects": []
+        },
+        "history": {
+          "transactions": [
+            {
+              "type": "contract_reward",
+              "contract_id": "CIQ-STARTER-001",
+              "contract_title": "Poprawa komunikacji w zespole 2-osobowym",
+              "amount": 0,
+              "rating": 1,
+              "timestamp": "2025-10-20 12:25:05"
+            }
+          ],
+          "level_ups": []
+        },
+        "office": {
+          "type": "home_office",
+          "upgraded_at": null
+        }
+      }
+    }
   },
   "z": {
     "user_id": "577ad34e-d0aa-43f8-8bae-e18037ebbbe2",

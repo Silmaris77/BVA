@@ -9,7 +9,7 @@
   --primary-color: #4A90E2;
   --primary-light: #7BB3F0;
   --secondary-color: #5CB85C;
-  --background-light: linear-gradient(135deg, #8596A8 0%, #96A7B4 50%, #7A8B99 100%);
+  --background-light: lch(83% 1.09 18.97);  /* Lekko szare tło */
   --background-dark: linear-gradient(135deg, #2D3748 0%, #374151 50%, #2D3748 100%);
   --background-card: linear-gradient(145deg, #4A5568 0%, #3F4A5A 100%);
   --background-card-hover: linear-gradient(145deg, #5A6A7C 0%, #4F5F6F 100%);

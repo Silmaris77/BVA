@@ -1260,20 +1260,44 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
                 </div>
                 """, unsafe_allow_html=True)
                 
-                # Metryki
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.metric("⭐ Ocena", f"{rating}/5")
-                with col2:
-                    st.metric("💰 Zarobiono", f"{reward_coins:,}")
-                with col3:
-                    rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
-                    st.metric("📈 Reputacja", rep_display)
+                # Metryki w karcie
+                rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
                 
-                # Feedback
-                st.markdown("### 💬 Feedback od klienta:")
+                st.markdown(f"""
+                <div style='background: linear-gradient(to right, #f8fafc, #f1f5f9); 
+                            border-left: 4px solid #3b82f6; 
+                            border-radius: 8px; 
+                            padding: 16px; 
+                            margin: 16px 0;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);'>
+                    <div style='display: flex; justify-content: space-around; text-align: center;'>
+                        <div>
+                            <div style='font-size: 24px; margin-bottom: 4px;'>⭐</div>
+                            <div style='font-weight: 600; color: #1e293b;'>{rating}/5</div>
+                            <div style='font-size: 12px; color: #64748b;'>Ocena</div>
+                        </div>
+                        <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
+                        <div>
+                            <div style='font-size: 24px; margin-bottom: 4px;'>💰</div>
+                            <div style='font-weight: 600; color: #1e293b;'>{reward_coins:,}</div>
+                            <div style='font-size: 12px; color: #64748b;'>Zarobiono</div>
+                        </div>
+                        <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
+                        <div>
+                            <div style='font-size: 24px; margin-bottom: 4px;'>📈</div>
+                            <div style='font-weight: 600; color: #1e293b;'>{rep_display}</div>
+                            <div style='font-size: 12px; color: #64748b;'>Reputacja</div>
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Feedback od klienta
                 feedback = contract.get("feedback", "Brak feedbacku")
-                st.markdown(feedback)
+                
+                st.markdown("---")
+                st.subheader("💬 Feedback od klienta")
+                st.info(feedback)
                 
                 # Link do pełnej historii
                 st.info("💡 Pełne szczegóły kontraktu (opis, zadanie, Twoje rozwiązanie) znajdziesz w zakładce **'📜 Historia & Wydarzenia'**")
@@ -2105,19 +2129,32 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         
         st.success(f"🎉 **Rozmowa zakończona!**")
         
-        # Metryki
+        st.markdown("---")
+        
+        # Metryki w bardziej wyraźnych kolumnach
         col1, col2, col3, col4 = st.columns(4)
+        
         with col1:
-            st.metric("⭐ Ocena", f"{final_results['stars']}/5")
+            st.markdown("### ⭐")
+            st.markdown(f"**Ocena:** {final_results['stars']}/5")
+        
         with col2:
-            st.metric("🎯 Punkty", final_results['total_points'])
+            st.markdown("### 🎯")
+            st.markdown(f"**Punkty:** {final_results['total_points']}")
+        
         with col3:
-            st.metric("💬 Tur", final_results['turn_count'])
+            st.markdown("### 💬")
+            st.markdown(f"**Tur:** {final_results['turn_count']}")
+        
         with col4:
             ending_emoji = {"SUCCESS": "🏆", "NEUTRAL": "🤝", "FAILURE": "❌"}.get(
                 final_results.get('ending_type', 'NEUTRAL'), "🤝"
             )
-            st.metric("Wynik", f"{ending_emoji} {final_results.get('ending_type', 'NEUTRAL')}")
+            ending_type = final_results.get('ending_type', 'NEUTRAL')
+            st.markdown(f"### {ending_emoji}")
+            st.markdown(f"**{ending_type}**")
+        
+        st.markdown("---")
         
         # Podsumowanie
         st.markdown(f"""
@@ -2459,24 +2496,53 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new,
         
         st.markdown(html_content, unsafe_allow_html=True)
         
-        # Expander ze szczegółami zadania
-        with st.expander("👁️ Zobacz szczegóły zadania"):
-            st.markdown("### 🎯 Zadanie do wykonania")
-            st.markdown(contract['zadanie'])
+        # Expander ze szczegółami zadania - kompaktowy layout z kartami
+        with st.expander("👁️ Zobacz szczegóły zadania", expanded=False):
+            # Zadanie w karcie
+            st.markdown(f"""
+            <div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); 
+                        border-left: 4px solid #667eea; 
+                        border-radius: 12px; 
+                        padding: 16px 20px; 
+                        margin-bottom: 16px;'>
+                <div style='color: #667eea; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;'>
+                    🎯 ZADANIE DO WYKONANIA
+                </div>
+                <div style='color: #334155; font-size: 14px; line-height: 1.6;'>
+                    {contract['zadanie']}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
             
-            st.markdown("---")
+            # Wymagana wiedza w karcie
+            knowledge_items = "".join([f"<div style='padding: 6px 12px; background: white; border-radius: 6px; margin-bottom: 6px; color: #475569; font-size: 13px;'>✓ {req}</div>" for req in contract['wymagana_wiedza']])
             
-            st.markdown("### 📚 Wymagana wiedza z lekcji")
-            for req in contract['wymagana_wiedza']:
-                st.markdown(f"- {req}")
+            st.markdown(f"""
+            <div style='background: linear-gradient(135deg, #10b98115 0%, #05966915 100%); 
+                        border-left: 4px solid #10b981; 
+                        border-radius: 12px; 
+                        padding: 16px 20px; 
+                        margin-bottom: 16px;'>
+                <div style='color: #10b981; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 12px;'>
+                    📚 WYMAGANA WIEDZA
+                </div>
+                {knowledge_items}
+            </div>
+            """, unsafe_allow_html=True)
             
-            st.markdown("---")
-            
-            col_a, col_b = st.columns(2)
-            with col_a:
-                st.markdown(f"**🏆 Wymagany poziom firmy:** {contract['wymagany_poziom']}")
-            with col_b:
-                st.markdown(f"**📂 Kategoria:** {contract['kategoria']}")
+            # Dodatkowe info w kompaktowej formie
+            st.markdown(f"""
+            <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 12px;'>
+                <div style='background: #f8fafc; border-radius: 8px; padding: 12px; text-align: center;'>
+                    <div style='color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;'>Wymagany poziom</div>
+                    <div style='color: #1e293b; font-size: 18px; font-weight: 700;'>🏆 {contract['wymagany_poziom']}</div>
+                </div>
+                <div style='background: #f8fafc; border-radius: 8px; padding: 12px; text-align: center;'>
+                    <div style='color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;'>Kategoria</div>
+                    <div style='color: #1e293b; font-size: 18px; font-weight: 700;'>📂 {contract['kategoria']}</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
         
         # Przycisk przyjęcia - szerszy dla lepszej czytelności na laptopach
         col1, col2, col3 = st.columns([1, 3, 1])
@@ -3973,47 +4039,137 @@ def render_completed_contract_card(contract):
         </div>
         """, unsafe_allow_html=True)
         
-        # Metryki w kolumnach
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.markdown(f"### {'⭐' * rating}")
-            st.caption(f"Ocena: {rating}/5")
-        with col2:
-            # Wyświetl 0 monet jeśli kontrakt był odrzucony
-            coin_display = f"{reward_coins} monet" if reward_coins > 0 else "0 monet (odrzucono)"
-            st.metric("💰 Zarobiono", coin_display)
-        with col3:
-            rep_change = get_contract_reward_reputation(contract)
-            # Wyświetl znak + lub - w zależności od wartości
-            rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
-            st.metric("📈 Reputacja", rep_display)
+        # Metryki w karcie
+        rep_change = get_contract_reward_reputation(contract)
+        rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
+        
+        st.markdown(f"""
+        <div style='background: linear-gradient(to right, #f8fafc, #f1f5f9); 
+                    border-left: 4px solid #3b82f6; 
+                    border-radius: 8px; 
+                    padding: 16px; 
+                    margin: 16px 0;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);'>
+            <div style='display: flex; justify-content: space-around; text-align: center;'>
+                <div>
+                    <div style='font-size: 24px; margin-bottom: 4px;'>⭐</div>
+                    <div style='font-weight: 600; color: #1e293b;'>{rating}/5</div>
+                    <div style='font-size: 12px; color: #64748b;'>Ocena</div>
+                </div>
+                <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
+                <div>
+                    <div style='font-size: 24px; margin-bottom: 4px;'>💰</div>
+                    <div style='font-weight: 600; color: #1e293b;'>{reward_coins:,}</div>
+                    <div style='font-size: 12px; color: #64748b;'>Zarobiono</div>
+                </div>
+                <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
+                <div>
+                    <div style='font-size: 24px; margin-bottom: 4px;'>📈</div>
+                    <div style='font-weight: 600; color: #1e293b;'>{rep_display}</div>
+                    <div style='font-size: 12px; color: #64748b;'>Reputacja</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
         
         st.markdown("---")
         
-        # Feedback od klienta - główny element!
-        st.markdown("### 💬 Feedback od klienta:")
-        
-        # Wyświetl feedback jako markdown (renderuje **bold**, listy itp.)
-        st.markdown(feedback)
+        # Feedback od klienta
+        st.subheader("💬 Feedback od klienta")
+        st.info(feedback)
         
         # Expander z pełnymi szczegółami
         with st.expander("📋 Zobacz szczegóły kontraktu i Twoje rozwiązanie"):
-            st.markdown("**Opis sytuacji:**")
-            st.markdown(contract['opis'])
-            st.markdown("---")
-            st.markdown("**Zadanie:**")
-            st.markdown(contract['zadanie'])
-            st.markdown("---")
-            st.markdown("**Twoje rozwiązanie:**")
-            solution = contract.get("solution", "Brak zapisanego rozwiązania")
-            st.markdown(f"""
-            <div style='background: #f9fafb; 
-                        padding: 15px; 
-                        border-left: 3px solid #6366f1;
-                        font-family: monospace;'>
-                {solution}
+            # Karta 1: Opis sytuacji - Header
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #8b5cf615 0%, #6d28d915 100%); 
+                        border-left: 4px solid #8b5cf6; 
+                        border-radius: 12px 12px 0 0; 
+                        padding: 12px 20px 8px 20px; 
+                        margin-bottom: 0;'>
+                <div style='color: #8b5cf6; 
+                            font-size: 11px; 
+                            text-transform: uppercase; 
+                            letter-spacing: 1px; 
+                            font-weight: 600;'>
+                    📄 OPIS SYTUACJI
+                </div>
             </div>
             """, unsafe_allow_html=True)
+            
+            # Content
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #8b5cf615 0%, #6d28d915 100%); 
+                        border-left: 4px solid #8b5cf6; 
+                        border-radius: 0 0 12px 12px; 
+                        padding: 8px 20px 16px 20px; 
+                        margin: 0 0 16px 0;'>
+            """, unsafe_allow_html=True)
+            
+            st.markdown(contract['opis'])
+            
+            st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Karta 2: Zadanie - Header
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #f59e0b15 0%, #d9770615 100%); 
+                        border-left: 4px solid #f59e0b; 
+                        border-radius: 12px 12px 0 0; 
+                        padding: 12px 20px 8px 20px; 
+                        margin-bottom: 0;'>
+                <div style='color: #f59e0b; 
+                            font-size: 11px; 
+                            text-transform: uppercase; 
+                            letter-spacing: 1px; 
+                            font-weight: 600;'>
+                    🎯 ZADANIE
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Content
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #f59e0b15 0%, #d9770615 100%); 
+                        border-left: 4px solid #f59e0b; 
+                        border-radius: 0 0 12px 12px; 
+                        padding: 8px 20px 16px 20px; 
+                        margin: 0 0 16px 0;'>
+            """, unsafe_allow_html=True)
+            
+            st.markdown(contract['zadanie'])
+            
+            st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Karta 3: Twoje rozwiązanie - Header
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #06b6d415 0%, #0891b215 100%); 
+                        border-left: 4px solid #06b6d4; 
+                        border-radius: 12px 12px 0 0; 
+                        padding: 12px 20px 8px 20px; 
+                        margin-bottom: 0;'>
+                <div style='color: #06b6d4; 
+                            font-size: 11px; 
+                            text-transform: uppercase; 
+                            letter-spacing: 1px; 
+                            font-weight: 600;'>
+                    ✍️ TWOJE ROZWIĄZANIE
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Content
+            solution = contract.get("solution", "Brak zapisanego rozwiązania")
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #06b6d415 0%, #0891b215 100%); 
+                        border-left: 4px solid #06b6d4; 
+                        border-radius: 0 0 12px 12px; 
+                        padding: 8px 20px 16px 20px; 
+                        margin: 0 0 0 0;'>
+            """, unsafe_allow_html=True)
+            
+            st.markdown(f"```\n{solution}\n```")
+            
+            st.markdown("</div>", unsafe_allow_html=True)
             
             # Szczegóły oceny są teraz ukryte - feedback wystarczy
             # Jeśli potrzebujesz debugowania, odkomentuj poniżej:
