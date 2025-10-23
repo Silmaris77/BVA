@@ -1329,7 +1329,7 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
     with col_chart1:
         # Generuj i wyświetl wykres
         fig = create_financial_chart(bg_data, period=period, cumulative=cumulative)
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
         
         # Podsumowanie sum
         if cumulative:
@@ -3578,7 +3578,7 @@ def show_pl_statement(financial_data, period_type, show_comparison):
         paper_bgcolor='white'
     )
     
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def show_profitability_analysis(financial_data, bg_data):
@@ -3727,7 +3727,7 @@ def show_employee_roi_analysis(financial_data, bg_data):
             height=400
         )
         
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
 
 def show_category_analysis(financial_data, bg_data):
@@ -3813,7 +3813,7 @@ def show_category_analysis(financial_data, bg_data):
         paper_bgcolor='white'
     )
     
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
     
     # Top kontrakty
     st.markdown("#### 🏆 Top 5 Najbardziej Dochodowych Kontraktów")
@@ -4519,7 +4519,7 @@ def render_event_choice_modal(event_id: str, event_data: dict, username: str, us
     
     for idx, (col, choice) in enumerate(zip(cols, event_data["choices"])):
         with col:
-            if st.button(choice["text"], key=f"choice_{idx}", type="primary" if idx == 0 else "secondary", width="stretch"):
+            if st.button(choice["text"], key=f"event_choice_{event_id}_{idx}", type="primary" if idx == 0 else "secondary", width="stretch"):
                 # Aplikuj wybór
                 user_data = apply_event_effects(event_id, event_data, idx, user_data)
                 save_user_data(username, user_data)

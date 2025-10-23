@@ -659,7 +659,7 @@ def show_admin_dashboard():
                 )
             )
             
-            st.plotly_chart(fig_all, width="stretch")
+            st.plotly_chart(fig_all, use_container_width=True)
             
             # Tabela szczegółowa
             st.markdown("---")

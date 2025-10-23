@@ -834,7 +834,7 @@ def show_xp_history_section():
                 height=400
             )
             
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
             
             # Statystyki pod wykresem
             col_chart1, col_chart2, col_chart3, col_chart4 = st.columns(4)
@@ -1402,7 +1402,7 @@ def display_xp_chart(username: str):
         paper_bgcolor='rgba(0,0,0,0)'
     )
     
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
     
     # Statystyki pod wykresem
     col1, col2, col3, col4 = st.columns(4)
@@ -2261,19 +2261,19 @@ def generate_who_am_i_report_ui(username: str):
         
         with col1:
             if kolb_chart:
-                st.plotly_chart(kolb_chart, width="stretch")
+                st.plotly_chart(kolb_chart, use_container_width=True)
             else:
                 st.info("� **Test Kolba**\n\nWykonaj test aby zobaczyć wykres")
         
         with col2:
             if neuroleader_chart:
-                st.plotly_chart(neuroleader_chart, width="stretch")
+                st.plotly_chart(neuroleader_chart, use_container_width=True)
             else:
                 st.info("� **Neuroleader**\n\nWykonaj test aby zobaczyć wykres")
         
         with col3:
             if mi_chart:
-                st.plotly_chart(mi_chart, width="stretch")
+                st.plotly_chart(mi_chart, use_container_width=True)
             else:
                 st.info("🧠 **MI Test**\n\nWykonaj test aby zobaczyć wykres")
     else:
@@ -2286,12 +2286,12 @@ def generate_who_am_i_report_ui(username: str):
     
     with col_gauge:
         engagement_gauge = create_engagement_gauge(profile_data)
-        st.plotly_chart(engagement_gauge, width="stretch")
+        st.plotly_chart(engagement_gauge, use_container_width=True)
     
     with col_strengths:
         strengths_bars = create_strengths_bars(profile_data)
         if strengths_bars:
-            st.plotly_chart(strengths_bars, width="stretch")
+            st.plotly_chart(strengths_bars, use_container_width=True)
         else:
             st.info("💪 **Mocne Strony**\n\nWykonaj testy aby odkryć swoje mocne strony!")
     

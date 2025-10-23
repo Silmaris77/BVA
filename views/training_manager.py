@@ -355,7 +355,7 @@ def show_auction_tab():
             uniformtext=dict(mode='hide', minsize=10)
         )
         
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
     
     with timer_col:
         # Inicjalizuj stan timera dla licytacji
@@ -502,7 +502,25 @@ def show_rankings_tab():
         st.metric("Postęp", f"{progress_pct:.0f}%")
     with col3:
         if st.button("➕ Następna runda", type="primary", disabled=(current_round >= max_rounds)):
+            # Zwiększ rundę
             st.session_state.training_current_round += 1
+            
+            # Dla każdego zespołu - skopiuj ostatnie wartości do nowej rundy
+            for team in teams:
+                # Skopiuj ostatnią wartość dochodu (skumulowaną)
+                if team['revenue']:
+                    last_revenue = team['revenue'][-1]
+                    team['revenue'].append(last_revenue)
+                else:
+                    team['revenue'].append(0)
+                
+                # Skopiuj ostatnią wartość efektywności (skumulowaną)
+                if team['efficiency']:
+                    last_efficiency = team['efficiency'][-1]
+                    team['efficiency'].append(last_efficiency)
+                else:
+                    team['efficiency'].append(0)
+            
             st.rerun()
     with col4:
         if st.button("🔄 Reset", type="secondary"):
@@ -522,9 +540,9 @@ def show_rankings_tab():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("#### 💰 Dochód zespołów - SKUMULOWANY (edytowalna tabela)")
+        st.markdown("#### 💰 Dochód zespołów - SKUMULOWANE (edytowalne)")
         
-        # Przygotuj dane do edycji - używamy current_round + 1 jako max
+        # Przygotuj dane do edycji - wartości SKUMULOWANE w każdej rundzie
         revenue_data = []
         max_display_rounds = max(current_round + 1, max(len(t['revenue']) for t in teams))
         
@@ -537,37 +555,47 @@ def show_rankings_tab():
                 'Logo': team.get('logo', '🏢'),
                 'Zespół': team['name']
             }
-            # Dodaj kolumny SKUMULOWANE dla każdej rundy
-            cumulative = 0
+            # Dodaj kolumny z PRZYROSTAMI dla każdej rundy
             for r in range(max_display_rounds):
-                cumulative += team['revenue'][r]
-                row[f'R{r}'] = cumulative
+                row[f'R{r}'] = team['revenue'][r]
             revenue_data.append(row)
         
         df_revenue = pd.DataFrame(revenue_data)
         
         # Konfiguracja kolumn - dynamicznie dla każdej rundy
         column_config = {
-            'Logo': st.column_config.TextColumn('', width='small'),
-            'Zespół': st.column_config.TextColumn('Zespół', width='medium')
+            'Logo': st.column_config.TextColumn('', width='small', disabled=True),
+            'Zespół': st.column_config.TextColumn('Zespół', width='medium', disabled=True)
         }
         
-        # Dodaj konfigurację dla kolumn rund
+        # Dodaj konfigurację dla kolumn rund - EDYTOWALNE
         for r in range(max_display_rounds):
             column_config[f'R{r}'] = st.column_config.NumberColumn(
                 f'R{r}',
-                help=f'Skumulowany dochód do rundy {r}',
-                disabled=True,  # Skumulowane są tylko do odczytu
+                help=f'Dochód skumulowany do rundy {r}',
+                min_value=-1000000,
+                max_value=1000000,
+                step=100,
                 format='%d zł'
             )
         
-        # Tabela tylko do odczytu (skumulowane wartości)
-        st.dataframe(
+        # Tabela EDYTOWALNA (przyrosty)
+        edited_revenue = st.data_editor(
             df_revenue,
             width="stretch",
             hide_index=True,
-            column_config=column_config
+            column_config=column_config,
+            key='revenue_editor'
         )
+        
+        # Zapisz zmiany
+        if st.button("💾 Zapisz zmiany w przychodach", type="primary", key='save_revenue_edits'):
+            for idx, team in enumerate(teams):
+                for r in range(max_display_rounds):
+                    new_value = edited_revenue.iloc[idx][f'R{r}']
+                    team['revenue'][r] = int(new_value)
+            st.success("✅ Zmiany zapisane!")
+            st.rerun()
         
         # Pole do wpisania PRZYROSTU w aktualnej rundzie
         st.markdown(f"**Dodaj przychód dla rundy {current_round}:**")
@@ -577,7 +605,7 @@ def show_rankings_tab():
             with col:
                 revenue_increments[team['name']] = st.number_input(
                     f"{team.get('logo', '🏢')} {team['name']}",
-                    min_value=0,
+                    min_value=-1000000,
                     max_value=1000000,
                     value=0,
                     step=100,
@@ -587,7 +615,7 @@ def show_rankings_tab():
         if st.button("➕ Dodaj przychody", type="primary", key='add_revenue'):
             for team in teams:
                 increment = revenue_increments.get(team['name'], 0)
-                if increment > 0:
+                if increment != 0:
                     if current_round < len(team['revenue']):
                         team['revenue'][current_round] += increment
                     else:
@@ -596,9 +624,9 @@ def show_rankings_tab():
             st.rerun()
     
     with col2:
-        st.markdown("#### ⚡ Efektywność zespołów - SKUMULOWANA (edytowalna tabela)")
+        st.markdown("#### ⚡ Efektywność zespołów - SKUMULOWANA (edytowalne)")
         
-        # Przygotuj dane do edycji - używamy current_round + 1 jako max
+        # Przygotuj dane do edycji - wartości SKUMULOWANE w każdej rundzie
         efficiency_data = []
         max_display_rounds = max(current_round + 1, max(len(t['efficiency']) for t in teams))
         
@@ -611,37 +639,47 @@ def show_rankings_tab():
                 'Logo': team.get('logo', '🏢'),
                 'Zespół': team['name']
             }
-            # Dodaj kolumny SKUMULOWANE dla każdej rundy
-            cumulative = 0
+            # Dodaj kolumny z PRZYROSTAMI dla każdej rundy
             for r in range(max_display_rounds):
-                cumulative += team['efficiency'][r]
-                row[f'R{r}'] = cumulative
+                row[f'R{r}'] = team['efficiency'][r]
             efficiency_data.append(row)
         
         df_efficiency = pd.DataFrame(efficiency_data)
         
         # Konfiguracja kolumn - dynamicznie dla każdej rundy
         column_config = {
-            'Logo': st.column_config.TextColumn('', width='small'),
-            'Zespół': st.column_config.TextColumn('Zespół', width='medium')
+            'Logo': st.column_config.TextColumn('', width='small', disabled=True),
+            'Zespół': st.column_config.TextColumn('Zespół', width='medium', disabled=True)
         }
         
-        # Dodaj konfigurację dla kolumn rund
+        # Dodaj konfigurację dla kolumn rund - EDYTOWALNE
         for r in range(max_display_rounds):
             column_config[f'R{r}'] = st.column_config.NumberColumn(
                 f'R{r}',
-                help=f'Skumulowana efektywność do rundy {r}',
-                disabled=True,  # Skumulowane są tylko do odczytu
+                help=f'Efektywność skumulowana do rundy {r}',
+                min_value=0,
+                max_value=200,
+                step=1,
                 format='%d'
             )
         
-        # Tabela tylko do odczytu (skumulowane wartości)
-        st.dataframe(
+        # Tabela EDYTOWALNA (przyrosty)
+        edited_efficiency = st.data_editor(
             df_efficiency,
             width="stretch",
             hide_index=True,
-            column_config=column_config
+            column_config=column_config,
+            key='efficiency_editor'
         )
+        
+        # Zapisz zmiany
+        if st.button("💾 Zapisz zmiany w efektywności", type="primary", key='save_efficiency_edits'):
+            for idx, team in enumerate(teams):
+                for r in range(max_display_rounds):
+                    new_value = edited_efficiency.iloc[idx][f'R{r}']
+                    team['efficiency'][r] = int(new_value)
+            st.success("✅ Zmiany zapisane!")
+            st.rerun()
         
         # Pole do wpisania PRZYROSTU w aktualnej rundzie
         st.markdown(f"**Dodaj efektywność dla rundy {current_round}:**")
@@ -684,12 +722,19 @@ def show_rankings_tab():
     for idx, team in enumerate(teams):
         team_color = team.get('color', '#667eea')
         
-        # Skumulowany dochód
-        cumulative_revenue = []
-        total = 0
-        for val in team['revenue']:
-            total += val
-            cumulative_revenue.append(total)
+        # Dane są już SKUMULOWANE w team['revenue']
+        cumulative_revenue = team['revenue']
+        
+        # Wylicz przyrosty z różnicy między rundami
+        revenue_increments = []
+        for i in range(len(cumulative_revenue)):
+            if i == 0:
+                revenue_increments.append(cumulative_revenue[0])  # Pierwsza runda = cała wartość
+            else:
+                revenue_increments.append(cumulative_revenue[i] - cumulative_revenue[i-1])
+        
+        # Przygotuj custom data z przyrostami dla tooltip
+        customdata_revenue = [[revenue_increments[i], cumulative_revenue[i]] for i in range(len(cumulative_revenue))]
         
         fig.add_trace(
             go.Scatter(
@@ -699,17 +744,25 @@ def show_rankings_tab():
                 mode='lines+markers',
                 line=dict(color=team_color, width=4),
                 marker=dict(size=12, symbol='circle'),
-                hovertemplate=f"{team['name']}<br>Runda: %{{x}}<br>Suma: %{{y}} zł<extra></extra>"
+                customdata=customdata_revenue,
+                hovertemplate=f"<b>{team['name']}</b><br>Runda: %{{x}}<br>Przyrost: %{{customdata[0]}} zł<br>Skumulowane: %{{customdata[1]}} zł<extra></extra>"
             ),
             row=1, col=1
         )
         
-        # Skumulowana efektywność
-        cumulative_efficiency = []
-        total = 0
-        for val in team['efficiency']:
-            total += val
-            cumulative_efficiency.append(total)
+        # Dane są już SKUMULOWANE w team['efficiency']
+        cumulative_efficiency = team['efficiency']
+        
+        # Wylicz przyrosty z różnicy między rundami
+        efficiency_increments = []
+        for i in range(len(cumulative_efficiency)):
+            if i == 0:
+                efficiency_increments.append(cumulative_efficiency[0])
+            else:
+                efficiency_increments.append(cumulative_efficiency[i] - cumulative_efficiency[i-1])
+        
+        # Przygotuj custom data z przyrostami dla tooltip
+        customdata_efficiency = [[efficiency_increments[i], cumulative_efficiency[i]] for i in range(len(cumulative_efficiency))]
         
         fig.add_trace(
             go.Scatter(
@@ -720,33 +773,67 @@ def show_rankings_tab():
                 line=dict(color=team_color, width=4),
                 marker=dict(size=12, symbol='square'),
                 showlegend=False,
-                hovertemplate=f"{team['name']}<br>Runda: %{{x}}<br>Suma: %{{y}}<extra></extra>"
+                customdata=customdata_efficiency,
+                hovertemplate=f"<b>{team['name']}</b><br>Runda: %{{x}}<br>Przyrost: %{{customdata[0]}}<br>Skumulowane: %{{customdata[1]}}<extra></extra>"
             ),
             row=1, col=2
         )
     
-    fig.update_xaxes(title_text="Runda", row=1, col=1, gridcolor='lightgray', dtick=1)
-    fig.update_xaxes(title_text="Runda", row=1, col=2, gridcolor='lightgray', dtick=1)
-    fig.update_yaxes(title_text="Dochód skumulowany (zł)", row=1, col=1, gridcolor='lightgray')
-    fig.update_yaxes(title_text="Efektywność skumulowana", row=1, col=2, gridcolor='lightgray')
+    # Dynamiczne skalowanie osi Y dla dochodów
+    max_revenue = max([max(team['revenue']) if team['revenue'] else 0 for team in teams])
+    if max_revenue <= 10000:
+        revenue_y_max = 10000
+    elif max_revenue <= 20000:
+        revenue_y_max = 20000
+    elif max_revenue <= 30000:
+        revenue_y_max = 30000
+    else:
+        revenue_y_max = ((max_revenue // 10000) + 1) * 10000
+    
+    # Dynamiczne skalowanie osi Y dla efektywności
+    max_efficiency = max([max(team['efficiency']) if team['efficiency'] else 0 for team in teams])
+    if max_efficiency <= 20:
+        efficiency_y_max = 20
+    elif max_efficiency <= 30:
+        efficiency_y_max = 30
+    elif max_efficiency <= 40:
+        efficiency_y_max = 40
+    else:
+        efficiency_y_max = ((max_efficiency // 10) + 1) * 10
+    
+    fig.update_xaxes(title_text="Runda", row=1, col=1, gridcolor='lightgray', dtick=1, range=[-0.5, max_rounds - 0.5])
+    fig.update_xaxes(title_text="Runda", row=1, col=2, gridcolor='lightgray', dtick=1, range=[-0.5, max_rounds - 0.5])
+    fig.update_yaxes(title_text="Dochód skumulowany (zł)", row=1, col=1, gridcolor='lightgray', range=[0, revenue_y_max])
+    fig.update_yaxes(title_text="Efektywność skumulowana", row=1, col=2, gridcolor='lightgray', range=[8, efficiency_y_max], dtick=1)
     
     fig.update_layout(
-        height=500,
+        height=600,
         showlegend=True,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=-0.25,
+            xanchor="center",
+            x=0.5,
+            bgcolor="rgba(255,255,255,0.9)",
+            bordercolor="lightgray",
+            borderwidth=1
+        ),
         hovermode='x unified',
-        plot_bgcolor='white'
+        plot_bgcolor='white',
+        margin=dict(b=120, t=60)
     )
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
     
     # Wykres kołowy - Market Share
     st.markdown("---")
     st.markdown("### 📊 Market Share (udział w rynku)")
     
-    # Oblicz całkowity skumulowany dochód dla każdego zespołu
+    # Oblicz całkowity skumulowany dochód dla każdego zespołu (ostatnia wartość = skumulowana)
     market_share_data = []
     for team in teams:
-        total_revenue = sum(team['revenue'])
+        # Jeśli revenue jest już skumulowane, weź ostatnią wartość
+        total_revenue = team['revenue'][-1] if team['revenue'] else 0
         if total_revenue > 0:
             market_share_data.append({
                 'team': f"{team.get('logo', '🏢')} {team['name']}",
@@ -804,7 +891,7 @@ def show_rankings_tab():
             margin=dict(t=80, b=40, l=40, r=200)
         )
         
-        st.plotly_chart(fig_pie, width="stretch")
+        st.plotly_chart(fig_pie, use_container_width=True)
         
         # Tabela z procentami
         st.markdown("#### 📈 Szczegółowy udział w rynku:")
@@ -821,7 +908,7 @@ def show_rankings_tab():
         df_share = pd.DataFrame(share_table)
         st.dataframe(
             df_share,
-            width="stretch",
+            use_container_width=True,
             hide_index=True,
             column_config={
                 'Miejsce': st.column_config.TextColumn('🏆', width='small'),
