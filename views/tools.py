@@ -1934,7 +1934,7 @@ def display_kolb_results():
         showlegend=False
     )
     
-    st.plotly_chart(fig_bar, use_container_width=True)
+    st.plotly_chart(fig_bar, width="stretch")
     
     # Interpretacja wykresu słupkowego
     strongest = max(results.items(), key=lambda x: x[1])
@@ -2074,7 +2074,7 @@ def display_kolb_results():
         )
     )
     
-    st.plotly_chart(fig_grid, use_container_width=True)
+    st.plotly_chart(fig_grid, width="stretch")
     
     # Interpretacja siatki
     distance_from_center = math.sqrt(x_coord**2 + y_coord**2)
@@ -6329,7 +6329,7 @@ def show_mi_test():
         # Przycisk start
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if st.button("🚀 Rozpocznij Test (10-15 min)", use_container_width=True, type="primary", key="start_mi_test"):
+            if st.button("🚀 Rozpocznij Test (10-15 min)", width="stretch", type="primary", key="start_mi_test"):
                 st.session_state.mi_test_started = True
                 st.rerun()
         
@@ -6416,7 +6416,7 @@ def show_mi_test_questions():
     if len(st.session_state.mi_answers) == total_questions:
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if st.button("✅ Zakończ test i zobacz wyniki", use_container_width=True, type="primary", key="finish_mi_test"):
+            if st.button("✅ Zakończ test i zobacz wyniki", width="stretch", type="primary", key="finish_mi_test"):
                 calculate_and_save_mi_results()
                 st.session_state.mi_completed = True
                 st.rerun()
@@ -6499,7 +6499,7 @@ def show_mi_results():
         title="Profil Wielorakich Inteligencji"
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     
     # 2. INTERPRETACJA PROFILU
     st.markdown("## 🎯 Interpretacja Profilu")
@@ -6566,7 +6566,7 @@ def show_mi_results():
         df_results = df_results.sort_values('Sort', ascending=False).drop('Sort', axis=1)
         df_results.index = range(1, len(df_results) + 1)
         
-        st.dataframe(df_results, use_container_width=True)
+        st.dataframe(df_results, width="stretch")
     
     # 6. IMPLIKACJE DLA BVA
     show_mi_bva_recommendations(results)
@@ -6576,7 +6576,7 @@ def show_mi_results():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("📥 Pobierz raport PDF", use_container_width=True, key="download_mi_pdf"):
+        if st.button("📥 Pobierz raport PDF", width="stretch", key="download_mi_pdf"):
             pdf_bytes = generate_mi_pdf_report(results)
             if pdf_bytes:
                 st.download_button(
@@ -6588,13 +6588,13 @@ def show_mi_results():
                 )
     
     with col2:
-        if st.button("✅ Zastosuj rekomendacje w profilu", use_container_width=True, key="apply_mi_recs"):
+        if st.button("✅ Zastosuj rekomendacje w profilu", width="stretch", key="apply_mi_recs"):
             apply_mi_recommendations_to_profile(results)
             st.success("✅ Profil zaktualizowany!")
             st.balloons()
     
     with col3:
-        if st.button("🔄 Wykonaj test ponownie", use_container_width=True, key="reset_mi_test"):
+        if st.button("🔄 Wykonaj test ponownie", width="stretch", key="reset_mi_test"):
             # Reset testu
             for key in ['mi_test_started', 'mi_answers', 'mi_results', 'mi_completed']:
                 if key in st.session_state:

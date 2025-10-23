@@ -327,7 +327,7 @@ def show_admin_dashboard():
                 "test_taken": "Test wykonany",
                 "streak": "Seria dni"
             },
-            use_container_width=True
+            width="stretch"
         )
         
         # Dodaj opcję eksportu danych
@@ -367,7 +367,7 @@ def show_admin_dashboard():
                     format="%{value:.2f}"
                 )
             },
-            use_container_width=True
+            width="stretch"
         )
         
         # Wykres popularności lekcji (top 10)
@@ -444,7 +444,7 @@ def show_admin_dashboard():
                     "neuroleader_type": "Typ neuroleader",
                     "score": "Wynik"
                 },
-                use_container_width=True
+                width="stretch"
             )
         else:
             st.info("Brak danych o wynikach testów.")
@@ -506,7 +506,7 @@ def show_admin_dashboard():
                 title='Rozkład stylów uczenia się wśród użytkowników'
             )
             
-            st.altair_chart(chart, use_container_width=True)
+            st.altair_chart(chart, width="stretch")
             
             # GŁÓWNA WIZUALIZACJA: Siatka wszystkich użytkowników
             st.markdown("---")
@@ -659,7 +659,7 @@ def show_admin_dashboard():
                 )
             )
             
-            st.plotly_chart(fig_all, use_container_width=True)
+            st.plotly_chart(fig_all, width="stretch")
             
             # Tabela szczegółowa
             st.markdown("---")
@@ -689,7 +689,7 @@ def show_admin_dashboard():
                     "completed_date": "Data ukończenia"
                 },
                 hide_index=True,
-                use_container_width=True
+                width="stretch"
             )
             
             # Opcja eksportu
@@ -1191,7 +1191,7 @@ def show_business_games_admin_panel():
                         "✅ Zatwierdź ocenę",
                         key=f"approve_{review['id']}",
                         type="primary",
-                        use_container_width=True
+                        width="stretch"
                     ):
                         admin_username = st.session_state.get('username', 'admin')
                         
@@ -1211,7 +1211,7 @@ def show_business_games_admin_panel():
                     if st.button(
                         "⏭️ Pomiń na później",
                         key=f"skip_{review['id']}",
-                        use_container_width=True
+                        width="stretch"
                     ):
                         st.info("Przeskoczono do następnego")
     

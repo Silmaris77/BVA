@@ -67,7 +67,7 @@ def show_timer_tab():
     
     with col3:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🚀 START", type="primary", use_container_width=True):
+        if st.button("🚀 START", type="primary", width="stretch"):
             total_seconds = minutes * 60 + seconds
             if total_seconds > 0:
                 st.session_state.training_timer_end = datetime.now() + timedelta(seconds=total_seconds)
@@ -75,7 +75,7 @@ def show_timer_tab():
     
     with col4:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("⏹️ STOP", use_container_width=True):
+        if st.button("⏹️ STOP", width="stretch"):
             if st.session_state.training_timer_end:
                 st.session_state.training_timer_end = None
                 if 'training_timer_total' in st.session_state:
@@ -236,7 +236,7 @@ def show_timer_tab():
             </style>
             """, unsafe_allow_html=True)
             
-            if st.button("🔄 Nowy timer", type="primary", use_container_width=True):
+            if st.button("🔄 Nowy timer", type="primary", width="stretch"):
                 st.session_state.training_timer_end = None
                 st.rerun()
 
@@ -278,14 +278,14 @@ def show_auction_tab():
     # Przyciski w jednej linii
     col1, col2 = st.columns([3, 1])
     with col1:
-        if st.button("💵 Aktualizuj wszystkie oferty", type="primary", use_container_width=True):
+        if st.button("💵 Aktualizuj wszystkie oferty", type="primary", width="stretch"):
             for team in teams:
                 team['bid'] = bid_updates.get(team['name'], 0)
             st.success("✅ Oferty zaktualizowane!")
             st.rerun()
     
     with col2:
-        if st.button("🔄 Reset", type="secondary", use_container_width=True):
+        if st.button("🔄 Reset", type="secondary", width="stretch"):
             for team in teams:
                 team['bid'] = 0
             st.success("Oferty wyzerowane!")
@@ -355,7 +355,7 @@ def show_auction_tab():
             uniformtext=dict(mode='hide', minsize=10)
         )
         
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     
     with timer_col:
         # Inicjalizuj stan timera dla licytacji
@@ -371,14 +371,14 @@ def show_auction_tab():
             seconds = st.number_input("Sekundy:", min_value=0, max_value=300, value=60, key="auction_seconds", label_visibility="collapsed")
         
         with col2:
-            if st.button("▶️", key="auction_start", type="primary", use_container_width=True):
+            if st.button("▶️", key="auction_start", type="primary", width="stretch"):
                 if seconds > 0:
                     st.session_state.auction_timer_running = True
                     st.session_state.auction_timer_end = datetime.now() + timedelta(seconds=seconds)
                     st.rerun()
         
         with col3:
-            if st.button("⏹️", key="auction_stop", type="secondary", use_container_width=True):
+            if st.button("⏹️", key="auction_stop", type="secondary", width="stretch"):
                 st.session_state.auction_timer_running = False
                 st.session_state.auction_timer_end = None
                 st.rerun()
@@ -564,7 +564,7 @@ def show_rankings_tab():
         # Tabela tylko do odczytu (skumulowane wartości)
         st.dataframe(
             df_revenue,
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
             column_config=column_config
         )
@@ -638,7 +638,7 @@ def show_rankings_tab():
         # Tabela tylko do odczytu (skumulowane wartości)
         st.dataframe(
             df_efficiency,
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
             column_config=column_config
         )
@@ -737,7 +737,7 @@ def show_rankings_tab():
         hovermode='x unified',
         plot_bgcolor='white'
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     
     # Wykres kołowy - Market Share
     st.markdown("---")
@@ -804,7 +804,7 @@ def show_rankings_tab():
             margin=dict(t=80, b=40, l=40, r=200)
         )
         
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width="stretch")
         
         # Tabela z procentami
         st.markdown("#### 📈 Szczegółowy udział w rynku:")
@@ -821,7 +821,7 @@ def show_rankings_tab():
         df_share = pd.DataFrame(share_table)
         st.dataframe(
             df_share,
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
             column_config={
                 'Miejsce': st.column_config.TextColumn('🏆', width='small'),
@@ -979,7 +979,7 @@ def show_settings_tab():
         )
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("➕ Dodaj", type="primary", use_container_width=True):
+        if st.button("➕ Dodaj", type="primary", width="stretch"):
             if new_team_name:
                 # Użyj następnego koloru i logo w kolejności
                 next_idx = len(teams)
@@ -1004,7 +1004,7 @@ def show_settings_tab():
     with col1:
         st.markdown("**Uwaga:** To usunie wszystkie dane i przywróci ustawienia domyślne.")
     with col2:
-        if st.button("🔥 RESET", type="secondary", use_container_width=True):
+        if st.button("🔥 RESET", type="secondary", width="stretch"):
             st.session_state.training_teams = [
                 {"name": "Zespół 1", "bid": 0, "revenue": [100], "efficiency": [9], 
                  "color": "#667eea", "logo": "🏢"},

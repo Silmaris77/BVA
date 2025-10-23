@@ -266,12 +266,12 @@ def render_industry_card(industry_id, title, slogan, description, features, avai
     # Przycisk
     if available:
         button_label = "🎮 Kontynuuj" if has_progress else "🚀 Zacznij grę"
-        if st.button(button_label, key=f"start_{industry_id}", type="primary", use_container_width=True):
+        if st.button(button_label, key=f"start_{industry_id}", type="primary", width="stretch"):
             # Ustaw aktywną branżę (routing w show_business_games zdecyduje czy pokazać scenariusze czy grę)
             st.session_state["selected_industry"] = industry_id
             st.rerun()
     else:
-        st.button("🔒 Wkrótce dostępne", key=f"locked_{industry_id}", disabled=True, use_container_width=True)
+        st.button("🔒 Wkrótce dostępne", key=f"locked_{industry_id}", disabled=True, width="stretch")
     
     st.markdown("<div style='margin: 20px 0;'></div>", unsafe_allow_html=True)
 
@@ -480,7 +480,7 @@ def show_scenario_selector(username, user_data, industry_id):
     
     # Przycisk powrotu na dole
     st.markdown("<div style='margin: 20px 0;'></div>", unsafe_allow_html=True)
-    if st.button("← Powrót do wyboru branży", key="back_to_industries", use_container_width=True):
+    if st.button("← Powrót do wyboru branży", key="back_to_industries", width="stretch"):
         st.session_state["selected_industry"] = None
         st.rerun()
 
@@ -594,7 +594,7 @@ def render_scenario_card(scenario_id, scenario_data, industry_id, username, user
     if st.button(f"🚀 Rozpocznij", 
                  key=f"start_scenario_{scenario_id}", 
                  type="primary", 
-                 use_container_width=True):
+                 width="stretch"):
         # Inicjalizuj grę z tym scenariuszem
         user_data["business_games"][industry_id] = initialize_business_game_with_scenario(
             username, industry_id, scenario_id
@@ -1329,7 +1329,7 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
     with col_chart1:
         # Generuj i wyświetl wykres
         fig = create_financial_chart(bg_data, period=period, cumulative=cumulative)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
         
         # Podsumowanie sum
         if cumulative:
@@ -1398,7 +1398,7 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
                         logo,
                         key=f"logo_{selected_category}_{idx}",
                         help=f"Kliknij aby wybrać {logo}",
-                        use_container_width=True
+                        width="stretch"
                     ):
                         bg_data["firm"]["logo"] = logo
                         save_game_data(user_data, bg_data, industry_id)
@@ -1852,12 +1852,12 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
         col_action1, col_action2, col_action3 = st.columns(3)
         
         with col_action1:
-            if st.button("🔄 Zagraj ponownie", use_container_width=True, key=f"replay_{contract_id}"):
+            if st.button("🔄 Zagraj ponownie", width="stretch", key=f"replay_{contract_id}"):
                 reset_decision_tree(contract_id, start_node_id)
                 st.rerun()
         
         with col_action2:
-            if st.button("✅ Prześlij wynik", type="primary", use_container_width=True, key=f"submit_{contract_id}"):
+            if st.button("✅ Prześlij wynik", type="primary", width="stretch", key=f"submit_{contract_id}"):
                 # Calculate reward based on stars
                 base_reward = contract.get("nagroda_base", 500)
                 reward_5star = contract.get("nagroda_5star", 1000)
@@ -1896,7 +1896,7 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
                     st.error(message)
         
         with col_action3:
-            if st.button("← Powrót", use_container_width=True, key=f"back_{contract_id}"):
+            if st.button("← Powrót", width="stretch", key=f"back_{contract_id}"):
                 st.session_state["view_contract"] = None
                 st.rerun()
     
@@ -1949,7 +1949,7 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
                 if st.button(
                     choice_text, 
                     key=f"{contract_id}_choice_{i}",
-                    use_container_width=True,
+                    width="stretch",
                     type="secondary"
                 ):
                     # Make choice
@@ -2229,13 +2229,13 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         # Przyciski akcji
         col_replay, col_submit = st.columns(2)
         with col_replay:
-            if st.button("🔄 Zagraj ponownie", key=f"replay_{contract_id}", use_container_width=True):
+            if st.button("🔄 Zagraj ponownie", key=f"replay_{contract_id}", width="stretch"):
                 reset_conversation(contract_id, npc_config, scenario_context)
                 st.rerun()
         
         with col_submit:
             if st.button("✅ Zakończ kontrakt", key=f"submit_{contract_id}", 
-                        type="primary", use_container_width=True):
+                        type="primary", width="stretch"):
                 # Wywołaj submit_contract_ai_conversation
                 updated_user_data, success, message, _ = submit_contract_ai_conversation(user_data, contract_id)
                 
@@ -2390,7 +2390,7 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         col_send, col_end = st.columns([3, 1])
         
         with col_send:
-            if st.button("📤 Wyślij wiadomość", type="primary", use_container_width=True, 
+            if st.button("📤 Wyślij wiadomość", type="primary", width="stretch", 
                         disabled=not player_message.strip()):
                 if player_message.strip():
                     with st.spinner("🤖 AI analizuje Twoją odpowiedź i generuje reakcję..."):
@@ -2414,7 +2414,7 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
                                 st.error(f"❌ Błąd podczas przetwarzania: {str(e)}")
         
         with col_end:
-            if st.button("🏁 Zakończ", use_container_width=True):
+            if st.button("🏁 Zakończ", width="stretch"):
                 # Force end conversation
                 st.session_state[f"dt_{contract_id}_conversation_active"] = False
                 st.rerun()
@@ -2550,9 +2550,9 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new,
         with col2:
             # Sprawdź możliwość przyjęcia
             if not can_accept_new:
-                st.button("❌ Brak miejsca", key=f"no_space_{contract['id']}", disabled=True, use_container_width=True)
+                st.button("❌ Brak miejsca", key=f"no_space_{contract['id']}", disabled=True, width="stretch")
             else:
-                if st.button("✅ Przyjmij kontrakt", key=f"accept_{contract['id']}", type="primary", use_container_width=True):
+                if st.button("✅ Przyjmij kontrakt", key=f"accept_{contract['id']}", type="primary", width="stretch"):
                     updated_bg, success, message, _ = accept_contract(bg_data, contract['id'], user_data)
                     
                     if success:
@@ -2660,7 +2660,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
                         </div>
                         """, unsafe_allow_html=True)
                     with col_btn:
-                        if st.button("→", key=f"switch_to_{game_industry_id}", help=f"Przejdź do {info['name']}", use_container_width=True):
+                        if st.button("→", key=f"switch_to_{game_industry_id}", help=f"Przejdź do {info['name']}", width="stretch"):
                             # Przełącz branżę
                             st.session_state["selected_industry"] = game_industry_id
                             # Wyczyść stan zakładek, żeby wrócił do Dashboard
@@ -2683,14 +2683,14 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
         with col1:
             st.markdown("#### ➕ Otwórz nową firmę")
             st.caption("Rozpocznij nową grę w innej branży. Obecna firma pozostanie aktywna.")
-            if st.button("➕ Nowa firma", type="secondary", use_container_width=True, key="new_firm_btn"):
+            if st.button("➕ Nowa firma", type="secondary", width="stretch", key="new_firm_btn"):
                 st.session_state["selected_industry"] = None
                 st.rerun()
         
         with col2:
             st.markdown("#### 🏆 Zamknij firmę")
             st.caption("Zakończ tę firmę i przenieś ją do Hall of Fame z końcowym ratingiem.")
-            if st.button("🏆 Zamknij firmę", type="secondary", use_container_width=True, key="close_firm_btn"):
+            if st.button("🏆 Zamknij firmę", type="secondary", width="stretch", key="close_firm_btn"):
                 st.session_state["confirm_close_firm"] = True
                 st.rerun()
         
@@ -2745,7 +2745,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
             
             col_confirm, col_cancel = st.columns(2)
             with col_confirm:
-                if st.button("✅ TAK, zamknij firmę", type="primary", use_container_width=True, key="confirm_close_firm_yes"):
+                if st.button("✅ TAK, zamknij firmę", type="primary", width="stretch", key="confirm_close_firm_yes"):
                     # Oblicz transfer (ponownie, dla pewności)
                     final_money = bg_data.get("money", 0)
                     rating_bonus = int(final_score * 10)
@@ -2808,7 +2808,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
                     st.rerun()
             
             with col_cancel:
-                if st.button("❌ Anuluj", use_container_width=True, key="confirm_close_firm_no"):
+                if st.button("❌ Anuluj", width="stretch", key="confirm_close_firm_no"):
                     st.session_state["confirm_close_firm"] = False
                     st.rerun()
         
@@ -2822,7 +2822,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
         with col3:
             st.markdown("#### 🔄 Zmień branżę")
             st.caption("Przełącz się na inną branżę. Twoja aktualna gra zostanie zachowana.")
-            if st.button("🔄 Wybór branży", type="secondary", use_container_width=True, key="change_industry_btn2"):
+            if st.button("🔄 Wybór branży", type="secondary", width="stretch", key="change_industry_btn2"):
                 st.session_state["selected_industry"] = None
                 st.rerun()
         
@@ -2831,7 +2831,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
             st.caption("Usuń obecny scenariusz i rozpocznij nowy w tej samej branży.")
             
             # Potwierdź akcję
-            if st.button("🔄 Resetuj", type="secondary", use_container_width=True, key="reset_scenario_btn"):
+            if st.button("🔄 Resetuj", type="secondary", width="stretch", key="reset_scenario_btn"):
                 st.session_state["confirm_reset_scenario"] = True
                 st.rerun()
         
@@ -2848,7 +2848,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
             
             col_confirm, col_cancel = st.columns(2)
             with col_confirm:
-                if st.button("✅ TAK, resetuj scenariusz", type="primary", use_container_width=True, key="confirm_reset_yes"):
+                if st.button("✅ TAK, resetuj scenariusz", type="primary", width="stretch", key="confirm_reset_yes"):
                     # Usuń grę z tej branży
                     if industry_id in user_data.get("business_games", {}):
                         del user_data["business_games"][industry_id]
@@ -2858,7 +2858,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
                         time.sleep(1)
                         st.rerun()
             with col_cancel:
-                if st.button("❌ Anuluj", use_container_width=True, key="confirm_reset_no"):
+                if st.button("❌ Anuluj", width="stretch", key="confirm_reset_no"):
                     st.session_state["confirm_reset_scenario"] = False
                     st.rerun()
     
@@ -2909,7 +2909,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
             current_money = bg_data.get('money', 0)
             
             if current_money >= next_office['koszt_ulepszenia']:
-                if st.button("⬆️ Ulepsz biuro", type="primary", use_container_width=True):
+                if st.button("⬆️ Ulepsz biuro", type="primary", width="stretch"):
                     # Ulepsz biuro - płacimy Z FIRMY!
                     bg_data["money"] = current_money - next_office['koszt_ulepszenia']
                     bg_data["office"]["type"] = next_office_type
@@ -2935,7 +2935,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
                     st.balloons()
                     st.rerun()
             else:
-                st.button("⬆️ Ulepsz biuro", disabled=True, use_container_width=True)
+                st.button("⬆️ Ulepsz biuro", disabled=True, width="stretch")
                 st.caption(f"Potrzebujesz: {next_office['koszt_ulepszenia'] - current_money:.0f} PLN więcej")
     else:
         st.success("🌟 Posiadasz najlepsze możliwe biuro!")
@@ -3019,7 +3019,7 @@ def render_employee_card(employee, username, user_data, bg_data, industry_id="co
         """, unsafe_allow_html=True)
         
         # Przycisk zwolnienia
-        if st.button("🗑️ Zwolnij", key=f"fire_{employee['id']}", type="secondary", use_container_width=True):
+        if st.button("🗑️ Zwolnij", key=f"fire_{employee['id']}", type="secondary", width="stretch"):
             updated_user_data, success, message = fire_employee(user_data, employee['id'], industry_id)
             if success:
                 user_data.update(updated_user_data)
@@ -3055,9 +3055,9 @@ def render_hire_card(emp_type, emp_data, username, user_data, bg_data, industry_
         # Przycisk zatrudnienia
         if not can_hire:
             st.button("🔒 Niedostępny", key=f"hire_{emp_type}_locked", disabled=True, 
-                     help=reason, use_container_width=True)
+                     help=reason, width="stretch")
         else:
-            if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary", use_container_width=True):
+            if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary", width="stretch"):
                 updated_user_data, success, message = hire_employee(user_data, emp_type, industry_id)
                 if success:
                     user_data.update(updated_user_data)
@@ -3512,7 +3512,7 @@ def show_pl_statement(financial_data, period_type, show_comparison):
     # Stylowanie tabeli
     st.dataframe(
         df,
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
         height=500
     )
@@ -3578,7 +3578,7 @@ def show_pl_statement(financial_data, period_type, show_comparison):
         paper_bgcolor='white'
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 
 def show_profitability_analysis(financial_data, bg_data):
@@ -3706,7 +3706,7 @@ def show_employee_roi_analysis(financial_data, bg_data):
         })
     
     df = pd.DataFrame(roi_data)
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.dataframe(df, width="stretch", hide_index=True)
     
     # Wykres kosztów pracowników
     if employee_stats:
@@ -3727,7 +3727,7 @@ def show_employee_roi_analysis(financial_data, bg_data):
             height=400
         )
         
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 
 def show_category_analysis(financial_data, bg_data):
@@ -3784,7 +3784,7 @@ def show_category_analysis(financial_data, bg_data):
     table_data.sort(key=lambda x: float(x["Średni przychód"].replace(" 💰", "").replace(",", "")), reverse=True)
     
     df = pd.DataFrame(table_data)
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.dataframe(df, width="stretch", hide_index=True)
     
     # Wykres słupkowy - przychody per kategoria
     import plotly.graph_objects as go
@@ -3813,7 +3813,7 @@ def show_category_analysis(financial_data, bg_data):
         paper_bgcolor='white'
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     
     # Top kontrakty
     st.markdown("#### 🏆 Top 5 Najbardziej Dochodowych Kontraktów")
@@ -4519,7 +4519,7 @@ def render_event_choice_modal(event_id: str, event_data: dict, username: str, us
     
     for idx, (col, choice) in enumerate(zip(cols, event_data["choices"])):
         with col:
-            if st.button(choice["text"], key=f"choice_{idx}", type="primary" if idx == 0 else "secondary", use_container_width=True):
+            if st.button(choice["text"], key=f"choice_{idx}", type="primary" if idx == 0 else "secondary", width="stretch"):
                 # Aplikuj wybór
                 user_data = apply_event_effects(event_id, event_data, idx, user_data)
                 save_user_data(username, user_data)
