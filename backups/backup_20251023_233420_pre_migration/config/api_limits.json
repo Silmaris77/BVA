@@ -1,0 +1,30 @@
+{
+  "monthly_limit": 1000000,
+  "daily_limit": 50000,
+  "current_usage": {
+    "monthly": 0,
+    "daily": 0,
+    "last_reset_monthly": "2025-08",
+    "last_reset_daily": "2025-08-18"
+  },
+  "fallback_enabled": true,
+  "warning_thresholds": {
+    "daily": 0.8,
+    "monthly": 0.9
+  },
+  "premium_limits": {
+    "monthly_limit": 10000000,
+    "daily_limit": 500000
+  },
+  "rate_limiting": {
+    "requests_per_minute": 60,
+    "requests_per_hour": 1000
+  },
+  "feature_costs": {
+    "quiz_generation": 5000,
+    "content_analysis": 3000,
+    "personalized_feedback": 2000,
+    "investment_analysis": 8000,
+    "portfolio_optimization": 10000
+  }
+}

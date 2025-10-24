@@ -11,7 +11,6 @@ import plotly.graph_objects as go
 
 from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG, FIRM_LOGOS, OFFICE_TYPES, OFFICE_UPGRADE_PATH
 from data.scenarios import get_available_scenarios, get_scenario
-from data.users_new import save_single_user as save_user_data
 from utils.business_game import (
     initialize_business_game, initialize_business_game_with_scenario, refresh_contract_pool, accept_contract,
     submit_contract_solution, submit_contract_ai_conversation, hire_employee, fire_employee,
@@ -288,7 +287,7 @@ def show_hall_of_fame():
     st.caption("Firmy, które osiągnęły sukces i zostały zamknięte z honorem")
     
     # Zbierz wszystkie zamknięte firmy ze wszystkich użytkowników
-    from data.users_new import load_user_data
+    from data.users import load_user_data
     all_users = load_user_data()
     
     hall_entries = []
@@ -1354,35 +1353,22 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
     st.markdown("---")
     st.subheader("⚙️ Ustawienia Firmy")
     
-    # Wszystkie ustawienia w jednym miejscu z tabami
-    settings_tab1, settings_tab2, settings_tab3 = st.tabs([
-        "✏️ Nazwa i logo",
-        "🔄 Zarządzanie firmą", 
-        "📦 Archiwum firm"
-    ])
+    col_settings1, col_settings2 = st.columns(2)
     
-    # TAB 1: Nazwa i logo
-    with settings_tab1:
-        col_name, col_logo = st.columns([1, 1])
-        
-        with col_name:
-            st.markdown("### ✏️ Zmień nazwę firmy")
-            new_name = st.text_input(
-                "Nowa nazwa firmy", 
-                value=bg_data["firm"]["name"], 
-                key="dashboard_firm_name_input"
-            )
-            if st.button("💾 Zapisz nazwę", key="dashboard_save_firm_name", type="primary"):
+    with col_settings1:
+        with st.expander("✏️ Zmień nazwę firmy"):
+            new_name = st.text_input("Nowa nazwa firmy", value=bg_data["firm"]["name"], key="dashboard_firm_name_input")
+            if st.button("💾 Zapisz nazwę", key="dashboard_save_firm_name"):
                 bg_data["firm"]["name"] = new_name
                 save_game_data(user_data, bg_data, industry_id)
                 save_user_data(username, user_data)
                 st.success("✅ Nazwa firmy zaktualizowana!")
                 st.rerun()
-        
-        with col_logo:
-            st.markdown("### 🎨 Zmień logo firmy")
-            
-            # Kategorie logo
+    
+    with col_settings2:
+        with st.expander("🎨 Zmień logo firmy"):
+            # Pokaż kategorie
+            st.markdown("**Wybierz kategorię:**")
             categories = list(FIRM_LOGOS.keys())
             category_names = {
                 "basic": "🏢 Budynki",
@@ -1400,140 +1386,35 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
                 key="logo_category"
             )
             
-            # Grid logo (mniejszy - 6 kolumn)
+            # Wyświetl dostępne logo w gridzie
+            st.markdown("**Wybierz logo:**")
             available_logos = FIRM_LOGOS[selected_category]["free"]
-            cols = st.columns(6)
-            for idx, logo in enumerate(available_logos[:12]):  # Max 12 logo
-                with cols[idx % 6]:
+            
+            # Grid 8 kolumn
+            cols = st.columns(8)
+            for idx, logo in enumerate(available_logos):
+                with cols[idx % 8]:
                     if st.button(
                         logo,
                         key=f"logo_{selected_category}_{idx}",
-                        help=f"Wybierz {logo}"
+                        help=f"Kliknij aby wybrać {logo}",
+                        width="stretch"
                     ):
                         bg_data["firm"]["logo"] = logo
                         save_game_data(user_data, bg_data, industry_id)
                         save_user_data(username, user_data)
-                        st.success(f"✅ Logo: {logo}")
+                        st.success(f"✅ Logo zmienione na {logo}!")
                         st.rerun()
-        
-        # Podgląd na całej szerokości
-        st.markdown("---")
-        st.markdown("### 👀 Podgląd")
-        current_logo = bg_data["firm"].get("logo", "🏢")
-        current_name = bg_data["firm"]["name"]
-        st.markdown(f"""
-        <div style='text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; color: white;'>
-            <div style='font-size: 72px; margin-bottom: 12px;'>{current_logo}</div>
-            <h2 style='margin: 0; color: white;'>{current_name}</h2>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    # TAB 2: Zarządzanie firmą
-    with settings_tab2:
-        st.warning("⚠️ **Uwaga:** Te akcje mogą zmienić Twoją grę!")
-        
-        st.markdown("### 🆕 Rozpocznij nową firmę")
-        st.info("""
-        **Co się stanie:**
-        - Obecna firma zostanie zarchiwizowana (dane nie zostaną utracone)
-        - Stworzysz nową firmę od zera z nowym scenariuszem
-        - Zachowasz swoje DegenCoins i doświadczenie
-        - Będziesz mógł wrócić do poprzedniej firmy w zakładce "📦 Archiwum firm"
-        """)
-        
-        if st.button("🚀 Rozpocznij nową firmę", type="primary", key="start_new_company"):
-            # Zarchiwizuj obecną firmę
-            if "archived_games" not in user_data:
-                user_data["archived_games"] = {}
-            if industry_id not in user_data["archived_games"]:
-                user_data["archived_games"][industry_id] = []
             
-            # Dodaj timestamp do archiwalnej gry
-            archived_game = bg_data.copy()
-            archived_game["archived_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            archived_game["firm"]["archived_name"] = f"{bg_data['firm']['name']} (zarchiwizowana {datetime.now().strftime('%d.%m.%Y')})"
-            
-            user_data["archived_games"][industry_id].append(archived_game)
-            
-            # Usuń obecną grę
-            del user_data["business_games"][industry_id]
-            
-            # Zapisz zmiany
-            save_user_data(username, user_data)
-            
-            # Resetuj session state
-            st.session_state["selected_industry"] = industry_id
-            
-            st.success("✅ Firma zarchiwizowana! Przekierowuję do wyboru scenariusza...")
-            time.sleep(1)
-            st.rerun()
-    
-    # TAB 3: Archiwum firm
-    with settings_tab3:
-        if "archived_games" in user_data and industry_id in user_data["archived_games"]:
-            archived_count = len(user_data["archived_games"][industry_id])
-            
-            if archived_count > 0:
-                st.markdown(f"### 📦 Masz {archived_count} zarchiwizowanych firm")
-                st.info("💡 Możesz przywrócić dowolną firmę - obecna zostanie zarchiwizowana automatycznie")
-                
-                for idx, archived_game in enumerate(user_data["archived_games"][industry_id]):
-                    firm_name = archived_game["firm"].get("archived_name", archived_game["firm"]["name"])
-                    archived_at = archived_game.get("archived_at", "N/A")
-                    level = archived_game["firm"].get("level", 1)
-                    reputation = archived_game["firm"].get("reputation", 0)
-                    logo = archived_game["firm"].get("logo", "🏢")
-                    
-                    # Karta firmy
-                    with st.container():
-                        col_logo, col_info, col_action = st.columns([1, 4, 2])
-                        
-                        with col_logo:
-                            st.markdown(f"""
-                            <div style='text-align: center; font-size: 48px; padding: 10px;'>
-                                {logo}
-                            </div>
-                            """, unsafe_allow_html=True)
-                        
-                        with col_info:
-                            st.markdown(f"**{firm_name}**")
-                            st.caption(f"📅 Zarchiwizowana: {archived_at}")
-                            st.caption(f"🏢 Level {level} | ⭐ Reputacja {reputation}")
-                        
-                        with col_action:
-                            if st.button("🔄 Przywróć", key=f"restore_game_{idx}", type="secondary"):
-                                # Zarchiwizuj obecną firmę jeśli istnieje
-                                if industry_id in user_data["business_games"]:
-                                    current_game = user_data["business_games"][industry_id].copy()
-                                    current_game["archived_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                                    current_game["firm"]["archived_name"] = f"{current_game['firm']['name']} (zarchiwizowana {datetime.now().strftime('%d.%m.%Y')})"
-                                    user_data["archived_games"][industry_id].append(current_game)
-                                
-                                # Przywróć wybraną firmę
-                                restored_game = archived_game.copy()
-                                # Usuń metadane archiwum
-                                if "archived_at" in restored_game:
-                                    del restored_game["archived_at"]
-                                if "archived_name" in restored_game["firm"]:
-                                    del restored_game["firm"]["archived_name"]
-                                
-                                user_data["business_games"][industry_id] = restored_game
-                                
-                                # Usuń z archiwum
-                                user_data["archived_games"][industry_id].pop(idx)
-                                
-                                # Zapisz
-                                save_user_data(username, user_data)
-                                
-                                st.success(f"✅ Przywrócono firmę: {firm_name}")
-                                time.sleep(1)
-                                st.rerun()
-                        
-                        st.markdown("---")
-            else:
-                st.info("📭 Brak zarchiwizowanych firm. Rozpocznij nową firmę w zakładce '🔄 Zarządzanie firmą'")
-        else:
-            st.info("📭 Brak zarchiwizowanych firm. Rozpocznij nową firmę w zakładce '🔄 Zarządzanie firmą'")
+            # Podgląd aktualnego logo
+            st.markdown("---")
+            current_logo = bg_data["firm"].get("logo", "🏢")
+            st.markdown(f"""
+            <div style='text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; color: white;'>
+                <div style='font-size: 64px; margin-bottom: 8px;'>{current_logo}</div>
+                <p style='margin: 0; opacity: 0.9;'>Aktualne logo</p>
+            </div>
+            """, unsafe_allow_html=True)
 
 def render_active_contract_card(contract, username, user_data, bg_data):
     """Renderuje profesjonalną kartę aktywnego kontraktu w stylu game UI"""
@@ -1994,7 +1875,7 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
                     reward = base_reward
                 
                 # Mark contract as completed in bg_data
-                # from utils.business_game import complete_contract_decision_tree
+                from utils.business_game import complete_contract_decision_tree
                 updated_bg, success, message = complete_contract_decision_tree(
                     bg_data, 
                     contract_id, 
@@ -4728,7 +4609,7 @@ def show_rankings_tab(username, user_data, industry_id="consulting"):
     st.markdown("---")
     
     # Pobierz PRAWDZIWE dane wszystkich użytkowników
-    from data.users_new import load_user_data
+    from data.users import load_user_data
     all_users = load_user_data()
     
     # Zbierz firmy z business_game
@@ -5131,7 +5012,7 @@ def show_instructions_tab():
 
 def save_user_data(username, user_data):
     """Zapisuje dane użytkownika"""
-    from data.users_new import load_user_data, save_user_data as save_all_users
+    from data.users import load_user_data, save_user_data as save_all_users
     all_users = load_user_data()
     all_users[username] = user_data
     save_all_users(all_users)

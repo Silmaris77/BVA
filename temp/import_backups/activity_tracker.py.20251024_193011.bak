@@ -7,7 +7,7 @@ import json
 import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
-from data.users_new import load_user_data, save_user_data
+from data.users import load_user_data, save_user_data
 
 def log_activity(username: str, activity_type: str, details: Optional[Dict] = None):
     """

@@ -117,7 +117,7 @@ def main():
             show_tools_page()
         elif st.session_state.page == 'business_games':
             # Pobierz dane użytkownika
-            from data.users_new import load_user_data
+            from data.users import load_user_data
             users_data = load_user_data()
             user_data = users_data.get(st.session_state.username, {})
             show_business_games(st.session_state.username, user_data)

@@ -1,0 +1,548 @@
+"""
+Business Game Repository
+Warstwa abstrakcji dla business games - obsługuje JSON i SQL backend
+"""
+
+import json
+from pathlib import Path
+from typing import Optional, Dict, Any, List
+from datetime import datetime
+
+from .base_repository import BaseRepository
+
+
+class BusinessGameRepository(BaseRepository):
+    """
+    Repository dla business games
+    Obsługuje wiele scenariuszy: consulting, marketing, hr, etc.
+    """
+    
+    def __init__(self, backend: Optional[str] = None):
+        """
+        Initialize repository
+        
+        Args:
+            backend: 'json', 'sql', or None (use config)
+        """
+        super().__init__(backend)
+        
+        # Lazy loading - SQL inicjalizuje się tylko gdy potrzebny
+        self._sql_initialized = False
+        self.sql_available = False
+        self.users_file = Path(__file__).parent.parent.parent / "users_data.json"
+    
+    def _ensure_sql_initialized(self) -> bool:
+        """
+        Lazy loading - inicjalizuje SQL tylko gdy pierwszy raz potrzebny
+        
+        Returns:
+            bool: True jeśli SQL jest dostępny
+        """
+        if not self._sql_initialized:
+            self._sql_initialized = True
+            try:
+                from database.models import (
+                    BusinessGame, BusinessGameEmployee, BusinessGameContract,
+                    BusinessGameTransaction, BusinessGameStats, User
+                )
+                from database.connection import session_scope
+                
+                self.BusinessGame = BusinessGame
+                self.BusinessGameEmployee = BusinessGameEmployee
+                self.BusinessGameContract = BusinessGameContract
+                self.BusinessGameTransaction = BusinessGameTransaction
+                self.BusinessGameStats = BusinessGameStats
+                self.User = User
+                self.session_scope = session_scope
+                self.sql_available = True
+            except ImportError:
+                self.sql_available = False
+                print("⚠️  SQL dependencies not available for BusinessGameRepository")
+        
+        return self.sql_available
+    
+    # =============================================================================
+    # PUBLIC API
+    # =============================================================================
+    
+    def get(self, username: str, scenario_type: str) -> Optional[Dict[str, Any]]:
+        """
+        Pobiera business game dla użytkownika i scenariusza
+        
+        Args:
+            username: Nazwa użytkownika
+            scenario_type: Typ scenariusza (consulting, marketing, etc.)
+            
+        Returns:
+            Dictionary z danymi business game lub None
+        """
+        use_sql = self._should_use_sql_for_read(username)
+        
+        # Lazy loading - inicjalizuj SQL tylko jeśli potrzebny
+        if use_sql:
+            self._ensure_sql_initialized()
+        
+        if use_sql and self.sql_available:
+            return self._get_from_sql(username, scenario_type)
+        else:
+            return self._get_from_json(username, scenario_type)
+    
+    def save(self, username: str, scenario_type: str, game_data: Dict[str, Any]) -> bool:
+        """
+        Zapisuje business game
+        
+        Args:
+            username: Nazwa użytkownika
+            scenario_type: Typ scenariusza
+            game_data: Dane do zapisania
+            
+        Returns:
+            True jeśli sukces
+        """
+        # Validate data
+        if not self._validate_business_game_data(game_data):
+            raise ValueError(f"Invalid business game data for {username}/{scenario_type}")
+        
+        success = True
+        
+        # Dual write mode
+        if self._is_dual_write_enabled():
+            success &= self._save_to_json(username, scenario_type, game_data)
+            if self.sql_available:
+                success &= self._save_to_sql(username, scenario_type, game_data)
+        
+        # SQL write
+        elif self._should_use_sql_for_write(username):
+            if self.sql_available:
+                success = self._save_to_sql(username, scenario_type, game_data)
+            else:
+                print(f"⚠️  SQL not available, falling back to JSON for {username}")
+                success = self._save_to_json(username, scenario_type, game_data)
+        
+        # JSON write (default)
+        else:
+            success = self._save_to_json(username, scenario_type, game_data)
+        
+        return success
+    
+    def delete(self, username: str, scenario_type: str) -> bool:
+        """
+        Usuwa business game
+        
+        Args:
+            username: Nazwa użytkownika
+            scenario_type: Typ scenariusza
+            
+        Returns:
+            True jeśli sukces
+        """
+        success = True
+        
+        if self._is_dual_write_enabled():
+            success &= self._delete_from_json(username, scenario_type)
+            if self.sql_available:
+                success &= self._delete_from_sql(username, scenario_type)
+        elif self._should_use_sql_for_write(username):
+            if self.sql_available:
+                success = self._delete_from_sql(username, scenario_type)
+        else:
+            success = self._delete_from_json(username, scenario_type)
+        
+        return success
+    
+    def get_all_scenarios(self, username: str) -> Dict[str, Dict[str, Any]]:
+        """
+        Pobiera wszystkie scenariusze dla użytkownika
+        
+        Args:
+            username: Nazwa użytkownika
+            
+        Returns:
+            Dictionary: {scenario_type: game_data}
+        """
+        if self._should_use_sql_for_read(username):
+            return self._get_all_from_sql(username)
+        else:
+            return self._get_all_from_json(username)
+    
+    def exists(self, username: str, scenario_type: str) -> bool:
+        """Sprawdza czy business game istnieje"""
+        game_data = self.get(username, scenario_type)
+        return game_data is not None
+    
+    # =============================================================================
+    # JSON BACKEND
+    # =============================================================================
+    
+    def _get_from_json(self, username: str, scenario_type: str) -> Optional[Dict[str, Any]]:
+        """Pobiera business game z JSON"""
+        try:
+            with open(self.users_file, 'r', encoding='utf-8') as f:
+                users = json.load(f)
+            
+            user_data = users.get(username)
+            if not user_data:
+                return None
+            
+            business_games = user_data.get('business_games', {})
+            return business_games.get(scenario_type)
+            
+        except Exception as e:
+            print(f"❌ Error reading business game from JSON: {e}")
+            return None
+    
+    def _get_all_from_json(self, username: str) -> Dict[str, Dict[str, Any]]:
+        """Pobiera wszystkie scenariusze z JSON"""
+        try:
+            with open(self.users_file, 'r', encoding='utf-8') as f:
+                users = json.load(f)
+            
+            user_data = users.get(username, {})
+            return user_data.get('business_games', {})
+            
+        except Exception as e:
+            print(f"❌ Error reading business games from JSON: {e}")
+            return {}
+    
+    def _save_to_json(self, username: str, scenario_type: str, game_data: Dict[str, Any]) -> bool:
+        """Zapisuje business game do JSON"""
+        try:
+            # Load existing data
+            with open(self.users_file, 'r', encoding='utf-8') as f:
+                users = json.load(f)
+            
+            if username not in users:
+                print(f"❌ User {username} not found in JSON")
+                return False
+            
+            # Ensure business_games exists
+            if 'business_games' not in users[username]:
+                users[username]['business_games'] = {}
+            
+            # Save game data
+            users[username]['business_games'][scenario_type] = game_data
+            
+            # Write back
+            with open(self.users_file, 'w', encoding='utf-8') as f:
+                json.dump(users, f, indent=2, ensure_ascii=False)
+            
+            return True
+            
+        except Exception as e:
+            print(f"❌ Error saving business game to JSON: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def _delete_from_json(self, username: str, scenario_type: str) -> bool:
+        """Usuwa business game z JSON"""
+        try:
+            with open(self.users_file, 'r', encoding='utf-8') as f:
+                users = json.load(f)
+            
+            if username in users and 'business_games' in users[username]:
+                if scenario_type in users[username]['business_games']:
+                    del users[username]['business_games'][scenario_type]
+                    
+                    with open(self.users_file, 'w', encoding='utf-8') as f:
+                        json.dump(users, f, indent=2, ensure_ascii=False)
+                    
+                    return True
+            
+            return False
+            
+        except Exception as e:
+            print(f"❌ Error deleting business game from JSON: {e}")
+            return False
+    
+    # =============================================================================
+    # SQL BACKEND
+    # =============================================================================
+    
+    def _get_from_sql(self, username: str, scenario_type: str) -> Optional[Dict[str, Any]]:
+        """Pobiera business game z SQL"""
+        if not self.sql_available:
+            return None
+        
+        try:
+            with session_scope() as session:
+                # Get user
+                user = session.query(User).filter_by(username=username).first()
+                if not user:
+                    return None
+                
+                # Get business game
+                game = session.query(BusinessGame).filter_by(
+                    user_id=user.user_id,
+                    scenario_type=scenario_type
+                ).first()
+                
+                if not game:
+                    return None
+                
+                return game.to_dict()
+                
+        except Exception as e:
+            print(f"❌ Error reading business game from SQL: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+    
+    def _get_all_from_sql(self, username: str) -> Dict[str, Dict[str, Any]]:
+        """Pobiera wszystkie scenariusze z SQL"""
+        if not self.sql_available:
+            return {}
+        
+        try:
+            with session_scope() as session:
+                # Get user
+                user = session.query(User).filter_by(username=username).first()
+                if not user:
+                    return {}
+                
+                # Get all games
+                games = session.query(BusinessGame).filter_by(user_id=user.user_id).all()
+                
+                return {game.scenario_type: game.to_dict() for game in games}
+                
+        except Exception as e:
+            print(f"❌ Error reading business games from SQL: {e}")
+            return {}
+    
+    def _save_to_sql(self, username: str, scenario_type: str, game_data: Dict[str, Any]) -> bool:
+        """Zapisuje business game do SQL"""
+        if not self.sql_available:
+            return False
+        
+        try:
+            with session_scope() as session:
+                # Get user
+                user = session.query(User).filter_by(username=username).first()
+                if not user:
+                    print(f"❌ User {username} not found in SQL")
+                    return False
+                
+                # Check if game exists
+                game = session.query(BusinessGame).filter_by(
+                    user_id=user.user_id,
+                    scenario_type=scenario_type
+                ).first()
+                
+                if game:
+                    # Update existing game
+                    self._update_game_from_dict(game, game_data)
+                else:
+                    # Create new game
+                    game = BusinessGame.from_dict(user.user_id, scenario_type, game_data)
+                    session.add(game)
+                
+                # Need to flush to get game.id for relationships
+                session.flush()
+                
+                # Update relationships (employees, contracts, transactions, stats)
+                self._update_game_relationships(session, game, game_data)
+                
+                session.commit()
+                return True
+                
+        except Exception as e:
+            print(f"❌ Error saving business game to SQL: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+    
+    def _delete_from_sql(self, username: str, scenario_type: str) -> bool:
+        """Usuwa business game z SQL"""
+        if not self.sql_available:
+            return False
+        
+        try:
+            with session_scope() as session:
+                user = session.query(User).filter_by(username=username).first()
+                if not user:
+                    return False
+                
+                game = session.query(BusinessGame).filter_by(
+                    user_id=user.user_id,
+                    scenario_type=scenario_type
+                ).first()
+                
+                if game:
+                    session.delete(game)
+                    session.commit()
+                    return True
+                
+                return False
+                
+        except Exception as e:
+            print(f"❌ Error deleting business game from SQL: {e}")
+            return False
+    
+    # =============================================================================
+    # HELPER METHODS
+    # =============================================================================
+    
+    def _update_game_from_dict(self, game: 'BusinessGame', data: Dict[str, Any]):
+        """Aktualizuje istniejącą grę z dictionary"""
+        firm = data.get('firm', {})
+        office = data.get('office', {})
+        
+        game.scenario_id = data.get('scenario_id')
+        game.firm_name = firm.get('name')
+        game.firm_logo = firm.get('logo')
+        
+        if firm.get('founded'):
+            try:
+                game.firm_founded = datetime.strptime(firm['founded'], '%Y-%m-%d').date()
+            except (ValueError, TypeError):
+                pass
+        
+        game.firm_level = firm.get('level', 1)
+        game.firm_reputation = firm.get('reputation', 0)
+        game.office_type = office.get('type', 'home_office')
+        
+        if office.get('upgraded_at'):
+            try:
+                game.office_upgraded_at = datetime.strptime(office['upgraded_at'], '%Y-%m-%d %H:%M:%S')
+            except (ValueError, TypeError):
+                pass
+        
+        game.money = data.get('money', 0)
+        game.initial_money = data.get('initial_money', 0)
+        game.scenario_modifiers = data.get('scenario_modifiers', {})
+        game.scenario_objectives = data.get('scenario_objectives', [])
+        game.objectives_completed = data.get('objectives_completed', [])
+        game.ranking = data.get('ranking', {})
+        game.events = data.get('events', {})
+        game.updated_at = datetime.utcnow()
+    
+    def _update_game_relationships(self, session, game: 'BusinessGame', data: Dict[str, Any]):
+        """Aktualizuje relationships (employees, contracts, transactions, stats)"""
+        
+        # Update employees
+        employees_data = data.get('employees', [])
+        
+        # Delete existing employees
+        for emp in game.employees:
+            session.delete(emp)
+        session.flush()
+        
+        # Add new employees
+        for emp_data in employees_data:
+            emp = BusinessGameEmployee.from_dict(game.id, emp_data)
+            session.add(emp)
+        
+        # Update contracts
+        contracts_data = data.get('contracts', {})
+        
+        # Delete existing contracts
+        for contract in game.contracts:
+            session.delete(contract)
+        session.flush()
+        
+        # Add new contracts
+        for status_key, contracts_list in contracts_data.items():
+            # Handle available_pool → available mapping
+            actual_status = 'available' if status_key == 'available_pool' else status_key
+            
+            # Ensure contracts_list is actually a list
+            if not isinstance(contracts_list, list):
+                print(f"⚠️  Skipping contracts.{status_key} - not a list")
+                continue
+            
+            for contract_data in contracts_list:
+                contract = BusinessGameContract.from_dict(game.id, actual_status, contract_data)
+                session.add(contract)
+        
+        # Update transactions
+        history = data.get('history', {})
+        transactions_data = history.get('transactions', [])
+        
+        # Delete existing transactions
+        for trans in game.transactions:
+            session.delete(trans)
+        session.flush()
+        
+        # Add new transactions
+        for trans_data in transactions_data:
+            trans = BusinessGameTransaction.from_dict(game.id, trans_data)
+            session.add(trans)
+        
+        # Update stats
+        stats_data = data.get('stats', {})
+        
+        if game.stats:
+            # Update existing stats
+            self._update_stats_from_dict(game.stats, stats_data)
+        else:
+            # Create new stats
+            stats = BusinessGameStats.from_dict(game.id, stats_data)
+            session.add(stats)
+    
+    def _update_stats_from_dict(self, stats: 'BusinessGameStats', data: Dict[str, Any]):
+        """Aktualizuje statystyki z dictionary"""
+        stats.total_revenue = data.get('total_revenue', 0)
+        stats.total_costs = data.get('total_costs', 0)
+        stats.net_profit = data.get('net_profit', 0)
+        stats.contracts_completed = data.get('contracts_completed', 0)
+        stats.contracts_5star = data.get('contracts_5star', 0)
+        stats.contracts_4star = data.get('contracts_4star', 0)
+        stats.contracts_3star = data.get('contracts_3star', 0)
+        stats.contracts_2star = data.get('contracts_2star', 0)
+        stats.contracts_1star = data.get('contracts_1star', 0)
+        stats.avg_rating = data.get('avg_rating', 0.0)
+        stats.category_stats = data.get('category_stats', {})
+        stats.last_30_days = data.get('last_30_days', {})
+        stats.last_7_days = data.get('last_7_days', {})
+        stats.updated_at = datetime.utcnow()
+    
+    def _validate_business_game_data(self, data: Dict[str, Any]) -> bool:
+        """
+        Waliduje strukturę business game
+        KRYTYCZNE: Sprawdza czy wszystkie wymagane pola są obecne
+        To rozwiązuje problem z poprzedniej migracji!
+        """
+        # Required keys (money is optional - defaults to 0)
+        required_keys = ['firm', 'employees', 'office', 'contracts', 'stats', 'history']
+        
+        for key in required_keys:
+            if key not in data:
+                print(f"❌ Missing required key: {key}")
+                return False
+        
+        # Validate firm
+        firm = data.get('firm', {})
+        if not isinstance(firm, dict) or 'name' not in firm:
+            print(f"❌ Invalid firm structure")
+            return False
+        
+        # Validate employees
+        if not isinstance(data.get('employees'), list):
+            print(f"❌ Invalid employees structure (must be list)")
+            return False
+        
+        # Validate contracts
+        contracts = data.get('contracts', {})
+        if not isinstance(contracts, dict):
+            print(f"❌ Invalid contracts structure (must be dict)")
+            return False
+        
+        # At least 'active' and 'completed' should exist
+        # 'failed' and 'available_pool' are optional
+        if 'active' not in contracts or 'completed' not in contracts:
+            print(f"❌ Missing contracts.active or contracts.completed")
+            return False
+        
+        # Validate stats
+        stats = data.get('stats', {})
+        if not isinstance(stats, dict):
+            print(f"❌ Invalid stats structure (must be dict)")
+            return False
+        
+        # Validate history
+        history = data.get('history', {})
+        if not isinstance(history, dict) or 'transactions' not in history:
+            print(f"❌ Invalid history structure")
+            return False
+        
+        return True

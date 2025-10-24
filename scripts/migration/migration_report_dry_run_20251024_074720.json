@@ -1,0 +1,15 @@
+{
+  "phase": "dry_run",
+  "timestamp": "2025-10-24T07:47:20.829244",
+  "stats": {
+    "total_users": 46,
+    "users_with_bg": 13,
+    "validation_passed": 46,
+    "validation_failed": 0,
+    "migration_success": 0,
+    "migration_failed": 0,
+    "verification_passed": 0,
+    "verification_failed": 0,
+    "failed_users": []
+  }
+}

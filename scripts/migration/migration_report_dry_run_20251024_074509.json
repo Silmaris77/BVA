@@ -1,0 +1,48 @@
+{
+  "phase": "dry_run",
+  "timestamp": "2025-10-24T07:45:09.325884",
+  "stats": {
+    "total_users": 46,
+    "users_with_bg": 13,
+    "validation_passed": 38,
+    "validation_failed": 8,
+    "migration_success": 0,
+    "migration_failed": 0,
+    "verification_passed": 0,
+    "verification_failed": 0,
+    "failed_users": [
+      [
+        "p",
+        "invalid_bg_consulting"
+      ],
+      [
+        "z",
+        "invalid_bg_consulting"
+      ],
+      [
+        "kamil",
+        "invalid_bg_consulting"
+      ],
+      [
+        "Emma",
+        "invalid_bg_consulting"
+      ],
+      [
+        "Harry",
+        "invalid_bg_consulting"
+      ],
+      [
+        "Paul",
+        "invalid_bg_consulting"
+      ],
+      [
+        "karol",
+        "invalid_bg_consulting"
+      ],
+      [
+        "mick",
+        "invalid_bg_consulting"
+      ]
+    ]
+  }
+}

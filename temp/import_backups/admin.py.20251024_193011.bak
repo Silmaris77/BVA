@@ -8,8 +8,7 @@ import math
 from datetime import datetime, timedelta
 import time
 import json
-# Importy są OK tutaj - lazy loading jest w samym users_new
-from data.users_new import load_user_data, save_user_data
+from data.users import load_user_data, save_user_data
 from data.lessons import load_lessons
 from utils.scroll_utils import scroll_to_top
 from data.neuroleader_test_questions import NEUROLEADER_TYPES

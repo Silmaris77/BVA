@@ -1,0 +1,35 @@
+{
+  "timestamp": "20251023_233420",
+  "datetime": "2025-10-23T23:34:20.543478",
+  "reason": "pre_migration",
+  "files": [
+    "users_data.json",
+    "game_master_queue.json",
+    "leadership_profiles.json",
+    "user_status.json",
+    "config/api_limits.json",
+    "config/business_games_active_mode.json",
+    "config/business_games_settings.py"
+  ],
+  "checksums": {
+    "users_data.json": "1e1ab9dbdf46ad174b23d33344f44a36c1673602a9ccd6c558d66574f9543288",
+    "game_master_queue.json": "e73c044609130f89bb047ad6dd8edf963513a52e16ece2adf1d457479fc9f447",
+    "leadership_profiles.json": "96f7927476a056eb52181147903bed6f5b9720469e5f8c9ff23ade4773d5c374",
+    "user_status.json": "58fdcb27cccde2ea944a7761fc5923543da0fc75e065c689d3627ff9b3f962ee",
+    "config/api_limits.json": "b176ae18a6fc1e45db5814a9d073c79ea16988afb45d9d899b75f4b33d6842ee",
+    "config/business_games_active_mode.json": "f09c993c2694d0bfd2e8050ff1fd9877d686d47b5652d94e6b33da6fe5b89ec9",
+    "config/business_games_settings.py": "778e7b4d5e07d1af7f6af8ba187537ee36453644025ddde5752d9ca797c89f6b"
+  },
+  "sizes": {
+    "users_data.json": 1004912,
+    "game_master_queue.json": 6520,
+    "leadership_profiles.json": 10243,
+    "user_status.json": 2120,
+    "config/api_limits.json": 673,
+    "config/business_games_active_mode.json": 103,
+    "config/business_games_settings.py": 9483
+  },
+  "total_size": 1034054,
+  "errors": [],
+  "files_backed_up": 7
+}

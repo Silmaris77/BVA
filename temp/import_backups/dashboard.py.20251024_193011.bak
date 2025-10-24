@@ -4,7 +4,7 @@ import altair as alt
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-from data.users_new import load_user_data, save_user_data, get_current_user_data
+from data.users import load_user_data, save_user_data, get_current_user_data
 from data.neuroleader_test_questions import NEUROLEADER_TYPES
 from config.settings import DAILY_MISSIONS, USER_AVATARS
 from data.lessons import load_lessons
@@ -277,7 +277,7 @@ def display_lesson_cards(lessons_list, tab_name="", custom_columns=None):
         st.info("Brak dostępnych lekcji w tej kategorii.")
         return
 
-    from data.users_new import get_current_user_data
+    from data.users import get_current_user_data
     user_data = get_current_user_data(st.session_state.username)
     completed_lessons = user_data.get('completed_lessons', [])
     
@@ -311,7 +311,7 @@ def display_lesson_cards(lessons_list, tab_name="", custom_columns=None):
 def get_recommended_lessons(username):
     """Get recommended lessons based on user type"""
     lessons = load_lessons()
-    from data.users_new import get_current_user_data
+    from data.users import get_current_user_data
     user_data = get_current_user_data(username)
     degen_type = user_data.get('degen_type', None)
     
@@ -873,7 +873,7 @@ def show_available_lessons(device_type):
         </div>
     """, unsafe_allow_html=True)
       # Pobierz dane użytkownika
-    from data.users_new import get_current_user_data
+    from data.users import get_current_user_data
     user_data = get_current_user_data(st.session_state.username)
     completed_lessons = user_data.get('completed_lessons', [])
     

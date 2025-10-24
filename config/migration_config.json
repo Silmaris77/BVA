@@ -1,0 +1,46 @@
+{
+  "storage_backend": "json",
+  "dual_write_enabled": true,
+  "read_from_sql_percentage": 0,
+  "rollback_enabled": true,
+  "per_user_backend": {
+    "*": "json"
+  },
+  "migration_status": {
+    "phase": "dual_write_active",
+    "started_at": "2025-10-24T07:52:00",
+    "last_updated": "2025-10-24T19:35:00"
+  },
+  "database": {
+    "type": "sqlite",
+    "sqlite_path": "database/bva_app.db",
+    "postgresql": {
+      "host": "localhost",
+      "port": 5432,
+      "database": "bva_app",
+      "user": "bva_user",
+      "password": ""
+    }
+  },
+  "backup": {
+    "auto_backup_before_migration": true,
+    "keep_backups_count": 10,
+    "backup_on_error": true
+  },
+  "validation": {
+    "validate_before_save": true,
+    "validate_business_games": true,
+    "strict_mode": false
+  },
+  "feature_flags": {
+    "enable_sql_read": false,
+    "enable_sql_write": true,
+    "enable_dual_write": true,
+    "gradual_rollout_percentage": 100
+  },
+  "logging": {
+    "log_all_operations": false,
+    "log_errors_only": true,
+    "log_file": "logs/migration.log"
+  }
+}
