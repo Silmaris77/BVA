@@ -599,3 +599,55 @@
 [2025-10-22 13:03:32] ✅ Otrzymano odpowiedź z Gemini
 [2025-10-22 13:03:32] Długość odpowiedzi: 987 znaków
 [2025-10-22 13:03:32] ✅ JSON sparsowany pomyślnie
+[2025-10-25 00:51:03] ============================================================
+[2025-10-25 00:51:03] evaluate_contract_solution() wywołane
+[2025-10-25 00:51:03] get_active_evaluation_mode() wywołane
+[2025-10-25 00:51:03] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-25 00:51:03] DEFAULT_EVALUATION_MODE = ai
+[2025-10-25 00:51:03] Plik config/business_games_active_mode.json istnieje
+[2025-10-25 00:51:03] Z pliku odczytano tryb: 'ai'
+[2025-10-25 00:51:03] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-25 00:51:03] Używam trybu oceny: 'ai'
+[2025-10-25 00:51:03] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-25 00:51:03] Importuję google.generativeai...
+[2025-10-25 00:51:03] ✅ Import google.generativeai OK
+[2025-10-25 00:51:03] Przygotowuję prompt...
+[2025-10-25 00:51:03] ✅ Prompt przygotowany (długość: 2945 znaków)
+[2025-10-25 00:51:03] Pobieram API key...
+[2025-10-25 00:51:03] ✅ API key pobrane z st.secrets
+[2025-10-25 00:51:03] Konfiguruję genai.configure()...
+[2025-10-25 00:51:03] ✅ genai.configure() OK
+[2025-10-25 00:51:03] Ustawiam safety_settings...
+[2025-10-25 00:51:03] ✅ safety_settings ustawione
+[2025-10-25 00:51:03] Tworzę model: gemini-2.5-flash...
+[2025-10-25 00:51:04] ✅ Model utworzony
+[2025-10-25 00:51:04] Wywołuję model.generate_content()...
+[2025-10-25 00:51:16] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-25 00:51:16] Długość odpowiedzi: 1118 znaków
+[2025-10-25 00:51:16] ✅ JSON sparsowany pomyślnie
+[2025-10-25 00:51:29] ============================================================
+[2025-10-25 00:51:29] evaluate_contract_solution() wywołane
+[2025-10-25 00:51:29] get_active_evaluation_mode() wywołane
+[2025-10-25 00:51:29] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-25 00:51:29] DEFAULT_EVALUATION_MODE = ai
+[2025-10-25 00:51:29] Plik config/business_games_active_mode.json istnieje
+[2025-10-25 00:51:29] Z pliku odczytano tryb: 'ai'
+[2025-10-25 00:51:29] get_active_evaluation_mode() zwróciło: 'ai'
+[2025-10-25 00:51:29] Używam trybu oceny: 'ai'
+[2025-10-25 00:51:29] 🤖 evaluate_with_ai() ROZPOCZĘTA
+[2025-10-25 00:51:29] Importuję google.generativeai...
+[2025-10-25 00:51:29] ✅ Import google.generativeai OK
+[2025-10-25 00:51:29] Przygotowuję prompt...
+[2025-10-25 00:51:30] ✅ Prompt przygotowany (długość: 3219 znaków)
+[2025-10-25 00:51:30] Pobieram API key...
+[2025-10-25 00:51:30] ✅ API key pobrane z st.secrets
+[2025-10-25 00:51:30] Konfiguruję genai.configure()...
+[2025-10-25 00:51:30] ✅ genai.configure() OK
+[2025-10-25 00:51:30] Ustawiam safety_settings...
+[2025-10-25 00:51:30] ✅ safety_settings ustawione
+[2025-10-25 00:51:30] Tworzę model: gemini-2.5-flash...
+[2025-10-25 00:51:30] ✅ Model utworzony
+[2025-10-25 00:51:30] Wywołuję model.generate_content()...
+[2025-10-25 00:51:42] ✅ Otrzymano odpowiedź z Gemini
+[2025-10-25 00:51:42] Długość odpowiedzi: 930 znaków
+[2025-10-25 00:51:42] ✅ JSON sparsowany pomyślnie

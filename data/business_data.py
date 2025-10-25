@@ -898,6 +898,141 @@ TechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego
 
 **WORST solution:**
 - Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility"""
+    },
+    
+    # =========================================================================
+    # SPEED CHALLENGE CONTRACTS - Kontrakt z limitem czasu
+    # =========================================================================
+    {
+        "id": "speed_urgent_call",
+        "tytul": "⚡ Urgent: Klient dzwoni - natychmiastowa porada!",
+        "kategoria": "Kryzys",
+        "klient": "StartupHub",
+        "opis": "Ważny klient dzwoni z pilną kwestią biznesową. Musisz doradzić NA MIEJSCU - nie ma czasu na research!",
+        "wymagana_wiedza": ["Business Metrics", "Quick Thinking", "Client Communication"],
+        "typ": "pisanie",
+        "trudnosc": 1,  # Zmienione na 1 żeby było zawsze widoczne
+        "nagroda_base": 400,
+        "nagroda_4star": 550,
+        "nagroda_5star": 700,
+        "reputacja": 30,
+        "czas_realizacji_dni": 0,  # Natychmiastowe - nie ma deadline
+        "wymagany_poziom": 1,
+        "emoji": "⚡",
+        
+        # Speed Challenge specific fields
+        "contract_type": "speed_challenge",
+        "time_limit_seconds": 90,  # 1.5 minuty na odpowiedź
+        "speed_bonus_multiplier": 1.5,  # Bonus za szybką odpowiedź
+        "pressure_level": "medium",  # low/medium/high
+        
+        "challenge_config": {
+            "situation": "urgent_phone_call",
+            "client_name": "Anna Kowalska",
+            "client_role": "CEO StartupHub",
+            "urgency_reason": "Zaraz mam meeting z inwestorem za 10 minut!",
+            
+            "problem": """Anna (CEO StartupHub) dzwoni do Ciebie w panice:
+
+"Słuchaj, zaraz mam pitch przed inwestorami - za 10 MINUT! Jeden z nich właśnie przysłał email z pytaniem, które totalnie mnie zaskoczyło:
+
+**Pytanie inwestora:**
+'Dlaczego wasz CAC (Customer Acquisition Cost) wzrósł z 50 zł do 150 zł w Q2, podczas gdy LTV (Lifetime Value) spadło z 800 zł do 600 zł? To czerwona flaga - lejek się rozpadł czy problem w retencji?'
+
+Kurczę, nie mam czasu na szczegółową analizę! Jak mam na to odpowiedzieć, żeby NIE wyglądać jak idiota? Potrzebuję quick smart answer - CO to znaczy i JAK bronić tych liczb!"
+
+**Twoje zadanie:**
+Doradzić Annie w 90 sekund:
+1. Co to naprawdę znaczy (w prostych słowach)
+2. Jak to interpretation/spin żeby nie brzmiało źle
+3. Konkretną odpowiedź którą może użyć NA MIEJSCU""",
+            
+            "evaluation_criteria": {
+                "clarity": "Czy wyjaśniłeś problem w prostych słowach?",
+                "actionable": "Czy dałeś konkretną odpowiedź do użycia?",
+                "calm_confidence": "Czy uspokoiłeś klienta i dodałeś mu pewności?",
+                "business_savvy": "Czy pokazałeś zrozumienie metryki CAC/LTV?"
+            },
+            
+            "ideal_answer_keywords": [
+                "CAC wzrósł",
+                "LTV spadło",
+                "inwestycja w growth",
+                "customer quality",
+                "cohort analysis",
+                "pokazać trend",
+                "wyjaśnić kontekst",
+                "pivot strategii"
+            ]
+        }
+    },
+    {
+        "id": "speed_crisis_decision",
+        "tytul": "⚡ KRYZYS: Decyzja w 60 sekund!",
+        "kategoria": "Kryzys",
+        "klient": "TechShop",
+        "opis": "Twój klient ma awarię systemu podczas Black Friday. Musisz doradzić NATYCHMIAST - każda sekunda to stracone tysiące złotych!",
+        "wymagana_wiedza": ["Crisis Management", "Technical Decision Making", "Damage Control"],
+        "typ": "pisanie",
+        "trudnosc": 1,  # Zmienione na 1 żeby było zawsze widoczne (można zmienić na 3 później)
+        "nagroda_base": 600,
+        "nagroda_4star": 850,
+        "nagroda_5star": 1100,
+        "reputacja": 45,
+        "czas_realizacji_dni": 0,
+        "wymagany_poziom": 1,  # Zmienione na 1 żeby było dostępne od początku
+        "emoji": "⚡",
+        
+        "contract_type": "speed_challenge",
+        "time_limit_seconds": 60,  # Tylko 1 minuta!
+        "speed_bonus_multiplier": 2.0,  # Wyższy bonus - wyższy pressure
+        "pressure_level": "high",
+        
+        "challenge_config": {
+            "situation": "system_crisis",
+            "client_name": "Marek Nowak",
+            "client_role": "CTO E-commerce TechShop",
+            "urgency_reason": "Black Friday - tracimy 10k zł na minutę!",
+            
+            "problem": """Marek (CTO TechShop) dzwoni w totalnej panice - słychać chaos w tle:
+
+"ALARM! Mamy BLACK FRIDAY - największy dzień roku! Właśnie padł nam checkout - klienci NIE MOGĄ PŁACIĆ!
+
+**Sytuacja:**
+- 15:30 - peak traffic (5000 userów na stronie)
+- Checkout page zwraca błąd 503
+- Platforma płatności (Stripe) działa OK - problem u NAS
+- Dev team krzyczy że to 'database connection pool exhausted'
+- Backup developer proponuje 'restart całego systemu' (to zajmie 15 minut downtime)
+- Senior dev mówi 'zwiększ connection pool i przeładuj tylko API' (5 minut)
+- CEO krzyczy 'NAPRAWCIE TO TERAZ!!!'
+
+**Tracimy 10,000 zł na KAŻDĄ minutę downtime.**
+
+CO MAMY ROBIĆ?! Restart czy przeładowanie?! SZYBKO!"
+
+**Twoje zadanie (60 sekund):**
+1. Która opcja (restart vs przeładowanie)?
+2. DLACZEGO (quick reasoning)?
+3. Co robić PÓKI to się dzieje (minimize damage)?""",
+            
+            "evaluation_criteria": {
+                "decision_speed": "Czy szybko wybrałeś konkretne rozwiązanie?",
+                "risk_assessment": "Czy oceniłeś ryzyko obu opcji?",
+                "damage_control": "Czy zaproponowałeś plan minimalizacji strat?",
+                "clear_communication": "Czy instrukcje są jasne dla zestresowanego klienta?"
+            },
+            
+            "ideal_answer_keywords": [
+                "przeładuj API",
+                "connection pool",
+                "szybsze rozwiązanie",
+                "komunikat dla klientów",
+                "monitoruj",
+                "backup plan",
+                "minimize downtime"
+            ]
+        }
     }
 ]
 

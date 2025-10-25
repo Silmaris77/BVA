@@ -1168,7 +1168,7 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
     # Pending event (jeśli neutralne wymaga wyboru - blocking modal)
     if "pending_event" in st.session_state:
         event_id, event_data = st.session_state["pending_event"]
-        render_event_choice_modal(event_id, event_data, username, user_data)
+        render_event_choice_modal(event_id, event_data, username, user_data, context="dashboard")
     
     st.markdown("---")
     
@@ -1548,6 +1548,12 @@ def render_active_contract_card(contract, username, user_data, bg_data):
     if contract.get("contract_type") == "ai_conversation":
         industry_id = bg_data.get("industry", "consulting")
         render_ai_conversation_contract(contract, username, user_data, bg_data, industry_id)
+        return
+    
+    # Sprawdź czy to Speed Challenge Contract
+    if contract.get("contract_type") == "speed_challenge":
+        industry_id = bg_data.get("industry", "consulting")
+        render_speed_challenge_contract(contract, username, user_data, bg_data, industry_id)
         return
     
     # Standardowy kontrakt (pisanie/mówienie)
@@ -2157,7 +2163,7 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
     with col_filter1:
         category_filter = st.selectbox(
             "Kategoria:",
-            ["Wszystkie", "Konflikt", "Coaching", "Kultura", "Kryzys", "Leadership"],
+            ["Wszystkie", "Konflikt", "Coaching", "Kultura", "Kryzys", "Leadership", "AI Conversation"],
             key="contracts_filter_category"
         )
     
@@ -2232,6 +2238,11 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
     
     # Sprawdź czy zakończono
     is_completed = not conversation.get("conversation_active", True)
+    
+    # Sprawdź czy TTS jest dostępne
+    from utils.ai_conversation_engine import TTS_AVAILABLE
+    if not TTS_AVAILABLE:
+        st.warning("🔇 Text-to-Speech niedostępne. Zainstaluj gTTS: `pip install gTTS`")
     
     # === NAGŁÓWEK KONTRAKTU ===
     st.markdown(f"""
@@ -2355,17 +2366,71 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         with col_submit:
             if st.button("✅ Zakończ kontrakt", key=f"submit_{contract_id}", 
                         type="primary", width="stretch"):
-                # Wywołaj submit_contract_ai_conversation
-                updated_user_data, success, message, _ = submit_contract_ai_conversation(user_data, contract_id)
+                # Import funkcji calculate_final_conversation_score
+                from utils.ai_conversation_engine import calculate_final_conversation_score
                 
-                if success:
-                    # Zapisz zaktualizowane dane
-                    save_user_data(username, updated_user_data)
-                    st.success(message)
-                    time.sleep(1)  # Krótka pauza dla UX
-                    st.rerun()
+                # Znajdź kontrakt
+                contract_found = next((c for c in bg_data["contracts"]["active"] if c["id"] == contract_id), None)
+                if not contract_found:
+                    st.error("Kontrakt nie znaleziony w aktywnych")
                 else:
-                    st.error(message)
+                    try:
+                        # Pobierz wynik z engine
+                        result = calculate_final_conversation_score(contract_id)
+                        stars = result.get("stars", 1)
+                        total_points = result.get("total_points", 0)
+                        metrics = result.get("metrics", {})
+                        
+                        # Oblicz nagrodę
+                        reward_base = contract_found.get("nagroda_base", 500)
+                        reward_5star = contract_found.get("nagroda_5star", reward_base * 2)
+                        reward = int(reward_base + ((stars - 1) / 4.0) * (reward_5star - reward_base))
+                        
+                        # Dodaj nagrody
+                        user_data["degencoins"] = user_data.get("degencoins", 0) + reward
+                        bg_data["firm"]["reputation"] += contract_found.get("reputacja", 20) * stars / 3
+                        bg_data["stats"]["total_revenue"] += reward
+                        
+                        # Przenieś do completed
+                        completed_contract = contract_found.copy()
+                        completed_contract["completed_date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        completed_contract["stars"] = stars
+                        completed_contract["points"] = total_points
+                        completed_contract["reward"] = reward
+                        completed_contract["metrics"] = metrics
+                        completed_contract["status"] = "completed"
+                        
+                        bg_data["contracts"]["completed"].append(completed_contract)
+                        bg_data["contracts"]["active"] = [c for c in bg_data["contracts"]["active"] if c["id"] != contract_id]
+                        
+                        # Zaktualizuj statystyki
+                        bg_data["stats"]["contracts_completed"] = bg_data["stats"].get("contracts_completed", 0) + 1
+                        rating_key = f"contracts_{stars}star"
+                        bg_data["stats"][rating_key] = bg_data["stats"].get(rating_key, 0) + 1
+                        
+                        # Dodaj transakcję
+                        if "history" not in bg_data:
+                            bg_data["history"] = {"transactions": [], "level_ups": []}
+                        if "transactions" not in bg_data["history"]:
+                            bg_data["history"]["transactions"] = []
+                        
+                        bg_data["history"]["transactions"].append({
+                            "type": "contract_reward",
+                            "amount": reward,
+                            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            "description": f"AI Conversation: {contract_found['tytul']} ({stars}⭐)"
+                        })
+                        
+                        # Zapisz dane
+                        save_game_data(user_data, bg_data, industry_id)
+                        save_user_data(username, user_data)
+                        
+                        st.success(f"✅ Zakończono! 💰 +{reward} DegenCoins | ⭐ {stars}/5")
+                        time.sleep(1)
+                        st.rerun()
+                        
+                    except Exception as e:
+                        st.error(f"Błąd przy zakończeniu kontraktu: {e}")
         
     else:
         # === WIDOK AKTYWNEJ ROZMOWY ===
@@ -2475,6 +2540,40 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
                         <div style='color: #1e3a8a; line-height: 1.6;'>{content}</div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
+                    # Wyświetl feedback AI jeśli dostępny
+                    evaluation = msg.get("evaluation")
+                    if evaluation:
+                        feedback_text = evaluation.get("feedback", "")
+                        points = evaluation.get("points", 0)
+                        empathy = evaluation.get("empathy", 0)
+                        assertiveness = evaluation.get("assertiveness", 0)
+                        professionalism = evaluation.get("professionalism", 0)
+                        solution = evaluation.get("solution_quality", 0)
+                        
+                        st.markdown(f"""
+                        <div style='background: #fef3c7; padding: 12px; border-radius: 8px; 
+                                    margin: 8px 0 16px 0; border-left: 4px solid #f59e0b;'>
+                            <div style='font-size: 12px; font-weight: 600; color: #92400e; margin-bottom: 6px;'>
+                                🎯 Feedback AI (+{points} pkt)
+                            </div>
+                            <div style='color: #78350f; font-size: 13px; margin-bottom: 8px;'>{feedback_text}</div>
+                            <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 11px;'>
+                                <div style='background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px;'>
+                                    🤝 {empathy}/100
+                                </div>
+                                <div style='background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px;'>
+                                    💪 {assertiveness}/100
+                                </div>
+                                <div style='background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px;'>
+                                    👔 {professionalism}/100
+                                </div>
+                                <div style='background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px;'>
+                                    💡 {solution}/100
+                                </div>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
                 
                 elif role == "evaluation":
                     # Feedback od AI
@@ -2534,9 +2633,388 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         
         with col_end:
             if st.button("🏁 Zakończ", width="stretch"):
-                # Force end conversation
-                st.session_state[f"dt_{contract_id}_conversation_active"] = False
+                # Force end conversation - użyj poprawnego klucza dla AI Conversation
+                conv_key = f"ai_conv_{contract_id}"
+                if conv_key in st.session_state:
+                    st.session_state[conv_key]["conversation_active"] = False
+                    st.session_state[conv_key]["ending_reached"] = True
+                    st.session_state[conv_key]["ending_type"] = "MANUAL_END"
                 st.rerun()
+
+
+def render_speed_challenge_contract(contract, username, user_data, bg_data, industry_id="consulting"):
+    """Renderuje Speed Challenge Contract - kontrakt z limitem czasu"""
+    from utils.speed_challenge_engine import (
+        initialize_speed_challenge,
+        get_challenge_state,
+        start_challenge,
+        get_remaining_time,
+        render_timer,
+        complete_speed_challenge,
+        reset_challenge
+    )
+    
+    contract_id = contract["id"]
+    challenge_config = contract.get("challenge_config", {})
+    time_limit = contract.get("time_limit_seconds", 60)
+    speed_bonus_multiplier = contract.get("speed_bonus_multiplier", 1.5)
+    pressure_level = contract.get("pressure_level", "medium")
+    
+    # Inicjalizacja
+    initialize_speed_challenge(contract_id, challenge_config, time_limit)
+    state = get_challenge_state(contract_id)
+    
+    is_completed = state.get("completed", False)
+    
+    # === NAGŁÓWEK KONTRAKTU ===
+    pressure_colors = {
+        "low": ("#10b981", "#d1fae5"),
+        "medium": ("#f59e0b", "#fef3c7"),
+        "high": ("#ef4444", "#fee2e2")
+    }
+    pressure_color, pressure_bg = pressure_colors.get(pressure_level, pressure_colors["medium"])
+    
+    st.markdown(f"""
+    <div style='background: linear-gradient(135deg, {pressure_color} 0%, {pressure_color}dd 100%); 
+                color: white; padding: 24px; border-radius: 16px; margin-bottom: 24px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);'>
+        <div style='display: flex; align-items: center; justify-content: space-between;'>
+            <div>
+                <h2 style='margin: 0 0 8px 0; font-size: 24px;'>⚡ {contract['tytul']}</h2>
+                <p style='margin: 0; opacity: 0.95; font-size: 14px;'>{contract['opis']}</p>
+            </div>
+            <div style='background: rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 8px;'>
+                <div style='font-size: 32px; font-weight: bold; margin: 0;'>{time_limit}s</div>
+                <div style='font-size: 12px; opacity: 0.9; margin-top: 4px;'>LIMIT CZASU</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if is_completed:
+        # === WIDOK ZAKOŃCZENIA ===
+        evaluation = state.get("evaluation_result", {})
+        
+        stars = evaluation.get("stars", 3)
+        points = evaluation.get("points", 0)
+        base_points = evaluation.get("base_points", 0)
+        speed_bonus = evaluation.get("speed_bonus_applied", 0)
+        time_taken = evaluation.get("time_taken", 0)
+        on_time = evaluation.get("on_time", True)
+        
+        # Pokaż wyniki
+        st.success("🎉 **Challenge zakończony!**" if on_time else "⏰ **Challenge zakończony (po czasie)**")
+        
+        st.markdown("---")
+        
+        # Metryki
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.markdown("### ⭐")
+            st.markdown(f"**Ocena:** {stars}/5")
+        
+        with col2:
+            st.markdown("### 🎯")
+            if speed_bonus > 0:
+                st.markdown(f"**Punkty:** ~~{base_points}~~ **{points}**")
+                st.caption(f"💨 Speed bonus: +{int(speed_bonus * 100)}%")
+            else:
+                st.markdown(f"**Punkty:** {points}")
+        
+        with col3:
+            st.markdown("### ⏱️")
+            time_color = "green" if on_time else "red"
+            st.markdown(f"**Czas:** :{time_color}[{time_taken:.1f}s]")
+            st.caption(f"Limit: {time_limit}s")
+        
+        with col4:
+            result_emoji = "🏆" if stars >= 4 and on_time else ("🤝" if on_time else "⏰")
+            st.markdown(f"### {result_emoji}")
+            st.markdown(f"**{'SUCCESS' if stars >= 4 and on_time else ('OK' if on_time else 'TIMEOUT')}**")
+        
+        st.markdown("---")
+        
+        # Feedback
+        feedback_text = evaluation.get("feedback", "Brak szczegółowego feedbacku")
+        st.markdown(f"""
+        <div style='background: {pressure_bg}; border-left: 4px solid {pressure_color}; 
+                    padding: 16px; border-radius: 8px; margin: 16px 0;'>
+            <h4 style='margin: 0 0 8px 0; color: #1f2937;'>💭 Feedback</h4>
+            <p style='margin: 0; color: #4b5563;'>{feedback_text}</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Strengths & Improvements
+        col_str, col_imp = st.columns(2)
+        
+        with col_str:
+            st.markdown("#### ✅ Mocne strony")
+            strengths = evaluation.get("strengths", [])
+            if strengths:
+                for strength in strengths:
+                    st.markdown(f"- {strength}")
+            else:
+                st.caption("Brak szczegółów")
+        
+        with col_imp:
+            st.markdown("#### 🎯 Do poprawy")
+            improvements = evaluation.get("improvements", [])
+            if improvements:
+                for improvement in improvements:
+                    st.markdown(f"- {improvement}")
+            else:
+                st.caption("Świetna robota!")
+        
+        st.markdown("---")
+        
+        # Twoja odpowiedź
+        with st.expander("📝 Twoja odpowiedź", expanded=False):
+            st.markdown(state.get("player_response", ""))
+        
+        # Kontekst problemu
+        with st.expander("📋 Problem do rozwiązania"):
+            st.markdown(challenge_config.get("problem", "Brak opisu"))
+        
+        st.markdown("---")
+        
+        # Przyciski akcji
+        col_close, col_retry = st.columns(2)
+        
+        with col_close:
+            if st.button("✅ Zamknij i kompletuj", use_container_width=True, type="primary"):
+                # Zapisz wyniki do kontraktu
+                final_reward = 0  # Initialize
+                
+                # Aktualizuj kontrakt
+                for i, c in enumerate(bg_data["contracts"]["active"]):
+                    if c["id"] == contract_id:
+                        bg_data["contracts"]["active"][i].update({
+                            "status": "completed",
+                            "rating": stars,
+                            "completed_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            "speed_challenge_results": {
+                                "time_taken": time_taken,
+                                "time_limit": time_limit,
+                                "on_time": on_time,
+                                "speed_bonus": speed_bonus,
+                                "pressure_level": pressure_level
+                            }
+                        })
+                        
+                        # Przenieś do completed
+                        completed_contract = bg_data["contracts"]["active"].pop(i)
+                        bg_data["contracts"]["completed"].append(completed_contract)
+                        
+                        # Dodaj nagrody
+                        reward_multiplier = {1: 0.5, 2: 0.7, 3: 1.0, 4: 1.3, 5: 1.6}.get(stars, 1.0)
+                        base_reward = contract.get("nagroda_base", 500)
+                        final_reward = int(base_reward * reward_multiplier * (1 + speed_bonus * 0.3))
+                        
+                        user_data["degencoins"] = user_data.get("degencoins", 0) + final_reward
+                        bg_data["stats"]["total_revenue"] += final_reward
+                        bg_data["firm"]["reputation"] += contract.get("reputacja", 20) * stars / 3
+                        
+                        # Dodaj transakcję
+                        if "history" not in bg_data:
+                            bg_data["history"] = {"transactions": [], "level_ups": []}
+                        if "transactions" not in bg_data["history"]:
+                            bg_data["history"]["transactions"] = []
+                        
+                        bg_data["history"]["transactions"].append({
+                            "type": "contract_reward",
+                            "amount": final_reward,
+                            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            "description": f"Speed Challenge: {contract['tytul']} ({stars}⭐)"
+                        })
+                        
+                        break
+                
+                # Zapisz i resetuj
+                save_game_data(user_data, bg_data, industry_id)
+                save_user_data(username, user_data)
+                reset_challenge(contract_id)
+                st.success(f"💰 Otrzymujesz {final_reward} DegenCoins!")
+                st.rerun()
+        
+        with col_retry:
+            if st.button("🔄 Spróbuj ponownie", use_container_width=True):
+                reset_challenge(contract_id)
+                st.rerun()
+    
+    else:
+        # === WIDOK GRY ===
+        
+        # Kontekst challenge
+        client_name = challenge_config.get("client_name", "Klient")
+        client_role = challenge_config.get("client_role", "")
+        urgency_reason = challenge_config.get("urgency_reason", "Pilna sprawa!")
+        
+        st.markdown(f"""
+        <div style='background: #f8fafc; padding: 16px; border-radius: 12px; margin-bottom: 20px;
+                    border: 2px solid {pressure_color};'>
+            <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 12px;'>
+                <div style='background: {pressure_color}; color: white; 
+                            padding: 8px 16px; border-radius: 20px; font-weight: bold;'>
+                    {client_name}
+                </div>
+                <div style='color: #64748b; font-size: 14px;'>{client_role}</div>
+            </div>
+            <div style='background: {pressure_bg}; padding: 12px; border-radius: 8px;
+                        border-left: 4px solid {pressure_color};'>
+                <div style='font-weight: bold; color: {pressure_color}; margin-bottom: 8px;'>
+                    ⚡ {urgency_reason}
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Problem do rozwiązania
+        problem = challenge_config.get("problem", "Brak opisu problemu")
+        
+        # Konwertuj Markdown na HTML
+        import re
+        problem_html = problem.replace(chr(10), '<br>')
+        problem_html = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', problem_html)  # **bold**
+        problem_html = re.sub(r'\*(.*?)\*', r'<em>\1</em>', problem_html)  # *italic*
+        
+        st.markdown(f"""
+        <div style='background: white; padding: 20px; border-radius: 12px; 
+                    border: 1px solid #e5e7eb; margin-bottom: 24px;
+                    line-height: 1.6; color: #1f2937;'>
+            {problem_html}
+        </div>
+        """, unsafe_allow_html=True)
+        
+        
+        # Start button lub timer
+        if not state.get("started", False):
+            st.markdown("---")
+            st.markdown(f"""
+            <div style='background: {pressure_bg}; padding: 20px; border-radius: 12px; text-align: center;'>
+                <h3 style='color: {pressure_color}; margin: 0 0 12px 0;'>⏱️ Gotowy na challenge?</h3>
+                <p style='margin: 0; color: #64748b;'>
+                    Masz **{time_limit} sekund** na odpowiedź.<br>
+                    Im szybciej odpowiesz, tym większy bonus! 💨
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.markdown("")
+            
+            if st.button("🚀 START TIMER", use_container_width=True, type="primary"):
+                start_challenge(contract_id)
+                st.rerun()
+        
+        else:
+            # Timer aktywny - JavaScript countdown (bez reruns!)
+            remaining = get_remaining_time(contract_id)
+            time_out = remaining <= 0
+            
+            # JavaScript timer
+            timer_html = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {{
+                        margin: 0;
+                        padding: 0;
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                    }}
+                    @keyframes pulse {{
+                        0%, 100% {{ transform: scale(1); }}
+                        50% {{ transform: scale(1.05); }}
+                    }}
+                </style>
+            </head>
+            <body>
+                <div id="timer-container"></div>
+                <script>
+                (function() {{
+                    const container = document.getElementById('timer-container');
+                    let secondsLeft = {max(0, int(remaining))};
+                    const totalSeconds = {time_limit};
+                    
+                    function updateTimer() {{
+                        const minutes = Math.floor(secondsLeft / 60);
+                        const seconds = secondsLeft % 60;
+                        const percentage = (secondsLeft / totalSeconds) * 100;
+                        
+                        let color, bgColor;
+                        if (percentage > 50) {{
+                            color = '#4ade80';
+                            bgColor = '#f0fdf4';
+                        }} else if (percentage > 25) {{
+                            color = '#fbbf24';
+                            bgColor = '#fffbeb';
+                        }} else {{
+                            color = '#f87171';
+                            bgColor = '#fef2f2';
+                        }}
+                        
+                        if (secondsLeft <= 0) {{
+                            container.innerHTML = '<div style="background: #fee; border: 2px solid #f00; padding: 16px; border-radius: 8px; text-align: center; animation: pulse 1s infinite;"><h2 style="color: #c00; margin: 0; font-size: 32px;">⏰ CZAS MINĄŁ!</h2><p style="margin: 8px 0 0 0; color: #666;">Zbyt późno na odpowiedź...</p></div>';
+                        }} else {{
+                            const minutesStr = String(minutes).padStart(2, '0');
+                            const secondsStr = String(seconds).padStart(2, '0');
+                            
+                            container.innerHTML = '<div style="background: ' + bgColor + '; border: 2px solid ' + color + '; padding: 16px; border-radius: 8px; text-align: center;"><h2 style="color: ' + color + '; margin: 0; font-size: 48px; font-family: monospace; font-weight: bold;">' + minutesStr + ':' + secondsStr + '</h2><p style="margin: 8px 0 0 0; color: #666; font-size: 14px;">Pozostały czas</p></div>';
+                            
+                            secondsLeft--;
+                            setTimeout(updateTimer, 1000);
+                        }}
+                    }}
+                    
+                    updateTimer();
+                }})();
+                </script>
+            </body>
+            </html>
+            """
+            
+            st.components.v1.html(timer_html, height=120)
+            
+            st.markdown("---")
+            
+            # Pole odpowiedzi
+            st.markdown("### ✍️ Twoja odpowiedź")
+            
+            response = st.text_area(
+                "Wpisz swoją poradę dla klienta:",
+                height=200,
+                placeholder="Bądź konkretny, zwięzły i actionable...",
+                key=f"speed_response_{contract_id}",
+                disabled=time_out
+            )
+            
+            st.markdown("")
+            
+            # Przyciski
+            col_submit, col_cancel = st.columns([3, 1])
+            
+            with col_submit:
+                submit_disabled = not response.strip() or time_out
+                if st.button(
+                    "📤 Wyślij odpowiedź" if not time_out else "⏰ Czas minął",
+                    use_container_width=True,
+                    type="primary",
+                    disabled=submit_disabled
+                ):
+                    # Oceń odpowiedź
+                    with st.spinner("🤖 AI ocenia twoją odpowiedź..."):
+                        evaluation = complete_speed_challenge(
+                            contract_id,
+                            response,
+                            challenge_config
+                        )
+                    
+                    st.rerun()
+            
+            with col_cancel:
+                if st.button("❌ Anuluj", use_container_width=True):
+                    reset_challenge(contract_id)
+                    st.rerun()
 
 
 def render_contract_card(contract, username, user_data, bg_data, can_accept_new, industry_id="consulting"):
@@ -2617,37 +3095,39 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new,
         
         # Expander ze szczegółami zadania - kompaktowy layout z kartami
         with st.expander("👁️ Zobacz szczegóły zadania", expanded=False):
-            # Zadanie w karcie
-            st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); 
-                        border-left: 4px solid #667eea; 
-                        border-radius: 12px; 
-                        padding: 16px 20px; 
-                        margin-bottom: 16px;'>
-                <div style='color: #667eea; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;'>
-                    🎯 ZADANIE DO WYKONANIA
+            # Zadanie w karcie (opcjonalne - dla standardowych kontraktów)
+            if 'zadanie' in contract:
+                st.markdown(f"""
+                <div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); 
+                            border-left: 4px solid #667eea; 
+                            border-radius: 12px; 
+                            padding: 16px 20px; 
+                            margin-bottom: 16px;'>
+                    <div style='color: #667eea; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;'>
+                        🎯 ZADANIE DO WYKONANIA
+                    </div>
+                    <div style='color: #334155; font-size: 14px; line-height: 1.6;'>
+                        {contract['zadanie']}
+                    </div>
                 </div>
-                <div style='color: #334155; font-size: 14px; line-height: 1.6;'>
-                    {contract['zadanie']}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
             
-            # Wymagana wiedza w karcie
-            knowledge_items = "".join([f"<div style='padding: 6px 12px; background: white; border-radius: 6px; margin-bottom: 6px; color: #475569; font-size: 13px;'>✓ {req}</div>" for req in contract['wymagana_wiedza']])
-            
-            st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #10b98115 0%, #05966915 100%); 
-                        border-left: 4px solid #10b981; 
-                        border-radius: 12px; 
-                        padding: 16px 20px; 
-                        margin-bottom: 16px;'>
-                <div style='color: #10b981; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 12px;'>
-                    📚 WYMAGANA WIEDZA
+            # Wymagana wiedza w karcie (opcjonalne)
+            if 'wymagana_wiedza' in contract and contract['wymagana_wiedza']:
+                knowledge_items = "".join([f"<div style='padding: 6px 12px; background: white; border-radius: 6px; margin-bottom: 6px; color: #475569; font-size: 13px;'>✓ {req}</div>" for req in contract['wymagana_wiedza']])
+                
+                st.markdown(f"""
+                <div style='background: linear-gradient(135deg, #10b98115 0%, #05966915 100%); 
+                            border-left: 4px solid #10b981; 
+                            border-radius: 12px; 
+                            padding: 16px 20px; 
+                            margin-bottom: 16px;'>
+                    <div style='color: #10b981; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 12px;'>
+                        📚 WYMAGANA WIEDZA
+                    </div>
+                    {knowledge_items}
                 </div>
-                {knowledge_items}
-            </div>
-            """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
             
             # Dodatkowe info w kompaktowej formie
             st.markdown(f"""
@@ -4033,7 +4513,7 @@ def show_history_tab(username, user_data, industry_id="consulting"):
     # Pending event (jeśli neutralne wymaga wyboru)
     if "pending_event" in st.session_state:
         event_id, event_data = st.session_state["pending_event"]
-        render_event_choice_modal(event_id, event_data, username, user_data)
+        render_event_choice_modal(event_id, event_data, username, user_data, context="history")
     
     st.markdown("---")
     
@@ -4395,7 +4875,7 @@ def show_events_tab(username, user_data, industry_id="consulting"):
     # Pending event (jeśli neutralne wymaga wyboru)
     if "pending_event" in st.session_state:
         event_id, event_data = st.session_state["pending_event"]
-        render_event_choice_modal(event_id, event_data, username, user_data)
+        render_event_choice_modal(event_id, event_data, username, user_data, context="events")
     
     st.markdown("---")
     
@@ -4610,8 +5090,23 @@ def show_active_event_card(event: dict):
     
     st.markdown(event_card_html, unsafe_allow_html=True)
 
-def render_event_choice_modal(event_id: str, event_data: dict, username: str, user_data: dict):
-    """Renderuje modal z wyborem dla neutralnego zdarzenia"""
+def render_event_choice_modal(event_id: str, event_data: dict, username: str, user_data: dict, context: str = "default"):
+    """Renderuje modal z wyborem dla neutralnego zdarzenia
+    
+    Args:
+        event_id: ID wydarzenia
+        event_data: Dane wydarzenia
+        username: Nazwa użytkownika
+        user_data: Dane użytkownika
+        context: Kontekst wywołania (np. "dashboard", "history") - aby uniknąć duplikatów kluczy
+    """
+    
+    # Utwórz unikalny klucz dla tego wywołania (aby uniknąć duplikatów)
+    # Użyj hash z event_id i danych - będzie taki sam dla tego samego eventu w tej sesji
+    import hashlib
+    import json
+    event_hash = hashlib.md5(json.dumps({"id": event_id, "data": event_data, "ctx": context}, sort_keys=True).encode()).hexdigest()[:8]
+    
     
     from utils.business_game_events import apply_event_effects
     
@@ -4638,7 +5133,7 @@ def render_event_choice_modal(event_id: str, event_data: dict, username: str, us
     
     for idx, (col, choice) in enumerate(zip(cols, event_data["choices"])):
         with col:
-            if st.button(choice["text"], key=f"event_choice_{event_id}_{idx}", type="primary" if idx == 0 else "secondary", width="stretch"):
+            if st.button(choice["text"], key=f"event_choice_{event_hash}_{idx}", type="primary" if idx == 0 else "secondary", width="stretch"):
                 # Aplikuj wybór
                 user_data = apply_event_effects(event_id, event_data, idx, user_data)
                 save_user_data(username, user_data)

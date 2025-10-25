@@ -25,31 +25,151 @@ try:
 except ImportError:
     TTS_AVAILABLE = False
 
+# ElevenLabs TTS (opcjonalne - lepsze głosy z emocjami)
+try:
+    from elevenlabs.client import ElevenLabs
+    from elevenlabs import VoiceSettings
+    ELEVENLABS_AVAILABLE = True
+except ImportError:
+    ELEVENLABS_AVAILABLE = False
 
-def generate_npc_audio(text: str, npc_config: Dict) -> Optional[str]:
+
+def generate_npc_audio_elevenlabs(text: str, npc_config: Dict, emotion: str = "neutral", api_key: str = None) -> Optional[str]:
     """
-    Generuje plik audio z tekstem NPC używając gTTS.
+    Generuje audio używając ElevenLabs API - bardzo naturalne głosy z emocjami.
+    
+    Args:
+        text: Tekst do wypowiedzenia
+        npc_config: Konfiguracja NPC
+        emotion: Emocja do wyrażenia
+        api_key: Klucz API ElevenLabs
+        
+    Returns:
+        Base64 encoded audio data
+    """
+    if not ELEVENLABS_AVAILABLE:
+        print("⚠️ ElevenLabs niedostępne - zainstaluj: pip install elevenlabs")
+        return None
+    
+    if not api_key:
+        print("⚠️ Brak klucza API ElevenLabs")
+        return None
+    
+    try:
+        client = ElevenLabs(api_key=api_key)
+        
+        # Wybierz polski głos (możesz dostosować)
+        # Dostępne głosy: https://elevenlabs.io/voice-library
+        voice_id = "pNInz6obpgDQGcFmaJgB"  # Adam - polski męski głos (ciepły, profesjonalny)
+        
+        # Dostosuj parametry głosu do emocji
+        emotion_settings = {
+            "happy": {"stability": 0.4, "similarity_boost": 0.8, "style": 0.6},
+            "excited": {"stability": 0.3, "similarity_boost": 0.85, "style": 0.7},
+            "angry": {"stability": 0.6, "similarity_boost": 0.75, "style": 0.5},
+            "frustrated": {"stability": 0.5, "similarity_boost": 0.7, "style": 0.4},
+            "sad": {"stability": 0.7, "similarity_boost": 0.6, "style": 0.3},
+            "anxious": {"stability": 0.4, "similarity_boost": 0.7, "style": 0.5},
+            "concerned": {"stability": 0.6, "similarity_boost": 0.7, "style": 0.4},
+            "thoughtful": {"stability": 0.8, "similarity_boost": 0.75, "style": 0.3},
+            "neutral": {"stability": 0.5, "similarity_boost": 0.75, "style": 0.5},
+            "relieved": {"stability": 0.6, "similarity_boost": 0.75, "style": 0.4},
+            "satisfied": {"stability": 0.5, "similarity_boost": 0.75, "style": 0.5},
+            "defensive": {"stability": 0.5, "similarity_boost": 0.7, "style": 0.6},
+            "grateful": {"stability": 0.4, "similarity_boost": 0.8, "style": 0.6}
+        }
+        
+        settings = emotion_settings.get(emotion, emotion_settings["neutral"])
+        
+        # Generuj audio
+        audio_generator = client.generate(
+            text=text,
+            voice=voice_id,
+            model="eleven_multilingual_v2",
+            voice_settings=VoiceSettings(
+                stability=settings["stability"],
+                similarity_boost=settings["similarity_boost"],
+                style=settings.get("style", 0.5),
+                use_speaker_boost=True
+            )
+        )
+        
+        # Zbierz wszystkie chunki audio
+        audio_bytes = b"".join(audio_generator)
+        
+        # Konwertuj do base64
+        audio_base64 = base64.b64encode(audio_bytes).decode()
+        
+        print(f"✅ ElevenLabs audio [{emotion}] wygenerowane dla: {text[:50]}...")
+        return audio_base64
+        
+    except Exception as e:
+        print(f"❌ ElevenLabs TTS Error: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
+
+def generate_npc_audio(text: str, npc_config: Dict, emotion: str = "neutral") -> Optional[str]:
+    """
+    Generuje plik audio z tekstem NPC.
+    Próbuje najpierw ElevenLabs (jeśli dostępne), potem gTTS jako fallback.
     
     Args:
         text: Tekst do wypowiedzenia
         npc_config: Konfiguracja NPC (dla dostosowania głosu)
+        emotion: Emocja ("happy", "angry", "sad", "anxious", "neutral", etc.)
         
     Returns:
         Base64 encoded audio data lub None jeśli TTS niedostępne
     """
-    if not TTS_AVAILABLE or not text:
+    if not text:
+        return None
+    
+    # Spróbuj najpierw ElevenLabs (jeśli dostępne i skonfigurowane)
+    if ELEVENLABS_AVAILABLE:
+        try:
+            api_key = st.secrets.get("API_KEYS", {}).get("elevenlabs", "")
+            if api_key:
+                audio = generate_npc_audio_elevenlabs(text, npc_config, emotion, api_key)
+                if audio:
+                    return audio
+                else:
+                    print("⚠️ ElevenLabs zwrócił None, przełączam na gTTS...")
+            else:
+                print("ℹ️ Brak klucza ElevenLabs, używam gTTS...")
+        except Exception as e:
+            print(f"⚠️ Błąd ElevenLabs: {e}, przełączam na gTTS...")
+    
+    # Fallback do gTTS
+    if not TTS_AVAILABLE:
+        print("⚠️ TTS niedostępne - gTTS nie jest zainstalowane")
         return None
     
     try:
         # Określ język i parametry głosu
         lang = "pl"  # Polski
-        slow = False  # Normalna prędkość
         
-        # Opcjonalnie: dostosuj parametry na podstawie emocji/roli NPC
-        # Dla przykładu - można rozszerzyć o różne głosy/tempo
+        # Dostosuj tempo do emocji
+        # gTTS ma tylko slow=True/False, więc użyjemy przetwarzania audio
+        emotion_params = {
+            "happy": {"slow": False, "speed": 1.1},  # Nieco szybciej
+            "excited": {"slow": False, "speed": 1.15},
+            "angry": {"slow": False, "speed": 1.05},  # Nieco szybciej
+            "frustrated": {"slow": False, "speed": 1.0},
+            "sad": {"slow": False, "speed": 0.9},  # Wolniej
+            "anxious": {"slow": False, "speed": 1.05},  # Nieco szybciej
+            "concerned": {"slow": False, "speed": 0.95},  # Nieco wolniej
+            "thoughtful": {"slow": True, "speed": 0.95},  # Wolniej
+            "neutral": {"slow": False, "speed": 1.0},
+            "relieved": {"slow": False, "speed": 0.95},
+            "satisfied": {"slow": False, "speed": 1.0}
+        }
+        
+        params = emotion_params.get(emotion, {"slow": False, "speed": 1.0})
         
         # Generuj audio
-        tts = gTTS(text=text, lang=lang, slow=slow)
+        tts = gTTS(text=text, lang=lang, slow=params["slow"])
         
         # Zapisz do tymczasowego pliku
         temp_dir = Path("temp")
@@ -58,21 +178,56 @@ def generate_npc_audio(text: str, npc_config: Dict) -> Optional[str]:
         audio_file = temp_dir / f"npc_audio_{datetime.now().timestamp()}.mp3"
         tts.save(str(audio_file))
         
-        # Odczytaj jako base64
-        with open(audio_file, "rb") as f:
-            audio_bytes = f.read()
-            audio_base64 = base64.b64encode(audio_bytes).decode()
-        
-        # Usuń tymczasowy plik
+        # Jeśli mamy pydub, możemy modyfikować prędkość i pitch
+        # UWAGA: wymaga ffmpeg!
         try:
-            audio_file.unlink()
-        except:
-            pass
+            from pydub import AudioSegment
+            
+            audio = AudioSegment.from_mp3(str(audio_file))
+            
+            # Dostosuj szybkość (tylko jeśli != 1.0)
+            if params["speed"] != 1.0:
+                # Zmiana prędkości bez zmiany wysokości tonu
+                new_frame_rate = int(audio.frame_rate * params["speed"])
+                audio = audio._spawn(audio.raw_data, overrides={'frame_rate': new_frame_rate})
+                audio = audio.set_frame_rate(44100)  # Przywróć standardową częstotliwość
+            
+            # Zapisz zmodyfikowane audio
+            modified_file = temp_dir / f"npc_audio_modified_{datetime.now().timestamp()}.mp3"
+            audio.export(str(modified_file), format="mp3")
+            
+            # Odczytaj zmodyfikowane audio
+            with open(modified_file, "rb") as f:
+                audio_bytes = f.read()
+                audio_base64 = base64.b64encode(audio_bytes).decode()
+            
+            # Usuń oba pliki
+            try:
+                audio_file.unlink()
+                modified_file.unlink()
+            except:
+                pass
+                
+        except (ImportError, FileNotFoundError) as e:
+            # Brak pydub lub ffmpeg - użyj podstawowego audio bez modyfikacji
+            print(f"ℹ️ Emocje w TTS ograniczone (brak pydub/ffmpeg): {e}")
+            with open(audio_file, "rb") as f:
+                audio_bytes = f.read()
+                audio_base64 = base64.b64encode(audio_bytes).decode()
+            
+            # Usuń plik
+            try:
+                audio_file.unlink()
+            except:
+                pass
         
+        print(f"✅ Audio [{emotion}] wygenerowane dla: {text[:50]}...")
         return audio_base64
         
     except Exception as e:
-        print(f"TTS Error: {e}")
+        print(f"❌ TTS Error: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 
@@ -109,13 +264,14 @@ def initialize_ai_conversation(contract_id: str, npc_config: Dict, scenario_cont
         
         # NPC sends opening message
         opening_message = npc_config.get("opening_message", "Dzień dobry.")
-        opening_audio = generate_npc_audio(opening_message, npc_config)
+        initial_emotion = npc_config.get("initial_emotion", "neutral")
+        opening_audio = generate_npc_audio(opening_message, npc_config, emotion=initial_emotion)
         
         st.session_state[conv_key]["messages"].append({
             "role": "npc",
             "text": opening_message,
             "timestamp": datetime.now().strftime("%H:%M:%S"),
-            "emotion": npc_config.get("initial_emotion", "neutral"),
+            "emotion": initial_emotion,
             "audio": opening_audio
         })
 
@@ -313,8 +469,9 @@ Zwróć odpowiedź w DOKŁADNIE tym formacie JSON (tylko JSON, bez markdown):
         import json
         reaction = json.loads(result_text)
         
-        # Generate audio for NPC response
-        audio_data = generate_npc_audio(reaction.get("text", ""), npc_config)
+        # Generate audio for NPC response WITH EMOTION
+        npc_emotion = reaction.get("emotion", "neutral")
+        audio_data = generate_npc_audio(reaction.get("text", ""), npc_config, emotion=npc_emotion)
         reaction["audio"] = audio_data
         return reaction
         
