@@ -10,7 +10,7 @@ from utils.ai_conversation_engine import (
     get_conversation_state,
     calculate_final_conversation_score
 )
-from utils.business_game import submit_contract_ai_conversation
+from utils.business_game import submit_contract_conversation
 from data.business_data import CONTRACTS_POOL
 
 # Mock session state (Streamlit requirement)
@@ -108,7 +108,7 @@ def test_ai_conversation_flow():
     }
     
     # Wywołaj submit
-    updated_user_data, success, message, _ = submit_contract_ai_conversation(user_data, contract_id)
+    updated_user_data, success, message, _ = submit_contract_conversation(user_data, contract_id)
     
     if success:
         print(f"   ✅ {message}")

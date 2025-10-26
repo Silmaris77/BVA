@@ -4,15 +4,40 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 import streamlit as st
+from config.settings import DEVELOPMENT_MODE
 
 def save_user_data(users_data):
-    """Save user data to JSON file"""
+    """Save user data to JSON file (skip in DEVELOPMENT_MODE)"""
+    if DEVELOPMENT_MODE:
+        # Tryb developerski - zapisz tylko do session_state
+        st.session_state['users_data_cache'] = users_data
+        return
+    
+    # Produkcja - zapisz do pliku
     file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'users_data.json')
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(users_data, f, indent=2, ensure_ascii=False)
 
 def load_user_data():
-    """Load user data from JSON file"""
+    """Load user data from JSON file (or cache in DEVELOPMENT_MODE)"""
+    if DEVELOPMENT_MODE:
+        # Tryb developerski - użyj cache z session_state
+        if 'users_data_cache' in st.session_state:
+            return st.session_state['users_data_cache']
+        
+        # Pierwsza inicjalizacja - załaduj z pliku jeśli istnieje
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'users_data.json')
+        if os.path.exists(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                users_data = json.load(f)
+                st.session_state['users_data_cache'] = users_data
+                return users_data
+        
+        # Brak danych - zwróć pusty dict
+        st.session_state['users_data_cache'] = {}
+        return {}
+    
+    # Produkcja - czytaj z pliku
     file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'users_data.json')
     if os.path.exists(file_path):
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -93,20 +118,54 @@ def login_user(username, password):
     if username in users_data and users_data[username]["password"] == password:
         # Zaktualizuj datę ostatniego logowania
         users_data[username]["last_login"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Zapisz dzisiejsze statystyki (INLINE - bez dodatkowego ładowania/zapisu)
+        from datetime import timedelta
+        today = datetime.now().strftime("%Y-%m-%d")
+        
+        # Sprawdź czy już zapisano dzisiejsze statystyki
+        daily_stats = users_data[username].get('daily_stats', {})
+        if today not in daily_stats:
+            current_stats = {
+                'xp': users_data[username].get('xp', 0),
+                'degencoins': users_data[username].get('degencoins', 0),
+                'level': users_data[username].get('level', 1),
+                'completed_lessons': len(users_data[username].get('completed_lessons', []))
+            }
+            
+            # Dodaj do historii dziennej
+            if 'daily_stats' not in users_data[username]:
+                users_data[username]['daily_stats'] = {}
+            
+            users_data[username]['daily_stats'][today] = current_stats
+            
+            # Zachowaj tylko ostatnie 30 dni
+            dates = list(users_data[username]['daily_stats'].keys())
+            dates.sort()
+            if len(dates) > 30:
+                for old_date in dates[:-30]:
+                    del users_data[username]['daily_stats'][old_date]
+        
+        # Zaloguj aktywność (INLINE - bez dodatkowego ładowania/zapisu)
+        if 'activity_log' not in users_data[username]:
+            users_data[username]['activity_log'] = []
+        
+        activity_entry = {
+            'type': 'login',
+            'timestamp': datetime.now().isoformat(),
+            'details': {}
+        }
+        users_data[username]['activity_log'].append(activity_entry)
+        
+        # Zachowaj tylko ostatnie 90 dni aktywności
+        cutoff_date = (datetime.now() - timedelta(days=90)).isoformat()
+        users_data[username]['activity_log'] = [
+            entry for entry in users_data[username]['activity_log']
+            if entry['timestamp'] > cutoff_date
+        ]
+        
+        # JEDEN zapis na końcu (zamiast czterech!)
         save_user_data(users_data)
-        
-        # Zapisz dzisiejsze statystyki dla śledzenia zmian
-        from views.dashboard import save_daily_stats
-        save_daily_stats(username)
-        
-        # Zaloguj aktywność - logowanie
-        try:
-            from utils.activity_tracker import log_activity
-            log_activity(username, 'login', {
-                'timestamp': datetime.now().isoformat()
-            })
-        except ImportError:
-            pass  # Ignore if activity_tracker is not available
         
         return users_data[username]
     return None

@@ -772,8 +772,8 @@ co się dzieje w zespołach. Nie wie jak to zrobić, żeby nie podważyć autyte
         "wymagany_poziom": 1,  # Changed from 2 to 1 - dostępny od startu
         "emoji": "💬",
         
-        # AI Conversation specific fields
-        "contract_type": "ai_conversation",
+        # Conversation specific fields
+        "contract_type": "conversation",
         "npc_config": {
             "name": "Mark",
             "role": "Senior Developer",
@@ -782,7 +782,7 @@ co się dzieje w zespołach. Nie wie jak to zrobić, żeby nie podważyć autyte
             "initial_emotion": "anxious",
             "current_emotion": "anxious",
             "goal": "Keep his job while managing his mother's medical crisis. Hoping for understanding and flexibility.",
-            "opening_message": "*Mark siedzi przy biurku, unikając kontaktu wzrokowego. Widzisz jak napina się gdy się zbliżasz.*\n\nMark: \"Przepraszam za spóźnienie... Wiem, że to już trzeci raz w tym tygodniu.\"",
+            "opening_message": "Mark siedzi przy biurku, unikając kontaktu wzrokowego. Widzisz jak napina się gdy się zbliżasz.\n\nMark: \"Przepraszam za spóźnienie... Wiem, że to już trzeci raz w tym tygodniu.\"",
             "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
         },
         "scenario_context": """**Kontekst scenariusza:**
@@ -856,8 +856,8 @@ Mama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego tran
         "wymagany_poziom": 1,  # Changed from 3 to 1 - dostępny od startu
         "emoji": "💬",
         
-        # AI Conversation specific fields
-        "contract_type": "ai_conversation",
+        # Conversation specific fields
+        "contract_type": "conversation",
         "npc_config": {
             "name": "Michael",
             "role": "CEO TechVentures LLC",
@@ -1231,3 +1231,16 @@ def get_contract_by_id(contract_id):
         if contract["id"] == contract_id:
             return contract
     return None
+
+def get_all_ai_contracts():
+    """Zwraca wszystkie kontrakty typu 'conversation' dla coaching tool"""
+    conversation_contracts = []
+    for contract in CONTRACTS_POOL:
+        if contract.get("contract_type") == "conversation":
+            # Dodaj pola wymagane przez coaching tool
+            contract_dict = contract.copy()
+            contract_dict["type"] = "conversation"  # Alias dla kompatybilności
+            contract_dict["title"] = contract.get("tytul", "Bez tytułu")
+            contract_dict["id"] = contract.get("id")
+            conversation_contracts.append(contract_dict)
+    return conversation_contracts

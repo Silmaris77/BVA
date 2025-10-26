@@ -324,12 +324,10 @@ def refresh_contract_pool(business_data: Dict, force: bool = False) -> Dict:
     return business_data
 
 def can_accept_contract(business_data: Dict) -> Tuple[bool, str]:
-    """Sprawdza czy użytkownik może przyjąć kolejny kontrakt"""
-    active_count = len(business_data["contracts"]["active"])
+    """Sprawdza czy użytkownik może przyjąć kolejny kontrakt
     
-    if active_count >= GAME_CONFIG["max_active_contracts"]:
-        return False, f"Maksimum aktywnych kontraktów: {GAME_CONFIG['max_active_contracts']}"
-    
+    Sprawdza tylko dzienny limit kontraktów (nie ma limitu równoczesnych)
+    """
     # Sprawdź dzienny limit - liczymy WSZYSTKIE kontrakty dzisiaj (accepted + completed)
     today = datetime.now().strftime("%Y-%m-%d")
     
@@ -354,12 +352,86 @@ def can_accept_contract(business_data: Dict) -> Tuple[bool, str]:
     )
     
     if today_total >= capacity:
-        return False, f"⏰ Dzienny limit kontraktów wyczerpany! Wykonano już {today_total} z {capacity} dostępnych kontraktów dzisiaj. Wróć jutro lub awansuj firmę!"
+        return False, f"⏰ Dzienny limit kontraktów wyczerpany! Wykonano już {today_total} z {int(capacity)} dostępnych kontraktów dzisiaj. Wróć jutro lub awansuj firmę!"
     
     if today_total >= GAME_CONFIG["max_daily_contracts"]:
         return False, f"Absolutny dzienny limit: {GAME_CONFIG['max_daily_contracts']}"
     
     return True, ""
+
+def check_and_apply_deadline_penalties(business_data: Dict, user_data: Dict) -> Tuple[Dict, List[str]]:
+    """Sprawdza aktywne kontrakty pod kątem przekroczonego deadline i nakłada kary
+    
+    Kary za spóźnienie:
+    - Pieniądze: 50% wartości kontraktu (nagroda_base) odejmowane od salda firmy
+    - Reputacja: 2x bonus reputacji za realizację kontraktu (np. +20 → -40)
+    
+    Kontrakty przeterminowane są automatycznie usuwane z aktywnych
+    
+    Returns:
+        (updated_business_data, list_of_penalty_messages)
+    """
+    now = datetime.now()
+    penalties = []
+    expired_contracts = []
+    
+    for contract in business_data["contracts"]["active"]:
+        deadline_str = contract.get("deadline")
+        if not deadline_str:
+            continue
+            
+        try:
+            deadline = datetime.strptime(deadline_str, "%Y-%m-%d %H:%M:%S")
+            
+            # Sprawdź czy deadline minął
+            if now > deadline:
+                # Oblicz kary
+                penalty_amount = int(contract.get("nagroda_base", 500) * 0.5)  # 50% wartości
+                reputation_bonus = contract.get("reputacja", 20)
+                reputation_penalty = reputation_bonus * 2  # 2x bonus reputacji
+                
+                # Odejmij karę pieniężną od salda
+                business_data["money"] = business_data.get("money", 0) - penalty_amount
+                
+                # Odejmij karę reputacji
+                business_data["firm"]["reputation"] = max(0, business_data["firm"]["reputation"] - reputation_penalty)
+                
+                # Zapisz w historii transakcji (pieniądze)
+                transaction = {
+                    "type": "deadline_penalty",
+                    "amount": -penalty_amount,
+                    "description": f"Kara za nieterminowość: {contract['tytul']}",
+                    "timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
+                    "contract_id": contract["id"]
+                }
+                
+                if "history" not in business_data:
+                    business_data["history"] = {"transactions": []}
+                if "transactions" not in business_data["history"]:
+                    business_data["history"]["transactions"] = []
+                    
+                business_data["history"]["transactions"].append(transaction)
+                
+                # Dodaj wiadomość o karach
+                penalties.append(
+                    f"⚠️ Kontrakt '{contract['tytul']}' przekroczył deadline! "
+                    f"Kara: -{penalty_amount:,} PLN | -{reputation_penalty} reputacji"
+                )
+                
+                # Oznacz do usunięcia
+                expired_contracts.append(contract["id"])
+                
+        except Exception as e:
+            continue  # Ignoruj błędy parsowania dat
+    
+    # Usuń przeterminowane kontrakty z aktywnych
+    if expired_contracts:
+        business_data["contracts"]["active"] = [
+            c for c in business_data["contracts"]["active"] 
+            if c["id"] not in expired_contracts
+        ]
+    
+    return business_data, penalties
 
 def accept_contract(business_data: Dict, contract_id: str, user_data: Optional[Dict] = None) -> Tuple[Dict, bool, str, Optional[Tuple]]:
     """Przyjmuje kontrakt i opcjonalnie triggeruje wydarzenie
@@ -702,8 +774,8 @@ def calculate_contract_reward(contract: Dict, rating: int, business_data: Dict) 
     }
 
 
-def submit_contract_ai_conversation(user_data: Dict, contract_id: str) -> Tuple[Dict, bool, str, Optional[Tuple[str, Dict]]]:
-    """Zakończ AI Conversation contract, policz nagrody i zaktualizuj dane użytkownika.
+def submit_contract_conversation(user_data: Dict, contract_id: str) -> Tuple[Dict, bool, str, Optional[Tuple[str, Dict]]]:
+    """Zakończ Conversation contract, policz nagrody i zaktualizuj dane użytkownika.
 
     Uwaga: Funkcja używa utils.ai_conversation_engine.calculate_final_conversation_score
     by pobrać końcowy wynik (gwiazdki, punkty, metryki) i aplikuje odpowiednie nagrody.
@@ -1164,12 +1236,9 @@ def check_objective_completion(game_data: Dict, user_data: Dict, objective: Dict
         return game_data["firm"]["level"] >= target
     
     elif obj_type == "money":
-        # Dla "Corporate Rescue" - sprawdza czy wyszedł na zero
-        initial_money = game_data.get("initial_money", 0)
-        if initial_money < 0:
-            current_money = user_data.get("degencoins", 0)
-            return current_money >= target
-        return True
+        # Cel typu "money" sprawdza SALDO FIRMY (nie DegenCoins użytkownika!)
+        current_money = game_data.get("money", 0)
+        return current_money >= target
     
     elif obj_type == "employees":
         target_count = target if target is not None else 0
@@ -1243,7 +1312,7 @@ def get_objectives_summary(game_data: Dict, user_data: Dict) -> Dict:
         elif obj_type == "level":
             current = game_data["firm"]["level"]
         elif obj_type == "money":
-            current = user_data.get("degencoins", 0)
+            current = game_data.get("money", 0)  # Saldo firmy, nie DegenCoins!
         elif obj_type == "employees":
             current = len(game_data.get("employees", []))
         

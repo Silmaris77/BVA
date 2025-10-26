@@ -1,4 +1,4 @@
-"""
+﻿"""
 Business Games - UI
 Widok główny z zakładkami: Dashboard, Rynek Kontraktów, Pracownicy, Rankingi
 """
@@ -14,7 +14,7 @@ from data.scenarios import get_available_scenarios, get_scenario
 from data.users_new import save_single_user as save_user_data
 from utils.business_game import (
     initialize_business_game, initialize_business_game_with_scenario, refresh_contract_pool, accept_contract,
-    submit_contract_solution, submit_contract_ai_conversation, hire_employee, fire_employee,
+    submit_contract_solution, submit_contract_conversation, hire_employee, fire_employee,
     calculate_daily_costs, calculate_total_daily_costs, get_firm_summary, get_revenue_chart_data,
     get_category_distribution, calculate_overall_score, can_accept_contract,
     can_hire_employee, update_user_ranking, get_objectives_summary, update_objectives_progress
@@ -486,116 +486,156 @@ def show_scenario_selector(username, user_data, industry_id):
         st.rerun()
 
 def render_scenario_card(scenario_id, scenario_data, industry_id, username, user_data):
-    """Renderuje kartę pojedynczego scenariusza"""
+    """Renderuje kartę pojedynczego scenariusza w stylu spójnym z kartami kontraktów"""
     
     # Sprawdź czy to tryb lifetime
     is_lifetime = scenario_data.get("is_lifetime", False)
     
-    # Mapowanie trudności na kolory
-    difficulty_colors = {
-        "easy": ("linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)", "#155724"),
-        "medium": ("linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)", "#856404"),
-        "hard": ("linear-gradient(135deg, #ff9a56 0%, #ff6a00 100%)", "#fff"),
-        "expert": ("linear-gradient(135deg, #ee0979 0%, #ff6a00 100%)", "#fff"),
-        "open": ("linear-gradient(135deg, #667eea 0%, #764ba2 100%)", "#fff")  # Fioletowy dla lifetime
+    # Mapowanie trudności na kolory (spójne z resztą UI)
+    difficulty_config = {
+        "easy": {
+            "gradient": "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+            "badge": "🟢 Łatwy",
+            "accent": "#10b981",
+            "glow": "0 0 20px rgba(16, 185, 129, 0.3)"
+        },
+        "medium": {
+            "gradient": "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
+            "badge": "🟡 Średni",
+            "accent": "#f59e0b",
+            "glow": "0 0 20px rgba(245, 158, 11, 0.3)"
+        },
+        "hard": {
+            "gradient": "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
+            "badge": "🔴 Trudny",
+            "accent": "#ef4444",
+            "glow": "0 0 20px rgba(239, 68, 68, 0.3)"
+        },
+        "expert": {
+            "gradient": "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
+            "badge": "💜 Ekspert",
+            "accent": "#8b5cf6",
+            "glow": "0 0 20px rgba(139, 92, 246, 0.4)"
+        },
+        "open": {
+            "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            "badge": "♾️ OPEN",
+            "accent": "#667eea",
+            "glow": "0 0 20px rgba(102, 126, 234, 0.4)"
+        }
     }
     
-    difficulty_badges = {
-        "easy": "🟢 Łatwy",
-        "medium": "🟡 Średni",
-        "hard": "🟠 Trudny",
-        "expert": "🔴 Ekspert",
-        "open": "♾️ OPEN"  # Badge dla lifetime
-    }
+    difficulty = scenario_data.get("difficulty", "medium")
+    config = difficulty_config.get(difficulty, difficulty_config["medium"])
     
-    gradient, text_color = difficulty_colors.get(scenario_data.get("difficulty", "medium"), difficulty_colors["medium"])
-    difficulty_badge = difficulty_badges.get(scenario_data.get("difficulty", "medium"), "🟡 Średni")
+    # Pobierz dane scenariusza
+    initial = scenario_data.get('initial_conditions', {})
+    money = initial.get('money', 50000)
+    reputation = initial.get('reputation', 50)
+    office = initial.get('office_type', 'home_office')
+    objectives = scenario_data.get('objectives', [])
+    total_reward = sum(obj.get('reward_money', 0) for obj in objectives) if not is_lifetime else 0
     
-    # Karta scenariusza - kompaktowa wersja
-    st.markdown(f"""
-    <div style='background: {gradient}; padding: 14px; border-radius: 12px; 
-                color: {text_color}; margin-bottom: 10px;'>
-        <div style='display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;'>
-            <h3 style='margin: 0; font-size: 17px;'>{scenario_data.get('icon', '🎮')} {scenario_data.get('name', 'Scenariusz')}</h3>
-            <div style='padding: 3px 7px; background: rgba(255,255,255,0.25); border-radius: 6px; 
-                        font-size: 9px; font-weight: 600; white-space: nowrap;'>
-                {difficulty_badge}
-            </div>
-        </div>
-        <p style='margin: 0; font-size: 12px; line-height: 1.35; opacity: 0.95;'>
-            {scenario_data.get('description', '')}
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    # Formatuj nazwę biura
+    office_name = office.replace('_', ' ').title()
     
-    # Szczegóły scenariusza w jednym expanderze
-    with st.expander("📋 Szczegóły scenariusza", expanded=False):
-        # Warunki startowe
-        st.markdown("**💼 Warunki startowe:**")
-        initial = scenario_data.get('initial_conditions', {})
-        money = initial.get('money', 50000)
-        reputation = initial.get('reputation', 50)
-        office = initial.get('office_type', 'home_office')
-        
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("💰 Kapitał", f"{money:,} PLN")
-        with col2:
-            st.metric("⭐ Reputacja", f"{reputation}/100")
-        with col3:
-            st.metric("🏢 Biuro", office.replace('_', ' ').title())
+    # Karta w stylu kontraktów - HTML bez wcięć w środku
+    html_content = f"""<div style="background: white; border-radius: 20px; padding: 24px; margin: 16px 0; box-shadow: 0 8px 32px rgba(0,0,0,0.1), {config["glow"]}; border-left: 6px solid {config["accent"]}; transition: all 0.3s ease;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+<div style="flex: 1;">
+<div style="font-size: 32px; margin-bottom: 8px;">{scenario_data.get('icon', '🎮')}</div>
+<h3 style="margin: 0; color: #1e293b; font-size: 20px; font-weight: 700;">{scenario_data.get('name', 'Scenariusz')}</h3>
+<p style="margin: 4px 0 0 0; color: #64748b; font-size: 14px;">{industry_id.upper()} • {'Tryb nieskończony' if is_lifetime else f'{len(objectives)} celów'}</p>
+</div>
+<div style="background: {config["gradient"]}; color: white; padding: 12px 20px; border-radius: 12px; text-align: center; min-width: 120px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+<div style="font-size: 18px; font-weight: 700; margin-bottom: 4px;">{config["badge"]}</div>
+<div style="font-size: 11px; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px;">POZIOM</div>
+</div>
+</div>
+<div style="background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+<div style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600;">📖 Opis scenariusza</div>
+<div style="color: #334155; font-size: 14px; line-height: 1.6;">{scenario_data.get('description', '')}</div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+<div style="text-align: center;">
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Kapitał startowy</div>
+<div style="color: #10b981; font-size: 18px; font-weight: 700;">💰 {money:,}</div>
+</div>
+<div style="text-align: center;">
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Reputacja</div>
+<div style="color: #f59e0b; font-size: 18px; font-weight: 700;">⭐ {reputation}</div>
+</div>
+<div style="text-align: center;">
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Biuro</div>
+<div style="color: #8b5cf6; font-size: 18px; font-weight: 700;">🏢 {office_name}</div>
+</div>
+</div>
+</div>"""
+    
+    st.markdown(html_content, unsafe_allow_html=True)
+    
+    # Szczegóły scenariusza w expanderze - profesjonalny layout
+    with st.expander("📋 Cele i modyfikatory", expanded=False):
+        # Cele - tylko jeśli to NIE jest tryb lifetime
+        if objectives and not is_lifetime:
+            objectives_html = ""
+            for obj in objectives:
+                reward = obj.get('reward_money', 0)
+                desc = obj.get('description', 'Cel')
+                objectives_html += f"<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px; display: flex; justify-content: space-between; align-items: center;'><span>✓ {desc}</span><span style='color: #10b981; font-weight: 700;'>💎 {reward:,} PLN</span></div>"
+            
+            st.markdown(f"""
+<div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;'>
+<div style='color: #667eea; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>🎯 CELE DO OSIĄGNIĘCIA</div>
+{objectives_html}
+<div style='margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(102, 126, 234, 0.2); text-align: center; color: #667eea; font-size: 15px; font-weight: 700;'>Łączna nagroda: 💎 {total_reward:,} PLN</div>
+</div>
+            """, unsafe_allow_html=True)
+        elif is_lifetime:
+            st.markdown("""
+<div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #8b5cf6; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;'>
+<div style='color: #8b5cf6; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px;'>♾️ TRYB NIESKOŃCZONY</div>
+<div style='color: #334155; font-size: 14px; line-height: 1.6;'>Graj bez ograniczeń i rywalizuj z innymi o najwyższy wynik w rankingu! Buduj swoją firmę, realizuj kontrakty i zdobywaj doświadczenie bez limitów czasowych czy celów do osiągnięcia.</div>
+</div>
+            """, unsafe_allow_html=True)
         
         # Modyfikatory jeśli istnieją
         modifiers = scenario_data.get('modifiers', {})
         has_modifiers = any(v != 1.0 for v in modifiers.values() if isinstance(v, (int, float)))
         
         if has_modifiers:
-            st.markdown("---")
-            st.markdown("**⚙️ Modyfikatory:**")
-            mod_items = []
+            modifiers_html = ""
             
             if modifiers.get('reputation_gain_multiplier', 1.0) != 1.0:
                 mult = modifiers['reputation_gain_multiplier']
                 change = f"+{int((mult - 1) * 100)}%" if mult > 1 else f"{int((mult - 1) * 100)}%"
-                mod_items.append(f"⭐ Reputacja: **{change}**")
+                color = "#10b981" if mult > 1 else "#ef4444"
+                modifiers_html += f"<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px; display: flex; justify-content: space-between; align-items: center;'><span>⭐ Zmiany reputacji</span><span style='color: {color}; font-weight: 700;'>{change}</span></div>"
             
             if modifiers.get('revenue_multiplier', 1.0) != 1.0:
                 mult = modifiers['revenue_multiplier']
                 change = f"+{int((mult - 1) * 100)}%" if mult > 1 else f"{int((mult - 1) * 100)}%"
-                mod_items.append(f"💵 Przychody: **{change}**")
+                color = "#10b981" if mult > 1 else "#ef4444"
+                modifiers_html += f"<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px; display: flex; justify-content: space-between; align-items: center;'><span>💵 Przychody</span><span style='color: {color}; font-weight: 700;'>{change}</span></div>"
             
             if modifiers.get('cost_multiplier', 1.0) != 1.0:
                 mult = modifiers['cost_multiplier']
                 change = f"+{int((mult - 1) * 100)}%" if mult > 1 else f"{int((mult - 1) * 100)}%"
-                mod_items.append(f"💸 Koszty: **{change}**")
+                color = "#ef4444" if mult > 1 else "#10b981"
+                modifiers_html += f"<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px; display: flex; justify-content: space-between; align-items: center;'><span>💸 Koszty</span><span style='color: {color}; font-weight: 700;'>{change}</span></div>"
             
-            for item in mod_items:
-                st.markdown(f"- {item}")
-        
-        # Cele - tylko jeśli to NIE jest tryb lifetime
-        objectives = scenario_data.get('objectives', [])
-        if objectives and not is_lifetime:
-            st.markdown("---")
-            st.markdown("**🎯 Cele do osiągnięcia:**")
-            for obj in objectives:
-                reward = obj.get('reward_money', 0)
-                st.markdown(f"- {obj.get('description', 'Cel')} · 💎 **{reward:,}**")
-        elif is_lifetime:
-            st.markdown("---")
-            st.info("♾️ **Tryb nieskończony:** Graj bez ograniczeń i rywalizuj z innymi o najwyższy wynik w rankingu!")
+            st.markdown(f"""
+<div style='background: linear-gradient(135deg, #f59e0b15 0%, #d9770615 100%); border-left: 4px solid #f59e0b; border-radius: 12px; padding: 16px 20px;'>
+<div style='color: #f59e0b; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>⚙️ MODYFIKATORY SCENARIUSZA</div>
+{modifiers_html}
+</div>
+            """, unsafe_allow_html=True)
     
-    # Status celów - kompaktowo poza expanderem
-    objectives = scenario_data.get('objectives', [])
-    if objectives and not is_lifetime:
-        st.caption(f"🎯 {len(objectives)} celów · 💎 {sum(obj.get('reward_money', 0) for obj in objectives):,} nagród")
-    elif is_lifetime:
-        st.caption("♾️ Tryb nieskończony - bez celów")
-    
-    # Przycisk rozpoczęcia - kompaktowy
-    if st.button(f"🚀 Rozpocznij", 
+    # Przycisk rozpoczęcia - profesjonalny, pełna szerokość
+    if st.button(f"🚀 Rozpocznij {scenario_data.get('name', 'scenariusz')}", 
                  key=f"start_scenario_{scenario_id}", 
                  type="primary", 
-                 width="stretch"):
+                 use_container_width=True):
         # Inicjalizuj grę z tym scenariuszem
         user_data["business_games"][industry_id] = initialize_business_game_with_scenario(
             username, industry_id, scenario_id
@@ -646,29 +686,40 @@ def show_industry_game(username, user_data, industry_id):
     
     st.markdown("---")
     
-    # Główne zakładki
-    tabs = st.tabs(["📖 Instrukcja", "🏢 Dashboard", "💼 Rynek Kontraktów", "🏢 Biuro i Pracownicy", "📊 Raporty Finansowe", "📜 Historia & Wydarzenia", "🏆 Rankingi"])
+    # Główne zakładki (bez Instrukcji - teraz w Dashboard)
+    tabs = st.tabs(["🏢 Dashboard", "💼 Rynek Kontraktów", "🏢 Zarządzanie", "⚙️ Ustawienia"])
     
     with tabs[0]:
-        show_instructions_tab()
-    
-    with tabs[1]:
         show_dashboard_tab(username, user_data, industry_id)
     
-    with tabs[2]:
+    with tabs[1]:
         show_contracts_tab(username, user_data, industry_id)
     
+    with tabs[2]:
+        # Pod-taby w Zarządzaniu
+        management_tabs = st.tabs(["🏢 Biuro", "👥 Pracownicy", "📊 Raporty Finansowe", "📜 Historia & Wydarzenia"])
+        
+        with management_tabs[0]:
+            show_office_tab(username, user_data, industry_id)
+        
+        with management_tabs[1]:
+            show_employees_tab(username, user_data, industry_id)
+        
+        with management_tabs[2]:
+            show_financial_reports_tab(username, user_data, industry_id)
+        
+        with management_tabs[3]:
+            show_history_tab(username, user_data, industry_id)
+    
     with tabs[3]:
-        show_employees_tab(username, user_data, industry_id)
-    
-    with tabs[4]:
-        show_financial_reports_tab(username, user_data, industry_id)
-    
-    with tabs[5]:
-        show_history_tab(username, user_data, industry_id)
-    
-    with tabs[6]:
-        show_rankings_tab(username, user_data, industry_id)
+        # Pod-taby w Ustawieniach
+        settings_tabs = st.tabs(["🏢 Ustawienia Firmy", "⚙️ Zarządzanie Grą"])
+        
+        with settings_tabs[0]:
+            show_firm_settings_tab(username, user_data, industry_id)
+        
+        with settings_tabs[1]:
+            show_game_management_tab(username, user_data, industry_id)
 
 # =============================================================================
 # NAGŁÓWEK
@@ -1006,6 +1057,152 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
         save_user_data(username, user_data)
     
     # =============================================================================
+    # SPRAWDŹ DEADLINE I NAŁÓŻ KARY ZA SPÓŹNIENIE
+    # =============================================================================
+    
+    from utils.business_game import check_and_apply_deadline_penalties
+    bg_data, penalty_messages = check_and_apply_deadline_penalties(bg_data, user_data)
+    
+    if penalty_messages:
+        for msg in penalty_messages:
+            st.error(msg)
+        save_game_data(user_data, bg_data, industry_id)
+        save_user_data(username, user_data)
+    
+    # =============================================================================
+    # INSTRUKCJA GRY - EXPANDER
+    # =============================================================================
+    
+    with st.expander("📖 Jak grać w Business Games? (Instrukcja)", expanded=False):
+        # Sekcja 1: Szybki start
+        st.markdown("""
+<div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;'>
+<div style='color: #667eea; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>🚀 SZYBKI START (5 KROKÓW)</div>
+<div style='color: #334155; font-size: 14px; line-height: 1.8;'>
+<strong>1️⃣ Przyjmij kontrakt</strong> → Zakładka "💼 Rynek Kontraktów"<br>
+<strong>2️⃣ Wykonaj zadanie</strong> → Wróć do "🏢 Dashboard" → Aktywne Kontrakty<br>
+<strong>3️⃣ Prześlij rozwiązanie</strong> → Tekst/Audio → Klient oceni 1-5⭐<br>
+<strong>4️⃣ Zbieraj pieniądze</strong> → 500-3000 PLN za kontrakt<br>
+<strong>5️⃣ Rozwijaj firmę</strong> → Poziom 1 → 10 (180k PLN, 5500 reputacji)
+</div>
+</div>
+        """, unsafe_allow_html=True)
+        
+        # Grid 2 kolumny
+        col_left, col_right = st.columns(2)
+        
+        with col_left:
+            # Typy kontraktów
+            st.markdown("""
+<div style='background: linear-gradient(135deg, #10b98115 0%, #05966915 100%); border-left: 4px solid #10b981; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;'>
+<div style='color: #10b981; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>💼 TYPY KONTRAKTÓW</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px;'>
+<strong>💼 Standard</strong><br>
+<span style='font-size: 12px; color: #64748b;'>Podstawowe zlecenia • Tekst/Audio → Klient ocenia</span>
+</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px;'>
+<strong>💬 Conversation</strong><br>
+<span style='font-size: 12px; color: #64748b;'>Rozmowy z NPC • Text-to-Speech 🔊 • Dynamiczne reakcje</span>
+</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px;'>
+<strong>⚡ Speed Challenge</strong><br>
+<span style='font-size: 12px; color: #64748b;'>Kontrakt na czas • Timer • Wysokie bonusy</span>
+</div>
+</div>
+            """, unsafe_allow_html=True)
+            
+            # Pracownicy
+            st.markdown("""
+<div style='background: linear-gradient(135deg, #f59e0b15 0%, #d9770615 100%); border-left: 4px solid #f59e0b; border-radius: 12px; padding: 16px 20px;'>
+<div style='color: #f59e0b; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>👥 PRACOWNICY</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px; display: flex; justify-content: space-between;'>
+<span><strong>📊 Analityk</strong> - Bonus do ocen</span>
+<span style='color: #f59e0b; font-weight: 700;'>+0.5⭐</span>
+</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px; display: flex; justify-content: space-between;'>
+<span><strong>💼 Manager</strong> - Więcej kontraktów</span>
+<span style='color: #f59e0b; font-weight: 700;'>+1/dzień</span>
+</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 8px; color: #334155; font-size: 14px; display: flex; justify-content: space-between;'>
+<span><strong>🎯 Specjalista</strong> - Niższe koszty</span>
+<span style='color: #10b981; font-weight: 700;'>-20%</span>
+</div>
+<div style='margin-top: 12px; padding: 8px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; color: #ef4444; font-size: 12px; text-align: center;'>
+⚠️ Koszt: 500 PLN/dzień/pracownik<br>Zatrudniaj mądrze!
+</div>
+</div>
+            """, unsafe_allow_html=True)
+        
+        with col_right:
+            # Poziomy firmy (skrócone)
+            st.markdown("""
+<div style='background: linear-gradient(135deg, #8b5cf615 0%, #7c3aed15 100%); border-left: 4px solid #8b5cf6; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;'>
+<div style='color: #8b5cf6; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>📈 POZIOMY FIRMY</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 6px; color: #334155; font-size: 13px;'>
+<strong>Lvl 1:</strong> Solo Consultant → 0 PLN, 0 rep
+</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 6px; color: #334155; font-size: 13px;'>
+<strong>Lvl 4:</strong> Strategic Partners → 10k PLN, 600 rep, <span style='color: #10b981;'>★ 2 kontrakty/dzień</span>
+</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 6px; color: #334155; font-size: 13px;'>
+<strong>Lvl 7:</strong> National Authority → 55k PLN, 2200 rep, <span style='color: #10b981;'>★ 3 kontrakty/dzień</span>
+</div>
+<div style='padding: 8px 12px; background: white; border-radius: 8px; margin-bottom: 6px; color: #334155; font-size: 13px;'>
+<strong>Lvl 10:</strong> CIQ Empire → 180k PLN, 5500 rep, <span style='color: #10b981;'>★ 5 kontraktów/dzień</span>
+</div>
+<div style='margin-top: 12px; padding: 8px; background: rgba(139, 92, 246, 0.1); border-radius: 6px; color: #8b5cf6; font-size: 12px; text-align: center;'>
+💡 Wyższy poziom = więcej możliwości!
+</div>
+</div>
+            """, unsafe_allow_html=True)
+            
+            # Wydarzenia
+            st.markdown("""
+<div style='background: linear-gradient(135deg, #3b82f615 0%, #2563eb15 100%); border-left: 4px solid #3b82f6; border-radius: 12px; padding: 16px 20px;'>
+<div style='color: #3b82f6; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>🎲 WYDARZENIA LOSOWE</div>
+<div style='color: #334155; font-size: 14px; line-height: 1.6;'>
+Co dzień <strong>10% szansa</strong> na wydarzenie:<br><br>
+✅ <strong>60%</strong> pozytywne/neutralne<br>
+❌ <strong>40%</strong> negatywne<br><br>
+<span style='font-size: 12px; color: #64748b;'>
+Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta (+bonus)
+</span>
+</div>
+</div>
+            """, unsafe_allow_html=True)
+        
+        # Wskazówki strategiczne
+        st.markdown("---")
+        st.markdown("""
+<div style='background: linear-gradient(135deg, #ef444415 0%, #dc262615 100%); border-left: 4px solid #ef4444; border-radius: 12px; padding: 16px 20px;'>
+<div style='color: #ef4444; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>⚠️ NAJCZĘSTSZE BŁĘDY</div>
+<div style='color: #334155; font-size: 14px; line-height: 1.8;'>
+❌ <strong>Zatrudnianie za wcześnie</strong> - Poziom 1-2: 500 PLN/dzień to za dużo!<br>
+❌ <strong>Ignorowanie reputacji</strong> - Poziom 4+ wymaga 600+ reputacji<br>
+❌ <strong>Przyjmowanie za dużo kontraktów</strong> - Max 1 kontrakt/dzień (początkowo)<br>
+❌ <strong>Brak kapitału awaryjnego</strong> - Trzymaj 3x koszty dzienne
+</div>
+</div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+<div style='background: linear-gradient(135deg, #10b98115 0%, #05966915 100%); border-left: 4px solid #10b981; border-radius: 12px; padding: 16px 20px; margin-top: 16px;'>
+<div style='color: #10b981; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>✅ ZŁOTE ZASADY</div>
+<div style='color: #334155; font-size: 14px; line-height: 1.8;'>
+✅ <strong>Poziom 1-3:</strong> Zbieraj kapitał, NIE zatrudniaj (jeszcze!)<br>
+✅ <strong>Poziom 4+:</strong> 2 kontrakty/dzień = możesz zatrudniać rentownie<br>
+✅ <strong>Buduj reputację:</strong> Wysokie oceny (4-5⭐) = szybszy awans<br>
+✅ <strong>Conversations 💬:</strong> Text-to-Speech 🔊 + dobre nagrody + trening komunikacji<br>
+✅ <strong>Sprawdzaj Dashboard:</strong> Wszystkie wyniki kontraktów tu są!
+</div>
+</div>
+        """, unsafe_allow_html=True)
+    
+# Koniec expandera instrukcji - wcięcie wraca do 4 spacji (poziom funkcji)
+
+    st.markdown("---")
+    
+    # =============================================================================
     # SEKCJA CELÓW SCENARIUSZA
     # =============================================================================
     
@@ -1038,13 +1235,24 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
                 # Emoji zależne od postępu
                 progress_pct = (completed_count / total) * 100 if total > 0 else 0
                 if progress_pct == 100:
-                    header_emoji = "�"
+                    header_emoji = "🏆"
                 elif progress_pct >= 50:
                     header_emoji = "🎯"
                 else:
                     header_emoji = "📋"
                 
                 with st.expander(f"{header_emoji} **Cele** · {completed_count}/{total}", expanded=False):
+                    # Pobierz dane scenariusza
+                    from data.scenarios import get_scenario
+                    scenario_id = bg_data.get("scenario_id")
+                    scenario = get_scenario(industry_id, scenario_id) if scenario_id else None
+                    
+                    if scenario:
+                        # Nagłówek scenariusza - HTML w jednej linii dla poprawnego renderowania
+                        scenario_name = scenario.get("name", "Nieznany scenariusz")
+                        scenario_desc = scenario.get("description", "")
+                        st.markdown(f"""<div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;'><div style='color: #667eea; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px;'>🎮 SCENARIUSZ</div><div style='color: #212121; font-weight: 700; font-size: 1.1em; margin-bottom: 6px;'>{scenario_name}</div><div style='color: #64748b; font-size: 0.9em; line-height: 1.5;'>{scenario_desc}</div></div>""", unsafe_allow_html=True)
+                    
                     # Siatka celów - 1 lub 2 kolumny w zależności od ilości
                     if total <= 2:
                         cols = st.columns(1)
@@ -1072,58 +1280,32 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
                         # Progress
                         obj_progress = min(1.0, current_value / target) if target > 0 else (1.0 if is_completed else 0.0)
                         
-                        # Material 3 kompaktowa karta
+                        # Material 3 kompaktowa karta - jednolity layout dla wszystkich celów
                         with cols[idx % len(cols)]:
+                            # Kolor progress bara zależy od stanu
                             if is_completed:
-                                # Ukończony - zielona karta
-                                st.markdown(f"""
-                                <div style='background: linear-gradient(135deg, #00c853 0%, #00e676 100%); 
-                                            padding: 12px; border-radius: 12px; margin-bottom: 8px;
-                                            box-shadow: 0 2px 4px rgba(0,200,83,0.3);'>
-                                    <div style='display: flex; justify-content: space-between; align-items: center;'>
-                                        <div style='flex: 1;'>
-                                            <div style='color: white; font-weight: 600; font-size: 0.9em; margin-bottom: 4px;'>
-                                                {icon} {description}
-                                            </div>
-                                            <div style='color: rgba(255,255,255,0.9); font-size: 0.75em;'>
-                                                ✅ Ukończono · {current_value:,}/{target:,}
-                                            </div>
-                                        </div>
-                                        <div style='background: rgba(255,255,255,0.3); padding: 6px 10px; 
-                                                    border-radius: 8px; color: white; font-weight: bold; font-size: 0.85em;'>
-                                            💎 {reward:,}
-                                        </div>
-                                    </div>
-                                </div>
-                                """, unsafe_allow_html=True)
+                                progress_color = "#00c853"  # Zielony dla ukończonych
+                                bg_color = "#f1f8f4"  # Subtelne zielone tło
+                                border_color = "#00c853"
                             else:
-                                # Aktywny - niebieska/szara karta
                                 progress_color = "#2196f3" if obj_progress >= 0.5 else "#90a4ae"
-                                st.markdown(f"""
-                                <div style='background: #f5f5f5; border: 1px solid #e0e0e0;
-                                            padding: 12px; border-radius: 12px; margin-bottom: 8px;'>
-                                    <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;'>
-                                        <div style='flex: 1;'>
-                                            <div style='color: #212121; font-weight: 600; font-size: 0.9em;'>
-                                                {icon} {description}
-                                            </div>
-                                        </div>
-                                        <div style='background: #fff3e0; padding: 4px 8px; border-radius: 6px; 
-                                                    color: #f57c00; font-weight: bold; font-size: 0.75em;'>
-                                            🎁 {reward:,}
-                                        </div>
-                                    </div>
-                                    <div style='color: #616161; font-size: 0.75em; margin-bottom: 4px;'>
-                                        {current_value:,} / {target:,} · {obj_progress*100:.0f}%
-                                    </div>
-                                    <div style='background: #e0e0e0; height: 4px; border-radius: 2px; overflow: hidden;'>
-                                        <div style='background: {progress_color}; height: 100%; width: {obj_progress*100}%;
-                                                    transition: width 0.3s ease;'></div>
-                                    </div>
-                                </div>
-                                """, unsafe_allow_html=True)
+                                bg_color = "#f5f5f5"
+                                border_color = "#e0e0e0"
+                            
+                            # Prefix dla ukończonych
+                            status_prefix = "✅ Ukończono · " if is_completed else ""
+                            
+                            st.markdown(f"""<div style='background: {bg_color}; border: 1px solid {border_color}; padding: 12px; border-radius: 12px; margin-bottom: 8px;'><div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;'><div style='flex: 1;'><div style='color: #212121; font-weight: 600; font-size: 0.9em;'>{icon} {description}</div></div><div style='background: {"#e8f5e9" if is_completed else "#fff3e0"}; padding: 4px 8px; border-radius: 6px; color: {"#00c853" if is_completed else "#f57c00"}; font-weight: bold; font-size: 0.75em;'>{"💎" if is_completed else "🎁"} {reward:,}</div></div><div style='color: #616161; font-size: 0.75em; margin-bottom: 4px;'>{status_prefix}{current_value:,} / {target:,} · {obj_progress*100:.0f}%</div><div style='background: #e0e0e0; height: 4px; border-radius: 2px; overflow: hidden;'><div style='background: {progress_color}; height: 100%; width: {obj_progress*100}%; transition: width 0.3s ease;'></div></div></div>""", unsafe_allow_html=True)
+            else:
+                # Scenariusz ma puste cele (tryb lifetime/otwarty)
+                # Nie wyświetlamy nic - to OK dla trybu bez celów
+                pass
         except Exception as e:
             st.error(f"⚠️ Błąd podczas ładowania celów scenariusza: {str(e)}")
+    else:
+        # Brak scenariusza lub scenariusz bez celów - to normalne dla trybu Lifetime
+        # Nie wyświetlamy nic
+        pass
     
     # =============================================================================
     # SEKCJA DZIENNEGO WYDARZENIA - RAZ NA DOBĘ
@@ -1350,208 +1532,29 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
                 </div>
             </div>
             """, unsafe_allow_html=True)
-    
-    st.markdown("---")
-    st.subheader("⚙️ Ustawienia Firmy")
-    
-    # Wszystkie ustawienia w jednym miejscu z tabami
-    settings_tab1, settings_tab2, settings_tab3 = st.tabs([
-        "✏️ Nazwa i logo",
-        "🔄 Zarządzanie firmą", 
-        "📦 Archiwum firm"
-    ])
-    
-    # TAB 1: Nazwa i logo
-    with settings_tab1:
-        col_name, col_logo = st.columns([1, 1])
-        
-        with col_name:
-            st.markdown("### ✏️ Zmień nazwę firmy")
-            new_name = st.text_input(
-                "Nowa nazwa firmy", 
-                value=bg_data["firm"]["name"], 
-                key="dashboard_firm_name_input"
-            )
-            if st.button("💾 Zapisz nazwę", key="dashboard_save_firm_name", type="primary"):
-                bg_data["firm"]["name"] = new_name
-                save_game_data(user_data, bg_data, industry_id)
-                save_user_data(username, user_data)
-                st.success("✅ Nazwa firmy zaktualizowana!")
-                st.rerun()
-        
-        with col_logo:
-            st.markdown("### 🎨 Zmień logo firmy")
-            
-            # Kategorie logo
-            categories = list(FIRM_LOGOS.keys())
-            category_names = {
-                "basic": "🏢 Budynki",
-                "business": "💼 Biznes",
-                "creative": "🎨 Kreatywne",
-                "nature": "🌍 Natura",
-                "tech": "💻 Technologia",
-                "animals": "🦁 Zwierzęta"
-            }
-            
-            selected_category = st.selectbox(
-                "Kategoria:",
-                categories,
-                format_func=lambda x: category_names.get(x, x),
-                key="logo_category"
-            )
-            
-            # Grid logo (mniejszy - 6 kolumn)
-            available_logos = FIRM_LOGOS[selected_category]["free"]
-            cols = st.columns(6)
-            for idx, logo in enumerate(available_logos[:12]):  # Max 12 logo
-                with cols[idx % 6]:
-                    if st.button(
-                        logo,
-                        key=f"logo_{selected_category}_{idx}",
-                        help=f"Wybierz {logo}"
-                    ):
-                        bg_data["firm"]["logo"] = logo
-                        save_game_data(user_data, bg_data, industry_id)
-                        save_user_data(username, user_data)
-                        st.success(f"✅ Logo: {logo}")
-                        st.rerun()
-        
-        # Podgląd na całej szerokości
-        st.markdown("---")
-        st.markdown("### 👀 Podgląd")
-        current_logo = bg_data["firm"].get("logo", "🏢")
-        current_name = bg_data["firm"]["name"]
-        st.markdown(f"""
-        <div style='text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; color: white;'>
-            <div style='font-size: 72px; margin-bottom: 12px;'>{current_logo}</div>
-            <h2 style='margin: 0; color: white;'>{current_name}</h2>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    # TAB 2: Zarządzanie firmą
-    with settings_tab2:
-        st.warning("⚠️ **Uwaga:** Te akcje mogą zmienić Twoją grę!")
-        
-        st.markdown("### 🆕 Rozpocznij nową firmę")
-        st.info("""
-        **Co się stanie:**
-        - Obecna firma zostanie zarchiwizowana (dane nie zostaną utracone)
-        - Stworzysz nową firmę od zera z nowym scenariuszem
-        - Zachowasz swoje DegenCoins i doświadczenie
-        - Będziesz mógł wrócić do poprzedniej firmy w zakładce "📦 Archiwum firm"
-        """)
-        
-        if st.button("🚀 Rozpocznij nową firmę", type="primary", key="start_new_company"):
-            # Zarchiwizuj obecną firmę
-            if "archived_games" not in user_data:
-                user_data["archived_games"] = {}
-            if industry_id not in user_data["archived_games"]:
-                user_data["archived_games"][industry_id] = []
-            
-            # Dodaj timestamp do archiwalnej gry
-            archived_game = bg_data.copy()
-            archived_game["archived_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            archived_game["firm"]["archived_name"] = f"{bg_data['firm']['name']} (zarchiwizowana {datetime.now().strftime('%d.%m.%Y')})"
-            
-            user_data["archived_games"][industry_id].append(archived_game)
-            
-            # Usuń obecną grę
-            del user_data["business_games"][industry_id]
-            
-            # Zapisz zmiany
-            save_user_data(username, user_data)
-            
-            # Resetuj session state
-            st.session_state["selected_industry"] = industry_id
-            
-            st.success("✅ Firma zarchiwizowana! Przekierowuję do wyboru scenariusza...")
-            time.sleep(1)
-            st.rerun()
-    
-    # TAB 3: Archiwum firm
-    with settings_tab3:
-        if "archived_games" in user_data and industry_id in user_data["archived_games"]:
-            archived_count = len(user_data["archived_games"][industry_id])
-            
-            if archived_count > 0:
-                st.markdown(f"### 📦 Masz {archived_count} zarchiwizowanych firm")
-                st.info("💡 Możesz przywrócić dowolną firmę - obecna zostanie zarchiwizowana automatycznie")
-                
-                for idx, archived_game in enumerate(user_data["archived_games"][industry_id]):
-                    firm_name = archived_game["firm"].get("archived_name", archived_game["firm"]["name"])
-                    archived_at = archived_game.get("archived_at", "N/A")
-                    level = archived_game["firm"].get("level", 1)
-                    reputation = archived_game["firm"].get("reputation", 0)
-                    logo = archived_game["firm"].get("logo", "🏢")
-                    
-                    # Karta firmy
-                    with st.container():
-                        col_logo, col_info, col_action = st.columns([1, 4, 2])
-                        
-                        with col_logo:
-                            st.markdown(f"""
-                            <div style='text-align: center; font-size: 48px; padding: 10px;'>
-                                {logo}
-                            </div>
-                            """, unsafe_allow_html=True)
-                        
-                        with col_info:
-                            st.markdown(f"**{firm_name}**")
-                            st.caption(f"📅 Zarchiwizowana: {archived_at}")
-                            st.caption(f"🏢 Level {level} | ⭐ Reputacja {reputation}")
-                        
-                        with col_action:
-                            if st.button("🔄 Przywróć", key=f"restore_game_{idx}", type="secondary"):
-                                # Zarchiwizuj obecną firmę jeśli istnieje
-                                if industry_id in user_data["business_games"]:
-                                    current_game = user_data["business_games"][industry_id].copy()
-                                    current_game["archived_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                                    current_game["firm"]["archived_name"] = f"{current_game['firm']['name']} (zarchiwizowana {datetime.now().strftime('%d.%m.%Y')})"
-                                    user_data["archived_games"][industry_id].append(current_game)
-                                
-                                # Przywróć wybraną firmę
-                                restored_game = archived_game.copy()
-                                # Usuń metadane archiwum
-                                if "archived_at" in restored_game:
-                                    del restored_game["archived_at"]
-                                if "archived_name" in restored_game["firm"]:
-                                    del restored_game["firm"]["archived_name"]
-                                
-                                user_data["business_games"][industry_id] = restored_game
-                                
-                                # Usuń z archiwum
-                                user_data["archived_games"][industry_id].pop(idx)
-                                
-                                # Zapisz
-                                save_user_data(username, user_data)
-                                
-                                st.success(f"✅ Przywrócono firmę: {firm_name}")
-                                time.sleep(1)
-                                st.rerun()
-                        
-                        st.markdown("---")
-            else:
-                st.info("📭 Brak zarchiwizowanych firm. Rozpocznij nową firmę w zakładce '🔄 Zarządzanie firmą'")
-        else:
-            st.info("📭 Brak zarchiwizowanych firm. Rozpocznij nową firmę w zakładce '🔄 Zarządzanie firmą'")
 
 def render_active_contract_card(contract, username, user_data, bg_data):
     """Renderuje profesjonalną kartę aktywnego kontraktu w stylu game UI"""
     
+    # Backward compatibility: ai_conversation → conversation
+    contract_type = contract.get("contract_type")
+    if contract_type == "ai_conversation":
+        contract_type = "conversation"
+    
     # Sprawdź czy to Decision Tree Contract
-    if contract.get("contract_type") == "decision_tree":
+    if contract_type == "decision_tree":
         industry_id = bg_data.get("industry", "consulting")
         render_decision_tree_contract(contract, username, user_data, bg_data, industry_id)
         return
     
-    # Sprawdź czy to AI Conversation Contract
-    if contract.get("contract_type") == "ai_conversation":
+    # Sprawdź czy to Conversation Contract
+    if contract_type == "conversation":
         industry_id = bg_data.get("industry", "consulting")
-        render_ai_conversation_contract(contract, username, user_data, bg_data, industry_id)
+        render_conversation_contract(contract, username, user_data, bg_data, industry_id)
         return
     
     # Sprawdź czy to Speed Challenge Contract
-    if contract.get("contract_type") == "speed_challenge":
+    if contract_type == "speed_challenge":
         industry_id = bg_data.get("industry", "consulting")
         render_speed_challenge_contract(contract, username, user_data, bg_data, industry_id)
         return
@@ -2108,23 +2111,62 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
                     """, unsafe_allow_html=True)
                     if step.get('feedback'):
                         st.caption(step['feedback'])
+    
+    # =============================================================================
+    # SEKCJA RANKINGÓW
+    # =============================================================================
+    
+    st.markdown("---")
+    st.subheader("🏆 Rankingi")
+    
+    # Wywołaj funkcję rankingów (będzie wyświetlana jako część Dashboard)
+    show_rankings_content(username, user_data, industry_id)
 
 def show_contracts_tab(username, user_data, industry_id="consulting"):
     """Zakładka Rynek Kontraktów"""
     bg_data = get_game_data(user_data, industry_id)
+    
+    # =============================================================================
+    # SPRAWDŹ DEADLINE I NAŁÓŻ KARY ZA SPÓŹNIENIE
+    # =============================================================================
+    
+    from utils.business_game import check_and_apply_deadline_penalties
+    bg_data, penalty_messages = check_and_apply_deadline_penalties(bg_data, user_data)
+    
+    if penalty_messages:
+        for msg in penalty_messages:
+            st.error(msg)
+        save_game_data(user_data, bg_data, industry_id)
+        save_user_data(username, user_data)
+    
+    # =============================================================================
+    # SEKCJA 1: AKTYWNE KONTRAKTY (pracuj nad nimi)
+    # =============================================================================
+    
+    st.subheader("📋 Aktywne Kontrakty")
+    
+    active_contracts = bg_data["contracts"]["active"]
+    
+    if len(active_contracts) == 0:
+        st.info("✨ Brak aktywnych kontraktów. Przyjmij nowe zlecenie poniżej!")
+    else:
+        for contract in active_contracts:
+            render_active_contract_card(contract, username, user_data, bg_data)
+    
+    st.markdown("---")
+    
+    # =============================================================================
+    # SEKCJA 2: DOSTĘPNE KONTRAKTY DO PRZYJĘCIA
+    # =============================================================================
     
     st.subheader("💼 Dostępne Kontrakty")
     
     # Info o pojemności
     can_accept, reason = can_accept_contract(bg_data)
     
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        active_count = len(bg_data["contracts"]["active"])
-        max_active = GAME_CONFIG["max_active_contracts"]
-        st.info(f"📋 Aktywne kontrakty: **{active_count}/{max_active}**")
+    col1, col2 = st.columns(2)
     
-    with col2:
+    with col1:
         firm_level = bg_data["firm"]["level"]
         employees = bg_data["employees"]
         capacity = FIRM_LEVELS[firm_level]["limit_kontraktow_dzienny"]
@@ -2132,9 +2174,16 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
             emp_type = EMPLOYEE_TYPES.get(emp["type"])
             if emp_type and emp_type["bonus_type"] == "capacity":
                 capacity += emp_type["bonus_value"]
-        st.info(f"🎯 Dzienna pojemność: **{int(capacity)} kontraktów**")
+        
+        # Policz ile kontraktów przyjęto/ukończono dzisiaj
+        today = datetime.now().strftime("%Y-%m-%d")
+        today_accepted = sum(1 for c in bg_data["contracts"]["active"] if c.get("accepted_date", "").startswith(today))
+        today_completed = sum(1 for c in bg_data["contracts"]["completed"] if c.get("completed_date", "").startswith(today))
+        today_total = today_accepted + today_completed
+        
+        st.info(f"🎯 Dzienna pojemność: **{today_total}/{int(capacity)} kontraktów**")
     
-    with col3:
+    with col2:
         # Czas do odświeżenia puli
         last_refresh = datetime.strptime(bg_data["contracts"]["last_refresh"], "%Y-%m-%d %H:%M:%S")
         next_refresh = last_refresh.replace(hour=0, minute=0, second=0) + timedelta(days=1)
@@ -2163,7 +2212,7 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
     with col_filter1:
         category_filter = st.selectbox(
             "Kategoria:",
-            ["Wszystkie", "Konflikt", "Coaching", "Kultura", "Kryzys", "Leadership", "AI Conversation"],
+            ["Wszystkie", "Konflikt", "Coaching", "Kultura", "Kryzys", "Leadership", "Conversation"],
             key="contracts_filter_category"
         )
     
@@ -2216,8 +2265,8 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
                 render_contract_card(contract, username, user_data, bg_data, can_accept, industry_id)
 
 
-def render_ai_conversation_contract(contract, username, user_data, bg_data, industry_id="consulting"):
-    """Renderuje interaktywny AI Conversation Contract - dynamiczna rozmowa z NPC"""
+def render_conversation_contract(contract, username, user_data, bg_data, industry_id="consulting"):
+    """Renderuje interaktywny Conversation Contract - dynamiczna rozmowa z NPC"""
     from utils.ai_conversation_engine import (
         initialize_ai_conversation,
         get_conversation_state,
@@ -2230,11 +2279,11 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
     npc_config = contract.get("npc_config", {})
     scenario_context = contract.get("scenario_context", "")
     
-    # Inicjalizacja
-    conversation = get_conversation_state(contract_id)
+    # Inicjalizacja (per user!)
+    conversation = get_conversation_state(contract_id, username)
     if not conversation:
-        initialize_ai_conversation(contract_id, npc_config, scenario_context)
-        conversation = get_conversation_state(contract_id)
+        initialize_ai_conversation(contract_id, npc_config, scenario_context, username)
+        conversation = get_conversation_state(contract_id, username)
     
     # Sprawdź czy zakończono
     is_completed = not conversation.get("conversation_active", True)
@@ -2255,68 +2304,61 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
     
     if is_completed:
         # === WIDOK ZAKOŃCZENIA ===
-        final_results = calculate_final_conversation_score(contract_id)
+        final_results = calculate_final_conversation_score(contract_id, username)
         
         st.success(f"🎉 **Rozmowa zakończona!**")
         
-        st.markdown("---")
+        # Metryki w kompaktowej karcie (jak inne kontrakty)
+        stars = final_results.get('stars', 1)
+        total_points = final_results.get('total_points', 0)
         
-        # Metryki w bardziej wyraźnych kolumnach
-        col1, col2, col3, col4 = st.columns(4)
+        # Oblicz nagrodę dla wyświetlenia
+        reward_base = contract.get("nagroda_base", 500)
+        reward_5star = contract.get("nagroda_5star", reward_base * 2)
+        reward = int(reward_base + ((stars - 1) / 4.0) * (reward_5star - reward_base))
+        rep_change = int(contract.get("reputacja", 20) * stars / 3)
+        rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
         
-        with col1:
-            st.markdown("### ⭐")
-            st.markdown(f"**Ocena:** {final_results['stars']}/5")
-        
-        with col2:
-            st.markdown("### 🎯")
-            st.markdown(f"**Punkty:** {final_results['total_points']}")
-        
-        with col3:
-            st.markdown("### 💬")
-            st.markdown(f"**Tur:** {final_results['turn_count']}")
-        
-        with col4:
-            ending_emoji = {"SUCCESS": "🏆", "NEUTRAL": "🤝", "FAILURE": "❌"}.get(
-                final_results.get('ending_type', 'NEUTRAL'), "🤝"
-            )
-            ending_type = final_results.get('ending_type', 'NEUTRAL')
-            st.markdown(f"### {ending_emoji}")
-            st.markdown(f"**{ending_type}**")
-        
-        st.markdown("---")
-        
-        # Podsumowanie
         st.markdown(f"""
-        <div style='background: #f8fafc; border-left: 4px solid #667eea; 
-                    padding: 20px; border-radius: 8px; margin: 20px 0;'>
-            <h3 style='margin: 0 0 12px 0; color: #1e293b;'>📋 Podsumowanie</h3>
-            <p style='margin: 0; color: #475569; line-height: 1.6;'>{final_results.get('summary', '')}</p>
+        <div style='background: linear-gradient(to right, #f8fafc, #f1f5f9); 
+                    border-left: 4px solid #3b82f6; 
+                    border-radius: 8px; 
+                    padding: 16px; 
+                    margin: 16px 0;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);'>
+            <div style='display: flex; justify-content: space-around; text-align: center;'>
+                <div>
+                    <div style='font-size: 24px; margin-bottom: 4px;'>⭐</div>
+                    <div style='font-weight: 600; color: #1e293b;'>{stars}/5</div>
+                    <div style='font-size: 12px; color: #64748b;'>Ocena</div>
+                </div>
+                <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
+                <div>
+                    <div style='font-size: 24px; margin-bottom: 4px;'>💰</div>
+                    <div style='font-weight: 600; color: #1e293b;'>{reward:,}</div>
+                    <div style='font-size: 12px; color: #64748b;'>Zarobiono</div>
+                </div>
+                <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
+                <div>
+                    <div style='font-size: 24px; margin-bottom: 4px;'>📈</div>
+                    <div style='font-weight: 600; color: #1e293b;'>{rep_display}</div>
+                    <div style='font-size: 12px; color: #64748b;'>Reputacja</div>
+                </div>
+            </div>
         </div>
         """, unsafe_allow_html=True)
         
-        # Szczegółowe metryki
-        metrics_data = final_results.get('metrics', {})
-        if metrics_data:
-            st.markdown("### 📊 Twoje kompetencje w rozmowie")
-            metric_cols = st.columns(4)
-            metric_labels = {
-                'empathy': ('🤝 Empatia', 'empathy'),
-                'assertiveness': ('💪 Asertywność', 'assertiveness'),
-                'professionalism': ('👔 Profesjonalizm', 'professionalism'),
-                'solution_quality': ('💡 Jakość rozwiązań', 'solution_quality')
-            }
-            for idx, (key, (label, metric_key)) in enumerate(metric_labels.items()):
-                value = metrics_data.get(metric_key, 0)
-                with metric_cols[idx]:
-                    st.metric(label, f"{value}/100")
-                    # Progress bar
-                    color = "#10b981" if value >= 70 else "#f59e0b" if value >= 50 else "#ef4444"
-                    st.markdown(f"""
-                    <div style='background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;'>
-                        <div style='background: {color}; width: {value}%; height: 100%;'></div>
-                    </div>
-                    """, unsafe_allow_html=True)
+        # Feedback od klienta (jak w innych kontraktach)
+        feedback = final_results.get('summary', 'Brak feedbacku')
+        
+        st.markdown("---")
+        st.subheader("💬 Feedback od klienta")
+        st.info(feedback)
+        
+        # Link do pełnej historii
+        st.info("� Pełne szczegóły rozmowy znajdziesz w zakładce **'📜 Historia & Wydarzenia'**")
+        
+        st.markdown("---")
         
         # Historia rozmowy
         with st.expander("💬 Zobacz całą rozmowę"):
@@ -2360,7 +2402,7 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         col_replay, col_submit = st.columns(2)
         with col_replay:
             if st.button("🔄 Zagraj ponownie", key=f"replay_{contract_id}", width="stretch"):
-                reset_conversation(contract_id, npc_config, scenario_context)
+                reset_conversation(contract_id, npc_config, scenario_context, username)
                 st.rerun()
         
         with col_submit:
@@ -2375,11 +2417,12 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
                     st.error("Kontrakt nie znaleziony w aktywnych")
                 else:
                     try:
-                        # Pobierz wynik z engine
-                        result = calculate_final_conversation_score(contract_id)
+                        # Pobierz wynik z engine (per user!)
+                        result = calculate_final_conversation_score(contract_id, username)
                         stars = result.get("stars", 1)
                         total_points = result.get("total_points", 0)
                         metrics = result.get("metrics", {})
+                        feedback_summary = result.get("summary", "")
                         
                         # Oblicz nagrodę
                         reward_base = contract_found.get("nagroda_base", 500)
@@ -2394,10 +2437,12 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
                         # Przenieś do completed
                         completed_contract = contract_found.copy()
                         completed_contract["completed_date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                        completed_contract["stars"] = stars
+                        completed_contract["rating"] = stars  # Używamy "rating" jak inne kontrakty
+                        completed_contract["stars"] = stars  # Dla kompatybilności
                         completed_contract["points"] = total_points
                         completed_contract["reward"] = reward
                         completed_contract["metrics"] = metrics
+                        completed_contract["feedback"] = feedback_summary
                         completed_contract["status"] = "completed"
                         
                         bg_data["contracts"]["completed"].append(completed_contract)
@@ -2418,7 +2463,7 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
                             "type": "contract_reward",
                             "amount": reward,
                             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                            "description": f"AI Conversation: {contract_found['tytul']} ({stars}⭐)"
+                            "description": f"Conversation: {contract_found['tytul']} ({stars}⭐)"
                         })
                         
                         # Zapisz dane
@@ -2439,46 +2484,8 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         with st.expander("📖 Kontekst sytuacji", expanded=False):
             st.markdown(scenario_context)
         
-        # === BOCZNY PANEL Z METRYKAMI ===
-        with st.sidebar:
-            st.markdown("### 📊 Postęp rozmowy")
-            current_turn = conversation.get("current_turn", 1)
-            total_score = conversation.get("total_score", 0)
-            relationship_health = conversation.get("relationship_health", 100)
-            
-            st.metric("Tura", f"{current_turn}")
-            st.metric("Punkty", f"{total_score}")
-            
-            # Relationship health bar
-            health_color = "#10b981" if relationship_health >= 70 else "#f59e0b" if relationship_health >= 40 else "#ef4444"
-            st.markdown(f"""
-            <div style='margin: 12px 0;'>
-                <div style='font-size: 14px; color: #475569; margin-bottom: 4px;'>
-                    ❤️ Relacja z {npc_config.get('name', 'NPC')}
-                </div>
-                <div style='background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden;'>
-                    <div style='background: {health_color}; width: {relationship_health}%; 
-                                height: 100%; transition: width 0.3s;'></div>
-                </div>
-                <div style='font-size: 12px; color: #64748b; margin-top: 4px;'>
-                    {relationship_health}/100
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Metryki szczegółowe
-            metrics = conversation.get("metrics", {})
-            if metrics:
-                st.markdown("#### 🎯 Twoje kompetencje")
-                for metric_key, metric_value in metrics.items():
-                    metric_label = {
-                        'empathy': '🤝 Empatia',
-                        'assertiveness': '💪 Asertywność',
-                        'professionalism': '👔 Profesjonalizm',
-                        'solution_quality': '💡 Rozwiązania'
-                    }.get(metric_key, metric_key.capitalize())
-                    
-                    st.markdown(f"**{metric_label}**: {metric_value}/100")
+        # Pobierz current_turn (potrzebny w logice, ale bez wyświetlania)
+        current_turn = conversation.get("current_turn", 1)
         
         # === HISTORIA KONWERSACJI ===
         st.markdown("### 💬 Rozmowa")
@@ -2541,51 +2548,11 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
                     </div>
                     """, unsafe_allow_html=True)
                     
-                    # Wyświetl feedback AI jeśli dostępny
-                    evaluation = msg.get("evaluation")
-                    if evaluation:
-                        feedback_text = evaluation.get("feedback", "")
-                        points = evaluation.get("points", 0)
-                        empathy = evaluation.get("empathy", 0)
-                        assertiveness = evaluation.get("assertiveness", 0)
-                        professionalism = evaluation.get("professionalism", 0)
-                        solution = evaluation.get("solution_quality", 0)
-                        
-                        st.markdown(f"""
-                        <div style='background: #fef3c7; padding: 12px; border-radius: 8px; 
-                                    margin: 8px 0 16px 0; border-left: 4px solid #f59e0b;'>
-                            <div style='font-size: 12px; font-weight: 600; color: #92400e; margin-bottom: 6px;'>
-                                🎯 Feedback AI (+{points} pkt)
-                            </div>
-                            <div style='color: #78350f; font-size: 13px; margin-bottom: 8px;'>{feedback_text}</div>
-                            <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 11px;'>
-                                <div style='background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px;'>
-                                    🤝 {empathy}/100
-                                </div>
-                                <div style='background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px;'>
-                                    💪 {assertiveness}/100
-                                </div>
-                                <div style='background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px;'>
-                                    👔 {professionalism}/100
-                                </div>
-                                <div style='background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 4px;'>
-                                    💡 {solution}/100
-                                </div>
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
+                    # Feedback AI usunięty - realistyczna rozmowa bez "ściąg"
                 
                 elif role == "evaluation":
-                    # Feedback od AI
-                    st.markdown(f"""
-                    <div style='background: #fef3c7; padding: 12px; border-radius: 8px; 
-                                margin: 8px 0; border-left: 4px solid #f59e0b;'>
-                        <div style='font-size: 12px; font-weight: 600; color: #92400e; margin-bottom: 4px;'>
-                            🎯 Feedback AI
-                        </div>
-                        <div style='color: #78350f; font-size: 13px;'>{content}</div>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    # Feedback od AI - również usunięty (był duplikat)
+                    pass
         
         # === INPUT GRACZA ===
         st.markdown("---")
@@ -2595,14 +2562,137 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         if current_turn == 1:
             st.info(f"💡 **Wskazówka**: {npc_config.get('name', 'Rozmówca')} ma swoją perspektywę i cele. Spróbuj zrozumieć sytuację z jego punktu widzenia.")
         
+        # === SPEECH-TO-TEXT INTERFACE (jak w "Feedback dla nowego pracownika") ===
+        st.markdown("**🎤 Nagraj** (wielokrotnie, jeśli chcesz) **lub ✍️ pisz bezpośrednio w polu poniżej:**")
+        
+        # Klucze dla transkrypcji i wersjonowania
+        transcription_key = f"ai_conv_transcription_{contract_id}"
+        transcription_version_key = f"ai_conv_transcription_version_{contract_id}"
+        last_audio_hash_key = f"ai_conv_last_audio_hash_{contract_id}"
+        
+        # Inicjalizacja
+        if transcription_key not in st.session_state:
+            st.session_state[transcription_key] = ""
+        if transcription_version_key not in st.session_state:
+            st.session_state[transcription_version_key] = 0
+        if last_audio_hash_key not in st.session_state:
+            st.session_state[last_audio_hash_key] = None
+        
+        audio_data = st.audio_input(
+            "🎤 Nagrywanie...",
+            key=f"audio_input_ai_conv_{contract_id}"
+        )
+        
+        # Przetwarzanie nagrania audio (tylko jeśli to NOWE nagranie!)
+        if audio_data is not None:
+            import hashlib
+            
+            # Oblicz hash audio aby wykryć duplikaty
+            audio_bytes = audio_data.getvalue()
+            audio_hash = hashlib.md5(audio_bytes).hexdigest()
+            
+            # Sprawdź czy to to samo nagranie co poprzednio
+            if audio_hash != st.session_state[last_audio_hash_key]:
+                # NOWE nagranie - przetwarzaj!
+                st.session_state[last_audio_hash_key] = audio_hash
+                
+                import speech_recognition as sr
+                import tempfile
+                import os
+                from pydub import AudioSegment
+                
+                with st.spinner("🤖 Rozpoznaję mowę..."):
+                    try:
+                        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+                            tmp_file.write(audio_bytes)
+                            tmp_path = tmp_file.name
+                        
+                        wav_path = None
+                        try:
+                            audio = AudioSegment.from_file(tmp_path)
+                            wav_path = tmp_path.replace(".wav", "_converted.wav")
+                            audio.export(wav_path, format="wav")
+                            
+                            recognizer = sr.Recognizer()
+                            with sr.AudioFile(wav_path) as source:
+                                audio_data_sr = recognizer.record(source)
+                                
+                            transcription = recognizer.recognize_google(audio_data_sr, language="pl-PL")
+                            
+                            # Post-processing: Dodaj interpunkcję przez Gemini
+                            try:
+                                import google.generativeai as genai
+                                
+                                api_key = st.secrets["API_KEYS"]["gemini"]
+                                genai.configure(api_key=api_key)
+                                
+                                model = genai.GenerativeModel("models/gemini-2.5-flash")
+                                prompt = f"""Dodaj interpunkcję (kropki, przecinki, pytajniki, wykrzykniki) do poniższego tekstu.
+Nie zmieniaj słów, tylko dodaj znaki interpunkcyjne. Zachowaj strukturę i podział na zdania.
+Zwróć tylko poprawiony tekst, bez dodatkowych komentarzy.
+
+Tekst do poprawy:
+{transcription}"""
+                                response = model.generate_content(prompt)
+                                transcription_with_punctuation = response.text.strip()
+                                
+                                # Komunikat usunięty - ciche działanie
+                                transcription = transcription_with_punctuation
+                                
+                            except Exception as gemini_error:
+                                # Błąd Gemini - cicho kontynuuj z surową transkrypcją
+                                pass
+                            
+                            # DOPISZ do istniejącego tekstu (jak w "Feedback")
+                            # Użytkownik może nagrywać wielokrotnie i budować odpowiedź
+                            existing_text = st.session_state.get(transcription_key, "")
+                            if existing_text.strip():
+                                # Jeśli jest już jakiś tekst, dodaj nową linię i dopisz
+                                st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
+                            else:
+                                # Jeśli to pierwsze nagranie, po prostu zapisz
+                                st.session_state[transcription_key] = transcription
+                            
+                            # Inkrementuj wersję - to wymusi re-render text_area z nową wartością!
+                            st.session_state[transcription_version_key] += 1
+                            
+                            # Komunikat usunięty - ciche działanie
+                            
+                        except sr.UnknownValueError:
+                            st.error("❌ Nie udało się rozpoznać mowy. Spróbuj ponownie lub mów wyraźniej.")
+                        except sr.RequestError as e:
+                            st.error(f"❌ Błąd połączenia z usługą rozpoznawania mowy: {str(e)}")
+                        finally:
+                            if os.path.exists(tmp_path):
+                                os.unlink(tmp_path)
+                            if wav_path and os.path.exists(wav_path):
+                                os.unlink(wav_path)
+                                
+                    except Exception as e:
+                        st.error(f"❌ Błąd podczas transkrypcji: {str(e)}")
+                        st.info("💡 Możesz wprowadzić tekst ręcznie w polu poniżej.")
+        
+        # Dynamiczny klucz który zmienia się po transkrypcji (wymusza re-render)
+        text_area_key = f"ai_conv_input_{contract_id}_{current_turn}_v{st.session_state[transcription_version_key]}"
+        current_text = st.session_state.get(transcription_key, "")
+        
+        # Oblicz dynamiczną wysokość na podstawie liczby linii
+        num_lines = current_text.count('\n') + 1
+        # Minimalna wysokość: 120px, każda linia dodatkowa to ~25px
+        dynamic_height = max(120, min(400, 120 + (num_lines - 3) * 25))
+        
         # Text area dla odpowiedzi
         player_message = st.text_area(
-            "Co powiesz?",
-            height=120,
-            placeholder=f"Wpisz swoją odpowiedź do {npc_config.get('name', 'rozmówcy')}...",
-            key=f"input_{contract_id}_{current_turn}",
-            label_visibility="collapsed"
+            "📝 Możesz edytować transkrypcję lub pisać bezpośrednio:",
+            value=current_text,
+            height=dynamic_height,
+            key=text_area_key,
+            placeholder=f"Wpisz swoją odpowiedź do {npc_config.get('name', 'rozmówcy')}... lub użyj mikrofonu powyżej"
         )
+        
+        # Synchronizuj wartość z pola tekstowego do session_state
+        if text_area_key in st.session_state:
+            st.session_state[transcription_key] = st.session_state[text_area_key]
         
         # Przyciski
         col_send, col_end = st.columns([3, 1])
@@ -2618,12 +2708,17 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
                             st.error("❌ Brak klucza API Gemini. Skonfiguruj secrets.")
                         else:
                             try:
-                                # Process message through AI engine
+                                # Process message through AI engine (per user!)
                                 evaluation, npc_reaction = process_player_message(
                                     contract_id, 
                                     player_message, 
-                                    api_key
+                                    api_key,
+                                    username
                                 )
+                                
+                                # Wyczyść pole tekstowe po wysłaniu (NOWY klucz!)
+                                st.session_state[transcription_key] = ""
+                                st.session_state[transcription_version_key] += 1  # Wymusza re-render
                                 
                                 # Success - rerun to show new messages
                                 st.rerun()
@@ -2633,13 +2728,79 @@ def render_ai_conversation_contract(contract, username, user_data, bg_data, indu
         
         with col_end:
             if st.button("🏁 Zakończ", width="stretch"):
-                # Force end conversation - użyj poprawnego klucza dla AI Conversation
-                conv_key = f"ai_conv_{contract_id}"
-                if conv_key in st.session_state:
-                    st.session_state[conv_key]["conversation_active"] = False
-                    st.session_state[conv_key]["ending_reached"] = True
-                    st.session_state[conv_key]["ending_type"] = "MANUAL_END"
-                st.rerun()
+                # Zakończ i od razu przenieś do completed (jak "Zakończ kontrakt")
+                from utils.ai_conversation_engine import calculate_final_conversation_score
+                
+                # Znajdź kontrakt
+                contract_found = next((c for c in bg_data["contracts"]["active"] if c["id"] == contract_id), None)
+                if not contract_found:
+                    st.error("Kontrakt nie znaleziony w aktywnych")
+                else:
+                    try:
+                        # Pobierz wynik z engine (per user!)
+                        result = calculate_final_conversation_score(contract_id, username)
+                        stars = result.get("stars", 1)
+                        total_points = result.get("total_points", 0)
+                        metrics = result.get("metrics", {})
+                        feedback_summary = result.get("summary", "")
+                        
+                        # Oblicz nagrodę
+                        reward_base = contract_found.get("nagroda_base", 500)
+                        reward_5star = contract_found.get("nagroda_5star", reward_base * 2)
+                        reward = int(reward_base + ((stars - 1) / 4.0) * (reward_5star - reward_base))
+                        
+                        # Dodaj nagrody
+                        user_data["degencoins"] = user_data.get("degencoins", 0) + reward
+                        bg_data["firm"]["reputation"] += contract_found.get("reputacja", 20) * stars / 3
+                        bg_data["stats"]["total_revenue"] += reward
+                        
+                        # Przenieś do completed
+                        completed_contract = contract_found.copy()
+                        completed_contract["completed_date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        completed_contract["rating"] = stars  # Używamy "rating" jak inne kontrakty
+                        completed_contract["stars"] = stars  # Dla kompatybilności
+                        completed_contract["points"] = total_points
+                        completed_contract["reward"] = reward
+                        completed_contract["metrics"] = metrics
+                        completed_contract["feedback"] = feedback_summary
+                        completed_contract["status"] = "completed"
+                        
+                        bg_data["contracts"]["completed"].append(completed_contract)
+                        bg_data["contracts"]["active"] = [c for c in bg_data["contracts"]["active"] if c["id"] != contract_id]
+                        
+                        # Zaktualizuj statystyki
+                        bg_data["stats"]["contracts_completed"] = bg_data["stats"].get("contracts_completed", 0) + 1
+                        rating_key = f"contracts_{stars}star"
+                        bg_data["stats"][rating_key] = bg_data["stats"].get(rating_key, 0) + 1
+                        
+                        # Dodaj transakcję
+                        if "history" not in bg_data:
+                            bg_data["history"] = {"transactions": [], "level_ups": []}
+                        if "transactions" not in bg_data["history"]:
+                            bg_data["history"]["transactions"] = []
+                        
+                        bg_data["history"]["transactions"].append({
+                            "type": "contract_reward",
+                            "amount": reward,
+                            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            "description": f"Conversation: {contract_found['tytul']} ({stars}⭐)"
+                        })
+                        
+                        # Zapisz dane
+                        save_game_data(user_data, bg_data, industry_id)
+                        save_user_data(username, user_data)
+                        
+                        # Wyczyść stan konwersacji
+                        conv_key = f"ai_conv_{username}_{contract_id}"
+                        if conv_key in st.session_state:
+                            del st.session_state[conv_key]
+                        
+                        st.success(f"✅ Zakończono! 💰 +{reward} DegenCoins | ⭐ {stars}/5")
+                        time.sleep(1)
+                        st.rerun()
+                        
+                    except Exception as e:
+                        st.error(f"Błąd przy zakończeniu kontraktu: {e}")
 
 
 def render_speed_challenge_contract(contract, username, user_data, bg_data, industry_id="consulting"):
@@ -3166,8 +3327,14 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new,
 # TAB 3: PRACOWNICY
 # =============================================================================
 
-def show_employees_tab(username, user_data, industry_id="consulting"):
-    """Zakładka Biuro i Pracownicy"""
+# =============================================================================
+# TAB 3A: BIURO
+# =============================================================================
+
+def show_office_tab(username, user_data, industry_id="consulting"):
+    """Zakładka Biuro - zarządzanie przestrzenią"""
+    from datetime import datetime
+    
     bg_data = get_game_data(user_data, industry_id)
     
     # Inicjalizacja biura jeśli nie istnieje (dla starych zapisów)
@@ -3178,294 +3345,6 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
         }
         save_game_data(user_data, bg_data, industry_id)
         save_user_data(username, user_data)
-    
-    # =============================================================================
-    # SEKCJA ZARZĄDZANIA GRĄ
-    # =============================================================================
-    
-    # Sprawdź czy to tryb lifetime
-    is_lifetime = bg_data.get("scenario_id") == "lifetime"
-    
-    with st.expander("⚙️ Zarządzanie Grą", expanded=False):
-        if is_lifetime:
-            st.markdown("### ♾️ Tryb Lifetime Challenge")
-            st.info("💡 Grasz w trybie nieskończonym! Rywalizuj z innymi w rankingu i buduj swoją firmę bez ograniczeń.")
-            st.markdown("---")
-        
-        # =============================================================================
-        # SEKCJA: OTWARTE FIRMY
-        # =============================================================================
-        st.markdown("### 🏢 Twoje otwarte firmy")
-        
-        # Pobierz wszystkie aktywne gry
-        active_games = user_data.get("business_games", {})
-        
-        if not active_games:
-            st.info("Nie masz jeszcze żadnych aktywnych firm.")
-        else:
-            # Nazwy branż i ikony
-            industry_info = {
-                "consulting": {"name": "Consulting", "icon": "💼"},
-                "fmcg": {"name": "FMCG", "icon": "🛒"},
-                "pharma": {"name": "Pharma", "icon": "💊"},
-                "banking": {"name": "Banking", "icon": "🏦"},
-                "insurance": {"name": "Insurance", "icon": "🛡️"},
-                "automotive": {"name": "Automotive", "icon": "🚗"}
-            }
-            
-            # Pobierz nazwy scenariuszy
-            from data.scenarios import get_scenario
-            
-            # Wyświetl każdą firmę jako kompaktową kartę
-            for game_industry_id, game_data in active_games.items():
-                info = industry_info.get(game_industry_id, {"name": game_industry_id, "icon": "🏢"})
-                scenario_id = game_data.get("scenario_id", "unknown")
-                scenario = get_scenario(game_industry_id, scenario_id)
-                scenario_name = scenario.get("name", "Nieznany scenariusz") if scenario else "Nieznany scenariusz"
-                
-                # Status firmy
-                level = game_data.get("level", 1)
-                reputation = game_data.get("reputation", 0)
-                
-                # Sprawdź czy to obecna firma
-                is_current = (game_industry_id == industry_id)
-                
-                # Karta firmy z możliwością przejścia
-                if is_current:
-                    # Obecna firma - wyróżniona
-                    st.markdown(f"""
-                    <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                                padding: 12px; border-radius: 8px; margin-bottom: 8px; color: white;'>
-                        <div style='display: flex; justify-content: space-between; align-items: center;'>
-                            <div>
-                                <div style='font-weight: bold; font-size: 16px;'>{info['icon']} {info['name']}</div>
-                                <div style='font-size: 12px; opacity: 0.9;'>{scenario_name} · Poziom {level} · Reputacja {reputation}</div>
-                            </div>
-                            <div style='background: rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold;'>
-                                ▶ AKTYWNA
-                            </div>
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
-                else:
-                    # Inna firma - klikalna
-                    col_card, col_btn = st.columns([4, 1])
-                    with col_card:
-                        st.markdown(f"""
-                        <div style='background: #f5f5f5; border: 1px solid #e0e0e0;
-                                    padding: 12px; border-radius: 8px;'>
-                            <div style='font-weight: bold; font-size: 14px; color: #333;'>{info['icon']} {info['name']}</div>
-                            <div style='font-size: 11px; color: #666;'>{scenario_name} · Poziom {level} · Reputacja {reputation}</div>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    with col_btn:
-                        if st.button("→", key=f"switch_to_{game_industry_id}", help=f"Przejdź do {info['name']}", width="stretch"):
-                            # Przełącz branżę
-                            st.session_state["selected_industry"] = game_industry_id
-                            # Wyczyść stan zakładek, żeby wrócił do Dashboard
-                            if "active_tab" in st.session_state:
-                                del st.session_state["active_tab"]
-                            # Zapisz wiadomość o przełączeniu
-                            st.session_state["switch_message"] = f"Przełączono na {info['icon']} {info['name']}"
-                            st.rerun()
-        
-        st.markdown("---")
-        
-        # =============================================================================
-        # OPCJE ZARZĄDZANIA
-        # =============================================================================
-        st.markdown("### 🎮 Opcje zarządzania")
-        
-        # Siatka 2x2 dla 4 opcji
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("#### ➕ Otwórz nową firmę")
-            st.caption("Rozpocznij nową grę w innej branży. Obecna firma pozostanie aktywna.")
-            if st.button("➕ Nowa firma", type="secondary", width="stretch", key="new_firm_btn"):
-                st.session_state["selected_industry"] = None
-                st.rerun()
-        
-        with col2:
-            st.markdown("#### 🏆 Zamknij firmę")
-            st.caption("Zakończ tę firmę i przenieś ją do Hall of Fame z końcowym ratingiem.")
-            if st.button("🏆 Zamknij firmę", type="secondary", width="stretch", key="close_firm_btn"):
-                st.session_state["confirm_close_firm"] = True
-                st.rerun()
-        
-        # Dialog potwierdzenia zamknięcia firmy
-        if st.session_state.get("confirm_close_firm", False):
-            st.warning("⚠️ **Czy na pewno chcesz zamknąć tę firmę?**")
-            
-            # Oblicz końcowy rating
-            from utils.business_game import calculate_overall_score
-            final_score = calculate_overall_score(bg_data)
-            final_level = bg_data.get("level", 1)
-            final_reputation = bg_data.get("reputation", 0)
-            final_revenue = bg_data.get("stats", {}).get("total_revenue", 0)
-            final_money = bg_data.get("money", 0)  # Saldo firmy
-            
-            # Oblicz bonus za rating (im wyższy rating, tym wyższy bonus)
-            rating_bonus = int(final_score * 10)  # np. rating 100 = 1000 monet bonusu
-            
-            # Oblicz całkowity transfer do monet gracza
-            # Saldo firmy + bonus za rating
-            total_transfer = final_money + rating_bonus
-            
-            # Jeśli saldo ujemne, zastosuj "ochronę" - tylko 50% długu
-            if final_money < 0:
-                debt_protection = abs(final_money) * 0.5  # 50% długu odpuszczone
-                total_transfer = int(final_money * 0.5 + rating_bonus)  # połowa długu + bonus
-                protection_info = f"🛡️ Ochrona przed długiem: **{debt_protection:,.0f} PLN** odpuszczone (50%)"
-            else:
-                protection_info = ""
-            
-            st.markdown(f"""
-            **📊 Twój końcowy wynik:**
-            - 🏆 Rating: **{final_score}** punktów
-            - 📈 Poziom: **{final_level}**
-            - ⭐ Reputacja: **{final_reputation}**
-            - 💰 Łączny przychód: **{final_revenue:,} PLN**
-            - 💵 Saldo firmy: **{final_money:,} PLN**
-            - 🎁 Bonus za rating: **+{rating_bonus:,}** monet
-            
-            **💰 Realizacja zysków:**
-            - Transfer do portfela: **{total_transfer:,}** monet
-            {f"- {protection_info}" if protection_info else ""}
-            - Obecne monety: **{user_data.get('degencoins', 0):,}**
-            - Po zamknięciu: **{user_data.get('degencoins', 0) + total_transfer:,}** monet
-            
-            **Konsekwencje:**
-            - ✅ Firma trafi do **Hall of Fame** z Twoim wynikiem
-            - ❌ Nie będziesz już mógł w nią grać
-            - 💰 Otrzymasz przelew: **{total_transfer:,}** monet
-            - 🏢 Inne firmy pozostaną aktywne
-            """)
-            
-            col_confirm, col_cancel = st.columns(2)
-            with col_confirm:
-                if st.button("✅ TAK, zamknij firmę", type="primary", width="stretch", key="confirm_close_firm_yes"):
-                    # Oblicz transfer (ponownie, dla pewności)
-                    final_money = bg_data.get("money", 0)
-                    rating_bonus = int(final_score * 10)
-                    
-                    if final_money < 0:
-                        total_transfer = int(final_money * 0.5 + rating_bonus)
-                    else:
-                        total_transfer = final_money + rating_bonus
-                    
-                    # REALIZUJ ZYSKI/STRATY - przelew do portfela gracza
-                    user_data["degencoins"] = user_data.get("degencoins", 0) + total_transfer
-                    
-                    # Przygotuj dane do Hall of Fame
-                    if "hall_of_fame" not in user_data:
-                        user_data["hall_of_fame"] = []
-                    
-                    from datetime import datetime
-                    hall_entry = {
-                        "username": username,
-                        "industry_id": industry_id,
-                        "scenario_id": bg_data.get("scenario_id", "unknown"),
-                        "final_score": final_score,
-                        "final_level": final_level,
-                        "final_reputation": final_reputation,
-                        "final_revenue": final_revenue,
-                        "final_money": final_money,
-                        "rating_bonus": rating_bonus,
-                        "total_transfer": total_transfer,
-                        "employees_count": len(bg_data.get("employees", [])),
-                        "closed_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "firm_name": bg_data.get("firm_name", f"{username}'s Company")
-                    }
-                    
-                    user_data["hall_of_fame"].append(hall_entry)
-                    
-                    # Usuń firmę
-                    if industry_id in user_data.get("business_games", {}):
-                        del user_data["business_games"][industry_id]
-                    
-                    save_user_data(username, user_data)
-                    
-                    # Komunikat z wynikiem transferu
-                    if total_transfer >= 0:
-                        st.success(f"🏆 Firma zamknięta! Otrzymałeś **{total_transfer:,}** monet (saldo + bonus)!")
-                    else:
-                        st.warning(f"🏆 Firma zamknięta! Strata: **{total_transfer:,}** monet (50% długu po ochronie)")
-                    
-                    st.info(f"💰 Twoje nowe saldo: **{user_data['degencoins']:,}** monet")
-                    st.balloons()
-                    st.session_state["confirm_close_firm"] = False
-                    
-                    # Jeśli to była ostatnia firma, wróć do wyboru branży
-                    if not user_data.get("business_games", {}):
-                        st.session_state["selected_industry"] = None
-                    else:
-                        # Przejdź do pierwszej dostępnej firmy
-                        st.session_state["selected_industry"] = list(user_data["business_games"].keys())[0]
-                    
-                    time.sleep(2)
-                    st.rerun()
-            
-            with col_cancel:
-                if st.button("❌ Anuluj", width="stretch", key="confirm_close_firm_no"):
-                    st.session_state["confirm_close_firm"] = False
-                    st.rerun()
-        
-        st.markdown("---")
-        
-        # Pozostałe opcje w drugiej sekcji
-        st.markdown("### ⚙️ Zarządzanie scenariuszem")
-        
-        col3, col4 = st.columns(2)
-        
-        with col3:
-            st.markdown("#### 🔄 Zmień branżę")
-            st.caption("Przełącz się na inną branżę. Twoja aktualna gra zostanie zachowana.")
-            if st.button("🔄 Wybór branży", type="secondary", width="stretch", key="change_industry_btn2"):
-                st.session_state["selected_industry"] = None
-                st.rerun()
-        
-        with col4:
-            st.markdown("#### 🔄 Zresetuj scenariusz")
-            st.caption("Usuń obecny scenariusz i rozpocznij nowy w tej samej branży.")
-            
-            # Potwierdź akcję
-            if st.button("🔄 Resetuj", type="secondary", width="stretch", key="reset_scenario_btn"):
-                st.session_state["confirm_reset_scenario"] = True
-                st.rerun()
-        
-        # Dialog potwierdzenia resetowania scenariusza
-        if st.session_state.get("confirm_reset_scenario", False):
-            st.warning("⚠️ **Czy na pewno chcesz zresetować ten scenariusz?**")
-            st.markdown("""
-            Konsekwencje:
-            - ❌ Cała aktualna gra zostanie usunięta (NIE trafi do Hall of Fame)
-            - 🎯 Będziesz mógł wybrać nowy scenariusz w tej branży
-            - 💾 Inne branże pozostaną nienaruszone
-            - 💰 Zdobyte monety **zachowasz**
-            """)
-            
-            col_confirm, col_cancel = st.columns(2)
-            with col_confirm:
-                if st.button("✅ TAK, resetuj scenariusz", type="primary", width="stretch", key="confirm_reset_yes"):
-                    # Usuń grę z tej branży
-                    if industry_id in user_data.get("business_games", {}):
-                        del user_data["business_games"][industry_id]
-                        save_user_data(username, user_data)
-                        st.success("✅ Scenariusz zresetowany! Przekierowuję do wyboru nowego...")
-                        st.session_state["confirm_reset_scenario"] = False
-                        time.sleep(1)
-                        st.rerun()
-            with col_cancel:
-                if st.button("❌ Anuluj", width="stretch", key="confirm_reset_no"):
-                    st.session_state["confirm_reset_scenario"] = False
-                    st.rerun()
-    
-    st.markdown("---")
-    
-    # =============================================================================
-    # SEKCJA BIURA
-    # =============================================================================
     
     st.subheader("🏢 Twoje Biuro")
     
@@ -3508,7 +3387,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
             current_money = bg_data.get('money', 0)
             
             if current_money >= next_office['koszt_ulepszenia']:
-                if st.button("⬆️ Ulepsz biuro", type="primary", width="stretch"):
+                if st.button("⬆️ Ulepsz biuro", type="primary", use_container_width=True):
                     # Ulepsz biuro - płacimy Z FIRMY!
                     bg_data["money"] = current_money - next_office['koszt_ulepszenia']
                     bg_data["office"]["type"] = next_office_type
@@ -3534,18 +3413,655 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
                     st.balloons()
                     st.rerun()
             else:
-                st.button("⬆️ Ulepsz biuro", disabled=True, width="stretch")
+                st.button("⬆️ Ulepsz biuro", disabled=True, use_container_width=True)
                 st.caption(f"Potrzebujesz: {next_office['koszt_ulepszenia'] - current_money:.0f} PLN więcej")
     else:
         st.success("🌟 Posiadasz najlepsze możliwe biuro!")
+
+# =============================================================================
+# TAB 4A: USTAWIENIA FIRMY
+# =============================================================================
+
+def show_firm_settings_tab(username, user_data, industry_id="consulting"):
+    """Ustawienia firmy - nazwa, logo, archiwum firm"""
+    bg_data = get_game_data(user_data, industry_id)
     
-    st.markdown("---")
+    # Wszystkie ustawienia w jednym miejscu z tabami
+    settings_tab1, settings_tab2, settings_tab3, settings_tab4, settings_tab5, settings_tab6 = st.tabs([
+        "✏️ Nazwa i logo",
+        "� Informacje",
+        "🎨 Personalizacja",
+        "💰 Cele finansowe",
+        "🔔 Powiadomienia",
+        "� Zarządzanie firmą"
+    ])
+    
+    # TAB 1: Nazwa i logo
+    with settings_tab1:
+        col_name, col_logo = st.columns([1, 1])
+        
+        with col_name:
+            st.markdown("### ✏️ Zmień nazwę firmy")
+            new_name = st.text_input(
+                "Nowa nazwa firmy", 
+                value=bg_data["firm"]["name"], 
+                key="settings_firm_name_input"
+            )
+            if st.button("💾 Zapisz nazwę", key="settings_save_firm_name", type="primary"):
+                bg_data["firm"]["name"] = new_name
+                save_game_data(user_data, bg_data, industry_id)
+                save_user_data(username, user_data)
+                st.success("✅ Nazwa firmy zaktualizowana!")
+                st.rerun()
+        
+        with col_logo:
+            st.markdown("### 🎨 Zmień logo firmy")
+            
+            # Kategorie logo
+            categories = list(FIRM_LOGOS.keys())
+            category_names = {
+                "basic": "🏢 Budynki",
+                "business": "💼 Biznes",
+                "creative": "🎨 Kreatywne",
+                "nature": "🌍 Natura",
+                "tech": "💻 Technologia",
+                "animals": "🦁 Zwierzęta"
+            }
+            
+            selected_category = st.selectbox(
+                "Kategoria:",
+                categories,
+                format_func=lambda x: category_names.get(x, x),
+                key="settings_logo_category"
+            )
+            
+            # Grid logo (mniejszy - 6 kolumn)
+            available_logos = FIRM_LOGOS[selected_category]["free"]
+            cols = st.columns(6)
+            for idx, logo in enumerate(available_logos[:12]):  # Max 12 logo
+                with cols[idx % 6]:
+                    if st.button(
+                        logo,
+                        key=f"settings_logo_{selected_category}_{idx}",
+                        help=f"Wybierz {logo}"
+                    ):
+                        bg_data["firm"]["logo"] = logo
+                        save_game_data(user_data, bg_data, industry_id)
+                        save_user_data(username, user_data)
+                        st.success(f"✅ Logo: {logo}")
+                        st.rerun()
+        
+        # Podgląd na całej szerokości
+        st.markdown("---")
+        st.markdown("### 👀 Podgląd")
+        current_logo = bg_data["firm"].get("logo", "🏢")
+        current_name = bg_data["firm"]["name"]
+        st.markdown(f"""
+        <div style='text-align: center; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; color: white;'>
+            <div style='font-size: 72px; margin-bottom: 12px;'>{current_logo}</div>
+            <h2 style='margin: 0; color: white;'>{current_name}</h2>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # TAB 2: Informacje o firmie
+    with settings_tab2:
+        st.markdown("### 📊 Informacje o firmie")
+        
+        # Pobierz dane
+        founded_date = bg_data["firm"].get("founded", datetime.now().strftime("%Y-%m-%d"))
+        founded_dt = datetime.strptime(founded_date, "%Y-%m-%d")
+        days_active = (datetime.now() - founded_dt).days
+        
+        # Grid z informacjami
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 20px; border-radius: 12px; text-align: center; color: white;'>
+                <div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px;'>📅 Data założenia</div>
+                <div style='font-size: 24px; font-weight: 700;'>{}</div>
+            </div>
+            """.format(founded_dt.strftime("%d.%m.%Y")), unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 12px; text-align: center; color: white;'>
+                <div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px;'>⏱️ Dni działalności</div>
+                <div style='font-size: 24px; font-weight: 700;'>{days_active}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            level = bg_data["firm"].get("level", 1)
+            st.markdown(f"""
+            <div style='background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 20px; border-radius: 12px; text-align: center; color: white;'>
+                <div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px;'>🏆 Poziom firmy</div>
+                <div style='font-size: 24px; font-weight: 700;'>Level {level}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Slogan/Motto
+        st.markdown("### 💬 Motto firmy")
+        current_motto = bg_data["firm"].get("motto", "")
+        new_motto = st.text_area(
+            "Motto lub slogan Twojej firmy:",
+            value=current_motto,
+            max_chars=200,
+            height=80,
+            placeholder="Np. 'Jakość przede wszystkim' lub 'Innowacje dla ludzi'",
+            key="firm_motto"
+        )
+        
+        if new_motto != current_motto:
+            if st.button("💾 Zapisz motto", type="primary", key="save_motto"):
+                bg_data["firm"]["motto"] = new_motto
+                save_game_data(user_data, bg_data, industry_id)
+                save_user_data(username, user_data)
+                st.success("✅ Motto zaktualizowane!")
+                st.rerun()
+        
+        st.markdown("---")
+        
+        # Dodatkowe informacje
+        st.markdown("### 📋 Szczegóły")
+        
+        info_col1, info_col2 = st.columns(2)
+        
+        with info_col1:
+            st.info(f"""
+            **🏢 Branża:** {industry_id.capitalize()}  
+            **📊 Scenariusz:** {bg_data.get('scenario_id', 'N/A')}  
+            **⭐ Reputacja:** {bg_data['firm'].get('reputation', 0)}  
+            """)
+        
+        with info_col2:
+            total_employees = len(bg_data.get("employees", []))
+            total_completed = len(bg_data.get("contracts", {}).get("completed", []))
+            total_revenue = bg_data.get("stats", {}).get("total_revenue", 0)
+            
+            st.success(f"""
+            **👥 Pracownicy:** {total_employees}  
+            **✅ Ukończone kontrakty:** {total_completed}  
+            **💰 Łączny przychód:** {total_revenue:,} PLN  
+            """)
+    
+    # TAB 3: Personalizacja
+    with settings_tab3:
+        st.markdown("### 🎨 Schemat kolorów firmy")
+        st.info("💡 Wybierz schemat kolorów, który będzie reprezentował Twoją firmę w interfejsie")
+        
+        # Dostępne schematy kolorów
+        color_schemes = {
+            "purple": {"name": "🟣 Fioletowy (Classic)", "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", "primary": "#667eea"},
+            "blue": {"name": "🔵 Niebieski (Professional)", "gradient": "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)", "primary": "#3b82f6"},
+            "green": {"name": "🟢 Zielony (Growth)", "gradient": "linear-gradient(135deg, #10b981 0%, #059669 100%)", "primary": "#10b981"},
+            "orange": {"name": "🟠 Pomarańczowy (Energy)", "gradient": "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)", "primary": "#f59e0b"},
+            "red": {"name": "🔴 Czerwony (Bold)", "gradient": "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)", "primary": "#ef4444"},
+            "pink": {"name": "🌸 Różowy (Creative)", "gradient": "linear-gradient(135deg, #ec4899 0%, #db2777 100%)", "primary": "#ec4899"},
+            "teal": {"name": "💎 Turkusowy (Innovation)", "gradient": "linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)", "primary": "#14b8a6"},
+            "indigo": {"name": "💜 Indygo (Premium)", "gradient": "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)", "primary": "#6366f1"}
+        }
+        
+        # Obecny schemat
+        current_scheme = bg_data["firm"].get("color_scheme", "purple")
+        
+        # Grid z podglądem schematów
+        cols = st.columns(4)
+        for idx, (scheme_id, scheme_data) in enumerate(color_schemes.items()):
+            with cols[idx % 4]:
+                is_current = scheme_id == current_scheme
+                border = "4px solid #10b981" if is_current else "2px solid #e5e7eb"
+                
+                st.markdown(f"""
+                <div style='border: {border}; border-radius: 12px; padding: 12px; margin-bottom: 12px; background: white;'>
+                    <div style='background: {scheme_data["gradient"]}; height: 80px; border-radius: 8px; margin-bottom: 8px;'></div>
+                    <div style='font-size: 12px; text-align: center; color: #64748b;'>{scheme_data["name"]}</div>
+                    {"<div style='text-align: center; color: #10b981; font-size: 11px; margin-top: 4px;'>✓ Aktywny</div>" if is_current else ""}
+                </div>
+                """, unsafe_allow_html=True)
+                
+                if st.button("Wybierz", key=f"color_{scheme_id}", disabled=is_current, use_container_width=True):
+                    bg_data["firm"]["color_scheme"] = scheme_id
+                    save_game_data(user_data, bg_data, industry_id)
+                    save_user_data(username, user_data)
+                    st.success(f"✅ Zmieniono na {scheme_data['name']}")
+                    st.rerun()
+        
+        st.markdown("---")
+        
+        # Podgląd wizytówki w rankingach
+        st.markdown("### 👀 Podgląd wizytówki")
+        current_logo = bg_data["firm"].get("logo", "🏢")
+        current_name = bg_data["firm"]["name"]
+        current_gradient = color_schemes[current_scheme]["gradient"]
+        
+        st.markdown(f"""
+        <div style='background: {current_gradient}; padding: 24px; border-radius: 16px; color: white; margin: 16px 0;'>
+            <div style='display: flex; align-items: center; gap: 20px;'>
+                <div style='font-size: 64px;'>{current_logo}</div>
+                <div style='flex: 1;'>
+                    <h2 style='margin: 0; color: white; font-size: 28px;'>{current_name}</h2>
+                    <div style='opacity: 0.9; margin-top: 8px;'>Level {bg_data["firm"].get("level", 1)} • {industry_id.capitalize()}</div>
+                </div>
+                <div style='text-align: right;'>
+                    <div style='font-size: 32px; font-weight: 700;'>#{1}</div>
+                    <div style='opacity: 0.9; font-size: 14px;'>w rankingu</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # TAB 4: Cele finansowe
+    with settings_tab4:
+        st.markdown("### 💰 Zarządzanie celami finansowymi")
+        
+        # Inicjalizuj ustawienia finansowe jeśli nie istnieją
+        if "financial_settings" not in bg_data:
+            bg_data["financial_settings"] = {
+                "savings_goal": 0,
+                "low_balance_alert": -10000,
+                "high_balance_alert": 50000,
+                "auto_transfer_enabled": False,
+                "auto_transfer_threshold": 30000,
+                "auto_transfer_amount": 5000
+            }
+        
+        fin_settings = bg_data["financial_settings"]
+        current_balance = bg_data.get("money", 0)
+        
+        # Obecne saldo
+        balance_color = "#10b981" if current_balance >= 0 else "#ef4444"
+        st.markdown(f"""
+        <div style='background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 24px; border-radius: 16px; color: white; margin-bottom: 24px;'>
+            <div style='font-size: 14px; opacity: 0.8; margin-bottom: 8px;'>💰 Obecne saldo firmy</div>
+            <div style='font-size: 42px; font-weight: 700; color: {balance_color};'>{current_balance:,} PLN</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Cel oszczędnościowy
+        st.markdown("### 🎯 Cel oszczędnościowy")
+        st.caption("Ustaw minimalną kwotę, którą chcesz utrzymać jako bufor bezpieczeństwa")
+        
+        savings_goal = st.number_input(
+            "Cel oszczędnościowy (PLN):",
+            min_value=0,
+            max_value=1000000,
+            value=fin_settings.get("savings_goal", 0),
+            step=5000,
+            key="savings_goal_input"
+        )
+        
+        if current_balance >= savings_goal and savings_goal > 0:
+            st.success(f"✅ Cel osiągnięty! Masz {current_balance - savings_goal:,} PLN powyżej celu")
+        elif savings_goal > 0:
+            deficit = savings_goal - current_balance
+            st.warning(f"⚠️ Brakuje {deficit:,} PLN do osiągnięcia celu")
+        
+        st.markdown("---")
+        
+        # Alerty salda
+        st.markdown("### 🔔 Alerty salda")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("#### ⚠️ Alert niskiego salda")
+            low_alert = st.number_input(
+                "Powiadom gdy saldo spadnie poniżej:",
+                min_value=-100000,
+                max_value=0,
+                value=fin_settings.get("low_balance_alert", -10000),
+                step=1000,
+                key="low_alert_input"
+            )
+            
+            if current_balance < low_alert:
+                st.error(f"🚨 ALERT! Saldo poniżej progu: {current_balance:,} PLN < {low_alert:,} PLN")
+        
+        with col2:
+            st.markdown("#### 🎉 Alert wysokiego salda")
+            high_alert = st.number_input(
+                "Powiadom gdy saldo przekroczy:",
+                min_value=0,
+                max_value=1000000,
+                value=fin_settings.get("high_balance_alert", 50000),
+                step=5000,
+                key="high_alert_input"
+            )
+            
+            if current_balance > high_alert:
+                st.success(f"🎉 Gratulacje! Saldo powyżej progu: {current_balance:,} PLN > {high_alert:,} PLN")
+        
+        st.markdown("---")
+        
+        # Auto-transfer do DegenCoins
+        st.markdown("### 💎 Automatyczny transfer zysków")
+        st.caption("Automatycznie przenoś nadwyżki do swojego portfela DegenCoins")
+        
+        auto_transfer = st.checkbox(
+            "Włącz automatyczny transfer",
+            value=fin_settings.get("auto_transfer_enabled", False),
+            key="auto_transfer_enabled"
+        )
+        
+        if auto_transfer:
+            col1, col2 = st.columns(2)
+            with col1:
+                transfer_threshold = st.number_input(
+                    "Transfer gdy saldo przekroczy:",
+                    min_value=0,
+                    max_value=1000000,
+                    value=fin_settings.get("auto_transfer_threshold", 30000),
+                    step=5000,
+                    key="transfer_threshold"
+                )
+            with col2:
+                transfer_amount = st.number_input(
+                    "Kwota transferu:",
+                    min_value=1000,
+                    max_value=100000,
+                    value=fin_settings.get("auto_transfer_amount", 5000),
+                    step=1000,
+                    key="transfer_amount"
+                )
+            
+            st.info(f"💡 Gdy saldo firmy przekroczy {transfer_threshold:,} PLN, automatycznie przelej {transfer_amount:,} PLN do DegenCoins")
+        
+        # Zapisz ustawienia
+        if st.button("💾 Zapisz ustawienia finansowe", type="primary", key="save_financial_settings"):
+            bg_data["financial_settings"] = {
+                "savings_goal": savings_goal,
+                "low_balance_alert": low_alert,
+                "high_balance_alert": high_alert,
+                "auto_transfer_enabled": auto_transfer,
+                "auto_transfer_threshold": transfer_threshold if auto_transfer else fin_settings.get("auto_transfer_threshold", 30000),
+                "auto_transfer_amount": transfer_amount if auto_transfer else fin_settings.get("auto_transfer_amount", 5000)
+            }
+            save_game_data(user_data, bg_data, industry_id)
+            save_user_data(username, user_data)
+            st.success("✅ Ustawienia finansowe zapisane!")
+            st.rerun()
+    
+    # TAB 5: Powiadomienia
+    with settings_tab5:
+        st.markdown("### 🔔 Centrum powiadomień")
+        
+        # Inicjalizuj ustawienia powiadomień
+        if "notifications" not in bg_data:
+            bg_data["notifications"] = {
+                "deadline_alert_hours": 24,
+                "deadline_alert_enabled": True,
+                "new_contracts_alert": True,
+                "balance_alerts_enabled": True,
+                "events_alerts_enabled": True,
+                "level_up_alerts": True,
+                "employee_alerts": True
+            }
+        
+        notif_settings = bg_data["notifications"]
+        
+        # Alerty deadline
+        st.markdown("### ⏰ Alerty deadline kontraktów")
+        deadline_enabled = st.checkbox(
+            "Powiadamiaj o zbliżających się deadline'ach",
+            value=notif_settings.get("deadline_alert_enabled", True),
+            key="deadline_alert_enabled"
+        )
+        
+        if deadline_enabled:
+            deadline_hours = st.slider(
+                "Powiadom X godzin przed deadline:",
+                min_value=1,
+                max_value=72,
+                value=notif_settings.get("deadline_alert_hours", 24),
+                step=1,
+                key="deadline_hours"
+            )
+            st.caption(f"💡 Otrzymasz powiadomienie {deadline_hours}h przed upływem terminu każdego kontraktu")
+        
+        st.markdown("---")
+        
+        # Pozostałe powiadomienia
+        st.markdown("### 📬 Inne powiadomienia")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            new_contracts = st.checkbox(
+                "📋 Nowe kontrakty w puli",
+                value=notif_settings.get("new_contracts_alert", True),
+                key="new_contracts_alert"
+            )
+            
+            balance_alerts = st.checkbox(
+                "💰 Alerty salda",
+                value=notif_settings.get("balance_alerts_enabled", True),
+                key="balance_alerts"
+            )
+            
+            events_alerts = st.checkbox(
+                "🎲 Wydarzenia losowe",
+                value=notif_settings.get("events_alerts_enabled", True),
+                key="events_alerts"
+            )
+        
+        with col2:
+            level_up = st.checkbox(
+                "🏆 Awanse poziomów",
+                value=notif_settings.get("level_up_alerts", True),
+                key="level_up_alerts"
+            )
+            
+            employee_alerts = st.checkbox(
+                "👥 Zmiany w zespole",
+                value=notif_settings.get("employee_alerts", True),
+                key="employee_alerts"
+            )
+            
+            reputation_alerts = st.checkbox(
+                "⭐ Zmiany reputacji",
+                value=notif_settings.get("reputation_alerts", True),
+                key="reputation_alerts"
+            )
+        
+        st.markdown("---")
+        
+        # Podsumowanie aktywnych alertów
+        active_alerts = sum([
+            deadline_enabled,
+            new_contracts,
+            balance_alerts,
+            events_alerts,
+            level_up,
+            employee_alerts,
+            reputation_alerts
+        ])
+        
+        st.info(f"📊 Aktywnych alertów: **{active_alerts}**/7")
+        
+        # Zapisz ustawienia
+        if st.button("💾 Zapisz ustawienia powiadomień", type="primary", key="save_notifications"):
+            bg_data["notifications"] = {
+                "deadline_alert_hours": deadline_hours if deadline_enabled else notif_settings.get("deadline_alert_hours", 24),
+                "deadline_alert_enabled": deadline_enabled,
+                "new_contracts_alert": new_contracts,
+                "balance_alerts_enabled": balance_alerts,
+                "events_alerts_enabled": events_alerts,
+                "level_up_alerts": level_up,
+                "employee_alerts": employee_alerts,
+                "reputation_alerts": reputation_alerts
+            }
+            save_game_data(user_data, bg_data, industry_id)
+            save_user_data(username, user_data)
+            st.success("✅ Ustawienia powiadomień zapisane!")
+            st.rerun()
+    
+    # TAB 6: Zarządzanie firmą
+    with settings_tab6:
+        # Sub-taby w zarządzaniu
+        manage_tab1, manage_tab2 = st.tabs(["🆕 Nowa firma", "📦 Archiwum"])
+        
+        # Sub-tab: Nowa firma
+        with manage_tab1:
+            st.warning("⚠️ **Uwaga:** Te akcje mogą zmienić Twoją grę!")
+            
+            st.markdown("### 🆕 Rozpocznij nową firmę")
+            st.info("""
+            **Co się stanie:**
+            - Obecna firma zostanie zarchiwizowana (dane nie zostaną utracone)
+            - Stworzysz nową firmę od zera z nowym scenariuszem
+            - Zachowasz swoje DegenCoins i doświadczenie
+            - Będziesz mógł wrócić do poprzedniej firmy w zakładce "📦 Archiwum"
+            """)
+            
+            if st.button("🚀 Rozpocznij nową firmę", type="primary", key="start_new_company"):
+                # Zarchiwizuj obecną firmę
+                if "archived_games" not in user_data:
+                    user_data["archived_games"] = {}
+                if industry_id not in user_data["archived_games"]:
+                    user_data["archived_games"][industry_id] = []
+                
+                # Dodaj timestamp do archiwalnej gry
+                archived_game = bg_data.copy()
+                archived_game["archived_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                archived_game["firm"]["archived_name"] = f"{bg_data['firm']['name']} (zarchiwizowana {datetime.now().strftime('%d.%m.%Y')})"
+                
+                user_data["archived_games"][industry_id].append(archived_game)
+                
+                # Usuń obecną grę
+                del user_data["business_games"][industry_id]
+                
+                # Zapisz zmiany
+                save_user_data(username, user_data)
+                
+                # Resetuj session state
+                st.session_state["selected_industry"] = industry_id
+                
+                st.success("✅ Firma zarchiwizowana! Przekierowuję do wyboru scenariusza...")
+                time.sleep(1)
+                st.rerun()
+        
+        # Sub-tab: Archiwum
+        with manage_tab2:
+            if "archived_games" in user_data and industry_id in user_data["archived_games"]:
+                archived_count = len(user_data["archived_games"][industry_id])
+                
+                if archived_count > 0:
+                    st.markdown(f"### 📦 Masz {archived_count} zarchiwizowanych firm")
+                    st.info("💡 Możesz przywrócić dowolną firmę - obecna zostanie zarchiwizowana automatycznie")
+                    
+                    for idx, archived_game in enumerate(user_data["archived_games"][industry_id]):
+                        firm_name = archived_game["firm"].get("archived_name", archived_game["firm"]["name"])
+                        archived_at = archived_game.get("archived_at", "N/A")
+                        level = archived_game["firm"].get("level", 1)
+                        reputation = archived_game["firm"].get("reputation", 0)
+                        logo = archived_game["firm"].get("logo", "🏢")
+                        
+                        # Karta firmy
+                        with st.container():
+                            col_logo, col_info, col_action = st.columns([1, 4, 2])
+                            
+                            with col_logo:
+                                st.markdown(f"""
+                                <div style='text-align: center; font-size: 48px; padding: 10px;'>
+                                    {logo}
+                                </div>
+                                """, unsafe_allow_html=True)
+                            
+                            with col_info:
+                                st.markdown(f"**{firm_name}**")
+                                st.caption(f"📅 Zarchiwizowana: {archived_at}")
+                                st.caption(f"🏢 Level {level} | ⭐ Reputacja {reputation}")
+                            
+                            with col_action:
+                                if st.button("🔄 Przywróć", key=f"restore_game_{idx}", type="secondary"):
+                                    # Zarchiwizuj obecną firmę jeśli istnieje
+                                    if industry_id in user_data["business_games"]:
+                                        current_game = user_data["business_games"][industry_id].copy()
+                                        current_game["archived_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                                        current_game["firm"]["archived_name"] = f"{current_game['firm']['name']} (zarchiwizowana {datetime.now().strftime('%d.%m.%Y')})"
+                                        user_data["archived_games"][industry_id].append(current_game)
+                                    
+                                    # Przywróć wybraną firmę
+                                    restored_game = archived_game.copy()
+                                    # Usuń metadane archiwum
+                                    if "archived_at" in restored_game:
+                                        del restored_game["archived_at"]
+                                    if "archived_name" in restored_game["firm"]:
+                                        del restored_game["firm"]["archived_name"]
+                                    
+                                    user_data["business_games"][industry_id] = restored_game
+                                    
+                                    # Usuń z archiwum
+                                    user_data["archived_games"][industry_id].pop(idx)
+                                    
+                                    # Zapisz
+                                    save_user_data(username, user_data)
+                                    
+                                    st.success(f"✅ Przywrócono firmę: {firm_name}")
+                                    time.sleep(1)
+                                    st.rerun()
+                            
+                            st.markdown("---")
+                else:
+                    st.info("📭 Brak zarchiwizowanych firm. Rozpocznij nową firmę w zakładce '🆕 Nowa firma'")
+            else:
+                st.info("📭 Brak zarchiwizowanych firm. Rozpocznij nową firmę w zakładce '🆕 Nowa firma'")
+
+# =============================================================================
+# TAB 4B: ZARZĄDZANIE GRĄ
+# =============================================================================
+
+def show_game_management_tab(username, user_data, industry_id="consulting"):
+    """Zarządzanie grą - zmiana branży, reset, zamknięcie firmy"""
+    import time
+    from data.scenarios import get_scenario
+    
+    bg_data = get_game_data(user_data, industry_id)
+    
+    st.subheader("⚙️ Zarządzanie Grą")
+    
+    # Sprawdź czy to tryb lifetime
+    is_lifetime = bg_data.get("scenario_id") == "lifetime"
+    
+    if is_lifetime:
+        st.markdown("### ♾️ Tryb Lifetime Challenge")
+        st.info("💡 Grasz w trybie nieskończonym! Rywalizuj z innymi w rankingu i buduj swoją firmę bez ograniczeń.")
+        st.markdown("---")
+    
+    # Będzie reszta zawartości z expandera...
+    st.info("🚧 Funkcje zarządzania grą wkrótce dostępne tutaj.")
+
+# =============================================================================
+# TAB 3B: PRACOWNICY
+# =============================================================================
+
+def show_employees_tab(username, user_data, industry_id="consulting"):
+    """Zakładka Biuro i Pracownicy"""
+    bg_data = get_game_data(user_data, industry_id)
+    
+    # Inicjalizacja biura jeśli nie istnieje (dla starych zapisów)
+    if "office" not in bg_data:
+        bg_data["office"] = {
+            "type": "home_office",
+            "upgraded_at": None
+        }
+        save_game_data(user_data, bg_data, industry_id)
+        save_user_data(username, user_data)
     
     # =============================================================================
     # SEKCJA PRACOWNIKÓW
     # =============================================================================
     
     st.subheader("👥 Zarządzanie Zespołem")
+    
+    # Pobierz informacje o biurze (potrzebne do limitu pracowników)
+    office_type = bg_data["office"]["type"]
+    office_info = OFFICE_TYPES[office_type]
     
     max_employees = office_info['max_pracownikow']
     current_count = len(bg_data["employees"])
@@ -5198,8 +5714,8 @@ def render_event_history_card(event: dict):
 # TAB 7: RANKINGI
 # =============================================================================
 
-def show_rankings_tab(username, user_data, industry_id="consulting"):
-    """Zakładka Rankingi"""
+def show_rankings_content(username, user_data, industry_id="consulting"):
+    """Zawartość rankingów - może być wyświetlana jako osobny tab lub część Dashboard"""
     bg_data = get_game_data(user_data, industry_id)
     
     st.subheader("🏆 Rankingi Firm Konsultingowych")
@@ -5335,6 +5851,20 @@ def show_rankings_tab(username, user_data, industry_id="consulting"):
         actual_rank = next((i+1 for i, f in enumerate(all_firms) if f["username"] == firm["username"]), idx)
         medal = "🥇" if actual_rank == 1 else "🥈" if actual_rank == 2 else "🥉" if actual_rank == 3 else f"#{actual_rank}"
         
+        # Kolory podium - złoto, srebro, brąz
+        if actual_rank == 1:
+            podium_bg = "linear-gradient(135deg, #ffd70015 0%, #ffed4e15 100%)"
+            podium_border = "#ffd700"
+        elif actual_rank == 2:
+            podium_bg = "linear-gradient(135deg, #c0c0c015 0%, #e8e8e815 100%)"
+            podium_border = "#c0c0c0"
+        elif actual_rank == 3:
+            podium_bg = "linear-gradient(135deg, #cd7f3215 0%, #d4964815 100%)"
+            podium_border = "#cd7f32"
+        else:
+            podium_bg = "white"
+            podium_border = "#e2e8f0"
+        
         # Format score zależnie od typu (liczba całkowita vs z przecinkiem)
         if ranking_type == "⭐ Jakość (średnia ocena)":
             score_display = f"{firm['score']:.1f}"
@@ -5344,14 +5874,16 @@ def show_rankings_tab(username, user_data, industry_id="consulting"):
         if firm["is_user"]:
             st.markdown(f"""
             <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        color: white; padding: 15px; border-radius: 10px; margin: 10px 0;'>
+                        color: white; padding: 15px; border-radius: 10px; margin: 10px 0;
+                        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);'>
                 <h3 style='margin:0;'>{medal} <span style='font-size: 1.2em;'>{firm['logo']}</span> {firm['name']} (Ty!)</h3>
                 <p style='margin:5px 0 0 0;'>{score_label}: {score_display}{score_suffix}</p>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
-            <div style='border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin: 10px 0;'>
+            <div style='background: {podium_bg}; border: 2px solid {podium_border}; 
+                        padding: 15px; border-radius: 10px; margin: 10px 0;'>
                 <h4 style='margin:0;'>{medal} <span style='font-size: 1.2em;'>{firm['logo']}</span> {firm['name']}</h4>
                 <p style='margin:5px 0 0 0; color: #666;'>{score_label}: {score_display}{score_suffix}</p>
             </div>
@@ -5387,238 +5919,6 @@ def render_user_rank_highlight(bg_data, ranking_type):
         </div>
     </div>
     """, unsafe_allow_html=True)
-
-# =============================================================================
-# TAB 0: INSTRUKCJA GRY
-# =============================================================================
-
-def show_instructions_tab():
-    """Zakładka z instrukcją gry"""
-    
-    st.markdown("## 📖 Jak grać w Business Games?")
-    
-    st.markdown("---")
-    
-    # Cel gry
-    st.markdown("""
-    ### 🎯 Cel Gry
-    
-    Twoim celem jest **zbudowanie i rozwinięcie firmy konsultingowej CIQ** od Solo Consultant do globalnego imperium,
-    realizując kontrakty dla klientów, zarządzając zespołem pracowników i reagując na losowe wydarzenia rynkowe.
-    
-    **Wygrywasz, gdy:**
-    - Osiągniesz poziom 10: **CIQ Empire** (180,000+ PLN, 5500+ reputacji)
-    - Zdobędziesz najwięcej przychodów
-    - Uzyskasz najlepszą średnią ocenę kontraktów
-    """)
-    
-    st.markdown("---")
-    
-    # Podstawy rozgrywki
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.markdown("""
-        ### 💼 Kontrakty
-        
-        **Typy kontraktów:**
-        - 💼 **Standard** - podstawowe zlecenia (warsztaty, audyty)
-        - ⭐ **Premium** - wysokopłatne projekty (wymagają reputacji)
-        - 💬 **AI Conversation** - rozmowy z NPC + ocena komunikacji (NOWOŚĆ!)
-        
-        **Jak działają kontrakty Standard/Premium?**
-        1. W zakładce **"Rynek Kontraktów"** wybierz dostępne zlecenia
-        2. Każdy kontrakt ma:
-           - 🔥 **Trudność** (1-5 płomyków)
-           - 💰 **Nagrodę** (zależną od oceny 1-5⭐)
-           - ⭐ **Bonus reputacji**
-           - 📋 **Kategorię** (Konflikt, Coaching, Kryzys, Leadership)
-        
-        **💬 AI Conversations - NOWOŚĆ!**
-        - **Ikona:** 💬 (łatwo rozpoznać na rynku)
-        - **Jak działa:** Prowadzisz rzeczywistą rozmowę z AI-sterowanym NPC
-        - **🔊 Text-to-Speech:** Każda odpowiedź NPC jest czytana polskim głosem!
-        - **Metryki na żywo:** Sidebar pokazuje empatię, asertywność, profesjonalizm
-        - **Dynamiczne reakcje:** AI reaguje na to co piszesz
-        - **Scenariusze:** Mark (spóźniający się programista), Michael (trudne negocjacje)
-        
-        **Wykonywanie kontraktów:**
-        1. Kliknij kontrakt w "Aktywne Kontrakty"
-        2. Standard/Premium: Audio/tekst → AI ocenia (1-5⭐)
-        3. AI Conversation: Prowadź rozmowę → końcowa ocena 1-5⭐
-        4. Masz **3 próby** na kontrakty Standard/Premium
-        """)
-    
-    with col2:
-        st.markdown("""
-        ### 🏢 10 Poziomów Firmy
-        
-        **Twoja firma rozwija się przez 10 poziomów:**
-        
-        | Poziom | Nazwa | PLN | Reputacja | Pracownicy | Kontrakty/dzień |
-        |--------|-------|-----|-----------|------------|-----------------|
-        | 1 | Solo Consultant | 0 | 0 | 0 | 1 |
-        | 2 | Boutique Consulting | 2k | 100 | 2 | 1 |
-        | 3 | CIQ Advisory | 5k | 300 | 3 | 1 |
-        | 4 | Strategic Partners | 10k | 600 | 5 | 2 |
-        | 5 | Elite Consulting | 20k | 1000 | 7 | 2 |
-        | 6 | Regional Leaders | 35k | 1500 | 10 | 2 |
-        | 7 | National Authority | 55k | 2200 | 15 | 3 |
-        | 8 | Global Partners | 80k | 3000 | 20 | 3 |
-        | 9 | Worldwide Corp. | 120k | 4000 | 30 | 4 |
-        | 10 | CIQ Empire | 180k | 5500 | 50 | 5 |
-        
-        **Kluczowe mechaniki:**
-        - 💰 Zbieraj pieniądze realizując kontrakty
-        - ⭐ Buduj reputację wysokiej jakości pracą
-        - 👥 Zatrudniaj pracowników (koszt: 500 PLN/osoba/dzień)
-        - 📈 Wyższe poziomy = więcej możliwości!
-        """)
-    
-    st.markdown("---")
-    
-    # Mechaniki gry
-    col3, col4 = st.columns(2)
-    
-    with col3:
-        st.markdown("""
-        ### 🎲 Wydarzenia Losowe
-        
-        Co turę (dzień) jest **10% szans** na wydarzenie:
-        
-        **🌱 Dla początkujących (poziom 1-2):**
-        - ☕ "Kawa na klawiaturze" (-200 PLN)
-        - 📡 "Przerwa w internecie" (-150 PLN)
-        - 🔧 "Drobna awaria sprzętu" (-300 PLN)
-        
-        **📈 Dla rozwijających się (poziom 3-5):**
-        - 📋 "Konkurencja podbiła ofertę" (strata kontraktu)
-        - 💼 "Nieoczekiwany kontrakt premium" (+1500 PLN)
-        - 🎯 "Polecenie od klienta" (+300 reputacji)
-        
-        **🏆 Dla dużych firm (poziom 6+):**
-        - ⚡ "Poważna awaria" (-1000 PLN + opóźnienie)
-        - 🏆 "Nagroda branżowa" (+500 reputacji)
-        - 🌍 "Międzynarodowy projekt" (+3000 PLN)
-        
-        **System jest zbalansowany:** 60% pozytywne/neutralne, 40% negatywne
-        """)
-    
-    with col4:
-        st.markdown("""
-        ### 👥 Pracownicy
-        
-        **Zatrudniaj specjalistów:**
-        - **Junior** (500💰) - podstawowe wsparcie
-        - **Mid** (1500💰) - lepsze bonusy
-        - **Senior** (3500💰) - najlepsze korzyści
-        
-        **Typy pracowników:**
-        - 📊 **Analityk** - bonus do oceny kontraktów (+0.5⭐)
-        - 💼 **Manager** - zwiększa pojemność dzienną (+1 kontrakt)
-        - 🎯 **Specjalista** - redukuje koszty dzienne (-20%)
-        - 🚀 **Ekspert** - zwiększa nagrody (+15%)
-        
-        **Pamiętaj:**
-        - Każdy pracownik: **500 PLN/dzień**
-        - Limit zależy od poziomu firmy
-        - ROI: Pracownik powinien generować >500 PLN/dzień wartości
-        """)
-    
-    st.markdown("---")
-    
-    # Wskazówki strategiczne
-    st.markdown("""
-    ### 💡 Wskazówki i Strategia
-    
-    #### ✅ Dobre praktyki:
-    - **Poziom 1-2:** Zbieraj pieniądze z tanich kontraktów, NIE zatrudniaj (za drogie!)
-    - **Wypróbuj AI Conversations:** Ikona 💬 - trening komunikacji + dobre nagrody + słuchaj NPC!
-    - **Buduj reputację:** Poziom 4-5 wymaga 600-1000 reputacji - rób premium kontrakty
-    - **Zarządzaj kapitałem:** Trzymaj zawsze 3x więcej niż koszty dzienne (np. 3 pracowników = 1500 PLN/dzień → trzymaj 4500+ PLN)
-    - **Poziom 4+ (2 kontrakty/dzień):** Teraz możesz zatrudniać rentownie!
-    
-    #### ❌ Unikaj:
-    - Zatrudniania za wcześnie (poziom 1-2) - spalenie kapitału
-    - Ignorowania reputacji - blokuje awans na wyższe poziomy
-    - Przyjmowania więcej kontraktów niż możesz wykonać
-    - Bankructwa - brak pieniędzy = automatyczne zwolnienia
-    
-    #### 🎯 Pro tipy dla AI Conversations:
-    - **🔊 Słuchaj audio:** Każda odpowiedź NPC jest czytana polskim głosem - możesz odtworzyć ponownie!
-    - **Mark (Spóźniający się Talent):** Potrzebuje empatii + granic. Odkryj problem rodzinny.
-    - **Michael (Trudne Negocjacje):** Testuje Twoją pewność siebie. Komunikuj wartość, nie ulegaj.
-    - **Metryki:** Sidebar pokazuje na żywo jak sobie radzisz (empatia, asertywność, etc.)
-    - **Możesz grać ponownie:** Nie udało się? Kliknij "Zagraj ponownie" i spróbuj innej strategii!
-    
-    #### 🚀 Ścieżka Fast-Track (najszybsza droga do poziomu 10):
-    1. **Poziom 1:** 5 kontraktów standard → 2500 PLN
-    2. **Poziom 2:** Zatrudnij 1 pracownika, 2 kontrakty/dzień → 5000 PLN
-    3. **Poziom 3:** Zatrudnij 2, fokus premium → 10,000 PLN
-    4. **Poziom 4+:** Skaluj agresywnie - każdy poziom = więcej kontraktów = szybsza progresja!
-    """)
-    
-    st.markdown("---")
-    
-    # FAQ
-    with st.expander("❓ Najczęściej zadawane pytania (FAQ)"):
-        st.markdown("""
-        **Q: Gdzie zobaczę wyniki po wykonaniu kontraktu?**  
-        A: **Dashboard!** Po wykonaniu kontraktu wróć do zakładki "🏢 Dashboard". W sekcji **"🎯 Ostatnio ukończone kontrakty"** zobaczysz ocenę, zarobek, reputację i feedback od klienta. Nie musisz wchodzić w "Historia & Wydarzenia" - wszystko jest na Dashboard!
-        
-        **Q: Nie widzę kontraktów AI (💬) na rynku?**  
-        A: Kontrakty AI mają poziom trudności 1 - powinny być widoczne od razu. Spróbuj "🔄 Wymuś odświeżenie".
-        
-        **Q: Jak działa Text-to-Speech w AI Conversations?**  
-        A: Każda odpowiedź NPC jest automatycznie czytana polskim głosem (gTTS). Odtwarzacz pojawia się pod wiadomością - kliknij play!
-        
-        **Q: Czy mogę posłuchać odpowiedzi NPC ponownie?**  
-        A: Tak! Audio jest zachowane w historii rozmowy - możesz odtworzyć każdą wiadomość wielokrotnie.
-        
-        **Q: Ile poziomów firmy jest w grze?**  
-        A: **10 poziomów** - od "Solo Consultant" (poziom 1) do "CIQ Empire" (poziom 10). Wymagane: 180,000+ PLN i 5500+ reputacji.
-        
-        **Q: Co to jest reputacja i jak ją zdobyć?**  
-        A: Reputacja odblokowuje wyższe poziomy firmy. Zdobywasz ją wykonując kontrakty (+10-50 za każdy). Premium kontrakty dają więcej!
-        
-        **Q: Ile razy mogę próbować wykonać kontrakt?**  
-        A: **3 próby** na kontrakty Standard/Premium. AI Conversations: możesz "Zagraj ponownie" bez limitu.
-        
-        **Q: Co się stanie jak zabraknie mi pieniędzy?**  
-        A: **Bankructwo** - system automatycznie zwolni pracowników aby pokryć koszty. Unikaj tego! Trzymaj zawsze zapas.
-        
-        **Q: Czy mogę zatrudnić więcej pracowników niż limit?**  
-        A: Nie. Każdy poziom firmy ma maksymalną pojemność pracowników. Musisz awansować firmę.
-        
-        **Q: Jak działa dzienny limit kontraktów?**  
-        A: Limit liczy **WSZYSTKIE kontrakty dzisiaj** (przyjęte + ukończone). Poziom 1-3 = 1/dzień, poziom 4-6 = 2/dzień, itd. **WAŻNE:** Ukończenie kontraktu nie resetuje limitu - musisz poczekać do jutra!
-        
-        **Q: Kiedy powinienem zatrudnić pierwszego pracownika?**  
-        A: **Poziom 4+** gdy masz 2 kontrakty/dzień. Wcześniej (poziom 1-3) to strata pieniędzy - nie masz wystarczającej pojemności.
-        
-        **Q: Jak często pojawiają się wydarzenia?**  
-        A: **10% szans co turę** (dzień). Średnio 1 wydarzenie na 10 dni. System jest zbalansowany dla początkujących.
-        
-        **Q: Jak szybko mogę osiągnąć poziom 10?**  
-        A: Zależy od strategii: Agresywna gra ~2-3h, Bezpieczna ~4-5h, Casual ~6-10h.
-        
-        **Q: Czy AI Conversations są trudniejsze?**  
-        A: To nie test wiedzy, ale umiejętności komunikacji. Jeśli potrafisz prowadzić trudne rozmowy - będzie łatwo (4-5⭐)!
-        """)
-    
-    st.markdown("---")
-    
-    st.success("""
-    **🎮 Gotowy do gry?**  
-    Wróć do zakładki **Dashboard** i zacznij swoją przygodę biznesową!  
-    
-    💡 **Wskazówki:**
-    - Wypróbuj kontrakty AI (💬) - świetny trening komunikacji + słuchaj NPC w polskim głosie!
-    - **Po wykonaniu kontraktu wróć do Dashboard** - zobaczysz swoje wyniki w sekcji "🎯 Ostatnio ukończone kontrakty"!
-    - Nie musisz wchodzić w "Historia & Wydarzenia" aby zobaczyć feedback - wszystko jest na Dashboard!
-    
-    Powodzenia! 🚀
-    """)
 
 # =============================================================================
 # FUNKCJE POMOCNICZE

@@ -4,6 +4,7 @@ from utils.components import zen_header, notification, zen_button, add_animation
 from utils.material3_components import apply_material3_theme
 from utils.css_loader import ensure_css_files, load_login_css
 from utils.scroll_utils import scroll_to_top
+from config.settings import DEVELOPMENT_MODE
 import os
 import base64
 
@@ -18,6 +19,10 @@ def img_to_base64(img_path):
     return ""
 
 def show_login_page():
+    # Ostrzeżenie o trybie developerskim
+    if DEVELOPMENT_MODE:
+        st.warning("⚡ **TRYB DEVELOPERSKI AKTYWNY** - Dane nie są zapisywane do plików (tylko w pamięci). Po restarcie aplikacji znikną.")
+    
     # Zastosuj Material 3 Theme
     apply_material3_theme()
     

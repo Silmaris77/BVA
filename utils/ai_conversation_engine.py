@@ -81,11 +81,11 @@ def generate_npc_audio_elevenlabs(text: str, npc_config: Dict, emotion: str = "n
         
         settings = emotion_settings.get(emotion, emotion_settings["neutral"])
         
-        # Generuj audio
-        audio_generator = client.generate(
+        # Generuj audio (API v2.x)
+        audio_generator = client.text_to_speech.convert(
+            voice_id=voice_id,
             text=text,
-            voice=voice_id,
-            model="eleven_multilingual_v2",
+            model_id="eleven_multilingual_v2",
             voice_settings=VoiceSettings(
                 stability=settings["stability"],
                 similarity_boost=settings["similarity_boost"],
@@ -231,7 +231,7 @@ def generate_npc_audio(text: str, npc_config: Dict, emotion: str = "neutral") ->
         return None
 
 
-def initialize_ai_conversation(contract_id: str, npc_config: Dict, scenario_context: str):
+def initialize_ai_conversation(contract_id: str, npc_config: Dict, scenario_context: str, username: Optional[str] = None):
     """
     Inicjalizuje rozmowę AI dla danego kontraktu.
     
@@ -239,9 +239,14 @@ def initialize_ai_conversation(contract_id: str, npc_config: Dict, scenario_cont
         contract_id: Unikalny ID kontraktu
         npc_config: Konfiguracja NPC (imię, rola, osobowość, cel)
         scenario_context: Kontekst scenariusza (sytuacja, tło, cel rozmowy)
+        username: Nazwa użytkownika (dla separacji session state)
     """
-    # Initialize session state for this conversation
-    conv_key = f"ai_conv_{contract_id}"
+    # Pobierz username z session_state jeśli nie przekazano
+    if username is None:
+        username = st.session_state.get("username", "default_user")
+    
+    # Initialize session state for this conversation (per user!)
+    conv_key = f"ai_conv_{username}_{contract_id}"
     
     if conv_key not in st.session_state:
         st.session_state[conv_key] = {
@@ -265,20 +270,22 @@ def initialize_ai_conversation(contract_id: str, npc_config: Dict, scenario_cont
         # NPC sends opening message
         opening_message = npc_config.get("opening_message", "Dzień dobry.")
         initial_emotion = npc_config.get("initial_emotion", "neutral")
-        opening_audio = generate_npc_audio(opening_message, npc_config, emotion=initial_emotion)
+        # opening_audio = generate_npc_audio(opening_message, npc_config, emotion=initial_emotion)  # TTS tymczasowo wyłączone
         
         st.session_state[conv_key]["messages"].append({
             "role": "npc",
             "text": opening_message,
             "timestamp": datetime.now().strftime("%H:%M:%S"),
             "emotion": initial_emotion,
-            "audio": opening_audio
+            # "audio": opening_audio  # TTS tymczasowo wyłączone
         })
 
 
-def get_conversation_state(contract_id: str) -> Dict:
-    """Pobiera aktualny stan rozmowy"""
-    conv_key = f"ai_conv_{contract_id}"
+def get_conversation_state(contract_id: str, username: Optional[str] = None) -> Dict:
+    """Pobiera aktualny stan rozmowy dla danego użytkownika"""
+    if username is None:
+        username = st.session_state.get("username", "default_user")
+    conv_key = f"ai_conv_{username}_{contract_id}"
     return st.session_state.get(conv_key, {})
 
 
@@ -471,8 +478,8 @@ Zwróć odpowiedź w DOKŁADNIE tym formacie JSON (tylko JSON, bez markdown):
         
         # Generate audio for NPC response WITH EMOTION
         npc_emotion = reaction.get("emotion", "neutral")
-        audio_data = generate_npc_audio(reaction.get("text", ""), npc_config, emotion=npc_emotion)
-        reaction["audio"] = audio_data
+        # audio_data = generate_npc_audio(reaction.get("text", ""), npc_config, emotion=npc_emotion)  # TTS tymczasowo wyłączone
+        # reaction["audio"] = audio_data  # TTS tymczasowo wyłączone
         return reaction
         
     except Exception as e:
@@ -489,7 +496,8 @@ Zwróć odpowiedź w DOKŁADNIE tym formacie JSON (tylko JSON, bez markdown):
 def process_player_message(
     contract_id: str,
     player_message: str,
-    gemini_api_key: str
+    gemini_api_key: str,
+    username: Optional[str] = None
 ) -> Tuple[Dict, Dict]:
     """
     Przetwarza wiadomość gracza - ocenia ją i generuje reakcję NPC.
@@ -497,7 +505,9 @@ def process_player_message(
     Returns:
         Tuple[Dict, Dict]: (evaluation, npc_reaction)
     """
-    conv_key = f"ai_conv_{contract_id}"
+    if username is None:
+        username = st.session_state.get("username", "default_user")
+    conv_key = f"ai_conv_{username}_{contract_id}"
     conv_state = st.session_state.get(conv_key)
     
     if not conv_state:
@@ -562,7 +572,7 @@ def process_player_message(
     return evaluation, npc_reaction
 
 
-def calculate_final_conversation_score(contract_id: str) -> Dict:
+def calculate_final_conversation_score(contract_id: str, username: Optional[str] = None) -> Dict:
     """
     Oblicza finalny wynik rozmowy i konwertuje na gwiazdki.
     
@@ -576,7 +586,9 @@ def calculate_final_conversation_score(contract_id: str) -> Dict:
             "summary": str
         }
     """
-    conv_key = f"ai_conv_{contract_id}"
+    if username is None:
+        username = st.session_state.get("username", "default_user")
+    conv_key = f"ai_conv_{username}_{contract_id}"
     conv_state = st.session_state.get(conv_key, {})
     
     total_points = conv_state.get("total_score", 0)
@@ -655,9 +667,11 @@ def calculate_final_conversation_score(contract_id: str) -> Dict:
     }
 
 
-def reset_conversation(contract_id: str, npc_config: Dict, scenario_context: str):
+def reset_conversation(contract_id: str, npc_config: Dict, scenario_context: str, username: Optional[str] = None):
     """Resetuje rozmowę - pozwala zagrać ponownie"""
-    conv_key = f"ai_conv_{contract_id}"
+    if username is None:
+        username = st.session_state.get("username", "default_user")
+    conv_key = f"ai_conv_{username}_{contract_id}"
     if conv_key in st.session_state:
         del st.session_state[conv_key]
-    initialize_ai_conversation(contract_id, npc_config, scenario_context)
+    initialize_ai_conversation(contract_id, npc_config, scenario_context, username)

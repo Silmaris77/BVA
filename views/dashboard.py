@@ -6,7 +6,7 @@ import numpy as np
 from datetime import datetime, timedelta
 from data.users_new import load_user_data, save_user_data, get_current_user_data
 from data.neuroleader_test_questions import NEUROLEADER_TYPES
-from config.settings import DAILY_MISSIONS, USER_AVATARS
+from config.settings import DAILY_MISSIONS, USER_AVATARS, DEVELOPMENT_MODE
 from data.lessons import load_lessons
 from utils.goals import get_user_goals, calculate_goal_metrics
 from utils.daily_missions import get_daily_missions_progress
@@ -1092,6 +1092,10 @@ def show_leaderboard_compact():
     st.markdown("</div>", unsafe_allow_html=True)
 
 def show_dashboard():
+    # Ostrzeżenie o trybie developerskim
+    if DEVELOPMENT_MODE:
+        st.info("⚡ **TRYB DEVELOPERSKI** - Zmiany zapisywane tylko w pamięci (szybkie logowanie!)")
+    
     # Przewiń na górę strony
     scroll_to_top()
     

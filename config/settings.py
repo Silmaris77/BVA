@@ -2,6 +2,11 @@
 Ustawienia globalne dla aplikacji ZenDegenAcademy
 """
 
+# ⚡ TRYB DEVELOPERSKI - Wyłącza zapisy do JSON dla maksymalnej szybkości
+# DEVELOPMENT_MODE = True  -> Brak zapisów, wszystko w pamięci (szybkie!)
+# DEVELOPMENT_MODE = False -> Normalne zapisy do plików (produkcja)
+DEVELOPMENT_MODE = False  # BETA TESTY - zapisy włączone
+
 # Ścieżka do pliku JSON zawierającego dane wszystkich lekcji
 # Upewnij się, że ten plik istnieje i zawiera poprawne dane w formacie:
 # {
