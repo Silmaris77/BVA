@@ -23,47 +23,28 @@ from utils.components import zen_header
 from utils.material3_components import apply_material3_theme
 from utils.scroll_utils import scroll_to_top
 
-# =============================================================================
-# IMPORTY Z REFAKTORYZACJI (preferowane - nadpisują stare definicje)
-# =============================================================================
+# Importy z modułów refactored
 from views.business_games_refactored.helpers import (
-    get_contract_reward_coins,
-    get_contract_reward_reputation,
-    get_game_data,
-    save_game_data,
-    play_coin_sound
+    get_contract_reward_coins, get_contract_reward_reputation,
+    get_game_data, save_game_data, play_coin_sound
 )
-from views.business_games_refactored.components.charts import (
-    create_financial_chart
-)
-from views.business_games_refactored.components.headers import (
-    render_header,
-    render_fmcg_header
-)
+from views.business_games_refactored.components.charts import create_financial_chart
+from views.business_games_refactored.components.headers import render_header, render_fmcg_header
 from views.business_games_refactored.components.event_card import (
-    render_active_effects_badge,
-    render_latest_event_card,
-    show_active_event_card
+    render_active_effects_badge, render_latest_event_card, show_active_event_card
 )
 from views.business_games_refactored.components.contract_card import (
-    render_active_contract_card,
-    render_decision_tree_contract,
-    render_conversation_contract,
-    render_speed_challenge_contract,
-    render_contract_card,
-    render_completed_contract_card
+    render_active_contract_card, render_completed_contract_card, render_contract_card
 )
-from views.business_games_refactored.components.employee_card import (
-    render_employee_card,
-    render_hire_card
-)
+from views.business_games_refactored.components.employee_card import render_employee_card, render_hire_card
+from views.business_games_refactored.industries import fmcg
 
 # =============================================================================
 # FUNKCJE POMOCNICZE
 # =============================================================================
 
 def show_business_games(username, user_data):
-    """Meta-widok Business Games Suite - strona główna z menu"""
+    """Główna funkcja obsługująca Business Games"""
     
     # Przewiń na górę strony
     scroll_to_top()
@@ -2063,99 +2044,6 @@ def show_fmcg_stats_tab(username, user_data, industry_id):
 def show_industry_game(username, user_data, industry_id):
     """Widok gry dla wybranej branży"""
     
-    # CSS dla kompaktowych nagłówków i separatorów - MAKSYMALNIE KOMPAKTOWY
-    st.markdown("""
-    <style>
-    /* MAKSYMALNA SZEROKOŚĆ GŁÓWNEJ ZAWARTOŚCI - bardziej agresywne selektory */
-    section.main > div.block-container {
-        max-width: 95% !important;
-        padding-left: 2rem !important;
-        padding-right: 2rem !important;
-    }
-    
-    /* Alternatywny selektor */
-    .stApp section.main div[data-testid="stVerticalBlock"] {
-        max-width: 95% !important;
-    }
-    
-    /* Bezpośredni selektor na główny kontener */
-    div.block-container {
-        max-width: 95% !important;
-    }
-    
-    /* Globalne zmniejszenie odstępów dla wszystkich nagłówków */
-    div[data-testid="stVerticalBlock"] > div:has(h1),
-    div[data-testid="stVerticalBlock"] > div:has(h2),
-    div[data-testid="stVerticalBlock"] > div:has(h3) {
-        margin-top: 0.3rem !important;
-        margin-bottom: 0.3rem !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-    }
-    
-    /* Bezpośrednio na wszystkie h2 i h3 */
-    h1, h2, h3 {
-        margin-top: 0.3rem !important;
-        margin-bottom: 0.5rem !important;
-        padding-top: 0 !important;
-    }
-    
-    /* Stare selektory (dla pewności) */
-    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
-        margin-top: 0.3rem !important;
-        margin-bottom: 0.5rem !important;
-        padding-top: 0 !important;
-    }
-    
-    /* Block container */
-    .block-container {
-        padding-top: 2rem !important;
-    }
-    
-    /* Expandery */
-    .streamlit-expanderHeader {
-        margin-top: 0.5rem !important;
-        margin-bottom: 0.5rem !important;
-    }
-    
-    /* Element zawierający subheader */
-    [data-testid="stMarkdownContainer"] {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-    }
-    
-    /* MAKSYMALNIE ZMNIEJSZ SEPARATORY <hr> */
-    hr {
-        margin-top: 0.5rem !important;
-        margin-bottom: 0.5rem !important;
-        border: none !important;
-        border-top: 1px solid #e0e0e0 !important;
-        height: 0 !important;
-    }
-    
-    /* Container dla separatorów */
-    .stMarkdown:has(hr) {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-    }
-    
-    /* Element container dla separatorów */
-    div[data-testid="stElementContainer"]:has(hr) {
-        margin-top: 0.3rem !important;
-        margin-bottom: 0.3rem !important;
-        padding: 0 !important;
-    }
-    
-    /* MarkdownContainer z hr */
-    div[data-testid="stMarkdownContainer"]:has(hr) {
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
     try:
         # KLUCZOWE: Jeśli initializing_game=True, przeładuj user_data z dysku
         if st.session_state.get("initializing_game", False):
@@ -2169,12 +2057,6 @@ def show_industry_game(username, user_data, industry_id):
                 st.rerun()
             # Reset flagi po przeładowaniu
             st.session_state["initializing_game"] = False
-        
-        # Przycisk powrotu do menu głównego (kompaktowy, na górze)
-        if st.button("← Powrót do menu", key="back_to_home"):
-            st.session_state["bg_view"] = "home"
-            st.session_state["selected_industry"] = None
-            st.rerun()
         
         # Pokaż wiadomość o przełączeniu (jeśli istnieje)
         if "switch_message" in st.session_state:
@@ -2291,6 +2173,13 @@ def show_industry_game(username, user_data, industry_id):
             
             with settings_tabs[1]:
                 show_game_management_tab(username, user_data, industry_id)
+        
+        # Przycisk powrotu do menu na samym dole
+        st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
+        if st.button("← Powrót do menu", key="back_to_home", use_container_width=True):
+            st.session_state["bg_view"] = "home"
+            st.session_state["selected_industry"] = None
+            st.rerun()
     
     except Exception as e:
         st.error(f"❌ Błąd renderowania gry dla {industry_id}:")
@@ -3778,6 +3667,84 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
                 render_hire_card(emp_type, EMPLOYEE_TYPES[emp_type], username, user_data, bg_data, industry_id)
     else:
         st.success("✅ Wszystkie dostępne typy pracowników są już zatrudnione!")
+
+def render_employee_card(employee, username, user_data, bg_data, industry_id="consulting"):
+    """Renderuje kartę zatrudnionego pracownika - kompaktowa"""
+    
+    emp_data = EMPLOYEE_TYPES[employee["type"]]
+    
+    # Kompaktowa karta
+    with st.container():
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    padding: 15px; border-radius: 10px; margin-bottom: 10px; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 18px; font-weight: bold;">{emp_data['ikona']} {emp_data['nazwa']}</div>
+                    <div style="font-size: 12px; opacity: 0.9; margin-top: 4px;">{emp_data['bonus']}</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 14px; font-weight: bold;">{emp_data['koszt_dzienny']} 💰/dzień</div>
+                    <div style="font-size: 11px; opacity: 0.8;">od {employee['hired_date']}</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Przycisk zwolnienia
+        if st.button("🗑️ Zwolnij", key=f"fire_{employee['id']}", type="secondary", width="stretch"):
+            updated_user_data, success, message = fire_employee(user_data, employee['id'], industry_id)
+            if success:
+                user_data.update(updated_user_data)
+                save_user_data(username, user_data)
+                st.success(message)
+                st.rerun()
+            else:
+                st.error(message)
+
+def render_hire_card(emp_type, emp_data, username, user_data, bg_data, industry_id="consulting"):
+    """Renderuje kartę dostępnego pracownika - kompaktowa"""
+    
+    can_hire, reason = can_hire_employee(user_data, emp_type, industry_id)
+    
+    with st.container():
+        # Kompaktowa karta z gradientem (szary)
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%); 
+                    padding: 15px; border-radius: 10px; margin-bottom: 10px; color: #424242;">
+            <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                {emp_data['ikona']} {emp_data['nazwa']}
+            </div>
+            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px;">
+                {emp_data['bonus']}
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                <div>💰 Zatrudnienie: <strong>{emp_data['koszt_zatrudnienia']}</strong></div>
+                <div>📅 Dzienny: <strong>{emp_data['koszt_dzienny']}</strong></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Przycisk zatrudnienia
+        if not can_hire:
+            st.button("🔒 Niedostępny", key=f"hire_{emp_type}_locked", disabled=True, 
+                     help=reason, width="stretch")
+        else:
+            if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary", width="stretch"):
+                updated_user_data, success, message = hire_employee(user_data, emp_type, industry_id)
+                if success:
+                    user_data.update(updated_user_data)
+                    save_user_data(username, user_data)
+                    st.success(message)
+                    st.rerun()
+                else:
+                        st.error(message)
+        
+        st.markdown("---")
+
+# =============================================================================
+# TAB 4: RAPORTY FINANSOWE
+# =============================================================================
 
 def show_financial_reports_tab(username, user_data, industry_id="consulting"):
     """Zakładka Raporty Finansowe - zaawansowana analiza P&L i KPI"""
