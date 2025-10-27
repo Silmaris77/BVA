@@ -24,6 +24,41 @@ from utils.material3_components import apply_material3_theme
 from utils.scroll_utils import scroll_to_top
 
 # =============================================================================
+# IMPORTY Z REFAKTORYZACJI (preferowane - nadpisują stare definicje)
+# =============================================================================
+from views.business_games_refactored.helpers import (
+    get_contract_reward_coins,
+    get_contract_reward_reputation,
+    get_game_data,
+    save_game_data,
+    play_coin_sound
+)
+from views.business_games_refactored.components.charts import (
+    create_financial_chart
+)
+from views.business_games_refactored.components.headers import (
+    render_header,
+    render_fmcg_header
+)
+from views.business_games_refactored.components.event_card import (
+    render_active_effects_badge,
+    render_latest_event_card,
+    show_active_event_card
+)
+from views.business_games_refactored.components.contract_card import (
+    render_active_contract_card,
+    render_decision_tree_contract,
+    render_conversation_contract,
+    render_speed_challenge_contract,
+    render_contract_card,
+    render_completed_contract_card
+)
+from views.business_games_refactored.components.employee_card import (
+    render_employee_card,
+    render_hire_card
+)
+
+# =============================================================================
 # FUNKCJE POMOCNICZE
 # =============================================================================
 
@@ -2086,16 +2121,6 @@ def show_industry_game(username, user_data, industry_id):
     # CSS dla kompaktowych nagłówków i separatorów - MAKSYMALNIE KOMPAKTOWY
     st.markdown("""
     <style>
-    /* PRZYWRÓĆ NORMALNĄ SZEROKOŚĆ SIDEBARA */
-    [data-testid="stSidebar"] {
-        min-width: 21rem !important;
-        max-width: 21rem !important;
-    }
-    
-    [data-testid="stSidebar"] > div:first-child {
-        width: 21rem !important;
-    }
-    
     /* MAKSYMALNA SZEROKOŚĆ GŁÓWNEJ ZAWARTOŚCI - bardziej agresywne selektory */
     section.main > div.block-container {
         max-width: 95% !important;
