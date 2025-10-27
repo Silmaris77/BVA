@@ -79,10 +79,11 @@ def get_random_event(bg_data: Dict, user_coins: int) -> Optional[Tuple[str, Dict
     for event_id, event_data in RANDOM_EVENTS.items():
         # Sprawdź warunki
         if check_event_conditions(event_data, bg_data):
-            # Dodatkowe sprawdzenie min_coins (wymaga user_coins)
+            # Dodatkowe sprawdzenie min_coins - sprawdź SALDO FIRMY, nie DegenCoins!
             conditions = event_data.get("conditions", {})
             if "min_coins" in conditions:
-                if user_coins < conditions["min_coins"]:
+                firm_money = bg_data.get("money", 0)
+                if firm_money < conditions["min_coins"]:
                     continue
             
             available_events.append((event_id, event_data))

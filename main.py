@@ -2,6 +2,12 @@ import streamlit as st
 import os
 import sys
 import traceback
+import warnings
+
+# Ukryj ostrzeżenia Google Cloud (ALTS credentials)
+warnings.filterwarnings('ignore', message='.*ALTS.*')
+os.environ['GRPC_VERBOSITY'] = 'ERROR'
+os.environ['GLOG_minloglevel'] = '2'
 
 # Ścieżka do głównego katalogu aplikacji (dla importów)
 APP_DIR = os.path.dirname(os.path.abspath(__file__))

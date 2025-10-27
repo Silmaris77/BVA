@@ -1,0 +1,8 @@
+🔍 DEBUG save(): START dla xyz
+🔍 DEBUG save(): Industries PRZED migracją: ['consulting']
+🔍 DEBUG save(): MIGRACJA POMINIĘTA
+🔍 DEBUG save(): _validate_before_save() = False
+🔍 DEBUG save(): use_sql=False, dual_write=True
+🔍 DEBUG save(): Wywołuję _save_to_json()...
+🔍 DEBUG save(): _save_to_json zwróciło True
+🔍 DEBUG save(): KONIEC - zwracam True

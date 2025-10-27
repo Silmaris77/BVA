@@ -83,7 +83,7 @@ def play_coin_sound():
 # =============================================================================
 
 def show_business_games(username, user_data):
-    """Meta-widok Business Games Suite - wybór branży lub gra"""
+    """Meta-widok Business Games Suite - strona główna z menu"""
     
     # Przewiń na górę strony
     scroll_to_top()
@@ -96,34 +96,188 @@ def show_business_games(username, user_data):
         user_data["business_games"] = {
             "consulting": user_data["business_game"]
         }
-        # Nie usuwamy starego klucza dla backward compatibility podczas przejścia
         save_user_data(username, user_data)
     
     # Inicjalizacja nowej struktury
     if "business_games" not in user_data:
         user_data["business_games"] = {}
     
-    # Sprawdź czy jest aktywna branża w session_state
-    if "selected_industry" not in st.session_state:
-        # Sprawdź czy gracz ma już rozpoczętą grę w jakiejś branży
-        if "consulting" in user_data["business_games"]:
-            st.session_state["selected_industry"] = "consulting"
-        else:
-            st.session_state["selected_industry"] = None
+    # Sprawdź stan nawigacji
+    if "bg_view" not in st.session_state:
+        st.session_state["bg_view"] = "home"  # home, industry_selector, scenario_selector, game
     
-    # ROUTING: Jeśli wybrano branżę → idź do gry, inaczej → selector
-    if st.session_state["selected_industry"]:
+    if "selected_industry" not in st.session_state:
+        st.session_state["selected_industry"] = None
+    
+    # Flaga inicjalizacji (ustawiana podczas tworzenia nowej gry)
+    if "initializing_game" not in st.session_state:
+        st.session_state["initializing_game"] = False
+    
+    # RESET session_state jeśli selected_industry jest ustawione ale gra nie istnieje
+    # TYLKO jeśli NIE jesteśmy w trakcie inicjalizacji
+    if (st.session_state["selected_industry"] is not None and 
+        st.session_state["bg_view"] == "game" and
+        st.session_state["selected_industry"] not in user_data.get("business_games", {}) and
+        not st.session_state["initializing_game"]):
+        st.warning("⚠️ Znaleziono nieaktualny stan sesji - resetuję...")
+        st.session_state["bg_view"] = "home"
+        st.session_state["selected_industry"] = None
+    
+    # =========================================================================
+    # ROUTING
+    # =========================================================================
+    
+    if st.session_state["bg_view"] == "home":
+        show_business_games_home(username, user_data)
+    
+    elif st.session_state["bg_view"] == "industry_selector":
+        show_industry_selector(username, user_data)
+    
+    elif st.session_state["bg_view"] == "scenario_selector":
+        industry_id = st.session_state["selected_industry"]
+        show_scenario_selector(username, user_data, industry_id)
+    
+    elif st.session_state["bg_view"] == "game":
         industry_id = st.session_state["selected_industry"]
         
-        # Sprawdź czy gra dla tej branży już istnieje
-        if industry_id in user_data["business_games"]:
-            # Gra istnieje → pokaż rozgrywkę
-            show_industry_game(username, user_data, industry_id)
+        # SPECJALNE ZABEZPIECZENIE: Jeśli initializing_game=True i gra nie istnieje,
+        # przeładuj user_data z dysku (może być opóźniony zapis)
+        if (st.session_state.get("initializing_game", False) and 
+            industry_id not in user_data.get("business_games", {})):
+            from data.users_new import get_current_user_data
+            user_data = get_current_user_data(username)
+            if not user_data:
+                st.error("❌ Błąd ładowania danych użytkownika!")
+                st.session_state["bg_view"] = "home"
+                st.rerun()
+        
+        # ZABEZPIECZENIE: Sprawdź czy gra dla tej branży istnieje
+        # ALE pomiń to sprawdzenie jeśli jesteśmy w trakcie inicjalizacji
+        if (industry_id not in user_data.get("business_games", {}) and 
+            not st.session_state.get("initializing_game", False)):
+            st.error(f"❌ Błąd: Gra dla branży '{industry_id}' nie została zainicjalizowana!")
+            st.warning("Zostaniesz przekierowany do wyboru scenariusza...")
+            st.session_state["bg_view"] = "scenario_selector"
+            st.rerun()
+        
+        show_industry_game(username, user_data, industry_id)
+
+
+# =============================================================================
+# STRONA GŁÓWNA BUSINESS GAMES
+# =============================================================================
+
+def show_business_games_home(username, user_data):
+    """Strona główna Business Games z menu wyboru"""
+    
+    zen_header("Business Games Suite")
+    
+    st.markdown("""
+    <div style='text-align: center; padding: 20px 0;'>
+        <h2 style='color: #667eea;'>🎮 Centrum Gier Biznesowych</h2>
+        <p style='color: #64748b; font-size: 16px;'>Wybierz co chcesz zrobić</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # Pobierz aktywne gry gracza
+    active_games = user_data.get("business_games", {})
+    
+    # Grid 3 kolumny
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        # KONTYNUUJ GRY (jeśli są aktywne)
+        if active_games:
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                        padding: 30px; border-radius: 20px; text-align: center; 
+                        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4); min-height: 300px;
+                        display: flex; flex-direction: column; justify-content: center;'>
+                <div style='font-size: 64px; margin-bottom: 16px;'>▶️</div>
+                <h3 style='color: white; margin: 0 0 12px 0;'>Kontynuuj Gry</h3>
+                <p style='color: rgba(255,255,255,0.9); font-size: 14px; margin: 0;'>
+                    Wróć do swoich aktywnych gier biznesowych
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.markdown("<div style='margin: 12px 0;'></div>", unsafe_allow_html=True)
+            
+            # Przyciski dla każdej aktywnej gry
+            for industry_id, game_data in active_games.items():
+                industry_names = {
+                    "consulting": "💼 Consulting",
+                    "fmcg": "🛒 FMCG",
+                    "pharma": "💊 Pharma",
+                    "banking": "🏦 Banking",
+                    "insurance": "🛡️ Insurance",
+                    "automotive": "🚗 Automotive"
+                }
+                industry_name = industry_names.get(industry_id, industry_id.title())
+                
+                if st.button(f"▶️ {industry_name}", key=f"continue_{industry_id}", use_container_width=True):
+                    st.session_state["selected_industry"] = industry_id
+                    st.session_state["bg_view"] = "game"
+                    st.rerun()
         else:
-            # Gra nie istnieje → pokaż selektor scenariuszy
-            show_scenario_selector(username, user_data, industry_id)
-    else:
-        show_industry_selector(username, user_data)
+            st.markdown("""
+            <div style='background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%); 
+                        padding: 30px; border-radius: 20px; text-align: center; 
+                        min-height: 300px;
+                        display: flex; flex-direction: column; justify-content: center;'>
+                <div style='font-size: 64px; margin-bottom: 16px; opacity: 0.5;'>▶️</div>
+                <h3 style='color: #64748b; margin: 0 0 12px 0;'>Brak aktywnych gier</h3>
+                <p style='color: #94a3b8; font-size: 14px; margin: 0;'>
+                    Rozpocznij nową grę aby zobaczyć tutaj swoje postępy
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    with col2:
+        # NOWA GRA
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+                    padding: 30px; border-radius: 20px; text-align: center; 
+                    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4); min-height: 300px;
+                    display: flex; flex-direction: column; justify-content: center;'>
+            <div style='font-size: 64px; margin-bottom: 16px;'>🎯</div>
+            <h3 style='color: white; margin: 0 0 12px 0;'>Nowa Gra</h3>
+            <p style='color: rgba(255,255,255,0.9); font-size: 14px; margin: 0;'>
+                Rozpocznij nową przygodę biznesową w wybranej branży
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("<div style='margin: 12px 0;'></div>", unsafe_allow_html=True)
+        
+        if st.button("🚀 Wybierz branżę", key="new_game", type="primary", use_container_width=True):
+            st.session_state["bg_view"] = "industry_selector"
+            st.session_state["selected_industry"] = None
+            st.rerun()
+    
+    with col3:
+        # HALL OF FAME
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); 
+                    padding: 30px; border-radius: 20px; text-align: center; 
+                    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.4); min-height: 300px;
+                    display: flex; flex-direction: column; justify-content: center;'>
+            <div style='font-size: 64px; margin-bottom: 16px;'>🏆</div>
+            <h3 style='color: white; margin: 0 0 12px 0;'>Hall of Fame</h3>
+            <p style='color: rgba(255,255,255,0.9); font-size: 14px; margin: 0;'>
+                Zobacz najlepszych graczy i legendarne firmy
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("<div style='margin: 12px 0;'></div>", unsafe_allow_html=True)
+        
+        if st.button("👑 Zobacz rankingi", key="hall_of_fame", use_container_width=True):
+            st.info("🚧 Hall of Fame - wkrótce!")
+            # TODO: Pokazać rankingi globalne
+
 
 # =============================================================================
 # SELECTOR BRANŻY
@@ -131,6 +285,11 @@ def show_business_games(username, user_data):
 
 def show_industry_selector(username, user_data):
     """Ekran wyboru branży - karty z różnymi grami branżowymi"""
+    
+    # Przycisk powrotu do menu głównego
+    if st.button("← Powrót do menu", key="back_to_home_from_industries"):
+        st.session_state["bg_view"] = "home"
+        st.rerun()
     
     zen_header("Business Games Suite")
     
@@ -162,10 +321,10 @@ def show_industry_selector(username, user_data):
         render_industry_card(
             industry_id="fmcg",
             title="🛒 FMCG",
-            slogan="Od debiutu na półce do brand leadera - zdobądź serca konsumentów!",
-            description="Zarządzaj markami konsumenckimi. Wprowadzaj produkty, prowadź kampanie, zdobywaj rynek.",
-            features=["📦 Product launches", "📺 Marketing campaigns", "🏪 Distribution"],
-            available=False,
+            slogan="Od Junior Repa do Chief Sales Officer - zdobądź rynek FMCG!",
+            description="Kariera w sprzedaży FMCG. Awansuj przez 10 poziomów, zarządzaj zespołem, buduj market share.",
+            features=["� Career progression", "� Team management", "🏪 Territory sales"],
+            available=True,  # ✅ WŁĄCZONE!
             username=username,
             user_data=user_data
         )
@@ -268,8 +427,16 @@ def render_industry_card(industry_id, title, slogan, description, features, avai
     if available:
         button_label = "🎮 Kontynuuj" if has_progress else "🚀 Zacznij grę"
         if st.button(button_label, key=f"start_{industry_id}", type="primary", width="stretch"):
-            # Ustaw aktywną branżę (routing w show_business_games zdecyduje czy pokazać scenariusze czy grę)
+            # Ustaw aktywną branżę
             st.session_state["selected_industry"] = industry_id
+            
+            # Jeśli gracz już ma grę w tej branży → idź do gry
+            if has_progress:
+                st.session_state["bg_view"] = "game"
+            else:
+                # Nie ma gry → pokaż selektor scenariuszy
+                st.session_state["bg_view"] = "scenario_selector"
+            
             st.rerun()
     else:
         st.button("🔒 Wkrótce dostępne", key=f"locked_{industry_id}", disabled=True, width="stretch")
@@ -481,12 +648,17 @@ def show_scenario_selector(username, user_data, industry_id):
     
     # Przycisk powrotu na dole
     st.markdown("<div style='margin: 20px 0;'></div>", unsafe_allow_html=True)
-    if st.button("← Powrót do wyboru branży", key="back_to_industries", width="stretch"):
+    if st.button("← Powrót do wyboru branży", key="back_to_industries", use_container_width=True):
         st.session_state["selected_industry"] = None
+        st.session_state["bg_view"] = "industry_selector"
         st.rerun()
 
 def render_scenario_card(scenario_id, scenario_data, industry_id, username, user_data):
-    """Renderuje kartę pojedynczego scenariusza w stylu spójnym z kartami kontraktów"""
+    """Renderuje kartę pojedynczego scenariusza w stylu spójnym z kartami kontraktów
+    
+    Returns:
+        bool: True jeśli gra została rozpoczęta (przycisk kliknięty), False w przeciwnym razie
+    """
     
     # Sprawdź czy to tryb lifetime
     is_lifetime = scenario_data.get("is_lifetime", False)
@@ -530,14 +702,44 @@ def render_scenario_card(scenario_id, scenario_data, industry_id, username, user
     
     # Pobierz dane scenariusza
     initial = scenario_data.get('initial_conditions', {})
-    money = initial.get('money', 50000)
-    reputation = initial.get('reputation', 50)
-    office = initial.get('office_type', 'home_office')
+    
+    # CONSULTING: money, reputation, office
+    # FMCG: level, monthly_sales, market_share
+    is_fmcg = industry_id == "fmcg"
+    
+    if is_fmcg:
+        param1_label = "Poziom kariery"
+        param1_value = f"⭐ Lvl {initial.get('level', 1)}"
+        param1_color = "#667eea"
+        
+        param2_label = "Monthly Sales"
+        param2_value = f"💰 {initial.get('monthly_sales', 0):,}"
+        param2_color = "#10b981"
+        
+        param3_label = "Market Share"
+        param3_value = f"📊 {initial.get('market_share', 0)}%"
+        param3_color = "#8b5cf6"
+    else:
+        # CONSULTING
+        money = initial.get('money', 50000)
+        reputation = initial.get('reputation', 50)
+        office = initial.get('office_type', 'home_office')
+        office_name = office.replace('_', ' ').title()
+        
+        param1_label = "Kapitał startowy"
+        param1_value = f"💰 {money:,}"
+        param1_color = "#10b981"
+        
+        param2_label = "Reputacja"
+        param2_value = f"⭐ {reputation}"
+        param2_color = "#f59e0b"
+        
+        param3_label = "Biuro"
+        param3_value = f"🏢 {office_name}"
+        param3_color = "#8b5cf6"
+    
     objectives = scenario_data.get('objectives', [])
     total_reward = sum(obj.get('reward_money', 0) for obj in objectives) if not is_lifetime else 0
-    
-    # Formatuj nazwę biura
-    office_name = office.replace('_', ' ').title()
     
     # Karta w stylu kontraktów - HTML bez wcięć w środku
     html_content = f"""<div style="background: white; border-radius: 20px; padding: 24px; margin: 16px 0; box-shadow: 0 8px 32px rgba(0,0,0,0.1), {config["glow"]}; border-left: 6px solid {config["accent"]}; transition: all 0.3s ease;">
@@ -558,16 +760,16 @@ def render_scenario_card(scenario_id, scenario_data, industry_id, username, user
 </div>
 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
 <div style="text-align: center;">
-<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Kapitał startowy</div>
-<div style="color: #10b981; font-size: 18px; font-weight: 700;">💰 {money:,}</div>
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">{param1_label}</div>
+<div style="color: {param1_color}; font-size: 18px; font-weight: 700;">{param1_value}</div>
 </div>
 <div style="text-align: center;">
-<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Reputacja</div>
-<div style="color: #f59e0b; font-size: 18px; font-weight: 700;">⭐ {reputation}</div>
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">{param2_label}</div>
+<div style="color: {param2_color}; font-size: 18px; font-weight: 700;">{param2_value}</div>
 </div>
 <div style="text-align: center;">
-<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Biuro</div>
-<div style="color: #8b5cf6; font-size: 18px; font-weight: 700;">🏢 {office_name}</div>
+<div style="color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">{param3_label}</div>
+<div style="color: {param3_color}; font-size: 18px; font-weight: 700;">{param3_value}</div>
 </div>
 </div>
 </div>"""
@@ -637,12 +839,1095 @@ def render_scenario_card(scenario_id, scenario_data, industry_id, username, user
                  type="primary", 
                  use_container_width=True):
         # Inicjalizuj grę z tym scenariuszem
-        user_data["business_games"][industry_id] = initialize_business_game_with_scenario(
-            username, industry_id, scenario_id
+        try:
+            # WAŻNE: Ustaw flagę PRZED zapisem - ochroni przed resetem podczas st.rerun()
+            st.session_state["initializing_game"] = True
+            
+            # KLUCZOWE: Załaduj świeże user_data z dysku przed modyfikacją
+            from data.users_new import get_current_user_data
+            fresh_user_data = get_current_user_data(username)
+            
+            if not fresh_user_data:
+                st.error("❌ Błąd ładowania danych użytkownika!")
+                st.session_state["initializing_game"] = False
+                return False
+            
+            # Inicjalizuj FMCG game
+            bg_data = initialize_business_game_with_scenario(username, industry_id, scenario_id)
+            
+            # Upewnij się, że business_games istnieje
+            if "business_games" not in fresh_user_data:
+                fresh_user_data["business_games"] = {}
+            
+            # Zapisz dane FMCG
+            fresh_user_data["business_games"][industry_id] = bg_data
+            
+            # KLUCZOWE: Zapisz bezpośrednio do JSON (omiń repository z wadliwą migracją)
+            import json
+            try:
+                with open('users_data.json', 'r', encoding='utf-8') as f:
+                    all_users = json.load(f)
+                all_users[username] = fresh_user_data
+                with open('users_data.json', 'w', encoding='utf-8') as f:
+                    json.dump(all_users, f, indent=2, ensure_ascii=False)
+            except Exception as e:
+                st.error(f"❌ Błąd zapisu: {e}")
+                st.session_state["initializing_game"] = False
+                return False
+            
+            # Ustaw bg_view (NIE resetuj initializing_game - zostanie zresetowane w show_industry_game)
+            st.session_state["bg_view"] = "game"
+            
+            st.success(f"🎉 Scenariusz '{scenario_data.get('name')}' rozpoczęty! Powodzenia!")
+            st.rerun()  # Przeładuj stronę, żeby pokazać dashboard
+        except Exception as e:
+            st.session_state["initializing_game"] = False  # Reset tylko przy błędzie
+            st.error(f"❌ Błąd inicjalizacji: {str(e)}")
+            import traceback
+            st.code(traceback.format_exc())
+    
+    return False  # Gra nie została rozpoczęta
+
+# =============================================================================
+# FMCG TABS
+# =============================================================================
+
+def show_fmcg_company_info_tab(username, user_data, industry_id):
+    """Zakładka z informacjami o firmie FreshLife Poland i portfolio produktów"""
+    from data.industries.fmcg_company import COMPANY_INFO, PRODUCT_PORTFOLIO
+    
+    st.markdown("# 🏢 FreshLife Poland - Twoja Firma")
+    
+    # Sekcja O Firmie
+    st.markdown("## 📋 O Firmie")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        st.markdown(f"""
+**{COMPANY_INFO['full_name']}**
+
+{COMPANY_INFO['description']}
+
+**Misja:** {COMPANY_INFO['mission']}
+""")
+    
+    with col2:
+        st.markdown(f"""
+**📊 Dane Podstawowe**
+- **Rok założenia:** {COMPANY_INFO['founded']}
+- **Firma matka:** {COMPANY_INFO['parent_company']}
+- **Pracownicy:** {COMPANY_INFO['employees_poland']}
+- **Siedziba:** {COMPANY_INFO['hq_location']}
+""")
+    
+    # Wartości firmy
+    st.markdown("### 💎 Nasze Wartości")
+    cols = st.columns(len(COMPANY_INFO['values']))
+    for i, value in enumerate(COMPANY_INFO['values']):
+        with cols[i]:
+            st.info(f"**{value}**")
+    
+    # Pozycja rynkowa
+    st.markdown("### 📈 Pozycja Rynkowa")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;'>
+    <div style='font-size: 24px; margin-bottom: 8px;'>🧴</div>
+    <div style='font-size: 14px; opacity: 0.9;'>Personal Care</div>
+    <div style='font-size: 20px; font-weight: 700; margin-top: 8px;'>{COMPANY_INFO['market_position']['personal_care']}</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;'>
+    <div style='font-size: 24px; margin-bottom: 8px;'>🍽️</div>
+    <div style='font-size: 14px; opacity: 0.9;'>Food & Beverages</div>
+    <div style='font-size: 20px; font-weight: 700; margin-top: 8px;'>{COMPANY_INFO['market_position']['food']}</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;'>
+    <div style='font-size: 24px; margin-bottom: 8px;'>🏠</div>
+    <div style='font-size: 14px; opacity: 0.9;'>Home Care</div>
+    <div style='font-size: 20px; font-weight: 700; margin-top: 8px;'>{COMPANY_INFO['market_position']['home_care']}</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # Portfolio Produktów
+    st.markdown("## 🛍️ Portfolio Produktów")
+    st.info("💡 **Wskazówka:** Zapoznaj się z naszymi produktami - przydadzą Ci się w rozmowach z klientami!")
+    
+    # Zakładki dla kategorii
+    tab_pc, tab_food, tab_hc = st.tabs(["🧴 Personal Care", "🍽️ Food & Beverages", "🏠 Home Care"])
+    
+    with tab_pc:
+        show_product_category(PRODUCT_PORTFOLIO['personal_care'])
+    
+    with tab_food:
+        show_product_category(PRODUCT_PORTFOLIO['food'])
+    
+    with tab_hc:
+        show_product_category(PRODUCT_PORTFOLIO['home_care'])
+
+
+def show_product_category(category):
+    """Wyświetla produkty z danej kategorii"""
+    st.markdown(f"### {category['category_name']}")
+    st.markdown(f"*{category['description']}*")
+    st.markdown(f"**Udział w rynku:** {category['market_share']}%")
+    
+    st.markdown("---")
+    
+    for product in category['products']:
+        with st.expander(f"📦 **{product['name']}** - {product['subcategory']}", expanded=False):
+            col1, col2 = st.columns([2, 1])
+            
+            with col1:
+                st.markdown(f"""
+**USP (Unique Selling Proposition):**  
+{product['usp']}
+
+**Warianty:**  
+{', '.join(product['variants'])}
+
+**Grupa docelowa:** {product['target_group']}
+
+**Opakowanie:** {product['packaging']}
+
+**Termin przydatności:** {product['shelf_life']}
+""")
+                
+                if product.get('awards'):
+                    st.markdown(f"**🏆 Nagrody:** {', '.join(product['awards'])}")
+            
+            with col2:
+                st.markdown(f"""
+<div style='background: #f8fafc; padding: 16px; border-radius: 8px; border: 2px solid #e2e8f0;'>
+    <div style='font-size: 12px; color: #64748b; margin-bottom: 4px;'>Cena detaliczna</div>
+    <div style='font-size: 18px; font-weight: 700; color: #0f172a;'>{product['price_range']}</div>
+    
+    <div style='font-size: 12px; color: #64748b; margin-top: 12px; margin-bottom: 4px;'>Marża</div>
+    <div style='font-size: 18px; font-weight: 700; color: #10b981;'>{product['margin_percent']}%</div>
+    
+    <div style='font-size: 12px; color: #64748b; margin-top: 12px; margin-bottom: 4px;'>Potencjał wolumenu</div>
+    <div style='font-size: 16px; font-weight: 600; color: #8b5cf6;'>{product['volume_potential'].upper()}</div>
+</div>
+""", unsafe_allow_html=True)
+
+
+def show_fmcg_dashboard_tab(username, user_data, industry_id):
+    """Dashboard FMCG - przegląd kariery, cele, postępy"""
+    bg_data = user_data["business_games"][industry_id]
+    
+    from data.industries.fmcg import CAREER_LEVELS as FMCG_LEVELS
+    from data.scenarios import get_scenario
+    
+    career = bg_data["career"]
+    metrics = bg_data["metrics"]
+    level = career["level"]
+    scenario_id = bg_data.get("scenario_id")
+    
+    # 📋 CELE SCENARIUSZA
+    st.markdown("### 🎯 Cele Scenariusza")
+    
+    if scenario_id:
+        scenario = get_scenario("fmcg", scenario_id)
+        objectives = bg_data.get("scenario_objectives", [])
+        completed = bg_data.get("objectives_completed", [])
+        
+        if objectives:
+            for i, obj in enumerate(objectives):
+                is_completed = i in completed
+                icon = "✅" if is_completed else "⏳"
+                progress_color = "#10b981" if is_completed else "#f59e0b"
+                
+                st.markdown(f"""
+                <div style='background: white; padding: 16px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid {progress_color};'>
+                    <div style='display: flex; justify-content: space-between; align-items: center;'>
+                        <div>
+                            <strong>{icon} {obj['description']}</strong>
+                        </div>
+                        <div style='color: {progress_color}; font-weight: 700;'>
+                            {obj.get('reward_money', 0):,} PLN
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("Brak celów dla tego scenariusza.")
+    else:
+        st.info("Tryb swobodny - brak celów scenariusza.")
+    
+    st.markdown("---")
+    
+    # 📊 POSTĘP KARIERY
+    st.markdown("### 📈 Postęp Kariery")
+    
+    level_info = FMCG_LEVELS[level]
+    next_level = level + 1
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        html = f"""<div class='game-card'>
+<h4 style='margin-top:0;'>💼 Obecna Pozycja</h4>
+<p style='font-size: 18px; font-weight: 700; color: #8b5cf6;'>{career['title']}</p>
+<p style='opacity: 0.8;'>Poziom {level}/10</p>
+<p style='font-size: 13px; margin-top: 12px;'><strong>Obowiązki:</strong></p>
+<ul style='font-size: 12px; opacity: 0.9;'>
+{"".join([f"<li>{resp}</li>" for resp in level_info['responsibilities'][:3]])}
+</ul>
+</div>"""
+        st.markdown(html, unsafe_allow_html=True)
+    
+    with col2:
+        if next_level <= 10:
+            next_level_info = FMCG_LEVELS[next_level]
+            required = next_level_info['required_metrics']
+            
+            # Oblicz progress
+            sales_progress = min(100, (metrics.get('monthly_sales', 0) / required.get('monthly_sales', 1)) * 100) if 'monthly_sales' in required else 0
+            share_progress = min(100, (metrics.get('market_share', 0) / required.get('market_share', 1)) * 100) if 'market_share' in required else 0
+            csat_progress = min(100, (metrics.get('customer_satisfaction', 0) / required.get('customer_satisfaction', 1)) * 100) if 'customer_satisfaction' in required else 0
+            
+            # Zbuduj HTML (bez wcięć!)
+            html = f"""<div class='game-card'>
+<h4 style='margin-top:0;'>🎯 Następny Poziom</h4>
+<p style='font-size: 18px; font-weight: 700; color: #10b981;'>{next_level_info['role']}</p>
+<p style='opacity: 0.8;'>Poziom {next_level}/10</p>
+<p style='font-size: 13px; margin-top: 12px;'><strong>Wymagania:</strong></p>
+<div style='margin-top: 8px;'>
+<div style='font-size: 12px; margin-bottom: 4px;'>💰 Sprzedaż: {metrics.get('monthly_sales', 0):,.0f} / {required.get('monthly_sales', 0):,.0f} PLN</div>
+<div style='background: #e2e8f0; border-radius: 4px; height: 6px;'>
+<div style='background: #f59e0b; height: 100%; width: {sales_progress}%; border-radius: 4px;'></div>
+</div>
+<div style='font-size: 12px; margin-bottom: 4px; margin-top: 8px;'>📊 Market Share: {metrics.get('market_share', 0):.1f}% / {required.get('market_share', 0)}%</div>
+<div style='background: #e2e8f0; border-radius: 4px; height: 6px;'>
+<div style='background: #8b5cf6; height: 100%; width: {share_progress}%; border-radius: 4px;'></div>
+</div>
+<div style='font-size: 12px; margin-bottom: 4px; margin-top: 8px;'>⭐ CSAT: {metrics.get('customer_satisfaction', 0)}% / {required.get('customer_satisfaction', 0)}%</div>
+<div style='background: #e2e8f0; border-radius: 4px; height: 6px;'>
+<div style='background: #10b981; height: 100%; width: {csat_progress}%; border-radius: 4px;'></div>
+</div>
+</div>
+</div>"""
+            
+            st.markdown(html, unsafe_allow_html=True)
+        else:
+            st.success("🏆 Osiągnąłeś najwyższy poziom - Chief Sales Officer!")
+
+
+def show_fmcg_tasks_tab(username, user_data, industry_id):
+    """Zadania - dostępne zadania do wykonania"""
+    from data.industries.fmcg_tasks import get_random_tasks, get_task_by_id
+    
+    bg_data = user_data["business_games"][industry_id]
+    career = bg_data["career"]
+    metrics = bg_data["metrics"]
+    level = career["level"]
+    
+    # Pobierz zadania
+    active_tasks = bg_data.get("tasks", {}).get("active", [])
+    available_pool = bg_data.get("tasks", {}).get("available_pool", [])
+    
+    if not available_pool or len(available_pool) < 5:
+        # Wygeneruj 6 losowych zadań dla poziomu
+        new_tasks = get_random_tasks(level, count=6)
+        
+        # Zapisz do bg_data
+        if "tasks" not in bg_data:
+            bg_data["tasks"] = {"active": [], "completed": [], "available_pool": []}
+        bg_data["tasks"]["available_pool"] = new_tasks
+        
+        # Zapisz do user_data
+        from data.users_new import save_single_user
+        save_single_user(username, user_data)
+        
+        # Odśwież available_pool ze zapisanych danych (bez rerun!)
+        available_pool = new_tasks
+    
+    # =============================================================================
+    # AKTYWNE ZADANIA
+    # =============================================================================
+    if active_tasks:
+        st.markdown("### ⚡ Aktywne Zadania")
+        st.markdown("Twoje bieżące zadania. Kliknij 'Wykonaj' aby je rozwiązać.")
+        
+        for task_id in active_tasks:
+            task = get_task_by_id(task_id)
+            if not task:
+                continue
+            
+            # Mapowanie kategorii
+            category_config = {
+                "field_sales": {"emoji": "🚗", "color": "#3b82f6", "name": "Sprzedaż w Terenie"},
+                "key_accounts": {"emoji": "🏢", "color": "#8b5cf6", "name": "Key Accounts"},
+                "team_management": {"emoji": "👥", "color": "#10b981", "name": "Zarządzanie Zespołem"},
+                "trade_marketing": {"emoji": "📊", "color": "#f59e0b", "name": "Trade Marketing"},
+                "strategy": {"emoji": "🎯", "color": "#ec4899", "name": "Strategia"},
+                "crisis": {"emoji": "⚠️", "color": "#ef4444", "name": "Kryzys"}
+            }
+            cat_info = category_config.get(task["category"], {"emoji": "📋", "color": "#64748b", "name": task["category"]})
+            
+            with st.expander(f"{cat_info['emoji']} **{task['title']}** - {cat_info['name']}", expanded=False):
+                st.markdown(f"**Sytuacja:**")
+                st.markdown(task['scenario'])
+                
+                st.markdown("---")
+                st.markdown("**💡 Jak chcesz rozwiązać to zadanie?**")
+                
+                solution = st.text_area(
+                    "Twoje rozwiązanie:",
+                    placeholder="Opisz swoje podejście do rozwiązania tego zadania (min. 50 znaków)...",
+                    key=f"solution_{task_id}",
+                    height=150
+                )
+                
+                col_submit, col_cancel = st.columns([1, 1])
+                
+                with col_submit:
+                    if st.button("✅ Wyślij rozwiązanie", key=f"submit_{task_id}", use_container_width=True):
+                        if len(solution.strip()) < 50:
+                            st.error("⚠️ Rozwiązanie musi mieć co najmniej 50 znaków!")
+                        else:
+                            # WYKONAJ ZADANIE
+                            # Podstawowa ocena jakości (bez AI - na podstawie długości)
+                            quality_score = min(1.0, len(solution.strip()) / 200)  # Max 1.0 przy 200+ znakach
+                            
+                            # Oblicz nagrody z modyfikatorem jakości (FMCG uses direct keys)
+                            actual_sales = int(task.get('sales_impact', 0) * quality_score)
+                            actual_share = task.get('reputation_impact', 0) * quality_score
+                            actual_csat = task.get('satisfaction_impact', 0) * quality_score  # if exists
+                            actual_money = int(task.get('base_reward', 0) * quality_score)
+                            
+                            # Aktualizuj metryki
+                            metrics['monthly_sales'] = metrics.get('monthly_sales', 0) + actual_sales
+                            metrics['market_share'] = min(100, metrics.get('market_share', 0) + actual_share)
+                            if actual_csat > 0:
+                                metrics['customer_satisfaction'] = min(100, metrics.get('customer_satisfaction', 0) + actual_csat)
+                            
+                            # Aktualizuj finanse (jeśli istnieją)
+                            if 'finances' in bg_data:
+                                bg_data['finances']['cash'] = bg_data['finances'].get('cash', 0) + actual_money
+                            
+                            # Przenieś zadanie do completed
+                            bg_data["tasks"]["active"].remove(task_id)
+                            if "completed" not in bg_data["tasks"]:
+                                bg_data["tasks"]["completed"] = []
+                            bg_data["tasks"]["completed"].append({
+                                "task_id": task_id,
+                                "solution": solution,
+                                "quality_score": quality_score,
+                                "rewards_earned": {
+                                    "sales": actual_sales,
+                                    "market_share": actual_share,
+                                    "csat": actual_csat,
+                                    "money": actual_money
+                                }
+                            })
+                            
+                            # Sprawdź cele scenariusza
+                            scenario_id = bg_data.get("scenario_id")
+                            if scenario_id:
+                                objectives = bg_data.get("scenario_objectives", [])
+                                completed_objectives = bg_data.get("objectives_completed", [])
+                                
+                                for idx, obj in enumerate(objectives):
+                                    if idx not in completed_objectives:
+                                        # Sprawdź warunki
+                                        completed = True
+                                        if 'required_sales' in obj and metrics.get('monthly_sales', 0) < obj['required_sales']:
+                                            completed = False
+                                        if 'required_market_share' in obj and metrics.get('market_share', 0) < obj['required_market_share']:
+                                            completed = False
+                                        if 'required_tasks' in obj and len(bg_data["tasks"]["completed"]) < obj['required_tasks']:
+                                            completed = False
+                                        
+                                        if completed:
+                                            completed_objectives.append(idx)
+                                            # Dodaj nagrodę za cel
+                                            if 'reward_money' in obj:
+                                                if 'finances' in bg_data:
+                                                    bg_data['finances']['cash'] = bg_data['finances'].get('cash', 0) + obj['reward_money']
+                                
+                                bg_data["objectives_completed"] = completed_objectives
+                            
+                            # Sprawdź awans
+                            from data.industries.fmcg import can_advance_to_next_level, get_career_stage, CAREER_LEVELS as FMCG_LEVELS
+                            career_stage = get_career_stage(career['level'])
+                            can_advance, advance_reason = can_advance_to_next_level(career['level'], metrics, career_stage)
+                            
+                            # Zapisz BEZPOŚREDNIO do JSON (workaround dla repository bug)
+                            import json
+                            users_file = "users_data.json"
+                            with open(users_file, "r", encoding="utf-8") as f:
+                                all_users = json.load(f)
+                            all_users[username] = user_data
+                            with open(users_file, "w", encoding="utf-8") as f:
+                                json.dump(all_users, f, ensure_ascii=False, indent=2)
+                            
+                            # Pokaż rezultat
+                            st.success(f"✅ Zadanie wykonane!")
+                            st.balloons()
+                            
+                            col_r1, col_r2, col_r3, col_r4 = st.columns(4)
+                            with col_r1:
+                                st.metric("💰 Sprzedaż", f"+{actual_sales:,} PLN")
+                            with col_r2:
+                                st.metric("📊 Market Share", f"+{actual_share:.1f}%")
+                            with col_r3:
+                                st.metric("⭐ CSAT", f"+{actual_csat:.0f}%")
+                            with col_r4:
+                                st.metric("💵 Gotówka", f"+{actual_money:,} PLN")
+                            
+                            if can_advance:
+                                next_level = career['level'] + 1
+                                next_role = FMCG_LEVELS[next_level]['role']
+                                st.success(f"🎉 Gratulacje! Możesz awansować na: **{next_role}**!")
+                            
+                            st.rerun()
+                
+                with col_cancel:
+                    if st.button("❌ Anuluj zadanie", key=f"cancel_{task_id}", use_container_width=True):
+                        # Usuń z aktywnych, dodaj z powrotem do available_pool
+                        bg_data["tasks"]["active"].remove(task_id)
+                        
+                        # Dodaj pełny obiekt zadania z powrotem do available_pool
+                        bg_data["tasks"]["available_pool"].append(task)
+                        
+                        # Zapisz BEZPOŚREDNIO do JSON (workaround dla repository bug)
+                        import json
+                        users_file = "users_data.json"
+                        with open(users_file, "r", encoding="utf-8") as f:
+                            all_users = json.load(f)
+                        all_users[username] = user_data
+                        with open(users_file, "w", encoding="utf-8") as f:
+                            json.dump(all_users, f, ensure_ascii=False, indent=2)
+                        
+                        st.warning(f"⚠️ Anulowano zadanie: {task['title']}")
+                        st.rerun()
+        
+        st.markdown("---")
+    
+    # =============================================================================
+    # DOSTĘPNE ZADANIA
+    # =============================================================================
+    st.markdown("### 💼 Dostępne Zadania")
+    st.markdown("Wybierz zadanie aby je zaakceptować. Możesz mieć maksymalnie 3 aktywne zadania jednocześnie.")
+    
+    # Wyświetl ile aktywnych zadań ma użytkownik
+    col_info1, col_info2 = st.columns(2)
+    with col_info1:
+        st.metric("Aktywne zadania", f"{len(active_tasks)}/3")
+    with col_info2:
+        st.metric("Dostępne zadania", len(available_pool))
+    
+    st.markdown("---")
+    
+    # Mapowanie kategorii i trudności (wspólne dla wszystkich zadań)
+    category_config = {
+        "field_sales": {"emoji": "🚗", "color": "#3b82f6", "name": "Sprzedaż w Terenie"},
+        "key_accounts": {"emoji": "🏢", "color": "#8b5cf6", "name": "Key Accounts"},
+        "team_management": {"emoji": "👥", "color": "#10b981", "name": "Zarządzanie Zespołem"},
+        "trade_marketing": {"emoji": "📊", "color": "#f59e0b", "name": "Trade Marketing"},
+        "strategy": {"emoji": "🎯", "color": "#ec4899", "name": "Strategia"},
+        "crisis": {"emoji": "⚠️", "color": "#ef4444", "name": "Kryzys"}
+    }
+    
+    difficulty_config = {
+        "easy": {"label": "Łatwe", "color": "#10b981"},
+        "medium": {"label": "Średnie", "color": "#f59e0b"},
+        "hard": {"label": "Trudne", "color": "#ef4444"}
+    }
+    
+    # Filtruj available_pool - usuń zadania które są już aktywne (fix dla duplikatów)
+    available_pool_filtered = [t for t in available_pool if t['id'] not in active_tasks]
+    
+    # Wyświetl zadania w gridzie 2 kolumny
+    for i in range(0, len(available_pool_filtered), 2):
+        col1, col2 = st.columns(2)
+        
+        # Zadanie 1
+        with col1:
+            if i < len(available_pool_filtered):
+                task = available_pool_filtered[i]  # available_pool zawiera pełne obiekty zadań, nie ID!
+                
+                if task:
+                    cat_info = category_config.get(task["category"], {"emoji": "📋", "color": "#64748b", "name": task["category"]})
+                    diff_info = difficulty_config.get(task["difficulty"], {"label": "?", "color": "#64748b"})
+                    
+                    html = f"""<div class='game-card' style='border-left: 4px solid {cat_info['color']}; min-height: 280px;'>
+<div style='display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;'>
+<div>
+<span style='font-size: 20px;'>{cat_info['emoji']}</span>
+<span style='font-size: 13px; color: {cat_info['color']}; font-weight: 600; margin-left: 8px;'>{cat_info['name']}</span>
+</div>
+<span style='background: {diff_info['color']}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700;'>{diff_info['label']}</span>
+</div>
+<h4 style='margin: 8px 0; font-size: 16px; line-height: 1.4;'>{task['title']}</h4>
+<p style='font-size: 13px; opacity: 0.8; margin: 12px 0; line-height: 1.5;'>{task['scenario'][:120]}...</p>
+<div style='margin-top: 16px; padding-top: 12px; border-top: 1px solid #e2e8f0;'>
+<div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>
+<strong>Nagrody:</strong>
+</div>
+<div style='display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 11px;'>
+<div>💰 Sprzedaż: +{task.get('sales_impact', 0):,} PLN</div>
+<div>📊 Market Share: +{task.get('reputation_impact', 0)}%</div>
+<div>💵 Gotówka: +{task.get('base_reward', 0):,} PLN</div>
+<div>⏱️ Czas: {task.get('time_days', 1)} dni</div>
+</div>
+</div>
+</div>"""
+                    
+                    st.markdown(html, unsafe_allow_html=True)
+                    
+                    # Przycisk akceptacji
+                    can_accept = len(active_tasks) < 3
+                    if can_accept:
+                        if st.button(f"✅ Akceptuj zadanie", key=f"accept_{task['id']}", use_container_width=True):
+                            # Sprawdź czy zadanie już nie jest w active (fix dla duplikatów)
+                            if task['id'] not in bg_data["tasks"]["active"]:
+                                # Dodaj do aktywnych zadań (tylko ID!)
+                                bg_data["tasks"]["active"].append(task['id'])
+                                
+                                # Usuń z available_pool - znajdź zadanie po ID i usuń
+                                bg_data["tasks"]["available_pool"] = [
+                                    t for t in bg_data["tasks"]["available_pool"] 
+                                    if t['id'] != task['id']
+                                ]
+                                
+                                # Zapisz BEZPOŚREDNIO do JSON (workaround dla repository bug)
+                                import json
+                                users_file = "users_data.json"
+                                with open(users_file, "r", encoding="utf-8") as f:
+                                    all_users = json.load(f)
+                                all_users[username] = user_data
+                                with open(users_file, "w", encoding="utf-8") as f:
+                                    json.dump(all_users, f, ensure_ascii=False, indent=2)
+                                
+                                st.success(f"✅ Zaakceptowano zadanie: {task['title']}")
+                            st.rerun()
+                    else:
+                        st.button("❌ Limit aktywnych zadań (3/3)", key=f"limit_{task['id']}", disabled=True, use_container_width=True)
+        
+        # Zadanie 2
+        with col2:
+            if i+1 < len(available_pool_filtered):
+                task = available_pool_filtered[i+1]  # available_pool zawiera pełne obiekty zadań, nie ID!
+                
+                if task:
+                    cat_info = category_config.get(task["category"], {"emoji": "📋", "color": "#64748b", "name": task["category"]})
+                    diff_info = difficulty_config.get(task["difficulty"], {"label": "?", "color": "#64748b"})
+                    
+                    html = f"""<div class='game-card' style='border-left: 4px solid {cat_info['color']}; min-height: 280px;'>
+<div style='display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;'>
+<div>
+<span style='font-size: 20px;'>{cat_info['emoji']}</span>
+<span style='font-size: 13px; color: {cat_info['color']}; font-weight: 600; margin-left: 8px;'>{cat_info['name']}</span>
+</div>
+<span style='background: {diff_info['color']}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700;'>{diff_info['label']}</span>
+</div>
+<h4 style='margin: 8px 0; font-size: 16px; line-height: 1.4;'>{task['title']}</h4>
+<p style='font-size: 13px; opacity: 0.8; margin: 12px 0; line-height: 1.5;'>{task.get('description', task['scenario'][:120])}...</p>
+<div style='margin-top: 16px; padding-top: 12px; border-top: 1px solid #e2e8f0;'>
+<div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>
+<strong>Nagrody:</strong>
+</div>
+<div style='display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 11px;'>
+<div>💰 Sprzedaż: +{task.get('sales_impact', 0):,} PLN</div>
+<div>📊 Market Share: +{task.get('reputation_impact', 0)}%</div>
+<div>💵 Gotówka: +{task.get('base_reward', 0):,} PLN</div>
+<div>⏱️ Czas: {task.get('time_days', 1)} dni</div>
+</div>
+</div>
+</div>"""
+                    
+                    st.markdown(html, unsafe_allow_html=True)
+                    
+                    can_accept = len(active_tasks) < 3
+                    if can_accept:
+                        if st.button(f"✅ Akceptuj zadanie", key=f"accept_{task['id']}", use_container_width=True):
+                            # Sprawdź czy zadanie już nie jest w active (fix dla duplikatów)
+                            if task['id'] not in bg_data["tasks"]["active"]:
+                                # Dodaj do aktywnych zadań (tylko ID!)
+                                bg_data["tasks"]["active"].append(task['id'])
+                                
+                                # Usuń z available_pool - znajdź zadanie po ID i usuń
+                                bg_data["tasks"]["available_pool"] = [
+                                    t for t in bg_data["tasks"]["available_pool"] 
+                                    if t['id'] != task['id']
+                                ]
+                                
+                                # Zapisz BEZPOŚREDNIO do JSON (workaround dla repository bug)
+                                import json
+                                users_file = "users_data.json"
+                                with open(users_file, "r", encoding="utf-8") as f:
+                                    all_users = json.load(f)
+                                all_users[username] = user_data
+                                with open(users_file, "w", encoding="utf-8") as f:
+                                    json.dump(all_users, f, ensure_ascii=False, indent=2)
+                                
+                                st.success(f"✅ Zaakceptowano zadanie: {task['title']}")
+                            st.rerun()
+                            
+                            st.success(f"✅ Zaakceptowano zadanie: {task['title']}")
+                            st.rerun()
+                    else:
+                        st.button("❌ Limit aktywnych zadań (3/3)", key=f"limit_{task['id']}", disabled=True, use_container_width=True)
+
+
+def show_fmcg_onboarding(username, user_data, industry_id):
+    """Onboarding FMCG - prezentacja firmy i wybór klientów docelowych"""
+    from data.industries.fmcg_company import COMPANY_INFO, PRODUCT_PORTFOLIO, get_company_pitch
+    from data.industries.fmcg_customers import get_customers_by_segment, get_segment_info
+    
+    bg_data = user_data["business_games"][industry_id]
+    
+    st.markdown("# 🎯 Witaj w FreshLife Poland!")
+    
+    st.markdown(f"""
+### Gratulacje! Zaczynasz karierę jako **{bg_data['career']['title']}**
+
+Przed Tobą długa droga od przedstawiciela handlowego do Chief Sales Officer.
+Ale najpierw - poznaj firmę i wybierz swoich pierwszych klientów!
+""")
+    
+    # KROK 1: Poznaj FreshLife
+    st.markdown("---")
+    st.markdown("## 📋 Krok 1: Poznaj FreshLife Poland")
+    
+    with st.expander("🏢 O firmie", expanded=True):
+        st.markdown(f"""
+**{COMPANY_INFO['full_name']}**
+        
+{COMPANY_INFO['description']}
+
+**Nasza misja:** {COMPANY_INFO['mission']}
+
+**Wartości:**
+""")
+        for value in COMPANY_INFO['values']:
+            st.markdown(f"• {value}")
+        
+        st.markdown(f"""
+**Pozycja rynkowa:**
+• Personal Care: {COMPANY_INFO['market_position']['personal_care']}
+• Food: {COMPANY_INFO['market_position']['food']}
+• Home Care: {COMPANY_INFO['market_position']['home_care']}
+""")
+    
+    # KROK 2: Portfolio produktów
+    st.markdown("## 📦 Krok 2: Poznaj nasze produkty")
+    
+    tab_pc, tab_food, tab_hc = st.tabs(["🧴 Personal Care", "🍽️ Food", "🏠 Home Care"])
+    
+    with tab_pc:
+        category = PRODUCT_PORTFOLIO['personal_care']
+        st.markdown(f"**{category['category_name']}** - {category['description']}")
+        st.markdown(f"*Market share: {category['market_share']}%*")
+        
+        for product in category['products']:
+            with st.expander(f"{product['name']} - {product['subcategory']}"):
+                col1, col2 = st.columns([2, 1])
+                with col1:
+                    st.markdown(f"**USP:** {product['usp']}")
+                    st.markdown(f"**Warianty:** {', '.join(product['variants'])}")
+                    st.markdown(f"**Target:** {product['target_group']}")
+                with col2:
+                    st.metric("Cena", product['price_range'])
+                    st.metric("Marża", f"{product['margin_percent']}%")
+                    st.metric("Potencjał", product['volume_potential'])
+    
+    with tab_food:
+        category = PRODUCT_PORTFOLIO['food']
+        st.markdown(f"**{category['category_name']}** - {category['description']}")
+        st.markdown(f"*Market share: {category['market_share']}%*")
+        
+        for product in category['products']:
+            with st.expander(f"{product['name']} - {product['subcategory']}"):
+                col1, col2 = st.columns([2, 1])
+                with col1:
+                    st.markdown(f"**USP:** {product['usp']}")
+                    st.markdown(f"**Warianty:** {', '.join(product['variants'])}")
+                with col2:
+                    st.metric("Cena", product['price_range'])
+                    st.metric("Marża", f"{product['margin_percent']}%")
+    
+    with tab_hc:
+        category = PRODUCT_PORTFOLIO['home_care']
+        st.markdown(f"**{category['category_name']}** - {category['description']}")
+        st.markdown(f"*Market share: {category['market_share']}%*")
+        
+        for product in category['products']:
+            with st.expander(f"{product['name']} - {product['subcategory']}"):
+                col1, col2 = st.columns([2, 1])
+                with col1:
+                    st.markdown(f"**USP:** {product['usp']}")
+                    st.markdown(f"**Warianty:** {', '.join(product['variants'])}")
+                with col2:
+                    st.metric("Cena", product['price_range'])
+                    st.metric("Marża", f"{product['margin_percent']}%")
+    
+    # KROK 3: Wybór targetu
+    st.markdown("---")
+    st.markdown("## 🎯 Krok 3: Wybierz swoich pierwszych klientów")
+    
+    st.info("""
+💡 **Ważne:** Na początek skup się na **Traditional Trade** (sklepy osiedlowe, kioski).
+To najłatwiejszy segment do zdobycia pierwszych klientów.
+
+Wybierz **2-3 sklepy** które chcesz pozyskać jako pierwsze.
+""")
+    
+    # Lista klientów Traditional Trade
+    customers = get_customers_by_segment("traditional_trade")
+    
+    st.markdown("### Dostępni klienci:")
+    
+    # Session state dla wyborów
+    if 'selected_customers' not in st.session_state:
+        st.session_state.selected_customers = []
+    
+    for customer in customers:
+        with st.expander(f"🏪 {customer['name']} - {customer['location']} (Potencjał: {customer['potential_monthly']:,} PLN/mies)"):
+            col1, col2 = st.columns([3, 1])
+            
+            with col1:
+                st.markdown(customer['description'])
+                
+                st.markdown(f"""
+**Charakterystyka:**
+• Obrót: {customer['characteristics']['monthly_revenue']}
+• Klienci/dzień: {customer['characteristics']['customers_per_day']}
+• Konkurencja: {customer['characteristics']['competition']}
+
+**Co ich boli:**
+""")
+                for pain in customer['pain_points']:
+                    st.markdown(f"• {pain}")
+                
+                st.markdown("**Szanse:**")
+                for opp in customer['opportunities']:
+                    st.markdown(f"• {opp}")
+            
+            with col2:
+                # Checkbox do wyboru
+                is_selected = customer['id'] in st.session_state.selected_customers
+                if st.checkbox(
+                    "Wybierz",
+                    value=is_selected,
+                    key=f"select_{customer['id']}"
+                ):
+                    if customer['id'] not in st.session_state.selected_customers:
+                        st.session_state.selected_customers.append(customer['id'])
+                else:
+                    if customer['id'] in st.session_state.selected_customers:
+                        st.session_state.selected_customers.remove(customer['id'])
+    
+    # Przycisk zakończenia onboardingu
+    st.markdown("---")
+    
+    selected_count = len(st.session_state.selected_customers)
+    
+    if selected_count < 2:
+        st.warning(f"⚠️ Wybierz przynajmniej 2 klientów ({selected_count}/2)")
+    elif selected_count > 3:
+        st.warning(f"⚠️ Na początek maksymalnie 3 klientów ({selected_count}/3)")
+    else:
+        st.success(f"✅ Wybrano {selected_count} klientów. Możesz rozpocząć!")
+        
+        if st.button("🚀 Rozpocznij pracę z wybranymi klientami", type="primary", use_container_width=True):
+            # Zapisz wybór i oznacz onboarding jako ukończony
+            bg_data["customers"]["selected_targets"] = st.session_state.selected_customers
+            bg_data["customers"]["prospects"] = st.session_state.selected_customers.copy()
+            bg_data["customers"]["onboarding_completed"] = True
+            
+            # Inicjalizuj conversation history dla każdego klienta
+            for customer_id in st.session_state.selected_customers:
+                bg_data["conversations"][customer_id] = []
+            
+            # Zapisz
+            import json
+            users_file = "users_data.json"
+            with open(users_file, "r", encoding="utf-8") as f:
+                all_users = json.load(f)
+            all_users[username] = user_data
+            with open(users_file, "w", encoding="utf-8") as f:
+                json.dump(all_users, f, ensure_ascii=False, indent=2)
+            
+            st.success("✅ Świetnie! Przekierowuję do panelu klientów...")
+            st.rerun()
+
+
+def show_fmcg_customers_tab(username, user_data, industry_id):
+    """Tab Klienci - lista klientów, umów spotkania, historia"""
+    from data.industries.fmcg_customers import get_customer_by_id
+    
+    bg_data = user_data["business_games"][industry_id]
+    customers_data = bg_data.get("customers", {})
+    
+    # Sprawdź czy jest aktywna rozmowa
+    if st.session_state.get('fmcg_conversation_active', False):
+        customer_id = st.session_state.get('fmcg_conversation_customer')
+        customer = get_customer_by_id(customer_id)
+        
+        if customer:
+            render_fmcg_customer_conversation(customer, username, user_data, bg_data, industry_id)
+            return
+        else:
+            # Błąd - reset
+            st.session_state.fmcg_conversation_active = False
+            st.rerun()
+    
+    st.markdown("# 👥 Moi Klienci")
+    
+    # Podsumowanie
+    prospects = customers_data.get("prospects", [])
+    active = customers_data.get("active_clients", [])
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("🎯 Prospects", len(prospects))
+    with col2:
+        st.metric("✅ Aktywni", len(active))
+    with col3:
+        total_potential = sum(
+            get_customer_by_id(c_id).get('potential_monthly', 0) 
+            for c_id in prospects + active
         )
-        save_user_data(username, user_data)
-        st.success(f"🎉 Scenariusz '{scenario_data.get('name')}' rozpoczęty! Powodzenia!")
-        st.rerun()
+        st.metric("💰 Potencjał", f"{total_potential:,} PLN/mies")
+    
+    st.markdown("---")
+    
+    # Lista prospects
+    if prospects:
+        st.markdown("## 🎯 Prospects (w trakcie pozyskiwania)")
+        
+        for customer_id in prospects:
+            customer = get_customer_by_id(customer_id)
+            if not customer:
+                continue
+            
+            with st.expander(f"🏪 {customer['name']} - {customer['location']}", expanded=False):
+                col1, col2 = st.columns([3, 1])
+                
+                with col1:
+                    st.markdown(f"**Właściciel:** {customer['owner']}")
+                    st.markdown(f"**Typ:** {customer['type']}")
+                    st.markdown(f"**Potencjał:** {customer['potential_monthly']:,} PLN/miesiąc")
+                    
+                    # Historia rozmów
+                    conversations = bg_data.get("conversations", {}).get(customer_id, [])
+                    if conversations:
+                        st.markdown(f"**Spotkań:** {len(conversations)}")
+                        last_conv = conversations[-1]
+                        st.markdown(f"**Ostatnie:** {last_conv.get('date', 'brak daty')}")
+                
+                with col2:
+                    st.markdown("###")
+                    if st.button("📞 Umów spotkanie", key=f"meeting_{customer_id}", use_container_width=True):
+                        # Otwórz conversation
+                        st.session_state.fmcg_conversation_customer = customer_id
+                        st.session_state.fmcg_conversation_active = True
+                        st.rerun()
+    
+    # Lista aktywnych
+    if active:
+        st.markdown("## ✅ Aktywni Klienci")
+        st.info("🚧 Lista aktywnych klientów - wkrótce!")
+    
+    # Jeśli brak klientów
+    if not prospects and not active:
+        st.warning("Nie masz jeszcze żadnych klientów. Wróć do onboardingu i wybierz klientów!")
+
+
+def render_fmcg_customer_conversation(customer, username, user_data, bg_data, industry_id):
+    """Renderuje rozmowę z klientem FMCG - wykorzystuje AI Conversation Engine"""
+    from data.industries.fmcg_conversations import build_conversation_prompt
+    from datetime import datetime
+    import google.generativeai as genai
+    import os
+    
+    customer_id = customer['id']
+    
+    # Nagłówek
+    st.markdown(f"""
+<div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+            color: white; padding: 24px; border-radius: 16px; margin-bottom: 24px;'>
+    <h2 style='margin: 0 0 8px 0;'>🏪 Spotkanie: {customer['name']}</h2>
+    <p style='margin: 0; opacity: 0.9; font-size: 14px;'>Właściciel: {customer['owner']} | {customer['location']}</p>
+</div>
+""", unsafe_allow_html=True)
+    
+    # Pobierz historię rozmów
+    conversation_history = bg_data.get("conversations", {}).get(customer_id, [])
+    
+    # Informacja o historii
+    if conversation_history:
+        st.info(f"📋 Spotkanie #{len(conversation_history) + 1} z {customer['owner']}")
+    else:
+        st.info(f"🆕 Pierwsze spotkanie z {customer['owner']} - czas na prospecting!")
+    
+    # Historia wiadomości (przechowujemy w session_state)
+    if f'fmcg_conv_messages_{customer_id}' not in st.session_state:
+        st.session_state[f'fmcg_conv_messages_{customer_id}'] = []
+    
+    messages = st.session_state[f'fmcg_conv_messages_{customer_id}']
+    
+    # Current turn - liczba wiadomości gracza (do klucza text_area)
+    player_messages_count = len([m for m in messages if m['role'] == 'player'])
+    current_turn = player_messages_count + 1
+    
+    # Wyświetl historię rozmowy
+    st.markdown("### 💬 Rozmowa")
+    
+    for msg in messages:
+        if msg['role'] == 'player':
+            st.markdown(f"""
+<div style='background: #e0f2fe; padding: 12px; border-radius: 8px; margin: 8px 0; border-left: 4px solid #0284c7;'>
+    <strong>🎯 Ty:</strong><br>{msg['content']}
+</div>
+""", unsafe_allow_html=True)
+        else:
+            st.markdown(f"""
+<div style='background: #f3f4f6; padding: 12px; border-radius: 8px; margin: 8px 0; border-left: 4px solid #6b7280;'>
+    <strong>🏪 {customer['owner']}:</strong><br>{msg['content']}
+</div>
+""", unsafe_allow_html=True)
+    
+    # Pole wpisywania wiadomości
+    st.markdown("---")
+    
+    col_input, col_btn = st.columns([4, 1])
+    
+    with col_input:
+        player_message = st.text_area(
+            "Twoja wiadomość:",
+            placeholder="Napisz co chcesz powiedzieć klientowi...",
+            height=100,
+            key=f"msg_input_{customer_id}_{current_turn}"
+        )
+    
+    with col_btn:
+        st.markdown("###")
+        send_clicked = st.button("📤 Wyślij", use_container_width=True, type="primary")
+        
+        st.markdown("###")
+        if st.button("🚪 Zakończ spotkanie", use_container_width=True):
+            # Zapisz conversation do historii
+            if messages:
+                conversation_record = {
+                    "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "messages": messages.copy(),
+                    "topic": "Prospecting" if not conversation_history else "Follow-up",
+                    "customer_impression": "neutral"  # TODO: AI evaluation
+                }
+                
+                if customer_id not in bg_data["conversations"]:
+                    bg_data["conversations"][customer_id] = []
+                bg_data["conversations"][customer_id].append(conversation_record)
+                
+                # Zapisz
+                import json
+                users_file = "users_data.json"
+                with open(users_file, "r", encoding="utf-8") as f:
+                    all_users = json.load(f)
+                all_users[username] = user_data
+                with open(users_file, "w", encoding="utf-8") as f:
+                    json.dump(all_users, f, ensure_ascii=False, indent=2)
+            
+            # Wyczyść session state
+            st.session_state.fmcg_conversation_active = False
+            if f'fmcg_conv_messages_{customer_id}' in st.session_state:
+                del st.session_state[f'fmcg_conv_messages_{customer_id}']
+            
+            st.success("✅ Spotkanie zakończone!")
+            st.rerun()
+    
+    # Wyślij wiadomość
+    if send_clicked and player_message and player_message.strip():
+        st.write(f"🔍 DEBUG START - player_message: {player_message[:50]}...")
+        st.write(f"🔍 DEBUG - messages przed append: {len(messages)}")
+        
+        # Dodaj wiadomość gracza
+        messages.append({
+            "role": "player",
+            "content": player_message
+        })
+        
+        
+        st.write(f"🔍 DEBUG - messages po append gracza: {len(messages)}")
+        
+        # Przygotuj kontekst dla AI
+        context = {
+            "relationship_status": "prospect",  # TODO: dynamicznie
+            "products_sold": [],
+            "relationship_score": 0
+        }
+        
+        # Zbuduj prompt
+        prompt = build_conversation_prompt(
+            customer=customer,
+            conversation_history=conversation_history,
+            player_message=player_message,
+            context=context,
+            current_messages=messages  # Przekaż bieżącą historię rozmowy
+        )
+        
+        # Wywołaj AI
+        try:
+            # Konfiguracja Gemini - czytaj z secrets.toml
+            api_key = None
+            try:
+                # Najpierw próbuj secrets.toml (bezpieczne)
+                api_key = st.secrets["API_KEYS"]["GEMINI_API_KEY"]
+            except:
+                # Fallback - plik (deprecated)
+                try:
+                    with open("config/gemini_api_key.txt", "r") as f:
+                        api_key = f.read().strip()
+                except:
+                    api_key = os.getenv("GEMINI_API_KEY")
+            
+            if not api_key:
+                st.error("❌ Brak klucza API Gemini! Dodaj do .streamlit/secrets.toml w sekcji [API_KEYS]")
+                return
+            
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel('gemini-2.0-flash-exp')
+            
+            with st.spinner(f"{customer['owner']} myśli..."):
+                response = model.generate_content(prompt)
+                npc_response = response.text
+                
+                # Dodaj odpowiedź NPC
+                messages.append({
+                    "role": "npc",
+                    "content": npc_response
+                })
+                
+                st.write(f"🔍 DEBUG - messages po append NPC: {len(messages)}")
+                st.write(f"🔍 DEBUG - npc_response: {npc_response[:100]}...")
+                st.write("🔍 DEBUG - przed rerun")
+                
+                st.rerun()
+                
+        except Exception as e:
+            st.error(f"❌ Błąd AI: {str(e)}")
+
+
+def show_fmcg_stats_tab(username, user_data, industry_id):
+    """Statystyki Kariery - wykresy, historia, osiągnięcia"""
+    st.info("🚧 Statystyki Kariery - w budowie! 🚧")
+    st.write("Tutaj będą statystyki i wykresy.")
 
 # =============================================================================
 # GRA BRANŻOWA
@@ -651,83 +1936,319 @@ def render_scenario_card(scenario_id, scenario_data, industry_id, username, user
 def show_industry_game(username, user_data, industry_id):
     """Widok gry dla wybranej branży"""
     
-    # Pokaż wiadomość o przełączeniu (jeśli istnieje)
-    if "switch_message" in st.session_state:
-        st.success(st.session_state["switch_message"])
-        del st.session_state["switch_message"]
-    
-    # Nagłówek z nazwą branży
-    industry_names = {
-        "consulting": "💼 Consulting Game",
-        "fmcg": "🛒 FMCG Game",
-        "pharma": "💊 Pharma Game",
-        "banking": "🏦 Banking Game",
-        "insurance": "🛡️ Insurance Game",
-        "automotive": "🚗 Automotive Game"
-    }
-    zen_header(industry_names.get(industry_id, "Business Game"))
-    
-    # Pobierz dane branży
-    bg_data = user_data["business_games"][industry_id]
-    
-    # MIGRACJA: Dodaj brakujące transakcje dla starych wydarzeń z monetami
-    from utils.business_game import migrate_event_transactions
-    user_data, migrated_count = migrate_event_transactions(user_data, industry_id)
-    if migrated_count > 0:
-        save_user_data(username, user_data)
+    try:
+        # KLUCZOWE: Jeśli initializing_game=True, przeładuj user_data z dysku
+        if st.session_state.get("initializing_game", False):
+            from data.users_new import get_current_user_data
+            user_data = get_current_user_data(username)
+            
+            if not user_data:
+                st.error("❌ Błąd ładowania danych użytkownika!")
+                st.session_state["bg_view"] = "home"
+                st.session_state["initializing_game"] = False
+                st.rerun()
+            # Reset flagi po przeładowaniu
+            st.session_state["initializing_game"] = False
+        
+        # Przycisk powrotu do menu głównego (kompaktowy, na górze)
+        if st.button("← Powrót do menu", key="back_to_home"):
+            st.session_state["bg_view"] = "home"
+            st.session_state["selected_industry"] = None
+            st.rerun()
+        
+        # Pokaż wiadomość o przełączeniu (jeśli istnieje)
+        if "switch_message" in st.session_state:
+            st.success(st.session_state["switch_message"])
+            del st.session_state["switch_message"]
+        
+        # Nagłówek z nazwą branży
+        industry_names = {
+            "consulting": "💼 Consulting Game",
+            "fmcg": "🛒 FMCG Game",
+            "pharma": "💊 Pharma Game",
+            "banking": "🏦 Banking Game",
+            "insurance": "🛡️ Insurance Game",
+            "automotive": "🚗 Automotive Game"
+        }
+        zen_header(industry_names.get(industry_id, "Business Game"))
+        
+        # Pobierz dane branży
         bg_data = user_data["business_games"][industry_id]
-    
-    # Odśwież pulę kontraktów
-    bg_data = refresh_contract_pool(bg_data)
-    user_data["business_games"][industry_id] = bg_data
-    
-    # Nagłówek z podsumowaniem firmy
-    render_header(user_data, industry_id)
-    
-    st.markdown("---")
-    
-    # Główne zakładki (bez Instrukcji - teraz w Dashboard)
-    tabs = st.tabs(["🏢 Dashboard", "💼 Rynek Kontraktów", "🏢 Zarządzanie", "⚙️ Ustawienia"])
-    
-    with tabs[0]:
-        show_dashboard_tab(username, user_data, industry_id)
-    
-    with tabs[1]:
-        show_contracts_tab(username, user_data, industry_id)
-    
-    with tabs[2]:
-        # Pod-taby w Zarządzaniu
-        management_tabs = st.tabs(["🏢 Biuro", "👥 Pracownicy", "📊 Raporty Finansowe", "📜 Historia & Wydarzenia"])
         
-        with management_tabs[0]:
-            show_office_tab(username, user_data, industry_id)
+        # ========== FMCG - Skip Consulting-specific logic ==========
+        if industry_id == "fmcg":
+            # Migracja danych - dodaj customers i conversations jeśli nie istnieją
+            if "customers" not in bg_data:
+                bg_data["customers"] = {
+                    "selected_targets": [],
+                    "active_clients": [],
+                    "prospects": [],
+                    "lost": [],
+                    "onboarding_completed": False
+                }
+            if "conversations" not in bg_data:
+                bg_data["conversations"] = {}
+            
+            render_header(user_data, industry_id)
+            st.markdown("---")
+            
+            # Sprawdź czy gracz przeszedł onboarding
+            onboarding_done = bg_data.get("customers", {}).get("onboarding_completed", False)
+            
+            if not onboarding_done:
+                # ONBOARDING - Prezentacja firmy i wybór klientów
+                show_fmcg_onboarding(username, user_data, industry_id)
+                return
+            
+            # ZAKŁADKI FMCG (po onboardingu)
+            tabs = st.tabs(["📚 Moja Firma", "🏢 Dashboard", "👥 Klienci", "💼 Zadania", "📊 Statystyki Kariery"])
+            
+            with tabs[0]:
+                show_fmcg_company_info_tab(username, user_data, industry_id)
+            
+            with tabs[1]:
+                show_fmcg_dashboard_tab(username, user_data, industry_id)
+            
+            with tabs[2]:
+                show_fmcg_customers_tab(username, user_data, industry_id)
+            
+            with tabs[3]:
+                show_fmcg_tasks_tab(username, user_data, industry_id)
+            
+            with tabs[4]:
+                st.info("🚧 Statystyki kariery - wkrótce!")
+                
+            return
         
-        with management_tabs[1]:
-            show_employees_tab(username, user_data, industry_id)
+        # ========== CONSULTING - Original logic ==========
+        # MIGRACJA: Dodaj brakujące transakcje dla starych wydarzeń z monetami
+        from utils.business_game import migrate_event_transactions
+        user_data, migrated_count = migrate_event_transactions(user_data, industry_id)
+        if migrated_count > 0:
+            save_user_data(username, user_data)
+            bg_data = user_data["business_games"][industry_id]
         
-        with management_tabs[2]:
-            show_financial_reports_tab(username, user_data, industry_id)
+        # Odśwież pulę kontraktów
+        bg_data = refresh_contract_pool(bg_data)
+        user_data["business_games"][industry_id] = bg_data
         
-        with management_tabs[3]:
-            show_history_tab(username, user_data, industry_id)
+        # Nagłówek z podsumowaniem firmy
+        render_header(user_data, industry_id)
+        
+        st.markdown("---")
+        
+        # Główne zakładki (bez Instrukcji - teraz w Dashboard)
+        tabs = st.tabs(["🏢 Dashboard", "💼 Rynek Kontraktów", "🏢 Zarządzanie", "⚙️ Ustawienia"])
+        
+        with tabs[0]:
+            show_dashboard_tab(username, user_data, industry_id)
+        
+        with tabs[1]:
+            show_contracts_tab(username, user_data, industry_id)
+        
+        with tabs[2]:
+            # Pod-taby w Zarządzaniu
+            management_tabs = st.tabs(["🏢 Biuro", "👥 Pracownicy", "📊 Raporty Finansowe", "📜 Historia & Wydarzenia"])
+            
+            with management_tabs[0]:
+                show_office_tab(username, user_data, industry_id)
+            
+            with management_tabs[1]:
+                show_employees_tab(username, user_data, industry_id)
+            
+            with management_tabs[2]:
+                show_financial_reports_tab(username, user_data, industry_id)
+            
+            with management_tabs[3]:
+                show_history_tab(username, user_data, industry_id)
+        
+        with tabs[3]:
+            # Pod-taby w Ustawieniach
+            settings_tabs = st.tabs(["🏢 Ustawienia Firmy", "⚙️ Zarządzanie Grą"])
+            
+            with settings_tabs[0]:
+                show_firm_settings_tab(username, user_data, industry_id)
+            
+            with settings_tabs[1]:
+                show_game_management_tab(username, user_data, industry_id)
     
-    with tabs[3]:
-        # Pod-taby w Ustawieniach
-        settings_tabs = st.tabs(["🏢 Ustawienia Firmy", "⚙️ Zarządzanie Grą"])
+    except Exception as e:
+        st.error(f"❌ Błąd renderowania gry dla {industry_id}:")
+        st.error(f"**Error:** {str(e)}")
+        import traceback
+        st.code(traceback.format_exc())
         
-        with settings_tabs[0]:
-            show_firm_settings_tab(username, user_data, industry_id)
-        
-        with settings_tabs[1]:
-            show_game_management_tab(username, user_data, industry_id)
+        # Debug info
+        st.markdown("### 🔍 Debug Info:")
+        st.write(f"Username: {username}")
+        st.write(f"Industry: {industry_id}")
+        st.write(f"bg_view: {st.session_state.get('bg_view')}")
+        st.write(f"Has business_games: {'business_games' in user_data}")
+        if "business_games" in user_data:
+            st.write(f"Industries: {list(user_data['business_games'].keys())}")
 
 # =============================================================================
 # NAGŁÓWEK
 # =============================================================================
 
+def render_fmcg_header(user_data, bg_data):
+    """Renderuje nagłówek dla FMCG Career Model"""
+    from data.industries.fmcg import CAREER_LEVELS as FMCG_LEVELS, INDUSTRY_INFO as FMCG_INFO
+    
+    career = bg_data["career"]
+    metrics = bg_data["metrics"]
+    level = career["level"]
+    level_info = FMCG_LEVELS[level]
+    
+    # CSS (takie same style jak Consulting)
+    st.markdown("""
+    <style>
+    .game-card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+        height: 100%;
+    }
+    .game-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+    .firm-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+    }
+    .firm-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(102, 126, 234, 0.6);
+    }
+    .stat-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        transition: all 0.3s ease;
+        border-left: 4px solid;
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+    }
+    .stat-card.gold { border-left-color: #f59e0b; }
+    .stat-card.purple { border-left-color: #8b5cf6; }
+    .stat-card.blue { border-left-color: #3b82f6; }
+    .stat-card.green { border-left-color: #10b981; }
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 8px 0;
+        color: #1e293b;
+    }
+    .stat-label {
+        font-size: 13px;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # JEDEN WIERSZ: Career Card | Monthly Sales | Market Share | CSAT
+    col_career, col1, col2, col3 = st.columns([1.5, 1, 1, 1])
+    
+    with col_career:
+        team_size = len(bg_data.get("team", []))
+        
+        # Buduj HTML ręcznie bez f-string w środku
+        if team_size > 0:
+            team_section = f"<p style='margin:2px 0; opacity:0.85; font-size: 13px;'>👥 Zespół: {team_size} osób</p>"
+        else:
+            team_section = ""
+        
+        # Komponuj HTML bez zagnieżdżonych f-stringów
+        html_parts = [
+            "<div class='firm-card' style='padding: 20px; display: flex; align-items: center; gap: 16px; min-height: 140px; height: 100%;'>",
+            f"<div style='font-size: 48px;'>{career['company_logo']}</div>",
+            "<div style='flex: 1;'>",
+            f"<h2 style='margin:0; font-size: 18px; font-weight: 700;'>{career['title']}</h2>",
+            f"<p style='margin:4px 0 0 0; opacity:0.9; font-size: 13px;'>{career['company']}</p>",
+            team_section,
+            f"<p style='margin:2px 0 0 0; opacity:0.75; font-size: 12px;'>Poziom {level}/10</p>",
+            "</div>",
+            "</div>"
+        ]
+        
+        html = "".join(html_parts)
+        st.markdown(html, unsafe_allow_html=True)
+    
+    with col1:
+        monthly_sales = metrics.get("monthly_sales", 0)
+        st.markdown(f"""
+        <div class='stat-card gold'>
+            <div class='stat-label'>💰 Monthly Sales</div>
+            <div class='stat-value'>{monthly_sales:,.0f}</div>
+            <div style='font-size: 12px; color: #64748b;'>PLN</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        market_share = metrics.get("market_share", 0)
+        # Progress do następnego poziomu
+        next_level = level + 1
+        progress_info = ""
+        if next_level <= 10:
+            next_level_info = FMCG_LEVELS[next_level]
+            required_share = next_level_info['required_metrics'].get('market_share', 0)
+            if required_share > 0:
+                progress_pct = min(100, (market_share / required_share) * 100)
+                progress_info = f"<div style='margin-top: 8px;'><div style='background: #e2e8f0; border-radius: 4px; height: 4px; overflow: hidden;'><div style='background: #8b5cf6; height: 100%; width: {progress_pct}%;'></div></div><div style='font-size: 10px; color: #64748b; margin-top: 2px;'>Do awansu: {required_share}%</div></div>"
+        
+        st.markdown(f"""
+        <div class='stat-card purple'>
+            <div class='stat-label'>📊 Market Share</div>
+            <div class='stat-value'>{market_share:.1f}%</div>
+            <div style='font-size: 12px; color: #64748b;'>territory</div>
+            {progress_info}
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        csat = metrics.get("customer_satisfaction", 75)
+        st.markdown(f"""
+        <div class='stat-card blue'>
+            <div class='stat-label'>⭐ Customer Satisfaction</div>
+            <div class='stat-value'>{csat:.0f}%</div>
+            <div style='font-size: 12px; color: #64748b;'>CSAT score</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+
 def render_header(user_data, industry_id="consulting"):
-    """Renderuje nagłówek z profesjonalnymi kartami w stylu gamifikacji"""
+    """Renderuje nagłówek z profesjonalnymi kartami w stylu gamifikacji
+    
+    OBSŁUGUJE DWA MODELE:
+    - Consulting: Firma, Saldo, Reputacja, Rating
+    - FMCG: Kariera, Monthly Sales, Market Share, CSAT
+    """
     bg_data = user_data["business_games"][industry_id]
+    
+    # ========== FMCG CAREER MODEL ==========
+    if industry_id == "fmcg":
+        render_fmcg_header(user_data, bg_data)
+        return
+    
+    # ========== CONSULTING FIRM MODEL ==========
     firm = bg_data["firm"]
     level_info = FIRM_LEVELS[firm["level"]]
     
@@ -1370,8 +2891,9 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
         if len(active_contracts) == 0:
             st.info("Brak aktywnych kontraktów. Przejdź do zakładki 'Rynek Kontraktów' aby przyjąć nowe zlecenie!")
         else:
-            for contract in active_contracts:
-                render_active_contract_card(contract, username, user_data, bg_data)
+            for idx, contract in enumerate(active_contracts):
+                # Dodaj prefix "dashboard_" aby uniknąć konfliktu z zakładką Kontrakty
+                render_active_contract_card(contract, username, user_data, bg_data, contract_index=f"dashboard_{idx}")
     
     # PRAWA KOLUMNA - DZISIEJSZE WYDARZENIE
     with col_event:
@@ -1533,8 +3055,15 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
             </div>
             """, unsafe_allow_html=True)
 
-def render_active_contract_card(contract, username, user_data, bg_data):
+def render_active_contract_card(contract, username, user_data, bg_data, contract_index=0):
     """Renderuje profesjonalną kartę aktywnego kontraktu w stylu game UI"""
+    
+    contract_id = contract.get('id', 'UNKNOWN')
+    print(f"DEBUG render_active_contract_card: WEJŚCIE - contract_id={contract_id}, index={contract_index}")
+    
+    if not contract_id or contract_id == 'UNKNOWN':
+        st.error(f"⚠️ BŁĄD: Kontrakt bez ID! Index: {contract_index}, Dane: {contract}")
+        return
     
     # Backward compatibility: ai_conversation → conversation
     contract_type = contract.get("contract_type")
@@ -1544,20 +3073,25 @@ def render_active_contract_card(contract, username, user_data, bg_data):
     # Sprawdź czy to Decision Tree Contract
     if contract_type == "decision_tree":
         industry_id = bg_data.get("industry", "consulting")
-        render_decision_tree_contract(contract, username, user_data, bg_data, industry_id)
+        render_decision_tree_contract(contract, username, user_data, bg_data, industry_id, contract_index=contract_index)
         return
     
     # Sprawdź czy to Conversation Contract
     if contract_type == "conversation":
         industry_id = bg_data.get("industry", "consulting")
-        render_conversation_contract(contract, username, user_data, bg_data, industry_id)
+        render_conversation_contract(contract, username, user_data, bg_data, industry_id, contract_index=contract_index)
         return
     
     # Sprawdź czy to Speed Challenge Contract
     if contract_type == "speed_challenge":
         industry_id = bg_data.get("industry", "consulting")
-        render_speed_challenge_contract(contract, username, user_data, bg_data, industry_id)
+        render_speed_challenge_contract(contract, username, user_data, bg_data, industry_id, contract_index=contract_index)
         return
+    
+    # Dla standardowych kontraktów - inicjalizuj wersję transkrypcji (do śledzenia zmian)
+    transcription_version_key = f"transcription_version_{contract_id}"
+    if transcription_version_key not in st.session_state:
+        st.session_state[transcription_version_key] = 0
     
     # Standardowy kontrakt (pisanie/mówienie)
     with st.container():
@@ -1695,102 +3229,138 @@ def render_active_contract_card(contract, username, user_data, bg_data):
             
             solution_key = f"solution_{contract['id']}"
             
-            # Inicjalizuj klucze session_state
+            # Inicjalizuj tylko transcription_key (version_key jest już zainicjalizowany wyżej)
             transcription_key = f"transcription_{contract['id']}"
-            transcription_version_key = f"transcription_version_{contract['id']}"
             if transcription_key not in st.session_state:
                 st.session_state[transcription_key] = ""
-            if transcription_version_key not in st.session_state:
-                st.session_state[transcription_version_key] = 0
             
             st.markdown("**🎤 Nagraj** (wielokrotnie, jeśli chcesz) **lub ✍️ pisz bezpośrednio w polu poniżej:**")
             
+            # Wyświetl komunikat sukcesu jeśli był (po rerun)
+            success_key = f"transcription_success_{contract_id}"
+            if st.session_state.get(success_key, False):
+                st.success("✅ Transkrypcja zakończona! Tekst pojawił się w polu poniżej.")
+                del st.session_state[success_key]  # Usuń flagę aby nie pokazywać ponownie
+            
+            # Klucz musi być UNIKALNY - dodajmy render_id aby zapobiec duplikacji
+            # Jeśli render_id nie istnieje dla tego kontraktu, stwórz nowy
+            render_id_key = f"render_id_{contract_id}_{contract_index}"
+            if render_id_key not in st.session_state:
+                import random
+                st.session_state[render_id_key] = random.randint(100000, 999999)
+            
+            render_id = st.session_state[render_id_key]
+            audio_key = f"audio_{contract_id}_{contract_index}_{render_id}"
+            
+            # Klucz do śledzenia ostatnio przetworzonego audio (hash)
+            last_audio_hash_key = f"last_audio_hash_{contract_id}"
+            if last_audio_hash_key not in st.session_state:
+                st.session_state[last_audio_hash_key] = None
+            
             audio_data = st.audio_input(
                 "🎤 Nagrywanie...",
-                key=f"audio_input_{contract['id']}"
+                key=audio_key
             )
             
+            # Przetwarzaj TYLKO jeśli to NOWE audio (nie było jeszcze przetworzone)
             if audio_data is not None:
-                import speech_recognition as sr
-                import tempfile
-                import os
-                from pydub import AudioSegment
+                import hashlib
                 
-                with st.spinner("🤖 Rozpoznaję mowę..."):
-                    try:
-                        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
-                            tmp_file.write(audio_data.getvalue())
-                            tmp_path = tmp_file.name
-                        
-                        wav_path = None
+                # Oblicz hash audio
+                audio_bytes = audio_data.getvalue()
+                current_audio_hash = hashlib.md5(audio_bytes).hexdigest()
+                
+                # Sprawdź czy to nowe audio (inny hash niż ostatnio)
+                if current_audio_hash != st.session_state[last_audio_hash_key]:
+                    # NOWE audio - przetwarzaj!
+                    st.session_state[last_audio_hash_key] = current_audio_hash
+                    
+                    import speech_recognition as sr
+                    import tempfile
+                    import os
+                    from pydub import AudioSegment
+                    
+                    with st.spinner("🤖 Rozpoznaję mowę..."):
                         try:
-                            audio = AudioSegment.from_file(tmp_path)
-                            wav_path = tmp_path.replace(".wav", "_converted.wav")
-                            audio.export(wav_path, format="wav")
+                            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+                                tmp_file.write(audio_data.getvalue())
+                                tmp_path = tmp_file.name
                             
-                            recognizer = sr.Recognizer()
-                            with sr.AudioFile(wav_path) as source:
-                                audio_data_sr = recognizer.record(source)
-                                
-                            transcription = recognizer.recognize_google(audio_data_sr, language="pl-PL")
-                            
-                            # Post-processing: Dodaj interpunkcję przez Gemini
+                            wav_path = None
                             try:
-                                import google.generativeai as genai
+                                audio = AudioSegment.from_file(tmp_path)
+                                wav_path = tmp_path.replace(".wav", "_converted.wav")
+                                audio.export(wav_path, format="wav")
                                 
-                                # Konfiguracja Gemini (z secrets.toml)
-                                api_key = st.secrets["API_KEYS"]["gemini"]
-                                genai.configure(api_key=api_key)
+                                recognizer = sr.Recognizer()
+                                with sr.AudioFile(wav_path) as source:
+                                    audio_data_sr = recognizer.record(source)
+                                    
+                                transcription = recognizer.recognize_google(audio_data_sr, language="pl-PL")
                                 
-                                # Dodaj interpunkcję - użyj najnowszego stabilnego modelu
-                                model = genai.GenerativeModel("models/gemini-2.5-flash")
-                                prompt = f"""Dodaj interpunkcję (kropki, przecinki, pytajniki, wykrzykniki) do poniższego tekstu.
+                                # Post-processing: Dodaj interpunkcję przez Gemini
+                                try:
+                                    import google.generativeai as genai
+                                    
+                                    # Konfiguracja Gemini (z secrets.toml)
+                                    api_key = st.secrets["API_KEYS"]["gemini"]
+                                    genai.configure(api_key=api_key)
+                                    
+                                    # Dodaj interpunkcję - użyj najnowszego stabilnego modelu
+                                    model = genai.GenerativeModel("models/gemini-2.5-flash")
+                                    prompt = f"""Dodaj interpunkcję (kropki, przecinki, pytajniki, wykrzykniki) do poniższego tekstu.
 Nie zmieniaj słów, tylko dodaj znaki interpunkcyjne. Zachowaj strukturę i podział na zdania.
 Zwróć tylko poprawiony tekst, bez dodatkowych komentarzy.
 
 Tekst do poprawy:
 {transcription}"""
+                                    
+                                    response = model.generate_content(prompt)
+                                    transcription_with_punctuation = response.text.strip()
+                                    
+                                    # Nie wyświetlaj komunikatu tutaj - będzie w session_state
+                                    transcription = transcription_with_punctuation
+                                    
+                                except Exception as gemini_error:
+                                    # Nie wyświetlaj ostrzeżenia - kontynuuj z podstawową transkrypcją
+                                    pass
                                 
-                                response = model.generate_content(prompt)
-                                transcription_with_punctuation = response.text.strip()
+                                # DOPISZ do istniejącego tekstu (zamiast nadpisywać)
+                                existing_text = st.session_state.get(transcription_key, "")
+                                if existing_text.strip():
+                                    # Jeśli jest już jakiś tekst, dodaj nową linię i dopisz
+                                    st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
+                                else:
+                                    # Jeśli to pierwsze nagranie, po prostu zapisz
+                                    st.session_state[transcription_key] = transcription
                                 
-                                st.info("🤖 Gemini dodał interpunkcję do transkrypcji.")
-                                transcription = transcription_with_punctuation
+                                st.session_state[transcription_version_key] += 1
                                 
-                            except Exception as gemini_error:
-                                st.warning(f"⚠️ Nie udało się dodać interpunkcji: {str(gemini_error)}")
-                                # Kontynuuj z transkrypcją bez interpunkcji
+                                # Ustaw flagę sukcesu (wyświetlimy komunikat po rerun)
+                                st.session_state[f"transcription_success_{contract_id}"] = True
+                                
+                                # NIE kasuj flagi rendered_ - po prostu zrób rerun
+                                # text_area zostanie zaktualizowany dzięki zmianie klucza (wersja)
+                                st.rerun()
                             
-                            # DOPISZ do istniejącego tekstu (zamiast nadpisywać)
-                            existing_text = st.session_state.get(transcription_key, "")
-                            if existing_text.strip():
-                                # Jeśli jest już jakiś tekst, dodaj nową linię i dopisz
-                                st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
-                            else:
-                                # Jeśli to pierwsze nagranie, po prostu zapisz
-                                st.session_state[transcription_key] = transcription
-                            
-                            st.session_state[transcription_version_key] += 1
-                            
-                            st.success("✅ Transkrypcja zakończona! Tekst pojawił się w polu poniżej.")
-                            
-                        except sr.UnknownValueError:
-                            st.error("❌ Nie udało się rozpoznać mowy. Spróbuj ponownie lub mów wyraźniej.")
-                        except sr.RequestError as e:
-                            st.error(f"❌ Błąd połączenia z usługą rozpoznawania mowy: {str(e)}")
-                        finally:
-                            if os.path.exists(tmp_path):
-                                os.unlink(tmp_path)
-                            if wav_path and os.path.exists(wav_path):
-                                os.unlink(wav_path)
-                            
-                    except Exception as e:
-                        st.error(f"❌ Błąd podczas transkrypcji: {str(e)}")
-                        st.info("💡 Możesz wprowadzić tekst ręcznie w polu poniżej.")
+                            except sr.UnknownValueError:
+                                st.error("❌ Nie udało się rozpoznać mowy. Spróbuj ponownie lub mów wyraźniej.")
+                            except sr.RequestError as e:
+                                st.error(f"❌ Błąd połączenia z usługą rozpoznawania mowy: {str(e)}")
+                            finally:
+                                if os.path.exists(tmp_path):
+                                    os.unlink(tmp_path)
+                                if wav_path and os.path.exists(wav_path):
+                                    os.unlink(wav_path)
+                        
+                        except Exception as e:
+                            st.error(f"❌ Błąd podczas transkrypcji: {str(e)}")
             
-            # Dynamiczny klucz który zmienia się po transkrypcji
-            text_area_key = f"{solution_key}_v{st.session_state[transcription_version_key]}"
             current_text = st.session_state.get(transcription_key, contract.get("solution", ""))
+            
+            # Klucz musi zawierać render_id aby zapobiec duplikacji
+            # oraz wersję transkrypcji aby wymusić odświeżenie po nagraniu
+            text_area_key = f"solution_{contract_id}_{contract_index}_{render_id}_v{st.session_state[transcription_version_key]}"
             
             solution = st.text_area(
                 "📝 Możesz edytować transkrypcję lub pisać bezpośrednio:",
@@ -1800,10 +3370,8 @@ Tekst do poprawy:
                 placeholder="Nagrywaj wielokrotnie lub pisz bezpośrednio tutaj..."
             )
             
-            # WAŻNE: Synchronizuj wartość z pola tekstowego do session_state
-            # Żeby zapisać to co użytkownik napisał ręcznie przed nagraniem
-            if text_area_key in st.session_state:
-                st.session_state[transcription_key] = st.session_state[text_area_key]
+            # Zapisz aktualną wartość solution do session_state
+            st.session_state[transcription_key] = solution
             
             # ANTI-CHEAT: Dodaj JavaScript do śledzenia wklejania
             st.markdown(f"""
@@ -1848,7 +3416,7 @@ Tekst do poprawy:
                 st.caption(f"Liczba słów: {word_count}/{min_words} ({progress}%)")
             
             with col2:
-                if st.button("✅ Prześlij rozwiązanie", key=f"submit_{contract['id']}", type="primary"):
+                if st.button("✅ Prześlij rozwiązanie", key=f"submit_{contract_id}_{contract_index}", type="primary"):
                     if word_count < min_words:
                         st.error(f"Rozwiązanie zbyt krótkie! Minimum: {min_words} słów")
                     else:
@@ -1886,7 +3454,7 @@ Tekst do poprawy:
 # TAB 2: RYNEK KONTRAKTÓW
 # =============================================================================
 
-def render_decision_tree_contract(contract, username, user_data, bg_data, industry_id="consulting"):
+def render_decision_tree_contract(contract, username, user_data, bg_data, industry_id="consulting", contract_index=0):
     """Renderuje interaktywny Decision Tree Contract"""
     from utils.decision_tree_engine import (
         initialize_decision_tree_state,
@@ -1980,12 +3548,12 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
         col_action1, col_action2, col_action3 = st.columns(3)
         
         with col_action1:
-            if st.button("🔄 Zagraj ponownie", width="stretch", key=f"replay_{contract_id}"):
+            if st.button("🔄 Zagraj ponownie", width="stretch", key=f"replay_{contract_id}_{contract_index}"):
                 reset_decision_tree(contract_id, start_node_id)
                 st.rerun()
         
         with col_action2:
-            if st.button("✅ Prześlij wynik", type="primary", width="stretch", key=f"submit_{contract_id}"):
+            if st.button("✅ Prześlij wynik", type="primary", use_container_width=True, key=f"submit_dt_{contract_id}_{contract_index}"):
                 # Calculate reward based on stars
                 base_reward = contract.get("nagroda_base", 500)
                 reward_5star = contract.get("nagroda_5star", 1000)
@@ -2024,7 +3592,7 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
                     st.error(message)
         
         with col_action3:
-            if st.button("← Powrót", width="stretch", key=f"back_{contract_id}"):
+            if st.button("← Powrót", width="stretch", key=f"back_{contract_id}_{contract_index}"):
                 st.session_state["view_contract"] = None
                 st.rerun()
     
@@ -2076,7 +3644,7 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
                 # Button dla każdego wyboru
                 if st.button(
                     choice_text, 
-                    key=f"{contract_id}_choice_{i}",
+                    key=f"{contract_id}_choice_{i}_{contract_index}",
                     width="stretch",
                     type="secondary"
                 ):
@@ -2143,15 +3711,52 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
     # SEKCJA 1: AKTYWNE KONTRAKTY (pracuj nad nimi)
     # =============================================================================
     
+    # CRITICAL FIX: Wyczyść flagi rendered_ na początku każdego renderowania
+    # Zapobiega blokowaniu kontraktów po st.rerun()
+    # WAŻNE: Kasuj WSZYSTKIE flagi rendered_, niezależnie od formatu klucza
+    keys_to_clear = [k for k in st.session_state.keys() if isinstance(k, str) and k.startswith("rendered_")]
+    if keys_to_clear:
+        print(f"DEBUG show_contracts_tab: Kasowanie {len(keys_to_clear)} flag rendered_: {keys_to_clear[:5]}...")  # pokaż pierwsze 5
+    for k in keys_to_clear:
+        del st.session_state[k]
+    
     st.subheader("📋 Aktywne Kontrakty")
     
     active_contracts = bg_data["contracts"]["active"]
     
+    # CRITICAL FIX: Usuń duplikaty kontraktów (po ID)
+    # Może się zdarzyć, że ten sam kontrakt został dodany wielokrotnie
+    seen_ids = set()
+    unique_contracts = []
+    for contract in active_contracts:
+        contract_id = contract.get('id')
+        if not contract_id:
+            print(f"⚠️ WARNING: Kontrakt bez ID! Pomijam. Dane: {contract}")
+            continue  # Pomiń kontrakty bez ID
+        if contract_id not in seen_ids:
+            seen_ids.add(contract_id)
+            unique_contracts.append(contract)
+        else:
+            print(f"⚠️ WARNING: Duplikat kontraktu {contract_id} - usuwam!")
+    
+    # Jeśli znaleziono duplikaty, zaktualizuj listę i zapisz
+    if len(unique_contracts) < len(active_contracts):
+        st.warning(f"⚠️ Wykryto i usunięto {len(active_contracts) - len(unique_contracts)} zduplikowanych kontraktów.")
+        bg_data["contracts"]["active"] = unique_contracts
+        save_game_data(user_data, bg_data, industry_id)
+        save_user_data(username, user_data)
+        active_contracts = unique_contracts
+    
     if len(active_contracts) == 0:
         st.info("✨ Brak aktywnych kontraktów. Przyjmij nowe zlecenie poniżej!")
     else:
-        for contract in active_contracts:
-            render_active_contract_card(contract, username, user_data, bg_data)
+        # DEBUG: Sprawdź listę kontraktów
+        contract_ids_debug = [c.get('id', 'NO_ID') for c in active_contracts]
+        print(f"DEBUG show_contracts_tab: Renderowanie {len(active_contracts)} kontraktów: {contract_ids_debug}")
+        
+        for idx, contract in enumerate(active_contracts):
+            print(f"DEBUG: Renderowanie kontraktu idx={idx}, id={contract.get('id', 'NO_ID')}")
+            render_active_contract_card(contract, username, user_data, bg_data, contract_index=idx)
     
     st.markdown("---")
     
@@ -2265,8 +3870,13 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
                 render_contract_card(contract, username, user_data, bg_data, can_accept, industry_id)
 
 
-def render_conversation_contract(contract, username, user_data, bg_data, industry_id="consulting"):
+def render_conversation_contract(contract, username, user_data, bg_data, industry_id="consulting", contract_index=0):
     """Renderuje interaktywny Conversation Contract - dynamiczna rozmowa z NPC"""
+    
+    contract_id = contract["id"]
+    
+    # Render blocking jest już wykonany w render_active_contract_card - nie duplikuj tutaj
+    
     from utils.ai_conversation_engine import (
         initialize_ai_conversation,
         get_conversation_state,
@@ -2401,13 +4011,13 @@ def render_conversation_contract(contract, username, user_data, bg_data, industr
         # Przyciski akcji
         col_replay, col_submit = st.columns(2)
         with col_replay:
-            if st.button("🔄 Zagraj ponownie", key=f"replay_{contract_id}", width="stretch"):
+            if st.button("🔄 Zagraj ponownie", key=f"replay_{contract_id}_{contract_index}", width="stretch"):
                 reset_conversation(contract_id, npc_config, scenario_context, username)
                 st.rerun()
         
         with col_submit:
-            if st.button("✅ Zakończ kontrakt", key=f"submit_{contract_id}", 
-                        type="primary", width="stretch"):
+            if st.button("✅ Zakończ kontrakt", key=f"submit_conv_{contract_id}_{contract_index}", 
+                        type="primary", use_container_width=True):
                 # Import funkcji calculate_final_conversation_score
                 from utils.ai_conversation_engine import calculate_final_conversation_score
                 
@@ -2570,17 +4180,14 @@ def render_conversation_contract(contract, username, user_data, bg_data, industr
         transcription_version_key = f"ai_conv_transcription_version_{contract_id}"
         last_audio_hash_key = f"ai_conv_last_audio_hash_{contract_id}"
         
-        # Inicjalizacja
-        if transcription_key not in st.session_state:
-            st.session_state[transcription_key] = ""
-        if transcription_version_key not in st.session_state:
-            st.session_state[transcription_version_key] = 0
-        if last_audio_hash_key not in st.session_state:
-            st.session_state[last_audio_hash_key] = None
+        # Inicjalizacja (setdefault nie powoduje re-render jeśli klucz już istnieje!)
+        st.session_state.setdefault(transcription_key, "")
+        st.session_state.setdefault(transcription_version_key, 0)
+        st.session_state.setdefault(last_audio_hash_key, None)
         
         audio_data = st.audio_input(
             "🎤 Nagrywanie...",
-            key=f"audio_input_ai_conv_{contract_id}"
+            key=f"audio_input_ai_conv_{contract_id}_{contract_index}"
         )
         
         # Przetwarzanie nagrania audio (tylko jeśli to NOWE nagranie!)
@@ -2803,7 +4410,7 @@ Tekst do poprawy:
                         st.error(f"Błąd przy zakończeniu kontraktu: {e}")
 
 
-def render_speed_challenge_contract(contract, username, user_data, bg_data, industry_id="consulting"):
+def render_speed_challenge_contract(contract, username, user_data, bg_data, industry_id="consulting", contract_index=0):
     """Renderuje Speed Challenge Contract - kontrakt z limitem czasu"""
     from utils.speed_challenge_engine import (
         initialize_speed_challenge,
@@ -3145,7 +4752,7 @@ def render_speed_challenge_contract(contract, username, user_data, bg_data, indu
                 "Wpisz swoją poradę dla klienta:",
                 height=200,
                 placeholder="Bądź konkretny, zwięzły i actionable...",
-                key=f"speed_response_{contract_id}",
+                key=f"speed_response_{contract_id}_{contract_index}",
                 disabled=time_out
             )
             
@@ -3310,14 +4917,15 @@ def render_contract_card(contract, username, user_data, bg_data, can_accept_new,
         with col2:
             # Sprawdź możliwość przyjęcia
             if not can_accept_new:
-                st.button("❌ Brak miejsca", key=f"no_space_{contract['id']}", disabled=True, width="stretch")
+                st.button("❌ Brak miejsca", key=f"no_space_{contract['id']}", disabled=True, use_container_width=True)
             else:
-                if st.button("✅ Przyjmij kontrakt", key=f"accept_{contract['id']}", type="primary", width="stretch"):
+                if st.button("✅ Przyjmij kontrakt", key=f"accept_{contract['id']}", type="primary", use_container_width=True):
                     updated_bg, success, message, _ = accept_contract(bg_data, contract['id'], user_data)
                     
                     if success:
-                        save_game_data(user_data, updated_bg, industry_id)
-                        save_user_data(username, user_data)
+                        from data.users_new import save_single_user
+                        user_data = save_game_data(user_data, updated_bg, industry_id)
+                        save_single_user(username, user_data)
                         st.success(message)
                         st.rerun()
                     else:
@@ -5543,13 +7151,13 @@ def show_active_event_card(event: dict):
         effects = event["effects"]
         effects_items = []
         
-        # Monety
+        # Monety (SALDO FIRMY!)
         if effects.get("coins"):
             coin_value = effects["coins"]
             if coin_value > 0:
-                effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>💰</span><div><strong>+{coin_value}</strong><br><span style='font-size: 11px; opacity: 0.9;'>monet</span></div></div>")
+                effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>💰</span><div><strong>+{coin_value:,} PLN</strong><br><span style='font-size: 11px; opacity: 0.9;'>saldo firmy</span></div></div>")
             else:
-                effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>💸</span><div><strong>{coin_value}</strong><br><span style='font-size: 11px; opacity: 0.9;'>monet</span></div></div>")
+                effects_items.append(f"<div style='background: {emoji_bg}; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px;'><span style='font-size: 20px;'>💸</span><div><strong>{coin_value:,} PLN</strong><br><span style='font-size: 11px; opacity: 0.9;'>saldo firmy</span></div></div>")
         
         # Reputacja
         if effects.get("reputation"):
@@ -5920,13 +7528,11 @@ def render_user_rank_highlight(bg_data, ranking_type):
     </div>
     """, unsafe_allow_html=True)
 
+
 # =============================================================================
 # FUNKCJE POMOCNICZE
 # =============================================================================
 
-def save_user_data(username, user_data):
-    """Zapisuje dane użytkownika"""
-    from data.users_new import load_user_data, save_user_data as save_all_users
-    all_users = load_user_data()
-    all_users[username] = user_data
-    save_all_users(all_users)
+# UWAGA: save_user_data jest importowane z data.users_new na początku pliku
+# jako alias dla save_single_user
+

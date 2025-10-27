@@ -173,30 +173,299 @@ SCENARIOS = {
         }
     },
     
-    # Placeholdery dla pozostałych branż - wypełnisz jak będziesz je implementować
+    # =========================================================================
+    # FMCG - Career Path Scenarios
+    # =========================================================================
     "fmcg": {
         "lifetime": {
             "id": "lifetime",
             "name": "🌟 Lifetime Challenge",
-            "description": "Tryb nieskończony bez celów - rywalizuj z innymi graczami o najwyższy wynik!",
+            "description": "Tryb nieskończony bez celów - buduj karierę w FMCG bez ograniczeń czasowych!",
             "icon": "♾️",
             "difficulty": "open",
             "initial_conditions": {
-                "money": 0,
-                "reputation": 0,
-                "employees": [],
-                "office_type": "home_office"
+                "level": 1,
+                "role": "Junior Sales Representative",
+                "monthly_sales": 0,
+                "market_share": 0,
+                "customer_satisfaction": 70,
+                "team": []
             },
             "modifiers": {
-                "reputation_gain_multiplier": 1.0,
-                "revenue_multiplier": 1.0,
-                "cost_multiplier": 1.0,
-                "employee_salary_multiplier": 1.0,
-                "contract_difficulty_adjustment": 0
+                "sales_multiplier": 1.0,
+                "market_share_gain": 1.0,
+                "satisfaction_impact": 1.0,
+                "task_difficulty": 0
             },
             "objectives": [],
             "special_events": [],
             "is_lifetime": True
+        },
+        
+        "quick_start": {
+            "id": "quick_start",
+            "name": "🚀 Quick Start - Pierwsza Sprzedaż",
+            "description": "Szybki start dla nowych graczy. Osiągnij pierwszy sukces w FMCG!",
+            "icon": "🎯",
+            "difficulty": "easy",
+            "initial_conditions": {
+                "level": 1,
+                "role": "Junior Sales Representative",
+                "monthly_sales": 0,
+                "market_share": 0,
+                "customer_satisfaction": 70,
+                "team": []
+            },
+            "modifiers": {
+                "sales_multiplier": 1.2,        # +20% łatwiejsza sprzedaż
+                "market_share_gain": 1.3,       # Szybszy wzrost market share
+                "satisfaction_impact": 1.0,
+                "task_difficulty": -5           # Łatwiejsze zadania
+            },
+            "objectives": [
+                {
+                    "type": "monthly_sales",
+                    "target": 15000,
+                    "description": "Osiągnij 15k PLN sprzedaży w miesiącu",
+                    "reward_money": 5000
+                },
+                {
+                    "type": "market_share",
+                    "target": 8,
+                    "description": "Zdobądź 8% market share w swoim territory",
+                    "reward_money": 3000
+                },
+                {
+                    "type": "level",
+                    "target": 2,
+                    "description": "Awansuj na Sales Representative",
+                    "reward_money": 5000
+                }
+            ],
+            "special_events": []
+        },
+        
+        "territory_master": {
+            "id": "territory_master",
+            "name": "🗺️ Territory Master",
+            "description": "Opanuj swoje territory! Zostań najlepszym rep w regionie.",
+            "icon": "👑",
+            "difficulty": "medium",
+            "initial_conditions": {
+                "level": 2,
+                "role": "Sales Representative",
+                "monthly_sales": 10000,
+                "market_share": 8,
+                "customer_satisfaction": 75,
+                "team": []
+            },
+            "modifiers": {
+                "sales_multiplier": 1.0,
+                "market_share_gain": 1.5,       # Łatwiej zdobywać market share
+                "satisfaction_impact": 1.2,     # Większy wpływ na CSAT
+                "task_difficulty": 0
+            },
+            "objectives": [
+                {
+                    "type": "monthly_sales",
+                    "target": 60000,
+                    "description": "Osiągnij 60k PLN miesięcznej sprzedaży",
+                    "reward_money": 15000
+                },
+                {
+                    "type": "market_share",
+                    "target": 20,
+                    "description": "Zdobądź 20% market share (dominacja!)",
+                    "reward_money": 20000
+                },
+                {
+                    "type": "customer_satisfaction",
+                    "target": 85,
+                    "description": "Osiągnij 85% satysfakcji klientów",
+                    "reward_money": 10000
+                },
+                {
+                    "type": "level",
+                    "target": 3,
+                    "description": "Awansuj na Senior Sales Rep",
+                    "reward_money": 15000
+                }
+            ],
+            "special_events": []
+        },
+        
+        "team_builder": {
+            "id": "team_builder",
+            "name": "👥 Team Builder - Pierwszy Zespół",
+            "description": "Zbuduj i prowadź swój pierwszy zespół sprzedażowy!",
+            "icon": "🏗️",
+            "difficulty": "hard",
+            "initial_conditions": {
+                "level": 4,
+                "role": "Sales Team Leader",
+                "monthly_sales": 0,
+                "market_share": 12,
+                "customer_satisfaction": 78,
+                "team": [
+                    {"role": "junior_rep", "name": "Ania", "productivity": 8000},
+                    {"role": "sales_rep", "name": "Marek", "productivity": 20000},
+                    {"role": "sales_rep", "name": "Kasia", "productivity": 22000}
+                ]
+            },
+            "modifiers": {
+                "sales_multiplier": 1.0,
+                "market_share_gain": 1.0,
+                "satisfaction_impact": 1.0,
+                "task_difficulty": 5,           # Trudniejsze (management!)
+                "team_turnover": 1.5            # Większe ryzyko odejścia ludzi
+            },
+            "objectives": [
+                {
+                    "type": "team_sales",
+                    "target": 200000,
+                    "description": "Zespół osiąga 200k PLN miesięcznej sprzedaży",
+                    "reward_money": 30000
+                },
+                {
+                    "type": "team_satisfaction",
+                    "target": 80,
+                    "description": "Satysfakcja zespołu na poziomie 80%+",
+                    "reward_money": 20000
+                },
+                {
+                    "type": "market_share",
+                    "target": 18,
+                    "description": "Zdobądź 18% market share jako zespół",
+                    "reward_money": 25000
+                },
+                {
+                    "type": "level",
+                    "target": 5,
+                    "description": "Awansuj na Area Sales Manager",
+                    "reward_money": 25000
+                }
+            ],
+            "special_events": ["team_conflict", "top_performer_leaving"]
+        },
+        
+        "national_chains": {
+            "id": "national_chains",
+            "name": "🏢 National Chains Master",
+            "description": "Wygraj kontrakty z największymi sieciami handlowymi w Polsce!",
+            "icon": "💼",
+            "difficulty": "very_hard",
+            "initial_conditions": {
+                "level": 6,
+                "role": "District Sales Manager",
+                "monthly_sales": 0,
+                "market_share": 20,
+                "customer_satisfaction": 82,
+                "team": [
+                    {"role": "team_leader", "name": "Piotr", "manages": 3},
+                    {"role": "senior_rep", "name": "Anna"},
+                    {"role": "senior_rep", "name": "Tomasz"},
+                    {"role": "sales_rep", "name": "Ewa"},
+                    {"role": "sales_rep", "name": "Jacek"},
+                    {"role": "sales_rep", "name": "Magda"},
+                    {"role": "junior_rep", "name": "Bartek"}
+                ]
+            },
+            "modifiers": {
+                "sales_multiplier": 2.0,        # Duże kontrakty = duża sprzedaż
+                "market_share_gain": 2.0,       # National chains = massive impact
+                "satisfaction_impact": 1.0,
+                "task_difficulty": 10,          # Bardzo trudne negocjacje
+                "contract_penalty": 1.5         # Wysokie penalties za błędy
+            },
+            "objectives": [
+                {
+                    "type": "team_sales",
+                    "target": 800000,
+                    "description": "Osiągnij 800k PLN miesięcznej sprzedaży zespołu",
+                    "reward_money": 100000
+                },
+                {
+                    "type": "market_share",
+                    "target": 28,
+                    "description": "Zdobądź 28% market share dzięki national chains",
+                    "reward_money": 80000
+                },
+                {
+                    "type": "key_account_wins",
+                    "target": 3,
+                    "description": "Wygraj 3 kontrakty z top national chains (Biedronka, Lidl, Kaufland)",
+                    "reward_money": 120000
+                },
+                {
+                    "type": "level",
+                    "target": 7,
+                    "description": "Awansuj na Regional Sales Manager",
+                    "reward_money": 100000
+                }
+            ],
+            "special_events": ["contract_breach", "competitor_poaching"]
+        },
+        
+        "to_the_top": {
+            "id": "to_the_top",
+            "name": "🚀 To The Top - CSO Challenge",
+            "description": "Ultimate challenge: Od Junior Rep do Chief Sales Officer! Najdłuższa ścieżka kariery.",
+            "icon": "👑",
+            "difficulty": "expert",
+            "initial_conditions": {
+                "level": 1,
+                "role": "Junior Sales Representative",
+                "monthly_sales": 0,
+                "market_share": 0,
+                "customer_satisfaction": 70,
+                "team": []
+            },
+            "modifiers": {
+                "sales_multiplier": 0.9,        # Trudniejsza sprzedaż
+                "market_share_gain": 0.8,       # Wolniejszy wzrost
+                "satisfaction_impact": 1.0,
+                "task_difficulty": 15,          # Bardzo trudne zadania
+                "advancement_threshold": 1.2    # 120% requirements do awansu
+            },
+            "objectives": [
+                {
+                    "type": "level",
+                    "target": 10,
+                    "description": "Osiągnij poziom 10: Chief Sales Officer!",
+                    "reward_money": 500000
+                },
+                {
+                    "type": "team_sales",
+                    "target": 10000000,
+                    "description": "Zespół osiąga 10M PLN rocznej sprzedaży",
+                    "reward_money": 300000
+                },
+                {
+                    "type": "market_share",
+                    "target": 35,
+                    "description": "Zdominuj rynek - 35% market share",
+                    "reward_money": 200000
+                },
+                {
+                    "type": "team_size",
+                    "target": 100,
+                    "description": "Zbuduj organizację 100+ osób",
+                    "reward_money": 250000
+                },
+                {
+                    "type": "customer_satisfaction",
+                    "target": 92,
+                    "description": "92% satysfakcji klientów (world-class!)",
+                    "reward_money": 150000
+                },
+                {
+                    "type": "career_speed",
+                    "target": 24,
+                    "description": "Osiągnij CSO w mniej niż 24 miesiące (2 lata)",
+                    "reward_money": 1000000  # MASSIVE bonus!
+                }
+            ],
+            "special_events": ["market_crash", "acquisition_offer", "board_challenge"]
         },
         "standard": {
             "id": "standard",

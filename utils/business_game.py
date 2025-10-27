@@ -15,6 +15,26 @@ from data.business_data import (
 )
 from data.scenarios import get_scenario, get_default_scenario_id
 
+# FMCG Industry imports
+try:
+    from data.industries.fmcg import (
+        INDUSTRY_INFO as FMCG_INFO,
+        CAREER_LEVELS as FMCG_CAREER_LEVELS,
+        METRICS_CONFIG as FMCG_METRICS,
+        FMCG_GAME_CONFIG,
+        can_advance_to_next_level as fmcg_can_advance,
+        get_career_stage as fmcg_get_career_stage
+    )
+    from data.industries.fmcg_tasks import (
+        FMCG_TASKS,
+        get_tasks_for_level as fmcg_get_tasks_for_level,
+        get_task_by_id as fmcg_get_task_by_id,
+        get_random_tasks as fmcg_get_random_tasks
+    )
+    FMCG_AVAILABLE = True
+except ImportError:
+    FMCG_AVAILABLE = False
+
 # =============================================================================
 # INICJALIZACJA FIRMY
 # =============================================================================
@@ -22,14 +42,23 @@ from data.scenarios import get_scenario, get_default_scenario_id
 def initialize_business_game_with_scenario(username: str, industry_id: str, scenario_id: str) -> Dict:
     """Inicjalizuje Business Games z wybranym scenariuszem
     
+    OBSŁUGUJE DWA MODELE:
+    - Consulting: "Own Firm" model (firma, kontrakty, pracownicy)
+    - FMCG: "Career Progression" model (kariera, tasks, team)
+    
     Args:
         username: Nazwa użytkownika
-        industry_id: ID branży (np. "consulting")
-        scenario_id: ID scenariusza (np. "startup_mode")
+        industry_id: ID branży (np. "consulting", "fmcg")
+        scenario_id: ID scenariusza (np. "startup_mode", "quick_start")
     
     Returns:
         Dict z pełnymi danymi gry zainicjalizowanymi według scenariusza
     """
+    # FMCG używa innej struktury danych (Career Progression)
+    if industry_id == "fmcg":
+        return initialize_fmcg_game_with_scenario(username, scenario_id)
+    
+    # CONSULTING (i inne przyszłe branże "Own Firm")
     scenario = get_scenario(industry_id, scenario_id)
     if not scenario:
         # Fallback do standardowego scenariusza
@@ -203,6 +232,150 @@ def initialize_business_game(username: str) -> Dict:
             "level_ups": []  # Historia awansów
         }
     }
+
+
+def initialize_fmcg_game_with_scenario(username: str, scenario_id: str) -> Dict:
+    """Inicjalizuje FMCG Career Game z wybranym scenariuszem
+    
+    UWAGA: FMCG używa modelu CAREER PROGRESSION (nie "firma")
+    - Gracz jest PRACOWNIKIEM w GlobalCPG Inc.
+    - Awansuje przez 10 poziomów kariery (Junior Rep → CSO)
+    - Metryki: Monthly Sales, Market Share, CSAT, Team Satisfaction
+    
+    Args:
+        username: Nazwa użytkownika
+        scenario_id: ID scenariusza FMCG (np. "quick_start", "to_the_top")
+    
+    Returns:
+        Dict z danymi gry FMCG zainicjalizowanymi według scenariusza
+    """
+    if not FMCG_AVAILABLE:
+        raise ImportError("FMCG industry module not available")
+    
+    scenario = get_scenario("fmcg", scenario_id)
+    if not scenario:
+        # Fallback do lifetime scenario
+        scenario = get_scenario("fmcg", "lifetime")
+        if not scenario:
+            raise ValueError(f"Nie można znaleźć scenariusza FMCG: {scenario_id}")
+    
+    initial = scenario['initial_conditions']
+    level = initial.get('level', 1)
+    career_info = FMCG_CAREER_LEVELS[level]
+    
+    return {
+        # Metadata
+        "industry": "fmcg",
+        "scenario_id": scenario_id,
+        "scenario_modifiers": scenario['modifiers'],
+        "scenario_objectives": scenario['objectives'],
+        "objectives_completed": [],
+        
+        # Career Info (nie "firm"!)
+        "career": {
+            "level": level,
+            "title": career_info['role'],
+            "company": FMCG_INFO['company_name'],
+            "company_logo": FMCG_INFO['icon'],
+            "started_at": datetime.now().strftime("%Y-%m-%d"),
+            "last_promotion": None
+        },
+        
+        # Metrics (nie "money" i "reputation"!)
+        "metrics": {
+            "monthly_sales": initial.get('monthly_sales', 0),
+            "market_share": initial.get('market_share', 0),
+            "customer_satisfaction": initial.get('customer_satisfaction', 75),
+            "team_satisfaction": initial.get('team_satisfaction', 0) if level >= 4 else None
+        },
+        
+        # Team (tylko dla poziomów 4+)
+        "team": initial.get('team', []) if level >= 4 else [],
+        
+        # Tasks (zamiast "contracts")
+        "tasks": {
+            "active": initial.get('tasks_in_progress', []),
+            "completed": [],
+            "available_pool": [],
+            "last_refresh": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        },
+        
+        # Stats
+        "stats": {
+            "total_sales": 0,
+            "total_team_sales": 0 if level >= 4 else None,
+            "tasks_completed": 0,
+            "tasks_5star": 0,
+            "tasks_4star": 0,
+            "tasks_3star": 0,
+            "tasks_2star": 0,
+            "tasks_1star": 0,
+            "avg_rating": 0.0,
+            "category_stats": {
+                "field_sales": {"completed": 0, "total_sales": 0, "avg_rating": 0.0},
+                "key_accounts": {"completed": 0, "total_sales": 0, "avg_rating": 0.0},
+                "team_management": {"completed": 0, "total_sales": 0, "avg_rating": 0.0},
+                "trade_marketing": {"completed": 0, "total_sales": 0, "avg_rating": 0.0},
+                "strategy": {"completed": 0, "total_sales": 0, "avg_rating": 0.0},
+                "crisis": {"completed": 0, "total_sales": 0, "avg_rating": 0.0}
+            },
+            "last_30_days": {
+                "sales": 0,
+                "tasks": 0,
+                "avg_rating": 0.0
+            },
+            "last_7_days": {
+                "sales": 0,
+                "tasks": 0,
+                "avg_rating": 0.0
+            }
+        },
+        
+        # Ranking (podobnie jak Consulting)
+        "ranking": {
+            "overall_score": 0.0,
+            "current_positions": {
+                "overall": None,
+                "sales": None,
+                "quality": None,
+                "productivity_30d": None
+            },
+            "previous_positions": {},
+            "badges": []
+        },
+        
+        # Events (losowe wydarzenia)
+        "events": {
+            "history": [],
+            "last_roll": None,
+            "active_effects": []
+        },
+        
+        # Salary/Bonus (zamiast "money")
+        "finances": {
+            "bonus_earned": 0,
+            "total_earned": 0
+        },
+        
+        # Customers & CRM (NEW - dla systemu klientów)
+        "customers": {
+            "selected_targets": [],  # Lista ID klientów wybranych przez gracza
+            "active_clients": [],    # Klienci którzy już kupują
+            "prospects": [],         # Klienci w trakcie prospectingu
+            "lost": [],              # Utraceni klienci
+            "onboarding_completed": False  # Czy gracz przeszedł onboarding
+        },
+        
+        # Conversation History (dla AI rozmów z klientami)
+        "conversations": {},  # {customer_id: [lista rozmów]}
+        
+        # History
+        "history": {
+            "promotions": [],  # Historia awansów
+            "achievements": []  # Osiągnięcia specjalne
+        }
+    }
+
 
 # =============================================================================
 # ZARZĄDZANIE FIRMĄ
@@ -441,6 +614,7 @@ def accept_contract(business_data: Dict, contract_id: str, user_data: Optional[D
         triggered_event = (event_id, event_data) lub None
     """
     can_accept, reason = can_accept_contract(business_data)
+    
     if not can_accept:
         return business_data, False, reason, None
     
@@ -488,6 +662,12 @@ def accept_contract(business_data: Dict, contract_id: str, user_data: Optional[D
     ).strftime("%Y-%m-%d %H:%M:%S")
     active_contract["status"] = "in_progress"
     active_contract["solution"] = ""
+    
+    # CRITICAL FIX: Sprawdź czy kontrakt już nie jest w aktywnych (uniknij duplikatów)
+    already_active = any(c.get("id") == contract_id for c in business_data["contracts"]["active"])
+    
+    if already_active:
+        return business_data, False, "Kontrakt jest już aktywny!", None
     
     business_data["contracts"]["active"].append(active_contract)
     

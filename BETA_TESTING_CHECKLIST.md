@@ -134,8 +134,8 @@ http://localhost:8501
 ```
 
 ### **Klucze API (dla Ciebie):**
-- **Gemini:** `AIzaSyCDRzwz8c8EE8Mb1suxrF6kWHaBQNDqB3I` (w secrets.toml)
-- **ElevenLabs:** `sk_2c76b82443ac4b1a7724b1f988c2e8a368c8a737ddbfcb10` (w secrets.toml)
+- **Gemini:** `[SKONFIGURUJ W secrets.toml]`
+- **ElevenLabs:** `[SKONFIGURUJ W secrets.toml]`
 
 ⚠️ **NIE UDOSTĘPNIAJ KLUCZY PUBLICZNIE!**
 
