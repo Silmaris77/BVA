@@ -2083,6 +2083,109 @@ def show_fmcg_stats_tab(username, user_data, industry_id):
 def show_industry_game(username, user_data, industry_id):
     """Widok gry dla wybranej branży"""
     
+    # CSS dla kompaktowych nagłówków i separatorów - MAKSYMALNIE KOMPAKTOWY
+    st.markdown("""
+    <style>
+    /* PRZYWRÓĆ NORMALNĄ SZEROKOŚĆ SIDEBARA */
+    [data-testid="stSidebar"] {
+        min-width: 21rem !important;
+        max-width: 21rem !important;
+    }
+    
+    [data-testid="stSidebar"] > div:first-child {
+        width: 21rem !important;
+    }
+    
+    /* MAKSYMALNA SZEROKOŚĆ GŁÓWNEJ ZAWARTOŚCI - bardziej agresywne selektory */
+    section.main > div.block-container {
+        max-width: 95% !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+    
+    /* Alternatywny selektor */
+    .stApp section.main div[data-testid="stVerticalBlock"] {
+        max-width: 95% !important;
+    }
+    
+    /* Bezpośredni selektor na główny kontener */
+    div.block-container {
+        max-width: 95% !important;
+    }
+    
+    /* Globalne zmniejszenie odstępów dla wszystkich nagłówków */
+    div[data-testid="stVerticalBlock"] > div:has(h1),
+    div[data-testid="stVerticalBlock"] > div:has(h2),
+    div[data-testid="stVerticalBlock"] > div:has(h3) {
+        margin-top: 0.3rem !important;
+        margin-bottom: 0.3rem !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    
+    /* Bezpośrednio na wszystkie h2 i h3 */
+    h1, h2, h3 {
+        margin-top: 0.3rem !important;
+        margin-bottom: 0.5rem !important;
+        padding-top: 0 !important;
+    }
+    
+    /* Stare selektory (dla pewności) */
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+        margin-top: 0.3rem !important;
+        margin-bottom: 0.5rem !important;
+        padding-top: 0 !important;
+    }
+    
+    /* Block container */
+    .block-container {
+        padding-top: 2rem !important;
+    }
+    
+    /* Expandery */
+    .streamlit-expanderHeader {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    /* Element zawierający subheader */
+    [data-testid="stMarkdownContainer"] {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    
+    /* MAKSYMALNIE ZMNIEJSZ SEPARATORY <hr> */
+    hr {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+        border: none !important;
+        border-top: 1px solid #e0e0e0 !important;
+        height: 0 !important;
+    }
+    
+    /* Container dla separatorów */
+    .stMarkdown:has(hr) {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    
+    /* Element container dla separatorów */
+    div[data-testid="stElementContainer"]:has(hr) {
+        margin-top: 0.3rem !important;
+        margin-bottom: 0.3rem !important;
+        padding: 0 !important;
+    }
+    
+    /* MarkdownContainer z hr */
+    div[data-testid="stMarkdownContainer"]:has(hr) {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     try:
         # KLUCZOWE: Jeśli initializing_game=True, przeładuj user_data z dysku
         if st.session_state.get("initializing_game", False):
@@ -2185,7 +2288,7 @@ def show_industry_game(username, user_data, industry_id):
         st.markdown("---")
         
         # Główne zakładki (bez Instrukcji - teraz w Dashboard)
-        tabs = st.tabs(["🏢 Dashboard", "💼 Rynek Kontraktów", "🏢 Zarządzanie", "⚙️ Ustawienia"])
+        tabs = st.tabs(["🏢 Dashboard", "💼 Kontrakty", "🏢 Zarządzanie", "⚙️ Ustawienia"])
         
         with tabs[0]:
             show_dashboard_tab(username, user_data, industry_id)
@@ -2560,19 +2663,21 @@ def create_financial_chart(bg_data, period=7, cumulative=False):
     transactions = bg_data.get("history", {}).get("transactions", [])
     
     if not transactions:
-        # Pusty wykres jeśli brak danych
+        # Pusty wykres jeśli brak danych - gamifikowany styl
         fig = go.Figure()
         fig.add_annotation(
-            text="Brak danych finansowych<br>Ukończ pierwszy kontrakt!",
+            text="🎮 Brak danych finansowych<br><span style='font-size: 14px;'>Ukończ pierwszy kontrakt aby zobaczyć wykres!</span>",
             xref="paper", yref="paper",
             x=0.5, y=0.5, showarrow=False,
-            font=dict(size=16, color="#64748b")
+            font=dict(size=18, color="#64748b", family="Arial")
         )
         fig.update_layout(
-            height=300,
+            height=400,
             xaxis=dict(visible=False),
             yaxis=dict(visible=False),
-            plot_bgcolor='white'
+            plot_bgcolor='#f8fafc',
+            paper_bgcolor='white',
+            margin=dict(l=20, r=20, t=40, b=20)
         )
         return fig
     
@@ -2641,67 +2746,128 @@ def create_financial_chart(bg_data, period=7, cumulative=False):
     # Formatuj daty (krótko)
     dates_formatted = [datetime.strptime(d, "%Y-%m-%d").strftime("%d.%m") for d in dates]
     
-    # Twórz wykres
+    # Twórz wykres - GRYWALIZACYJNY STYL
     fig = go.Figure()
     
+    # Trace 1: PRZYCHODY (zielony gradient)
     fig.add_trace(go.Scatter(
         x=dates_formatted,
         y=revenues,
-        name='Przychody',
+        name='💰 Przychody',
         mode='lines+markers',
-        line=dict(color='#10b981', width=3),
-        marker=dict(size=8),
+        line=dict(color='#10b981', width=4, shape='spline'),
+        marker=dict(
+            size=10,
+            color='#10b981',
+            line=dict(color='white', width=2),
+            symbol='circle'
+        ),
         fill='tozeroy',
-        fillcolor='rgba(16, 185, 129, 0.1)'
+        fillcolor='rgba(16, 185, 129, 0.15)',
+        hovertemplate='<b>%{x}</b><br>Przychody: %{y:,.0f} 💰<extra></extra>'
     ))
     
+    # Trace 2: KOSZTY (czerwony gradient)
     fig.add_trace(go.Scatter(
         x=dates_formatted,
         y=costs,
-        name='Koszty',
+        name='💸 Koszty',
         mode='lines+markers',
-        line=dict(color='#ef4444', width=3),
-        marker=dict(size=8),
+        line=dict(color='#ef4444', width=4, shape='spline'),
+        marker=dict(
+            size=10,
+            color='#ef4444',
+            line=dict(color='white', width=2),
+            symbol='circle'
+        ),
         fill='tozeroy',
-        fillcolor='rgba(239, 68, 68, 0.1)'
+        fillcolor='rgba(239, 68, 68, 0.15)',
+        hovertemplate='<b>%{x}</b><br>Koszty: %{y:,.0f} 💸<extra></extra>'
     ))
+    
+    # Trace 3: ZYSK (fioletowy, grubsza linia)
+    profit_colors = ['#10b981' if p > 0 else '#ef4444' if p < 0 else '#94a3b8' for p in profits]
     
     fig.add_trace(go.Scatter(
         x=dates_formatted,
         y=profits,
-        name='Zysk',
+        name='💎 Zysk',
         mode='lines+markers',
-        line=dict(color='#8b5cf6', width=3, dash='dot'),
-        marker=dict(size=8)
+        line=dict(color='#8b5cf6', width=5, shape='spline'),
+        marker=dict(
+            size=12,
+            color=profit_colors,
+            line=dict(color='white', width=3),
+            symbol='diamond'
+        ),
+        hovertemplate='<b>%{x}</b><br>Zysk: %{y:,.0f} 💎<extra></extra>'
     ))
     
-    # Layout
-    title_text = f"{'Skumulowane ' if cumulative else ''}Finanse (ostatnie {period} dni)"
+    # Layout - PROFESJONALNY I GRYWALIZACYJNY
+    title_text = f"{'📈 Wartości Skumulowane' if cumulative else '📊 Przychody i Koszty'} (ostatnie {period} dni)"
     
     fig.update_layout(
-        title=dict(text=title_text, font=dict(size=14, color='#64748b')),
+        title=dict(
+            text=title_text,
+            font=dict(size=18, color='#1e293b', family='Arial Black', weight='bold'),
+            x=0.5,
+            xanchor='center'
+        ),
         xaxis=dict(
             title="",
             showgrid=True,
-            gridcolor='#f1f5f9'
+            gridcolor='#e2e8f0',
+            gridwidth=1,
+            showline=True,
+            linecolor='#cbd5e1',
+            linewidth=2,
+            tickfont=dict(size=12, color='#64748b', family='Arial')
         ),
         yaxis=dict(
-            title="Monety 💰",
+            title="",
             showgrid=True,
-            gridcolor='#f1f5f9'
+            gridcolor='#e2e8f0',
+            gridwidth=1,
+            showline=True,
+            linecolor='#cbd5e1',
+            linewidth=2,
+            tickfont=dict(size=12, color='#64748b', family='Arial'),
+            tickformat=',',
+            ticksuffix=' 💰'
         ),
-        height=300,
+        height=400,
         hovermode='x unified',
-        plot_bgcolor='white',
+        plot_bgcolor='#f8fafc',
         paper_bgcolor='white',
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
-            xanchor="right",
-            x=1
+            xanchor="center",
+            x=0.5,
+            bgcolor='rgba(255, 255, 255, 0.9)',
+            bordercolor='#e2e8f0',
+            borderwidth=2,
+            font=dict(size=13, family='Arial', weight='bold')
         ),
-        margin=dict(l=50, r=20, t=60, b=40)
+        margin=dict(l=60, r=40, t=80, b=50),
+        font=dict(family='Arial'),
+        hoverlabel=dict(
+            bgcolor="white",
+            font_size=13,
+            font_family="Arial",
+            bordercolor='#cbd5e1'
+        )
+    )
+    
+    # Dodaj linię zerową dla zysku (wizualna pomoc)
+    fig.add_hline(
+        y=0, 
+        line_dash="dash", 
+        line_color="#94a3b8", 
+        line_width=2,
+        opacity=0.5,
+        annotation_text="",
     )
     
     return fig
@@ -2747,7 +2913,7 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
 <div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;'>
 <div style='color: #667eea; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>🚀 SZYBKI START (5 KROKÓW)</div>
 <div style='color: #334155; font-size: 14px; line-height: 1.8;'>
-<strong>1️⃣ Przyjmij kontrakt</strong> → Zakładka "💼 Rynek Kontraktów"<br>
+<strong>1️⃣ Przyjmij kontrakt</strong> → Zakładka "💼 Kontrakty"<br>
 <strong>2️⃣ Wykonaj zadanie</strong> → Wróć do "🏢 Dashboard" → Aktywne Kontrakty<br>
 <strong>3️⃣ Prześlij rozwiązanie</strong> → Tekst/Audio → Klient oceni 1-5⭐<br>
 <strong>4️⃣ Zbieraj pieniądze</strong> → 500-3000 PLN za kontrakt<br>
@@ -2840,7 +3006,6 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
             """, unsafe_allow_html=True)
         
         # Wskazówki strategiczne
-        st.markdown("---")
         st.markdown("""
 <div style='background: linear-gradient(135deg, #ef444415 0%, #dc262615 100%); border-left: 4px solid #ef4444; border-radius: 12px; padding: 16px 20px;'>
 <div style='color: #ef4444; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 12px;'>⚠️ NAJCZĘSTSZE BŁĘDY</div>
@@ -3020,31 +3185,135 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
         event_id, event_data = st.session_state["pending_event"]
         render_event_choice_modal(event_id, event_data, username, user_data, context="dashboard")
     
-    st.markdown("---")
-    
     # Pobierz podsumowanie
     summary = get_firm_summary(user_data, industry_id)
     
-    # Dwie kolumny: Aktywne kontrakty i Wydarzenie
+    # Layout: Dwie kolumny - [Kontrakty (Aktywne + Ukończone) | Wydarzenia]
     col_contracts, col_event = st.columns([2, 1])
     
-    # LEWA KOLUMNA - AKTYWNE KONTRAKTY
+    # LEWA KOLUMNA - KONTRAKTY (Aktywne + Ostatnio Ukończone)
     with col_contracts:
-        st.subheader("📋 Aktywne Kontrakty")
+        # AKTYWNE KONTRAKTY - kompaktowy nagłówek bez marginesu
+        st.markdown("""
+        <div style='margin-top: 0 !important; padding-top: 0 !important;'>
+            <h3 style='margin: 0 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>📋 Aktywne Kontrakty</h3>
+        </div>
+        """, unsafe_allow_html=True)
         
         # Lista aktywnych kontraktów
         active_contracts = bg_data["contracts"]["active"]
         
         if len(active_contracts) == 0:
-            st.info("Brak aktywnych kontraktów. Przejdź do zakładki 'Rynek Kontraktów' aby przyjąć nowe zlecenie!")
+            st.info("Brak aktywnych kontraktów. Przejdź do zakładki 'Kontrakty' aby przyjąć nowe zlecenie!")
         else:
             for idx, contract in enumerate(active_contracts):
                 # Dodaj prefix "dashboard_" aby uniknąć konfliktu z zakładką Kontrakty
                 render_active_contract_card(contract, username, user_data, bg_data, contract_index=f"dashboard_{idx}")
+        
+        # Kompaktowy separator (zmniejszona przestrzeń)
+        st.markdown("<div style='margin: 0.5rem 0;'></div>", unsafe_allow_html=True)
+        
+        # OSTATNIO UKOŃCZONE KONTRAKTY
+        completed_contracts = bg_data.get("contracts", {}).get("completed", [])
+        
+        # Pokaż maksymalnie 3 ostatnio ukończone kontrakty
+        recent_completed = sorted(
+            completed_contracts,
+            key=lambda x: x.get("completed_date", ""),
+            reverse=True
+        )[:3]
+        
+        if recent_completed:
+            st.markdown("""
+            <div style='margin-top: 0 !important; padding-top: 0 !important;'>
+                <h3 style='margin: 0.5rem 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>🎯 Ostatnio Ukończone Kontrakty</h3>
+            </div>
+            """, unsafe_allow_html=True)
+            st.caption("Zobacz wyniki swoich ostatnich kontraktów - nie musisz wchodzić w Historię!")
+            
+            # Wyświetl w kompaktowej formie
+            for contract in recent_completed:
+                rating = contract.get("rating", 0)
+                reward_coins = get_contract_reward_coins(contract)
+                rep_change = get_contract_reward_reputation(contract)
+                
+                # Kolor na podstawie oceny
+                if rating >= 4:
+                    border_color = "#10b981"
+                    bg_color = "#f0fdf4"
+                elif rating >= 3:
+                    border_color = "#f59e0b"
+                    bg_color = "#fffbeb"
+                else:
+                    border_color = "#ef4444"
+                    bg_color = "#fef2f2"
+                
+                with st.expander(
+                    f"{contract.get('emoji', '📋')} {contract.get('tytul', 'Kontrakt')} · {'⭐' * rating} · {reward_coins:,} 💰",
+                    expanded=False
+                ):
+                    # Kompaktowy widok wyniku
+                    st.markdown(f"""
+                    <div style='border-left: 5px solid {border_color}; 
+                                background: {bg_color};
+                                padding: 15px; 
+                                margin: 10px 0; 
+                                border-radius: 8px;'>
+                        <p style='margin: 0; color: #666; font-size: 0.9em;'>
+                            <strong>Klient:</strong> {contract.get('klient', 'N/A')} | 
+                            <strong>Ukończono:</strong> {contract.get('completed_date', 'N/A')}
+                        </p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # Metryki w karcie
+                    rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
+                    
+                    st.markdown(f"""
+                    <div style='background: linear-gradient(to right, #f8fafc, #f1f5f9); 
+                                border-left: 4px solid #3b82f6; 
+                                border-radius: 8px; 
+                                padding: 16px; 
+                                margin: 16px 0;
+                                box-shadow: 0 1px 3px rgba(0,0,0,0.1);'>
+                        <div style='display: flex; justify-content: space-around; text-align: center;'>
+                            <div>
+                                <div style='font-size: 24px; margin-bottom: 4px;'>⭐</div>
+                                <div style='font-weight: 600; color: #1e293b;'>{rating}/5</div>
+                                <div style='font-size: 12px; color: #64748b;'>Ocena</div>
+                            </div>
+                            <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
+                            <div>
+                                <div style='font-size: 24px; margin-bottom: 4px;'>💰</div>
+                                <div style='font-weight: 600; color: #1e293b;'>{reward_coins:,}</div>
+                                <div style='font-size: 12px; color: #64748b;'>Zarobiono</div>
+                            </div>
+                            <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
+                            <div>
+                                <div style='font-size: 24px; margin-bottom: 4px;'>📈</div>
+                                <div style='font-weight: 600; color: #1e293b;'>{rep_display}</div>
+                                <div style='font-size: 12px; color: #64748b;'>Reputacja</div>
+                            </div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # Feedback od klienta
+                    feedback = contract.get("feedback", "Brak feedbacku")
+                    
+                    st.markdown("<h4 style='margin-top: 0.5rem; margin-bottom: 0.3rem; padding: 0; font-size: 1.1em;'>💬 Feedback od klienta</h4>", unsafe_allow_html=True)
+                    st.info(feedback)
+                    
+                    # Link do pełnej historii
+                    st.info("💡 Pełne szczegóły kontraktu (opis, zadanie, Twoje rozwiązanie) znajdziesz w zakładce **'📜 Historia & Wydarzenia'**")
     
     # PRAWA KOLUMNA - DZISIEJSZE WYDARZENIE
     with col_event:
-        st.subheader("🎲 Dzisiejsze Wydarzenie")
+        st.markdown("""
+        <div style='margin-top: 0 !important; padding-top: 0 !important;'>
+            <h3 style='margin: 0 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>🎲 Dzisiejsze Wydarzenie</h3>
+        </div>
+        """, unsafe_allow_html=True)
         
         # Pokaż dzisiejsze wydarzenie (jeśli jest)
         latest_event = get_latest_event(bg_data)
@@ -3060,116 +3329,33 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
     
     st.markdown("---")
     
-    # =============================================================================
-    # SEKCJA OSTATNIO UKOŃCZONYCH KONTRAKTÓW - NOWOŚĆ!
-    # =============================================================================
+    # WYKRES FINANSOWY - pełna szerokość - kompaktowy nagłówek
+    st.markdown("""
+    <div style='margin-top: 0 !important; padding-top: 0 !important;'>
+        <h3 style='margin: 0.5rem 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>📊 Analiza Finansowa</h3>
+    </div>
+    """, unsafe_allow_html=True)
     
-    completed_contracts = bg_data.get("contracts", {}).get("completed", [])
+    # Generuj i wyświetl wykres na pełną szerokość
+    fig = create_financial_chart(
+        bg_data, 
+        period=st.session_state.get("financial_chart_period", 7),
+        cumulative=st.session_state.get("financial_chart_cumulative", False)
+    )
+    st.plotly_chart(fig, use_container_width=True)
     
-    # Pokaż maksymalnie 3 ostatnio ukończone kontrakty
-    recent_completed = sorted(
-        completed_contracts,
-        key=lambda x: x.get("completed_date", ""),
-        reverse=True
-    )[:3]
+    # Kontrolki POD wykresem - kompaktowy layout
+    col_controls, col_summary = st.columns([1, 2])
     
-    if recent_completed:
-        st.subheader("🎯 Ostatnio Ukończone Kontrakty")
-        st.caption("Zobacz wyniki swoich ostatnich kontraktów - nie musisz wchodzić w Historię!")
+    with col_controls:
+        st.markdown("**⚙️ Ustawienia wykresu:**")
         
-        # Wyświetl w kompaktowej formie
-        for contract in recent_completed:
-            rating = contract.get("rating", 0)
-            reward_coins = get_contract_reward_coins(contract)
-            rep_change = get_contract_reward_reputation(contract)
-            
-            # Kolor na podstawie oceny
-            if rating >= 4:
-                border_color = "#10b981"
-                bg_color = "#f0fdf4"
-            elif rating >= 3:
-                border_color = "#f59e0b"
-                bg_color = "#fffbeb"
-            else:
-                border_color = "#ef4444"
-                bg_color = "#fef2f2"
-            
-            with st.expander(
-                f"{contract.get('emoji', '📋')} {contract.get('tytul', 'Kontrakt')} · {'⭐' * rating} · {reward_coins:,} 💰",
-                expanded=False
-            ):
-                # Kompaktowy widok wyniku
-                st.markdown(f"""
-                <div style='border-left: 5px solid {border_color}; 
-                            background: {bg_color};
-                            padding: 15px; 
-                            margin: 10px 0; 
-                            border-radius: 8px;'>
-                    <p style='margin: 0; color: #666; font-size: 0.9em;'>
-                        <strong>Klient:</strong> {contract.get('klient', 'N/A')} | 
-                        <strong>Ukończono:</strong> {contract.get('completed_date', 'N/A')}
-                    </p>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                # Metryki w karcie
-                rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
-                
-                st.markdown(f"""
-                <div style='background: linear-gradient(to right, #f8fafc, #f1f5f9); 
-                            border-left: 4px solid #3b82f6; 
-                            border-radius: 8px; 
-                            padding: 16px; 
-                            margin: 16px 0;
-                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);'>
-                    <div style='display: flex; justify-content: space-around; text-align: center;'>
-                        <div>
-                            <div style='font-size: 24px; margin-bottom: 4px;'>⭐</div>
-                            <div style='font-weight: 600; color: #1e293b;'>{rating}/5</div>
-                            <div style='font-size: 12px; color: #64748b;'>Ocena</div>
-                        </div>
-                        <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
-                        <div>
-                            <div style='font-size: 24px; margin-bottom: 4px;'>💰</div>
-                            <div style='font-weight: 600; color: #1e293b;'>{reward_coins:,}</div>
-                            <div style='font-size: 12px; color: #64748b;'>Zarobiono</div>
-                        </div>
-                        <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
-                        <div>
-                            <div style='font-size: 24px; margin-bottom: 4px;'>📈</div>
-                            <div style='font-weight: 600; color: #1e293b;'>{rep_display}</div>
-                            <div style='font-size: 12px; color: #64748b;'>Reputacja</div>
-                        </div>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                # Feedback od klienta
-                feedback = contract.get("feedback", "Brak feedbacku")
-                
-                st.markdown("---")
-                st.subheader("💬 Feedback od klienta")
-                st.info(feedback)
-                
-                # Link do pełnej historii
-                st.info("💡 Pełne szczegóły kontraktu (opis, zadanie, Twoje rozwiązanie) znajdziesz w zakładce **'📜 Historia & Wydarzenia'**")
-        
-        st.markdown("---")
-    
-    # NOWY WYKRES FINANSOWY z kontrolkami
-    st.subheader("📊 Analiza Finansowa")
-    
-    # Kontrolki
-    col_chart1, col_chart2 = st.columns([3, 1])
-    
-    with col_chart2:
-        st.markdown("**Okres:**")
         period = st.radio(
-            "Wybierz okres",
+            "Okres",
             options=[7, 14, 30],
-            format_func=lambda x: f"{x} dni",
+            format_func=lambda x: f"📅 {x} dni",
             key="financial_chart_period",
-            label_visibility="collapsed"
+            horizontal=True
         )
         
         cumulative = st.checkbox(
@@ -3178,13 +3364,9 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
             key="financial_chart_cumulative"
         )
     
-    with col_chart1:
-        # Generuj i wyświetl wykres
-        fig = create_financial_chart(bg_data, period=period, cumulative=cumulative)
-        st.plotly_chart(fig, use_container_width=True)
-        
-        # Podsumowanie sum
-        if cumulative:
+    with col_summary:
+        # Podsumowanie sum - tylko jeśli cumulative
+        if st.session_state.get("financial_chart_cumulative", False):
             transactions = bg_data.get("history", {}).get("transactions", [])
             # Przychody: kontrakty + pozytywne wydarzenia
             total_rev = sum(t.get("amount", 0) for t in transactions if t.get("type") in ["contract_reward", "event_reward"])
@@ -3193,11 +3375,12 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
             total_profit = total_rev - total_cost
             
             st.markdown(f"""
-            <div style='background: #f8f9fa; padding: 12px; border-radius: 8px; margin-top: 8px;'>
-                <div style='display: flex; justify-content: space-around; font-size: 14px;'>
-                    <div><strong>📊 Suma przychodów:</strong> {total_rev:,} 💰</div>
-                    <div><strong>💸 Suma kosztów:</strong> {total_cost:,} 💰</div>
-                    <div><strong>💎 Suma zysku:</strong> <span style='color: {"#10b981" if total_profit >= 0 else "#ef4444"}'>{total_profit:,} 💰</span></div>
+            <div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; border-radius: 8px; padding: 12px 16px; margin-top: 8px;'>
+                <div style='color: #667eea; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px;'>💎 PODSUMOWANIE TOTAL</div>
+                <div style='display: flex; justify-content: space-around; font-size: 13px;'>
+                    <div><strong>📊 Przychody:</strong> <span style='color: #10b981;'>{total_rev:,} 💰</span></div>
+                    <div><strong>💸 Koszty:</strong> <span style='color: #ef4444;'>{total_cost:,} 💰</span></div>
+                    <div><strong>💎 Zysk:</strong> <span style='color: {"#10b981" if total_profit >= 0 else "#ef4444"}; font-weight: 700;'>{total_profit:,} 💰</span></div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -3354,8 +3537,8 @@ def render_active_contract_card(contract, username, user_data, bg_data, contract
         
         st.markdown(html_content, unsafe_allow_html=True)
         
-        # ROZWIĄZANIE - expander
-        with st.expander("✍️ Pracuj nad rozwiązaniem", expanded=True):
+        # ROZWIĄZANIE - expander (domyślnie zwinięty dla kompaktowego widoku)
+        with st.expander("✍️ Pracuj nad rozwiązaniem", expanded=False):
             # Wyświetl zadanie na górze
             st.markdown("### 🎯 Zadanie")
             st.markdown(contract['zadanie'])

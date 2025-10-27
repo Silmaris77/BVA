@@ -7,7 +7,7 @@
     "degencoins": 171060,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-26 23:05:45",
+    "last_login": "2025-10-27 12:29:09",
     "completed_lessons": [
       "0. Wprowadzenie do neuroprzywództwa",
       "1. Mózg emocjonalny_copy"
@@ -880,6 +880,12 @@
         "completed_lessons": 2
       },
       "2025-10-26": {
+        "xp": 1634,
+        "degencoins": 171060,
+        "level": 1,
+        "completed_lessons": 2
+      },
+      "2025-10-27": {
         "xp": 1634,
         "degencoins": 171060,
         "level": 1,
@@ -2413,6 +2419,11 @@
         "type": "login",
         "timestamp": "2025-10-26T23:05:45.928620",
         "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-27T12:29:09.688638",
+        "details": {}
       }
     ],
     "reports": [
@@ -3348,7 +3359,7 @@
       },
       "stats": {
         "total_revenue": 0,
-        "total_costs": 600,
+        "total_costs": 750,
         "net_profit": 0,
         "contracts_completed": 0,
         "contracts_5star": 0,
@@ -3431,12 +3442,24 @@
             "effects": {
               "coins": -300
             }
+          },
+          {
+            "event_id": "internet_outage",
+            "timestamp": "2025-10-27 12:29:43",
+            "title": "Awaria Internetu",
+            "emoji": "📡",
+            "type": "negative",
+            "description": "Twój internet padł na cały dzień. Straciłeś cenny czas i musiałeś pracować z kawiarni.",
+            "choice": null,
+            "effects": {
+              "coins": -150
+            }
           }
         ],
-        "last_roll": "2025-10-26 00:02:46",
+        "last_roll": "2025-10-27 12:29:43",
         "active_effects": []
       },
-      "money": 19400,
+      "money": 19250,
       "history": {
         "transactions": [
           {
@@ -3459,6 +3482,13 @@
             "event_id": "minor_equipment_issue",
             "event_title": "Drobna Awaria Sprzętu",
             "timestamp": "2025-10-26 00:02:46"
+          },
+          {
+            "type": "event_cost",
+            "amount": -150,
+            "event_id": "internet_outage",
+            "event_title": "Awaria Internetu",
+            "timestamp": "2025-10-27 12:29:43"
           }
         ],
         "level_ups": []
@@ -3959,7 +3989,7 @@
         },
         "stats": {
           "total_revenue": 0,
-          "total_costs": 600,
+          "total_costs": 750,
           "net_profit": 0,
           "contracts_completed": 0,
           "contracts_5star": 0,
@@ -4042,12 +4072,24 @@
               "effects": {
                 "coins": -300
               }
+            },
+            {
+              "event_id": "internet_outage",
+              "timestamp": "2025-10-27 12:29:43",
+              "title": "Awaria Internetu",
+              "emoji": "📡",
+              "type": "negative",
+              "description": "Twój internet padł na cały dzień. Straciłeś cenny czas i musiałeś pracować z kawiarni.",
+              "choice": null,
+              "effects": {
+                "coins": -150
+              }
             }
           ],
-          "last_roll": "2025-10-26 00:02:46",
+          "last_roll": "2025-10-27 12:29:43",
           "active_effects": []
         },
-        "money": 19400,
+        "money": 19250,
         "history": {
           "transactions": [
             {
@@ -4070,6 +4112,13 @@
               "event_id": "minor_equipment_issue",
               "event_title": "Drobna Awaria Sprzętu",
               "timestamp": "2025-10-26 00:02:46"
+            },
+            {
+              "type": "event_cost",
+              "amount": -150,
+              "event_id": "internet_outage",
+              "event_title": "Awaria Internetu",
+              "timestamp": "2025-10-27 12:29:43"
             }
           ],
           "level_ups": []
@@ -26718,7 +26767,7 @@
     "degencoins": 725,
     "level": 1,
     "joined_date": "2025-10-22",
-    "last_login": "2025-10-24 23:10:52",
+    "last_login": "2025-10-27 12:51:49",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -26736,6 +26785,12 @@
       "2025-10-24": {
         "xp": 0,
         "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-10-27": {
+        "xp": 0,
+        "degencoins": 725,
         "level": 1,
         "completed_lessons": 0
       }
@@ -27346,6 +27401,31 @@
         "details": {
           "timestamp": "2025-10-24T23:10:52.444668"
         }
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-27T12:42:36.195148",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-27T12:45:07.826838",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-27T12:45:35.599371",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-27T12:48:32.091984",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-27T12:51:49.185694",
+        "details": {}
       }
     ],
     "archived_games": {
