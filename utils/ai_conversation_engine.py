@@ -349,6 +349,12 @@ Dodatkowo oceń:
 - RELATIONSHIP_IMPACT (-30 do +30) - Jak ta wypowiedź wpłynie na relację z rozmówcą?
 - POINTS (0-20) - Ogólna jakość tej wypowiedzi (suma powyższych czynników)
 
+FEEDBACK Z PERSPEKTYWY NPC (klienta/rozmówcy):
+- POSITIVE_ASPECTS - Lista 1-3 konkretnych rzeczy, które MI SIĘ PODOBAŁY w zachowaniu rozmówcy (z perspektywy NPC: "Podobało mi się...", "Doceniam...", "Dobrze, że...")
+- IMPROVEMENT_SUGGESTIONS - Lista 1-3 rzeczy, których MI BRAKOWAŁO lub co mnie ZANIEPOKOIŁO (z perspektywy NPC: "Zabrakło mi...", "Wolałbym/wolałabym...", "Niepokoiło mnie...")
+
+Pisz feedback z perspektywy NPC w 1. osobie ("mi się podobało", "chciałbym/chciałabym", "brakowało mi").
+
 Zwróć odpowiedź w DOKŁADNIE tym formacie JSON (tylko JSON, bez markdown, bez dodatkowych komentarzy):
 {{
   "empathy": <0-100>,
@@ -357,7 +363,9 @@ Zwróć odpowiedź w DOKŁADNIE tym formacie JSON (tylko JSON, bez markdown, bez
   "solution_quality": <0-100>,
   "relationship_impact": <-30 do +30>,
   "points": <0-20>,
-  "feedback": "<krótka (1-2 zdania) informacja zwrotna dla gracza - co zrobił dobrze, co można poprawić>"
+  "feedback": "<krótka (1-2 zdania) informacja zwrotna z perspektywy trenera - co gracz zrobił dobrze, co można poprawić>",
+  "positive_aspects": ["<co mi się podobało jako NPC 1>", "<co mi się podobało jako NPC 2>"],
+  "improvement_suggestions": ["<czego mi brakowało jako NPC 1>", "<czego mi brakowało jako NPC 2>"]
 }}"""
 
     try:
@@ -383,7 +391,9 @@ Zwróć odpowiedź w DOKŁADNIE tym formacie JSON (tylko JSON, bez markdown, bez
             "solution_quality": 50,
             "relationship_impact": 0,
             "points": 10,
-            "feedback": f"[Błąd oceny AI: {str(e)}] Odpowiedź przyjęta z domyślną oceną."
+            "feedback": f"[Błąd oceny AI: {str(e)}] Odpowiedź przyjęta z domyślną oceną.",
+            "positive_aspects": ["Odpowiedź została udzielona"],
+            "improvement_suggestions": ["Spróbuj być bardziej konkretny w następnej wypowiedzi"]
         }
 
 

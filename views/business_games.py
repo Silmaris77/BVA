@@ -1806,14 +1806,149 @@ def render_fmcg_customer_conversation(customer, username, user_data, bg_data, in
     # Pole wpisywania wiadomości
     st.markdown("---")
     
+    # === SPEECH-TO-TEXT INTERFACE (jak w kontraktach conversation) ===
+    st.markdown("**🎤 Nagraj** (wielokrotnie, jeśli chcesz) **lub ✍️ pisz bezpośrednio w polu poniżej:**")
+    
+    # Klucze dla transkrypcji i wersjonowania
+    transcription_key = f"fmcg_transcription_{customer_id}"
+    transcription_version_key = f"fmcg_transcription_version_{customer_id}"
+    last_audio_hash_key = f"fmcg_last_audio_hash_{customer_id}"
+    
+    # Inicjalizacja (setdefault nie powoduje re-render jeśli klucz już istnieje!)
+    st.session_state.setdefault(transcription_key, "")
+    st.session_state.setdefault(transcription_version_key, 0)
+    st.session_state.setdefault(last_audio_hash_key, None)
+    
+    audio_data = st.audio_input(
+        "🎤 Nagrywanie...",
+        key=f"audio_input_fmcg_{customer_id}_{current_turn}"
+    )
+    
+    # Przetwarzanie nagrania audio (tylko jeśli to NOWE nagranie!)
+    if audio_data is not None:
+        import hashlib
+        
+        # Oblicz hash audio aby wykryć duplikaty
+        audio_bytes = audio_data.getvalue()
+        audio_hash = hashlib.md5(audio_bytes).hexdigest()
+        
+        # Sprawdź czy to to samo nagranie co poprzednio
+        if audio_hash != st.session_state[last_audio_hash_key]:
+            # NOWE nagranie - przetwarzaj!
+            st.session_state[last_audio_hash_key] = audio_hash
+            
+            import speech_recognition as sr
+            import tempfile
+            import os
+            from pydub import AudioSegment
+            
+            with st.spinner("🤖 Rozpoznaję mowę..."):
+                try:
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+                        tmp_file.write(audio_bytes)
+                        tmp_path = tmp_file.name
+                    
+                    wav_path = None
+                    try:
+                        audio = AudioSegment.from_file(tmp_path)
+                        wav_path = tmp_path.replace(".wav", "_converted.wav")
+                        audio.export(wav_path, format="wav")
+                        
+                        recognizer = sr.Recognizer()
+                        with sr.AudioFile(wav_path) as source:
+                            audio_data_sr = recognizer.record(source)
+                            
+                        transcription = recognizer.recognize_google(audio_data_sr, language="pl-PL")
+                        
+                        # Post-processing: Dodaj interpunkcję przez Gemini
+                        try:
+                            import google.generativeai as genai
+                            
+                            # Pobierz API key
+                            api_key = None
+                            try:
+                                api_key = st.secrets["API_KEYS"]["gemini"]
+                            except:
+                                try:
+                                    with open("config/gemini_api_key.txt", "r") as f:
+                                        api_key = f.read().strip()
+                                except:
+                                    api_key = os.getenv("GEMINI_API_KEY")
+                            
+                            if api_key:
+                                genai.configure(api_key=api_key)
+                                model = genai.GenerativeModel("models/gemini-2.5-flash")
+                                prompt = f"""Dodaj interpunkcję (kropki, przecinki, pytajniki, wykrzykniki) do poniższego tekstu.
+Nie zmieniaj słów, tylko dodaj znaki interpunkcyjne. Zachowaj strukturę i podział na zdania.
+Zwróć tylko poprawiony tekst, bez dodatkowych komentarzy.
+
+Tekst do poprawy:
+{transcription}"""
+                                response = model.generate_content(prompt)
+                                transcription_with_punctuation = response.text.strip()
+                                transcription = transcription_with_punctuation
+                                
+                        except Exception as gemini_error:
+                            # Błąd Gemini - cicho kontynuuj z surową transkrypcją
+                            pass
+                        
+                        # DOPISZ do istniejącego tekstu (z session_state)
+                        # Pobierz aktualną wartość z transcription_key (tam zapisujemy wartości)
+                        existing_text = st.session_state.get(transcription_key, "")
+                        
+                        if existing_text.strip():
+                            st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
+                        else:
+                            st.session_state[transcription_key] = transcription
+                        
+                        # Inkrementuj wersję - to wymusi re-render text_area z nową wartością!
+                        st.session_state[transcription_version_key] += 1
+                        
+                        # Ciche działanie - brak st.info() przed rerun!
+                        st.rerun()
+                        
+                    finally:
+                        # Cleanup temp files
+                        try:
+                            if os.path.exists(tmp_path):
+                                os.unlink(tmp_path)
+                            if wav_path and os.path.exists(wav_path):
+                                os.unlink(wav_path)
+                        except:
+                            pass
+                            
+                except sr.UnknownValueError:
+                    st.session_state.fmcg_stt_error = "🎤 Nie rozpoznano mowy. Spróbuj ponownie (mów wyraźniej, bliżej mikrofonu)."
+                    st.rerun()
+                except sr.RequestError as e:
+                    st.session_state.fmcg_stt_error = f"❌ Błąd usługi rozpoznawania mowy: {e}"
+                    st.rerun()
+                except Exception as e:
+                    st.session_state.fmcg_stt_error = f"❌ Błąd podczas transkrypcji: {str(e)}"
+                    st.rerun()
+    
+    # Wyświetl błędy STT (jeśli są)
+    if "fmcg_stt_error" in st.session_state:
+        st.warning(st.session_state.fmcg_stt_error)
+        del st.session_state.fmcg_stt_error
+    
     col_input, col_btn = st.columns([4, 1])
     
     with col_input:
+        # Callback - synchronizuj wartość text_area z transcription_key
+        def sync_textarea_to_state():
+            textarea_key = f"msg_input_{customer_id}_{current_turn}_{st.session_state.get(transcription_version_key, 0)}"
+            if textarea_key in st.session_state:
+                st.session_state[transcription_key] = st.session_state[textarea_key]
+        
+        # Użyj wartości z transkrypcji jako value (+ wersja w kluczu wymusza re-render)
         player_message = st.text_area(
             "Twoja wiadomość:",
+            value=st.session_state.get(transcription_key, ""),
             placeholder="Napisz co chcesz powiedzieć klientowi...",
             height=100,
-            key=f"msg_input_{customer_id}_{current_turn}"
+            key=f"msg_input_{customer_id}_{current_turn}_{st.session_state.get(transcription_version_key, 0)}",
+            on_change=sync_textarea_to_state
         )
     
     with col_btn:
@@ -1849,6 +1984,14 @@ def render_fmcg_customer_conversation(customer, username, user_data, bg_data, in
             if f'fmcg_conv_messages_{customer_id}' in st.session_state:
                 del st.session_state[f'fmcg_conv_messages_{customer_id}']
             
+            # Wyczyść transkrypcję
+            if transcription_key in st.session_state:
+                del st.session_state[transcription_key]
+            if transcription_version_key in st.session_state:
+                del st.session_state[transcription_version_key]
+            if last_audio_hash_key in st.session_state:
+                del st.session_state[last_audio_hash_key]
+            
             st.success("✅ Spotkanie zakończone!")
             st.rerun()
     
@@ -1856,6 +1999,10 @@ def render_fmcg_customer_conversation(customer, username, user_data, bg_data, in
     if send_clicked and player_message and player_message.strip():
         st.write(f"🔍 DEBUG START - player_message: {player_message[:50]}...")
         st.write(f"🔍 DEBUG - messages przed append: {len(messages)}")
+        
+        # Wyczyść transkrypcję po wysłaniu (jak w kontraktach conversation)
+        st.session_state[transcription_key] = ""
+        st.session_state[transcription_version_key] += 1
         
         # Dodaj wiadomość gracza
         messages.append({
@@ -3959,10 +4106,32 @@ def render_conversation_contract(contract, username, user_data, bg_data, industr
         """, unsafe_allow_html=True)
         
         # Feedback od klienta (jak w innych kontraktach)
-        feedback = final_results.get('summary', 'Brak feedbacku')
-        
         st.markdown("---")
         st.subheader("💬 Feedback od klienta")
+        
+        # Buduj feedback z evaluacji (tak samo jak przy zapisywaniu kontraktu)
+        messages = conversation.get("messages", [])
+        all_positive = []
+        all_improvements = []
+        
+        for msg in messages:
+            if msg.get("role") == "player":
+                evaluation = msg.get("evaluation", {})
+                all_positive.extend(evaluation.get("positive_aspects", []))
+                all_improvements.extend(evaluation.get("improvement_suggestions", []))
+        
+        # Sformatuj feedback jak w business_game_evaluation.py (z perspektywy NPC)
+        npc_name = contract.get("npc_name", "Klient")
+        feedback = f"**{npc_name}:** Dziękuję za poświęcony czas na rozmowę."
+        
+        if all_positive:
+            feedback += "\n\n**👍 Co mi się podobało:**\n"
+            feedback += "\n".join([f"• {s}" for s in all_positive[:5]])  # Top 5
+        
+        if all_improvements:
+            feedback += "\n\n**⚠️ Co mogłoby być lepsze:**\n"
+            feedback += "\n".join([f"• {i}" for i in all_improvements[:5]])  # Top 5
+        
         st.info(feedback)
         
         # Link do pełnej historii
@@ -4032,15 +4201,40 @@ def render_conversation_contract(contract, username, user_data, bg_data, industr
                         stars = result.get("stars", 1)
                         total_points = result.get("total_points", 0)
                         metrics = result.get("metrics", {})
-                        feedback_summary = result.get("summary", "")
+                        
+                        # Buduj feedback jak w kontraktach standard (z 👍/⚠️)
+                        conv_key = f"ai_conv_{username}_{contract_id}"
+                        conv_state = st.session_state.get(conv_key, {})
+                        messages = conv_state.get("messages", [])
+                        
+                        # Zbierz wszystkie pozytywne aspekty i sugestie z całej rozmowy
+                        all_positive = []
+                        all_improvements = []
+                        for msg in messages:
+                            if msg.get("role") == "player":
+                                evaluation = msg.get("evaluation", {})
+                                all_positive.extend(evaluation.get("positive_aspects", []))
+                                all_improvements.extend(evaluation.get("improvement_suggestions", []))
+                        
+                        # Sformatuj feedback jak w business_game_evaluation.py (z perspektywy NPC)
+                        npc_name = contract_found.get("npc_name", "Klient")
+                        feedback_summary = f"**{npc_name}:** Dziękuję za poświęcony czas na rozmowę."
+                        
+                        if all_positive:
+                            feedback_summary += "\n\n**👍 Co mi się podobało:**\n"
+                            feedback_summary += "\n".join([f"• {s}" for s in all_positive[:5]])  # Top 5
+                        
+                        if all_improvements:
+                            feedback_summary += "\n\n**⚠️ Co mogłoby być lepsze:**\n"
+                            feedback_summary += "\n".join([f"• {i}" for i in all_improvements[:5]])  # Top 5
                         
                         # Oblicz nagrodę
                         reward_base = contract_found.get("nagroda_base", 500)
                         reward_5star = contract_found.get("nagroda_5star", reward_base * 2)
                         reward = int(reward_base + ((stars - 1) / 4.0) * (reward_5star - reward_base))
                         
-                        # Dodaj nagrody
-                        user_data["degencoins"] = user_data.get("degencoins", 0) + reward
+                        # KRYTYCZNE: Dodaj do SALDA FIRMY (bg_data["money"]), NIE do DegenCoins!
+                        bg_data["money"] = bg_data.get("money", 0) + reward
                         bg_data["firm"]["reputation"] += contract_found.get("reputacja", 20) * stars / 3
                         bg_data["stats"]["total_revenue"] += reward
                         
@@ -4080,7 +4274,7 @@ def render_conversation_contract(contract, username, user_data, bg_data, industr
                         save_game_data(user_data, bg_data, industry_id)
                         save_user_data(username, user_data)
                         
-                        st.success(f"✅ Zakończono! 💰 +{reward} DegenCoins | ⭐ {stars}/5")
+                        st.success(f"✅ Zakończono! 💰 +{reward:,} PLN | ⭐ {stars}/5")
                         time.sleep(1)
                         st.rerun()
                         
@@ -4180,6 +4374,13 @@ def render_conversation_contract(contract, username, user_data, bg_data, industr
         transcription_version_key = f"ai_conv_transcription_version_{contract_id}"
         last_audio_hash_key = f"ai_conv_last_audio_hash_{contract_id}"
         
+        # Render ID - zapobiega duplikatom gdy kontrakt jest w dashboardzie i zakładce jednocześnie
+        render_id_key = f"ai_conv_render_id_{contract_id}_{contract_index}"
+        if render_id_key not in st.session_state:
+            import random
+            st.session_state[render_id_key] = random.randint(100000, 999999)
+        render_id = st.session_state[render_id_key]
+        
         # Inicjalizacja (setdefault nie powoduje re-render jeśli klucz już istnieje!)
         st.session_state.setdefault(transcription_key, "")
         st.session_state.setdefault(transcription_version_key, 0)
@@ -4187,7 +4388,7 @@ def render_conversation_contract(contract, username, user_data, bg_data, industr
         
         audio_data = st.audio_input(
             "🎤 Nagrywanie...",
-            key=f"audio_input_ai_conv_{contract_id}_{contract_index}"
+            key=f"audio_input_ai_conv_{contract_id}_{contract_index}_{render_id}"
         )
         
         # Przetwarzanie nagrania audio (tylko jeśli to NOWE nagranie!)
@@ -4250,9 +4451,10 @@ Tekst do poprawy:
                                 # Błąd Gemini - cicho kontynuuj z surową transkrypcją
                                 pass
                             
-                            # DOPISZ do istniejącego tekstu (jak w "Feedback")
-                            # Użytkownik może nagrywać wielokrotnie i budować odpowiedź
+                            # DOPISZ do istniejącego tekstu (z session_state)
+                            # Pobierz aktualną wartość z transcription_key (tam zapisujemy wartości)
                             existing_text = st.session_state.get(transcription_key, "")
+                            
                             if existing_text.strip():
                                 # Jeśli jest już jakiś tekst, dodaj nową linię i dopisz
                                 st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
@@ -4280,8 +4482,14 @@ Tekst do poprawy:
                         st.info("💡 Możesz wprowadzić tekst ręcznie w polu poniżej.")
         
         # Dynamiczny klucz który zmienia się po transkrypcji (wymusza re-render)
-        text_area_key = f"ai_conv_input_{contract_id}_{current_turn}_v{st.session_state[transcription_version_key]}"
+        #WAŻNE: Dodaj render_id aby zapobiec duplikatom między dashboardem a zakładką
+        text_area_key = f"ai_conv_input_{contract_id}_{current_turn}_{render_id}_v{st.session_state[transcription_version_key]}"
         current_text = st.session_state.get(transcription_key, "")
+        
+        # Callback - synchronizuj wartość text_area z transcription_key
+        def sync_conv_textarea_to_state():
+            if text_area_key in st.session_state:
+                st.session_state[transcription_key] = st.session_state[text_area_key]
         
         # Oblicz dynamiczną wysokość na podstawie liczby linii
         num_lines = current_text.count('\n') + 1
@@ -4294,19 +4502,21 @@ Tekst do poprawy:
             value=current_text,
             height=dynamic_height,
             key=text_area_key,
-            placeholder=f"Wpisz swoją odpowiedź do {npc_config.get('name', 'rozmówcy')}... lub użyj mikrofonu powyżej"
+            placeholder=f"Wpisz swoją odpowiedź do {npc_config.get('name', 'rozmówcy')}... lub użyj mikrofonu powyżej",
+            on_change=sync_conv_textarea_to_state
         )
         
-        # Synchronizuj wartość z pola tekstowego do session_state
-        if text_area_key in st.session_state:
-            st.session_state[transcription_key] = st.session_state[text_area_key]
+        # Synchronizacja już jest w callback on_change, nie trzeba tu duplikować
         
         # Przyciski
         col_send, col_end = st.columns([3, 1])
         
         with col_send:
-            if st.button("📤 Wyślij wiadomość", type="primary", width="stretch", 
-                        disabled=not player_message.strip()):
+            if st.button("📤 Wyślij wiadomość", 
+                        type="primary", 
+                        width="stretch",
+                        disabled=not player_message.strip(),
+                        key=f"send_msg_{contract_id}_{current_turn}_{render_id}"):
                 if player_message.strip():
                     with st.spinner("🤖 AI analizuje Twoją odpowiedź i generuje reakcję..."):
                         # Get Gemini API key
@@ -4334,7 +4544,9 @@ Tekst do poprawy:
                                 st.error(f"❌ Błąd podczas przetwarzania: {str(e)}")
         
         with col_end:
-            if st.button("🏁 Zakończ", width="stretch"):
+            if st.button("🏁 Zakończ", 
+                        width="stretch",
+                        key=f"end_conv_{contract_id}_{current_turn}_{render_id}"):
                 # Zakończ i od razu przenieś do completed (jak "Zakończ kontrakt")
                 from utils.ai_conversation_engine import calculate_final_conversation_score
                 
@@ -4349,15 +4561,40 @@ Tekst do poprawy:
                         stars = result.get("stars", 1)
                         total_points = result.get("total_points", 0)
                         metrics = result.get("metrics", {})
-                        feedback_summary = result.get("summary", "")
+                        
+                        # Buduj feedback jak w kontraktach standard (z 👍/⚠️)
+                        conv_key = f"ai_conv_{username}_{contract_id}"
+                        conv_state = st.session_state.get(conv_key, {})
+                        messages = conv_state.get("messages", [])
+                        
+                        # Zbierz wszystkie pozytywne aspekty i sugestie z całej rozmowy
+                        all_positive = []
+                        all_improvements = []
+                        for msg in messages:
+                            if msg.get("role") == "player":
+                                evaluation = msg.get("evaluation", {})
+                                all_positive.extend(evaluation.get("positive_aspects", []))
+                                all_improvements.extend(evaluation.get("improvement_suggestions", []))
+                        
+                        # Sformatuj feedback jak w business_game_evaluation.py (z perspektywy NPC)
+                        npc_name = contract_found.get("npc_name", "Klient")
+                        feedback_summary = f"**{npc_name}:** Dziękuję za poświęcony czas na rozmowę."
+                        
+                        if all_positive:
+                            feedback_summary += "\n\n**👍 Co mi się podobało:**\n"
+                            feedback_summary += "\n".join([f"• {s}" for s in all_positive[:5]])  # Top 5
+                        
+                        if all_improvements:
+                            feedback_summary += "\n\n**⚠️ Co mogłoby być lepsze:**\n"
+                            feedback_summary += "\n".join([f"• {i}" for i in all_improvements[:5]])  # Top 5
                         
                         # Oblicz nagrodę
                         reward_base = contract_found.get("nagroda_base", 500)
                         reward_5star = contract_found.get("nagroda_5star", reward_base * 2)
                         reward = int(reward_base + ((stars - 1) / 4.0) * (reward_5star - reward_base))
                         
-                        # Dodaj nagrody
-                        user_data["degencoins"] = user_data.get("degencoins", 0) + reward
+                        # KRYTYCZNE: Dodaj do SALDA FIRMY (bg_data["money"]), NIE do DegenCoins!
+                        bg_data["money"] = bg_data.get("money", 0) + reward
                         bg_data["firm"]["reputation"] += contract_found.get("reputacja", 20) * stars / 3
                         bg_data["stats"]["total_revenue"] += reward
                         
@@ -4402,7 +4639,7 @@ Tekst do poprawy:
                         if conv_key in st.session_state:
                             del st.session_state[conv_key]
                         
-                        st.success(f"✅ Zakończono! 💰 +{reward} DegenCoins | ⭐ {stars}/5")
+                        st.success(f"✅ Zakończono! 💰 +{reward:,} PLN | ⭐ {stars}/5")
                         time.sleep(1)
                         st.rerun()
                         
@@ -4579,7 +4816,8 @@ def render_speed_challenge_contract(contract, username, user_data, bg_data, indu
                         base_reward = contract.get("nagroda_base", 500)
                         final_reward = int(base_reward * reward_multiplier * (1 + speed_bonus * 0.3))
                         
-                        user_data["degencoins"] = user_data.get("degencoins", 0) + final_reward
+                        # KRYTYCZNE: Dodaj do SALDA FIRMY (bg_data["money"]), NIE do DegenCoins!
+                        bg_data["money"] = bg_data.get("money", 0) + final_reward
                         bg_data["stats"]["total_revenue"] += final_reward
                         bg_data["firm"]["reputation"] += contract.get("reputacja", 20) * stars / 3
                         
@@ -4602,7 +4840,7 @@ def render_speed_challenge_contract(contract, username, user_data, bg_data, indu
                 save_game_data(user_data, bg_data, industry_id)
                 save_user_data(username, user_data)
                 reset_challenge(contract_id)
-                st.success(f"💰 Otrzymujesz {final_reward} DegenCoins!")
+                st.success(f"💰 Otrzymujesz {final_reward:,} PLN!")
                 st.rerun()
         
         with col_retry:
