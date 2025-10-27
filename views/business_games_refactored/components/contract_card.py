@@ -17,6 +17,14 @@ import streamlit as st
 from datetime import datetime, timedelta
 import time
 
+# Import helper functions
+from views.business_games_refactored.helpers import (
+    get_contract_reward_coins,
+    get_contract_reward_reputation,
+    get_game_data,
+    save_game_data
+)
+
 
 def render_active_contract_card(contract, username, user_data, bg_data, contract_index=0):
     """Renderuje profesjonalną kartę aktywnego kontraktu w stylu game UI"""
