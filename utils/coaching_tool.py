@@ -222,7 +222,8 @@ def show_coaching_on_the_job():
     
     with col_send:
         if st.button("📤 Wyślij (i zobacz feedback)", type="primary", use_container_width=True,
-                    disabled=not player_message or not player_message.strip()):
+                    disabled=not player_message or not player_message.strip(),
+                    key="coaching_send_button"):
             if player_message and player_message.strip():
                 with st.spinner("🤖 Trener AI analizuje Twoją odpowiedź..."):
                     api_key = st.secrets.get("API_KEYS", {}).get("gemini", "")
@@ -241,6 +242,6 @@ def show_coaching_on_the_job():
                             st.error(f"❌ Błąd: {str(e)}")
     
     with col_reset:
-        if st.button("🔄 Reset", use_container_width=True):
+        if st.button("🔄 Reset", use_container_width=True, key="coaching_reset_button"):
             reset_conversation(contract_id, npc_config, scenario_context, username="coaching_temp")
             st.rerun()
