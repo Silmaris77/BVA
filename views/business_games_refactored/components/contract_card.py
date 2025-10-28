@@ -19,8 +19,10 @@ import time
 
 from views.business_games_refactored.helpers import (
     get_contract_reward_coins,
-    get_contract_reward_reputation
+    get_contract_reward_reputation,
+    save_game_data
 )
+from utils.business_game import accept_contract
 
 
 def render_active_contract_card(contract, username, user_data, bg_data, contract_index=0):
@@ -294,7 +296,27 @@ Tekst do poprawy:
                                     pass
                                 
                                 # DOPISZ do istniejącego tekstu (zamiast nadpisywać)
+                                # Sprawdź czy jest aktualny tekst w transcription_key (tu zapisujemy wartość z text_area)
                                 existing_text = st.session_state.get(transcription_key, "")
+                                
+                                # KLUCZOWE: Szukaj NAJNOWSZEJ wartości text_area (niezależnie od wersji!)
+                                # Użytkownik mógł coś napisać między nagraniami
+                                text_area_prefix = f"solution_{contract_id}_{contract_index}_"
+                                latest_text_area_value = ""
+                                
+                                for k in st.session_state.keys():
+                                    if k.startswith(text_area_prefix):
+                                        val = st.session_state[k]
+                                        # Weź najdłuższą wartość (najprawdopodobniej najnowsza)
+                                        if isinstance(val, str) and len(val) > len(latest_text_area_value):
+                                            latest_text_area_value = val
+                                
+                                if latest_text_area_value:
+                                    existing_text = latest_text_area_value
+                                elif not existing_text:
+                                    # Fallback: sprawdź solution kontraktu
+                                    existing_text = contract.get("solution", "")
+                                
                                 if existing_text.strip():
                                     # Jeśli jest już jakiś tekst, dodaj nową linię i dopisz
                                     st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
@@ -330,15 +352,21 @@ Tekst do poprawy:
             # oraz wersję transkrypcji aby wymusić odświeżenie po nagraniu
             text_area_key = f"solution_{contract_id}_{contract_index}_{render_id}_v{st.session_state[transcription_version_key]}"
             
+            # Callback do zapisywania wartości text_area do transcription_key
+            def save_text_to_transcription():
+                """Zapisz wartość z text_area do transcription_key"""
+                st.session_state[transcription_key] = st.session_state[text_area_key]
+            
             solution = st.text_area(
                 "📝 Możesz edytować transkrypcję lub pisać bezpośrednio:",
                 value=current_text,
                 height=400,
                 key=text_area_key,
-                placeholder="Nagrywaj wielokrotnie lub pisz bezpośrednio tutaj..."
+                placeholder="Nagrywaj wielokrotnie lub pisz bezpośrednio tutaj...",
+                on_change=save_text_to_transcription
             )
             
-            # Zapisz aktualną wartość solution do session_state
+            # Zapisz aktualną wartość solution do session_state (dla kompatybilności)
             st.session_state[transcription_key] = solution
             
             # ANTI-CHEAT: Dodaj JavaScript do śledzenia wklejania
@@ -385,7 +413,7 @@ Tekst do poprawy:
             
             # Import funkcji z business_game
             from utils.business_game import submit_contract_solution
-            from data.users_new import save_user_data
+            from data.users_new import save_single_user
             from views.business_games_refactored.helpers import play_coin_sound
             
             with col2:
@@ -406,7 +434,7 @@ Tekst do poprawy:
                         
                         if success:
                             user_data.update(updated_user_data)
-                            save_user_data(username, user_data)
+                            save_single_user(username, user_data)
                             
                             # Wyczyść tracking anti-cheat
                             if solution_start_key in st.session_state:
@@ -437,7 +465,7 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
     )
     from utils.business_game import complete_contract_decision_tree
     from views.business_games_refactored.helpers import save_game_data
-    from data.users_new import save_user_data
+    from data.users_new import save_single_user
     
     contract_id = contract["id"]
     nodes = contract.get("nodes", {})
@@ -556,7 +584,7 @@ def render_decision_tree_contract(contract, username, user_data, bg_data, indust
                 
                 if success:
                     save_game_data(user_data, updated_bg, industry_id)
-                    save_user_data(username, user_data)
+                    save_single_user(username, user_data)
                     st.success(f"{message} 💰 +{reward} monet | ⭐ +{contract.get('reputacja', 20)} reputacji")
                     time.sleep(2)
                     st.rerun()
@@ -664,7 +692,7 @@ def render_conversation_contract(contract, username, user_data, bg_data, industr
         reset_conversation
     )
     from views.business_games_refactored.helpers import save_game_data
-    from data.users_new import save_user_data
+    from data.users_new import save_single_user
     
     contract_id = contract["id"]
     npc_config = contract.get("npc_config", {})
@@ -906,7 +934,7 @@ def render_conversation_contract(contract, username, user_data, bg_data, industr
                         
                         # Zapisz dane
                         save_game_data(user_data, bg_data, industry_id)
-                        save_user_data(username, user_data)
+                        save_single_user(username, user_data)
                         
                         st.success(f"✅ Zakończono! 💰 +{reward:,} PLN | ⭐ {stars}/5")
                         time.sleep(1)
@@ -1089,6 +1117,21 @@ Tekst do poprawy:
                             # Pobierz aktualną wartość z transcription_key (tam zapisujemy wartości)
                             existing_text = st.session_state.get(transcription_key, "")
                             
+                            # KLUCZOWE: Szukaj NAJNOWSZEJ wartości text_area (niezależnie od wersji!)
+                            # Użytkownik mógł coś napisać między nagraniami
+                            text_area_prefix = f"ai_conv_input_{contract_id}_{current_turn}_"
+                            latest_text_area_value = ""
+                            
+                            for k in st.session_state.keys():
+                                if k.startswith(text_area_prefix):
+                                    val = st.session_state[k]
+                                    # Weź najdłuższą wartość (najprawdopodobniej najnowsza)
+                                    if isinstance(val, str) and len(val) > len(latest_text_area_value):
+                                        latest_text_area_value = val
+                            
+                            if latest_text_area_value:
+                                existing_text = latest_text_area_value
+                            
                             if existing_text.strip():
                                 # Jeśli jest już jakiś tekst, dodaj nową linię i dopisz
                                 st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
@@ -1266,7 +1309,7 @@ Tekst do poprawy:
                         
                         # Zapisz dane
                         save_game_data(user_data, bg_data, industry_id)
-                        save_user_data(username, user_data)
+                        save_single_user(username, user_data)
                         
                         # Wyczyść stan konwersacji
                         conv_key = f"ai_conv_{username}_{contract_id}"
@@ -1470,7 +1513,7 @@ def render_speed_challenge_contract(contract, username, user_data, bg_data, indu
                 
                 # Zapisz i resetuj
                 save_game_data(user_data, bg_data, industry_id)
-                save_user_data(username, user_data)
+                save_single_user(username, user_data)
                 reset_challenge(contract_id)
                 st.success(f"💰 Otrzymujesz {final_reward:,} PLN!")
                 st.rerun()
@@ -1822,7 +1865,7 @@ def show_office_tab(username, user_data, industry_id="consulting"):
             "upgraded_at": None
         }
         save_game_data(user_data, bg_data, industry_id)
-        save_user_data(username, user_data)
+        save_single_user(username, user_data)
     
     st.subheader("🏢 Twoje Biuro")
     
@@ -1886,7 +1929,7 @@ def show_office_tab(username, user_data, industry_id="consulting"):
                     })
                     
                     save_game_data(user_data, bg_data, industry_id)
-                    save_user_data(username, user_data)
+                    save_single_user(username, user_data)
                     st.success(f"🎉 Biuro ulepszone do: {next_office['nazwa']}!")
                     st.balloons()
                     st.rerun()
@@ -1928,7 +1971,7 @@ def show_firm_settings_tab(username, user_data, industry_id="consulting"):
             if st.button("💾 Zapisz nazwę", key="settings_save_firm_name", type="primary"):
                 bg_data["firm"]["name"] = new_name
                 save_game_data(user_data, bg_data, industry_id)
-                save_user_data(username, user_data)
+                save_single_user(username, user_data)
                 st.success("✅ Nazwa firmy zaktualizowana!")
                 st.rerun()
         
@@ -1965,7 +2008,7 @@ def show_firm_settings_tab(username, user_data, industry_id="consulting"):
                     ):
                         bg_data["firm"]["logo"] = logo
                         save_game_data(user_data, bg_data, industry_id)
-                        save_user_data(username, user_data)
+                        save_single_user(username, user_data)
                         st.success(f"✅ Logo: {logo}")
                         st.rerun()
         
@@ -2036,7 +2079,7 @@ def show_firm_settings_tab(username, user_data, industry_id="consulting"):
             if st.button("💾 Zapisz motto", type="primary", key="save_motto"):
                 bg_data["firm"]["motto"] = new_motto
                 save_game_data(user_data, bg_data, industry_id)
-                save_user_data(username, user_data)
+                save_single_user(username, user_data)
                 st.success("✅ Motto zaktualizowane!")
                 st.rerun()
         
@@ -2103,7 +2146,7 @@ def show_firm_settings_tab(username, user_data, industry_id="consulting"):
                 if st.button("Wybierz", key=f"color_{scheme_id}", disabled=is_current, use_container_width=True):
                     bg_data["firm"]["color_scheme"] = scheme_id
                     save_game_data(user_data, bg_data, industry_id)
-                    save_user_data(username, user_data)
+                    save_single_user(username, user_data)
                     st.success(f"✅ Zmieniono na {scheme_data['name']}")
                     st.rerun()
         
@@ -2260,7 +2303,7 @@ def show_firm_settings_tab(username, user_data, industry_id="consulting"):
                 "auto_transfer_amount": transfer_amount if auto_transfer else fin_settings.get("auto_transfer_amount", 5000)
             }
             save_game_data(user_data, bg_data, industry_id)
-            save_user_data(username, user_data)
+            save_single_user(username, user_data)
             st.success("✅ Ustawienia finansowe zapisane!")
             st.rerun()
     
@@ -2374,7 +2417,7 @@ def show_firm_settings_tab(username, user_data, industry_id="consulting"):
                 "reputation_alerts": reputation_alerts
             }
             save_game_data(user_data, bg_data, industry_id)
-            save_user_data(username, user_data)
+            save_single_user(username, user_data)
             st.success("✅ Ustawienia powiadomień zapisane!")
             st.rerun()
     
@@ -2414,7 +2457,7 @@ def show_firm_settings_tab(username, user_data, industry_id="consulting"):
                 del user_data["business_games"][industry_id]
                 
                 # Zapisz zmiany
-                save_user_data(username, user_data)
+                save_single_user(username, user_data)
                 
                 # Resetuj session state
                 st.session_state["selected_industry"] = industry_id
@@ -2478,7 +2521,7 @@ def show_firm_settings_tab(username, user_data, industry_id="consulting"):
                                     user_data["archived_games"][industry_id].pop(idx)
                                     
                                     # Zapisz
-                                    save_user_data(username, user_data)
+                                    save_single_user(username, user_data)
                                     
                                     st.success(f"✅ Przywrócono firmę: {firm_name}")
                                     time.sleep(1)
@@ -2529,7 +2572,7 @@ def show_employees_tab(username, user_data, industry_id="consulting"):
             "upgraded_at": None
         }
         save_game_data(user_data, bg_data, industry_id)
-        save_user_data(username, user_data)
+        save_single_user(username, user_data)
     
     # =============================================================================
     # SEKCJA PRACOWNIKÓW
@@ -2616,7 +2659,7 @@ def render_employee_card(employee, username, user_data, bg_data, industry_id="co
             updated_user_data, success, message = fire_employee(user_data, employee['id'], industry_id)
             if success:
                 user_data.update(updated_user_data)
-                save_user_data(username, user_data)
+                save_single_user(username, user_data)
                 st.success(message)
                 st.rerun()
             else:
@@ -2654,7 +2697,7 @@ def render_hire_card(emp_type, emp_data, username, user_data, bg_data, industry_
                 updated_user_data, success, message = hire_employee(user_data, emp_type, industry_id)
                 if success:
                     user_data.update(updated_user_data)
-                    save_user_data(username, user_data)
+                    save_single_user(username, user_data)
                     st.success(message)
                     st.rerun()
                 else:
@@ -3446,7 +3489,7 @@ def show_history_tab(username, user_data, industry_id="consulting"):
             "active_effects": []
         }
         save_game_data(user_data, bg_data, industry_id)
-        save_user_data(username, user_data)
+        save_single_user(username, user_data)
     
     from utils.business_game_events import should_trigger_event, get_random_event, apply_event_effects
     from datetime import datetime, timedelta
@@ -3492,7 +3535,7 @@ def show_history_tab(username, user_data, industry_id="consulting"):
                 else:
                     # Bezpośrednio aplikuj
                     user_data = apply_event_effects(event_id, event_data, None, user_data, industry_id)
-                    save_user_data(username, user_data)
+                    save_single_user(username, user_data)
                     st.success(f"{event_data['emoji']} **{event_data['title']}**")
                     st.balloons() if event_data["type"] == "positive" else None
                     st.rerun()
@@ -3500,7 +3543,7 @@ def show_history_tab(username, user_data, industry_id="consulting"):
                 # Brak zdarzenia (80% przypadków)
                 bg_data.setdefault("events", {})["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 save_game_data(user_data, bg_data, industry_id)
-                save_user_data(username, user_data)
+                save_single_user(username, user_data)
                 st.info("😐 Tym razem nic się nie wydarzyło. Spokojny dzień!")
                 st.rerun()
     
@@ -3768,7 +3811,7 @@ def show_events_tab(username, user_data, industry_id="consulting"):
             "active_effects": []
         }
         save_game_data(user_data, bg_data, industry_id)
-        save_user_data(username, user_data)
+        save_single_user(username, user_data)
     
     st.subheader("🎲 Wydarzenia Losowe")
     
@@ -3832,7 +3875,7 @@ def show_events_tab(username, user_data, industry_id="consulting"):
                 else:
                     # Bezpośrednio aplikuj
                     user_data = apply_event_effects(event_id, event_data, None, user_data, industry_id)
-                    save_user_data(username, user_data)
+                    save_single_user(username, user_data)
                     st.success(f"{event_data['emoji']} **{event_data['title']}**")
                     st.balloons() if event_data["type"] == "positive" else None
                     st.rerun()
@@ -3840,7 +3883,7 @@ def show_events_tab(username, user_data, industry_id="consulting"):
                 # Brak zdarzenia (80% przypadków)
                 bg_data.setdefault("events", {})["last_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 save_game_data(user_data, bg_data, industry_id)
-                save_user_data(username, user_data)
+                save_single_user(username, user_data)
                 st.info("😐 Tym razem nic się nie wydarzyło. Spokojny dzień!")
                 st.rerun()
     

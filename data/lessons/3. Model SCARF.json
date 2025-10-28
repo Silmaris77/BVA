@@ -39,8 +39,8 @@
     "learning": {
       "sections": [
         {
-          "title": "[SECTION_TITLE]",
-          "content": "[SECTION_CONTENT_HTML]"
+          "title": "📊 Inteligencja Konwersacyjna: Klucz do Efektywnego Przywództwa",
+          "content": "<div style='margin: 20px 0;'><p>Poznaj jak model SCARF łączy się z inteligencją konwersacyjną i wpływa na efektywne przywództwo.</p><div style='margin: 20px 0; text-align: center;'><iframe src='https://gamma.app/embed/y70bq38043d6k17' style='width: 100%; max-width: 900px; height: 500px; border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);' allow='fullscreen' title='Inteligencja Konwersacyjna: Klucz do Efektywnego Przywództwa'></iframe></div><p style='text-align: center; margin-top: 16px;'><a href='https://gamma.app/docs/y70bq38043d6k17' target='_blank' style='color: #667eea; text-decoration: none;'>🔗 Otwórz prezentację w nowej karcie</a></p></div>"
         },
         {
           "title": "[SECTION_TITLE_2]",
