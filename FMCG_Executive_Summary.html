@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMCG Sales Simulator - Executive Summary</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 2cm 1.5cm;
+            }
+            
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+            
+            pre, table {
+                page-break-inside: avoid;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1a5490;
+        }
+        
+        .header h1 {
+            color: #1a5490;
+            font-size: 28pt;
+            margin-bottom: 10px;
+        }
+        
+        .header .meta {
+            color: #666;
+            font-size: 10pt;
+        }
+        
+        h1 {
+            color: #1a5490;
+            font-size: 24pt;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            border-bottom: 2px solid #1a5490;
+            padding-bottom: 0.3em;
+        }
+        
+        h2 {
+            color: #2874a6;
+            font-size: 18pt;
+            margin-top: 1.2em;
+            margin-bottom: 0.4em;
+        }
+        
+        h3 {
+            color: #34495e;
+            font-size: 14pt;
+            margin-top: 1em;
+            margin-bottom: 0.3em;
+        }
+        
+        h4 {
+            color: #5d6d7e;
+            font-size: 12pt;
+            margin-top: 0.8em;
+            margin-bottom: 0.3em;
+        }
+        
+        p {
+            margin-bottom: 0.8em;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-left: 4px solid #1a5490;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            margin: 1em 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9pt;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+            font-size: 10pt;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #1a5490;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        ul, ol {
+            margin-left: 2em;
+            margin-bottom: 1em;
+        }
+        
+        li {
+            margin-bottom: 0.4em;
+        }
+        
+        blockquote {
+            border-left: 4px solid #1a5490;
+            margin-left: 0;
+            padding-left: 1em;
+            color: #555;
+            font-style: italic;
+            margin: 1em 0;
+        }
+        
+        a {
+            color: #1a5490;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 2em 0;
+        }
+        
+        .toolbar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .toolbar button {
+            background-color: #1a5490;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11pt;
+            margin: 5px 0;
+            width: 100%;
+        }
+        
+        .toolbar button:hover {
+            background-color: #2874a6;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 9pt;
+        }
+        
+        /* Highlight dla ważnych elementów */
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 9pt;
+            font-weight: bold;
+            margin: 0 4px;
+        }
+        
+        .badge-success { background-color: #d4edda; color: #155724; }
+        .badge-warning { background-color: #fff3cd; color: #856404; }
+        .badge-danger { background-color: #f8d7da; color: #721c24; }
+        .badge-info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="toolbar no-print">
+        <button onclick="window.print()">🖨️ Drukuj / Zapisz PDF</button>
+        <button onclick="window.location.href='index.html'">📂 Wszystkie pliki</button>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>FMCG Sales Simulator - Executive Summary</h1>
+            <div class="meta">
+                Wygenerowano: 28.10.2025 15:21<br>
+                Dokument źródłowy: <code>FMCG_MVP_SUMMARY.md</code>
+            </div>
+        </div>
+        
+        <div class="content">
+            <h1>🎮 FMCG Game - MVP Summary (Dla Klienta)</h1>
+<p><strong>Data:</strong> 28.10.2025<br />
+<strong>Wersja:</strong> 1.0 (po dodaniu Trade Marketing + Balansu)</p>
+<hr />
+<h2>🎯 CORE CONCEPT</h2>
+<p><strong>&ldquo;Symulator kariery w sprzedaży FMCG z AI rozmowami handlowymi&rdquo;</strong></p>
+<p>Gracz zaczyna jako <strong>Junior Sales Rep</strong> w firmie FreshMarket i buduje karierę przez:<br />
+- 🗺️ Zarządzanie terytorium (mapa 30km wokół Piaseczna)<br />
+- 🤝 Rozmowy handlowe z AI (właściciele sklepów)<br />
+- 📈 Zarządzanie relacjami (reputacja -100 do +100)<br />
+- 💰 Osiąganie celów sprzedażowych (10k PLN/miesiąc → awans)</p>
+<hr />
+<h2>🔑 KLUCZOWE MECHANIKI (MVP)</h2>
+<h3>1. <strong>CYKL ŻYCIA KLIENTA</strong> (3 statusy)</h3>
+<div class="codehilite"><pre><span></span><code>🔍 PROSPECT → ✅ ACTIVE → ❌ LOST
+   (Hunting)   (Farming)   (Win-back)
+</code></pre></div>
+
+<ul>
+<li><strong>PROSPECT:</strong> Szukasz nowych klientów, cold call, trudne przekonanie</li>
+<li><strong>ACTIVE:</strong> Obsługujesz klientów, regularne wizyty, budowanie reputacji</li>
+<li><strong>LOST:</strong> Zaniedbałeś klienta, musi go odzyskać (bardzo trudne!)</li>
+</ul>
+<h3>2. <strong>REPUTACJA</strong> (-100 do +100)</h3>
+<p><strong>DWA POZIOMY:</strong> 🆕<br />
+1. <strong>Reputacja u klienta</strong> (indywidualna dla każdego ACTIVE/LOST)<br />
+2. <strong>Reputacja ogólna handlowca</strong> (średnia ważona wszystkich klientów)</p>
+<p><strong>Reputacja u klienta - Rośnie gdy:</strong><br />
+- Odwiedzasz regularnie (+5)<br />
+- Dostajesz 5⭐ od AI (+10)<br />
+- Sprzedajesz nowy produkt (+15)</p>
+<p><strong>Reputacja u klienta - Maleje gdy:</strong><br />
+- Nie odwiedzasz &gt; 7 dni (-5/dzień)<br />
+- Dostajesz 1-2⭐ (-15)<br />
+- Nie wykonujesz zadań (-10)</p>
+<p><strong>6 progów u klienta:</strong><br />
+- 80-100: VIP Client 🌟<br />
+- 50-79: Happy Client 😊<br />
+- 20-49: Neutral 😐<br />
+- 0-19: At Risk ⚠️<br />
+- -1 to -49: Critical 😞<br />
+- &lt;-50: LOST ❌</p>
+<p><strong>Reputacja ogólna handlowca:</strong> 🆕<br />
+- Średnia ważona reputacji u wszystkich klientów<br />
+- <strong>ACTIVE:</strong> 80% wagi (ważone wartością miesięczną - VIPy liczą się bardziej)<br />
+- <strong>LOST:</strong> 20% wagi (kara za utratę klienta)<br />
+- <strong>Wzór:</strong> <code>(sum(rep_active × value) / sum(value)) × 0.8 + (avg(rep_lost)) × 0.2</code></p>
+<p><strong>Przykład:</strong></p>
+<div class="codehilite"><pre><span></span><code>ACTIVE:
+- Sklep A: rep=70, 1,000 PLN → waga: 70,000
+- Sklep B: rep=60, 500 PLN → waga: 30,000
+- Sklep C: rep=80, 1,500 PLN → waga: 120,000
+Średnia ACTIVE: 220,000 / 3,000 = 73.3
+
+LOST:
+- Sklep D: rep=-30 → średnia: -30
+
+OGÓLNA: 73.3 × 0.8 + (-30) × 0.2 = 58.6 - 6 = 52.6 → 53/100
+</code></pre></div>
+
+<p><strong>Progi reputacji ogólnej:</strong><br />
+| Rep | Tytuł | Efekty |<br />
+|-----|-------|--------|<br />
+| 90-100 | 🏆 Sales Legend | +10% zamówienia, +500 PLN/m bonus |<br />
+| 75-89 | 🌟 Top Performer | +5% zamówienia, Premium klienci |<br />
+| 60-74 | ✅ Solid Rep | Standard |<br />
+| 40-59 | 🟡 Average | Ostrzeżenie szefa |<br />
+| 20-39 | ⚠️ Struggling | -10% nowe kontrakty |<br />
+| &lt;20 | 🔴 At Risk | -20% kontrakty, Ryzyko zwolnienia |</p>
+<p><strong>Wpływ na gameplay:</strong><br />
+- Nowi PROSPECT: Jeśli rep ≥75 → &ldquo;Słyszałem dobre rzeczy!&rdquo; (+10 starting rep)<br />
+- Awans Level 2: Wymaga rep ≥60 (nie można z &ldquo;Average&rdquo;)<br />
+- Email od szefa: Jeśli &lt;40 → &ldquo;30 dni na poprawę lub zwolnienie!&rdquo;<br />
+- Rekomendacje: Jeśli ≥90 → Dostęp do VIP prospectów</p>
+<p><strong>Strategiczne dylematy:</strong><br />
+- ❓ Inwestować w małego klienta (rep=45) czy szukać nowych?<br />
+- ❓ Odzyskiwać LOST (-30 rep) czy skupić się na ACTIVE?<br />
+- ❓ 1 VIP (5k PLN) vs 5 małych (1k każdy) → różny wpływ na avg</p>
+<h3>3. <strong>NARZĘDZIA TRADE MARKETING</strong> 🆕</h3>
+<p><strong>Budżet:</strong> 2,000 PLN/miesiąc</p>
+<p><strong>5 narzędzi:</strong><br />
+1. 💰 <strong>Rabat</strong> (0 PLN) - obniża cenę, +5 rep<br />
+2. 🎁 <strong>Gratis</strong> (350 PLN) - Kup 10, weź 12, +8 rep<br />
+3. 📢 <strong>POS</strong> (200 PLN) - Stojaki/plakaty, +15% sprzedaży przez 30 dni, +5 rep<br />
+4. 🎪 <strong>Promocja</strong> (600 PLN) - Konkurs dla klientów końcowych, +30% przez 14 dni, +10 rep<br />
+5. 🚚 <strong>Darmowa dostawa</strong> (150 PLN) - Free shipping, +3 rep</p>
+<p><strong>Strategia:</strong> Gracz musi mądrze wydawać budżet (POS = najlepszy ROI)</p>
+<h3>4. <strong>BALANS ROZGRYWKI</strong> 🆕</h3>
+<p><strong>System energii:</strong><br />
+- Dzień: 8:00-17:00 (100% energii)<br />
+- Wizyta bliska (5-10km): -20% energii<br />
+- Wizyta daleka (20-30km): -30% energii<br />
+- Zadanie proste: -10%<br />
+- Lunch break: +15%</p>
+<p><strong>Wynik:</strong> Max <strong>2-3 wizyty + 2 zadania dziennie</strong></p>
+<p><strong>Wydarzenia losowe (1-2/dzień):</strong><br />
+- 🎉 30% pozytywne (bonusy, nowi klienci)<br />
+- ⚠️ 50% neutralne (wybory gracza)<br />
+- 🚨 20% negatywne (awaria auta, konkurencja)</p>
+<p><strong>Rytm:</strong><br />
+- <strong>1 dzień:</strong> 20-30 min gry (2-3 wizyty)<br />
+- <strong>1 tydzień:</strong> 1.5-2h gry (12-15 wizyt)<br />
+- <strong>1 miesiąc:</strong> 6-8h (osiągnięcie Level 1 targetu)</p>
+<h3>5. <strong>AI CONVERSATIONS</strong></h3>
+<p><strong>Wizyta handlowa = rozmowa z AI (Gemini):</strong><br />
+- Gracz pisze/mówi (speech-to-text)<br />
+- AI odpowiada jako właściciel sklepu<br />
+- AI ocenia rozmowę (1-5⭐)<br />
+- Feedback: &ldquo;Co poszło dobrze? Co poprawić?&rdquo;</p>
+<p><strong>Kontekst AI zależy od:</strong><br />
+- Statusu (PROSPECT/ACTIVE/LOST)<br />
+- Reputacji (VIP vs At Risk = różne nastroje)<br />
+- Historii (ile wizyt, jakie produkty)<br />
+- Celu (cold call / check-in / win-back)</p>
+<h3>6. <strong>PRODUKTY U KLIENTA</strong></h3>
+<p><strong>Każdy aktywny klient ma listing produktów:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;product&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FreshSoap&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;monthly_volume&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="err">sz</span><span class="kc">tu</span><span class="err">k</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;market_share&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="err">%</span><span class="p">,</span><span class="w">  </span><span class="c1">// vs konkurencja</span>
+<span class="w">  </span><span class="nt">&quot;shelf_placement&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;prime&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// prime/standard/poor</span>
+<span class="w">  </span><span class="nt">&quot;trend&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;growing&quot;</span><span class="w">  </span><span class="c1">// growing/stable/declining</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Cross-sell:</strong> Gracz może sprzedać więcej produktów → +15 rep, +PLN</p>
+<hr />
+<h2>📊 PRZYKŁADOWY FLOW (1 TYDZIEŃ)</h2>
+<p><strong>Poniedziałek:</strong><br />
+- 8:00: Start (100% energii)<br />
+- 9:00: 🚗 Wizyta u &ldquo;Sklep U Janusza&rdquo; (PROSPECT, cold call)<br />
+  - AI rozmowa: Przekonywanie do FreshSoap<br />
+  - Używam narzędzia: 🎁 Gratis (2 sztuki za darmo)<br />
+  - Wynik: ✅ Kontrakt podpisany! 500 PLN/miesiąc, ocena 4⭐<br />
+- 11:00: 📋 Zadanie: &ldquo;Raport tygodniowy&rdquo; (proste)<br />
+- 13:00: ☕ Lunch break (+15% energii)<br />
+- 14:00: 🚗 Wizyta u &ldquo;Biedronka Konstancin&rdquo; (ACTIVE, check-in)<br />
+  - Reputacja: 65/100 (Happy Client)<br />
+  - AI rozmowa: Kontrola ekspozycji<br />
+  - Wynik: ✅ Wszystko OK, ocena 5⭐ (+10 rep → 75/100)<br />
+- 16:00: 🎲 <strong>Wydarzenie:</strong> &ldquo;Telefon od klienta - chce promocję&rdquo;<br />
+  - Wybór: [Zgoda -500 PLN, +15 rep] → Wybieram<br />
+- 17:00: Koniec dnia</p>
+<p><strong>Wynik dnia:</strong><br />
+- 2 wizyty (1 nowy kontrakt + 1 check-in)<br />
+- 1 zadanie<br />
+- 500 PLN sprzedaży<br />
+- 1 PROSPECT → ACTIVE (Sklep U Janusza, rep=50)<br />
+- Budżet: 1,650/2,000 PLN (użyłem gratis + promocja)<br />
+- <strong>🌟 Reputacja ogólna:</strong> 58/100 → 62/100 🆕<br />
+  - ACTIVE (2): Janusz=50, Biedronka=75 → avg=62.5<br />
+  - LOST (0): -<br />
+  - Wzrost: Nowy klient + poprawa u Biedronki</p>
+<p><strong>Wtorek-Piątek:</strong> Podobnie&hellip;</p>
+<p><strong>Koniec tygodnia:</strong><br />
+- 12 wizyt (4 nowe kontrakty + 8 check-ins)<br />
+- Sprzedaż: 3,500 PLN (cel: 2,500) ✅<br />
+- Średnia ocena: 4.3⭐<br />
+- <strong>🌟 Reputacja ogólna:</strong> 62 → 68/100 (✅ Solid Rep!)<br />
+  - ACTIVE (5): avg=68 (4 zadowolonych + 1 neutralny)<br />
+  - LOST (0): Brak<br />
+- <strong>Nagroda:</strong> +500 PLN bonus (osiągnięty cel)</p>
+<hr />
+<h2>🎯 CEL GRY (MVP = Level 1)</h2>
+<p><strong>Awans do Level 2:</strong><br />
+- ✅ Miesięczna sprzedaż: 10,000 PLN<br />
+- ✅ Kontrakty: Min. 10 aktywnych klientów<br />
+- ✅ Średnia ocena wizyt: 4.0+/5.0<br />
+- ✅ <strong>Reputacja ogólna: ≥60</strong> 🆕 (nie można awansować z &ldquo;Average&rdquo;)<br />
+- ✅ Czas: Min. 1 miesiąc (4 tygodnie)</p>
+<p><strong>Po awansie:</strong><br />
+- 🔓 Większe terytorium (40km)<br />
+- 🔓 Dostęp do większych klientów (Carrefour, Auchan)<br />
+- 💰 Wyższe cele (25,000 PLN/miesiąc)<br />
+- 📈 Nowe mechaniki (zespół, strategia)</p>
+<hr />
+<h2>🛠️ TECHNOLOGIE</h2>
+<table>
+<thead>
+<tr>
+<th>Komponent</th>
+<th>Technologia</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Backend</strong></td>
+<td>Python + Streamlit</td>
+<td>✅ Działa</td>
+</tr>
+<tr>
+<td><strong>Mapa</strong></td>
+<td>Folium (leaflet.js)</td>
+<td>🚧 Do dodania</td>
+</tr>
+<tr>
+<td><strong>AI</strong></td>
+<td>Google Gemini</td>
+<td>✅ Działa</td>
+</tr>
+<tr>
+<td><strong>Speech-to-text</strong></td>
+<td>SpeechRecognition</td>
+<td>✅ Działa</td>
+</tr>
+<tr>
+<td><strong>Baza danych</strong></td>
+<td>JSON (user_data)</td>
+<td>✅ Działa</td>
+</tr>
+<tr>
+<td><strong>Klienci</strong></td>
+<td>6 fake klientów</td>
+<td>✅ Gotowe</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>📋 CHECKLISTY IMPLEMENTACJI</h2>
+<h3><strong>MUST HAVE (bez tego nie działa):</strong></h3>
+<ul>
+<li>[ ] Mapa z 20+ klientami (pinezki, filtry)</li>
+<li>[ ] Kalendarz wizyt + system energii</li>
+<li>[ ] Narzędzia Trade Marketing (UI + mechanika, budżet 2k)</li>
+<li>[ ] <strong>Reputacja u klienta</strong> (timeline, progi -100 do +100, UI)</li>
+<li>[ ] <strong>Reputacja ogólna handlowca</strong> 🆕 (średnia ważona, widget w Dashboard)</li>
+<li>[ ] Wydarzenia dzienne (popup, historia, 1-2/dzień)</li>
+<li>[ ] Dashboard (cele, KPI, alerty, <strong>widget reputacji ogólnej</strong>)</li>
+<li>[ ] System kontraktów (PROSPECT/ACTIVE/LOST transitions)</li>
+</ul>
+<h3><strong>SHOULD HAVE (ważne, ale może poczekać):</strong></h3>
+<ul>
+<li>[ ] Routing (optymalizacja tras)</li>
+<li>[ ] CRM (szczegółowa karta klienta)</li>
+<li>[ ] Zadania auto-generowane</li>
+<li>[ ] Nagrody tygodniowe</li>
+<li>[ ] <strong>Wykres historii reputacji ogólnej</strong> 🆕 (timeline 4 tygodni)</li>
+<li>[ ] <strong>Email od szefa przy rep &lt;40</strong> 🆕 (&ldquo;30 dni na poprawę!&rdquo;)</li>
+<li>[ ] Achievements</li>
+</ul>
+<h3><strong>NICE TO HAVE (polish):</strong></h3>
+<ul>
+<li>[ ] Animacje</li>
+<li>[ ] Sound effects</li>
+<li>[ ] Leaderboard</li>
+<li>[ ] Mobile PWA</li>
+</ul>
+<hr />
+<h2>⏱️ TIMELINE IMPLEMENTACJI</h2>
+<table>
+<thead>
+<tr>
+<th>Tydzień</th>
+<th>Zadania</th>
+<th>Deliverable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>Mapa + Klienci (30 fake)</td>
+<td>Interaktywna mapa z prospektami</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>Kalendarz + Energia</td>
+<td>Planowanie wizyt działa</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>Narzędzia TM + Budżet</td>
+<td>5 narzędzi dostępnych w UI</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>Wydarzenia + Dashboard</td>
+<td>Eventy losowe + KPI tracking</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>Reputacja + Timeline</td>
+<td>Pełny system relacji</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>Testing + Polish</td>
+<td><strong>MVP READY!</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>💡 CO ROBI TĘ GRĘ WYJĄTKOWĄ?</h2>
+<h3>1. <strong>AI Conversations = Core Gameplay</strong></h3>
+<p>Nie klikasz przycisków - <strong>rozmawiasz</strong> z AI jak prawdziwy handlowiec.</p>
+<h3>2. <strong>Długoterminowe relacje</strong></h3>
+<p>To nie &ldquo;sprzedaj i zapomnij&rdquo; - musisz <strong>utrzymywać</strong> klientów (wizyty regularne, reputacja).</p>
+<h3>3. <strong>Strategiczne decyzje</strong> 🆕</h3>
+<ul>
+<li>Budżet 2k PLN - wydasz na gratisy czy POS?</li>
+<li>Odwiedzisz 3 małych (rep=60) czy 1 VIP (rep=90)?</li>
+<li><strong>Reputacja ogólna:</strong> 1 VIP za 5k ma większą wagę niż 5 małych po 1k!</li>
+<li>Czy odzyskiwać LOST (-30 rep) czy szukać nowych (0 rep)?</li>
+</ul>
+<h3>4. <strong>Emergent gameplay</strong></h3>
+<p>Każda rozgrywka inna (losowi klienci, eventy, różne AI responses).</p>
+<h3>5. <strong>Realistic simulation</strong></h3>
+<p>Bazuje na prawdziwym FMCG (trade marketing, market share, shelf placement, <strong>portfolio management</strong>).</p>
+<h3>6. <strong>Progresja i sens achievement</strong> 🆕</h3>
+<ul>
+<li>Awansowanie wymaga <strong>reputation ≥60</strong> (nie można z &ldquo;Average&rdquo;)</li>
+<li>Reputation ≥90 = Sales Legend (+500 PLN/m, dostęp do VIP)</li>
+<li>Reputation &lt;40 = Email od szefa: &ldquo;30 dni na poprawę lub zwolnienie!&rdquo;</li>
+</ul>
+<hr />
+<h2>🎬 DEMO SCENARIO (Dla pokazania klientowi)</h2>
+<p><strong>Setup:</strong><br />
+- Gracz = Junior Sales Rep, dzień 1<br />
+- Mapa: 20 prospectów w promieniu 30km<br />
+- Budżet: 2,000 PLN<br />
+- Cel miesiąca: 10,000 PLN</p>
+<p><strong>Pokazujemy:</strong></p>
+<ol>
+<li>
+<p><strong>Mapa</strong> (30 sec)<br />
+   - Pinezki różne kolory<br />
+   - Klik → Info o kliencie<br />
+   - &ldquo;Zaplanuj wizytę&rdquo; → Kalendarz</p>
+</li>
+<li>
+<p><strong>Kalendarz</strong> (30 sec)<br />
+   - Wybór dnia/godziny<br />
+   - Energia: 100% → 80% po wizycie<br />
+   - Max 3 wizyty/dzień</p>
+</li>
+<li>
+<p><strong>Wizyta AI</strong> (3 min) ⭐ GŁÓWNA ATRAKCJA<br />
+   - Cold call u &ldquo;Sklep U Janusza&rdquo;<br />
+   - Gracz mówi: &ldquo;Dzień dobry, jestem z FreshMarket&hellip;&rdquo;<br />
+   - AI odpowiada: &ldquo;Czym się różnicie od konkurencji?&rdquo;<br />
+   - Gracz oferuje: 🎁 Gratis (2 sztuki za darmo)<br />
+   - AI: &ldquo;OK, wezmę 10 sztuk na próbę&rdquo;<br />
+   - <strong>Wynik:</strong> ✅ Kontrakt, 4⭐, +500 PLN</p>
+</li>
+<li>
+<p><strong>Reputacja</strong> (1 min)<br />
+   - Timeline: &ldquo;2025-10-28: Pierwsza wizyta, +50 rep&rdquo;<br />
+   - Progi: Neutral → Happy (≥50)<br />
+   - Za tydzień: Regularna wizyta (+5 rep)</p>
+</li>
+<li>
+<p><strong>Wydarzenie</strong> (1 min)<br />
+   - Popup: &ldquo;Telefon od klienta - chce promocję&rdquo;<br />
+   - Wybór: Zgoda/Odmowa<br />
+   - Konsekwencje: +15 rep lub -5 rep</p>
+</li>
+<li>
+<p><strong>Dashboard</strong> (1 min)<br />
+   - Sprzedaż: 500/10,000 PLN (5%)<br />
+   - Kontrakty: 1/10<br />
+   - Budżet: 1,650/2,000 PLN<br />
+   - <strong>🌟 Reputacja ogólna: 50/100</strong> 🆕 (1 ACTIVE = Janusz rep=50)<br />
+   - Alert: &ldquo;Brawo! Pierwszy kontrakt!&rdquo;</p>
+</li>
+<li>
+<p><strong>Reputacja widget</strong> (1 min) 🆕 ⭐ NOWA FUNKCJA<br />
+   - Widget: &ldquo;Twoja reputacja: 50/100 (Solid Rep)&rdquo;<br />
+   - Szczegóły:</p>
+<ul>
+<li>ACTIVE (1): Janusz = 50/100</li>
+<li>LOST (0): Brak</li>
+<li>Tip: &ldquo;Pozyskaj więcej klientów → wyższa reputacja!&rdquo;</li>
+<li>Postęp do awansu: &ldquo;Potrzebujesz ≥60 do Level 2&rdquo;</li>
+</ul>
+</li>
+</ol>
+<p><strong>Total demo:</strong> <strong>8 minut</strong> (idealny pitch!)</p>
+<hr />
+<h2>🚀 NEXT STEPS</h2>
+<ol>
+<li>✅ <strong>Design doc gotowy</strong> (FMCG_GAME_DESIGN.md)</li>
+<li>✅ <strong>Plan implementacji</strong> (FMCG_CLIENT_CARD_UPGRADE.md)</li>
+<li>🔄 <strong>Teraz:</strong> Zatwierdzenie z klientem</li>
+<li>⏳ <strong>Potem:</strong> 6 tygodni implementacji</li>
+<li>🎉 <strong>Wynik:</strong> MVP gotowy do beta testów</li>
+</ol>
+<hr />
+<p><strong>Pytania do klienta:</strong></p>
+<ol>
+<li>Czy balans (2-3 wizyty/dzień, 6-8h/miesiąc) jest OK?</li>
+<li>Czy narzędzia Trade Marketing są jasne i użyteczne?</li>
+<li>Czy wydarzenia losowe dodają frajdy czy denerwują?</li>
+<li>Czy 6 tygodni timeline jest akceptowalne?</li>
+</ol>
+<p><strong>Kontakt:</strong> [Twój email/telefon]</p>
+        </div>
+        
+        <div class="footer">
+            <p>FMCG Sales Simulator &copy; 2025 | Wersja dokumentu: 1.0</p>
+            <p style="margin-top: 10px; font-size: 8pt;">
+                💡 <strong>Tip:</strong> Użyj Ctrl+P (Cmd+P na Mac) aby zapisać jako PDF<br>
+                W opcjach drukowania wybierz "Zapisz jako PDF"
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Automatyczne numerowanie nagłówków
+        document.querySelectorAll('h2').forEach((h, i) => {
+            if (!h.textContent.match(/^\d+\./)) {
+                h.textContent = (i + 1) + '. ' + h.textContent;
+            }
+        });
+    </script>
+</body>
+</html>

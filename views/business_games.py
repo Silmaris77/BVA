@@ -2103,22 +2103,22 @@ def show_industry_game(username, user_data, industry_id):
                 return
             
             # ZAKŁADKI FMCG (po onboardingu)
-            tabs = st.tabs(["📚 Moja Firma", "🏢 Dashboard", "👥 Klienci", "💼 Zadania", "📊 Statystyki Kariery"])
+            tabs = st.tabs(["🏢 Dashboard", "👥 Klienci", "💼 Zadania", "📊 Statystyki Kariery", "📚 Moja Firma"])
             
             with tabs[0]:
-                show_fmcg_company_info_tab(username, user_data, industry_id)
-            
-            with tabs[1]:
                 show_fmcg_dashboard_tab(username, user_data, industry_id)
             
-            with tabs[2]:
+            with tabs[1]:
                 show_fmcg_customers_tab(username, user_data, industry_id)
             
-            with tabs[3]:
+            with tabs[2]:
                 show_fmcg_tasks_tab(username, user_data, industry_id)
             
+            with tabs[3]:
+                fmcg.show_fmcg_career_stats_tab(username, user_data, industry_id)
+            
             with tabs[4]:
-                st.info("🚧 Statystyki kariery - wkrótce!")
+                fmcg.show_fmcg_company_info_tab(username, user_data, industry_id)
                 
             return
         

@@ -108,13 +108,20 @@ python -m streamlit run main.py
 ### **Struktura katalogów:**
 
 ```
-ZenDegenAcademy/
+BVA/
 ├── main.py                    # Główny plik aplikacji Streamlit
 ├── requirements.txt           # Zależności Python
 ├── runtime.txt               # Wersja Python dla deployment
 ├── start.bat                 # Launcher aplikacji (Windows)
 ├── users_data.json          # Baza danych użytkowników (JSON)
 ├── user_status.json         # Status sesji użytkowników
+│
+├── README.md                # Główna dokumentacja (TEN PLIK)
+├── CHANGELOG_2025_10_27.md # Szczegółowy log zmian
+├── CLEANUP_ANALYSIS.md     # Raport czyszczenia aplikacji
+├── BETA_READY_SUMMARY.md   # Podsumowanie gotowości beta
+├── BETA_TESTING_CHECKLIST.md # Checklista testów
+├── BETA_TESTER_GUIDE.md    # Przewodnik dla testerów
 │
 ├── config/                   # Konfiguracja aplikacji
 │   ├── settings.py          # Główne ustawienia
@@ -127,6 +134,11 @@ ZenDegenAcademy/
 │   ├── learn.py            # System nauki
 │   ├── lesson.py           # Pojedyncze lekcje
 │   ├── inspirations.py     # Sekcja inspiracji
+│   ├── business_games.py   # Business Games - symulacja firmy
+│   ├── business_games_refactored/  # Moduły BG (zrefaktoryzowane)
+│   │   ├── components/     # Komponenty UI (karty, wykresy, nagłówki)
+│   │   ├── fmcg.py         # Moduł FMCG
+│   │   └── helpers.py      # Funkcje pomocnicze
 │   ├── admin.py            # Panel administratora
 │   └── shop_new.py         # Sklep (w rozwoju)
 │
@@ -141,24 +153,31 @@ ZenDegenAcademy/
 ├── data/                    # Dane i modele
 │   ├── users.py            # Funkcje użytkowników
 │   ├── users_fixed.py      # Naprawione funkcje użytkowników
-│   ├── lessons.py          # Dane lekcji
+│   ├── lessons/            # Dane lekcji (JSON)
+│   ├── business_games/     # Dane kontraktów, wydarzeń, pracowników
 │   ├── course_data.py      # Dane kursów
 │   ├── test_questions.py   # Pytania testowe
 │   └── inspirations/       # Katalog z artykułami
 │
 ├── static/                  # Zasoby statyczne
-│   ├── css/                # Style CSS
+│   ├── css/                # Style CSS (toolbar hiding)
+│   ├── images/             # Obrazy i grafiki
 │   └── js/                 # Skrypty JavaScript
 │
 ├── tests/                   # Testy aplikacji
-│   └── test_*.py           # Poszczególne testy
+│   ├── README.md           # Dokumentacja testów
+│   └── archive/            # Zarchiwizowane pliki testowe (21 plików)
 │
-└── docs/                    # Dokumentacja projektu
-    ├── implementation/     # Dokumentacja implementacji
-    ├── planning/           # Plany i strategie
-    ├── fixes/              # Historia napraw
-    └── status/             # Statusy i podsumowania
+├── docs/                    # Dokumentacja projektu
+│   └── archive/            # Zarchiwizowana dokumentacja (28 plików)
+│
+├── scripts/                 # Skrypty pomocnicze
+│   └── archive/            # Zarchiwizowane skrypty (10 plików)
+│
+└── temp/                    # Pliki tymczasowe (automatycznie zarządzane)
 ```
+
+**📝 Uwaga:** Pliki testowe, stara dokumentacja i jednorazowe skrypty zostały zarchiwizowane (27.10.2025) w celu uporządkowania workspace.
 
 ---
 
@@ -678,10 +697,13 @@ rm user_status.json
 ## 📞 Support i Kontakt
 
 ### **Dokumentacja:**
-- **README główny** - `/docs/README.md`
-- **Implementation docs** - `/docs/implementation/`
-- **Fix history** - `/docs/fixes/`
-- **Planning docs** - `/docs/planning/`
+- **README główny** - ten plik (kompletna dokumentacja aplikacji)
+- **CHANGELOG_2025_10_27.md** - szczegółowy log ostatnich zmian
+- **CLEANUP_ANALYSIS.md** - raport czyszczenia i optymalizacji
+- **BETA_READY_SUMMARY.md** - podsumowanie gotowości beta
+- **BETA_TESTING_CHECKLIST.md** - lista kontrolna testów
+- **BETA_TESTER_GUIDE.md** - przewodnik dla testerów
+- **Archiwum:** `/docs/archive/`, `/tests/archive/`, `/scripts/archive/`
 
 ### **Zgłaszanie problemów:**
 1. Sprawdź `/docs/fixes/` czy problem był już naprawiany
@@ -700,16 +722,36 @@ rm user_status.json
 
 ## 📊 Statystyki Projektu
 
-**Ostatnia aktualizacja:** 6 października 2025
-**Status:** Aktywny rozwój
-**Wersja:** 1.2.0
+**Ostatnia aktualizacja:** 27 października 2025
+**Status:** Aktywny rozwój - Beta Testing
+**Wersja:** 1.3.0
 
-### **Najnowsze zmiany:**
-- ✅ Naprawiono problem z uruchamianiem Streamlit na Windows
-- ✅ Zaktualizowano instrukcje instalacji i uruchomienia
-- ✅ Dodano rozwiązania typowych problemów
-- ✅ Poprawiono dokumentację instalacji zależności
-- 🔄 W trakcie: Optymalizacja wydajności aplikacji
+### **Najnowsze zmiany (27 października 2025):**
+- ✅ **Główne naprawy Business Games:**
+  - Naprawiono 84 błędy w `views/business_games.py`
+  - Dodano brakującą definicję funkcji `show_business_games()`
+  - Dodano wszystkie importy z refactored modules
+  - Usunięto 130 linii niestandardowego CSS
+  - Przywrócono spójność szerokości UI z innymi modułami
+  
+- ✅ **Czyszczenie aplikacji:**
+  - Usunięto 53 niepotrzebne pliki (24.16 MB)
+  - Zarchiwizowano 21 plików testowych → `tests/archive/`
+  - Zarchiwizowano 28 plików dokumentacji → `docs/archive/`
+  - Zarchiwizowano 10 skryptów pomocniczych → `scripts/archive/`
+  - **Łącznie:** 112 plików uporządkowanych, ~25-30 MB odzyskane
+  
+- ✅ **Ulepszenia UI:**
+  - Ukryto przycisk "Deploy" i menu główne Streamlit
+  - Przesunięto przycisk "Powrót do menu" na dół strony Business Games
+  - Poprawiono czytelność interfejsu
+  
+- ✅ **Dokumentacja:**
+  - Utworzono `CHANGELOG_2025_10_27.md` - szczegółowy opis zmian
+  - Utworzono `CLEANUP_ANALYSIS.md` - raport czyszczenia
+  - Zaktualizowano strukturę projektu w README
+  
+- 🔄 **Status:** Aplikacja gotowa do testów beta
 
 ### **Znane problemy:**
 - **Windows:** Komenda `streamlit` może nie być rozpoznawana - użyj `python -m streamlit run main.py`
@@ -723,15 +765,47 @@ rm user_status.json
 - 🎯 **Q3 2026:** AI-powered rekomendacje treści
 
 ### **Metryki projektu:**
-- **Pliki:** 100+ plików źródłowych
+- **Pliki:** 100+ plików źródłowych (po optymalizacji)
 - **Linie kodu:** 15,000+ LOC
-- **Testy:** 25+ plików testowych
-- **Dokumentacja:** Kompletna
+- **Testy:** 21 plików testowych (zarchiwizowanych)
+- **Dokumentacja:** Kompletna i zaktualizowana
 - **Platformy:** Windows, Linux, macOS
+- **Status czyszczenia:** ✅ 112 plików uporządkowanych (27.10.2025)
+- **Odzyskane miejsce:** ~25-30 MB
 
 ---
 
 ## 📝 Changelog
+
+### **v1.3.0** (27 października 2025) - 🧹 Cleanup & Optimization
+- 🔧 **Business Games - Główne naprawy:**
+  - Naprawiono 84 błędy w `views/business_games.py` (definicja funkcji + importy)
+  - Błędy zredukowane z 84 → 15 (tylko fałszywe alarmy type checker)
+  - Dodano wszystkie importy z `business_games_refactored` modules
+  - Usunięto 130 linii custom CSS (przywrócono spójność UI)
+  
+- 🗑️ **Czyszczenie aplikacji (cleanup_app.ps1):**
+  - Usunięto 53 pliki: stare backupy JSON, .bak, temp files, logi debug
+  - Odzyskano 24.16 MB miejsca na dysku
+  - Wszystkie pliki bezpiecznie przeniesione do backup
+  
+- 📦 **Archiwizacja (archive_files.ps1):**
+  - 21 plików testowych → `tests/archive/`
+  - 28 plików dokumentacji → `docs/archive/`
+  - 10 skryptów pomocniczych → `scripts/archive/`
+  - **Łącznie:** 112 plików uporządkowanych
+  
+- 🎨 **Ulepszenia UI:**
+  - Ukryto przycisk Deploy i menu główne Streamlit (`static/css/style.css`)
+  - Przesunięto przycisk "Powrót do menu" na dół strony Business Games
+  - Zwiększono czytelność interfejsu
+  
+- 📚 **Dokumentacja:**
+  - `CHANGELOG_2025_10_27.md` - szczegółowy log wszystkich zmian
+  - `CLEANUP_ANALYSIS.md` - raport czyszczenia z kategoriami
+  - Zaktualizowano `README.md` ze strukturą po optymalizacji
+  
+- ✅ **Walidacja:** Aplikacja przetestowana i gotowa do testów beta
 
 ### **v1.2.0** (6 października 2025)
 - 🔧 **Naprawiono:** Problem z uruchamianiem `streamlit` na Windows
@@ -756,12 +830,14 @@ rm user_status.json
 **Status aplikacji:** 🟢 **AKTYWNA**
 
 **🔗 Przydatne linki:**
-- **Dokumentacja techniczna:** `/docs/`
-- **Historia zmian:** `/docs/fixes/`
-- **Plany rozwoju:** `/docs/planning/`
-- **Status projektu:** `/docs/status/`
+- **Dokumentacja główna:** `README.md` (ten plik)
+- **Log zmian:** `CHANGELOG_2025_10_27.md`
+- **Raport czyszczenia:** `CLEANUP_ANALYSIS.md`
+- **Przewodnik beta:** `BETA_TESTER_GUIDE.md`
+- **Archiwum dokumentacji:** `docs/archive/`
+- **Archiwum testów:** `tests/archive/`
 
-*Ostatnia aktualizacja dokumentacji: 6 października 2025*
+*Ostatnia aktualizacja dokumentacji: 27 października 2025*
 
 **Supported platforms:**
 - ✅ Windows 10/11
@@ -771,6 +847,29 @@ rm user_status.json
 
 ---
 
-*Dokumentacja wygenerowana automatycznie na podstawie analizy kodu i struktury projektu.*
+*Dokumentacja zaktualizowana 27 października 2025 - wersja 1.3.0*
 
-**ZenDegenAcademy - Podróż ku finansowej mądrości rozpoczyna się tutaj! 🚀**
+**BrainVentureAcademy - Podróż ku finansowej mądrości rozpoczyna się tutaj! 🚀**
+
+---
+
+## 🧹 Historia Optymalizacji
+
+### Czyszczenie z 27 października 2025:
+**Faza 1 - Cleanup (cleanup_app.ps1):**
+- Usunięto 6 starych backupów JSON (zachowano najnowszy)
+- Usunięto 10 plików .bak z temp/import_backups/
+- Usunięto 7 plików tymczasowych (MP3, HTML)
+- Usunięto 5 logów debug
+- Usunięto 15 starych skryptów fix_*
+- Usunięto 2 skrypty PowerShell
+- Usunięto 4 prototypy HTML
+- **Wynik:** 53 pliki, 24.16 MB odzyskane
+
+**Faza 2 - Archive (archive_files.ps1):**
+- Zarchiwizowano 21 plików testowych → tests/archive/
+- Zarchiwizowano 28 plików dokumentacji → docs/archive/
+- Zarchiwizowano 10 skryptów pomocniczych → scripts/archive/
+- **Wynik:** 59 plików zarchiwizowanych
+
+**Łącznie:** 112 plików uporządkowanych, ~25-30 MB odzyskane, workspace czysty i zorganizowany! ✨

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMCG Sales Simulator - Package Summary</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 2cm 1.5cm;
+            }
+            
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+            
+            pre, table {
+                page-break-inside: avoid;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1a5490;
+        }
+        
+        .header h1 {
+            color: #1a5490;
+            font-size: 28pt;
+            margin-bottom: 10px;
+        }
+        
+        .header .meta {
+            color: #666;
+            font-size: 10pt;
+        }
+        
+        h1 {
+            color: #1a5490;
+            font-size: 24pt;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            border-bottom: 2px solid #1a5490;
+            padding-bottom: 0.3em;
+        }
+        
+        h2 {
+            color: #2874a6;
+            font-size: 18pt;
+            margin-top: 1.2em;
+            margin-bottom: 0.4em;
+        }
+        
+        h3 {
+            color: #34495e;
+            font-size: 14pt;
+            margin-top: 1em;
+            margin-bottom: 0.3em;
+        }
+        
+        h4 {
+            color: #5d6d7e;
+            font-size: 12pt;
+            margin-top: 0.8em;
+            margin-bottom: 0.3em;
+        }
+        
+        p {
+            margin-bottom: 0.8em;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-left: 4px solid #1a5490;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            margin: 1em 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9pt;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+            font-size: 10pt;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #1a5490;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        ul, ol {
+            margin-left: 2em;
+            margin-bottom: 1em;
+        }
+        
+        li {
+            margin-bottom: 0.4em;
+        }
+        
+        blockquote {
+            border-left: 4px solid #1a5490;
+            margin-left: 0;
+            padding-left: 1em;
+            color: #555;
+            font-style: italic;
+            margin: 1em 0;
+        }
+        
+        a {
+            color: #1a5490;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 2em 0;
+        }
+        
+        .toolbar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .toolbar button {
+            background-color: #1a5490;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11pt;
+            margin: 5px 0;
+            width: 100%;
+        }
+        
+        .toolbar button:hover {
+            background-color: #2874a6;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 9pt;
+        }
+        
+        /* Highlight dla ważnych elementów */
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 9pt;
+            font-weight: bold;
+            margin: 0 4px;
+        }
+        
+        .badge-success { background-color: #d4edda; color: #155724; }
+        .badge-warning { background-color: #fff3cd; color: #856404; }
+        .badge-danger { background-color: #f8d7da; color: #721c24; }
+        .badge-info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="toolbar no-print">
+        <button onclick="window.print()">🖨️ Drukuj / Zapisz PDF</button>
+        <button onclick="window.location.href='index.html'">📂 Wszystkie pliki</button>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>FMCG Sales Simulator - Package Summary</h1>
+            <div class="meta">
+                Wygenerowano: 28.10.2025 15:21<br>
+                Dokument źródłowy: <code>FMCG_PRESENTATION_PACKAGE_SUMMARY.md</code>
+            </div>
+        </div>
+        
+        <div class="content">
+            <h1>FMCG Simulator - Kompletny Pakiet Prezentacyjny</h1>
+<h2>📦 ZAWARTOŚĆ PAKIETU</h2>
+<p>Przygotowane dokumenty dla klienta - gotowe do prezentacji i implementacji.</p>
+<hr />
+<h2>1. DOKUMENTY PROJEKTOWE (Design)</h2>
+<h3>A. <strong>FMCG_GAME_DESIGN.md</strong> (1,296 linii)</h3>
+<ul>
+<li>Master design document</li>
+<li>Pełna specyfikacja mechanik gry</li>
+<li>12 głównych sekcji:</li>
+<li>Vision &amp; Core Loop</li>
+<li>MVP Scope</li>
+<li>Lifecycle klientów (PROSPECT/ACTIVE/LOST)</li>
+<li>System reputacji (2-tier)</li>
+<li>Zadania (5 typów)</li>
+<li>Wizyty handlowe (AI)</li>
+<li>Kontrakty &amp; produkty</li>
+<li>Win-back system</li>
+<li><strong>Trade Marketing tools (NEW)</strong></li>
+<li><strong>Game balance (NEW)</strong></li>
+<li>Prompt engineering</li>
+<li>Technology stack</li>
+<li>Timeline 6 tygodni</li>
+</ul>
+<p><strong>Dla kogo:</strong> Development team, Game designer</p>
+<hr />
+<h3>B. <strong>FMCG_OUTCOMES_SPEC.md</strong> (NEW - szczegółowa specyfikacja)</h3>
+<ul>
+<li>Matryca wyników rozmów handlowych:</li>
+<li>PROSPECT: 5 poziomów oceny AI → specific outcomes</li>
+<li>ACTIVE: 5 poziomów → rep changes, market share, problem detection</li>
+<li>LOST: 5 poziomów → win-back progress</li>
+<li>Matryca efektów realizacji zadań:</li>
+<li>Wizyty regularne (w terminie / spóźnione / pominięte)</li>
+<li>Operacyjne (kontrola ekspozycji)</li>
+<li>Sprzedażowe (cross-sell)</li>
+<li>Awaryjne (reklamacje)</li>
+<li>Win-back (strategic)</li>
+<li>Interakcje Trade Marketing × Wyniki (5 narzędzi, 3 scenariusze ROI)</li>
+<li>Edge cases (6 sytuacji specjalnych)</li>
+<li>Parametry techniczne:</li>
+<li>JSON schemas</li>
+<li>Python probability formulas</li>
+<li>AI context generation</li>
+</ul>
+<p><strong>Dla kogo:</strong> Backend developers, AI engineers, QA testers</p>
+<hr />
+<h3>C. <strong>FMCG_REPUTATION_SYSTEM.md</strong> (Technical spec)</h3>
+<ul>
+<li>Problem/Solution (why add overall reputation)</li>
+<li>Mechanics (weighted average formula)</li>
+<li>Example calculations (3 ACTIVE + 2 LOST)</li>
+<li>Reputation thresholds (6 levels: Sales Legend to At Risk)</li>
+<li>Gameplay impact (4 areas: prospects, advancement, boss, events)</li>
+<li>UI components (3 widgets)</li>
+<li>Strategic dilemmas (3 scenarios)</li>
+<li>Implementation checklist (18 tasks)</li>
+<li>Success metrics (4 KPIs)</li>
+</ul>
+<p><strong>Dla kogo:</strong> Feature implementation team</p>
+<hr />
+<h2>2. DOKUMENTY PREZENTACYJNE (Client-facing)</h2>
+<h3>D. <strong>FMCG_MVP_SUMMARY.md</strong> (365 linii)</h3>
+<ul>
+<li>Condensed version dla klienta</li>
+<li>6 kluczowych mechanik</li>
+<li>Przykładowy tydzień (Monday flow)</li>
+<li>Wymagania awansu</li>
+<li>Demo scenario (8 minut)</li>
+<li>Technology table</li>
+<li>Implementation checklists (MUST / SHOULD / COULD)</li>
+<li>&ldquo;Why unique&rdquo; section</li>
+</ul>
+<p><strong>Dla kogo:</strong> Client presentation, Stakeholders</p>
+<hr />
+<h3>E. <strong>FMCG_PRESENTATION_SLIDES.md</strong> (Część 1: slajdy 1-12)</h3>
+<p><strong>Format:</strong> ASCII art slide deck (gotowy do przekonwertowania na PowerPoint/PDF)</p>
+<p><strong>Zawartość:</strong><br />
+1. Cover Slide (Tytuł, elevator pitch)<br />
+2. Problem (Tradycyjny trening = drogi, rzadki, teoretyczny)<br />
+3. Rozwiązanie (Gamifikowany simulator)<br />
+4. Core Loop (Przykładowy dzień gracza - 30 min)<br />
+5. Mapa (Territory Piaseczno, Folium)<br />
+6. Klienci (Lifecycle: PROSPECT → ACTIVE → LOST)<br />
+7. Reputacja (2-tier system, formula)<br />
+8. Zadania (5 typów)<br />
+9. Rozmowy AI (Jak wygląda, ocena 1-5⭐)<br />
+10. Trade Marketing Tools (5 narzędzi, budżet 2k PLN)<br />
+11. Balans energii (Dlaczego 30 min/dzień)<br />
+12. Wydarzenia (1-2/dzień, unpredictability)</p>
+<p><strong>Dla kogo:</strong> Client presentation (20-25 minut)</p>
+<hr />
+<h3>F. <strong>FMCG_PRESENTATION_SLIDES_PART2.md</strong> (Część 2: slajdy 13-20)</h3>
+<p><strong>Zawartość:</strong><br />
+13. Przykładowy tydzień gracza (Poniedziałek-Piątek breakdown)<br />
+14. Przykładowe wyniki rozmowy AI (Wersja A vs B, feedback)<br />
+15. Dashboard (Co widzi gracz - UI overview)<br />
+16. Progression (Awans Level 1 → 2 → 3)<br />
+17. Technologia (Stack: Streamlit, Gemini, Folium, koszt)<br />
+18. Timeline implementacji (6 tygodni, week-by-week plan)<br />
+19. Metryki sukcesu (Learning outcomes, Engagement, Business impact, A/B test)<br />
+20. Next Steps (Decision → Development → Beta → Launch, Investment 31k PLN)</p>
+<p><strong>+ BACKUP SLIDES (Q&amp;A):</strong><br />
+- B1: Dlaczego nie gotowe platformy? (Trailhead comparison)<br />
+- B2: Prywatność danych (GDPR compliance)<br />
+- B3: Czy zastąpi tradycyjne szkolenia? (Hybrid model)</p>
+<p><strong>Dla kogo:</strong> Client presentation (kontynuacja)</p>
+<hr />
+<h2>3. WIZUALIZACJE UI (Mockups)</h2>
+<h3>G. <strong>FMCG_UI_MOCKUPS_PART1.md</strong> (Ekrany 1-5)</h3>
+<p><strong>Szczegółowe ASCII art mockups:</strong><br />
+1. <strong>DASHBOARD</strong> (Główny ekran)<br />
+   - Level progress bar<br />
+   - Reputation timeline (wykres)<br />
+   - Zadania (4 aktywne z priorytetami)<br />
+   - Mapa territory (interactive Folium)<br />
+   - Quick stats (PLN, energia, finanse)</p>
+<ol start="2">
+<li>
+<p><strong>CLIENT CARD</strong> (Szczegóły klienta)<br />
+   - Podstawowe info (typ, lokalizacja, dystans)<br />
+   - Portfolio produktów (listing, market share)<br />
+   - Reputation widget (trend 30d)<br />
+   - Timeline (ostatnie 5 eventów)<br />
+   - Quick actions (wizyta, email, raport)</p>
+</li>
+<li>
+<p><strong>AI CONVERSATION SCREEN</strong> (Wizyta)<br />
+   - Chat interface (AI vs gracz)<br />
+   - Kontekst wizyty (cel, produkty, historia)<br />
+   - Live scoring (profesjonalizm, dopasowanie, słuchanie)<br />
+   - Trade Marketing tools panel (quick access)<br />
+   - AI hints (💡 podpowiedzi kontekstowe)</p>
+</li>
+<li>
+<p><strong>VISIT RESULTS SCREEN</strong> (Po rozmowie)<br />
+   - Rating (⭐⭐⭐⭐⭐)<br />
+   - AI feedback (co poszło dobrze / co poprawić)<br />
+   - Nagrody (PLN, reputation, market share)<br />
+   - Wpływ na overall reputation (wykres animowany)<br />
+   - Nowe zadania wygenerowane</p>
+</li>
+<li>
+<p><strong>TRADE MARKETING PANEL</strong><br />
+   - Budżet (progress bar: 1,400/2,000 PLN)<br />
+   - 5 narzędzi (opis, koszt, ROI, cooldown)<br />
+   - Historia użyć (ostatnie 30 dni)<br />
+   - Analytics (avg ROI, najlepsze/najsłabsze)</p>
+</li>
+</ol>
+<p><strong>Dla kogo:</strong> UI/UX designer, Frontend developer</p>
+<hr />
+<h3>H. <strong>FMCG_UI_MOCKUPS_PART2.md</strong> (Ekrany 6-10)</h3>
+<p><strong>Zawartość:</strong><br />
+6. <strong>CALENDAR VIEW</strong> (Planowanie tygodnia)<br />
+   - Tygodniowy widok (Pon-Niedz)<br />
+   - Zadania z kolorami (priorytet)<br />
+   - Energia tracking (per dzień)<br />
+   - Smart suggestions (AI balancing)</p>
+<ol start="7">
+<li>
+<p><strong>CLIENT LIST VIEW</strong> (Przegląd klientów)<br />
+   - Filtry (ACTIVE/PROSPECT/LOST)<br />
+   - Sortowanie (PLN, reputation, dystans)<br />
+   - Quick info cards<br />
+   - Alerts (OVERDUE, market share drops)</p>
+</li>
+<li>
+<p><strong>WEEKLY REPORT</strong> (Podsumowanie)<br />
+   - Key metrics (sprzedaż, reputation, completion rate)<br />
+   - Wykres reputacji (4 tygodnie)<br />
+   - Top performers (klienci)<br />
+   - Areas for improvement<br />
+   - Rekomendacje AI<br />
+   - Email od szefa (feedback)</p>
+</li>
+<li>
+<p><strong>LEVEL UP SCREEN</strong> (Awans)<br />
+   - Achievements (checklisty ✅)<br />
+   - Co się zmienia (territory, budget, mechaniki)<br />
+   - Nagrody (badge, bonus, unlocks)<br />
+   - Email gratulacyjny<br />
+   - Cel Level 2 (następny milestone)</p>
+</li>
+<li>
+<p><strong>TUTORIAL / ONBOARDING</strong> (First-time user)</p>
+<ul>
+<li>8-step guided tour</li>
+<li>Intro (cele, czas)</li>
+<li>Mapa (territory)</li>
+<li>Energia (balance)</li>
+<li><strong>Praktyczna wizyta</strong> (guided first visit)</li>
+<li>Tips &amp; tricks</li>
+</ul>
+</li>
+</ol>
+<p><strong>Dla kogo:</strong> UI/UX designer, Frontend developer</p>
+<hr />
+<h2>4. PLAYER JOURNEY DIAGRAM</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">                    </span><span class="n">FMCG</span><span class="w"> </span><span class="n">SIMULATOR</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">PLAYER</span><span class="w"> </span><span class="n">JOURNEY</span><span class="w">                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                         </span><span class="p">(</span><span class="n">Start</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Level</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">                               </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="n">DAY</span><span class="w"> </span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="n">ONBOARDING</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Tutorial</span><span class="w"> </span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">kroków</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="n">min</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Pierwsza</span><span class="w"> </span><span class="n">wizyta</span><span class="w"> </span><span class="p">(</span><span class="n">PROSPECT</span><span class="w"> </span><span class="n">guided</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="n">ABC</span><span class="p">)</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└─</span><span class="w"> </span><span class="n">Wynik:</span><span class="w"> </span><span class="mi">4</span><span class="err">⭐</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="s">&quot;Zainteresowany, wymaga 2. wizyty&quot;</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Dashboard</span><span class="w"> </span><span class="n">tour</span><span class="w"> </span><span class="p">(</span><span class="n">gdzie</span><span class="w"> </span><span class="n">co</span><span class="w"> </span><span class="n">jest</span><span class="p">)</span>
+<span class="err">└─</span><span class="w"> </span><span class="n">Cel:</span><span class="w"> </span><span class="n">Zrozumieć</span><span class="w"> </span><span class="n">podstawowe</span><span class="w"> </span><span class="n">mechaniki</span>
+
+<span class="w">      </span><span class="err">↓</span>
+
+<span class="n">DAY</span><span class="w"> </span><span class="mi">3</span><span class="o">-</span><span class="mi">7</span><span class="p">:</span><span class="w"> </span><span class="n">TYDZIEŃ</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">LEARNING</span><span class="w"> </span><span class="n">BASICS</span>
+<span class="err">├─</span><span class="w"> </span><span class="mi">2</span><span class="o">.</span><span class="w"> </span><span class="n">wizyta</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="n">ABC</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">5</span><span class="err">⭐</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">KONTRAKT</span><span class="o">!</span><span class="w"> </span><span class="err">🎉</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">200</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Cold</span><span class="w"> </span><span class="n">call:</span><span class="w"> </span><span class="n">Dino</span><span class="w"> </span><span class="n">Konstancin</span><span class="w"> </span><span class="p">(</span><span class="n">PROSPECT</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">4</span><span class="err">⭐</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="s">&quot;Rozważa&quot;</span>
+<span class="err">├─</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="n">wizyty</span><span class="w"> </span><span class="n">regularne</span><span class="w"> </span><span class="p">(</span><span class="n">nowi</span><span class="w"> </span><span class="n">klienci</span><span class="w"> </span><span class="n">ACTIVE</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">zadanie</span><span class="w"> </span><span class="n">operacyjne</span><span class="w"> </span><span class="p">(</span><span class="n">kontrola</span><span class="w"> </span><span class="n">ekspozycji</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Event:</span><span class="w"> </span><span class="n">Telefon</span><span class="w"> </span><span class="n">od</span><span class="w"> </span><span class="n">klienta</span><span class="w"> </span><span class="p">(</span><span class="n">neutral</span><span class="p">,</span><span class="w"> </span><span class="n">flavor</span><span class="p">)</span>
+<span class="err">└─</span><span class="w"> </span><span class="n">Wyniki</span><span class="w"> </span><span class="n">tygodnia:</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Sprzedaż:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="mi">500</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">z</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="n">klientów</span><span class="p">)</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Reputation:</span><span class="w"> </span><span class="mi">45</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">52</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">7</span><span class="p">)</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Avg</span><span class="w"> </span><span class="n">rating:</span><span class="w"> </span><span class="mf">3.8</span><span class="err">⭐</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Czas</span><span class="w"> </span><span class="n">gry:</span><span class="w"> </span><span class="o">~</span><span class="mi">35</span><span class="w"> </span><span class="n">min</span><span class="o">/</span><span class="n">dzień</span><span class="w"> </span><span class="p">(</span><span class="n">uczenie</span><span class="w"> </span><span class="n">się</span><span class="w"> </span><span class="n">interfejsu</span><span class="p">)</span>
+
+<span class="w">      </span><span class="err">↓</span>
+
+<span class="n">DAY</span><span class="w"> </span><span class="mi">8</span><span class="o">-</span><span class="mi">14</span><span class="p">:</span><span class="w"> </span><span class="n">TYDZIEŃ</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">BUILDING</span><span class="w"> </span><span class="n">MOMENTUM</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Dino:</span><span class="w"> </span><span class="mi">2</span><span class="o">.</span><span class="w"> </span><span class="n">wizyta</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">5</span><span class="err">⭐</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">KONTRAKT</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="mi">500</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Cross</span><span class="o">-</span><span class="n">sell</span><span class="w"> </span><span class="n">sukces:</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="n">ABC</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">FreshShampoo</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">400</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Trade</span><span class="w"> </span><span class="n">Marketing:</span><span class="w"> </span><span class="n">Użycie</span><span class="w"> </span><span class="n">POS</span><span class="w"> </span><span class="p">(</span><span class="mi">200</span><span class="w"> </span><span class="n">PLN</span><span class="p">)</span><span class="w"> </span><span class="n">dla</span><span class="w"> </span><span class="n">Dino</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Event:</span><span class="w"> </span><span class="n">Rekomendacja</span><span class="o">!</span><span class="w"> </span><span class="n">Nowy</span><span class="w"> </span><span class="n">PROSPECT</span><span class="w"> </span><span class="p">(</span><span class="n">Żabka</span><span class="p">)</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">high</span><span class="w"> </span><span class="n">interest</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Pierwsze</span><span class="w"> </span><span class="n">wyzwanie:</span><span class="w"> </span><span class="n">Reklamacja</span><span class="w"> </span><span class="p">(</span><span class="n">PILNE</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Rozwiązane</span><span class="w"> </span><span class="mi">5</span><span class="err">⭐</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">10</span><span class="w"> </span><span class="n">rep</span><span class="w"> </span><span class="n">bonus</span><span class="p">)</span>
+<span class="err">└─</span><span class="w"> </span><span class="n">Wyniki</span><span class="w"> </span><span class="n">tygodnia:</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Sprzedaż:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="mi">600</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Reputation:</span><span class="w"> </span><span class="mi">52</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">56</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Avg</span><span class="w"> </span><span class="n">rating:</span><span class="w"> </span><span class="mf">4.0</span><span class="err">⭐</span><span class="w"> </span><span class="err">✅</span><span class="w"> </span><span class="n">TARGET</span><span class="o">!</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Czas</span><span class="w"> </span><span class="n">gry:</span><span class="w"> </span><span class="o">~</span><span class="mi">30</span><span class="w"> </span><span class="n">min</span><span class="o">/</span><span class="n">dzień</span><span class="w"> </span><span class="p">(</span><span class="n">efficiency</span><span class="w"> </span><span class="n">improved</span><span class="p">)</span>
+
+<span class="w">      </span><span class="err">↓</span>
+
+<span class="n">DAY</span><span class="w"> </span><span class="mi">15</span><span class="o">-</span><span class="mi">21</span><span class="p">:</span><span class="w"> </span><span class="n">TYDZIEŃ</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ADVANCED</span><span class="w"> </span><span class="n">TACTICS</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Żabka:</span><span class="w"> </span><span class="n">Cold</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">Gratis</span><span class="w"> </span><span class="p">(</span><span class="mi">350</span><span class="w"> </span><span class="n">PLN</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">5</span><span class="err">⭐</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">KONTRAKT</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">800</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="mi">2</span><span class="err">×</span><span class="w"> </span><span class="n">Cross</span><span class="o">-</span><span class="n">sell</span><span class="w"> </span><span class="n">attempts</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="n">sukces</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">odmowa</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Event:</span><span class="w"> </span><span class="n">Awaria</span><span class="w"> </span><span class="n">samochodu</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="n">wizyta</span><span class="p">,</span><span class="w"> </span><span class="n">learning</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">adapt</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Kaufland</span><span class="w"> </span><span class="p">(</span><span class="n">duży</span><span class="w"> </span><span class="n">klient</span><span class="p">):</span><span class="w"> </span><span class="n">Cold</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">3</span><span class="err">⭐</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="s">&quot;Wątpliwości&quot;</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└─</span><span class="w"> </span><span class="mi">2</span><span class="o">.</span><span class="w"> </span><span class="n">próba</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">POS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Gratis</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">4</span><span class="err">⭐</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="s">&quot;Rozważa&quot;</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Problem:</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="n">XYZ</span><span class="w"> </span><span class="n">market</span><span class="w"> </span><span class="n">share</span><span class="w"> </span><span class="n">drop</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Zadanie</span><span class="w"> </span><span class="n">ekspozycji</span>
+<span class="err">└─</span><span class="w"> </span><span class="n">Wyniki</span><span class="w"> </span><span class="n">tygodnia:</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Sprzedaż:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="mi">100</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Reputation:</span><span class="w"> </span><span class="mi">56</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">59</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">blisko</span><span class="w"> </span><span class="n">Solid</span><span class="w"> </span><span class="n">Rep</span><span class="o">!</span><span class="p">)</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Avg</span><span class="w"> </span><span class="n">rating:</span><span class="w"> </span><span class="mf">4.1</span><span class="err">⭐</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Strategic</span><span class="w"> </span><span class="n">thinking:</span><span class="w"> </span><span class="n">Balancing</span><span class="w"> </span><span class="n">budget</span><span class="w"> </span><span class="n">TM</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">600</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mo">000</span><span class="w"> </span><span class="n">used</span><span class="p">)</span>
+
+<span class="w">      </span><span class="err">↓</span>
+
+<span class="n">DAY</span><span class="w"> </span><span class="mi">22</span><span class="o">-</span><span class="mi">28</span><span class="p">:</span><span class="w"> </span><span class="n">TYDZIEŃ</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">FINAL</span><span class="w"> </span><span class="n">PUSH</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Kaufland:</span><span class="w"> </span><span class="mi">3</span><span class="o">.</span><span class="w"> </span><span class="n">wizyta</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">WSZYSTKIMI</span><span class="w"> </span><span class="n">narzędziami</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└─</span><span class="w"> </span><span class="n">Gratis</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">POS</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Darmowa</span><span class="w"> </span><span class="n">dostawa</span><span class="w"> </span><span class="p">(</span><span class="mi">700</span><span class="w"> </span><span class="n">PLN</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">5</span><span class="err">⭐</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">KONTRAKT</span><span class="o">!</span><span class="w"> </span><span class="err">🎉</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└─</span><span class="w"> </span><span class="o">+</span><span class="mi">5</span><span class="p">,</span><span class="mo">000</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">BIGGEST</span><span class="w"> </span><span class="n">CLIENT</span><span class="o">!</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Overall</span><span class="w"> </span><span class="n">reputation:</span><span class="w"> </span><span class="mi">59</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mi">62</span><span class="w"> </span><span class="p">(</span><span class="n">Solid</span><span class="w"> </span><span class="n">Rep</span><span class="o">!</span><span class="p">)</span><span class="w"> </span><span class="err">✅</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└─</span><span class="w"> </span><span class="n">Unlock:</span><span class="w"> </span><span class="s">&quot;SOLID REPUTATION&quot;</span><span class="w"> </span><span class="n">achievement</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└─</span><span class="w"> </span><span class="n">Feedback</span><span class="w"> </span><span class="n">od</span><span class="w"> </span><span class="n">szefa:</span><span class="w"> </span><span class="s">&quot;Gratulacje, możesz awansować!&quot;</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Sprzedaż</span><span class="w"> </span><span class="n">total:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="mi">200</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w"> </span><span class="err">✅</span><span class="w"> </span><span class="p">(</span><span class="n">target:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="mo">000</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Kontrakty:</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="n">aktywne</span><span class="w"> </span><span class="err">✅</span><span class="w"> </span><span class="p">(</span><span class="n">target:</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Avg</span><span class="w"> </span><span class="n">rating:</span><span class="w"> </span><span class="mf">4.1</span><span class="err">⭐</span><span class="w"> </span><span class="err">✅</span><span class="w"> </span><span class="p">(</span><span class="n">target:</span><span class="w"> </span><span class="mf">4.0</span><span class="p">)</span>
+<span class="err">└─</span><span class="w"> </span><span class="n">Wyniki</span><span class="w"> </span><span class="n">miesiąca:</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="mi">52</span><span class="w"> </span><span class="n">wizyty</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="p">(</span><span class="n">avg</span><span class="w"> </span><span class="mi">13</span><span class="o">/</span><span class="n">tydzień</span><span class="p">)</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Success</span><span class="w"> </span><span class="n">rate:</span><span class="w"> </span><span class="mi">78</span><span class="nv">%</span><span class="w"> </span><span class="err">(</span><span class="nv">very</span><span class="w"> </span><span class="n">good</span><span class="o">!</span><span class="p">)</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Trade</span><span class="w"> </span><span class="n">Marketing</span><span class="w"> </span><span class="n">ROI:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="mi">300</span><span class="nv">%</span><span class="w"> </span><span class="err">(</span><span class="nv">świetne</span><span class="w"> </span><span class="n">decyzje</span><span class="o">!</span><span class="p">)</span>
+<span class="w">   </span><span class="err">•</span><span class="w"> </span><span class="n">Czas</span><span class="w"> </span><span class="n">gry:</span><span class="w"> </span><span class="mi">28</span><span class="w"> </span><span class="n">dni</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="n">h</span><span class="w"> </span><span class="n">total</span>
+
+<span class="w">      </span><span class="err">↓</span>
+
+<span class="n">DAY</span><span class="w"> </span><span class="mi">29</span><span class="p">:</span><span class="w"> </span><span class="n">LEVEL</span><span class="w"> </span><span class="n">UP</span><span class="o">!</span><span class="w"> </span><span class="err">🎊</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Awans:</span><span class="w"> </span><span class="n">Junior</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Mid</span><span class="w"> </span><span class="n">Salesperson</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Nagrody:</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├─</span><span class="w"> </span><span class="n">Badge:</span><span class="w"> </span><span class="s">&quot;MID SALESPERSON&quot;</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├─</span><span class="w"> </span><span class="n">Bonus:</span><span class="w"> </span><span class="o">+</span><span class="mi">500</span><span class="w"> </span><span class="n">PLN</span><span class="w"> </span><span class="p">(</span><span class="n">budget</span><span class="w"> </span><span class="n">TM</span><span class="p">)</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├─</span><span class="w"> </span><span class="n">Nowy</span><span class="w"> </span><span class="n">samochód</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="nv">%</span><span class="w"> </span><span class="nv">energia</span><span class="p">)</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├─</span><span class="w"> </span><span class="n">Unlock:</span><span class="w"> </span><span class="n">Advanced</span><span class="w"> </span><span class="n">reports</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└─</span><span class="w"> </span><span class="n">Territory</span><span class="w"> </span><span class="n">expansion</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mi">10</span><span class="w"> </span><span class="n">klientów</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Nowe</span><span class="w"> </span><span class="n">wyzwania:</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├─</span><span class="w"> </span><span class="n">Sieci</span><span class="w"> </span><span class="n">handlowe</span><span class="w"> </span><span class="p">(</span><span class="n">Tesco</span><span class="p">,</span><span class="w"> </span><span class="n">Carrefour</span><span class="p">)</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├─</span><span class="w"> </span><span class="n">Konkurencja</span><span class="w"> </span><span class="n">aktywna</span>
+<span class="err">│</span><span class="w">  </span><span class="err">├─</span><span class="w"> </span><span class="n">Seasonal</span><span class="w"> </span><span class="n">trends</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└─</span><span class="w"> </span><span class="n">Targety</span><span class="w"> </span><span class="n">kwartalne</span><span class="w"> </span><span class="p">(</span><span class="mi">25</span><span class="n">k</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="p">)</span>
+<span class="err">└─</span><span class="w"> </span><span class="n">Email</span><span class="w"> </span><span class="n">od</span><span class="w"> </span><span class="n">szefa:</span><span class="w"> </span><span class="s">&quot;Świetna robota, teraz prawdziwe wyzwania!&quot;</span>
+
+<span class="w">      </span><span class="err">↓</span>
+
+<span class="n">LEVEL</span><span class="w"> </span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="n">MID</span><span class="w"> </span><span class="n">SALESPERSON</span><span class="w"> </span><span class="p">(</span><span class="mi">8</span><span class="w"> </span><span class="n">tygodni</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Territory:</span><span class="w"> </span><span class="mi">25</span><span class="w"> </span><span class="n">klientów</span><span class="w"> </span><span class="p">(</span><span class="n">was:</span><span class="w"> </span><span class="mi">15</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Portfolio:</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="n">produktów</span><span class="w"> </span><span class="p">(</span><span class="n">was:</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Budget</span><span class="w"> </span><span class="n">TM:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="mi">500</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="n">was:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="mo">000</span><span class="p">)</span>
+<span class="err">├─</span><span class="w"> </span><span class="n">Target:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="mo">000</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w"> </span><span class="n">sprzedaży</span>
+<span class="err">└─</span><span class="w"> </span><span class="n">Nowe</span><span class="w"> </span><span class="n">mechaniki:</span>
+<span class="w">   </span><span class="err">├─</span><span class="w"> </span><span class="n">Key</span><span class="w"> </span><span class="n">Account</span><span class="w"> </span><span class="n">Management</span>
+<span class="w">   </span><span class="err">├─</span><span class="w"> </span><span class="n">Competitor</span><span class="w"> </span><span class="n">tracking</span>
+<span class="w">   </span><span class="err">├─</span><span class="w"> </span><span class="n">Seasonal</span><span class="w"> </span><span class="n">events</span><span class="w"> </span><span class="p">(</span><span class="n">targi</span><span class="p">)</span>
+<span class="w">   </span><span class="err">└─</span><span class="w"> </span><span class="n">Team</span><span class="w"> </span><span class="n">collaboration</span><span class="w"> </span><span class="p">(</span><span class="n">future:</span><span class="w"> </span><span class="n">zarządzanie</span><span class="w"> </span><span class="n">juniorami</span><span class="p">)</span>
+
+<span class="w">      </span><span class="err">↓</span>
+
+<span class="p">[</span><span class="n">LEVEL</span><span class="w"> </span><span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="n">SENIOR</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Future</span><span class="w"> </span><span class="n">expansion</span><span class="p">]</span>
+</code></pre></div>
+
+<hr />
+<h2>5. KLUCZOWE INSIGHTS DLA KLIENTA</h2>
+<h3>💡 DLACZEGO TO DZIAŁA?</h3>
+<p><strong>1. Engagement = Mobile Game Model</strong><br />
+- 30 min/dzień (jak Candy Crush)<br />
+- Daily rhythm (morning routine)<br />
+- Clear goals (Level up progress bar)<br />
+- <strong>Result:</strong> 70% DAU (Daily Active Users) możliwe</p>
+<p><strong>2. Learning = Safe Practice Space</strong><br />
+- AI feedback natychmiastowy<br />
+- Błąd NIE = utracony klient<br />
+- Repetition bez konsekwencji<br />
+- <strong>Result:</strong> 4 tygodnie gry = 14h treningu (vs 16h rocznie tradycyjnie)</p>
+<p><strong>3. Motivation = Gamification</strong><br />
+- Achievements (badges)<br />
+- Leaderboards (future: compare with peers)<br />
+- Progression (Level 1 → 2 → 3)<br />
+- <strong>Result:</strong> 60% retention (30 dni) - benchmark Duolingo 55%</p>
+<p><strong>4. Realism = Transfer do prawdziwej pracy</strong><br />
+- AI conversations (soft skills)<br />
+- Territory management (planning)<br />
+- Budget constraints (trade-offs)<br />
+- <strong>Result:</strong> Junior do 1. kontraktu: 60 dni (was: 90-120)</p>
+<p><strong>5. Mierzalność = ROI Proof</strong><br />
+- Every action tracked<br />
+- Progress visible real-time<br />
+- A/B testing możliwe<br />
+- <strong>Result:</strong> ROI 720% Year 1 (31k investment → 225k savings)</p>
+<hr />
+<h2>6. IMPLEMENTATION ROADMAP</h2>
+<div class="codehilite"><pre><span></span><code>WEEK 1-2: CORE
+├─ Data structures (clients, tasks, user state)
+├─ Folium map (15 fake clients, Piaseczno)
+├─ Calendar UI (Streamlit)
+└─ Deliverable: Interactive map + calendar
+
+WEEK 3-4: AI &amp; GAME LOOP
+├─ Gemini API integration
+├─ Prompt engineering (3 scenarios: PROSPECT/ACTIVE/LOST)
+├─ Conversation outcomes (matryca z FMCG_OUTCOMES_SPEC.md)
+├─ Reputation calculations (2-tier system)
+└─ Deliverable: Working AI chat + full game loop
+
+WEEK 5: TRADE MARKETING &amp; EVENTS
+├─ 5 narzędzi TM (budget, cooldowns, ROI tracking)
+├─ Event system (1-2/day, % distribution)
+├─ Energy system (100% daily, visit costs)
+└─ Deliverable: Strategic depth added
+
+WEEK 6: POLISH &amp; TESTING
+├─ Dashboard UI (charts: Plotly)
+├─ Tutorial (8-step onboarding)
+├─ Balance tuning (probabilities testing)
+├─ Bug fixing
+└─ Deliverable: MVP ready for beta
+
+WEEK 7-12: BETA TESTING
+├─ 10-20 handlowców (mix junior/mid)
+├─ Weekly feedback sessions
+├─ Iteracja mechanik (balance tweaks)
+└─ Content expansion (więcej klientów, produktów)
+
+WEEK 13+: LAUNCH
+└─ Rollout do całego zespołu
+</code></pre></div>
+
+<hr />
+<h2>7. PYTANIA DO KLIENTA (Przygotuj odpowiedzi)</h2>
+<p><strong>Strategiczne:</strong><br />
+1. Ile handlowców obecnie w zespole? (określi skalę)<br />
+2. Jaki jest avg czas onboardingu juniora? (benchmark przed/po)<br />
+3. Czy macie CRM? (integracja możliwa)<br />
+4. Jaki budżet na training obecnie? (pokazać savings)</p>
+<p><strong>Techniczne:</strong><br />
+5. Czy można użyć prawdziwych nazw produktów? (lub fake names)<br />
+6. Czy można użyć prawdziwego territory? (lub synthetic data)<br />
+7. Kto będzie product ownerem? (feedback loop ważny)</p>
+<p><strong>Organizacyjne:</strong><br />
+8. Beta testerzy - kto? (mix junior/mid dla balanced feedback)<br />
+9. Success metrics - jak mierzymy? (CRM data access?)<br />
+10. Timeline - kiedy chcecie launch? (Q1? Q2?)</p>
+<hr />
+<h2>8. NEXT STEPS (Po Prezentacji)</h2>
+<p><strong>IMMEDIATE (Tydzień 1-2):</strong><br />
+- [ ] Prezentacja stakeholderom<br />
+- [ ] Q&amp;A session (2h, deep dive)<br />
+- [ ] Budget approval (31,200 PLN)<br />
+- [ ] Wybór beta testerów (10-20 osób)<br />
+- [ ] Kickoff meeting (dev team)</p>
+<p><strong>SHORT-TERM (Tydzień 3-8):</strong><br />
+- [ ] Development (6 tygodni)<br />
+- [ ] Weekly demos (pokazuj progress)<br />
+- [ ] Beta recruitment (onboarding materials)</p>
+<p><strong>MID-TERM (Tydzień 9-14):</strong><br />
+- [ ] Beta testing (6 tygodni)<br />
+- [ ] Feedback collection (weekly surveys)<br />
+- [ ] Iteracja (balance, content)</p>
+<p><strong>LONG-TERM (Tydzień 15+):</strong><br />
+- [ ] Launch (rollout plan)<br />
+- [ ] Monitoring (dashboards, analytics)<br />
+- [ ] Continuous improvement (content updates)<br />
+- [ ] Expansion (Level 3, multiplayer?, VR?)</p>
+<hr />
+<h2>9. PLIKI DO PRZESŁANIA KLIENTOWI</h2>
+<p><strong>Package zawiera:</strong><br />
+1. ✅ FMCG_PRESENTATION_SLIDES.md (Część 1)<br />
+2. ✅ FMCG_PRESENTATION_SLIDES_PART2.md (Część 2)<br />
+3. ✅ FMCG_MVP_SUMMARY.md (Executive summary)<br />
+4. ✅ FMCG_GAME_DESIGN.md (Full design doc)<br />
+5. ✅ FMCG_OUTCOMES_SPEC.md (Technical spec)<br />
+6. ✅ FMCG_REPUTATION_SYSTEM.md (Feature spec)<br />
+7. ✅ FMCG_UI_MOCKUPS_PART1.md (Screens 1-5)<br />
+8. ✅ FMCG_UI_MOCKUPS_PART2.md (Screens 6-10)<br />
+9. ✅ FMCG_PRESENTATION_PACKAGE_SUMMARY.md (Ten plik)</p>
+<p><strong>Format:</strong> Markdown (łatwo przekonwertować na PDF/PowerPoint)</p>
+<p><strong>Konwersja na PowerPoint:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Użyj Pandoc (jeśli zainstalowany)</span>
+<span class="n">pandoc</span> <span class="n">FMCG_PRESENTATION_SLIDES</span><span class="p">.</span><span class="nb">md </span><span class="n">-o</span> <span class="n">FMCG_Presentation</span><span class="p">.</span><span class="n">pptx</span>
+<span class="n">pandoc</span> <span class="n">FMCG_MVP_SUMMARY</span><span class="p">.</span><span class="nb">md </span><span class="n">-o</span> <span class="n">FMCG_Executive_Summary</span><span class="p">.</span><span class="n">pdf</span>
+</code></pre></div>
+
+<p>Lub skopiuj ASCII art do slajdów ręcznie (zachowaj monospace font: Courier New)</p>
+<hr />
+<h2>10. CONTACT &amp; SUPPORT</h2>
+<p><strong>Pytania? Uwagi? Potrzebujesz zmian?</strong></p>
+<p>📧 Email: [TWÓJ EMAIL]<br />
+📞 Phone: [TWÓJ TELEFON]<br />
+🌐 Demo: [LINK DO PROTOTYPU - jeśli istnieje]<br />
+💬 Slack: [KANAŁ - jeśli istnieje]</p>
+<p><strong>Dostępność:</strong><br />
+- Pon-Pt: 9:00-17:00<br />
+- Response time: &lt;24h</p>
+<hr />
+<p><strong>GOTOWE DO PREZENTACJI! 🎉</strong></p>
+<p>Powodzenia w przekonaniu klienta! 🚀</p>
+        </div>
+        
+        <div class="footer">
+            <p>FMCG Sales Simulator &copy; 2025 | Wersja dokumentu: 1.0</p>
+            <p style="margin-top: 10px; font-size: 8pt;">
+                💡 <strong>Tip:</strong> Użyj Ctrl+P (Cmd+P na Mac) aby zapisać jako PDF<br>
+                W opcjach drukowania wybierz "Zapisz jako PDF"
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Automatyczne numerowanie nagłówków
+        document.querySelectorAll('h2').forEach((h, i) => {
+            if (!h.textContent.match(/^\d+\./)) {
+                h.textContent = (i + 1) + '. ' + h.textContent;
+            }
+        });
+    </script>
+</body>
+</html>

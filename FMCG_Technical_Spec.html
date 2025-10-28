@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMCG Sales Simulator - Technical Specification</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 2cm 1.5cm;
+            }
+            
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+            
+            pre, table {
+                page-break-inside: avoid;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1a5490;
+        }
+        
+        .header h1 {
+            color: #1a5490;
+            font-size: 28pt;
+            margin-bottom: 10px;
+        }
+        
+        .header .meta {
+            color: #666;
+            font-size: 10pt;
+        }
+        
+        h1 {
+            color: #1a5490;
+            font-size: 24pt;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            border-bottom: 2px solid #1a5490;
+            padding-bottom: 0.3em;
+        }
+        
+        h2 {
+            color: #2874a6;
+            font-size: 18pt;
+            margin-top: 1.2em;
+            margin-bottom: 0.4em;
+        }
+        
+        h3 {
+            color: #34495e;
+            font-size: 14pt;
+            margin-top: 1em;
+            margin-bottom: 0.3em;
+        }
+        
+        h4 {
+            color: #5d6d7e;
+            font-size: 12pt;
+            margin-top: 0.8em;
+            margin-bottom: 0.3em;
+        }
+        
+        p {
+            margin-bottom: 0.8em;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-left: 4px solid #1a5490;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            margin: 1em 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9pt;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+            font-size: 10pt;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #1a5490;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        ul, ol {
+            margin-left: 2em;
+            margin-bottom: 1em;
+        }
+        
+        li {
+            margin-bottom: 0.4em;
+        }
+        
+        blockquote {
+            border-left: 4px solid #1a5490;
+            margin-left: 0;
+            padding-left: 1em;
+            color: #555;
+            font-style: italic;
+            margin: 1em 0;
+        }
+        
+        a {
+            color: #1a5490;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 2em 0;
+        }
+        
+        .toolbar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .toolbar button {
+            background-color: #1a5490;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11pt;
+            margin: 5px 0;
+            width: 100%;
+        }
+        
+        .toolbar button:hover {
+            background-color: #2874a6;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 9pt;
+        }
+        
+        /* Highlight dla ważnych elementów */
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 9pt;
+            font-weight: bold;
+            margin: 0 4px;
+        }
+        
+        .badge-success { background-color: #d4edda; color: #155724; }
+        .badge-warning { background-color: #fff3cd; color: #856404; }
+        .badge-danger { background-color: #f8d7da; color: #721c24; }
+        .badge-info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="toolbar no-print">
+        <button onclick="window.print()">🖨️ Drukuj / Zapisz PDF</button>
+        <button onclick="window.location.href='index.html'">📂 Wszystkie pliki</button>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>FMCG Sales Simulator - Technical Specification</h1>
+            <div class="meta">
+                Wygenerowano: 28.10.2025 15:21<br>
+                Dokument źródłowy: <code>FMCG_OUTCOMES_SPEC.md</code>
+            </div>
+        </div>
+        
+        <div class="content">
+            <h1>FMCG Simulator - Specyfikacja Efektów i Wyników</h1>
+<p><strong>Dokument techniczny:</strong> Pełna matryca wyników rozmów handlowych i realizacji zadań<br />
+<strong>Wersja:</strong> 1.0<br />
+<strong>Data:</strong> 2025-01-XX<br />
+<strong>Cel:</strong> Sformalizować wszystkie możliwe efekty interakcji przed implementacją</p>
+<hr />
+<h2>SPIS TREŚCI</h2>
+<ol>
+<li><a href="#1-matryca-wyników-rozmów-handlowych">Matryca Wyników Rozmów Handlowych</a></li>
+<li><a href="#2-matryca-efektów-realizacji-zadań">Matryca Efektów Realizacji Zadań</a></li>
+<li><a href="#3-interakcje-narzędzia-trade-marketing--wyniki">Interakcje: Narzędzia Trade Marketing × Wyniki</a></li>
+<li><a href="#4-edge-cases-i-sytuacje-specjalne">Edge Cases i Sytuacje Specjalne</a></li>
+<li><a href="#5-parametry-techniczne">Parametry Techniczne</a></li>
+</ol>
+<hr />
+<h2>1. MATRYCA WYNIKÓW ROZMÓW HANDLOWYCH</h2>
+<h3>A. PROSPECT (Cold Call / Pierwsza Wizyta)</h3>
+<p><strong>CEL:</strong> Przekonać klienta do podpisania pierwszego kontraktu</p>
+<h4><strong>Ocena AI × Wynik Rozmowy</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Ocena AI</th>
+<th>Wynik</th>
+<th>Status Change</th>
+<th>Reputation</th>
+<th>PLN/miesiąc</th>
+<th>Zadania</th>
+<th>Timeline Event</th>
+<th>Notatki</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>5⭐</strong></td>
+<td>✅ <strong>KONTRAKT PODPISANY</strong></td>
+<td>PROSPECT → ACTIVE</td>
+<td>Start: 50</td>
+<td>+500-2k (zależy od typu)</td>
+<td>Auto: &ldquo;Wizyta regularna za 7 dni&rdquo;</td>
+<td>&ldquo;✅ Kontrakt podpisany - [produkty]&rdquo;</td>
+<td>Gracz wybiera produkty z portfolio przed rozmową</td>
+</tr>
+<tr>
+<td><strong>4⭐</strong></td>
+<td>🤔 <strong>ZAINTERESOWANY</strong></td>
+<td>PROSPECT (visits_count +1)</td>
+<td>-</td>
+<td>-</td>
+<td>Sugestia: &ldquo;Druga wizyta za 3-5 dni&rdquo;</td>
+<td>&ldquo;🤔 Klient zainteresowany - wymaga drugiej wizyty&rdquo;</td>
+<td>Klient chce pomyśleć / zobaczyć ofertę na piśmie</td>
+</tr>
+<tr>
+<td><strong>3⭐</strong></td>
+<td>🤔 <strong>WĄTPLIWOŚCI</strong></td>
+<td>PROSPECT (visits_count +1)</td>
+<td>-</td>
+<td>-</td>
+<td>Sugestia: &ldquo;Przygotuj lepszą ofertę, wróć za 7 dni&rdquo;</td>
+<td>&ldquo;😐 Klient ma wątpliwości - [powód]&rdquo;</td>
+<td>AI podaje konkretny powód (cena? konkurencja? brak miejsca?)</td>
+</tr>
+<tr>
+<td><strong>2⭐</strong></td>
+<td>⏸️ <strong>NIE TERAZ</strong></td>
+<td>PROSPECT (visits_count +1)</td>
+<td>-</td>
+<td>-</td>
+<td>Blokada wizyty na 14 dni</td>
+<td>&ldquo;🚫 Klient niezainteresowany - spróbuj później&rdquo;</td>
+<td>Klient nie ma czasu / budżetu / zainteresowania</td>
+</tr>
+<tr>
+<td><strong>1⭐</strong></td>
+<td>❌ <strong>ODRZUCENIE</strong></td>
+<td>PROSPECT (visits_count +1)</td>
+<td>-</td>
+<td>-</td>
+<td>Jeśli visits_count ≥ 3 → USUŃ</td>
+<td>&ldquo;❌ Definitywna odmowa - [powód]&rdquo;</td>
+<td>Spalony kontakt (źle poprowadzona rozmowa, agresywna sprzedaż)</td>
+</tr>
+</tbody>
+</table>
+<h4><strong>Mechaniki Dodatkowe (PROSPECT):</strong></h4>
+<p><strong>Multi-visit System:</strong><br />
+- <code>visits_count</code> śledzi liczbę prób<br />
+- Po <strong>3 nieudanych wizytach</strong> → Prospect znika z listy (nie marnować czasu)<br />
+- Każda wizyta wymaga <strong>nowego podejścia</strong> (AI pamięta poprzednie rozmowy)</p>
+<p><strong>Interest Level (parametr Prospect):</strong><br />
+- Wysoki (80-100): 5⭐ = 90% szans na kontrakt, 4⭐ = 70%<br />
+- Średni (50-79): 5⭐ = 70% szans, 4⭐ = 40%<br />
+- Niski (20-49): 5⭐ = 50% szans, 4⭐ = 20%<br />
+- (AI używa tego w logice, gracz tego nie widzi bezpośrednio)</p>
+<p><strong>Wpływ Narzędzi Trade Marketing:</strong><br />
+- <strong>Gratis (2+1):</strong> +20% szans na sukces w 2. wizycie (argument sprzedażowy)<br />
+- <strong>Rabat:</strong> +15% szans ale -10% marża (ryzykowne dla Prospect)<br />
+- <strong>Materiały POS:</strong> +10% szans (profesjonalny wygląd)</p>
+<hr />
+<h3>B. ACTIVE (Check-in / Wizyta Kontrolna)</h3>
+<p><strong>CEL:</strong> Utrzymanie relacji, kontrola ekspozycji, cross-sell, rozwiązywanie problemów</p>
+<h4><strong>Ocena AI × Wynik Rozmowy</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Ocena AI</th>
+<th>Wynik</th>
+<th>Status Change</th>
+<th>Reputation Change</th>
+<th>PLN/miesiąc</th>
+<th>Zadania Generowane</th>
+<th>Timeline Event</th>
+<th>Szczegóły Efektu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>5⭐</strong></td>
+<td>✅ <strong>DOSKONAŁA WIZYTA</strong></td>
+<td>ACTIVE</td>
+<td>+10</td>
+<td>-</td>
+<td>Losowo (30%): &ldquo;🆕 Cross-sell opportunity&rdquo;</td>
+<td>&ldquo;⭐⭐⭐⭐⭐ Wizyta - klient zachwycony&rdquo;</td>
+<td>Klient zadowolony, brak problemów. Market share +2% (lepsze relacje = lepsze miejsce na półce)</td>
+</tr>
+<tr>
+<td><strong>4⭐</strong></td>
+<td>✅ <strong>DOBRA WIZYTA</strong></td>
+<td>ACTIVE</td>
+<td>+5</td>
+<td>-</td>
+<td>-</td>
+<td>&ldquo;⭐⭐⭐⭐ Wizyta - wszystko OK&rdquo;</td>
+<td>Standardowa wizyta, klient zadowolony. Brak zmian w market share</td>
+</tr>
+<tr>
+<td><strong>3⭐</strong></td>
+<td>😐 <strong>NEUTRALNA WIZYTA</strong></td>
+<td>ACTIVE</td>
+<td>+2</td>
+<td>-</td>
+<td>Losowo (40%): &ldquo;📦 Problem do rozwiązania&rdquo;</td>
+<td>&ldquo;⭐⭐⭐ Wizyta - bez zmian&rdquo;</td>
+<td>Wizyta dla formalności. Klient obojętny. Ryzyko: jeśli będzie więcej takich → spadek rep</td>
+</tr>
+<tr>
+<td><strong>2⭐</strong></td>
+<td>⚠️ <strong>SŁABA WIZYTA</strong></td>
+<td>ACTIVE</td>
+<td>-5</td>
+<td>-</td>
+<td>Losowo (60%): &ldquo;🚨 Zadanie naprawcze (deadline: 7 dni)&rdquo;</td>
+<td>&ldquo;⭐⭐ Wizyta - klient niezadowolony&rdquo;</td>
+<td>Klient narzeka (ekspozycja? dostawa? jakość?). Jeśli nie rozwiążesz problemu → dalszy spadek rep</td>
+</tr>
+<tr>
+<td><strong>1⭐</strong></td>
+<td>❌ <strong>KATASTROFA</strong></td>
+<td>ACTIVE</td>
+<td>-15</td>
+<td>-</td>
+<td>Obowiązkowe: &ldquo;🚨 PILNE: Naprawa relacji (deadline: 3 dni)&rdquo;</td>
+<td>&ldquo;⭐ Wizyta - poważny problem!&rdquo;</td>
+<td>Klient bardzo zły (np. źle obsłużona reklamacja). Jeśli nie naprawisz w 3 dni → reputation -30 dodatkowe</td>
+</tr>
+</tbody>
+</table>
+<h4><strong>Mechaniki Dodatkowe (ACTIVE):</strong></h4>
+<p><strong>Problem Detection (ocena ≤3⭐):</strong><br />
+- AI generuje konkretny problem:<br />
+  - <strong>Ekspozycja:</strong> &ldquo;Produkty w magazynie, nie na półce&rdquo; → Zadanie: kontrola ekspozycji<br />
+  - <strong>Jakość:</strong> &ldquo;Ostatnia dostawa miała uszkodzenia&rdquo; → Zadanie: rozmowa z magazynem + rekompensata<br />
+  - <strong>Konkurencja:</strong> &ldquo;Palmolive oferuje lepsze warunki&rdquo; → Zadanie: złóż lepszą ofertę (Trade Marketing)<br />
+  - <strong>Sprzedaż:</strong> &ldquo;Twoje produkty się nie sprzedają&rdquo; → Zadanie: promocja konsumencka</p>
+<p><strong>Cross-sell Opportunity (ocena ≥4⭐):</strong><br />
+- AI wykrywa moment (30% szans przy 5⭐, 15% przy 4⭐):<br />
+  - Przykład: &ldquo;Widzę, że FreshSoap sprzedaje się świetnie - może zainteresuje Cię FreshDish?&rdquo;<br />
+  - Gracz może zaproponować nowy produkt<br />
+  - Ocena drugiej części rozmowy (pitch produktu):<br />
+    - <strong>Sukces:</strong> +1 produkt do portfolio, +15 rep, +200-500 PLN/m<br />
+    - <strong>Odmowa:</strong> Brak straty (ale nie można spamować - max 1 cross-sell na 14 dni)</p>
+<p><strong>Visit Frequency Tracking:</strong><br />
+- Każdy ACTIVE klient ma <code>visit_frequency_required</code> (7/14/30 dni)<br />
+- Jeśli gracz <strong>spóźnia się &gt;7 dni</strong> od last_visit:<br />
+  - <strong>Automatyczna kara:</strong> -5 rep (zaniedbanie)<br />
+  - <strong>Timeline event:</strong> &ldquo;⏰ Brak wizyty - klient czuje się zaniedbany&rdquo;<br />
+- Jeśli spóźnienie <strong>&gt;14 dni:</strong><br />
+  - <strong>Kara:</strong> -10 rep<br />
+  - <strong>Ryzyko:</strong> Jeśli reputation spadnie &lt;-50 → LOST</p>
+<p><strong>Market Share Dynamics:</strong><br />
+- Każda wizyta 5⭐ → <strong>+2% market share</strong> (lepsze relacje = lepsza ekspozycja)<br />
+- Każda wizyta 1-2⭐ → <strong>-3% market share</strong> (pogorszenie relacji = gorsze miejsce na półce)<br />
+- Market share wpływa na <code>monthly_value</code>:<br />
+  - Wzrost z 20% → 25% = +10% PLN/miesiąc<br />
+  - Spadek z 30% → 20% = -25% PLN/miesiąc</p>
+<hr />
+<h3>C. LOST (Win-back / Odzyskiwanie Klienta)</h3>
+<p><strong>CEL:</strong> Przeprosić, wyjaśnić zmiany, zaoferować coś ekstra, odbudować zaufanie</p>
+<h4><strong>Ocena AI × Wynik Rozmowy</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Ocena AI</th>
+<th>Wynik</th>
+<th>Status Change</th>
+<th>Reputation</th>
+<th>PLN/miesiąc</th>
+<th>Zadania</th>
+<th>Timeline Event</th>
+<th>Szczegóły</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>5⭐</strong></td>
+<td>✅ <strong>ODZYSKANY</strong></td>
+<td>LOST → ACTIVE</td>
+<td>Reset do 0</td>
+<td>Powrót do previous_monthly_value × 0.8</td>
+<td>Auto: &ldquo;Wizyta kontrolna za 7 dni&rdquo;</td>
+<td>&ldquo;🎉 Klient odzyskany - kontrakt wznowiony&rdquo;</td>
+<td>Klient daje drugą szansę. Produkty: tylko 80% poprzedniego portfolio (musi odbudować zaufanie)</td>
+</tr>
+<tr>
+<td><strong>4⭐</strong></td>
+<td>🤔 <strong>ROZWAŻA</strong></td>
+<td>LOST (win_back_attempts +1)</td>
+<td>-</td>
+<td>-</td>
+<td>Sugestia: &ldquo;Druga próba za 14 dni&rdquo;</td>
+<td>&ldquo;🤔 Klient rozważa powrót - wymaga czasu&rdquo;</td>
+<td>Klient widzi starania, ale potrzebuje czasu / lepszej oferty</td>
+</tr>
+<tr>
+<td><strong>3⭐</strong></td>
+<td>😐 <strong>SKEPTYCZNY</strong></td>
+<td>LOST (win_back_attempts +1, difficulty +1)</td>
+<td>-</td>
+<td>-</td>
+<td>Sugestia: &ldquo;Przygotuj lepszą ofertę, wróć za 21 dni&rdquo;</td>
+<td>&ldquo;😐 Klient skeptyczny - [konkretny powód]&rdquo;</td>
+<td>AI podaje co nie przekonało (oferta? zaufanie? konkurencja lepsza?)</td>
+</tr>
+<tr>
+<td><strong>2⭐</strong></td>
+<td>⏸️ <strong>NIE TERAZ</strong></td>
+<td>LOST (win_back_attempts +1, difficulty +2)</td>
+<td>-</td>
+<td>-</td>
+<td>Blokada na 30 dni</td>
+<td>&ldquo;🚫 Klient nie chce rozmawiać - spróbuj za miesiąc&rdquo;</td>
+<td>Zbyt świeża rana / już ma nowego dostawcę / nie wierzy w zmiany</td>
+</tr>
+<tr>
+<td><strong>1⭐</strong></td>
+<td>❌ <strong>SPALONY</strong></td>
+<td>LOST (win_back_attempts +1, difficulty +3)</td>
+<td>-</td>
+<td>-</td>
+<td>Jeśli attempts ≥3 → USUŃ (na zawsze)</td>
+<td>&ldquo;❌ Definitywna odmowa - koniec współpracy&rdquo;</td>
+<td>Źle poprowadzona rozmowa pogorszyła sytuację. Klient zamyka drzwi</td>
+</tr>
+</tbody>
+</table>
+<h4><strong>Mechaniki Dodatkowe (LOST):</strong></h4>
+<p><strong>Win-back Difficulty System:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Bazowa trudność zależna od lost_reason</span>
+<span class="n">base_difficulty</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Zaniedbanie&quot;</span><span class="p">:</span> <span class="mf">7.0</span><span class="p">,</span>                    <span class="c1"># Trudne (gracz zawiódł)</span>
+    <span class="s2">&quot;Koniec kontraktu - brak wznowienia&quot;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span>  <span class="c1"># Średnie (naturalne wygaśnięcie)</span>
+    <span class="s2">&quot;Konkurencja&quot;</span><span class="p">:</span> <span class="mf">6.0</span><span class="p">,</span>                    <span class="c1"># Średnie-trudne (mają lepszą ofertę)</span>
+    <span class="s2">&quot;Reklamacja nierozwiązana&quot;</span><span class="p">:</span> <span class="mf">8.5</span><span class="p">,</span>       <span class="c1"># Bardzo trudne (klient stracił zaufanie)</span>
+    <span class="s2">&quot;Reputation &lt; -50&quot;</span><span class="p">:</span> <span class="mf">9.0</span>                <span class="c1"># Ekstremalnie trudne (katastrofalna relacja)</span>
+<span class="p">}</span>
+
+<span class="c1"># Modyfikatory</span>
+<span class="n">win_back_difficulty</span> <span class="o">=</span> <span class="n">base_difficulty</span>
+<span class="n">win_back_difficulty</span> <span class="o">+=</span> <span class="p">(</span><span class="n">win_back_attempts</span> <span class="err">×</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># Każda nieudana próba +2</span>
+<span class="n">win_back_difficulty</span> <span class="o">-=</span> <span class="p">(</span><span class="n">days_since_lost</span> <span class="o">/</span> <span class="mi">30</span><span class="p">)</span>  <span class="c1"># Czas goi rany (-1 co miesiąc)</span>
+<span class="n">win_back_difficulty</span> <span class="o">+=</span> <span class="p">(</span><span class="n">current_competitor_months</span> <span class="err">×</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># Jeśli ma nowego dostawcę</span>
+
+<span class="c1"># Szansa powodzenia (przy ocenie 5⭐)</span>
+<span class="n">success_chance</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span> <span class="o">-</span> <span class="p">(</span><span class="n">win_back_difficulty</span> <span class="err">×</span> <span class="mi">8</span><span class="p">))</span>
+<span class="c1"># Przykład: difficulty 7.0 → 44% szans nawet przy 5⭐</span>
+</code></pre></div>
+
+<p><strong>Required Offer (Trade Marketing):</strong><br />
+- Win-back <strong>WYMAGA</strong> użycia narzędzia Trade Marketing w ofercie:<br />
+  - <strong>Gratis (2+1):</strong> +25% szans na sukces (konkretna korzyść)<br />
+  - <strong>Rabat 10%:</strong> +20% szans (kompensata)<br />
+  - <strong>Darmowa dostawa:</strong> +15% szans (ułatwienie)<br />
+  - <strong>Bez oferty ekstra:</strong> -30% szans (dlaczego miałby wrócić?)<br />
+- <strong>Koszt:</strong> Narzędzia kosztują z budżetu (2k PLN/miesiąc) - strategiczna decyzja!</p>
+<p><strong>Win-back Attempts Limit:</strong><br />
+- <strong>Max 3 próby</strong> na klienta LOST<br />
+- Po 3. nieudanej → klient <strong>USUŃ</strong> (never contact again)<br />
+- <strong>Cooldown:</strong> Minimum 7 dni między próbami (nie można spamować)</p>
+<p><strong>Reputation Reset:</strong><br />
+- Jeśli odzyskany → <strong>reputation = 0</strong> (nie 50 jak nowy klient!)<br />
+- Powód: Zaufanie zostało nadszarpnięte, trzeba odbudować<br />
+- Pierwsze 3 wizyty <strong>krytyczne</strong> - muszą być 4-5⭐</p>
+<hr />
+<h2>2. MATRYCA EFEKTÓW REALIZACJI ZADAŃ</h2>
+<h3>A. ZADANIA REGULARNE (Auto-generowane Wizyty)</h3>
+<p><strong>Typ:</strong> 📅 &ldquo;Wizyta u [Klient]&rdquo;<br />
+<strong>Deadline:</strong> Zależny od <code>visit_frequency_required</code> (7/14/30 dni)<br />
+<strong>Priorytet:</strong> 🔴 Pilne (jeśli overdue) / 🟡 Średnie (w terminie)</p>
+<h4><strong>Realizacja × Efekty</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Termin</th>
+<th>Reputation</th>
+<th>Market Share</th>
+<th>Zadania Dodatkowe</th>
+<th>Timeline Event</th>
+<th>Notatki</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ <strong>W TERMINIE</strong></td>
+<td>≤ deadline</td>
+<td>+5</td>
+<td>+1%</td>
+<td>-</td>
+<td>&ldquo;📅 Wizyta regularna - relacja utrzymana&rdquo;</td>
+<td>Standardowa nagroda za profesjonalizm</td>
+</tr>
+<tr>
+<td>⏰ <strong>SPÓŹNIONY (1-3 dni)</strong></td>
+<td>deadline +1-3</td>
+<td>+2</td>
+<td>0%</td>
+<td>-</td>
+<td>&ldquo;⏰ Wizyta spóźniona - klient zauważył&rdquo;</td>
+<td>Zrealizowane ale bez bonusu</td>
+</tr>
+<tr>
+<td>⏰ <strong>BARDZO SPÓŹNIONY (4-7 dni)</strong></td>
+<td>deadline +4-7</td>
+<td>-5</td>
+<td>-2%</td>
+<td>Auto: &ldquo;🚨 Napraw relację&rdquo;</td>
+<td>&ldquo;⚠️ Poważne spóźnienie - klient niezadowolony&rdquo;</td>
+<td>Kara za zaniedbanie</td>
+</tr>
+<tr>
+<td>❌ <strong>POMINIĘTY (&gt;7 dni)</strong></td>
+<td>deadline +8+</td>
+<td>-10</td>
+<td>-5%</td>
+<td>Auto: &ldquo;🚨 PILNE: Win-back early stage&rdquo;</td>
+<td>&ldquo;❌ Brak wizyty - relacja ucierpiała&rdquo;</td>
+<td>Jeśli reputation spadnie &lt;-50 → LOST</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Automatyczna Blokada:</strong><br />
+- Gracz <strong>NIE MOŻE</strong> pominąć wizyty regularnej<br />
+- Jeśli deadline minął → wizyta pozostaje w kalendarzu jako &ldquo;OVERDUE&rdquo; (czerwona)<br />
+- Każdy dzień opóźnienia → dodatkowa kara -1 rep/dzień<br />
+- <strong>Strategia:</strong> Lepiej zrobić kiepską wizytę (2⭐ = -5 rep) niż pominąć całkowicie (-10 rep)</p>
+<hr />
+<h3>B. ZADANIA OPERACYJNE (Kontrola, Ekspozycja)</h3>
+<p><strong>Typ:</strong> 📦 &ldquo;Kontrola ekspozycji - [Klient]&rdquo;<br />
+<strong>Deadline:</strong> 3-7 dni<br />
+<strong>Priorytet:</strong> 🟡 Średnie</p>
+<h4><strong>Realizacja × Efekty</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Wynik AI (1-5⭐)</th>
+<th>Reputation</th>
+<th>Market Share</th>
+<th>PLN/miesiąc</th>
+<th>Timeline Event</th>
+<th>Szczegóły</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ <strong>WYKONANE (5⭐)</strong></td>
+<td>Idealnie</td>
+<td>+5</td>
+<td>+3%</td>
+<td>+5% (przez 30 dni)</td>
+<td>&ldquo;✅ Ekspozycja poprawiona - produkty na prime shelf&rdquo;</td>
+<td>Produkty przeniesione na najlepsze miejsce. Wzrost sprzedaży</td>
+</tr>
+<tr>
+<td>✅ <strong>WYKONANE (3-4⭐)</strong></td>
+<td>OK</td>
+<td>+3</td>
+<td>+1%</td>
+<td>-</td>
+<td>&ldquo;✅ Ekspozycja poprawiona&rdquo;</td>
+<td>Produkty na półce, ale nie idealnie</td>
+</tr>
+<tr>
+<td>❌ <strong>NIEWYKONANE</strong></td>
+<td>-</td>
+<td>-10</td>
+<td>-5%</td>
+<td>-10% (przez 30 dni)</td>
+<td>&ldquo;❌ Ekspozycja zaniedbana - produkty w magazynie&rdquo;</td>
+<td>Klient sam musi zarządzać ekspozycją - zły wpływ na sprzedaż</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Problem Discovery:</strong><br />
+- Przy wykonaniu zadania (ocena 5⭐) → 20% szans na <strong>wykrycie nowego problemu</strong>:<br />
+  - &ldquo;Konkurencja ma promocję - nasze produkty giną&rdquo;<br />
+  - &ldquo;Brakuje shelf-talkers (materiały POS)&rdquo;<br />
+  - &ldquo;Klient wspomniał o zainteresowaniu nowym produktem&rdquo;<br />
+- <strong>Efekt:</strong> Generuje nowe zadanie (szansa na dodatkowy rep/PLN)</p>
+<hr />
+<h3>C. ZADANIA SPRZEDAŻOWE (Cross-sell, Up-sell)</h3>
+<p><strong>Typ:</strong> 🆕 &ldquo;Cross-sell: [Produkt] → [Klient]&rdquo;<br />
+<strong>Deadline:</strong> 7-14 dni<br />
+<strong>Priorytet:</strong> 🟢 Niskie (opportunity, nie obowiązek)</p>
+<h4><strong>Realizacja × Efekty</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Wynik AI</th>
+<th>Reputation</th>
+<th>PLN/miesiąc</th>
+<th>Produkty</th>
+<th>Timeline Event</th>
+<th>Szczegóły</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ <strong>SUKCES (5⭐)</strong></td>
+<td>Przekonał</td>
+<td>+15</td>
+<td>+200-500 (zależy od produktu)</td>
+<td>+1 produkt</td>
+<td>&ldquo;🎉 Cross-sell sukces - [Produkt] dodany&rdquo;</td>
+<td>Idealny pitch. Klient widzi wartość. Wzrost portfolio</td>
+</tr>
+<tr>
+<td>🤔 <strong>ZAINTERESOWANIE (4⭐)</strong></td>
+<td>Rozważa</td>
+<td>+5</td>
+<td>-</td>
+<td>-</td>
+<td>&ldquo;🤔 Klient rozważa [Produkt] - próbka wysłana&rdquo;</td>
+<td>Wymaga próbki/testu. Nowe zadanie za 14 dni: &ldquo;Czy przyjął produkt?&rdquo;</td>
+</tr>
+<tr>
+<td>😐 <strong>ODMOWA (3⭐)</strong></td>
+<td>Nie teraz</td>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>&ldquo;😐 Cross-sell odrzucony - brak miejsca na półce&rdquo;</td>
+<td>Neutralna odmowa. Można spróbować innego produktu za 30 dni</td>
+</tr>
+<tr>
+<td>❌ <strong>AGRESYWNA SPRZEDAŻ (1-2⭐)</strong></td>
+<td>Zirytowany</td>
+<td>-10</td>
+<td>-</td>
+<td>-</td>
+<td>&ldquo;❌ Cross-sell nieudany - klient poczuł presję&rdquo;</td>
+<td>Źle poprowadzone. Klient czuje się napieralny. Kara</td>
+</tr>
+<tr>
+<td>⏸️ <strong>POMINIĘTE</strong></td>
+<td>-</td>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>Brak kary (to opportunity, nie obowiązek)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cooldown System:</strong><br />
+- <strong>Max 1 cross-sell na klienta na 14 dni</strong> (nie spamować)<br />
+- Jeśli 2 kolejne cross-sell zakończone ≤3⭐ → <strong>blokada cross-sell na 60 dni</strong> (klient nie chce słyszeć o nowych produktach)<br />
+- <strong>Strategia:</strong> Wybieraj moment (reputation ≥60 = większa szansa sukcesu)</p>
+<p><strong>Product Fit (szanse sukcesu):</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># AI ocenia dopasowanie produktu do klienta</span>
+<span class="n">product_fit_score</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">product_fit_score</span> <span class="o">+=</span> <span class="p">(</span><span class="n">client_reputation</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="err">×</span> <span class="mi">30</span>  <span class="c1"># Lepsza relacja = lepsze szanse</span>
+<span class="n">product_fit_score</span> <span class="o">+=</span> <span class="p">(</span><span class="n">client_budget</span> <span class="o">/</span> <span class="n">product_price</span><span class="p">)</span> <span class="err">×</span> <span class="mi">20</span>  <span class="c1"># Czy stać klienta?</span>
+<span class="n">product_fit_score</span> <span class="o">+=</span> <span class="n">similar_products_success</span> <span class="err">×</span> <span class="mi">15</span>  <span class="c1"># Jeśli FreshSoap OK → FreshDish łatwiej</span>
+<span class="n">product_fit_score</span> <span class="o">+=</span> <span class="p">(</span><span class="n">market_trends</span><span class="p">)</span> <span class="err">×</span> <span class="mi">10</span>  <span class="c1"># Czy produkt w trendzie?</span>
+
+<span class="c1"># Przy 5⭐ rozmowie:</span>
+<span class="n">success_chance</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">95</span><span class="p">,</span> <span class="n">product_fit_score</span><span class="p">))</span>
+</code></pre></div>
+
+<hr />
+<h3>D. ZADANIA AWARYJNE (Reklamacje, Problemy)</h3>
+<p><strong>Typ:</strong> 🚨 &ldquo;ALERT: [Problem] - [Klient]&rdquo;<br />
+<strong>Deadline:</strong> NATYCHMIAST (1-3 dni)<br />
+<strong>Priorytet:</strong> 🔴 PILNE</p>
+<h4><strong>Realizacja × Efekty</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Rozwiązanie AI</th>
+<th>Reputation</th>
+<th>PLN/miesiąc</th>
+<th>Zadania Kaskadowe</th>
+<th>Timeline Event</th>
+<th>Szczegóły</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ <strong>ROZWIĄZANE BŁYSKAWICZNIE (&lt;24h, 5⭐)</strong></td>
+<td>Doskonałe</td>
+<td>+10</td>
+<td>-</td>
+<td>-</td>
+<td>&ldquo;⚡ Problem rozwiązany natychmiast - klient pod wrażeniem&rdquo;</td>
+<td>Szybka reakcja buduje zaufanie. Bonus +10 rep (nie tylko uniknięcie kary)</td>
+</tr>
+<tr>
+<td>✅ <strong>ROZWIĄZANE W TERMINIE (1-3 dni, 4-5⭐)</strong></td>
+<td>Skutecznie</td>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>&ldquo;✅ Problem rozwiązany - klient usatysfakcjonowany&rdquo;</td>
+<td>Uniknięcie kary -30 rep. Brak bonusu (oczekiwane)</td>
+</tr>
+<tr>
+<td>⚠️ <strong>ROZWIĄZANE POŁOWICZNIE (3⭐)</strong></td>
+<td>Kompromis</td>
+<td>-10</td>
+<td>-5%</td>
+<td>Auto: &ldquo;📞 Follow-up za 7 dni&rdquo;</td>
+<td>&ldquo;⚠️ Problem częściowo rozwiązany - wymaga monitoringu&rdquo;</td>
+<td>Klient niezadowolony ale daje czas. Musi być follow-up</td>
+</tr>
+<tr>
+<td>❌ <strong>NIEROZWIĄZANE / ŹLE (1-2⭐)</strong></td>
+<td>Porażka</td>
+<td>-30</td>
+<td>-15%</td>
+<td>Auto: &ldquo;🚨 Naprawa relacji (3 dni)&rdquo;</td>
+<td>&ldquo;❌ Problem nierozwiązany - klient wściekły&rdquo;</td>
+<td>Pogorszenie relacji. Jeśli nie naprawisz → LOST</td>
+</tr>
+<tr>
+<td>⏸️ <strong>ZIGNOROWANE (&gt;3 dni)</strong></td>
+<td>-</td>
+<td>-50</td>
+<td>-30%</td>
+<td>Auto: LOST (reason: &ldquo;Problem ignored&rdquo;)</td>
+<td>&ldquo;💀 Problem zignorowany - utrata klienta&rdquo;</td>
+<td>Automatyczny LOST. Win-back difficulty = 9.5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Problem Types (różne wymagania):</strong></p>
+<p><strong>Reklamacja jakości:</strong><br />
+- Wymaga: przeprosin + wymiany produktu + rekompensaty (Gratis lub Rabat)<br />
+- Jeśli rozwiązane dobrze → klient docenia profesjonalizm</p>
+<p><strong>Opóźniona dostawa:</strong><br />
+- Wymaga: wyjaśnienia przyczyny + obietnica poprawy + darmowa dostawa następna<br />
+- AI sprawdza czy gracz nie obwinia magazynu / logistyki (to źle!)</p>
+<p><strong>Konflikt osobisty:</strong><br />
+- Najtrudniejszy typ (difficulty +2)<br />
+- Wymaga: autentycznych przeprosin, wysłuchania, zaoferowania rozwiązania<br />
+- Jeśli gracz próbuje tylko &ldquo;sprzedać&rdquo; → automatycznie 1⭐</p>
+<hr />
+<h3>E. ZADANIA STRATEGICZNE (Win-back)</h3>
+<p><strong>Typ:</strong> 🔄 &ldquo;Win-back: [Klient LOST]&rdquo;<br />
+<strong>Deadline:</strong> 14 dni (sugestia, można odłożyć)<br />
+<strong>Priorytet:</strong> 🟡 Średnie (zależy od wartości klienta)</p>
+<h4><strong>Realizacja × Efekty</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Wynik</th>
+<th>Reputation</th>
+<th>PLN/miesiąc</th>
+<th>Win-back Attempts</th>
+<th>Timeline Event</th>
+<th>Szczegóły</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✅ <strong>SUKCES (5⭐)</strong></td>
+<td>LOST → ACTIVE</td>
+<td>Reset do 0</td>
+<td>Powrót ×0.8</td>
+<td>Reset do 0</td>
+<td>&ldquo;🎉 Klient odzyskany - świeży start&rdquo;</td>
+<td>Patrz sekcja 1.C (LOST Win-back)</td>
+</tr>
+<tr>
+<td>🤔 <strong>PROGRESS (4⭐)</strong></td>
+<td>LOST</td>
+<td>-</td>
+<td>-</td>
+<td>+1, difficulty +1</td>
+<td>&ldquo;🤔 Klient rozważa - daj mu czas&rdquo;</td>
+<td>Wymaga kolejnej wizyty (14-21 dni)</td>
+</tr>
+<tr>
+<td>❌ <strong>PORAŻKA (≤3⭐)</strong></td>
+<td>LOST</td>
+<td>-</td>
+<td>-</td>
+<td>+1, difficulty +2-3</td>
+<td>&ldquo;❌ Win-back nieudany - [powód]&rdquo;</td>
+<td>Jeśli attempts ≥3 → USUŃ</td>
+</tr>
+<tr>
+<td>⏸️ <strong>POMINIĘTE</strong></td>
+<td>LOST</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>Brak kary (gracz może zrezygnować z win-back)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Strategic Decision:</strong><br />
+- Win-back <strong>kosztuje</strong> (narzędzia Trade Marketing + czas wizyty = -20-30% energii)<br />
+- Gracz musi ocenić: <strong>Czy warto?</strong><br />
+  - Klient 5k PLN/miesiąc → TAK (duża wartość)<br />
+  - Klient 500 PLN/miesiąc → NIE (lepiej szukać nowego Prospect)<br />
+- <strong>ROI win-back:</strong><br />
+<code>Koszt: ~600 PLN (narzędzia) + 1-2 wizyty (czas)
+  Zysk: monthly_value × 0.8 × 12 miesięcy (jeśli odzyskany)
+  Break-even: monthly_value ≥ 1,000 PLN (inaczej nie opłaca się)</code></p>
+<hr />
+<h2>3. INTERAKCJE: NARZĘDZIA TRADE MARKETING × WYNIKI</h2>
+<h3>Wpływ Narzędzi na Szanse Sukcesu</h3>
+<p><strong>Budżet:</strong> 2,000 PLN/miesiąc (Level 1)</p>
+<table>
+<thead>
+<tr>
+<th>Narzędzie</th>
+<th>Koszt</th>
+<th>Najlepsze Użycie</th>
+<th>Modyfikator Szans</th>
+<th>Dodatkowe Efekty</th>
+<th>Strategia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rabat cenowy</strong></td>
+<td>0 PLN</td>
+<td>PROSPECT (cold call), Win-back (rekompensata)</td>
+<td>+15% szans</td>
+<td>-10% marża (trwałe!)</td>
+<td>Ryzykowne. Tylko jeśli MUSI być sukces</td>
+</tr>
+<tr>
+<td><strong>Gratis (2+1)</strong></td>
+<td>350 PLN</td>
+<td>Win-back (konkretna korzyść), PROSPECT (2. wizyta)</td>
+<td>+20-25% szans</td>
+<td>+8 rep (klient docenia)</td>
+<td>Najbardziej uniwersalne. Szybki efekt</td>
+</tr>
+<tr>
+<td><strong>Materiały POS</strong></td>
+<td>200 PLN</td>
+<td>ACTIVE (kontrola ekspozycji), Cross-sell (wsparcie sprzedaży)</td>
+<td>+10% szans, +15% sprzedaż (30 dni)</td>
+<td>+5 rep</td>
+<td>Najlepszy ROI długoterminowy. Buduje markę</td>
+</tr>
+<tr>
+<td><strong>Promocja konsumencka</strong></td>
+<td>600 PLN</td>
+<td>ACTIVE (słaba sprzedaż produktu), Cross-sell (nowy produkt)</td>
+<td>+30% sprzedaż (14 dni)</td>
+<td>+10 rep</td>
+<td>Drogi ale efektowny. Jeśli klient skarży się na brak rotacji</td>
+</tr>
+<tr>
+<td><strong>Darmowa dostawa</strong></td>
+<td>150 PLN</td>
+<td>Win-back (ułatwienie), ACTIVE (nagłe zamówienie)</td>
+<td>+15% szans</td>
+<td>+3 rep</td>
+<td>Tani &ldquo;uprzejmość&rdquo;. Buduje goodwill</td>
+</tr>
+</tbody>
+</table>
+<h3>Przykładowe Scenariusze</h3>
+<h4><strong>Scenariusz 1: Cold Call z Gratis</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="n">Klient</span><span class="o">:</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="n">ABC</span><span class="w"> </span><span class="o">(</span><span class="n">Prospect</span><span class="o">,</span><span class="w"> </span><span class="n">interest_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="o">)</span>
+<span class="n">Wizyta</span><span class="o">:</span><span class="w"> </span><span class="n">Pierwsza</span><span class="w"> </span><span class="o">(</span><span class="n">PROSPECT</span><span class="o">)</span>
+<span class="n">Ocena</span><span class="w"> </span><span class="n">AI</span><span class="o">:</span><span class="w"> </span><span class="mi">4</span><span class="err">⭐</span><span class="w"> </span><span class="o">(</span><span class="n">zainteresowany</span><span class="w"> </span><span class="n">ale</span><span class="w"> </span><span class="n">wątpliwości</span><span class="o">)</span>
+
+<span class="n">BEZ</span><span class="w"> </span><span class="n">Gratis</span><span class="o">:</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Wynik</span><span class="o">:</span><span class="w"> </span><span class="err">🤔</span><span class="w"> </span><span class="n">ZAINTERESOWANY</span><span class="w"> </span><span class="o">(</span><span class="n">wymaga</span><span class="w"> </span><span class="mi">2</span><span class="o">.</span><span class="w"> </span><span class="n">wizyty</span><span class="o">)</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Szansa</span><span class="w"> </span><span class="n">na</span><span class="w"> </span><span class="n">kontrakt</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="mi">2</span><span class="o">.</span><span class="w"> </span><span class="n">wizycie</span><span class="o">:</span><span class="w"> </span><span class="mi">40</span><span class="o">%</span>
+
+<span class="n">Z</span><span class="w"> </span><span class="n">Gratis</span><span class="w"> </span><span class="o">(</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">350</span><span class="w"> </span><span class="n">PLN</span><span class="o">:</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Wynik</span><span class="o">:</span><span class="w"> </span><span class="err">✅</span><span class="w"> </span><span class="n">KONTRAKT</span><span class="w"> </span><span class="n">PODPISANY</span><span class="w"> </span><span class="o">(</span><span class="n">Gratis</span><span class="w"> </span><span class="n">przekonał</span><span class="o">!)</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Szansa</span><span class="o">:</span><span class="w"> </span><span class="mi">40</span><span class="o">%</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">25</span><span class="o">%</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">65</span><span class="o">%</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Sukces</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Koszt</span><span class="o">:</span><span class="w"> </span><span class="mi">350</span><span class="w"> </span><span class="n">PLN</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Zysk</span><span class="o">:</span><span class="w"> </span><span class="o">+</span><span class="mi">1</span><span class="o">,</span><span class="mi">200</span><span class="w"> </span><span class="n">PLN</span><span class="sr">/miesiąc × 12 = 14,400 PLN/</span><span class="n">rok</span>
+<span class="o">-</span><span class="w"> </span><span class="n">ROI</span><span class="o">:</span><span class="w"> </span><span class="mi">14</span><span class="o">,</span><span class="mi">400</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">350</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="o">,</span><span class="mi">100</span><span class="o">%</span><span class="w"> </span><span class="o">(</span><span class="err">ś</span><span class="n">wietna</span><span class="w"> </span><span class="n">inwestycja</span><span class="o">!)</span>
+</code></pre></div>
+
+<h4><strong>Scenariusz 2: Win-back z Multiple Tools</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="n">Klient</span><span class="o">:</span><span class="w"> </span><span class="n">Kaufland</span><span class="w"> </span><span class="n">Piaseczno</span><span class="w"> </span><span class="o">(</span><span class="n">LOST</span><span class="o">,</span><span class="w"> </span><span class="n">lost_reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Zaniedbanie&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">difficulty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">7.5</span><span class="o">)</span>
+<span class="n">Win</span><span class="o">-</span><span class="n">back</span><span class="w"> </span><span class="n">Attempt</span><span class="o">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="n">Ocena</span><span class="w"> </span><span class="n">AI</span><span class="o">:</span><span class="w"> </span><span class="mi">5</span><span class="err">⭐</span><span class="w"> </span><span class="o">(</span><span class="n">doskonała</span><span class="w"> </span><span class="n">rozmowa</span><span class="o">)</span>
+
+<span class="n">BEZ</span><span class="w"> </span><span class="n">narzędzi</span><span class="o">:</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Szansa</span><span class="w"> </span><span class="n">sukcesu</span><span class="o">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">(</span><span class="mf">7.5</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mi">8</span><span class="o">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="o">%</span><span class="w"> </span><span class="o">(</span><span class="n">praktycznie</span><span class="w"> </span><span class="n">niemożliwe</span><span class="o">)</span>
+
+<span class="n">Z</span><span class="w"> </span><span class="n">Gratis</span><span class="w"> </span><span class="o">(</span><span class="mi">350</span><span class="w"> </span><span class="n">PLN</span><span class="o">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Darmowa</span><span class="w"> </span><span class="n">dostawa</span><span class="w"> </span><span class="o">(</span><span class="mi">150</span><span class="w"> </span><span class="n">PLN</span><span class="o">):</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Szansa</span><span class="o">:</span><span class="w"> </span><span class="mi">10</span><span class="o">%</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">25</span><span class="o">%</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">15</span><span class="o">%</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="o">%</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Koszt</span><span class="o">:</span><span class="w"> </span><span class="mi">500</span><span class="w"> </span><span class="n">PLN</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Zysk</span><span class="w"> </span><span class="o">(</span><span class="n">jeśli</span><span class="w"> </span><span class="n">sukces</span><span class="o">):</span><span class="w"> </span><span class="mi">3</span><span class="o">,</span><span class="mi">000</span><span class="w"> </span><span class="n">PLN</span><span class="sr">/m × 0.8 × 12 = 28,800 PLN/</span><span class="n">rok</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Expected</span><span class="w"> </span><span class="n">Value</span><span class="o">:</span><span class="w"> </span><span class="mi">28</span><span class="o">,</span><span class="mi">800</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="o">,</span><span class="mi">400</span><span class="w"> </span><span class="n">PLN</span><span class="w"> </span><span class="o">(</span><span class="n">opłaca</span><span class="w"> </span><span class="n">się</span><span class="o">!)</span>
+
+<span class="n">Z</span><span class="w"> </span><span class="n">Gratis</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Darmowa</span><span class="w"> </span><span class="n">dostawa</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Rabat</span><span class="w"> </span><span class="mi">10</span><span class="o">%:</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Szansa</span><span class="o">:</span><span class="w"> </span><span class="mi">10</span><span class="o">%</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">25</span><span class="o">%</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">15</span><span class="o">%</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">15</span><span class="o">%</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">65</span><span class="o">%</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Koszt</span><span class="o">:</span><span class="w"> </span><span class="mi">500</span><span class="w"> </span><span class="n">PLN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">(-</span><span class="mi">10</span><span class="o">%</span><span class="w"> </span><span class="n">marża</span><span class="w"> </span><span class="n">na</span><span class="w"> </span><span class="n">zawsze</span><span class="o">)</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Ryzyko</span><span class="o">:</span><span class="w"> </span><span class="n">Rabat</span><span class="w"> </span><span class="n">trwały</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="o">,</span><span class="mi">600</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">rok</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Expected</span><span class="w"> </span><span class="n">Value</span><span class="o">:</span><span class="w"> </span><span class="o">(</span><span class="mi">28</span><span class="o">,</span><span class="mi">800</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">3</span><span class="o">,</span><span class="mi">600</span><span class="o">)</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mf">0.65</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="o">,</span><span class="mi">380</span><span class="w"> </span><span class="n">PLN</span><span class="w"> </span><span class="o">(</span><span class="n">wciąż</span><span class="w"> </span><span class="n">opłaca</span><span class="w"> </span><span class="n">się</span><span class="o">,</span><span class="w"> </span><span class="n">ale</span><span class="w"> </span><span class="n">mniejszy</span><span class="w"> </span><span class="n">zysk</span><span class="o">)</span>
+</code></pre></div>
+
+<h4><strong>Scenariusz 3: Cross-sell z POS</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="n">Klient</span><span class="o">:</span><span class="w"> </span><span class="n">Dino</span><span class="w"> </span><span class="n">Konstancin</span><span class="w"> </span><span class="o">(</span><span class="n">ACTIVE</span><span class="o">,</span><span class="w"> </span><span class="n">reputation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">70</span><span class="o">,</span><span class="w"> </span><span class="n">market_share</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">25</span><span class="o">%)</span>
+<span class="n">Zadanie</span><span class="o">:</span><span class="w"> </span><span class="n">Cross</span><span class="o">-</span><span class="n">sell</span><span class="w"> </span><span class="n">FreshDish</span>
+<span class="n">Ocena</span><span class="w"> </span><span class="n">AI</span><span class="o">:</span><span class="w"> </span><span class="mi">4</span><span class="err">⭐</span><span class="w"> </span><span class="o">(</span><span class="n">zainteresowany</span><span class="o">,</span><span class="w"> </span><span class="n">ale</span><span class="w"> </span><span class="n">obawia</span><span class="w"> </span><span class="n">się</span><span class="w"> </span><span class="n">braku</span><span class="w"> </span><span class="n">miejsca</span><span class="o">)</span>
+
+<span class="n">BEZ</span><span class="w"> </span><span class="n">POS</span><span class="o">:</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Wynik</span><span class="o">:</span><span class="w"> </span><span class="err">🤔</span><span class="w"> </span><span class="n">ZAINTERESOWANIE</span><span class="w"> </span><span class="o">(</span><span class="n">wymaga</span><span class="w"> </span><span class="n">próbki</span><span class="o">,</span><span class="w"> </span><span class="mi">50</span><span class="o">%</span><span class="w"> </span><span class="n">szans</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="n">follow</span><span class="o">-</span><span class="n">up</span><span class="o">)</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Czas</span><span class="o">:</span><span class="w"> </span><span class="mi">14</span><span class="w"> </span><span class="n">dni</span><span class="w"> </span><span class="n">na</span><span class="w"> </span><span class="n">follow</span><span class="o">-</span><span class="n">up</span>
+
+<span class="n">Z</span><span class="w"> </span><span class="n">Materiały</span><span class="w"> </span><span class="n">POS</span><span class="w"> </span><span class="o">(</span><span class="mi">200</span><span class="w"> </span><span class="n">PLN</span><span class="o">):</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Argument</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Mamy profesjonalne stojaki - nie zajmie Ci miejsca&quot;</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Szansa</span><span class="w"> </span><span class="n">sukcesu</span><span class="w"> </span><span class="n">od</span><span class="w"> </span><span class="n">razu</span><span class="o">:</span><span class="w"> </span><span class="mi">50</span><span class="o">%</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">10</span><span class="o">%</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="o">%</span>
+<span class="o">-</span><span class="w"> </span><span class="n">Dodatkowy</span><span class="w"> </span><span class="n">efekt</span><span class="o">:</span><span class="w"> </span><span class="o">+</span><span class="mi">15</span><span class="o">%</span><span class="w"> </span><span class="n">sprzedaż</span><span class="w"> </span><span class="n">FreshDish</span><span class="w"> </span><span class="n">przez</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="n">dni</span><span class="w"> </span><span class="o">(</span><span class="n">lepsze</span><span class="w"> </span><span class="n">miejsce</span><span class="o">)</span>
+<span class="o">-</span><span class="w"> </span><span class="n">ROI</span><span class="o">:</span><span class="w"> </span><span class="n">Jeśli</span><span class="w"> </span><span class="n">sukces</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="o">+</span><span class="mi">400</span><span class="w"> </span><span class="n">PLN</span><span class="sr">/m (FreshDish) + 15% boost = +460 PLN/</span><span class="n">m</span>
+<span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">460</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="o">,</span><span class="mi">520</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">rok</span>
+<span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="o">,</span><span class="mi">520</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="o">,</span><span class="mi">760</span><span class="o">%</span><span class="w"> </span><span class="n">ROI</span>
+</code></pre></div>
+
+<hr />
+<h2>4. EDGE CASES I SYTUACJE SPECJALNE</h2>
+<h3>A. Co jeśli energia = 0 podczas wizyty?</h3>
+<p><strong>Problem:</strong> Gracz zaczął wizytę z 25% energii, wizyta kosztuje 30%</p>
+<p><strong>Rozwiązanie:</strong><br />
+- Wizyta <strong>może się odbyć</strong> (w końcu umówiona)<br />
+- Energia idzie w <strong>minus</strong> (np. -5%)<br />
+- <strong>Kara jakości:</strong><br />
+  - Energia &lt;0% → AI automatycznie obniża ocenę o 1⭐<br />
+  - Feedback: &ldquo;Wyglądasz na zmęczonego - klient to zauważył&rdquo;<br />
+- <strong>Blokada:</strong> Jeśli energia &lt;-20% → gracz <strong>nie może</strong> rozpocząć nowej wizyty (musi zakończyć dzień)<br />
+- <strong>Strategia:</strong> Planuj wizyty! Energia = zasób</p>
+<h3>B. Co jeśli klient ma reputation = -50 ale kontrakt jeszcze aktywny?</h3>
+<p><strong>Problem:</strong> Reputation threshold dla LOST = -50, ale co się dzieje po przekroczeniu?</p>
+<p><strong>Rozwiązanie:</strong><br />
+- Przy reputation <strong>= -50</strong> → <strong>Trigger wydarzenia:</strong><br />
+  - 🚨 &ldquo;OSTRZEŻENIE: Klient [X] rozważa zmianę dostawcy!&rdquo;<br />
+  - Automatyczne zadanie: &ldquo;Naprawa relacji (deadline: 7 dni)&rdquo;<br />
+- Gracz ma <strong>7 dni</strong> na podniesienie reputation &gt;-40 (wizyta 5⭐ + problem solving)<br />
+- <strong>Jeśli nie naprawi w terminie:</strong><br />
+  - Status: ACTIVE → LOST<br />
+  - Reason: &ldquo;Reputation &lt; -50 przez &gt;7 dni&rdquo;<br />
+  - Win-back difficulty = 8.0 (bardzo trudne)<br />
+- <strong>Jeśli naprawi:</strong><br />
+  - Reputation &gt;-40 → zadanie zamknięte<br />
+  - Bonus: +5 rep (klient docenia wysiłek)</p>
+<h3>C. Co jeśli gracz ma 2 zadania pilne tego samego dnia?</h3>
+<p><strong>Problem:</strong> 🚨 Reklamacja (deadline: dziś) + 📅 Wizyta regularna overdue (deadline: dziś)</p>
+<p><strong>Rozwiązanie:</strong><br />
+- Gracz <strong>musi wybrać</strong> (energia nie wystarczy na 2 wizyty)<br />
+- <strong>Priorytetyzacja AI:</strong><br />
+  1. <strong>Zadania awaryjne (🚨)</strong> → wyższy priorytet (kara -50 rep za ignore)<br />
+  2. Wizyty regularne (📅) → można opóźnić o 1 dzień (kara -1 rep/dzień)<br />
+- <strong>Feedback:</strong><br />
+  - &ldquo;Masz 2 pilne zadania - wybierz mądrze!&rdquo;<br />
+  - &ldquo;Reklamacja: ignore = -50 rep, Wizyta regularna: +1 dzień = -1 rep&rdquo;<br />
+- <strong>Strategiczny wybór:</strong> Zawsze priorytet dla awaryjnych (mniejsza strata)</p>
+<h3>D. Co jeśli gracz używa tego samego narzędzia 3 razy z rzędu u tego samego klienta?</h3>
+<p><strong>Problem:</strong> Gracz spamuje Gratis (2+1) co wizytę u Sklep ABC</p>
+<p><strong>Rozwiązanie:</strong><br />
+- <strong>Diminishing Returns:</strong><br />
+  - 1. użycie: +8 rep, pełen efekt<br />
+  - 2. użycie (w ciągu 30 dni): +4 rep, 50% efektu<br />
+  - 3. użycie (w ciągu 30 dni): +1 rep, 10% efektu<br />
+  - 4. użycie: 0 rep, AI feedback: &ldquo;Klient przyzwyczaił się - to już nie działa&rdquo;<br />
+- <strong>Cooldown:</strong> 30 dni między użyciami <strong>tego samego narzędzia</strong> u <strong>tego samego klienta</strong><br />
+- <strong>Strategia:</strong> Rotuj narzędzia (Gratis → POS → Promocja) dla lepszego efektu</p>
+<h3>E. Co jeśli cross-sell sukces, ale klient nie ma budżetu na dodatkowy produkt?</h3>
+<p><strong>Problem:</strong> AI oceniło rozmowę 5⭐ (świetny pitch), ale klient logicznie nie stać</p>
+<p><strong>Rozwiązanie:</strong><br />
+- AI sprawdza <code>client_budget</code> przed finalizacją<br />
+- <strong>Jeśli przekroczony:</strong><br />
+  - Wynik: 🤔 &ldquo;Klient chce, ale nie stać go teraz&rdquo;<br />
+  - Timeline: &ldquo;😊 Cross-sell odłożony - klient zainteresowany, czeka na budżet&rdquo;<br />
+  - <strong>Auto-zadanie za 90 dni:</strong> &ldquo;📅 Follow-up: Czy budżet się zwiększył?&rdquo;<br />
+- <strong>Jeśli w budżecie:</strong><br />
+  - Wynik: ✅ Sukces<br />
+  - <code>monthly_value</code> wzrasta<br />
+  - <code>client_budget</code> maleje o wartość nowego produktu</p>
+<h3>F. Co jeśli gracz odzyskuje klienta LOST, a potem znowu go traci?</h3>
+<p><strong>Problem:</strong> Win-back sukces → klient ACTIVE → po 2 miesiącach znowu LOST</p>
+<p><strong>Rozwiązanie:</strong><br />
+- <strong>2. utrata tego samego klienta:</strong><br />
+  - <code>win_back_difficulty</code> <strong>nie resetuje się</strong> całkowicie<br />
+  - Nowa difficulty = previous_difficulty × 0.5 + new_base_difficulty<br />
+  - Przykład: 1. win-back difficulty = 7.0, 2. utrata → difficulty = 7.0 × 0.5 + 7.0 = 10.5<br />
+- <strong>Max attempts</strong> również się kumuluje:<br />
+  - 1. win-back: 3 próby użyte, odzyskany<br />
+  - 2. win-back: tylko <strong>2 próby</strong> dostępne (3 - 1 pozostała z poprzedniego)<br />
+- <strong>Feedback:</strong> &ldquo;Ten klient już raz wrócił i znowu odszedł - ostatnia szansa!&rdquo;<br />
+- <strong>Strategia:</strong> Jeśli odzyskujesz klienta, <strong>musisz</strong> utrzymać reputation &gt;40 (nie powtarzać błędów)</p>
+<hr />
+<h2>5. PARAMETRY TECHNICZNE</h2>
+<h3>A. Zmienne Stanu Klienta (JSON)</h3>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;client_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sklep_abc_piaseczno&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Sklep ABC&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ACTIVE&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// PROSPECT | ACTIVE | LOST</span>
+
+<span class="w">  </span><span class="c1">// PROSPECT only</span>
+<span class="w">  </span><span class="nt">&quot;interest_level&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">65</span><span class="p">,</span><span class="w">  </span><span class="c1">// 0-100</span>
+<span class="w">  </span><span class="nt">&quot;visits_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">     </span><span class="c1">// Ile wizyt już było</span>
+
+<span class="w">  </span><span class="c1">// ACTIVE only</span>
+<span class="w">  </span><span class="nt">&quot;reputation&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w">                    </span><span class="c1">// -100 to +100</span>
+<span class="w">  </span><span class="nt">&quot;monthly_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1200</span><span class="p">,</span><span class="w">               </span><span class="c1">// PLN</span>
+<span class="w">  </span><span class="nt">&quot;visit_frequency_required&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">      </span><span class="c1">// dni</span>
+<span class="w">  </span><span class="nt">&quot;last_visit_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-10&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;products_portfolio&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;market_share&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w">                  </span><span class="c1">// %</span>
+<span class="w">  </span><span class="nt">&quot;contract_renewal_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-07-01&quot;</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// LOST only</span>
+<span class="w">  </span><span class="nt">&quot;lost_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-15&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;lost_reason&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Zaniedbanie - brak wizyt przez 6 tygodni&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;last_reputation&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-20</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;win_back_attempts&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">              </span><span class="c1">// 0-3</span>
+<span class="w">  </span><span class="nt">&quot;win_back_difficulty&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">7.5</span><span class="p">,</span><span class="w">          </span><span class="c1">// 0-10</span>
+<span class="w">  </span><span class="nt">&quot;win_back_cooldown_until&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-22&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// Nie można próbować przed tą datą</span>
+
+<span class="w">  </span><span class="c1">// Timeline (wszystkie statusy)</span>
+<span class="w">  </span><span class="nt">&quot;timeline&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-10&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;visit&quot;</span><span class="p">,</span><span class="w">              </span><span class="c1">// visit | task | contract | event</span>
+<span class="w">      </span><span class="nt">&quot;event&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Wizyta regularna&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;rating&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4.5</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;reputation_change&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">+</span><span class="mi">5</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;details&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Check-in - wszystko OK&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-15&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;task&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;event&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cross-sell FreshDish&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;rating&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;reputation_change&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">+</span><span class="mi">15</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;pln_change&quot;</span><span class="p">:</span><span class="w"> </span><span class="err">+</span><span class="mi">400</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;details&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Produkt dodany do portfolio&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>B. Zmienne Stanu Zadania (JSON)</h3>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;task_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;task_12345&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;regular_visit&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// regular_visit | operational | sales | emergency | win_back</span>
+<span class="w">  </span><span class="nt">&quot;client_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sklep_abc&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Wizyta u Sklep ABC&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Kontrola ekspozycji, check-in&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;priority&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;medium&quot;</span><span class="p">,</span><span class="w">     </span><span class="c1">// low | medium | high | urgent</span>
+<span class="w">  </span><span class="nt">&quot;deadline&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-20&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;created_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-13&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pending&quot;</span><span class="p">,</span><span class="w">      </span><span class="c1">// pending | in_progress | completed | failed | expired</span>
+
+<span class="w">  </span><span class="c1">// Nagrody (jeśli completed)</span>
+<span class="w">  </span><span class="nt">&quot;rewards&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;reputation&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pln_change&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;market_share&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">  </span><span class="p">},</span>
+
+<span class="w">  </span><span class="c1">// Kary (jeśli failed/expired)</span>
+<span class="w">  </span><span class="nt">&quot;penalties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;reputation&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-10</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;pln_change&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;market_share&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-2</span>
+<span class="w">  </span><span class="p">},</span>
+
+<span class="w">  </span><span class="c1">// Metadata</span>
+<span class="w">  </span><span class="nt">&quot;energy_cost&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">        </span><span class="c1">// % energii</span>
+<span class="w">  </span><span class="nt">&quot;estimated_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w">     </span><span class="c1">// minuty</span>
+<span class="w">  </span><span class="nt">&quot;can_skip&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">        </span><span class="c1">// Czy można pominąć bez kary</span>
+<span class="w">  </span><span class="nt">&quot;cascades_on_fail&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c1">// Czy generuje zadanie naprawcze</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>C. Trade Marketing Tool Usage Tracking</h3>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;user_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;player_123&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;trade_marketing_budget&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2000</span><span class="p">,</span><span class="w">  </span><span class="c1">// PLN/month (resetuje co miesiąc)</span>
+<span class="w">  </span><span class="nt">&quot;trade_marketing_spent&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">850</span><span class="p">,</span><span class="w">    </span><span class="c1">// PLN (wydane w tym miesiącu)</span>
+<span class="w">  </span><span class="nt">&quot;trade_marketing_history&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-10&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gratis_2plus1&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;client_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sklep_abc&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;cost&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">350</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;context&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PROSPECT cold call&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// Kontrakt podpisany</span>
+<span class="w">      </span><span class="nt">&quot;roi&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4100</span><span class="w">           </span><span class="c1">// % (calculated post-hoc)</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-15&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pos_materials&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;client_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dino_konstancin&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;cost&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;context&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cross-sell FreshDish&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;roi&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2760</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+
+<span class="w">  </span><span class="c1">// Cooldowns (per client)</span>
+<span class="w">  </span><span class="nt">&quot;tool_cooldowns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;sklep_abc&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;gratis_2plus1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-02-10&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// Nie można użyć przed tą datą</span>
+<span class="w">      </span><span class="nt">&quot;rabat&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3>D. AI Conversation Context (Prompt Variables)</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Przykład generowania kontekstu dla AI przy ACTIVE check-in</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_ai_context</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Jesteś właścicielem: </span><span class="si">{</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)</span>
+
+<span class="s2">HISTORIA WSPÓŁPRACY:</span>
+<span class="s2">- Dni współpracy: </span><span class="si">{</span><span class="p">(</span><span class="n">today</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;contract_date&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">days</span><span class="si">}</span>
+<span class="s2">- Ostatnia wizyta: </span><span class="si">{</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;last_visit_date&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">days_since_visit</span><span class="si">}</span><span class="s2"> dni temu)</span>
+<span class="s2">- Reputacja sprzedawcy: </span><span class="si">{</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;reputation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/100 (</span><span class="si">{</span><span class="n">get_reputation_label</span><span class="p">(</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;reputation&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">- Produkty w portfolio: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;products_portfolio&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> z 12 dostępnych</span>
+<span class="s2">- Market share: </span><span class="si">{</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;market_share&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">%</span>
+
+<span class="s2">OSTATNIE WYDARZENIA:</span>
+<span class="si">{</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;timeline&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span><span class="si">}</span><span class="s2">  // Ostatnie 3 eventy</span>
+
+<span class="s2">AKTUALNY PROBLEM (jeśli jest):</span>
+<span class="si">{</span><span class="n">task</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">TWOJA POSTAWA:</span>
+<span class="si">{</span><span class="n">generate_attitude</span><span class="p">(</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;reputation&#39;</span><span class="p">])</span><span class="si">}</span>
+
+<span class="s2">CEL SPRZEDAWCY (gracz tego nie widzi):</span>
+<span class="si">{</span><span class="n">task</span><span class="p">[</span><span class="s1">&#39;goal&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">ZASADY:</span>
+<span class="s2">- Reaguj naturalnie</span>
+<span class="s2">- Jeśli </span><span class="si">{</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;reputation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ≥70 → jesteś przyjaźnie nastawiony</span>
+<span class="s2">- Jeśli </span><span class="si">{</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;reputation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> &lt;40 → jesteś krytyczny, wymagający</span>
+<span class="s2">- Po rozmowie oceń 1-5⭐ i wyjaśnij dlaczego</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">context</span>
+</code></pre></div>
+
+<h3>E. Success Probability Formulas</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># PROSPECT - Szansa na podpisanie kontraktu</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_contract_probability</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">conversation_rating</span><span class="p">,</span> <span class="n">tools_used</span><span class="p">):</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s1">&#39;interest_level&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>  <span class="c1"># 0.0 - 1.0</span>
+
+    <span class="c1"># Modyfikator z oceny rozmowy</span>
+    <span class="n">rating_mod</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">5</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span>
+        <span class="mi">4</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+        <span class="mi">3</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="mf">0.1</span>
+    <span class="p">}[</span><span class="n">conversation_rating</span><span class="p">]</span>
+
+    <span class="c1"># Modyfikator z narzędzi</span>
+    <span class="n">tools_mod</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="s1">&#39;gratis_2plus1&#39;</span> <span class="ow">in</span> <span class="n">tools_used</span><span class="p">:</span>
+        <span class="n">tools_mod</span> <span class="o">+=</span> <span class="mf">0.20</span>
+    <span class="k">if</span> <span class="s1">&#39;rabat&#39;</span> <span class="ow">in</span> <span class="n">tools_used</span><span class="p">:</span>
+        <span class="n">tools_mod</span> <span class="o">+=</span> <span class="mf">0.15</span>
+    <span class="k">if</span> <span class="s1">&#39;pos_materials&#39;</span> <span class="ow">in</span> <span class="n">tools_used</span><span class="p">:</span>
+        <span class="n">tools_mod</span> <span class="o">+=</span> <span class="mf">0.10</span>
+
+    <span class="n">probability</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">base</span> <span class="o">*</span> <span class="n">rating_mod</span> <span class="o">+</span> <span class="n">tools_mod</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">probability</span>
+
+
+<span class="c1"># ACTIVE - Cross-sell success probability</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_crosssell_probability</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">conversation_rating</span><span class="p">,</span> <span class="n">tools_used</span><span class="p">):</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c1"># Bazowo 30%</span>
+
+    <span class="c1"># Reputacja (klient musi ufać)</span>
+    <span class="n">rep_mod</span> <span class="o">=</span> <span class="n">client</span><span class="p">[</span><span class="s1">&#39;reputation&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">200</span>  <span class="c1"># -100..+100 → -0.5..+0.5</span>
+
+    <span class="c1"># Dopasowanie produktu</span>
+    <span class="n">fit_score</span> <span class="o">=</span> <span class="n">calculate_product_fit</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">product</span><span class="p">)</span>  <span class="c1"># 0.0 - 1.0</span>
+
+    <span class="c1"># Ocena rozmowy (pitch)</span>
+    <span class="n">rating_mod</span> <span class="o">=</span> <span class="p">(</span><span class="n">conversation_rating</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>  <span class="c1"># 5⭐ = +0.2, 3⭐ = 0, 1⭐ = -0.2</span>
+
+    <span class="c1"># Narzędzia</span>
+    <span class="n">tools_mod</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="s1">&#39;pos_materials&#39;</span> <span class="ow">in</span> <span class="n">tools_used</span><span class="p">:</span>
+        <span class="n">tools_mod</span> <span class="o">+=</span> <span class="mf">0.10</span>
+    <span class="k">if</span> <span class="s1">&#39;promocja_konsumencka&#39;</span> <span class="ow">in</span> <span class="n">tools_used</span><span class="p">:</span>
+        <span class="n">tools_mod</span> <span class="o">+=</span> <span class="mf">0.15</span>
+
+    <span class="n">probability</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="n">rep_mod</span> <span class="o">+</span> <span class="n">fit_score</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="o">+</span> <span class="n">rating_mod</span> <span class="o">+</span> <span class="n">tools_mod</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">probability</span>
+
+
+<span class="c1"># LOST - Win-back success probability</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_winback_probability</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">conversation_rating</span><span class="p">,</span> <span class="n">tools_used</span><span class="p">):</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">client</span><span class="p">[</span><span class="s1">&#39;win_back_difficulty&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># difficulty 7.0 → base 0.3</span>
+
+    <span class="c1"># Ocena rozmowy (kluczowa!)</span>
+    <span class="n">rating_mod</span> <span class="o">=</span> <span class="p">(</span><span class="n">conversation_rating</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.15</span>  <span class="c1"># 5⭐ = +0.3, 1⭐ = -0.3</span>
+
+    <span class="c1"># Narzędzia (obowiązkowe dla realnych szans)</span>
+    <span class="n">tools_mod</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="s1">&#39;gratis_2plus1&#39;</span> <span class="ow">in</span> <span class="n">tools_used</span><span class="p">:</span>
+        <span class="n">tools_mod</span> <span class="o">+=</span> <span class="mf">0.25</span>
+    <span class="k">if</span> <span class="s1">&#39;rabat&#39;</span> <span class="ow">in</span> <span class="n">tools_used</span><span class="p">:</span>
+        <span class="n">tools_mod</span> <span class="o">+=</span> <span class="mf">0.20</span>
+    <span class="k">if</span> <span class="s1">&#39;darmowa_dostawa&#39;</span> <span class="ow">in</span> <span class="n">tools_used</span><span class="p">:</span>
+        <span class="n">tools_mod</span> <span class="o">+=</span> <span class="mf">0.15</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tools_used</span><span class="p">:</span>  <span class="c1"># Brak narzędzi = kara</span>
+        <span class="n">tools_mod</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.30</span>
+
+    <span class="c1"># Czas od utraty (czas goi rany)</span>
+    <span class="n">days_since_lost</span> <span class="o">=</span> <span class="p">(</span><span class="n">today</span> <span class="o">-</span> <span class="n">client</span><span class="p">[</span><span class="s1">&#39;lost_date&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">days</span>
+    <span class="n">time_mod</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">days_since_lost</span> <span class="o">/</span> <span class="mi">200</span><span class="p">)</span>  <span class="c1"># Max +0.15 po 200 dniach</span>
+
+    <span class="n">probability</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">0.85</span><span class="p">,</span> <span class="n">base</span> <span class="o">+</span> <span class="n">rating_mod</span> <span class="o">+</span> <span class="n">tools_mod</span> <span class="o">+</span> <span class="n">time_mod</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">probability</span>
+</code></pre></div>
+
+<hr />
+<h2>PODSUMOWANIE - KLUCZOWE ZASADY</h2>
+<h3>1. <strong>Każda rozmowa MA EFEKT</strong> (nie tylko liczba ⭐)</h3>
+<ul>
+<li>PROSPECT: Kontrakt / Zainteresowanie / Odmowa / Spalenie</li>
+<li>ACTIVE: Rep + Market share + Problem detection + Cross-sell opportunity</li>
+<li>LOST: Odzyskanie / Progress / Porażka + difficulty increase</li>
+</ul>
+<h3>2. <strong>Zadania mają KASKADOWE EFEKTY</strong></h3>
+<ul>
+<li>Zadanie 2⭐ → generuje zadanie naprawcze</li>
+<li>Cross-sell 5⭐ → możliwość kolejnego za 30 dni (portfolio expansion)</li>
+<li>Problem zignorowany → LOST → Win-back → &hellip;</li>
+</ul>
+<h3>3. <strong>Narzędzia Trade Marketing = STRATEGICZNY ZASÓB</strong></h3>
+<ul>
+<li>Budżet 2k PLN/miesiąc (ograniczony!)</li>
+<li>Każde narzędzie ma cooldown (nie spamować)</li>
+<li>Wybór: Gratis na Prospect (szybki efekt) vs POS na ACTIVE (długoterminowy ROI)</li>
+</ul>
+<h3>4. <strong>Czas ma ZNACZENIE</strong></h3>
+<ul>
+<li>Spóźnienie -1 rep/dzień</li>
+<li>Zadania awaryjne &lt;24h = bonus, &gt;3 dni = LOST</li>
+<li>Win-back po 90 dniach łatwiejszy niż po 7 dniach (klient zapomina)</li>
+</ul>
+<h3>5. <strong>Reputacja = FUNDAMENT</strong></h3>
+<ul>
+<li>&lt;-50 = trigger LOST (7 dni na naprawę)</li>
+<li>&lt;40 = email od szefa (ostrzeżenie)</li>
+<li>≥60 = wymagane do awansu</li>
+<li>≥70 = VIP prospects (word of mouth)</li>
+</ul>
+<hr />
+<p><strong>GOTOWE DO IMPLEMENTACJI?</strong></p>
+<p>Ten dokument zawiera <strong>wszystkie możliwe wyniki</strong> interakcji w grze.<br />
+AI powinno używać tych formuł do symulacji.<br />
+UI powinno pokazywać te efekty graczowi.<br />
+Testing powinien weryfikować te prawdopodobieństwa.</p>
+<p>Następny krok: <strong>Slide deck dla klienta</strong> prezentujący te mechaniki w przystępny sposób.</p>
+        </div>
+        
+        <div class="footer">
+            <p>FMCG Sales Simulator &copy; 2025 | Wersja dokumentu: 1.0</p>
+            <p style="margin-top: 10px; font-size: 8pt;">
+                💡 <strong>Tip:</strong> Użyj Ctrl+P (Cmd+P na Mac) aby zapisać jako PDF<br>
+                W opcjach drukowania wybierz "Zapisz jako PDF"
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Automatyczne numerowanie nagłówków
+        document.querySelectorAll('h2').forEach((h, i) => {
+            if (!h.textContent.match(/^\d+\./)) {
+                h.textContent = (i + 1) + '. ' + h.textContent;
+            }
+        });
+    </script>
+</body>
+</html>

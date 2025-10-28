@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMCG Sales Simulator - Prezentacja (Część 2)</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 2cm 1.5cm;
+            }
+            
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+            
+            pre, table {
+                page-break-inside: avoid;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1a5490;
+        }
+        
+        .header h1 {
+            color: #1a5490;
+            font-size: 28pt;
+            margin-bottom: 10px;
+        }
+        
+        .header .meta {
+            color: #666;
+            font-size: 10pt;
+        }
+        
+        h1 {
+            color: #1a5490;
+            font-size: 24pt;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            border-bottom: 2px solid #1a5490;
+            padding-bottom: 0.3em;
+        }
+        
+        h2 {
+            color: #2874a6;
+            font-size: 18pt;
+            margin-top: 1.2em;
+            margin-bottom: 0.4em;
+        }
+        
+        h3 {
+            color: #34495e;
+            font-size: 14pt;
+            margin-top: 1em;
+            margin-bottom: 0.3em;
+        }
+        
+        h4 {
+            color: #5d6d7e;
+            font-size: 12pt;
+            margin-top: 0.8em;
+            margin-bottom: 0.3em;
+        }
+        
+        p {
+            margin-bottom: 0.8em;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-left: 4px solid #1a5490;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            margin: 1em 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9pt;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+            font-size: 10pt;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #1a5490;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        ul, ol {
+            margin-left: 2em;
+            margin-bottom: 1em;
+        }
+        
+        li {
+            margin-bottom: 0.4em;
+        }
+        
+        blockquote {
+            border-left: 4px solid #1a5490;
+            margin-left: 0;
+            padding-left: 1em;
+            color: #555;
+            font-style: italic;
+            margin: 1em 0;
+        }
+        
+        a {
+            color: #1a5490;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 2em 0;
+        }
+        
+        .toolbar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .toolbar button {
+            background-color: #1a5490;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11pt;
+            margin: 5px 0;
+            width: 100%;
+        }
+        
+        .toolbar button:hover {
+            background-color: #2874a6;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 9pt;
+        }
+        
+        /* Highlight dla ważnych elementów */
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 9pt;
+            font-weight: bold;
+            margin: 0 4px;
+        }
+        
+        .badge-success { background-color: #d4edda; color: #155724; }
+        .badge-warning { background-color: #fff3cd; color: #856404; }
+        .badge-danger { background-color: #f8d7da; color: #721c24; }
+        .badge-info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="toolbar no-print">
+        <button onclick="window.print()">🖨️ Drukuj / Zapisz PDF</button>
+        <button onclick="window.location.href='index.html'">📂 Wszystkie pliki</button>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>FMCG Sales Simulator - Prezentacja (Część 2)</h1>
+            <div class="meta">
+                Wygenerowano: 28.10.2025 15:21<br>
+                Dokument źródłowy: <code>FMCG_PRESENTATION_SLIDES_PART2.md</code>
+            </div>
+        </div>
+        
+        <div class="content">
+            <h1>FMCG Sales Simulator - Prezentacja CZĘŚĆ 2</h1>
+<h2>SLAJD 13: PRZYKŁADOWY TYDZIEŃ GRACZA</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">  </span><span class="err">📅</span><span class="w"> </span><span class="n">TYDZIEŃ</span><span class="w"> </span><span class="n">W</span><span class="w"> </span><span class="n">SYMULATORZE</span><span class="w">                       </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">PONIEDZIAŁEK</span><span class="w"> </span><span class="p">(</span><span class="n">Gentle</span><span class="w"> </span><span class="n">Start</span><span class="p">)</span><span class="w">                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">9</span><span class="o">:</span><span class="mh">00</span><span class="w">  </span><span class="err">🏪</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="n">ABC</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">wizyta</span><span class="w"> </span><span class="n">regularna</span><span class="w"> </span><span class="p">(</span><span class="mh">4</span><span class="err">⭐</span><span class="p">)</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">14</span><span class="o">:</span><span class="mh">00</span><span class="w"> </span><span class="err">📦</span><span class="w"> </span><span class="n">Kontrola</span><span class="w"> </span><span class="n">ekspozycji</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Dino</span><span class="w">           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Wynik:</span><span class="w"> </span><span class="o">+</span><span class="mh">10</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mh">8</span><span class="w"> </span><span class="n">rep</span><span class="w">                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Czas:</span><span class="w"> </span><span class="mh">25</span><span class="w"> </span><span class="n">min</span><span class="w">                                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">WTOREK</span><span class="w"> </span><span class="p">(</span><span class="n">Momentum</span><span class="p">)</span><span class="w">                             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">9</span><span class="o">:</span><span class="mh">00</span><span class="w">  </span><span class="err">🎯</span><span class="w"> </span><span class="n">PROSPECT</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="err">Ż</span><span class="n">abka</span><span class="w"> </span><span class="n">Konstancin</span><span class="w"> </span><span class="p">(</span><span class="n">cold</span><span class="p">)</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">12</span><span class="o">:</span><span class="mh">00</span><span class="w"> </span><span class="err">📞</span><span class="w"> </span><span class="nl">Event:</span><span class="w"> </span><span class="n">Telefon</span><span class="w"> </span><span class="n">od</span><span class="w"> </span><span class="n">Kaufland</span><span class="w">           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">14</span><span class="o">:</span><span class="mh">00</span><span class="w"> </span><span class="err">🏪</span><span class="w"> </span><span class="n">Dino</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">cross</span><span class="o">-</span><span class="n">sell</span><span class="w"> </span><span class="n">FreshDish</span><span class="w"> </span><span class="p">(</span><span class="mh">5</span><span class="err">⭐</span><span class="p">)</span><span class="w">    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Wynik:</span><span class="w"> </span><span class="o">+</span><span class="mh">400</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mh">20</span><span class="w"> </span><span class="n">rep</span><span class="p">,</span><span class="w"> </span><span class="n">używam</span><span class="w"> </span><span class="n">POS</span><span class="w"> </span><span class="p">(</span><span class="mh">200</span><span class="p">)</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Czas:</span><span class="w"> </span><span class="mh">35</span><span class="w"> </span><span class="n">min</span><span class="w">                                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">Ś</span><span class="n">RODA</span><span class="w"> </span><span class="p">(</span><span class="n">Challenge</span><span class="p">)</span><span class="w">                             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">9</span><span class="o">:</span><span class="mh">00</span><span class="w">  </span><span class="err">🚨</span><span class="w"> </span><span class="nl">PILNE:</span><span class="w"> </span><span class="n">Reklamacja</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="n">ABC</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">11</span><span class="o">:</span><span class="mh">00</span><span class="w"> </span><span class="n">Rozwiązanie</span><span class="w"> </span><span class="p">(</span><span class="mh">5</span><span class="err">⭐</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="o">+</span><span class="mh">10</span><span class="w"> </span><span class="n">rep</span><span class="w"> </span><span class="n">bonus</span><span class="o">!</span><span class="w">      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">15</span><span class="o">:</span><span class="mh">00</span><span class="w"> </span><span class="err">🔄</span><span class="w"> </span><span class="n">Win</span><span class="o">-</span><span class="n">back</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Kaufland</span><span class="w"> </span><span class="p">(</span><span class="n">LOST</span><span class="p">)</span><span class="w">           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Wynik:</span><span class="w"> </span><span class="n">ABC</span><span class="w"> </span><span class="n">repair</span><span class="p">,</span><span class="w"> </span><span class="n">Kaufland</span><span class="w"> </span><span class="err">🤔</span><span class="w"> </span><span class="p">(</span><span class="n">wymaga</span><span class="w"> </span><span class="mf">2.</span><span class="w"> </span><span class="n">try</span><span class="p">)</span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Czas:</span><span class="w"> </span><span class="mh">40</span><span class="w"> </span><span class="n">min</span><span class="w">                                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">CZWARTEK</span><span class="w"> </span><span class="p">(</span><span class="n">Routine</span><span class="p">)</span><span class="w">                            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">9</span><span class="o">:</span><span class="mh">00</span><span class="w">  </span><span class="err">🏪</span><span class="w"> </span><span class="err">Ż</span><span class="n">abka</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">follow</span><span class="o">-</span><span class="n">up</span><span class="w"> </span><span class="n">cold</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="p">(</span><span class="mh">4</span><span class="err">⭐</span><span class="p">)</span><span class="w">    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">14</span><span class="o">:</span><span class="mh">00</span><span class="w"> </span><span class="err">🏪</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="n">XYZ</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">regularna</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Wynik:</span><span class="w"> </span><span class="err">Ż</span><span class="n">abka</span><span class="w"> </span><span class="n">zainteresowana</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mh">5</span><span class="w"> </span><span class="n">rep</span><span class="w"> </span><span class="p">(</span><span class="n">XYZ</span><span class="p">)</span><span class="w">     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Czas:</span><span class="w"> </span><span class="mh">30</span><span class="w"> </span><span class="n">min</span><span class="w">                                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">PIĄTEK</span><span class="w"> </span><span class="p">(</span><span class="n">Closing</span><span class="p">)</span><span class="w">                              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">9</span><span class="o">:</span><span class="mh">00</span><span class="w">  </span><span class="err">🎯</span><span class="w"> </span><span class="err">Ż</span><span class="n">abka</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">KONTRAKT</span><span class="o">!</span><span class="w"> </span><span class="err">🎉</span><span class="w"> </span><span class="p">(</span><span class="n">ACTIVE</span><span class="p">)</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mh">14</span><span class="o">:</span><span class="mh">00</span><span class="w"> </span><span class="err">📊</span><span class="w"> </span><span class="n">Raport</span><span class="w"> </span><span class="n">tygodniowy</span><span class="w">                    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Wynik:</span><span class="w"> </span><span class="o">+</span><span class="mh">1</span><span class="p">,</span><span class="mh">200</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w"> </span><span class="n">nowy</span><span class="w"> </span><span class="n">kontrakt</span><span class="w">             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Czas:</span><span class="w"> </span><span class="mh">20</span><span class="w"> </span><span class="n">min</span><span class="w">                                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">───────────────────────────────────────────</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">PODSUMOWANIE</span><span class="w"> </span><span class="nl">TYGODNIA:</span><span class="w">                        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="mh">12</span><span class="w"> </span><span class="n">wizyt</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mh">5</span><span class="w"> </span><span class="n">dni</span><span class="w">                            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="o">+</span><span class="mh">1</span><span class="p">,</span><span class="mh">610</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w"> </span><span class="p">(</span><span class="mh">1</span><span class="w"> </span><span class="n">nowy</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">1</span><span class="w"> </span><span class="n">cross</span><span class="o">-</span><span class="n">sell</span><span class="p">)</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Overall</span><span class="w"> </span><span class="nl">reputation:</span><span class="w"> </span><span class="mh">52</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mh">58</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="mh">6</span><span class="p">)</span><span class="w">            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Total</span><span class="w"> </span><span class="nl">czas:</span><span class="w"> </span><span class="mh">2</span><span class="n">h</span><span class="w"> </span><span class="mh">30</span><span class="n">min</span><span class="w"> </span><span class="p">(</span><span class="o">~</span><span class="mh">30</span><span class="w"> </span><span class="n">min</span><span class="o">/</span><span class="n">dzień</span><span class="p">)</span><span class="w">       </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<p><strong>Insight:</strong><br />
+Tydzień gry = tydzień pracy (realistyczny timing)<br />
+Ale bez ryzyka prawdziwych klientów!</p>
+<hr />
+<h2>SLAJD 14: PRZYKŁADOWE WYNIKI ROZMOWY AI</h2>
+<div class="codehilite"><pre><span></span><code>┌─────────────────────────────────────────────────┐
+│  💬 PRZYKŁAD: COLD CALL (PROSPECT)              │
+│                                                 │
+│  SCENARIUSZ:                                   │
+│  Gracz: Junior handlowiec (Level 1)           │
+│  Klient: Sklep ABC (Prospect, interest=60)     │
+│  Cel: Podpisać kontrakt na FreshSoap           │
+│                                                 │
+│  ───────────────────────────────────────────   │
+│                                                 │
+│  WERSJA A - SŁABA ROZMOWA (2⭐)                │
+│  ────────────────────────────────────────────  │
+│  Gracz: &quot;Dzień dobry, mam świetną ofertę!&quot;    │
+│  AI: &quot;Nie mam czasu, zajęty jestem&quot;           │
+│  Gracz: &quot;Ale naprawdę warto, super ceny!&quot;     │
+│  AI: &quot;Mam już dostawcę, dziękuję&quot;             │
+│                                                 │
+│  WYNIK: 🚫 Odmowa (visits_count = 1)           │
+│  FEEDBACK:                                     │
+│  ❌ &quot;Zbyt agresywna sprzedaż&quot;                  │
+│  ❌ &quot;Nie zapytałeś o potrzeby klienta&quot;         │
+│  💡 &quot;Spróbuj zacząć od pytania otwartego&quot;      │
+│                                                 │
+│  ───────────────────────────────────────────   │
+│                                                 │
+│  WERSJA B - DOBRA ROZMOWA (5⭐)                │
+│  ────────────────────────────────────────────  │
+│  Gracz: &quot;Dzień dobry, widzę że sklep dobrze   │
+│          prosperuje. Jakie produkty są u Was  │
+│          najlepiej sprzedawane?&quot;               │
+│  AI: &quot;Przede wszystkim kosmetyki, ale miejsce │
+│       jest ograniczone&quot;                        │
+│  Gracz: &quot;Rozumiem. Mamy FreshSoap - kompaktowy│
+│          produkt, który nie zajmuje dużo       │
+│          miejsca. Mogę zostawić próbkę?&quot;       │
+│  AI: &quot;Dobra, chętnie zobaczę&quot;                 │
+│                                                 │
+│  WYNIK: ✅ KONTRAKT PODPISANY! 🎉              │
+│  FEEDBACK:                                     │
+│  ✅ &quot;Świetne rozpoznanie potrzeby (miejsce)&quot;   │
+│  ✅ &quot;Delikatne podejście, nie presja&quot;          │
+│  ✅ &quot;Próbka = smart move&quot;                      │
+└─────────────────────────────────────────────────┘
+</code></pre></div>
+
+<p><strong>Learning:</strong><br />
+AI uczy <strong>soft skills</strong> (słuchanie, empatia, dopasowanie)<br />
+nie tylko product knowledge!</p>
+<hr />
+<h2>SLAJD 15: DASHBOARD - Co widzi gracz?</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">  </span><span class="err">📊</span><span class="w"> </span><span class="n">GAME</span><span class="w"> </span><span class="n">DASHBOARD</span><span class="w">                              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">┌───────────────────────────────────────────┐</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">👤</span><span class="w"> </span><span class="nl">GRACZ:</span><span class="w"> </span><span class="n">Jan</span><span class="w"> </span><span class="n">Kowalski</span><span class="w"> </span><span class="p">(</span><span class="n">Level</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w">         </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">                                           </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="n">POSTĘP</span><span class="w"> </span><span class="n">DO</span><span class="w"> </span><span class="n">LEVEL</span><span class="w"> </span><span class="mh">2</span><span class="o">:</span><span class="w">                        </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">████████████░░░░░░░░</span><span class="w"> </span><span class="mh">65</span><span class="o">%</span><span class="w">                  </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">                                           </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">✅</span><span class="w"> </span><span class="nl">Sprzedaż:</span><span class="w"> </span><span class="mh">8</span><span class="p">,</span><span class="mh">500</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mh">10</span><span class="p">,</span><span class="mh">000</span><span class="w"> </span><span class="n">PLN</span><span class="w"> </span><span class="err">✅</span><span class="w">        </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">✅</span><span class="w"> </span><span class="nl">Kontrakty:</span><span class="w"> </span><span class="mh">12</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mh">10</span><span class="w"> </span><span class="err">✅</span><span class="w">                  </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">⚠️</span><span class="w"> </span><span class="nl">Rating:</span><span class="w"> </span><span class="mf">3.8</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">4.0</span><span class="w"> </span><span class="p">(</span><span class="mf">0.2</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">celu</span><span class="p">)</span><span class="w">       </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">⚠️</span><span class="w"> </span><span class="nl">Reputation:</span><span class="w"> </span><span class="mh">58</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mh">60</span><span class="w"> </span><span class="p">(</span><span class="mh">2</span><span class="w"> </span><span class="n">pkt</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">celu</span><span class="p">)</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└───────────────────────────────────────────┘</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">┌───────────────────────────────────────────┐</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">💰</span><span class="w"> </span><span class="n">FINANSE</span><span class="w">                                </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">├─</span><span class="w"> </span><span class="n">Miesięczna</span><span class="w"> </span><span class="nl">sprzedaż:</span><span class="w"> </span><span class="mh">8</span><span class="p">,</span><span class="mh">500</span><span class="w"> </span><span class="n">PLN</span><span class="w">        </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">├─</span><span class="w"> </span><span class="n">Trade</span><span class="w"> </span><span class="nl">Marketing:</span><span class="w"> </span><span class="mh">1</span><span class="p">,</span><span class="mh">200</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mh">2</span><span class="p">,</span><span class="mh">000</span><span class="w"> </span><span class="n">PLN</span><span class="w">    </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">└─</span><span class="w"> </span><span class="nl">Trend:</span><span class="w"> </span><span class="o">+</span><span class="mh">15</span><span class="o">%</span><span class="w"> </span><span class="n">vs</span><span class="w"> </span><span class="n">poprzedni</span><span class="w"> </span><span class="n">tydzień</span><span class="w"> </span><span class="err">📈</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└───────────────────────────────────────────┘</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">┌───────────────────────────────────────────┐</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">⭐</span><span class="w"> </span><span class="n">REPUTACJA</span><span class="w">                              </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">                                           </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="nl">Ogólna:</span><span class="w"> </span><span class="mh">58</span><span class="o">/</span><span class="mh">100</span><span class="w"> </span><span class="p">(</span><span class="n">Average</span><span class="w"> </span><span class="err">⚠️</span><span class="p">)</span><span class="w">              </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">████████████░░░░░░░░</span><span class="w">                      </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">                                           </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="n">Timeline</span><span class="w"> </span><span class="p">(</span><span class="n">ostatnie</span><span class="w"> </span><span class="mh">7</span><span class="w"> </span><span class="n">dni</span><span class="p">)</span><span class="o">:</span><span class="w">               </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">   </span><span class="mh">52</span><span class="w"> </span><span class="err">━━</span><span class="w"> </span><span class="mh">54</span><span class="w"> </span><span class="err">━━</span><span class="w"> </span><span class="mh">56</span><span class="w"> </span><span class="err">━━</span><span class="w"> </span><span class="mh">58</span><span class="w"> </span><span class="err">📈</span><span class="w">               </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">                                           </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="n">Top</span><span class="w"> </span><span class="n">klienci</span><span class="w"> </span><span class="p">(</span><span class="n">reputation</span><span class="p">)</span><span class="o">:</span><span class="w">                </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">🥇</span><span class="w"> </span><span class="nl">Dino:</span><span class="w"> </span><span class="mh">85</span><span class="o">/</span><span class="mh">100</span><span class="w"> </span><span class="p">(</span><span class="n">Top</span><span class="w"> </span><span class="n">Performer</span><span class="p">)</span><span class="w">          </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">🥈</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="nl">ABC:</span><span class="w"> </span><span class="mh">70</span><span class="o">/</span><span class="mh">100</span><span class="w"> </span><span class="p">(</span><span class="n">Happy</span><span class="p">)</span><span class="w">             </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">🥉</span><span class="w"> </span><span class="err">Ż</span><span class="nl">abka:</span><span class="w"> </span><span class="mh">50</span><span class="o">/</span><span class="mh">100</span><span class="w"> </span><span class="p">(</span><span class="n">Neutral</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">NEW</span><span class="p">)</span><span class="w">         </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└───────────────────────────────────────────┘</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">┌───────────────────────────────────────────┐</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">📅</span><span class="w"> </span><span class="n">ZADANIA</span><span class="w"> </span><span class="p">(</span><span class="n">dzisiaj</span><span class="p">)</span><span class="w">                      </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">                                           </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">🔴</span><span class="w"> </span><span class="nl">PILNE:</span><span class="w"> </span><span class="n">Reklamacja</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Kaufland</span><span class="w"> </span><span class="p">(</span><span class="mh">3</span><span class="n">h</span><span class="p">)</span><span class="w">     </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">🟡</span><span class="w"> </span><span class="n">Wizyta</span><span class="w"> </span><span class="n">regularna</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Dino</span><span class="w"> </span><span class="p">(</span><span class="n">dziś</span><span class="p">)</span><span class="w">        </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">🟢</span><span class="w"> </span><span class="n">Cross</span><span class="o">-</span><span class="n">sell</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Sklep</span><span class="w"> </span><span class="n">XYZ</span><span class="w"> </span><span class="p">(</span><span class="mh">7</span><span class="w"> </span><span class="n">dni</span><span class="p">)</span><span class="w">        </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└───────────────────────────────────────────┘</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">┌───────────────────────────────────────────┐</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">🗺️</span><span class="w"> </span><span class="n">MAPA</span><span class="w"> </span><span class="p">(</span><span class="mh">15</span><span class="w"> </span><span class="n">klientów</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="n">territory</span><span class="p">)</span><span class="w">        </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">                                           </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">     </span><span class="p">[</span><span class="n">Mini</span><span class="o">-</span><span class="n">map</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="n">pinami</span><span class="p">]</span><span class="w">                  </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w">                                           </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">🟢</span><span class="w"> </span><span class="nl">ACTIVE:</span><span class="w"> </span><span class="mh">8</span><span class="w">    </span><span class="err">🔴</span><span class="w"> </span><span class="nl">LOST:</span><span class="w"> </span><span class="mh">2</span><span class="w">              </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">🔵</span><span class="w"> </span><span class="nl">PROSPECT:</span><span class="w"> </span><span class="mh">5</span><span class="w">                            </span><span class="err">│</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">└───────────────────────────────────────────┘</span><span class="w"> </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<p><strong>UI Philosophy:</strong><br />
+Game-like = motivating<br />
+Dashboard = sales CRM + RPG stats</p>
+<hr />
+<h2>SLAJD 16: PROGRESSION - Awans Level 1 → 2</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">  </span><span class="err">🎯</span><span class="w"> </span><span class="nl">AWANS:</span><span class="w"> </span><span class="n">JUNIOR</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">MID</span><span class="w"> </span><span class="n">SALESPERSON</span><span class="w">             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">WYMAGANIA</span><span class="w"> </span><span class="p">(</span><span class="n">Level</span><span class="w"> </span><span class="mh">2</span><span class="p">)</span><span class="o">:</span><span class="w">                          </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">✅</span><span class="w"> </span><span class="n">Sprzedaż</span><span class="w"> </span><span class="nl">miesięczna:</span><span class="w"> </span><span class="err">≥</span><span class="w"> </span><span class="mh">10</span><span class="p">,</span><span class="mh">000</span><span class="w"> </span><span class="n">PLN</span><span class="w">         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">✅</span><span class="w"> </span><span class="n">Kontrakty</span><span class="w"> </span><span class="nl">aktywne:</span><span class="w"> </span><span class="err">≥</span><span class="w"> </span><span class="mh">10</span><span class="w">                    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">✅</span><span class="w"> </span><span class="err">Ś</span><span class="n">rednia</span><span class="w"> </span><span class="n">ocena</span><span class="w"> </span><span class="nl">wizyt:</span><span class="w"> </span><span class="err">≥</span><span class="w"> </span><span class="mf">4.0</span><span class="err">⭐</span><span class="w">               </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">✅</span><span class="w"> </span><span class="n">Reputacja</span><span class="w"> </span><span class="nl">ogólna:</span><span class="w"> </span><span class="err">≥</span><span class="w"> </span><span class="mh">60</span><span class="o">/</span><span class="mh">100</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nl">Czas:</span><span class="w"> </span><span class="o">~</span><span class="mh">4</span><span class="w"> </span><span class="n">tygodnie</span><span class="w"> </span><span class="p">(</span><span class="n">MVP</span><span class="p">)</span><span class="w">                       </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">───────────────────────────────────────────</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">CO</span><span class="w"> </span><span class="n">SIĘ</span><span class="w"> </span><span class="n">ZMIENIA</span><span class="w"> </span><span class="n">NA</span><span class="w"> </span><span class="n">LEVEL</span><span class="w"> </span><span class="mh">2</span><span class="o">?</span><span class="w">                    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">📈</span><span class="w"> </span><span class="n">Większe</span><span class="w"> </span><span class="nl">możliwości:</span><span class="w">                        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nl">Territory:</span><span class="w"> </span><span class="mh">15</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mh">25</span><span class="w"> </span><span class="n">klientów</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nl">Portfolio:</span><span class="w"> </span><span class="mh">6</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mh">12</span><span class="w"> </span><span class="n">produktów</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Budget</span><span class="w"> </span><span class="nl">TM:</span><span class="w"> </span><span class="mh">2</span><span class="p">,</span><span class="mh">000</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mh">3</span><span class="p">,</span><span class="mh">500</span><span class="w"> </span><span class="n">PLN</span><span class="o">/</span><span class="n">m</span><span class="w">             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">🎯</span><span class="w"> </span><span class="n">Trudniejsze</span><span class="w"> </span><span class="nl">wyzwania:</span><span class="w">                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Sieci</span><span class="w"> </span><span class="n">handlowe</span><span class="w"> </span><span class="p">(</span><span class="n">Kaufland</span><span class="p">,</span><span class="w"> </span><span class="n">Tesco</span><span class="p">)</span><span class="w">           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Konkurencja</span><span class="w"> </span><span class="n">aktywna</span><span class="w"> </span><span class="p">(</span><span class="n">Palmolive</span><span class="w"> </span><span class="n">walczy</span><span class="o">!</span><span class="p">)</span><span class="w">    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Seasonal</span><span class="w"> </span><span class="n">trends</span><span class="w"> </span><span class="p">(</span><span class="n">lato</span><span class="o">/</span><span class="n">zima</span><span class="p">)</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">💡</span><span class="w"> </span><span class="n">Nowe</span><span class="w"> </span><span class="nl">mechaniki:</span><span class="w">                            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Zespół</span><span class="w"> </span><span class="p">(</span><span class="n">zarządzanie</span><span class="w"> </span><span class="n">juniorami</span><span class="p">)</span><span class="w">             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Targety</span><span class="w"> </span><span class="n">regionalne</span><span class="w"> </span><span class="p">(</span><span class="n">KPI</span><span class="w"> </span><span class="n">szefa</span><span class="p">)</span><span class="w">             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Eventy</span><span class="w"> </span><span class="n">branżowe</span><span class="w"> </span><span class="p">(</span><span class="n">targi</span><span class="p">,</span><span class="w"> </span><span class="n">konferencje</span><span class="p">)</span><span class="w">       </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">───────────────────────────────────────────</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">ROADMAP</span><span class="w"> </span><span class="p">(</span><span class="mh">3</span><span class="w"> </span><span class="n">poziomy</span><span class="p">)</span><span class="o">:</span><span class="w">                          </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Level</span><span class="w"> </span><span class="mh">1</span><span class="o">:</span><span class="w"> </span><span class="n">JUNIOR</span><span class="w"> </span><span class="p">(</span><span class="mh">4</span><span class="w"> </span><span class="n">tygodnie</span><span class="p">)</span><span class="w">                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="n">Piaseczno</span><span class="w"> </span><span class="p">(</span><span class="mh">15</span><span class="w"> </span><span class="n">klientów</span><span class="p">)</span><span class="w">                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">    </span><span class="err">└─</span><span class="w"> </span><span class="n">Podstawowe</span><span class="w"> </span><span class="n">narzędzia</span><span class="w">                     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">         </span><span class="err">↓</span><span class="w">                                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Level</span><span class="w"> </span><span class="mh">2</span><span class="o">:</span><span class="w"> </span><span class="n">MID</span><span class="w"> </span><span class="p">(</span><span class="mh">8</span><span class="w"> </span><span class="n">tygodni</span><span class="p">)</span><span class="w">                     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="n">Region</span><span class="w"> </span><span class="p">(</span><span class="mh">25</span><span class="w"> </span><span class="n">klientów</span><span class="p">)</span><span class="w">                    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="n">Konkurencja</span><span class="w">                              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">    </span><span class="err">└─</span><span class="w"> </span><span class="n">Seasonal</span><span class="w"> </span><span class="n">trends</span><span class="w">                          </span><span class="err">│</span>
+<span class="err">│</span><span class="w">         </span><span class="err">↓</span><span class="w">                                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Level</span><span class="w"> </span><span class="mh">3</span><span class="o">:</span><span class="w"> </span><span class="n">SENIOR</span><span class="w"> </span><span class="p">(</span><span class="mh">12</span><span class="w"> </span><span class="n">tygodni</span><span class="p">)</span><span class="w">                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="n">Multi</span><span class="o">-</span><span class="n">region</span><span class="w"> </span><span class="p">(</span><span class="mh">50</span><span class="w"> </span><span class="n">klientów</span><span class="p">)</span><span class="w">              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">    </span><span class="err">├─</span><span class="w"> </span><span class="n">Team</span><span class="w"> </span><span class="n">management</span><span class="w"> </span><span class="p">(</span><span class="mh">3</span><span class="w"> </span><span class="n">juniorów</span><span class="p">)</span><span class="w">            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">    </span><span class="err">└─</span><span class="w"> </span><span class="n">Strategic</span><span class="w"> </span><span class="n">planning</span><span class="w">                       </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<p><strong>Progression = Retention!</strong><br />
+Gracz widzi path do mastery (nie tylko &ldquo;ukończone&rdquo;)</p>
+<hr />
+<h2>SLAJD 17: TECHNOLOGIA - Stack</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────┐</span>
+<span class="err">│</span>  <span class="err">🔧</span> <span class="n">TECHNOLOGY</span> <span class="n">STACK</span>                            <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="n">FRONTEND</span><span class="p">:</span>                                     <span class="err">│</span>
+<span class="err">│</span>  <span class="err">────────────────────────────────────────────</span>  <span class="err">│</span>
+<span class="err">│</span>  <span class="err">🐍</span> <span class="n">Streamlit</span> <span class="p">(</span><span class="n">Python</span> <span class="n">web</span> <span class="n">framework</span><span class="p">)</span>           <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Szybki</span> <span class="n">development</span>                        <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Natywna</span> <span class="n">integracja</span> <span class="n">z</span> <span class="n">Python</span>               <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Built</span><span class="o">-</span><span class="n">in</span> <span class="n">widgets</span> <span class="p">(</span><span class="n">sliders</span><span class="p">,</span> <span class="n">charts</span><span class="p">)</span>        <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="err">📊</span> <span class="n">Plotly</span> <span class="p">(</span><span class="n">Interactive</span> <span class="n">charts</span><span class="p">)</span>                <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Reputation</span> <span class="n">timeline</span> <span class="p">(</span><span class="n">line</span> <span class="n">chart</span><span class="p">)</span>          <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Portfolio</span> <span class="n">breakdown</span> <span class="p">(</span><span class="n">pie</span> <span class="n">chart</span><span class="p">)</span>           <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Market</span> <span class="n">share</span> <span class="n">evolution</span> <span class="p">(</span><span class="n">area</span> <span class="n">chart</span><span class="p">)</span>       <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="err">🗺️</span> <span class="n">Folium</span> <span class="p">(</span><span class="n">Maps</span><span class="p">)</span>                              <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">OpenStreetMap</span> <span class="n">integration</span>                 <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Custom</span> <span class="n">markers</span> <span class="p">(</span><span class="n">ACTIVE</span><span class="o">/</span><span class="n">PROSPECT</span><span class="o">/</span><span class="n">LOST</span><span class="p">)</span>     <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Distance</span> <span class="n">calculation</span> <span class="p">(</span><span class="n">energia</span><span class="p">)</span>            <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="err">───────────────────────────────────────────</span>   <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="n">BACKEND</span><span class="p">:</span>                                      <span class="err">│</span>
+<span class="err">│</span>  <span class="err">────────────────────────────────────────────</span>  <span class="err">│</span>
+<span class="err">│</span>  <span class="err">🤖</span> <span class="n">Google</span> <span class="n">Gemini</span> <span class="n">API</span>                          <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Conversation</span> <span class="n">simulation</span>                   <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Context</span><span class="o">-</span><span class="n">aware</span> <span class="n">responses</span>                   <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="mi">1</span><span class="o">-</span><span class="mi">5</span><span class="err">⭐</span> <span class="n">rating</span> <span class="n">with</span> <span class="n">explanations</span>            <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="err">💾</span> <span class="n">JSON</span> <span class="p">(</span><span class="n">Data</span> <span class="n">storage</span> <span class="o">-</span> <span class="n">MVP</span><span class="p">)</span>                  <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">users_data</span><span class="p">.</span><span class="n">json</span> <span class="p">(</span><span class="n">game</span> <span class="n">state</span><span class="p">)</span>             <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Fast</span> <span class="n">prototyping</span>                          <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Easy</span> <span class="n">debugging</span>                            <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="err">📅</span> <span class="n">Python</span> <span class="n">datetime</span>                            <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Task</span> <span class="n">deadlines</span>                            <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Visit</span> <span class="n">frequency</span> <span class="n">tracking</span>                  <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Weekly</span><span class="o">/</span><span class="n">monthly</span> <span class="n">rhythms</span>                    <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="err">───────────────────────────────────────────</span>   <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="n">DEPLOYMENT</span><span class="p">:</span>                                   <span class="err">│</span>
+<span class="err">│</span>  <span class="err">────────────────────────────────────────────</span>  <span class="err">│</span>
+<span class="err">│</span>  <span class="err">☁️</span> <span class="n">Streamlit</span> <span class="n">Cloud</span> <span class="p">(</span><span class="n">MVP</span><span class="p">)</span>                      <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Free</span> <span class="n">tier</span><span class="p">:</span> <span class="mi">1</span><span class="n">GB</span> <span class="n">RAM</span><span class="p">,</span> <span class="mi">1</span> <span class="n">CPU</span>                <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Auto</span><span class="o">-</span><span class="n">deployment</span> <span class="n">from</span> <span class="n">GitHub</span>               <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">SSL</span> <span class="n">included</span>                              <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="err">🚀</span> <span class="n">Future</span><span class="p">:</span> <span class="n">Custom</span> <span class="n">hosting</span>                     <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">PostgreSQL</span> <span class="p">(</span><span class="n">scale</span><span class="p">)</span>                        <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Redis</span> <span class="p">(</span><span class="n">caching</span><span class="p">)</span>                           <span class="err">│</span>
+<span class="err">│</span>    <span class="err">•</span> <span class="n">Docker</span> <span class="p">(</span><span class="n">isolation</span><span class="p">)</span>                        <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="err">───────────────────────────────────────────</span>   <span class="err">│</span>
+<span class="err">│</span>                                                 <span class="err">│</span>
+<span class="err">│</span>  <span class="n">KOSZT</span> <span class="p">(</span><span class="n">MVP</span><span class="p">):</span>                                  <span class="err">│</span>
+<span class="err">│</span>  <span class="err">•</span> <span class="n">Streamlit</span> <span class="n">Cloud</span><span class="p">:</span> <span class="mi">0</span> <span class="n">PLN</span> <span class="p">(</span><span class="n">free</span> <span class="n">tier</span><span class="p">)</span>         <span class="err">│</span>
+<span class="err">│</span>  <span class="err">•</span> <span class="n">Gemini</span> <span class="n">API</span><span class="p">:</span> <span class="o">~</span><span class="mi">50</span> <span class="n">PLN</span><span class="o">/</span><span class="n">m</span> <span class="p">(</span><span class="mi">100</span> <span class="n">users</span><span class="p">)</span>          <span class="err">│</span>
+<span class="err">│</span>  <span class="err">•</span> <span class="n">Domain</span><span class="p">:</span> <span class="mi">50</span> <span class="n">PLN</span><span class="o">/</span><span class="n">rok</span>                          <span class="err">│</span>
+<span class="err">│</span>  <span class="err">──────────────</span>                                <span class="err">│</span>
+<span class="err">│</span>  <span class="n">TOTAL</span><span class="p">:</span> <span class="o">~</span><span class="mi">100</span> <span class="n">PLN</span><span class="o">/</span><span class="n">miesiąc</span> <span class="p">(</span><span class="n">start</span><span class="p">)</span>               <span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<p><strong>Why this stack?</strong><br />
+Szybkość MVP &gt; Perfect architecture<br />
+Streamlit = 6 tyg implementacji vs 6 m-cy React</p>
+<hr />
+<h2>SLAJD 18: TIMELINE IMPLEMENTACJI</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">  </span><span class="err">📅</span><span class="w"> </span><span class="mi">6</span><span class="o">-</span><span class="nx">WEEK</span><span class="w"> </span><span class="nx">IMPLEMENTATION</span><span class="w"> </span><span class="nx">PLAN</span><span class="w">                  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">WEEK</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="w"> </span><span class="nx">DATA</span><span class="w"> </span><span class="nx">STRUCTURES</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nx">MAP</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Client</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="nx">model</span><span class="w"> </span><span class="p">(</span><span class="nx">JSON</span><span class="w"> </span><span class="nx">schema</span><span class="p">)</span><span class="w">             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Task</span><span class="w"> </span><span class="nx">system</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="w"> </span><span class="nx">types</span><span class="p">)</span><span class="w">                       </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Folium</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="p">(</span><span class="nx">Piaseczno</span><span class="w"> </span><span class="nx">area</span><span class="p">)</span><span class="w">                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="nx">fake</span><span class="w"> </span><span class="nx">clients</span><span class="w"> </span><span class="p">(</span><span class="nx">realistic</span><span class="w"> </span><span class="nx">data</span><span class="p">)</span><span class="w">            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">Deliverable</span><span class="p">:</span><span class="w"> </span><span class="nx">Interactive</span><span class="w"> </span><span class="nx">map</span><span class="w"> </span><span class="nx">with</span><span class="w"> </span><span class="nx">pins</span><span class="w">       </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">WEEK</span><span class="w"> </span><span class="mi">2</span><span class="p">:</span><span class="w"> </span><span class="nx">CALENDAR</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nx">TASK</span><span class="w"> </span><span class="nx">MANAGEMENT</span><span class="w">            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Calendar</span><span class="w"> </span><span class="nx">UI</span><span class="w"> </span><span class="p">(</span><span class="nx">Streamlit</span><span class="p">)</span><span class="w">                     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Task</span><span class="w"> </span><span class="kt">auto</span><span class="o">-</span><span class="nx">generation</span><span class="w"> </span><span class="p">(</span><span class="nx">wizyty</span><span class="w"> </span><span class="nx">regularne</span><span class="p">)</span><span class="w">     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Deadline</span><span class="w"> </span><span class="nx">tracking</span><span class="w">                           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Energy</span><span class="w"> </span><span class="nx">system</span><span class="w"> </span><span class="p">(</span><span class="mi">100</span><span class="o">%</span><span class="w"> </span><span class="nx">daily</span><span class="p">)</span><span class="w">                  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">Deliverable</span><span class="p">:</span><span class="w"> </span><span class="nx">Functional</span><span class="w"> </span><span class="nx">calendar</span><span class="w">             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">WEEK</span><span class="w"> </span><span class="mi">3</span><span class="p">:</span><span class="w"> </span><span class="nx">AI</span><span class="w"> </span><span class="nx">CONVERSATIONS</span><span class="w">                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Gemini</span><span class="w"> </span><span class="nx">API</span><span class="w"> </span><span class="nx">integration</span><span class="w">                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Prompt</span><span class="w"> </span><span class="nx">engineering</span><span class="w"> </span><span class="p">(</span><span class="nx">PROSPECT</span><span class="o">/</span><span class="nx">ACTIVE</span><span class="o">/</span><span class="nx">LOST</span><span class="p">)</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Context</span><span class="w"> </span><span class="nx">generation</span><span class="w"> </span><span class="p">(</span><span class="nx">client</span><span class="w"> </span><span class="nx">history</span><span class="p">)</span><span class="w">         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="mi">1</span><span class="o">-</span><span class="mi">5</span><span class="err">⭐</span><span class="w"> </span><span class="nx">rating</span><span class="w"> </span><span class="nx">system</span><span class="w">                         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">Deliverable</span><span class="p">:</span><span class="w"> </span><span class="nx">Working</span><span class="w"> </span><span class="nx">AI</span><span class="w"> </span><span class="nx">chat</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="nx">scenarios</span><span class="p">)</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">WEEK</span><span class="w"> </span><span class="mi">4</span><span class="p">:</span><span class="w"> </span><span class="nx">OUTCOMES</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nx">EFFECTS</span><span class="w">                    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Conversation</span><span class="w"> </span><span class="nx">outcomes</span><span class="w"> </span><span class="nx">matrix</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Task</span><span class="w"> </span><span class="nx">completion</span><span class="w"> </span><span class="nx">effects</span><span class="w">                     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Reputation</span><span class="w"> </span><span class="nx">calculations</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="o">-</span><span class="nx">tier</span><span class="p">)</span><span class="w">            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Client</span><span class="w"> </span><span class="nx">status</span><span class="w"> </span><span class="nx">transitions</span><span class="w"> </span><span class="p">(</span><span class="nx">PROSPECT</span><span class="err">→</span><span class="nx">ACTIVE</span><span class="p">)</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">Deliverable</span><span class="p">:</span><span class="w"> </span><span class="nx">Full</span><span class="w"> </span><span class="nx">game</span><span class="w"> </span><span class="nx">loop</span><span class="w"> </span><span class="nx">works</span><span class="w">            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">WEEK</span><span class="w"> </span><span class="mi">5</span><span class="p">:</span><span class="w"> </span><span class="nx">TRADE</span><span class="w"> </span><span class="nx">MARKETING</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nx">EVENTS</span><span class="w">              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="nx">narzędzi</span><span class="w"> </span><span class="nx">TM</span><span class="w"> </span><span class="p">(</span><span class="nx">budget</span><span class="w"> </span><span class="nx">tracking</span><span class="p">)</span><span class="w">            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Event</span><span class="w"> </span><span class="nx">system</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="nx">day</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="nx">distribution</span><span class="p">)</span><span class="w">      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Tool</span><span class="w"> </span><span class="nx">cooldowns</span><span class="w">                              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">ROI</span><span class="w"> </span><span class="nx">calculations</span><span class="w">                            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">Deliverable</span><span class="p">:</span><span class="w"> </span><span class="nx">Strategic</span><span class="w"> </span><span class="nx">depth</span><span class="w"> </span><span class="nx">added</span><span class="w">           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">WEEK</span><span class="w"> </span><span class="mi">6</span><span class="p">:</span><span class="w"> </span><span class="nx">POLISH</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nx">BALANCE</span><span class="w"> </span><span class="nx">TESTING</span><span class="w">              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Dashboard</span><span class="w"> </span><span class="nx">UI</span><span class="w"> </span><span class="p">(</span><span class="nx">charts</span><span class="p">,</span><span class="w"> </span><span class="nx">stats</span><span class="p">)</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Tutorial</span><span class="w"> </span><span class="p">(</span><span class="nx">onboarding</span><span class="w"> </span><span class="nx">nowych</span><span class="w"> </span><span class="nx">graczy</span><span class="p">)</span><span class="w">         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Balance</span><span class="w"> </span><span class="nx">tuning</span><span class="w"> </span><span class="p">(</span><span class="nx">probabilities</span><span class="p">)</span><span class="w">              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Bug</span><span class="w"> </span><span class="nx">fixing</span><span class="w">                                  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">Deliverable</span><span class="p">:</span><span class="w"> </span><span class="nx">MVP</span><span class="w"> </span><span class="nx">ready</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">beta</span><span class="w"> </span><span class="nx">testers</span><span class="w">      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">───────────────────────────────────────────</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">POST</span><span class="o">-</span><span class="nx">LAUNCH</span><span class="w"> </span><span class="p">(</span><span class="nx">Week</span><span class="w"> </span><span class="mi">7</span><span class="o">-</span><span class="mi">12</span><span class="p">):</span><span class="w">                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Beta</span><span class="w"> </span><span class="nx">testing</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="o">-</span><span class="mi">20</span><span class="w"> </span><span class="nx">handlowców</span><span class="p">)</span><span class="w">            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Feedback</span><span class="w"> </span><span class="nx">collection</span><span class="w">                         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Iteracja</span><span class="w"> </span><span class="nx">mechanik</span><span class="w">                           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="nx">Content</span><span class="w"> </span><span class="nx">expansion</span><span class="w"> </span><span class="p">(</span><span class="nx">więcej</span><span class="w"> </span><span class="nx">klientów</span><span class="p">)</span><span class="w">         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="nx">FULL</span><span class="w"> </span><span class="nx">LAUNCH</span><span class="p">:</span><span class="w"> </span><span class="nx">Week</span><span class="w"> </span><span class="mi">13</span><span class="w">                          </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<p><strong>Team:</strong><br />
+1 dev (Python/Streamlit) + 1 game designer (balance)<br />
+= <strong>6 tygodni do MVP</strong></p>
+<hr />
+<h2>SLAJD 19: METRYKI SUKCESU - Jak zmierzymy efekt?</h2>
+<div class="codehilite"><pre><span></span><code>┌─────────────────────────────────────────────────┐
+│<span class="w">  </span>📊<span class="w"> </span><span class="nv">SUCCESS</span><span class="w"> </span><span class="nv">METRICS</span><span class="w">                             </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span><span class="nv">LEARNING</span><span class="w"> </span><span class="nv">OUTCOMES</span>:<span class="w">                            </span>│
+│<span class="w">  </span>────────────────────────────────────────────<span class="w">  </span>│
+│<span class="w">  </span>🎯<span class="w"> </span><span class="nv">Avg</span><span class="w"> </span><span class="nv">rating</span><span class="w"> </span><span class="nv">w</span><span class="w"> </span><span class="nv">real</span><span class="w"> </span><span class="nv">cold</span><span class="w"> </span><span class="nv">calls</span><span class="w">               </span>│
+│<span class="w">     </span><span class="nv">Baseline</span>:<span class="w"> </span><span class="mi">2</span>.<span class="mi">5</span>⭐<span class="w"> </span><span class="ss">(</span><span class="nv">juniorzy</span><span class="w"> </span><span class="nv">bez</span><span class="w"> </span><span class="nv">treningu</span><span class="ss">)</span><span class="w">    </span>│
+│<span class="w">     </span><span class="nv">Target</span>:<span class="w"> </span><span class="mi">3</span>.<span class="mi">5</span>⭐<span class="o">+</span><span class="w"> </span><span class="ss">(</span><span class="nv">po</span><span class="w"> </span><span class="mi">20</span><span class="nv">h</span><span class="w"> </span><span class="nv">gry</span><span class="ss">)</span><span class="w">                </span>│
+│<span class="w">     </span><span class="nv">Measure</span>:<span class="w"> </span><span class="nv">CRM</span><span class="w"> </span><span class="nv">data</span><span class="w"> </span><span class="ss">(</span><span class="nv">Salesforce</span><span class="o">/</span><span class="nv">HubSpot</span><span class="ss">)</span><span class="w">     </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>🎯<span class="w"> </span><span class="nv">Time</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">first</span><span class="w"> </span><span class="nv">contract</span><span class="w"> </span><span class="ss">(</span><span class="nv">juniorzy</span><span class="ss">)</span><span class="w">          </span>│
+│<span class="w">     </span><span class="nv">Baseline</span>:<span class="w"> </span><span class="mi">90</span><span class="o">-</span><span class="mi">120</span><span class="w"> </span><span class="nv">dni</span><span class="w">                       </span>│
+│<span class="w">     </span><span class="nv">Target</span>:<span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="nv">dni</span><span class="w"> </span><span class="ss">(</span><span class="mi">33</span><span class="o">%</span><span class="w"> </span><span class="nv">szybciej</span><span class="o">!</span><span class="ss">)</span><span class="w">             </span>│
+│<span class="w">     </span><span class="nv">Measure</span>:<span class="w"> </span><span class="nv">HR</span><span class="w"> </span><span class="nv">onboarding</span><span class="w"> </span><span class="nv">tracking</span><span class="w">            </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>🎯<span class="w"> </span><span class="nv">Win</span><span class="o">-</span><span class="nv">back</span><span class="w"> </span><span class="nv">success</span><span class="w"> </span><span class="nv">rate</span><span class="w">                      </span>│
+│<span class="w">     </span><span class="nv">Baseline</span>:<span class="w"> </span><span class="mi">15</span><span class="o">-</span><span class="mi">20</span><span class="o">%</span><span class="w"> </span><span class="ss">(</span><span class="nv">industry</span><span class="w"> </span><span class="nv">avg</span><span class="ss">)</span><span class="w">            </span>│
+│<span class="w">     </span><span class="nv">Target</span>:<span class="w"> </span><span class="mi">25</span><span class="o">-</span><span class="mi">30</span><span class="o">%</span><span class="w">                             </span>│
+│<span class="w">     </span><span class="nv">Measure</span>:<span class="w"> </span><span class="nv">CRM</span><span class="w"> </span><span class="nv">LOST</span>→<span class="nv">ACTIVE</span><span class="w"> </span><span class="nv">transitions</span><span class="w">       </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>───────────────────────────────────────────<span class="w">   </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span><span class="nv">ENGAGEMENT</span><span class="w"> </span><span class="nv">METRICS</span>:<span class="w">                           </span>│
+│<span class="w">  </span>────────────────────────────────────────────<span class="w">  </span>│
+│<span class="w">  </span>📈<span class="w"> </span><span class="nv">Daily</span><span class="w"> </span><span class="nv">Active</span><span class="w"> </span><span class="nv">Users</span><span class="w"> </span><span class="ss">(</span><span class="nv">DAU</span><span class="ss">)</span><span class="w">                   </span>│
+│<span class="w">     </span><span class="nv">Target</span>:<span class="w"> </span><span class="mi">70</span><span class="o">%</span><span class="w"> </span><span class="nv">graczy</span><span class="w"> </span><span class="nv">loguje</span><span class="w"> </span><span class="nv">si</span>ę<span class="w"> </span><span class="mi">5</span><span class="o">+</span><span class="w"> </span><span class="nv">dni</span><span class="o">/</span><span class="nv">tyg</span><span class="w">  </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>📈<span class="w"> </span><span class="nv">Session</span><span class="w"> </span><span class="nv">length</span><span class="w">                             </span>│
+│<span class="w">     </span><span class="nv">Target</span>:<span class="w"> </span><span class="mi">25</span><span class="o">-</span><span class="mi">35</span><span class="w"> </span><span class="nv">min</span><span class="w"> </span><span class="ss">(</span><span class="nv">sweet</span><span class="w"> </span><span class="nv">spot</span><span class="ss">)</span><span class="w">             </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>📈<span class="w"> </span><span class="nv">Retention</span><span class="w"> </span><span class="ss">(</span><span class="mi">30</span><span class="w"> </span><span class="nv">dni</span><span class="ss">)</span><span class="w">                         </span>│
+│<span class="w">     </span><span class="nv">Target</span>:<span class="w"> </span><span class="mi">60</span><span class="o">%+</span><span class="w"> </span><span class="ss">(</span><span class="nv">benchmark</span>:<span class="w"> </span><span class="nv">Duolingo</span><span class="w"> </span><span class="mi">55</span><span class="o">%</span><span class="ss">)</span><span class="w">     </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>📈<span class="w"> </span><span class="nv">Level</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="nv">completion</span><span class="w"> </span><span class="nv">rate</span><span class="w">                    </span>│
+│<span class="w">     </span><span class="nv">Target</span>:<span class="w"> </span><span class="mi">40</span><span class="o">%</span><span class="w"> </span><span class="nv">graczy</span><span class="w"> </span><span class="nv">ko</span>ń<span class="nv">czy</span><span class="w"> </span><span class="nv">Level</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="ss">(</span><span class="mi">4</span><span class="w"> </span><span class="nv">tyg</span><span class="ss">)</span><span class="w">  </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>───────────────────────────────────────────<span class="w">   </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span><span class="nv">BUSINESS</span><span class="w"> </span><span class="nv">IMPACT</span>:<span class="w">                              </span>│
+│<span class="w">  </span>────────────────────────────────────────────<span class="w">  </span>│
+│<span class="w">  </span>💰<span class="w"> </span><span class="nv">Koszt</span><span class="w"> </span><span class="nv">treningu</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">handlowiec</span><span class="w">                </span>│
+│<span class="w">     </span><span class="nv">Traditional</span>:<span class="w"> </span><span class="mi">5</span>,<span class="mi">000</span><span class="w"> </span><span class="nv">PLN</span><span class="w"> </span><span class="ss">(</span><span class="mi">2</span><span class="o">-</span><span class="nv">day</span><span class="w"> </span><span class="nv">workshop</span><span class="ss">)</span><span class="w">    </span>│
+│<span class="w">     </span><span class="nv">Simulator</span>:<span class="w"> </span><span class="mi">500</span><span class="w"> </span><span class="nv">PLN</span><span class="w"> </span><span class="ss">(</span><span class="nv">licencja</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">hosting</span><span class="ss">)</span><span class="w">    </span>│
+│<span class="w">     </span><span class="nv">Savings</span>:<span class="w"> </span><span class="mi">90</span><span class="o">%</span><span class="w"> </span>🎉<span class="w">                            </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>💰<span class="w"> </span><span class="nv">Onboarding</span><span class="w"> </span><span class="nv">cost</span><span class="w"> </span><span class="nv">reduction</span><span class="w">                  </span>│
+│<span class="w">     </span><span class="nv">Faster</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">productivity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">30</span><span class="o">%</span><span class="w"> </span><span class="nv">cost</span><span class="w">         </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>💰<span class="w"> </span><span class="nv">ROI</span><span class="w">                                        </span>│
+│<span class="w">     </span><span class="mi">1</span><span class="w"> </span><span class="nv">kontrakt</span><span class="w"> </span><span class="nv">extra</span><span class="w"> </span><span class="ss">(</span><span class="nv">junior</span><span class="ss">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="nv">k</span><span class="w"> </span><span class="nv">PLN</span><span class="o">/</span><span class="nv">rok</span><span class="w">    </span>│
+│<span class="w">     </span><span class="k">Break</span><span class="o">-</span><span class="nv">even</span>:<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="nv">miesi</span>ą<span class="nv">c</span><span class="o">!</span><span class="w">                     </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span>───────────────────────────────────────────<span class="w">   </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span><span class="nv">A</span><span class="o">/</span><span class="nv">B</span><span class="w"> </span><span class="nv">TEST</span><span class="w"> </span><span class="ss">(</span><span class="mi">6</span><span class="w"> </span><span class="nv">miesi</span>ę<span class="nv">cy</span><span class="ss">)</span>:<span class="w">                        </span>│
+│<span class="w">  </span><span class="nv">Grupa</span><span class="w"> </span><span class="nv">A</span>:<span class="w"> </span><span class="nv">Tradycyjny</span><span class="w"> </span><span class="nv">trening</span><span class="w"> </span><span class="ss">(</span><span class="mi">20</span><span class="w"> </span><span class="nv">os</span>ó<span class="nv">b</span><span class="ss">)</span><span class="w">        </span>│
+│<span class="w">  </span><span class="nv">Grupa</span><span class="w"> </span><span class="nv">B</span>:<span class="w"> </span><span class="nv">Simulator</span><span class="w"> </span><span class="ss">(</span><span class="mi">20</span><span class="w"> </span><span class="nv">os</span>ó<span class="nv">b</span><span class="ss">)</span><span class="w">                 </span>│
+│<span class="w">                                                 </span>│
+│<span class="w">  </span><span class="nv">Measure</span>:<span class="w">                                      </span>│
+│<span class="w">  </span>•<span class="w"> </span><span class="nv">Sales</span><span class="w"> </span><span class="nv">performance</span><span class="w"> </span><span class="ss">(</span><span class="nv">PLN</span><span class="o">/</span><span class="nv">miesi</span>ą<span class="nv">c</span><span class="ss">)</span><span class="w">             </span>│
+│<span class="w">  </span>•<span class="w"> </span><span class="nv">Client</span><span class="w"> </span><span class="nv">retention</span><span class="w"> </span><span class="nv">rate</span><span class="w">                       </span>│
+│<span class="w">  </span>•<span class="w"> </span><span class="nv">Cold</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="nl">success</span><span class="w"> </span><span class="nv">rate</span><span class="w">                      </span>│
+│<span class="w">  </span>•<span class="w"> </span><span class="nv">Manager</span><span class="w"> </span><span class="nv">satisfaction</span><span class="w"> </span><span class="ss">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">10</span><span class="ss">)</span><span class="w">                 </span>│
+└─────────────────────────────────────────────────┘
+</code></pre></div>
+
+<hr />
+<h2>SLAJD 20: NEXT STEPS - Co teraz?</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">  </span><span class="err">🚀</span><span class="w"> </span><span class="n">NASTĘPNE</span><span class="w"> </span><span class="n">KROKI</span><span class="w">                              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">PHASE</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="n">DECISION</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="n">tygodnie</span><span class="p">)</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">✅</span><span class="w"> </span><span class="n">Prezentacja</span><span class="w"> </span><span class="n">dla</span><span class="w"> </span><span class="n">stakeholders</span><span class="w">               </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">✅</span><span class="w"> </span><span class="n">Q</span><span class="o">&amp;</span><span class="n">A</span><span class="w"> </span><span class="n">session</span><span class="w"> </span><span class="p">(</span><span class="n">odpowiedzi</span><span class="w"> </span><span class="n">na</span><span class="w"> </span><span class="n">pytania</span><span class="p">)</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">✅</span><span class="w"> </span><span class="n">Budget</span><span class="w"> </span><span class="n">approval</span><span class="w">                            </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">✅</span><span class="w"> </span><span class="n">Wybór</span><span class="w"> </span><span class="n">beta</span><span class="w"> </span><span class="n">testerów</span><span class="w"> </span><span class="p">(</span><span class="mi">10-20</span><span class="w"> </span><span class="n">handlowców</span><span class="p">)</span><span class="w">     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">PHASE</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="w"> </span><span class="n">DEVELOPMENT</span><span class="w"> </span><span class="p">(</span><span class="mi">6</span><span class="w"> </span><span class="n">tygodni</span><span class="p">)</span><span class="w">              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Week</span><span class="w"> </span><span class="mi">1-2</span><span class="o">:</span><span class="w"> </span><span class="n">Core</span><span class="w"> </span><span class="n">mechanics</span><span class="w"> </span><span class="p">(</span><span class="n">map</span><span class="p">,</span><span class="w"> </span><span class="n">calendar</span><span class="p">,</span><span class="w"> </span><span class="n">AI</span><span class="p">)</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Week</span><span class="w"> </span><span class="mi">3-4</span><span class="o">:</span><span class="w"> </span><span class="n">Game</span><span class="w"> </span><span class="n">loop</span><span class="w"> </span><span class="p">(</span><span class="n">outcomes</span><span class="p">,</span><span class="w"> </span><span class="n">reputation</span><span class="p">)</span><span class="w">    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Week</span><span class="w"> </span><span class="mi">5-6</span><span class="o">:</span><span class="w"> </span><span class="n">Polish</span><span class="w"> </span><span class="p">(</span><span class="n">UI</span><span class="p">,</span><span class="w"> </span><span class="n">balance</span><span class="p">,</span><span class="w"> </span><span class="n">tutorial</span><span class="p">)</span><span class="w">      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">PHASE</span><span class="w"> </span><span class="mi">3</span><span class="o">:</span><span class="w"> </span><span class="n">BETA</span><span class="w"> </span><span class="n">TESTING</span><span class="w"> </span><span class="p">(</span><span class="mi">6</span><span class="w"> </span><span class="n">tygodni</span><span class="p">)</span><span class="w">             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="mi">10-20</span><span class="w"> </span><span class="n">handlowców</span><span class="w"> </span><span class="p">(</span><span class="n">mix</span><span class="w"> </span><span class="n">junior</span><span class="o">/</span><span class="n">mid</span><span class="p">)</span><span class="w">          </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Weekly</span><span class="w"> </span><span class="n">feedback</span><span class="w"> </span><span class="n">sessions</span><span class="w">                    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Iteracja</span><span class="w"> </span><span class="n">mechanik</span><span class="w">                           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Content</span><span class="w"> </span><span class="n">expansion</span><span class="w">                           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">PHASE</span><span class="w"> </span><span class="mi">4</span><span class="o">:</span><span class="w"> </span><span class="n">LAUNCH</span><span class="w"> </span><span class="p">(</span><span class="n">Week</span><span class="w"> </span><span class="mi">13</span><span class="o">+</span><span class="p">)</span><span class="w">                    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Rollout</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">całego</span><span class="w"> </span><span class="n">zespołu</span><span class="w">                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Onboarding</span><span class="w"> </span><span class="n">nowych</span><span class="w"> </span><span class="n">graczy</span><span class="w">                    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Monitoring</span><span class="w"> </span><span class="n">metryk</span><span class="w">                           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">Continuous</span><span class="w"> </span><span class="n">improvement</span><span class="w">                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">───────────────────────────────────────────</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">INVESTMENT</span><span class="o">:</span><span class="w">                                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">────────────────────────────────────────────</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Development</span><span class="w"> </span><span class="p">(</span><span class="mi">6</span><span class="w"> </span><span class="n">tyg</span><span class="p">)</span><span class="o">:</span><span class="w">       </span><span class="mi">20</span><span class="p">,</span><span class="mo">000</span><span class="w"> </span><span class="n">PLN</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Beta</span><span class="w"> </span><span class="n">testing</span><span class="w"> </span><span class="p">(</span><span class="mi">6</span><span class="w"> </span><span class="n">tyg</span><span class="p">)</span><span class="o">:</span><span class="w">       </span><span class="mi">5</span><span class="p">,</span><span class="mo">000</span><span class="w"> </span><span class="n">PLN</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Hosting</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="n">rok</span><span class="p">)</span><span class="o">:</span><span class="w">            </span><span class="mi">1</span><span class="p">,</span><span class="mi">200</span><span class="w"> </span><span class="n">PLN</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Contingency</span><span class="w"> </span><span class="p">(</span><span class="mi">20</span><span class="o">%</span><span class="p">)</span><span class="o">:</span><span class="w">          </span><span class="mi">5</span><span class="p">,</span><span class="mo">000</span><span class="w"> </span><span class="n">PLN</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">──────────────────────────────────────</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">TOTAL</span><span class="o">:</span><span class="w">                     </span><span class="mi">31</span><span class="p">,</span><span class="mi">200</span><span class="w"> </span><span class="n">PLN</span><span class="w">        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Expected</span><span class="w"> </span><span class="n">ROI</span><span class="w"> </span><span class="p">(</span><span class="n">Year</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="o">:</span><span class="w">                        </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="n">handlowców</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="mi">500</span><span class="w"> </span><span class="n">PLN</span><span class="w"> </span><span class="n">savings</span><span class="w">          </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">225</span><span class="p">,</span><span class="mo">000</span><span class="w"> </span><span class="n">PLN</span><span class="w"> </span><span class="n">saved</span><span class="w">                         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">•</span><span class="w"> </span><span class="n">ROI</span><span class="o">:</span><span class="w"> </span><span class="mi">720</span><span class="o">%</span><span class="w"> </span><span class="err">🚀</span><span class="w">                                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">───────────────────────────────────────────</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">📞</span><span class="w"> </span><span class="n">CONTACT</span><span class="o">:</span><span class="w">                                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="p">[</span><span class="n">TWOJE</span><span class="w"> </span><span class="n">DANE</span><span class="p">]</span><span class="w">                                  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">📧</span><span class="w"> </span><span class="n">Email</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="n">EMAIL</span><span class="p">]</span><span class="w">                             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">🌐</span><span class="w"> </span><span class="n">Demo</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="n">LINK</span><span class="w"> </span><span class="n">DO</span><span class="w"> </span><span class="n">PROTOTYPU</span><span class="p">]</span><span class="w">                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">───────────────────────────────────────────</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">         </span><span class="n">DZIĘKUJEMY</span><span class="w"> </span><span class="n">ZA</span><span class="w"> </span><span class="n">UWAGĘ</span><span class="o">!</span><span class="w"> </span><span class="err">🎉</span><span class="w">                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">     </span><span class="n">Pytania</span><span class="o">?</span><span class="w"> </span><span class="n">Otwarte</span><span class="w"> </span><span class="n">na</span><span class="w"> </span><span class="n">dyskusję</span><span class="o">!</span><span class="w"> </span><span class="err">💬</span><span class="w">           </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<hr />
+<h2>BACKUP SLIDES (Q&amp;A)</h2>
+<h3>B1: Dlaczego nie gotowe platformy (Salesforce Trailhead)?</h3>
+<div class="codehilite"><pre><span></span><code>┌─────────────────────────────────────────────────┐
+│  Trailhead / LinkedIn Learning:                │
+│  ❌ Generic (nie FMCG-specific)                │
+│  ❌ Teoretyczne (brak praktyki rozmów)         │
+│  ❌ Brak AI conversations                      │
+│  ❌ Brak gamifikacji (nudne)                   │
+│                                                 │
+│  Nasz Simulator:                               │
+│  ✅ Custom (Twoje produkty, Twoi klienci)     │
+│  ✅ Praktyczny (rozmowy AI, real scenarios)    │
+│  ✅ Engaging (30 min/dzień, nie 3h kursu)      │
+│  ✅ Mierzalny (postępy widoczne real-time)     │
+└─────────────────────────────────────────────────┘
+</code></pre></div>
+
+<h3>B2: Co z prywatnością danych (AI)?</h3>
+<div class="codehilite"><pre><span></span><code>┌─────────────────────────────────────────────────┐
+│  GDPR COMPLIANCE:                              │
+│  ✅ AI NIE widzi prawdziwych klientów         │
+│  ✅ Fake data (generated clients)              │
+│  ✅ Gracz może usunąć dane (GDPR right)        │
+│  ✅ Gemini API: no training on customer data   │
+│                                                 │
+│  Wszystkie rozmowy = synthetic scenarios       │
+│  (bazowane na realizmie, nie real clients)     │
+└─────────────────────────────────────────────────┘
+</code></pre></div>
+
+<h3>B3: Czy to zastąpi tradycyjne szkolenia?</h3>
+<div class="codehilite"><pre><span></span><code>┌─────────────────────────────────────────────────┐
+│  NIE - TO SUPLEMENT, NIE REPLACEMENT!          │
+│                                                 │
+│  Simulator:                                    │
+│  • Ongoing practice (30 min/dzień)            │
+│  • Soft skills (rozmowy, negocjacje)          │
+│  • Individual learning pace                    │
+│                                                 │
+│  Traditional training:                         │
+│  • Product deep-dives (specjaliści)           │
+│  • Team building                               │
+│  • Strategy sessions                           │
+│                                                 │
+│  HYBRID MODEL = BEST RESULTS 🎯                │
+└─────────────────────────────────────────────────┘
+</code></pre></div>
+
+<hr />
+<p><strong>KONIEC PREZENTACJI</strong></p>
+<p><strong>Następny krok:</strong> Wizualizacje (screenshots mockupów UI)</p>
+        </div>
+        
+        <div class="footer">
+            <p>FMCG Sales Simulator &copy; 2025 | Wersja dokumentu: 1.0</p>
+            <p style="margin-top: 10px; font-size: 8pt;">
+                💡 <strong>Tip:</strong> Użyj Ctrl+P (Cmd+P na Mac) aby zapisać jako PDF<br>
+                W opcjach drukowania wybierz "Zapisz jako PDF"
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Automatyczne numerowanie nagłówków
+        document.querySelectorAll('h2').forEach((h, i) => {
+            if (!h.textContent.match(/^\d+\./)) {
+                h.textContent = (i + 1) + '. ' + h.textContent;
+            }
+        });
+    </script>
+</body>
+</html>

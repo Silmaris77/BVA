@@ -19,75 +19,157 @@ def show_fmcg_company_info_tab(username, user_data, industry_id):
     """Zakładka z informacjami o firmie FreshLife Poland i portfolio produktów"""
     from data.industries.fmcg_company import COMPANY_INFO, PRODUCT_PORTFOLIO
     
-    # Sekcja O Firmie (bez dużego nagłówka - oszczędność miejsca)
-    st.markdown("## 📋 O Firmie")
+    # Hero Card - Główna informacja o firmie
+    st.markdown(f"""
+<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 16px; color: white; margin-bottom: 24px; box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);'>
+<div style='font-size: 32px; font-weight: 700; margin-bottom: 12px;'>🛒 FreshLife Poland</div>
+<div style='font-size: 18px; opacity: 0.95; line-height: 1.6;'>Wiodący producent i dystrybutor produktów FMCG w Polsce<br><span style='font-size: 14px; opacity: 0.8;'>Część globalnej grupy FreshLife International</span></div>
+</div>
+""", unsafe_allow_html=True)
     
-    col1, col2 = st.columns([2, 1])
-    
-    with col1:
-        st.markdown(f"""
-**{COMPANY_INFO['full_name']}**
-
-{COMPANY_INFO['description']}
-
-**Misja:** {COMPANY_INFO['mission']}
-""")
-    
-    with col2:
-        st.markdown(f"""
-**📊 Dane Podstawowe**
-- **Rok założenia:** {COMPANY_INFO['founded']}
-- **Firma matka:** {COMPANY_INFO['parent_company']}
-- **Pracownicy:** {COMPANY_INFO['employees_poland']}
-- **Siedziba:** {COMPANY_INFO['hq_location']}
-""")
-    
-    # Wartości firmy
-    st.markdown("### 💎 Nasze Wartości")
-    cols = st.columns(len(COMPANY_INFO['values']))
-    for i, value in enumerate(COMPANY_INFO['values']):
-        with cols[i]:
-            st.info(f"**{value}**")
-    
-    # Pozycja rynkowa
-    st.markdown("### 📈 Pozycja Rynkowa")
+    # Karty z kluczowymi informacjami (3 kolumny)
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown(f"""
-<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;'>
-    <div style='font-size: 24px; margin-bottom: 8px;'>🧴</div>
-    <div style='font-size: 14px; opacity: 0.9;'>Personal Care</div>
-    <div style='font-size: 20px; font-weight: 700; margin-top: 8px;'>{COMPANY_INFO['market_position']['personal_care']}</div>
+<div style='background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; box-shadow: 0 2px 8px rgba(0,0,0,0.08);'>
+<div style='color: #667eea; font-size: 14px; font-weight: 600; margin-bottom: 8px;'>📅 ROK ZAŁOŻENIA</div>
+<div style='font-size: 28px; font-weight: 700; color: #1e293b;'>{COMPANY_INFO['founded']}</div>
+<div style='color: #64748b; font-size: 13px; margin-top: 4px;'>{2025 - int(COMPANY_INFO['founded'])} lat doświadczenia</div>
 </div>
 """, unsafe_allow_html=True)
     
     with col2:
         st.markdown(f"""
-<div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;'>
-    <div style='font-size: 24px; margin-bottom: 8px;'>🍽️</div>
-    <div style='font-size: 14px; opacity: 0.9;'>Food & Beverages</div>
-    <div style='font-size: 20px; font-weight: 700; margin-top: 8px;'>{COMPANY_INFO['market_position']['food']}</div>
+<div style='background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #10b981; box-shadow: 0 2px 8px rgba(0,0,0,0.08);'>
+<div style='color: #10b981; font-size: 14px; font-weight: 600; margin-bottom: 8px;'>👥 PRACOWNICY</div>
+<div style='font-size: 28px; font-weight: 700; color: #1e293b;'>{COMPANY_INFO['employees_poland']}</div>
+<div style='color: #64748b; font-size: 13px; margin-top: 4px;'>w całej Polsce</div>
 </div>
 """, unsafe_allow_html=True)
     
     with col3:
         st.markdown(f"""
-<div style='background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;'>
-    <div style='font-size: 24px; margin-bottom: 8px;'>🏠</div>
-    <div style='font-size: 14px; opacity: 0.9;'>Home Care</div>
-    <div style='font-size: 20px; font-weight: 700; margin-top: 8px;'>{COMPANY_INFO['market_position']['home_care']}</div>
+<div style='background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #f59e0b; box-shadow: 0 2px 8px rgba(0,0,0,0.08);'>
+<div style='color: #f59e0b; font-size: 14px; font-weight: 600; margin-bottom: 8px;'>📍 SIEDZIBA</div>
+<div style='font-size: 20px; font-weight: 700; color: #1e293b;'>{COMPANY_INFO['hq_location']}</div>
+<div style='color: #64748b; font-size: 13px; margin-top: 4px;'>+ oddziały w całym kraju</div>
 </div>
 """, unsafe_allow_html=True)
     
-    st.markdown("---")
+    st.markdown("<div style='margin: 24px 0;'></div>", unsafe_allow_html=True)
     
-    # Portfolio Produktów
-    st.markdown("## 🛍️ Portfolio Produktów")
-    st.info("💡 **Wskazówka:** Zapoznaj się z naszymi produktami - przydadzą Ci się w rozmowach z klientami!")
+    # Misja i Wartości w jednym rzędzie
+    col_mission, col_values = st.columns([1.2, 1.8])
     
-    # Zakładki dla kategorii
-    tab_pc, tab_food, tab_hc = st.tabs(["🧴 Personal Care", "🍽️ Food & Beverages", "🏠 Home Care"])
+    with col_mission:
+        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 24px; border-radius: 12px; color: white; height: 100%; box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);'>
+<div style='font-size: 18px; font-weight: 700; margin-bottom: 12px;'>🎯 Nasza Misja</div>
+<div style='font-size: 14px; line-height: 1.6; opacity: 0.95;'>{COMPANY_INFO['mission']}</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    with col_values:
+        st.markdown("**💎 Wartości Firmy**")
+        values_cols = st.columns(len(COMPANY_INFO['values']))
+        for i, value in enumerate(COMPANY_INFO['values']):
+            with values_cols[i]:
+                st.markdown(f"""
+<div style='background: #f8fafc; padding: 12px; border-radius: 8px; text-align: center; border: 2px solid #e2e8f0;'>
+<div style='font-size: 13px; font-weight: 600; color: #475569;'>{value}</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    st.markdown("<div style='margin: 32px 0;'></div>", unsafe_allow_html=True)
+    
+    # Szczegółowy opis firmy - karty z gradientami
+    st.markdown(f"""
+<div style='font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 16px;'>
+📖 Historia i Filozofia
+</div>
+""", unsafe_allow_html=True)
+    
+    col_desc1, col_desc2 = st.columns(2)
+    
+    with col_desc1:
+        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); padding: 24px; border-radius: 12px; color: white; height: 100%; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);'>
+<div style='font-size: 18px; font-weight: 700; margin-bottom: 12px;'>📚 Historia Firmy</div>
+<div style='font-size: 14px; line-height: 1.6; opacity: 0.95;'>{COMPANY_INFO.get('description', 'FreshLife Poland to jedna z wiodących firm FMCG w Polsce, oferująca szeroki asortyment produktów codziennego użytku.')}</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    with col_desc2:
+        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%); padding: 24px; border-radius: 12px; color: white; height: 100%; box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);'>
+<div style='font-size: 18px; font-weight: 700; margin-bottom: 12px;'>💡 Nasza Filozofia</div>
+<div style='font-size: 14px; line-height: 1.6; opacity: 0.95;'>{COMPANY_INFO.get('philosophy', 'Wierzymy w jakość, innowacyjność i odpowiedzialność społeczną. Każdy nasz produkt jest tworzony z myślą o zadowoleniu klientów i ochronie środowiska.')}</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    st.markdown("<div style='margin: 32px 0;'></div>", unsafe_allow_html=True)
+    
+    # Pozycja Rynkowa - Karty z efektami
+    st.markdown(f"""
+<div style='font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 16px;'>
+📈 Nasza Pozycja na Rynku
+</div>
+""", unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; border-radius: 16px; color: white; text-align: center; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3); transition: transform 0.3s ease;'>
+<div style='font-size: 36px; margin-bottom: 12px;'>🧴</div>
+<div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px;'>Personal Care</div>
+<div style='font-size: 32px; font-weight: 700; margin: 12px 0;'>#{COMPANY_INFO['market_position']['personal_care']}</div>
+<div style='font-size: 12px; opacity: 0.85; padding: 8px 12px; background: rgba(255,255,255,0.2); border-radius: 20px; display: inline-block;'>TOP 3 w Polsce</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 24px; border-radius: 16px; color: white; text-align: center; box-shadow: 0 8px 20px rgba(240, 147, 251, 0.3); transition: transform 0.3s ease;'>
+<div style='font-size: 36px; margin-bottom: 12px;'>🍽️</div>
+<div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px;'>Food & Beverages</div>
+<div style='font-size: 32px; font-weight: 700; margin: 12px 0;'>#{COMPANY_INFO['market_position']['food']}</div>
+<div style='font-size: 12px; opacity: 0.85; padding: 8px 12px; background: rgba(255,255,255,0.2); border-radius: 20px; display: inline-block;'>TOP 5 w Polsce</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 24px; border-radius: 16px; color: white; text-align: center; box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3); transition: transform 0.3s ease;'>
+<div style='font-size: 36px; margin-bottom: 12px;'>🏠</div>
+<div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px;'>Home Care</div>
+<div style='font-size: 32px; font-weight: 700; margin: 12px 0;'>#{COMPANY_INFO['market_position']['home_care']}</div>
+<div style='font-size: 12px; opacity: 0.85; padding: 8px 12px; background: rgba(255,255,255,0.2); border-radius: 20px; display: inline-block;'>Lider Polski</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    st.markdown("<div style='margin: 40px 0;'></div>", unsafe_allow_html=True)
+    
+    # Portfolio Produktów - Header z CTA
+    st.markdown(f"""
+<div style='background: linear-gradient(to right, #fbbf24, #f59e0b); padding: 20px 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);'>
+<div style='display: flex; justify-content: space-between; align-items: center; color: white;'>
+<div>
+<div style='font-size: 24px; font-weight: 700; margin-bottom: 4px;'>🛍️ Portfolio Produktów</div>
+<div style='font-size: 14px; opacity: 0.95;'>Poznaj nasze produkty - klucz do sukcesu w rozmowach z klientami</div>
+</div>
+<div style='background: rgba(255,255,255,0.25); padding: 12px 20px; border-radius: 20px; font-size: 14px; font-weight: 600;'>💡 Wiedza = Sprzedaż</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    # Zakładki dla kategorii z nowymi ikonami
+    tab_pc, tab_food, tab_hc = st.tabs([
+        "🧴 Personal Care (TOP 3)", 
+        "🍽️ Food & Beverages (TOP 5)", 
+        "🏠 Home Care (LIDER)"
+    ])
     
     with tab_pc:
         show_product_category(PRODUCT_PORTFOLIO['personal_care'])
@@ -100,48 +182,90 @@ def show_fmcg_company_info_tab(username, user_data, industry_id):
 
 
 def show_product_category(category):
-    """Wyświetla produkty z danej kategorii"""
-    st.markdown(f"### {category['category_name']}")
-    st.markdown(f"*{category['description']}*")
-    st.markdown(f"**Udział w rynku:** {category['market_share']}%")
+    """Wyświetla produkty z danej kategorii w grywalizacyjnym stylu"""
     
-    st.markdown("---")
+    # Header kategorii jako karta
+    st.markdown(f"""
+<div style='background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 24px; border-radius: 12px; color: white; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);'>
+<div style='font-size: 26px; font-weight: 700; margin-bottom: 8px;'>{category['category_name']}</div>
+<div style='font-size: 14px; opacity: 0.95; margin-bottom: 12px;'>{category['description']}</div>
+<div style='display: inline-block; background: rgba(255,255,255,0.25); padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;'>📊 Udział w rynku: {category['market_share']}%</div>
+</div>
+""", unsafe_allow_html=True)
     
-    for product in category['products']:
-        with st.expander(f"📦 **{product['name']}** - {product['subcategory']}", expanded=False):
-            col1, col2 = st.columns([2, 1])
-            
-            with col1:
-                st.markdown(f"""
-**USP (Unique Selling Proposition):**  
+    # Produkty jako karty w grid 2 kolumny
+    for idx in range(0, len(category['products']), 2):
+        cols = st.columns(2)
+        
+        for col_idx, col in enumerate(cols):
+            if idx + col_idx < len(category['products']):
+                product = category['products'][idx + col_idx]
+                
+                with col:
+                    # Określ kolor karty bazując na potencjale wolumenu
+                    volume_colors = {
+                        'high': ('linear-gradient(135deg, #10b981 0%, #059669 100%)', '#10b981'),
+                        'medium': ('linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', '#f59e0b'),
+                        'low': ('linear-gradient(135deg, #6b7280 0%, #4b5563 100%)', '#6b7280')
+                    }
+                    bg_gradient, border_color = volume_colors.get(
+                        product['volume_potential'].lower(), 
+                        ('linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', '#6366f1')
+                    )
+                    
+                    # Karta produktu
+                    st.markdown(f"""
+<div style='background: white; border-radius: 12px; border-left: 4px solid {border_color}; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s;'>
+<div style='display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;'>
+<div>
+<div style='font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 4px;'>📦 {product['name']}</div>
+<div style='font-size: 13px; color: #64748b; font-weight: 500;'>{product['subcategory']}</div>
+</div>
+<div style='background: {bg_gradient}; color: white; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap;'>{product['volume_potential'].upper()}</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
+                    
+                    # Expander z detalami
+                    with st.expander("🔍 Szczegóły produktu", expanded=False):
+                        detail_col1, detail_col2 = st.columns([1.5, 1])
+                        
+                        with detail_col1:
+                            st.markdown(f"""
+**💡 USP (Unique Selling Proposition):**  
 {product['usp']}
 
-**Warianty:**  
+**📦 Warianty:**  
 {', '.join(product['variants'])}
 
-**Grupa docelowa:** {product['target_group']}
+**🎯 Grupa docelowa:** {product['target_group']}
 
-**Opakowanie:** {product['packaging']}
+**📦 Opakowanie:** {product['packaging']}
 
-**Termin przydatności:** {product['shelf_life']}
+**⏰ Termin przydatności:** {product['shelf_life']}
 """)
-                
-                if product.get('awards'):
-                    st.markdown(f"**🏆 Nagrody:** {', '.join(product['awards'])}")
-            
-            with col2:
-                # Kompaktowy box z danymi cenowymi - UWAGA: HTML bez wcięć!
-                price_box_html = f"""<div style='background: #f8fafc; padding: 16px; border-radius: 8px; border: 2px solid #e2e8f0;'>
-<div style='font-size: 12px; color: #64748b; margin-bottom: 4px;'>Cena detaliczna</div>
-<div style='font-size: 18px; font-weight: 700; color: #0f172a;'>{product["price_range"]}</div>
-
-<div style='font-size: 12px; color: #64748b; margin-top: 12px; margin-bottom: 4px;'>Marża</div>
-<div style='font-size: 18px; font-weight: 700; color: #10b981;'>{product["margin_percent"]}%</div>
-
-<div style='font-size: 12px; color: #64748b; margin-top: 12px; margin-bottom: 4px;'>Potencjał wolumenu</div>
-<div style='font-size: 16px; font-weight: 600; color: #8b5cf6;'>{product["volume_potential"].upper()}</div>
-</div>"""
-                st.markdown(price_box_html, unsafe_allow_html=True)
+                            
+                            if product.get('awards'):
+                                st.markdown(f"**🏆 Nagrody:** {', '.join(product['awards'])}")
+                        
+                        with detail_col2:
+                            # Kompaktowy box z danymi - stats card
+                            st.markdown(f"""
+<div style='background: #f8fafc; padding: 16px; border-radius: 8px; border: 2px solid #e2e8f0;'>
+<div style='margin-bottom: 16px;'>
+<div style='font-size: 11px; color: #64748b; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;'>💰 Cena Detaliczna</div>
+<div style='font-size: 20px; font-weight: 700; color: #0f172a;'>{product["price_range"]}</div>
+</div>
+<div style='margin-bottom: 16px;'>
+<div style='font-size: 11px; color: #64748b; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;'>📊 Marża</div>
+<div style='font-size: 20px; font-weight: 700; color: #10b981;'>{product["margin_percent"]}%</div>
+</div>
+<div style='padding: 12px; background: {bg_gradient}; border-radius: 6px; text-align: center;'>
+<div style='font-size: 11px; color: white; opacity: 0.9; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;'>Potencjał Wolumenu</div>
+<div style='font-size: 16px; font-weight: 700; color: white;'>{product["volume_potential"].upper()}</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
 
 
 def show_fmcg_dashboard_tab(username, user_data, industry_id):
@@ -1192,8 +1316,226 @@ Tekst do poprawy:
             st.error(f"❌ Błąd AI: {str(e)}")
 
 
-def show_fmcg_stats_tab(username, user_data, industry_id):
-    """Statystyki Kariery - wykresy, historia, osiągnięcia"""
-    st.info("🚧 Statystyki Kariery - w budowie! 🚧")
-    st.write("Tutaj będą statystyki i wykresy.")
+
+
+def show_fmcg_career_stats_tab(username, user_data, industry_id):
+    """📊 Statystyki Kariery - ścieżka rozwoju, osiągnięcia, metryki"""
+    from data.industries.fmcg import CAREER_LEVELS
+    
+    bg_data = user_data["business_games"][industry_id]
+    career = bg_data["career"]
+    metrics = bg_data["metrics"]
+    
+    current_level = career["level"]
+    current_role = CAREER_LEVELS[current_level]
+    next_level = current_level + 1 if current_level < len(CAREER_LEVELS) else None
+    
+    # Hero Card - Obecny poziom
+    st.markdown(f"""
+<div style='background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 30px; border-radius: 16px; color: white; margin-bottom: 24px; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);'>
+<div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px;'>TWOJA OBECNA POZYCJA</div>
+<div style='font-size: 32px; font-weight: 700; margin-bottom: 8px;'>{current_role['icon']} {current_role['role']}</div>
+<div style='font-size: 16px; opacity: 0.95;'>Poziom {current_level} z {len(CAREER_LEVELS)}</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    # Kluczowe metryki - 4 karty
+    st.markdown(f"""
+<div style='font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 16px;'>
+📈 Kluczowe Metryki
+</div>
+""", unsafe_allow_html=True)
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    total_visits = len(bg_data.get("conversation_history", []))
+    total_sales = metrics.get("total_sales", 0)
+    avg_rating = metrics.get("average_rating", 0)
+    win_rate = (metrics.get("successful_visits", 0) / max(total_visits, 1)) * 100
+    
+    with col1:
+        st.markdown(f"""
+<div style='background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #10b981; box-shadow: 0 2px 8px rgba(0,0,0,0.08);'>
+<div style='color: #10b981; font-size: 12px; font-weight: 600; margin-bottom: 8px;'>💰 CAŁKOWITA SPRZEDAŻ</div>
+<div style='font-size: 28px; font-weight: 700; color: #1e293b;'>{total_sales:,} PLN</div>
+<div style='color: #64748b; font-size: 12px; margin-top: 4px;'>Łączna wartość</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown(f"""
+<div style='background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #3b82f6; box-shadow: 0 2px 8px rgba(0,0,0,0.08);'>
+<div style='color: #3b82f6; font-size: 12px; font-weight: 600; margin-bottom: 8px;'>🎯 LICZBA WIZYT</div>
+<div style='font-size: 28px; font-weight: 700; color: #1e293b;'>{total_visits}</div>
+<div style='color: #64748b; font-size: 12px; margin-top: 4px;'>Wszystkie wizyty</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown(f"""
+<div style='background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #f59e0b; box-shadow: 0 2px 8px rgba(0,0,0,0.08);'>
+<div style='color: #f59e0b; font-size: 12px; font-weight: 600; margin-bottom: 8px;'>⭐ ŚREDNIA OCENA</div>
+<div style='font-size: 28px; font-weight: 700; color: #1e293b;'>{avg_rating:.1f}/5.0</div>
+<div style='color: #64748b; font-size: 12px; margin-top: 4px;'>Od klientów</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    with col4:
+        st.markdown(f"""
+<div style='background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #ec4899; box-shadow: 0 2px 8px rgba(0,0,0,0.08);'>
+<div style='color: #ec4899; font-size: 12px; font-weight: 600; margin-bottom: 8px;'>🏆 SKUTECZNOŚĆ</div>
+<div style='font-size: 28px; font-weight: 700; color: #1e293b;'>{win_rate:.0f}%</div>
+<div style='color: #64748b; font-size: 12px; margin-top: 4px;'>Win rate</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    st.markdown("<div style='margin: 32px 0;'></div>", unsafe_allow_html=True)
+    
+    # Ścieżka rozwoju kariery
+    st.markdown(f"""
+<div style='font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 16px;'>
+🎯 Ścieżka Rozwoju Kariery
+</div>
+""", unsafe_allow_html=True)
+    
+    if next_level and next_level in CAREER_LEVELS:
+        next_role = CAREER_LEVELS[next_level]
+        
+        # Karta następnego poziomu
+        col_current, col_arrow, col_next = st.columns([2, 0.5, 2])
+        
+        with col_current:
+            st.markdown(f"""
+<div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 24px; border-radius: 12px; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);'>
+<div style='font-size: 12px; opacity: 0.9; margin-bottom: 8px;'>OBECNA POZYCJA ✓</div>
+<div style='font-size: 24px; font-weight: 700; margin-bottom: 4px;'>{current_role['icon']} {current_role['role_short']}</div>
+<div style='font-size: 13px; opacity: 0.95;'>Poziom {current_level}</div>
+</div>
+""", unsafe_allow_html=True)
+        
+        with col_arrow:
+            st.markdown("""
+<div style='text-align: center; padding-top: 40px;'>
+<div style='font-size: 32px;'>→</div>
+</div>
+""", unsafe_allow_html=True)
+        
+        with col_next:
+            st.markdown(f"""
+<div style='background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 24px; border-radius: 12px; color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);'>
+<div style='font-size: 12px; opacity: 0.9; margin-bottom: 8px;'>NASTĘPNY POZIOM 🎯</div>
+<div style='font-size: 24px; font-weight: 700; margin-bottom: 4px;'>{next_role['icon']} {next_role['role_short']}</div>
+<div style='font-size: 13px; opacity: 0.95;'>Poziom {next_level}</div>
+</div>
+""", unsafe_allow_html=True)
+        
+        st.markdown("<div style='margin: 20px 0;'></div>", unsafe_allow_html=True)
+        
+        # Wymagania do awansu
+        st.markdown("**� Wymagania do awansu:**")
+        
+        req_cols = st.columns(3)
+        required = next_role.get("required_metrics", {})
+        
+        # Miesięczna sprzedaż
+        monthly_sales_required = required.get("monthly_sales", 0)
+        monthly_sales_current = metrics.get("monthly_sales", 0)
+        monthly_progress = min((monthly_sales_current / max(monthly_sales_required, 1)) * 100, 100)
+        
+        with req_cols[0]:
+            st.markdown(f"""
+<div style='background: #f8fafc; padding: 16px; border-radius: 8px; border: 2px solid #e2e8f0;'>
+<div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>💰 Miesięczna sprzedaż</div>
+<div style='font-size: 20px; font-weight: 700; color: #1e293b;'>{monthly_sales_current:,} / {monthly_sales_required:,} PLN</div>
+<div style='background: #e2e8f0; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;'>
+<div style='background: linear-gradient(to right, #10b981, #059669); height: 100%; width: {monthly_progress}%;'></div>
+</div>
+<div style='font-size: 11px; color: #64748b; margin-top: 4px;'>{monthly_progress:.0f}% ukończone</div>
+</div>
+""", unsafe_allow_html=True)
+        
+        # Market share
+        market_share_required = required.get("market_share", 0)
+        market_share_current = metrics.get("market_share", 0)
+        market_progress = min((market_share_current / max(market_share_required, 1)) * 100, 100)
+        
+        with req_cols[1]:
+            st.markdown(f"""
+<div style='background: #f8fafc; padding: 16px; border-radius: 8px; border: 2px solid #e2e8f0;'>
+<div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>📊 Udział w rynku</div>
+<div style='font-size: 20px; font-weight: 700; color: #1e293b;'>{market_share_current}% / {market_share_required}%</div>
+<div style='background: #e2e8f0; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;'>
+<div style='background: linear-gradient(to right, #3b82f6, #2563eb); height: 100%; width: {market_progress}%;'></div>
+</div>
+<div style='font-size: 11px; color: #64748b; margin-top: 4px;'>{market_progress:.0f}% ukończone</div>
+</div>
+""", unsafe_allow_html=True)
+        
+        # Satysfakcja klientów
+        satisfaction_required = required.get("customer_satisfaction", 0)
+        satisfaction_current = metrics.get("customer_satisfaction", 0)
+        satisfaction_progress = min((satisfaction_current / max(satisfaction_required, 1)) * 100, 100)
+        
+        with req_cols[2]:
+            st.markdown(f"""
+<div style='background: #f8fafc; padding: 16px; border-radius: 8px; border: 2px solid #e2e8f0;'>
+<div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>⭐ Satysfakcja klientów</div>
+<div style='font-size: 20px; font-weight: 700; color: #1e293b;'>{satisfaction_current}% / {satisfaction_required}%</div>
+<div style='background: #e2e8f0; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;'>
+<div style='background: linear-gradient(to right, #f59e0b, #d97706); height: 100%; width: {satisfaction_progress}%;'></div>
+</div>
+<div style='font-size: 11px; color: #64748b; margin-top: 4px;'>{satisfaction_progress:.0f}% ukończone</div>
+</div>
+""", unsafe_allow_html=True)
+    
+    else:
+        st.success("🎉 Gratulacje! Osiągnąłeś najwyższy poziom kariery!")
+    
+    st.markdown("<div style='margin: 32px 0;'></div>", unsafe_allow_html=True)
+    
+    # Wszystkie poziomy kariery - Timeline
+    st.markdown(f"""
+<div style='font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 16px;'>
+🏆 Wszystkie Poziomy Kariery
+</div>
+""", unsafe_allow_html=True)
+    
+    for level_num in range(1, len(CAREER_LEVELS) + 1):
+        level_info = CAREER_LEVELS[level_num]
+        is_current = (level_num == current_level)
+        is_unlocked = (level_num <= current_level)
+        
+        if is_current:
+            bg_color = "linear-gradient(135deg, #10b981 0%, #059669 100%)"
+            text_color = "white"
+            border = "none"
+            opacity = "1"
+        elif is_unlocked:
+            bg_color = "#f8fafc"
+            text_color = "#1e293b"
+            border = "2px solid #10b981"
+            opacity = "0.8"
+        else:
+            bg_color = "#f8fafc"
+            text_color = "#64748b"
+            border = "2px solid #e2e8f0"
+            opacity = "0.6"
+        
+        badge = "✓ ODBLOKOWANE" if is_unlocked else "🔒 ZABLOKOWANE"
+        badge_bg = "rgba(255,255,255,0.2)" if is_unlocked else "rgba(100,116,139,0.2)"
+        
+        st.markdown(f"""
+<div style='background: {bg_color}; padding: 20px; border-radius: 12px; margin-bottom: 12px; border: {border}; opacity: {opacity};'>
+<div style='display: flex; justify-content: space-between; align-items: center;'>
+<div>
+<div style='font-size: 24px; font-weight: 700; color: {text_color}; margin-bottom: 4px;'>{level_info['icon']} {level_info['role']}</div>
+<div style='font-size: 14px; color: {text_color}; opacity: 0.9;'>{level_info['description']}</div>
+</div>
+<div style='background: {badge_bg}; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; color: {text_color};'>
+{badge}
+</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
+
 
