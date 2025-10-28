@@ -410,6 +410,13 @@ def navigation_menu():
                 if 'lesson_finished' in st.session_state:
                     st.session_state.lesson_finished = False
             
+            # Jeśli klikamy na "Business Games", resetuj stan aby wrócić do strony głównej
+            if option['id'] == 'business_games':
+                st.session_state['bg_view'] = 'home'
+                st.session_state['selected_industry'] = None
+                if 'initializing_game' in st.session_state:
+                    st.session_state['initializing_game'] = False
+            
             st.session_state.page = option['id']
             st.rerun()
 

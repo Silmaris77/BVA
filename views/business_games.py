@@ -17,7 +17,8 @@ from utils.business_game import (
     submit_contract_solution, submit_contract_conversation, hire_employee, fire_employee,
     calculate_daily_costs, calculate_total_daily_costs, get_firm_summary, get_revenue_chart_data,
     get_category_distribution, calculate_overall_score, can_accept_contract,
-    can_hire_employee, update_user_ranking, get_objectives_summary, update_objectives_progress
+    can_hire_employee, update_user_ranking, get_objectives_summary, update_objectives_progress,
+    save_ranking_position, get_ranking_chart_data, get_ranking_chart_data_for_players
 )
 from utils.components import zen_header
 from utils.material3_components import apply_material3_theme
@@ -65,7 +66,7 @@ def show_business_games(username, user_data):
     
     # Sprawdź stan nawigacji
     if "bg_view" not in st.session_state:
-        st.session_state["bg_view"] = "home"  # home, industry_selector, scenario_selector, game
+        st.session_state["bg_view"] = "home"  # home, industry_selector, scenario_selector, game, rankings
     
     if "selected_industry" not in st.session_state:
         st.session_state["selected_industry"] = None
@@ -97,6 +98,9 @@ def show_business_games(username, user_data):
     elif st.session_state["bg_view"] == "scenario_selector":
         industry_id = st.session_state["selected_industry"]
         show_scenario_selector(username, user_data, industry_id)
+    
+    elif st.session_state["bg_view"] == "hall_of_fame":
+        show_hall_of_fame()
     
     elif st.session_state["bg_view"] == "game":
         industry_id = st.session_state["selected_industry"]
@@ -235,9 +239,9 @@ def show_business_games_home(username, user_data):
         
         st.markdown("<div style='margin: 12px 0;'></div>", unsafe_allow_html=True)
         
-        if st.button("👑 Zobacz rankingi", key="hall_of_fame", use_container_width=True):
-            st.info("🚧 Hall of Fame - wkrótce!")
-            # TODO: Pokazać rankingi globalne
+        if st.button("👑 Zobacz Hall of Fame", key="hall_of_fame", use_container_width=True):
+            st.session_state["bg_view"] = "hall_of_fame"
+            st.rerun()
 
 
 # =============================================================================
@@ -411,11 +415,21 @@ def render_industry_card(industry_id, title, slogan, description, features, avai
 def show_hall_of_fame():
     """Hall of Fame - legendarne zamknięte firmy"""
     
-    st.markdown("---")
-    st.markdown("## 🏛️ Hall of Fame - Legendarne Firmy")
-    st.caption("Firmy, które osiągnęły sukces i zostały zamknięte z honorem")
+    # Przycisk powrotu do menu głównego
+    if st.button("🏠 Powrót do menu głównego", key="back_from_hof"):
+        st.session_state["bg_view"] = "home"
+        st.rerun()
     
-    # Zbierz wszystkie zamknięte firmy ze wszystkich użytkowników
+    zen_header("Hall of Fame")
+    
+    st.markdown("""
+    <div style='text-align: center; padding: 20px 0;'>
+        <h2 style='color: #f59e0b;'>🏛️ Legendarne Firmy</h2>
+        <p style='color: #64748b; font-size: 16px;'>Firmy, które osiągnęły sukces i zostały zamknięte z honorem</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
     from data.users_new import load_user_data
     all_users = load_user_data()
     
@@ -1084,6 +1098,14 @@ def show_fmcg_dashboard_tab(username, user_data, industry_id):
             st.markdown(html, unsafe_allow_html=True)
         else:
             st.success("🏆 Osiągnąłeś najwyższy poziom - Chief Sales Officer!")
+    
+    # =============================================================================
+    # RANKINGI - Na dole Dashboard
+    # =============================================================================
+    
+    st.markdown("---")
+    st.markdown("<div style='margin: 40px 0 20px 0;'></div>", unsafe_allow_html=True)
+    show_rankings_content(username, user_data, industry_id)
 
 
 def show_fmcg_tasks_tab(username, user_data, industry_id):
@@ -2150,7 +2172,7 @@ def show_industry_game(username, user_data, industry_id):
         
         with tabs[2]:
             # Pod-taby w Zarządzaniu
-            management_tabs = st.tabs(["🏢 Biuro", "👥 Pracownicy", "📊 Raporty Finansowe", "📜 Historia & Wydarzenia"])
+            management_tabs = st.tabs(["🏢 Biuro", "👥 Pracownicy", "📊 Raporty Finansowe", "📜 Historia"])
             
             with management_tabs[0]:
                 show_office_tab(username, user_data, industry_id)
@@ -2629,7 +2651,7 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
                     st.info(feedback)
                     
                     # Link do pełnej historii
-                    st.info("💡 Pełne szczegóły kontraktu (opis, zadanie, Twoje rozwiązanie) znajdziesz w zakładce **'📜 Historia & Wydarzenia'**")
+                    st.info("💡 Pełne szczegóły kontraktu (opis, zadanie, Twoje rozwiązanie) znajdziesz w zakładce **'📜 Historia'**")
     
     # PRAWA KOLUMNA - DZISIEJSZE WYDARZENIE
     with col_event:
@@ -2708,6 +2730,14 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
                 </div>
             </div>
             """, unsafe_allow_html=True)
+    
+    # =============================================================================
+    # RANKINGI - Na dole Dashboard
+    # =============================================================================
+    
+    st.markdown("---")
+    st.markdown("<div style='margin: 40px 0 20px 0;'></div>", unsafe_allow_html=True)
+    show_rankings_content(username, user_data, industry_id)
 
 def show_contracts_tab(username, user_data, industry_id="consulting"):
     """Zakładka Rynek Kontraktów"""
@@ -2829,6 +2859,20 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
         st.warning(f"⚠️ {reason}")
     
     st.markdown("---")
+    
+    # Zbierz wszystkie zamknięte firmy ze wszystkich użytkowników
+    from data.users_new import load_user_data
+    all_users = load_user_data()
+    
+    hall_entries = []
+    for user, data in all_users.items():
+        if "hall_of_fame" in data:
+            for entry in data["hall_of_fame"]:
+                hall_entries.append(entry)
+    
+    if not hall_entries:
+        st.info("🏛️ Hall of Fame jest jeszcze pusty. Bądź pierwszym, który zamknie firmę z sukcesem!")
+        return
     
     # Filtry
     col_filter1, col_filter2, col_filter3 = st.columns(3)
@@ -2963,6 +3007,17 @@ def show_office_tab(username, user_data, industry_id="consulting"):
                         "type": "office_upgrade",
                         "description": f"Ulepszenie biura: {next_office['nazwa']}",
                         "amount": -next_office['koszt_ulepszenia']
+                    })
+                    
+                    # Dodaj do historii biur (dla zakładki Historia)
+                    if "offices" not in bg_data.setdefault("history", {}):
+                        bg_data["history"]["offices"] = []
+                    
+                    bg_data["history"]["offices"].append({
+                        "office_type": next_office['nazwa'],
+                        "cost": next_office['koszt_dzienny'],
+                        "capacity": next_office['max_pracownikow'],
+                        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     })
                     
                     save_game_data(user_data, bg_data, industry_id)
@@ -4510,10 +4565,10 @@ def show_category_analysis(financial_data, bg_data):
 # =============================================================================
 
 def show_history_tab(username, user_data, industry_id="consulting"):
-    """Zakładka Historia & Wydarzenia - chronologiczna oś czasu"""
+    """Zakładka Historia - chronologiczna oś czasu z kontraktami, wydarzeniami, pracownikami i biurem"""
     bg_data = get_game_data(user_data, industry_id)
     
-    st.subheader("📜 Historia & Wydarzenia Firmy")
+    st.subheader("📜 Historia Firmy")
     
     # Sekcja losowania wydarzeń na górze
     st.markdown("### 🎲 Losowanie Wydarzenia")
@@ -4591,7 +4646,7 @@ def show_history_tab(username, user_data, industry_id="consulting"):
     
     st.markdown("---")
     
-    # Zbierz wszystkie zdarzenia (kontrakty + wydarzenia)
+    # Zbierz wszystkie zdarzenia (kontrakty + wydarzenia + pracownicy + biuro)
     timeline_items = []
     
     # Dodaj ukończone kontrakty
@@ -4612,6 +4667,24 @@ def show_history_tab(username, user_data, industry_id="consulting"):
             "data": event
         })
     
+    # Dodaj historię pracowników (zatrudnienia/zwolnienia)
+    employee_history = bg_data.get("history", {}).get("employees", [])
+    for emp_event in employee_history:
+        timeline_items.append({
+            "type": "employee",
+            "date": emp_event.get("date", ""),
+            "data": emp_event
+        })
+    
+    # Dodaj historię biura (przeprowadzki)
+    office_history = bg_data.get("history", {}).get("offices", [])
+    for office_event in office_history:
+        timeline_items.append({
+            "type": "office",
+            "date": office_event.get("date", ""),
+            "data": office_event
+        })
+    
     # Sortuj chronologicznie (najnowsze najpierw)
     timeline_items.sort(key=lambda x: x["date"], reverse=True)
     
@@ -4625,7 +4698,7 @@ def show_history_tab(username, user_data, industry_id="consulting"):
     with col1:
         filter_type = st.selectbox(
             "Typ:",
-            ["Wszystko", "Tylko kontrakty", "Tylko wydarzenia"],
+            ["Wszystko", "Tylko kontrakty", "Tylko wydarzenia", "Tylko pracownicy", "Tylko biuro"],
             key="history_filter_type"
         )
     with col2:
@@ -4649,6 +4722,10 @@ def show_history_tab(username, user_data, industry_id="consulting"):
         filtered = [item for item in filtered if item["type"] == "contract"]
     elif filter_type == "Tylko wydarzenia":
         filtered = [item for item in filtered if item["type"] == "event"]
+    elif filter_type == "Tylko pracownicy":
+        filtered = [item for item in filtered if item["type"] == "employee"]
+    elif filter_type == "Tylko biuro":
+        filtered = [item for item in filtered if item["type"] == "office"]
     
     if filter_rating != "Wszystkie":
         if filter_rating == "⭐⭐⭐⭐⭐ (5)":
@@ -4672,8 +4749,12 @@ def show_history_tab(username, user_data, industry_id="consulting"):
     for item in filtered:
         if item["type"] == "contract":
             render_completed_contract_card(item["data"])
-        else:  # event
+        elif item["type"] == "event":
             render_event_history_card(item["data"])
+        elif item["type"] == "employee":
+            render_employee_history_card(item["data"])
+        elif item["type"] == "office":
+            render_office_history_card(item["data"])
 
 
 def show_events_tab(username, user_data, industry_id="consulting"):
@@ -4840,6 +4921,60 @@ def render_event_choice_modal(event_id: str, event_data: dict, username: str, us
                 st.success(f"✅ Wybrano: {choice['text']}")
                 st.rerun()
 
+def render_employee_history_card(emp_event: dict):
+    """Renderuje kartę zdarzenia pracowniczego w historii"""
+    
+    action = emp_event.get("action", "unknown")
+    employee_name = emp_event.get("employee_name", "Pracownik")
+    employee_type = emp_event.get("employee_type", "")
+    date = emp_event.get("date", "Nieznana data")
+    cost = emp_event.get("cost", 0)
+    
+    if action == "hired":
+        icon = "✅"
+        border_color = "#10b981"
+        title = f"{icon} Zatrudniono: {employee_name} ({employee_type})"
+    elif action == "fired":
+        icon = "❌"
+        border_color = "#ef4444"
+        title = f"{icon} Zwolniono: {employee_name} ({employee_type})"
+    else:
+        icon = "👥"
+        border_color = "#64748b"
+        title = f"{icon} {employee_name} ({employee_type})"
+    
+    with st.expander(f"{title} - {date}"):
+        st.markdown(f"""
+        <div style='border-left: 4px solid {border_color}; padding: 12px; background: #f8fafc; border-radius: 8px;'>
+            <strong>Pracownik:</strong> {employee_name}<br>
+            <strong>Stanowisko:</strong> {employee_type}<br>
+            <strong>Data:</strong> {date}<br>
+            <strong>Koszt (miesięczny):</strong> {cost:,} PLN
+        </div>
+        """, unsafe_allow_html=True)
+
+def render_office_history_card(office_event: dict):
+    """Renderuje kartę zdarzenia biurowego w historii"""
+    
+    office_type = office_event.get("office_type", "Nieznane biuro")
+    date = office_event.get("date", "Nieznana data")
+    cost = office_event.get("cost", 0)
+    capacity = office_event.get("capacity", 0)
+    
+    icon = "🏢"
+    border_color = "#3b82f6"
+    title = f"{icon} Nowe biuro: {office_type}"
+    
+    with st.expander(f"{title} - {date}"):
+        st.markdown(f"""
+        <div style='border-left: 4px solid {border_color}; padding: 12px; background: #f8fafc; border-radius: 8px;'>
+            <strong>Typ biura:</strong> {office_type}<br>
+            <strong>Data przeprowadzki:</strong> {date}<br>
+            <strong>Koszt (miesięczny):</strong> {cost:,} PLN<br>
+            <strong>Pojemność:</strong> {capacity} aktywnych kontraktów
+        </div>
+        """, unsafe_allow_html=True)
+
 def render_event_history_card(event: dict):
     """Renderuje kartę zdarzenia w historii"""
     
@@ -4910,6 +5045,15 @@ def show_rankings_content(username, user_data, industry_id="consulting"):
         ["🏆 Rating (Overall Score)", "💰 Przychody", "⭐ Jakość (średnia ocena)", "🔥 Produktywność (30 dni)"],
         key="rankings_type_selector"
     )
+    
+    # Mapowanie wyświetlanych nazw na typy wewnętrzne
+    ranking_type_map = {
+        "🏆 Rating (Overall Score)": "overall",
+        "💰 Przychody": "revenue",
+        "⭐ Jakość (średnia ocena)": "quality",
+        "🔥 Produktywność (30 dni)": "productivity_30d"
+    }
+    internal_ranking_type = ranking_type_map.get(ranking_type, "overall")
     
     st.markdown("---")
     
@@ -5004,6 +5148,11 @@ def show_rankings_content(username, user_data, industry_id="consulting"):
     total_active = len(all_firms)
     user_rank = next((i+1 for i, f in enumerate(all_firms) if f["is_user"]), None)
     
+    # Zapisz pozycję użytkownika do historii
+    if user_rank:
+        bg_data = save_ranking_position(bg_data, user_rank, internal_ranking_type)
+        save_game_data(user_data, bg_data, industry_id)
+    
     st.info(f"""
     ℹ️ **Ranking aktywnych firm: {total_active}**
     
@@ -5014,6 +5163,8 @@ def show_rankings_content(username, user_data, industry_id="consulting"):
     - Uwzględniamy: przychody, jakość pracy, reputację, poziom firmy
     - Rywalizuj z {total_active-1} innymi firmami!
     """)
+    
+    st.markdown("---")
     
     # Tytuł rankingu
     st.markdown(f"### 🥇 TOP {min(10, total_active)} - {ranking_type}")
@@ -5069,6 +5220,10 @@ def show_rankings_content(username, user_data, industry_id="consulting"):
             </div>
             """, unsafe_allow_html=True)
     
+    # Wykres historii pozycji w rankingu
+    st.markdown("---")
+    render_ranking_history_chart(username, all_users, bg_data, internal_ranking_type, ranking_type, all_firms)
+    
 def render_user_rank_highlight(bg_data, ranking_type):
     """Renderuje highlight pozycji użytkownika"""
     
@@ -5099,6 +5254,169 @@ def render_user_rank_highlight(bg_data, ranking_type):
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+def render_ranking_history_chart(current_username, all_users, bg_data, internal_ranking_type, display_ranking_type, all_firms):
+    """Renderuje wykres historii pozycji w rankingu z wyborem zakresu czasu i liniami dla TOP 10"""
+    import plotly.graph_objects as go
+    
+    st.markdown(f"### 📊 Historia pozycji - {display_ranking_type}")
+    
+    # Wybór zakresu czasu
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        time_range = st.radio(
+            "Zakres czasu:",
+            ["📅 Ostatnie 7 dni", "📅 Ostatni miesiąc", "📅 Ostatni rok", "📅 Cała historia"],
+            horizontal=True,
+            key=f"ranking_time_range_{internal_ranking_type}"
+        )
+    
+    # Mapowanie zakresu na liczbę dni
+    days_map = {
+        "📅 Ostatnie 7 dni": 7,
+        "📅 Ostatni miesiąc": 30,
+        "📅 Ostatni rok": 365,
+        "📅 Cała historia": None
+    }
+    days = days_map.get(time_range)
+    
+    # Pobierz dane dla wszystkich graczy
+    all_players_data = get_ranking_chart_data_for_players(all_users, internal_ranking_type, days, top_n=10)
+    
+    if not all_players_data:
+        st.info("📊 Brak danych historycznych. Historia zacznie się zapisywać od teraz!")
+        return
+    
+    # Debug info
+    st.caption(f"🔍 Pokazuję dane dla typu rankingu: **{internal_ranking_type}** | Zakres: **{time_range}** | Graczy z danymi: **{len(all_players_data)}**")
+    
+    # Sortuj graczy po aktualnej pozycji (top 10)
+    players_by_rank = sorted(
+        [(username, data) for username, data in all_players_data.items() if data["current_rank"]],
+        key=lambda x: x[1]["current_rank"]
+    )[:10]
+    
+    # Dodaj aktualnego użytkownika jeśli nie jest w top 10
+    if current_username not in [p[0] for p in players_by_rank]:
+        if current_username in all_players_data:
+            players_by_rank.append((current_username, all_players_data[current_username]))
+    
+    if not players_by_rank:
+        st.info("📊 Brak danych historycznych. Historia zacznie się zapisywać od teraz!")
+        return
+    
+    # Stwórz wykres
+    fig = go.Figure()
+    
+    # Definicja kolorów
+    color_map = {
+        1: '#FFD700',      # Złoty
+        2: '#C0C0C0',      # Srebrny
+        3: '#CD7F32',      # Brązowy
+        'top10': '#9CA3AF', # Szary dla reszty top 10
+        'user': '#667eea'   # Niebieski dla użytkownika
+    }
+    
+    # Dodaj linie dla każdego gracza
+    for username, player_data in players_by_rank:
+        current_rank = player_data["current_rank"]
+        is_current_user = (username == current_username)
+        
+        # Określ kolor
+        if is_current_user:
+            # Użytkownik: jeśli jest na podium, to kolor podium, inaczej niebieski
+            if current_rank in [1, 2, 3]:
+                color = color_map[current_rank]
+                line_width = 4
+            else:
+                color = color_map['user']
+                line_width = 4
+            name = f"{player_data['firm_logo']} {player_data['firm_name']} (Ty)"
+            dash = 'solid'
+        else:
+            # Inni gracze: top 3 = kolor podium, reszta = szary
+            if current_rank in [1, 2, 3]:
+                color = color_map[current_rank]
+                line_width = 3
+            else:
+                color = color_map['top10']
+                line_width = 2
+            name = f"{player_data['firm_logo']} {player_data['firm_name']}"
+            dash = 'solid'
+        
+        # Dodaj linię
+        fig.add_trace(go.Scatter(
+            x=player_data["dates"],
+            y=player_data["positions"],
+            mode='lines+markers',
+            name=name,
+            line=dict(color=color, width=line_width, dash=dash),
+            marker=dict(size=6 if is_current_user else 4, color=color),
+            hovertemplate=f'<b>{name}</b><br>Data: %{{x}}<br>Pozycja: #%{{y}}<extra></extra>'
+        ))
+    
+    # Zaktualizuj layout
+    fig.update_layout(
+        title=None,
+        xaxis_title="Data",
+        yaxis_title="Pozycja w rankingu",
+        hovermode='x unified',
+        height=500,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(size=12),
+        yaxis=dict(
+            autorange='reversed',  # Odwróć oś Y (1 na górze, większe liczby na dole)
+            gridcolor='rgba(200,200,200,0.2)',
+            tickformat='d'  # Liczby całkowite
+        ),
+        xaxis=dict(
+            gridcolor='rgba(200,200,200,0.2)',
+            tickangle=-45
+        ),
+        margin=dict(l=50, r=20, t=20, b=80),
+        legend=dict(
+            orientation="v",
+            yanchor="top",
+            y=1,
+            xanchor="left",
+            x=1.02,
+            bgcolor='rgba(255,255,255,0.8)',
+            bordercolor='rgba(0,0,0,0.2)',
+            borderwidth=1
+        )
+    )
+    
+    # Unikalna kombinacja dla cache busting
+    chart_key = f"{internal_ranking_type}_{days}_{len(all_players_data)}"
+    st.plotly_chart(fig, use_container_width=True, key=f"chart_{chart_key}")
+    
+    # Statystyki dla aktualnego użytkownika
+    user_data = all_players_data.get(current_username)
+    if user_data and len(user_data["positions"]) > 1:
+        best_position = min(user_data["positions"])
+        worst_position = max(user_data["positions"])
+        current_position = user_data["positions"][-1]
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric("Twoja najlepsza", f"#{best_position}")
+        
+        with col2:
+            st.metric("Twoja obecna", f"#{current_position}")
+        
+        with col3:
+            # Zmiana od poprzedniego pomiaru
+            if len(user_data["positions"]) >= 2:
+                prev_position = user_data["positions"][-2]
+                change = prev_position - current_position  # Dodatnia = awans (lepiej)
+                st.metric("Zmiana", f"#{current_position}", delta=change, delta_color="inverse")
+            else:
+                st.metric("Zmiana", "—")
+        
+        with col4:
+            st.metric("Twoja najgorsza", f"#{worst_position}")
 
 
 # =============================================================================

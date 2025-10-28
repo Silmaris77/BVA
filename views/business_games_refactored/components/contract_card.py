@@ -17,6 +17,11 @@ import streamlit as st
 from datetime import datetime, timedelta
 import time
 
+from views.business_games_refactored.helpers import (
+    get_contract_reward_coins,
+    get_contract_reward_reputation
+)
+
 
 def render_active_contract_card(contract, username, user_data, bg_data, contract_index=0):
     """Renderuje profesjonalną kartę aktywnego kontraktu w stylu game UI"""
@@ -3592,7 +3597,7 @@ def show_history_tab(username, user_data, industry_id="consulting"):
 
 
 def render_completed_contract_card(contract):
-    """Renderuje kartę ukończonego kontraktu z pełnym feedbackiem"""
+    """Renderuje kartę ukończonego kontraktu w expanderze (jak wydarzenia)"""
     
     rating = contract.get("rating", 0)
     feedback = contract.get("feedback", "Brak feedbacku")
@@ -3602,38 +3607,25 @@ def render_completed_contract_card(contract):
     # Status koloru na podstawie oceny
     if rating >= 4:
         border_color = "#10b981"  # zielony
-        bg_color = "#f0fdf4"
+        icon = "✅"
     elif rating >= 3:
         border_color = "#f59e0b"  # pomarańczowy
-        bg_color = "#fffbeb"
+        icon = "⭐"
     else:
         border_color = "#ef4444"  # czerwony
-        bg_color = "#fef2f2"
+        icon = "❌"
     
-    with st.container():
-        # Header
-        st.markdown(f"""
-        <div style='border-left: 5px solid {border_color}; 
-                    background: {bg_color};
-                    padding: 15px; 
-                    margin: 10px 0; 
-                    border-radius: 8px;'>
-            <h4 style='margin: 0 0 10px 0;'>{contract['emoji']} {contract['tytul']}</h4>
-            <p style='margin: 0; color: #666;'>
-                <strong>Klient:</strong> {contract['klient']} | 
-                <strong>Kategoria:</strong> {contract['kategoria']} | 
-                <strong>Ukończono:</strong> {completed_date}
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        
+    # Tytuł expandera z metrykami
+    rep_change = get_contract_reward_reputation(contract)
+    rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
+    
+    expander_title = f"{icon} {contract['emoji']} **{contract['tytul']}** - {contract['klient']} | ⭐ {rating}/5 | 💰 {reward_coins:,} | 📈 {rep_display} | 📅 {completed_date}"
+    
+    with st.expander(expander_title, expanded=False):
         # Metryki w karcie
-        rep_change = get_contract_reward_reputation(contract)
-        rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
-        
         st.markdown(f"""
         <div style='background: linear-gradient(to right, #f8fafc, #f1f5f9); 
-                    border-left: 4px solid #3b82f6; 
+                    border-left: 4px solid {border_color}; 
                     border-radius: 8px; 
                     padding: 16px; 
                     margin: 16px 0;
@@ -3663,111 +3655,102 @@ def render_completed_contract_card(contract):
         st.markdown("---")
         
         # Feedback od klienta
-        st.subheader("💬 Feedback od klienta")
+        st.markdown("**💬 Feedback od klienta:**")
         st.info(feedback)
         
-        # Expander z pełnymi szczegółami
-        with st.expander("📋 Zobacz szczegóły kontraktu i Twoje rozwiązanie"):
-            # Karta 1: Opis sytuacji - Header
-            st.markdown("""
-            <div style='background: linear-gradient(135deg, #8b5cf615 0%, #6d28d915 100%); 
-                        border-left: 4px solid #8b5cf6; 
-                        border-radius: 12px 12px 0 0; 
-                        padding: 12px 20px 8px 20px; 
-                        margin-bottom: 0;'>
-                <div style='color: #8b5cf6; 
-                            font-size: 11px; 
-                            text-transform: uppercase; 
-                            letter-spacing: 1px; 
-                            font-weight: 600;'>
-                    📄 OPIS SYTUACJI
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Content
-            st.markdown("""
-            <div style='background: linear-gradient(135deg, #8b5cf615 0%, #6d28d915 100%); 
-                        border-left: 4px solid #8b5cf6; 
-                        border-radius: 0 0 12px 12px; 
-                        padding: 8px 20px 16px 20px; 
-                        margin: 0 0 16px 0;'>
-            """, unsafe_allow_html=True)
-            
-            st.markdown(contract['opis'])
-            
-            st.markdown("</div>", unsafe_allow_html=True)
-            
-            # Karta 2: Zadanie - Header
-            st.markdown("""
-            <div style='background: linear-gradient(135deg, #f59e0b15 0%, #d9770615 100%); 
-                        border-left: 4px solid #f59e0b; 
-                        border-radius: 12px 12px 0 0; 
-                        padding: 12px 20px 8px 20px; 
-                        margin-bottom: 0;'>
-                <div style='color: #f59e0b; 
-                            font-size: 11px; 
-                            text-transform: uppercase; 
-                            letter-spacing: 1px; 
-                            font-weight: 600;'>
-                    🎯 ZADANIE
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Content
-            st.markdown("""
-            <div style='background: linear-gradient(135deg, #f59e0b15 0%, #d9770615 100%); 
-                        border-left: 4px solid #f59e0b; 
-                        border-radius: 0 0 12px 12px; 
-                        padding: 8px 20px 16px 20px; 
-                        margin: 0 0 16px 0;'>
-            """, unsafe_allow_html=True)
-            
-            st.markdown(contract['zadanie'])
-            
-            st.markdown("</div>", unsafe_allow_html=True)
-            
-            # Karta 3: Twoje rozwiązanie - Header
-            st.markdown("""
-            <div style='background: linear-gradient(135deg, #06b6d415 0%, #0891b215 100%); 
-                        border-left: 4px solid #06b6d4; 
-                        border-radius: 12px 12px 0 0; 
-                        padding: 12px 20px 8px 20px; 
-                        margin-bottom: 0;'>
-                <div style='color: #06b6d4; 
-                            font-size: 11px; 
-                            text-transform: uppercase; 
-                            letter-spacing: 1px; 
-                            font-weight: 600;'>
-                    ✍️ TWOJE ROZWIĄZANIE
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Content
-            solution = contract.get("solution", "Brak zapisanego rozwiązania")
-            st.markdown("""
-            <div style='background: linear-gradient(135deg, #06b6d415 0%, #0891b215 100%); 
-                        border-left: 4px solid #06b6d4; 
-                        border-radius: 0 0 12px 12px; 
-                        padding: 8px 20px 16px 20px; 
-                        margin: 0 0 0 0;'>
-            """, unsafe_allow_html=True)
-            
-            st.markdown(f"```\n{solution}\n```")
-            
-            st.markdown("</div>", unsafe_allow_html=True)
-            
-            # Szczegóły oceny są teraz ukryte - feedback wystarczy
-            # Jeśli potrzebujesz debugowania, odkomentuj poniżej:
-            # eval_details = contract.get("evaluation_details", {})
-            # if eval_details:
-            #     st.markdown("---")
-            #     st.markdown("**Szczegóły oceny (debug):**")
-            #     st.json(eval_details)
-        
         st.markdown("---")
+        
+        # Szczegóły kontraktu
+        # Karta 1: Opis sytuacji - Header
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #8b5cf615 0%, #6d28d915 100%); 
+                    border-left: 4px solid #8b5cf6; 
+                    border-radius: 12px 12px 0 0; 
+                    padding: 12px 20px 8px 20px; 
+                    margin-bottom: 0;'>
+            <div style='color: #8b5cf6; 
+                        font-size: 11px; 
+                        text-transform: uppercase; 
+                        letter-spacing: 1px; 
+                        font-weight: 600;'>
+                📄 OPIS SYTUACJI
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Content
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #8b5cf615 0%, #6d28d915 100%); 
+                    border-left: 4px solid #8b5cf6; 
+                    border-radius: 0 0 12px 12px; 
+                    padding: 8px 20px 16px 20px; 
+                    margin: 0 0 16px 0;'>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(contract['opis'])
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        # Karta 2: Zadanie - Header
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #f59e0b15 0%, #d9770615 100%); 
+                    border-left: 4px solid #f59e0b; 
+                    border-radius: 12px 12px 0 0; 
+                    padding: 12px 20px 8px 20px; 
+                    margin-bottom: 0;'>
+            <div style='color: #f59e0b; 
+                        font-size: 11px; 
+                        text-transform: uppercase; 
+                        letter-spacing: 1px; 
+                        font-weight: 600;'>
+                🎯 ZADANIE
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Content
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #f59e0b15 0%, #d9770615 100%); 
+                    border-left: 4px solid #f59e0b; 
+                    border-radius: 0 0 12px 12px; 
+                    padding: 8px 20px 16px 20px; 
+                    margin: 0 0 16px 0;'>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(contract['zadanie'])
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        # Karta 3: Twoje rozwiązanie - Header
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #06b6d415 0%, #0891b215 100%); 
+                    border-left: 4px solid #06b6d4; 
+                    border-radius: 12px 12px 0 0; 
+                    padding: 12px 20px 8px 20px; 
+                    margin-bottom: 0;'>
+            <div style='color: #06b6d4; 
+                        font-size: 11px; 
+                        text-transform: uppercase; 
+                        letter-spacing: 1px; 
+                        font-weight: 600;'>
+                ✍️ TWOJE ROZWIĄZANIE
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Content
+        solution = contract.get("solution", "Brak zapisanego rozwiązania")
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #06b6d415 0%, #0891b215 100%); 
+                    border-left: 4px solid #06b6d4; 
+                    border-radius: 0 0 12px 12px; 
+                    padding: 8px 20px 16px 20px; 
+                    margin: 0 0 0 0;'>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(f"```\n{solution}\n```")
+        
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # =============================================================================
 # WYDARZENIA (HELPER FUNCTIONS)

@@ -28,6 +28,21 @@ def check_event_conditions(event_data: Dict, bg_data: Dict) -> bool:
         if bg_data["stats"]["avg_rating"] < conditions["min_avg_rating"]:
             return False
     
+    # Max średnia ocena (dla wydarzeń typu "imposter syndrome")
+    if "max_avg_rating" in conditions:
+        if bg_data["stats"]["avg_rating"] > conditions["max_avg_rating"]:
+            return False
+    
+    # Min poziom firmy
+    if "min_level" in conditions:
+        if bg_data["firm"]["level"] < conditions["min_level"]:
+            return False
+    
+    # Max poziom firmy (dla wydarzeń dla początkujących)
+    if "max_level" in conditions:
+        if bg_data["firm"]["level"] > conditions["max_level"]:
+            return False
+    
     # Min monety
     if "min_coins" in conditions:
         # Pobierz coins z user_data (przekazane osobno)

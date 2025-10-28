@@ -87,7 +87,8 @@ RANDOM_EVENTS = {
         },
         "rarity": "rare",
         "conditions": {
-            "min_contracts": 3
+            "min_contracts": 3,
+            "has_active_contracts": True
         }
     },
     
@@ -686,6 +687,212 @@ RANDOM_EVENTS = {
         "conditions": {
             "min_contracts": 7,
             "min_coins": 1500
+        }
+    },
+    
+    # =========================================================================
+    # WYDARZENIA DLA POCZĄTKUJĄCYCH (Poziom 1)
+    # =========================================================================
+    
+    "first_client_review": {
+        "type": "positive",
+        "emoji": "⭐",
+        "title": "Pierwsza Świetna Opinia!",
+        "description": "Twój pierwszy klient zostawił entuzjastyczną opinię w internecie. Nowi klienci już dzwonią!",
+        "flavor_text": "\"Profesjonalizm i zaangażowanie na najwyższym poziomie. Gorąco polecam!\" - ⭐⭐⭐⭐⭐",
+        "effects": {
+            "reputation": 5,
+            "coins": 200
+        },
+        "rarity": "common",
+        "conditions": {
+            "max_level": 2,
+            "min_contracts": 1,
+            "min_avg_rating": 4.0
+        }
+    },
+    
+    "beginner_luck": {
+        "type": "positive",
+        "emoji": "🍀",
+        "title": "Szczęście Początkującego",
+        "description": "Natrafiłeś na klienta, który akurat pilnie potrzebuje pomocy i jest gotów zapłacić więcej!",
+        "flavor_text": "\"Jesteście wolni? Potrzebuję kogoś NATYCHMIAST. Zapłacę 30% więcej!\"",
+        "effects": {
+            "next_contract_bonus": 1.3,
+            "reputation": 2
+        },
+        "rarity": "uncommon",
+        "conditions": {
+            "max_level": 2,
+            "min_contracts": 0
+        }
+    },
+    
+    "mentor_help": {
+        "type": "positive",
+        "emoji": "👨‍🏫",
+        "title": "Nieoczekiwana Pomoc Mentora",
+        "description": "Doświadczony konsultant zauważył Twój potencjał i oferuje bezpłatną poradę, która przyspiesza realizację kontraktu.",
+        "flavor_text": "\"Pamiętam swoje początki... Pozwól, że ci pokażę kilka trików!\"",
+        "effects": {
+            "deadline_extension": 2,
+            "capacity_boost": 1,
+            "duration_days": 2
+        },
+        "rarity": "uncommon",
+        "conditions": {
+            "max_level": 2,
+            "min_contracts": 2,
+            "has_active_contracts": True
+        }
+    },
+    
+    "free_coffee": {
+        "type": "positive",
+        "emoji": "☕",
+        "title": "Darmowa Kawa od Klienta",
+        "description": "Klient był pod wrażeniem Twojej pracy i wysłał voucher na miesiąc darmowej kawy. Mała rzecz, a cieszy!",
+        "flavor_text": "\"Dziękuję za świetną robotę! To małe podziękowan ie od nas.\"",
+        "effects": {
+            "reputation": 1,
+            "coins": 100
+        },
+        "rarity": "common",
+        "conditions": {
+            "max_level": 2,
+            "min_contracts": 1
+        }
+    },
+    
+    "networking_event": {
+        "type": "neutral",
+        "emoji": "🎤",
+        "title": "Zaproszenie na Wydarzenie Networkingowe",
+        "description": "Lokalna izba biznesu organizuje wydarzenie networkingowe. Udział kosztuje 150 monet, ale możesz poznać nowych klientów.",
+        "flavor_text": "\"W biznesie chodzi o ludzi. Przyjdź, poznaj innych przedsiębiorców!\"",
+        "choices": [
+            {
+                "text": "✅ Idę! Networking to podstawa",
+                "effects": {
+                    "coins": -150,
+                    "reputation": 4,
+                    "next_contract_bonus": 1.2
+                }
+            },
+            {
+                "text": "❌ Za drogo, skupiam się na pracy",
+                "effects": {
+                    "capacity_boost": 1,
+                    "duration_days": 1
+                }
+            }
+        ],
+        "rarity": "common",
+        "conditions": {
+            "max_level": 2,
+            "min_coins": 200,
+            "min_contracts": 1
+        }
+    },
+    
+    "online_course": {
+        "type": "neutral",
+        "emoji": "💻",
+        "title": "Kurs Online ze Zniżką",
+        "description": "Platforma edukacyjna oferuje 50% zniżki na kurs, który może poprawić Twoje umiejętności. Kosztuje 200 monet.",
+        "flavor_text": "\"Zainwestuj w siebie - to najlepsza inwestycja!\"",
+        "choices": [
+            {
+                "text": "✅ Kupuję kurs",
+                "effects": {
+                    "coins": -200,
+                    "capacity_boost": 2,
+                    "duration_days": 5
+                }
+            },
+            {
+                "text": "❌ Nauczę się sam/sama",
+                "effects": {
+                    "reputation": 1
+                }
+            }
+        ],
+        "rarity": "common",
+        "conditions": {
+            "max_level": 3,
+            "min_coins": 250,
+            "min_contracts": 2
+        }
+    },
+    
+    "computer_slowdown": {
+        "type": "negative",
+        "emoji": "🐌",
+        "title": "Komputer Zwalnia",
+        "description": "Twój komputer zaczyna przytykać i wymaga aktualizacji systemu. Tracisz czas na instalację.",
+        "flavor_text": "\"Windows Update: Instalowanie 1 z 247 aktualizacji... Nie wyłączaj komputera.\"",
+        "effects": {
+            "capacity_penalty": -1,
+            "duration_days": 1
+        },
+        "rarity": "common",
+        "conditions": {
+            "max_level": 3,
+            "min_contracts": 1
+        }
+    },
+    
+    "client_confusion": {
+        "type": "negative",
+        "emoji": "❓",
+        "title": "Nieporozumienie z Klientem",
+        "description": "Klient źle zrozumiał zakres usługi i oczekuje więcej pracy. Musisz poświęcić dodatkowy czas na wyjaśnienia.",
+        "flavor_text": "\"Jak to nie wchodzi w cenę?! Myślałem, że wszystko jest zawarte...\"",
+        "effects": {
+            "capacity_penalty": -1,
+            "duration_days": 2,
+            "reputation": -2
+        },
+        "rarity": "common",
+        "conditions": {
+            "max_level": 2,
+            "min_contracts": 1
+        }
+    },
+    
+    "invoice_delay": {
+        "type": "negative",
+        "emoji": "🧾",
+        "title": "Opóźniona Płatność",
+        "description": "Klient obiecał zapłacić natychmiast, ale faktura \"zaginęła w systemie\". Musisz czekać na pieniądze.",
+        "flavor_text": "\"Księgowość mówi, że nie dostali faktury... Możesz wysłać ponownie?\"",
+        "effects": {
+            "coins": -100,
+            "reputation": -1
+        },
+        "rarity": "common",
+        "conditions": {
+            "max_level": 3,
+            "min_contracts": 2
+        }
+    },
+    
+    "imposter_syndrome": {
+        "type": "negative",
+        "emoji": "😰",
+        "title": "Zespół Samozwańczości",
+        "description": "Masz wątpliwości czy naprawdę jesteś wystarczająco dobry/a. Potrzebujesz chwili na odzyskanie pewności siebie.",
+        "flavor_text": "\"A co jeśli klient odkryje, że tak naprawdę nie wiem co robię...?\"",
+        "effects": {
+            "capacity_penalty": -1,
+            "duration_days": 1
+        },
+        "rarity": "uncommon",
+        "conditions": {
+            "max_level": 2,
+            "min_contracts": 3,
+            "max_avg_rating": 4.5
         }
     }
 }

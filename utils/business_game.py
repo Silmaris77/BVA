@@ -134,7 +134,8 @@ def initialize_business_game_with_scenario(username: str, industry_id: str, scen
                 "productivity_30d": None
             },
             "previous_positions": {},
-            "badges": []
+            "badges": [],
+            "position_history": []  # Historia pozycji w rankingu
         },
         "events": {
             "history": [],
@@ -150,7 +151,20 @@ def initialize_business_game_with_scenario(username: str, industry_id: str, scen
                 "description": f"Kapitał początkowy - Scenariusz: {scenario['name']}",
                 "balance_after": initial['money']
             }] if initial['money'] != 0 else [],
-            "level_ups": []
+            "level_ups": [],
+            "employees": [],  # Historia zatrudnień/zwolnień
+            "offices": [{  # Historia zmian biura - startowe biuro
+                "office_type": OFFICE_TYPES[initial['office_type']]['nazwa'],
+                "cost": OFFICE_TYPES[initial['office_type']]['koszt_dzienny'],
+                "capacity": OFFICE_TYPES[initial['office_type']]['max_pracownikow'],
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }],
+            "milestones": [{  # Kamienie milowe firmy
+                "type": "founded",
+                "title": "Założenie firmy",
+                "description": f"🎉 Firma {username}'s Consulting została założona! Scenariusz: {scenario['name']}",
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }]
         },
         # Specjalne dane dla scenariusza
         "initial_money": initial['money']  # Zachowaj dla referencji
@@ -220,7 +234,8 @@ def initialize_business_game(username: str) -> Dict:
                 "productivity_30d": None
             },
             "previous_positions": {},
-            "badges": []
+            "badges": [],
+            "position_history": []  # Historia pozycji w rankingu
         },
         "events": {
             "history": [],  # Historia zdarzeń losowych
@@ -229,7 +244,20 @@ def initialize_business_game(username: str) -> Dict:
         },
         "history": {
             "transactions": [],  # Historia finansowa
-            "level_ups": []  # Historia awansów
+            "level_ups": [],  # Historia awansów
+            "employees": [],  # Historia zatrudnień/zwolnień
+            "offices": [{  # Historia zmian biura
+                "office_type": "Home Office",
+                "cost": 0,
+                "capacity": 1,
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }],
+            "milestones": [{  # Kamienie milowe firmy
+                "type": "founded",
+                "title": "Założenie firmy",
+                "description": f"🎉 Firma {username}'s Consulting została założona!",
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }]
         }
     }
 
@@ -341,7 +369,8 @@ def initialize_fmcg_game_with_scenario(username: str, scenario_id: str) -> Dict:
                 "productivity_30d": None
             },
             "previous_positions": {},
-            "badges": []
+            "badges": [],
+            "position_history": []  # Historia pozycji w rankingu
         },
         
         # Events (losowe wydarzenia)
@@ -1132,12 +1161,24 @@ def hire_employee(user_data: Dict, employee_type: str, industry_id: str = "consu
     }
     business_data["employees"].append(new_employee)
     
-    # Dodaj do historii
+    # Dodaj do historii transakcji
     business_data["history"]["transactions"].append({
         "type": "employee_hired",
         "employee_type": employee_type,
         "amount": -emp_data["koszt_zatrudnienia"],
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    })
+    
+    # Dodaj do historii pracowników (dla zakładki Historia)
+    if "employees" not in business_data.setdefault("history", {}):
+        business_data["history"]["employees"] = []
+    
+    business_data["history"]["employees"].append({
+        "action": "hired",
+        "employee_name": emp_data["nazwa"],
+        "employee_type": employee_type,
+        "cost": emp_data["koszt_miesięczny"],
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     })
     
     # Zapisz zmiany
@@ -1176,12 +1217,24 @@ def fire_employee(user_data: Dict, employee_id: str, industry_id: str = "consult
         e for e in business_data["employees"] if e["id"] != employee_id
     ]
     
-    # Dodaj do historii
+    # Dodaj do historii transakcji
     business_data["history"]["transactions"].append({
         "type": "employee_fired",
         "employee_type": employee["type"],
         "amount": 0,  # Zwolnienie nie ma kosztu finansowego, ale zapisujemy dla kompletności
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    })
+    
+    # Dodaj do historii pracowników (dla zakładki Historia)
+    if "employees" not in business_data.setdefault("history", {}):
+        business_data["history"]["employees"] = []
+    
+    business_data["history"]["employees"].append({
+        "action": "fired",
+        "employee_name": emp_data["nazwa"],
+        "employee_type": employee["type"],
+        "cost": emp_data["koszt_miesięczny"],
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     })
     
     # Zapisz zmiany
@@ -1270,8 +1323,55 @@ def calculate_overall_score(business_data: Dict) -> float:
     return round(score, 2)
 
 def update_user_ranking(business_data: Dict) -> Dict:
-    """Aktualizuje overall score użytkownika"""
+    """Aktualizuje overall score użytkownika i zapisuje historię pozycji"""
+    from datetime import datetime
+    
+    # Aktualizuj overall score
     business_data["ranking"]["overall_score"] = calculate_overall_score(business_data)
+    
+    # Inicjalizuj historię pozycji jeśli nie istnieje
+    if "position_history" not in business_data["ranking"]:
+        business_data["ranking"]["position_history"] = []
+    
+    # Zapisz aktualną pozycję z timestampem (pozycja będzie obliczona później w show_rankings_content)
+    # Tu zapisujemy tylko score, pozycja będzie dodana przez save_ranking_position()
+    
+    return business_data
+
+def save_ranking_position(business_data: Dict, position: int, ranking_type: str = "overall"):
+    """Zapisuje pozycję w rankingu do historii
+    
+    Args:
+        business_data: Dane gry użytkownika
+        position: Pozycja w rankingu
+        ranking_type: Typ rankingu (overall, revenue, quality, productivity_30d)
+    """
+    from datetime import datetime
+    
+    if "position_history" not in business_data["ranking"]:
+        business_data["ranking"]["position_history"] = []
+    
+    history = business_data["ranking"]["position_history"]
+    current_time = datetime.now()
+    
+    # Sprawdź czy już zapisaliśmy pozycję dzisiaj dla tego typu rankingu
+    today_str = current_time.strftime("%Y-%m-%d")
+    
+    # Usuń wpis z dzisiaj jeśli istnieje (aktualizacja)
+    history[:] = [h for h in history if not (h.get("date", "")[:10] == today_str and h.get("type") == ranking_type)]
+    
+    # Dodaj nowy wpis
+    history.append({
+        "date": current_time.strftime("%Y-%m-%d %H:%M:%S"),
+        "type": ranking_type,
+        "position": position,
+        "score": business_data["ranking"]["overall_score"]
+    })
+    
+    # Ogranicz historię do ostatnich 365 dni (żeby nie rosła w nieskończoność)
+    if len(history) > 1000:
+        history[:] = history[-1000:]
+    
     return business_data
 
 def get_all_rankings(all_users_data: List[Dict], ranking_type: str = "overall") -> List[Dict]:
@@ -1345,6 +1445,109 @@ def get_category_distribution(business_data: Dict) -> Dict:
         for cat, stats in category_stats.items() 
         if stats["completed"] > 0
     }
+
+def get_ranking_chart_data(business_data: Dict, ranking_type: str = "overall", days: Optional[int] = 30) -> Dict:
+    """Generuje dane do wykresu historii pozycji w rankingu
+    
+    Args:
+        business_data: Dane gry użytkownika
+        ranking_type: Typ rankingu (overall, revenue, quality, productivity_30d)
+        days: Liczba dni wstecz (7, 30, 365, None dla całej historii)
+        
+    Returns:
+        Dict z listami dat i pozycji
+    """
+    from datetime import datetime, timedelta
+    
+    history = business_data.get("ranking", {}).get("position_history", [])
+    
+    # Filtruj po typie rankingu
+    filtered = [h for h in history if h.get("type") == ranking_type]
+    
+    if not filtered:
+        return {"dates": [], "positions": [], "scores": []}
+    
+    # Filtruj po dacie jeśli days jest podane
+    if days:
+        cutoff_date = datetime.now() - timedelta(days=days)
+        filtered = [
+            h for h in filtered 
+            if datetime.strptime(h["date"], "%Y-%m-%d %H:%M:%S") >= cutoff_date
+        ]
+    
+    # Sortuj po dacie
+    filtered.sort(key=lambda x: x["date"])
+    
+    # Wyciągnij dane
+    dates = [h["date"][:10] for h in filtered]  # Tylko data bez czasu
+    positions = [h["position"] for h in filtered]
+    scores = [h.get("score", 0) for h in filtered]
+    
+    return {
+        "dates": dates,
+        "positions": positions,
+        "scores": scores
+    }
+
+def get_ranking_chart_data_for_players(all_users_data: Dict, ranking_type: str = "overall", days: Optional[int] = 30, top_n: int = 10) -> Dict:
+    """Generuje dane do wykresu historii pozycji w rankingu dla wielu graczy
+    
+    Args:
+        all_users_data: Słownik wszystkich użytkowników {username: user_data}
+        ranking_type: Typ rankingu (overall, revenue, quality, productivity_30d)
+        days: Liczba dni wstecz (7, 30, 365, None dla całej historii)
+        top_n: Liczba najlepszych graczy do pokazania
+        
+    Returns:
+        Dict z danymi dla każdego gracza: {username: {"dates": [...], "positions": [...], "current_rank": X}}
+    """
+    from datetime import datetime, timedelta
+    
+    result = {}
+    
+    for username, user_data in all_users_data.items():
+        bg_data = user_data.get("business_game")
+        if not bg_data:
+            continue
+        
+        history = bg_data.get("ranking", {}).get("position_history", [])
+        
+        # Filtruj po typie rankingu
+        filtered = [h for h in history if h.get("type") == ranking_type]
+        
+        if not filtered:
+            continue
+        
+        # Filtruj po dacie jeśli days jest podane
+        if days:
+            cutoff_date = datetime.now() - timedelta(days=days)
+            filtered = [
+                h for h in filtered 
+                if datetime.strptime(h["date"], "%Y-%m-%d %H:%M:%S") >= cutoff_date
+            ]
+        
+        if not filtered:
+            continue
+        
+        # Sortuj po dacie
+        filtered.sort(key=lambda x: x["date"])
+        
+        # Wyciągnij dane
+        dates = [h["date"][:10] for h in filtered]
+        positions = [h["position"] for h in filtered]
+        
+        # Aktualna pozycja (ostatnia w historii)
+        current_rank = positions[-1] if positions else None
+        
+        result[username] = {
+            "dates": dates,
+            "positions": positions,
+            "current_rank": current_rank,
+            "firm_name": bg_data.get("firm", {}).get("name", username),
+            "firm_logo": bg_data.get("firm", {}).get("logo", "🏢")
+        }
+    
+    return result
 
 
 # =============================================================================

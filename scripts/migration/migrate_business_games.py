@@ -40,6 +40,7 @@ def test_business_game_migration(username: str, dry_run: bool = True):
     # Validate each scenario
     print(f"\n📋 Step 2: Validating data...")
     all_valid = True
+    valid_scenarios = {}  # Only scenarios that pass validation
     
     for scenario_type, game_data in scenarios.items():
         print(f"\n   🎮 Scenario: {scenario_type}")
@@ -49,9 +50,9 @@ def test_business_game_migration(username: str, dry_run: bool = True):
         missing = [f for f in required_fields if f not in game_data]
         
         if missing:
-            print(f"      ❌ Missing fields: {missing}")
-            all_valid = False
-            continue
+            print(f"      ⚠️  Missing fields: {missing}")
+            print(f"      ⏭️  SKIPPING {scenario_type} (incomplete structure)")
+            continue  # Skip invalid scenarios instead of failing
         
         # Show details
         firm = game_data.get('firm', {})
@@ -77,20 +78,24 @@ def test_business_game_migration(username: str, dry_run: bool = True):
         # Repository validation
         if json_repo._validate_business_game_data(game_data):
             print(f"      ✅ Data structure is valid")
+            valid_scenarios[scenario_type] = game_data  # Add to valid list
         else:
-            print(f"      ❌ Data structure is invalid")
-            all_valid = False
+            print(f"      ⚠️  Data structure is invalid")
+            print(f"      ⏭️  SKIPPING {scenario_type}")
     
-    if not all_valid:
-        print(f"\n❌ Validation failed!")
+    if not valid_scenarios:
+        print(f"\n⚠️  No valid scenarios found to migrate!")
         return False
     
-    print(f"\n✅ All scenarios are valid!")
+    print(f"\n✅ {len(valid_scenarios)} scenario(s) validated: {list(valid_scenarios.keys())}")
     
     if dry_run:
         print(f"\n" + "="*80)
         print(f"✅ DRY RUN COMPLETE - No changes made")
-        print(f"   Ready to migrate {len(scenarios)} scenario(s) for {username}")
+        print(f"   Ready to migrate {len(valid_scenarios)} scenario(s) for {username}")
+        if len(valid_scenarios) < len(scenarios):
+            skipped = set(scenarios.keys()) - set(valid_scenarios.keys())
+            print(f"   ⏭️  Skipped {len(skipped)} incomplete scenario(s): {list(skipped)}")
         print("="*80)
         return True
     
@@ -98,13 +103,14 @@ def test_business_game_migration(username: str, dry_run: bool = True):
     print(f"\n📋 Step 3: Migrating to SQL...")
     sql_repo = BusinessGameRepository(backend="sql")
     
-    if not sql_repo.sql_available:
+    # Force SQL initialization
+    if not sql_repo._ensure_sql_initialized():
         print(f"   ❌ SQL backend not available!")
         return False
     
     migration_success = True
     
-    for scenario_type, game_data in scenarios.items():
+    for scenario_type, game_data in valid_scenarios.items():  # Only migrate valid scenarios
         print(f"\n   🎮 Migrating {scenario_type}...")
         
         try:
@@ -128,7 +134,7 @@ def test_business_game_migration(username: str, dry_run: bool = True):
     # Verify migration
     print(f"\n📋 Step 4: Verifying migration...")
     
-    for scenario_type in scenarios.keys():
+    for scenario_type in valid_scenarios.keys():  # Only verify valid scenarios
         print(f"\n   🎮 Verifying {scenario_type}...")
         
         # Load from SQL
@@ -140,7 +146,7 @@ def test_business_game_migration(username: str, dry_run: bool = True):
             continue
         
         # Compare key fields
-        json_data = scenarios[scenario_type]
+        json_data = valid_scenarios[scenario_type]
         
         firm_match = json_data.get('firm', {}).get('name') == sql_data.get('firm', {}).get('name')
         money_match = json_data.get('money') == sql_data.get('money')
@@ -156,7 +162,10 @@ def test_business_game_migration(username: str, dry_run: bool = True):
     print(f"\n" + "="*80)
     if migration_success:
         print(f"✅ MIGRATION COMPLETE")
-        print(f"   {len(scenarios)} scenario(s) migrated successfully for {username}")
+        print(f"   {len(valid_scenarios)} scenario(s) migrated successfully for {username}")
+        if len(valid_scenarios) < len(scenarios):
+            skipped = set(scenarios.keys()) - set(valid_scenarios.keys())
+            print(f"   ⏭️  Skipped {len(skipped)} incomplete scenario(s): {list(skipped)}")
     else:
         print(f"❌ MIGRATION HAD ERRORS")
     print("="*80)
