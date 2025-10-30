@@ -7,9 +7,11 @@
     "*": "json"
   },
   "migration_status": {
-    "phase": "dual_write_active",
+    "phase": "sql_active",
     "started_at": "2025-10-24T07:52:00",
-    "last_updated": "2025-10-24T19:35:00"
+    "last_updated": "2025-10-29T00:52:00",
+    "migration_complete": true,
+    "users_migrated": ["admin", "Piotr", "Pawel"]
   },
   "database": {
     "type": "sqlite",

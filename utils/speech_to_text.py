@@ -157,3 +157,43 @@ def get_speech_transcript(key: str = "stt") -> str:
         st.session_state[transcript_key] = ""  # Wyczyść po pobraniu
         return transcript
     return ""
+
+
+def add_punctuation_to_text(text: str) -> str:
+    """
+    Dodaje interpunkcję do tekstu używając Gemini API.
+    
+    Args:
+        text: Tekst bez interpunkcji (z rozpoznawania mowy)
+    
+    Returns:
+        Tekst z dodaną interpunkcją lub oryginalny tekst jeśli błąd
+    """
+    if not text or not text.strip():
+        return text
+    
+    try:
+        import google.generativeai as genai
+        
+        # Konfiguracja Gemini (z secrets.toml)
+        api_key = st.secrets["API_KEYS"]["gemini"]
+        genai.configure(api_key=api_key)
+        
+        # Dodaj interpunkcję - użyj najnowszego modelu
+        model = genai.GenerativeModel("models/gemini-2.0-flash-exp")
+        prompt = f"""Dodaj interpunkcję (kropki, przecinki, pytajniki, wykrzykniki) do poniższego tekstu.
+Nie zmieniaj słów, tylko dodaj znaki interpunkcyjne. Zachowaj strukturę i podział na zdania.
+Zwróć tylko poprawiony tekst, bez dodatkowych komentarzy.
+
+Tekst do poprawy:
+{text}"""
+        
+        response = model.generate_content(prompt)
+        text_with_punctuation = response.text.strip()
+        
+        return text_with_punctuation
+        
+    except Exception as e:
+        # W przypadku błędu zwróć oryginalny tekst
+        print(f"[STT] Błąd dodawania interpunkcji: {e}")
+        return text

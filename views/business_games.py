@@ -77,12 +77,15 @@ def show_business_games(username, user_data):
     
     # RESET session_state jeśli selected_industry jest ustawione ale gra nie istnieje
     # TYLKO jeśli NIE jesteśmy w trakcie inicjalizacji
+    # ORAZ pomiń dla FMCG i CONSULTING (które mają własną inicjalizację w UI)
     if (st.session_state["selected_industry"] is not None and 
         st.session_state["bg_view"] == "game" and
         st.session_state["selected_industry"] not in user_data.get("business_games", {}) and
-        not st.session_state["initializing_game"]):
+        not st.session_state["initializing_game"] and
+        st.session_state["selected_industry"] not in ["fmcg", "consulting"]):
         st.warning("⚠️ Znaleziono nieaktualny stan sesji - resetuję...")
         st.session_state["bg_view"] = "home"
+        st.session_state["selected_industry"] = None
         st.session_state["selected_industry"] = None
     
     # =========================================================================
@@ -118,11 +121,14 @@ def show_business_games(username, user_data):
         
         # ZABEZPIECZENIE: Sprawdź czy gra dla tej branży istnieje
         # ALE pomiń to sprawdzenie jeśli jesteśmy w trakcie inicjalizacji
+        # ORAZ pomiń dla FMCG (które ma własną inicjalizację w UI)
         if (industry_id not in user_data.get("business_games", {}) and 
-            not st.session_state.get("initializing_game", False)):
+            not st.session_state.get("initializing_game", False) and
+            industry_id != "fmcg"):
             st.error(f"❌ Błąd: Gra dla branży '{industry_id}' nie została zainicjalizowana!")
             st.warning("Zostaniesz przekierowany do wyboru scenariusza...")
             st.session_state["bg_view"] = "scenario_selector"
+            st.rerun()
             st.rerun()
         
         show_industry_game(username, user_data, industry_id)
@@ -2096,53 +2102,51 @@ def show_industry_game(username, user_data, industry_id):
         }
         zen_header(industry_names.get(industry_id, "Business Game"))
         
-        # Pobierz dane branży
-        bg_data = user_data["business_games"][industry_id]
-        
-        # ========== FMCG - Skip Consulting-specific logic ==========
+        # ========== FMCG - Use new playable mechanics ==========
         if industry_id == "fmcg":
-            # Migracja danych - dodaj customers i conversations jeśli nie istnieją
-            if "customers" not in bg_data:
-                bg_data["customers"] = {
-                    "selected_targets": [],
-                    "active_clients": [],
-                    "prospects": [],
-                    "lost": [],
-                    "onboarding_completed": False
-                }
-            if "conversations" not in bg_data:
-                bg_data["conversations"] = {}
+            # Import new playable UI
+            from views.business_games_refactored.industries.fmcg_playable import show_fmcg_playable_game
             
-            render_header(user_data, industry_id)
-            st.markdown("---")
-            
-            # Sprawdź czy gracz przeszedł onboarding
-            onboarding_done = bg_data.get("customers", {}).get("onboarding_completed", False)
-            
-            if not onboarding_done:
-                # ONBOARDING - Prezentacja firmy i wybór klientów
-                show_fmcg_onboarding(username, user_data, industry_id)
-                return
-            
-            # ZAKŁADKI FMCG (po onboardingu)
-            tabs = st.tabs(["🏢 Dashboard", "👥 Klienci", "💼 Zadania", "📊 Statystyki Kariery", "📚 Moja Firma"])
-            
-            with tabs[0]:
-                show_fmcg_dashboard_tab(username, user_data, industry_id)
-            
-            with tabs[1]:
-                show_fmcg_customers_tab(username, user_data, industry_id)
-            
-            with tabs[2]:
-                show_fmcg_tasks_tab(username, user_data, industry_id)
-            
-            with tabs[3]:
-                fmcg.show_fmcg_career_stats_tab(username, user_data, industry_id)
-            
-            with tabs[4]:
-                fmcg.show_fmcg_company_info_tab(username, user_data, industry_id)
-                
+            # Show playable game interface
+            show_fmcg_playable_game(username)
             return
+        
+        # Pobierz dane branży (tylko dla innych branż)
+        if "business_games" not in user_data:
+            user_data["business_games"] = {}
+        
+        if industry_id not in user_data["business_games"]:
+            st.warning(f"⚠️ Brak danych dla {industry_id}, inicjalizuję...")
+            
+            # Automatyczna inicjalizacja
+            from utils.business_game import initialize_business_game
+            
+            new_game_data = initialize_business_game(username)
+            user_data["business_games"][industry_id] = new_game_data
+            
+            save_user_data(username, user_data)
+            st.success("✅ Gra została zainicjalizowana! Zapisano do bazy.")
+            
+            # IMPORTANT: Set bg_view to "game" so it stays on game view
+            st.session_state["bg_view"] = "game"
+            st.session_state["selected_industry"] = industry_id
+        
+        # Ensure business_games exists after reload
+        if "business_games" not in user_data:
+            st.error("❌ business_games zniknęło po reloadzie!")
+            user_data["business_games"] = {}
+        
+        # Ensure industry exists
+        if industry_id not in user_data["business_games"]:
+            st.error(f"❌ Błąd: {industry_id} nie istnieje w business_games po inicjalizacji!")
+            st.json(user_data.get("business_games", {}))
+            if st.button("🔄 Powrót do menu"):
+                st.session_state["bg_view"] = "home"
+                st.session_state["selected_industry"] = None
+                st.rerun()
+            return
+        
+        bg_data = user_data["business_games"][industry_id]
         
         # ========== CONSULTING - Original logic ==========
         # MIGRACJA: Dodaj brakujące transakcje dla starych wydarzeń z monetami
@@ -2155,6 +2159,14 @@ def show_industry_game(username, user_data, industry_id):
         # Odśwież pulę kontraktów
         bg_data = refresh_contract_pool(bg_data)
         user_data["business_games"][industry_id] = bg_data
+        
+        # SAVE after refresh!
+        save_user_data(username, user_data)
+        
+        # CRITICAL: Reload user_data from disk to ensure consistency
+        from data.users_new import get_current_user_data
+        user_data = get_current_user_data(username)
+        bg_data = user_data["business_games"][industry_id]
         
         # Nagłówek z podsumowaniem firmy
         render_header(user_data, industry_id)
@@ -2224,17 +2236,63 @@ def show_industry_game(username, user_data, industry_id):
 
 def show_dashboard_tab(username, user_data, industry_id="consulting"):
     """Zakładka Dashboard - podsumowanie firmy"""
+    from utils.business_game_events import get_latest_event, get_random_event, apply_event_effects
+    from datetime import datetime, timedelta
+    
     bg_data = get_game_data(user_data, industry_id)
     
     # BACKWARD COMPATIBILITY: Zainicjalizuj events jeśli nie istnieje
     if "events" not in bg_data:
         bg_data["events"] = {
             "history": [],
-            "last_roll": None,
+            "last_roll": None,  # Legacy pole (nieużywane)
+            "last_auto_event": None,  # Automatyczne wydarzenie dzienne
+            "last_manual_roll": None,  # Ręczne losowanie przez gracza
             "active_effects": []
         }
         save_game_data(user_data, bg_data, industry_id)
         save_user_data(username, user_data)
+    
+    # =============================================================================
+    # AUTOMATYCZNE WYDARZENIE DZIENNE (raz dziennie przy wejściu)
+    # =============================================================================
+    
+    today = datetime.now().strftime("%Y-%m-%d")
+    last_auto_event = bg_data.get("events", {}).get("last_auto_event")
+    should_auto_roll = True
+    
+    if last_auto_event:
+        last_auto_date = last_auto_event.split(" ")[0]  # Tylko data
+        if last_auto_date == today:
+            should_auto_roll = False
+    
+    # Jeśli jeszcze dziś nie było automatycznego wydarzenia - WYLOSUJ TERAZ
+    if should_auto_roll:
+        event_result = get_random_event(bg_data, user_data.get("degencoins", 0))  # 20% szansa
+        
+        if event_result:
+            event_id, event_data = event_result
+            
+            # Sprawdź czy wymaga wyboru
+            if event_data["type"] == "neutral" and "choices" in event_data:
+                # Zapisz w session_state i wyświetl modal
+                st.session_state["pending_event"] = (event_id, event_data)
+                st.session_state["pending_event_type"] = "auto"
+            else:
+                # Bezpośrednio aplikuj (positive i negative)
+                user_data = apply_event_effects(event_id, event_data, None, user_data, industry_id)
+                save_user_data(username, user_data)
+                
+                if event_data["type"] == "positive":
+                    st.balloons()
+        
+        # Zapisz timestamp automatycznego losowania
+        bg_data.setdefault("events", {})["last_auto_event"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        save_game_data(user_data, bg_data, industry_id)
+        save_user_data(username, user_data)
+        
+        # Przeładuj bg_data po zapisie
+        bg_data = get_game_data(user_data, industry_id)
     
     # =============================================================================
     # SPRAWDŹ DEADLINE I NAŁÓŻ KARY ZA SPÓŹNIENIE
@@ -2250,7 +2308,326 @@ def show_dashboard_tab(username, user_data, industry_id="consulting"):
         save_user_data(username, user_data)
     
     # =============================================================================
-    # INSTRUKCJA GRY - EXPANDER
+    # WYDARZENIA W DWÓCH KOLUMNACH (Dzisiejsze + Losowanie)
+    # =============================================================================
+    
+    col_event_today, col_event_roll = st.columns(2)
+    
+    # LEWA KOLUMNA - DZISIEJSZE WYDARZENIE (AUTOMATYCZNE)
+    with col_event_today:
+        st.markdown("""
+        <div style='margin-top: 0 !important; padding-top: 0 !important;'>
+            <h3 style='margin: 0 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>🎲 Dzisiejsze Wydarzenie</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Pokaż dzisiejsze AUTOMATYCZNE wydarzenie (manual_roll=False)
+        today = datetime.now().strftime("%Y-%m-%d")
+        auto_event_today = None
+        
+        # Znajdź automatyczne wydarzenie z dzisiaj
+        for event in reversed(bg_data.get("events", {}).get("history", [])):
+            event_date = event.get("timestamp", "").split(" ")[0]
+            # Automatyczne = manual_roll jest False lub nie istnieje
+            if event_date == today and not event.get("manual_roll", False):
+                auto_event_today = event
+                break
+        
+        if auto_event_today:
+            show_active_event_card(auto_event_today)
+        else:
+            st.info("Dzisiaj nie ma żadnego wydarzenia.")
+    
+    # PRAWA KOLUMNA - LOSOWANIE DODATKOWEGO WYDARZENIA
+    with col_event_roll:
+        st.markdown("""
+        <div style='margin-top: 0 !important; padding-top: 0 !important;'>
+            <h3 style='margin: 0 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>🎲 Losowanie Wydarzenia</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Sprawdź cooldown dla RĘCZNEGO losowania (oddzielny od automatycznego!)
+        last_manual_roll = bg_data.get("events", {}).get("last_manual_roll")
+        can_roll = True
+        hours_left = 0
+        minutes_left = 0
+        manual_event_today = None
+        
+        if last_manual_roll:
+            last_dt = datetime.strptime(last_manual_roll, "%Y-%m-%d %H:%M:%S")
+            next_roll = last_dt + timedelta(hours=24)
+            now = datetime.now()
+            
+            # Sprawdź czy wylosowano dziś
+            manual_roll_date = last_manual_roll.split(" ")[0]
+            if manual_roll_date == today:
+                # Znajdź wydarzenie z dzisiaj które było ręczne (ma flagę manual=True w historii)
+                for event in reversed(bg_data.get("events", {}).get("history", [])):
+                    event_date = event.get("timestamp", "").split(" ")[0]
+                    if event_date == today and event.get("manual_roll", False):
+                        manual_event_today = event
+                        break
+            
+            if now < next_roll:
+                can_roll = False
+                time_until_next = next_roll - now
+                hours_left = int(time_until_next.total_seconds() / 3600)
+                minutes_left = int((time_until_next.total_seconds() % 3600) / 60)
+        
+        # Jeśli dziś było ręczne losowanie - pokaż wydarzenie
+        if manual_event_today:
+            show_active_event_card(manual_event_today)
+        else:
+            # Info box
+            if can_roll:
+                st.success("✅ **Gotowe do losowania!**")
+                st.caption("💡 Wydarzenia: pozytywne 🎉, neutralne ⚖️, negatywne 💥")
+            else:
+                st.warning(f"⏰ Następne za: **{hours_left}h {minutes_left}min**")
+            
+            # Przycisk losowania
+            if st.button("🎲 LOSUJ!", disabled=not can_roll, type="primary", key="roll_event_dashboard", use_container_width=True):
+                # SZANSA 100% (dla testów)
+                event_result = get_random_event(bg_data, user_data.get("degencoins", 0), force_trigger=True)
+                
+                if event_result:
+                    event_id, event_data = event_result
+                    
+                    # Sprawdź czy wymaga wyboru
+                    if event_data["type"] == "neutral" and "choices" in event_data:
+                        # Zapisz zdarzenie tymczasowo w session_state
+                        st.session_state["pending_event"] = (event_id, event_data)
+                        st.session_state["pending_event_manual"] = True  # Oznacz jako ręczne
+                        st.rerun()
+                    else:
+                        # Bezpośrednio aplikuj - RĘCZNE LOSOWANIE
+                        user_data = apply_event_effects(event_id, event_data, None, user_data, industry_id, manual_roll=True)
+                        
+                        # Zapisz timestamp RĘCZNEGO losowania
+                        bg_data.setdefault("events", {})["last_manual_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        save_game_data(user_data, bg_data, industry_id)
+                        save_user_data(username, user_data)
+                        
+                        st.success(f"{event_data['emoji']} **{event_data['title']}**")
+                        st.balloons() if event_data["type"] == "positive" else None
+                        st.rerun()
+                else:
+                    # Brak zdarzenia - zapisz timestamp RĘCZNEGO losowania
+                    bg_data.setdefault("events", {})["last_manual_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    save_game_data(user_data, bg_data, industry_id)
+                    save_user_data(username, user_data)
+                    st.info("😐 Spokojny dzień!")
+                    st.rerun()
+    
+    # Pending event (jeśli neutralne wymaga wyboru)
+    if "pending_event" in st.session_state:
+        event_id, event_data = st.session_state["pending_event"]
+        render_event_choice_modal(event_id, event_data, username, user_data, context="dashboard")
+    
+    st.markdown("---")
+    
+    # =============================================================================
+    # AKTYWNE KONTRAKTY W DWÓCH KOLUMNACH
+    # =============================================================================
+    
+    st.markdown("""
+    <div style='margin-top: 0 !important; padding-top: 0 !important;'>
+        <h3 style='margin: 0 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>📋 Aktywne Kontrakty</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Lista aktywnych kontraktów
+    active_contracts = bg_data["contracts"]["active"]
+    
+    if len(active_contracts) == 0:
+        st.info("Brak aktywnych kontraktów. Przejdź do zakładki 'Kontrakty' aby przyjąć nowe zlecenie!")
+    else:
+        # Podziel na dwie kolumny
+        col_contract1, col_contract2 = st.columns(2)
+        
+        for idx, contract in enumerate(active_contracts):
+            # Naprzemienne kolumny
+            with col_contract1 if idx % 2 == 0 else col_contract2:
+                render_active_contract_card(contract, username, user_data, bg_data, contract_index=f"dashboard_{idx}")
+    
+    st.markdown("---")
+    
+    # =============================================================================
+    # WYKRES FINANSOWY - pełna szerokość - kompaktowy nagłówek
+    # =============================================================================
+    
+    st.markdown("""
+    <div style='margin-top: 0 !important; padding-top: 0 !important;'>
+        <h3 style='margin: 0.5rem 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>📊 Analiza Finansowa</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Generuj i wyświetl wykres na pełną szerokość
+    fig = create_financial_chart(
+        bg_data, 
+        period=st.session_state.get("financial_chart_period", 7),
+        cumulative=st.session_state.get("financial_chart_cumulative", False)
+    )
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Kontrolki POD wykresem - kompaktowy layout
+    col_controls, col_summary = st.columns([1, 2])
+    
+    with col_controls:
+        st.markdown("**⚙️ Ustawienia wykresu:**")
+        
+        period = st.radio(
+            "Okres",
+            options=[7, 14, 30],
+            format_func=lambda x: f"📅 {x} dni",
+            key="financial_chart_period",
+            horizontal=True
+        )
+        
+        cumulative = st.checkbox(
+            "📈 Wartość skumulowana",
+            value=False,
+            key="financial_chart_cumulative"
+        )
+    
+    with col_summary:
+        # Podsumowanie sum - tylko jeśli cumulative
+        if st.session_state.get("financial_chart_cumulative", False):
+            transactions = bg_data.get("history", {}).get("transactions", [])
+            # Przychody: kontrakty + pozytywne wydarzenia
+            total_rev = sum(t.get("amount", 0) for t in transactions if t.get("type") in ["contract_reward", "event_reward"])
+            # Koszty: pracownicy + negatywne wydarzenia
+            total_cost = sum(abs(t.get("amount", 0)) for t in transactions if t.get("type") in ["daily_costs", "employee_hired", "employee_hire", "event_cost"])
+            total_profit = total_rev - total_cost
+            
+            st.markdown(f"""
+            <div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; border-radius: 8px; padding: 12px 16px; margin-top: 8px;'>
+                <div style='color: #667eea; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px;'>💎 PODSUMOWANIE TOTAL</div>
+                <div style='display: flex; justify-content: space-around; font-size: 13px;'>
+                    <div><strong>📊 Przychody:</strong> <span style='color: #10b981;'>{total_rev:,} 💰</span></div>
+                    <div><strong>💸 Koszty:</strong> <span style='color: #ef4444;'>{total_cost:,} 💰</span></div>
+                    <div><strong>💎 Zysk:</strong> <span style='color: {"#10b981" if total_profit >= 0 else "#ef4444"}; font-weight: 700;'>{total_profit:,} 💰</span></div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # =============================================================================
+    # RANKINGI - Na dole Dashboard
+    # =============================================================================
+    
+    st.markdown("---")
+    st.markdown("<div style='margin: 40px 0 20px 0;'></div>", unsafe_allow_html=True)
+    show_rankings_content(username, user_data, industry_id)
+    
+    # =============================================================================
+    # SEKCJA CELÓW SCENARIUSZA - POD RANKINGAMI
+    # =============================================================================
+    
+    st.markdown("---")
+    
+    # Sprawdź czy gra ma scenariusz i cele (klucze: scenario_id, scenario_objectives)
+    if "scenario_objectives" in bg_data and bg_data.get("scenario_objectives"):
+        try:
+            # Aktualizuj postęp celów (sprawdza automatycznie co zostało ukończone)
+            newly_completed = update_objectives_progress(bg_data, user_data)
+            
+            # Jeśli jakieś cele zostały właśnie ukończone - nagroda!
+            if newly_completed:
+                for obj in newly_completed:
+                    reward = obj.get("reward_money", 0)
+                    if reward > 0:
+                        bg_data["money"] = bg_data.get("money", 0) + reward
+                        st.success(f"🎉 Cel ukończony: {obj.get('description')}! Nagroda: +{reward:,} PLN!")
+                        st.balloons()
+                
+                # Zapisz zmiany
+                save_game_data(user_data, bg_data, industry_id)
+                save_user_data(username, user_data)
+            
+            objectives_data = get_objectives_summary(bg_data, user_data)
+            
+            if objectives_data and objectives_data.get("total", 0) > 0:
+                # Material 3 style - kompaktowy widok celów
+                completed_count = objectives_data.get("completed_count", 0)
+                total = objectives_data["total"]
+                
+                # Emoji zależne od postępu
+                progress_pct = (completed_count / total) * 100 if total > 0 else 0
+                if progress_pct == 100:
+                    header_emoji = "🏆"
+                elif progress_pct >= 50:
+                    header_emoji = "🎯"
+                else:
+                    header_emoji = "📋"
+                
+                with st.expander(f"{header_emoji} **Cele** · {completed_count}/{total}", expanded=False):
+                    # Pobierz dane scenariusza
+                    from data.scenarios import get_scenario
+                    scenario_id = bg_data.get("scenario_id")
+                    scenario = get_scenario(industry_id, scenario_id) if scenario_id else None
+                    
+                    if scenario:
+                        # Nagłówek scenariusza - HTML w jednej linii dla poprawnego renderowania
+                        scenario_name = scenario.get("name", "Nieznany scenariusz")
+                        scenario_desc = scenario.get("description", "")
+                        st.markdown(f"""<div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;'><div style='color: #667eea; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px;'>🎮 SCENARIUSZ</div><div style='color: #212121; font-weight: 700; font-size: 1.1em; margin-bottom: 6px;'>{scenario_name}</div><div style='color: #64748b; font-size: 0.9em; line-height: 1.5;'>{scenario_desc}</div></div>""", unsafe_allow_html=True)
+                    
+                    # Siatka celów - 1 lub 2 kolumny w zależności od ilości
+                    if total <= 2:
+                        cols = st.columns(1)
+                    else:
+                        cols = st.columns(2)
+                    
+                    for idx, obj_status in enumerate(objectives_data["objectives"]):
+                        is_completed = obj_status.get("completed", False)
+                        current_value = obj_status.get("current", 0)
+                        target = obj_status.get("target", 0)
+                        description = obj_status.get("description", "Cel")
+                        reward = obj_status.get("reward", 0)
+                        obj_type = obj_status.get("type", "")
+                        
+                        # Ikony typów
+                        type_icons = {
+                            "revenue_total": "💰",
+                            "reputation": "⭐",
+                            "level": "📈",
+                            "money": "💵",
+                            "employees": "👥"
+                        }
+                        icon = type_icons.get(obj_type, "🎯")
+                        
+                        # Progress
+                        obj_progress = min(1.0, current_value / target) if target > 0 else (1.0 if is_completed else 0.0)
+                        
+                        # Material 3 kompaktowa karta - jednolity layout dla wszystkich celów
+                        with cols[idx % len(cols)]:
+                            # Kolor progress bara zależy od stanu
+                            if is_completed:
+                                progress_color = "#00c853"  # Zielony dla ukończonych
+                                bg_color = "#f1f8f4"  # Subtelne zielone tło
+                                border_color = "#00c853"
+                            else:
+                                progress_color = "#2196f3" if obj_progress >= 0.5 else "#90a4ae"
+                                bg_color = "#f5f5f5"
+                                border_color = "#e0e0e0"
+                            
+                            # Prefix dla ukończonych
+                            status_prefix = "✅ Ukończono · " if is_completed else ""
+                            
+                            st.markdown(f"""<div style='background: {bg_color}; border: 1px solid {border_color}; padding: 12px; border-radius: 12px; margin-bottom: 8px;'><div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;'><div style='flex: 1;'><div style='color: #212121; font-weight: 600; font-size: 0.9em;'>{icon} {description}</div></div><div style='background: {"#e8f5e9" if is_completed else "#fff3e0"}; padding: 4px 8px; border-radius: 6px; color: {"#00c853" if is_completed else "#f57c00"}; font-weight: bold; font-size: 0.75em;'>{"💎" if is_completed else "🎁"} {reward:,}</div></div><div style='color: #616161; font-size: 0.75em; margin-bottom: 4px;'>{status_prefix}{current_value:,} / {target:,} · {obj_progress*100:.0f}%</div><div style='background: #e0e0e0; height: 4px; border-radius: 2px; overflow: hidden;'><div style='background: {progress_color}; height: 100%; width: {obj_progress*100}%; transition: width 0.3s ease;'></div></div></div>""", unsafe_allow_html=True)
+            else:
+                # Scenariusz ma puste cele (tryb lifetime/otwarty)
+                # Nie wyświetlamy nic - to OK dla trybu bez celów
+                pass
+        except Exception as e:
+            st.error(f"⚠️ Błąd podczas ładowania celów scenariusza: {str(e)}")
+    else:
+        # Brak scenariusza lub scenariusz bez celów - to normalne dla trybu Lifetime
+        # Nie wyświetlamy nic
+        pass
+    
+    # =============================================================================
+    # INSTRUKCJA GRY - EXPANDER - W TYM SAMYM SEPARATORZE CO CELE
     # =============================================================================
     
     with st.expander("📖 Jak grać w Business Games? (Instrukcja)", expanded=False):
@@ -2376,368 +2753,6 @@ Przykłady: Nagroda branżowa (+500 rep), Awaria (-1000 PLN), Polecenie klienta 
 </div>
 </div>
         """, unsafe_allow_html=True)
-    
-# Koniec expandera instrukcji - wcięcie wraca do 4 spacji (poziom funkcji)
-
-    st.markdown("---")
-    
-    # =============================================================================
-    # SEKCJA CELÓW SCENARIUSZA
-    # =============================================================================
-    
-    # Sprawdź czy gra ma scenariusz i cele (klucze: scenario_id, scenario_objectives)
-    if "scenario_objectives" in bg_data and bg_data.get("scenario_objectives"):
-        try:
-            # Aktualizuj postęp celów (sprawdza automatycznie co zostało ukończone)
-            newly_completed = update_objectives_progress(bg_data, user_data)
-            
-            # Jeśli jakieś cele zostały właśnie ukończone - nagroda!
-            if newly_completed:
-                for obj in newly_completed:
-                    reward = obj.get("reward_money", 0)
-                    if reward > 0:
-                        bg_data["money"] = bg_data.get("money", 0) + reward
-                        st.success(f"🎉 Cel ukończony: {obj.get('description')}! Nagroda: +{reward:,} PLN!")
-                        st.balloons()
-                
-                # Zapisz zmiany
-                save_game_data(user_data, bg_data, industry_id)
-                save_user_data(username, user_data)
-            
-            objectives_data = get_objectives_summary(bg_data, user_data)
-            
-            if objectives_data and objectives_data.get("total", 0) > 0:
-                # Material 3 style - kompaktowy widok celów
-                completed_count = objectives_data.get("completed_count", 0)
-                total = objectives_data["total"]
-                
-                # Emoji zależne od postępu
-                progress_pct = (completed_count / total) * 100 if total > 0 else 0
-                if progress_pct == 100:
-                    header_emoji = "🏆"
-                elif progress_pct >= 50:
-                    header_emoji = "🎯"
-                else:
-                    header_emoji = "📋"
-                
-                with st.expander(f"{header_emoji} **Cele** · {completed_count}/{total}", expanded=False):
-                    # Pobierz dane scenariusza
-                    from data.scenarios import get_scenario
-                    scenario_id = bg_data.get("scenario_id")
-                    scenario = get_scenario(industry_id, scenario_id) if scenario_id else None
-                    
-                    if scenario:
-                        # Nagłówek scenariusza - HTML w jednej linii dla poprawnego renderowania
-                        scenario_name = scenario.get("name", "Nieznany scenariusz")
-                        scenario_desc = scenario.get("description", "")
-                        st.markdown(f"""<div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px;'><div style='color: #667eea; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px;'>🎮 SCENARIUSZ</div><div style='color: #212121; font-weight: 700; font-size: 1.1em; margin-bottom: 6px;'>{scenario_name}</div><div style='color: #64748b; font-size: 0.9em; line-height: 1.5;'>{scenario_desc}</div></div>""", unsafe_allow_html=True)
-                    
-                    # Siatka celów - 1 lub 2 kolumny w zależności od ilości
-                    if total <= 2:
-                        cols = st.columns(1)
-                    else:
-                        cols = st.columns(2)
-                    
-                    for idx, obj_status in enumerate(objectives_data["objectives"]):
-                        is_completed = obj_status.get("completed", False)
-                        current_value = obj_status.get("current", 0)
-                        target = obj_status.get("target", 0)
-                        description = obj_status.get("description", "Cel")
-                        reward = obj_status.get("reward", 0)
-                        obj_type = obj_status.get("type", "")
-                        
-                        # Ikony typów
-                        type_icons = {
-                            "revenue_total": "💰",
-                            "reputation": "⭐",
-                            "level": "📈",
-                            "money": "💵",
-                            "employees": "👥"
-                        }
-                        icon = type_icons.get(obj_type, "🎯")
-                        
-                        # Progress
-                        obj_progress = min(1.0, current_value / target) if target > 0 else (1.0 if is_completed else 0.0)
-                        
-                        # Material 3 kompaktowa karta - jednolity layout dla wszystkich celów
-                        with cols[idx % len(cols)]:
-                            # Kolor progress bara zależy od stanu
-                            if is_completed:
-                                progress_color = "#00c853"  # Zielony dla ukończonych
-                                bg_color = "#f1f8f4"  # Subtelne zielone tło
-                                border_color = "#00c853"
-                            else:
-                                progress_color = "#2196f3" if obj_progress >= 0.5 else "#90a4ae"
-                                bg_color = "#f5f5f5"
-                                border_color = "#e0e0e0"
-                            
-                            # Prefix dla ukończonych
-                            status_prefix = "✅ Ukończono · " if is_completed else ""
-                            
-                            st.markdown(f"""<div style='background: {bg_color}; border: 1px solid {border_color}; padding: 12px; border-radius: 12px; margin-bottom: 8px;'><div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;'><div style='flex: 1;'><div style='color: #212121; font-weight: 600; font-size: 0.9em;'>{icon} {description}</div></div><div style='background: {"#e8f5e9" if is_completed else "#fff3e0"}; padding: 4px 8px; border-radius: 6px; color: {"#00c853" if is_completed else "#f57c00"}; font-weight: bold; font-size: 0.75em;'>{"💎" if is_completed else "🎁"} {reward:,}</div></div><div style='color: #616161; font-size: 0.75em; margin-bottom: 4px;'>{status_prefix}{current_value:,} / {target:,} · {obj_progress*100:.0f}%</div><div style='background: #e0e0e0; height: 4px; border-radius: 2px; overflow: hidden;'><div style='background: {progress_color}; height: 100%; width: {obj_progress*100}%; transition: width 0.3s ease;'></div></div></div>""", unsafe_allow_html=True)
-            else:
-                # Scenariusz ma puste cele (tryb lifetime/otwarty)
-                # Nie wyświetlamy nic - to OK dla trybu bez celów
-                pass
-        except Exception as e:
-            st.error(f"⚠️ Błąd podczas ładowania celów scenariusza: {str(e)}")
-    else:
-        # Brak scenariusza lub scenariusz bez celów - to normalne dla trybu Lifetime
-        # Nie wyświetlamy nic
-        pass
-    
-    # =============================================================================
-    # SEKCJA DZIENNEGO WYDARZENIA - RAZ NA DOBĘ
-    # =============================================================================
-    
-    from utils.business_game_events import get_random_event, apply_event_effects, get_latest_event
-    from datetime import datetime, timedelta
-    
-    # Sprawdź czy dzisiaj było już losowanie
-    last_roll = bg_data.get("events", {}).get("last_roll")
-    today = datetime.now().strftime("%Y-%m-%d")
-    should_roll = True
-    
-    if last_roll:
-        last_roll_date = last_roll.split(" ")[0]  # Pobierz tylko datę (bez godziny)
-        if last_roll_date == today:
-            should_roll = False
-    
-    # Jeśli jeszcze dziś nie było losowania - WYLOSUJ TERAZ
-    if should_roll:
-        event_result = get_random_event(bg_data, user_data.get("degencoins", 0))
-        
-        if event_result:
-            event_id, event_data = event_result
-            
-            # Sprawdź czy wymaga wyboru
-            if event_data["type"] == "neutral" and "choices" in event_data:
-                # Zapisz w session_state i wyświetl modal
-                st.session_state["pending_event"] = (event_id, event_data)
-            else:
-                # Bezpośrednio aplikuj (positive i negative)
-                user_data = apply_event_effects(event_id, event_data, None, user_data)
-                save_user_data(username, user_data)
-                
-                if event_data["type"] == "positive":
-                    st.balloons()
-        
-        # Przeładuj bg_data po zapisie
-        bg_data = get_game_data(user_data, industry_id)
-        last_roll = bg_data.get("events", {}).get("last_roll")
-    
-    # Pending event (jeśli neutralne wymaga wyboru - blocking modal)
-    if "pending_event" in st.session_state:
-        event_id, event_data = st.session_state["pending_event"]
-        render_event_choice_modal(event_id, event_data, username, user_data, context="dashboard")
-    
-    # Pobierz podsumowanie
-    summary = get_firm_summary(user_data, industry_id)
-    
-    # Layout: Dwie kolumny - [Kontrakty (Aktywne + Ukończone) | Wydarzenia]
-    col_contracts, col_event = st.columns([2, 1])
-    
-    # LEWA KOLUMNA - KONTRAKTY (Aktywne + Ostatnio Ukończone)
-    with col_contracts:
-        # AKTYWNE KONTRAKTY - kompaktowy nagłówek bez marginesu
-        st.markdown("""
-        <div style='margin-top: 0 !important; padding-top: 0 !important;'>
-            <h3 style='margin: 0 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>📋 Aktywne Kontrakty</h3>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Lista aktywnych kontraktów
-        active_contracts = bg_data["contracts"]["active"]
-        
-        if len(active_contracts) == 0:
-            st.info("Brak aktywnych kontraktów. Przejdź do zakładki 'Kontrakty' aby przyjąć nowe zlecenie!")
-        else:
-            for idx, contract in enumerate(active_contracts):
-                # Dodaj prefix "dashboard_" aby uniknąć konfliktu z zakładką Kontrakty
-                render_active_contract_card(contract, username, user_data, bg_data, contract_index=f"dashboard_{idx}")
-        
-        # Kompaktowy separator (zmniejszona przestrzeń)
-        st.markdown("<div style='margin: 0.5rem 0;'></div>", unsafe_allow_html=True)
-        
-        # OSTATNIO UKOŃCZONE KONTRAKTY
-        completed_contracts = bg_data.get("contracts", {}).get("completed", [])
-        
-        # Pokaż maksymalnie 3 ostatnio ukończone kontrakty
-        recent_completed = sorted(
-            completed_contracts,
-            key=lambda x: x.get("completed_date", ""),
-            reverse=True
-        )[:3]
-        
-        if recent_completed:
-            st.markdown("""
-            <div style='margin-top: 0 !important; padding-top: 0 !important;'>
-                <h3 style='margin: 0.5rem 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>🎯 Ostatnio Ukończone Kontrakty</h3>
-            </div>
-            """, unsafe_allow_html=True)
-            st.caption("Zobacz wyniki swoich ostatnich kontraktów - nie musisz wchodzić w Historię!")
-            
-            # Wyświetl w kompaktowej formie
-            for contract in recent_completed:
-                rating = contract.get("rating", 0)
-                reward_coins = get_contract_reward_coins(contract)
-                rep_change = get_contract_reward_reputation(contract)
-                
-                # Kolor na podstawie oceny
-                if rating >= 4:
-                    border_color = "#10b981"
-                    bg_color = "#f0fdf4"
-                elif rating >= 3:
-                    border_color = "#f59e0b"
-                    bg_color = "#fffbeb"
-                else:
-                    border_color = "#ef4444"
-                    bg_color = "#fef2f2"
-                
-                with st.expander(
-                    f"{contract.get('emoji', '📋')} {contract.get('tytul', 'Kontrakt')} · {'⭐' * rating} · {reward_coins:,} 💰",
-                    expanded=False
-                ):
-                    # Kompaktowy widok wyniku
-                    st.markdown(f"""
-                    <div style='border-left: 5px solid {border_color}; 
-                                background: {bg_color};
-                                padding: 15px; 
-                                margin: 10px 0; 
-                                border-radius: 8px;'>
-                        <p style='margin: 0; color: #666; font-size: 0.9em;'>
-                            <strong>Klient:</strong> {contract.get('klient', 'N/A')} | 
-                            <strong>Ukończono:</strong> {contract.get('completed_date', 'N/A')}
-                        </p>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                    # Metryki w karcie
-                    rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
-                    
-                    st.markdown(f"""
-                    <div style='background: linear-gradient(to right, #f8fafc, #f1f5f9); 
-                                border-left: 4px solid #3b82f6; 
-                                border-radius: 8px; 
-                                padding: 16px; 
-                                margin: 16px 0;
-                                box-shadow: 0 1px 3px rgba(0,0,0,0.1);'>
-                        <div style='display: flex; justify-content: space-around; text-align: center;'>
-                            <div>
-                                <div style='font-size: 24px; margin-bottom: 4px;'>⭐</div>
-                                <div style='font-weight: 600; color: #1e293b;'>{rating}/5</div>
-                                <div style='font-size: 12px; color: #64748b;'>Ocena</div>
-                            </div>
-                            <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
-                            <div>
-                                <div style='font-size: 24px; margin-bottom: 4px;'>💰</div>
-                                <div style='font-weight: 600; color: #1e293b;'>{reward_coins:,}</div>
-                                <div style='font-size: 12px; color: #64748b;'>Zarobiono</div>
-                            </div>
-                            <div style='border-left: 2px solid #e2e8f0; height: 60px;'></div>
-                            <div>
-                                <div style='font-size: 24px; margin-bottom: 4px;'>📈</div>
-                                <div style='font-weight: 600; color: #1e293b;'>{rep_display}</div>
-                                <div style='font-size: 12px; color: #64748b;'>Reputacja</div>
-                            </div>
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                    # Feedback od klienta
-                    feedback = contract.get("feedback", "Brak feedbacku")
-                    
-                    st.markdown("<h4 style='margin-top: 0.5rem; margin-bottom: 0.3rem; padding: 0; font-size: 1.1em;'>💬 Feedback od klienta</h4>", unsafe_allow_html=True)
-                    st.info(feedback)
-                    
-                    # Link do pełnej historii
-                    st.info("💡 Pełne szczegóły kontraktu (opis, zadanie, Twoje rozwiązanie) znajdziesz w zakładce **'📜 Historia'**")
-    
-    # PRAWA KOLUMNA - DZISIEJSZE WYDARZENIE
-    with col_event:
-        st.markdown("""
-        <div style='margin-top: 0 !important; padding-top: 0 !important;'>
-            <h3 style='margin: 0 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>🎲 Dzisiejsze Wydarzenie</h3>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Pokaż dzisiejsze wydarzenie (jeśli jest)
-        latest_event = get_latest_event(bg_data)
-        if latest_event:
-            # Sprawdź czy wydarzenie jest z dzisiaj
-            event_date = latest_event.get("timestamp", "").split(" ")[0]
-            if event_date == today:
-                show_active_event_card(latest_event)
-            else:
-                st.info("Dzisiaj nie ma żadnego wydarzenia.")
-        else:
-            st.info("Dzisiaj nie ma żadnego wydarzenia.")
-    
-    st.markdown("---")
-    
-    # WYKRES FINANSOWY - pełna szerokość - kompaktowy nagłówek
-    st.markdown("""
-    <div style='margin-top: 0 !important; padding-top: 0 !important;'>
-        <h3 style='margin: 0.5rem 0 0.5rem 0 !important; padding: 0 !important; font-size: 1.3em;'>📊 Analiza Finansowa</h3>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Generuj i wyświetl wykres na pełną szerokość
-    fig = create_financial_chart(
-        bg_data, 
-        period=st.session_state.get("financial_chart_period", 7),
-        cumulative=st.session_state.get("financial_chart_cumulative", False)
-    )
-    st.plotly_chart(fig, use_container_width=True)
-    
-    # Kontrolki POD wykresem - kompaktowy layout
-    col_controls, col_summary = st.columns([1, 2])
-    
-    with col_controls:
-        st.markdown("**⚙️ Ustawienia wykresu:**")
-        
-        period = st.radio(
-            "Okres",
-            options=[7, 14, 30],
-            format_func=lambda x: f"📅 {x} dni",
-            key="financial_chart_period",
-            horizontal=True
-        )
-        
-        cumulative = st.checkbox(
-            "📈 Wartość skumulowana",
-            value=False,
-            key="financial_chart_cumulative"
-        )
-    
-    with col_summary:
-        # Podsumowanie sum - tylko jeśli cumulative
-        if st.session_state.get("financial_chart_cumulative", False):
-            transactions = bg_data.get("history", {}).get("transactions", [])
-            # Przychody: kontrakty + pozytywne wydarzenia
-            total_rev = sum(t.get("amount", 0) for t in transactions if t.get("type") in ["contract_reward", "event_reward"])
-            # Koszty: pracownicy + negatywne wydarzenia
-            total_cost = sum(abs(t.get("amount", 0)) for t in transactions if t.get("type") in ["daily_costs", "employee_hired", "employee_hire", "event_cost"])
-            total_profit = total_rev - total_cost
-            
-            st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border-left: 4px solid #667eea; border-radius: 8px; padding: 12px 16px; margin-top: 8px;'>
-                <div style='color: #667eea; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px;'>💎 PODSUMOWANIE TOTAL</div>
-                <div style='display: flex; justify-content: space-around; font-size: 13px;'>
-                    <div><strong>📊 Przychody:</strong> <span style='color: #10b981;'>{total_rev:,} 💰</span></div>
-                    <div><strong>💸 Koszty:</strong> <span style='color: #ef4444;'>{total_cost:,} 💰</span></div>
-                    <div><strong>💎 Zysk:</strong> <span style='color: {"#10b981" if total_profit >= 0 else "#ef4444"}; font-weight: 700;'>{total_profit:,} 💰</span></div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-    
-    # =============================================================================
-    # RANKINGI - Na dole Dashboard
-    # =============================================================================
-    
-    st.markdown("---")
-    st.markdown("<div style='margin: 40px 0 20px 0;'></div>", unsafe_allow_html=True)
-    show_rankings_content(username, user_data, industry_id)
 
 def show_contracts_tab(username, user_data, industry_id="consulting"):
     """Zakładka Rynek Kontraktów"""
@@ -2860,27 +2875,13 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
     
     st.markdown("---")
     
-    # Zbierz wszystkie zamknięte firmy ze wszystkich użytkowników
-    from data.users_new import load_user_data
-    all_users = load_user_data()
-    
-    hall_entries = []
-    for user, data in all_users.items():
-        if "hall_of_fame" in data:
-            for entry in data["hall_of_fame"]:
-                hall_entries.append(entry)
-    
-    if not hall_entries:
-        st.info("🏛️ Hall of Fame jest jeszcze pusty. Bądź pierwszym, który zamknie firmę z sukcesem!")
-        return
-    
     # Filtry
     col_filter1, col_filter2, col_filter3 = st.columns(3)
     
     with col_filter1:
         category_filter = st.selectbox(
             "Kategoria:",
-            ["Wszystkie", "Konflikt", "Coaching", "Kultura", "Kryzys", "Leadership", "Conversation"],
+            ["Wszystkie", "Konflikt", "Coaching", "Kultura", "Kryzys", "Leadership", "AI Conversation", "Conversation"],
             key="contracts_filter_category"
         )
     
@@ -4882,6 +4883,7 @@ def render_event_choice_modal(event_id: str, event_data: dict, username: str, us
     # Użyj hash z event_id i danych - będzie taki sam dla tego samego eventu w tej sesji
     import hashlib
     import json
+    from datetime import datetime
     event_hash = hashlib.md5(json.dumps({"id": event_id, "data": event_data, "ctx": context}, sort_keys=True).encode()).hexdigest()[:8]
     
     
@@ -4911,12 +4913,27 @@ def render_event_choice_modal(event_id: str, event_data: dict, username: str, us
     for idx, (col, choice) in enumerate(zip(cols, event_data["choices"])):
         with col:
             if st.button(choice["text"], key=f"event_choice_{event_hash}_{idx}", type="primary" if idx == 0 else "secondary", width="stretch"):
+                # Sprawdź czy to ręczne losowanie
+                is_manual = st.session_state.get("pending_event_manual", False)
+                industry_id = st.session_state.get("selected_industry", "consulting")
+                
                 # Aplikuj wybór
-                user_data = apply_event_effects(event_id, event_data, idx, user_data)
+                user_data = apply_event_effects(event_id, event_data, idx, user_data, industry_id=industry_id, manual_roll=is_manual)
+                
+                # Jeśli to było ręczne losowanie, zapisz timestamp
+                if is_manual:
+                    from data.repositories.user_repository import get_game_data, save_game_data
+                    industry_id = st.session_state.get("selected_industry", "consulting")
+                    bg_data = get_game_data(user_data, industry_id)
+                    bg_data.setdefault("events", {})["last_manual_roll"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    save_game_data(user_data, bg_data, industry_id)
+                
                 save_user_data(username, user_data)
                 
                 # Usuń pending
                 del st.session_state["pending_event"]
+                if "pending_event_manual" in st.session_state:
+                    del st.session_state["pending_event_manual"]
                 
                 st.success(f"✅ Wybrano: {choice['text']}")
                 st.rerun()
@@ -4943,7 +4960,8 @@ def render_employee_history_card(emp_event: dict):
         border_color = "#64748b"
         title = f"{icon} {employee_name} ({employee_type})"
     
-    with st.expander(f"{title} - {date}"):
+    # DATA NA POCZĄTKU
+    with st.expander(f"📅 {date} | {title}"):
         st.markdown(f"""
         <div style='border-left: 4px solid {border_color}; padding: 12px; background: #f8fafc; border-radius: 8px;'>
             <strong>Pracownik:</strong> {employee_name}<br>
@@ -4965,7 +4983,8 @@ def render_office_history_card(office_event: dict):
     border_color = "#3b82f6"
     title = f"{icon} Nowe biuro: {office_type}"
     
-    with st.expander(f"{title} - {date}"):
+    # DATA NA POCZĄTKU
+    with st.expander(f"📅 {date} | {title}"):
         st.markdown(f"""
         <div style='border-left: 4px solid {border_color}; padding: 12px; background: #f8fafc; border-radius: 8px;'>
             <strong>Typ biura:</strong> {office_type}<br>
@@ -4989,7 +5008,8 @@ def render_event_history_card(event: dict):
         border_color = "#f59e0b"
         icon = "⚖️"
     
-    with st.expander(f"{event['emoji']} {event['title']} - {event['timestamp']}"):
+    # DATA NA POCZĄTKU
+    with st.expander(f"📅 {event['timestamp']} | {event['emoji']} {event['title']}"):
         st.markdown(f"**Opis:** {event['description']}")
         
         if event.get("choice"):

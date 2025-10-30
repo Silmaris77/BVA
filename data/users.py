@@ -6,6 +6,57 @@ from typing import Optional
 import streamlit as st
 from config.settings import DEVELOPMENT_MODE
 
+def _enrich_user_data_with_lessons(users_data):
+    """
+    Wzbogaca user_data o dane lekcji z SQL (jeśli dostępne)
+    
+    Działa jako fallback/overlay:
+    - Jeśli SQL ma dane -> użyj SQL
+    - Jeśli SQL nie ma danych -> użyj JSON
+    """
+    try:
+        from data.repositories import LessonRepository
+        repo = LessonRepository()
+        
+        # Sprawdź czy SQL jest dostępny
+        if not repo._should_use_sql_for_read():
+            return users_data  # Używamy tylko JSON
+        
+        repo._ensure_sql_initialized()
+        if not repo.sql_available:
+            return users_data  # SQL niedostępny
+        
+        # Dla każdego użytkownika, wzbogać danymi z SQL
+        for username in users_data.keys():
+            # Completed lessons
+            sql_completed = repo.get_completed_lessons(username)
+            if sql_completed:  # Jeśli są dane w SQL
+                users_data[username]['completed_lessons'] = sql_completed
+            
+            # Lesson access
+            sql_access = repo.get_lesson_access(username)
+            if sql_access:  # Jeśli są dane w SQL
+                users_data[username]['lesson_access'] = sql_access
+            
+            # Lesson progress - trudniejsze, bo musimy pobrać dla wszystkich lekcji
+            # Pobierz listę lekcji z JSON jako wskazówkę
+            json_progress = users_data[username].get('lesson_progress', {})
+            if json_progress:
+                sql_progress = {}
+                for lesson_id in json_progress.keys():
+                    lesson_prog = repo.get_lesson_progress(username, lesson_id)
+                    if lesson_prog:
+                        sql_progress[lesson_id] = lesson_prog
+                
+                if sql_progress:  # Jeśli są dane w SQL
+                    users_data[username]['lesson_progress'] = sql_progress
+        
+    except Exception as e:
+        # Jeśli coś pójdzie nie tak, zwróć dane bez enrichment
+        print(f"⚠️  Could not enrich user data with lessons from SQL: {e}")
+    
+    return users_data
+
 def save_user_data(users_data):
     """Save user data to JSON file (skip in DEVELOPMENT_MODE)"""
     if DEVELOPMENT_MODE:
@@ -23,7 +74,7 @@ def load_user_data():
     if DEVELOPMENT_MODE:
         # Tryb developerski - użyj cache z session_state
         if 'users_data_cache' in st.session_state:
-            return st.session_state['users_data_cache']
+            return _enrich_user_data_with_lessons(st.session_state['users_data_cache'])
         
         # Pierwsza inicjalizacja - załaduj z pliku jeśli istnieje
         file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'users_data.json')
@@ -31,17 +82,18 @@ def load_user_data():
             with open(file_path, 'r', encoding='utf-8') as f:
                 users_data = json.load(f)
                 st.session_state['users_data_cache'] = users_data
-                return users_data
+                return _enrich_user_data_with_lessons(users_data)
         
         # Brak danych - zwróć pusty dict
         st.session_state['users_data_cache'] = {}
         return {}
     
-    # Produkcja - czytaj z pliku
+    # Produkcja - czytaj z pliku i wzbogać o SQL
     file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'users_data.json')
     if os.path.exists(file_path):
         with open(file_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            users_data = json.load(f)
+            return _enrich_user_data_with_lessons(users_data)
     return {}
 
 def register_user(username, password, password_confirm):

@@ -3,6 +3,17 @@ import os
 from datetime import datetime
 import streamlit as st
 from data.users import load_user_data, save_user_data
+from data.repositories import LessonRepository
+
+# Initialize repository (will use config to determine backend)
+_lesson_repo = None
+
+def get_lesson_repository():
+    """Get or create lesson repository instance"""
+    global _lesson_repo
+    if _lesson_repo is None:
+        _lesson_repo = LessonRepository()
+    return _lesson_repo
 
 def save_lesson_progress(username, lesson_id, step, notes=None):
     """Save user's progress in a lesson"""
@@ -89,72 +100,63 @@ def award_fragment_xp(lesson_id, fragment_type, xp_amount):
         fragment_type: 'intro', 'opening_quiz', 'content', 'reflection', 'application', 'closing_quiz', 'summary'
         xp_amount: Ilość XP do przyznania
     """
-    users_data = load_user_data()
     username = st.session_state.username
+    repo = get_lesson_repository()
     
-    if username in users_data:
+    # Pobierz aktualny postęp z repository
+    lesson_progress = repo.get_lesson_progress(username, lesson_id)
+    
+    # Sprawdź czy XP za ten fragment już zostało przyznane
+    fragment_key = f"{fragment_type}_xp_awarded"
+    if not lesson_progress.get(fragment_key, False):
+        # Pobierz user_data dla XP (nadal w JSON/SQL przez UserRepository)
+        users_data = load_user_data()
+        if username not in users_data:
+            return False, 0
+        
         user_data = users_data[username]
         
-        # Struktura: lesson_progress[lesson_id][fragment_type] = {'completed': True, 'xp_awarded': 10}
-        lesson_progress = user_data.get('lesson_progress', {})
+        # Dodaj XP (ale NIE DODAWAJ już monet - tylko w Business Games!)
+        current_xp = user_data.get('xp', 0)
+        user_data['xp'] = current_xp + xp_amount
         
-        if lesson_id not in lesson_progress:
-            lesson_progress[lesson_id] = {}
-          # Sprawdź czy XP za ten fragment już zostało przyznane
-        fragment_key = f"{fragment_type}_xp_awarded"
-        if not lesson_progress[lesson_id].get(fragment_key, False):
-            # Dodaj XP (ale NIE DODAWAJ już monet - tylko w Business Games!)
-            current_xp = user_data.get('xp', 0)
-            user_data['xp'] = current_xp + xp_amount
-            
-            # USUNIĘTO: Monety są teraz dostępne TYLKO w Business Games
-            # current_degencoins = user_data.get('degencoins', 0)
-            # user_data['degencoins'] = current_degencoins + xp_amount
-            
-            # Zaznacz że XP zostało przyznane
-            lesson_progress[lesson_id][fragment_key] = True
-            lesson_progress[lesson_id][f"{fragment_type}_completed"] = True
-            lesson_progress[lesson_id][f"{fragment_type}_xp"] = xp_amount
-            # USUNIĘTO: lesson_progress[lesson_id][f"{fragment_type}_degencoins"] = xp_amount
-            lesson_progress[lesson_id][f"{fragment_type}_timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            
-            user_data['lesson_progress'] = lesson_progress
-            
-            # Zapisz dane
-            users_data[username] = user_data
-            save_user_data(users_data)
-            
-            # Odśwież session_state
-            st.session_state.user_data = user_data
-            
-            # Aktualizuj dzisiejsze statystyki
-            try:
-                from views.dashboard import update_daily_stats_if_needed
-                update_daily_stats_if_needed(username)
-            except ImportError:
-                pass  # Dashboard module not available
-            
-            return True, xp_amount
+        # Zapisz user_data (XP)
+        users_data[username] = user_data
+        save_user_data(users_data)
+        
+        # Przygotuj dane postępu
+        progress_data = {
+            f"{fragment_type}_xp_awarded": True,
+            f"{fragment_type}_completed": True,
+            f"{fragment_type}_xp": xp_amount,
+            f"{fragment_type}_degencoins": 0,  # Już nie używane
+            f"{fragment_type}_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        
+        # Zapisz postęp przez repository
+        repo.save_lesson_progress(username, lesson_id, fragment_type, progress_data)
+        
+        # Odśwież session_state
+        st.session_state.user_data = user_data
+        
+        # Aktualizuj dzisiejsze statystyki
+        try:
+            from views.dashboard import update_daily_stats_if_needed
+            update_daily_stats_if_needed(username)
+        except ImportError:
+            pass  # Dashboard module not available
+        
+        return True, xp_amount
     
     return False, 0
 
 def get_lesson_fragment_progress(lesson_id):
     """Pobierz postęp fragmentów dla danej lekcji"""
     username = st.session_state.username
+    repo = get_lesson_repository()
     
-    # Sprawdź najpierw session_state, potem plik
-    if hasattr(st.session_state, 'user_data') and st.session_state.user_data:
-        lesson_progress = st.session_state.user_data.get('lesson_progress', {})
-        if lesson_id in lesson_progress:
-            return lesson_progress.get(lesson_id, {})
-    
-    # Fallback do danych z pliku
-    users_data = load_user_data()
-    if username in users_data:
-        lesson_progress = users_data[username].get('lesson_progress', {})
-        return lesson_progress.get(lesson_id, {})
-    
-    return {}
+    # Pobierz z repository (automatycznie wybierze JSON lub SQL)
+    return repo.get_lesson_progress(username, lesson_id)
 
 def calculate_lesson_completion(lesson_id):
     """Oblicz procent ukończenia lekcji"""
@@ -190,23 +192,21 @@ def get_fragment_xp_breakdown(lesson_total_xp):
 
 def mark_lesson_as_completed(lesson_id):
     """Oznacz lekcję jako w pełni ukończoną"""
-    users_data = load_user_data()
     username = st.session_state.username
+    repo = get_lesson_repository()
     
-    if username in users_data:
-        user_data = users_data[username]
-        completed_lessons = user_data.get('completed_lessons', [])
+    # Sprawdź czy już ukończona
+    completed = repo.get_completed_lessons(username)
+    
+    if lesson_id not in completed:
+        # Dodaj do completed lessons przez repository
+        success = repo.add_completed_lesson(username, lesson_id)
         
-        if lesson_id not in completed_lessons:
-            completed_lessons.append(lesson_id)
-            user_data['completed_lessons'] = completed_lessons
-            
-            # Zapisz dane
-            users_data[username] = user_data
-            save_user_data(users_data)
-            
-            # Odśwież session_state
-            st.session_state.user_data = user_data
+        if success:
+            # Odśwież user_data w session_state
+            users_data = load_user_data()
+            if username in users_data:
+                st.session_state.user_data = users_data[username]
             
             # Add recent activity for lesson completion
             try:
@@ -227,13 +227,13 @@ def mark_lesson_as_completed(lesson_id):
                 pass
             except Exception:
                 pass
-            
             # Aktualizuj dzisiejsze statystyki
             try:
                 from views.dashboard import update_daily_stats_if_needed
                 update_daily_stats_if_needed(username)
             except ImportError:
                 pass  # Dashboard module not available
+            except Exception:
                 pass  # Ignore other errors
             
             # Check for achievements after completing lesson

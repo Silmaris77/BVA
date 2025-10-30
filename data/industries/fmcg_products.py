@@ -1,0 +1,1191 @@
+"""
+Pełny katalog produktów FMCG
+- 12 produktów FreshLife (własne)
+- 36 produktów konkurencji (dystrybuowane)
+"""
+
+# ============================================================================
+# FRESHLIFE PRODUCTS (Własne produkty - wyższa marża)
+# ============================================================================
+
+FRESHLIFE_PRODUCTS = {
+    # PERSONAL CARE
+    "pc_001": {
+        "id": "pc_001",
+        "name": "BodyWash Natural",
+        "brand": "FreshLife",
+        "category": "Personal Care",
+        "subcategory": "Żele pod prysznic",
+        "emoji": "🧴",
+        "variants": ["Aloe & Green Tea", "Coconut & Shea", "Lavender Calm"],
+        "base_variant": "Aloe & Green Tea 250ml",
+        "price_retail": 12.99,
+        "price_wholesale": 8.44,
+        "margin_percent": 35,
+        "margin_pln": 4.55,
+        "moq": 6,  # Minimum order quantity (pcs)
+        "popularity": 72,  # 0-100
+        "shelf_life_days": 1080,
+        "packaging": "Butelka PET z recyclingu 250ml, pompka",
+        
+        # STORYTELLING
+        "description": "Naturalny żel pod prysznic z ekstraktami z aloesu i zielonej herbaty. Bez parabenów, SLS i barwników. Idealny dla skóry wrażliwej. Piękne, ekologiczne opakowanie z recyclingu.",
+        "target_customer": "Kobiety 25-45 lat świadome składu, rodzice szukający bezpiecznych produktów, osoby z wrażliwą skórą, ekologiczni konsumenci",
+        "rotation_speed": "Średnia (7-10 dni przy 10 szt)",
+        "suggested_initial_order": "6-10 szt",
+        
+        # PRZEWAGI NAD KONKURENCJĄ
+        "competitors": [
+            {
+                "brand": "Dove Natural",
+                "price": 15.99,
+                "margin_percent": 18,
+                "advantages": [
+                    "Tańszy o 3 zł (-19%)",
+                    "Lepsza marża: 35% vs 18%",
+                    "97% naturalnych składników vs 85%"
+                ]
+            },
+            {
+                "brand": "Fa Natural",
+                "price": 13.99,
+                "margin_percent": 20,
+                "advantages": [
+                    "Bardziej naturalny skład (97% vs 85%)",
+                    "Podobna cena, lepsza marża: 35% vs 20%",
+                    "Opakowanie z recyclingu (Fa - plastik pierwotny)"
+                ]
+            }
+        ],
+        
+        # ARGUMENTY SPRZEDAŻOWE
+        "sales_arguments": [
+            "Widzę że ma Pan/Pani Dove Natural za 15.99. Nasz BodyWash ma podobną jakość i naturalny skład, ale jest tańszy dla klienta końcowego (12.99) i Pan/Pani zarabia więcej (35% vs 18%).",
+            "To idealna opcja dla klientów szukających oszczędności bez kompromisów w jakości - naturalny skład, bez chemii, a cena niższa niż Dove.",
+            "Opakowanie z recyclingu przyciąga ekologicznych konsumentów - to rosnąca grupa, szczególnie wśród młodszych klientów."
+        ],
+        
+        "usp": "97% naturalnych składników, 0% parabenów i SLS, opakowanie z recyclingu",
+        "awards": [],
+        "promo_support": True,
+        "pos_materials": ["Wobbler", "Shelf strip", "Tester", "Ulotka składnikowa"],
+    },
+    
+    "pc_002": {
+        "id": "pc_002",
+        "name": "SilkHair",
+        "brand": "FreshLife",
+        "category": "Personal Care",
+        "subcategory": "Szampony",
+        "variants": ["Volume", "Repair", "Color Protection", "Anti-Dandruff"],
+        "base_variant": "Volume 400ml",
+        "price_retail": 18.00,
+        "price_wholesale": 10.80,
+        "margin_percent": 40,
+        "moq": 12,
+        "popularity": 68,
+        "shelf_life_days": 1080,
+        "packaging": "Butelka HDPE 400ml",
+        "usp": "Technologia Keratin Complex, efekt salonu w domu",
+        "awards": ["Beauty Awards 2024"],
+        "promo_support": True,
+        "pos_materials": ["Wobbler", "Leaflet"],
+    },
+    
+    "pc_003": {
+        "id": "pc_003",
+        "name": "DeoActive",
+        "brand": "FreshLife",
+        "category": "Personal Care",
+        "subcategory": "Dezodoranty",
+        "variants": ["Men Sport", "Men Classic", "Women Fresh", "Women Sensitive"],
+        "base_variant": "Men Sport 150ml",
+        "price_retail": 12.00,
+        "price_wholesale": 6.96,
+        "margin_percent": 42,
+        "moq": 24,
+        "popularity": 71,
+        "shelf_life_days": 900,
+        "packaging": "Aerozol 150ml",
+        "usp": "48h ochrony, 0% aluminium",
+        "awards": [],
+        "promo_support": True,
+        "pos_materials": ["Counter display", "Tester"],
+    },
+    
+    # FOOD
+    "food_001": {
+        "id": "food_001",
+        "name": "MorningJoy",
+        "brand": "FreshLife",
+        "category": "Food",
+        "subcategory": "Płatki śniadaniowe",
+        "variants": ["Chocolate", "Honey", "Fruits", "Fitness"],
+        "base_variant": "Chocolate 500g",
+        "price_retail": 14.00,
+        "price_wholesale": 10.08,
+        "margin_percent": 28,
+        "moq": 12,
+        "popularity": 62,
+        "shelf_life_days": 365,
+        "packaging": "Karton 500g",
+        "usp": "Pełne ziarno, bez cukru dodanego w wersji Fitness",
+        "awards": [],
+        "promo_support": True,
+        "pos_materials": ["Shelf strip", "Recipe cards"],
+    },
+    
+    "food_002": {
+        "id": "food_002",
+        "name": "QuickSoup",
+        "brand": "FreshLife",
+        "category": "Food",
+        "subcategory": "Zupy instant",
+        "variants": ["Rosół", "Pomidorowa", "Grochówka", "Krem z pieczarek"],
+        "base_variant": "Rosół",
+        "price_retail": 4.00,
+        "price_wholesale": 2.72,
+        "margin_percent": 32,
+        "moq": 24,
+        "popularity": 70,
+        "shelf_life_days": 540,
+        "packaging": "Saszetka 60g",
+        "usp": "Gotowa w 3 minuty, bez konserwantów",
+        "awards": [],
+        "promo_support": True,
+        "pos_materials": ["Counter display", "Sampling"],
+    },
+    
+    "food_003": {
+        "id": "food_003",
+        "name": "TomatoRed",
+        "brand": "FreshLife",
+        "category": "Food",
+        "subcategory": "Ketchupy i sosy",
+        "variants": ["Classic", "Pikantny", "Bez cukru", "Kids"],
+        "base_variant": "Classic 470g",
+        "price_retail": 11.99,
+        "price_wholesale": 7.19,
+        "margin_percent": 40,
+        "moq": 12,
+        "popularity": 96,
+        "shelf_life_days": 540,
+        "packaging": "Butelka szklana 470g",
+        "usp": "Kultowy smak, z naturalnych pomidorów",
+        "awards": ["Konsumencki Lider Jakości 2024"],
+        "promo_support": True,
+        "pos_materials": ["Display", "Wobbler", "Shelf strip"],
+    },
+    
+    # HOME CARE
+    "hc_001": {
+        "id": "hc_001",
+        "name": "SparkleClean",
+        "brand": "FreshLife",
+        "category": "Home Care",
+        "subcategory": "Płyny do mycia podłóg",
+        "variants": ["Universal", "Wood", "Tiles", "Antibacterial"],
+        "base_variant": "Universal 1L",
+        "price_retail": 12.50,
+        "price_wholesale": 7.75,
+        "margin_percent": 38,
+        "moq": 12,
+        "popularity": 66,
+        "shelf_life_days": 730,
+        "packaging": "Butelka PET 1L",
+        "usp": "Błysk bez smug, biodegradowalna formuła",
+        "awards": [],
+        "promo_support": True,
+        "pos_materials": ["Wobbler", "Demo video"],
+    },
+    
+    "hc_002": {
+        "id": "hc_002",
+        "name": "DishPro",
+        "brand": "FreshLife",
+        "category": "Home Care",
+        "subcategory": "Płyny do naczyń",
+        "variants": ["Lemon", "Apple", "Sensitive", "Power Grease"],
+        "base_variant": "Lemon 500ml",
+        "price_retail": 7.50,
+        "price_wholesale": 4.50,
+        "margin_percent": 40,
+        "moq": 24,
+        "popularity": 73,
+        "shelf_life_days": 730,
+        "packaging": "Butelka PET 500ml",
+        "usp": "Usuwa tłuszcz już w 30°C, łagodny dla rąk",
+        "awards": [],
+        "promo_support": True,
+        "pos_materials": ["Counter display", "Tester"],
+    },
+    
+    "hc_003": {
+        "id": "hc_003",
+        "name": "FreshAir",
+        "brand": "FreshLife",
+        "category": "Home Care",
+        "subcategory": "Odświeżacze powietrza",
+        "variants": ["Lavender", "Ocean", "Forest", "Citrus"],
+        "base_variant": "Lavender 300ml",
+        "price_retail": 15.00,
+        "price_wholesale": 8.25,
+        "margin_percent": 45,
+        "moq": 12,
+        "popularity": 64,
+        "shelf_life_days": 900,
+        "packaging": "Aerozol 300ml",
+        "usp": "Neutralizuje zapachy zamiast maskować",
+        "awards": [],
+        "promo_support": True,
+        "pos_materials": ["Wobbler", "Tester"],
+    },
+    
+    # SNACKS (nowe kategorie FreshLife)
+    "snack_001": {
+        "id": "snack_001",
+        "name": "CrunchBites",
+        "brand": "FreshLife",
+        "category": "Snacks",
+        "subcategory": "Chipsy",
+        "variants": ["Paprika", "Sól morska", "Śmietana-cebula", "BBQ"],
+        "base_variant": "Paprika 150g",
+        "price_retail": 5.50,
+        "price_wholesale": 3.85,
+        "margin_percent": 30,
+        "moq": 24,
+        "popularity": 69,
+        "shelf_life_days": 180,
+        "packaging": "Torebka foliowa 150g",
+        "usp": "Pieczone nie smażone, -30% tłuszczu",
+        "awards": [],
+        "promo_support": True,
+        "pos_materials": ["Counter display", "Wobbler"],
+    },
+    
+    "snack_002": {
+        "id": "snack_002",
+        "name": "NutMix",
+        "brand": "FreshLife",
+        "category": "Snacks",
+        "subcategory": "Orzechy i bakalie",
+        "variants": ["Classic Mix", "Sport Mix", "Exotic Mix", "Party Mix"],
+        "base_variant": "Classic Mix 200g",
+        "price_retail": 12.00,
+        "price_wholesale": 8.40,
+        "margin_percent": 30,
+        "moq": 12,
+        "popularity": 61,
+        "shelf_life_days": 270,
+        "packaging": "Torebka foliowa 200g",
+        "usp": "Prażone bez oleju, naturalne smaki",
+        "awards": [],
+        "promo_support": False,
+        "pos_materials": ["Shelf strip"],
+    },
+    
+    "bev_001": {
+        "id": "bev_001",
+        "name": "FreshTea",
+        "brand": "FreshLife",
+        "category": "Beverages",
+        "subcategory": "Herbaty mrożone",
+        "variants": ["Lemon", "Peach", "Forest Fruits", "Green Tea"],
+        "base_variant": "Lemon 500ml",
+        "price_retail": 3.50,
+        "price_wholesale": 2.45,
+        "margin_percent": 30,
+        "moq": 24,
+        "popularity": 72,
+        "shelf_life_days": 180,
+        "packaging": "Butelka PET 500ml",
+        "usp": "Bez cukru, zaparzona na zimno",
+        "awards": [],
+        "promo_support": True,
+        "pos_materials": ["Chłodziarka branded", "Wobbler"],
+    },
+}
+
+
+# ============================================================================
+# COMPETITOR PRODUCTS (Produkty konkurencji - dystrybuowane, niższa marża)
+# ============================================================================
+
+COMPETITOR_PRODUCTS = {
+    # PERSONAL CARE - Konkurencja dla CleanFresh (żele)
+    "comp_pc_001": {
+        "id": "comp_pc_001",
+        "name": "Dove Men+Care",
+        "brand": "Dove",
+        "manufacturer": "Unilever",
+        "category": "Personal Care",
+        "subcategory": "Żele pod prysznic",
+        "base_variant": "Clean Comfort 400ml",
+        "price_retail": 14.00,
+        "price_wholesale": 11.90,
+        "margin_percent": 15,
+        "moq": 6,
+        "popularity": 92,
+        "shelf_life_days": 1080,
+        "packaging": "Butelka PET 400ml",
+        "usp": "Nawilża i chroni skórę, technologia MicroMoisture",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_pc_002": {
+        "id": "comp_pc_002",
+        "name": "Nivea Men",
+        "brand": "Nivea",
+        "manufacturer": "Beiersdorf",
+        "category": "Personal Care",
+        "subcategory": "Żele pod prysznic",
+        "base_variant": "Deep 500ml",
+        "price_retail": 12.00,
+        "price_wholesale": 10.20,
+        "margin_percent": 15,
+        "moq": 6,
+        "popularity": 89,
+        "shelf_life_days": 1080,
+        "packaging": "Butelka PET 500ml",
+        "usp": "Oczyszcza i odświeża, węgiel aktywny",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_pc_003": {
+        "id": "comp_pc_003",
+        "name": "Palmolive Men",
+        "brand": "Palmolive",
+        "manufacturer": "Colgate-Palmolive",
+        "category": "Personal Care",
+        "subcategory": "Żele pod prysznic",
+        "base_variant": "Revitalising Sport 500ml",
+        "price_retail": 9.00,
+        "price_wholesale": 7.65,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 78,
+        "shelf_life_days": 1080,
+        "packaging": "Butelka PET 500ml",
+        "usp": "Odświeża i energetyzuje",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # PERSONAL CARE - Konkurencja dla SilkHair (szampony)
+    "comp_pc_004": {
+        "id": "comp_pc_004",
+        "name": "L'Oréal Elseve",
+        "brand": "L'Oréal Paris",
+        "manufacturer": "L'Oréal",
+        "category": "Personal Care",
+        "subcategory": "Szampony",
+        "base_variant": "Full Resist 400ml",
+        "price_retail": 22.00,
+        "price_wholesale": 18.70,
+        "margin_percent": 15,
+        "moq": 6,
+        "popularity": 94,
+        "shelf_life_days": 1080,
+        "packaging": "Butelka PET 400ml",
+        "usp": "Wzmacnia włosy, zapobiega wypadaniu",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_pc_005": {
+        "id": "comp_pc_005",
+        "name": "Dove Repair",
+        "brand": "Dove",
+        "manufacturer": "Unilever",
+        "category": "Personal Care",
+        "subcategory": "Szampony",
+        "base_variant": "Intensive Repair 400ml",
+        "price_retail": 18.00,
+        "price_wholesale": 15.30,
+        "margin_percent": 15,
+        "moq": 6,
+        "popularity": 91,
+        "shelf_life_days": 1080,
+        "packaging": "Butelka PET 400ml",
+        "usp": "Regeneruje zniszczone włosy od środka",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_pc_006": {
+        "id": "comp_pc_006",
+        "name": "Head & Shoulders",
+        "brand": "Head & Shoulders",
+        "manufacturer": "Procter & Gamble",
+        "category": "Personal Care",
+        "subcategory": "Szampony",
+        "base_variant": "Classic Clean 400ml",
+        "price_retail": 20.00,
+        "price_wholesale": 17.00,
+        "margin_percent": 15,
+        "moq": 6,
+        "popularity": 96,
+        "shelf_life_days": 1080,
+        "packaging": "Butelka PET 400ml",
+        "usp": "Skutecznie zwalcza łupież",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # PERSONAL CARE - Konkurencja dla DeoActive (dezodoranty)
+    "comp_pc_007": {
+        "id": "comp_pc_007",
+        "name": "Rexona Men",
+        "brand": "Rexona",
+        "manufacturer": "Unilever",
+        "category": "Personal Care",
+        "subcategory": "Dezodoranty",
+        "base_variant": "Sport Defence 150ml",
+        "price_retail": 13.00,
+        "price_wholesale": 11.05,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 93,
+        "shelf_life_days": 900,
+        "packaging": "Aerozol 150ml",
+        "usp": "Ochrona do 96h, MotionSense",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_pc_008": {
+        "id": "comp_pc_008",
+        "name": "Nivea Deo",
+        "brand": "Nivea",
+        "manufacturer": "Beiersdorf",
+        "category": "Personal Care",
+        "subcategory": "Dezodoranty",
+        "base_variant": "Fresh Active 150ml",
+        "price_retail": 11.00,
+        "price_wholesale": 9.35,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 88,
+        "shelf_life_days": 900,
+        "packaging": "Aerozol 150ml",
+        "usp": "48h ochrony, Ocean Extracts",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_pc_009": {
+        "id": "comp_pc_009",
+        "name": "Fa Men",
+        "brand": "Fa",
+        "manufacturer": "Henkel",
+        "category": "Personal Care",
+        "subcategory": "Dezodoranty",
+        "base_variant": "Sport Energy Boost 150ml",
+        "price_retail": 9.50,
+        "price_wholesale": 8.08,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 82,
+        "shelf_life_days": 900,
+        "packaging": "Aerozol 150ml",
+        "usp": "Ochrona 48h, Guarana extract",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # FOOD - Konkurencja dla MorningJoy (płatki)
+    "comp_food_001": {
+        "id": "comp_food_001",
+        "name": "Nesquik",
+        "brand": "Nesquik",
+        "manufacturer": "Nestlé",
+        "category": "Food",
+        "subcategory": "Płatki śniadaniowe",
+        "base_variant": "Chocolate 450g",
+        "price_retail": 16.00,
+        "price_wholesale": 13.60,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 95,
+        "shelf_life_days": 365,
+        "packaging": "Karton 450g",
+        "usp": "Kultowy smak czekolady, bez sztucznych barwników",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_food_002": {
+        "id": "comp_food_002",
+        "name": "Fitness Nestlé",
+        "brand": "Fitness",
+        "manufacturer": "Nestlé",
+        "category": "Food",
+        "subcategory": "Płatki śniadaniowe",
+        "base_variant": "Fruits 400g",
+        "price_retail": 14.00,
+        "price_wholesale": 11.90,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 87,
+        "shelf_life_days": 365,
+        "packaging": "Karton 400g",
+        "usp": "Pełne ziarno, niskokaloryczne",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_food_003": {
+        "id": "comp_food_003",
+        "name": "Kellogg's Corn Flakes",
+        "brand": "Kellogg's",
+        "manufacturer": "Kellogg Company",
+        "category": "Food",
+        "subcategory": "Płatki śniadaniowe",
+        "base_variant": "Original 500g",
+        "price_retail": 15.00,
+        "price_wholesale": 12.75,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 90,
+        "shelf_life_days": 365,
+        "packaging": "Karton 500g",
+        "usp": "Oryginalne płatki kukurydziane od 1906",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # FOOD - Konkurencja dla QuickSoup (zupy)
+    "comp_food_004": {
+        "id": "comp_food_004",
+        "name": "Knorr",
+        "brand": "Knorr",
+        "manufacturer": "Unilever",
+        "category": "Food",
+        "subcategory": "Zupy instant",
+        "base_variant": "Rosół instant",
+        "price_retail": 4.50,
+        "price_wholesale": 3.83,
+        "margin_percent": 15,
+        "moq": 24,
+        "popularity": 96,
+        "shelf_life_days": 540,
+        "packaging": "Saszetka",
+        "usp": "Numer 1 w Polsce, naturalny smak",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_food_005": {
+        "id": "comp_food_005",
+        "name": "Winiary",
+        "brand": "Winiary",
+        "manufacturer": "Nestlé",
+        "category": "Food",
+        "subcategory": "Zupy instant",
+        "base_variant": "Pomidorowa",
+        "price_retail": 4.00,
+        "price_wholesale": 3.40,
+        "margin_percent": 15,
+        "moq": 24,
+        "popularity": 93,
+        "shelf_life_days": 540,
+        "packaging": "Saszetka",
+        "usp": "Polska marka, tradycyjny smak",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_food_006": {
+        "id": "comp_food_006",
+        "name": "Amino",
+        "brand": "Amino",
+        "manufacturer": "Gellwe",
+        "category": "Food",
+        "subcategory": "Zupy instant",
+        "base_variant": "Grochówka",
+        "price_retail": 3.50,
+        "price_wholesale": 2.98,
+        "margin_percent": 15,
+        "moq": 24,
+        "popularity": 84,
+        "shelf_life_days": 540,
+        "packaging": "Saszetka",
+        "usp": "Bogata w aminokwasy",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # FOOD - Konkurencja dla TomatoRed (ketchupy)
+    "comp_food_007": {
+        "id": "comp_food_007",
+        "name": "Fanex Ketchup Pomidorowy",
+        "brand": "Fanex",
+        "manufacturer": "Fanex Foods",
+        "category": "Food",
+        "subcategory": "Ketchupy i sosy",
+        "base_variant": "Classic 480g",
+        "price_retail": 10.99,
+        "price_wholesale": 9.34,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 92,
+        "shelf_life_days": 540,
+        "packaging": "Butelka PET 480g",
+        "usp": "Gęsty, z naturalnych pomidorów",
+        "promo_support": True,
+        "pos_materials": ["Display", "Wobbler"],
+    },
+    
+    "comp_food_008": {
+        "id": "comp_food_008",
+        "name": "Kotlin Ketchup Łagodny",
+        "brand": "Kotlin",
+        "manufacturer": "Agros-Nova",
+        "category": "Food",
+        "subcategory": "Ketchupy i sosy",
+        "base_variant": "Łagodny 450g",
+        "price_retail": 7.99,
+        "price_wholesale": 6.79,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 84,
+        "shelf_life_days": 540,
+        "packaging": "Butelka PET 450g",
+        "usp": "Polski produkt, doskonała cena",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_food_009": {
+        "id": "comp_food_009",
+        "name": "Łowicz Ketchup Pikantny",
+        "brand": "Łowicz",
+        "manufacturer": "ZPOW Łowicz",
+        "category": "Food",
+        "subcategory": "Ketchupy i sosy",
+        "base_variant": "Pikantny 480g",
+        "price_retail": 8.49,
+        "price_wholesale": 7.22,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 88,
+        "shelf_life_days": 540,
+        "packaging": "Butelka PET 480g",
+        "usp": "Z polskich pomidorów, pikantna nuta",
+        "promo_support": True,
+        "pos_materials": ["Shelf strip"],
+    },
+    
+    # HOME CARE - Konkurencja dla SparkleClean (podłogi)
+    "comp_hc_001": {
+        "id": "comp_hc_001",
+        "name": "Domestos",
+        "brand": "Domestos",
+        "manufacturer": "Unilever",
+        "category": "Home Care",
+        "subcategory": "Płyny do mycia podłóg",
+        "base_variant": "Universal 1L",
+        "price_retail": 14.00,
+        "price_wholesale": 11.90,
+        "margin_percent": 15,
+        "moq": 6,
+        "popularity": 92,
+        "shelf_life_days": 730,
+        "packaging": "Butelka PET 1L",
+        "usp": "Zabija 99.9% bakterii",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_hc_002": {
+        "id": "comp_hc_002",
+        "name": "Cillit Bang",
+        "brand": "Cillit Bang",
+        "manufacturer": "Reckitt Benckiser",
+        "category": "Home Care",
+        "subcategory": "Płyny do mycia podłóg",
+        "base_variant": "Power Cleaner 1L",
+        "price_retail": 16.00,
+        "price_wholesale": 13.60,
+        "margin_percent": 15,
+        "moq": 6,
+        "popularity": 88,
+        "shelf_life_days": 730,
+        "packaging": "Butelka PET 1L",
+        "usp": "Usuwa tłuszcz i zabrudzenia bez wysiłku",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_hc_003": {
+        "id": "comp_hc_003",
+        "name": "Ludwik",
+        "brand": "Ludwik",
+        "manufacturer": "Inco",
+        "category": "Home Care",
+        "subcategory": "Płyny do mycia podłóg",
+        "base_variant": "Universal 1L",
+        "price_retail": 9.00,
+        "price_wholesale": 7.65,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 86,
+        "shelf_life_days": 730,
+        "packaging": "Butelka PET 1L",
+        "usp": "Polska marka, sprawdzony skład",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # HOME CARE - Konkurencja dla DishPro (naczynia)
+    "comp_hc_004": {
+        "id": "comp_hc_004",
+        "name": "Fairy",
+        "brand": "Fairy",
+        "manufacturer": "Procter & Gamble",
+        "category": "Home Care",
+        "subcategory": "Płyny do naczyń",
+        "base_variant": "Lemon 500ml",
+        "price_retail": 9.00,
+        "price_wholesale": 7.65,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 97,
+        "shelf_life_days": 730,
+        "packaging": "Butelka PET 500ml",
+        "usp": "Usuwa tłuszcz już w zimnej wodzie",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_hc_005": {
+        "id": "comp_hc_005",
+        "name": "Ludwik Naczynia",
+        "brand": "Ludwik",
+        "manufacturer": "Inco",
+        "category": "Home Care",
+        "subcategory": "Płyny do naczyń",
+        "base_variant": "Aloes 500ml",
+        "price_retail": 6.50,
+        "price_wholesale": 5.53,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 89,
+        "shelf_life_days": 730,
+        "packaging": "Butelka PET 500ml",
+        "usp": "Skuteczny i delikatny dla rąk",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_hc_006": {
+        "id": "comp_hc_006",
+        "name": "Persil",
+        "brand": "Persil",
+        "manufacturer": "Henkel",
+        "category": "Home Care",
+        "subcategory": "Płyny do naczyń",
+        "base_variant": "Green Power 450ml",
+        "price_retail": 8.00,
+        "price_wholesale": 6.80,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 83,
+        "shelf_life_days": 730,
+        "packaging": "Butelka PET 450ml",
+        "usp": "Skuteczny i ekologiczny",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # HOME CARE - Konkurencja dla FreshAir (odświeżacze)
+    "comp_hc_007": {
+        "id": "comp_hc_007",
+        "name": "Air Wick",
+        "brand": "Air Wick",
+        "manufacturer": "Reckitt Benckiser",
+        "category": "Home Care",
+        "subcategory": "Odświeżacze powietrza",
+        "base_variant": "Lavender 300ml",
+        "price_retail": 16.00,
+        "price_wholesale": 13.60,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 94,
+        "shelf_life_days": 900,
+        "packaging": "Aerozol 300ml",
+        "usp": "Naturalne olejki eteryczne",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_hc_008": {
+        "id": "comp_hc_008",
+        "name": "Glade",
+        "brand": "Glade",
+        "manufacturer": "SC Johnson",
+        "category": "Home Care",
+        "subcategory": "Odświeżacze powietrza",
+        "base_variant": "Ocean Escape 300ml",
+        "price_retail": 14.00,
+        "price_wholesale": 11.90,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 91,
+        "shelf_life_days": 900,
+        "packaging": "Aerozol 300ml",
+        "usp": "Długotrwały świeży zapach",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_hc_009": {
+        "id": "comp_hc_009",
+        "name": "Brise",
+        "brand": "Brise",
+        "manufacturer": "Henkel",
+        "category": "Home Care",
+        "subcategory": "Odświeżacze powietrza",
+        "base_variant": "Fresh Cotton 300ml",
+        "price_retail": 12.00,
+        "price_wholesale": 10.20,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 85,
+        "shelf_life_days": 900,
+        "packaging": "Aerozol 300ml",
+        "usp": "Odświeża i neutralizuje",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # SNACKS - Konkurencja dla CrunchBites (chipsy)
+    "comp_snack_001": {
+        "id": "comp_snack_001",
+        "name": "Lay's",
+        "brand": "Lay's",
+        "manufacturer": "PepsiCo",
+        "category": "Snacks",
+        "subcategory": "Chipsy",
+        "base_variant": "Papryka 140g",
+        "price_retail": 6.00,
+        "price_wholesale": 5.10,
+        "margin_percent": 15,
+        "moq": 24,
+        "popularity": 98,
+        "shelf_life_days": 180,
+        "packaging": "Torebka 140g",
+        "usp": "Numer 1 na świecie",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_snack_002": {
+        "id": "comp_snack_002",
+        "name": "Pringles",
+        "brand": "Pringles",
+        "manufacturer": "Kellogg's",
+        "category": "Snacks",
+        "subcategory": "Chipsy",
+        "base_variant": "Original 165g",
+        "price_retail": 8.50,
+        "price_wholesale": 7.23,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 95,
+        "shelf_life_days": 270,
+        "packaging": "Tuba 165g",
+        "usp": "Unikalna forma i opakowanie",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_snack_003": {
+        "id": "comp_snack_003",
+        "name": "Chio Chips",
+        "brand": "Chio",
+        "manufacturer": "Intersnack",
+        "category": "Snacks",
+        "subcategory": "Chipsy",
+        "base_variant": "Sól 150g",
+        "price_retail": 5.50,
+        "price_wholesale": 4.68,
+        "margin_percent": 15,
+        "moq": 24,
+        "popularity": 87,
+        "shelf_life_days": 180,
+        "packaging": "Torebka 150g",
+        "usp": "Chrupkie i smaczne",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # SNACKS - Konkurencja dla NutMix (orzechy)
+    "comp_snack_004": {
+        "id": "comp_snack_004",
+        "name": "Helio Mix",
+        "brand": "Helio",
+        "manufacturer": "Aksam",
+        "category": "Snacks",
+        "subcategory": "Orzechy i bakalie",
+        "base_variant": "Student Mix 200g",
+        "price_retail": 13.00,
+        "price_wholesale": 11.05,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 82,
+        "shelf_life_days": 270,
+        "packaging": "Torebka 200g",
+        "usp": "Polska marka, naturalne orzechy",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_snack_005": {
+        "id": "comp_snack_005",
+        "name": "Bakalland Mix",
+        "brand": "Bakalland",
+        "manufacturer": "Bakalland",
+        "category": "Snacks",
+        "subcategory": "Orzechy i bakalie",
+        "base_variant": "Energy Mix 180g",
+        "price_retail": 14.00,
+        "price_wholesale": 11.90,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 88,
+        "shelf_life_days": 270,
+        "packaging": "Torebka 180g",
+        "usp": "Wysokiej jakości owoce i orzechy",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_snack_006": {
+        "id": "comp_snack_006",
+        "name": "Alesto Mix",
+        "brand": "Alesto",
+        "manufacturer": "Lidl",
+        "category": "Snacks",
+        "subcategory": "Orzechy i bakalie",
+        "base_variant": "Premium Mix 200g",
+        "price_retail": 11.00,
+        "price_wholesale": 9.35,
+        "margin_percent": 15,
+        "moq": 12,
+        "popularity": 79,
+        "shelf_life_days": 270,
+        "packaging": "Torebka 200g",
+        "usp": "Private label, dobra cena",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    # BEVERAGES - Konkurencja dla FreshTea (herbaty mrożone)
+    "comp_bev_001": {
+        "id": "comp_bev_001",
+        "name": "Lipton Ice Tea",
+        "brand": "Lipton",
+        "manufacturer": "PepsiCo",
+        "category": "Beverages",
+        "subcategory": "Herbaty mrożone",
+        "base_variant": "Lemon 500ml",
+        "price_retail": 4.00,
+        "price_wholesale": 3.40,
+        "margin_percent": 15,
+        "moq": 24,
+        "popularity": 96,
+        "shelf_life_days": 180,
+        "packaging": "Butelka PET 500ml",
+        "usp": "Numer 1 na świecie",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_bev_002": {
+        "id": "comp_bev_002",
+        "name": "Fuze Tea",
+        "brand": "Fuze Tea",
+        "manufacturer": "Coca-Cola",
+        "category": "Beverages",
+        "subcategory": "Herbaty mrożone",
+        "base_variant": "Peach 500ml",
+        "price_retail": 3.80,
+        "price_wholesale": 3.23,
+        "margin_percent": 15,
+        "moq": 24,
+        "popularity": 92,
+        "shelf_life_days": 180,
+        "packaging": "Butelka PET 500ml",
+        "usp": "Naturalny smak owoców",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+    
+    "comp_bev_003": {
+        "id": "comp_bev_003",
+        "name": "Nestea",
+        "brand": "Nestea",
+        "manufacturer": "Nestlé",
+        "category": "Beverages",
+        "subcategory": "Herbaty mrożone",
+        "base_variant": "Green Tea 500ml",
+        "price_retail": 3.50,
+        "price_wholesale": 2.98,
+        "margin_percent": 15,
+        "moq": 24,
+        "popularity": 89,
+        "shelf_life_days": 180,
+        "packaging": "Butelka PET 500ml",
+        "usp": "Zielona herbata, antyoksydanty",
+        "promo_support": False,
+        "pos_materials": [],
+    },
+}
+
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+def get_all_products():
+    """Zwraca wszystkie produkty (FreshLife + konkurencja)"""
+    all_products = {}
+    all_products.update(FRESHLIFE_PRODUCTS)
+    all_products.update(COMPETITOR_PRODUCTS)
+    return all_products
+
+
+def get_freshlife_products():
+    """Zwraca tylko produkty FreshLife"""
+    return FRESHLIFE_PRODUCTS
+
+
+def get_competitor_products():
+    """Zwraca tylko produkty konkurencji"""
+    return COMPETITOR_PRODUCTS
+
+
+def get_products_by_category(category):
+    """Zwraca produkty z danej kategorii (wszystkie)"""
+    all_prods = get_all_products()
+    return {k: v for k, v in all_prods.items() if v['category'] == category}
+
+
+def get_product_by_id(product_id):
+    """Zwraca produkt po ID"""
+    all_prods = get_all_products()
+    return all_prods.get(product_id)
+
+
+def get_competitors_for_product(freshlife_id):
+    """
+    Znajduje produkty konkurencji w tej samej kategorii co produkt FreshLife
+    
+    Returns:
+        list - IDs produktów konkurencji (max 3)
+    """
+    fl_product = FRESHLIFE_PRODUCTS.get(freshlife_id)
+    if not fl_product:
+        return []
+    
+    category = fl_product["category"]
+    
+    # Znajdź konkurentów w tej samej kategorii
+    competitors = [
+        comp_id for comp_id, comp in COMPETITOR_PRODUCTS.items()
+        if comp["category"] == category
+    ]
+    
+    # Zwróć max 3
+    return competitors[:3]
+
+
+def compare_products(freshlife_id, competitor_ids):
+    """
+    Porównuje produkt FreshLife z produktami konkurencji
+    
+    Returns:
+        dict - porównanie: marża, cena, popularność
+    """
+    fl_product = FRESHLIFE_PRODUCTS.get(freshlife_id)
+    if not fl_product:
+        return None
+    
+    comparison = {
+        "freshlife": fl_product,
+        "competitors": [],
+        "advantages": [],
+        "disadvantages": []
+    }
+    
+    for comp_id in competitor_ids:
+        comp = COMPETITOR_PRODUCTS.get(comp_id)
+        if comp:
+            comparison["competitors"].append(comp)
+            
+            # Analiza przewag
+            if fl_product["margin_percent"] > comp["margin_percent"]:
+                comparison["advantages"].append(f"Wyższa marża niż {comp['name']} (+{fl_product['margin_percent'] - comp['margin_percent']}pp)")
+            
+            if fl_product["price_retail"] < comp["price_retail"]:
+                comparison["advantages"].append(f"Niższa cena niż {comp['name']} ({comp['price_retail'] - fl_product['price_retail']:.2f} PLN taniej)")
+            
+            if fl_product["popularity"] < comp["popularity"]:
+                comparison["disadvantages"].append(f"Mniejsza rozpoznawalność niż {comp['name']} ({comp['popularity'] - fl_product['popularity']} pkt)")
+    
+    return comparison
+
+
+# Przykład użycia porównania
+def get_sales_pitch(product_id):
+    """Generuje sales pitch dla produktu FreshLife"""
+    product = FRESHLIFE_PRODUCTS.get(product_id)
+    if not product:
+        return "Produkt nie znaleziony"
+    
+    pitch = f"""
+🎯 {product['name']} - {product['subcategory']}
+
+💰 KORZYŚCI FINANSOWE:
+- Cena detaliczna: {product['price_retail']:.2f} PLN
+- Cena hurt: {product['price_wholesale']:.2f} PLN  
+- Marża: {product['margin_percent']}% (vs konkurencja 15%)
+- MOQ: tylko {product['moq']} szt.
+
+✨ USP: {product['usp']}
+
+📦 WSPARCIE:
+"""
+    
+    if product.get('promo_support'):
+        pitch += "- Wsparcie promocyjne\n"
+    if product.get('pos_materials'):
+        pitch += f"- Materiały POS: {', '.join(product['pos_materials'])}\n"
+    
+    if product.get('awards'):
+        pitch += f"\n🏆 NAGRODY:\n"
+        for award in product['awards']:
+            pitch += f"- {award}\n"
+    
+    return pitch
+
+
+# Kategorie dla filtrów
+CATEGORIES = {
+    "Personal Care": "Produkty do pielęgnacji ciała",
+    "Food": "Produkty spożywcze",
+    "Home Care": "Produkty do czyszczenia",
+    "Snacks": "Przekąski",
+    "Beverages": "Napoje"
+}
+
+SUBCATEGORIES = {
+    "Personal Care": ["Żele pod prysznic", "Szampony", "Dezodoranty"],
+    "Food": ["Płatki śniadaniowe", "Zupy instant", "Oleje spożywcze"],
+    "Home Care": ["Płyny do mycia podłóg", "Płyny do naczyń", "Odświeżacze powietrza"],
+    "Snacks": ["Chipsy", "Orzechy i bakalie"],
+    "Beverages": ["Herbaty mrożone"]
+}

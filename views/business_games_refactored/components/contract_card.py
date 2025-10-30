@@ -3658,11 +3658,11 @@ def render_completed_contract_card(contract):
         border_color = "#ef4444"  # czerwony
         icon = "❌"
     
-    # Tytuł expandera z metrykami
+    # Tytuł expandera z metrykami - DATA NA POCZĄTKU
     rep_change = get_contract_reward_reputation(contract)
     rep_display = f"+{rep_change}" if rep_change >= 0 else str(rep_change)
     
-    expander_title = f"{icon} {contract['emoji']} **{contract['tytul']}** - {contract['klient']} | ⭐ {rating}/5 | 💰 {reward_coins:,} | 📈 {rep_display} | 📅 {completed_date}"
+    expander_title = f"📅 {completed_date} | {icon} {contract['emoji']} **{contract['tytul']}** - {contract['klient']} | ⭐ {rating}/5 | 💰 {reward_coins:,} | 📈 {rep_display}"
     
     with st.expander(expander_title, expanded=False):
         # Metryki w karcie

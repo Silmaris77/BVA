@@ -19,24 +19,26 @@ def build_conversation_prompt(customer, conversation_history, player_message, co
     """
     
     # Podstawowe info o kliencie
+    owner_profile = customer.get('owner_profile', {})
+    characteristics = customer.get('characteristics', {})
+    
     customer_context = f"""
-KLIENT: {customer['name']}
-Właściciel: {customer['owner']}
-Typ: {customer['type']}
-Lokalizacja: {customer['location']}
+KLIENT: {customer.get('name', 'Nieznany')}
+Właściciel: {customer.get('owner', owner_profile.get('name', 'Nieznany'))}
+Typ: {customer.get('type', 'Sklep')}
+Lokalizacja: {customer.get('location', 'Nieznana')}
     
 CHARAKTERYSTYKA KLIENTA:
-{customer['description']}
+{customer.get('description', 'Brak opisu')}
 
-Miesięczny obrót: {customer['characteristics']['monthly_revenue']}
-Klienci dziennie: {customer['characteristics']['customers_per_day']}
-Konkurencja: {customer['characteristics']['competition']}
+Miesięczny obrót: {characteristics.get('monthly_revenue', 'nieznany')} PLN
+Klienci dziennie: {characteristics.get('customers_per_day', 'nieznana liczba')}
+Konkurencja: {characteristics.get('competition', 'brak informacji')}
 
 OSOBOWOŚĆ właściciela:
-Styl: {customer['personality']['style']}
-Priorytety: {', '.join(customer['personality']['priorities'])}
-Obawy: {', '.join(customer['personality']['concerns'])}
-Styl negocjacji: {customer['personality']['negotiation_style']}
+{owner_profile.get('personality', 'Nieznana osobowość')}
+Priorytety: {', '.join(owner_profile.get('priorities', ['Brak']))}
+Obawy: {', '.join(owner_profile.get('concerns', ['Brak']))}
 """
     
     # Historia współpracy (jeśli istnieje)
@@ -51,6 +53,29 @@ Ustalenia: {conv.get('agreements', 'brak ustaleń')}
 Następne kroki: {conv.get('next_steps', 'brak')}
 Wrażenie klienta: {conv.get('customer_impression', 'neutralne')}
 """
+            # Dodaj szczegóły zamówienia jeśli są
+            if conv.get('order_items'):
+                history_context += "Zamówione produkty:\n"
+                for item in conv['order_items']:
+                    history_context += f"  - {item['name']} ({item['brand']}) × {item['quantity']} szt.\n"
+                if conv.get('order_value'):
+                    history_context += f"Wartość zamówienia: {conv['order_value']} PLN\n"
+            
+            # Dodaj informacje o narzędziach trade marketing
+            if conv.get('tools_used'):
+                tools_desc = []
+                for tool in conv.get('tools_used', []):
+                    tool_names = {
+                        'gratis': 'Gratis/próbki',
+                        'rabat': 'Rabat',
+                        'pos_material': 'Materiały POS (ulotki, plakaty)',
+                        'promocja': 'Promocja',
+                        'free_delivery': 'Darmowa dostawa'
+                    }
+                    tools_desc.append(tool_names.get(tool, tool))
+                history_context += f"Narzędzia użyte: {', '.join(tools_desc)}\n"
+            
+            history_context += "\n"
     
     # Status współpracy
     status = context.get('relationship_status', 'prospect')

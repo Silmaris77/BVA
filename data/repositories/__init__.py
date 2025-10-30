@@ -11,9 +11,11 @@ Ten moduł implementuje Repository Pattern, który umożliwia:
 from .base_repository import BaseRepository
 from .user_repository import UserRepository
 from .business_game_repository import BusinessGameRepository
+from .lesson_repository import LessonRepository
 
 __all__ = [
     'BaseRepository',
     'UserRepository',
     'BusinessGameRepository',
+    'LessonRepository',
 ]

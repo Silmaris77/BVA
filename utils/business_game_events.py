@@ -77,8 +77,18 @@ def check_event_conditions(event_data: Dict, bg_data: Dict) -> bool:
     return True
 
 
-def get_random_event(bg_data: Dict, user_coins: int) -> Optional[Tuple[str, Dict]]:
-    """Losuje zdarzenie spełniające warunki"""
+def get_random_event(bg_data: Dict, user_coins: int, force_trigger: bool = False) -> Optional[Tuple[str, Dict]]:
+    """
+    Losuje zdarzenie spełniające warunki
+    
+    Args:
+        bg_data: Dane gry
+        user_coins: DegenCoins użytkownika (nieużywane, legacy)
+        force_trigger: Jeśli True, pomija sprawdzenie szansy 20% i ZAWSZE zwraca wydarzenie
+    
+    Returns:
+        Tuple (event_id, event_data) lub None jeśli brak dostępnych wydarzeń
+    """
     
     # BACKWARD COMPATIBILITY: Zainicjalizuj events jeśli nie istnieje
     if "events" not in bg_data:
@@ -88,10 +98,24 @@ def get_random_event(bg_data: Dict, user_coins: int) -> Optional[Tuple[str, Dict
             "active_effects": []
         }
     
+    # Pobierz dzisiejsze wydarzenia (aby nie losować duplikatów tego samego dnia)
+    from datetime import datetime
+    today = datetime.now().strftime("%Y-%m-%d")
+    today_event_ids = set()
+    
+    for event in bg_data.get("events", {}).get("history", []):
+        event_date = event.get("timestamp", "").split(" ")[0]
+        if event_date == today:
+            today_event_ids.add(event.get("event_id"))
+    
     # Zbierz dostępne zdarzenia
     available_events = []
     
     for event_id, event_data in RANDOM_EVENTS.items():
+        # Pomiń jeśli to wydarzenie już wystąpiło dzisiaj
+        if event_id in today_event_ids:
+            continue
+            
         # Sprawdź warunki
         if check_event_conditions(event_data, bg_data):
             # Dodatkowe sprawdzenie min_coins - sprawdź SALDO FIRMY, nie DegenCoins!
@@ -156,7 +180,7 @@ def should_trigger_event(bg_data: Dict) -> bool:
     return True
 
 
-def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[int], user_data: Dict, industry_id: str = "consulting") -> Dict:
+def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[int], user_data: Dict, industry_id: str = "consulting", manual_roll: bool = False) -> Dict:
     """Aplikuje efekty zdarzenia do user_data
     
     Args:
@@ -165,6 +189,7 @@ def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[in
         choice_idx: Indeks wyboru (dla neutralnych eventów)
         user_data: Dane użytkownika
         industry_id: ID branży (domyślnie consulting)
+        manual_roll: Czy wydarzenie było wylosowane ręcznie (True) czy automatycznie (False)
     """
     
     # Pobierz dane gry z backward compatibility
@@ -359,7 +384,8 @@ def apply_event_effects(event_id: str, event_data: Dict, choice_idx: Optional[in
         "type": event_data["type"],
         "description": event_data["description"],
         "choice": choice_text,
-        "effects": effects
+        "effects": effects,
+        "manual_roll": manual_roll  # Oznaczenie czy było ręczne losowanie
     }
     
     # Dodaj informację o dotkniętym kontrakcie (jeśli dotyczy)

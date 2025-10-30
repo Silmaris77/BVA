@@ -11,6 +11,79 @@ import streamlit as st
 from datetime import datetime
 from views.business_games_refactored.helpers import get_game_data, save_game_data
 
+# Import nowych modułów rozszerzeń
+from utils.fmcg_client_helpers import (
+    migrate_fmcg_customers_to_new_structure,
+    get_client_by_id,
+    get_clients_by_status,
+    is_visit_overdue,
+    get_reputation_status
+)
+from utils.fmcg_reputation import (
+    update_client_reputation,
+    record_visit,
+    sign_contract,
+    check_overdue_visits
+)
+from utils.fmcg_products import (
+    get_product_info,
+    suggest_cross_sell_products,
+    get_portfolio_summary,
+    FRESHLIFE_PRODUCTS
+)
+
+# =============================================================================
+# MIGRATION & INITIALIZATION
+# =============================================================================
+
+def ensure_fmcg_data_structure(username: str, user_data: dict, bg_data: dict) -> int:
+    """
+    Sprawdza strukturę danych FMCG i przeprowadza migrację jeśli potrzebna
+    
+    Args:
+        username: Nazwa użytkownika
+        user_data: Cały dict user_data
+        bg_data: business_games["fmcg"] dict
+    
+    Returns:
+        Liczba zmigrowanych klientów (0 jeśli brak migracji)
+    """
+    
+    customers_data = bg_data.get("customers", {})
+    
+    # Sprawdź czy już jest nowa struktura
+    if "clients" in customers_data:
+        # Już zmigrowane
+        return 0
+    
+    # Sprawdź czy są dane do migracji
+    if "prospects" not in customers_data and "active_clients" not in customers_data:
+        # Nowa instalacja - inicjalizuj pustą strukturę
+        customers_data["clients"] = {}
+        bg_data["customers"] = customers_data
+        return 0
+    
+    # MIGRACJA
+    st.info("🔄 Wykryto starą strukturę danych - przeprowadzam migrację do nowego systemu...")
+    
+    migrated_data, count = migrate_fmcg_customers_to_new_structure(bg_data)
+    
+    # Nadpisz bg_data
+    bg_data.update(migrated_data)
+    
+    # Zapisz
+    import json
+    users_file = "users_data.json"
+    with open(users_file, "r", encoding="utf-8") as f:
+        all_users = json.load(f)
+    all_users[username] = user_data
+    with open(users_file, "w", encoding="utf-8") as f:
+        json.dump(all_users, f, ensure_ascii=False, indent=2)
+    
+    st.success(f"✅ Zmigrowano {count} klientów do nowego systemu z reputacją i portfolio!")
+    
+    return count
+
 # =============================================================================
 # FMCG TABS
 # =============================================================================

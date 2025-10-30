@@ -1,0 +1,439 @@
+{
+  "scenario_id": "fmcg_piaseczno_v1",
+  "scenario_modifiers": {},
+  "scenario_objectives": [
+    {
+      "id": "first_sale",
+      "description": "Zrealizuj pierwszą sprzedaż",
+      "completed": false
+    },
+    {
+      "id": "first_active",
+      "description": "Przekształć PROSPECT w ACTIVE",
+      "completed": false
+    },
+    {
+      "id": "5_clients",
+      "description": "Miej 5 aktywnych klientów",
+      "completed": false
+    }
+  ],
+  "objectives_completed": [],
+  "firm": {
+    "name": "FreshLife Poland",
+    "logo": "🛒",
+    "founded": "2025-10-29",
+    "level": 1,
+    "reputation": 0
+  },
+  "fmcg_state": {
+    "level": 1,
+    "role": "Junior Sales Representative",
+    "experience_points": 0,
+    "territory_name": "Piaseczno - Biuro Regionalne FreshLife",
+    "territory_latitude": 52.0846,
+    "territory_longitude": 21.025,
+    "energy": 100,
+    "energy_max": 100,
+    "marketing_budget": 2000,
+    "marketing_budget_used": 0,
+    "clients_prospect": 5,
+    "clients_active": 0,
+    "clients_lost": 0,
+    "monthly_sales": 0,
+    "market_share": 0,
+    "customer_satisfaction_avg": 0,
+    "current_week": 1,
+    "current_day": "Monday",
+    "visits_this_week": 0,
+    "visits_scheduled": [],
+    "first_sale": false,
+    "first_active_client": false,
+    "five_active_clients": false,
+    "reputation_100": false,
+    "last_activity_date": "2025-10-29T01:55:05.293802",
+    "last_visit_client_id": null,
+    "clients": {
+      "pias_001": {
+        "client_id": "pias_001",
+        "name": "Sklep 'U Danusi'",
+        "type": "Sklep osiedlowy",
+        "segment": "traditional_trade",
+        "location": "Piaseczno Centrum, Os. Warszawskie",
+        "latitude": 52.0832,
+        "longitude": 21.0267,
+        "distance_from_base": 0.3,
+        "status": "PROSPECT",
+        "status_since": "2025-10-29T01:55:05.294090",
+        "interest_level": 30,
+        "first_contact_date": null,
+        "visits_count": 0,
+        "decision_deadline": null,
+        "reputation": 0,
+        "last_visit_date": null,
+        "visit_frequency_required": 14,
+        "products_portfolio": [],
+        "monthly_value": 0,
+        "market_share_vs_competition": 0,
+        "satisfaction_score": 3,
+        "contract_renewal_date": null,
+        "lost_date": null,
+        "lost_reason": null,
+        "win_back_attempts": 0,
+        "win_back_difficulty": 1,
+        "owner_name": "Danuta Kowalska",
+        "personality_style": "Tradycyjny",
+        "priorities": [
+          "Marża",
+          "Rotacja towaru",
+          "Wsparcie"
+        ],
+        "potential_monthly": 3200,
+        "size_sqm": 65,
+        "employees_count": 2,
+        "total_sales": 0,
+        "avg_order_value": 0,
+        "orders_count": 0,
+        "owner_profile": {
+          "name": "Danuta Kowalska",
+          "age": 52,
+          "experience_years": 18,
+          "personality": "Tradycyjna, ostrożna, ale lojalna",
+          "priorities": [
+            "Marża",
+            "Stali klienci",
+            "Prosta współpraca"
+          ],
+          "concerns": [
+            "Zaleganie towaru",
+            "Konkurencja Biedronki",
+            "Skomplikowane warunki"
+          ]
+        },
+        "characteristics": {
+          "monthly_revenue": 95000,
+          "customers_per_day": 140,
+          "avg_basket": 42,
+          "opening_hours": "6:00-22:00",
+          "employees": 2,
+          "parking": false,
+          "competition": "Biedronka 200m, Żabka 150m"
+        },
+        "note": ""
+      },
+      "pias_003": {
+        "client_id": "pias_003",
+        "name": "Sklep 'ABC Górki'",
+        "type": "Sklep osiedlowy",
+        "segment": "traditional_trade",
+        "location": "Piaseczno-Górki",
+        "latitude": 52.0912,
+        "longitude": 21.018,
+        "distance_from_base": 1.2,
+        "status": "PROSPECT",
+        "status_since": "2025-10-29T01:55:05.294124",
+        "interest_level": 30,
+        "first_contact_date": null,
+        "visits_count": 0,
+        "decision_deadline": null,
+        "reputation": 0,
+        "last_visit_date": null,
+        "visit_frequency_required": 14,
+        "products_portfolio": [],
+        "monthly_value": 0,
+        "market_share_vs_competition": 0,
+        "satisfaction_score": 3,
+        "contract_renewal_date": null,
+        "lost_date": null,
+        "lost_reason": null,
+        "win_back_attempts": 0,
+        "win_back_difficulty": 1,
+        "owner_name": "Piotr Zieliński",
+        "personality_style": "Tradycyjny",
+        "priorities": [
+          "Marża",
+          "Rotacja towaru",
+          "Wsparcie"
+        ],
+        "potential_monthly": 4800,
+        "size_sqm": 85,
+        "employees_count": 3,
+        "total_sales": 0,
+        "avg_order_value": 0,
+        "orders_count": 0,
+        "owner_profile": {
+          "name": "Piotr Zieliński",
+          "age": 44,
+          "experience_years": 11,
+          "personality": "Profesjonalny, otwarty na nowości",
+          "priorities": [
+            "Wyróżniki",
+            "Jakość",
+            "Wsparcie merchandisingowe"
+          ],
+          "concerns": [
+            "Produkty masowe",
+            "Brak wsparcia",
+            "Złe warunki płatności"
+          ]
+        },
+        "characteristics": {
+          "monthly_revenue": 135000,
+          "customers_per_day": 165,
+          "avg_basket": 52,
+          "opening_hours": "6:30-22:00",
+          "employees": 3,
+          "parking": true,
+          "competition": "Biedronka 800m, sklepy osiedlowe"
+        },
+        "note": ""
+      },
+      "pias_002": {
+        "client_id": "pias_002",
+        "name": "Kiosk 'MaxiPress Piaseczno'",
+        "type": "Kiosk przy stacji PKP",
+        "segment": "traditional_trade",
+        "location": "Piaseczno - dworzec PKP",
+        "latitude": 52.0845,
+        "longitude": 21.024,
+        "distance_from_base": 0.2,
+        "status": "PROSPECT",
+        "status_since": "2025-10-29T01:55:05.294142",
+        "interest_level": 30,
+        "first_contact_date": null,
+        "visits_count": 0,
+        "decision_deadline": null,
+        "reputation": 0,
+        "last_visit_date": null,
+        "visit_frequency_required": 14,
+        "products_portfolio": [],
+        "monthly_value": 0,
+        "market_share_vs_competition": 0,
+        "satisfaction_score": 3,
+        "contract_renewal_date": null,
+        "lost_date": null,
+        "lost_reason": null,
+        "win_back_attempts": 0,
+        "win_back_difficulty": 1,
+        "owner_name": "Marek Wiśniewski",
+        "personality_style": "Tradycyjny",
+        "priorities": [
+          "Marża",
+          "Rotacja towaru",
+          "Wsparcie"
+        ],
+        "potential_monthly": 1500,
+        "size_sqm": 15,
+        "employees_count": 2,
+        "total_sales": 0,
+        "avg_order_value": 0,
+        "orders_count": 0,
+        "owner_profile": {
+          "name": "Marek Wiśniewski",
+          "age": 38,
+          "experience_years": 6,
+          "personality": "Dynamiczny, biznesowy, konkretny",
+          "priorities": [
+            "Marża",
+            "Szybka rotacja",
+            "Małe opakowania"
+          ],
+          "concerns": [
+            "Przestrzeń",
+            "Produkty wolno rotujące",
+            "Duże MOQ"
+          ]
+        },
+        "characteristics": {
+          "monthly_revenue": 45000,
+          "customers_per_day": 280,
+          "avg_basket": 12,
+          "opening_hours": "5:30-22:00",
+          "employees": 2,
+          "parking": false,
+          "competition": "Żabka w dworcu, automaty"
+        },
+        "note": ""
+      },
+      "pias_005": {
+        "client_id": "pias_005",
+        "name": "Sklep 'Osiedlowy Plus'",
+        "type": "Sklep osiedlowy",
+        "segment": "traditional_trade",
+        "location": "Józefosław",
+        "latitude": 52.0612,
+        "longitude": 21.0389,
+        "distance_from_base": 3.1,
+        "status": "PROSPECT",
+        "status_since": "2025-10-29T01:55:05.294153",
+        "interest_level": 30,
+        "first_contact_date": null,
+        "visits_count": 0,
+        "decision_deadline": null,
+        "reputation": 0,
+        "last_visit_date": null,
+        "visit_frequency_required": 14,
+        "products_portfolio": [],
+        "monthly_value": 0,
+        "market_share_vs_competition": 0,
+        "satisfaction_score": 3,
+        "contract_renewal_date": null,
+        "lost_date": null,
+        "lost_reason": null,
+        "win_back_attempts": 0,
+        "win_back_difficulty": 1,
+        "owner_name": "Tomasz i Anna Kowalczykowie",
+        "personality_style": "Tradycyjny",
+        "priorities": [
+          "Marża",
+          "Rotacja towaru",
+          "Wsparcie"
+        ],
+        "potential_monthly": 5200,
+        "size_sqm": 95,
+        "employees_count": 4,
+        "total_sales": 0,
+        "avg_order_value": 0,
+        "orders_count": 0,
+        "owner_profile": {
+          "name": "Tomasz i Anna Kowalczykowie",
+          "age": 35,
+          "experience_years": 13,
+          "personality": "Ambitni, partnerzy, długoterminowo nastawieni",
+          "priorities": [
+            "Rozwój",
+            "Stali klienci",
+            "Nowoczesny asortyment"
+          ],
+          "concerns": [
+            "Lock-in w umowy",
+            "Brak elastyczności",
+            "Wysokie wymogi"
+          ]
+        },
+        "characteristics": {
+          "monthly_revenue": 145000,
+          "customers_per_day": 180,
+          "avg_basket": 58,
+          "opening_hours": "6:00-22:00",
+          "employees": 4,
+          "parking": true,
+          "competition": "Biedronka w budowie (za 6 mies.)"
+        },
+        "note": ""
+      },
+      "pias_008": {
+        "client_id": "pias_008",
+        "name": "Sklep 'Groszek'",
+        "type": "Sklep osiedlowy",
+        "segment": "traditional_trade",
+        "location": "Magdalenka",
+        "latitude": 52.0534,
+        "longitude": 21.0689,
+        "distance_from_base": 5.4,
+        "status": "PROSPECT",
+        "status_since": "2025-10-29T01:55:05.294163",
+        "interest_level": 30,
+        "first_contact_date": null,
+        "visits_count": 0,
+        "decision_deadline": null,
+        "reputation": 0,
+        "last_visit_date": null,
+        "visit_frequency_required": 14,
+        "products_portfolio": [],
+        "monthly_value": 0,
+        "market_share_vs_competition": 0,
+        "satisfaction_score": 3,
+        "contract_renewal_date": null,
+        "lost_date": null,
+        "lost_reason": null,
+        "win_back_attempts": 0,
+        "win_back_difficulty": 1,
+        "owner_name": "Ewa Lewandowska",
+        "personality_style": "Tradycyjny",
+        "priorities": [
+          "Marża",
+          "Rotacja towaru",
+          "Wsparcie"
+        ],
+        "potential_monthly": 1400,
+        "size_sqm": 55,
+        "employees_count": 1,
+        "total_sales": 0,
+        "avg_order_value": 0,
+        "orders_count": 0,
+        "owner_profile": {
+          "name": "Ewa Lewandowska",
+          "age": 47,
+          "experience_years": 7,
+          "personality": "Spokojna, bez presji wzrostu, stabilna",
+          "priorities": [
+            "Proste warunki",
+            "Małe zamówienia",
+            "Sprawdzone produkty"
+          ],
+          "concerns": [
+            "Zaleganie",
+            "Komplikacje",
+            "Duże MOQ"
+          ]
+        },
+        "characteristics": {
+          "monthly_revenue": 52000,
+          "customers_per_day": 70,
+          "avg_basket": 38,
+          "opening_hours": "7:00-20:00",
+          "employees": 1,
+          "parking": true,
+          "competition": "Biedronka 4km (Piaseczno)"
+        },
+        "note": ""
+      }
+    }
+  },
+  "office": {
+    "type": "company_office",
+    "upgraded_at": null
+  },
+  "employees": [],
+  "contracts": {
+    "active": [],
+    "completed": [],
+    "failed": [],
+    "available_pool": []
+  },
+  "stats": {
+    "total_sales": 0,
+    "clients_acquired": 0,
+    "clients_lost": 0,
+    "visits_completed": 0,
+    "avg_conversation_rating": 0.0,
+    "total_reputation_gained": 0
+  },
+  "ranking": {
+    "overall_score": 0.0,
+    "current_positions": {
+      "overall": null,
+      "sales": null,
+      "reputation": null
+    },
+    "previous_positions": {},
+    "badges": []
+  },
+  "events": {
+    "history": [],
+    "last_roll": null
+  },
+  "money": 0,
+  "initial_money": 0,
+  "history": {
+    "transactions": [],
+    "milestones": [
+      {
+        "date": "2025-10-29 01:55:05",
+        "type": "game_start",
+        "description": "Rozpoczęto karierę jako Junior Sales Representative"
+      }
+    ]
+  }
+}

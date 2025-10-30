@@ -88,9 +88,10 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Relationships (będą dodane później)
-    # lesson_progress = relationship("LessonProgress", back_populates="user", cascade="all, delete-orphan")
-    # completed_lessons = relationship("CompletedLesson", back_populates="user", cascade="all, delete-orphan")
+    # Relationships
+    lesson_progress = relationship("LessonProgress", back_populates="user", cascade="all, delete-orphan")
+    completed_lessons = relationship("CompletedLesson", back_populates="user", cascade="all, delete-orphan")
+    lesson_access = relationship("LessonAccess", back_populates="user", cascade="all, delete-orphan")
     # badges = relationship("UserBadge", back_populates="user", cascade="all, delete-orphan")
     
     def to_dict(self, include_relations=False):
@@ -115,12 +116,21 @@ class User(Base):
             "test_taken": self.test_taken,
         }
         
-        # TODO: Add relations when models are ready
+        # Add relations when requested
         if include_relations:
-            # result["completed_lessons"] = [cl.lesson_id for cl in self.completed_lessons]
+            result["completed_lessons"] = [cl.lesson_id for cl in self.completed_lessons]
+            result["lesson_access"] = {la.lesson_id: la.has_access for la in self.lesson_access}
+            result["lesson_progress"] = {}
+            for lp in self.lesson_progress:
+                if lp.lesson_id not in result["lesson_progress"]:
+                    result["lesson_progress"][lp.lesson_id] = {}
+                result["lesson_progress"][lp.lesson_id][f"{lp.section_name}_xp_awarded"] = lp.xp_awarded
+                result["lesson_progress"][lp.lesson_id][f"{lp.section_name}_completed"] = lp.completed
+                result["lesson_progress"][lp.lesson_id][f"{lp.section_name}_xp"] = lp.xp
+                result["lesson_progress"][lp.lesson_id][f"{lp.section_name}_degencoins"] = lp.degencoins
+                if lp.timestamp:
+                    result["lesson_progress"][lp.lesson_id][f"{lp.section_name}_timestamp"] = lp.timestamp.strftime("%Y-%m-%d %H:%M:%S")
             # result["badges"] = [b.badge_id for b in self.badges]
-            # result["lesson_progress"] = {...}
-            pass
         
         return result
     
@@ -211,31 +221,100 @@ class User(Base):
 
 
 # =============================================================================
-# LESSON PROGRESS MODEL (Simplified for now)
+# LESSON MODELS
 # =============================================================================
-# TODO: Uncomment and implement when needed
-# class LessonProgress(Base):
-#     __tablename__ = 'lesson_progress'
-#     
-#     id = Column(Integer, primary_key=True)
-#     user_id = Column(GUID(), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False)
-#     lesson_id = Column(String(255), nullable=False)
-#     section_name = Column(String(100), nullable=False)
-#     
-#     xp_awarded = Column(Boolean, default=False)
-#     completed = Column(Boolean, default=False)
-#     xp = Column(Integer, default=0)
-#     degencoins = Column(Integer, default=0)
-#     timestamp = Column(DateTime)
-#     
-#     created_at = Column(DateTime, default=datetime.utcnow)
-#     
-#     user = relationship("User", back_populates="lesson_progress")
-#     
-#     __table_args__ = (
-#         UniqueConstraint('user_id', 'lesson_id', 'section_name', name='uix_user_lesson_section'),
-#         Index('idx_user_lesson', 'user_id', 'lesson_id'),
-#     )
+
+class LessonProgress(Base):
+    """Model dla postępu w lekcjach (intro, content, quiz, etc.)"""
+    __tablename__ = 'lesson_progress'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(GUID(), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False)
+    lesson_id = Column(String(255), nullable=False)
+    section_name = Column(String(100), nullable=False)  # intro, content, practical_exercises, summary
+    
+    xp_awarded = Column(Boolean, default=False)
+    completed = Column(Boolean, default=False)
+    xp = Column(Integer, default=0)
+    degencoins = Column(Integer, default=0)
+    timestamp = Column(DateTime)
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    user = relationship("User", back_populates="lesson_progress")
+    
+    __table_args__ = (
+        UniqueConstraint('user_id', 'lesson_id', 'section_name', name='uix_user_lesson_section'),
+        Index('idx_user_lesson', 'user_id', 'lesson_id'),
+    )
+    
+    def to_dict(self):
+        """Konwertuje do formatu JSON"""
+        return {
+            f"{self.section_name}_xp_awarded": self.xp_awarded,
+            f"{self.section_name}_completed": self.completed,
+            f"{self.section_name}_xp": self.xp,
+            f"{self.section_name}_degencoins": self.degencoins,
+            f"{self.section_name}_timestamp": self.timestamp.strftime("%Y-%m-%d %H:%M:%S") if self.timestamp else None
+        }
+    
+    @staticmethod
+    def from_dict(user_id: uuid.UUID, lesson_id: str, section_name: str, data: dict):
+        """Tworzy model z formatu JSON"""
+        timestamp = None
+        timestamp_str = data.get(f"{section_name}_timestamp")
+        if timestamp_str:
+            try:
+                timestamp = datetime.strptime(timestamp_str, "%Y-%m-%d %H:%M:%S")
+            except (ValueError, TypeError):
+                pass
+        
+        return LessonProgress(
+            user_id=user_id,
+            lesson_id=lesson_id,
+            section_name=section_name,
+            xp_awarded=data.get(f"{section_name}_xp_awarded", False),
+            completed=data.get(f"{section_name}_completed", False),
+            xp=data.get(f"{section_name}_xp", 0),
+            degencoins=data.get(f"{section_name}_degencoins", 0),
+            timestamp=timestamp
+        )
+
+
+class CompletedLesson(Base):
+    """Model dla ukończonych lekcji"""
+    __tablename__ = 'completed_lessons'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(GUID(), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False)
+    lesson_id = Column(String(255), nullable=False)
+    completed_at = Column(DateTime, default=datetime.utcnow)
+    
+    user = relationship("User", back_populates="completed_lessons")
+    
+    __table_args__ = (
+        UniqueConstraint('user_id', 'lesson_id', name='uix_user_completed_lesson'),
+        Index('idx_user_completed', 'user_id'),
+    )
+
+
+class LessonAccess(Base):
+    """Model dla dostępu do lekcji"""
+    __tablename__ = 'lesson_access'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(GUID(), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False)
+    lesson_id = Column(String(255), nullable=False)
+    has_access = Column(Boolean, default=False)
+    granted_at = Column(DateTime, default=datetime.utcnow)
+    
+    user = relationship("User", back_populates="lesson_access")
+    
+    __table_args__ = (
+        UniqueConstraint('user_id', 'lesson_id', name='uix_user_lesson_access'),
+        Index('idx_user_access', 'user_id'),
+    )
 
 
 # =============================================================================
