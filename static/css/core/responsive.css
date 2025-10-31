@@ -1,0 +1,150 @@
+/* 
+   Responsive Styles
+   Media queries dla różnych urządzeń
+   Wydzielone z layout.py::apply_responsive_styles()
+*/
+
+/* ===== MEDIA QUERIES ===== */
+
+/* Mobilne */
+@media (max-width: 640px) {
+    .hide-mobile {
+        display: none !important;
+    }
+    
+    .st-emotion-cache-1r6slb0 {  /* Główny kontener */
+        padding: 1rem 0.75rem !important;
+    }
+    
+    .st-emotion-cache-16txtl3 h1 {  /* Nagłówki */
+        font-size: 1.5rem !important;
+    }
+    
+    .st-emotion-cache-10trblm {  /* Tekst */
+        font-size: 0.9rem !important;
+    }
+    
+    .st-emotion-cache-1erivem {  /* Przyciski */
+        font-size: 0.85rem !important;
+        padding: 0.3rem 0.6rem !important;
+    }
+    
+    /* Mniejsze odstępy w formularzach */
+    .st-emotion-cache-183lzff {
+        gap: 0.75rem !important;
+    }
+    
+    /* Zmniejszone odstępy dla tabów */
+    [data-testid="stHorizontalBlock"] {
+        gap: 0.5rem !important;
+    }
+    
+    /* Responsive styling for charts */
+    .stChart > div {
+        max-width: 100% !important;
+        overflow: hidden !important;
+    }
+    
+    /* Radar chart container sizing */
+    .stChart svg {
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    /* Slight negative margin for chart containers on mobile */
+    .stChart {
+        margin: 0 -10px !important;
+    }
+    
+    /* Better font sizing for legends */
+    .stChart text {
+        font-size: 0.85rem !important;
+    }
+}
+
+/* Tablety */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .hide-tablet {
+        display: none !important;
+    }
+    
+    .st-emotion-cache-1r6slb0 {  /* Główny kontener */
+        padding: 1.5rem 1.25rem !important;
+    }
+    
+    /* Chart sizing for tablets */
+    .stChart > div {
+        max-width: 85% !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+    .hide-desktop {
+        display: none !important;
+    }
+    
+    /* Chart sizing for desktop */
+    .stChart > div {
+        max-width: 75% !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* ===== VISIBILITY HELPERS ===== */
+.visible-mobile-only {
+    display: none;
+}
+
+.visible-tablet-only {
+    display: none;
+}
+
+.visible-desktop-only {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    .visible-mobile-only {
+        display: block !important;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .visible-tablet-only {
+        display: block !important;
+    }
+}
+
+@media (min-width: 1025px) {
+    .visible-desktop-only {
+        display: block !important;
+    }
+}
+
+/* ===== RESPONSIVE TYPOGRAPHY ===== */
+html {
+    font-size: calc(14px + 0.25vw);
+}
+
+/* ===== ANIMATIONS ===== */
+/* Animacje wejścia na mobilnych wolniejsze dla lepszej wydajności */
+@media (max-width: 640px) {
+    .fadeIn, .scaleIn {
+        animation-duration: 0.3s !important;
+    }
+}
+
+/* ===== CUSTOM COMPONENTS ===== */
+/* Custom radar chart container (for profile & degen test) */
+.radar-chart-container {
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 640px) {
+    .radar-chart-container {
+        transform: scale(0.95);
+        transform-origin: center;
+    }
+}

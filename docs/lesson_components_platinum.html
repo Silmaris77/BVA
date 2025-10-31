@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo: Platinum Edition + Premium Gold Buttons</title>
+    <style>
+        /* PLATINUM EDITION - Premium Luxury Theme */
+        :root {
+            /* Platinum Background Palette */
+            --background-primary: #0f1419;        /* Deep Charcoal - głębsze niż Executive Pro */
+            --background-card: #1a1f2e;           /* Rich Slate */
+            --surface-elevated: #252b3b;          /* Elevated Slate */
+            --background-hover: #2d3548;          /* Hover State */
+            
+            /* Premium Gold Palette - bardziej luksusowe odcienie */
+            --gold-primary: #FFD700;              /* Pure Gold */
+            --gold-light: #FFF4CC;                /* Light Gold */
+            --gold-dark: #B8860B;                 /* Dark Goldenrod */
+            --gold-metallic: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+            
+            /* Platinum Text Colors */
+            --text-platinum: #F8F9FA;             /* Platinum White - jaśniejsze */
+            --text-silver: #E2E8F0;               /* Silver */
+            --text-muted: #94A3B8;                /* Muted Silver */
+            
+            /* Accent Colors - bardziej wyraziste */
+            --accent-sapphire: #3B82F6;           /* Sapphire Blue */
+            --accent-emerald: #10B981;            /* Emerald Green */
+            --accent-ruby: #EF4444;               /* Ruby Red */
+            --accent-amber: #F59E0B;              /* Amber */
+            
+            /* Navy - głębszy odcień */
+            --navy-deep: #0F172A;                 /* Deep Navy */
+            --navy-rich: #1E293B;                 /* Rich Navy */
+            
+            /* Borders & Shadows - bardziej wyrafinowane */
+            --border-platinum: rgba(248, 249, 250, 0.1);
+            --shadow-gold-glow: 0 0 20px rgba(255, 215, 0, 0.3);
+            --shadow-gold-strong: 0 4px 30px rgba(255, 215, 0, 0.4);
+            
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--background-primary);
+            color: var(--text-platinum);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .platinum-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 30px;
+        }
+
+        /* PREMIUM HEADER */
+        .platinum-hero {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(180deg, var(--navy-deep) 0%, var(--background-primary) 100%);
+            border-radius: var(--radius-xl);
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platinum-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gold-metallic);
+        }
+
+        .platinum-hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gold-metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .platinum-hero p {
+            color: var(--text-silver);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* SECTION HEADERS */
+        .section-header {
+            margin: 60px 0 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-platinum);
+            position: relative;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background: var(--gold-metallic);
+        }
+
+        .section-header h2 {
+            color: var(--gold-primary);
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .component-label {
+            background: var(--surface-elevated);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 16px;
+            display: inline-block;
+            border: 1px solid var(--border-platinum);
+        }
+
+        /* PREMIUM GOLD BUTTONS */
+        .btn-gold-premium {
+            background: var(--gold-metallic);
+            color: var(--navy-deep);
+            padding: 14px 32px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-gold-glow);
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gold-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-gold-strong);
+        }
+
+        .btn-gold-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-gold-premium:hover::before {
+            left: 100%;
+        }
+
+        .btn-gold-outline {
+            background: transparent;
+            color: var(--gold-primary);
+            padding: 14px 32px;
+            border: 2px solid var(--gold-primary);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-gold-outline:hover {
+            background: var(--gold-primary);
+            color: var(--navy-deep);
+            box-shadow: var(--shadow-gold-glow);
+        }
+
+        /* LESSON COMPONENTS - Platinum Edition */
+        
+        /* Header główny */
+        .lesson-header-platinum {
+            background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-rich) 100%);
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            margin: 24px 0;
+            border-top: 3px solid var(--gold-primary);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .lesson-header-platinum h3 {
+            color: var(--gold-primary);
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .lesson-header-platinum p {
+            color: var(--text-silver);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Karty - Platinum Edition */
+        .card-platinum {
+            background: var(--background-card);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 24px 0;
+            border-left: 4px solid;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card-platinum:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-platinum h4 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .card-platinum p,
+        .card-platinum li {
+            color: var(--text-silver);
+            line-height: 1.7;
+        }
+
+        .card-platinum-gold {
+            border-left-color: var(--gold-primary);
+            background: linear-gradient(135deg, var(--background-card) 0%, rgba(255, 215, 0, 0.05) 100%);
+        }
+
+        .card-platinum-gold h4 {
+            color: var(--gold-primary);
+        }
+
+        .card-platinum-gold:hover {
+            box-shadow: var(--shadow-gold-glow), 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-platinum-sapphire {
+            border-left-color: var(--accent-sapphire);
+        }
+
+        .card-platinum-sapphire h4 {
+            color: var(--accent-sapphire);
+        }
+
+        .card-platinum-emerald {
+            border-left-color: var(--accent-emerald);
+        }
+
+        .card-platinum-emerald h4 {
+            color: var(--accent-emerald);
+        }
+
+        .card-platinum-amber {
+            border-left-color: var(--accent-amber);
+        }
+
+        .card-platinum-amber h4 {
+            color: var(--accent-amber);
+        }
+
+        .card-platinum-ruby {
+            border-left-color: var(--accent-ruby);
+        }
+
+        .card-platinum-ruby h4 {
+            color: var(--accent-ruby);
+        }
+
+        /* Premium Quote */
+        .quote-platinum {
+            background: var(--surface-elevated);
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--gold-primary);
+            margin: 32px 0;
+            font-style: italic;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .quote-platinum::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 4rem;
+            color: var(--gold-primary);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+
+        .quote-platinum p {
+            color: var(--text-platinum);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin: 0;
+            padding-left: 40px;
+        }
+
+        .quote-author {
+            color: var(--gold-primary);
+            font-size: 1rem;
+            margin-top: 16px;
+            padding-left: 40px;
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* Premium Highlight */
+        .highlight-platinum {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+            padding: 20px 28px;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--gold-primary);
+            margin: 20px 0;
+            box-shadow: var(--shadow-gold-glow);
+        }
+
+        .highlight-platinum p {
+            color: var(--text-platinum);
+            margin: 0;
+        }
+
+        .highlight-platinum strong {
+            color: var(--gold-primary);
+        }
+
+        /* Premium Steps */
+        .steps-platinum {
+            counter-reset: platinum-step;
+            margin: 32px 0;
+        }
+
+        .step-platinum {
+            background: var(--background-card);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--gold-primary);
+            counter-increment: platinum-step;
+            position: relative;
+            padding-left: 80px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .step-platinum:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-gold-glow), 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .step-platinum::before {
+            content: counter(platinum-step);
+            position: absolute;
+            left: 20px;
+            top: 24px;
+            background: var(--gold-metallic);
+            color: var(--navy-deep);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: var(--shadow-gold-glow);
+        }
+
+        .step-platinum h5 {
+            color: var(--gold-primary);
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .step-platinum p {
+            color: var(--text-silver);
+            margin: 0;
+        }
+
+        /* Key Takeaway - Premium */
+        .takeaway-platinum {
+            background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy-rich) 100%);
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            margin: 40px 0;
+            border: 2px solid var(--gold-primary);
+            box-shadow: var(--shadow-gold-strong);
+        }
+
+        .takeaway-platinum h4 {
+            color: var(--gold-primary);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+
+        .takeaway-platinum ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .takeaway-platinum li {
+            color: var(--text-platinum);
+            padding-left: 32px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .takeaway-platinum li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--gold-primary);
+            font-size: 1.2rem;
+        }
+
+        /* Summary - Premium */
+        .summary-platinum {
+            background: linear-gradient(135deg, var(--surface-elevated) 0%, var(--background-card) 100%);
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--gold-primary);
+            margin: 40px 0;
+            box-shadow: var(--shadow-gold-strong);
+        }
+
+        .summary-platinum h4 {
+            color: var(--gold-primary);
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .summary-platinum p,
+        .summary-platinum li {
+            color: var(--text-silver);
+        }
+
+        /* Two Column Layout */
+        .two-columns-platinum {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 24px 0;
+        }
+
+        @media (max-width: 768px) {
+            .two-columns-platinum {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Table - Premium */
+        .table-platinum {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            background: var(--background-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .table-platinum thead {
+            background: var(--navy-deep);
+            border-bottom: 2px solid var(--gold-primary);
+        }
+
+        .table-platinum th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--gold-primary);
+        }
+
+        .table-platinum td {
+            padding: 16px 20px;
+            color: var(--text-silver);
+            border-bottom: 1px solid var(--border-platinum);
+        }
+
+        .table-platinum tr:hover {
+            background: var(--surface-elevated);
+        }
+
+        /* Progress Bar - Premium */
+        .progress-platinum {
+            margin: 32px 0;
+        }
+
+        .progress-label-platinum {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            color: var(--text-platinum);
+            font-weight: 500;
+        }
+
+        .progress-bar-platinum {
+            height: 12px;
+            background: var(--surface-elevated);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-fill-platinum {
+            height: 100%;
+            background: var(--gold-metallic);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            box-shadow: var(--shadow-gold-glow);
+        }
+
+        /* Callout - Premium */
+        .callout-platinum {
+            padding: 20px 24px;
+            border-radius: var(--radius-lg);
+            margin: 24px 0;
+            display: flex;
+            gap: 16px;
+            align-items: start;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .callout-platinum-tip {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border-left: 4px solid var(--accent-emerald);
+        }
+
+        .callout-platinum-info {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border-left: 4px solid var(--accent-sapphire);
+        }
+
+        .callout-platinum span {
+            font-size: 1.5rem;
+        }
+
+        .callout-platinum p {
+            color: var(--text-platinum);
+            margin: 0;
+        }
+
+        /* Example Box - Premium */
+        .example-platinum {
+            background: var(--background-card);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-platinum);
+            margin: 24px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .example-title-platinum {
+            color: var(--gold-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .example-platinum p {
+            color: var(--text-silver);
+            margin-bottom: 12px;
+        }
+
+        .example-platinum strong {
+            color: var(--text-platinum);
+        }
+
+        /* Spacing */
+        .spacing-lg { margin: 48px 0; }
+
+        /* Demo Grid */
+        .demo-grid {
+            display: grid;
+            gap: 32px;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="platinum-container">
+        <!-- HERO HEADER -->
+        <div class="platinum-hero">
+            <h1>💎 Platinum Edition</h1>
+            <p>Premium Design System z ekskluzywną paletą Gold & Platinum</p>
+        </div>
+
+        <!-- BUTTONS SHOWCASE -->
+        <div class="section-header">
+            <h2>🌟 Premium Gold Buttons</h2>
+        </div>
+
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 40px;">
+            <button class="btn-gold-premium">Premium Gold Button</button>
+            <button class="btn-gold-outline">Outline Gold Button</button>
+        </div>
+
+        <!-- LESSON HEADER -->
+        <div class="section-header">
+            <h2>1. Header Główny Lekcji</h2>
+        </div>
+
+        <div class="component-label">Platinum Edition Header</div>
+        <div class="lesson-header-platinum">
+            <h3>🧠 Neurobiologia Zaufania w Zespołach</h3>
+            <p>Odkryj, jak twój mózg buduje lub niszczy zaufanie w każdej rozmowie z członkami zespołu.</p>
+        </div>
+
+        <!-- PREMIUM CARDS -->
+        <div class="section-header">
+            <h2>2. Karty Premium (5 wariantów)</h2>
+        </div>
+
+        <div class="demo-grid">
+            <div>
+                <div class="component-label">Gold Card - najważniejsze koncepcje</div>
+                <div class="card-platinum card-platinum-gold">
+                    <h4>⭐ Kluczowa Koncepcja</h4>
+                    <p>Aktywne słuchanie to fundament zaufania w zespole. To nie tylko technika - to świadomy wybór budowania relacji każdego dnia.</p>
+                </div>
+            </div>
+
+            <div>
+                <div class="component-label">Sapphire Card - informacje</div>
+                <div class="card-platinum card-platinum-sapphire">
+                    <h4>💡 Ciekawostka naukowa</h4>
+                    <p>Wiesz, że 90% komunikacji to komunikacja niewerbalna? Twoja postawa, ton głosu i mimika mają większe znaczenie niż same słowa!</p>
+                </div>
+            </div>
+
+            <div>
+                <div class="component-label">Emerald Card - sukcesy i tipy</div>
+                <div class="card-platinum card-platinum-emerald">
+                    <h4>✅ Tip dnia</h4>
+                    <p>Zacznij każdą rozmowę z członkiem zespołu od pytania otwartego: "Jak się dziś czujesz?" zamiast "Wszystko ok?"</p>
+                </div>
+            </div>
+
+            <div>
+                <div class="component-label">Amber Card - ostrzeżenia</div>
+                <div class="card-platinum card-platinum-amber">
+                    <h4>⚠️ Uważaj!</h4>
+                    <p>Unikaj zamykania rozmówcy pytaniami typu tak/nie. Pytania zamknięte blokują głębszą komunikację i ograniczają zaufanie.</p>
+                </div>
+            </div>
+
+            <div>
+                <div class="component-label">Ruby Card - błędy i zagrożenia</div>
+                <div class="card-platinum card-platinum-ruby">
+                    <h4>🚫 Najczęstszy błąd</h4>
+                    <p>Przerywanie rozmówcy w połowie zdania niszczy zaufanie! Twój mózg natychmiast wydziela kortyzol - hormon stresu.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUOTE -->
+        <div class="section-header">
+            <h2>3. Premium Quote</h2>
+        </div>
+
+        <div class="component-label">Elegancki cytat z ozdobnikiem</div>
+        <div class="quote-platinum">
+            <p>Leadership is not about being in charge. It's about taking care of those in your charge.</p>
+            <div class="quote-author">— Simon Sinek</div>
+        </div>
+
+        <!-- HIGHLIGHT -->
+        <div class="section-header">
+            <h2>4. Highlight Box</h2>
+        </div>
+
+        <div class="component-label">Podświetlone kluczowe informacje</div>
+        <div class="highlight-platinum">
+            <p><strong>Zapamiętaj:</strong> Każda rozmowa to szansa na budowanie zaufania lub jego niszczenie. Nie ma neutralnych interakcji!</p>
+        </div>
+
+        <!-- EXAMPLE -->
+        <div class="section-header">
+            <h2>5. Przykład Praktyczny</h2>
+        </div>
+
+        <div class="component-label">Przykład z życia</div>
+        <div class="example-platinum">
+            <div class="example-title-platinum">📌 Przykład z codzienności lidera</div>
+            <p><strong>Sytuacja:</strong> Członek zespołu popełnił błąd w ważnym raporcie dla klienta.</p>
+            <p><strong>❌ Zła reakcja:</strong> "Dlaczego znowu to zepsułeś?! Ile razy mam ci powtarzać?!"</p>
+            <p><strong>✅ Dobra reakcja:</strong> "Widzę, że w raporcie są niezgodności. Usiądź, opowiedz mi co się stało i jak mogę pomóc."</p>
+        </div>
+
+        <!-- STEPS -->
+        <div class="section-header">
+            <h2>6. Kroki do Wdrożenia</h2>
+        </div>
+
+        <div class="component-label">Instrukcje krok po kroku z numeracją</div>
+        <div class="steps-platinum">
+            <div class="step-platinum">
+                <h5>Zaobserwuj</h5>
+                <p>Zwróć uwagę na mowę ciała rozmówcy - czy jest otwarty (ramiona rozluźnione) czy zamknięty (ręce skrzyżowane)?</p>
+            </div>
+            <div class="step-platinum">
+                <h5>Zapytaj</h5>
+                <p>Zadaj pytanie otwarte: "Jak się z tym czujesz?" zamiast "Wszystko ok?"</p>
+            </div>
+            <div class="step-platinum">
+                <h5>Wysłuchaj</h5>
+                <p>Pozwól drugiej osobie mówić bez przerywania - pełna uwaga, odłóż telefon!</p>
+            </div>
+            <div class="step-platinum">
+                <h5>Podsumuj</h5>
+                <p>Sparafrazuj: "Jeśli dobrze rozumiem, niepokoi Cię..."</p>
+            </div>
+        </div>
+
+        <!-- CALLOUTS -->
+        <div class="section-header">
+            <h2>7. Callout Boxes</h2>
+        </div>
+
+        <div class="component-label">Tip Callout</div>
+        <div class="callout-platinum callout-platinum-tip">
+            <span>💡</span>
+            <div>
+                <p><strong>Pro Tip:</strong> Wystarczy 2 minuty pełnej uwagi, by wywołać reakcję oksytocyny - hormonu zaufania!</p>
+            </div>
+        </div>
+
+        <div class="component-label">Info Callout</div>
+        <div class="callout-platinum callout-platinum-info">
+            <span>ℹ️</span>
+            <div>
+                <p><strong>Warto wiedzieć:</strong> Multitasking podczas rozmowy wysyła sygnał: "Nie jesteś dla mnie ważny."</p>
+            </div>
+        </div>
+
+        <!-- TWO COLUMNS -->
+        <div class="section-header">
+            <h2>8. Layout Dwukolumnowy</h2>
+        </div>
+
+        <div class="component-label">Responsive 2-column (mobile → 1 column)</div>
+        <div class="two-columns-platinum">
+            <div class="card-platinum card-platinum-ruby">
+                <h4>❌ Red Flags</h4>
+                <ul>
+                    <li>Przerywanie w połowie zdania</li>
+                    <li>Osądzanie bez wysłuchania</li>
+                    <li>Ignorowanie emocji</li>
+                    <li>Skupienie na sobie</li>
+                </ul>
+            </div>
+            <div class="card-platinum card-platinum-emerald">
+                <h4>✅ Green Flags</h4>
+                <ul>
+                    <li>Aktywne słuchanie</li>
+                    <li>Empatia i zrozumienie</li>
+                    <li>Otwartość na perspektywę</li>
+                    <li>Pełna uwaga</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="section-header">
+            <h2>9. Tabela Premium</h2>
+        </div>
+
+        <div class="component-label">Stylizowana tabela z hover efektami</div>
+        <table class="table-platinum">
+            <thead>
+                <tr>
+                    <th>Poziom C-IQ</th>
+                    <th>Cecha</th>
+                    <th>Hormon</th>
+                    <th>Rezultat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Poziom 1</td>
+                    <td>Obrona</td>
+                    <td>Kortyzol ⚠️</td>
+                    <td>Brak zaufania</td>
+                </tr>
+                <tr>
+                    <td>Poziom 2</td>
+                    <td>Wymiana</td>
+                    <td>Dopamina 📊</td>
+                    <td>Współpraca</td>
+                </tr>
+                <tr>
+                    <td>Poziom 3</td>
+                    <td>Współtworzenie</td>
+                    <td>Oksytocyna 💚</td>
+                    <td>Zaufanie</td>
+                </tr>
+                <tr>
+                    <td>Poziom 4</td>
+                    <td>Transformacja</td>
+                    <td>Serotonina ✨</td>
+                    <td>Innowacja</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- PROGRESS BAR -->
+        <div class="section-header">
+            <h2>10. Progress Bar Premium</h2>
+        </div>
+
+        <div class="component-label">Złoty gradient z efektem świecenia</div>
+        <div class="progress-platinum">
+            <div class="progress-label-platinum">
+                <span>Twój postęp w module:</span>
+                <span><strong>75%</strong></span>
+            </div>
+            <div class="progress-bar-platinum">
+                <div class="progress-fill-platinum" style="width: 75%"></div>
+            </div>
+        </div>
+
+        <!-- TAKEAWAY -->
+        <div class="section-header">
+            <h2>11. Key Takeaway Premium</h2>
+        </div>
+
+        <div class="component-label">Kluczowe wnioski ze złotą ramką</div>
+        <div class="takeaway-platinum">
+            <h4>🎯 Kluczowe wnioski z tej sekcji:</h4>
+            <ul>
+                <li>Zaufanie buduje się przez małe, konsekwentne działania</li>
+                <li>Oksytocyna vs. kortyzol - rzeczywiste substancje chemiczne</li>
+                <li>Każda rozmowa odbywa się na 4 poziomach komunikacji</li>
+                <li>Masz wybór: który hormon wywołasz swoją reakcją?</li>
+            </ul>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="section-header">
+            <h2>12. Podsumowanie Premium</h2>
+        </div>
+
+        <div class="component-label">Podsumowanie modułu ze złotą obwódką</div>
+        <div class="summary-platinum">
+            <h4>📝 Podsumowanie modułu</h4>
+            <p>W tym module nauczyłeś się:</p>
+            <ul>
+                <li>Jak działa neurobiologia zaufania</li>
+                <li>Jakie są 4 poziomy Conversational Intelligence</li>
+                <li>Jak budować relacje przez codzienne rozmowy</li>
+                <li>Praktyczne techniki aktywnego słuchania</li>
+            </ul>
+            <div class="spacing-lg"></div>
+            <button class="btn-gold-premium">Przejdź do następnego modułu →</button>
+        </div>
+
+        <!-- COMPLETE LESSON EXAMPLE -->
+        <div class="spacing-lg"></div>
+        <div style="border-top: 3px solid var(--gold-primary); padding-top: 60px;">
+            <div class="section-header">
+                <h2>🎓 Przykład: Kompletna Lekcja Platinum</h2>
+            </div>
+
+            <div class="lesson-header-platinum">
+                <h3>🧠 Neurobiologia Zaufania</h3>
+                <p>Odkryj mechanizmy działania mózgu w kontekście budowania zaufania w zespołach.</p>
+            </div>
+
+            <p style="color: var(--text-silver); margin: 24px 0;">
+                Czy wiesz, że każda rozmowa wywołuje reakcję chemiczną w mózgu? To nie metafora - to dosłowna prawda! 
+                Poznajmy mechanizmy, które działają "pod maską" każdej interakcji...
+            </p>
+
+            <div class="card-platinum card-platinum-gold">
+                <h4>⭐ Kluczowa koncepcja: Oksytocyna vs. Kortyzol</h4>
+                <p>
+                    Zaufanie i strach to rzeczywiste substancje chemiczne! Gdy czujesz się bezpiecznie - oksytocyna. 
+                    Gdy czujesz zagrożenie - kortyzol. Każda Twoja reakcja wywołuje jedną z nich w mózgu rozmówcy.
+                </p>
+            </div>
+
+            <div class="example-platinum">
+                <div class="example-title-platinum">📌 Przykład z życia</div>
+                <p><strong>Sytuacja:</strong> Pracownik: "Szefie, chyba popełniłem błąd..."</p>
+                <p><strong>❌ Reakcja A (kortyzol):</strong> "Nie mam czasu! Czemu zawsze coś jest?!"</p>
+                <p><strong>✅ Reakcja B (oksytocyna):</strong> "Usiądź, opowiedz mi co się stało."</p>
+            </div>
+
+            <div class="highlight-platinum">
+                <p><strong>Kluczowa różnica:</strong> Reakcja A → pracownik UNIKNIE Cię następnym razem. Reakcja B → PRZYJDZIE ponownie!</p>
+            </div>
+
+            <h4 style="color: var(--gold-primary); margin: 40px 0 24px;">Jak to zastosować?</h4>
+
+            <div class="steps-platinum">
+                <div class="step-platinum">
+                    <h5>Zauważ moment</h5>
+                    <p>Gdy ktoś podchodzi - zatrzymaj się. To moment wyboru: oksytocyna czy kortyzol?</p>
+                </div>
+                <div class="step-platinum">
+                    <h5>Skontaktuj wzrokiem</h5>
+                    <p>Odłóż telefon, odwróć się, nawiąż kontakt. Sygnał: "Jesteś ważny/ważna."</p>
+                </div>
+                <div class="step-platinum">
+                    <h5>Otwórz przestrzeń</h5>
+                    <p>"Opowiedz mi więcej..." - daj 2-3 minuty pełnej uwagi.</p>
+                </div>
+            </div>
+
+            <div class="callout-platinum callout-platinum-tip">
+                <span>💡</span>
+                <div>
+                    <p><strong>Pro Tip:</strong> 2 minuty pełnej uwagi wystarczą! To nie wymaga godzin - wymaga JAKOŚCI.</p>
+                </div>
+            </div>
+
+            <div class="summary-platinum">
+                <h4>📝 Co zapamiętać?</h4>
+                <ul>
+                    <li>Każda rozmowa = reakcja chemiczna w mózgu</li>
+                    <li>Oksytocyna = zaufanie | Kortyzol = strach</li>
+                    <li>Twój wybór w pierwszych 10 sekundach decyduje</li>
+                </ul>
+            </div>
+
+            <div class="takeaway-platinum">
+                <h4>🎯 Zadanie na dziś:</h4>
+                <p>Wybierz JEDNĄ osobę z zespołu i daj jej 5 minut pełnej uwagi. Telefon odłożony, kontakt wzrokowy, aktywne słuchanie.</p>
+                <p><strong>Obserwuj efekt i zapisz swoje spostrzeżenia!</strong></p>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn-gold-premium" style="margin-right: 16px;">Przejdź do następnej lekcji →</button>
+                <button class="btn-gold-outline">Powtórz moduł</button>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div style="text-align: center; margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--border-platinum);">
+            <p style="color: var(--text-muted); font-size: 1.1rem;">
+                💎 <span style="color: var(--gold-primary);">Platinum Edition</span> Design System
+            </p>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">
+                Pure Gold (#FFD700) | Platinum White (#F8F9FA) | Deep Charcoal (#0f1419)
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>

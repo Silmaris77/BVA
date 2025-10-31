@@ -479,7 +479,7 @@ def show_lessons_content():
             st.markdown("""
             <style>
             .lesson-nav-container {
-                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                background: var(--background-card);
                 padding: 1rem;
                 border-radius: 12px;
                 margin-bottom: 2rem;
@@ -489,7 +489,7 @@ def show_lessons_content():
                 text-align: center;
                 font-size: 1.1rem;
                 font-weight: 600;
-                color: #334155;
+                color: var(--text-primary);
                 margin-bottom: 1rem;
             }            /* Zapewnij jednakową szerokość przycisków nawigacji lekcji - 280px jak przycisk "Dalej" */
             .lesson-nav-container .stButton > button {

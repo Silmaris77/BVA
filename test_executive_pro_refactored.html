@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Executive Pro Refactored</title>
+    <link rel="stylesheet" href="static/css/themes/executive-pro-new.css">
+</head>
+<body>
+    <div class="container" style="max-width: 1200px; margin: 40px auto; padding: 20px;">
+        <h1 style="text-align: center; color: var(--accent-color); margin-bottom: 40px;">
+            💼 Executive Pro - Refactored Test
+        </h1>
+
+        <!-- Test: Klasy z _components.css -->
+        <h2 style="color: var(--text-primary); margin: 30px 0 20px 0;">1. Cards (z _components.css)</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px;">
+            <div class="card">
+                <h3>Basic Card</h3>
+                <p>Ta karta używa klasy .card z _components.css</p>
+            </div>
+
+            <div class="card-premium">
+                <h3>Premium Card</h3>
+                <p>Ta karta używa klasy .card-premium</p>
+            </div>
+
+            <div class="card-deep">
+                <h3>Deep Card</h3>
+                <p>Ta karta używa klasy .card-deep</p>
+            </div>
+        </div>
+
+        <!-- Test: Badges -->
+        <h2 style="color: var(--text-primary); margin: 30px 0 20px 0;">2. Badges (z _components.css)</h2>
+        
+        <div style="margin-bottom: 40px;">
+            <span class="badge badge-primary">Primary</span>
+            <span class="badge badge-success">Success</span>
+            <span class="badge badge-warning">Warning</span>
+            <span class="badge badge-error">Error</span>
+            <span class="badge-tier" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);">Gold Tier</span>
+            <span class="badge-streak">🔥 5 dni</span>
+        </div>
+
+        <!-- Test: Progress Bars -->
+        <h2 style="color: var(--text-primary); margin: 30px 0 20px 0;">3. Progress Bars (z _components.css)</h2>
+        
+        <div style="margin-bottom: 40px;">
+            <p style="color: var(--text-secondary); margin-bottom: 10px;">Primary (Navy Blue):</p>
+            <div class="progress-container">
+                <div class="progress-bar progress-bar-primary" style="width: 65%;"></div>
+            </div>
+
+            <p style="color: var(--text-secondary); margin: 20px 0 10px 0;">Accent (Gold):</p>
+            <div class="progress-container">
+                <div class="progress-bar progress-bar-accent" style="width: 85%;"></div>
+            </div>
+
+            <p style="color: var(--text-secondary); margin: 20px 0 10px 0;">Success (Green):</p>
+            <div class="progress-container">
+                <div class="progress-bar progress-bar-success" style="width: 45%;"></div>
+            </div>
+        </div>
+
+        <!-- Test: Metrics -->
+        <h2 style="color: var(--text-primary); margin: 30px 0 20px 0;">4. Metrics (z _components.css)</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
+            <div class="metric-card">
+                <div class="metric-value">85%</div>
+                <div class="metric-label">Postęp</div>
+            </div>
+
+            <div class="metric-card success">
+                <div class="metric-value">142</div>
+                <div class="metric-label">Punkty</div>
+            </div>
+
+            <div class="metric-card warning">
+                <div class="metric-value">3</div>
+                <div class="metric-label">Do zrobienia</div>
+            </div>
+        </div>
+
+        <!-- Test: Alerts -->
+        <h2 style="color: var(--text-primary); margin: 30px 0 20px 0;">5. Alerts (z _components.css)</h2>
+        
+        <div style="margin-bottom: 40px;">
+            <div class="alert alert-info">
+                <strong>Info:</strong> To jest alert informacyjny używający klasy z _components.css
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Sukces!</strong> Operacja zakończona pomyślnie
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Uwaga:</strong> Coś wymaga Twojej uwagi
+            </div>
+
+            <div class="alert alert-error">
+                <strong>Błąd:</strong> Wystąpił problem
+            </div>
+        </div>
+
+        <!-- Test: Buttons -->
+        <h2 style="color: var(--text-primary); margin: 30px 0 20px 0;">6. Buttons (z _components.css)</h2>
+        
+        <div style="margin-bottom: 40px;">
+            <button class="btn-custom btn-primary">Primary Button</button>
+            <button class="btn-custom btn-success">Success Button</button>
+        </div>
+
+        <!-- Test: Headers -->
+        <div class="header-gradient">
+            Header Gradient (z _components.css)
+        </div>
+
+        <div class="header-section" style="margin-top: 20px;">
+            Header Section (z _components.css)
+        </div>
+
+        <!-- Test: Utility Classes -->
+        <h2 style="color: var(--text-primary); margin: 30px 0 20px 0;">7. Utility Classes (z _components.css)</h2>
+        
+        <div class="card mt-lg mb-xl p-lg rounded-lg shadow-xl">
+            <p class="text-center font-bold text-primary-color">
+                Ten div używa utility classes: mt-lg, mb-xl, p-lg, rounded-lg, shadow-xl
+            </p>
+            <p class="text-center text-muted-color font-normal">
+                A ten tekst używa: text-center, text-muted-color, font-normal
+            </p>
+        </div>
+
+        <div style="margin-top: 60px; padding: 40px; background: rgba(31, 41, 55, 0.5); border-radius: 12px; text-align: center;">
+            <h2 style="color: var(--accent-color); margin-bottom: 20px;">✅ Test Refaktoryzacji</h2>
+            <p style="color: var(--text-secondary); line-height: 1.8;">
+                Jeśli widzisz wszystkie powyższe elementy z odpowiednim stylowaniem,<br>
+                to znaczy że refaktoryzacja działa poprawnie!<br><br>
+                <strong style="color: var(--text-primary);">Korzyści:</strong><br>
+                ✅ Zmienne CSS w jednym miejscu (_variables.css)<br>
+                ✅ Komponenty w jednym miejscu (_components.css)<br>
+                ✅ Łatwe utrzymanie i modyfikacja<br>
+                ✅ Spójność w całej aplikacji<br>
+                ✅ Szybkie tworzenie nowych themes
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Animacja progress bars
+        window.addEventListener('load', function() {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

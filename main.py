@@ -56,6 +56,7 @@ st.set_page_config(**PAGE_CONFIG)
 try:
     from utils.session import init_session_state, clear_session
     from utils.components import zen_header, navigation_menu, zen_button
+    from utils.theme_manager import ThemeManager
     from views.login import show_login_page
     from views.dashboard import show_dashboard
     from views.lesson import show_lesson
@@ -72,42 +73,12 @@ except Exception as e:
     st.code(traceback.format_exc())
     st.stop()  # Stop execution if imports fail
 
-# Załaduj pliki CSS
-def load_css(css_file):
-    with open(css_file, "r", encoding="utf-8") as f:
-        css = f.read()
-    return css
-
-# Dynamiczne ładowanie layoutu na podstawie preferencji użytkownika
-def get_user_layout():
-    """Pobiera preferencję layoutu użytkownika"""
-    if st.session_state.get('logged_in', False):
-        try:
-            from data.users import load_user_data
-            users_data = load_user_data()
-            user_data = users_data.get(st.session_state.get('username'), {})
-            return user_data.get('layout_preference', 'standard')
-        except:
-            return 'standard'
-    return 'standard'
-
-# Wybierz odpowiedni plik CSS na podstawie preferencji użytkownika
-user_layout = get_user_layout()
-theme_path = os.path.join(os.path.dirname(__file__), "static", "css", "themes", f"{user_layout}.css")
-
-# Załaduj CSS layoutu
-if os.path.exists(theme_path):
-    css = load_css(theme_path)
-    st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
-else:
-    # Fallback to standard if theme file doesn't exist
-    css_path = os.path.join(os.path.dirname(__file__), "static", "css", "themes", "standard.css")
-    css = load_css(css_path)
-    st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
-
 def main():
     # Initialize session state
     init_session_state()
+    
+    # Aplikuj wszystkie style (base + user theme)
+    ThemeManager.apply_all()
     
     # Sidebar for logged-in users
     if st.session_state.logged_in:

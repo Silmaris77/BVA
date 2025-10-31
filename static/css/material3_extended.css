@@ -1,5 +1,10 @@
 /* Material 3 - Rozszerzony zestaw stylów */
 
+/* ===== Import Core Styles ===== */
+@import url('core/base.css');
+@import url('core/components.css');
+@import url('core/responsive.css');
+
 /* ===== System typografii ===== */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Flex:wght@300..700&display=swap');
 

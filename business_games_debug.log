@@ -137,3 +137,8 @@
 [2025-10-31 15:11:32] DEFAULT_EVALUATION_MODE = ai
 [2025-10-31 15:11:32] Plik config/business_games_active_mode.json istnieje
 [2025-10-31 15:11:32] Z pliku odczytano tryb: 'ai'
+[2025-10-31 22:39:53] get_active_evaluation_mode() wywołane
+[2025-10-31 22:39:53] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-31 22:39:53] DEFAULT_EVALUATION_MODE = ai
+[2025-10-31 22:39:53] Plik config/business_games_active_mode.json istnieje
+[2025-10-31 22:39:53] Z pliku odczytano tryb: 'ai'

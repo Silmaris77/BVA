@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo: Komponenty Lekcji - Executive Pro</title>
+    <link rel="stylesheet" href="../static/css/themes/executive-pro.css">
+    <style>
+        body {
+            background: var(--background-primary, #1a202c);
+            color: var(--text-primary, #f3f4f6);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .demo-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .demo-section {
+            margin-bottom: 60px;
+        }
+        .demo-section-title {
+            color: var(--accent-gold, #f59e0b);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color, #374151);
+        }
+        .demo-label {
+            background: var(--surface-elevated, #2d3748);
+            color: var(--text-muted, #9ca3af);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1 style="text-align: center; color: var(--accent-gold); margin-bottom: 10px;">
+            🎨 Demo Komponentów Lekcji
+        </h1>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 60px;">
+            Executive Pro Design System - Navy, Gold & Platinum
+        </p>
+
+        <!-- SEKCJA 1: HEADERY -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">1. Header Główny Sekcji</h2>
+            
+            <div class="demo-label">.lesson-header-primary</div>
+            <div class="lesson-header-primary">
+                <h3>🧠 Neurobiologia Przywództwa</h3>
+                <p>W tym module poznasz mechanizmy działania ludzkiego mózgu w kontekście przywództwa i budowania zaufania w zespołach.</p>
+            </div>
+        </div>
+
+        <!-- SEKCJA 2: KARTY INFORMACYJNE -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">2. Karty Informacyjne (5 typów)</h2>
+            
+            <div class="demo-label">.lesson-card-info</div>
+            <div class="lesson-card-info">
+                <h4>💡 Ciekawostka naukowa</h4>
+                <p>Wiesz, że 90% komunikacji to komunikacja niewerbalna? Twoja postawa, ton głosu i mimika mają większe znaczenie niż same słowa!</p>
+            </div>
+
+            <div class="demo-label">.lesson-card-success</div>
+            <div class="lesson-card-success">
+                <h4>✅ Tip dnia</h4>
+                <p>Zacznij każdą rozmowę z członkiem zespołu od pytania otwartego: "Jak się dziś czujesz?" zamiast "Wszystko ok?"</p>
+            </div>
+
+            <div class="demo-label">.lesson-card-warning</div>
+            <div class="lesson-card-warning">
+                <h4>⚠️ Uważaj!</h4>
+                <p>Unikaj zamykania rozmówcy pytaniami typu tak/nie. Pytania zamknięte blokują głębszą komunikację i ograniczają zaufanie.</p>
+            </div>
+
+            <div class="demo-label">.lesson-card-danger</div>
+            <div class="lesson-card-danger">
+                <h4>🚫 Najczęstszy błąd liderów</h4>
+                <p>Przerywanie rozmówcy w połowie zdania niszczy zaufanie! Twój mózg natychmiast wydziela kortyzol - hormon stresu.</p>
+            </div>
+
+            <div class="demo-label">.lesson-card-gold</div>
+            <div class="lesson-card-gold">
+                <h4>⭐ Kluczowa Umiejętność Executive Pro</h4>
+                <p>Aktywne słuchanie to fundament zaufania w zespole. To nie tylko technika - to świadomy wybór budowania relacji.</p>
+            </div>
+        </div>
+
+        <!-- SEKCJA 3: HIGHLIGHT -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">3. Highlight Box</h2>
+            
+            <div class="demo-label">.lesson-highlight</div>
+            <div class="lesson-highlight">
+                <p><strong>Zapamiętaj:</strong> Każda rozmowa to szansa na budowanie zaufania lub jego niszczenie. Nie ma neutralnych interakcji!</p>
+            </div>
+        </div>
+
+        <!-- SEKCJA 4: CYTATY -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">4. Cytaty</h2>
+            
+            <div class="demo-label">.lesson-quote</div>
+            <div class="lesson-quote">
+                <p>„Leadership is not about being in charge. It's about taking care of those in your charge."</p>
+                <div class="lesson-quote-author">— Simon Sinek</div>
+            </div>
+        </div>
+
+        <!-- SEKCJA 5: PRZYKŁADY -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">5. Przykłady Praktyczne</h2>
+            
+            <div class="demo-label">.lesson-example</div>
+            <div class="lesson-example">
+                <div class="lesson-example-title">📌 Przykład z życia codziennego</div>
+                <p><strong>Sytuacja:</strong> Członek zespołu popełnił błąd w ważnym raporcie dla klienta.</p>
+                <p><strong>❌ Zła reakcja (kortyzol):</strong> "Dlaczego znowu to zepsułeś?! Ile razy mam ci powtarzać?!"</p>
+                <p><strong>✅ Dobra reakcja (oksytocyna):</strong> "Widzę, że w raporcie są niezgodności. Usiądź, opowiedz mi co się stało i jak mogę pomóc."</p>
+            </div>
+        </div>
+
+        <!-- SEKCJA 6: LISTY -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">6. Listy Stylizowane</h2>
+            
+            <div class="demo-label">.lesson-list</div>
+            <div class="lesson-list">
+                <ul>
+                    <li><strong>Aktywne słuchanie</strong> - pokazuje szacunek i buduje zaufanie przez pełną uwagę</li>
+                    <li><strong>Pytania otwarte</strong> - zachęcają do głębszej refleksji zamiast odpowiedzi tak/nie</li>
+                    <li><strong>Parafraza</strong> - potwierdza zrozumienie: "Jeśli dobrze rozumiem..."</li>
+                    <li><strong>Empatia</strong> - rozpoznawanie i nazywanie emocji rozmówcy</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SEKCJA 7: KROKI -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">7. Instrukcje Krok po Kroku</h2>
+            
+            <div class="demo-label">.lesson-steps</div>
+            <div class="lesson-steps">
+                <div class="lesson-step">
+                    <h5>Zaobserwuj</h5>
+                    <p>Zwróć uwagę na mowę ciała rozmówcy - czy jest otwarty (ramiona rozluźnione) czy zamknięty (ręce skrzyżowane)?</p>
+                </div>
+                <div class="lesson-step">
+                    <h5>Zapytaj</h5>
+                    <p>Zadaj pytanie otwarte: "Jak się z tym czujesz?" zamiast "Wszystko ok?"</p>
+                </div>
+                <div class="lesson-step">
+                    <h5>Wysłuchaj</h5>
+                    <p>Pozwól drugiej osobie mówić bez przerywania - pełna uwaga, odłóż telefon, nawiąż kontakt wzrokowy!</p>
+                </div>
+                <div class="lesson-step">
+                    <h5>Podsumuj</h5>
+                    <p>Sparafrazuj to, co usłyszałeś: "Jeśli dobrze rozumiem, niepokoi Cię..."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKCJA 8: CALLOUTS -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">8. Callout Boxes</h2>
+            
+            <div class="demo-label">.lesson-callout-tip</div>
+            <div class="lesson-callout-tip">
+                <span>💡</span>
+                <div>
+                    <p><strong>Pro Tip:</strong> Zacznij każdy dzień od krótkiej rozmowy 1-on-1 z kimś z zespołu. Wystarczy 2-3 minuty pełnej uwagi!</p>
+                </div>
+            </div>
+
+            <div class="demo-label">.lesson-callout-info</div>
+            <div class="lesson-callout-info">
+                <span>ℹ️</span>
+                <div>
+                    <p><strong>Warto wiedzieć:</strong> Oksytocyna (hormon zaufania) wydziela się już po 2 minutach autentycznej, nieprzerwanej rozmowy!</p>
+                </div>
+            </div>
+
+            <div class="demo-label">.lesson-callout-warning</div>
+            <div class="lesson-callout-warning">
+                <span>⚠️</span>
+                <div>
+                    <p><strong>Uwaga:</strong> Multitasking podczas rozmowy (sprawdzanie telefonu, pisanie emaili) wysyła sygnał: "Nie jesteś dla mnie ważny."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKCJA 9: DWUKOLUMNOWY LAYOUT -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">9. Layout Dwukolumnowy</h2>
+            
+            <div class="demo-label">.lesson-two-columns</div>
+            <div class="lesson-two-columns">
+                <div class="lesson-card-danger">
+                    <h4>❌ Red Flags w komunikacji</h4>
+                    <ul>
+                        <li>Przerywanie w połowie zdania</li>
+                        <li>Osądzanie bez wysłuchania</li>
+                        <li>Ignorowanie emocji</li>
+                        <li>Skupienie na sobie, nie na rozmówcy</li>
+                    </ul>
+                </div>
+                <div class="lesson-card-success">
+                    <h4>✅ Green Flags w komunikacji</h4>
+                    <ul>
+                        <li>Aktywne słuchanie</li>
+                        <li>Empatia i zrozumienie</li>
+                        <li>Otwartość na perspektywę drugiej osoby</li>
+                        <li>Pełna uwaga i kontakt wzrokowy</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 12px;">
+                💡 Na urządzeniach mobilnych (< 768px) układa się automatycznie w jedną kolumnę
+            </p>
+        </div>
+
+        <!-- SEKCJA 10: TABELA -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">10. Tabele</h2>
+            
+            <div class="demo-label">.lesson-table</div>
+            <table class="lesson-table">
+                <thead>
+                    <tr>
+                        <th>Poziom C-IQ</th>
+                        <th>Cecha dominująca</th>
+                        <th>Hormon</th>
+                        <th>Rezultat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Poziom 1</td>
+                        <td>Obrona, zamknięcie</td>
+                        <td>Kortyzol ⚠️</td>
+                        <td>Brak zaufania</td>
+                    </tr>
+                    <tr>
+                        <td>Poziom 2</td>
+                        <td>Wymiana transakcyjna</td>
+                        <td>Dopamina 📊</td>
+                        <td>Współpraca</td>
+                    </tr>
+                    <tr>
+                        <td>Poziom 3</td>
+                        <td>Współtworzenie</td>
+                        <td>Oksytocyna 💚</td>
+                        <td>Zaufanie</td>
+                    </tr>
+                    <tr>
+                        <td>Poziom 4</td>
+                        <td>Transformacja</td>
+                        <td>Serotonina ✨</td>
+                        <td>Innowacja</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SEKCJA 11: PROGRESS BAR -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">11. Progress Bar</h2>
+            
+            <div class="demo-label">.lesson-progress</div>
+            <div class="lesson-progress">
+                <div class="lesson-progress-label">
+                    <span>Twój postęp w module "Neurobiologia Zaufania":</span>
+                    <span><strong>75%</strong></span>
+                </div>
+                <div class="lesson-progress-bar">
+                    <div class="lesson-progress-fill" style="width: 75%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEKCJA 12: KEY TAKEAWAY -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">12. Key Takeaway (Kluczowe Wnioski)</h2>
+            
+            <div class="demo-label">.lesson-takeaway</div>
+            <div class="lesson-takeaway">
+                <h4>🎯 Kluczowe wnioski z tej sekcji:</h4>
+                <ul>
+                    <li>Zaufanie buduje się przez małe, konsekwentne działania - nie jednorazowe "wielkie gesty"</li>
+                    <li>Oksytocyna vs. kortyzol - to rzeczywiste substancje chemiczne, nie metafory</li>
+                    <li>Każda rozmowa odbywa się na 4 poziomach: treść, emocje, relacja, przyszłość</li>
+                    <li>Masz wybór: czy wywołasz hormon zaufania czy stresu? Decyduje Twoja reakcja!</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SEKCJA 13: PODSUMOWANIE -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">13. Podsumowanie Sekcji</h2>
+            
+            <div class="demo-label">.lesson-summary</div>
+            <div class="lesson-summary">
+                <h4>📝 Podsumowanie modułu</h4>
+                <p>W tym module nauczyłeś się:</p>
+                <ul>
+                    <li>Jak działa neurobiologia zaufania - oksytocyna i kortyzol</li>
+                    <li>Jakie są 4 poziomy Conversational Intelligence (C-IQ)</li>
+                    <li>Jak świadomie budować relacje przez codzienne rozmowy</li>
+                    <li>Praktyczne techniki aktywnego słuchania i empatii</li>
+                </ul>
+                <p><strong>Następny krok:</strong> Przejdź do modułu "Pytania, które zmieniają wszystko" →</p>
+            </div>
+        </div>
+
+        <!-- SEKCJA 14: VIDEO -->
+        <div class="demo-section">
+            <h2 class="demo-section-title">14. Video Embed</h2>
+            
+            <div class="demo-label">.lesson-video</div>
+            <p style="color: var(--text-muted); margin-bottom: 16px;">
+                Responsywny kontener 16:9 z zaokrąglonymi rogami (przykład z YouTube):
+            </p>
+            <div class="lesson-video">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                        allowfullscreen 
+                        title="Przykładowe video"></iframe>
+            </div>
+        </div>
+
+        <!-- PRZYKŁAD KOMPLETNEJ LEKCJI -->
+        <div class="demo-section" style="margin-top: 80px; padding-top: 40px; border-top: 3px solid var(--accent-gold);">
+            <h2 class="demo-section-title">🎓 Przykład: Kompletna Lekcja</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 40px;">
+                Poniżej zobaczysz, jak połączyć różne komponenty w jedną spójną lekcję:
+            </p>
+
+            <!-- HEADER GŁÓWNY -->
+            <div class="lesson-header-primary">
+                <h3>🧠 Neurobiologia Zaufania w Zespołach</h3>
+                <p>Odkryj, jak twój mózg buduje lub niszczy zaufanie w każdej rozmowie z członkami zespołu.</p>
+            </div>
+
+            <!-- WPROWADZENIE -->
+            <p>Czy wiesz, że każda rozmowa wywołuje reakcję chemiczną w mózgu? To nie metafora - to dosłowna prawda! Poznajmy mechanizmy, które działają "pod maską" każdej interakcji...</p>
+
+            <!-- KLUCZOWA KONCEPCJA -->
+            <div class="lesson-card-gold">
+                <h4>⭐ Kluczowa koncepcja: Oksytocyna vs. Kortyzol</h4>
+                <p>To nie metafora - zaufanie i strach to rzeczywiste substancje chemiczne w naszym mózgu! Gdy czujesz się bezpiecznie w rozmowie, twój mózg wydziela oksytocynę. Gdy czujesz zagrożenie - kortyzol.</p>
+            </div>
+
+            <!-- PRZYKŁAD PRAKTYCZNY -->
+            <div class="lesson-example">
+                <div class="lesson-example-title">📌 Przykład z życia</div>
+                <p><strong>Sytuacja:</strong> Pracownik przychodzi z problemem: "Szefie, chyba popełniłem błąd..."</p>
+                <p><strong>Reakcja typu A (kortyzol ⚠️):</strong> "Nie mam czasu na to teraz! Czemu zawsze coś jest?!"</p>
+                <p><strong>Reakcja typu B (oksytocyna 💚):</strong> "Usiądź, opowiedz mi dokładnie co się stało. Razem znajdziemy rozwiązanie."</p>
+            </div>
+
+            <div class="lesson-highlight">
+                <p><strong>Kluczowa różnica:</strong> W pierwszym przypadku mózg pracownika wydziela kortyzol - następnym razem UNIKNIE szefa. W drugim - oksytocynę - PRZYJDZIE ponownie!</p>
+            </div>
+
+            <!-- KROKI DO WDROŻENIA -->
+            <div class="lesson-spacing-lg">
+                <h4>Jak to zastosować w praktyce?</h4>
+            </div>
+
+            <div class="lesson-steps">
+                <div class="lesson-step">
+                    <h5>Zauważ moment</h5>
+                    <p>Gdy ktoś do Ciebie podchodzi - zatrzymaj się na chwilę. To moment, w którym wybierasz: oksytocyna czy kortyzol?</p>
+                </div>
+                <div class="lesson-step">
+                    <h5>Skontaktuj wzrokiem</h5>
+                    <p>Odłóż telefon, odwróć się całym ciałem, nawiąż kontakt wzrokowy. To sygnał: "Jesteś dla mnie ważny/ważna."</p>
+                </div>
+                <div class="lesson-step">
+                    <h5>Otwórz przestrzeń</h5>
+                    <p>"Opowiedz mi więcej..." zamiast "Tak, ok, zrobię to." Daj 2-3 minuty pełnej uwagi.</p>
+                </div>
+                <div class="lesson-step">
+                    <h5>Sparafrazuj</h5>
+                    <p>"Jeśli dobrze rozumiem, martwisz się że..." - pokaż, że naprawdę słuchasz.</p>
+                </div>
+            </div>
+
+            <!-- TIP -->
+            <div class="lesson-callout-tip">
+                <span>💡</span>
+                <div>
+                    <p><strong>Pro Tip:</strong> Wystarczy 2 minuty pełnej uwagi, by wywołać reakcję oksytocyny! To nie wymaga godzin - wymaga JAKOŚCI, nie ilości.</p>
+                </div>
+            </div>
+
+            <!-- PODSUMOWANIE -->
+            <div class="lesson-summary">
+                <h4>📝 Co zapamiętać z tej sekcji?</h4>
+                <ul>
+                    <li>Każda rozmowa = reakcja chemiczna w mózgu (oksytocyna vs. kortyzol)</li>
+                    <li>Oksytocyna = hormon zaufania, więzi, współpracy</li>
+                    <li>Kortyzol = hormon stresu, obrony, unikania</li>
+                    <li>Masz wybór: który hormon wywołasz swoją reakcją w pierwszych 10 sekundach rozmowy?</li>
+                </ul>
+            </div>
+
+            <!-- KEY TAKEAWAY -->
+            <div class="lesson-takeaway">
+                <h4>🎯 Praktyczne zadanie na dziś:</h4>
+                <p>Wybierz JEDNĄ osobę z zespołu i daj jej dzisiaj 5 minut pełnej, nieprzerwanej uwagi. Telefon odłożony, kontakt wzrokowy, aktywne słuchanie.</p>
+                <p><strong>Obserwuj efekt:</strong> Jak zareaguje? Jak ty się poczujesz? Zapisz swoje spostrzeżenia.</p>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div style="text-align: center; margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--border-color);">
+            <p style="color: var(--text-muted);">
+                🎨 Executive Pro Design System | Navy, Gold & Platinum
+            </p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                Wszystkie komponenty są responsywne, dostępne (WCAG AA) i gotowe do użycia! 🚀
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>

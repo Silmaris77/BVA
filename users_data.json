@@ -3,11 +3,11 @@
     "user_id": "4c552312-1787-4a02-a06f-b6538e83adb7",
     "password": "admin",
     "degen_type": null,
-    "xp": 236,
+    "xp": 241,
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-31 15:21:21",
+    "last_login": "2025-10-31 22:39:46",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -23,7 +23,7 @@
         "completed_lessons": 0
       },
       "2025-10-31": {
-        "xp": 236,
+        "xp": 241,
         "degencoins": 236,
         "level": 1,
         "completed_lessons": 0
@@ -84,6 +84,16 @@
         "type": "login",
         "timestamp": "2025-10-31T15:21:21.784752",
         "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-31T22:14:19.557443",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-31T22:39:46.405515",
+        "details": {}
       }
     ],
     "inspirations": {
@@ -126,7 +136,7 @@
           "logo": "🏢",
           "founded": "2025-10-29",
           "level": 1,
-          "reputation": 4,
+          "reputation": 6,
           "color_scheme": "purple",
           "motto": ""
         },
@@ -158,7 +168,7 @@
               "wymagany_poziom": 1,
               "min_slow": 20,
               "emoji": "☕",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-EASY-002",
@@ -179,7 +189,7 @@
               "wymagany_poziom": 1,
               "min_slow": 15,
               "emoji": "🛒",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-EASY-003",
@@ -200,7 +210,7 @@
               "wymagany_poziom": 1,
               "min_slow": 20,
               "emoji": "🧹",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-EASY-004",
@@ -221,7 +231,7 @@
               "wymagany_poziom": 1,
               "min_slow": 15,
               "emoji": "❓",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-EASY-005",
@@ -242,7 +252,7 @@
               "wymagany_poziom": 1,
               "min_slow": 10,
               "emoji": "⭐",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-EASY-006",
@@ -263,7 +273,7 @@
               "wymagany_poziom": 1,
               "min_slow": 15,
               "emoji": "📅",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-STARTER-001",
@@ -285,7 +295,7 @@
               "wymagany_poziom": 1,
               "min_slow": 30,
               "emoji": "🤝",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-AI-001",
@@ -321,7 +331,7 @@
                 "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
               },
               "scenario_context": "**Kontekst scenariusza:**\n\nMark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.\n\n**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**\nMama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)\n2. Zachować relację i zaufanie\n3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)\n4. Pokazać empatię bez rezygnacji z standardów zespołowych\n\n**Możliwe zakończenia:**\n- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera\n- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia\n- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany\n\n**Wskaźniki sukcesu:**\n- Relacja Mark-Firma: czy zostanie i będzie zaangażowany\n- Morale zespołu: czy rozumieją sytuację i wspierają\n- Rozwiązanie: czy jest długofalowe i fair dla wszystkich",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-AI-002",
@@ -357,7 +367,7 @@
                 "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
               },
               "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "speed_urgent_call",
@@ -406,7 +416,7 @@
                   "pivot strategii"
                 ]
               },
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "speed_crisis_decision",
@@ -454,53 +464,53 @@
                   "minimize downtime"
                 ]
               },
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
-              "id": "CIQ-KONFLIKT-001",
-              "tytul": "Mediacja w konflikcie zespołowym",
-              "kategoria": "Konflikt",
-              "klient": "TechCorp",
-              "opis": "Zespół projektowy w firmie TechCorp jest podzielony. \nLider projektu i główny developer mają odmienne wizje dotyczące architektury systemu. \nNapięcie wpływa na terminowość i morale zespołu.",
-              "zadanie": "Odpowiedz krótko:\n\n1. **Co prawdopodobnie jest źródłem konfliktu?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę spotkania mediacyjnego.** (3-4 punkty, krótko)\n   \n3. **Jakie 3 kluczowe pytania zadasz obu stronom?** (lista pytań)",
+              "id": "CIQ-LEADERSHIP-001",
+              "tytul": "Framework dla efektywnych 1:1",
+              "kategoria": "Leadership",
+              "klient": "MarketPro",
+              "opis": "Firma MarketPro (50 osób) nie ma struktury 1:1 meetings. \nLeadership chce wprowadzić best practices dla wszystkich managerów.",
+              "zadanie": "Odpowiedz krótko:\n\n1. **Jak często i jak długo powinny trwać 1:1?** (1 zdanie)\n   \n2. **Wymień 5 tematów, które należy poruszać na 1:1** (lista)\n   \n3. **Jakie 3 błędy managerowie najczęściej popełniają na 1:1?** (lista)",
               "wymagana_wiedza": [
-                "Conversational Intelligence",
-                "Zarządzanie konfliktem",
-                "Ladder of Inference"
+                "1:1 Conversations",
+                "Active Listening",
+                "Coaching"
               ],
               "trudnosc": 2,
-              "nagroda_base": 450,
-              "nagroda_4star": 600,
-              "nagroda_5star": 750,
-              "reputacja": 30,
+              "nagroda_base": 500,
+              "nagroda_4star": 650,
+              "nagroda_5star": 850,
+              "reputacja": 40,
               "czas_realizacji_dni": 1,
               "wymagany_poziom": 1,
-              "min_slow": 50,
-              "emoji": "⚔️",
-              "available_until": "2025-10-30 17:28:04"
+              "min_slow": 40,
+              "emoji": "🤝",
+              "available_until": "2025-11-01 22:44:21"
             },
             {
-              "id": "CIQ-LEADERSHIP-002",
-              "tytul": "Skip-level meetings strategy",
-              "kategoria": "Leadership",
-              "klient": "GrowthCorp",
-              "opis": "VP Engineering chce wprowadzić skip-level meetings aby lepiej rozumieć \nco się dzieje w zespołach. Nie wie jak to zrobić, żeby nie podważyć autytetu managerów.",
-              "zadanie": "Strategia skip-level:\n\n1. **Jakie są cele skip-level meetings?** (3 cele, po 1 zdaniu)\n   \n2. **Jak przedstawić to managerom, żeby nie czuli zagrożenia?** (3-4 zdania)\n   \n3. **Wymień 10 kluczowych pytań do zadania na skip-level**\n   \n4. **Czego NIE poruszać na skip-level?** (3 tematy z wyjaśnieniem)",
+              "id": "CIQ-KONFLIKT-002",
+              "tytul": "Negocjacje z trudnym stakeholderem",
+              "kategoria": "Konflikt",
+              "klient": "FinanceHub",
+              "opis": "Kluczowy stakeholder w projekcie blokuje ważne decyzje. \nMa silne opinie i nie słucha argumentów zespołu. CEO prosi o wsparcie.",
+              "zadanie": "Krótka strategia:\n\n1. **Jakie mogą być jego ukryte motywacje i obawy?** (2-3 zdania)\n   \n2. **Zaproponuj strukturę rozmowy** (5 kroków, krótko)\n   \n3. **Wymień 5 kluczowych pytań otwartych do zadania**\n\n4. **Best case i worst case - jak się zachowasz?** (po 1 zdaniu na każdy)",
               "wymagana_wiedza": [
-                "Skip-level meetings",
-                "Leadership",
-                "Trust Building"
+                "Conversational Intelligence",
+                "Techniki negocjacyjne",
+                "Active Listening"
               ],
               "trudnosc": 3,
-              "nagroda_base": 700,
-              "nagroda_4star": 900,
-              "nagroda_5star": 1150,
-              "reputacja": 50,
+              "nagroda_base": 650,
+              "nagroda_4star": 850,
+              "nagroda_5star": 1100,
+              "reputacja": 45,
               "czas_realizacji_dni": 2,
               "wymagany_poziom": 1,
               "min_slow": 80,
-              "emoji": "🤝",
-              "available_until": "2025-10-30 17:28:04"
+              "emoji": "⚔️",
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-COACHING-002",
@@ -523,7 +533,7 @@
               "wymagany_poziom": 1,
               "min_slow": 120,
               "emoji": "🎯",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             },
             {
               "id": "CIQ-KRYZYS-002",
@@ -546,14 +556,14 @@
               "wymagany_poziom": 1,
               "min_slow": 200,
               "emoji": "🚨",
-              "available_until": "2025-10-30 17:28:04"
+              "available_until": "2025-11-01 22:44:21"
             }
           ],
-          "last_refresh": "2025-10-29 17:28:04"
+          "last_refresh": "2025-10-31 22:44:21"
         },
         "stats": {
           "total_revenue": 0,
-          "total_costs": 0,
+          "total_costs": 150,
           "net_profit": 0,
           "contracts_completed": 0,
           "contracts_5star": 0,
@@ -639,9 +649,36 @@
                 "next_contract_bonus": 1.3,
                 "reputation": 2
               }
+            },
+            {
+              "event_id": "internet_outage",
+              "timestamp": "2025-10-31 22:44:22",
+              "title": "Awaria Internetu",
+              "emoji": "📡",
+              "type": "negative",
+              "description": "Twój internet padł na cały dzień. Straciłeś cenny czas i musiałeś pracować z kawiarni.",
+              "choice": null,
+              "effects": {
+                "coins": -150
+              },
+              "manual_roll": false
+            },
+            {
+              "event_id": "beginner_luck",
+              "timestamp": "2025-10-31 22:44:29",
+              "title": "Szczęście Początkującego",
+              "emoji": "🍀",
+              "type": "positive",
+              "description": "Natrafiłeś na klienta, który akurat pilnie potrzebuje pomocy i jest gotów zapłacić więcej!",
+              "choice": null,
+              "effects": {
+                "next_contract_bonus": 1.3,
+                "reputation": 2
+              },
+              "manual_roll": true
             }
           ],
-          "last_roll": "2025-10-29 17:28:19",
+          "last_roll": "2025-10-31 22:44:29",
           "active_effects": [
             {
               "type": "next_contract_bonus",
@@ -652,12 +689,27 @@
               "type": "next_contract_bonus",
               "multiplier": 1.3,
               "expires": null
+            },
+            {
+              "type": "next_contract_bonus",
+              "multiplier": 1.3,
+              "expires": null
             }
-          ]
+          ],
+          "last_auto_event": "2025-10-31 22:44:22",
+          "last_manual_roll": "2025-10-31 22:44:29"
         },
-        "money": 0,
+        "money": -150,
         "history": {
-          "transactions": [],
+          "transactions": [
+            {
+              "type": "event_cost",
+              "amount": -150,
+              "event_id": "internet_outage",
+              "event_title": "Awaria Internetu",
+              "timestamp": "2025-10-31 22:44:22"
+            }
+          ],
           "level_ups": [],
           "employees": [],
           "offices": [
@@ -723,7 +775,9 @@
           "logo": "🏪",
           "founded": "2025-10-31",
           "level": 1,
-          "reputation": 0
+          "reputation": 0,
+          "color_scheme": "purple",
+          "motto": ""
         },
         "fmcg_state": {
           "level": 1,
@@ -1880,6 +1934,24 @@
         "history": {
           "transactions": [],
           "milestones": []
+        },
+        "financial_settings": {
+          "savings_goal": 0,
+          "low_balance_alert": -10000,
+          "high_balance_alert": 50000,
+          "auto_transfer_enabled": false,
+          "auto_transfer_threshold": 30000,
+          "auto_transfer_amount": 5000
+        },
+        "notifications": {
+          "deadline_alert_hours": 24,
+          "deadline_alert_enabled": true,
+          "new_contracts_alert": true,
+          "balance_alerts_enabled": true,
+          "events_alerts_enabled": true,
+          "level_up_alerts": true,
+          "employee_alerts": true,
+          "reputation_alerts": true
         }
       }
     },
@@ -4073,7 +4145,16 @@
       }
     },
     "theme_preference": "gaming-pro",
-    "layout_preference": "halloween"
+    "layout_preference": "standard",
+    "lesson_progress": {
+      "0. Wprowadzenie do neuroprzywództwa": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 5,
+        "intro_degencoins": 0,
+        "intro_timestamp": "2025-10-31 22:40:37"
+      }
+    }
   },
   "Piotr": {
     "user_id": "2686f4c8-e6dd-4463-9d39-b5724604ad4c",
@@ -20323,7 +20404,7 @@
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-10-30",
-    "last_login": "2025-10-31 15:52:15",
+    "last_login": "2025-10-31 21:39:42",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -23781,9 +23862,14 @@
         "type": "login",
         "timestamp": "2025-10-31T15:52:15.767704",
         "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-31T21:39:42.371223",
+        "details": {}
       }
     ],
-    "layout_preference": "halloween",
+    "layout_preference": "standard",
     "lesson_progress": {
       "0. Wprowadzenie do neuroprzywództwa": {
         "intro_xp_awarded": true,
@@ -30689,11 +30775,11 @@
     "user_id": "961ffb88-73f6-4838-917a-08f1ee09ca71",
     "password": "Patka",
     "degen_type": null,
-    "xp": 0,
+    "xp": 61,
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-10-31",
-    "last_login": null,
+    "last_login": "2025-11-01 00:13:55",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -30703,7 +30789,13 @@
     },
     "daily_stats": {
       "2025-10-31": {
-        "xp": 0,
+        "xp": 61,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-11-01": {
+        "xp": 61,
         "degencoins": 0,
         "level": 1,
         "completed_lessons": 0
@@ -30750,7 +30842,7 @@
         "firm": {
           "name": "FMCG Corp",
           "logo": "🏪",
-          "founded": "2025-10-31",
+          "founded": "2025-11-01",
           "level": 1,
           "reputation": 0
         },
@@ -34125,7 +34217,49 @@
         "note": ""
       }
     },
-    "activity_log": [],
-    "layout_preference": "executive-pro"
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-10-31T20:56:54.768538",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-31T21:59:05.166825",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-10-31T22:18:13.630077",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-01T00:13:55.937898",
+        "details": {}
+      }
+    ],
+    "layout_preference": "executive-pro",
+    "lesson_progress": {
+      "0. Wprowadzenie do neuroprzywództwa": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 5,
+        "intro_degencoins": 0,
+        "intro_timestamp": "2025-10-31 20:18:15"
+      },
+      "11. Od słów do zaufania - Conversational Intelligence": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 8,
+        "intro_degencoins": 0,
+        "intro_timestamp": "2025-10-31 20:43:19",
+        "content_xp_awarded": true,
+        "content_completed": true,
+        "content_xp": 48,
+        "content_degencoins": 0,
+        "content_timestamp": "2025-10-31 22:04:23"
+      }
+    }
   }
 }

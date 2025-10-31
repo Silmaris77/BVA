@@ -1010,17 +1010,17 @@ def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=Non
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
     
     .m3-lesson-card {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 20%, #dee2e6 50%, #ced4da 80%, #adb5bd 100%);
-        color: #212529;
+        background: var(--background-card, #2d3748);
+        color: var(--text-primary, #e2e8f0);
         border-radius: 16px;
         padding: 24px;
         margin-bottom: 20px;
-        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.15), 0 2px 4px rgba(108, 117, 125, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         position: relative;
         overflow: hidden;
         font-family: 'Roboto', sans-serif;
-        border: 1px solid rgba(173, 181, 189, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     .m3-lesson-card::before {
@@ -1042,7 +1042,7 @@ def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=Non
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #f1f3f4 0%, #e1e5e9 20%, #d6dbdf 50%, #c1c8cd 80%, #9ca3af 100%);
+        background: var(--surface-elevated, #374151);
         opacity: 0;
         transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         z-index: 1;
@@ -1092,12 +1092,51 @@ def lesson_card(title, description, image=None, xp=0, duration=0, difficulty=Non
         font-size: 1.5rem;
         font-weight: 500;
         margin-bottom: 16px;
-        color: #1A237E;
+        color: var(--text-primary, #e2e8f0);
     }
     
     .m3-lesson-badges {
         display: flex;
         flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+    
+    .m3-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 500;
+        color: white;
+        background-color: #6200EE;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .m3-badge-xp {
+        background-color: #F59E0B;
+    }
+    
+    .m3-badge-category {
+        background-color: #9575CD;
+    }
+    
+    .m3-description {
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--text-secondary, #cbd5e1);
+        margin: 16px 0;
+    }
+    
+    .m3-completion-status {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-muted, #9ca3af);
+    }
+    
+    .m3-completion-status.m3-completed {
+        color: #4CAF50;
+    }
         gap: 8px;
         margin: 16px 0;
     }

@@ -1,0 +1,153 @@
+/* 
+   Material 3 Base Styles
+   Bazowe style używane przez wszystkie motywy
+   Wydzielone z material3_components.py::apply_material3_theme()
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+/* ===== TYPOGRAPHY ===== */
+html, body, [class*="css"] {
+    font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3 {
+    color: #1A237E;
+    font-weight: 500;
+}
+
+/* ===== MATERIAL 3 ANIMATIONS ===== */
+@keyframes m3-ripple {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+.m3-animation-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.m3-animation-ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: m3-ripple 0.6s;
+    pointer-events: none;
+}
+
+/* ===== EXPANDERS ===== */
+.streamlit-expanderHeader {
+    border-radius: 12px !important;
+    transition: background-color 0.3s;
+}
+
+.streamlit-expanderHeader:hover {
+    background-color: rgba(33, 150, 243, 0.08) !important;
+}
+
+/* ===== TEXT INPUTS ===== */
+.stTextInput > div > div > input {
+    border-radius: 8px !important;
+    border: 1px solid #E0E0E0 !important;
+    padding: 10px 14px !important;
+    transition: border-color 0.3s, box-shadow 0.3s !important;
+}
+
+.stTextInput > div > div > input:focus {
+    border-color: #2196F3 !important;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+}
+
+/* ===== SELECTBOXES ===== */
+.stSelectbox > div > div {
+    background-color: #6B7A87 !important;
+    border-radius: 8px !important;
+    border: 1px solid #5A6975 !important;
+    color: #FFFFFF !important;
+}
+
+.stSelectbox > div > div:hover {
+    background-color: #7A8B99 !important;
+    border-color: #6B7A87 !important;
+}
+
+.stSelectbox > div > div:focus-within {
+    background-color: #7A8B99 !important;
+    border-color: #2196F3 !important;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+}
+
+/* Wyśrodkowanie tekstu w selectboxach */
+.stSelectbox > div > div > div {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    min-height: 40px !important;
+}
+
+.stSelectbox > div > div > div > div {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    line-height: normal !important;
+    vertical-align: middle !important;
+}
+
+.stSelectbox div[data-baseweb="select"] > div {
+    display: flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+}
+
+.stSelectbox div[data-baseweb="select"] > div > div {
+    display: flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+    line-height: 1.4 !important;
+}
+
+/* ===== TABS ===== */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+    border-radius: 8px 8px 0 0 !important;
+    padding: 10px 16px !important;
+    transition: background-color 0.3s !important;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: rgba(33, 150, 243, 0.1) !important;
+    font-weight: 500 !important;
+    color: #ffffff !important;
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Kolory tekstu zakładek */
+.stTabs [data-baseweb="tab"] {
+    color: #c0c0c0 !important; /* Jasno-srebrny dla nieaktywnych zakładek */
+    text-shadow: 0 0 2px rgba(192, 192, 192, 0.6) !important;
+    opacity: 0.8 !important;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    color: #e0e0e0 !important; /* Jaśniejszy srebrny przy hover */
+    opacity: 1 !important;
+}
+
+/* ===== PAGE ANIMATIONS ===== */
+.main .block-container {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
