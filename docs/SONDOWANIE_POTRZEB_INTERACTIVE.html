@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sondowanie potrzeb klienta - Sztuka zadawania właściwych pytań</title>
+    <style>
+        /* ===== BVA EDUCATIONAL STYLES - UNIVERSAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* UNIVERSAL BOXES */
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .success-box h3, .success-box h4 {
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+        
+        .error-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #ef4444;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .error-box h3, .error-box h4 {
+            color: #991b1b;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .info-box h3, .info-box h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box h3, .warning-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-left: 4px solid #f97316;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .highlight-box h3, .highlight-box h4 {
+            color: #9a3412;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 5px;
+        }
+        
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .example-dialogue {
+            background: #f1f5f9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #94a3b8;
+        }
+        
+        .dialogue-seller {
+            color: #f5576c;
+            font-weight: 600;
+        }
+        
+        .dialogue-client {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        .interactive-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+        
+        .interactive-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+            background: #2563eb;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        .footer-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .footer-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        blockquote {
+            border-left: 4px solid #94a3b8;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        h2 {
+            color: #1e293b;
+            margin: 30px 0 15px 0;
+            font-size: 2rem;
+        }
+        
+        h3 {
+            color: #334155;
+            margin: 20px 0 10px 0;
+            font-size: 1.5rem;
+        }
+        
+        h4 {
+            color: #475569;
+            margin: 15px 0 10px 0;
+            font-size: 1.2rem;
+        }
+        
+        p {
+            margin: 10px 0;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        /* Style specyficzne dla tego artykułu */
+        .conversation-step {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .spin-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .spin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Sondowanie potrzeb klienta</h1>
+            <p>Sztuka zadawania właściwych pytań w sprzedaży FMCG</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('wprowadzenie')">📖 Wprowadzenie</button>
+            <button class="tab" onclick="openTab('techniki')">🔍 5 Technik</button>
+            <button class="tab" onclick="openTab('spin')">🎯 SPIN Selling</button>
+            <button class="tab" onclick="openTab('rozmowa')">💬 Przykładowa rozmowa</button>
+            <button class="tab" onclick="openTab('bledy')">⚠️ Błędy</button>
+            <button class="tab" onclick="openTab('cwiczenie')">🎓 Ćwiczenie</button>
+        </div>
+        
+        <div class="content">
+            <!-- Tab 1: Wprowadzenie -->
+            <div id="wprowadzenie" class="tab-content active">
+                <h2>📖 Wprowadzenie</h2>
+                
+                <blockquote>
+                    "Ludzie nie kupują produktów - kupują rozwiązania swoich problemów."
+                </blockquote>
+                
+                <p style="font-size: 1.1rem; margin: 20px 0;">
+                    <strong>Sondowanie potrzeb</strong> to kluczowa umiejętność każdego profesjonalnego handlowca. 
+                    Nie chodzi o sprzedaż tego, co mamy w ofercie, ale o <strong>zrozumienie biznesu klienta</strong> 
+                    na tyle głęboko, by zaproponować rozwiązanie, które faktycznie mu pomoże.
+                </p>
+                
+                <div class="info-box">
+                    <h3>🎮 Mechanika gry: Kompetencje > Reputacja</h3>
+                    <p>
+                        W grze możesz odkryć <strong>capacity klienta</strong> (zdolność zakupową) nawet przy reputacji 0, 
+                        jeśli zadasz <strong>profesjonalne, konkretne pytania</strong>. Klient docenia, gdy handlowiec 
+                        pyta o liczby, rotację i facings zamiast ogólników.
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">🎭 Porównanie podejść</h3>
+                
+                <div class="grid">
+                    <div class="error-box">
+                        <h4>❌ Początkujący handlowiec</h4>
+                        <div class="example-dialogue">
+                            <p><span class="dialogue-seller">Handlowiec:</span> "Dzień dobry! Mam świetną ofertę - żel pod prysznic tylko 4,50 zł. Weźmie Pan 100 sztuk?"</p>
+                            <p><span class="dialogue-client">Klient (w myślach):</span> <em>"Kolejny sprzedawca... nie wie nic o moim sklepie, od razu wciska towar. Nie, dziękuję."</em></p>
+                        </div>
+                        <p><strong>Efekt:</strong> Brak zamówienia, stracony czas, słaba reputacja.</p>
+                    </div>
+                    
+                    <div class="success-box">
+                        <h4>✅ Profesjonalny handlowiec</h4>
+                        <div class="example-dialogue">
+                            <p><span class="dialogue-seller">Handlowiec:</span> "Dzień dobry! Jestem Tomek z FreshLife. Mogę zadać kilka pytań o Pana biznes?"</p>
+                            <p><span class="dialogue-client">Klient:</span> "Proszę bardzo..."</p>
+                            <p><span class="dialogue-seller">Handlowiec:</span> "Jaka jest rotacja produktów Personal Care w Pana sklepie?"</p>
+                            <p><span class="dialogue-client">Klient:</span> "Około 2 tygodni, sprzedaję jakieś 150 sztuk miesięcznie. Widzi Pan, wreszcie ktoś pyta o konkretne liczby!"</p>
+                        </div>
+                        <p><strong>Efekt:</strong> Odkryłeś capacity, zbudowałeś reputację profesjonalisty, masz dane do oferty.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Techniki -->
+            <div id="techniki" class="tab-content">
+                <h2>🔍 Pięć kluczowych technik sondowania</h2>
+                
+                <div class="card">
+                    <h3>1. Pytania otwarte (Open-ended questions)</h3>
+                    <p>Pytania, na które <strong>nie można odpowiedzieć TAK/NIE</strong>. Wymuszają rozbudowaną odpowiedź.</p>
+                    
+                    <div class="success-box" style="margin-top: 15px;">
+                        <h4>✅ Dobre przykłady:</h4>
+                        <ul>
+                            <li>"Jak wygląda struktura Pana klientów? Kto najczęściej robi zakupy?"</li>
+                            <li>"Jakie kategorie produktów najlepiej się u Pana sprzedają?"</li>
+                            <li>"Z jakimi wyzwaniami spotyka się Pan w codziennej działalności?"</li>
+                            <li>"Jak ocenia Pan obecną współpracę z dostawcami?"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="error-box">
+                        <h4>❌ Unikaj pytań zamkniętych:</h4>
+                        <ul>
+                            <li>"Czy ma Pan stałych klientów?" → odpowiedź: "Tak" (koniec rozmowy)</li>
+                            <li>"Czy interesuje Pana nasz produkt?" → odpowiedź: "Nie" (koniec rozmowy)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>2. Pytania sondujące (Probing questions)</h3>
+                    <p>Pogłębiają odpowiedzi klienta, <strong>docierają do sedna</strong>.</p>
+                    
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-client">Klient:</span> "Sprzedaję różne produkty..."</p>
+                        <p><span class="dialogue-seller">TY:</span> "A która konkretnie kategoria przynosi Panu największą marżę?"</p>
+                    </div>
+                    
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-client">Klient:</span> "Mam problem z rotacją..."</p>
+                        <p><span class="dialogue-seller">TY:</span> "Jaka rotacja jest dla Pana optymalna? Ile dni?"</p>
+                    </div>
+                    
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-client">Klient:</span> "Konkurencja jest silna..."</p>
+                        <p><span class="dialogue-seller">TY:</span> "Jakie marki konkurencyjne najlepiej schodzą u Pana klientów?"</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>3. Pytania techniczne/capacity questions</h3>
+                    <p>Pokazują <strong>profesjonalizm</strong> i odblokowują <strong>konkretne dane</strong>.</p>
+                    
+                    <div class="grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🧴</div>
+                            <h4>Personal Care</h4>
+                            <ul>
+                                <li>"Jaka jest rotacja produktów higieny osobistej?"</li>
+                                <li>"Ile facingów może Pan przeznaczyć na nową markę?"</li>
+                                <li>"Jak często zamawia Pan produkty z tej kategorii?"</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🥛</div>
+                            <h4>Food (Żywność)</h4>
+                            <ul>
+                                <li>"Jaki jest obrót produktami mlecznymi?"</li>
+                                <li>"Czy ma Pan chłodziarki? Ile metrów?"</li>
+                                <li>"Jak szybko rotują się produkty świeże?"</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🥤</div>
+                            <h4>Beverages (Napoje)</h4>
+                            <ul>
+                                <li>"Jakie napoje najlepiej schodzą latem vs zimą?"</li>
+                                <li>"Ile kartonów wody sprzedaje Pan tygodniowo?"</li>
+                                <li>"Czy ma Pan miejsce magazynowe na napoje?"</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🍫</div>
+                            <h4>Snacks (Słodycze)</h4>
+                            <ul>
+                                <li>"Które batony cieszą się największą popularnością?"</li>
+                                <li>"Jaki odsetek klientów kupuje słodycze przy kasie?"</li>
+                                <li>"Czy planuje Pan rozszerzenie asortymentu snacków?"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>4. Pytania o pain points (problemy)</h3>
+                    <p>Odkrywają frustracje i wyzwania klienta.</p>
+                    
+                    <ul>
+                        <li>"Czy zdarza się, że produkty przeterminowują się w magazynie?"</li>
+                        <li>"Z którymi dostawcami ma Pan problemy z terminowością dostaw?"</li>
+                        <li>"Czy klienci pytają o produkty, których aktualnie nie ma Pan w ofercie?"</li>
+                        <li>"Które kategorie generują najwięcej reklamacji?"</li>
+                    </ul>
+                    
+                    <div class="highlight-box" style="margin-top: 15px;">
+                        <h4>💡 Czemu to działa?</h4>
+                        <p>Jeśli odkryjesz <strong>ból klienta</strong> (np. "dostawca zawsze spóźnia się 2 dni"), 
+                        możesz zaproponować <strong>rozwiązanie</strong> (np. "my dowozimy punktualnie, mamy 98% on-time delivery").</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>5. Pytania o cele biznesowe</h3>
+                    <p>Pokazują, że myślisz długoterminowo o sukcesie klienta.</p>
+                    
+                    <ul>
+                        <li>"Jakie ma Pan plany rozwoju sklepu w najbliższych miesiącach?"</li>
+                        <li>"Czy chce Pan zwiększyć udział marż na jakiejś kategorii?"</li>
+                        <li>"Czy rozważa Pan wprowadzenie nowych kategorii produktowych?"</li>
+                        <li>"Jakie jest Pana docelowe tempo rotacji dla nowych produktów?"</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 3: SPIN Selling -->
+            <div id="spin" class="tab-content">
+                <h2>🎯 SPIN Selling - Metodyka Pytań</h2>
+                
+                <p style="font-size: 1.1rem; margin-bottom: 20px;">
+                    <strong>SPIN</strong> to sprawdzona metodyka sprzedaży oparta na czterech typach pytań:
+                </p>
+                
+                <div class="spin-grid">
+                    <div class="info-box">
+                        <h3>S - Situation (Sytuacja)</h3>
+                        <p>Pytania o <strong>aktualną sytuację</strong> klienta - fakty, liczby, strukturę biznesu.</p>
+                        
+                        <div class="highlight-box" style="margin-top: 15px;">
+                            <strong>Przykłady:</strong>
+                            <ul>
+                                <li>"Ile lat prowadzi Pan ten sklep?"</li>
+                                <li>"Ilu dostawców obsługuje Pan obecnie?"</li>
+                                <li>"Jaka jest średnia wartość koszyka zakupowego Pana klientów?"</li>
+                                <li>"Jak często Pan zamawia towar?"</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="error-box">
+                        <h3>P - Problem</h3>
+                        <p>Pytania o <strong>problemy, wyzwania, trudności</strong> w bieżącej sytuacji.</p>
+                        
+                        <div class="highlight-box" style="margin-top: 15px;">
+                            <strong>Przykłady:</strong>
+                            <ul>
+                                <li>"Czy zdarza się, że zabraknie Panu produktów w szczycie sprzedaży?"</li>
+                                <li>"Czy ma Pan problem z przeterminowaniem się towarów?"</li>
+                                <li>"Czy zdarza się, że dostawca nie dotrzymuje terminów?"</li>
+                                <li>"Czy rotacja jest wystarczająco szybka, żeby nie zamrażać kapitału?"</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h3>I - Implication (Konsekwencje)</h3>
+                        <p>Pytania o <strong>skutki i konsekwencje</strong> problemów - budują poczucie pilności.</p>
+                        
+                        <div class="highlight-box" style="margin-top: 15px;">
+                            <strong>Przykłady:</strong>
+                            <ul>
+                                <li>"Co się dzieje, gdy zabraknie popularnego produktu? Czy klienci kupują u konkurencji?"</li>
+                                <li>"Ile to kosztuje Pana, gdy produkt się przeterminuje?"</li>
+                                <li>"Jak opóźnienia w dostawach wpływają na Pana cash flow?"</li>
+                                <li>"Czy wolna rotacja nie blokuje Panu pieniędzy, które mógłby Pan zainwestować gdzie indziej?"</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="success-box">
+                        <h3>N - Need-payoff (Korzyści)</h3>
+                        <p>Pytania o <strong>wartość rozwiązania</strong> - niech klient SAM mówi o korzyściach.</p>
+                        
+                        <div class="highlight-box" style="margin-top: 15px;">
+                            <strong>Przykłady:</strong>
+                            <ul>
+                                <li>"Jak pomogłoby Panu, gdyby dostawy były co 3 dni zamiast raz w tygodniu?"</li>
+                                <li>"Czy szybsza rotacja pozwoliłaby Panu uwolnić kapitał na inne inwestycje?"</li>
+                                <li>"Jak zwiększyłaby się Pana marża, gdyby produkty świeże nie przeterminowywały się?"</li>
+                                <li>"Czy lepsze facings przy kasie zwiększyłyby sprzedaż impulsową?"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box" style="margin-top: 30px;">
+                    <h3>💡 Kluczowa zasada SPIN</h3>
+                    <p>
+                        Nie TY mówisz klientowi, dlaczego powinien kupić. <strong>KLIENT SAM dochodzi do wniosku</strong>, 
+                        że potrzebuje Twojego rozwiązania, odpowiadając na Twoje pytania!
+                    </p>
+                    <p style="margin-top: 10px;">
+                        <strong>Przykład:</strong> Zamiast "Nasz produkt ma szybką rotację" pytasz: 
+                        "Jak pomogłaby Panu szybsza rotacja?" → Klient odpowiada: "Mógłbym uwolnić kapitał i lepiej zarządzać przepływami..."
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Przykładowa rozmowa -->
+            <div id="rozmowa" class="tab-content">
+                <h2>💬 Przykładowa rozmowa - 7 kroków do zamknięcia sprzedaży</h2>
+                
+                <div class="conversation-step">
+                    <h3><span class="step-number">1</span> Nawiązanie kontaktu + pytanie sytuacyjne</h3>
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-seller">TY:</span> "Dzień dobry! Tomek z FreshLife. Widzę, że prowadzi Pan sklep w super lokalizacji - blisko osiedla. Jak długo jest Pan tutaj?"</p>
+                        <p><span class="dialogue-client">Klient:</span> "5 lat już... znam swoich klientów."</p>
+                    </div>
+                    <span class="badge badge-info">Cel: Nawiązać kontakt i wprowadzić rozmowę</span>
+                </div>
+                
+                <div class="conversation-step">
+                    <h3><span class="step-number">2</span> Sondowanie struktury klientów</h3>
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-seller">TY:</span> "To świetnie! A jacy są Pana główni klienci? Rodziny z dziećmi, seniorzy, młodzież?"</p>
+                        <p><span class="dialogue-client">Klient:</span> "Głównie seniorzy z osiedla, przychodzą codziennie po drobne zakupy."</p>
+                    </div>
+                    <span class="badge badge-success">ODKRYCIE: Seniorzy = cena ważniejsza niż marka, lojalność</span>
+                </div>
+                
+                <div class="conversation-step">
+                    <h3><span class="step-number">3</span> Pytanie techniczne o capacity</h3>
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-seller">TY:</span> "Rozumiem. A jaka jest rotacja produktów higieny osobistej - żele, mydła - w Pana sklepie? Jak często Pan zamawia?"</p>
+                        <p><span class="dialogue-client">Klient:</span> "Hmm... około 2 tygodni, sprzedaję jakieś 150 sztuk miesięcznie. Widzi Pan, wreszcie ktoś pyta o konkretne liczby!"</p>
+                    </div>
+                    <span class="badge badge-success">ODBLOKOWAŁEŚ CAPACITY! Klient podał konkretne liczby!</span>
+                </div>
+                
+                <div class="conversation-step">
+                    <h3><span class="step-number">4</span> Pytanie o problem (SPIN: Problem)</h3>
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-seller">TY:</span> "Z jakimi problemami spotyka się Pan w zarządzaniu asortymentem Personal Care?"</p>
+                        <p><span class="dialogue-client">Klient:</span> "No wie Pan... drogie marki stoją na półce, a seniorzy biorą najtańsze. Tracę pieniądze na zamrożonym towarze."</p>
+                    </div>
+                    <span class="badge badge-error">PROBLEM: Drogi asortyment się nie sprzedaje, kapitał zamrożony</span>
+                </div>
+                
+                <div class="conversation-step">
+                    <h3><span class="step-number">5</span> Pytanie o implikację (SPIN: Implication)</h3>
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-seller">TY:</span> "Ile kapitału jest zamrożone w produktach, które stoją miesiącami?"</p>
+                        <p><span class="dialogue-client">Klient:</span> "No... może ze 300-400 zł. To sporo jak na mój budżet."</p>
+                    </div>
+                    <span class="badge badge-warning">IMPLIKACJA: 300-400 zł zamrożone = duży problem</span>
+                </div>
+                
+                <div class="conversation-step">
+                    <h3><span class="step-number">6</span> Pytanie o korzyść (SPIN: Need-payoff)</h3>
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-seller">TY:</span> "Gdyby miał Pan produkty dobrej jakości, ale w atrakcyjnej cenie dla seniorów - takie, które rotują się 2x szybciej - jak pomogłoby to Panu?"</p>
+                        <p><span class="dialogue-client">Klient:</span> "To byłaby rewolucja! Mógłbym odzyskać kapitał i zamówić więcej tego, co naprawdę chodzi."</p>
+                    </div>
+                    <span class="badge badge-success">KLIENT SAM ODKRYŁ WARTOŚĆ!</span>
+                </div>
+                
+                <div class="conversation-step">
+                    <h3><span class="step-number">7</span> Propozycja dopasowana do potrzeb</h3>
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-seller">TY:</span> "Rozumiem Pana sytuację. FreshLife ma produkty świetnie pasujące do seniorów - dobra jakość, ale cena konkurencyjna. Nasze żele mają rotację 10-12 dni. Na start proponuję 12 sztuk - zobaczy Pan jak schodzi. Jeśli dobrze pójdzie, zamówimy więcej. Co Pan na to?"</p>
+                        <p><span class="dialogue-client">Klient:</span> "12 sztuk to sensowna ilość na próbę. Dobra, zgoda!"</p>
+                    </div>
+                    <span class="badge badge-success">SPRZEDAŻ ZAMKNIĘTA! 🎉</span>
+                </div>
+                
+                <div class="success-box" style="margin-top: 30px;">
+                    <h3>🎯 Dlaczego ta rozmowa się powiodła?</h3>
+                    <ul>
+                        <li>✅ Zadawał <strong>profesjonalne pytania</strong> zamiast od razu wciskać produkt</li>
+                        <li>✅ Odkrył <strong>capacity</strong> (150 szt/mies, rotacja 2 tyg)</li>
+                        <li>✅ Zidentyfikował <strong>problem</strong> (drogi asortyment zalegający)</li>
+                        <li>✅ Klient SAM mówił o <strong>konsekwencjach</strong> (400 zł zamrożone)</li>
+                        <li>✅ Klient SAM mówił o <strong>korzyściach</strong> (odzyskać kapitał)</li>
+                        <li>✅ Oferta <strong>dopasowana</strong> do potrzeb (12 szt na próbę)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Błędy -->
+            <div id="bledy" class="tab-content">
+                <h2>⚠️ Najczęstsze błędy w sondowaniu</h2>
+                
+                <div class="error-box">
+                    <h3>1. Pytania naprowadzające (Leading questions)</h3>
+                    <p>Pytasz tak, by uzyskać odpowiedź, którą chcesz usłyszeć - klient czuje manipulację.</p>
+                    
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-seller">❌ ŹLE:</span> "Prawda, że chciałby Pan zwiększyć marżę na Personal Care?"</p>
+                        <p style="color: #64748b;"><em>(Klient czuje, że próbujesz go nakłonić)</em></p>
+                    </div>
+                    
+                    <div class="example-dialogue" style="background: #d1fae5;">
+                        <p><span class="dialogue-seller">✅ DOBRZE:</span> "Jak ocenia Pan obecną marżę na produktach Personal Care?"</p>
+                        <p style="color: #064e3b;"><em>(Neutralne pytanie, klient odpowiada szczerze)</em></p>
+                    </div>
+                </div>
+                
+                <div class="error-box">
+                    <h3>2. Przesłuchanie zamiast rozmowy</h3>
+                    <p>Zadajesz 10 pytań pod rząd bez komentarza - klient czuje się jak na przesłuchaniu.</p>
+                    
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>Rozwiązanie:</strong>
+                        <ul>
+                            <li>Po każdych 2-3 pytaniach <strong>podsumuj i skomentuj</strong></li>
+                            <li>"Rozumiem, czyli głównie rodziny z dziećmi..."</li>
+                            <li>"To ciekawe, że rotacja jest tak szybka..."</li>
+                            <li><strong>SŁUCHAJ aktywnie</strong> i reaguj na odpowiedzi</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="error-box">
+                    <h3>3. Nie słuchasz odpowiedzi</h3>
+                    <p>Masz listę pytań i zadajesz je kolejno, nie reagując na to, co mówi klient.</p>
+                    
+                    <div class="example-dialogue">
+                        <p><span class="dialogue-client">Klient:</span> "Mam ogromny problem z przeterminowaniem jogurtów..."</p>
+                        <p><span class="dialogue-seller">❌ Ty (nie słuchasz):</span> "A jakie napoje Pan sprzedaje?"</p>
+                        <p style="color: #991b1b; margin-top: 10px;"><em>🚫 Stracona szansa! Klient SAM powiedział o problemie!</em></p>
+                    </div>
+                    
+                    <div class="example-dialogue" style="background: #d1fae5; margin-top: 15px;">
+                        <p><span class="dialogue-client">Klient:</span> "Mam ogromny problem z przeterminowaniem jogurtów..."</p>
+                        <p><span class="dialogue-seller">✅ Ty (słuchasz):</span> "To poważny problem. Ile produktów miesięcznie Pan traci? Jak wpływa to na marżę?"</p>
+                        <p style="color: #064e3b; margin-top: 10px;"><em>💚 Doskonale! Pogłębiasz problem, budujesz pilność</em></p>
+                    </div>
+                </div>
+                
+                <div class="error-box">
+                    <h3>4. Zbyt szybkie przejście do oferty</h3>
+                    <p>Po 2-3 pytaniach już prezentujesz produkt - za wcześnie!</p>
+                    
+                    <div class="success-box" style="margin-top: 15px;">
+                        <strong>Zasada:</strong>
+                        <p style="margin-top: 10px;">Zanim zaprezentujesz ofertę, musisz odkryć:</p>
+                        <ul>
+                            <li>✅ Capacity (zdolność zakupowa, rotacja, facings)</li>
+                            <li>✅ Problem (co klienta boli, frustruje)</li>
+                            <li>✅ Konsekwencje problemu (stracone pieniądze, klienci)</li>
+                            <li>✅ Wartość rozwiązania (klient SAM mówi o korzyściach)</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>Dopiero wtedy</strong> Twoja oferta będzie trafiona!</p>
+                    </div>
+                </div>
+                
+                <div class="error-box">
+                    <h3>5. Ogólniki zamiast konkretów</h3>
+                    <p>Zadajesz ogólne pytania i dostajesz ogólne odpowiedzi - zero użytecznych danych.</p>
+                    
+                    <div class="grid" style="margin-top: 15px;">
+                        <div class="error-box">
+                            <h4>❌ Ogólne pytania:</h4>
+                            <ul>
+                                <li>"Ile Pan sprzedaje?" → "Różnie..."</li>
+                                <li>"Czy ma Pan klientów?" → "Tak."</li>
+                                <li>"Czy dobrze się sprzedaje?" → "W miarę."</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="success-box">
+                            <h4>✅ Konkretne pytania:</h4>
+                            <ul>
+                                <li>"Ile sztuk żelów sprzedaje Pan tygodniowo?" → "Około 35-40"</li>
+                                <li>"Jaka jest rotacja produktów Personal Care?" → "10-14 dni"</li>
+                                <li>"Ile facingów może Pan przeznaczyć?" → "3-4 facings"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 6: Ćwiczenie -->
+            <div id="cwiczenie" class="tab-content">
+                <h2>🎓 Ćwiczenie praktyczne</h2>
+                
+                <div class="info-box">
+                    <h3>📋 Scenariusz</h3>
+                    <p>
+                        Wchodzisz do małego sklepu osiedlowego (80 m²). Właściciel to Pan Kowalski, około 60 lat. 
+                        Sklep prowadzi od 10 lat. Nie wiesz nic więcej.
+                    </p>
+                    <p style="margin-top: 10px;">
+                        <strong>Twój cel:</strong> Sprzedać produkty Personal Care (żele pod prysznic, szampony).
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">📝 Zadanie: Przygotuj 5 pytań SPIN</h3>
+                
+                <div class="card">
+                    <h4>Pytanie 1: SITUATION (Sytuacja)</h4>
+                    <p style="color: #64748b;">Zbierz fakty o strukturze klientów i biznesie.</p>
+                    <button class="interactive-button" onclick="toggleHidden('hint1')">💡 Pokaż przykład</button>
+                    <div id="hint1" class="hidden" style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <strong>Przykład:</strong> "Panie Kowalski, jak wygląda profil Pana klientów? Kto najczęściej robi zakupy?"
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4>Pytanie 2: CAPACITY (Pytanie techniczne)</h4>
+                    <p style="color: #64748b;">Odkryj konkretne liczby - rotację, volume.</p>
+                    <button class="interactive-button" onclick="toggleHidden('hint2')">💡 Pokaż przykład</button>
+                    <div id="hint2" class="hidden" style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <strong>Przykład:</strong> "Jaka jest rotacja produktów Personal Care w Pana sklepie? Jak często Pan zamawia?"
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4>Pytanie 3: PROBLEM (Problem)</h4>
+                    <p style="color: #64748b;">Odkryj wyzwania i frustracje.</p>
+                    <button class="interactive-button" onclick="toggleHidden('hint3')">💡 Pokaż przykład</button>
+                    <div id="hint3" class="hidden" style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <strong>Przykład:</strong> "Z jakimi wyzwaniami spotyka się Pan w zarządzaniu asortymentem? Czy coś szczególnie Pana frustruje?"
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4>Pytanie 4: IMPLICATION (Konsekwencje)</h4>
+                    <p style="color: #64748b;">Pogłęb problem - pokaż realny koszt.</p>
+                    <button class="interactive-button" onclick="toggleHidden('hint4')">💡 Pokaż przykład</button>
+                    <div id="hint4" class="hidden" style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <strong>Przykład:</strong> "Wspomniał Pan o produktach, które zalegają... Ile kapitału jest w nich zamrożone?"
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4>Pytanie 5: NEED-PAYOFF (Korzyści)</h4>
+                    <p style="color: #64748b;">Niech klient SAM mówi o wartości rozwiązania.</p>
+                    <button class="interactive-button" onclick="toggleHidden('hint5')">💡 Pokaż przykład</button>
+                    <div id="hint5" class="hidden" style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <strong>Przykład:</strong> "Gdyby miał Pan produkty, które rotują się 2x szybciej i przynoszą lepszą marżę, jak zmieniłoby to Pana biznes?"
+                    </div>
+                </div>
+                
+                <div class="success-box" style="margin-top: 30px;">
+                    <h3>🎯 Kluczowe wskazówki</h3>
+                    <ul>
+                        <li>✅ Zacznij od pytań sytuacyjnych (fakty) - buduj kontekst</li>
+                        <li>✅ Przejdź do pytań o problemy - odkryj pain points</li>
+                        <li>✅ Pogłębiaj konsekwencje - buduj pilność</li>
+                        <li>✅ Niech klient SAM mówi o korzyściach - nie musisz go przekonywać!</li>
+                        <li>✅ Słuchaj aktywnie i reaguj na odpowiedzi - to rozmowa, nie przesłuchanie</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <h3>🎮 Sprawdź się w grze!</h3>
+                    <p>
+                        Wróć do gry i spróbuj zastosować techniki sondowania w rozmowie z klientem. 
+                        Pamiętaj: <strong>profesjonalne pytania odblokowują capacity nawet przy reputacji 0!</strong>
+                    </p>
+                    <p style="margin-top: 10px;">
+                        Zamiast "Ile Pan sprzedaje?" zapytaj: <strong>"Jaka jest rotacja produktów Personal Care w Pana sklepie?"</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <div>
+            <button class="footer-button" onclick="scrollToTop()">
+                ⬆️ Powrót na górę
+            </button>
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">
+            BVA Educational Materials
+        </div>
+        <div style="opacity: 0.9; font-size: 0.95rem;">
+            Data: 2025-10-30 | Wersja: 1.0 | Licencja: Do użytku edukacyjnego
+        </div>
+    </div>
+    
+    <script>
+        function openTab(tabName) {
+            var tabContents = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            var tabs = document.getElementsByClassName('tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        function toggleHidden(elementId) {
+            var element = document.getElementById(elementId);
+            if (element.classList.contains('hidden')) {
+                element.classList.remove('hidden');
+                event.currentTarget.textContent = '🔼 Ukryj przykład';
+            } else {
+                element.classList.add('hidden');
+                event.currentTarget.textContent = '💡 Pokaż przykład';
+            }
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

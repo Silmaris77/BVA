@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planowanie terytorium sprzedażowego - Od analizy do pierwszej wizyty</title>
+    <style>
+        /* ===== BVA EDUCATIONAL STYLES - UNIVERSAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* UNIVERSAL BOXES */
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .success-box h3, .success-box h4 {
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+        
+        .error-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #ef4444;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .error-box h3, .error-box h4 {
+            color: #991b1b;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .info-box h3, .info-box h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box h3, .warning-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-left: 4px solid #f97316;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .highlight-box h3, .highlight-box h4 {
+            color: #9a3412;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f8fafc;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        .footer-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .footer-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        blockquote {
+            border-left: 4px solid #94a3b8;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        h2 {
+            color: #1e293b;
+            margin: 30px 0 15px 0;
+            font-size: 2rem;
+        }
+        
+        h3 {
+            color: #334155;
+            margin: 20px 0 10px 0;
+            font-size: 1.5rem;
+        }
+        
+        h4 {
+            color: #475569;
+            margin: 15px 0 10px 0;
+            font-size: 1.2rem;
+        }
+        
+        p {
+            margin: 10px 0;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        /* Specific styles for this article */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .checklist {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .checklist li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8fafc;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .checklist li:before {
+            content: "☐ ";
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗺️ Planowanie terytorium sprzedażowego</h1>
+            <p>Od analizy do pierwszej wizyty</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('wprowadzenie')">📖 Wprowadzenie</button>
+            <button class="tab" onclick="openTab('analiza')">🔍 Analiza</button>
+            <button class="tab" onclick="openTab('strategia')">🎯 Strategia</button>
+            <button class="tab" onclick="openTab('routing')">🗺️ Routing</button>
+            <button class="tab" onclick="openTab('przygotowanie')">🎒 Przygotowanie</button>
+            <button class="tab" onclick="openTab('gra')">🎮 W grze</button>
+            <button class="tab" onclick="openTab('bledy')">⚠️ Błędy</button>
+        </div>
+        
+        <div class="content">
+            <!-- Tab 1: Wprowadzenie -->
+            <div id="wprowadzenie" class="tab-content active">
+                <blockquote>
+                    "Nie planujesz porażki, ale porażka to efekt braku planu."
+                </blockquote>
+                
+                <h2>Wyobraź sobie dwa scenariusze:</h2>
+                
+                <div class="comparison-grid">
+                    <div class="error-box">
+                        <h3>❌ Handlowiec bez planu</h3>
+                        <p><strong>Poniedziałek, 8:00</strong></p>
+                        <p>Tomek wsiada do samochodu bez konkretnego planu. Jedzie "gdzieś tam" do sklepów.</p>
+                        <ul>
+                            <li>Pierwsza wizyta - odrzucenie</li>
+                            <li>Druga wizyta - sklep zamknięty</li>
+                            <li>Po południu ugrzązł w korku</li>
+                            <li>Jeździł chaotycznie po całym mieście</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>Efekt:</strong></p>
+                        <p>4 wizyty • 0 zamówień • 150 km • Frustracja 😞</p>
+                    </div>
+                    
+                    <div class="success-box">
+                        <h3>✅ Handlowiec z planem</h3>
+                        <p><strong>Poniedziałek, 8:00</strong></p>
+                        <p>Ania ma plan tygodnia. Dzisiaj: 8 sklepów w klastrze "Mokotów Zachód".</p>
+                        <ul>
+                            <li>Wie, że Pan Kowalski (A) zamawia we wtorki</li>
+                            <li>Dziś odwiedza go tylko na "poznanie"</li>
+                            <li>Zaczyna od Pana Nowaka (B) - 70% szans</li>
+                            <li>Wszystko w promieniu 3 km</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>Efekt:</strong></p>
+                        <p>8 wizyt • 3 zamówienia • 40 km • Momentum 🚀</p>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h3>💡 Różnica? PLANOWANIE TERYTORIUM</h3>
+                    <p>W tym artykule dowiesz się, jak:</p>
+                    <ul>
+                        <li>✅ Przeanalizować terytorium i podzielić klientów (ABC)</li>
+                        <li>✅ Stworzyć strategię prospectingową (od kogo zacząć?)</li>
+                        <li>✅ Zaplanować trasówkę (routing), by nie tracić czasu</li>
+                        <li>✅ Przygotować się do pierwszej wizyty</li>
+                        <li>✅ Wykorzystać mechaniki gry do maksimum</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Analiza -->
+            <div id="analiza" class="tab-content">
+                <h2>🔍 Analiza terytorium - poznaj swój obszar</h2>
+                
+                <div class="card">
+                    <h3>🎯 Krok 1: Zbierz dane</h3>
+                    <p>Zanim zrobisz COKOLWIEK, musisz zrozumieć terytorium:</p>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <h4>📋 Co musisz wiedzieć?</h4>
+                        <ul>
+                            <li>📍 <strong>Lokalizacja klientów</strong> - gdzie są sklepy? (mapa)</li>
+                            <li>📊 <strong>Wielkość sklepów</strong> - powierzchnia, obroty (jeśli wiesz)</li>
+                            <li>👥 <strong>Typ klienta</strong> - osiedlowy, przydrożny, centrum?</li>
+                            <li>🏢 <strong>Właściciel</strong> - sieć czy niezależny?</li>
+                            <li>📅 <strong>Dni/godziny otwarcia</strong> - kiedy można odwiedzić?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <h4>🎮 W grze: Przycisk "Analiza terytorium"</h4>
+                        <p>Kliknij "Analiza terytorium" i zobaczysz:</p>
+                        <ul>
+                            <li>Listę sklepów z podstawowymi danymi</li>
+                            <li>Lokalizację (dzielnica/ulica)</li>
+                            <li>Status reputacji</li>
+                            <li>Szacowany potencjał</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>💡 Tip:</strong> Wykorzystaj to ZANIM zaczniesz wizyty!</p>
+                    </div>
+                </div>
+                
+                <h2 style="margin-top: 40px;">🔤 Krok 2: Segmentacja ABC</h2>
+                <p style="font-size: 1.1rem;">Nie wszystkie sklepy są równe. Podziel klientów na 3 kategorie:</p>
+                
+                <div class="success-box">
+                    <h3>🌟 Kategoria A - KLUCZOWI KLIENCI</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 15px;"><strong>20% sklepów = 80% potencjału</strong></p>
+                    
+                    <h4>Cechy:</h4>
+                    <ul>
+                        <li>Duże sklepy (80-150 m²)</li>
+                        <li>Wysokie obroty (200-500 szt/mies w Personal Care)</li>
+                        <li>Strategiczna lokalizacja (ruchliwe osiedla, centra)</li>
+                        <li>Właściciel profesjonalny, otwarty na współpracę</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 15px;">Strategia:</h4>
+                    <ul>
+                        <li>⏰ Najwyższy priorytet czasowy (2-3 wizyty/mies)</li>
+                        <li>🎯 Personalizowane oferty</li>
+                        <li>📞 Regularny kontakt (telefon + wizyty)</li>
+                        <li>🎁 Wsparcie promocyjne, degustacje</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px; padding: 10px; background: #d1fae5; border-radius: 6px;">
+                        <strong>🎮 W grze:</strong> Poświęć na nich 60% czasu!
+                    </p>
+                </div>
+                
+                <div class="info-box">
+                    <h3>📊 Kategoria B - POTENCJALNI PARTNERZY</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 15px;"><strong>30% sklepów = 15% potencjału</strong></p>
+                    
+                    <h4>Cechy:</h4>
+                    <ul>
+                        <li>Średnie sklepy (40-80 m²)</li>
+                        <li>Umiarkowane obroty (100-200 szt/mies)</li>
+                        <li>Stabilna działalność</li>
+                        <li>Właściciel otwarty, ale ostrożny</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 15px;">Strategia:</h4>
+                    <ul>
+                        <li>⏰ Regularne wizyty (1-2x/mies)</li>
+                        <li>🎯 Standardowe oferty + promocje</li>
+                        <li>📞 Kontakt głównie wizytowy</li>
+                        <li>🚀 Potencjał wzrostu - można przenieść do A!</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px; padding: 10px; background: #dbeafe; border-radius: 6px;">
+                        <strong>🎮 W grze:</strong> 30% czasu na budowanie relacji
+                    </p>
+                </div>
+                
+                <div class="warning-box">
+                    <h3>📌 Kategoria C - MAŁE SKLEPY</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 15px;"><strong>50% sklepów = 5% potencjału</strong></p>
+                    
+                    <h4>Cechy:</h4>
+                    <ul>
+                        <li>Małe sklepy (20-40 m²)</li>
+                        <li>Niskie obroty (50-100 szt/mies)</li>
+                        <li>Ograniczony budżet</li>
+                        <li>Właściciel często sam obsługuje</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 15px;">Strategia:</h4>
+                    <ul>
+                        <li>⏰ Rzadkie wizyty (raz na 2-3 miesiące)</li>
+                        <li>🎯 Proste oferty "plug and play"</li>
+                        <li>📞 Głównie telefon/email</li>
+                        <li>🚫 Nie poświęcaj tu zbyt wiele czasu!</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px; padding: 10px; background: #fef3c7; border-radius: 6px;">
+                        <strong>🎮 W grze:</strong> Tylko 10% czasu - szybkie quick wins
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">📋 Przykładowa segmentacja (20 sklepów)</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kategoria</th>
+                            <th>Liczba sklepów</th>
+                            <th>% czasu</th>
+                            <th>Priorytet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>A</strong> (Kluczowi)</td>
+                            <td>4 sklepy</td>
+                            <td>60%</td>
+                            <td>🔴 Najwyższy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B</strong> (Potencjalni)</td>
+                            <td>6 sklepów</td>
+                            <td>30%</td>
+                            <td>🟡 Średni</td>
+                        </tr>
+                        <tr>
+                            <td><strong>C</strong> (Małe)</td>
+                            <td>10 sklepów</td>
+                            <td>10%</td>
+                            <td>🟢 Niski</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="highlight-box">
+                    <h4>💡 Zasada 80/20 w praktyce</h4>
+                    <p style="font-size: 1.1rem;">
+                        <strong>4 sklepy (20%) = 80% Twoich przyszłych obrotów!</strong>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Strategia -->
+            <div id="strategia" class="tab-content">
+                <h2>🎯 Strategia prospectingowa - od kogo zacząć?</h2>
+                
+                <p style="font-size: 1.1rem; margin: 20px 0;">
+                    Masz listę. Teraz pytanie: <strong>W JAKIEJ KOLEJNOŚCI odwiedzać?</strong>
+                </p>
+                
+                <div class="highlight-box">
+                    <h3>🚀 Strategia "Quick Wins First"</h3>
+                    <p style="font-size: 1.1rem;">
+                        <strong>Idea:</strong> Zacznij od klientów, u których masz <strong>największe szanse na sukces</strong>, 
+                        by zbudować <strong>momentum i pewność siebie</strong>.
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">✅ Zaczynaj od:</h3>
+                
+                <div class="card">
+                    <h3>1️⃣ Sklepy kategoria B (średnie, otwarte)</h3>
+                    <ul>
+                        <li>✅ Mniejsza presja niż kategoria A</li>
+                        <li>✅ Realny potencjał zamówienia</li>
+                        <li>✅ Budują Twoją pewność siebie</li>
+                        <li>✅ Dają pierwsze referencje</li>
+                    </ul>
+                    <p style="margin-top: 15px; padding: 15px; background: #dbeafe; border-radius: 8px;">
+                        <strong>🎯 Cel:</strong> Pierwsze 2-3 zamówienia w tydzień 1
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3>2️⃣ Sklepy kategoria C (małe, quick wins)</h3>
+                    <ul>
+                        <li>✅ Łatwe do zamknięcia (małe zamówienia)</li>
+                        <li>✅ Szybkie referencje</li>
+                        <li>✅ Budują portfolio klientów</li>
+                        <li>✅ Praktyka bez dużej presji</li>
+                    </ul>
+                    <p style="margin-top: 15px; padding: 15px; background: #fef3c7; border-radius: 8px;">
+                        <strong>🎯 Cel:</strong> 5-6 małych zamówień w tydzień 1-2
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3>3️⃣ Sklepy kategoria A (duże, kluczowe)</h3>
+                    <ul>
+                        <li>⏰ Dopiero gdy masz <strong>doświadczenie i referencje</strong></li>
+                        <li>💪 Pewność siebie z wcześniejszych sukcesów</li>
+                        <li>📊 Dane z rynku ("Pan Nowak już z nami współpracuje!")</li>
+                        <li>🎯 Lepsze argumenty sprzedażowe</li>
+                    </ul>
+                    <p style="margin-top: 15px; padding: 15px; background: #d1fae5; border-radius: 8px;">
+                        <strong>🎯 Cel:</strong> Pierwsze duże zamówienie w tydzień 3-4
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🚫 Dlaczego NIE zaczynać od A?</h3>
+                
+                <div class="comparison-grid">
+                    <div class="error-box">
+                        <h4>❌ Błąd początkującego</h4>
+                        <blockquote style="border-color: #ef4444; color: #991b1b;">
+                            "Zacznę od największego sklepu - jeśli go zdobędę, reszta pójdzie łatwo!"
+                        </blockquote>
+                        <p><strong>Rzeczywistość:</strong></p>
+                        <ul>
+                            <li>❌ Klienci A są wymagający - potrzeba doświadczenia</li>
+                            <li>❌ Odrzucenie na starcie = demolka pewności siebie</li>
+                            <li>❌ Brak referencji ("Kto już z Panem współpracuje?")</li>
+                            <li>❌ Brak momentum</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="success-box">
+                        <h4>✅ Lepsze podejście</h4>
+                        <p><strong>Strategia Quick Wins:</strong></p>
+                        <ul>
+                            <li>✅ Zdobądź 5-6 małych/średnich klientów</li>
+                            <li>✅ Zbuduj referencje i case studies</li>
+                            <li>✅ Poznaj obiekcje i odpowiedzi</li>
+                            <li>✅ WTEDY idź do A z "portfolio sukcesu"</li>
+                        </ul>
+                        <p style="margin-top: 15px; padding: 10px; background: #d1fae5; border-radius: 6px;">
+                            <strong>Efekt:</strong> 3x wyższe szanse na zamówienie u klienta A!
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="info-box" style="margin-top: 30px;">
+                    <h3>🎮 W grze: Jak to wykorzystać?</h3>
+                    
+                    <h4>Tydzień 1-2: Foundation</h4>
+                    <ul>
+                        <li>Skup się na klientach <strong>B i C</strong></li>
+                        <li>Cel: 5-8 zamówień (małych/średnich)</li>
+                        <li>Buduj reputację i pewność siebie</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 15px;">Tydzień 3-4: Scale Up</h4>
+                    <ul>
+                        <li>Zaatakuj klientów <strong>A</strong> z referencjami:</li>
+                        <li>"Współpracuję już z 8 sklepami na Mokotowie..."</li>
+                        <li>"Pan Nowak zamówił 50 sztuk i sprzedał w tydzień..."</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px; padding: 15px; background: white; border-radius: 8px; border: 2px solid #3b82f6;">
+                        <strong>💡 Rezultat:</strong> Wyższe szanse na zamówienie + lepsze warunki negocjacyjne!
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Routing -->
+            <div id="routing" class="tab-content">
+                <h2>🗺️ Planowanie trasówki (routing) - optymalizacja czasu</h2>
+                
+                <div class="error-box">
+                    <h3>❌ Problem</h3>
+                    <p style="font-size: 1.1rem;">
+                        Masz 20 sklepów rozsianych po mieście. Jak je odwiedzić, żeby nie tracić czasu na jazdę?
+                    </p>
+                </div>
+                
+                <div class="success-box">
+                    <h3>✅ Rozwiązanie: Klasteryzacja geograficzna</h3>
+                    <p style="font-size: 1.1rem;">
+                        <strong>Nie jedź chaotycznie!</strong> Pogrupuj sklepy geograficznie w <strong>klastry (zone)</strong>.
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">🗺️ Przykład: Warszawa - 4 klastry</h3>
+                
+                <div class="card">
+                    <h3>Klaster 1: Mokotów Zachód (5 sklepów)</h3>
+                    <ul>
+                        <li>Sklep A1: ul. Puławska 120</li>
+                        <li>Sklep B1: ul. Wiśniowa 5</li>
+                        <li>Sklep B2: ul. Konstruktorska 8</li>
+                        <li>Sklep C1: ul. Wołoska 15</li>
+                        <li>Sklep C2: ul. Racławicka 22</li>
+                    </ul>
+                    <p style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <strong>📅 Plan:</strong> Poniedziałki = Mokotów Zachód (5 wizyt, ~20 km)
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3>Klaster 2: Ursynów (4 sklepy)</h3>
+                    <ul>
+                        <li>Sklep A2: al. KEN 80</li>
+                        <li>Sklep B3: ul. Hawajska 12</li>
+                        <li>Sklep C3: ul. Pileckiego 5</li>
+                        <li>Sklep C4: ul. Stryjeńskich 18</li>
+                    </ul>
+                    <p style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <strong>📅 Plan:</strong> Wtorki = Ursynów (4 wizyty, ~15 km)
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3>Klaster 3: Ochota (6 sklepów)</h3>
+                    <ul>
+                        <li>Sklep A3: ul. Grójecka 50</li>
+                        <li>Sklep B4: ul. Opaczewska 30</li>
+                        <li>Sklep B5: ul. Szczęśliwicka 42</li>
+                        <li>Sklep C5-C8: małe sklepy okoliczne</li>
+                    </ul>
+                    <p style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <strong>📅 Plan:</strong> Środy + czwartki = Ochota (6-8 wizyt, ~25 km)
+                    </p>
+                </div>
+                
+                <div class="card">
+                    <h3>Klaster 4: Centrum (5 sklepów)</h3>
+                    <ul>
+                        <li>Sklep A4: ul. Marszałkowska 100</li>
+                        <li>Sklep B6: ul. Nowy Świat 25</li>
+                        <li>Sklep C9-C11: małe sklepy w centrum</li>
+                    </ul>
+                    <p style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 8px;">
+                        <strong>📅 Plan:</strong> Piątki = Centrum (5 wizyt, ~10 km)
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📊 Routing: Dzień vs Chaos</h3>
+                
+                <div class="comparison-grid">
+                    <div class="error-box">
+                        <h4>❌ CHAOS (bez planu)</h4>
+                        <p><strong>Poniedziałek:</strong></p>
+                        <p>Mokotów → Ursynów → Mokotów → Ochota → Centrum</p>
+                        <ul style="margin-top: 15px;">
+                            <li>Dystans: <strong>120 km</strong> (krzyżowanie się)</li>
+                            <li>Czas w trasie: <strong>4 godziny</strong> (korki!)</li>
+                            <li>Wizyty: <strong>6</strong> (zmęczenie)</li>
+                        </ul>
+                        <p style="margin-top: 15px; font-size: 1.1rem;">😞 Frustracja i marnowany czas</p>
+                    </div>
+                    
+                    <div class="success-box">
+                        <h4>✅ KLASTERYZACJA (z planem)</h4>
+                        <p><strong>Poniedziałek:</strong></p>
+                        <p>Mokotów Zachód (5 sklepów w promieniu 3 km)</p>
+                        <ul style="margin-top: 15px;">
+                            <li>Dystans: <strong>20 km</strong></li>
+                            <li>Czas w trasie: <strong>1 godzina</strong></li>
+                            <li>Wizyty: <strong>8</strong> (więcej czasu na rozmowy!)</li>
+                        </ul>
+                        <p style="margin-top: 15px; font-size: 1.1rem;">🚀 Efektywność i więcej zamówień!</p>
+                    </div>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <h3>💡 Oszczędność dzięki klasteryzacji</h3>
+                    <p style="font-size: 1.2rem;">
+                        <strong>100 km + 3 godziny = więcej wizyt = więcej zamówień!</strong>
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 40px;">⏰ Ile wizyt dziennie?</h3>
+                
+                <div class="info-box">
+                    <h4>🎯 Jakość > Ilość!</h4>
+                    
+                    <div style="margin-top: 20px;">
+                        <h4>Początkujący handlowiec:</h4>
+                        <ul>
+                            <li>Cel: <strong>5-6 wizyt dziennie</strong></li>
+                            <li>Czas na wizytę: 30-45 min (rozmowa + dojazd)</li>
+                            <li>Focus: Budowanie relacji, słuchanie, uczenie się</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h4>Doświadczony handlowiec:</h4>
+                        <ul>
+                            <li>Możliwe: <strong>8-10 wizyt dziennie</strong></li>
+                            <li>Czas na wizytę: 20-30 min (efektywność)</li>
+                            <li>Focus: Zamykanie sprzedaży, upselling</li>
+                        </ul>
+                    </div>
+                    
+                    <p style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; border: 2px solid #3b82f6;">
+                        <strong>🎮 W grze:</strong> Zaplanuj 5-6 wizyt dziennie w jednym klastrze.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Przygotowanie -->
+            <div id="przygotowanie" class="tab-content">
+                <h2>🎒 Przygotowanie do pierwszej wizyty</h2>
+                
+                <div class="highlight-box">
+                    <h3>💡 Kluczowa zasada</h3>
+                    <p style="font-size: 1.2rem;">
+                        <strong>5 minut research = +50% szans na sukces!</strong>
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">🔍 Research przed wizytą</h3>
+                
+                <div class="card">
+                    <h3>1️⃣ Google Maps / Street View</h3>
+                    <ul>
+                        <li>Jak wygląda sklep z zewnątrz?</li>
+                        <li>Czy jest parking?</li>
+                        <li>Jakie sklepy są obok? (konkurencja, synergie)</li>
+                        <li>Jak wygląda okolica? (osiedle, centrum, przydrożny)</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>2️⃣ Google / Facebook</h3>
+                    <ul>
+                        <li>Czy sklep ma profil? (poziom profesjonalizmu)</li>
+                        <li>Jakie opinie? (klienci zadowoleni = dobry właściciel)</li>
+                        <li>Czy są promocje, eventy?</li>
+                        <li>Zdjęcia wnętrza (asortyment, merchandising)</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>3️⃣ W grze: Karta klienta</h3>
+                    <ul>
+                        <li>Sprawdź reputację (0 = cold call, 50+ = warm)</li>
+                        <li>Zobacz historię wizyt (co mówili wcześniej?)</li>
+                        <li>Przeczytaj notatki (pain points, potrzeby)</li>
+                        <li>Oceń potencjał (capacity, kategoria ABC)</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px; padding: 15px; background: #dbeafe; border-radius: 8px;">
+                        <strong>💡 Efekt:</strong> Spersonalizowana rozmowa zamiast ogólników!
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🎒 Co zabrać?</h3>
+                
+                <div class="grid">
+                    <div class="info-box">
+                        <h4>📦 Fizycznie</h4>
+                        <ul>
+                            <li>📱 <strong>Tablet/Laptop</strong> - prezentacja oferty</li>
+                            <li>📄 <strong>Katalog produktów</strong> (1-2 kartki!)</li>
+                            <li>🎁 <strong>Sample produktu</strong> - żel, szampon</li>
+                            <li>📝 <strong>Notatnik</strong> - zapisuj info</li>
+                            <li>🖊️ <strong>Wizytówki</strong> - profesjonalizm</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="success-box">
+                        <h4>🧠 Mentalnie</h4>
+                        <ul>
+                            <li>🎯 <strong>Cel wizyty</strong> - poznanie? Zamówienie?</li>
+                            <li>💬 <strong>Elevator pitch</strong> - 30 sekund o firmie</li>
+                            <li>❓ <strong>3-5 pytań kluczowych</strong> - SPIN!</li>
+                            <li>🛡️ <strong>Odpowiedzi na obiekcje</strong> - gotowe</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🎤 Elevator Pitch (30 sekund)</h3>
+                
+                <div class="card">
+                    <h4>Co to jest?</h4>
+                    <p>Krótkie (30 sek), treściwe przedstawienie firmy i oferty.</p>
+                    
+                    <div class="highlight-box" style="margin-top: 20px;">
+                        <h4>Przykład - FreshLife:</h4>
+                        <p style="font-size: 1.05rem; line-height: 1.8;">
+                            "Dzień dobry! Jestem Tomek z <strong>FreshLife</strong>. Specjalizujemy się w dystrybucji produktów FMCG 
+                            dla małych i średnich sklepów. Naszą mocną stroną jest <strong>terminowość dostaw</strong> (98% on-time delivery) 
+                            oraz <strong>elastyczność</strong> - dowozimy już od 10 sztuk, podczas gdy konkurencja wymaga minimum 50. 
+                            Współpracujemy z 120 sklepami w Warszawie. <strong>Mogę zadać kilka pytań o Pana biznes?</strong>"
+                        </p>
+                    </div>
+                    
+                    <h4 style="margin-top: 20px;">Struktura:</h4>
+                    <ol>
+                        <li>Kim jesteś? (imię, firma)</li>
+                        <li>Co robicie? (branża, specjalizacja)</li>
+                        <li>Jaka jest wartość? (USP - unique selling proposition)</li>
+                        <li>Social proof (liczby, referencje)</li>
+                        <li>Call to action (pytanie otwarte)</li>
+                    </ol>
+                    
+                    <p style="margin-top: 15px; padding: 15px; background: #ffedd5; border-radius: 8px; border-left: 4px solid #f97316;">
+                        <strong>⏱️ Czas:</strong> 25-30 sekund<br>
+                        <strong>💡 Tip:</strong> Przećwicz przed lustrem 10 razy, żeby brzmiało naturalnie!
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 40px;">❓ 5 kluczowych pytań na pierwszą wizytę</h3>
+                
+                <div class="info-box">
+                    <h4>🎯 Nie sprzedawaj - SŁUCHAJ!</h4>
+                    
+                    <div style="margin-top: 20px;">
+                        <p><strong>1️⃣ "Jak długo prowadzi Pan ten sklep?"</strong></p>
+                        <p style="color: #64748b; margin-left: 20px;">→ Situation - budowanie kontaktu</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <p><strong>2️⃣ "Jaki jest profil Pana klientów?"</strong></p>
+                        <p style="color: #64748b; margin-left: 20px;">→ Situation - zrozumienie biznesu</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <p><strong>3️⃣ "Jaka jest rotacja produktów [kategoria]?"</strong></p>
+                        <p style="color: #64748b; margin-left: 20px;">→ Capacity - odkrycie potencjału</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <p><strong>4️⃣ "Z jakimi wyzwaniami spotyka się Pan w codziennej działalności?"</strong></p>
+                        <p style="color: #64748b; margin-left: 20px;">→ Problem - pain points</p>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <p><strong>5️⃣ "Z ilu dostawców Pan korzysta? Jak ocenia Pan współpracę?"</strong></p>
+                        <p style="color: #64748b; margin-left: 20px;">→ Problem + Implication</p>
+                    </div>
+                    
+                    <p style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; border: 2px solid #3b82f6;">
+                        <strong>🎯 Cel:</strong> Zbierz informacje, zbuduj relację, odkryj potrzeby. 
+                        <strong>Nie sprzedawaj na pierwszej wizycie (chyba że klient SAM poprosi)!</strong>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 6: Gra -->
+            <div id="gra" class="tab-content">
+                <h2>🎮 Mechanika gry - jak to wszystko wykorzystać?</h2>
+                
+                <h3>🎯 Funkcje w grze:</h3>
+                
+                <div class="card">
+                    <h3>1. Analiza terytorium</h3>
+                    <ul>
+                        <li><strong>Gdzie:</strong> Dashboard → "Analiza terytorium"</li>
+                        <li><strong>Co daje:</strong> Lista klientów z podstawowymi danymi</li>
+                        <li><strong>Jak użyć:</strong> Segmentacja ABC, wybór priorytetów</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>2. Planowanie tygodnia</h3>
+                    <ul>
+                        <li><strong>Gdzie:</strong> Dashboard → "Zaplanuj tydzień"</li>
+                        <li><strong>Co daje:</strong> Kalendarz wizyt</li>
+                        <li><strong>Jak użyć:</strong> Przypisz sklepy do dni (klasteryzacja!)</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>3. Karta klienta</h3>
+                    <ul>
+                        <li><strong>Gdzie:</strong> Kliknij na klienta</li>
+                        <li><strong>Co daje:</strong> Reputacja, historia, notatki</li>
+                        <li><strong>Jak użyć:</strong> Research przed wizytą</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>4. Notatki po wizycie</h3>
+                    <ul>
+                        <li><strong>Gdzie:</strong> Po każdej wizycie</li>
+                        <li><strong>Co zapisać:</strong></li>
+                    </ul>
+                    <ul style="margin-left: 40px;">
+                        <li>Capacity (liczby!)</li>
+                        <li>Pain points (problemy)</li>
+                        <li>Następne kroki (co obiecałeś?)</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🏆 Strategia na pierwsze 4 tygodnie</h3>
+                
+                <div class="success-box">
+                    <h4>Tydzień 1: RECONNAISSANCE 🔍</h4>
+                    <ul>
+                        <li><strong>Cel:</strong> Poznaj terytorium, zrób segmentację ABC</li>
+                        <li><strong>Wizyty:</strong> 4-5 dziennie (kategoria B i C)</li>
+                        <li><strong>Focus:</strong> Zadawanie pytań, słuchanie, budowanie relacji</li>
+                        <li><strong>Target:</strong> 2-3 małe zamówienia (quick wins)</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <h4>Tydzień 2: MOMENTUM 🚀</h4>
+                    <ul>
+                        <li><strong>Cel:</strong> Zdobądź 5-8 klientów (B i C)</li>
+                        <li><strong>Focus:</strong> Profesjonalne pytania, odkrywanie capacity</li>
+                        <li><strong>Target:</strong> 5-8 zamówień (budowanie portfolio)</li>
+                    </ul>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>Tydzień 3: SKALOWANIE 📈</h4>
+                    <ul>
+                        <li><strong>Cel:</strong> Zwiększ volume u obecnych + nowi klienci B</li>
+                        <li><strong>Focus:</strong> Upselling, cross-selling</li>
+                        <li><strong>Target:</strong> 10+ zamówień (stabilny pipeline)</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4>Tydzień 4: BIG FISH 🐟</h4>
+                    <ul>
+                        <li><strong>Cel:</strong> Zaatakuj klientów A z referencjami</li>
+                        <li><strong>Focus:</strong> Personalizowane oferty, case studies</li>
+                        <li><strong>Target:</strong> 1-2 duże zamówienia (kluczowi klienci)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 7: Błędy -->
+            <div id="bledy" class="tab-content">
+                <h2>⚠️ Najczęstsze błędy (i jak ich unikać)</h2>
+                
+                <div class="error-box">
+                    <h3>❌ Błąd 1: Brak planu ("Jadę gdzie oczy poniosą")</h3>
+                    <p><strong>Skutek:</strong> Chaos, mało wizyt, wysokie koszty paliwa, frustracja</p>
+                    <div class="success-box" style="margin-top: 15px; background: #d1fae5;">
+                        <p><strong>✅ Rozwiązanie:</strong> Klasteryzacja + plan tygodnia (niedziela wieczorem!)</p>
+                    </div>
+                </div>
+                
+                <div class="error-box">
+                    <h3>❌ Błąd 2: Skupienie na klientach C (małych)</h3>
+                    <p><strong>Skutek:</strong> Dużo pracy, małe przychody, wypalenie</p>
+                    <div class="success-box" style="margin-top: 15px; background: #d1fae5;">
+                        <p><strong>✅ Rozwiązanie:</strong> Zasada 80/20 - 60% czasu na A, 30% na B, 10% na C</p>
+                    </div>
+                </div>
+                
+                <div class="error-box">
+                    <h3>❌ Błąd 3: Zaatakowanie klientów A za wcześnie</h3>
+                    <p><strong>Skutek:</strong> Odrzucenie, brak referencji, stracona szansa</p>
+                    <div class="success-box" style="margin-top: 15px; background: #d1fae5;">
+                        <p><strong>✅ Rozwiązanie:</strong> Quick wins first (B→C→A)</p>
+                    </div>
+                </div>
+                
+                <div class="error-box">
+                    <h3>❌ Błąd 4: Brak researchu przed wizytą</h3>
+                    <p><strong>Skutek:</strong> Ogólnikowa rozmowa, brak spersonalizowania</p>
+                    <div class="success-box" style="margin-top: 15px; background: #d1fae5;">
+                        <p><strong>✅ Rozwiązanie:</strong> 5 minut research = +50% szans</p>
+                    </div>
+                </div>
+                
+                <div class="error-box">
+                    <h3>❌ Błąd 5: Sprzedaż na pierwszej wizycie</h3>
+                    <p><strong>Skutek:</strong> "Kolejny sprzedawca..." - brak zaufania</p>
+                    <div class="success-box" style="margin-top: 15px; background: #d1fae5;">
+                        <p><strong>✅ Rozwiązanie:</strong> Pierwsze wizyty = słuchanie + pytania (SPIN!)</p>
+                    </div>
+                </div>
+                
+                <h2 style="margin-top: 50px;">✅ Podsumowanie - Twój plan działania</h2>
+                
+                <div class="card">
+                    <h3>📋 Checklist: Przed rozpoczęciem sprzedaży</h3>
+                    <ul class="checklist">
+                        <li>Zrób analizę terytorium (lista wszystkich sklepów)</li>
+                        <li>Segmentacja ABC (20% sklepów = 80% potencjału)</li>
+                        <li>Klasteryzacja geograficzna (4-5 stref)</li>
+                        <li>Plan tygodnia (dni = klastry)</li>
+                        <li>Przygotuj elevator pitch (30 sek)</li>
+                        <li>Lista 5 pytań kluczowych (SPIN)</li>
+                        <li>Materiały (katalog, samples, wizytówki)</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>📋 Checklist: Przed każdą wizytą</h3>
+                    <ul class="checklist">
+                        <li>Research (Google Maps, profil klienta w grze)</li>
+                        <li>Cel wizyty (poznanie / budowanie relacji / zamówienie)</li>
+                        <li>3-5 pytań przygotowanych</li>
+                        <li>Notatnik na zapisywanie</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>📋 Checklist: Po wizycie</h3>
+                    <ul class="checklist">
+                        <li>Zapisz notatki (capacity, pain points)</li>
+                        <li>Określ kategorię (A/B/C)</li>
+                        <li>Zaplanuj następny krok (follow-up)</li>
+                        <li>Zaktualizuj plan tygodnia</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 40px;">
+                    <h3>🎯 Kluczowe zasady</h3>
+                    <ol style="font-size: 1.1rem; line-height: 2;">
+                        <li><strong>Plan > Chaos</strong> - Klasteryzacja oszczędza czas i pieniądze</li>
+                        <li><strong>80/20</strong> - 20% klientów = 80% przychodów</li>
+                        <li><strong>Quick Wins First</strong> - Momentum buduje pewność siebie</li>
+                        <li><strong>Research 5 min</strong> = +50% szans na sukces</li>
+                        <li><strong>Słuchaj > Mów</strong> - SPIN Selling odkrywa potrzeby</li>
+                    </ol>
+                </div>
+                
+                <div class="success-box" style="margin-top: 30px;">
+                    <h3>🎮 Teraz Twoja kolej!</h3>
+                    <p style="font-size: 1.1rem;">Wróć do gry i:</p>
+                    <ol style="font-size: 1.05rem; line-height: 1.8;">
+                        <li>Kliknij <strong>"Analiza terytorium"</strong></li>
+                        <li>Zrób segmentację ABC (wypisz na kartce!)</li>
+                        <li>Zaplanuj tydzień 1 (klastry geograficzne)</li>
+                        <li>Przygotuj elevator pitch</li>
+                        <li>Zaczynaj od klientów B (quick wins!)</li>
+                    </ol>
+                    <p style="font-size: 1.3rem; margin-top: 20px; text-align: center;">
+                        <strong>Powodzenia! 🚀</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div>
+            <button class="footer-button" onclick="scrollToTop()">
+                ⬆️ Powrót na górę
+            </button>
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">
+            BVA Educational Materials
+        </div>
+        <div style="opacity: 0.9; font-size: 0.95rem;">
+            Data: 2025-10-30 | Wersja: 1.0 | Licencja: Do użytku edukacyjnego
+        </div>
+    </div>
+    
+    <script>
+        function openTab(tabName) {
+            var tabContents = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            var tabs = document.getElementsByClassName('tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

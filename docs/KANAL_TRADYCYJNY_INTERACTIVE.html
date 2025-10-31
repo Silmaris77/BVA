@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanał Tradycyjny - Charakterystyka i Modele Dystrybucji</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .pros {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+        }
+        
+        .cons {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .pros h4, .cons h4 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .pros h4 { color: #10b981; }
+        .cons h4 { color: #ef4444; }
+        
+        .pros ul, .cons ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .pros li::before {
+            content: "✅ ";
+            margin-right: 8px;
+        }
+        
+        .cons li::before {
+            content: "❌ ";
+            margin-right: 8px;
+        }
+        
+        .price-flow {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .price-flow h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 6px;
+        }
+        
+        .flow-arrow {
+            font-size: 1.5rem;
+            margin: 10px;
+            color: #f59e0b;
+        }
+        
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .info-box.warning {
+            background: #fffbeb;
+            border-left-color: #f59e0b;
+        }
+        
+        .info-box.success {
+            background: #f0fdf4;
+            border-left-color: #10b981;
+        }
+        
+        .expandable {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .expandable-header {
+            background: #f8fafc;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .expandable-header:hover {
+            background: #f1f5f9;
+        }
+        
+        .expandable-content {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .expandable.open .expandable-content {
+            padding: 15px;
+            max-height: 2000px;
+        }
+        
+        .expandable-icon {
+            transition: transform 0.3s;
+        }
+        
+        .expandable.open .expandable-icon {
+            transform: rotate(180deg);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f8fafc;
+        }
+        
+        .argument-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .argument-card h4 {
+            color: #065f46;
+            margin-bottom: 8px;
+        }
+        
+        .argument-quote {
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            font-style: italic;
+            color: #1e293b;
+            border-left: 3px solid #10b981;
+            margin-top: 8px;
+        }
+        
+        .challenge-response {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .challenge {
+            background: #fef2f2;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 3px solid #ef4444;
+        }
+        
+        .response {
+            background: #f0fdf4;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border-left: 3px solid #10b981;
+        }
+        
+        .best-practice {
+            display: flex;
+            align-items: start;
+            padding: 12px;
+            margin: 8px 0;
+            background: #fefce8;
+            border-radius: 6px;
+            border-left: 3px solid #eab308;
+        }
+        
+        .best-practice-number {
+            background: #eab308;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .footer a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏪 Kanał Tradycyjny</h1>
+            <p>Charakterystyka i Modele Dystrybucji</p>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('intro')">📋 Wprowadzenie</button>
+            <button class="tab" onclick="showTab('models')">🔄 Modele Dystrybucji</button>
+            <button class="tab" onclick="showTab('economics')">💰 Ekonomika</button>
+            <button class="tab" onclick="showTab('role')">👔 Rola Handlowca</button>
+            <button class="tab" onclick="showTab('arguments')">💬 Argumenty</button>
+            <button class="tab" onclick="showTab('challenges')">🚧 Wyzwania</button>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- TAB 1: Wprowadzenie -->
+            <div id="intro" class="tab-content active">
+                <h2>🏪 Czym jest kanał tradycyjny?</h2>
+                
+                <div class="info-box">
+                    <strong>Kanał tradycyjny (Traditional Trade)</strong> to segment detaliczny składający się z małych, niezależnych punktów sprzedaży.
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🏪</div>
+                        <div>
+                            <div class="card-title">Rodzaje punktów</div>
+                            <div class="card-subtitle">Małe, rodzinne biznesy</div>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>Sklepy osiedlowe (powierzchnia &lt;100 m²)</li>
+                        <li>Kioski</li>
+                        <li>Małe markety rodzinne</li>
+                        <li>Stacje benzynowe (część detaliczna)</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Różnice vs Modern Trade</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cecha</th>
+                            <th>Kanał Tradycyjny</th>
+                            <th>Modern Trade (sieci)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Powierzchnia</strong></td>
+                            <td>&lt;100 m²</td>
+                            <td>500-5000+ m²</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Właściciel</strong></td>
+                            <td>Rodzinny biznes</td>
+                            <td>Korporacja</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Decyzje zakupowe</strong></td>
+                            <td>Właściciel/rodzina</td>
+                            <td>Centrala</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Zamówienia</strong></td>
+                            <td>Małe, częste</td>
+                            <td>Duże, rzadkie</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Zaopatrzenie</strong></td>
+                            <td>Hurtownie, cash & carry</td>
+                            <td>Bezpośrednio od producentów</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Warunki płatności</strong></td>
+                            <td>Gotówka, kredyt 7-14 dni</td>
+                            <td>Kredyt kupiecki 30-90 dni</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Negocjacje</strong></td>
+                            <td>Lokalne, elastyczne</td>
+                            <td>Centralne, sztywne</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Priorytet</strong></td>
+                            <td>Marża w PLN, rotacja</td>
+                            <td>Obrót, cena dla klienta</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- TAB 2: Modele Dystrybucji -->
+            <div id="models" class="tab-content">
+                <h2>🔄 Modele Dystrybucji</h2>
+                
+                <!-- Model 1 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <div>
+                            <div class="card-title">Model 1: Dystrybucja Bezpośrednia</div>
+                            <div class="card-subtitle">Direct-to-Retail</div>
+                        </div>
+                    </div>
+                    
+                    <div class="price-flow">
+                        <h4>Przepływ towaru:</h4>
+                        <div class="flow-step">
+                            <strong>Producent (FreshLife)</strong>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <strong>Sklep osiedlowy</strong>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <strong>Klient końcowy</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <strong>Kiedy się stosuje?</strong><br>
+                        Małe lokalne marki, produkty wymagające wsparcia edukacyjnego, testowanie rynku, produkty premium/niszowe
+                    </div>
+                    
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>Zalety</h4>
+                            <ul>
+                                <li>Bezpośrednia kontrola ceny i marży</li>
+                                <li>Szybki feedback od rynku</li>
+                                <li>Budowanie relacji z detalem</li>
+                                <li>Wyższa marża (brak pośrednika)</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>Wady</h4>
+                            <ul>
+                                <li>Kosztowna logistyka</li>
+                                <li>Wymaga dużego zespołu</li>
+                                <li>Trudne skalowanie</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="price-flow">
+                        <h4>Przykład cenowy:</h4>
+                        <div class="flow-step">
+                            <strong>Koszt produkcji:</strong> 6.00 zł
+                        </div>
+                        <div class="flow-step">
+                            <strong>Cena dla sklepu:</strong> 8.44 zł (marża 40%)
+                        </div>
+                        <div class="flow-step">
+                            <strong>Cena detaliczna:</strong> 12.99 zł (marża 35%)
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Model 2 -->
+                <div class="card" style="border-color: #10b981;">
+                    <div class="card-header">
+                        <div class="card-icon">⭐</div>
+                        <div>
+                            <div class="card-title">Model 2: Przez Hurtownię</div>
+                            <div class="card-subtitle">Najpopularniejszy w Polsce! 🇵🇱</div>
+                        </div>
+                    </div>
+                    
+                    <div class="price-flow">
+                        <h4>Przepływ towaru:</h4>
+                        <div class="flow-step">
+                            <strong>Producent (FreshLife)</strong>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <strong>Hurtownia (Eurocash, Makro, FMCG24)</strong>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <strong>Sklep osiedlowy</strong>
+                        </div>
+                        <div class="flow-arrow">↓</div>
+                        <div class="flow-step">
+                            <strong>Klient końcowy</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box success">
+                        <strong>🎯 Rola handlowca producenta: Budowanie "pull" (popytu)</strong><br>
+                        1. Odwiedza sklepy i pokazuje produkty<br>
+                        2. Przekonuje właściciela do zamawiania<br>
+                        3. Sklep zamawia przez swoją hurtownię<br>
+                        4. Handlowiec wspiera merchandisingiem i POS<br><br>
+                        <strong>⚠️ Nie bierze zamówienia bezpośrednio!</strong> Sklep ma umowę z hurtownią.
+                    </div>
+                    
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>Zalety</h4>
+                            <ul>
+                                <li>Hurtownia obsługuje logistykę</li>
+                                <li>Jeden duży klient zamiast tysięcy</li>
+                                <li>Szybkie pokrycie rynku</li>
+                                <li>Niższe koszty operacyjne</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>Wady</h4>
+                            <ul>
+                                <li>Niższa marża (15-25%)</li>
+                                <li>Mniejsza kontrola nad ceną</li>
+                                <li>Zależy od polityki hurtowni</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="price-flow">
+                        <h4>Przykład cenowy:</h4>
+                        <div class="flow-step">
+                            <strong>Koszt produkcji:</strong> 6.00 zł
+                        </div>
+                        <div class="flow-step">
+                            <strong>Cena dla hurtowni:</strong> 7.50 zł (marża 25%)
+                        </div>
+                        <div class="flow-step">
+                            <strong>Cena hurtowni dla sklepu:</strong> 10.50 zł (marża 40%)
+                        </div>
+                        <div class="flow-step">
+                            <strong>Cena detaliczna:</strong> 12.99 zł (marża 19%)
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Model 3 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🌍</div>
+                        <div>
+                            <div class="card-title">Model 3: Dystrybucja 3-poziomowa</div>
+                            <div class="card-subtitle">Dystrybutor Regionalny</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box warning">
+                        <strong>Kiedy się stosuje?</strong><br>
+                        Import z zagranicy, produkty specjalistyczne, brak zasobów do obsługi całego rynku
+                    </div>
+                    
+                    <p><strong>Charakterystyka:</strong> Najdroższy model (2 pośredników), najniższa marża dla producenta, stosowany głównie przez małych importerów.</p>
+                </div>
+                
+                <!-- Model 4 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🛒</div>
+                        <div>
+                            <div class="card-title">Model 4: Cash & Carry</div>
+                            <div class="card-subtitle">Samoobsługa Hurtowa (Makro, Selgros)</div>
+                        </div>
+                    </div>
+                    
+                    <p><strong>Charakterystyka:</strong> Sklep sam jedzie do hurtowni i kupuje. Płatność natychmiastowa (cash). Handlowiec producenta wspiera tylko w punkcie sprzedaży.</p>
+                    
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h4>Zalety dla sklepu</h4>
+                            <ul>
+                                <li>Niższa cena niż w dostawie</li>
+                                <li>Natychmiastowa dostępność</li>
+                                <li>Może kupić dokładnie tyle ile potrzebuje</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h4>Wady</h4>
+                            <ul>
+                                <li>Musi dojechać (czas, paliwo)</li>
+                                <li>Płatność gotówką</li>
+                                <li>Ograniczona ilość (wielkość auta)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TAB 3: Ekonomika -->
+            <div id="economics" class="tab-content">
+                <h2>💰 Ekonomika Sklepu Tradycyjnego</h2>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💵</div>
+                        <div>
+                            <div class="card-title">1. Marża w PLN (najważniejsze!)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        Sklep woli zarobić <strong>5 zł na 10 produktach</strong> (50 zł) niż <strong>2 zł na 50 produktach</strong> (100 zł).
+                    </div>
+                    
+                    <p><strong>Dlaczego?</strong></p>
+                    <ul>
+                        <li>Mniej miejsca na półce</li>
+                        <li>Mniejszy kapitał zamrożony</li>
+                        <li>Mniejsze ryzyko przeterminowania</li>
+                    </ul>
+                    
+                    <div class="argument-quote">
+                        "Na naszym produkcie zarobi Pan 4.55 zł na sztuce. Przy sprzedaży 10 sztuk tygodniowo to 45 zł czystego zysku."
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔄</div>
+                        <div>
+                            <div class="card-title">2. Rotacja (szybkość sprzedaży)</div>
+                        </div>
+                    </div>
+                    
+                    <p><strong>Wskaźnik rotacji = Ile razy w miesiącu produkt się sprzedaje</strong></p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Produkt</th>
+                                <th>Rotacja</th>
+                                <th>Marża/szt</th>
+                                <th>Zarobek/mies</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Produkt A</strong></td>
+                                <td>2x/mies</td>
+                                <td>3 zł</td>
+                                <td>6 zł/mies</td>
+                            </tr>
+                            <tr style="background: #f0fdf4;">
+                                <td><strong>Produkt B</strong></td>
+                                <td>6x/mies</td>
+                                <td>1.50 zł</td>
+                                <td><strong>9 zł/mies ✅</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="info-box success">
+                        <strong>Produkt B jest lepszy!</strong> Szybsza rotacja = więcej zarobku
+                    </div>
+                    
+                    <div class="argument-quote">
+                        "Nasz produkt sprzedaje się w 7-10 dni. To 3-4 rotacje miesięcznie. Konkurencja rotuje raz na 30 dni."
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💰</div>
+                        <div>
+                            <div class="card-title">3. Kapitał obrotowy</div>
+                        </div>
+                    </div>
+                    
+                    <p>Mały sklep ma <strong>ograniczony kapitał</strong> (5,000-20,000 zł miesięcznie na zakupy).</p>
+                    
+                    <p><strong>Zmienne koszty:</strong></p>
+                    <ul>
+                        <li>Minimalne zamówienie (MOQ): Im niższe, tym lepiej</li>
+                        <li>Termin płatności: Przelew 14 dni > gotówka przy dostawie</li>
+                        <li>Wielkość opakowania: Małe > duże (mniej zamrożonych pieniędzy)</li>
+                    </ul>
+                    
+                    <div class="argument-quote">
+                        "Może Pan zacząć od 6 sztuk - to tylko 63 zł. Dove wymaga zamówienia 24 sztuk za 336 zł. Nie zamraża Pan kapitału."
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📏</div>
+                        <div>
+                            <div class="card-title">4. Shelf space (miejsce na półce)</div>
+                        </div>
+                    </div>
+                    
+                    <p>Sklep ma <strong>ograniczoną przestrzeń</strong>. Każdy nowy produkt = coś musi zejść z półki.</p>
+                    
+                    <div class="info-box warning">
+                        <strong>Kluczowe pytanie:</strong> "Co zastąpi?"
+                    </div>
+                    
+                    <div class="argument-quote">
+                        "Nasz produkt zajmuje 15 cm półki, podobnie jak Dove. Może go zastąpić 1:1, a Pan zarobi więcej."
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Struktura kosztów małego sklepu</h3>
+                
+                <div class="info-box">
+                    Typowa struktura (sklep 50 m², obrót 30,000 zł/mies):
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pozycja</th>
+                            <th>Wartość</th>
+                            <th>% obrotu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Zakup towaru</td>
+                            <td>22,500 zł</td>
+                            <td>75%</td>
+                        </tr>
+                        <tr>
+                            <td>Czynsz</td>
+                            <td>2,000 zł</td>
+                            <td>6.6%</td>
+                        </tr>
+                        <tr>
+                            <td>Energia, media</td>
+                            <td>800 zł</td>
+                            <td>2.6%</td>
+                        </tr>
+                        <tr>
+                            <td>Wynagrodzenia</td>
+                            <td>3,500 zł</td>
+                            <td>11.6%</td>
+                        </tr>
+                        <tr>
+                            <td>Inne koszty</td>
+                            <td>700 zł</td>
+                            <td>2.3%</td>
+                        </tr>
+                        <tr style="background: #fef2f2;">
+                            <td><strong>Zysk netto</strong></td>
+                            <td><strong>500 zł</strong></td>
+                            <td><strong>1.6%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="info-box warning">
+                    <strong>Wniosek:</strong> Sklep żyje z marży! Każda złotówka się liczy.
+                </div>
+            </div>
+            
+            <!-- TAB 4: Rola Handlowca -->
+            <div id="role" class="tab-content">
+                <h2>👔 Rola Handlowca w Różnych Modelach</h2>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <div>
+                            <div class="card-title">Model Bezpośredni (Direct-to-Retail)</div>
+                        </div>
+                    </div>
+                    
+                    <h4>Zadania:</h4>
+                    <div class="pros">
+                        <ul>
+                            <li>Prezentacja produktów</li>
+                            <li>Przyjęcie zamówienia (paperwork)</li>
+                            <li>Przekazanie zamówienia do logistyki</li>
+                            <li>Monitorowanie dostawy</li>
+                            <li>Merchandising (układanie na półce)</li>
+                            <li>Wsparcie POS (materiały promocyjne)</li>
+                            <li>Rozliczenie należności (czasem)</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 style="margin-top: 20px;">Metryki sukcesu:</h4>
+                    <ul>
+                        <li>Wartość zamówień (PLN)</li>
+                        <li>Liczba aktywnych klientów</li>
+                        <li>Średnia wartość zamówienia</li>
+                        <li>Częstotliwość wizyt</li>
+                    </ul>
+                </div>
+                
+                <div class="card" style="border-color: #10b981;">
+                    <div class="card-header">
+                        <div class="card-icon">⭐</div>
+                        <div>
+                            <div class="card-title">Model przez Hurtownię (Pull Strategy)</div>
+                        </div>
+                    </div>
+                    
+                    <h4>Zadania:</h4>
+                    <div class="pros">
+                        <ul>
+                            <li>Budowanie świadomości produktu</li>
+                            <li>Edukacja sklepu o zaletach</li>
+                            <li>Zachęcanie do zamówienia przez hurtownię</li>
+                            <li>Merchandising (jeśli produkt już jest)</li>
+                            <li>Wsparcie POS</li>
+                            <li>Monitoring dostępności w hurtowni</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 style="margin-top: 20px;">NIE robi:</h4>
+                    <div class="cons">
+                        <ul>
+                            <li>Nie bierze zamówienia (sklep zamawia przez Eurocash)</li>
+                            <li>Nie organizuje dostawy</li>
+                            <li>Nie rozlicza płatności</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 style="margin-top: 20px;">Metryki sukcesu:</h4>
+                    <ul>
+                        <li>Liczba sklepów które dodały produkt do portfolio</li>
+                        <li>Sell-out (sprzedaż ze sklepu do konsumenta)</li>
+                        <li>Distribution numeric (% sklepów mających produkt)</li>
+                        <li>Share of shelf (% miejsca na półce)</li>
+                    </ul>
+                    
+                    <div class="argument-quote">
+                        "Nasz produkt jest dostępny w Eurocash pod kodem XYZ123. Może Pan zamówić przez swoje konto online lub zadzwonić do przedstawiciela. Ja będę wspierał sprzedaż materiałami promocyjnymi."
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TAB 5: Argumenty -->
+            <div id="arguments" class="tab-content">
+                <h2>💬 Argumenty Sprzedażowe</h2>
+                
+                <h3>1. Argumenty ekonomiczne (najważniejsze!)</h3>
+                
+                <div class="argument-card">
+                    <h4>💵 Marża w PLN</h4>
+                    <div class="argument-quote">
+                        "Zarobi Pan 4.55 zł na sztuce - to więcej niż na większości produktów Personal Care."
+                    </div>
+                </div>
+                
+                <div class="argument-card">
+                    <h4>📊 ROI (Return on Investment)</h4>
+                    <div class="argument-quote">
+                        "Przy zamówieniu 10 sztuk zainwestuje Pan 105 zł. Sprzeda Pan je w 10 dni za 130 zł. To 25 zł zysku w 10 dni."
+                    </div>
+                </div>
+                
+                <div class="argument-card">
+                    <h4>🔄 Rotacja</h4>
+                    <div class="argument-quote">
+                        "Produkt rotuje co 7-10 dni. W miesiącu może Pan zarobić 45 zł na 10 sztukach, które zajmą tylko 15 cm półki."
+                    </div>
+                </div>
+                
+                <div class="argument-card">
+                    <h4>📦 Niskie MOQ</h4>
+                    <div class="argument-quote">
+                        "Może Pan zacząć od 6 sztuk. To niskie ryzyko - jeśli się nie sprzeda, nie ma wielkiej straty. Ale zazwyczaj sprzedaje się w tydzień."
+                    </div>
+                </div>
+                
+                <div class="argument-card">
+                    <h4>💰 Kapitał obrotowy</h4>
+                    <div class="argument-quote">
+                        "Płatność przelew 14 dni - nie musi Pan płacić od razu. Zdąży Pan sprzedać część towaru zanim zapłaci fakturę."
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 30px;">2. Argumenty dla klienta końcowego</h3>
+                
+                <div class="argument-card">
+                    <h4>💰 Cena</h4>
+                    <div class="argument-quote">
+                        "Klient zapłaci 12.99 zł zamiast 15.99 za Dove. Oszczędność 3 zł przyciąga klientów wrażliwych na cenę - a to większość w małych sklepach."
+                    </div>
+                </div>
+                
+                <div class="argument-card">
+                    <h4>✨ Jakość</h4>
+                    <div class="argument-quote">
+                        "97% naturalnych składników - to przyciąga świadomych konsumentów. Szczególnie młode mamy i osoby z wrażliwą skórą."
+                    </div>
+                </div>
+                
+                <div class="argument-card">
+                    <h4>🇵🇱 Lokalność</h4>
+                    <div class="argument-quote">
+                        "Polski producent - część klientów preferuje wspieranie lokalnych firm."
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 30px;">3. Argumenty operacyjne</h3>
+                
+                <div class="argument-card">
+                    <h4>📏 Shelf space</h4>
+                    <div class="argument-quote">
+                        "Nasz produkt zajmuje 15 cm, podobnie jak Dove. Może go zastąpić 1:1, bez reorganizacji półki."
+                    </div>
+                </div>
+                
+                <div class="argument-card">
+                    <h4>🚚 Dostawa</h4>
+                    <div class="argument-quote">
+                        "Darmowa dostawa od 100 zł. Dwa razy w tygodniu obsługujemy ten region."
+                    </div>
+                </div>
+                
+                <div class="argument-card">
+                    <h4>🎁 Wsparcie</h4>
+                    <div class="argument-quote">
+                        "Dostarczę Panu wobblery, shelf stripy i testery. Produkty z dobrym merchandisingiem sprzedają się 30% lepiej."
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 30px;">4. Argumenty społeczne (Social Proof)</h3>
+                
+                <div class="argument-card">
+                    <h4>👥 Inni sprzedają</h4>
+                    <div class="argument-quote">
+                        "W Piasecznie już 5 sklepów ma nasz produkt. Pan Kowalski z ulicy Głównej sprzedaje 15 sztuk tygodniowo."
+                    </div>
+                </div>
+                
+                <div class="argument-card">
+                    <h4>📈 Trend</h4>
+                    <div class="argument-quote">
+                        "Naturalne kosmetyki to najszybciej rosnąca kategoria - +20% rocznie. Klienci coraz częściej pytają o produkty bez parabenów."
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TAB 6: Wyzwania -->
+            <div id="challenges" class="tab-content">
+                <h2>🚧 Wyzwania i Best Practices</h2>
+                
+                <h3>Typowe wyzwania i jak je pokonać</h3>
+                
+                <div class="challenge-response">
+                    <div class="challenge">
+                        <strong>❌ Obiekcja:</strong> "Nie mam miejsca, półki pełne."
+                    </div>
+                    <div class="response">
+                        <strong>✅ Odpowiedź 1:</strong> "Rozumiem. Czy jest produkt który słabo rotuje? Nasz produkt sprzedaje się szybciej - można zastąpić wolno rotujący produkt."
+                    </div>
+                    <div class="response">
+                        <strong>✅ Odpowiedź 2:</strong> "Możemy zacząć od 6 sztuk - to tylko 15 cm półki. Jeśli się sprawdzi, zwiększymy."
+                    </div>
+                </div>
+                
+                <div class="challenge-response">
+                    <div class="challenge">
+                        <strong>❌ Obiekcja:</strong> "Mam już Dove, klienci go znają."
+                    </div>
+                    <div class="response">
+                        <strong>✅ Odpowiedź 1:</strong> "Dove zostaje! Nasz produkt to alternatywa dla klientów wrażliwych na cenę. 60% klientów szuka tańszych opcji."
+                    </div>
+                    <div class="response">
+                        <strong>✅ Odpowiedź 2:</strong> "Niech będą oba - Dove dla premium, FreshLife dla value. Pokryje Pan całą grupę klientów."
+                    </div>
+                </div>
+                
+                <div class="challenge-response">
+                    <div class="challenge">
+                        <strong>❌ Obiekcja:</strong> "Nikt nie zna tej marki, nie będzie kupował."
+                    </div>
+                    <div class="response">
+                        <strong>✅ Odpowiedź 1:</strong> "Dlatego wspieramy degustacjami i testerami. Klient próbuje → kupuje. W innych sklepach 40% klientów próbuje w pierwszym miesiącu."
+                    </div>
+                    <div class="response">
+                        <strong>✅ Odpowiedź 2:</strong> "Polski producent to atut - część klientów preferuje lokalne marki. Szczególnie w obecnych czasach."
+                    </div>
+                </div>
+                
+                <div class="challenge-response">
+                    <div class="challenge">
+                        <strong>❌ Obiekcja:</strong> "A co jak mi się nie sprzeda? Będę miał stratę."
+                    </div>
+                    <div class="response">
+                        <strong>✅ Odpowiedź 1:</strong> "Termin ważności to 3 lata. Przy rotacji 10 dni nie ma ryzyka przeterminowania."
+                    </div>
+                    <div class="response">
+                        <strong>✅ Odpowiedź 2:</strong> "Zaczynamy od małego zamówienia - 6 sztuk. Jeśli się sprzeda w tydzień (a tak jest w innych sklepach), zwiększymy."
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">Best Practices dla Handlowca</h3>
+                
+                <div class="best-practice">
+                    <div class="best-practice-number">1</div>
+                    <div>
+                        <strong>Poznaj ekonomikę sklepu</strong><br>
+                        Pytaj o obroty, rotację, marże
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <div class="best-practice-number">2</div>
+                    <div>
+                        <strong>Mów o PLN, nie o %</strong><br>
+                        "zarobi Pan 45 zł" > "marża 35%"
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <div class="best-practice-number">3</div>
+                    <div>
+                        <strong>Zacznij od małego zamówienia</strong><br>
+                        Zmniejszasz ryzyko dla sklepu
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <div class="best-practice-number">4</div>
+                    <div>
+                        <strong>Wspieraj merchandisingiem</strong><br>
+                        Produkty z POS sprzedają się lepiej
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <div class="best-practice-number">5</div>
+                    <div>
+                        <strong>Buduj social proof</strong><br>
+                        "5 sklepów już sprzedaje"
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <div class="best-practice-number">6</div>
+                    <div>
+                        <strong>Follow-up</strong><br>
+                        Wróć za tydzień, sprawdź rotację
+                    </div>
+                </div>
+                
+                <div class="best-practice">
+                    <div class="best-practice-number">7</div>
+                    <div>
+                        <strong>Mierz sell-out</strong><br>
+                        Ważniejsze niż sell-in (zamówienie sklepu)
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>BVA Educational Materials</strong></p>
+            <p>Data: 2025-10-30 | Wersja: 1.0 | Licencja: Do użytku edukacyjnego</p>
+            <p style="margin-top: 15px;">
+                <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" style="cursor: pointer;">⬆️ Powrót na górę</a>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Expandable sections
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('expandable-header')) {
+                e.target.parentElement.classList.toggle('open');
+            }
+        });
+        
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+    
+    <!-- Footer -->
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; margin-top: 0;">
+        <div style="margin-bottom: 15px;">
+            <button onclick="scrollToTop()" style="background: white; color: #667eea; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: all 0.3s;">
+                ⬆️ Powrót na górę
+            </button>
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">
+            BVA Educational Materials
+        </div>
+        <div style="opacity: 0.9; font-size: 0.95rem;">
+            Data: 2025-10-30 | Wersja: 1.0 | Licencja: Do użytku edukacyjnego
+        </div>
+    </div>
+</body>
+</html>

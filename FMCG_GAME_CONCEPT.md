@@ -17,8 +17,14 @@
 ### FreshLife Poland
 - **Branża:** FMCG (Fast-Moving Consumer Goods)
 - **Model biznesowy:** Producent własnych produktów (100% portfolio)
+- **Model dystrybucji:** Realistyczny - przez hurtownie (Eurocash, Makro, FMCG24)
+  - FreshLife sprzedaje produkty do hurtowni
+  - Handlowiec buduje "pull" (popyt) - przekonuje sklepy do zamawiania przez hurtownię
+  - Możliwość małych zamówień testowych bezpośrednio od FreshLife
 - **Portfolio:** 12 produktów w 5 kategoriach (Personal Care, Food, Home Care, Snacks, Beverages)
-  - **Marża:** 25-45% - standardowa dla producenta
+  - **Marża producenta:** 25% (sprzedaż do hurtowni)
+  - **Marża hurtowni:** 30-40% (sprzedaż do sklepów)
+  - **Marża sklepu:** 18-25% (sprzedaż do konsumentów)
   - **Popularność:** Średnia - budująca się marka (wymaga aktywnej sprzedaży)
   - **Wyzwanie:** Walka o shelf space z dużymi korporacjami (Unilever, P&G, Nestlé)
 - **Konkurencja (NIE sprzedawana przez FreshLife):** Znane marki już obecne w sklepach (Dove, Danone, Fa, Kotlin, etc.)

@@ -1,0 +1,382 @@
+/* ============================================================================
+   BVA EDUCATIONAL MATERIALS - STANDARD KOLORYSTYCZNY
+   ============================================================================
+   
+   KATEGORIE TEMATYCZNE (Header/Stopka):
+   - Kanał & Dystrybucja: #667eea → #764ba2 (fiolet)
+   - Sprzedaż & Negocjacje: #f093fb → #f5576c (różowo-czerwony)
+   - Merchandising & Shelf: #3b82f6 → #1e40af (niebieski)
+   - Finanse & Marże: #f59e0b → #d97706 (złoty)
+   - Relacje & Komunikacja: #10b981 → #059669 (zielony)
+   
+   UNIWERSALNE ELEMENTY (zawsze te same):
+   - Success/Zalety: #10b981 (zielony)
+   - Error/Wady: #ef4444 (czerwony)
+   - Info/Informacja: #3b82f6 (niebieski)
+   - Warning/Uwaga: #f59e0b (żółty/pomarańczowy)
+   - Highlight/Ważne: #f97316 (intensywny pomarańczowy)
+   
+   Wersja: 1.0
+   Data: 2025-10-30
+   ============================================================================ */
+
+/* ===== BASE STYLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #1e293b;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+/* ===== WSZYSTKIE ARTYKUŁY - FIOLETOWY GRADIENT ===== */
+/* Póki co jeden kolor dla wszystkich artykułów */
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.header p {
+    font-size: 1.1rem;
+    opacity: 0.95;
+}
+
+/* ===== TABS (zawsze neutralne kolory) ===== */
+.tabs {
+    display: flex;
+    background: #f1f5f9;
+    border-bottom: 2px solid #e2e8f0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.tab {
+    padding: 15px 30px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.tab:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.tab.active {
+    background: white;
+    color: #667eea;
+    border-bottom: 3px solid #667eea;
+}
+
+/* ===== CONTENT ===== */
+.content {
+    padding: 40px;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.5s;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== UNIVERSAL BOXES (ZAWSZE TE SAME KOLORY) ===== */
+
+/* Success Box - Zielony (zalety, dobre praktyki, sukces) */
+.success-box {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-left: 4px solid #10b981;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+.success-box h3, .success-box h4 {
+    color: #065f46;
+    margin-bottom: 10px;
+}
+
+/* Error Box - Czerwony (wady, błędy, ostrzeżenia) */
+.error-box {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-left: 4px solid #ef4444;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+.error-box h3, .error-box h4 {
+    color: #991b1b;
+    margin-bottom: 10px;
+}
+
+/* Info Box - Niebieski (informacje, wskazówki) */
+.info-box {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-left: 4px solid #3b82f6;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+.info-box h3, .info-box h4 {
+    color: #1e40af;
+    margin-bottom: 10px;
+}
+
+/* Warning Box - Żółty/Pomarańczowy (uwagi, ważne informacje) */
+.warning-box {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid #f59e0b;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+.warning-box h3, .warning-box h4 {
+    color: #92400e;
+    margin-bottom: 10px;
+}
+
+/* Highlight Box - Intensywny pomarańczowy (kluczowe informacje) */
+.highlight-box {
+    background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+    border-left: 4px solid #f97316;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+.highlight-box h3, .highlight-box h4 {
+    color: #9a3412;
+    margin-bottom: 10px;
+}
+
+/* ===== CARDS (neutralne, uniwersalne) ===== */
+.card {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+/* ===== GRID ===== */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+/* ===== BADGES (uniwersalne) ===== */
+.badge {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 5px;
+}
+
+.badge-success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge-error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-info {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* ===== DIALOGUE EXAMPLES ===== */
+.example-dialogue {
+    background: #f1f5f9;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border-left: 4px solid #94a3b8;
+}
+
+.dialogue-seller {
+    color: #f5576c;
+    font-weight: 600;
+}
+
+.dialogue-client {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+/* ===== BUTTONS ===== */
+.interactive-button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 10px 5px;
+}
+
+.interactive-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    background: #2563eb;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    margin-top: 0;
+}
+
+.footer-button {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+    margin-bottom: 15px;
+}
+
+.footer-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .tabs {
+        flex-wrap: wrap;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+}
+
+/* ===== UTILITIES ===== */
+.hidden {
+    display: none;
+}
+
+ul, ol {
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+li {
+    margin: 8px 0;
+}
+
+blockquote {
+    border-left: 4px solid #94a3b8;
+    padding-left: 20px;
+    margin: 20px 0;
+    font-style: italic;
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+h2 {
+    color: #1e293b;
+    margin: 30px 0 15px 0;
+    font-size: 2rem;
+}
+
+h3 {
+    color: #334155;
+    margin: 20px 0 10px 0;
+    font-size: 1.5rem;
+}
+
+h4 {
+    color: #475569;
+    margin: 15px 0 10px 0;
+    font-size: 1.2rem;
+}
+
+p {
+    margin: 10px 0;
+}
+
+strong {
+    font-weight: 600;
+    color: #0f172a;
+}

@@ -3,7 +3,7 @@ FMCG Data Schema for SQL Storage
 Defines data structures for FMCG game stored in BusinessGame.extra_data and BusinessGameContract.extra_data
 """
 
-from typing import TypedDict, List, Optional
+from typing import TypedDict, List, Optional, Dict
 from datetime import datetime
 
 # =============================================================================
@@ -55,8 +55,14 @@ class FMCGClientData(TypedDict):
     
     # Client Profile (basic - always visible)
     owner_name: str
+    personality_style: str  # "Tradycyjny", "Nowoczesny"
+    priorities: List[str]  # ["Marża", "Rotacja towaru", "Wsparcie"]
+    potential_monthly: int  # PLN potencjalna miesięczna wartość
     size_sqm: int
     employees_count: int
+    
+    # Sales Capacity (realistyczne limity zamówień)
+    sales_capacity: Optional[Dict]  # Parametry sprzedaży dla kategorii (generowane automatycznie)
     
     # Client Discovery System (odkrywane stopniowo)
     knowledge_level: int  # 0-5 stars (obliczane na podstawie % odkrytych pól)
@@ -103,6 +109,42 @@ class FMCGClientDiscoveredInfo(TypedDict):
     # Relationship
     trust_level: Optional[str]  # "Sceptyczny", "Otwarty", "Zaufany partner"
     preferred_communication: Optional[str]  # "Krótkie, konkretne rozmowy", "Lubi long talk"
+    
+    # Sales Capacity Discovery (odkrywane stopniowo - wymaga ~4 wizyt)
+    sales_capacity_discovered: Optional[Dict[str, Dict]]
+    # {
+    #   "Personal Care": {
+    #     "weekly_sales_volume": 150,
+    #     "shelf_space_facings": 12,
+    #     "storage_capacity": 300,
+    #     "rotation_days": 14,
+    #     "max_order_per_sku": 24,
+    #     "avg_products_in_category": 20,
+    #     "discovered_date": "2025-10-30T10:00:00",
+    #     "discovered_method": "conversation",  # "conversation", "observation", "mentor"
+    #     "reputation_at_discovery": 35  # Reputacja gdy odkryto
+    #   }
+    # }
+    
+    # Market Share per kategoria (obliczane automatycznie)
+    market_share_by_category: Optional[Dict[str, Dict]]
+    # {
+    #   "Personal Care": {
+    #     "player_share": 35,  # % - ile z total_volume to produkty gracza
+    #     "competitor_share": 65,
+    #     "player_volume_weekly": 53,  # sztuk tygodniowo
+    #     "total_volume_weekly": 150,
+    #     "trend": "growing",  # "growing", "declining", "stable"
+    #     "trend_percentage": 15,  # +15% vs miesiąc temu
+    #     "last_updated": "2025-10-30T10:00:00",
+    #     "history": [  # Ostatnie 6 miesięcy dla wykresu
+    #       {"month": "2025-05", "player_share": 0, "player_volume": 0},
+    #       {"month": "2025-06", "player_share": 20, "player_volume": 30},
+    #       {"month": "2025-07", "player_share": 30, "player_volume": 45},
+    #       {"month": "2025-08", "player_share": 35, "player_volume": 53}
+    #     ]
+    #   }
+    # }
 
 
 class FMCGClientNote(TypedDict):
@@ -207,14 +249,42 @@ class FMCGGameState(TypedDict):
     visits_this_week: int
     visits_scheduled: List[dict]  # [{client_id, date, time}]
     
+    # Route planning & tracking
+    current_location: Optional[Dict]  # {"lat": ..., "lng": ...} lub None = "base"
+    planned_visits_today: Optional[List[str]]  # Lista client_id w kolejności wizyt
+    completed_visits_today: Optional[List[Dict]]  # [{client_id, lat, lng, distance_from_prev}]
+    total_distance_today: float  # Suma km przejechanych dzisiaj
+    route_optimization_used: bool  # Czy gracz użył optymalizacji trasy
+    
     # Visit history (for conversation memory)
     visit_history: Optional[List[dict]]  # [{client_id, date, summary, key_points, quality, order_value}]
+    
+    # ALEX AI Sales Assistant & Autopilot
+    alex_level: int  # 0-4 (0=Trainee, 1=Junior, 2=Mid, 3=Senior, 4=Master)
+    alex_training_points: int  # Punkty z quizów/case'ów
+    alex_competencies: Dict[str, float]  # {"planning": 0.6, "communication": 0.6, ...} - % ukończenia modułu
+    alex_quiz_scores: Dict[str, int]  # {"quiz_001": 85, ...} - wyniki quizów
+    alex_case_completions: List[str]  # ["case_001", "case_002"] - ukończone case studies
+    autopilot_visits_count: int  # Liczba wizyt wykonanych przez autopilota (total)
+    autopilot_visits_this_week: int  # Liczba wizyt autopilota w tym tygodniu
+    autopilot_efficiency_avg: float  # Średnia efektywność autopilota (% względem manualnego)
     
     # Achievements
     first_sale: bool
     first_active_client: bool
     five_active_clients: bool
     reputation_100: bool  # Reputation +100 with any client
+    
+    # Progression System - Weekly/Monthly Targets
+    weekly_target_sales: int  # Target sprzedaży na tydzień (PLN)
+    weekly_actual_sales: int  # Aktualna sprzedaż w tym tygodniu (PLN)
+    weekly_target_visits: int  # Target wizyt na tydzień
+    weekly_best_sales: int  # Najlepszy wynik tygodniowy (rekord)
+    weekly_streak: int  # Ile tygodni z rzędu osiągnięto cel
+    monthly_target_sales: int  # Target sprzedaży na miesiąc (PLN)
+    monthly_actual_sales: int  # Aktualna sprzedaż w tym miesiącu (PLN)
+    monthly_best_sales: int  # Najlepszy wynik miesięczny (rekord)
+    weekly_history: List[Dict]  # [{week: 1, sales: 12000, visits: 8, target_achieved: True}]
     
     # Last activity
     last_activity_date: str
@@ -240,6 +310,9 @@ def create_new_client(
     employees: int = 2
 ) -> FMCGClientData:
     """Tworzy nowego klienta w statusie PROSPECT"""
+    # Import sales_capacity generator
+    from utils.fmcg_order_realism import generate_sales_capacity
+    
     return {
         "client_id": client_id,
         "name": name,
@@ -273,6 +346,89 @@ def create_new_client(
         "potential_monthly": potential,
         "size_sqm": size_sqm,
         "employees_count": employees,
+        "sales_capacity": generate_sales_capacity(size_sqm, client_type),  # AUTO-GENERATE
+        "knowledge_level": 0,  # Brak odkryć na start
+        "discovered_info": {
+            # Personality & Decision Making
+            "personality_description": None,
+            "decision_priorities": None,
+            # Customer Base
+            "main_customers": None,
+            "customer_demographics": None,
+            # Competition
+            "competing_brands": None,
+            "shelf_space_constraints": None,
+            # Business Needs
+            "pain_points": None,
+            "business_goals": None,
+            # Ordering Patterns
+            "typical_order_value": None,
+            "preferred_frequency": None,
+            "payment_terms": None,
+            "delivery_preferences": None,
+            # Store specifics
+            "best_selling_categories": None,
+            "seasonal_patterns": None,
+            # Relationship
+            "trust_level": None,
+            "preferred_communication": None,
+            # Sales Capacity Discovery (puste na start - odkrywane stopniowo)
+            "sales_capacity_discovered": {},
+            # Market Share (wszystkie kategorie na 0%)
+            "market_share_by_category": {
+                "Personal Care": {
+                    "player_share": 0,
+                    "competitor_share": 100,
+                    "player_volume_weekly": 0,
+                    "total_volume_weekly": 0,  # Nieznane dopóki nie odkryte
+                    "trend": "stable",
+                    "trend_percentage": 0,
+                    "last_updated": datetime.now().isoformat(),
+                    "history": [{"month": datetime.now().strftime("%Y-%m"), "player_share": 0, "player_volume": 0}]
+                },
+                "Food": {
+                    "player_share": 0,
+                    "competitor_share": 100,
+                    "player_volume_weekly": 0,
+                    "total_volume_weekly": 0,
+                    "trend": "stable",
+                    "trend_percentage": 0,
+                    "last_updated": datetime.now().isoformat(),
+                    "history": [{"month": datetime.now().strftime("%Y-%m"), "player_share": 0, "player_volume": 0}]
+                },
+                "Home Care": {
+                    "player_share": 0,
+                    "competitor_share": 100,
+                    "player_volume_weekly": 0,
+                    "total_volume_weekly": 0,
+                    "trend": "stable",
+                    "trend_percentage": 0,
+                    "last_updated": datetime.now().isoformat(),
+                    "history": [{"month": datetime.now().strftime("%Y-%m"), "player_share": 0, "player_volume": 0}]
+                },
+                "Snacks": {
+                    "player_share": 0,
+                    "competitor_share": 100,
+                    "player_volume_weekly": 0,
+                    "total_volume_weekly": 0,
+                    "trend": "stable",
+                    "trend_percentage": 0,
+                    "last_updated": datetime.now().isoformat(),
+                    "history": [{"month": datetime.now().strftime("%Y-%m"), "player_share": 0, "player_volume": 0}]
+                },
+                "Beverages": {
+                    "player_share": 0,
+                    "competitor_share": 100,
+                    "player_volume_weekly": 0,
+                    "total_volume_weekly": 0,
+                    "trend": "stable",
+                    "trend_percentage": 0,
+                    "last_updated": datetime.now().isoformat(),
+                    "history": [{"month": datetime.now().strftime("%Y-%m"), "player_share": 0, "player_volume": 0}]
+                }
+            }
+        },
+        "discovery_notes": [],  # Historia notatek z wizyt
         "total_sales": 0,
         "avg_order_value": 0,
         "orders_count": 0
@@ -304,8 +460,15 @@ def create_visit_record(
         "energy_cost": energy_cost,
         "conversation_quality": conversation_quality,
         "conversation_topic": "regular_visit",
+        "conversation_summary": None,
+        "conversation_transcript": None,
+        "key_points": None,
         "client_mood_before": "neutral",
         "client_mood_after": "friendly",
+        "ai_discovered_info": None,
+        "knowledge_level_before": 0,
+        "knowledge_level_after": 0,
+        "new_discoveries_count": 0,
         "order_placed": order_value > 0,
         "order_value": order_value,
         "products_sold": products_sold or [],
@@ -319,8 +482,8 @@ def create_visit_record(
 
 def initialize_fmcg_game_state(
     territory: str = "Piaseczno",
-    lat: float = 52.0846,
-    lon: float = 21.0250
+    lat: float = 52.0748,  # Centrum Piaseczna (Rynek Piasecki)
+    lon: float = 21.0274
 ) -> FMCGGameState:
     """Inicjalizuje nowy stan gry FMCG"""
     return {
@@ -344,11 +507,42 @@ def initialize_fmcg_game_state(
         "current_day": "Monday",
         "visits_this_week": 0,
         "visits_scheduled": [],
+        "current_location": None,  # None = baza
+        "planned_visits_today": [],
+        "completed_visits_today": [],
+        "total_distance_today": 0.0,
+        "route_optimization_used": False,
         "visit_history": [],  # Historia wizyt dla AI memory
+        "alex_level": 0,  # 0 = Trainee (początek)
+        "alex_training_points": 0,
+        "alex_competencies": {
+            "planning": 0.0,
+            "communication": 0.0,
+            "analysis": 0.0,
+            "relationship": 0.0,
+            "negotiation": 0.0
+        },
+        "alex_quiz_scores": {},
+        "alex_case_completions": [],
+        "autopilot_visits_count": 0,
+        "autopilot_visits_this_week": 0,
+        "autopilot_efficiency_avg": 0.0,
         "first_sale": False,
         "first_active_client": False,
         "five_active_clients": False,
         "reputation_100": False,
+        
+        # Progression targets (Level 1 defaults)
+        "weekly_target_sales": 8000,  # Level 1: 8k PLN/tydzień
+        "weekly_actual_sales": 0,
+        "weekly_target_visits": 6,  # Level 1: 6 wizyt/tydzień
+        "weekly_best_sales": 0,
+        "weekly_streak": 0,
+        "monthly_target_sales": 35000,  # Level 1: 35k PLN/miesiąc
+        "monthly_actual_sales": 0,
+        "monthly_best_sales": 0,
+        "weekly_history": [],
+        
         "last_activity_date": datetime.now().isoformat(),
         "last_visit_client_id": None
     }

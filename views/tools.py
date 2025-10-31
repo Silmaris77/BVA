@@ -2675,6 +2675,25 @@ def show_ciq_tools():
             if zen_button("🚀 Uruchom C-IQ Scanner", key="level_detector", width='stretch'):
                 st.session_state.active_tool = "level_detector"
         
+        # C-IQ Email Coach (NOWE)
+        with st.container():
+            email_coach_html = '''
+            <div style='padding: 20px; border: 2px solid #FF9800; border-radius: 15px; margin: 10px 0; background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%);'>
+                <h4>📧 C-IQ Email Coach</h4>
+                <p><strong>Interpretuj maile klientów i twórz odpowiedzi na poziomie III Transformacyjnym</strong></p>
+                <ul style='margin: 10px 0; padding-left: 20px;'>
+                    <li>✅ Analiza intencji i poziomu C-IQ klienta</li>
+                    <li>✅ Identyfikacja emocji i potrzeb</li>
+                    <li>✅ Twoja propozycja odpowiedzi + feedback AI</li>
+                    <li>✅ Wersja finalna na poziomie III (transformacyjna)</li>
+                </ul>
+            </div>
+            '''
+            st.markdown(email_coach_html, unsafe_allow_html=True)
+            
+            if zen_button("✉️ Uruchom Email Coach", key="email_coach_btn", width='stretch'):
+                st.session_state.active_tool = "email_coach"
+        
     with col2:
         # Conversation Intelligence Pro
         with st.container():
@@ -2731,6 +2750,8 @@ def show_ciq_tools():
         
         if active_tool == 'level_detector':
             show_level_detector()
+        elif active_tool == 'email_coach':
+            show_email_coach()
         elif active_tool == 'emotion_detector':
             show_emotion_detector()
         elif active_tool == 'communication_analyzer':
@@ -3143,6 +3164,486 @@ def display_level_analysis(result: Dict):
         st.markdown("### 🎯 Praktyczne wskazówki do zastosowania")
         for i, tip in enumerate(result['practical_tips'], 1):
             st.markdown(f"**{i}.** {tip}")
+
+
+def show_email_coach():
+    """C-IQ Email Coach - interpretacja maili i tworzenie odpowiedzi transformacyjnych"""
+    st.markdown("## 📧 C-IQ Email Coach")
+    st.markdown("**Zinterpretuj mail klienta** i **napisz odpowiedź na poziomie III (Transformacyjnym)**")
+    
+    st.markdown("---")
+    
+    # Krok 1: Wklej mail klienta + określ relację
+    st.markdown("### 📥 Krok 1: Określ relację i wklej mail")
+    
+    # Wybór relacji
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        relationship_type = st.selectbox(
+            "🤝 Z kim prowadzisz rozmowę?",
+            [
+                "👤 Klient (zewnętrzny)",
+                "📊 Przełożony",
+                "🏢 Dostawca/Partner",
+                "👥 Współpracownik (poziomo)",
+                "📋 Podwładny",
+                "🎯 Kandydat (rekrutacja)",
+                "💼 Stakeholder/Inwestor",
+                "👨‍👩‍👧 Osoba prywatna"
+            ],
+            key="relationship_type_select"
+        )
+    
+    with col2:
+        st.info(f"""
+        **Wybrałeś:** {relationship_type}
+        
+        AI dostosuje ton i podejście do tego typu relacji.
+        """)
+    
+    client_email = st.text_area(
+        "Treść maila:",
+        height=200,
+        placeholder="Np. 'Dzień dobry, już trzeci raz piszę w sprawie opóźnionej dostawy. To jest nieakceptowalne! Jeśli do jutra nie dostanę informacji, rozważę rozwiązanie współpracy...'",
+        key="client_email_input"
+    )
+    
+    if st.button("🔍 Analizuj mail", type="primary", use_container_width=True):
+        if not client_email or len(client_email.strip()) < 20:
+            st.error("⚠️ Wklej treść maila (minimum 20 znaków)")
+        else:
+            with st.spinner("🤖 AI analizuje mail..."):
+                # Analiza maila klienta
+                analysis = analyze_email_with_ai(client_email, relationship_type)
+                
+                if analysis:
+                    st.session_state['email_analysis'] = analysis
+                    st.session_state['client_email'] = client_email
+                    st.session_state['relationship_type'] = relationship_type
+                    st.rerun()
+    
+    # Krok 2: Pokaż interpretację (jeśli istnieje)
+    if 'email_analysis' in st.session_state:
+        analysis = st.session_state['email_analysis']
+        
+        st.markdown("---")
+        st.markdown("### 🧠 Krok 2: Interpretacja maila przez AI")
+        
+        # Panel interpretacji
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown(f"""
+            <div style='padding: 20px; border-radius: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;'>
+                <h4 style='margin: 0 0 10px 0;'>📊 Wykryty poziom C-IQ</h4>
+                <h2 style='margin: 0; font-size: 2rem;'>{analysis.get('detected_level', 'N/A')}</h2>
+                <p style='margin: 10px 0 0 0; opacity: 0.9;'>Pewność: {analysis.get('confidence', 0)}/10</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.markdown(f"""
+            <div style='padding: 15px; border-radius: 10px; background: #f8f9fa; margin-top: 15px;'>
+                <h5>🎯 Ton emocjonalny</h5>
+                <p style='margin: 5px 0; font-size: 1.1rem;'><strong>{analysis.get('emotional_tone', 'N/A')}</strong></p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            trust_score = analysis.get('trust_building_score', 0)
+            trust_color = "#10b981" if trust_score >= 7 else "#f59e0b" if trust_score >= 4 else "#ef4444"
+            
+            st.markdown(f"""
+            <div style='padding: 20px; border-radius: 10px; background: {trust_color}15; border: 2px solid {trust_color};'>
+                <h4 style='margin: 0 0 10px 0; color: {trust_color};'>🤝 Budowanie zaufania</h4>
+                <div style='background: #e5e7eb; border-radius: 10px; height: 30px; overflow: hidden;'>
+                    <div style='background: {trust_color}; height: 100%; width: {trust_score*10}%; transition: width 0.5s;'></div>
+                </div>
+                <p style='margin: 10px 0 0 0; text-align: center; font-size: 1.5rem; font-weight: bold; color: {trust_color};'>{trust_score}/10</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # Wyjaśnienie
+        st.markdown("#### 💡 Dlaczego to ten poziom?")
+        st.info(analysis.get('explanation', 'Brak wyjaśnienia'))
+        
+        # Kluczowe wskaźniki
+        if 'key_indicators' in analysis and analysis['key_indicators']:
+            st.markdown("#### 🔍 Kluczowe wskaźniki językowe")
+            cols = st.columns(2)
+            for i, indicator in enumerate(analysis['key_indicators']):
+                with cols[i % 2]:
+                    st.markdown(f"• {indicator}")
+        
+        # Wpływ neurobiologiczny
+        if 'neurobiological_impact' in analysis:
+            st.markdown("#### 🧬 Wpływ neurobiologiczny")
+            st.warning(analysis['neurobiological_impact'])
+        
+        st.markdown("---")
+        
+        # Krok 3: Napisz swoją odpowiedź
+        st.markdown("### ✍️ Krok 3: Napisz swoją wersję odpowiedzi")
+        st.markdown("*AI oceni Twoją odpowiedź i zaproponuje wersję transformacyjną*")
+        
+        # Kontekst dodatkowy (opcjonalny)
+        with st.expander("➕ **Dodatkowy kontekst sytuacji** (opcjonalnie)", expanded=False):
+            st.markdown("""
+            Jeśli masz dodatkowe informacje o kliencie lub sytuacji, które powinny wpłynąć na odpowiedź, wpisz je tutaj.
+            
+            **Przykłady:**
+            - "Klient wcześniej skarżył się na jakość, ale nie zgłosił reklamacji"
+            - "Wiemy, że klient rozważa ofertę konkurencji"
+            - "To kluczowy klient - 40% naszych rocznych przychodów"
+            - "Klient ma trudności finansowe, ale nie mówi o tym wprost"
+            """)
+            
+            additional_context = st.text_area(
+                "Dodatkowy kontekst:",
+                height=100,
+                placeholder="Np. 'Klient nie jest szczery - wiemy, że ma już ofertę od konkurencji, ale tego nie wspomina...'",
+                key="additional_context_input"
+            )
+        
+        user_response = st.text_area(
+            "Twoja odpowiedź do klienta:",
+            height=200,
+            placeholder="Napisz swoją propozycję odpowiedzi na mail klienta...",
+            key="user_response_input"
+        )
+        
+        if st.button("🎯 Oceń moją odpowiedź i wygeneruj wersję III", type="primary", use_container_width=True):
+            if not user_response or len(user_response.strip()) < 20:
+                st.error("⚠️ Napisz swoją odpowiedź (minimum 20 znaków)")
+            else:
+                with st.spinner("🤖 AI ocenia Twoją odpowiedź i tworzy wersję transformacyjną..."):
+                    # Pobierz kontekst (jeśli jest)
+                    context = st.session_state.get('additional_context_input', '').strip()
+                    relationship = st.session_state.get('relationship_type', '👤 Klient (zewnętrzny)')
+                    
+                    # Oceń odpowiedź użytkownika i wygeneruj wersję III
+                    feedback = generate_transformational_response(
+                        client_email=st.session_state['client_email'],
+                        client_analysis=analysis,
+                        user_response=user_response,
+                        additional_context=context if context else None,
+                        relationship_type=relationship
+                    )
+                    
+                    if feedback:
+                        st.session_state['response_feedback'] = feedback
+                        st.session_state['user_response'] = user_response
+                        # Zapisz też kontekst jeśli był podany
+                        context = st.session_state.get('additional_context_input', '').strip()
+                        if context:
+                            st.session_state['saved_context'] = context
+                        st.rerun()
+        
+        # Krok 4: Pokaż feedback i wersję III
+        if 'response_feedback' in st.session_state:
+            feedback = st.session_state['response_feedback']
+            
+            st.markdown("---")
+            st.markdown("### 🎓 Krok 4: Feedback i wersja finalna")
+            
+            # Pokaż typ relacji
+            if 'relationship_type' in st.session_state:
+                st.info(f"🤝 **Typ relacji:** {st.session_state['relationship_type']}")
+            
+            # Pokaż kontekst jeśli był podany
+            if 'saved_context' in st.session_state and st.session_state['saved_context']:
+                with st.expander("📋 **Uwzględniony kontekst sytuacji**", expanded=False):
+                    st.info(st.session_state['saved_context'])
+            
+            # Feedback do Twojej odpowiedzi
+            st.markdown("#### 📝 Twoja odpowiedź:")
+            st.info(st.session_state['user_response'])
+            
+            st.markdown("#### 💬 Feedback AI:")
+            st.markdown(feedback.get('user_response_feedback', 'Brak feedbacku'))
+            
+            # Poziom Twojej odpowiedzi
+            if 'user_response_level' in feedback:
+                level_color = "#10b981" if "III" in feedback['user_response_level'] else "#f59e0b" if "II" in feedback['user_response_level'] else "#94a3b8"
+                st.markdown(f"""
+                <div style='padding: 15px; border-radius: 10px; background: {level_color}15; border: 2px solid {level_color}; margin: 15px 0;'>
+                    <h5 style='margin: 0; color: {level_color};'>🎯 Poziom Twojej odpowiedzi: {feedback['user_response_level']}</h5>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # Wersja transformacyjna (Level III)
+            st.markdown("---")
+            st.markdown("#### 🌟 Propozycja AI - Wersja Transformacyjna (Poziom III)")
+            st.success(feedback.get('transformational_version', 'Brak wersji transformacyjnej'))
+            
+            # Dlaczego to Level III?
+            if 'why_transformational' in feedback:
+                st.markdown("#### ✨ Dlaczego ta wersja jest transformacyjna?")
+                st.markdown(feedback['why_transformational'])
+            
+            # Kluczowe zmiany
+            if 'key_changes' in feedback and feedback['key_changes']:
+                st.markdown("#### 🔄 Kluczowe zmiany względem Twojej wersji")
+                for i, change in enumerate(feedback['key_changes'], 1):
+                    st.markdown(f"**{i}.** {change}")
+            
+            # Przyciski akcji
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("🔄 Spróbuj ponownie z inną odpowiedzią", use_container_width=True):
+                    for key in ['response_feedback', 'user_response', 'saved_context']:
+                        if key in st.session_state:
+                            del st.session_state[key]
+                    st.rerun()
+            
+            with col2:
+                if st.button("📋 Skopiuj wersję transformacyjną", use_container_width=True):
+                    st.code(feedback.get('transformational_version', ''), language=None)
+                    st.success("✅ Możesz skopiować tekst powyżej!")
+        
+        # Reset całego narzędzia
+        if st.button("🆕 Analizuj nowy mail", type="secondary", use_container_width=True):
+            for key in ['email_analysis', 'client_email', 'response_feedback', 'user_response', 'saved_context', 'relationship_type']:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.rerun()
+
+
+def analyze_email_with_ai(email_text: str, relationship_type: str = "👤 Klient (zewnętrzny)") -> Optional[Dict]:
+    """Analizuje mail używając AI (Gemini) z uwzględnieniem typu relacji"""
+    try:
+        import google.generativeai as genai
+        
+        # Pobierz klucz API
+        api_key = None
+        if hasattr(st, 'secrets') and 'API_KEYS' in st.secrets and 'GEMINI_API_KEY' in st.secrets['API_KEYS']:
+            api_key = st.secrets['API_KEYS']['GEMINI_API_KEY']
+        elif hasattr(st, 'secrets') and 'GEMINI_API_KEY' in st.secrets:
+            api_key = st.secrets['GEMINI_API_KEY']
+        
+        if not api_key:
+            st.error("⚠️ Brak klucza API Gemini")
+            return None
+        
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        
+        # Mapowanie typu relacji na kontekst dla AI
+        relationship_context = {
+            "👤 Klient (zewnętrzny)": "Relacja biznesowa - klient zewnętrzny. Kluczowe: budowanie zaufania, utrzymanie relacji, rozwiązywanie problemów.",
+            "📊 Przełożony": "Relacja hierarchiczna - komunikacja w górę. Kluczowe: profesjonalizm, konkretność, asertywność przy zachowaniu szacunku.",
+            "🏢 Dostawca/Partner": "Relacja partnerska - współpraca biznesowa. Kluczowe: wzajemność, jasne oczekiwania, win-win.",
+            "👥 Współpracownik (poziomo)": "Relacja pozioma - równorzędna. Kluczowe: współpraca, budowanie zespołu, otwartość.",
+            "📋 Podwładny": "Relacja hierarchiczna - komunikacja w dół. Kluczowe: jasność, wspieranie rozwoju, feedback konstruktywny.",
+            "🎯 Kandydat (rekrutacja)": "Relacja rekrutacyjna. Kluczowe: profesjonalizm, jasność, budowanie marki pracodawcy.",
+            "💼 Stakeholder/Inwestor": "Relacja strategiczna. Kluczowe: transparentność, biznesowa wartość, zarządzanie oczekiwaniami.",
+            "👨‍👩‍👧 Osoba prywatna": "Relacja osobista. Kluczowe: empatia, autentyczność, zrozumienie."
+        }
+        
+        context_info = relationship_context.get(relationship_type, relationship_context["👤 Klient (zewnętrzny)"])
+        
+        prompt = f"""Jesteś ekspertem od Conversational Intelligence. Przeanalizuj poniższy mail.
+
+TYP RELACJI: {relationship_type}
+KONTEKST RELACJI: {context_info}
+
+MAIL DO ANALIZY:
+{email_text}
+
+POZIOMY C-IQ:
+- **Poziom I (Transakcyjny)**: Wymiana informacji, fokus na zadania, język dyrektywny, brak emocji
+- **Poziom II (Pozycyjny)**: Obrona stanowisk, argumentowanie, "my vs oni", konfrontacja, walka o rację
+- **Poziom III (Transformacyjny)**: Współtworzenie, pytania otwarte, "wspólny cel", budowanie zaufania, język partnerski
+
+Uwzględnij typ relacji przy analizie - w różnych relacjach te same słowa mogą mieć inne znaczenie!
+
+Zwróć analizę w formacie JSON (UŻYJ polskich znaków):
+{{
+    "detected_level": "Poziom I/II/III",
+    "confidence": [1-10],
+    "explanation": "Dlaczego to ten poziom - cytuj konkretne fragmenty",
+    "key_indicators": ["wskaźnik 1", "wskaźnik 2", "wskaźnik 3"],
+    "neurobiological_impact": "Wpływ na hormony - kortyzol (stres) czy oksytocyna (zaufanie)",
+    "emotional_tone": "neutralny/pozytywny/negatywny/agresywny/partnerski",
+    "trust_building_score": [1-10],
+    "hidden_needs": ["potrzeba 1", "potrzeba 2"],
+    "suggested_approach": "Jak podejść do odpowiedzi w kontekście tego typu relacji"
+}}"""
+        
+        response = model.generate_content(
+            prompt,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.7,
+                max_output_tokens=800,
+            )
+        )
+        
+        # Parse JSON
+        result_text = response.text.strip()
+        # Usuń markdown code blocks jeśli są
+        if result_text.startswith('```'):
+            result_text = '\n'.join(result_text.split('\n')[1:-1])
+        
+        result = json.loads(result_text)
+        return result
+        
+    except Exception as e:
+        st.error(f"❌ Błąd analizy: {e}")
+        import traceback
+        st.code(traceback.format_exc())
+        return None
+
+
+def generate_transformational_response(
+    client_email: str, 
+    client_analysis: Dict, 
+    user_response: str, 
+    additional_context: Optional[str] = None,
+    relationship_type: str = "👤 Klient (zewnętrzny)"
+) -> Optional[Dict]:
+    """Ocenia odpowiedź użytkownika i generuje wersję transformacyjną"""
+    try:
+        import google.generativeai as genai
+        
+        # Pobierz klucz API
+        api_key = None
+        if hasattr(st, 'secrets') and 'API_KEYS' in st.secrets and 'GEMINI_API_KEY' in st.secrets['API_KEYS']:
+            api_key = st.secrets['API_KEYS']['GEMINI_API_KEY']
+        elif hasattr(st, 'secrets') and 'GEMINI_API_KEY' in st.secrets:
+            api_key = st.secrets['GEMINI_API_KEY']
+        
+        if not api_key:
+            st.error("⚠️ Brak klucza API Gemini")
+            return None
+        
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        
+        # Mapowanie typu relacji
+        relationship_guidelines = {
+            "👤 Klient (zewnętrzny)": "Relacja klient-dostawca. Ton: profesjonalny, partnerski, budujący zaufanie. Unikaj: obrony, tłumaczeń.",
+            "📊 Przełożony": "Komunikacja w górę. Ton: asertywny ale z szacunkiem, konkretny, biznesowy. Podkreślaj wartość i rozwiązania.",
+            "🏢 Dostawca/Partner": "Relacja partnerska B2B. Ton: równorzędny, win-win, jasne oczekiwania. Balans między asertywnością a współpracą.",
+            "👥 Współpracownik (poziomo)": "Relacja koleżeńska. Ton: otwarty, wspierający, 'my razem'. Budowanie zespołu.",
+            "📋 Podwładny": "Komunikacja w dół. Ton: wspierający rozwój, jasny, konstruktywny feedback. Coaching approach.",
+            "🎯 Kandydat (rekrutacja)": "Relacja rekrutacyjna. Ton: profesjonalny, transparentny, budowanie marki pracodawcy.",
+            "💼 Stakeholder/Inwestor": "Relacja strategiczna. Ton: biznesowy, zorientowany na wartość, zarządzanie oczekiwaniami.",
+            "👨‍👩‍👧 Osoba prywatna": "Relacja osobista. Ton: empatyczny, autentyczny, zrozumienie kontekstu emocjonalnego."
+        }
+        
+        relationship_guide = relationship_guidelines.get(relationship_type, relationship_guidelines["👤 Klient (zewnętrzny)"])
+        
+        # Dodaj kontekst do promptu jeśli istnieje
+        context_section = ""
+        if additional_context:
+            context_section = f"""
+DODATKOWY KONTEKST SYTUACJI (WAŻNE!):
+{additional_context}
+
+⚠️ Uwzględnij ten kontekst w swojej ocenie i propozycji odpowiedzi!
+"""
+        
+        prompt = f"""Jesteś ekspertem od Conversational Intelligence i coachem komunikacji.
+
+TYP RELACJI: {relationship_type}
+WYTYCZNE DLA TEGO TYPU RELACJI: {relationship_guide}
+
+MAIL ORYGINALNY:
+{client_email}
+
+ANALIZA MAILA:
+- Poziom C-IQ: {client_analysis.get('detected_level')}
+- Ton emocjonalny: {client_analysis.get('emotional_tone')}
+- Ukryte potrzeby: {', '.join(client_analysis.get('hidden_needs', []))}
+{context_section}
+ODPOWIEDŹ UŻYTKOWNIKA (DO OCENY):
+{user_response}
+
+ZADANIE:
+1. Oceń odpowiedź użytkownika (na jakim jest poziomie C-IQ?)
+2. Daj konstruktywny feedback{' - uwzględnij dodatkowy kontekst i typ relacji!' if additional_context else ' - uwzględnij typ relacji!'}
+3. Wygeneruj TRANSFORMACYJNĄ wersję odpowiedzi (Poziom III) która:
+   - Jest dostosowana do typu relacji ({relationship_type})
+   - Buduje zaufanie (oksytocyna, nie kortyzol)
+   - Używa języka odpowiedniego dla tej relacji
+   - Zadaje pytania otwarte
+   - Adresuje ukryte potrzeby
+   - Proponuje współtworzenie rozwiązania
+
+Zwróć odpowiedź w formacie JSON. MUSISZ użyć poprawnych polskich znaków (ą, ć, ę, ł, ń, ó, ś, ź, ż).
+
+Format JSON:
+{{
+    "user_response_level": "Poziom I/II/III",
+    "user_response_feedback": "Co jest dobre, co można poprawić - konkretnie i konstruktywnie. UŻYJ POLSKICH ZNAKÓW.",
+    "transformational_version": "Twoja propozycja odpowiedzi na poziomie III (gotowa do skopiowania). UŻYJ POLSKICH ZNAKÓW.",
+    "why_transformational": "Dlaczego ta wersja jest transformacyjna - analiza elementów. UŻYJ POLSKICH ZNAKÓW.",
+    "key_changes": ["zmiana 1", "zmiana 2", "zmiana 3"]
+}}
+
+WAŻNE: 
+- Używaj POPRAWNYCH polskich znaków (ą, ć, ę, ł, ń, ó, ś, ź, ż)
+- Jeśli masz cudzysłów wewnątrz tekstu, użyj \" (escaped)
+- Nowe linie w tekście zastąp spacją lub użyj \\n
+"""
+        
+        response = model.generate_content(
+            prompt,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.8,
+                max_output_tokens=1500,
+            )
+        )
+        
+        # Parse JSON - z lepszą obsługą błędów
+        result_text = response.text.strip()
+        
+        # Usuń markdown code blocks
+        if result_text.startswith('```'):
+            lines = result_text.split('\n')
+            # Znajdź pierwszą linię z { i ostatnią z }
+            start_idx = 0
+            end_idx = len(lines)
+            for i, line in enumerate(lines):
+                if line.strip().startswith('{'):
+                    start_idx = i
+                    break
+            for i in range(len(lines)-1, -1, -1):
+                if lines[i].strip().endswith('}'):
+                    end_idx = i + 1
+                    break
+            result_text = '\n'.join(lines[start_idx:end_idx])
+        
+        # Debug - pokaż surowy JSON
+        print("🔍 Raw JSON response (first 500 chars):")
+        try:
+            print(result_text[:500])
+        except:
+            print(result_text.encode('utf-8')[:500])
+        
+        try:
+            # Parse JSON z polskimi znakami
+            result = json.loads(result_text, strict=False)
+            return result
+        except json.JSONDecodeError as e:
+            st.error(f"❌ Błąd parsowania JSON: {e}")
+            st.markdown("**Surowa odpowiedź AI:**")
+            st.code(result_text)
+            
+            # Fallback - zwróć przynajmniej tekst
+            return {
+                "user_response_level": "Poziom II",
+                "user_response_feedback": "Nie udało się sparsować odpowiedzi AI. Zobacz surową odpowiedź poniżej.",
+                "transformational_version": result_text,
+                "why_transformational": "Błąd parsowania JSON",
+                "key_changes": ["Błąd parsowania - zobacz surową odpowiedź"]
+            }
+        
+    except Exception as e:
+        st.error(f"❌ Błąd generowania: {e}")
+        import traceback
+        st.code(traceback.format_exc())
+        return None
+
 
 def show_ciq_examples():
     """Pokazuje przykłady różnych poziomów C-IQ"""

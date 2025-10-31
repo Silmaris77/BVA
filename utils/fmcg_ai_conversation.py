@@ -208,14 +208,25 @@ Odpowiedz TYLKO JSON (bez markdown, bez dodatkowego tekstu):
         import json
         import re
         
-        response_text = response.text.strip()
+        # Get response text safely
+        try:
+            response_text = response.text.strip()
+        except AttributeError:
+            # If response doesn't have .text attribute, fallback
+            print(f"❌ Błąd: response nie ma atrybutu 'text'")
+            return evaluate_conversation_heuristic(conversation_messages, client)
         
         # Remove markdown code blocks if present
         response_text = re.sub(r'```json\s*', '', response_text)
         response_text = re.sub(r'```\s*$', '', response_text)
         response_text = response_text.strip()
         
-        evaluation = json.loads(response_text)
+        try:
+            evaluation = json.loads(response_text)
+        except json.JSONDecodeError as json_err:
+            print(f"❌ Błąd parsowania JSON: {json_err}")
+            print(f"Response text: {response_text[:200]}...")
+            return evaluate_conversation_heuristic(conversation_messages, client)
         
         # Validate and cap values
         evaluation["quality"] = max(1, min(5, int(evaluation.get("quality", 3))))
@@ -228,6 +239,9 @@ Odpowiedz TYLKO JSON (bez markdown, bez dodatkowego tekstu):
         
     except Exception as e:
         print(f"❌ Błąd oceny rozmowy: {e}")
+        print(f"Exception type: {type(e).__name__}")
+        import traceback
+        traceback.print_exc()
         # Fallback to simple heuristic
         return evaluate_conversation_heuristic(conversation_messages, client)
 
@@ -681,3 +695,139 @@ def calculate_knowledge_level(discovered_info: Dict) -> int:
         return 4  # ⭐⭐⭐⭐☆
     else:
         return 5  # ⭐⭐⭐⭐⭐
+
+
+def extract_sales_capacity_discovery(
+    conversation_transcript: str,
+    client: dict,
+    current_discovered: dict
+) -> dict:
+    """
+    Wyciąga informacje o sales_capacity z rozmowy używając AI
+    
+    Args:
+        conversation_transcript: str - pełna transkrypcja rozmowy (klient + gracz)
+        client: dict - dane klienta
+        current_discovered: dict - obecnie odkryte capacity (sales_capacity_discovered)
+    
+    Returns:
+        dict - nowe odkrycia per kategoria:
+        {
+            "Personal Care": {
+                "weekly_sales_volume": 150,
+                "shelf_space_facings": 12,
+                "storage_capacity": 300,
+                "rotation_days": 14,
+                "max_order_per_sku": 24,
+                "avg_products_in_category": 20,
+                "discovered_date": "2025-10-30T10:00:00",
+                "discovered_method": "conversation",
+                "reputation_at_discovery": 35
+            }
+        }
+    """
+    if not initialize_gemini():
+        return {}
+    
+    try:
+        # Prompt dla AI do ekstrakcji structured data
+        extraction_prompt = f"""
+Przeanalizuj poniższą rozmowę między handlowcem a właścicielem sklepu.
+Wyciągnij KONKRETNE LICZBY dotyczące sprzedaży w poszczególnych kategoriach produktów.
+
+ROZMOWA:
+{conversation_transcript}
+
+KATEGORIE PRODUKTÓW:
+- Personal Care (żele, szampony, mydła)
+- Food (jogurty, sery, ketchupy)
+- Home Care (płyny do naczyń, proszki)
+- Snacks (chipsy, batoniki)
+- Beverages (napoje, woda)
+
+SZUKAJ INFORMACJI O:
+1. weekly_sales_volume - ile sztuk sprzedaje tygodniowo w kategorii (np. "sprzedaję 150 sztuk żeli tygodniowo")
+2. shelf_space_facings - ile pozycji na półce (np. "mam 12 facingów")
+3. rotation_days - ile dni rotacja (np. "obraca się co 14 dni")
+4. max_order_per_sku - maksymalne zamówienie na produkt (np. "max 24 sztuki na produkt")
+
+ZWRÓĆ JSON w formacie:
+{{
+  "Personal Care": {{
+    "weekly_sales_volume": 150,
+    "shelf_space_facings": 12,
+    "rotation_days": 14,
+    "max_order_per_sku": 24
+  }},
+  "Food": {{
+    ...jeśli znaleziono informacje...
+  }}
+}}
+
+WAŻNE:
+- Zwróć TYLKO kategorie, o których klient wspomniał konkretne liczby
+- Jeśli klient nie podał liczby - NIE zgaduj! Pomiń tę kategorię
+- Jeśli klient mówił ogólnie ("około 100+") - zaokrąglij do najbliższej dziesiątki
+- Zwróć czysty JSON bez ```json markers
+
+JSON:"""
+        
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        response = model.generate_content(extraction_prompt)
+        
+        # Parse JSON response
+        import json
+        import traceback
+        
+        try:
+            response_text = response.text.strip()
+            # Remove markdown markers if present
+            if response_text.startswith("```json"):
+                response_text = response_text[7:]
+            if response_text.startswith("```"):
+                response_text = response_text[3:]
+            if response_text.endswith("```"):
+                response_text = response_text[:-3]
+            response_text = response_text.strip()
+            
+            extracted_data = json.loads(response_text)
+        except json.JSONDecodeError as e:
+            print(f"⚠️ JSON parsing error in extract_sales_capacity_discovery: {e}")
+            print(f"Response text: {response_text[:200]}")
+            traceback.print_exc()
+            return {}
+        
+        # Wzbogać dane o metadane
+        enriched_discoveries = {}
+        reputation = client.get('reputation', 0)
+        
+        for category, data in extracted_data.items():
+            if category not in ["Personal Care", "Food", "Home Care", "Snacks", "Beverages"]:
+                continue  # Skip invalid categories
+            
+            # Skip if already discovered
+            if category in current_discovered:
+                continue
+            
+            # Uzupełnij brakujące pola na podstawie sales_capacity
+            sales_capacity = client.get('sales_capacity', {}).get(category, {})
+            
+            enriched_discoveries[category] = {
+                "weekly_sales_volume": data.get('weekly_sales_volume') or sales_capacity.get('weekly_sales_volume'),
+                "shelf_space_facings": data.get('shelf_space_facings') or sales_capacity.get('shelf_space_facings'),
+                "storage_capacity": sales_capacity.get('storage_capacity'),  # Nie odkrywane w rozmowie
+                "rotation_days": data.get('rotation_days') or sales_capacity.get('rotation_days'),
+                "max_order_per_sku": data.get('max_order_per_sku') or sales_capacity.get('max_order_per_sku'),
+                "avg_products_in_category": sales_capacity.get('avg_products_in_category'),
+                "discovered_date": datetime.now().isoformat(),
+                "discovered_method": "conversation",
+                "reputation_at_discovery": reputation
+            }
+        
+        return enriched_discoveries
+        
+    except Exception as e:
+        print(f"❌ Error in extract_sales_capacity_discovery: {e}")
+        import traceback
+        traceback.print_exc()
+        return {}

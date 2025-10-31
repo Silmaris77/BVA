@@ -6,6 +6,7 @@ Podstawowe mechaniki gry: wizyty, reputacja, statusy klientów, energia
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple
 import random
+import math
 
 from data.industries.fmcg_data_schema import (
     FMCGClientData,
@@ -14,6 +15,424 @@ from data.industries.fmcg_data_schema import (
     create_visit_record
 )
 from data.repositories.business_game_repository import BusinessGameRepository
+
+
+# =============================================================================
+# ROUTE PLANNING & DISTANCE CALCULATION
+# =============================================================================
+
+# Cache dla dystansów i geometrii tras
+_distance_cache = {}
+_route_geometry_cache = {}  # Nowy cache dla geometrii tras
+
+def calculate_distance_haversine(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    """
+    Oblicza odległość w linii prostej (formuła Haversine) + korekta 30%
+    
+    Args:
+        lat1, lng1: Współrzędne punktu 1
+        lat2, lng2: Współrzędne punktu 2
+    
+    Returns:
+        Odległość w kilometrach z korektą na krętość ulic
+    """
+    # Promień Ziemi w km
+    R = 6371.0
+    
+    # Konwersja stopni na radiany
+    lat1_rad = math.radians(lat1)
+    lat2_rad = math.radians(lat2)
+    delta_lat = math.radians(lat2 - lat1)
+    delta_lng = math.radians(lng2 - lng1)
+    
+    # Formuła Haversine
+    a = math.sin(delta_lat / 2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(delta_lng / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    
+    straight_distance = R * c
+    
+    # Korekta na krętość ulic (+30%)
+    real_distance = straight_distance * 1.3
+    
+    return round(real_distance, 2)
+
+
+def calculate_distance_osrm(lat1: float, lng1: float, lat2: float, lng2: float, get_geometry: bool = False):
+    """
+    Oblicza rzeczywistą odległość ulicami używając OSRM API
+    
+    Args:
+        lat1, lng1: Współrzędne punktu 1
+        lat2, lng2: Współrzędne punktu 2
+        get_geometry: Czy zwrócić również geometrię trasy (współrzędne po ulicach)
+    
+    Returns:
+        Jeśli get_geometry=False: dystans w km (float) lub None
+        Jeśli get_geometry=True: {"distance": float, "geometry": [[lat, lng], ...]} lub None
+    """
+    try:
+        import requests
+        
+        # OSRM wymaga lng, lat (nie lat, lng!)
+        url = f"http://router.project-osrm.org/route/v1/driving/{lng1},{lat1};{lng2},{lat2}"
+        params = {
+            "overview": "full" if get_geometry else "false",
+            "geometries": "geojson"
+        }
+        
+        response = requests.get(url, params=params, timeout=3)
+        
+        if response.status_code == 200:
+            data = response.json()
+            
+            if data.get("code") == "Ok" and data.get("routes"):
+                route = data["routes"][0]
+                
+                # Dystans w metrach
+                distance_meters = route["distance"]
+                distance_km = distance_meters / 1000
+                
+                if get_geometry:
+                    # Geometria trasy (lista współrzędnych)
+                    geometry = route.get("geometry", {}).get("coordinates", [])
+                    # OSRM zwraca [lng, lat], zmieniamy na [lat, lng] dla Folium
+                    geometry_latlong = [[coord[1], coord[0]] for coord in geometry]
+                    
+                    return {
+                        "distance": round(distance_km, 2),
+                        "geometry": geometry_latlong
+                    }
+                else:
+                    return round(distance_km, 2)
+        
+        return None
+        
+    except Exception as e:
+        # Błąd (brak internetu, timeout, etc.)
+        print(f"❌ OSRM error: {e}")
+        return None
+
+
+def calculate_distance_between_points(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    """
+    Oblicza odległość między dwoma punktami GPS
+    
+    Strategia:
+    1. Sprawdź cache
+    2. Spróbuj OSRM (rzeczywista trasa ulicami)
+    3. Fallback: Haversine × 1.3
+    
+    Args:
+        lat1, lng1: Współrzędne punktu 1
+        lat2, lng2: Współrzędne punktu 2
+    
+    Returns:
+        Odległość w kilometrach (rzeczywista trasa ulicami)
+    """
+    # Klucz cache (zaokrąglony do 4 miejsc po przecinku)
+    cache_key = (round(lat1, 4), round(lng1, 4), round(lat2, 4), round(lng2, 4))
+    
+    # Sprawdź cache
+    if cache_key in _distance_cache:
+        return _distance_cache[cache_key]
+    
+    # Spróbuj OSRM (bez geometrii - tylko odległość)
+    osrm_result = calculate_distance_osrm(lat1, lng1, lat2, lng2, get_geometry=False)
+    
+    if osrm_result is not None:
+        # OSRM zwraca float gdy get_geometry=False
+        osrm_distance = osrm_result if isinstance(osrm_result, float) else osrm_result.get("distance", None)
+        if osrm_distance is not None:
+            # Sukces - zapisz do cache
+            _distance_cache[cache_key] = osrm_distance
+            return osrm_distance
+    
+    # Fallback: Haversine × 1.3
+    fallback_distance = calculate_distance_haversine(lat1, lng1, lat2, lng2)
+    
+    # Zapisz do cache (żeby nie próbować OSRM ponownie dla tego samego punktu)
+    _distance_cache[cache_key] = fallback_distance
+    
+    return fallback_distance
+
+
+def optimize_route(base_location: Dict, shop_locations: List[Dict]) -> Tuple[List[str], float]:
+    """
+    Optymalizuje trasę wizyt algorytmem nearest neighbor (greedy TSP)
+    
+    Args:
+        base_location: {"lat": ..., "lng": ...}
+        shop_locations: [{"client_id": "...", "name": "...", "lat": ..., "lng": ...}, ...]
+    
+    Returns:
+        (optimized_order, total_distance)
+        optimized_order: Lista client_id w optymalnej kolejności
+        total_distance: Całkowity dystans w km (baza → sklepy → baza)
+    """
+    if not shop_locations:
+        return [], 0.0
+    
+    # Nearest neighbor algorithm
+    unvisited = shop_locations.copy()
+    route = []
+    current_location = base_location
+    total_distance = 0.0
+    
+    while unvisited:
+        # Znajdź najbliższy sklep
+        nearest_shop = min(
+            unvisited,
+            key=lambda shop: calculate_distance_between_points(
+                current_location["lat"], current_location["lng"],
+                shop["lat"], shop["lng"]
+            )
+        )
+        
+        # Dodaj do trasy
+        distance = calculate_distance_between_points(
+            current_location["lat"], current_location["lng"],
+            nearest_shop["lat"], nearest_shop["lng"]
+        )
+        total_distance += distance
+        route.append(nearest_shop["client_id"])
+        
+        # Aktualizuj pozycję
+        current_location = {"lat": nearest_shop["lat"], "lng": nearest_shop["lng"]}
+        unvisited.remove(nearest_shop)
+    
+    # Dodaj powrót do bazy
+    if route:
+        last_shop = next(s for s in shop_locations if s["client_id"] == route[-1])
+        return_distance = calculate_distance_between_points(
+            last_shop["lat"], last_shop["lng"],
+            base_location["lat"], base_location["lng"]
+        )
+        total_distance += return_distance
+    
+    return route, round(total_distance, 2)
+
+
+def calculate_route_distance(base_location: Dict, shop_locations: List[Dict], route_order: List[str]) -> float:
+    """
+    Oblicza całkowitą długość trasy dla danej kolejności wizyt
+    
+    Args:
+        base_location: {"lat": ..., "lng": ...}
+        shop_locations: Lista wszystkich sklepów z pozycjami
+        route_order: Lista client_id w kolejności wizyt
+    
+    Returns:
+        Całkowity dystans w km (baza → sklepy w podanej kolejności → baza)
+    """
+    if not route_order:
+        return 0.0
+    
+    # Mapowanie client_id → location
+    shops_by_id = {shop["client_id"]: shop for shop in shop_locations}
+    
+    total_distance = 0.0
+    current_location = base_location
+    
+    # Dystans przez wszystkie sklepy
+    for client_id in route_order:
+        shop = shops_by_id.get(client_id)
+        if not shop:
+            continue
+        
+        distance = calculate_distance_between_points(
+            current_location["lat"], current_location["lng"],
+            shop["lat"], shop["lng"]
+        )
+        total_distance += distance
+        current_location = {"lat": shop["lat"], "lng": shop["lng"]}
+    
+    # Powrót do bazy
+    if route_order:
+        last_shop = shops_by_id.get(route_order[-1])
+        if last_shop:
+            return_distance = calculate_distance_between_points(
+                last_shop["lat"], last_shop["lng"],
+                base_location["lat"], base_location["lng"]
+            )
+            total_distance += return_distance
+    
+    return round(total_distance, 2)
+
+
+def get_route_geometry(base_location: Dict, shop_locations: List[Dict], route_order: List[str]) -> List[List[float]]:
+    """
+    Pobiera geometrię trasy (współrzędne po ulicach) dla zaplanowanej kolejności wizyt
+    
+    Args:
+        base_location: {"lat": ..., "lng": ...}
+        shop_locations: Lista wszystkich sklepów z pozycjami
+        route_order: Lista client_id w kolejności wizyt
+    
+    Returns:
+        Lista współrzędnych [[lat, lng], [lat, lng], ...] tworzących trasę po ulicach
+        Jeśli OSRM niedostępny, zwraca pustą listę (mapa użyje prostych linii)
+    """
+    if not route_order:
+        return []
+    
+    # Cache key
+    cache_key = tuple(route_order)
+    if cache_key in _route_geometry_cache:
+        return _route_geometry_cache[cache_key]
+    
+    # Mapowanie client_id → location
+    shops_by_id = {shop["client_id"]: shop for shop in shop_locations}
+    
+    full_geometry = []
+    current_location = base_location
+    
+    # Pobierz geometrię dla każdego odcinka
+    for i, client_id in enumerate(route_order, 1):
+        shop = shops_by_id.get(client_id)
+        if not shop:
+            continue
+        
+        # Pobierz trasę z geometrią
+        result = calculate_distance_osrm(
+            current_location["lat"], current_location["lng"],
+            shop["lat"], shop["lng"],
+            get_geometry=True
+        )
+        
+        if result and isinstance(result, dict) and "geometry" in result:
+            # Dodaj współrzędne z tego odcinka (pomijaj pierwszy punkt jeśli nie pierwszy odcinek, żeby uniknąć duplikatów)
+            geometry = result["geometry"]
+            if full_geometry:
+                geometry = geometry[1:]  # Pomiń pierwszy punkt (to ten sam co ostatni z poprzedniego odcinka)
+            full_geometry.extend(geometry)
+        else:
+            # Fallback: prosta linia
+            if not full_geometry:
+                full_geometry.append([current_location["lat"], current_location["lng"]])
+            full_geometry.append([shop["lat"], shop["lng"]])
+        
+        current_location = {"lat": shop["lat"], "lng": shop["lng"]}
+    
+    # Powrót do bazy
+    if route_order:
+        last_shop = shops_by_id.get(route_order[-1])
+        if last_shop:
+            result = calculate_distance_osrm(
+                last_shop["lat"], last_shop["lng"],
+                base_location["lat"], base_location["lng"],
+                get_geometry=True
+            )
+            
+            if result and isinstance(result, dict) and "geometry" in result:
+                geometry = result["geometry"][1:]  # Pomiń pierwszy punkt
+                full_geometry.extend(geometry)
+            else:
+                # Fallback: prosta linia
+                full_geometry.append([base_location["lat"], base_location["lng"]])
+    
+    # Zapisz do cache
+    _route_geometry_cache[cache_key] = full_geometry
+    
+    return full_geometry
+
+
+def clear_distance_cache():
+    """
+    Czyści cache dystansów i geometrii tras (można wywołać np. raz dziennie)
+    """
+    global _distance_cache, _route_geometry_cache
+    _distance_cache.clear()
+    _route_geometry_cache.clear()
+
+
+def get_route_geometry_split(base_location: Dict, shop_locations: List[Dict], route_order: List[str]) -> Dict:
+    """
+    Pobiera geometrię trasy podzieloną na wizyt i powrót do bazy
+    
+    Args:
+        base_location: {"lat": ..., "lng": ...}
+        shop_locations: Lista wszystkich sklepów z pozycjami
+        route_order: Lista client_id w kolejności wizyt
+    
+    Returns:
+        {
+            "visits": [[lat, lng], ...],  # Geometria wizyt (od bazy do ostatniego sklepu)
+            "return": [[lat, lng], ...]   # Geometria powrotu (od ostatniego sklepu do bazy)
+        }
+    """
+    print(f"🔍 get_route_geometry_split: {len(route_order)} wizyt")
+    
+    if not route_order:
+        return {"visits": [], "return": []}
+    
+    # Mapowanie client_id → location
+    shops_by_id = {shop["client_id"]: shop for shop in shop_locations}
+    
+    visits_geometry = []
+    current_location = base_location
+    
+    # Pobierz geometrię wizyt (od bazy przez wszystkie sklepy)
+    for i, client_id in enumerate(route_order, 1):
+        shop = shops_by_id.get(client_id)
+        if not shop:
+            print(f"  ⚠️ Sklep {client_id} nie znaleziony")
+            continue
+        
+        print(f"  Wizyta {i}/{len(route_order)}: {current_location['lat']:.4f} → {shop['lat']:.4f}")
+        
+        # Pobierz trasę z geometrią
+        result = calculate_distance_osrm(
+            current_location["lat"], current_location["lng"],
+            shop["lat"], shop["lng"],
+            get_geometry=True
+        )
+        
+        if result and isinstance(result, dict) and "geometry" in result:
+            geometry = result["geometry"]
+            if visits_geometry:
+                geometry = geometry[1:]  # Pomiń pierwszy punkt (duplikat)
+            visits_geometry.extend(geometry)
+            print(f"    ✓ Dodano {len(geometry)} punktów do wizyt")
+        else:
+            # Fallback: prosta linia
+            print(f"    ⚠️ OSRM failed, prosta linia")
+            if not visits_geometry:
+                visits_geometry.append([current_location["lat"], current_location["lng"]])
+            visits_geometry.append([shop["lat"], shop["lng"]])
+        
+        current_location = {"lat": shop["lat"], "lng": shop["lng"]}
+    
+    print(f"  ✅ Geometria wizyt: {len(visits_geometry)} punktów")
+    
+    # Pobierz geometrię powrotu do bazy
+    return_geometry = []
+    if route_order:
+        last_shop = shops_by_id.get(route_order[-1])
+        if last_shop:
+            print(f"  🏠 Powrót: {last_shop['lat']:.4f} → {base_location['lat']:.4f}")
+            result = calculate_distance_osrm(
+                last_shop["lat"], last_shop["lng"],
+                base_location["lat"], base_location["lng"],
+                get_geometry=True
+            )
+            
+            if result and isinstance(result, dict) and "geometry" in result:
+                return_geometry = result["geometry"]
+                print(f"    ✓ Powrót: {len(return_geometry)} punktów")
+            else:
+                # Fallback: prosta linia
+                print(f"    ⚠️ OSRM failed dla powrotu, prosta linia")
+                return_geometry = [
+                    [last_shop["lat"], last_shop["lng"]],
+                    [base_location["lat"], base_location["lng"]]
+                ]
+    
+    print(f"  ✅ SPLIT: visits={len(visits_geometry)}, return={len(return_geometry)}")
+    
+    return {
+        "visits": visits_geometry,
+        "return": return_geometry
+    }
 
 
 # =============================================================================
@@ -415,6 +834,8 @@ def execute_visit_placeholder(
     # Update game state metrics
     game_state["visits_this_week"] = game_state.get("visits_this_week", 0) + 1
     game_state["monthly_sales"] = game_state.get("monthly_sales", 0) + order_value
+    game_state["weekly_actual_sales"] = game_state.get("weekly_actual_sales", 0) + order_value
+    game_state["monthly_actual_sales"] = game_state.get("monthly_actual_sales", 0) + order_value
     
     # Update client counts in game state
     if client["status"] == "ACTIVE" and client.get("orders_count", 0) == 1:
@@ -505,9 +926,53 @@ def advance_day(game_state: FMCGGameState, clients: Dict[str, FMCGClientData]) -
     
     # Reset weekly counter on Monday
     if next_idx == 0:
+        # WEEKLY TARGET SUMMARY - Before reset
+        weekly_target = game_state.get("weekly_target_sales", 8000)
+        weekly_actual = game_state.get("weekly_actual_sales", 0)
+        weekly_visits_actual = game_state.get("visits_this_week", 0)
+        weekly_visits_target = game_state.get("weekly_target_visits", 6)
+        
+        target_achieved = weekly_actual >= weekly_target
+        
+        # Update weekly history
+        if "weekly_history" not in game_state:
+            game_state["weekly_history"] = []
+        
+        game_state["weekly_history"].append({
+            "week": game_state.get("current_week", 1),
+            "sales": weekly_actual,
+            "visits": weekly_visits_actual,
+            "target_sales": weekly_target,
+            "target_visits": weekly_visits_target,
+            "target_achieved": target_achieved,
+            "date_end": datetime.now().strftime("%Y-%m-%d")
+        })
+        
+        # Update streak
+        if target_achieved:
+            game_state["weekly_streak"] = game_state.get("weekly_streak", 0) + 1
+        else:
+            game_state["weekly_streak"] = 0  # Reset streak
+        
+        # Update best sales record
+        if weekly_actual > game_state.get("weekly_best_sales", 0):
+            game_state["weekly_best_sales"] = weekly_actual
+        
+        # Store week summary for display (cleared after viewing)
+        game_state["last_week_summary"] = {
+            "week": game_state.get("current_week", 1),
+            "sales": weekly_actual,
+            "visits": weekly_visits_actual,
+            "target_achieved": target_achieved,
+            "streak": game_state.get("weekly_streak", 0)
+        }
+        
+        # Reset weekly counters
         game_state["current_week"] = game_state.get("current_week", 1) + 1
         game_state["visits_this_week"] = 0
+        game_state["weekly_actual_sales"] = 0  # Reset weekly sales tracker
         game_state["coaching_visits_this_week"] = 0  # Reset coaching counter
+        game_state["autopilot_visits_this_week"] = 0  # Reset autopilot counter
     
     # Process all clients
     clients_to_lose = []

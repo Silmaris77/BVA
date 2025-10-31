@@ -1,0 +1,3 @@
+"""
+FMCG Game - UI Components
+"""

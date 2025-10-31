@@ -19,11 +19,32 @@ FRESHLIFE_PRODUCTS = {
         "emoji": "🧴",
         "variants": ["Aloe & Green Tea", "Coconut & Shea", "Lavender Calm"],
         "base_variant": "Aloe & Green Tea 250ml",
-        "price_retail": 12.99,
-        "price_wholesale": 8.44,
-        "margin_percent": 35,
-        "margin_pln": 4.55,
-        "moq": 6,  # Minimum order quantity (pcs)
+        
+        # PRICING - MODEL REALISTYCZNY (przez hurtownię)
+        "price_retail": 12.99,  # Cena w sklepie
+        "price_wholesale_eurocash": 10.50,  # Cena hurtowni (Eurocash) dla sklepu
+        "price_freshlife_to_eurocash": 7.50,  # Cena producenta dla hurtowni
+        "margin_shop_percent": 19,  # Marża sklepu (kupuje od Eurocash)
+        "margin_shop_pln": 2.49,  # Ile zarabia sklep na 1 sztuce
+        "margin_eurocash_percent": 40,  # Marża hurtowni
+        "margin_freshlife_percent": 25,  # Marża producenta (COGS: 6.00 zł)
+        
+        # DISTRIBUTION MODEL
+        "distribution_model": "wholesale",  # wholesale / direct / hybrid
+        "available_at": ["Eurocash", "Makro Cash & Carry", "FMCG24"],
+        "eurocash_sku": "FL-PC001-250",  # Kod w systemie Eurocash
+        
+        # ORDERING
+        "moq_freshlife": 6,  # MOQ bezpośrednio od FreshLife (dla testów)
+        "moq_eurocash": 1,  # MOQ w Eurocash (dla sklepów)
+        "payment_terms_eurocash": "Przelew 14 dni",
+        "payment_terms_direct": "Przelew 14 dni lub gotówka",
+        "delivery_free_threshold": 300,  # Darmowa dostawa od X zł (bezpośrednia)
+        
+        # LOGISTICS
+        "shelf_space_cm": 15,  # Ile cm zajmuje na półce
+        "case_size": 12,  # Ile sztuk w kartonie
+        "cases_per_pallet": 80,
         "popularity": 72,  # 0-100
         "shelf_life_days": 1080,
         "packaging": "Butelka PET z recyclingu 250ml, pompka",
@@ -31,41 +52,53 @@ FRESHLIFE_PRODUCTS = {
         # STORYTELLING
         "description": "Naturalny żel pod prysznic z ekstraktami z aloesu i zielonej herbaty. Bez parabenów, SLS i barwników. Idealny dla skóry wrażliwej. Piękne, ekologiczne opakowanie z recyclingu.",
         "target_customer": "Kobiety 25-45 lat świadome składu, rodzice szukający bezpiecznych produktów, osoby z wrażliwą skórą, ekologiczni konsumenci",
-        "rotation_speed": "Średnia (7-10 dni przy 10 szt)",
-        "suggested_initial_order": "6-10 szt",
+        "rotation_speed": "Szybka (7-10 dni przy 10 szt) = 3-4 rotacje/mies",
+        "rotation_speed_context": "Przy rotacji 3x/mies i marży 2.49 zł = 7.47 zł zysku/mies z 15 cm półki. Dove rotuje 1x/mies przy marży 2.88 zł = 2.88 zł/mies.",
+        "suggested_initial_order": "6-10 szt (pierwsze zamówienie testowe bezpośrednio od FreshLife), potem przez Eurocash",
         
-        # PRZEWAGI NAD KONKURENCJĄ
+        # PRZEWAGI NAD KONKURENCJĄ (BEZ MARŻ KONKURENCJI - realistycznie!)
         "competitors": [
             {
                 "brand": "Dove Natural",
-                "price": 15.99,
-                "margin_percent": 18,
+                "price_retail": 15.99,
+                "price_wholesale_estimated": 13.11,  # Szacowana (nie znamy dokładnie)
+                "moq_estimated": 24,
+                "shelf_space_cm": 15,
+                "rotation_estimated": "Wolna (30 dni)",
                 "advantages": [
-                    "Tańszy o 3 zł (-19%)",
-                    "Lepsza marża: 35% vs 18%",
-                    "97% naturalnych składników vs 85%"
+                    "💰 Tańszy dla klienta: 12.99 zł vs 15.99 zł (oszczędność 3 zł)",
+                    "💵 Lepsza marża dla Pana: zarobi Pan 2.49 zł vs ~2.88 zł, ALE rotacja 3x szybsza!",
+                    "📦 Niższe MOQ: może Pan zacząć od 6 szt (u nas bezpośrednio) vs 24 szt Dove",
+                    "♻️ 97% naturalnych składników vs 85% (Dove)",
+                    "🌱 Opakowanie z recyclingu - przyciąga ekologicznych klientów"
                 ]
             },
             {
                 "brand": "Fa Natural",
-                "price": 13.99,
-                "margin_percent": 20,
+                "price_retail": 13.99,
+                "price_wholesale_estimated": 11.19,
+                "moq_estimated": 12,
+                "shelf_space_cm": 15,
+                "rotation_estimated": "Średnia (20 dni)",
                 "advantages": [
-                    "Bardziej naturalny skład (97% vs 85%)",
-                    "Podobna cena, lepsza marża: 35% vs 20%",
-                    "Opakowanie z recyclingu (Fa - plastik pierwotny)"
+                    "💰 Tańszy dla klienta: 12.99 zł vs 13.99 zł",
+                    "♻️ Bardziej naturalny skład: 97% vs 85%",
+                    "📦 Podobne MOQ, ale lepsza rotacja (10 dni vs 20 dni)",
+                    "🌱 Opakowanie z recyclingu (Fa - plastik pierwotny)"
                 ]
             }
         ],
         
-        # ARGUMENTY SPRZEDAŻOWE
+        # ARGUMENTY SPRZEDAŻOWE - dostosowane do modelu przez hurtownię
         "sales_arguments": [
-            "Widzę że ma Pan/Pani Dove Natural za 15.99. Nasz BodyWash ma podobną jakość i naturalny skład, ale jest tańszy dla klienta końcowego (12.99) i Pan/Pani zarabia więcej (35% vs 18%).",
-            "To idealna opcja dla klientów szukających oszczędności bez kompromisów w jakości - naturalny skład, bez chemii, a cena niższa niż Dove.",
-            "Opakowanie z recyclingu przyciąga ekologicznych konsumentów - to rosnąca grupa, szczególnie wśród młodszych klientów."
+            "📦 Nasz produkt jest dostępny w Eurocash pod kodem FL-PC001-250. Może Pan zamówić przez swoje konto online lub zadzwonić do przedstawiciela. Cena 10.50 zł, sprzeda Pan za 12.99 - to 2.49 zł na sztuce.",
+            "🔄 Kluczowa sprawa: nasz produkt rotuje w 7-10 dni, Dove w 30. To oznacza że zarobi Pan WIĘCEJ mimo niższej marży jednostkowej: 3 rotacje/mies x 2.49 zł = 7.47 zł vs 1 rotacja Dove x 2.88 zł = 2.88 zł.",
+            "💡 Może Pan zacząć testowo - zamówię bezpośrednio 6 sztuk. Jeśli się sprawdzi (a zazwyczaj tak jest), będzie Pan zamawiał przez Eurocash. Małe ryzyko, duży potencjał.",
+            "🛒 Klienci szukają oszczędności: 12.99 zł zamiast 15.99 za Dove to argument, który działa. Szczególnie w małych sklepach, gdzie klient liczy każdą złotówkę.",
+            "♻️ Naturalny skład i ekologiczne opakowanie - to trend! Młodsi klienci (25-40 lat) coraz częściej patrzą na skład i pochodzenie opakowania."
         ],
         
-        "usp": "97% naturalnych składników, 0% parabenów i SLS, opakowanie z recyclingu",
+        "usp": "97% naturalnych składników, 0% parabenów i SLS, opakowanie z recyclingu, szybka rotacja",
         "awards": [],
         "promo_support": True,
         "pos_materials": ["Wobbler", "Shelf strip", "Tester", "Ulotka składnikowa"],

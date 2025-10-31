@@ -28,6 +28,11 @@ def create_new_client_entry(client_id: str, status: str = "prospect") -> Dict:
         "visit_frequency_required": 14,  # dni
         "next_visit_due": None,
         
+        # Client Discovery System
+        "knowledge_level": 0,  # 0-5 stars
+        "discovered_info": {},  # FMCGClientDiscoveredInfo - all fields None initially
+        "discovery_notes": [],  # List of FMCGClientNote
+        
         # Produkty u klienta
         "products_portfolio": [],
         
@@ -42,7 +47,10 @@ def create_new_client_entry(client_id: str, status: str = "prospect") -> Dict:
         "events_timeline": [],
         
         # Conversations (kompatybilność wsteczna)
-        "conversations": []
+        "conversations": [],
+        
+        # Visit history
+        "visits_history": []
     }
 
 
@@ -67,7 +75,7 @@ def migrate_fmcg_customers_to_new_structure(bg_data: Dict) -> Tuple[Dict, int]:
     # Sprawdź czy już jest nowa struktura
     if "clients" in old_customers and isinstance(old_customers["clients"], dict):
         # Już nowa struktura - nie migruj
-        return user_data, 0
+        return bg_data, 0
     
     # MIGRACJA: Stara struktura → Nowa
     new_clients = {}
