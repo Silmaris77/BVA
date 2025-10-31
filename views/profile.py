@@ -271,7 +271,7 @@ def show_profile():
 
     # Main Profile Tabs - usunięto Personalizację, Eksplorator Typów i Typ Neurolidera
     # Historia XP przeniesiona jako sub-tab w Statystykach
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "📈 Raporty"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Statystyki", "🎒 Ekwipunek", "🏆 Odznaki", "📈 Raporty", "⚙️ Ustawienia"])
     
     # Tab 1: Statistics - z sub-tabami
     with tab1:
@@ -665,6 +665,273 @@ def show_profile():
         scroll_to_top()
         st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
         show_reports_section()
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Tab 5: Settings - Ustawienia layoutu
+    with tab5:
+        scroll_to_top()
+        st.markdown("<div class='profile-tab-content'>", unsafe_allow_html=True)
+        
+        zen_header("⚙️ Ustawienia Profilu")
+        
+        st.markdown("### 🎨 Wybór Layoutu")
+        st.markdown("Wybierz styl wizualny aplikacji, który najbardziej Ci odpowiada.")
+        
+        # Get current theme/layout from user data
+        current_layout = user_data.get('layout_preference', 'standard')
+        
+        # Layout options
+        layout_options = {
+            "Standard": {
+                "value": "standard",
+                "description": "Klasyczny layout z niebiesko-zielonymi kolorami",
+                "icon": "📘",
+                "colors": ["#4A90E2", "#5CB85C", "#2D3748"]
+            },
+            "Gaming Pro": {
+                "value": "gaming-pro",
+                "description": "Nowoczesny gaming design z cyber purple i glow effects",
+                "icon": "🎮",
+                "colors": ["#8B5CF6", "#3B82F6", "#10B981"]
+            },
+            "Halloween": {
+                "value": "halloween",
+                "description": "Halloweenowy klimat z dynią i magiczną purpurą",
+                "icon": "🎃",
+                "colors": ["#FF6B35", "#9D4EDD", "#00FF00"]
+            },
+            "Executive Pro": {
+                "value": "executive-pro",
+                "description": "Profesjonalny design dla kadry zarządzającej - Navy, Gold, Platinum",
+                "icon": "💼",
+                "colors": ["#1E3A8A", "#F59E0B", "#E5E7EB"]
+            }
+        }
+        
+        # Display layout cards
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            # Przygotuj HTML dla kolorów Standard
+            standard_colors_html = ''.join([
+                f'<div style="width: 40px; height: 40px; border-radius: 50%; background: {color};"></div>'
+                for color in layout_options['Standard']['colors']
+            ])
+            
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                border-radius: 12px;
+                padding: 20px;
+                border: {'3px solid #4A90E2' if current_layout == 'standard' else '1px solid #e2e8f0'};
+                transition: all 0.3s ease;
+                min-height: 200px;
+            ">
+                <div style="font-size: 48px; text-align: center; margin-bottom: 10px;">
+                    {layout_options['Standard']['icon']}
+                </div>
+                <h3 style="color: #1a202c; text-align: center; margin-bottom: 10px;">
+                    Standard
+                </h3>
+                <p style="color: #4a5568; text-align: center; font-size: 14px; margin-bottom: 15px;">
+                    {layout_options['Standard']['description']}
+                </p>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                    {standard_colors_html}
+                </div>
+                {'<div style="text-align: center; margin-top: 15px; color: #4A90E2; font-weight: 600;">✓ Aktywny</div>' 
+                 if current_layout == 'standard' else ''}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("Wybierz Standard", key="select_standard", use_container_width=True):
+                users_data[st.session_state.username]['layout_preference'] = 'standard'
+                save_user_data(users_data)
+                st.success("✅ Layout zmieniony na Standard!")
+                st.info("🔄 Odśwież stronę (F5), aby zobaczyć zmiany")
+        
+        with col2:
+            # Przygotuj HTML dla kolorów Gaming Pro
+            gaming_colors_html = ''.join([
+                f'<div style="width: 40px; height: 40px; border-radius: 50%; background: {color}; box-shadow: 0 0 10px {color};"></div>'
+                for color in layout_options['Gaming Pro']['colors']
+            ])
+            
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                border-radius: 12px;
+                padding: 20px;
+                border: {'3px solid #8B5CF6' if current_layout == 'gaming-pro' else '1px solid #475569'};
+                box-shadow: {'0 0 20px rgba(139, 92, 246, 0.6)' if current_layout == 'gaming-pro' else 'none'};
+                transition: all 0.3s ease;
+                min-height: 200px;
+            ">
+                <div style="font-size: 48px; text-align: center; margin-bottom: 10px;">
+                    {layout_options['Gaming Pro']['icon']}
+                </div>
+                <h3 style="color: #f8fafc; text-align: center; margin-bottom: 10px;">
+                    Gaming Pro
+                </h3>
+                <p style="color: #cbd5e1; text-align: center; font-size: 14px; margin-bottom: 15px;">
+                    {layout_options['Gaming Pro']['description']}
+                </p>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                    {gaming_colors_html}
+                </div>
+                {'<div style="text-align: center; margin-top: 15px; color: #8B5CF6; font-weight: 600; text-shadow: 0 0 10px rgba(139, 92, 246, 0.8);">✓ Aktywny</div>' 
+                 if current_layout == 'gaming-pro' else ''}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("Wybierz Gaming Pro", key="select_gaming_pro", use_container_width=True):
+                users_data[st.session_state.username]['layout_preference'] = 'gaming-pro'
+                save_user_data(users_data)
+                st.success("✅ Layout zmieniony na Gaming Pro!")
+                st.info("🔄 Odśwież stronę (F5), aby zobaczyć zmiany")
+        
+        with col3:
+            # Przygotuj HTML dla kolorów Halloween
+            halloween_colors_html = ''.join([
+                f'<div style="width: 40px; height: 40px; border-radius: 50%; background: {color}; box-shadow: 0 0 15px {color};"></div>'
+                for color in layout_options['Halloween']['colors']
+            ])
+            
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(135deg, #1a0b2e 0%, #2d1b3d 100%);
+                border-radius: 12px;
+                padding: 20px;
+                border: {'3px solid #FF6B35' if current_layout == 'halloween' else '1px solid #3d2754'};
+                box-shadow: {'0 0 25px rgba(255, 107, 53, 0.8)' if current_layout == 'halloween' else 'none'};
+                transition: all 0.3s ease;
+                min-height: 200px;
+            ">
+                <div style="font-size: 48px; text-align: center; margin-bottom: 10px;">
+                    {layout_options['Halloween']['icon']}
+                </div>
+                <h3 style="color: #FFF5E6; text-align: center; margin-bottom: 10px;">
+                    Halloween
+                </h3>
+                <p style="color: #E0D4C8; text-align: center; font-size: 14px; margin-bottom: 15px;">
+                    {layout_options['Halloween']['description']}
+                </p>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                    {halloween_colors_html}
+                </div>
+                {'<div style="text-align: center; margin-top: 15px; color: #FF6B35; font-weight: 600; text-shadow: 0 0 15px rgba(255, 107, 53, 0.9);">✓ Aktywny</div>' 
+                 if current_layout == 'halloween' else ''}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("Wybierz Halloween 🎃", key="select_halloween", use_container_width=True):
+                users_data[st.session_state.username]['layout_preference'] = 'halloween'
+                save_user_data(users_data)
+                st.success("🎃 Layout zmieniony na Halloween!")
+                st.info("🔄 Odśwież stronę (F5), aby zobaczyć zmiany")
+        
+        with col4:
+            # Przygotuj HTML dla kolorów Executive Pro
+            executive_colors_html = ''.join([
+                f'<div style="width: 40px; height: 40px; border-radius: 8px; background: {color}; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);"></div>'
+                for color in layout_options['Executive Pro']['colors']
+            ])
+            
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+                border-radius: 12px;
+                padding: 20px;
+                border: {'3px solid #F59E0B' if current_layout == 'executive-pro' else '1px solid #475569'};
+                box-shadow: {'0 0 20px rgba(245, 158, 11, 0.5)' if current_layout == 'executive-pro' else 'none'};
+                transition: all 0.3s ease;
+                min-height: 200px;
+            ">
+                <div style="font-size: 48px; text-align: center; margin-bottom: 10px;">
+                    {layout_options['Executive Pro']['icon']}
+                </div>
+                <h3 style="color: #F3F4F6; text-align: center; margin-bottom: 10px; font-weight: 600;">
+                    Executive Pro
+                </h3>
+                <p style="color: #D1D5DB; text-align: center; font-size: 14px; margin-bottom: 15px;">
+                    {layout_options['Executive Pro']['description']}
+                </p>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                    {executive_colors_html}
+                </div>
+                {'<div style="text-align: center; margin-top: 15px; color: #F59E0B; font-weight: 600; text-shadow: 0 0 10px rgba(245, 158, 11, 0.7);">✓ Aktywny</div>' 
+                 if current_layout == 'executive-pro' else ''}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("Wybierz Executive Pro 💼", key="select_executive_pro", use_container_width=True):
+                users_data[st.session_state.username]['layout_preference'] = 'executive-pro'
+                save_user_data(users_data)
+                st.success("💼 Layout zmieniony na Executive Pro!")
+                st.info("🔄 Odśwież stronę (F5), aby zobaczyć zmiany")
+        
+        st.markdown("---")
+        
+        # Feature comparison
+        st.markdown("### 📋 Porównanie Layoutów")
+        
+        comparison_data = {
+            "Funkcja": [
+                "Kolorystyka",
+                "Efekty wizualne",
+                "Glow effects",
+                "Glassmorphism",
+                "Animacje hover",
+                "Custom scrollbar",
+                "Styl",
+                "Najlepszy dla"
+            ],
+            "Standard": [
+                "Niebieski + Zielony",
+                "Subtelne cienie",
+                "❌ Brak",
+                "❌ Brak",
+                "✅ Podstawowe",
+                "❌ Systemowy",
+                "Klasyczny, profesjonalny",
+                "Praca, nauka"
+            ],
+            "Gaming Pro": [
+                "Cyber Purple + Electric Blue",
+                "Mocne cienie + blur",
+                "✅ Fioletowa poświata",
+                "✅ Semi-transparent + blur",
+                "✅ 3D lift + glow",
+                "✅ Gradient + glow",
+                "Nowoczesny, gamingowy",
+                "Gaming, motywacja"
+            ],
+            "Halloween": [
+                "Pumpkin Orange + Magic Purple",
+                "Bardzo mocne + blur",
+                "✅ Pomarańczowo-fioletowa",
+                "✅ Semi-transparent + blur",
+                "✅ 3D lift + glow + flame",
+                "✅ Gradient + glow + pulse",
+                "Halloweenowy, klimatyczny",
+                "Halloween, zabawa"
+            ],
+            "Executive Pro": [
+                "Navy Blue + Gold + Platinum",
+                "Eleganckie cienie",
+                "✅ Złota poświata (subtelna)",
+                "✅ Semi-transparent + sharp",
+                "✅ Smooth lift + shimmer",
+                "✅ Professional gradient",
+                "Biznesowy, premium",
+                "Kadra zarządzająca, corpo"
+            ]
+        }
+        
+        import pandas as pd
+        df = pd.DataFrame(comparison_data)
+        st.dataframe(df, use_container_width=True, hide_index=True)
+        
         st.markdown("</div>", unsafe_allow_html=True)
 
 def show_xp_history_section():

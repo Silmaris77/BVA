@@ -1,0 +1,1263 @@
+/* 
+   Halloween Theme - Halloweenowy design z dynią i magiczną purpurą
+   Pumpkin Orange + Magic Purple + Toxic Green
+   Data: 2025-10-31
+*/
+
+/* ============================================================================
+   ZMIENNE CSS - Halloween Theme
+   ============================================================================ */
+:root {
+  /* Główne kolory */
+  --primary-color: #FF6B35;          /* Pumpkin Orange */
+  --primary-light: #FF8C61;          /* Light Orange */
+  --primary-dark: #E85A2A;           /* Dark Orange */
+  --secondary-color: #9D4EDD;        /* Magic Purple */
+  --secondary-light: #C77DFF;        /* Light Purple */
+  --accent-color: #00FF00;           /* Toxic Green - Success */
+  --accent-light: #7FFF00;           /* Light Green */
+  
+  /* Status colors */
+  --success-color: #00FF00;          /* Toxic Green */
+  --warning-color: #FFA500;          /* Orange */
+  --error-color: #DC143C;            /* Crimson */
+  --info-color: #9D4EDD;             /* Purple */
+  
+  /* Background colors - Dark Halloween Theme */
+  --background-dark: linear-gradient(135deg, #1a0b2e 0%, #2d1b3d 50%, #1a0b2e 100%);
+  --background-medium: #2d1b3d;      /* Dark Purple */
+  --background-light: #1a0b2e;       /* Deep Dark Purple */
+  --background-card: linear-gradient(145deg, rgba(45, 27, 61, 0.9) 0%, rgba(58, 35, 77, 0.8) 100%);
+  --background-card-hover: linear-gradient(145deg, rgba(58, 35, 77, 0.95) 0%, rgba(75, 45, 99, 0.9) 100%);
+  
+  /* Gradienty */
+  --gradient-primary: linear-gradient(135deg, #FF6B35 0%, #E85A2A 50%, #D14D1F 100%);
+  --gradient-secondary: linear-gradient(135deg, #9D4EDD 0%, #7B2CBF 50%, #5A189A 100%);
+  --gradient-success: linear-gradient(135deg, #00FF00 0%, #00CC00 100%);
+  --gradient-dark: linear-gradient(135deg, #1a0b2e 0%, #2d1b3d 50%, #1a0b2e 100%);
+  --gradient-card: linear-gradient(145deg, rgba(45, 27, 61, 0.9) 0%, rgba(58, 35, 77, 0.8) 100%);
+  
+  /* Text colors */
+  --text-primary: #FFF5E6;           /* Cream White */
+  --text-secondary: #E0D4C8;         /* Light Cream */
+  --text-muted: #B0A290;             /* Muted Cream */
+  --text-dark: #1a0b2e;              /* Dark Purple */
+  
+  /* Border & Shadow with Halloween glow */
+  --border-color: rgba(255, 107, 53, 0.4);
+  --border-glow: rgba(255, 107, 53, 0.6);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.7), 0 2px 4px -1px rgba(255, 107, 53, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.8), 0 4px 6px -2px rgba(255, 107, 53, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.9), 0 10px 10px -5px rgba(255, 107, 53, 0.6);
+  --glow-purple: 0 0 25px rgba(157, 78, 221, 0.8);
+  --glow-blue: 0 0 20px rgba(255, 107, 53, 0.6);
+  --glow-green: 0 0 25px rgba(0, 255, 0, 0.8);
+  
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Fonts */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ============================================================================
+   HALLOWEEN - GŁÓWNE STYLE
+   ============================================================================ */
+
+/* Główny kontener aplikacji */
+.stApp {
+    background: var(--gradient-dark) !important;
+    font-family: var(--font-primary);
+}
+
+.main {
+    background: transparent;
+    color: var(--text-primary);
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background: var(--gradient-dark) !important;
+    border-right: 2px solid var(--border-color);
+    box-shadow: 4px 0 30px rgba(255, 107, 53, 0.2);
+}
+
+[data-testid="stSidebar"] > div:first-child {
+    background: transparent !important;
+}
+
+/* Ukryj domyślną nawigację */
+[data-testid="stSidebar"] > div:nth-of-type(2) {
+    display: none;
+}
+section[data-testid="stSidebarNav"] {
+    display: none;
+}
+
+/* Nagłówki sekcji w sidebarze z pulsującym tekstem */
+[data-testid="stSidebar"] h3 {
+    color: var(--text-primary);
+    font-size: 1.1em;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+    text-shadow: 0 0 10px rgba(255, 107, 53, 0.6);
+    animation: textPulse 3s ease-in-out infinite;
+}
+
+/* Pulsująca animacja tekstu */
+@keyframes textPulse {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(255, 107, 53, 0.6);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(255, 107, 53, 1),
+                     0 0 30px rgba(157, 78, 221, 0.6),
+                     0 0 40px rgba(0, 255, 0, 0.2);
+    }
+}
+
+/* Karty z efektem płonącego brzegu */
+.st-bx {
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Płonący brzeg - animowany gradient na krawędzi */
+.st-bx::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(255, 107, 53, 0) 40%,
+        rgba(255, 107, 53, 0.8) 50%,
+        rgba(255, 107, 53, 0) 60%,
+        transparent 100%
+    );
+    background-size: 200% 200%;
+    border-radius: var(--radius-lg);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+    animation: flameBorder 3s linear infinite;
+}
+
+@keyframes flameBorder {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 200% 200%;
+    }
+}
+
+.st-bx:hover::before {
+    opacity: 1;
+}
+
+.st-bx:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl), 
+                0 0 30px rgba(255, 107, 53, 0.6),
+                0 0 50px rgba(157, 78, 221, 0.3);
+    background: var(--background-card-hover);
+    border-color: rgba(255, 107, 53, 0.6);
+}
+
+/* Zen Header z pulsującym tekstem i dyniami */
+.zen-header {
+    background: var(--gradient-primary);
+    color: white;
+    text-align: center;
+    font-family: var(--font-display);
+    padding: 10px 50px;
+    margin-bottom: 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg), 
+                0 0 30px rgba(255, 107, 53, 0.6),
+                0 0 50px rgba(157, 78, 221, 0.3);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3),
+                 0 0 20px rgba(255, 255, 255, 0.3);
+    position: relative;
+    animation: headerGlow 4s ease-in-out infinite;
+}
+
+/* Pulsujące światło nagłówka */
+@keyframes headerGlow {
+    0%, 100% {
+        box-shadow: var(--shadow-lg), 
+                    0 0 30px rgba(255, 107, 53, 0.6),
+                    0 0 50px rgba(157, 78, 221, 0.3);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3),
+                     0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        box-shadow: var(--shadow-lg), 
+                    0 0 40px rgba(255, 107, 53, 0.9),
+                    0 0 70px rgba(157, 78, 221, 0.5),
+                    0 0 90px rgba(0, 255, 0, 0.2);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3),
+                     0 0 30px rgba(255, 255, 255, 0.5),
+                     0 0 40px rgba(255, 107, 53, 0.4);
+    }
+}
+
+/* Dynie po bokach nagłówka */
+.zen-header::before,
+.zen-header::after {
+    content: '🎃';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.8em;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.8));
+    animation: pumpkinFloat 3s ease-in-out infinite;
+}
+
+.zen-header::before {
+    left: 15px;
+}
+
+.zen-header::after {
+    right: 15px;
+    animation-delay: 1.5s;
+}
+
+/* Animacja unoszących się dyn */
+@keyframes pumpkinFloat {
+    0%, 100% {
+        transform: translateY(-50%) rotate(-3deg) scale(1);
+        filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.8));
+    }
+    50% {
+        transform: translateY(-60%) rotate(3deg) scale(1.1);
+        filter: drop-shadow(0 0 20px rgba(255, 107, 53, 1)) 
+                drop-shadow(0 0 30px rgba(157, 78, 221, 0.5));
+    }
+}
+
+/* Zen Button - custom styled button */
+.zen-button {
+    background: var(--gradient-primary) !important;
+    border: 2px solid var(--border-color) !important;
+    color: white !important;
+    border-radius: var(--radius-sm);
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Płonący brzeg dla zen-button */
+.zen-button::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(255, 107, 53, 0) 40%,
+        rgba(255, 107, 53, 0.9) 50%,
+        rgba(255, 107, 53, 0) 60%,
+        transparent 100%
+    );
+    background-size: 200% 200%;
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+    animation: flameBorder 3s linear infinite;
+}
+
+.zen-button:hover::before {
+    opacity: 1;
+}
+
+.zen-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-xl), 
+                0 0 30px rgba(255, 107, 53, 0.8),
+                0 0 50px rgba(157, 78, 221, 0.5);
+    border-color: var(--primary-light);
+}
+
+/* ============================================================================
+   PRZYCISKI - HALLOWEENOWY STYL
+   ============================================================================ */
+
+[data-testid="stButton"] button {
+    background: var(--gradient-card) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(0);
+    position: relative;
+    padding-left: 15px;
+    overflow: hidden;
+}
+
+/* Płonący brzeg dla przycisków */
+[data-testid="stButton"] button::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(255, 107, 53, 0) 40%,
+        rgba(255, 107, 53, 0.9) 50%,
+        rgba(255, 107, 53, 0) 60%,
+        transparent 100%
+    );
+    background-size: 200% 200%;
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+    animation: flameBorder 3s linear infinite;
+    pointer-events: none;
+}
+
+[data-testid="stButton"] button:hover::after {
+    opacity: 1;
+}
+
+[data-testid="stButton"] button:hover:not(:disabled) {
+    background: var(--gradient-primary) !important;
+    border-color: var(--primary-light) !important;
+    color: white !important;
+    transform: translateX(5px) translateY(-2px);
+    box-shadow: var(--shadow-md), 
+                0 0 25px rgba(255, 107, 53, 0.7),
+                0 0 40px rgba(157, 78, 221, 0.4);
+}
+
+[data-testid="stButton"] button::before {
+    content: "›";
+    position: absolute;
+    left: 10px;
+    opacity: 0;
+    transition: var(--transition-fast);
+    z-index: 1;
+}
+
+[data-testid="stButton"] button:hover::before {
+    opacity: 1;
+    left: 8px;
+}
+
+/* Przyciski w sidebarze */
+.stSidebar [data-testid="stButton"] button {
+    background: var(--gradient-card) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    font-weight: 500;
+    border-radius: var(--radius-sm) !important;
+    transition: all var(--transition-normal) !important;
+    width: 100% !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Płonący brzeg dla przycisków sidebar - używamy trzeciego pseudo-elementu przez selektor dziecka */
+.stSidebar [data-testid="stButton"] button > div::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 107, 53, 0) 40%,
+        rgba(255, 107, 53, 0.9) 50%,
+        rgba(255, 107, 53, 0) 60%,
+        transparent 100%
+    );
+    background-size: 200% 200%;
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+    animation: flameBorder 3s linear infinite;
+    pointer-events: none;
+}
+
+.stSidebar [data-testid="stButton"] button:hover:not(:disabled) > div::before {
+    opacity: 1;
+}
+
+.stSidebar [data-testid="stButton"] button:hover:not(:disabled) {
+    background: var(--gradient-primary) !important;
+    border-color: var(--primary-light) !important;
+    color: white !important;
+    box-shadow: var(--shadow-md), 
+                0 0 25px rgba(255, 107, 53, 0.7),
+                0 0 40px rgba(157, 78, 221, 0.4);
+    transform: translateX(3px);
+}
+
+/* Aktywny przycisk (disabled) */
+.stSidebar [data-testid="stButton"] button:disabled {
+    background: var(--gradient-primary) !important;
+    border: 1px solid var(--primary-light) !important;
+    color: white !important;
+    font-weight: 600;
+    opacity: 1 !important;
+    box-shadow: var(--glow-purple);
+}
+
+[data-testid="stSidebar"] [data-testid="stButton"] button:disabled::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    box-shadow: var(--glow-green);
+}
+
+/* ============================================================================
+   KARTY LEKCJI - GAMING STYLE
+   ============================================================================ */
+
+.degen-card {
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin: 12px 0;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    border-left: 5px solid var(--primary-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.degen-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-primary);
+    opacity: 0.8;
+}
+
+.degen-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl), var(--glow-purple);
+    background: var(--background-card-hover);
+}
+
+.degen-card h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.3px;
+}
+
+.degen-card p {
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+/* ============================================================================
+   ODZNAKI & BADGES
+   ============================================================================ */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.badge-xp { 
+    background: var(--gradient-success); 
+    box-shadow: var(--glow-green);
+}
+.badge-level { 
+    background: var(--gradient-primary); 
+    box-shadow: var(--glow-purple);
+}
+.badge-time { 
+    background: var(--gradient-secondary); 
+    box-shadow: var(--glow-blue);
+}
+.badge-difficulty-beginner { 
+    background: var(--success-color);
+    box-shadow: var(--glow-green);
+}
+.badge-difficulty-intermediate { 
+    background: var(--warning-color); 
+}
+.badge-difficulty-advanced { 
+    background: var(--error-color); 
+}
+
+/* ============================================================================
+   DASHBOARD - GAMING LAYOUT
+   ============================================================================ */
+
+.dashboard-section {
+    margin-bottom: 20px;
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    padding-top: 2px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Płonący brzeg dla dashboard */
+.dashboard-section::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(255, 107, 53, 0) 40%,
+        rgba(255, 107, 53, 0.8) 50%,
+        rgba(255, 107, 53, 0) 60%,
+        transparent 100%
+    );
+    background-size: 200% 200%;
+    border-radius: var(--radius-lg);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+    animation: flameBorder 3s linear infinite;
+}
+
+.dashboard-section:hover::before {
+    opacity: 1;
+}
+
+.dashboard-section:hover {
+    box-shadow: var(--shadow-lg), 
+                0 0 30px rgba(255, 107, 53, 0.6),
+                0 0 50px rgba(157, 78, 221, 0.3);
+    border-color: rgba(255, 107, 53, 0.6);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1px;
+    padding-bottom: 1px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+    text-shadow: var(--glow-purple);
+}
+
+/* Karty statystyk */
+.stat-card {
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    color: var(--text-primary);
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl), var(--glow-purple);
+    background: var(--background-card-hover);
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 4px 0;
+    line-height: 1;
+    text-shadow: var(--glow-purple);
+}
+
+.stat-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+/* ============================================================================
+   PROGRESS BARS - GAMING STYLE
+   ============================================================================ */
+
+.mission-progress-container {
+    width: 100%;
+    background-color: rgba(30, 41, 59, 0.5);
+    border-radius: var(--radius-md);
+    height: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.mission-progress-bar {
+    height: 100%;
+    background: var(--gradient-primary);
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.7);
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    transition: width 0.5s ease-in-out;
+    min-width: 30px;
+    position: relative;
+    animation: progressPulse 2s ease-in-out infinite;
+}
+
+/* Pulsująca animacja progress bara */
+@keyframes progressPulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 107, 53, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 107, 53, 1),
+                    0 0 40px rgba(157, 78, 221, 0.6),
+                    inset 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+}
+
+.goal-progress-container {
+    height: 10px;
+    background-color: rgba(30, 41, 59, 0.5);
+    border-radius: var(--radius-sm);
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.goal-progress-bar {
+    height: 100%;
+    background: var(--gradient-success);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+    transition: width 0.5s ease-in-out;
+    animation: greenPulse 2.5s ease-in-out infinite;
+}
+
+/* Pulsująca animacja zielonego progress bara */
+@keyframes greenPulse {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(0, 255, 0, 1),
+                    0 0 35px rgba(0, 255, 0, 0.5),
+                    inset 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* ============================================================================
+   KARTY MISJI & CELÓW - GAMING STYLE
+   ============================================================================ */
+
+.mission-card {
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    color: var(--text-primary);
+}
+
+/* Płonący brzeg dla mission-card */
+.mission-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(255, 107, 53, 0) 40%,
+        rgba(255, 107, 53, 0.8) 50%,
+        rgba(255, 107, 53, 0) 60%,
+        transparent 100%
+    );
+    background-size: 200% 200%;
+    border-radius: var(--radius-md);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+    animation: flameBorder 3s linear infinite;
+}
+
+.mission-card:hover::before {
+    opacity: 1;
+}
+
+.mission-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg), 
+                0 0 30px rgba(255, 107, 53, 0.6),
+                0 0 50px rgba(157, 78, 221, 0.3);
+    background: var(--background-card-hover);
+    border-color: rgba(255, 107, 53, 0.6);
+}
+
+.mission-card.completed {
+    border-color: var(--success-color);
+    box-shadow: var(--glow-green);
+}
+
+.goal-card {
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    border-left: 5px solid var(--primary-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Płonący brzeg dla goal-card */
+.goal-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(255, 107, 53, 0) 40%,
+        rgba(255, 107, 53, 0.8) 50%,
+        rgba(255, 107, 53, 0) 60%,
+        transparent 100%
+    );
+    background-size: 200% 200%;
+    border-radius: var(--radius-md);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: -1;
+    animation: flameBorder 3s linear infinite;
+}
+
+.goal-card:hover::before {
+    opacity: 1;
+}
+
+.goal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl), 
+                0 0 30px rgba(255, 107, 53, 0.6),
+                0 0 50px rgba(157, 78, 221, 0.3);
+    background: var(--background-card-hover);
+    border-color: rgba(255, 107, 53, 0.6);
+}
+
+.goal-card.completed {
+    border-left-color: var(--success-color);
+    box-shadow: var(--glow-green);
+}
+
+/* ============================================================================
+   CUSTOM SCROLLBAR - GAMING STYLE
+   ============================================================================ */
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-medium);
+    border-radius: var(--radius-sm);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--background-medium);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.6);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #FF8C61 0%, #FF6B35 50%, #E85A2A 100%);
+    box-shadow: 0 0 20px rgba(255, 107, 53, 1),
+                0 0 30px rgba(157, 78, 221, 0.6);
+    animation: scrollPulse 1s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 107, 53, 1),
+                    0 0 30px rgba(157, 78, 221, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 107, 53, 1),
+                    0 0 40px rgba(157, 78, 221, 0.8),
+                    0 0 50px rgba(0, 255, 0, 0.3);
+    }
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes pulse-glow {
+    0%, 100% { 
+        box-shadow: var(--shadow-md); 
+    }
+    50% { 
+        box-shadow: var(--shadow-lg), var(--glow-purple); 
+    }
+}
+
+@keyframes completedAnimation {
+    0% { transform: scale(1); }
+    50% { 
+        transform: scale(1.05); 
+        box-shadow: var(--shadow-xl), var(--glow-green);
+    }
+    100% { transform: scale(1); }
+}
+
+.mission-card.just-completed {
+    animation: completedAnimation 0.5s ease;
+}
+
+/* Pulsujące elementy ważne */
+.pulse-highlight {
+    animation: pulse-glow 3s infinite;
+}
+
+/* ============================================================================
+   TABELE & DATAFRAMES - HALLOWEEN STYLE
+   ============================================================================ */
+
+/* Streamlit dataframes */
+[data-testid="stDataFrame"] {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+/* Table rows hover */
+table tbody tr:hover {
+    background: rgba(255, 107, 53, 0.15) !important;
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.3);
+    transition: all var(--transition-fast);
+}
+
+/* Zebra striping */
+table tbody tr:nth-child(even) {
+    background: rgba(45, 27, 61, 0.3);
+}
+
+table tbody tr:nth-child(odd) {
+    background: rgba(26, 11, 46, 0.3);
+}
+
+/* Table headers */
+table thead th {
+    background: var(--gradient-primary) !important;
+    color: white !important;
+    font-weight: 600;
+    padding: 12px !important;
+    border: none !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ============================================================================
+   INPUT FIELDS - HALLOWEEN STYLE
+   ============================================================================ */
+
+/* Text inputs */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea {
+    background: rgba(45, 27, 61, 0.5) !important;
+    border: 2px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all var(--transition-normal);
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.6),
+                0 0 30px rgba(157, 78, 221, 0.3) !important;
+    animation: inputGlow 2s ease-in-out infinite;
+    outline: none !important;
+}
+
+@keyframes inputGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 107, 53, 0.6),
+                    0 0 30px rgba(157, 78, 221, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 107, 53, 0.9),
+                    0 0 40px rgba(157, 78, 221, 0.5),
+                    0 0 50px rgba(0, 255, 0, 0.2);
+    }
+}
+
+/* Placeholder */
+::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.6;
+}
+
+/* ============================================================================
+   METRYKI (st.metric) - HALLOWEEN STYLE
+   ============================================================================ */
+
+[data-testid="stMetric"] {
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-normal);
+}
+
+[data-testid="stMetric"]:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 25px rgba(255, 107, 53, 0.5);
+}
+
+/* Metric value */
+[data-testid="stMetricValue"] {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+    animation: metricPulse 3s ease-in-out infinite;
+}
+
+@keyframes metricPulse {
+    0%, 100% {
+        text-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
+    }
+    50% {
+        text-shadow: 0 0 25px rgba(255, 107, 53, 0.8),
+                     0 0 35px rgba(157, 78, 221, 0.4);
+    }
+}
+
+/* Metric delta */
+[data-testid="stMetricDelta"] svg {
+    filter: drop-shadow(0 0 5px currentColor);
+}
+
+/* ============================================================================
+   SELECTBOX & DROPDOWN - HALLOWEEN STYLE
+   ============================================================================ */
+
+[data-baseweb="select"] {
+    background: rgba(45, 27, 61, 0.5) !important;
+    border: 2px solid var(--border-color) !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+[data-baseweb="select"]:hover,
+[data-baseweb="select"]:focus-within {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.6) !important;
+}
+
+/* Dropdown menu */
+[data-baseweb="popover"] {
+    background: var(--background-card) !important;
+    border: 2px solid var(--primary-color) !important;
+    box-shadow: 0 0 30px rgba(255, 107, 53, 0.6) !important;
+}
+
+/* Dropdown options */
+[role="option"]:hover {
+    background: rgba(255, 107, 53, 0.2) !important;
+    box-shadow: inset 0 0 10px rgba(255, 107, 53, 0.3);
+}
+
+/* ============================================================================
+   CHECKBOX & RADIO - HALLOWEEN STYLE
+   ============================================================================ */
+
+/* Checkbox */
+input[type="checkbox"] {
+    accent-color: var(--primary-color);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.5));
+}
+
+input[type="checkbox"]:checked {
+    filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.9));
+    animation: checkPulse 0.3s ease;
+}
+
+@keyframes checkPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Radio buttons */
+input[type="radio"] {
+    accent-color: var(--primary-color);
+    filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.5));
+}
+
+input[type="radio"]:checked {
+    filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.9));
+}
+
+/* ============================================================================
+   SLIDER - HALLOWEEN STYLE
+   ============================================================================ */
+
+[data-baseweb="slider"] {
+    padding: 20px 0;
+}
+
+/* Slider track */
+[data-baseweb="slider"] [role="slider"] {
+    background: var(--gradient-primary) !important;
+    border: 2px solid var(--primary-light) !important;
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.7) !important;
+}
+
+[data-baseweb="slider"] [role="slider"]:hover {
+    box-shadow: 0 0 25px rgba(255, 107, 53, 1),
+                0 0 35px rgba(157, 78, 221, 0.5) !important;
+    animation: sliderPulse 1s ease-in-out infinite;
+}
+
+@keyframes sliderPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* ============================================================================
+   EXPANDER/COLLAPSE - HALLOWEEN STYLE
+   ============================================================================ */
+
+[data-testid="stExpander"] {
+    background: var(--background-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+[data-testid="stExpander"]:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+}
+
+/* Expander header */
+[data-testid="stExpander"] summary {
+    background: rgba(255, 107, 53, 0.1);
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 12px;
+    transition: all var(--transition-fast);
+}
+
+[data-testid="stExpander"] summary:hover {
+    background: rgba(255, 107, 53, 0.2);
+    text-shadow: 0 0 10px rgba(255, 107, 53, 0.6);
+}
+
+/* Expander arrow */
+[data-testid="stExpander"] summary svg {
+    filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.6));
+}
+
+/* ============================================================================
+   NOTIFICATIONS/ALERTS - HALLOWEEN STYLE
+   ============================================================================ */
+
+/* Success messages */
+[data-testid="stSuccess"] {
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.2) 0%, rgba(0, 204, 0, 0.1) 100%) !important;
+    border-left: 4px solid var(--success-color) !important;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3) !important;
+    animation: slideIn 0.3s ease;
+}
+
+/* Error messages */
+[data-testid="stError"] {
+    background: linear-gradient(135deg, rgba(220, 20, 60, 0.2) 0%, rgba(220, 20, 60, 0.1) 100%) !important;
+    border-left: 4px solid var(--error-color) !important;
+    box-shadow: 0 0 20px rgba(220, 20, 60, 0.3) !important;
+    animation: slideIn 0.3s ease;
+}
+
+/* Warning messages */
+[data-testid="stWarning"] {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.2) 0%, rgba(255, 165, 0, 0.1) 100%) !important;
+    border-left: 4px solid var(--warning-color) !important;
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.3) !important;
+    animation: slideIn 0.3s ease;
+}
+
+/* Info messages */
+[data-testid="stInfo"] {
+    background: linear-gradient(135deg, rgba(157, 78, 221, 0.2) 0%, rgba(157, 78, 221, 0.1) 100%) !important;
+    border-left: 4px solid var(--info-color) !important;
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.3) !important;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ============================================================================
+   SPINNER/LOADER - HALLOWEEN STYLE
+   ============================================================================ */
+
+[data-testid="stSpinner"] > div {
+    border-color: var(--primary-color) transparent var(--secondary-color) transparent !important;
+    filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.6));
+}
+
+/* ============================================================================
+   BADGES - HALLOWEEN STYLE (już istniejące, dodajemy animacje)
+   ============================================================================ */
+
+.badge-xp { 
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+.badge-difficulty-beginner { 
+    animation: badgePulse 2.5s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% {
+        box-shadow: 0 0 10px currentColor;
+    }
+    50% {
+        box-shadow: 0 0 20px currentColor,
+                    0 0 30px currentColor;
+    }
+}

@@ -1,4 +1,4 @@
-"""
+﻿"""
 🛒 FMCG Playable Game UI
 Minimal playable interface for FMCG sales simulation
 Uses fmcg_mechanics.py backend
@@ -3603,154 +3603,154 @@ Tekst do poprawy:
                                     
                                     except Exception as e:
                                         st.error(f"❌ Błąd podczas wizyty: {e}")
+        
+        # =============================================================================
+        # DAY ADVANCEMENT
+        # =============================================================================
+        
+        st.markdown("---")
+        st.subheader("⏭️ Koniec Dnia")
     
-    # =============================================================================
-    # DAY ADVANCEMENT
-    # =============================================================================
-    
-    st.markdown("---")
-    st.subheader("⏭️ Koniec Dnia")
-    
-    # Show urgent visits
-    urgent_clients = get_clients_needing_visit(clients, urgent_threshold_days=10)
-    if urgent_clients:
-        st.warning(f"⚠️ Pilne wizyty: {len(urgent_clients)} klientów wymaga wizyty!")
-        with st.expander("Zobacz listę pilnych wizyt"):
-            for client_id in urgent_clients:
-                client = clients[client_id]
-                st.write(f"- {client['name']} ({client.get('distance_from_base', 0):.1f} km)")
-    
-    if st.button("⏭️ Zakończ dzień", type="secondary"):
-        with st.spinner("Przechodzenie do następnego dnia..."):
-            try:
-                # Calculate return to base cost if player is away
-                if game_state.get("current_location") is not None:
-                    current_loc = game_state["current_location"]
-                    base_loc = {
-                        "lat": game_state.get("territory_latitude", 52.0846),
-                        "lng": game_state.get("territory_longitude", 21.0250)
-                    }
+        # Show urgent visits
+        urgent_clients = get_clients_needing_visit(clients, urgent_threshold_days=10)
+        if urgent_clients:
+            st.warning(f"⚠️ Pilne wizyty: {len(urgent_clients)} klientów wymaga wizyty!")
+            with st.expander("Zobacz listę pilnych wizyt"):
+                for client_id in urgent_clients:
+                    client = clients[client_id]
+                    st.write(f"- {client['name']} ({client.get('distance_from_base', 0):.1f} km)")
+        
+        if st.button("⏭️ Zakończ dzień", type="secondary"):
+            with st.spinner("Przechodzenie do następnego dnia..."):
+                try:
+                    # Calculate return to base cost if player is away
+                    if game_state.get("current_location") is not None:
+                        current_loc = game_state["current_location"]
+                        base_loc = {
+                            "lat": game_state.get("territory_latitude", 52.0846),
+                            "lng": game_state.get("territory_longitude", 21.0250)
+                        }
+                        
+                        return_distance = calculate_distance_between_points(
+                            current_loc["lat"], current_loc["lng"],
+                            base_loc["lat"], base_loc["lng"]
+                        )
+                        
+                        return_energy = int(return_distance * 0.5)  # Return to base costs 50% less
+                        
+                        # Deduct return energy
+                        game_state["energy"] = max(0, game_state.get("energy", 100) - return_energy)
+                        game_state["total_distance_today"] = game_state.get("total_distance_today", 0) + return_distance
+                        
+                        st.info(f"🚗 Powrót do bazy: {return_distance:.1f} km (-{return_energy}% energii)")
                     
-                    return_distance = calculate_distance_between_points(
-                        current_loc["lat"], current_loc["lng"],
-                        base_loc["lat"], base_loc["lng"]
-                    )
+                    # Reset route tracking for next day
+                    game_state["current_location"] = None
+                    game_state["planned_visits_today"] = []
+                    game_state["completed_visits_today"] = []
+                    game_state["total_distance_today"] = 0.0
+                    game_state["route_optimization_used"] = False
                     
-                    return_energy = int(return_distance * 0.5)  # Return to base costs 50% less
+                    # Clear session state route planning
+                    if hasattr(st.session_state, 'planned_route'):
+                        del st.session_state.planned_route
+                    if hasattr(st.session_state, 'current_visit_idx'):
+                        del st.session_state.current_visit_idx
+                    if hasattr(st.session_state, 'route_optimized'):
+                        del st.session_state.route_optimized
                     
-                    # Deduct return energy
-                    game_state["energy"] = max(0, game_state.get("energy", 100) - return_energy)
-                    game_state["total_distance_today"] = game_state.get("total_distance_today", 0) + return_distance
+                    # Advance day
+                    updated_game_state, updated_clients = advance_day(game_state, clients)
                     
-                    st.info(f"🚗 Powrót do bazy: {return_distance:.1f} km (-{return_energy}% energii)")
-                
-                # Reset route tracking for next day
-                game_state["current_location"] = None
-                game_state["planned_visits_today"] = []
-                game_state["completed_visits_today"] = []
-                game_state["total_distance_today"] = 0.0
-                game_state["route_optimization_used"] = False
-                
-                # Clear session state route planning
-                if hasattr(st.session_state, 'planned_route'):
-                    del st.session_state.planned_route
-                if hasattr(st.session_state, 'current_visit_idx'):
-                    del st.session_state.current_visit_idx
-                if hasattr(st.session_state, 'route_optimized'):
-                    del st.session_state.route_optimized
-                
-                # Advance day
-                updated_game_state, updated_clients = advance_day(game_state, clients)
-                
-                # Update references
-                game_state = updated_game_state
-                clients = updated_clients
-                
-                # Save to SQL and session state
-                update_fmcg_game_state_sql(username, game_state, clients)
-                st.session_state["fmcg_game_state"] = game_state
-                st.session_state["fmcg_clients"] = clients
-                
-                st.success(f"✅ Nowy dzień: {game_state['current_day']}")
-                st.info("⚡ Energia zregenerowana do 100%!")
-                
-                # WEEKLY SUMMARY - Display if new week started
-                if "last_week_summary" in game_state:
-                    summary = game_state["last_week_summary"]
+                    # Update references
+                    game_state = updated_game_state
+                    clients = updated_clients
                     
-                    # Determine medal/status
-                    if summary["target_achieved"]:
-                        medal_emoji = "🏆"
-                        medal_color = "#22c55e"
-                        status_msg = "GRATULACJE! Cel tygodniowy osiągnięty!"
-                    elif summary["sales"] >= summary.get("target_sales", 8000) * 0.75:
-                        medal_emoji = "🥈"
-                        medal_color = "#eab308"
-                        status_msg = "Blisko! Następnym razem uda się osiągnąć cel."
-                    else:
-                        medal_emoji = "📊"
-                        medal_color = "#f97316"
-                        status_msg = "Wyzwanie na następny tydzień: więcej wizyt!"
-                    
-                    # Extract all values
-                    week_num = summary['week']
-                    sales_value = summary['sales']
-                    sales_fmt = f"{sales_value:,}"
-                    target_sales = summary.get('target_sales', 8000)
-                    target_sales_fmt = f"{target_sales:,}"
-                    visits_value = summary['visits']
-                    target_visits = summary.get('target_visits', 6)
-                    streak_value = summary.get('streak', 0)
-                    medal_color_grad1 = f"{medal_color}20"
-                    medal_color_grad2 = f"{medal_color}05"
-                    
-                    summary_html = f"""<div style="border: 3px solid {medal_color}; border-radius: 16px; padding: 24px; background: linear-gradient(135deg, {medal_color_grad1} 0%, {medal_color_grad2} 100%); margin: 20px 0; text-align: center;">
-<h2 style="margin: 0 0 10px 0; color: #1f2937;">
-{medal_emoji} Podsumowanie Tygodnia {week_num}
-</h2>
-<div style="background: {medal_color}; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 18px; margin: 16px auto; display: inline-block;">
-{status_msg}
-</div>
-<div style="display: flex; justify-content: space-around; margin-top: 24px; flex-wrap: wrap; gap: 16px;">
-<div style="flex: 1; min-width: 150px;">
-<div style="font-size: 32px; font-weight: 700; color: {medal_color};">
-{sales_fmt} PLN
-</div>
-<div style="color: #6b7280; font-size: 14px; margin-top: 4px;">
-Sprzedaż (cel: {target_sales_fmt})
-</div>
-</div>
-<div style="flex: 1; min-width: 150px;">
-<div style="font-size: 32px; font-weight: 700; color: #6b7280;">
-{visits_value}
-</div>
-<div style="color: #6b7280; font-size: 14px; margin-top: 4px;">
-Wizyt (cel: {target_visits})
-</div>
-</div>
-<div style="flex: 1; min-width: 150px;">
-<div style="font-size: 32px; font-weight: 700; color: #3b82f6;">
-{streak_value}
-</div>
-<div style="color: #6b7280; font-size: 14px; margin-top: 4px;">
-🔥 Seria tygodni
-</div>
-</div>
-</div>
-</div>"""
-                    
-                    st.markdown(summary_html, unsafe_allow_html=True)
-                    
-                    # Clear summary after displaying
-                    del game_state["last_week_summary"]
+                    # Save to SQL and session state
                     update_fmcg_game_state_sql(username, game_state, clients)
-                
-                # Rerun to refresh UI
-                st.rerun()
-                
-            except Exception as e:
-                st.error(f"❌ Błąd podczas przechodzenia do następnego dnia: {e}")
-    
+                    st.session_state["fmcg_game_state"] = game_state
+                    st.session_state["fmcg_clients"] = clients
+                    
+                    st.success(f"✅ Nowy dzień: {game_state['current_day']}")
+                    st.info("⚡ Energia zregenerowana do 100%!")
+                    
+                    # WEEKLY SUMMARY - Display if new week started
+                    if "last_week_summary" in game_state:
+                        summary = game_state["last_week_summary"]
+                        
+                        # Determine medal/status
+                        if summary["target_achieved"]:
+                            medal_emoji = "🏆"
+                            medal_color = "#22c55e"
+                            status_msg = "GRATULACJE! Cel tygodniowy osiągnięty!"
+                        elif summary["sales"] >= summary.get("target_sales", 8000) * 0.75:
+                            medal_emoji = "🥈"
+                            medal_color = "#eab308"
+                            status_msg = "Blisko! Następnym razem uda się osiągnąć cel."
+                        else:
+                            medal_emoji = "📊"
+                            medal_color = "#f97316"
+                            status_msg = "Wyzwanie na następny tydzień: więcej wizyt!"
+                        
+                        # Extract all values
+                        week_num = summary['week']
+                        sales_value = summary['sales']
+                        sales_fmt = f"{sales_value:,}"
+                        target_sales = summary.get('target_sales', 8000)
+                        target_sales_fmt = f"{target_sales:,}"
+                        visits_value = summary['visits']
+                        target_visits = summary.get('target_visits', 6)
+                        streak_value = summary.get('streak', 0)
+                        medal_color_grad1 = f"{medal_color}20"
+                        medal_color_grad2 = f"{medal_color}05"
+                        
+                        summary_html = f"""<div style="border: 3px solid {medal_color}; border-radius: 16px; padding: 24px; background: linear-gradient(135deg, {medal_color_grad1} 0%, {medal_color_grad2} 100%); margin: 20px 0; text-align: center;">
+    <h2 style="margin: 0 0 10px 0; color: #1f2937;">
+    {medal_emoji} Podsumowanie Tygodnia {week_num}
+    </h2>
+    <div style="background: {medal_color}; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 18px; margin: 16px auto; display: inline-block;">
+    {status_msg}
+    </div>
+    <div style="display: flex; justify-content: space-around; margin-top: 24px; flex-wrap: wrap; gap: 16px;">
+    <div style="flex: 1; min-width: 150px;">
+    <div style="font-size: 32px; font-weight: 700; color: {medal_color};">
+    {sales_fmt} PLN
+    </div>
+    <div style="color: #6b7280; font-size: 14px; margin-top: 4px;">
+    Sprzedaż (cel: {target_sales_fmt})
+    </div>
+    </div>
+    <div style="flex: 1; min-width: 150px;">
+    <div style="font-size: 32px; font-weight: 700; color: #6b7280;">
+    {visits_value}
+    </div>
+    <div style="color: #6b7280; font-size: 14px; margin-top: 4px;">
+    Wizyt (cel: {target_visits})
+    </div>
+    </div>
+    <div style="flex: 1; min-width: 150px;">
+    <div style="font-size: 32px; font-weight: 700; color: #3b82f6;">
+    {streak_value}
+    </div>
+    <div style="color: #6b7280; font-size: 14px; margin-top: 4px;">
+    🔥 Seria tygodni
+    </div>
+    </div>
+    </div>
+    </div>"""
+                        
+                        st.markdown(summary_html, unsafe_allow_html=True)
+                        
+                        # Clear summary after displaying
+                        del game_state["last_week_summary"]
+                        update_fmcg_game_state_sql(username, game_state, clients)
+                    
+                    # Rerun to refresh UI
+                    st.rerun()
+                    
+                except Exception as e:
+                    st.error(f"❌ Błąd podczas przechodzenia do następnego dnia: {e}")
+        
     # =============================================================================
     # TAB: MENTOR (AI Assistant z ograniczeniami)
     # =============================================================================

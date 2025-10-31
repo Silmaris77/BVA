@@ -1,0 +1,564 @@
+/* 
+   Executive Pro Theme - Profesjonalny design dla kadry zarządzającej
+   Navy Blue + Platinum + Gold Accent
+   Data: 2025-10-31
+*/
+
+/* ============================================================================
+   ZMIENNE CSS - Executive Pro Theme
+   ============================================================================ */
+:root {
+  /* Główne kolory */
+  --primary-color: #1E3A8A;          /* Navy Blue - Profesjonalizm */
+  --primary-light: #3B82F6;          /* Light Navy */
+  --primary-dark: #1E40AF;           /* Dark Navy */
+  --secondary-color: #475569;        /* Steel Blue */
+  --secondary-light: #64748B;        /* Light Steel */
+  --accent-color: #F59E0B;           /* Gold - Sukces, Premium */
+  --accent-light: #FBBF24;           /* Light Gold */
+  
+  /* Status colors */
+  --success-color: #10B981;          /* Emerald Green */
+  --warning-color: #F59E0B;          /* Gold */
+  --error-color: #DC2626;            /* Red */
+  --info-color: #3B82F6;             /* Blue */
+  
+  /* Background colors - Executive Dark Theme */
+  --background-dark: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #111827 100%);
+  --background-medium: #1F2937;      /* Charcoal */
+  --background-light: #111827;       /* Deep Charcoal */
+  --background-card: linear-gradient(145deg, rgba(31, 41, 55, 0.95) 0%, rgba(55, 65, 81, 0.85) 100%);
+  --background-card-hover: linear-gradient(145deg, rgba(55, 65, 81, 0.98) 0%, rgba(75, 85, 99, 0.92) 100%);
+  
+  /* Gradienty */
+  --gradient-primary: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 50%, #1D4ED8 100%);
+  --gradient-secondary: linear-gradient(135deg, #475569 0%, #334155 50%, #1E293B 100%);
+  --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --gradient-gold: linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%);
+  --gradient-dark: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #111827 100%);
+  --gradient-card: linear-gradient(145deg, rgba(31, 41, 55, 0.95) 0%, rgba(55, 65, 81, 0.85) 100%);
+  
+  /* Text colors */
+  --text-primary: #F3F4F6;           /* Platinum White */
+  --text-secondary: #D1D5DB;         /* Silver */
+  --text-muted: #9CA3AF;             /* Muted Silver */
+  --text-dark: #1F2937;              /* Charcoal */
+  --text-gold: #F59E0B;              /* Gold accent */
+  
+  /* Border & Shadow - Professional subtle glow */
+  --border-color: rgba(30, 58, 138, 0.4);
+  --border-glow: rgba(30, 58, 138, 0.6);
+  --border-gold: rgba(245, 158, 11, 0.5);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.7), 0 2px 4px -1px rgba(30, 58, 138, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.8), 0 4px 6px -2px rgba(30, 58, 138, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.9), 0 10px 10px -5px rgba(30, 58, 138, 0.4);
+  --glow-navy: 0 0 20px rgba(30, 58, 138, 0.5);
+  --glow-gold: 0 0 20px rgba(245, 158, 11, 0.6);
+  --glow-green: 0 0 20px rgba(16, 185, 129, 0.5);
+  
+  /* Border radius - Sharp professional */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+  
+  /* Transitions - Quick and professional */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s ease;
+  
+  /* Fonts */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ============================================================================
+   EXECUTIVE PRO - GŁÓWNE STYLE
+   ============================================================================ */
+
+/* Główny kontener aplikacji */
+.stApp {
+    background: var(--gradient-dark) !important;
+    font-family: var(--font-primary);
+}
+
+.main {
+    background: transparent;
+    color: var(--text-primary);
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background: var(--gradient-dark) !important;
+    border-right: 1px solid var(--border-color);
+    box-shadow: 4px 0 20px rgba(30, 58, 138, 0.15);
+}
+
+[data-testid="stSidebar"] > div:first-child {
+    background: transparent !important;
+}
+
+/* Ukryj domyślną nawigację */
+[data-testid="stSidebar"] > div:nth-of-type(2) {
+    display: none;
+}
+section[data-testid="stSidebarNav"] {
+    display: none;
+}
+
+/* Nagłówki sekcji w sidebarze */
+[data-testid="stSidebar"] h3 {
+    color: var(--text-primary);
+    font-size: 1.1em;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+    text-shadow: var(--glow-navy);
+}
+
+/* Karty */
+.st-bx {
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-normal);
+}
+
+.st-bx:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl), var(--glow-gold);
+    background: var(--background-card-hover);
+}
+
+/* Zen Header */
+.zen-header {
+    background: var(--gradient-primary);
+    color: white;
+    text-align: center;
+    font-family: var(--font-display);
+    padding: 10px;
+    margin-bottom: 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg), var(--glow-gold);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ============================================================================
+   PRZYCISKI - EXECUTIVE STYLE
+   ============================================================================ */
+
+[data-testid="stButton"] button {
+    background: var(--gradient-card) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(0);
+    position: relative;
+    padding-left: 15px;
+}
+
+[data-testid="stButton"] button:hover:not(:disabled) {
+    background: var(--gradient-primary) !important;
+    border-color: var(--primary-light) !important;
+    color: white !important;
+    transform: translateX(5px) translateY(-2px);
+    box-shadow: var(--shadow-md), var(--glow-gold);
+}
+
+[data-testid="stButton"] button::before {
+    content: "›";
+    position: absolute;
+    left: 10px;
+    opacity: 0;
+    transition: var(--transition-fast);
+}
+
+[data-testid="stButton"] button:hover::before {
+    opacity: 1;
+    left: 8px;
+}
+
+/* Przyciski w sidebarze */
+.stSidebar [data-testid="stButton"] button {
+    background: var(--gradient-card) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    font-weight: 500;
+    border-radius: var(--radius-sm) !important;
+    transition: all var(--transition-normal) !important;
+    width: 100% !important;
+}
+
+.stSidebar [data-testid="stButton"] button:hover:not(:disabled) {
+    background: var(--gradient-primary) !important;
+    border-color: var(--primary-light) !important;
+    color: white !important;
+    box-shadow: var(--shadow-md), var(--glow-gold);
+    transform: translateX(3px);
+}
+
+/* Aktywny przycisk (disabled) */
+.stSidebar [data-testid="stButton"] button:disabled {
+    background: var(--gradient-primary) !important;
+    border: 1px solid var(--primary-light) !important;
+    color: white !important;
+    font-weight: 600;
+    opacity: 1 !important;
+    box-shadow: var(--glow-gold);
+}
+
+[data-testid="stSidebar"] [data-testid="stButton"] button:disabled::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    box-shadow: var(--glow-green);
+}
+
+/* ============================================================================
+   KARTY LEKCJI - EXECUTIVE STYLE
+   ============================================================================ */
+
+.degen-card {
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin: 12px 0;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    border-left: 5px solid var(--primary-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.degen-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-primary);
+    opacity: 0.8;
+}
+
+.degen-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl), var(--glow-gold);
+    background: var(--background-card-hover);
+}
+
+.degen-card h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.3px;
+}
+
+.degen-card p {
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+/* ============================================================================
+   ODZNAKI & BADGES
+   ============================================================================ */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.badge-xp { 
+    background: var(--gradient-success); 
+    box-shadow: var(--glow-green);
+}
+.badge-level { 
+    background: var(--gradient-primary); 
+    box-shadow: var(--glow-gold);
+}
+.badge-time { 
+    background: var(--gradient-secondary); 
+    box-shadow: var(--glow-blue);
+}
+.badge-difficulty-beginner { 
+    background: var(--success-color);
+    box-shadow: var(--glow-green);
+}
+.badge-difficulty-intermediate { 
+    background: var(--warning-color); 
+}
+.badge-difficulty-advanced { 
+    background: var(--error-color); 
+}
+
+/* ============================================================================
+   DASHBOARD - EXECUTIVE LAYOUT
+   ============================================================================ */
+
+.dashboard-section {
+    margin-bottom: 20px;
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    padding-top: 2px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    transition: var(--transition-normal);
+}
+
+.dashboard-section:hover {
+    box-shadow: var(--shadow-lg), var(--glow-gold);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1px;
+    padding-bottom: 1px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-title {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+    text-shadow: var(--glow-gold);
+}
+
+/* Karty statystyk */
+.stat-card {
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    color: var(--text-primary);
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl), var(--glow-gold);
+    background: var(--background-card-hover);
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 4px 0;
+    line-height: 1;
+    text-shadow: var(--glow-gold);
+}
+
+.stat-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+/* ============================================================================
+   PROGRESS BARS - EXECUTIVE STYLE
+   ============================================================================ */
+
+.mission-progress-container {
+    width: 100%;
+    background-color: rgba(30, 41, 59, 0.5);
+    border-radius: var(--radius-md);
+    height: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.mission-progress-bar {
+    height: 100%;
+    background: var(--gradient-primary);
+    box-shadow: var(--glow-gold);
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    transition: width 0.5s ease-in-out;
+    min-width: 30px;
+}
+
+.goal-progress-container {
+    height: 10px;
+    background-color: rgba(30, 41, 59, 0.5);
+    border-radius: var(--radius-sm);
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.goal-progress-bar {
+    height: 100%;
+    background: var(--gradient-success);
+    box-shadow: var(--glow-green);
+    transition: width 0.5s ease-in-out;
+}
+
+/* ============================================================================
+   KARTY MISJI & CELÓW - EXECUTIVE STYLE
+   ============================================================================ */
+
+.mission-card {
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    color: var(--text-primary);
+}
+
+.mission-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg), var(--glow-gold);
+    background: var(--background-card-hover);
+}
+
+.mission-card.completed {
+    border-color: var(--success-color);
+    box-shadow: var(--glow-green);
+}
+
+.goal-card {
+    background: var(--background-card);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    border-left: 5px solid var(--primary-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.goal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl), var(--glow-gold);
+    background: var(--background-card-hover);
+}
+
+.goal-card.completed {
+    border-left-color: var(--success-color);
+    box-shadow: var(--glow-green);
+}
+
+/* ============================================================================
+   CUSTOM SCROLLBAR - EXECUTIVE STYLE
+   ============================================================================ */
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-medium);
+    border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--background-medium);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    box-shadow: var(--glow-gold);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes pulse-glow {
+    0%, 100% { 
+        box-shadow: var(--shadow-md); 
+    }
+    50% { 
+        box-shadow: var(--shadow-lg), var(--glow-gold); 
+    }
+}
+
+@keyframes completedAnimation {
+    0% { transform: scale(1); }
+    50% { 
+        transform: scale(1.05); 
+        box-shadow: var(--shadow-xl), var(--glow-green);
+    }
+    100% { transform: scale(1); }
+}
+
+.mission-card.just-completed {
+    animation: completedAnimation 0.5s ease;
+}
+
+/* Pulsujące elementy ważne */
+.pulse-highlight {
+    animation: pulse-glow 3s infinite;
+}

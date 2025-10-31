@@ -107,3 +107,33 @@
 [2025-10-29 16:18:17] ✅ Otrzymano odpowiedź z Gemini
 [2025-10-29 16:18:17] Długość odpowiedzi: 1080 znaków
 [2025-10-29 16:18:17] ✅ JSON sparsowany pomyślnie
+[2025-10-31 14:28:54] get_active_evaluation_mode() wywołane
+[2025-10-31 14:28:54] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-31 14:28:54] DEFAULT_EVALUATION_MODE = ai
+[2025-10-31 14:28:54] Plik config/business_games_active_mode.json istnieje
+[2025-10-31 14:28:54] Z pliku odczytano tryb: 'ai'
+[2025-10-31 14:29:03] get_active_evaluation_mode() wywołane
+[2025-10-31 14:29:03] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-31 14:29:03] DEFAULT_EVALUATION_MODE = ai
+[2025-10-31 14:29:03] Plik config/business_games_active_mode.json istnieje
+[2025-10-31 14:29:03] Z pliku odczytano tryb: 'ai'
+[2025-10-31 14:31:46] get_active_evaluation_mode() wywołane
+[2025-10-31 14:31:46] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-31 14:31:46] DEFAULT_EVALUATION_MODE = ai
+[2025-10-31 14:31:46] Plik config/business_games_active_mode.json istnieje
+[2025-10-31 14:31:46] Z pliku odczytano tryb: 'ai'
+[2025-10-31 14:31:57] get_active_evaluation_mode() wywołane
+[2025-10-31 14:31:57] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-31 14:31:57] DEFAULT_EVALUATION_MODE = ai
+[2025-10-31 14:31:57] Plik config/business_games_active_mode.json istnieje
+[2025-10-31 14:31:57] Z pliku odczytano tryb: 'ai'
+[2025-10-31 14:34:42] get_active_evaluation_mode() wywołane
+[2025-10-31 14:34:42] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-31 14:34:42] DEFAULT_EVALUATION_MODE = ai
+[2025-10-31 14:34:42] Plik config/business_games_active_mode.json istnieje
+[2025-10-31 14:34:42] Z pliku odczytano tryb: 'ai'
+[2025-10-31 15:11:32] get_active_evaluation_mode() wywołane
+[2025-10-31 15:11:32] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-10-31 15:11:32] DEFAULT_EVALUATION_MODE = ai
+[2025-10-31 15:11:32] Plik config/business_games_active_mode.json istnieje
+[2025-10-31 15:11:32] Z pliku odczytano tryb: 'ai'
