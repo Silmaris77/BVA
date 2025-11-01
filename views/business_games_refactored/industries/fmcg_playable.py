@@ -525,15 +525,14 @@ def show_fmcg_playable_game(username: str):
     pending_tasks = get_pending_tasks_count(st.session_state)
     tasks_badge = f" ({pending_tasks})" if pending_tasks > 0 else ""
     
-    tab_dashboard, tab_history, tab_tasks, tab_clients, tab_products, tab_conversation, tab_mentor, tab_inspiracje = st.tabs([
+    tab_dashboard, tab_history, tab_tasks, tab_clients, tab_products, tab_conversation, tab_hr = st.tabs([
         "📊 Dashboard",
         "📈 Historia",
         f"📋 Zadania{tasks_badge}",
         "🗺️ Klienci", 
         "📦 Produkty", 
         "💬 Rozmowa",
-        "🎓 Mentor",
-        "📚 Inspiracje"
+        "👥 HR"
     ])
     
     # =============================================================================
@@ -3752,152 +3751,375 @@ Tekst do poprawy:
                     st.error(f"❌ Błąd podczas przechodzenia do następnego dnia: {e}")
         
     # =============================================================================
-    # TAB: MENTOR (AI Assistant z ograniczeniami)
+    # TAB: HR (Human Resources - Rozwój i Wsparcie)
     # =============================================================================
     
-    with tab_mentor:
-        st.markdown("## 🎓 Mentor - Twój Doradca Sprzedażowy")
+    with tab_hr:
+        st.markdown("## 👥 HR - Rozwój i Wsparcie")
+        st.markdown("Centrum rozwoju kariery, szkoleń i wsparcia w pracy Product Handlera")
         
-        # Initialize mentor state
-        if "mentor_questions_today" not in game_state:
-            game_state["mentor_questions_today"] = 0
-        if "mentor_last_reset_day" not in game_state:
-            game_state["mentor_last_reset_day"] = game_state.get("current_day", "Monday")
-        if "mentor_conversation_history" not in game_state:
-            game_state["mentor_conversation_history"] = []
+        # HR Sub-tabs
+        hr_tab_career, hr_tab_mentor, hr_tab_training = st.tabs([
+            "🎯 Ścieżka Kariery", 
+            "🎓 Mentor", 
+            "📚 Szkolenia"
+        ])
         
-        # Reset daily limit and clear history when day changes
-        if game_state.get("mentor_last_reset_day") != game_state.get("current_day"):
-            game_state["mentor_questions_today"] = 0
-            game_state["mentor_last_reset_day"] = game_state.get("current_day", "Monday")
-            game_state["mentor_conversation_history"] = []  # Clear history from previous day
-        
-        # Header with limits
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            st.markdown("""
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                        padding: 20px; 
-                        border-radius: 10px; 
-                        color: white; 
-                        margin-bottom: 20px;">
-                <h3 style="margin: 0;">📞 Telefon do Mentora</h3>
-                <p style="margin: 5px 0 0 0; opacity: 0.9;">Twój osobisty doradca - ekspert od sprzedaży FMCG</p>
+        # =============================
+        # HR TAB: ŚCIEŻKA KARIERY  
+        # =============================
+        with hr_tab_career:
+            st.markdown("### 🎯 Ścieżka Kariery w FMCG")
+            
+            # Career levels definition
+            career_levels = [
+                {"level": 1, "title": "Junior Sales Representative", "description": "Początkujący przedstawiciel handlowy", "requirements": "Brak wymagań", "emoji": "🌱", "color": "#4CAF50"},
+                {"level": 2, "title": "Sales Representative", "description": "Doświadczony przedstawiciel handlowy", "requirements": "3 mies. doświadczenia<br>5 udanych negocjacji", "emoji": "💼", "color": "#2196F3"},
+                {"level": 3, "title": "Senior Sales Representative", "description": "Starszy przedstawiciel handlowy", "requirements": "6 mies. doświadczenia<br>15 klientów, ocena 4.0", "emoji": "⭐", "color": "#FF9800"},
+                {"level": 4, "title": "Key Account Manager", "description": "Menedżer kluczowych klientów", "requirements": "1 rok doświadczenia<br>25 klientów<br>Umowy długoterminowe", "emoji": "🔑", "color": "#9C27B0"},
+                {"level": 5, "title": "Territory Manager", "description": "Menedżer terytorialny", "requirements": "1.5 roku<br>Zarządzanie 3+ osobami", "emoji": "🗺️", "color": "#FF5722"},
+                {"level": 6, "title": "Regional Sales Manager", "description": "Regionalny menedżer sprzedaży", "requirements": "2 lata doświadczenia<br>Wyniki zespołu 120%", "emoji": "🏆", "color": "#795548"},
+                {"level": 7, "title": "Area Sales Manager", "description": "Menedżer sprzedaży obszarowej", "requirements": "3 lata<br>Zarządzanie 5+ menedżerami", "emoji": "👑", "color": "#607D8B"},
+                {"level": 8, "title": "Sales Director", "description": "Dyrektor sprzedaży", "requirements": "4 lata<br>Strategiczne planowanie", "emoji": "💎", "color": "#E91E63"},
+                {"level": 9, "title": "Commercial Director", "description": "Dyrektor handlowy", "requirements": "5+ lat<br>Pełna odpowiedzialność", "emoji": "👨‍💼", "color": "#673AB7"}
+            ]
+            
+            # Current level (get from game state or default to 1)
+            current_level = game_state.get("career_level", 1)
+            
+            # Display current position as hero card
+            st.markdown("#### 📊 Twoja Aktualna Pozycja")
+            current_position = career_levels[current_level - 1]
+            
+            # Hero card with current position
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(135deg, {current_position['color']}20, {current_position['color']}40);
+                border: 2px solid {current_position['color']};
+                border-radius: 15px;
+                padding: 20px;
+                margin: 10px 0;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            ">
+                <h2 style="color: {current_position['color']}; margin: 0;">
+                    {current_position['emoji']} Poziom {current_position['level']}
+                </h2>
+                <h3 style="margin: 10px 0; color: #333;">
+                    {current_position['title']}
+                </h3>
+                <p style="font-size: 16px; color: #666; margin: 0;">
+                    {current_position['description']}
+                </p>
             </div>
             """, unsafe_allow_html=True)
-        
-        with col2:
-            questions_left = 2 - game_state.get("mentor_questions_today", 0)
-            if questions_left > 0:
-                st.success(f"✅ Pozostało pytań: **{questions_left}/2**")
-            else:
-                st.error("❌ Limit wyczerpany")
-        
-        st.markdown("---")
-        
-        # Display conversation history from today
-        mentor_history = game_state.get("mentor_conversation_history", [])
-        
-        if mentor_history:
-            st.markdown("### 📝 Twoje rozmowy z Mentorem (dzisiaj)")
-            st.caption("💡 Możesz wracać do tych porad w ciągu całego dnia. Historie zerują się każdego dnia.")
             
-            for idx, entry in enumerate(reversed(mentor_history), 1):
-                with st.expander(f"🗨️ Pytanie #{len(mentor_history) - idx + 1}: {entry.get('question', '')[:80]}...", expanded=(idx == 1)):
-                    # Question
-                    st.markdown(f"**Twoje pytanie:**")
-                    st.info(entry.get('question', ''))
-                    
-                    # Context if provided
-                    if entry.get('client_name') or entry.get('product_name'):
-                        st.markdown("**Kontekst:**")
-                        context_items = []
-                        if entry.get('client_name'):
-                            context_items.append(f"👤 Klient: {entry['client_name']}")
-                        if entry.get('product_name'):
-                            context_items.append(f"📦 Produkt: {entry['product_name']}")
-                        st.caption(" | ".join(context_items))
-                    
-                    # Answer
-                    st.markdown("**Rada Mentora:**")
-                    st.markdown(f"""
-                    <div style="background: #f0fdf4; 
-                                padding: 20px; 
-                                border-radius: 10px; 
-                                border-left: 4px solid #10b981;
-                                margin: 15px 0;">
-                        {entry.get('answer', '')}
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                    # Copy button helper
-                    st.caption("💡 Tip: Zaznacz tekst i skopiuj (Ctrl+C) żeby użyć w rozmowie z klientem!")
+            # Progress bar
+            progress = (current_level - 1) / (len(career_levels) - 1) * 100
+            st.markdown("#### 📈 Postęp Ogólny")
+            st.progress(progress / 100)
+            st.markdown(f"<div style='text-align: center; color: #666;'>Ukończono {current_level} z {len(career_levels)} poziomów ({progress:.1f}%)</div>", unsafe_allow_html=True)
             
             st.markdown("---")
-        
-        # Info box
-        st.info("""
-        💡 **Jak to działa?**
-        - Możesz zadać **2 pytania dziennie** (limit resetuje się każdego dnia)
-        - Mentor pomoże Ci z **konkretnymi klientami, produktami i sytuacjami sprzedażowymi**
-        - Pytaj o strategie rozmowy, argumenty sprzedażowe, obsługę obiekcji
-        
-        ⚠️ **Wskazówka:** Zadawaj konkretne pytania! Im bardziej szczegółowe, tym lepsze porady.
-        """)
-        
-        # Check if can ask
-        if game_state.get("mentor_questions_today", 0) >= 2:
-            st.warning("📵 **Mentor niedostępny dzisiaj.** Zadzwoń jutro - odświeży się limit pytań!")
+            st.markdown("#### 🚀 Kompletna Ścieżka Kariery")
+            
+            # Display career path in cards - 3 columns
+            for i in range(0, len(career_levels), 3):
+                cols = st.columns(3)
+                
+                for j, col in enumerate(cols):
+                    if i + j < len(career_levels):
+                        level = career_levels[i + j]
+                        level_num = level['level']
+                        
+                        with col:
+                            # Determine card status and style
+                            if level_num < current_level:
+                                # Completed
+                                status = "✅ UKOŃCZONY"
+                                border_color = "#4CAF50"
+                                bg_gradient = "linear-gradient(135deg, #4CAF5020, #4CAF5040)"
+                                opacity = "1"
+                            elif level_num == current_level:
+                                # Current
+                                status = "🎯 AKTUALNY"
+                                border_color = level['color']
+                                bg_gradient = f"linear-gradient(135deg, {level['color']}30, {level['color']}50)"
+                                opacity = "1"
+                            else:
+                                # Locked
+                                status = "🔒 ZABLOKOWANY"
+                                border_color = "#CCCCCC"
+                                bg_gradient = "linear-gradient(135deg, #f5f5f5, #e0e0e0)"
+                                opacity = "0.7"
+                            
+                            # Card HTML
+                            card_html = f"""
+                            <div style="
+                                background: {bg_gradient};
+                                border: 2px solid {border_color};
+                                border-radius: 12px;
+                                padding: 15px;
+                                margin: 5px 0;
+                                height: 320px;
+                                opacity: {opacity};
+                                transition: transform 0.2s;
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                display: flex;
+                                flex-direction: column;
+                            ">
+                                <div style="text-align: center; flex-grow: 1;">
+                                    <div style="font-size: 2em; margin-bottom: 5px;">
+                                        {level['emoji']}
+                                    </div>
+                                    <div style="
+                                        background: {border_color};
+                                        color: white;
+                                        padding: 2px 8px;
+                                        border-radius: 10px;
+                                        font-size: 12px;
+                                        font-weight: bold;
+                                        margin-bottom: 8px;
+                                        display: inline-block;
+                                    ">
+                                        {status}
+                                    </div>
+                                    <h4 style="
+                                        color: {border_color};
+                                        margin: 8px 0;
+                                        font-size: 14px;
+                                        line-height: 1.2;
+                                    ">
+                                        Poziom {level['level']}
+                                    </h4>
+                                    <h5 style="
+                                        color: #333;
+                                        margin: 5px 0;
+                                        font-size: 12px;
+                                        font-weight: bold;
+                                        line-height: 1.2;
+                                        height: 32px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    ">
+                                        {level['title']}
+                                    </h5>
+                                    <p style="
+                                        color: #666;
+                                        font-size: 11px;
+                                        margin: 8px 0;
+                                        line-height: 1.3;
+                                        height: 30px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    ">
+                                        {level['description']}
+                                    </p>
+                                </div>
+                                <div style="
+                                    background: rgba(255,255,255,0.9);
+                                    padding: 8px;
+                                    border-radius: 8px;
+                                    margin-top: auto;
+                                    min-height: 60px;
+                                ">
+                                    <strong style="font-size: 11px; color: #333;">Wymagania:</strong><br>
+                                    <div style="font-size: 10px; color: #666; line-height: 1.4; margin-top: 4px;">
+                                        {level['requirements']}
+                                    </div>
+                                </div>
+                            </div>
+                            """
+                            
+                            st.markdown(card_html, unsafe_allow_html=True)
+            
+            # Benefits section with modern styling
             st.markdown("---")
-            st.markdown("### 💼 Przykładowe pytania na przyszłość:")
-            st.markdown("""
-            - "Jak przekonać Pana Kowalskiego do zamówienia naszego BodyWash? Ma już Dove."
-            - "Jakie argumenty użyć jeśli sklep mówi że nie ma miejsca na półce?"
-            - "Co powiedzieć klientowi który się boi że produkt się nie sprzeda?"
-            - "Jak zbudować relację ze sklepem na początku współpracy?"
+            st.markdown("#### 🎁 Korzyści z Awansu")
+            
+            benefits = {
+                1: ["Podstawowe narzędzia sprzedażowe", "Dostęp do katalogu produktów"],
+                2: ["Zwiększony limit negocjacji", "Dostęp do historii klientów"],
+                3: ["Narzędzia analityczne", "Specjalne rabaty dla klientów"],
+                4: ["Zarządzanie kluczowymi klientami", "Dostęp do ekskluzywnych produktów"],
+                5: ["Narzędzia zarządzania zespołem", "Budżet marketingowy"],
+                6: ["Analityka regionalna", "Planowanie strategiczne"],
+                7: ["Zarządzanie wieloma regionami", "Dostęp do danych rynkowych"],
+                8: ["Strategia sprzedaży", "Budżet na rozwój produktów"],
+                9: ["Pełne uprawnienia komercyjne", "Strategia biznesowa firmy"]
+            }
+            
+            # Display benefits in a nice format
+            benefit_cols = st.columns(3)
+            for i, level in enumerate(range(1, current_level + 1)):
+                if level in benefits:
+                    with benefit_cols[i % 3]:
+                        level_info = career_levels[level - 1]
+                        st.markdown(f"""
+                        <div style="
+                            background: linear-gradient(135deg, {level_info['color']}20, {level_info['color']}30);
+                            border-left: 4px solid {level_info['color']};
+                            padding: 10px;
+                            margin: 5px 0;
+                            border-radius: 5px;
+                        ">
+                            <strong style="color: {level_info['color']};">
+                                {level_info['emoji']} Poziom {level}
+                            </strong><br>
+                            <small>
+                                {'<br>'.join([f"• {benefit}" for benefit in benefits[level]])}
+                            </small>
+                        </div>
+                        """, unsafe_allow_html=True)
+        
+        # =============================
+        # HR TAB: MENTOR (istniejąca funkcjonalność)
+        # =============================
+        with hr_tab_mentor:
+            st.markdown("### 🎓 Mentor - Twój Doradca Sprzedażowy")
+            
+            # Initialize mentor state
+            if "mentor_questions_today" not in game_state:
+                game_state["mentor_questions_today"] = 0
+            if "mentor_last_reset_day" not in game_state:
+                game_state["mentor_last_reset_day"] = game_state.get("current_day", "Monday")
+            if "mentor_conversation_history" not in game_state:
+                game_state["mentor_conversation_history"] = []
+            
+            # Reset daily limit and clear history when day changes
+            if game_state.get("mentor_last_reset_day") != game_state.get("current_day"):
+                game_state["mentor_questions_today"] = 0
+                game_state["mentor_last_reset_day"] = game_state.get("current_day", "Monday")
+                game_state["mentor_conversation_history"] = []  # Clear history from previous day
+            
+            # Header with limits
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                            padding: 20px; 
+                            border-radius: 10px; 
+                            color: white; 
+                            margin-bottom: 20px;">
+                    <h3 style="margin: 0;">📞 Telefon do Mentora</h3>
+                    <p style="margin: 5px 0 0 0; opacity: 0.9;">Twój osobisty doradca - ekspert od sprzedaży FMCG</p>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            with col2:
+                questions_left = 2 - game_state.get("mentor_questions_today", 0)
+                if questions_left > 0:
+                    st.success(f"✅ Pozostało pytań: **{questions_left}/2**")
+                else:
+                    st.error("❌ Limit wyczerpany")
+            
+            st.markdown("---")
+            
+            # Display conversation history from today
+            mentor_history = game_state.get("mentor_conversation_history", [])
+            
+            if mentor_history:
+                st.markdown("### 📝 Twoje rozmowy z Mentorem (dzisiaj)")
+                st.caption("💡 Możesz wracać do tych porad w ciągu całego dnia. Historie zerują się każdego dnia.")
+                
+                for idx, entry in enumerate(reversed(mentor_history), 1):
+                    with st.expander(f"🗨️ Pytanie #{len(mentor_history) - idx + 1}: {entry.get('question', '')[:80]}...", expanded=(idx == 1)):
+                        # Question
+                        st.markdown(f"**Twoje pytanie:**")
+                        st.info(entry.get('question', ''))
+                        
+                        # Context if provided
+                        if entry.get('client_name') or entry.get('product_name'):
+                            st.markdown("**Kontekst:**")
+                            context_items = []
+                            if entry.get('client_name'):
+                                context_items.append(f"👤 Klient: {entry['client_name']}")
+                            if entry.get('product_name'):
+                                context_items.append(f"📦 Produkt: {entry['product_name']}")
+                            st.caption(" | ".join(context_items))
+                        
+                        # Answer
+                        st.markdown("**Rada Mentora:**")
+                        st.markdown(f"""
+                        <div style="background: #f0fdf4; 
+                                    padding: 20px; 
+                                    border-radius: 10px; 
+                                    border-left: 4px solid #10b981;
+                                    margin: 15px 0;">
+                            {entry.get('answer', '')}
+                        </div>
+                        """, unsafe_allow_html=True)
+                        
+                        # Copy button helper
+                        st.caption("💡 Tip: Zaznacz tekst i skopiuj (Ctrl+C) żeby użyć w rozmowie z klientem!")
+                
+                st.markdown("---")
+            
+            # Info box
+            st.info("""
+            💡 **Jak to działa?**
+            - Możesz zadać **2 pytania dziennie** (limit resetuje się każdego dnia)
+            - Mentor pomoże Ci z **konkretnymi klientami, produktami i sytuacjami sprzedażowymi**
+            - Pytaj o strategie rozmowy, argumenty sprzedażowe, obsługę obiekcji
+            
+            ⚠️ **Wskazówka:** Zadawaj konkretne pytania! Im bardziej szczegółowe, tym lepsze porady.
             """)
-        else:
-            # Question input
-            st.markdown("### 📝 Zadaj pytanie Mentorowi:")
             
-            # Context helpers
-            with st.expander("🎯 Sugestie tematów (kliknij aby rozwinąć)"):
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.markdown("""
-                    **Klienci i relacje:**
-                    - Jak zacząć rozmowę z nowym klientem?
-                    - Jak zbudować zaufanie?
-                    - Co robić gdy klient jest zimny/obojętny?
-                    """)
-                with col2:
-                    st.markdown("""
-                    **Produkty i argumenty:**
-                    - Jakie argumenty dla konkretnego produktu?
-                    - Jak porównać się z konkurencją?
-                    - Co mówić o cenie i marży?
-                    """)
-            
-            # Question form
-            user_question = st.text_area(
-                "Twoje pytanie:",
-                placeholder="Np. 'Jak przekonać sklep osiedlowy do zamówienia naszego BodyWash Natural? Mają już Dove i mówią że nie potrzebują więcej produktów.'",
-                height=100,
-                key="mentor_question_input"
-            )
-            
-            # Optional context
-            with st.expander("➕ Dodaj kontekst (opcjonalnie)"):
-                selected_client_name = st.selectbox(
-                    "Dotyczy klienta:",
-                    ["Nie dotyczy konkretnego klienta"] + [c.get("name", "Unknown") for c in clients.values()],
-                    key="mentor_client_context"
+            # Check if can ask
+            if game_state.get("mentor_questions_today", 0) >= 2:
+                st.warning("📵 **Mentor niedostępny dzisiaj.** Zadzwoń jutro - odświeży się limit pytań!")
+                st.markdown("---")
+                st.markdown("### 💼 Przykładowe pytania na przyszłość:")
+                st.markdown("""
+                - "Jak przekonać Pana Kowalskiego do zamówienia naszego BodyWash? Ma już Dove."
+                - "Jakie argumenty użyć jeśli sklep mówi że nie ma miejsca na półce?"
+                - "Co powiedzieć klientowi który się boi że produkt się nie sprzeda?"
+                - "Jak zbudować relację ze sklepem na początku współpracy?"
+                """)
+            else:
+                # Question input
+                st.markdown("### 📝 Zadaj pytanie Mentorowi:")
+                
+                # Context helpers
+                with st.expander("🎯 Sugestie tematów (kliknij aby rozwinąć)"):
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.markdown("""
+                        **Klienci i relacje:**
+                        - Jak zacząć rozmowę z nowym klientem?
+                        - Jak zbudować zaufanie?
+                        - Co robić gdy klient jest zimny/obojętny?
+                        """)
+                    with col2:
+                        st.markdown("""
+                        **Produkty i argumenty:**
+                        - Jakie argumenty dla konkretnego produktu?
+                        - Jak porównać się z konkurencją?
+                        - Co mówić o cenie i marży?
+                        """)
+                
+                # Question form
+                user_question = st.text_area(
+                    "Twoje pytanie:",
+                    placeholder="Np. 'Jak przekonać sklep osiedlowy do zamówienia naszego BodyWash Natural? Mają już Dove i mówią że nie potrzebują więcej produktów.'",
+                    height=100,
+                    key="mentor_question_input"
                 )
                 
-                # Get product list from FRESHLIFE_PRODUCTS (player's company products)
-                product_names = [p.get("name", "Unknown") for p in FRESHLIFE_PRODUCTS.values()]
-                
-                selected_product = st.selectbox(
+                # Optional context
+                with st.expander("➕ Dodaj kontekst (opcjonalnie)"):
+                    selected_client_name = st.selectbox(
+                        "Dotyczy klienta:",
+                        ["Nie dotyczy konkretnego klienta"] + [c.get("name", "Unknown") for c in clients.values()],
+                        key="mentor_client_context"
+                    )
+                    
+                    # Get product list from FRESHLIFE_PRODUCTS (player's company products)
+                    product_names = [p.get("name", "Unknown") for p in FRESHLIFE_PRODUCTS.values()]
+                    
+                    selected_product = st.selectbox(
                     "Dotyczy produktu:",
                     ["Nie dotyczy konkretnego produktu"] + product_names,
                     key="mentor_product_context"
@@ -4047,55 +4269,67 @@ Tekst do poprawy:
                             st.info("Spróbuj ponownie za chwilę.")
     
     # =============================================================================
-    # TAB: INSPIRACJE (Artykuły edukacyjne)
+    # HR TAB: SZKOLENIA (przeniesiena z Inspiracji)
     # =============================================================================
     
-    with tab_inspiracje:
-        st.markdown("## 📚 Inspiracje i Materiały Edukacyjne")
-        st.markdown("Poniżej znajdziesz artykuły i materiały pomocne w sprzedaży FMCG.")
-        
-        st.markdown("---")
-        
-        # Artykuł 0: Planowanie terytorium (NOWY - PIERWSZY!)
-        with st.expander("🗺️ **Planowanie terytorium sprzedażowego - od analizy do pierwszej wizyty**", expanded=False):
-            # Elegancki preview
-            st.markdown("""
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                        padding: 30px; 
-                        border-radius: 15px; 
-                        color: white; 
-                        margin-bottom: 20px;
-                        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);">
-                <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🗺️ Zacznij od planu!</h2>
-                <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
-                    Segmentacja ABC, routing, strategia prospectingowa i przygotowanie do pierwszej wizyty
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
+        # =============================
+        # HR TAB: SZKOLENIA
+        # =============================
+        with hr_tab_training:
+            st.markdown("### 📚 Szkolenia i Materiały Edukacyjne")
+            st.markdown("Rozwijaj swoje umiejętności sprzedażowe dzięki specjalistycznym materiałom")
             
-            # Highlights
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.markdown("""
-                <div style="background: #d1fae5; padding: 15px; border-radius: 10px; border-left: 4px solid #10b981;">
-                    <div style="font-size: 2rem; margin-bottom: 5px;">🔤</div>
-                    <strong>Segmentacja ABC</strong><br>
-                    <span style="color: #64748b; font-size: 0.9rem;">20% klientów = 80% przychodów</span>
-                </div>
-                """, unsafe_allow_html=True)
+            # Training categories
+            training_categories = st.tabs([
+                "🗺️ Planowanie", 
+                "💬 Rozmowy sprzedażowe", 
+                "🏪 Merchandising",
+                "📊 Analityka"
+            ])
             
-            with col2:
-                st.markdown("""
-                <div style="background: #dbeafe; padding: 15px; border-radius: 10px; border-left: 4px solid #3b82f6;">
-                    <div style="font-size: 2rem; margin-bottom: 5px;">🚀</div>
-                    <strong>Quick Wins First</strong><br>
-                    <span style="color: #64748b; font-size: 0.9rem;">Od kogo zacząć? B→C→A</span>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col3:
-                st.markdown("""
-                <div style="background: #ffedd5; padding: 15px; border-radius: 10px; border-left: 4px solid #f97316;">
+            # PLANOWANIE TRAINING
+            with training_categories[0]:
+                st.markdown("#### 🗺️ Planowanie Terytorium Sprzedażowego")
+                
+                with st.expander("**Planowanie terytorium - od analizy do pierwszej wizyty**", expanded=False):
+                    # Elegancki preview
+                    st.markdown("""
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                padding: 30px; 
+                                border-radius: 15px; 
+                                color: white; 
+                                margin-bottom: 20px;
+                                box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);">
+                        <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🗺️ Zacznij od planu!</h2>
+                        <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
+                            Segmentacja ABC, routing, strategia prospectingowa i przygotowanie do pierwszej wizyty
+                        </p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # Highlights
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.markdown("""
+                        <div style="background: #d1fae5; padding: 15px; border-radius: 10px; border-left: 4px solid #10b981;">
+                            <div style="font-size: 2rem; margin-bottom: 5px;">🔤</div>
+                            <strong>Segmentacja ABC</strong><br>
+                            <span style="color: #64748b; font-size: 0.9rem;">20% klientów = 80% przychodów</span>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    
+                    with col2:
+                        st.markdown("""
+                        <div style="background: #dbeafe; padding: 15px; border-radius: 10px; border-left: 4px solid #3b82f6;">
+                            <div style="font-size: 2rem; margin-bottom: 5px;">🚀</div>
+                            <strong>Quick Wins First</strong><br>
+                            <span style="color: #64748b; font-size: 0.9rem;">Od kogo zacząć? B→C→A</span>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    
+                    with col3:
+                        st.markdown("""
+                        <div style="background: #ffedd5; padding: 15px; border-radius: 10px; border-left: 4px solid #f97316;">
                     <div style="font-size: 2rem; margin-bottom: 5px;">🗺️</div>
                     <strong>Routing + Klasteryzacja</strong><br>
                     <span style="color: #64748b; font-size: 0.9rem;">Oszczędź 100 km dziennie!</span>
