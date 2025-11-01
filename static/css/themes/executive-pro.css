@@ -90,6 +90,79 @@
     color: var(--text-primary);
 }
 
+/* Główny kontener zawartości - usunięcie górnej przestrzeni */
+.block-container {
+    padding-top: 0 !important;
+    background: transparent !important;
+}
+
+/* Specyficzny selektor dla bloku w main */
+.main .block-container {
+    background: transparent !important;
+    padding-top: 0 !important;
+}
+
+/* Streamlit header i kontener - dopasowanie do motywu */
+[data-testid="stHeader"] {
+    background: transparent !important;
+}
+
+[data-testid="stAppViewContainer"] {
+    background: var(--gradient-dark) !important;
+}
+
+/* Ukryj pierwszy element w main (naprawia problem z marginesem) */
+.main > div:first-child {
+    visibility: hidden;
+    height: 0;
+    padding: 0;
+}
+
+/* Ukryj przycisk header */
+button[kind="header"] {
+    display: none;
+}
+
+/* Ukryj potencjalne elementy białego paska Streamlit */
+[data-testid="stToolbar"] {
+    display: none !important;
+}
+
+[data-testid="stDecoration"] {
+    display: none !important;
+}
+
+.stMainMenu {
+    display: none !important;
+}
+
+/* Ukryj cały header Streamlit */
+[data-testid="stHeader"] {
+    display: none !important;
+}
+
+.stAppHeader {
+    display: none !important;
+}
+
+.stAppToolbar {
+    display: none !important;
+}
+
+#MainMenu {
+    display: none !important;
+}
+
+/* Ukryj przycisk Deploy */
+[data-testid="stAppDeployButton"] {
+    display: none !important;
+}
+
+/* Ukryj przycisk rozwijania sidebara */
+[data-testid="stExpandSidebarButton"] {
+    display: none !important;
+}
+
 /* Sidebar */
 [data-testid="stSidebar"] {
     background: var(--gradient-dark) !important;

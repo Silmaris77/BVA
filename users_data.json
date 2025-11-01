@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-10-31 22:39:46",
+    "last_login": "2025-11-01 11:32:35",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -23,6 +23,12 @@
         "completed_lessons": 0
       },
       "2025-10-31": {
+        "xp": 241,
+        "degencoins": 236,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-11-01": {
         "xp": 241,
         "degencoins": 236,
         "level": 1,
@@ -93,6 +99,31 @@
       {
         "type": "login",
         "timestamp": "2025-10-31T22:39:46.405515",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-01T10:29:32.155394",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-01T10:35:48.522427",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-01T10:43:31.551800",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-01T11:19:12.721761",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-01T11:32:35.699940",
         "details": {}
       }
     ],
@@ -773,11 +804,9 @@
         "firm": {
           "name": "FMCG Corp",
           "logo": "🏪",
-          "founded": "2025-10-31",
+          "founded": "2025-11-01",
           "level": 1,
-          "reputation": 0,
-          "color_scheme": "purple",
-          "motto": ""
+          "reputation": 0
         },
         "fmcg_state": {
           "level": 1,
@@ -1934,24 +1963,6 @@
         "history": {
           "transactions": [],
           "milestones": []
-        },
-        "financial_settings": {
-          "savings_goal": 0,
-          "low_balance_alert": -10000,
-          "high_balance_alert": 50000,
-          "auto_transfer_enabled": false,
-          "auto_transfer_threshold": 30000,
-          "auto_transfer_amount": 5000
-        },
-        "notifications": {
-          "deadline_alert_hours": 24,
-          "deadline_alert_enabled": true,
-          "new_contracts_alert": true,
-          "balance_alerts_enabled": true,
-          "events_alerts_enabled": true,
-          "level_up_alerts": true,
-          "employee_alerts": true,
-          "reputation_alerts": true
         }
       }
     },
@@ -4145,7 +4156,7 @@
       }
     },
     "theme_preference": "gaming-pro",
-    "layout_preference": "standard",
+    "layout_preference": "halloween",
     "lesson_progress": {
       "0. Wprowadzenie do neuroprzywództwa": {
         "intro_xp_awarded": true,
