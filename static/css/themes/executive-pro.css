@@ -158,9 +158,11 @@ button[kind="header"] {
     display: none !important;
 }
 
-/* Ukryj przycisk rozwijania sidebara */
+/* Przycisk rozwijania sidebara - WIDOCZNY */
 [data-testid="stExpandSidebarButton"] {
-    display: none !important;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
+    color: white !important;
+    border-radius: 8px !important;
 }
 
 /* Sidebar */
@@ -267,7 +269,10 @@ section[data-testid="stSidebarNav"] {
     font-weight: 500;
     border-radius: var(--radius-sm) !important;
     transition: all var(--transition-normal) !important;
-    width: 100% !important;
+    width: calc(100% - 12px) !important;
+    margin-right: 12px !important;
+    overflow: visible !important;
+    white-space: normal !important;
 }
 
 .stSidebar [data-testid="stButton"] button:hover:not(:disabled) {
@@ -275,7 +280,7 @@ section[data-testid="stSidebarNav"] {
     border-color: var(--primary-light) !important;
     color: white !important;
     box-shadow: var(--shadow-md), var(--glow-gold);
-    transform: translateX(3px);
+    transform: none;
 }
 
 /* Aktywny przycisk (disabled) */

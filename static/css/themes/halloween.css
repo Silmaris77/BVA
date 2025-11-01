@@ -150,9 +150,13 @@
     display: none !important;
 }
 
-/* Ukryj przycisk rozwijania sidebara */
+/* Przycisk rozwijania sidebara - WIDOCZNY z klimatem Halloween */
 [data-testid="stExpandSidebarButton"] {
-    display: none !important;
+    background: linear-gradient(135deg, #1a0d00 0%, #ff6b00 100%) !important;
+    color: #ff6b00 !important;
+    border: 1px solid #ff6b00 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.3) !important;
 }
 
 /* Sidebar */
@@ -458,9 +462,11 @@ section[data-testid="stSidebarNav"] {
     font-weight: 500;
     border-radius: var(--radius-sm) !important;
     transition: all var(--transition-normal) !important;
-    width: 100% !important;
+    width: calc(100% - 12px) !important;
+    margin-right: 12px !important;
     position: relative;
-    overflow: hidden;
+    overflow: visible !important;
+    white-space: normal !important;
 }
 
 /* Płonący brzeg dla przycisków sidebar - używamy trzeciego pseudo-elementu przez selektor dziecka */
@@ -499,7 +505,7 @@ section[data-testid="stSidebarNav"] {
     box-shadow: var(--shadow-md), 
                 0 0 25px rgba(255, 107, 53, 0.7),
                 0 0 40px rgba(157, 78, 221, 0.4);
-    transform: translateX(3px);
+    transform: none;
 }
 
 /* Aktywny przycisk (disabled) */

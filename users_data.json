@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-11-01 16:12:35",
+    "last_login": "2025-11-02 00:56:00",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -29,6 +29,12 @@
         "completed_lessons": 0
       },
       "2025-11-01": {
+        "xp": 241,
+        "degencoins": 236,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-11-02": {
         "xp": 241,
         "degencoins": 236,
         "level": 1,
@@ -139,6 +145,61 @@
       {
         "type": "login",
         "timestamp": "2025-11-01T16:12:35.229235",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:20:46.664625",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:25:00.864967",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:26:04.496420",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:31:38.322996",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:31:38.947368",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:35:50.105697",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:37:58.503928",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:43:41.094318",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:52:20.445633",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:55:29.514350",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-02T00:56:00.343310",
         "details": {}
       }
     ],
@@ -819,7 +880,7 @@
         "firm": {
           "name": "FMCG Corp",
           "logo": "🏪",
-          "founded": "2025-11-01",
+          "founded": "2025-11-02",
           "level": 1,
           "reputation": 0
         },

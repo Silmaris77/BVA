@@ -416,7 +416,10 @@ button[kind="header"] {
     font-weight: 500;
     border-radius: 6px !important;
     transition: all 0.3s ease !important;
-    width: 100% !important;
+    width: calc(100% - 12px) !important;
+    margin-right: 12px !important;
+    overflow: visible !important;
+    white-space: normal !important;
     display: block !important;
 }
 
