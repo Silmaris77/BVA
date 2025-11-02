@@ -118,6 +118,90 @@ button[kind="header"] {
     display: none;
 }
 
+/* ========================================
+   TABS - Profesjonalny design dla Standard
+   ======================================== */
+
+.stTabs {
+    overflow: visible !important;
+}
+
+.stTabs [data-baseweb="tab-list"] {
+    gap: 4px !important;
+    background: linear-gradient(145deg, rgba(74, 144, 226, 0.08) 0%, rgba(41, 128, 185, 0.12) 100%) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 6px !important;
+    border: 1px solid rgba(74, 144, 226, 0.15) !important;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+    border-radius: var(--radius-sm) !important;
+    color: rgba(247, 250, 252, 0.7) !important;
+    font-weight: 500 !important;
+    font-size: 15px !important;
+    padding: 12px 24px !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+}
+
+.stTabs [data-baseweb="tab"]::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%) !important;
+    border-radius: var(--radius-sm) !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    pointer-events: none !important;
+}
+
+.stTabs [data-baseweb="tab"]:hover:not([aria-selected="true"]) {
+    color: rgba(247, 250, 252, 0.95) !important;
+    background: rgba(74, 144, 226, 0.15) !important;
+    border-color: rgba(74, 144, 226, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2) !important;
+}
+
+.stTabs [data-baseweb="tab"]:hover:not([aria-selected="true"])::before {
+    opacity: 1 !important;
+}
+
+.stTabs [aria-selected="true"] {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    background: linear-gradient(145deg, #4A90E2 0%, #2980B9 100%) !important;
+    border-color: rgba(74, 144, 226, 0.4) !important;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.35),
+                0 2px 4px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .stTabs [data-baseweb="tab-list"] {
+        padding: 4px !important;
+        gap: 2px !important;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        padding: 10px 16px !important;
+        font-size: 14px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .stTabs [data-baseweb="tab"] {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+    }
+}
+
 /* Karty degena */
 .degen-card {
     background: var(--background-card);
