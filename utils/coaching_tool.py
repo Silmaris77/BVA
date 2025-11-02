@@ -60,17 +60,22 @@ def show_coaching_on_the_job():
     
     current_turn = conversation.get("current_turn", 1)
     
-    # === SIDEBAR Z LIVE METRYKAMI ===
-    with st.sidebar:
-        st.markdown("### 📊 Live Feedback - Coaching")
-        st.info("🎓 **Tryb treningowy** - nie wpływa na grę")
-        
-        total_score = conversation.get("total_score", 0)
-        relationship_health = conversation.get("relationship_health", 100)
-        
+    # === LIVE METRYKI NA STRONIE GŁÓWNEJ ===
+    st.markdown("---")
+    st.markdown("### 📊 Live Feedback - Coaching")
+    st.info("🎓 **Tryb treningowy** - nie wpływa na grę")
+    
+    total_score = conversation.get("total_score", 0)
+    relationship_health = conversation.get("relationship_health", 100)
+    
+    # Górny pasek metryk - 2 kolumny
+    col_metrics1, col_metrics2 = st.columns(2)
+    
+    with col_metrics1:
         st.metric("Tura", f"{current_turn}")
         st.metric("Punkty", f"{total_score}")
-        
+    
+    with col_metrics2:
         # Relationship health bar
         health_color = "#10b981" if relationship_health >= 70 else "#f59e0b" if relationship_health >= 40 else "#ef4444"
         st.markdown(f"""
@@ -87,35 +92,42 @@ def show_coaching_on_the_job():
             </div>
         </div>
         """, unsafe_allow_html=True)
+    
+    # Metryki szczegółowe - 4 kolumny
+    st.markdown("#### 🎯 Twoje kompetencje")
+    metrics = conversation.get("metrics", {})
+    if metrics:
+        metric_cols = st.columns(4)
+        metric_items = [
+            ('empathy', '🤝 Empatia'),
+            ('assertiveness', '💪 Asertywność'),
+            ('professionalism', '👔 Profesjonalizm'),
+            ('solution_quality', '💡 Rozwiązania')
+        ]
         
-        # Metryki szczegółowe
-        metrics = conversation.get("metrics", {})
-        if metrics:
-            st.markdown("#### 🎯 Twoje kompetencje")
-            for metric_key, metric_value in metrics.items():
-                metric_label = {
-                    'empathy': '🤝 Empatia',
-                    'assertiveness': '💪 Asertywność',
-                    'professionalism': '👔 Profesjonalizm',
-                    'solution_quality': '💡 Rozwiązania'
-                }.get(metric_key, metric_key.capitalize())
-                
-                # Progress bar dla każdej metryki
-                color = "#10b981" if metric_value >= 70 else "#f59e0b" if metric_value >= 40 else "#ef4444"
+        for idx, (metric_key, metric_label) in enumerate(metric_items):
+            metric_value = metrics.get(metric_key, 0)
+            color = "#10b981" if metric_value >= 70 else "#f59e0b" if metric_value >= 40 else "#ef4444"
+            
+            with metric_cols[idx]:
                 st.markdown(f"""
                 <div style='margin: 8px 0;'>
-                    <div style='font-size: 12px; color: #475569; margin-bottom: 2px;'>
+                    <div style='font-size: 12px; color: #475569; margin-bottom: 2px; text-align: center;'>
                         {metric_label}
                     </div>
                     <div style='background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;'>
                         <div style='background: {color}; width: {metric_value}%; 
                                     height: 100%; transition: width 0.3s;'></div>
                     </div>
-                    <div style='font-size: 11px; color: #64748b; margin-top: 2px;'>
+                    <div style='font-size: 11px; color: #64748b; margin-top: 2px; text-align: center;'>
                         {metric_value}/100
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+    else:
+        st.info("📊 Metryki pojawią się po pierwszej odpowiedzi")
+    
+    st.markdown("---")
     
     # === HISTORIA KONWERSACJI ===
     st.markdown("### 💬 Rozmowa")

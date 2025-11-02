@@ -228,6 +228,30 @@ section[data-testid="stSidebarNav"] {
 }
 
 /* ============================================================================
+   TABS - GAMING STYLE
+   ============================================================================ */
+
+.stTabs [data-baseweb="tab"] {
+    color: #b0b0b0 !important; /* Jasno szary dla nieaktywnych */
+}
+
+.stTabs [aria-selected="true"] {
+    color: #ffffff !important; /* Biały dla aktywnego */
+}
+
+/* ============================================================================
+   NAGŁÓWKI - GAMING STYLE
+   ============================================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+    color: #d0d0d0 !important; /* Jasno szary */
+}
+
+.section-title {
+    color: #d0d0d0 !important; /* Jasno szary */
+}
+
+/* ============================================================================
    PRZYCISKI - GAMING STYLE
    ============================================================================ */
 
@@ -430,7 +454,7 @@ section[data-testid="stSidebarNav"] {
 }
 
 .section-title {
-    color: var(--text-primary);
+    color: #d0d0d0 !important; /* Jasno szary */
     font-size: 1.2rem;
     font-weight: 600;
     margin: 0;
