@@ -450,6 +450,10 @@ def convert_prospect_to_active(client: FMCGClientData, first_order_value: int) -
     Returns:
         Zaktualizowany klient w statusie ACTIVE
     """
+    # Ensure client has 'status' field (backward compatibility)
+    if "status" not in client:
+        client["status"] = "PROSPECT"
+    
     if client["status"] != "PROSPECT":
         raise ValueError(f"Klient musi być PROSPECT, jest: {client['status']}")
     
@@ -483,6 +487,10 @@ def lose_client(client: FMCGClientData, reason: str) -> FMCGClientData:
     Returns:
         Zaktualizowany klient w statusie LOST
     """
+    # Ensure client has 'status' field (backward compatibility)
+    if "status" not in client:
+        client["status"] = "PROSPECT"
+    
     if client["status"] != "ACTIVE":
         raise ValueError(f"Klient musi być ACTIVE, jest: {client['status']}")
     
@@ -695,6 +703,10 @@ def update_client_reputation(client: FMCGClientData, reputation_change: int) -> 
     Returns:
         Zaktualizowany klient
     """
+    # Ensure client has 'status' field (backward compatibility)
+    if "status" not in client:
+        client["status"] = "PROSPECT"
+    
     if client["status"] != "ACTIVE":
         # Tylko ACTIVE clients mają reputację
         return client
@@ -782,6 +794,10 @@ def execute_visit_placeholder(
     Returns:
         (updated_client, updated_game_state, visit_record)
     """
+    # Ensure client has 'status' field (backward compatibility)
+    if "status" not in client:
+        client["status"] = "PROSPECT"
+    
     # Calculate visit costs
     distance = client.get("distance_from_base", 0)
     visit_duration = random.randint(30, 60)  # 30-60 min
@@ -843,10 +859,13 @@ def execute_visit_placeholder(
         game_state["clients_active"] = game_state.get("clients_active", 0) + 1
         game_state["clients_prospect"] = game_state.get("clients_prospect", 0) - 1
     
+    # Get client_id (backward compatibility: 'id' or 'client_id')
+    client_id = client.get("client_id") or client.get("id", "unknown")
+    
     # Create visit record
     visit_record = create_visit_record(
-        client_id=client["client_id"],
-        client_type=client["type"],
+        client_id=client_id,
+        client_type=client.get("type", "unknown"),
         visit_type="first_contact" if client.get("visits_count", 0) == 1 else "regular",
         duration=visit_duration,
         travel_time=travel_time,
@@ -1040,7 +1059,7 @@ def get_clients_needing_visit(clients: Dict[str, FMCGClientData], urgent_thresho
     urgent = []
     
     for client_id, client in clients.items():
-        if client["status"] == "ACTIVE":
+        if client.get("status") == "ACTIVE":
             last_visit = client.get("last_visit_date")
             if last_visit:
                 last_visit_date = datetime.fromisoformat(last_visit)

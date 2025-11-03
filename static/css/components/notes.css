@@ -1,0 +1,250 @@
+/* 
+   notes.css - Styling dla komponentów notatnika
+   Data: 02.11.2025
+*/
+
+/* ===== NOTES PANEL (w coaching tool) ===== */
+.notes-panel {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    height: 100%;
+}
+
+.notes-panel-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 12px 12px 0 0;
+    font-weight: 600;
+}
+
+/* ===== NOTE ITEM (lista w panelu) ===== */
+.note-item {
+    background: #f8f9fa;
+    border-left: 4px solid #667eea;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+}
+
+.note-item:hover {
+    background: #e9ecef;
+    transform: translateX(2px);
+}
+
+.note-item.pinned {
+    border-left-color: #ffc107;
+    background: #fffbf0;
+}
+
+.note-item-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.note-item-content {
+    color: #666;
+    line-height: 1.4;
+    font-size: 13px;
+    margin: 5px 0;
+}
+
+.note-item-meta {
+    color: #999;
+    font-size: 11px;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ===== NOTE CARD (grid w dashboard) ===== */
+.note-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.note-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.note-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.note-category {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.note-category.product {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.note-category.pitch {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.note-category.mentor {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.note-category.manager {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.note-category.client {
+    background: #fce4ec;
+    color: #c2185b;
+}
+
+.note-category.personal {
+    background: #f1f8e9;
+    color: #558b2f;
+}
+
+.note-card-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.note-card-content {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 14px;
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.note-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #e9ecef;
+    color: #999;
+    font-size: 12px;
+}
+
+/* ===== TAGS ===== */
+.note-tags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.note-tag {
+    background: #e9ecef;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    color: #495057;
+}
+
+/* ===== NOTES GRID ===== */
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .notes-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .note-card {
+        margin-bottom: 15px;
+    }
+}
+
+/* ===== STREAMLIT TABS OVERRIDE dla notatnika ===== */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0;
+}
+
+.stTabs [data-baseweb="tab"] {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-weight: 500;
+    border-radius: 8px 8px 0 0;
+}
+
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+}
+
+/* ===== ADD NOTE BUTTON ===== */
+.add-note-btn {
+    width: 100%;
+    padding: 10px;
+    background: #f8f9fa;
+    border: 2px dashed #667eea;
+    border-radius: 8px;
+    color: #667eea;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.add-note-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: #764ba2;
+    color: #764ba2;
+}
+
+/* ===== STATS WIDGET ===== */
+.notes-stats-widget {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    border-radius: 12px;
+    color: white;
+}
+
+.notes-stats-widget-title {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.notes-stats-widget-value {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.notes-stats-widget-details {
+    font-size: 12px;
+    opacity: 0.8;
+}

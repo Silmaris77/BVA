@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opcja C: Sidebar Navigation (Advanced)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 280px;
+            background: #1e293b;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+        .sidebar h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: #e2e8f0;
+        }
+        .sidebar-nav {
+            list-style: none;
+        }
+        .sidebar-nav li {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar-nav li:hover {
+            background: #334155;
+        }
+        .sidebar-nav li.active {
+            background: #6366f1;
+            font-weight: 600;
+        }
+        .sidebar-nav li .icon {
+            font-size: 18px;
+        }
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+        .header {
+            max-width: 1400px;
+            margin: 0 auto 30px;
+        }
+        h1 {
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .pros, .cons {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .pros h3 {
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+        .cons h3 {
+            color: #f59e0b;
+            margin-bottom: 10px;
+        }
+        .pros ul, .cons ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .pros li::before {
+            content: "✅ ";
+        }
+        .cons li::before {
+            content: "⚠️ ";
+        }
+        .content-area {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-height: 600px;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .section h2 {
+            color: #1e293b;
+            margin-bottom: 20px;
+            font-size: 24px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .client-card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .product-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }
+        .button-primary {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .button-primary:hover {
+            background: #4f46e5;
+        }
+        .button-secondary {
+            background: white;
+            color: #6366f1;
+            border: 2px solid #6366f1;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        .tag.premium { background: #ddd6fe; color: #7c3aed; }
+        .tag.value { background: #d1fae5; color: #10b981; }
+        .tag.mixed { background: #fed7aa; color: #f59e0b; }
+        .info-box {
+            background: #e0e7ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #6366f1;
+            margin-bottom: 20px;
+        }
+        .route-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #10b981;
+            margin-bottom: 15px;
+        }
+        .tool-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 300px;
+            margin-bottom: 20px;
+        }
+        .message {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+        .message.player {
+            background: #dbeafe;
+            margin-left: auto;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .breadcrumb {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .breadcrumb a {
+            color: #6366f1;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>🎯 Sprzedaż</h2>
+        <ul class="sidebar-nav">
+            <li class="active" onclick="showSection('overview')">
+                <span class="icon">📊</span>
+                <span>Przegląd</span>
+            </li>
+            <li onclick="showSection('map')">
+                <span class="icon">🗺️</span>
+                <span>Mapa Klientów</span>
+            </li>
+            <li onclick="showSection('clients')">
+                <span class="icon">👥</span>
+                <span>Lista Klientów</span>
+            </li>
+            <li onclick="showSection('routing')">
+                <span class="icon">🚗</span>
+                <span>Planowanie Trasy</span>
+            </li>
+            <li onclick="showSection('products')">
+                <span class="icon">📦</span>
+                <span>Katalog Produktów</span>
+            </li>
+            <li onclick="showSection('tm-tools')">
+                <span class="icon">🎁</span>
+                <span>Narzędzia TM</span>
+            </li>
+            <li onclick="showSection('visit')">
+                <span class="icon">💬</span>
+                <span>Wizyta u Klienta</span>
+            </li>
+            <li onclick="showSection('orders')">
+                <span class="icon">🛒</span>
+                <span>Zamówienia</span>
+            </li>
+            <li onclick="showSection('history')">
+                <span class="icon">📈</span>
+                <span>Historia & Stats</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>🎯 Opcja C: Sidebar Navigation (Advanced)</h1>
+            <p class="subtitle">Maksymalna dostępność bez przełączania tabów</p>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>Zalety</h3>
+                    <ul>
+                        <li>Zero przełączania między tabami - wszystko w jednym kliknięciu</li>
+                        <li>Kontekst zawsze widoczny (sidebar + breadcrumbs)</li>
+                        <li>Bardzo szybka nawigacja dla power users</li>
+                        <li>Można otworzyć wszystko co potrzeba bez tracenia kontekstu</li>
+                        <li>Scaling - łatwo dodać nowe sekcje</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>Wady</h3>
+                    <ul>
+                        <li>Nie-standard dla Streamlit (wymaga custom CSS/JS)</li>
+                        <li>Trudniejsze w implementacji i utrzymaniu</li>
+                        <li>Może być overwhelming dla początkujących graczy</li>
+                        <li>Sidebar zajmuje miejsce (mniej przestrzeni na treść)</li>
+                        <li>Potencjalne problemy z mobile/tablet</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div id="overview" class="section active">
+                <div class="breadcrumb">Sprzedaż / Przegląd</div>
+                <h2>📊 Przegląd Sprzedaży</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+                    <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; border-left: 4px solid #10b981;">
+                        <h3 style="color: #64748b; font-size: 14px; margin-bottom: 8px;">Klienci Aktywni</h3>
+                        <p style="font-size: 32px; font-weight: 700; color: #10b981;">18/25</p>
+                        <small style="color: #64748b;">72% bazy</small>
+                    </div>
+                    <div style="background: #fef3c7; padding: 20px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                        <h3 style="color: #64748b; font-size: 14px; margin-bottom: 8px;">Sprzedaż (miesiąc)</h3>
+                        <p style="font-size: 32px; font-weight: 700; color: #f59e0b;">1,243 kg</p>
+                        <small style="color: #64748b;">↑ +18% vs prev</small>
+                    </div>
+                    <div style="background: #e0e7ff; padding: 20px; border-radius: 8px; border-left: 4px solid #6366f1;">
+                        <h3 style="color: #64748b; font-size: 14px; margin-bottom: 8px;">Wizyty (ten tydzień)</h3>
+                        <p style="font-size: 32px; font-weight: 700; color: #6366f1;">12</p>
+                        <small style="color: #64748b;">Target: 15/tydzień</small>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>🎯 Quick Actions:</strong><br>
+                    <button class="button-primary" style="margin-right: 10px; margin-top: 10px;" onclick="showSection('routing')">🚗 Zaplanuj trasę na dziś</button>
+                    <button class="button-secondary" style="margin-right: 10px; margin-top: 10px;" onclick="showSection('visit')">💬 Rozpocznij wizytę</button>
+                    <button class="button-secondary" style="margin-top: 10px;" onclick="showSection('products')">📦 Przeglądaj produkty</button>
+                </div>
+            </div>
+
+            <div id="map" class="section">
+                <div class="breadcrumb"><a href="#" onclick="showSection('overview')">Sprzedaż</a> / Mapa Klientów</div>
+                <h2>🗺️ Mapa Klientów</h2>
+                
+                <div style="background: #e0e7ff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <p style="color: #4338ca; font-weight: 600; margin-bottom: 10px;">📍 Interaktywna mapa Folium</p>
+                    <div style="background: #cbd5e1; height: 400px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center;">
+                            <p style="color: #64748b; font-size: 18px; margin-bottom: 10px;">🗺️ Mapa z 25 klientami</p>
+                            <p style="color: #94a3b8; font-size: 14px;">Kliknij marker aby zobaczyć szczegóły</p>
+                            <p style="color: #94a3b8; font-size: 14px;">Zaznacz klientów aby dodać do trasy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="clients" class="section">
+                <div class="breadcrumb"><a href="#" onclick="showSection('overview')">Sprzedaż</a> / Lista Klientów</div>
+                <h2>👥 Lista Klientów (25)</h2>
+                
+                <div class="client-card">
+                    <div>
+                        <strong>🍔 Grill House</strong>
+                        <span class="tag premium">Premium</span>
+                        <br>
+                        <small style="color: #64748b;">5.2 km | 83 kg/mies | Kotlin | Rep: 65/100</small>
+                    </div>
+                    <button class="button-secondary" style="padding: 8px 16px; font-size: 13px;">Zobacz szczegóły</button>
+                </div>
+                <div class="client-card">
+                    <div>
+                        <strong>🥙 Kebab King</strong>
+                        <span class="tag value">Value</span>
+                        <br>
+                        <small style="color: #64748b;">8.1 km | 115 kg/mies | Kotlin | Rep: 42/100</small>
+                    </div>
+                    <button class="button-secondary" style="padding: 8px 16px; font-size: 13px;">Zobacz szczegóły</button>
+                </div>
+            </div>
+
+            <div id="routing" class="section">
+                <div class="breadcrumb"><a href="#" onclick="showSection('overview')">Sprzedaż</a> / Planowanie Trasy</div>
+                <h2>🚗 Planowanie Trasy</h2>
+                
+                <div class="route-card">
+                    <h3 style="margin-bottom: 10px;">🤖 Sugestia ALEX Praktykant</h3>
+                    <ol style="margin-left: 20px; margin-bottom: 15px;">
+                        <li>Baza → 🍔 Grill House (5.2 km)</li>
+                        <li>🍔 Grill House → 🥙 Kebab King (6.8 km)</li>
+                        <li>🥙 Kebab King → Baza (6.5 km)</li>
+                    </ol>
+                    <div style="background: #f0fdf4; padding: 12px; border-radius: 6px;">
+                        <strong>📊 Statystyki:</strong><br>
+                        📏 Dystans: 18.5 km | ⏱️ Czas: ~3h | ⚡ Energia: -45%
+                    </div>
+                </div>
+
+                <button class="button-primary">🚀 Rozpocznij trasę</button>
+            </div>
+
+            <div id="products" class="section">
+                <div class="breadcrumb"><a href="#" onclick="showSection('overview')">Sprzedaż</a> / Katalog Produktów</div>
+                <h2>📦 Katalog Produktów (12 produktów)</h2>
+                
+                <div class="product-card">
+                    <div style="display: flex; justify-content: between; margin-bottom: 10px;">
+                        <div>
+                            <strong style="font-size: 18px;">Heinz Ketchup Łagodny</strong>
+                            <span class="tag premium">Premium</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="color: #10b981; font-size: 24px; font-weight: 700;">28.50 PLN</span>
+                        </div>
+                    </div>
+                    <p style="color: #64748b;">875ml Food Service | Marża: 8.50 PLN (30%)</p>
+                </div>
+            </div>
+
+            <div id="tm-tools" class="section">
+                <div class="breadcrumb"><a href="#" onclick="showSection('overview')">Sprzedaż</a> / Narzędzia TM</div>
+                <h2>🎁 Narzędzia Trade-Marketing</h2>
+                
+                <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #10b981;">
+                    <strong>💰 Budżet TM:</strong> 3,800 / 5,000 PLN 
+                    <div style="background: #dcfce7; height: 20px; border-radius: 10px; margin-top: 8px; overflow: hidden;">
+                        <div style="background: #10b981; height: 100%; width: 76%;"></div>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div>
+                        <strong>🎨 Heinz Dispenser</strong><br>
+                        <small style="color: #64748b;">Premium clients | Wzrost sprzedaży: +15%</small>
+                    </div>
+                    <div>
+                        <span style="color: #f59e0b; font-weight: 700; margin-right: 10px;">15 PLN</span>
+                        <button class="button-secondary" style="padding: 6px 12px; font-size: 12px;">Dodaj</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="visit" class="section">
+                <div class="breadcrumb"><a href="#" onclick="showSection('overview')">Sprzedaż</a> / Wizyta u Klienta</div>
+                <h2>💬 Wizyta u Klienta</h2>
+                
+                <p style="margin-bottom: 15px;"><strong>Wybierz klienta:</strong> 
+                    <select style="padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 14px; width: 100%;">
+                        <option>🍔 Grill House (z trasy 1/2)</option>
+                        <option>🥙 Kebab King (z trasy 2/2)</option>
+                    </select>
+                </p>
+
+                <div class="chat-box">
+                    <div class="message">
+                        <strong>Właściciel:</strong> Dzień dobry! Co Pan ma dla mnie dzisiaj?
+                    </div>
+                    <div class="message player">
+                        <strong>Ty:</strong> Dzień dobry! Chciałbym przedstawić nowy Heinz Ketchup...
+                    </div>
+                </div>
+
+                <textarea style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: inherit; min-height: 80px; margin-bottom: 10px;" placeholder="Wpisz swoją odpowiedź..."></textarea>
+                <button class="button-primary">📤 Wyślij</button>
+            </div>
+
+            <div id="orders" class="section">
+                <div class="breadcrumb"><a href="#" onclick="showSection('overview')">Sprzedaż</a> / Zamówienia</div>
+                <h2>🛒 Zamówienia</h2>
+                <p>Formularz zamówienia pojawi się po zakończeniu rozmowy</p>
+            </div>
+
+            <div id="history" class="section">
+                <div class="breadcrumb"><a href="#" onclick="showSection('overview')">Sprzedaż</a> / Historia & Stats</div>
+                <h2>📈 Historia Wizyt i Statystyki</h2>
+                <p>Historia wszystkich wizyt, zamówień i statystyk</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.getElementsByClassName('section');
+            for (let i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+
+            const navItems = document.querySelectorAll('.sidebar-nav li');
+            for (let i = 0; i < navItems.length; i++) {
+                navItems[i].classList.remove('active');
+            }
+
+            document.getElementById(sectionId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

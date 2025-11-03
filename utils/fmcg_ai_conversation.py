@@ -113,7 +113,31 @@ def conduct_fmcg_conversation(
             )
         )
         
-        ai_response = response.text
+        # Safely extract text from response
+        try:
+            ai_response = response.text
+        except (AttributeError, ValueError, KeyError) as e:
+            # Response might be blocked or empty
+            print(f"⚠️ Błąd odczytu response.text: {e}")
+            print(f"Response type: {type(response)}")
+            if hasattr(response, 'candidates') and response.candidates:
+                try:
+                    if response.candidates[0].content.parts:
+                        part = response.candidates[0].content.parts[0]
+                        # Try different ways to get text
+                        if hasattr(part, 'text'):
+                            ai_response = part.text
+                        elif isinstance(part, dict) and 'text' in part:
+                            ai_response = part['text']
+                        else:
+                            ai_response = "Przepraszam, nie mogę w tym momencie odpowiedzieć."
+                    else:
+                        ai_response = "Przepraszam, nie mogę w tym momencie odpowiedzieć."
+                except (AttributeError, KeyError, IndexError) as part_error:
+                    print(f"⚠️ Błąd odczytu parts: {part_error}")
+                    ai_response = "Przepraszam, wystąpił problem z odpowiedzią."
+            else:
+                ai_response = "Przepraszam, wystąpił problem z odpowiedzią."
         
         # Metadata
         metadata = {
@@ -364,7 +388,20 @@ Odpowiedz TYLKO JSON:
         import json
         import re
         
-        response_text = response.text.strip()
+        # Safely extract text from response
+        try:
+            response_text = response.text.strip()
+        except (AttributeError, ValueError) as e:
+            print(f"⚠️ Błąd odczytu response.text w generate_conversation_summary: {e}")
+            # Fallback - simple summary
+            return {
+                "summary": f"Wizyta u {client_name}. Rozmowa na {evaluation['quality']}/5.",
+                "key_points": [
+                    f"Jakość: {evaluation['quality']}/5",
+                    f"Zamówienie: {'TAK' if evaluation['order_likely'] else 'NIE'} ({evaluation['order_value']} PLN)"
+                ]
+            }
+        
         # Remove markdown if present
         response_text = re.sub(r'```json\s*', '', response_text)
         response_text = re.sub(r'```\s*$', '', response_text)
@@ -496,7 +533,22 @@ Odpowiedz w formacie JSON:
         import json
         import re
         
-        response_text = response.text.strip()
+        # Safely extract text from response
+        try:
+            response_text = response.text.strip()
+        except (AttributeError, ValueError) as e:
+            print(f"⚠️ Błąd odczytu response.text w generate_manager_feedback_fuko: {e}")
+            # Return fallback feedback
+            return [
+                {
+                    "area": "Komunikacja z klientem",
+                    "fakty": "Podczas rozmowy zauważyłem Twoje zaangażowanie w prezentację produktów.",
+                    "ustosunkowanie": "Pozytywnie oceniam Twoją energię, jednak rozmowa mogła być bardziej zorientowana na potrzeby klienta.",
+                    "konsekwencje": "Klient może czuć się przytłoczony informacjami zamiast zrozumiany w swoich potrzebach.",
+                    "oczekiwania": "W następnej wizycie zacznij od pytań odkrywających potrzeby klienta, zanim przejdziesz do prezentacji produktów."
+                }
+            ]
+        
         # Remove markdown if present
         response_text = re.sub(r'```json\s*', '', response_text)
         response_text = re.sub(r'```\s*$', '', response_text)
@@ -547,7 +599,7 @@ def extract_client_discoveries(
     
     # Build conversation transcript
     transcript = "\n".join([
-        f"{'Handlowiec' if msg['role'] == 'user' else client_name}: {msg['text']}"
+        f"{'Handlowiec' if msg['role'] == 'user' else client_name}: {msg.get('content', msg.get('text', ''))}"
         for msg in conversation_history
     ])
     
@@ -620,7 +672,13 @@ Odpowiedz w formacie JSON:
         import json
         import re
         
-        response_text = response.text.strip()
+        # Safely extract text from response
+        try:
+            response_text = response.text.strip()
+        except (AttributeError, ValueError) as e:
+            print(f"⚠️ Błąd odczytu response.text w extract_client_discoveries: {e}")
+            return {"discovered": {}, "notes": []}
+        
         # Remove markdown if present
         response_text = re.sub(r'```json\s*', '', response_text)
         response_text = re.sub(r'```\s*$', '', response_text)
@@ -780,7 +838,13 @@ JSON:"""
         import traceback
         
         try:
-            response_text = response.text.strip()
+            # Safely extract text from response
+            try:
+                response_text = response.text.strip()
+            except (AttributeError, ValueError) as e:
+                print(f"⚠️ Błąd odczytu response.text w extract_sales_capacity_discovery: {e}")
+                return {}
+            
             # Remove markdown markers if present
             if response_text.startswith("```json"):
                 response_text = response_text[7:]

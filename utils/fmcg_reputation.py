@@ -55,6 +55,10 @@ def update_client_reputation(
         reputation_change: Wartość zmiany reputacji
     """
     
+    # Ensure client has 'status' field (backward compatibility)
+    if "status" not in client_data:
+        client_data["status"] = "PROSPECT"
+    
     # Oblicz zmianę
     change = custom_change if custom_change is not None else REPUTATION_CHANGES.get(event_type, 0)
     
@@ -80,8 +84,8 @@ def update_client_reputation(
     client_data.setdefault("events_timeline", []).append(event_entry)
     
     # Sprawdź czy klient został LOST
-    if new_rep <= -50 and client_data.get("status") == "active":
-        client_data["status"] = "lost"
+    if new_rep <= -50 and client_data.get("status") == "ACTIVE":
+        client_data["status"] = "LOST"
         client_data["lost_date"] = datetime.now().isoformat()
         client_data["lost_reason"] = "reputation_too_low"
         
@@ -143,6 +147,10 @@ def record_visit(client_data: Dict, visit_quality: int, notes: str = "") -> int:
     
     from datetime import datetime, timedelta
     
+    # Ensure client has 'status' field (backward compatibility)
+    if "status" not in client_data:
+        client_data["status"] = "PROSPECT"
+    
     now = datetime.now()
     today = now.strftime("%Y-%m-%d")
     
@@ -151,7 +159,7 @@ def record_visit(client_data: Dict, visit_quality: int, notes: str = "") -> int:
     
     # Sprawdź czy wizyta była spóźniona
     next_visit_due = client_data.get("next_visit_due")
-    if next_visit_due and client_data.get("status") == "active":
+    if next_visit_due and client_data.get("status") == "ACTIVE":
         due_dt = datetime.fromisoformat(next_visit_due)
         days_late = (now - due_dt).days
         
@@ -193,6 +201,10 @@ def record_visit(client_data: Dict, visit_quality: int, notes: str = "") -> int:
     if "visits_history" not in client_data:
         client_data["visits_history"] = []
     
+    # Ensure client has 'reputation' field (even PROSPECT can have it)
+    if "reputation" not in client_data:
+        client_data["reputation"] = 0
+    
     client_data["visits_history"].append({
         "date": today,
         "quality": visit_quality,
@@ -209,7 +221,11 @@ def record_visit(client_data: Dict, visit_quality: int, notes: str = "") -> int:
     client_data["next_visit_due"] = next_dt.strftime("%Y-%m-%d")
     
     # Jeśli to była pierwsza wizyta i prospect, dodaj event "first_visit"
-    if client_data.get("status") == "prospect" and not client_data.get("contract_start_date"):
+    if client_data.get("status") == "PROSPECT" and not client_data.get("contract_start_date"):
+        # Ensure events_timeline exists
+        if "events_timeline" not in client_data:
+            client_data["events_timeline"] = []
+        
         client_data["events_timeline"].append({
             "date": today,
             "type": "first_visit",
@@ -231,15 +247,23 @@ def sign_contract(client_data: Dict, products: list) -> None:
         products: Lista ID produktów w kontrakcie
     """
     
-    if client_data.get("status") != "prospect":
+    # Ensure client has 'status' field (backward compatibility)
+    if "status" not in client_data:
+        client_data["status"] = "PROSPECT"
+    
+    if client_data.get("status") != "PROSPECT":
         return  # Już aktywny lub lost
     
     now = datetime.now()
     today = now.strftime("%Y-%m-%d")
     
     # Zmień status
-    client_data["status"] = "active"
+    client_data["status"] = "ACTIVE"
     client_data["contract_start_date"] = today
+    
+    # Initialize reputation if not exists (should start at 50 for new ACTIVE)
+    if "reputation" not in client_data:
+        client_data["reputation"] = 50
     
     # Renewal za rok
     renewal_date = (now + timedelta(days=365)).strftime("%Y-%m-%d")
@@ -288,7 +312,7 @@ def check_overdue_visits(clients_dict: Dict) -> list:
     now = datetime.now()
     
     for client_id, client_data in clients_dict.items():
-        if client_data.get("status") != "active":
+        if client_data.get("status") != "ACTIVE":
             continue
         
         next_visit = client_data.get("next_visit_due")

@@ -1,54 +1,88 @@
 /* 
-   style.css - Główny plik stylów dla aplikacji DegApp
+   standard.css - Profesjonalny motyw Standard
    Autor: Anna
    Data: 15.05.2025
+   Updated: 02.11.2025 - Spójny schemat kolorów + Tabs gradient fioletowy
 */
 
-/* Zmienne CSS */
+/* ========================================
+   ZMIENNE CSS - PROFESJONALNY SCHEMAT
+   ======================================== */
 :root {
-  --primary-color: #4A90E2;
-  --primary-light: #7BB3F0;
-  --secondary-color: #5CB85C;
-  --background-light: lch(83% 1.09 18.97);  /* Lekko szare tło */
-  --background-dark: linear-gradient(135deg, #2D3748 0%, #374151 50%, #2D3748 100%);
-  --background-card: linear-gradient(145deg, #4A5568 0%, #3F4A5A 100%);
-  --background-card-hover: linear-gradient(145deg, #5A6A7C 0%, #4F5F6F 100%);
-  --text-primary: #F7FAFC;
-  --text-secondary: #E2E8F0;
-  --success-color: #5CB85C;
-  --warning-color: #F0AD4E;
-  --error-color: #D9534F;
-  --radius-sm: 5px;
+  /* Kolory główne - Niebieski corporate */
+  --primary-color: #2563EB;
+  --primary-light: #3B82F6;
+  --primary-dark: #1E40AF;
+  --primary-hover: #1D4ED8;
+  
+  /* Kolory pomocnicze */
+  --secondary-color: #10B981;
+  --accent-color: #F59E0B;
+  
+  /* Tła - Jasny, czysty schemat */
+  --background-light: #F8FAFC;
+  --background-main: #F1F5F9;
+  --background-card: #FFFFFF;
+  --background-card-hover: #F8FAFC;
+  --background-dark: linear-gradient(135deg, #1E293B 0%, #334155 50%, #1E293B 100%);
+  
+  /* Gradienty */
+  --gradient-primary: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+  --gradient-card: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 100%);
+  
+  /* Teksty - Ciemne na jasnym tle */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-on-primary: #FFFFFF;
+  
+  /* Kolory stanów */
+  --success-color: #10B981;
+  --warning-color: #F59E0B;
+  --error-color: #EF4444;
+  
+  /* Bordery */
+  --border-color: #E2E8F0;
+  
+  /* Cienie */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  
+  /* Zaokrąglenia */
+  --radius-sm: 6px;
   --radius-md: 10px;
-  --radius-lg: 15px;
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.4);
-  --shadow-lg: 0 8px 15px rgba(0,0,0,0.5);
-  --transition-fast: 0.3s ease;
-  --font-primary: 'Arial', sans-serif;
+  --radius-lg: 16px;
+  
+  /* Transition */
+  --transition-fast: 0.15s ease;
+  
+  /* Fonty */
+  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
 /* Podstawowe style */
 .main {
-    background: var(--background-light);
-    color: var(--text-primary);
+    background: var(--background-main) !important;
+    color: var(--text-primary) !important;
 }
+
 .st-bx {
-    background: var(--background-card);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--background-card) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 20px !important;
+    box-shadow: var(--shadow-md) !important;
+    border: 1px solid var(--border-color) !important;
 }
+
 .zen-header {
-    color: var(--text-primary);
+    color: var(--text-on-primary);
     text-align: center;
     font-family: var(--font-primary);
     padding: 10px;
     margin-bottom: 0;
-    background: linear-gradient(90deg, #4A90E2 0%, #2980B9 100%);
+    background: var(--gradient-primary);
     border-radius: var(--radius-md);
-    color: white;
     box-shadow: var(--shadow-md);
 }
 /* Ukryj specyficzny element Streamlit (zastąp [data-testid="..."] odpowiednim selektorem) */
@@ -63,9 +97,9 @@
     background: transparent !important;
 }
 
-/* Dodatkowe style dla ciemnego tła */
+/* Dodatkowe style dla jasnego tła */
 [data-testid="stAppViewContainer"] {
-    background: var(--background-light) !important;
+    background: var(--background-main) !important;
 }
 
 [data-testid="stHeader"] {
@@ -74,7 +108,7 @@
 
 /* Główny kontener */
 section.main {
-    background: var(--background-light) !important;
+    background: var(--background-main) !important;
 }
 
 /* Hide navigation elements */
@@ -85,7 +119,7 @@ section[data-testid="stSidebarNav"] {
     display: none;
 }
 
-/* Ciemne tło sidebara */
+/* Ciemny sidebar dla kontrastu */
 [data-testid="stSidebar"] {
     background: var(--background-dark) !important;
 }
@@ -94,19 +128,24 @@ section[data-testid="stSidebarNav"] {
     background: var(--background-dark) !important;
 }
 
-/* Ciemne tło głównej aplikacji */
-.stApp {
-    background: var(--background-light) !important;
+/* Teksty w sidebarze - jasne na ciemnym */
+[data-testid="stSidebar"] * {
+    color: var(--text-on-primary) !important;
 }
 
-/* Ciemne tło dla głównego kontenera */
+/* Jasne tło głównej aplikacji */
+.stApp {
+    background: var(--background-main) !important;
+}
+
+/* Transparentne tło dla głównego kontenera */
 .main .block-container {
     background: transparent !important;
 }
 
-/* Ciemne tło dla całej strony */
+/* Jasne tło dla całej strony */
 body {
-    background: var(--background-light) !important;
+    background: var(--background-main) !important;
 }
 
 .main > div:first-child {
@@ -119,7 +158,7 @@ button[kind="header"] {
 }
 
 /* ========================================
-   TABS - Profesjonalny design dla Standard
+   TABS - Design inspirowany stroną logowania
    ======================================== */
 
 .stTabs {
@@ -127,66 +166,41 @@ button[kind="header"] {
 }
 
 .stTabs [data-baseweb="tab-list"] {
-    gap: 4px !important;
-    background: linear-gradient(145deg, rgba(74, 144, 226, 0.08) 0%, rgba(41, 128, 185, 0.12) 100%) !important;
-    border-radius: var(--radius-sm) !important;
-    padding: 6px !important;
-    border: 1px solid rgba(74, 144, 226, 0.15) !important;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+    gap: 8px !important;
+    background: transparent !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    margin-bottom: 2rem !important;
+    padding: 0 !important;
 }
 
 .stTabs [data-baseweb="tab"] {
-    border-radius: var(--radius-sm) !important;
-    color: rgba(247, 250, 252, 0.7) !important;
+    color: #64748b !important;
     font-weight: 500 !important;
-    font-size: 15px !important;
+    font-size: 16px !important;
     padding: 12px 24px !important;
+    border-radius: 8px 8px 0 0 !important;
     background: transparent !important;
-    border: 1px solid transparent !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
     position: relative !important;
 }
 
-.stTabs [data-baseweb="tab"]::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%) !important;
-    border-radius: var(--radius-sm) !important;
-    opacity: 0 !important;
-    transition: opacity 0.3s ease !important;
-    pointer-events: none !important;
-}
-
 .stTabs [data-baseweb="tab"]:hover:not([aria-selected="true"]) {
-    color: rgba(247, 250, 252, 0.95) !important;
-    background: rgba(74, 144, 226, 0.15) !important;
-    border-color: rgba(74, 144, 226, 0.3) !important;
-    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2) !important;
-}
-
-.stTabs [data-baseweb="tab"]:hover:not([aria-selected="true"])::before {
-    opacity: 1 !important;
+    color: #475569 !important;
+    background: rgba(102, 126, 234, 0.05) !important;
 }
 
 .stTabs [aria-selected="true"] {
-    color: #ffffff !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
     font-weight: 600 !important;
-    background: linear-gradient(145deg, #4A90E2 0%, #2980B9 100%) !important;
-    border-color: rgba(74, 144, 226, 0.4) !important;
-    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.35),
-                0 2px 4px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
     .stTabs [data-baseweb="tab-list"] {
-        padding: 4px !important;
-        gap: 2px !important;
+        gap: 4px !important;
     }
     
     .stTabs [data-baseweb="tab"] {
@@ -223,7 +237,7 @@ button[kind="header"] {
 }
 
 .m3-lesson-card::before {
-    background: linear-gradient(90deg, #4A90E2, #2980B9) !important;
+    background: var(--gradient-primary) !important;
 }
 
 .m3-lesson-card::after {
@@ -252,37 +266,43 @@ button[kind="header"] {
                 inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 }
 
-/* Karty degena */
+/* ========================================
+   KARTY - PROFESJONALNY STYL
+   ======================================== */
+
 .degen-card {
-    background: var(--background-card);
-    border-radius: var(--radius-md);
+    background: var(--background-card) !important;
+    border-radius: var(--radius-md) !important;
     padding: 20px;
     margin: 12px 0;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md) !important;
     transition: var(--transition-fast);
     position: relative;
     overflow: hidden;
-    border-left: 5px solid var(--primary-color);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: var(--text-primary);
+    border-left: 4px solid var(--primary-color) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
 }
+
 .degen-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-    background: var(--background-card-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg) !important;
+    background: var(--background-card-hover) !important;
 }
+
 .degen-card h4 {
     margin-top: 0;
     margin-bottom: 10px;
     font-size: 18px;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text-primary) !important;
     letter-spacing: 0.3px;
 }
+
 .degen-card p {
-    color: var(--text-secondary);
+    color: var(--text-secondary) !important;
     margin-bottom: 18px;
-    line-height: 1.5;
+    line-height: 1.6;
     font-size: 14px;
 }
 .degen-card-footer {
@@ -542,14 +562,17 @@ button[kind="header"] {
     box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
 }
 
-/* Przyciski w sidebarze - jednolity wygląd */
+/* ========================================
+   SIDEBAR - Przyciski
+   ======================================== */
+
 .stSidebar [data-testid="stButton"] button {
-    background: linear-gradient(145deg, #5A6A7C 0%, #4F5F6F 100%) !important;
-    border: 1px solid rgba(255,255,255,0.15) !important;
-    color: var(--text-primary) !important;
+    background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    color: var(--text-on-primary) !important;
     font-weight: 500;
-    border-radius: 6px !important;
-    transition: all 0.3s ease !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all var(--transition-fast) !important;
     width: calc(100% - 12px) !important;
     margin-right: 12px !important;
     overflow: visible !important;
@@ -572,17 +595,17 @@ button[kind="header"] {
 }
 
 .stSidebar [data-testid="stButton"] button:hover:not(:disabled) {
-    background: linear-gradient(145deg, #6A7A8C 0%, #5F6F7F 100%) !important;
-    border-color: var(--primary-light) !important;
-    color: var(--text-primary) !important;
-    box-shadow: 0 3px 6px rgba(74, 144, 226, 0.3);
+    background: linear-gradient(145deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.1) 100%) !important;
+    border-color: rgba(255,255,255,0.3) !important;
+    color: var(--text-on-primary) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* KLUCZOWE: Przyciski disabled wyglądają tak samo jak normalne */
+/* Aktywny/disabled przycisk */
 .stSidebar [data-testid="stButton"] button:disabled {
-    background: linear-gradient(145deg, #4A90E2 0%, #2980B9 100%) !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    color: white !important;
+    background: var(--gradient-primary) !important;
+    border: 1px solid rgba(255,255,255,0.3) !important;
+    color: var(--text-on-primary) !important;
     font-weight: 600;
     opacity: 1 !important;
 }
@@ -590,10 +613,6 @@ button[kind="header"] {
 [data-testid="stButton"] button:active {
     transform: translateY(2px);
     box-shadow: var(--shadow-sm);
-    background: linear-gradient(to right, var(--primary-light), var(--primary-color));
-    color: white !important; /* Biały tekst dla lepszej widoczności */
-    font-weight: bold;
-    border-color: transparent;
 }
 
 [data-testid="stButton"] button::before {

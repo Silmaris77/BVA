@@ -416,16 +416,18 @@ def initialize_fmcg_game_with_scenario(username: str, scenario_id: str) -> Dict:
     }
 
 
-def initialize_fmcg_game_new(username: str) -> Dict:
+def initialize_fmcg_game_new(username: str, scenario: str = "quick_start") -> Dict:
     """
     NOWA IMPLEMENTACJA - Inicjalizuje FMCG game z systemem klientów
     
-    Tworzy początkowy stan gry:
-    - Level 1: Junior Sales Representative  
-    - Territory: Piaseczno
-    - 5 klientów PROSPECT (starter clients)
-    - 100% energy
-    - Marketing budget: 2000 PLN/miesiąc
+    Tworzy początkowy stan gry z wybranym scenariuszem:
+    - quick_start: Level 1, Piaseczno, 12 klientów, FreshLife produkty
+    - heinz_food_service: Level 1, Dzięgielów, 25 klientów FS, Heinz + Pudliszki
+    - lifetime: Sandbox mode, unlimited
+    
+    Args:
+        username: Nazwa użytkownika
+        scenario: ID scenariusza ("quick_start", "heinz_food_service", "lifetime")
     
     Returns:
         Dict z danymi gry FMCG gotowymi do zapisania w SQL (BusinessGame.extra_data)
@@ -433,51 +435,72 @@ def initialize_fmcg_game_new(username: str) -> Dict:
     if not FMCG_AVAILABLE:
         raise ImportError("FMCG industry module not available")
     
-    # Inicjalizuj podstawowy stan gry
-    game_state = initialize_fmcg_game_state(
-        territory=PIASECZNO_BASE["name"],
-        lat=PIASECZNO_BASE["latitude"],
-        lon=PIASECZNO_BASE["longitude"]
-    )
-    
-    # Pobierz 5 starter clients
-    starter_clients_dict = get_starter_clients(count=5)
-    
-    # Konwertuj na format z pełnymi danymi klienta
-    clients = {}
-    for client_id, client_data in starter_clients_dict.items():
-        clients[client_id] = create_new_client(
-            client_id=client_data["id"],
-            name=client_data["name"],
-            client_type=client_data["type"],
-            segment=client_data["segment"],
-            location=client_data.get("location", client_data.get("address", "")),
-            lat=client_data.get("latitude", 52.0846),
-            lon=client_data.get("longitude", 21.0250),
-            distance=client_data.get("distance_km", 0),
-            owner_name=client_data.get("owner_profile", {}).get("name", client_data.get("owner", "")),
-            potential=client_data.get("potential_monthly", 2000),
-            size_sqm=client_data.get("size_sqm", 80),
-            employees=client_data.get("characteristics", {}).get("employees", 2)
+    # Default scenario configuration (Quick Start / Lifetime)
+    if scenario in ["quick_start", "lifetime"]:
+        # Inicjalizuj podstawowy stan gry (Piaseczno)
+        game_state = initialize_fmcg_game_state(
+            territory=PIASECZNO_BASE["name"],
+            lat=PIASECZNO_BASE["latitude"],
+            lon=PIASECZNO_BASE["longitude"]
         )
         
-        # Dodaj dodatkowe dane z customer database (dla AI conversations)
-        clients[client_id].update({
-            "owner": client_data.get("owner", client_data.get("owner_profile", {}).get("name", "")),
-            "description": client_data.get("description", ""),
-            "owner_profile": client_data.get("owner_profile", {}),
-            "characteristics": client_data.get("characteristics", {}),
-            "note": client_data.get("note", "")
-        })
-    
-    # Update game state z klientami
-    game_state["clients"] = clients
-    game_state["clients_prospect"] = len(clients)
+        # Pobierz 5 starter clients
+        starter_clients_dict = get_starter_clients(count=5)
+        
+        # Konwertuj na format z pełnymi danymi klienta
+        clients = {}
+        for client_id, client_data in starter_clients_dict.items():
+            clients[client_id] = create_new_client(
+                client_id=client_data["id"],
+                name=client_data["name"],
+                client_type=client_data["type"],
+                segment=client_data["segment"],
+                location=client_data.get("location", client_data.get("address", "")),
+                lat=client_data.get("latitude", 52.0846),
+                lon=client_data.get("longitude", 21.0250),
+                distance=client_data.get("distance_km", 0),
+                owner_name=client_data.get("owner_profile", {}).get("name", client_data.get("owner", "")),
+                potential=client_data.get("potential_monthly", 2000),
+                size_sqm=client_data.get("size_sqm", 80),
+                employees=client_data.get("characteristics", {}).get("employees", 2)
+            )
+            
+            # Dodaj dodatkowe dane z customer database (dla AI conversations)
+            clients[client_id].update({
+                "owner": client_data.get("owner", client_data.get("owner_profile", {}).get("name", "")),
+                "description": client_data.get("description", ""),
+                "owner_profile": client_data.get("owner_profile", {}),
+                "characteristics": client_data.get("characteristics", {}),
+                "note": client_data.get("note", "")
+            })
+        
+        # Update game state z klientami
+        game_state["clients"] = clients
+        game_state["clients_prospect"] = len(clients)
+        
+        scenario_id = f"fmcg_{scenario}_v1"
+        
+    elif scenario == "heinz_food_service":
+        # Heinz scenario - będzie ładowany przez fmcg_playable.py
+        # Tutaj tylko podstawowa struktura
+        game_state = initialize_fmcg_game_state(
+            territory="Dzięgielów Food Service",
+            lat=49.7271667,  # Lipowa 29, 43-445 Dzięgielów (49°43'37.8"N)
+            lon=18.7025833   # 18°42'09.3"E
+        )
+        game_state["company"] = "Heinz Polska"
+        game_state["clients"] = {}  # Będzie wypełnione przez load_scenario_clients
+        game_state["clients_prospect"] = 25
+        scenario_id = "fmcg_heinz_food_service_v1"
+        
+    else:
+        # Fallback to quick_start
+        return initialize_fmcg_game_new(username, scenario="quick_start")
     
     # Zwróć kompletny stan gry
     return {
         # Metadata
-        "scenario_id": "fmcg_piaseczno_v1",
+        "scenario_id": scenario_id,
         "scenario_modifiers": {},
         "scenario_objectives": [
             {"id": "first_sale", "description": "Zrealizuj pierwszą sprzedaż", "completed": False},

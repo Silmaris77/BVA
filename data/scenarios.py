@@ -5,6 +5,26 @@ Każda branża może mieć wiele scenariuszy z różnymi warunkami startowymi,
 modyfikatorami i celami do osiągnięcia.
 """
 
+# Import klientów dla scenariuszy FMCG
+def load_scenario_clients(client_database_id):
+    """
+    Ładuje bazę klientów dla scenariusza
+    
+    Args:
+        client_database_id: ID bazy klientów (np. 'fmcg_clients_heinz_foodservice')
+        
+    Returns:
+        Dict z klientami lub pusty dict jeśli nie znaleziono
+    """
+    if client_database_id == "fmcg_clients_heinz_foodservice":
+        try:
+            from data.industries.fmcg_clients_heinz_foodservice import HEINZ_FOODSERVICE_CLIENTS
+            return HEINZ_FOODSERVICE_CLIENTS
+        except ImportError:
+            print(f"⚠️ Nie można załadować bazy klientów: {client_database_id}")
+            return {}
+    return {}
+
 SCENARIOS = {
     "consulting": {
         "lifetime": {
@@ -177,6 +197,195 @@ SCENARIOS = {
     # FMCG - Career Path Scenarios
     # =========================================================================
     "fmcg": {
+        "heinz_food_service": {
+            "id": "heinz_food_service",
+            "name": "🍅 Heinz Food Service Challenge",
+            "description": "Zostań Junior Sales Representative w Heinz Polska. Zarządzaj portfolio dwóch marek (Heinz Premium + Pudliszki Value) w kanale Food Service. 8 tygodni intensywnej sprzedaży w regionie Dzięgielów!",
+            "icon": "🍅",
+            "difficulty": "medium",
+            "company": "Heinz Polska",
+            "territory": {
+                "base_address": "Lipowa 29, 43-445 Dzięgielów",
+                "base_lat": 49.7271667,  # 49°43'37.8"N
+                "base_lng": 18.7025833,  # 18°42'09.3"E
+                "radius_km": 30
+            },
+            "duration_weeks": 8,
+            "client_database": "fmcg_clients_heinz_foodservice",  # Referencja do pliku z klientami
+            "total_clients": 25,
+            "client_breakdown": {
+                "burgerownie_street_food": 6,
+                "kebabownie_fast_food": 4,
+                "stołówki_bary": 3,
+                "pizzerie_casual": 4,
+                "hotele": 2,
+                "dystrybutorzy": 6
+            },
+            "initial_conditions": {
+                "level": 1,
+                "role": "Junior Sales Representative - Heinz Food Service",
+                "company": "Heinz Polska",
+                "territory_name": "Dzięgielów Food Service",
+                "monthly_sales": 0,
+                "current_week": 1,
+                "energy": 100,
+                "clients_total": 25,  # Restauracje, jadłodajnie, foodtrucki, dystrybutorzy
+                "clients_active": 0,
+                "clients_prospect": 25
+            },
+            "products": {
+                "own": [
+                    # HEINZ PREMIUM LINE
+                    {
+                        "id": "heinz_ketchup_classic",
+                        "name": "Heinz Ketchup Klasyczny 875ml",
+                        "brand": "Heinz",
+                        "tier": "premium",
+                        "category": "ketchup",
+                        "price_foodservice": 28.50,
+                        "margin_pct": 35,
+                        "target_segment": "Restauracje premium, burger joints craft, bistro",
+                        "usp": "Marka #1 na świecie, najlepsze pomidory, zero konserwantów, Instagram appeal"
+                    },
+                    {
+                        "id": "heinz_ketchup_hot",
+                        "name": "Heinz Ketchup Pikantny 875ml",
+                        "brand": "Heinz",
+                        "tier": "premium",
+                        "category": "ketchup",
+                        "price_foodservice": 29.50,
+                        "margin_pct": 35,
+                        "target_segment": "BBQ restaurants, pub food, foodtrucki z ostrymi daniami",
+                        "usp": "Premium spicy, naturalna ostrość, upsell opportunity (+2 zł do burgera)"
+                    },
+                    # PUDLISZKI VALUE LINE
+                    {
+                        "id": "pudliszki_ketchup_lagodny",
+                        "name": "Pudliszki Ketchup Łagodny 980g",
+                        "brand": "Pudliszki",
+                        "tier": "value",
+                        "category": "ketchup",
+                        "price_foodservice": 18.50,
+                        "margin_pct": 32,
+                        "target_segment": "Stołówki, fast food budget, jadłodajnie",
+                        "usp": "Polski lider, świetna cena, sprawdzony smak, duża pojemność"
+                    },
+                    {
+                        "id": "pudliszki_ketchup_ostry",
+                        "name": "Pudliszki Ketchup Ostry 980g",
+                        "brand": "Pudliszki",
+                        "tier": "value",
+                        "category": "ketchup",
+                        "price_foodservice": 18.90,
+                        "margin_pct": 32,
+                        "target_segment": "Food courts, kebaby, budżetowe restauracje",
+                        "usp": "Najlepsza relacja cena/jakość, duża pojemność"
+                    }
+                ],
+                "competition": [
+                    {
+                        "id": "kotlin_ketchup",
+                        "name": "Kotlin Ketchup 900g",
+                        "brand": "Kotlin",
+                        "category": "ketchup",
+                        "price_foodservice": 16.80,
+                        "market_share_foodservice": 18,
+                        "weaknesses": "Niska узнаваемость marki, zmienność smaku, słabsze wsparcie marketingowe"
+                    },
+                    {
+                        "id": "develey_ketchup",
+                        "name": "Develey Ketchup 875ml",
+                        "brand": "Develey",
+                        "category": "ketchup",
+                        "price_foodservice": 24.50,
+                        "market_share_foodservice": 8,
+                        "weaknesses": "Niemiecka marka, słaba узнаваемость w PL, droższy od Pudliszek a słabszy od Heinza"
+                    }
+                ]
+            },
+            "modifiers": {
+                "sales_multiplier": 1.0,
+                "distribution_gain": 1.2,
+                "satisfaction_impact": 1.0,
+                "task_difficulty": 0
+            },
+            "objectives": [
+                {
+                    "type": "numeric_distribution",
+                    "target": 15,
+                    "description": "🎯 Zdobądź 15 punktów sprzedaży (60% dystrybucji numerycznej portfolio Heinz)",
+                    "reward_money": 3000,
+                    "priority": "critical"
+                },
+                {
+                    "type": "monthly_sales",
+                    "target": 15000,
+                    "description": "💰 Osiągnij 15,000 PLN sprzedaży (Heinz + Pudliszki łącznie)",
+                    "reward_money": 2500,
+                    "priority": "high"
+                },
+                {
+                    "type": "premium_mix",
+                    "target": 40,
+                    "description": "⭐ Utrzymaj 40% wartości sprzedaży z linii premium (Heinz)",
+                    "reward_money": 2000,
+                    "priority": "high"
+                },
+                {
+                    "type": "beat_competition",
+                    "target": "kotlin",
+                    "target_wins": 6,
+                    "description": "🥊 Przejmij 6 klientów od Kotlin (switch na Heinz lub Pudliszki)",
+                    "reward_money": 1500,
+                    "priority": "medium"
+                },
+                {
+                    "type": "upsell_rate",
+                    "target": 30,
+                    "description": "📈 Osiągnij 30% upsell rate (klienci Pudliszki kupujący też Heinz)",
+                    "reward_money": 1000,
+                    "priority": "medium"
+                }
+            ],
+            "kpis": {
+                "primary": [
+                    "numeric_distribution",
+                    "revenue_total",
+                    "premium_mix_percent"
+                ],
+                "secondary": [
+                    "heinz_penetration",
+                    "pudliszki_volume",
+                    "average_basket_value",
+                    "upsell_success_rate"
+                ]
+            },
+            "selling_strategy": {
+                "premium_clients": "Heinz primary (Pudliszki jako backup/volume option)",
+                "value_clients": "Pudliszki primary (Heinz jako upsell/premium option)",
+                "portfolio_approach": "Two-brand strategy: pokryj cały rynek od stołówek do fine dining"
+            },
+            "special_events": [],
+            "is_lifetime": False,
+            "onboarding_tasks": [
+                {
+                    "id": "territory_analysis",
+                    "name": "Segmentacja Food Service",
+                    "description": "Podziel 25 punktów na 3 segmenty: Premium (Heinz focus), Value (Pudliszki focus), Mixed (portfolio approach)"
+                },
+                {
+                    "id": "route_planning",
+                    "name": "Plan wizyt tygodniowych",
+                    "description": "Zaplanuj trasę wizyt minimalizując koszty dojazdu i maksymalizując coverage"
+                },
+                {
+                    "id": "portfolio_pitch",
+                    "name": "Elevator Pitch - Portfolio Heinz",
+                    "description": "Przygotuj pitch: 'Heinz Polska oferuje rozwiązania dla każdego segmentu - od Pudliszek do Heinz premium'"
+                }
+            ]
+        },
+        
         "lifetime": {
             "id": "lifetime",
             "name": "🌟 Lifetime Challenge",

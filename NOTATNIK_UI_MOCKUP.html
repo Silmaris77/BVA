@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 FMCG Game - Notatnik UI Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .mockup-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .mockup-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mockup-section h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .description {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        /* ===== MOCKUP 1: ROZMOWA Z KLIENTEM ===== */
+        .conversation-mockup {
+            display: flex;
+            gap: 20px;
+            min-height: 600px;
+        }
+
+        .main-conversation {
+            flex: 1;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .conversation-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .conversation-header h4 {
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .turn-info {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .chat-area {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            overflow-y: auto;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 80%;
+        }
+
+        .message.client {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+        }
+
+        .message.player {
+            background: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+            margin-left: auto;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area textarea {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+            resize: none;
+        }
+
+        .input-area textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-area button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .input-area button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ===== NOTATNIK PANEL ===== */
+        .notes-panel {
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            max-height: 600px;
+        }
+
+        .notes-panel.collapsed {
+            width: 50px;
+        }
+
+        .notes-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notes-header h4 {
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .notes-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .notes-tab {
+            flex: 1;
+            padding: 12px 10px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85em;
+            color: #64748b;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .notes-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .notes-tab:hover:not(.active) {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .notes-content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .note-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+
+        .note-item h5 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+
+        .note-item p {
+            color: #666;
+            line-height: 1.4;
+            margin: 5px 0;
+        }
+
+        .note-item .note-meta {
+            color: #999;
+            font-size: 0.8em;
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .note-item.pinned {
+            border-left-color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .note-item.pinned::before {
+            content: "📌 ";
+        }
+
+        .add-note-btn {
+            width: 100%;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-note-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* ===== MOCKUP 2: ZARZĄDZANIE NOTATNIKIEM ===== */
+        .notebook-manager {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .manager-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .manager-header h3 {
+            margin: 0;
+            color: #667eea;
+            font-size: 1.5em;
+        }
+
+        .manager-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .manager-controls select,
+        .manager-controls input {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .manager-controls button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .note-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .note-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .note-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .note-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .note-category.elevator {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .note-category.product {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .note-category.mentor {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .note-category.manager {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .note-category.client {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .note-category.personal {
+            background: #f1f8e9;
+            color: #558b2f;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .note-actions button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .note-actions button:hover {
+            background: #f8f9fa;
+        }
+
+        .note-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .note-card-content {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .note-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #999;
+            font-size: 0.85em;
+            padding-top: 12px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .note-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .note-tag {
+            background: #e9ecef;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            color: #495057;
+        }
+
+        /* ===== MOCKUP 3: QUICK ACCESS ===== */
+        .quick-access {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .quick-search {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23999" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>') no-repeat right 12px center;
+        }
+
+        .quick-search:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .pinned-notes {
+            background: #fffbf0;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .pinned-notes h5 {
+            color: #f57c00;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .recent-notes h5 {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .note-quick-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .note-quick-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .note-quick-item-text {
+            flex: 1;
+        }
+
+        .note-quick-item-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+            margin-bottom: 3px;
+        }
+
+        .note-quick-item-preview {
+            color: #666;
+            font-size: 0.8em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .note-quick-item-icon {
+            font-size: 1.2em;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .conversation-mockup {
+                flex-direction: column;
+            }
+
+            .notes-panel {
+                width: 100%;
+                max-height: 400px;
+            }
+
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== UTILITIES ===== */
+        .feature-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .info-box h5 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 FMCG Game - Notatnik Gracza - UI Mockup</h1>
+
+        <!-- ===== MOCKUP 1: PODCZAS ROZMOWY ===== -->
+        <div class="mockup-section">
+            <h2>📱 Mockup 1: Notatnik podczas rozmowy z klientem</h2>
+            <div class="description">
+                <strong>Kontekst:</strong> Gracz prowadzi rozmowę z klientem "Supermarket ABC". Panel notatek jest otwarty po prawej stronie, zawsze widoczny podczas konwersacji. Gracz może szybko sprawdzić ceny produktów, elevator pitches, lub profil klienta bez przerywania rozmowy.
+            </div>
+
+            <div class="conversation-mockup">
+                <!-- Główna rozmowa -->
+                <div class="main-conversation">
+                    <div class="conversation-header">
+                        <h4>🤖 Rozmowa z klientem: Supermarket ABC</h4>
+                        <div class="turn-info">Tura 2/5 | Relacja: 65%</div>
+                    </div>
+
+                    <div class="chat-area">
+                        <div class="message client">
+                            <div class="message-sender">👤 Klient (Pan Kowalski - ISTJ)</div>
+                            <div>Dzień dobry! Interesują mnie produkty czekoladowe do sekcji premium. Co Pan może zaproponować?</div>
+                        </div>
+
+                        <div class="message player">
+                            <div class="message-sender">👨‍💼 Ty</div>
+                            <div>Dzień dobry! Świetnie się składa - mam dla Pana coś idealnego. Nasza linia premium "Chocolate Supreme" to produkty z kakaem z Ghany, które świetnie się sprzedają w podobnych supermarketach. Marża wynosi 35%, a klienci kupują je chętniej niż konkurencję.</div>
+                        </div>
+
+                        <div class="message client">
+                            <div class="message-sender">👤 Klient (Pan Kowalski - ISTJ)</div>
+                            <div>Hmm, interesujące. A jaka jest cena? Musimy być konkurencyjni.</div>
+                        </div>
+                    </div>
+
+                    <div class="input-area">
+                        <textarea rows="3" placeholder="Wpisz swoją odpowiedź..."></textarea>
+                        <button>📤 WYŚLIJ</button>
+                    </div>
+                </div>
+
+                <!-- Panel notatek -->
+                <div class="notes-panel">
+                    <div class="notes-header">
+                        <h4>📔 Notatnik</h4>
+                        <button class="toggle-btn" title="Zwiń/Rozwiń">◀</button>
+                    </div>
+
+                    <div class="notes-tabs">
+                        <button class="notes-tab active">📦 Produkty</button>
+                        <button class="notes-tab">🎯 Pitches</button>
+                        <button class="notes-tab">👤 Klient</button>
+                    </div>
+
+                    <div class="notes-content">
+                        <!-- Zakładka: Produkty -->
+                        <div class="note-item pinned">
+                            <h5>Chocolate Supreme</h5>
+                            <p><strong>Cena:</strong> €15.20 (sugerowana €17.99)</p>
+                            <p><strong>Marża:</strong> 35% dla detalu</p>
+                            <p><strong>USP:</strong> Premium kakao z Ghany, certyfikat Fair Trade</p>
+                            <p><strong>vs Konkurencja:</strong> Tańszy o €2 od Brand X</p>
+                            <div class="note-meta">
+                                <span>📌 Przypięte</span>
+                                <span>01.11.2025</span>
+                            </div>
+                        </div>
+
+                        <div class="note-item">
+                            <h5>Coffee Delight Premium</h5>
+                            <p><strong>Cena:</strong> €12.50</p>
+                            <p><strong>Marża:</strong> 30%</p>
+                            <p><strong>USP:</strong> Kawa arabica 100%, opakowanie ECO</p>
+                            <div class="note-meta">
+                                <span>Edytowano: 30.10.2025</span>
+                            </div>
+                        </div>
+
+                        <div class="note-item">
+                            <h5>Tea Selection Organic</h5>
+                            <p><strong>Cena:</strong> €8.90</p>
+                            <p><strong>Marża:</strong> 28%</p>
+                            <p><strong>USP:</strong> Certyfikat BIO, 10 smaków</p>
+                            <div class="note-meta">
+                                <span>Edytowano: 28.10.2025</span>
+                            </div>
+                        </div>
+
+                        <button class="add-note-btn">➕ Dodaj notatkę o produkcie</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h5>✨ Kluczowe features:</h5>
+                <ul>
+                    <li><strong>Collapsible panel</strong> - przycisk ◀ zwija do 50px (tylko ikony)</li>
+                    <li><strong>Sticky position</strong> - zawsze widoczny podczas scrollowania rozmowy</li>
+                    <li><strong>Zakładki</strong> - szybkie przełączanie między kategoriami (Produkty/Pitches/Klient)</li>
+                    <li><strong>Przypinanie</strong> - najważniejsze notatki na górze (📌)</li>
+                    <li><strong>Quick add</strong> - przycisk dodania notatki bez opuszczania rozmowy</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ===== MOCKUP 2: ZARZĄDZANIE NOTATNIKIEM ===== -->
+        <div class="mockup-section">
+            <h2>🗂️ Mockup 2: Zarządzanie notatnikiem (Dashboard)</h2>
+            <div class="description">
+                <strong>Kontekst:</strong> Gracz przygotowuje się do wizyty u klienta. Otwiera sekcję "Notatnik" w dashboard, gdzie może edytować, organizować i tworzyć nowe notatki. System ma filtry, wyszukiwarkę i kategorie.
+            </div>
+
+            <div class="notebook-manager">
+                <div class="manager-header">
+                    <h3>📔 Mój Notatnik</h3>
+                    <div class="manager-controls">
+                        <select>
+                            <option>🗂️ Wszystkie kategorie</option>
+                            <option>🎯 Elevator Pitches</option>
+                            <option>📦 Karty Produktów</option>
+                            <option>🎓 Wskazówki Mentora</option>
+                            <option>📊 Feedback Menedżera</option>
+                            <option>👤 Profile Klientów</option>
+                            <option>✍️ Notatki Własne</option>
+                        </select>
+                        <input type="text" placeholder="🔍 Szukaj w notatkach...">
+                        <button>➕ Nowa notatka</button>
+                        <button>📥 Import</button>
+                    </div>
+                </div>
+
+                <div class="notes-grid">
+                    <!-- Elevator Pitch -->
+                    <div class="note-card">
+                        <div class="note-card-header">
+                            <span class="note-category elevator">🎯 Elevator Pitch</span>
+                            <div class="note-actions">
+                                <button title="Przypnij">📌</button>
+                                <button title="Edytuj">✏️</button>
+                                <button title="Usuń">🗑️</button>
+                            </div>
+                        </div>
+                        <h4>Pitch dla produktów premium</h4>
+                        <div class="note-card-content">
+                            "Nasze produkty premium to nie tylko najwyższa jakość składników, ale przede wszystkim marża 30-35% i lojalność klientów. W podobnych sklepach sprzedaż wzrosła o 40% po wprowadzeniu naszej linii premium..."
+                        </div>
+                        <div class="note-card-footer">
+                            <span>📅 Utworzono: 25.10.2025</span>
+                            <div class="note-tags">
+                                <span class="note-tag">#premium</span>
+                                <span class="note-tag">#marża</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Karta Produktu -->
+                    <div class="note-card">
+                        <div class="note-card-header">
+                            <span class="note-category product">📦 Produkt</span>
+                            <div class="note-actions">
+                                <button title="Przypnij">📌</button>
+                                <button title="Edytuj">✏️</button>
+                                <button title="Usuń">🗑️</button>
+                            </div>
+                        </div>
+                        <h4>Chocolate Supreme</h4>
+                        <div class="note-card-content">
+                            <strong>Cena hurtowa:</strong> €15.20 (sugerowana detaliczna: €17.99)<br>
+                            <strong>Marża dla detalu:</strong> 35%<br>
+                            <strong>USP:</strong> Premium kakao z Ghany, Fair Trade<br>
+                            <strong>Konkurencja:</strong> Tańszy o €2 od Brand X, lepsza jakość
+                        </div>
+                        <div class="note-card-footer">
+                            <span>📅 Ostatnia edycja: 01.11.2025</span>
+                            <div class="note-tags">
+                                <span class="note-tag">#czekolada</span>
+                                <span class="note-tag">#premium</span>
+                                <span class="note-tag">#fairtrade</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wskazówka Mentora -->
+                    <div class="note-card">
+                        <div class="note-card-header">
+                            <span class="note-category mentor">🎓 Mentor</span>
+                            <div class="note-actions">
+                                <button title="Przypięte" style="opacity: 1;">📌</button>
+                                <button title="Edytuj">✏️</button>
+                                <button title="Usuń">🗑️</button>
+                            </div>
+                        </div>
+                        <h4>Technika dla klientów ISTJ</h4>
+                        <div class="note-card-content">
+                            <strong>Auto-dodane po sesji z mentorem</strong><br>
+                            Klienci typu ISTJ cenią sobie fakty i konkretne liczby. Używaj porównań z konkurencją, podawaj dokładne daty dostaw, unikaj ogólników. Dobra strategia: "Nasza marża to 35%, czyli o 5 punktów procentowych więcej niż przy Brand X".
+                        </div>
+                        <div class="note-card-footer">
+                            <span>📅 Sesja mentorska: 30.10.2025</span>
+                            <div class="note-tags">
+                                <span class="note-tag">#ISTJ</span>
+                                <span class="note-tag">#empatia</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Menedżera -->
+                    <div class="note-card">
+                        <div class="note-card-header">
+                            <span class="note-category manager">📊 Manager</span>
+                            <div class="note-actions">
+                                <button title="Przypnij">📌</button>
+                                <button title="Edytuj">✏️</button>
+                                <button title="Usuń">🗑️</button>
+                            </div>
+                        </div>
+                        <h4>Feedback po Turze 3</h4>
+                        <div class="note-card-content">
+                            <strong>Auto-dodane po feedbacku</strong><br>
+                            ✅ Świetne otwarcie rozmowy (+15% Relacja)<br>
+                            ⚠️ Za szybko przeszedłeś do ceny - buduj wartość najpierw<br>
+                            💡 Następnym razem: zapytaj o problemy klienta przed propozycją produktu
+                        </div>
+                        <div class="note-card-footer">
+                            <span>📅 Tura 3, Klient: Sklep XYZ</span>
+                            <div class="note-tags">
+                                <span class="note-tag">#asertywność</span>
+                                <span class="note-tag">#do-poprawy</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profil Klienta -->
+                    <div class="note-card">
+                        <div class="note-card-header">
+                            <span class="note-category client">👤 Klient</span>
+                            <div class="note-actions">
+                                <button title="Przypięte" style="opacity: 1;">📌</button>
+                                <button title="Edytuj">✏️</button>
+                                <button title="Usuń">🗑️</button>
+                            </div>
+                        </div>
+                        <h4>Supermarket ABC - Pan Kowalski</h4>
+                        <div class="note-card-content">
+                            <strong>Typ osobowości:</strong> ISTJ (faktyczny, systematyczny)<br>
+                            <strong>Preferencje:</strong> Produkty lokalne, certyfikaty BIO<br>
+                            <strong>Pain points:</strong> Ostatnio problemy z dostawami od poprzedniego dostawcy<br>
+                            <strong>Historia:</strong> Zamówił 3x produkty premium w ostatnim kwartale
+                        </div>
+                        <div class="note-card-footer">
+                            <span>📅 Relacja: 65% | Ostatnia wizyta: 28.10.2025</span>
+                            <div class="note-tags">
+                                <span class="note-tag">#supermarket</span>
+                                <span class="note-tag">#ISTJ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notatka Własna -->
+                    <div class="note-card">
+                        <div class="note-card-header">
+                            <span class="note-category personal">✍️ Własne</span>
+                            <div class="note-actions">
+                                <button title="Przypnij">📌</button>
+                                <button title="Edytuj">✏️</button>
+                                <button title="Usuń">🗑️</button>
+                            </div>
+                        </div>
+                        <h4>Strategia na Q4 2025</h4>
+                        <div class="note-card-content">
+                            Plan działania na ostatni kwartał:<br>
+                            1. Focus na klientów premium (wyższa marża)<br>
+                            2. Budować relacje z 5 kluczowymi klientami<br>
+                            3. Testować nowe produkty sezonowe<br>
+                            4. Cel: +20% sprzedaży vs Q3
+                        </div>
+                        <div class="note-card-footer">
+                            <span>📅 Utworzono: 01.10.2025</span>
+                            <div class="note-tags">
+                                <span class="note-tag">#strategia</span>
+                                <span class="note-tag">#Q4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h5>✨ Kluczowe features:</h5>
+                <ul>
+                    <li><strong>Grid layout</strong> - responsywny (3 kolumny desktop, 1 kolumna mobile)</li>
+                    <li><strong>Kategorie wizualne</strong> - kolorowe badge dla szybkiej identyfikacji</li>
+                    <li><strong>Filtry i search</strong> - znajdź notatki w sekundę</li>
+                    <li><strong>Auto-dodawanie</strong> - notatki z feedbacku/mentora dodawane automatycznie</li>
+                    <li><strong>Tagi</strong> - organizacja i filtrowanie (#premium, #ISTJ, etc.)</li>
+                    <li><strong>Przypinanie</strong> - ważne notatki zawsze na górze</li>
+                    <li><strong>Import/Export</strong> - backup i sharing notatek</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ===== MOCKUP 3: QUICK ACCESS ===== -->
+        <div class="mockup-section">
+            <h2>⚡ Mockup 3: Quick Access (wersja mobilna/kompaktowa)</h2>
+            <div class="description">
+                <strong>Kontekst:</strong> Na mniejszych ekranach lub gdy gracz chce tylko szybki dostęp do kluczowych notatek, system pokazuje uproszczony widok z wyszukiwarką i przypiętymi notatkami.
+            </div>
+
+            <div class="quick-access">
+                <input type="text" class="quick-search" placeholder="🔍 Szukaj w notatkach... (np. 'ISTJ', 'Chocolate', 'marża')">
+
+                <div class="pinned-notes">
+                    <h5>📌 Przypięte notatki</h5>
+                    
+                    <div class="note-quick-item">
+                        <div class="note-quick-item-text">
+                            <div class="note-quick-item-title">Chocolate Supreme</div>
+                            <div class="note-quick-item-preview">€15.20 | 35% marża | Premium kakao z Ghany...</div>
+                        </div>
+                        <div class="note-quick-item-icon">📦</div>
+                    </div>
+
+                    <div class="note-quick-item">
+                        <div class="note-quick-item-text">
+                            <div class="note-quick-item-title">Pitch dla produktów premium</div>
+                            <div class="note-quick-item-preview">Nasze produkty premium to nie tylko najwyższa jakość...</div>
+                        </div>
+                        <div class="note-quick-item-icon">🎯</div>
+                    </div>
+
+                    <div class="note-quick-item">
+                        <div class="note-quick-item-text">
+                            <div class="note-quick-item-title">Supermarket ABC - Pan Kowalski</div>
+                            <div class="note-quick-item-preview">ISTJ | Lubi fakty | Problem: opóźnienia dostaw...</div>
+                        </div>
+                        <div class="note-quick-item-icon">👤</div>
+                    </div>
+                </div>
+
+                <div class="recent-notes">
+                    <h5>🕐 Ostatnio edytowane</h5>
+
+                    <div class="note-quick-item">
+                        <div class="note-quick-item-text">
+                            <div class="note-quick-item-title">Feedback po Turze 3</div>
+                            <div class="note-quick-item-preview">Świetne otwarcie (+15%) | Za szybko do ceny...</div>
+                        </div>
+                        <div class="note-quick-item-icon">📊</div>
+                    </div>
+
+                    <div class="note-quick-item">
+                        <div class="note-quick-item-text">
+                            <div class="note-quick-item-title">Coffee Delight Premium</div>
+                            <div class="note-quick-item-preview">€12.50 | 30% marża | 100% arabica...</div>
+                        </div>
+                        <div class="note-quick-item-icon">📦</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h5>✨ Kluczowe features:</h5>
+                <ul>
+                    <li><strong>Quick search</strong> - instant filtering podczas pisania</li>
+                    <li><strong>Pinned first</strong> - najważniejsze notatki zawsze na górze</li>
+                    <li><strong>Kompaktowy widok</strong> - preview w 1 linii</li>
+                    <li><strong>Recent activity</strong> - ostatnio edytowane dla kontekstu</li>
+                    <li><strong>One-tap access</strong> - kliknięcie otwiera pełną notatkę</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ===== FEATURES SUMMARY ===== -->
+        <div class="mockup-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="color: white;">🎯 Podsumowanie Features Notatnika</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+                    <h3 style="color: white; margin-bottom: 10px;">📱 Podczas rozmowy</h3>
+                    <ul style="line-height: 1.8;">
+                        <li>Collapsible panel (350px ↔ 50px)</li>
+                        <li>Sticky position (zawsze widoczny)</li>
+                        <li>Tabs: Produkty/Pitches/Klient</li>
+                        <li>Quick add - bez opuszczania rozmowy</li>
+                        <li>Przypinanie najważniejszych</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+                    <h3 style="color: white; margin-bottom: 10px;">🗂️ Zarządzanie</h3>
+                    <ul style="line-height: 1.8;">
+                        <li>Grid layout (responsive)</li>
+                        <li>6 kategorii kolorowych</li>
+                        <li>Filtry + wyszukiwarka</li>
+                        <li>Auto-dodawanie (AI feedback)</li>
+                        <li>Tagi i organizacja</li>
+                        <li>Import/Export backup</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+                    <h3 style="color: white; margin-bottom: 10px;">🎮 Gamifikacja</h3>
+                    <ul style="line-height: 1.8;">
+                        <li>Achievement: "Przygotowany"</li>
+                        <li>AI sugestie: "Zapamiętać to?"</li>
+                        <li>Templates gotowe do użycia</li>
+                        <li>Historia edycji</li>
+                        <li>Statystyki użycia notatek</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.15); border-radius: 12px; backdrop-filter: blur(10px);">
+                <h3 style="color: white; margin-bottom: 15px;">🚀 Fazy implementacji (MVP → Full)</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div>
+                        <strong style="display: block; margin-bottom: 8px;">Phase 1: MVP (2-3 dni)</strong>
+                        <ul style="font-size: 0.9em; line-height: 1.6;">
+                            <li>Tabela SQL user_notes</li>
+                            <li>CRUD functions (Python)</li>
+                            <li>Panel basic (3 kategorie)</li>
+                            <li>Dashboard section</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="display: block; margin-bottom: 8px;">Phase 2: Enhanced (3-4 dni)</strong>
+                        <ul style="font-size: 0.9em; line-height: 1.6;">
+                            <li>Wszystkie 6 kategorii</li>
+                            <li>Filtry + search</li>
+                            <li>Przypinanie + tagi</li>
+                            <li>Quick access view</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="display: block; margin-bottom: 8px;">Phase 3: AI (2-3 dni)</strong>
+                        <ul style="font-size: 0.9em; line-height: 1.6;">
+                            <li>Auto-suggestions</li>
+                            <li>Templates smart</li>
+                            <li>Achievements</li>
+                            <li>Import/Export</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

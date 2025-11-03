@@ -1084,9 +1084,10 @@ COMPETITOR_PRODUCTS = {
 # ============================================================================
 
 def get_all_products():
-    """Zwraca wszystkie produkty (FreshLife + konkurencja)"""
+    """Zwraca wszystkie produkty (FreshLife + Heinz + konkurencja)"""
     all_products = {}
     all_products.update(FRESHLIFE_PRODUCTS)
+    all_products.update(HEINZ_PRODUCTS)
     all_products.update(COMPETITOR_PRODUCTS)
     return all_products
 
@@ -1094,6 +1095,11 @@ def get_all_products():
 def get_freshlife_products():
     """Zwraca tylko produkty FreshLife"""
     return FRESHLIFE_PRODUCTS
+
+
+def get_heinz_products():
+    """Zwraca tylko produkty Heinz"""
+    return HEINZ_PRODUCTS
 
 
 def get_competitor_products():
@@ -1198,6 +1204,7 @@ def get_sales_pitch(product_id):
     if product.get('pos_materials'):
         pitch += f"- Materiały POS: {', '.join(product['pos_materials'])}\n"
     
+    
     if product.get('awards'):
         pitch += f"\n🏆 NAGRODY:\n"
         for award in product['awards']:
@@ -1206,10 +1213,213 @@ def get_sales_pitch(product_id):
     return pitch
 
 
+# ============================================================================
+# HEINZ PRODUCTS (Food Service Channel)
+# ============================================================================
+
+HEINZ_PRODUCTS = {
+    "heinz_ketchup_classic": {
+        "id": "heinz_ketchup_classic",
+        "name": "Heinz Ketchup Łagodny",
+        "brand": "Heinz",
+        "category": "Food Service",
+        "subcategory": "Ketchupy",
+        "emoji": "🍅",
+        "variants": ["875ml Food Service"],
+        "base_variant": "875ml Food Service",
+        
+        # PRICING - FOOD SERVICE MODEL
+        "price_foodservice": 28.50,  # Cena dla restauracji/foodtruck
+        "price_retail_equivalent": 32.99,  # Gdyby był w retail (dla porównania)
+        "margin_foodservice_pct": 35,  # Marża Heinz
+        "cost_per_portion": 0.15,  # Koszt porcji 5ml dla restauracji
+        
+        # DISTRIBUTION MODEL
+        "distribution_model": "direct",  # Bezpośrednia sprzedaż do food service
+        "available_at": ["Bezpośrednio od Heinz", "Metro Cash & Carry Food Service"],
+        "heinz_sku": "HNZ-KCH-875-FS",
+        
+        # ORDERING
+        "moq": 12,  # Minimum 12 butelek (1 karton)
+        "payment_terms": "Przelew 30 dni lub gotówka z 2% rabatem",
+        "delivery_free_threshold": 500,  # Darmowa dostawa od 500 zł
+        
+        # LOGISTICS
+        "case_size": 12,  # 12 butelek w kartonie
+        "cases_per_pallet": 60,
+        "shelf_life_days": 540,  # 18 miesięcy
+        "packaging": "Butelka plastikowa z flipcap, łatwa do dawkowania",
+        "portion_size_ml": 5,
+        "portions_per_bottle": 175,
+        
+        # STORYTELLING
+        "description": "Heinz Ketchup Łagodny to klasyczna receptura globalnej marki, z pomidorów zbieranych w słońcu, charakterystycznym aromatem i smakiem rozpoznawalnym od lat. Kultowy smak #1 na świecie.",
+        "price_reference_retail": "Około 8,99 zł za 450g w detalu, formaty Food Service znacznie korzystniejsze",
+        "target_customer": "Burgerownie, sieciówki QSR, restauracje casual dining, hotele, foodtrucki premium",
+        "usage_speed": "Wysoka - restauracja używa 1 butelkę na 3-5 dni (burger joint)",
+        "suggested_initial_order": "12 szt (1 karton testowy) - wystarczy na 2 tygodnie w średniej restauracji",
+        
+        # SALES STORIES FOOD SERVICE
+        "sales_stories": [
+            "Gdy w menu wpisujesz markę Heinz, komunikujesz klientowi: jakość, globalny standard, pewność smaku. To nie tylko ketchup — to sygnał, że Twój lokal dba o detal.",
+            "Formaty HoReCa (np. pojemniki 2,5L) oznaczają niższy koszt porcji – dzięki większej gęstości i niższym stratom.",
+            "Heinz jest obecny w burgerowniach, sieciach QSR, stąd Twoi klienci mogą już znać smak — co zmniejsza opór: mniej prób, mniej tłumaczenia.",
+            "Choć cena może być nieco wyższa niż lokalnych marek, argumentem jest: mniej potrzeba na porcję, lepsza jakość i stabilność — co przekłada się na mniejszy food-cost i wyższe zadowolenie klienta."
+        ],
+        
+        # PRZEWAGI NAD KONKURENCJĄ
+        "competitors": [
+            {
+                "brand": "Pudliszki Ketchup Łagodny",
+                "price_foodservice": 18.50,
+                "cost_per_portion": 0.10,
+                "market_share_food_service": 45,
+                "advantages": [
+                    "🏆 Marka premium - klienci znają i lubią Heinz (узнаваемость 94% vs 67% Pudliszki)",
+                    "👨‍🍳 Lepszy smak - naturalne pomidory, bez konserwantów (Pudliszki: E211, E202)",
+                    "💰 Koszt porcji: tylko 5 gr więcej (0.15 zł vs 0.10 zł), ale wartość dodana!",
+                    "📸 Instagram appeal - butelka Heinz na stole = prestiż, klienci robią zdjęcia",
+                    "🎯 Premium positioning - jeśli masz burgery za 25 zł, musisz mieć Heinza, nie Pudliszki"
+                ]
+            },
+            {
+                "brand": "Kotlin Ketchup",
+                "price_foodservice": 16.80,
+                "cost_per_portion": 0.09,
+                "market_share_food_service": 12,
+                "advantages": [
+                    "🏆 Brand power - Heinz to synonim ketchupu na świecie (Kotlin: niche brand)",
+                    "👨‍🍳 Jakość składników - zero shortcuts, najlepsze pomidory",
+                    "💪 Consistency - każda butelka identyczna (Kotlin: zmienność smaku)",
+                    "🌍 Globalny standard - serwujesz to co McDonald's, Five Guys, Shake Shack"
+                ]
+            }
+        ],
+        
+        # ARGUMENTY SPRZEDAŻOWE
+        "sales_arguments": [
+            "🍔 Jeśli sprzedajesz burgery premium za 25-35 zł, ketchup Heinz to must-have. Klienci oczekują HEINZA przy drogim burgerze - to część doświadczenia premium.",
+            "💰 Różnica w koszcie: zaledwie 5 gr na porcję (0.15 zł vs 0.10 zł Pudliszki). Przy burgerze za 28 zł, klient nie zauważy 5 gr różnicy, ale ZAUWAŻY jakość.",
+            "📸 Marketing za darmo: klienci robią zdjęcia burgerów z Heinzem i wrzucają na Instagram. Butelka Heinz na stole = signal jakości. To nie działa z Pudliszkami.",
+            "🏆 Brand recognition: 94% Polaków zna Heinz, tylko 67% Pudliszki. Heinz to PEWNOŚĆ - klient wie czego się spodziewać.",
+            "👨‍🍳 Zero kompromisów: najlepsze pomidory, bez konserwantów (Pudliszki: E211, E202), bez additional sugars. Clean label - co raz ważniejsze dla gości.",
+            "💡 試験: weź 12 butelek testowo (500 zł). Postaw przy burgerach przez tydzień i zobacz reakcje gości. Jeśli nie zobaczysz różnicy, wrócimy do Pudliszek. Deal?"
+        ],
+        
+        # OBJECTIONS HANDLING
+        "common_objections": {
+            "Za drogo": "Rozumiem. Pytanie: czy Twoi goście płacą 15 zł czy 28 zł za burgera? Przy 28 zł dodatkowe 5 gr to 0.2% kosztu. Ale prestiż marki Heinz może zwiększyć postrzeganą wartość o 10-15%. Warto przetestować.",
+            "Pudliszki ok": "Pudliszki są OK dla food courtów i budżetówki. Ale Ty robisz coś więcej - craft burgery, jakość. Heinz to część storytellingu: 'używamy najlepszych składników, nawet ketchup'.",
+            "Klienci nie zauważą": "Nieprawda. Zrób test: daj 10 osobom Heinza i Pudliszki blind. 8/10 wybierze Heinza. A jak zobaczą butelkę? 10/10 rozpozna Heinza. Brand matters.",
+            "Zbyt duże MOQ": "12 butelek to 2100 zł wartości w porcjach (175 x 12 = 2100 porcji x 1 zł markup = 2100 zł przychodu). To się zwróci w 2-3 tygodnie w aktywnej restauracji."
+        },
+        
+        # UPSELL OPPORTUNITIES
+        "upsell": {
+            "heinz_ketchup_hot": "Masz ostrą wersję? 30% klientów pyta o pikantny ketchup. Heinz Hot to game-changer - możesz podnieść cenę burgera o 2 zł i dać 'premium spicy experience'.",
+            "heinz_mustard": "Do kiełbasek i hot-dogów: Heinz Yellow Mustard. Ta sama jakość, ta sama узнаваемość. Postaw Heinz Mustard przy Heinz Ketchup = kompletny premium experience."
+        }
+    },
+    
+    "heinz_ketchup_hot": {
+        "id": "heinz_ketchup_hot",
+        "name": "Heinz Ketchup Pikantny",
+        "brand": "Heinz",
+        "category": "Food Service",
+        "subcategory": "Ketchupy",
+        "emoji": "🌶️",
+        "variants": ["875ml Food Service"],
+        "base_variant": "875ml Food Service",
+        
+        "price_foodservice": 29.50,
+        "margin_foodservice_pct": 35,
+        "cost_per_portion": 0.16,
+        
+        "moq": 12,
+        "payment_terms": "Przelew 30 dni lub gotówka z 2% rabatem",
+        "delivery_free_threshold": 500,
+        
+        "description": "Ostra wersja legendarnego Heinz Ketchup. Naturalna ostrość z chili, bez sztucznych dodatków. Perfect match dla burgerów BBQ, frytek i wings.",
+        "target_customer": "Burger joints, BBQ restaurants, pub food, foodtrucki z ostrymi daniami",
+        
+        "sales_arguments": [
+            "🌶️ 30% gości pyta 'macie ostry ketchup?' - Heinz Hot to odpowiedź. Możesz podnieść cenę dania o 2 zł za 'spicy upgrade'.",
+            "💰 Markup potential: Heinz Hot postrzegany jako premium - możesz sprzedać porcję za 1.50 zł vs 0.50 zł zwykłego ketchupu.",
+            "🎯 Menu engineering: postaw 'Spicy Burger with Heinz Hot Ketchup' jako signature dish. Dodatkowo 2-3 zł do ceny = justified premium."
+        ]
+    },
+    
+    # ===== PUDLISZKI VALUE LINE (właściciel: Heinz Polska) =====
+    "pudliszki_ketchup_lagodny": {
+        "id": "pudliszki_ketchup_lagodny",
+        "name": "Pudliszki Ketchup Łagodny",
+        "brand": "Pudliszki",
+        "tier": "value",
+        "owner": "Heinz Polska",
+        "category": "Food Service",
+        "subcategory": "Ketchupy",
+        "emoji": "🍅",
+        "variants": ["980g Food Service"],
+        
+        "price_foodservice": 18.50,
+        "price_retail_reference": "7,49 zł za 480g (~15,60 zł/kg) lub 11,99 zł za 700g (~17,13 zł/kg) w detalu",
+        "margin_foodservice_pct": 32,
+        "cost_per_portion": 0.10,
+        
+        "moq": 12,
+        "payment_terms": "Przelew 30 dni",
+        
+        "description": "Pudliszki Ketchup łagodny to polski klasyk, przygotowany z wysokiej jakości pomidorów, dostępny w różnych wariantach wagowych. Marka dobrze znana konsumentom detalicznym, co może przenosić się na rozpoznawalność w kanale HoReCa.",
+        "target_customer": "Stołówki, fast food budget, jadłodajnie, food courts, bary mleczne",
+        
+        # SALES STORIES FOOD SERVICE
+        "sales_stories": [
+            "Pudliszki to marka, którą klienci widzą w sklepie — to daje Ci dodatkowy punkt: gdy używasz jej w lokalu, tworzy się poczucie znajomości i komfortu.",
+            "Dla lokalu, który nie chce stawiać na ultra-premium, Pudliszki oferuje bardzo dobrą relację jakości do ceny — idealne dla barów, jadłodajni, stołówek.",
+            "Możesz podkreślić: 'Polska marka, polskie pomidory, tradycyjny smak' — co w kontrakcie z klientem może być argumentem np. w ofercie lunchowej czy dla klientów rodzinnych.",
+            "Jeśli budżet jest napięty, a wolumen spory — wybór Pudliszki może być rozsądnym kompromisem: stabilny smak, dobra dostępność, konkurencyjna cena."
+        ],
+        
+        "sales_arguments": [
+            "💰 Najlepsza relacja cena/jakość - 18.50 zł za 980g. Heinz Polska quality w value segmencie.",
+            "🇵🇱 Polski lider - 40 lat tradycji, 67% узнаваемость.",
+            "📦 Największa pojemność - 980g vs 875ml konkurencja.",
+            "🏢 Portfolio Heinz - jeśli klient będzie zadowolony, za rok upgrade do Heinz premium."
+        ]
+    },
+    
+    "pudliszki_ketchup_ostry": {
+        "id": "pudliszki_ketchup_ostry",
+        "name": "Pudliszki Ketchup Ostry",
+        "brand": "Pudliszki",
+        "tier": "value",
+        "owner": "Heinz Polska",
+        "category": "Food Service",
+        "subcategory": "Ketchupy",
+        "emoji": "🌶️",
+        "variants": ["980g Food Service"],
+        
+        "price_foodservice": 18.90,
+        "margin_foodservice_pct": 32,
+        
+        "moq": 12,
+        
+        "description": "Ostra wersja Pudliszek. Value option dla volume operations.",
+        "target_customer": "Kebaby, food trucks budget, fast food chains",
+        
+        "sales_arguments": [
+            "🌶️ Spicy option za value price - 18.90 zł.",
+            "💰 Volume play - oszczędności przy wysokich wolumenach."
+        ]
+    }
+}
+
+
 # Kategorie dla filtrów
 CATEGORIES = {
     "Personal Care": "Produkty do pielęgnacji ciała",
     "Food": "Produkty spożywcze",
+    "Food Service": "Produkty dla gastronomii",
     "Home Care": "Produkty do czyszczenia",
     "Snacks": "Przekąski",
     "Beverages": "Napoje"
@@ -1218,7 +1428,9 @@ CATEGORIES = {
 SUBCATEGORIES = {
     "Personal Care": ["Żele pod prysznic", "Szampony", "Dezodoranty"],
     "Food": ["Płatki śniadaniowe", "Zupy instant", "Oleje spożywcze"],
+    "Food Service": ["Ketchupy", "Musztardy", "Sosy"],
     "Home Care": ["Płyny do mycia podłóg", "Płyny do naczyń", "Odświeżacze powietrza"],
     "Snacks": ["Chipsy", "Orzechy i bakalie"],
     "Beverages": ["Herbaty mrożone"]
 }
+
