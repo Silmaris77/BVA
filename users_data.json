@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-11-03 15:10:16",
+    "last_login": "2025-11-03 23:13:22",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -336,6 +336,106 @@
       {
         "type": "login",
         "timestamp": "2025-11-03T15:10:16.428606",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T15:38:38.496277",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T15:42:30.504066",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T15:56:56.071533",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T16:10:43.160195",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T19:18:10.061951",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T19:28:06.760452",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T19:39:01.234471",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T19:51:18.591253",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T19:54:07.750442",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T20:16:53.621119",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T21:16:47.692592",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T21:22:41.315786",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T21:45:16.919028",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T22:04:16.404188",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T22:33:10.433901",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T22:40:43.169157",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T22:50:38.771187",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T22:53:13.939337",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T22:57:35.759342",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-03T23:13:22.645043",
         "details": {}
       }
     ],
@@ -1066,7 +1166,7 @@
           "territory_name": "Dzięgielów Food Service",
           "territory_latitude": 49.7271667,
           "territory_longitude": 18.7025833,
-          "energy": 78,
+          "energy": 100,
           "energy_max": 100,
           "marketing_budget": 2000,
           "marketing_budget_used": 0,
@@ -1078,54 +1178,14 @@
           "customer_satisfaction_avg": 0,
           "current_week": 1,
           "current_day": "Monday",
-          "visits_this_week": 1,
+          "visits_this_week": 0,
           "visits_scheduled": [],
-          "current_location": {
-            "lat": 49.7768,
-            "lng": 18.7886
-          },
+          "current_location": null,
           "planned_visits_today": [],
           "completed_visits_today": [],
           "total_distance_today": 0.0,
           "route_optimization_used": false,
-          "visit_history": [
-            {
-              "client_id": "client_015",
-              "date": "2025-11-03",
-              "topic": "rozmowa handlowa",
-              "agreements": "Klient narzeka na konkurencję i rosnące koszty.; Brak konkretnych ustaleń i obietnic.",
-              "next_steps": "Do uzgodnienia",
-              "customer_impression": "neutralne",
-              "quality": 3,
-              "order_value": 0,
-              "order_margin": 0,
-              "order_items": [],
-              "tools_used": [],
-              "manager_feedback": null,
-              "summary": "Rozmowa z Pizza House przebiegła neutralnie, klient narzeka na konkurencję i rosnące koszty. Nie złożono zamówienia.",
-              "key_points": [
-                "Klient narzeka na konkurencję i rosnące koszty.",
-                "Brak konkretnych ustaleń i obietnic."
-              ],
-              "conversation_transcript": [
-                {
-                  "role": "Prezes Andrzej Kubiak",
-                  "content": "Dzień dobry! Witam w Pizza House - Sieć 3 lokale.",
-                  "timestamp": "2025-11-03T15:11:05.802244"
-                },
-                {
-                  "role": "Ja",
-                  "content": "Witam, panie Andrzeju! Co słychać w biznesie?",
-                  "timestamp": "2025-11-03T15:12:12.130521"
-                },
-                {
-                  "role": "Prezes Andrzej Kubiak",
-                  "content": "Dzień dobry! No co tu dużo mówić... Kręci się, kręci. Zawsze mogłoby być lepiej, konkurencja nie śpi, a koszty rosną jak na drożdżach. Ale dajemy radę. A u Pana/Pani co nowego? W jakiej sprawie Pan/Pani dzwoni?\n",
-                  "timestamp": "2025-11-03T15:12:13.971933"
-                }
-              ]
-            }
-          ],
+          "visit_history": [],
           "alex_level": 0,
           "alex_training_points": 0,
           "alex_competencies": {
@@ -1153,7 +1213,7 @@
           "monthly_actual_sales": 0,
           "monthly_best_sales": 0,
           "weekly_history": [],
-          "last_activity_date": "2025-11-03T15:10:32.793689",
+          "last_activity_date": "2025-11-03T23:13:40.607592",
           "last_visit_client_id": null,
           "company": "Heinz Polska",
           "clients": {
@@ -1688,66 +1748,7 @@
               "recommended_products": [
                 "heinz_ketchup_classic"
               ],
-              "upsell_potential": "high",
-              "status": "PROSPECT",
-              "last_visit_date": "2025-11-03T15:12:54.478824",
-              "visits_count": 1,
-              "first_contact_date": "2025-11-03T15:12:54.478773",
-              "decision_deadline": "2025-11-17T15:12:54.478778",
-              "reputation": -5,
-              "events_timeline": [
-                {
-                  "date": "2025-11-03 15:12:54",
-                  "type": "visit_poor_3stars",
-                  "description": "Wizyta u klienta - Rozmowa z Pizza House przebiegła neutralnie, klient narzeka na konkurencję i rosnące koszty. Nie złożono zamówienia.",
-                  "reputation_change": -5,
-                  "reputation_after": -5,
-                  "related_products": []
-                },
-                {
-                  "date": "2025-11-03",
-                  "type": "first_visit",
-                  "description": "🎯 Pierwsza wizyta u klienta",
-                  "reputation_change": 0,
-                  "reputation_after": -5,
-                  "related_products": []
-                }
-              ],
-              "visits_history": [
-                {
-                  "date": "2025-11-03",
-                  "quality": 3,
-                  "notes": "Rozmowa z Pizza House przebiegła neutralnie, klient narzeka na konkurencję i rosnące koszty. Nie złożono zamówienia.",
-                  "reputation_change": -5,
-                  "reputation_after": -5
-                }
-              ],
-              "next_visit_due": "2025-11-17",
-              "discovered_info": {
-                "pain_points": [
-                  "Konkurencja",
-                  "Rosnące koszty"
-                ]
-              },
-              "discovery_notes": [
-                {
-                  "visit_date": "2025-11-03T15:12:56.529281",
-                  "note_text": "Konkurencja",
-                  "discovered_fields": [
-                    "pain_points"
-                  ],
-                  "context": "konkurencja nie śpi"
-                },
-                {
-                  "visit_date": "2025-11-03T15:12:56.529305",
-                  "note_text": "Rosnące koszty",
-                  "discovered_fields": [
-                    "pain_points"
-                  ],
-                  "context": "koszty rosną jak na drożdżach"
-                }
-              ],
-              "knowledge_level": 1
+              "upsell_potential": "high"
             },
             "client_016": {
               "id": "client_016",
@@ -2100,10 +2101,7 @@
             }
           },
           "scenario_id": "heinz_food_service",
-          "clients_total": 25,
-          "mentor_questions_today": 0,
-          "mentor_last_reset_day": "Monday",
-          "mentor_conversation_history": []
+          "clients_total": 25
         },
         "office": {
           "type": "company_office",
@@ -2120,7 +2118,7 @@
           "total_sales": 0,
           "clients_acquired": 0,
           "clients_lost": 0,
-          "visits_completed": 1,
+          "visits_completed": 0,
           "avg_conversation_rating": 0.0,
           "total_reputation_gained": 0
         },
@@ -2153,7 +2151,7 @@
       "territory_name": "Dzięgielów Food Service",
       "territory_latitude": 49.7271667,
       "territory_longitude": 18.7025833,
-      "energy": 78,
+      "energy": 100,
       "energy_max": 100,
       "marketing_budget": 2000,
       "marketing_budget_used": 0,
@@ -2165,54 +2163,14 @@
       "customer_satisfaction_avg": 0,
       "current_week": 1,
       "current_day": "Monday",
-      "visits_this_week": 1,
+      "visits_this_week": 0,
       "visits_scheduled": [],
-      "current_location": {
-        "lat": 49.7768,
-        "lng": 18.7886
-      },
+      "current_location": null,
       "planned_visits_today": [],
       "completed_visits_today": [],
       "total_distance_today": 0.0,
       "route_optimization_used": false,
-      "visit_history": [
-        {
-          "client_id": "client_015",
-          "date": "2025-11-03",
-          "topic": "rozmowa handlowa",
-          "agreements": "Klient narzeka na konkurencję i rosnące koszty.; Brak konkretnych ustaleń i obietnic.",
-          "next_steps": "Do uzgodnienia",
-          "customer_impression": "neutralne",
-          "quality": 3,
-          "order_value": 0,
-          "order_margin": 0,
-          "order_items": [],
-          "tools_used": [],
-          "manager_feedback": null,
-          "summary": "Rozmowa z Pizza House przebiegła neutralnie, klient narzeka na konkurencję i rosnące koszty. Nie złożono zamówienia.",
-          "key_points": [
-            "Klient narzeka na konkurencję i rosnące koszty.",
-            "Brak konkretnych ustaleń i obietnic."
-          ],
-          "conversation_transcript": [
-            {
-              "role": "Prezes Andrzej Kubiak",
-              "content": "Dzień dobry! Witam w Pizza House - Sieć 3 lokale.",
-              "timestamp": "2025-11-03T15:11:05.802244"
-            },
-            {
-              "role": "Ja",
-              "content": "Witam, panie Andrzeju! Co słychać w biznesie?",
-              "timestamp": "2025-11-03T15:12:12.130521"
-            },
-            {
-              "role": "Prezes Andrzej Kubiak",
-              "content": "Dzień dobry! No co tu dużo mówić... Kręci się, kręci. Zawsze mogłoby być lepiej, konkurencja nie śpi, a koszty rosną jak na drożdżach. Ale dajemy radę. A u Pana/Pani co nowego? W jakiej sprawie Pan/Pani dzwoni?\n",
-              "timestamp": "2025-11-03T15:12:13.971933"
-            }
-          ]
-        }
-      ],
+      "visit_history": [],
       "alex_level": 0,
       "alex_training_points": 0,
       "alex_competencies": {
@@ -2240,7 +2198,7 @@
       "monthly_actual_sales": 0,
       "monthly_best_sales": 0,
       "weekly_history": [],
-      "last_activity_date": "2025-11-03T15:10:32.793689",
+      "last_activity_date": "2025-11-03T23:13:40.607592",
       "last_visit_client_id": null,
       "company": "Heinz Polska",
       "clients": {
@@ -2775,66 +2733,7 @@
           "recommended_products": [
             "heinz_ketchup_classic"
           ],
-          "upsell_potential": "high",
-          "status": "PROSPECT",
-          "last_visit_date": "2025-11-03T15:12:54.478824",
-          "visits_count": 1,
-          "first_contact_date": "2025-11-03T15:12:54.478773",
-          "decision_deadline": "2025-11-17T15:12:54.478778",
-          "reputation": -5,
-          "events_timeline": [
-            {
-              "date": "2025-11-03 15:12:54",
-              "type": "visit_poor_3stars",
-              "description": "Wizyta u klienta - Rozmowa z Pizza House przebiegła neutralnie, klient narzeka na konkurencję i rosnące koszty. Nie złożono zamówienia.",
-              "reputation_change": -5,
-              "reputation_after": -5,
-              "related_products": []
-            },
-            {
-              "date": "2025-11-03",
-              "type": "first_visit",
-              "description": "🎯 Pierwsza wizyta u klienta",
-              "reputation_change": 0,
-              "reputation_after": -5,
-              "related_products": []
-            }
-          ],
-          "visits_history": [
-            {
-              "date": "2025-11-03",
-              "quality": 3,
-              "notes": "Rozmowa z Pizza House przebiegła neutralnie, klient narzeka na konkurencję i rosnące koszty. Nie złożono zamówienia.",
-              "reputation_change": -5,
-              "reputation_after": -5
-            }
-          ],
-          "next_visit_due": "2025-11-17",
-          "discovered_info": {
-            "pain_points": [
-              "Konkurencja",
-              "Rosnące koszty"
-            ]
-          },
-          "discovery_notes": [
-            {
-              "visit_date": "2025-11-03T15:12:56.529281",
-              "note_text": "Konkurencja",
-              "discovered_fields": [
-                "pain_points"
-              ],
-              "context": "konkurencja nie śpi"
-            },
-            {
-              "visit_date": "2025-11-03T15:12:56.529305",
-              "note_text": "Rosnące koszty",
-              "discovered_fields": [
-                "pain_points"
-              ],
-              "context": "koszty rosną jak na drożdżach"
-            }
-          ],
-          "knowledge_level": 1
+          "upsell_potential": "high"
         },
         "client_016": {
           "id": "client_016",
@@ -3187,10 +3086,7 @@
         }
       },
       "scenario_id": "heinz_food_service",
-      "clients_total": 25,
-      "mentor_questions_today": 0,
-      "mentor_last_reset_day": "Monday",
-      "mentor_conversation_history": []
+      "clients_total": 25
     },
     "fmcg_clients": {
       "client_001": {
@@ -3724,66 +3620,7 @@
         "recommended_products": [
           "heinz_ketchup_classic"
         ],
-        "upsell_potential": "high",
-        "status": "PROSPECT",
-        "last_visit_date": "2025-11-03T15:12:54.478824",
-        "visits_count": 1,
-        "first_contact_date": "2025-11-03T15:12:54.478773",
-        "decision_deadline": "2025-11-17T15:12:54.478778",
-        "reputation": -5,
-        "events_timeline": [
-          {
-            "date": "2025-11-03 15:12:54",
-            "type": "visit_poor_3stars",
-            "description": "Wizyta u klienta - Rozmowa z Pizza House przebiegła neutralnie, klient narzeka na konkurencję i rosnące koszty. Nie złożono zamówienia.",
-            "reputation_change": -5,
-            "reputation_after": -5,
-            "related_products": []
-          },
-          {
-            "date": "2025-11-03",
-            "type": "first_visit",
-            "description": "🎯 Pierwsza wizyta u klienta",
-            "reputation_change": 0,
-            "reputation_after": -5,
-            "related_products": []
-          }
-        ],
-        "visits_history": [
-          {
-            "date": "2025-11-03",
-            "quality": 3,
-            "notes": "Rozmowa z Pizza House przebiegła neutralnie, klient narzeka na konkurencję i rosnące koszty. Nie złożono zamówienia.",
-            "reputation_change": -5,
-            "reputation_after": -5
-          }
-        ],
-        "next_visit_due": "2025-11-17",
-        "discovered_info": {
-          "pain_points": [
-            "Konkurencja",
-            "Rosnące koszty"
-          ]
-        },
-        "discovery_notes": [
-          {
-            "visit_date": "2025-11-03T15:12:56.529281",
-            "note_text": "Konkurencja",
-            "discovered_fields": [
-              "pain_points"
-            ],
-            "context": "konkurencja nie śpi"
-          },
-          {
-            "visit_date": "2025-11-03T15:12:56.529305",
-            "note_text": "Rosnące koszty",
-            "discovered_fields": [
-              "pain_points"
-            ],
-            "context": "koszty rosną jak na drożdżach"
-          }
-        ],
-        "knowledge_level": 1
+        "upsell_potential": "high"
       },
       "client_016": {
         "id": "client_016",
