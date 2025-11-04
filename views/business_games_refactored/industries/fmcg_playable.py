@@ -709,9 +709,10 @@ def show_fmcg_playable_game(username: str):
     pending_tasks = get_pending_tasks_count(st.session_state)
     tasks_badge = f" ({pending_tasks})" if pending_tasks > 0 else ""
     
-    tab_dashboard, tab_sales, tab_hr, tab_settings = st.tabs([
+    tab_dashboard, tab_sales, tab_notes, tab_hr, tab_settings = st.tabs([
         f"📊 Dashboard{tasks_badge}",
         "🎯 Sprzedaż",
+        "📝 Notatnik",
         "👥 HR & Team",
         "⚙️ Ustawienia"
     ])
@@ -721,754 +722,564 @@ def show_fmcg_playable_game(username: str):
     # =============================================================================
     
     with tab_dashboard:
-        # Energy bar
-        energy_pct = game_state.get("energy", 100)
-        energy_color = "#10b981" if energy_pct > 50 else "#f59e0b" if energy_pct > 25 else "#ef4444"
+        # =============================================================================
+        # HERO SECTION (zawsze widoczny)
+        # =============================================================================
         
+        # Get values needed for Hero Section
+        energy_pct = game_state.get("energy", 100)
+        status_summary = get_client_status_summary(clients)
+        current_week = game_state.get("current_week", 1)
+        current_day = game_state.get("current_day", "Monday")
+        tasks_completed_count = 3 - get_pending_tasks_count(st.session_state)
+        all_done = all_tasks_completed(st.session_state)
+        
+        # Energy emoji based on level
+        if energy_pct > 66:
+            energy_emoji = "⚡"
+        elif energy_pct > 33:
+            energy_emoji = "🔋"
+        else:
+            energy_emoji = "🪫"
+        
+        # Tasks status
+        day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        day_index = day_names.index(current_day) if current_day in day_names else 0
+        is_trial = (current_week == 1 and day_index < 2)
+        
+        if all_done:
+            tasks_status = "✅ Komplet"
+            tasks_color = "#10b981"
+        elif is_trial:
+            tasks_status = f"⏰ {tasks_completed_count}/3"
+            tasks_color = "#f59e0b"
+        else:
+            tasks_status = f"❗ {tasks_completed_count}/3"
+            tasks_color = "#ef4444"
+        
+        # Hero Section - Gaming Style
         st.markdown(f"""
-        <div style='background: white; padding: 16px; border-radius: 12px; border-left: 4px solid {energy_color}; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 16px;'>
-            <div style='color: #64748b; font-size: 14px; font-weight: 600; margin-bottom: 8px;'>⚡ ENERGIA</div>
-            <div style='background: #e2e8f0; border-radius: 8px; height: 24px; overflow: hidden; position: relative;'>
-                <div style='background: {energy_color}; height: 100%; width: {energy_pct}%; transition: width 0.3s;'></div>
-                <div style='position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #1e293b; font-size: 14px;'>{energy_pct}%</div>
+        <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; border-radius: 16px; color: white; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);'>
+            <div style='margin-bottom: 20px;'>
+                <div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px; font-weight: 600;'>{energy_emoji} ENERGIA</div>
+                <div style='background: rgba(255,255,255,0.2); height: 32px; border-radius: 16px; overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);'>
+                    <div style='background: linear-gradient(90deg, #10b981 0%, #34d399 100%); height: 100%; width: {energy_pct}%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); transition: width 0.3s ease;'>{energy_pct}%</div>
+                </div>
+            </div>
+            <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;'>
+                <div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
+                    <div style='font-size: 32px; font-weight: 700; margin-bottom: 4px;'>{status_summary.get("PROSPECT", 0)}</div>
+                    <div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>🔓 PROSPECT</div>
+                </div>
+                <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
+                    <div style='font-size: 32px; font-weight: 700; margin-bottom: 4px;'>{status_summary.get("ACTIVE", 0)}</div>
+                    <div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>✅ ACTIVE</div>
+                </div>
+                <div style='background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
+                    <div style='font-size: 32px; font-weight: 700; margin-bottom: 4px;'>{status_summary.get("LOST", 0)}</div>
+                    <div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>❌ LOST</div>
+                </div>
+                <div style='background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
+                    <div style='font-size: 28px; font-weight: 700; margin-bottom: 4px;'>{game_state.get('monthly_sales', 0):,}</div>
+                    <div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>💰 SPRZEDAŻ PLN</div>
+                </div>
+            </div>
+            <div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;'>
+                <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2);'>
+                    <div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>{current_day}</div>
+                    <div style='font-size: 11px; opacity: 0.9;'>📅 Dzień</div>
+                </div>
+                <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2);'>
+                    <div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>Tydzień {current_week}</div>
+                    <div style='font-size: 11px; opacity: 0.9;'>📆 Okres</div>
+                </div>
+                <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2); border-left: 3px solid {tasks_color};'>
+                    <div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>{tasks_status}</div>
+                    <div style='font-size: 11px; opacity: 0.9;'>📋 Zadania</div>
+                </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
-        # Stats cards
-        col1, col2, col3, col4 = st.columns(4)
+        # =============================================================================
+        # SUB-TABY dla szczegółów
+        # =============================================================================
         
-        status_summary = get_client_status_summary(clients)
+        dash_stats, dash_alerts, dash_tasks = st.tabs([
+            "📊 Statystyki",
+            "⚠️ Alerty & Akcje",
+            "📋 Zadania & Onboarding"
+        ])
         
-        with col1:
-            st.metric("🔓 PROSPECT", status_summary.get("PROSPECT", 0))
+        # ========================================================================
+        # SUB-TAB: STATYSTYKI (Cele, Achievement, Historia)
+        # ========================================================================
         
-        with col2:
-            st.metric("✅ ACTIVE", status_summary.get("ACTIVE", 0))
-        
-        with col3:
-            st.metric("❌ LOST", status_summary.get("LOST", 0))
-        
-        with col4:
-            st.metric("💰 Sprzedaż", f"{game_state.get('monthly_sales', 0):,} PLN")
-        
-        # Day & Week info
-        current_week = game_state.get("current_week", 1)
-        visits_this_week = game_state.get("visits_this_week", 0)
-        
-        col_day, col_week, col_tasks = st.columns(3)
-        
-        with col_day:
-            current_day = game_state.get("current_day", "Monday")
-            day_emoji = {"Monday": "1️⃣", "Tuesday": "2️⃣", "Wednesday": "3️⃣", "Thursday": "4️⃣", "Friday": "5️⃣"}
-            st.info(f"{day_emoji.get(current_day, '📅')} Dzień: **{current_day}**")
-        
-        with col_week:
-            st.info(f"📅 Tydzień: **{current_week}** | Wizyty: **{visits_this_week}**")
-        
-        with col_tasks:
-            tasks_completed_count = 3 - get_pending_tasks_count(st.session_state)
-            all_done = all_tasks_completed(st.session_state)
+        with dash_stats:
+            st.subheader("📈 Cele i Postępy")
             
-            if all_done:
-                st.success(f"✅ Zadania: **3/3** ukończone")
-            else:
-                # Check if in trial period
-                day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-                current_day = game_state.get("current_day", "Monday")
-                day_index = day_names.index(current_day) if current_day in day_names else 0
-                is_trial = (current_week == 1 and day_index < 2)
+            # ACHIEVEMENT TIER BADGE
+            from utils.fmcg_progression import get_achievement_tier
+            
+            weekly_history_data = game_state.get("weekly_history", [])
+            tier_data = get_achievement_tier(weekly_history_data)
+            
+            if tier_data["tier"] != "None":
+                # Extract values
+                tier_color = tier_data['tier_color']
+                tier_color_grad = f"{tier_color}dd"
+                tier_emoji = tier_data['tier_emoji']
+                tier_name = tier_data['tier']
+                requirements_text = ', '.join(tier_data['requirements_met'][:2])
                 
-                if is_trial:
-                    st.warning(f"⏰ Zadania: **{tasks_completed_count}/3** (Trial: dzień {day_index + 1}/2)")
-                else:
-                    st.error(f"❗ Zadania: **{tasks_completed_count}/3** (Wymagane do wizyt!)")
-        
-        st.markdown("---")
-        st.subheader("📈 Podsumowanie Tygodnia")
-        
-        col_m1, col_m2, col_m3 = st.columns(3)
-        
-        with col_m1:
-            st.metric(
-                "🎯 Cel sprzedażowy",
-                f"{game_state.get('monthly_sales', 0):,} PLN",
-                delta=f"{game_state.get('monthly_sales', 0) - 50000:,} PLN" if game_state.get('monthly_sales', 0) < 50000 else "Cel osiągnięty! 🎉"
-            )
-        
-        with col_m2:
-            avg_order = game_state.get('monthly_sales', 0) / max(visits_this_week, 1)
-            st.metric(
-                "💰 Średnie zamówienie",
-                f"{avg_order:,.0f} PLN"
-            )
-        
-        with col_m3:
-            st.metric(
-                "📞 Wizyty w tym tygodniu",
-                visits_this_week
-            )
-        
-        st.markdown("---")
-        
-        # Client status breakdown
-        st.subheader("👥 Status Klientów")
-        
-        col_s1, col_s2, col_s3 = st.columns(3)
-        
-        with col_s1:
-            st.info(f"""
-            **🔓 PROSPECT**  
-            {status_summary.get('PROSPECT', 0)} klientów
-            
-            _Potencjalni klienci do pozyskania_
-            """)
-        
-        with col_s2:
-            st.success(f"""
-            **✅ ACTIVE**  
-            {status_summary.get('ACTIVE', 0)} klientów
-            
-            _Aktywni klienci kupujący regularnie_
-            """)
-        
-        with col_s3:
-            st.error(f"""
-            **❌ LOST**  
-            {status_summary.get('LOST', 0)} klientów
-            
-            _Klienci, którzy przestali kupować_
-            """)
-        
-        # =============================================================================
-        # REPUTATION ALERTS - Critical clients at risk
-        # =============================================================================
-        
-        st.markdown("---")
-        
-        # ACHIEVEMENT TIER BADGE
-        from utils.fmcg_progression import get_achievement_tier
-        
-        weekly_history_data = game_state.get("weekly_history", [])
-        tier_data = get_achievement_tier(weekly_history_data)
-        
-        if tier_data["tier"] != "None":
-            # Extract values
-            tier_color = tier_data['tier_color']
-            tier_color_grad = f"{tier_color}dd"
-            tier_emoji = tier_data['tier_emoji']
-            tier_name = tier_data['tier']
-            requirements_text = ', '.join(tier_data['requirements_met'][:2])
-            
-            tier_badge_html = f"""<div style="background: linear-gradient(135deg, {tier_color} 0%, {tier_color_grad} 100%); color: white; padding: 12px 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                tier_badge_html = f"""<div style="background: linear-gradient(135deg, {tier_color} 0%, {tier_color_grad} 100%); color: white; padding: 12px 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
 <div style="font-size: 32px; margin-bottom: 4px;">{tier_emoji}</div>
 <div style="font-weight: 700; font-size: 20px;">{tier_name} Performer</div>
 <div style="font-size: 12px; opacity: 0.9; margin-top: 4px;">
 {requirements_text}
 </div>
 </div>"""
-            st.markdown(tier_badge_html, unsafe_allow_html=True)
-        
-        # WEEKLY TARGET PROGRESS
-        st.subheader("🎯 Cele Tygodniowe")
-        
-        weekly_target = game_state.get("weekly_target_sales", 8000)
-        weekly_actual = game_state.get("weekly_actual_sales", 0)
-        weekly_visits_target = game_state.get("weekly_target_visits", 6)
-        weekly_visits_actual = game_state.get("visits_this_week", 0)
-        weekly_streak = game_state.get("weekly_streak", 0)
-        
-        # Calculate progress percentage
-        sales_progress = min(100, (weekly_actual / weekly_target * 100)) if weekly_target > 0 else 0
-        visits_progress = min(100, (weekly_visits_actual / weekly_visits_target * 100)) if weekly_visits_target > 0 else 0
-        
-        # Determine status color
-        if sales_progress >= 100:
-            status_color = "#22c55e"  # Green - achieved
-            status_emoji = "✅"
-            status_text = "CEL OSIĄGNIĘTY!"
-        elif sales_progress >= 75:
-            status_color = "#eab308"  # Yellow - on track
-            status_emoji = "🔥"
-            status_text = "Blisko celu!"
-        elif sales_progress >= 50:
-            status_color = "#f97316"  # Orange - needs effort
-            status_emoji = "⚠️"
-            status_text = "Potrzebujesz przyspieszenia"
-        else:
-            status_color = "#ef4444"  # Red - at risk
-            status_emoji = "🚨"
-            status_text = "Zagrożony cel!"
-        
-        # EXTRACT all formatted values BEFORE f-string
-        current_week = game_state.get('current_week', 1)
-        weekly_actual_fmt = f"{weekly_actual:,}"
-        weekly_target_fmt = f"{weekly_target:,}"
-        sales_progress_pct = f"{sales_progress:.0f}"
-        visits_progress_pct = f"{visits_progress:.0f}"
-        status_color_grad1 = f"{status_color}15"
-        status_color_grad2 = f"{status_color}05"
-        status_color_grad3 = f"{status_color}dd"
-        
-        # Build progress card HTML
-        progress_html = f"""<div style="border: 2px solid {status_color}; border-radius: 12px; padding: 20px; background: linear-gradient(135deg, {status_color_grad1} 0%, {status_color_grad2} 100%); margin-bottom: 20px;">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-<h3 style="margin: 0; color: #1f2937;">{status_emoji} Tydzień {current_week}</h3>
-<div style="background: {status_color}; color: white; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 14px;">
-{status_text}
-</div>
-</div>
-<div style="margin-bottom: 20px;">
-<div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-<span style="font-weight: 600; color: #374151;">💰 Sprzedaż</span>
-<span style="font-weight: 600; color: {status_color};">{weekly_actual_fmt} / {weekly_target_fmt} PLN ({sales_progress_pct}%)</span>
-</div>
-<div style="background: #e5e7eb; height: 24px; border-radius: 12px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
-<div style="width: {sales_progress}%; height: 100%; background: linear-gradient(90deg, {status_color} 0%, {status_color_grad3} 100%); transition: width 0.5s ease; border-radius: 12px;"></div>
-</div>
-</div>
-<div>
-<div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-<span style="font-weight: 600; color: #374151;">📞 Wizyty</span>
-<span style="font-weight: 600; color: #6b7280;">{weekly_visits_actual} / {weekly_visits_target} ({visits_progress_pct}%)</span>
-</div>
-<div style="background: #e5e7eb; height: 18px; border-radius: 9px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
-<div style="width: {visits_progress}%; height: 100%; background: linear-gradient(90deg, #6b7280 0%, #9ca3af 100%); transition: width 0.5s ease; border-radius: 9px;"></div>
-</div>
-</div>
-</div>"""
-        
-        if weekly_streak > 0:
-            # Determine streak text
-            if weekly_streak == 1:
-                streak_text = "tydzień"
-            elif weekly_streak < 5:
-                streak_text = "tygodnie"
-            else:
-                streak_text = "tygodni"
+                st.markdown(tier_badge_html, unsafe_allow_html=True)
             
-            streak_html = f"""<div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 12px 20px; border-radius: 8px; text-align: center; font-weight: 600; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);">
-🔥 Seria: {weekly_streak} {streak_text} z rzędu!
-</div>"""
-            st.markdown(streak_html, unsafe_allow_html=True)
+            # WEEKLY TARGET PROGRESS
+            st.markdown("### 🎯 Cele Tygodniowe")
+            
+            weekly_target = game_state.get("weekly_target_sales", 8000)
+            weekly_actual = game_state.get("weekly_actual_sales", 0)
+            weekly_visits_target = game_state.get("weekly_target_visits", 6)
+            weekly_visits_actual = game_state.get("visits_this_week", 0)
+            weekly_streak = game_state.get("weekly_streak", 0)
+            
+            # Calculate progress percentage
+            sales_progress = min(100, (weekly_actual / weekly_target * 100)) if weekly_target > 0 else 0
+            visits_progress = min(100, (weekly_visits_actual / weekly_visits_target * 100)) if weekly_visits_target > 0 else 0
         
-        st.markdown(progress_html, unsafe_allow_html=True)
+            # Determine status color
+            if sales_progress >= 100:
+                status_color = "#22c55e"  # Green - achieved
+                status_emoji = "✅"
+                status_text = "CEL OSIĄGNIĘTY!"
+            elif sales_progress >= 75:
+                status_color = "#eab308"  # Yellow - on track
+                status_emoji = "🔥"
+                status_text = "Blisko celu!"
+            elif sales_progress >= 50:
+                status_color = "#f97316"  # Orange - needs effort
+                status_emoji = "⚠️"
+                status_text = "Potrzebujesz przyspieszenia"
+            else:
+                status_color = "#ef4444"  # Red - at risk
+                status_emoji = "🚨"
+                status_text = "Zagrożony cel!"
         
-        # MONTHLY TARGET PROGRESS (Compact)
-        monthly_target = game_state.get("monthly_target_sales", 35000)
-        monthly_actual = game_state.get("monthly_actual_sales", 0)
-        monthly_progress = min(100, (monthly_actual / monthly_target * 100)) if monthly_target > 0 else 0
+            # EXTRACT all formatted values BEFORE f-string
+            current_week = game_state.get('current_week', 1)
+            weekly_actual_fmt = f"{weekly_actual:,}"
+            weekly_target_fmt = f"{weekly_target:,}"
+            sales_progress_pct = f"{sales_progress:.0f}"
+            visits_progress_pct = f"{visits_progress:.0f}"
+            status_color_grad1 = f"{status_color}15"
+            status_color_grad2 = f"{status_color}05"
+            status_color_grad3 = f"{status_color}dd"
         
-        monthly_color = "#3b82f6" if monthly_progress >= 75 else "#6b7280"
+            # Build progress card HTML
+            progress_html = f"""<div style="border: 2px solid {status_color}; border-radius: 12px; padding: 20px; background: linear-gradient(135deg, {status_color_grad1} 0%, {status_color_grad2} 100%); margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <h3 style="margin: 0; color: #1f2937;">{status_emoji} Tydzień {current_week}</h3>
+    <div style="background: {status_color}; color: white; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 14px;">
+    {status_text}
+    </div>
+    </div>
+    <div style="margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+    <span style="font-weight: 600; color: #374151;">💰 Sprzedaż</span>
+    <span style="font-weight: 600; color: {status_color};">{weekly_actual_fmt} / {weekly_target_fmt} PLN ({sales_progress_pct}%)</span>
+    </div>
+    <div style="background: #e5e7eb; height: 24px; border-radius: 12px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="width: {sales_progress}%; height: 100%; background: linear-gradient(90deg, {status_color} 0%, {status_color_grad3} 100%); transition: width 0.5s ease; border-radius: 12px;"></div>
+    </div>
+    </div>
+    <div>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+    <span style="font-weight: 600; color: #374151;">📞 Wizyty</span>
+    <span style="font-weight: 600; color: #6b7280;">{weekly_visits_actual} / {weekly_visits_target} ({visits_progress_pct}%)</span>
+    </div>
+    <div style="background: #e5e7eb; height: 18px; border-radius: 9px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="width: {visits_progress}%; height: 100%; background: linear-gradient(90deg, #6b7280 0%, #9ca3af 100%); transition: width 0.5s ease; border-radius: 9px;"></div>
+    </div>
+    </div>
+    </div>"""
         
-        # Extract values
-        monthly_actual_fmt = f"{monthly_actual:,}"
-        monthly_target_fmt = f"{monthly_target:,}"
-        monthly_progress_pct = f"{monthly_progress:.0f}"
-        monthly_color_grad1 = f"{monthly_color}10"
-        monthly_color_grad2 = f"{monthly_color}05"
-        monthly_color_grad3 = f"{monthly_color}dd"
+            if weekly_streak > 0:
+                # Determine streak text
+                if weekly_streak == 1:
+                    streak_text = "tydzień"
+                elif weekly_streak < 5:
+                    streak_text = "tygodnie"
+                else:
+                    streak_text = "tygodni"
+            
+                streak_html = f"""<div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 12px 20px; border-radius: 8px; text-align: center; font-weight: 600; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);">
+    🔥 Seria: {weekly_streak} {streak_text} z rzędu!
+    </div>"""
+                st.markdown(streak_html, unsafe_allow_html=True)
         
-        monthly_html = f"""<div style="border: 1px solid {monthly_color}; border-radius: 8px; padding: 16px; background: linear-gradient(135deg, {monthly_color_grad1} 0%, {monthly_color_grad2} 100%); margin-bottom: 20px;">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-<span style="font-weight: 600; color: #374151;">📊 Cel Miesięczny</span>
-<span style="font-weight: 700; color: {monthly_color};">{monthly_actual_fmt} / {monthly_target_fmt} PLN ({monthly_progress_pct}%)</span>
-</div>
-<div style="background: #e5e7eb; height: 16px; border-radius: 8px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
-<div style="width: {monthly_progress}%; height: 100%; background: linear-gradient(90deg, {monthly_color} 0%, {monthly_color_grad3} 100%); transition: width 0.5s ease; border-radius: 8px;"></div>
-</div>
-</div>"""
-        st.markdown(monthly_html, unsafe_allow_html=True)
+            st.markdown(progress_html, unsafe_allow_html=True)
         
-        st.markdown("---")
-        st.subheader("⚠️ Alerty Reputacji")
+            # MONTHLY TARGET PROGRESS (Compact)
+            monthly_target = game_state.get("monthly_target_sales", 35000)
+            monthly_actual = game_state.get("monthly_actual_sales", 0)
+            monthly_progress = min(100, (monthly_actual / monthly_target * 100)) if monthly_target > 0 else 0
         
-        # Analyze clients by reputation
-        at_risk_clients = []  # -49 to 0
-        critical_clients = []  # -100 to -50 (LOST)
-        overdue_clients = []  # ACTIVE with overdue visits
+            monthly_color = "#3b82f6" if monthly_progress >= 75 else "#6b7280"
         
-        for client_id, client_data in clients.items():
-            if client_data.get("status", "PROSPECT").upper() == "ACTIVE":
-                reputation = client_data.get("reputation", 0)
+            # Extract values
+            monthly_actual_fmt = f"{monthly_actual:,}"
+            monthly_target_fmt = f"{monthly_target:,}"
+            monthly_progress_pct = f"{monthly_progress:.0f}"
+            monthly_color_grad1 = f"{monthly_color}10"
+            monthly_color_grad2 = f"{monthly_color}05"
+            monthly_color_grad3 = f"{monthly_color}dd"
+        
+            monthly_html = f"""<div style="border: 1px solid {monthly_color}; border-radius: 8px; padding: 16px; background: linear-gradient(135deg, {monthly_color_grad1} 0%, {monthly_color_grad2} 100%); margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <span style="font-weight: 600; color: #374151;">📊 Cel Miesięczny</span>
+    <span style="font-weight: 700; color: {monthly_color};">{monthly_actual_fmt} / {monthly_target_fmt} PLN ({monthly_progress_pct}%)</span>
+    </div>
+    <div style="background: #e5e7eb; height: 16px; border-radius: 8px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="width: {monthly_progress}%; height: 100%; background: linear-gradient(90deg, {monthly_color} 0%, {monthly_color_grad3} 100%); transition: width 0.5s ease; border-radius: 8px;"></div>
+    </div>
+    </div>"""
+            st.markdown(monthly_html, unsafe_allow_html=True)
+        
+        # ========================================================================
+        # SUB-TAB: ALERTY & AKCJE (Reputacja, Status Klientów)
+        # ========================================================================
+        
+        with dash_alerts:
+            st.subheader("⚠️ Alerty Reputacji")
+        
+            # Analyze clients by reputation
+            at_risk_clients = []  # -49 to 0
+            critical_clients = []  # -100 to -50 (LOST)
+            overdue_clients = []  # ACTIVE with overdue visits
+        
+            for client_id, client_data in clients.items():
+                if client_data.get("status", "PROSPECT").upper() == "ACTIVE":
+                    reputation = client_data.get("reputation", 0)
                 
-                # Check reputation thresholds
-                if reputation <= -50:
-                    critical_clients.append({
-                        "id": client_id,
-                        "name": client_data.get("name", client_id),
-                        "reputation": reputation
-                    })
-                elif reputation < 0:
-                    at_risk_clients.append({
-                        "id": client_id,
-                        "name": client_data.get("name", client_id),
-                        "reputation": reputation
-                    })
-                
-                # Check overdue visits
-                if is_visit_overdue(client_data):
-                    next_visit = client_data.get("next_visit_due", "")
-                    if next_visit:
-                        days_overdue = (datetime.now() - datetime.fromisoformat(next_visit)).days
-                        overdue_clients.append({
+                    # Check reputation thresholds
+                    if reputation <= -50:
+                        critical_clients.append({
                             "id": client_id,
                             "name": client_data.get("name", client_id),
-                            "days_overdue": days_overdue,
                             "reputation": reputation
                         })
+                    elif reputation < 0:
+                        at_risk_clients.append({
+                            "id": client_id,
+                            "name": client_data.get("name", client_id),
+                            "reputation": reputation
+                        })
+                
+                    # Check overdue visits
+                    if is_visit_overdue(client_data):
+                        next_visit = client_data.get("next_visit_due", "")
+                        if next_visit:
+                            days_overdue = (datetime.now() - datetime.fromisoformat(next_visit)).days
+                            overdue_clients.append({
+                                "id": client_id,
+                                "name": client_data.get("name", client_id),
+                                "days_overdue": days_overdue,
+                                "reputation": reputation
+                            })
         
-        # Display alerts
-        alerts_shown = False
+            # Display alerts
+            alerts_shown = False
         
-        if critical_clients:
-            alerts_shown = True
-            st.error(f"""
-            🚨 **KRYTYCZNE: {len(critical_clients)} klient(ów) na granicy LOST!**
+            if critical_clients:
+                alerts_shown = True
+                st.error(f"""
+                🚨 **KRYTYCZNE: {len(critical_clients)} klient(ów) na granicy LOST!**
             
-            Reputacja ≤ -50 - natychmiastowa wizyta wymagana!
-            """)
+                Reputacja ≤ -50 - natychmiastowa wizyta wymagana!
+                """)
             
-            for client in critical_clients[:3]:  # Show max 3
-                st.markdown(f"- **{client['name']}**: Reputacja {client['reputation']} 💀")
+                for client in critical_clients[:3]:  # Show max 3
+                    st.markdown(f"- **{client['name']}**: Reputacja {client['reputation']} 💀")
         
-        if at_risk_clients:
-            alerts_shown = True
-            st.warning(f"""
-            ⚠️ **UWAGA: {len(at_risk_clients)} klient(ów) zagrożonych!**
+            if at_risk_clients:
+                alerts_shown = True
+                st.warning(f"""
+                ⚠️ **UWAGA: {len(at_risk_clients)} klient(ów) zagrożonych!**
             
-            Reputacja poniżej 0 - ryzyko utraty klienta
-            """)
+                Reputacja poniżej 0 - ryzyko utraty klienta
+                """)
             
-            for client in at_risk_clients[:3]:  # Show max 3
-                st.markdown(f"- **{client['name']}**: Reputacja {client['reputation']} ⚠️")
+                for client in at_risk_clients[:3]:  # Show max 3
+                    st.markdown(f"- **{client['name']}**: Reputacja {client['reputation']} ⚠️")
         
-        if overdue_clients:
-            alerts_shown = True
-            # Sort by days overdue (most critical first)
-            overdue_clients.sort(key=lambda x: x['days_overdue'], reverse=True)
+            if overdue_clients:
+                alerts_shown = True
+                # Sort by days overdue (most critical first)
+                overdue_clients.sort(key=lambda x: x['days_overdue'], reverse=True)
             
-            st.info(f"""
-            📅 **{len(overdue_clients)} klient(ów) z przeterminowaną wizytą**
-            
-            Zaplanuj wizyty aby utrzymać reputację!
-            """)
-            
-            for client in overdue_clients[:3]:  # Show max 3
-                rep_status = get_reputation_status(client['reputation'])
-                st.markdown(f"- **{client['name']}**: {client['days_overdue']} dni opóźnienia | {rep_status['emoji']} Reputacja {client['reputation']}")
-        
-        if not alerts_shown:
-            st.success("""
-            ✅ **Wszystko w porządku!**
-            
-            Brak klientów zagrożonych - dobra robota! 🎉
-            """)
-        
-        # =============================================================================
-        # ALEX AI ASSISTANT STATUS
-        # =============================================================================
-        
-        st.markdown("---")
-        st.subheader("🤖 ALEX - Twój AI Sales Assistant")
-        
-        # Import ALEX functions
-        from utils.fmcg_alex_training import (
-            get_alex_stats,
-            get_autopilot_penalty,
-            get_points_to_next_level,
-            ALEX_LEVELS,
-            TRAINING_MODULES
-        )
-        
-        # Get ALEX stats from game state
-        alex_level = game_state.get("alex_level", 0)
-        alex_training_points = game_state.get("alex_training_points", 0)
-        alex_competencies = game_state.get("alex_competencies", {
-            "planning": 0.0,
-            "communication": 0.0,
-            "analysis": 0.0,
-            "relationship": 0.0,
-            "negotiation": 0.0
-        })
-        autopilot_visits_count = game_state.get("autopilot_visits_count", 0)
-        autopilot_visits_this_week = game_state.get("autopilot_visits_this_week", 0)
-        autopilot_efficiency = game_state.get("autopilot_efficiency_avg", 0.0)
-        
-        alex_stats = get_alex_stats(alex_level)
-        penalty = get_autopilot_penalty(alex_level, alex_competencies)
-        points_needed, points_for_next = get_points_to_next_level(alex_training_points, alex_level)
-        
-        # ALEX Status Card
-        points_text = "(MAX)" if alex_level >= 4 else f"(brakuje {points_needed})"
-        progress_width = (alex_training_points / max(points_for_next, 1)) * 100
-        
-        alex_card_html = f"""<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; border-radius: 16px; color: white; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3); margin-bottom: 20px;'>
-    <div style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;'>
-        <div>
-            <div style='font-size: 48px; margin-bottom: 8px;'>{alex_stats['emoji']}</div>
-            <div style='font-size: 28px; font-weight: 700;'>ALEX</div>
-            <div style='font-size: 16px; opacity: 0.9;'>AI Sales Assistant</div>
-        </div>
-        <div style='text-align: right;'>
-            <div style='font-size: 14px; opacity: 0.8; margin-bottom: 4px;'>Poziom</div>
-            <div style='font-size: 36px; font-weight: 700;'>{alex_level}/4</div>
-            <div style='font-size: 14px; font-weight: 600;'>{alex_stats['name_pl']}</div>
-        </div>
-    </div>
-    <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 12px;'>
-        <div style='font-size: 12px; opacity: 0.9; margin-bottom: 6px;'>Punkty treningowe</div>
-        <div style='background: rgba(255,255,255,0.2); border-radius: 6px; height: 12px; overflow: hidden;'>
-            <div style='background: #10b981; height: 100%; width: {progress_width:.0f}%;'></div>
-        </div>
-        <div style='font-size: 11px; margin-top: 4px; opacity: 0.8;'>{alex_training_points} / {points_for_next} punktów {points_text}</div>
-    </div>
-</div>"""
-        
-        st.markdown(alex_card_html, unsafe_allow_html=True)
-        
-        # ALEX Stats
-        col_alex1, col_alex2, col_alex3, col_alex4 = st.columns(4)
-        
-        with col_alex1:
-            st.metric("⚡ Kompetencja", f"{int(alex_stats['competence']*100)}%")
-            st.caption(f"Efektywność vs manualna")
-        
-        with col_alex2:
-            st.metric("⚠️ Penalty", f"{penalty:+.0f}%")
-            st.caption(f"Wpływ na wyniki wizyt")
-        
-        with col_alex3:
-            st.metric("📊 Limit wizyt/dzień", f"{alex_stats['visits_per_day']}")
-            st.caption(f"Max autopilot capacity")
-        
-        with col_alex4:
-            st.metric("🤖 Wizyt autopilota", f"{autopilot_visits_count}")
-            st.caption(f"W tym tygodniu: {autopilot_visits_this_week}")
-        
-        # Competencies breakdown
-        st.markdown("### 📚 Kompetencje ALEX")
-        
-        avg_competency = sum(alex_competencies.values()) / len(alex_competencies) if alex_competencies else 0
-        
-        st.markdown(f"""
-        <div style='background: white; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;'>
-            <div style='margin-bottom: 8px;'>
-                <span style='font-weight: 600; color: #64748b;'>Średnie ukończenie modułów:</span>
-                <span style='font-weight: 700; color: #1e293b; font-size: 18px; margin-left: 8px;'>{avg_competency*100:.0f}%</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        for module_id, module_data in TRAINING_MODULES.items():
-            completion = alex_competencies.get(module_id, 0.0)
-            completion_pct = int(completion * 100)
-            
-            # Color based on completion
-            if completion_pct >= 80:
-                bar_color = "#10b981"
-            elif completion_pct >= 50:
-                bar_color = "#f59e0b"
-            else:
-                bar_color = "#ef4444"
-            
-            st.markdown(f"""
-            <div style='background: white; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 8px;'>
-                <div style='font-weight: 600; color: #1e293b; margin-bottom: 6px;'>{module_data['name_pl']}</div>
-                <div style='background: #e2e8f0; border-radius: 4px; height: 8px; overflow: hidden;'>
-                    <div style='background: {bar_color}; height: 100%; width: {completion_pct}%;'></div>
-                </div>
-                <div style='display: flex; justify-content: space-between; margin-top: 4px;'>
-                    <span style='font-size: 11px; color: #64748b;'>{module_data['impact']}</span>
-                    <span style='font-size: 11px; font-weight: 600; color: {bar_color};'>{completion_pct}%</span>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        # Training CTA
-        st.markdown("---")
-        
-        if alex_level < 4:
-            st.info(f"""
-            💡 **Trenuj ALEX aby zwiększyć efektywność autopilota!**
-            
-            Ukończ quizy i case studies w zakładce **🤖 ALEX Training** aby:
-            - 📈 Zwiększyć kompetencję ALEX (obecnie: {int(alex_stats['competence']*100)}%)
-            - ⚠️ Zmniejszyć penalty na wyniki (obecnie: {penalty:+.0f}%)
-            - 🔓 Odblokować więcej wizyt autopilota dziennie (obecnie: {alex_stats['visits_per_day']})
-            - ⭐ Awansować ALEX na wyższy poziom
-            
-            **Do następnego poziomu:** {points_needed} punktów
-            """)
-        else:
-            st.success(f"""
-            🏆 **Gratulacje! ALEX osiągnął poziom MASTER!**
-            
-            Twój AI Sales Assistant jest w pełni wyszkolony:
-            - ⚡ Kompetencja: {int(alex_stats['competence']*100)}%
-            - ⚠️ Penalty: tylko {penalty:+.0f}%
-            - 📊 Maksymalny limit wizyt: {alex_stats['visits_per_day']}/dzień
-            
-            Kontynuuj trening aby utrzymać kompetencje na najwyższym poziomie!
-            """)
-        
-        # =============================================================================
-        # ZADANIA (ONBOARDING) - jako sekcja w Dashboard
-        # =============================================================================
-        
-        st.markdown("---")
-        
-        with st.expander(f"📋 Zadania onboardingowe {tasks_badge}", expanded=(pending_tasks > 0)):
-            # Trial period info
-            day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-            current_day = game_state.get("current_day", "Monday")
-            current_week = game_state.get("current_week", 1)
-            day_index = day_names.index(current_day) if current_day in day_names else 0
-            is_trial = (current_week == 1 and day_index < 2)
-            
-            if is_trial:
                 st.info(f"""
-                🎓 **Witaj w okresie próbnym!** (Tydzień 1, Dzień {day_index + 1}/2)
-                
-                Przez pierwsze 2 dni możesz swobodnie eksplorować grę bez ograniczeń energii.
-                Użyj tego czasu na zapoznanie się z interfejsem i ukończenie zadań onboardingowych.
-                """)
-            else:
-                st.warning("""
-                ⚠️ **Okres próbny zakończony!**
-                
-                Od dziś wizyty u klientów kosztują energię. Aby wykonywać wizyty, musisz najpierw ukończyć wszystkie zadania onboardingowe.
+                📅 **{len(overdue_clients)} klient(ów) z przeterminowaną wizytą**
+            
+                Zaplanuj wizyty aby utrzymać reputację!
                 """)
             
-            st.markdown("### 📝 Lista zadań")
+                for client in overdue_clients[:3]:  # Show max 3
+                    rep_status = get_reputation_status(client['reputation'])
+                    st.markdown(f"- **{client['name']}**: {client['days_overdue']} dni opóźnienia | {rep_status['emoji']} Reputacja {client['reputation']}")
+        
+            if not alerts_shown:
+                st.success("""
+                ✅ **Wszystko w porządku!**
             
-            # Task completion tracking
-            pending = get_pending_tasks_count(st.session_state)
+                Brak klientów zagrożonych - dobra robota! 🎉
+                """)
+        
+            # ========================================================================
+            # SUB-TAB: ZADANIA & ONBOARDING (Onboarding Tasks, Historia Wizyt)
+            # ========================================================================
+        
+        with dash_tasks:
+            # =============================================================================
+            # ZADANIA (ONBOARDING) - jako sekcja w Dashboard
+            # =============================================================================
             
-            for task_id, task in ONBOARDING_TASKS.items():
-                task_status = get_task_status(st.session_state, task_id)
+            with st.expander(f"📋 Zadania onboardingowe {tasks_badge}", expanded=(pending_tasks > 0)):
+                # Trial period info
+                day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+                current_day = game_state.get("current_day", "Monday")
+                current_week = game_state.get("current_week", 1)
+                day_index = day_names.index(current_day) if current_day in day_names else 0
+                is_trial = (current_week == 1 and day_index < 2)
+            
+                if is_trial:
+                    st.info(f"""
+                    🎓 **Witaj w okresie próbnym!** (Tydzień 1, Dzień {day_index + 1}/2)
                 
-                # Determine icon and color based on status
-                if task_status["status"] == "completed":
-                    status_icon = "✅"
-                    status_color = "#10b981"
-                    button_text = "Ukończone"
-                    button_disabled = True
-                elif task_status["status"] == "submitted":
-                    status_icon = "⏳"
-                    status_color = "#f59e0b"
-                    button_text = "Sprawdź wynik"
-                    button_disabled = False
+                    Przez pierwsze 2 dni możesz swobodnie eksplorować grę bez ograniczeń energii.
+                    Użyj tego czasu na zapoznanie się z interfejsem i ukończenie zadań onboardingowych.
+                    """)
                 else:
-                    status_icon = "📝"
-                    status_color = "#6b7280"
-                    button_text = "Rozpocznij"
-                    button_disabled = False
+                    st.warning("""
+                    ⚠️ **Okres próbny zakończony!**
                 
-                # Create expandable for each task
-                with st.expander(f"{status_icon} **{task['title']}**", expanded=(task_status["status"] != "completed" and pending <= 2)):
-                    st.markdown(f"**Opis:** {task['description']}")
-                    st.caption(f"⏱️ Deadline: {task.get('deadline', 'Brak')}")
-                    st.caption(f"🎯 Wymagane do: {task.get('required_for', 'Ogólny postęp')}")
-                    
-                    # Show task-specific content based on type
-                    if task_id == "task_company":
-                        st.markdown("""
-                        **Informacje do przeczytania:**
-                        - 🏢 Firma: FreshLife
-                        - 📦 Główne produkty: świeże owoce, warzywa, produkty ekologiczne
-                        - 🎯 Misja: Dostawa świeżości prosto do biznesów
-                        - 💡 USP: Dostawa w 24h, 100% świeżości gwarantowane
-                        """)
-                    
-                    elif task_id == "task_territory":
-                        # Show mini-map preview
-                        territory_lat = game_state.get("territory_latitude", 52.0846)
-                        territory_lon = game_state.get("territory_longitude", 21.0250)
-                        
-                        # Note: folium already imported at top of file
-                        
-                        mini_map = folium.Map(
-                            location=[territory_lat, territory_lon],
-                            zoom_start=12,
-                            tiles="OpenStreetMap",
-                            width=600,
-                            height=300
-                        )
-                        
-                        # Add base marker
-                        folium.Marker(
-                            [territory_lat, territory_lon],
-                            popup="Twoja baza",
-                            icon=folium.Icon(color="red", icon="home")
-                        ).add_to(mini_map)
-                        
-                        # Add client markers (sample)
-                        client_count = len([c for c in clients.values() if c.get("status") == "PROSPECT"])
-                        folium.CircleMarker(
-                            [territory_lat + 0.01, territory_lon + 0.01],
-                            radius=5,
-                            popup=f"{client_count} klientów w okolicy",
-                            color="blue",
-                            fill=True
-                        ).add_to(mini_map)
-                        
-                        folium_static(mini_map)
-                        
-                        st.markdown(f"""
-                        **Twoje terytorium:**
-                        - 📍 Baza: {game_state.get('territory_name', 'Piaseczno')}
-                        - 👥 Klienci: {len(clients)} punktów
-                        - 🎯 Status: {status_summary.get("PROSPECT", 0)} prospektów, {status_summary.get("ACTIVE", 0)} aktywnych
-                        """)
-                    
-                    elif task_id == "task_product":
-                        st.markdown("""
-                        **Przykładowe produkty FreshLife:**
-                        - 🥗 Mixy sałat premium
-                        - 🍎 Owoce sezonowe
-                        - 🥕 Warzywa organiczne
-                        - 🌿 Zioła świeże
-                        
-                        Pełny katalog znajdziesz w zakładce 'Produkty'
-                        """)
-                    
-                    # Submission area
-                    st.markdown("---")
-                    
+                    Od dziś wizyty u klientów kosztują energię. Aby wykonywać wizyty, musisz najpierw ukończyć wszystkie zadania onboardingowe.
+                    """)
+            
+                st.markdown("### 📝 Lista zadań")
+            
+                # Task completion tracking
+                pending = get_pending_tasks_count(st.session_state)
+            
+                for task_id, task in ONBOARDING_TASKS.items():
+                    task_status = get_task_status(st.session_state, task_id)
+                
+                    # Determine icon and color based on status
                     if task_status["status"] == "completed":
-                        st.success(f"✅ **Zadanie ukończone!**")
-                        
-                        if task_status.get("feedback"):
-                            st.info(f"💬 Feedback: {task_status['feedback']}")
-                    
+                        status_icon = "✅"
+                        status_color = "#10b981"
+                        button_text = "Ukończone"
+                        button_disabled = True
                     elif task_status["status"] == "submitted":
-                        st.warning("⏳ Zadanie złożone, oczekuje na weryfikację...")
-                        
-                        col_check, col_resubmit = st.columns([1, 1])
-                        
-                        with col_check:
-                            if st.button("🔍 Sprawdź wynik", key=f"check_{task_id}", use_container_width=True):
-                                # Simulate evaluation
-                                feedback = get_static_feedback(task_id)
-                                complete_task(st.session_state, task_id, feedback=feedback)
-                                st.rerun()
-                        
-                        with col_resubmit:
-                            if st.button("🔄 Złóż ponownie", key=f"resub_{task_id}", use_container_width=True):
-                                st.session_state[f"{task_id}_submitted"] = False
-                                st.rerun()
-                    
+                        status_icon = "⏳"
+                        status_color = "#f59e0b"
+                        button_text = "Sprawdź wynik"
+                        button_disabled = False
                     else:
-                        # Input area for submission
-                        user_answer = st.text_area(
-                            "Twoja odpowiedź:",
-                            placeholder="Napisz krótkie podsumowanie tego, czego się nauczyłeś...",
-                            key=f"answer_{task_id}",
-                            height=100
-                        )
+                        status_icon = "📝"
+                        status_color = "#6b7280"
+                        button_text = "Rozpocznij"
+                        button_disabled = False
+                
+                    # Create expandable for each task
+                    with st.expander(f"{status_icon} **{task['title']}**", expanded=(task_status["status"] != "completed" and pending <= 2)):
+                        st.markdown(f"**Opis:** {task['description']}")
+                        st.caption(f"⏱️ Deadline: {task.get('deadline', 'Brak')}")
+                        st.caption(f"🎯 Wymagane do: {task.get('required_for', 'Ogólny postęp')}")
+                    
+                        # Show task-specific content based on type
+                        if task_id == "task_company":
+                            st.markdown("""
+                            **Informacje do przeczytania:**
+                            - 🏢 Firma: FreshLife
+                            - 📦 Główne produkty: świeże owoce, warzywa, produkty ekologiczne
+                            - 🎯 Misja: Dostawa świeżości prosto do biznesów
+                            - 💡 USP: Dostawa w 24h, 100% świeżości gwarantowane
+                            """)
+                    
+                        elif task_id == "task_territory":
+                            # Show mini-map preview
+                            territory_lat = game_state.get("territory_latitude", 52.0846)
+                            territory_lon = game_state.get("territory_longitude", 21.0250)
                         
-                        col_submit, col_skip = st.columns([2, 1])
+                            # Note: folium already imported at top of file
                         
-                        with col_submit:
-                            if st.button(f"📤 Złóż zadanie", key=f"submit_{task_id}", type="primary", use_container_width=True):
-                                if user_answer and len(user_answer) >= 10:
-                                    submit_task(st.session_state, task_id, user_answer)
-                                    st.success("✅ Zadanie złożone!")
+                            mini_map = folium.Map(
+                                location=[territory_lat, territory_lon],
+                                zoom_start=12,
+                                tiles="OpenStreetMap",
+                                width=600,
+                                height=300
+                            )
+                        
+                            # Add base marker
+                            folium.Marker(
+                                [territory_lat, territory_lon],
+                                popup="Twoja baza",
+                                icon=folium.Icon(color="red", icon="home")
+                            ).add_to(mini_map)
+                        
+                            # Add client markers (sample)
+                            client_count = len([c for c in clients.values() if c.get("status") == "PROSPECT"])
+                            folium.CircleMarker(
+                                [territory_lat + 0.01, territory_lon + 0.01],
+                                radius=5,
+                                popup=f"{client_count} klientów w okolicy",
+                                color="blue",
+                                fill=True
+                            ).add_to(mini_map)
+                        
+                            folium_static(mini_map)
+                        
+                            st.markdown(f"""
+                            **Twoje terytorium:**
+                            - 📍 Baza: {game_state.get('territory_name', 'Piaseczno')}
+                            - 👥 Klienci: {len(clients)} punktów
+                            - 🎯 Status: {status_summary.get("PROSPECT", 0)} prospektów, {status_summary.get("ACTIVE", 0)} aktywnych
+                            """)
+                    
+                        elif task_id == "task_product":
+                            st.markdown("""
+                            **Przykładowe produkty FreshLife:**
+                            - 🥗 Mixy sałat premium
+                            - 🍎 Owoce sezonowe
+                            - 🥕 Warzywa organiczne
+                            - 🌿 Zioła świeże
+                        
+                            Pełny katalog znajdziesz w zakładce 'Produkty'
+                            """)
+                    
+                        # Submission area
+                        st.markdown("---")
+                    
+                        if task_status["status"] == "completed":
+                            st.success(f"✅ **Zadanie ukończone!**")
+                        
+                            if task_status.get("feedback"):
+                                st.info(f"💬 Feedback: {task_status['feedback']}")
+                    
+                        elif task_status["status"] == "submitted":
+                            st.warning("⏳ Zadanie złożone, oczekuje na weryfikację...")
+                        
+                            col_check, col_resubmit = st.columns([1, 1])
+                        
+                            with col_check:
+                                if st.button("🔍 Sprawdź wynik", key=f"check_{task_id}", use_container_width=True):
+                                    # Simulate evaluation
+                                    feedback = get_static_feedback(task_id)
+                                    complete_task(st.session_state, task_id, feedback=feedback)
                                     st.rerun()
-                                else:
-                                    st.error("❌ Odpowiedź zbyt krótka (min. 10 znaków)")
                         
-                        with col_skip:
-                            if st.button("⏭️ Pomiń", key=f"skip_{task_id}", use_container_width=True):
-                                st.info("💡 Możesz wrócić do tego zadania później")
+                            with col_resubmit:
+                                if st.button("🔄 Złóż ponownie", key=f"resub_{task_id}", use_container_width=True):
+                                    st.session_state[f"{task_id}_submitted"] = False
+                                    st.rerun()
+                    
+                        else:
+                            # Input area for submission
+                            user_answer = st.text_area(
+                                "Twoja odpowiedź:",
+                                placeholder="Napisz krótkie podsumowanie tego, czego się nauczyłeś...",
+                                key=f"answer_{task_id}",
+                                height=100
+                            )
+                        
+                            col_submit, col_skip = st.columns([2, 1])
+                        
+                            with col_submit:
+                                if st.button(f"📤 Złóż zadanie", key=f"submit_{task_id}", type="primary", use_container_width=True):
+                                    if user_answer and len(user_answer) >= 10:
+                                        submit_task(st.session_state, task_id, user_answer)
+                                        st.success("✅ Zadanie złożone!")
+                                        st.rerun()
+                                    else:
+                                        st.error("❌ Odpowiedź zbyt krótka (min. 10 znaków)")
+                        
+                            with col_skip:
+                                if st.button("⏭️ Pomiń", key=f"skip_{task_id}", use_container_width=True):
+                                    st.info("💡 Możesz wrócić do tego zadania później")
             
-            # Summary at bottom
-            st.markdown("---")
-            st.info(f"""
-            💡 **Status:** {3 - pending}/3 zadań ukończonych
-            
-            Po ukończeniu wszystkich zadań będziesz gotowy do efektywnej pracy w terenie!
-            """)
-        
-        # =============================================================================
-        # HISTORIA WIZYT - jako sekcja w Dashboard
-        # =============================================================================
-        
-        with st.expander("📈 Historia Wizyt i Statystyki", expanded=False):
-            # Get visit history
-            visit_history = game_state.get("visit_history", [])
-            
-            if not visit_history:
-                st.info("📭 Brak historii wizyt. Wykonaj pierwszą wizytę aby zobaczyć statystyki!")
-            else:
-                # Summary stats
-                col_v1, col_v2, col_v3 = st.columns(3)
-                
-                with col_v1:
-                    st.metric("📊 Wszystkie wizyty", len(visit_history))
-                
-                with col_v2:
-                    successful = sum(1 for v in visit_history if v.get("outcome") == "success")
-                    st.metric("✅ Udane", successful)
-                
-                with col_v3:
-                    if len(visit_history) > 0:
-                        success_rate = (successful / len(visit_history)) * 100
-                        st.metric("📈 Win rate", f"{success_rate:.0f}%")
-                
+                # Summary at bottom
                 st.markdown("---")
+                st.info(f"""
+                💡 **Status:** {3 - pending}/3 zadań ukończonych
+            
+                Po ukończeniu wszystkich zadań będziesz gotowy do efektywnej pracy w terenie!
+                """)
+        
+            # =============================================================================
+            # HISTORIA WIZYT - jako sekcja w Dashboard
+            # =============================================================================
+        
+            with st.expander("📈 Historia Wizyt i Statystyki", expanded=False):
+                # Get visit history
+                visit_history = game_state.get("visit_history", [])
+            
+                if not visit_history:
+                    st.info("📭 Brak historii wizyt. Wykonaj pierwszą wizytę aby zobaczyć statystyki!")
+                else:
+                    # Summary stats
+                    col_v1, col_v2, col_v3 = st.columns(3)
                 
-                # Recent visits (last 10)
-                st.markdown("### 🕒 Ostatnie wizyty")
+                    with col_v1:
+                        st.metric("📊 Wszystkie wizyty", len(visit_history))
                 
-                for visit in reversed(visit_history[-10:]):
-                    client_id = visit.get("client_id")
-                    client = clients.get(client_id, {})
-                    client_name = client.get("name", "Nieznany klient")
-                    
-                    outcome = visit.get("outcome", "unknown")
-                    date = visit.get("date", "N/A")
-                    notes = visit.get("notes", "Brak notatek")
-                    
-                    # Outcome icon
-                    outcome_icon = "✅" if outcome == "success" else "❌" if outcome == "failed" else "⏸️"
-                    outcome_color = "#10b981" if outcome == "success" else "#ef4444" if outcome == "failed" else "#6b7280"
-                    
-                    with st.container():
-                        st.markdown(f"""
-                        <div style='background: white; padding: 12px; border-radius: 8px; border-left: 4px solid {outcome_color}; margin-bottom: 8px;'>
-                            <div style='font-weight: 600; margin-bottom: 4px;'>{outcome_icon} {client_name}</div>
-                            <div style='font-size: 0.85rem; color: #64748b;'>📅 {date}</div>
-                            <div style='font-size: 0.9rem; margin-top: 4px;'>{notes}</div>
-                        </div>
-                        """, unsafe_allow_html=True)
+                    with col_v2:
+                        successful = sum(1 for v in visit_history if v.get("outcome") == "success")
+                        st.metric("✅ Udane", successful)
                 
-                if len(visit_history) > 10:
-                    st.caption(f"Pokazano 10 z {len(visit_history)} wizyt")
-        
-        # =============================================================================
-        # NOTES PANEL IN DASHBOARD
-        # =============================================================================
-        
-        st.markdown("---")
-        st.subheader("📝 Notatnik")
-        
-        # Get user data for notes
-        from data.users_new import get_current_user_data
-        user_data = get_current_user_data(username)
-        
-        if user_data and "user_id" in user_data:
-            # Render notes panel with unique key prefix
-            render_notes_panel(
-                user_id=user_data["user_id"],
-                active_tab="product_card",
-                key_prefix="fmcg_dashboard"
-            )
-        else:
-            st.warning("⚠️ Nie można załadować notatek")
+                    with col_v3:
+                        if len(visit_history) > 0:
+                            success_rate = (successful / len(visit_history)) * 100
+                            st.metric("📈 Win rate", f"{success_rate:.0f}%")
+                
+                    st.markdown("---")
+                
+                    # Recent visits (last 10)
+                    st.markdown("### 🕒 Ostatnie wizyty")
+                
+                    for visit in reversed(visit_history[-10:]):
+                        client_id = visit.get("client_id")
+                        client = clients.get(client_id, {})
+                        client_name = client.get("name", "Nieznany klient")
+                    
+                        outcome = visit.get("outcome", "unknown")
+                        date = visit.get("date", "N/A")
+                        notes = visit.get("notes", "Brak notatek")
+                    
+                        # Outcome icon
+                        outcome_icon = "✅" if outcome == "success" else "❌" if outcome == "failed" else "⏸️"
+                        outcome_color = "#10b981" if outcome == "success" else "#ef4444" if outcome == "failed" else "#6b7280"
+                    
+                        with st.container():
+                            st.markdown(f"""
+                            <div style='background: white; padding: 12px; border-radius: 8px; border-left: 4px solid {outcome_color}; margin-bottom: 8px;'>
+                                <div style='font-weight: 600; margin-bottom: 4px;'>{outcome_icon} {client_name}</div>
+                                <div style='font-size: 0.85rem; color: #64748b;'>📅 {date}</div>
+                                <div style='font-size: 0.9rem; margin-top: 4px;'>{notes}</div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                
+                    if len(visit_history) > 10:
+                        st.caption(f"Pokazano 10 z {len(visit_history)} wizyt")
     
-    # =============================================================================
+        # =============================================================================
     # TAB: SPRZEDAŻ (nowa - konsolidacja: Klienci + Rozmowa + Produkty)
     # =============================================================================
     
@@ -3658,6 +3469,28 @@ def show_fmcg_playable_game(username: str):
                         st.error(f"❌ Błąd podczas przechodzenia do następnego dnia: {e}")
     
     # =============================================================================
+    # TAB: NOTATNIK (Notes Panel)
+    # =============================================================================
+    
+    with tab_notes:
+        st.markdown("## 📝 Notatnik")
+        st.markdown("Twoje osobiste notatki, pomysły i obserwacje z pracy w terenie")
+        
+        # Get user data for notes
+        from data.users_new import get_current_user_data
+        user_data = get_current_user_data(username)
+        
+        if user_data and "user_id" in user_data:
+            # Render notes panel with unique key prefix
+            render_notes_panel(
+                user_id=user_data["user_id"],
+                active_tab="product_card",
+                key_prefix="fmcg_notes_tab"
+            )
+        else:
+            st.warning("⚠️ Nie można załadować notatek")
+    
+    # =============================================================================
     # TAB: HR & TEAM (Human Resources - Rozwój i Wsparcie)
     # =============================================================================
     
@@ -3666,11 +3499,158 @@ def show_fmcg_playable_game(username: str):
         st.markdown("Centrum rozwoju kariery, szkoleń i wsparcia w pracy Product Handlera")
         
         # HR Sub-tabs
-        hr_tab_career, hr_tab_mentor, hr_tab_training = st.tabs([
+        hr_tab_alex, hr_tab_career, hr_tab_mentor, hr_tab_training = st.tabs([
+            "🤖 ALEX AI",
             "🎯 Ścieżka Kariery", 
             "🎓 Mentor", 
             "📚 Szkolenia"
         ])
+        
+        # =============================
+        # HR TAB: ALEX AI ASSISTANT
+        # =============================
+        with hr_tab_alex:
+            st.subheader("🤖 ALEX - Twój AI Sales Assistant")
+            
+            # Import ALEX functions
+            from utils.fmcg_alex_training import (
+                get_alex_stats,
+                get_autopilot_penalty,
+                get_points_to_next_level,
+                ALEX_LEVELS,
+                TRAINING_MODULES
+            )
+            
+            # Get ALEX stats from game state
+            alex_level = game_state.get("alex_level", 0)
+            alex_training_points = game_state.get("alex_training_points", 0)
+            alex_competencies = game_state.get("alex_competencies", {
+                "planning": 0.0,
+                "communication": 0.0,
+                "analysis": 0.0,
+                "relationship": 0.0,
+                "negotiation": 0.0
+            })
+            autopilot_visits_count = game_state.get("autopilot_visits_count", 0)
+            autopilot_visits_this_week = game_state.get("autopilot_visits_this_week", 0)
+            autopilot_efficiency = game_state.get("autopilot_efficiency_avg", 0.0)
+            
+            alex_stats = get_alex_stats(alex_level)
+            penalty = get_autopilot_penalty(alex_level, alex_competencies)
+            points_needed, points_for_next = get_points_to_next_level(alex_training_points, alex_level)
+            
+            # ALEX Status Card
+            points_text = "(MAX)" if alex_level >= 4 else f"(brakuje {points_needed})"
+            progress_width = (alex_training_points / max(points_for_next, 1)) * 100
+            
+            alex_card_html = f"""<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; border-radius: 16px; color: white; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3); margin-bottom: 20px;'>
+        <div style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;'>
+            <div>
+                <div style='font-size: 48px; margin-bottom: 8px;'>{alex_stats['emoji']}</div>
+                <div style='font-size: 28px; font-weight: 700;'>ALEX</div>
+                <div style='font-size: 16px; opacity: 0.9;'>AI Sales Assistant</div>
+            </div>
+            <div style='text-align: right;'>
+                <div style='font-size: 14px; opacity: 0.8; margin-bottom: 4px;'>Poziom</div>
+                <div style='font-size: 36px; font-weight: 700;'>{alex_level}/4</div>
+                <div style='font-size: 14px; font-weight: 600;'>{alex_stats['name_pl']}</div>
+            </div>
+        </div>
+        <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 12px;'>
+            <div style='font-size: 12px; opacity: 0.9; margin-bottom: 6px;'>Punkty treningowe</div>
+            <div style='background: rgba(255,255,255,0.2); border-radius: 6px; height: 12px; overflow: hidden;'>
+                <div style='background: #10b981; height: 100%; width: {progress_width:.0f}%;'></div>
+            </div>
+            <div style='font-size: 11px; margin-top: 4px; opacity: 0.8;'>{alex_training_points} / {points_for_next} punktów {points_text}</div>
+        </div>
+    </div>"""
+            
+            st.markdown(alex_card_html, unsafe_allow_html=True)
+            
+            # ALEX Stats
+            col_alex1, col_alex2, col_alex3, col_alex4 = st.columns(4)
+            
+            with col_alex1:
+                st.metric("⚡ Kompetencja", f"{int(alex_stats['competence']*100)}%")
+                st.caption(f"Efektywność vs manualna")
+            
+            with col_alex2:
+                st.metric("⚠️ Penalty", f"{penalty:+.0f}%")
+                st.caption(f"Wpływ na wyniki wizyt")
+            
+            with col_alex3:
+                st.metric("📊 Limit wizyt/dzień", f"{alex_stats['visits_per_day']}")
+                st.caption(f"Max autopilot capacity")
+            
+            with col_alex4:
+                st.metric("🤖 Wizyt autopilota", f"{autopilot_visits_count}")
+                st.caption(f"W tym tygodniu: {autopilot_visits_this_week}")
+            
+            # Competencies breakdown
+            st.markdown("### 📚 Kompetencje ALEX")
+            
+            avg_competency = sum(alex_competencies.values()) / len(alex_competencies) if alex_competencies else 0
+            
+            st.markdown(f"""
+            <div style='background: white; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;'>
+                <div style='margin-bottom: 8px;'>
+                    <span style='font-weight: 600; color: #64748b;'>Średnie ukończenie modułów:</span>
+                    <span style='font-weight: 700; color: #1e293b; font-size: 18px; margin-left: 8px;'>{avg_competency*100:.0f}%</span>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            for module_id, module_data in TRAINING_MODULES.items():
+                completion = alex_competencies.get(module_id, 0.0)
+                completion_pct = int(completion * 100)
+                
+                # Color based on completion
+                if completion_pct >= 80:
+                    bar_color = "#10b981"
+                elif completion_pct >= 50:
+                    bar_color = "#f59e0b"
+                else:
+                    bar_color = "#ef4444"
+                
+                st.markdown(f"""
+                <div style='background: white; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 8px;'>
+                    <div style='font-weight: 600; color: #1e293b; margin-bottom: 6px;'>{module_data['name_pl']}</div>
+                    <div style='background: #e2e8f0; border-radius: 4px; height: 8px; overflow: hidden;'>
+                        <div style='background: {bar_color}; height: 100%; width: {completion_pct}%;'></div>
+                    </div>
+                    <div style='display: flex; justify-content: space-between; margin-top: 4px;'>
+                        <span style='font-size: 11px; color: #64748b;'>{module_data['impact']}</span>
+                        <span style='font-size: 11px; font-weight: 600; color: {bar_color};'>{completion_pct}%</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # Training CTA
+            st.markdown("---")
+            
+            if alex_level < 4:
+                st.info(f"""
+                💡 **Trenuj ALEX aby zwiększyć efektywność autopilota!**
+                
+                Ukończ quizy i case studies w zakładce **🤖 ALEX Training** aby:
+                - 📈 Zwiększyć kompetencję ALEX (obecnie: {int(alex_stats['competence']*100)}%)
+                - ⚠️ Zmniejszyć penalty na wyniki (obecnie: {penalty:+.0f}%)
+                - 🔓 Odblokować więcej wizyt autopilota dziennie (obecnie: {alex_stats['visits_per_day']})
+                - ⭐ Awansować ALEX na wyższy poziom
+                
+                **Do następnego poziomu:** {points_needed} punktów
+                """)
+            else:
+                st.success(f"""
+                🏆 **Gratulacje! ALEX osiągnął poziom MASTER!**
+                
+                Twój AI Sales Assistant jest w pełni wyszkolony:
+                - ⚡ Kompetencja: {int(alex_stats['competence']*100)}%
+                - ⚠️ Penalty: tylko {penalty:+.0f}%
+                - 📊 Maksymalny limit wizyt: {alex_stats['visits_per_day']}/dzień
+                
+                Kontynuuj trening aby utrzymać kompetencje na najwyższym poziomie!
+                """)
         
         # =============================
         # HR TAB: ŚCIEŻKA KARIERY  

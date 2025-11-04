@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-11-03 23:13:22",
+    "last_login": "2025-11-04 08:40:55",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -41,6 +41,12 @@
         "completed_lessons": 0
       },
       "2025-11-03": {
+        "xp": 297,
+        "degencoins": 236,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-11-04": {
         "xp": 297,
         "degencoins": 236,
         "level": 1,
@@ -436,6 +442,31 @@
       {
         "type": "login",
         "timestamp": "2025-11-03T23:13:22.645043",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T02:33:33.257778",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T02:38:50.834370",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T07:57:31.761380",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T08:37:12.089823",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T08:40:55.076818",
         "details": {}
       }
     ],
@@ -1155,7 +1186,7 @@
         "firm": {
           "name": "FMCG Corp",
           "logo": "🏪",
-          "founded": "2025-11-03",
+          "founded": "2025-11-04",
           "level": 1,
           "reputation": 0
         },
@@ -1213,7 +1244,7 @@
           "monthly_actual_sales": 0,
           "monthly_best_sales": 0,
           "weekly_history": [],
-          "last_activity_date": "2025-11-03T23:13:40.607592",
+          "last_activity_date": "2025-11-04T08:41:22.960955",
           "last_visit_client_id": null,
           "company": "Heinz Polska",
           "clients": {
@@ -2198,7 +2229,7 @@
       "monthly_actual_sales": 0,
       "monthly_best_sales": 0,
       "weekly_history": [],
-      "last_activity_date": "2025-11-03T23:13:40.607592",
+      "last_activity_date": "2025-11-04T08:41:22.960955",
       "last_visit_client_id": null,
       "company": "Heinz Polska",
       "clients": {
