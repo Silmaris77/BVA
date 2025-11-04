@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-11-04 15:40:13",
+    "last_login": "2025-11-04 16:46:43",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -572,6 +572,11 @@
       {
         "type": "login",
         "timestamp": "2025-11-04T15:40:13.848838",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T16:46:43.896155",
         "details": {}
       }
     ],
@@ -1388,7 +1393,7 @@
           "monthly_actual_sales": 0,
           "monthly_best_sales": 0,
           "weekly_history": [],
-          "last_activity_date": "2025-11-04T15:40:30.928399",
+          "last_activity_date": "2025-11-04T16:47:14.061475",
           "last_visit_client_id": null,
           "company": "Heinz Polska",
           "clients": {
@@ -2278,28 +2283,30 @@
           "reputation": {
             "clients": {},
             "company": {
-              "task_performance": 15,
+              "task_performance": 0,
               "sales_performance": 0.0,
               "professionalism": 100
             },
-            "tier": {
-              "name": "Trainee",
-              "emoji": "🟤",
-              "min_rating": 0,
-              "max_rating": 40
-            },
+            "tier": "Trainee",
             "unlock_tokens": 0,
             "training_credits": 0,
             "xp": 0,
             "level": 1,
-            "overall_rating": 13.8,
-            "company_reputation": 34.5
+            "overall_rating": 12.0
           },
           "scenario_id": "heinz_food_service",
           "clients_total": 25,
-          "mentor_questions_today": 0,
+          "mentor_questions_today": 1,
           "mentor_last_reset_day": "Monday",
-          "mentor_conversation_history": []
+          "mentor_conversation_history": [
+            {
+              "question": "jak zapytać o: 👤 Charakterystyka właściciela\n\n❓ Osobowość, styl podejmowania decyzji - do ustalenia podczas wizyty\n\n⚖️ Priorytety decyzyjne\n\n❓ Do ustalenia podczas wizyty\n\n🎯 Główni klienci sklepu\n\n❓ Demografia, potrzeby - do ustalenia podczas wizyty\n\n📊 Najlepiej sprzedające się kategorie\n\n❓ Do ustalenia\n\n🛒 Obecnie sprzedawane marki\n\n❓ Do ustalenia\n\n💡 Potrzeby/Bolesności\n\n❓ Do ustalenia\n\n💰 Typowe zamówienie\n\n❓ Wartość zamówienia - do ustalenia podczas wizyty\n\n📅 Preferowana częstotliwość\n\n❓ Jak często zamawia - do ustalenia podczas wizyty",
+              "answer": "Rozumiem, chcesz zebrać kluczowe informacje o sklepie i jego właścicielu. Pamiętaj, że w kanale tradycyjnym budowanie relacji to podstawa. Nie atakuj od razu pytaniami, tylko zacznij od budowania rapportu.\n\n**Osobowość i styl podejmowania decyzji (do ustalenia podczas wizyty):**\n\n*   Obserwuj! Czy właściciel jest otwarty na rozmowę, czy raczej sceptyczny? Czy jest konkretny i rzeczowy, czy bardziej woli pogawędzić o wszystkim i o niczym?\n*   Zacznij od luźnej rozmowy: \"Widzę, że ma Pan/Pani bardzo zadbany sklep. Sam Pan/Pani o to dba?\" (pozwala ocenić zaangażowanie i styl pracy).\n*   Spróbuj subtelnie podpytać: \"Jakie produkty cieszą się największym uznaniem klientów? Co Pana/Pani zdaniem o tym decyduje?\" (pozwala zrozumieć, co właściciel uważa za ważne przy wyborze asortymentu).\n\n**Główni klienci sklepu (do ustalenia podczas wizyty):**\n\n*   \"Widzę, że ma Pan/Pani tutaj sporo [np. młodych mam]. Czy to oni stanowią większość klientów?\" (Obserwuj i dopasuj pytanie do otoczenia).\n*   \"Czy zauważa Pan/Pani jakieś zmiany w preferencjach klientów w ostatnim czasie?\" (Pozwala zrozumieć, jak właściciel śledzi trendy).\n\n**Najlepiej sprzedające się kategorie:**\n\n*   \"Które kategorie produktów generują największy ruch w sklepie?\"\n*   \"Co najlepiej rotuje w sklepie? Z jakich produktów jest Pan/Pani najbardziej zadowolony/a?\"\n\n**Obecnie sprzedawane marki:**\n\n*   \"Jakie marki z kategorii [nazwa kategorii] ma Pan/Pani obecnie w ofercie?\"\n*   \"Z jakimi dostawcami z kategorii [nazwa kategorii] Pan/Pani współpracuje?\"\n\n**Potrzeby/Bolesności (do ustalenia):**\n\n*   \"Czy jest coś, co w ostatnim czasie sprawia Panu/Pani trudność w prowadzeniu sklepu?\" (Pozwala zidentyfikować problemy, np. brak miejsca, słaba marża na pewnych produktach).\n*   \"Czy jest coś, w czym mógłbym Panu/Pani pomóc?\" (Otwiera drzwi do rozmowy o konkretnych rozwiązaniach).\n\nPamiętaj, aby notować odpowiedzi i używać ich w dalszej rozmowie. Im lepiej zrozumiesz potrzeby właściciela, tym łatwiej będzie Ci zaproponować mu korzystne rozwiązanie.\n",
+              "client_name": null,
+              "product_name": null,
+              "timestamp": "Monday"
+            }
+          ]
         },
         "office": {
           "type": "company_office",
@@ -2396,7 +2403,7 @@
       "monthly_actual_sales": 0,
       "monthly_best_sales": 0,
       "weekly_history": [],
-      "last_activity_date": "2025-11-04T15:40:30.928399",
+      "last_activity_date": "2025-11-04T16:47:14.061475",
       "last_visit_client_id": null,
       "company": "Heinz Polska",
       "clients": {
@@ -3286,28 +3293,30 @@
       "reputation": {
         "clients": {},
         "company": {
-          "task_performance": 15,
+          "task_performance": 0,
           "sales_performance": 0.0,
           "professionalism": 100
         },
-        "tier": {
-          "name": "Trainee",
-          "emoji": "🟤",
-          "min_rating": 0,
-          "max_rating": 40
-        },
+        "tier": "Trainee",
         "unlock_tokens": 0,
         "training_credits": 0,
         "xp": 0,
         "level": 1,
-        "overall_rating": 13.8,
-        "company_reputation": 34.5
+        "overall_rating": 12.0
       },
       "scenario_id": "heinz_food_service",
       "clients_total": 25,
-      "mentor_questions_today": 0,
+      "mentor_questions_today": 1,
       "mentor_last_reset_day": "Monday",
-      "mentor_conversation_history": []
+      "mentor_conversation_history": [
+        {
+          "question": "jak zapytać o: 👤 Charakterystyka właściciela\n\n❓ Osobowość, styl podejmowania decyzji - do ustalenia podczas wizyty\n\n⚖️ Priorytety decyzyjne\n\n❓ Do ustalenia podczas wizyty\n\n🎯 Główni klienci sklepu\n\n❓ Demografia, potrzeby - do ustalenia podczas wizyty\n\n📊 Najlepiej sprzedające się kategorie\n\n❓ Do ustalenia\n\n🛒 Obecnie sprzedawane marki\n\n❓ Do ustalenia\n\n💡 Potrzeby/Bolesności\n\n❓ Do ustalenia\n\n💰 Typowe zamówienie\n\n❓ Wartość zamówienia - do ustalenia podczas wizyty\n\n📅 Preferowana częstotliwość\n\n❓ Jak często zamawia - do ustalenia podczas wizyty",
+          "answer": "Rozumiem, chcesz zebrać kluczowe informacje o sklepie i jego właścicielu. Pamiętaj, że w kanale tradycyjnym budowanie relacji to podstawa. Nie atakuj od razu pytaniami, tylko zacznij od budowania rapportu.\n\n**Osobowość i styl podejmowania decyzji (do ustalenia podczas wizyty):**\n\n*   Obserwuj! Czy właściciel jest otwarty na rozmowę, czy raczej sceptyczny? Czy jest konkretny i rzeczowy, czy bardziej woli pogawędzić o wszystkim i o niczym?\n*   Zacznij od luźnej rozmowy: \"Widzę, że ma Pan/Pani bardzo zadbany sklep. Sam Pan/Pani o to dba?\" (pozwala ocenić zaangażowanie i styl pracy).\n*   Spróbuj subtelnie podpytać: \"Jakie produkty cieszą się największym uznaniem klientów? Co Pana/Pani zdaniem o tym decyduje?\" (pozwala zrozumieć, co właściciel uważa za ważne przy wyborze asortymentu).\n\n**Główni klienci sklepu (do ustalenia podczas wizyty):**\n\n*   \"Widzę, że ma Pan/Pani tutaj sporo [np. młodych mam]. Czy to oni stanowią większość klientów?\" (Obserwuj i dopasuj pytanie do otoczenia).\n*   \"Czy zauważa Pan/Pani jakieś zmiany w preferencjach klientów w ostatnim czasie?\" (Pozwala zrozumieć, jak właściciel śledzi trendy).\n\n**Najlepiej sprzedające się kategorie:**\n\n*   \"Które kategorie produktów generują największy ruch w sklepie?\"\n*   \"Co najlepiej rotuje w sklepie? Z jakich produktów jest Pan/Pani najbardziej zadowolony/a?\"\n\n**Obecnie sprzedawane marki:**\n\n*   \"Jakie marki z kategorii [nazwa kategorii] ma Pan/Pani obecnie w ofercie?\"\n*   \"Z jakimi dostawcami z kategorii [nazwa kategorii] Pan/Pani współpracuje?\"\n\n**Potrzeby/Bolesności (do ustalenia):**\n\n*   \"Czy jest coś, co w ostatnim czasie sprawia Panu/Pani trudność w prowadzeniu sklepu?\" (Pozwala zidentyfikować problemy, np. brak miejsca, słaba marża na pewnych produktach).\n*   \"Czy jest coś, w czym mógłbym Panu/Pani pomóc?\" (Otwiera drzwi do rozmowy o konkretnych rozwiązaniach).\n\nPamiętaj, aby notować odpowiedzi i używać ich w dalszej rozmowie. Im lepiej zrozumiesz potrzeby właściciela, tym łatwiej będzie Ci zaproponować mu korzystne rozwiązanie.\n",
+          "client_name": null,
+          "product_name": null,
+          "timestamp": "Monday"
+        }
+      ]
     },
     "fmcg_clients": {
       "client_001": {

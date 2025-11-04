@@ -2566,6 +2566,58 @@ def show_fmcg_playable_game(username: str):
                             if route_clients:
                                 st.markdown(" → ".join(route_clients))
                                 
+                                # Calculate route characteristics
+                                total_points = len(st.session_state.planned_route)
+                                total_distance = 0
+                                
+                                # Sum distances from base for each client
+                                for cid in st.session_state.planned_route:
+                                    if isinstance(cid, str) and cid in filtered_clients:
+                                        client = filtered_clients[cid]
+                                        total_distance += client.get("distance_from_base", 0)
+                                
+                                # Add return distance (last client to base - approximate as same distance)
+                                if st.session_state.planned_route and isinstance(st.session_state.planned_route[-1], str):
+                                    last_client_id = st.session_state.planned_route[-1]
+                                    if last_client_id in filtered_clients:
+                                        total_distance += filtered_clients[last_client_id].get("distance_from_base", 0)
+                                
+                                # Estimate time (average 30 min per visit + 5 min per 10km travel)
+                                visit_time = total_points * 30  # minutes
+                                travel_time = (total_distance / 10) * 5  # minutes (5 min per 10km)
+                                total_time = visit_time + travel_time
+                                
+                                # Convert to hours
+                                total_hours = total_time / 60
+                                
+                                # Estimate energy (calories - rough estimate: 50 kcal per hour active work)
+                                energy_kcal = total_hours * 50
+                                
+                                # Display route characteristics in nice card
+                                st.markdown(f"""
+                                <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                            padding: 16px; border-radius: 12px; margin: 16px 0;'>
+                                    <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;'>
+                                        <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center;'>
+                                            <div style='font-size: 28px; font-weight: bold; color: white;'>{total_points}</div>
+                                            <div style='font-size: 12px; color: rgba(255,255,255,0.8);'>📍 Punktów</div>
+                                        </div>
+                                        <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center;'>
+                                            <div style='font-size: 28px; font-weight: bold; color: white;'>{total_distance:.1f}</div>
+                                            <div style='font-size: 12px; color: rgba(255,255,255,0.8);'>🚗 km</div>
+                                        </div>
+                                        <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center;'>
+                                            <div style='font-size: 28px; font-weight: bold; color: white;'>{total_hours:.1f}</div>
+                                            <div style='font-size: 12px; color: rgba(255,255,255,0.8);'>⏱️ godzin</div>
+                                        </div>
+                                        <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center;'>
+                                            <div style='font-size: 28px; font-weight: bold; color: white;'>{energy_kcal:.0f}</div>
+                                            <div style='font-size: 12px; color: rgba(255,255,255,0.8);'>🔥 kcal</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                """, unsafe_allow_html=True)
+                                
                                 col_clear, col_opt = st.columns(2)
                                 with col_clear:
                                     if st.button("🗑️ Wyczyść trasę", key="clear_route_from_map"):
@@ -2716,6 +2768,61 @@ def show_fmcg_playable_game(username: str):
                             max_selections=6,
                             key="heinz_route_selection"
                         )
+                    
+                        # Show route characteristics if clients selected
+                        if selected_for_route:
+                            total_points = len(selected_for_route)
+                            
+                            # Calculate total distance (sum of distances + return)
+                            base_lat = game_state.get("territory_latitude", 49.7271667)
+                            base_lon = game_state.get("territory_longitude", 18.7025833)
+                            
+                            total_distance = 0
+                            for cid in selected_for_route:
+                                if isinstance(cid, str) and cid in filtered_clients:
+                                    client = filtered_clients[cid]
+                                    total_distance += client.get("distance_from_base", 0)
+                            
+                            # Add return distance (from last client back to base)
+                            if selected_for_route:
+                                last_cid = selected_for_route[-1]
+                                if isinstance(last_cid, str) and last_cid in filtered_clients:
+                                    last_client = filtered_clients[last_cid]
+                                    total_distance += last_client.get("distance_from_base", 0)
+                            
+                            # Calculate time (30 min per visit + 5 min per 10 km)
+                            visit_time = total_points * 30  # minutes
+                            travel_time = (total_distance / 10) * 5  # 5 min per 10 km
+                            total_time = visit_time + travel_time
+                            total_hours = total_time / 60
+                            
+                            # Calculate energy (50 kcal per hour)
+                            energy_kcal = total_hours * 50
+                            
+                            st.markdown(f"""
+                            <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                        padding: 20px; border-radius: 10px; margin: 15px 0;
+                                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>
+                                <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;'>
+                                    <div style='text-align: center; color: white;'>
+                                        <div style='font-size: 32px; font-weight: bold; margin-bottom: 5px;'>{total_points}</div>
+                                        <div style='font-size: 14px; opacity: 0.9;'>Punktów</div>
+                                    </div>
+                                    <div style='text-align: center; color: white;'>
+                                        <div style='font-size: 32px; font-weight: bold; margin-bottom: 5px;'>{total_distance:.1f}</div>
+                                        <div style='font-size: 14px; opacity: 0.9;'>km</div>
+                                    </div>
+                                    <div style='text-align: center; color: white;'>
+                                        <div style='font-size: 32px; font-weight: bold; margin-bottom: 5px;'>{total_hours:.1f}</div>
+                                        <div style='font-size: 14px; opacity: 0.9;'>godzin</div>
+                                    </div>
+                                    <div style='text-align: center; color: white;'>
+                                        <div style='font-size: 32px; font-weight: bold; margin-bottom: 5px;'>{energy_kcal:.0f}</div>
+                                        <div style='font-size: 14px; opacity: 0.9;'>kcal</div>
+                                    </div>
+                                </div>
+                            </div>
+                            """, unsafe_allow_html=True)
                     
                         if selected_for_route and len(selected_for_route) >= 2:
                             col_btn1, col_btn2 = st.columns(2)
@@ -4888,7 +4995,9 @@ def show_fmcg_playable_game(username: str):
                             
                             # Call AI (Gemini)
                             import google.generativeai as genai
-                            api_key = st.secrets.get("GOOGLE_API_KEY")
+                            from utils.fmcg_tasks import get_gemini_api_key
+                            
+                            api_key = get_gemini_api_key()
                             if api_key:
                                 genai.configure(api_key=api_key)
                                 model = genai.GenerativeModel("models/gemini-2.0-flash-exp")
