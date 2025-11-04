@@ -129,13 +129,11 @@ Klienci: 25 punktów Food Service
 |-----------|--------|---------|-----------|------|
 | **Numeric Distribution** | 15/25 | 3,000 PLN | Critical | 60% dystrybucji numerycznej |
 | **Monthly Sales** | 15,000 PLN | 2,500 PLN | High | Łączna sprzedaż (Heinz + Pudliszki) |
-| **Premium Mix** | 40% | 2,000 PLN | High | % wartości z linii Heinz |
 | **Beat Kotlin** | 6 wins | 1,500 PLN | Medium | Przejęcia z Kotlin |
-| **Upsell Rate** | 30% | 1,800 PLN | High | Klienci Pudliszki → Heinz |
 
-**Portfolio Strategy KPI**:
-- **Premium Mix**: `heinz_revenue / total_revenue * 100` (target 40%)
-- **Upsell Rate**: `clients_buying_both / clients_buying_pudliszki * 100` (target 30%)
+**Portfolio Strategy KPI** (usunięte - uproszczono cele):
+- ~~Premium Mix~~: Usunięte z celów głównych
+- ~~Upsell Rate~~: Usunięte z celów głównych
 
 ---
 
@@ -194,9 +192,7 @@ Klienci: 25 punktów Food Service
 ### Dashboard KPI
 - **Dystrybucja**: 15/25 (60%)
 - **Sprzedaż**: 15,000 PLN / target
-- **Premium Mix**: 40% (Heinz revenue %)
 - **Kotlin Wins**: 6/8 possible
-- **Upsell**: 30% (Pudliszki → Heinz)
 
 ---
 
@@ -348,23 +344,19 @@ Ten scenariusz uczy:
 
 ## 📊 Success Metrics (jak wygrać)
 
-**Minimum (Bronze)**: 3 objectives completed
+**Minimum (Bronze)**: 2 objectives completed
 - 10 distribution points
 - 10,000 PLN sales
-- 4 Kotlin wins
 
-**Target (Silver)**: 4 objectives completed
+**Target (Silver)**: All 3 objectives completed
 - 15 distribution points
 - 15,000 PLN sales
-- 35% premium mix
 - 6 Kotlin wins
 
-**Excellence (Gold)**: All 5 objectives
-- 15 distribution
-- 15,000 PLN
-- 40% premium mix
-- 6 Kotlin wins
-- 30% upsell rate
+**Excellence (Gold)**: All objectives + bonus
+- 15+ distribution
+- 18,000+ PLN sales
+- 6+ Kotlin wins
 
 ---
 

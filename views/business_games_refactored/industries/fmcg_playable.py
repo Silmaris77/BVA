@@ -709,10 +709,9 @@ def show_fmcg_playable_game(username: str):
     pending_tasks = get_pending_tasks_count(st.session_state)
     tasks_badge = f" ({pending_tasks})" if pending_tasks > 0 else ""
     
-    tab_dashboard, tab_sales, tab_notes, tab_hr, tab_settings = st.tabs([
+    tab_dashboard, tab_sales, tab_hr, tab_settings = st.tabs([
         f"📊 Dashboard{tasks_badge}",
         "🎯 Sprzedaż",
-        "📝 Notatnik",
         "👥 HR & Team",
         "⚙️ Ustawienia"
     ])
@@ -965,6 +964,131 @@ def show_fmcg_playable_game(username: str):
     </div>
     </div>"""
             st.markdown(monthly_html, unsafe_allow_html=True)
+            
+            # SCENARIO-SPECIFIC GOALS
+            st.markdown("### 🎯 Cele Scenariusza")
+            
+            if is_heinz_scenario:
+                # HEINZ SCENARIO GOALS - Updated to 3 objectives
+                st.markdown("**📋 Scenariusz Heinz Food Service**")
+                
+                # Goal 1: Numeric Distribution (15/25)
+                active_clients = sum(1 for c in clients.values() if c.get("status") == "ACTIVE")
+                distribution_target = 15
+                
+                # Goal 2: Monthly Sales (15,000 PLN)
+                monthly_sales = game_state.get("total_revenue", 0)
+                sales_target = 15000
+                
+                # Goal 3: Beat Kotlin (6 wins)
+                kotlin_wins = sum(1 for c in clients.values() 
+                                 if c.get("previous_supplier", "").lower() == "kotlin" 
+                                 and c.get("status") == "ACTIVE")
+                kotlin_target = 6
+                
+                col_g1, col_g2, col_g3 = st.columns(3)
+                
+                with col_g1:
+                    dist_color = "#10b981" if active_clients >= distribution_target else "#f59e0b" if active_clients >= 10 else "#ef4444"
+                    st.markdown(f"""
+                    <div style='background: {dist_color}15; border: 2px solid {dist_color}; border-radius: 8px; padding: 16px; text-align: center;'>
+                        <div style='font-size: 28px; font-weight: 700; color: {dist_color}; margin-bottom: 4px;'>{active_clients}/{distribution_target}</div>
+                        <div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>Dystrybucja numeryczna</div>
+                        <div style='font-size: 11px; color: #94a3b8;'>Cel: 60% (15/25)</div>
+                        <div style='background: #e5e7eb; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden;'>
+                            <div style='width: {min(100, active_clients/distribution_target*100)}%; height: 100%; background: {dist_color};'></div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with col_g2:
+                    sales_color = "#10b981" if monthly_sales >= sales_target else "#f59e0b" if monthly_sales >= 10000 else "#ef4444"
+                    st.markdown(f"""
+                    <div style='background: {sales_color}15; border: 2px solid {sales_color}; border-radius: 8px; padding: 16px; text-align: center;'>
+                        <div style='font-size: 28px; font-weight: 700; color: {sales_color}; margin-bottom: 4px;'>{monthly_sales:,}</div>
+                        <div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>Sprzedaż miesięczna</div>
+                        <div style='font-size: 11px; color: #94a3b8;'>Cel: {sales_target:,} PLN</div>
+                        <div style='background: #e5e7eb; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden;'>
+                            <div style='width: {min(100, monthly_sales/sales_target*100)}%; height: 100%; background: {sales_color};'></div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with col_g3:
+                    kotlin_color = "#10b981" if kotlin_wins >= kotlin_target else "#f59e0b" if kotlin_wins >= 4 else "#ef4444"
+                    st.markdown(f"""
+                    <div style='background: {kotlin_color}15; border: 2px solid {kotlin_color}; border-radius: 8px; padding: 16px; text-align: center;'>
+                        <div style='font-size: 28px; font-weight: 700; color: {kotlin_color}; margin-bottom: 4px;'>{kotlin_wins}/{kotlin_target}</div>
+                        <div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>Przejęcia z Kotlin</div>
+                        <div style='font-size: 11px; color: #94a3b8;'>Beat competition</div>
+                        <div style='background: #e5e7eb; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden;'>
+                            <div style='width: {min(100, kotlin_wins/kotlin_target*100)}%; height: 100%; background: {kotlin_color};'></div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                st.markdown("---")
+            
+            else:
+                # STANDARD SCENARIO GOALS (Quick Start, Lifetime)
+                st.markdown("**🚀 Podstawowe Cele**")
+                
+                # Goal 1: Client acquisition
+                total_clients = len(clients)
+                active_clients = sum(1 for c in clients.values() if c.get("status") == "ACTIVE")
+                client_target = 10  # Target: 10 active clients
+                
+                # Goal 2: Product diversity
+                products_sold = len(set(game_state.get("products_sold_history", [])))
+                products_target = 15  # Target: 15 different products
+                
+                # Goal 3: Customer satisfaction (avg reputation)
+                total_rep = sum(c.get("reputation", 0) for c in clients.values() if c.get("status") == "ACTIVE")
+                avg_reputation = (total_rep / active_clients) if active_clients > 0 else 0
+                reputation_target = 50  # Target: +50 avg reputation
+                
+                col_g1, col_g2, col_g3 = st.columns(3)
+                
+                with col_g1:
+                    clients_color = "#10b981" if active_clients >= client_target else "#f59e0b" if active_clients >= 6 else "#ef4444"
+                    st.markdown(f"""
+                    <div style='background: {clients_color}15; border: 2px solid {clients_color}; border-radius: 8px; padding: 16px; text-align: center;'>
+                        <div style='font-size: 28px; font-weight: 700; color: {clients_color}; margin-bottom: 4px;'>{active_clients}/{client_target}</div>
+                        <div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>Aktywni klienci</div>
+                        <div style='font-size: 11px; color: #94a3b8;'>Portfolio</div>
+                        <div style='background: #e5e7eb; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden;'>
+                            <div style='width: {min(100, active_clients/client_target*100)}%; height: 100%; background: {clients_color};'></div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with col_g2:
+                    products_color = "#10b981" if products_sold >= products_target else "#f59e0b" if products_sold >= 10 else "#ef4444"
+                    st.markdown(f"""
+                    <div style='background: {products_color}15; border: 2px solid {products_color}; border-radius: 8px; padding: 16px; text-align: center;'>
+                        <div style='font-size: 28px; font-weight: 700; color: {products_color}; margin-bottom: 4px;'>{products_sold}/{products_target}</div>
+                        <div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>Różne produkty</div>
+                        <div style='font-size: 11px; color: #94a3b8;'>Dywersyfikacja</div>
+                        <div style='background: #e5e7eb; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden;'>
+                            <div style='width: {min(100, products_sold/products_target*100)}%; height: 100%; background: {products_color};'></div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with col_g3:
+                    rep_color = "#10b981" if avg_reputation >= reputation_target else "#f59e0b" if avg_reputation >= 25 else "#ef4444"
+                    st.markdown(f"""
+                    <div style='background: {rep_color}15; border: 2px solid {rep_color}; border-radius: 8px; padding: 16px; text-align: center;'>
+                        <div style='font-size: 28px; font-weight: 700; color: {rep_color}; margin-bottom: 4px;'>{avg_reputation:+.0f}</div>
+                        <div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>Średnia reputacja</div>
+                        <div style='font-size: 11px; color: #94a3b8;'>Cel: +{reputation_target}</div>
+                        <div style='background: #e5e7eb; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden;'>
+                            <div style='width: {min(100, max(0, (avg_reputation+100)/200*100))}%; height: 100%; background: {rep_color};'></div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                st.markdown("---")
             
             # WEEKLY HISTORY - Last 4 weeks
             st.markdown("### 📅 Historia Tygodniowa")
@@ -2759,6 +2883,37 @@ def show_fmcg_playable_game(username: str):
             """)
             
             st.markdown("---")
+            
+            # =============================================================================
+            # NOTATNIK - dostępny podczas przygotowania do wizyt
+            # =============================================================================
+            
+            with st.expander("📝 Notatnik", expanded=False):
+                st.markdown("""
+                **Twoje notatki, pomysły i obserwacje**
+                
+                Zapisuj tutaj:
+                - 📝 Pomysły na promocje
+                - 💡 Obserwacje z rynku
+                - 🎯 Plany działań
+                - 📊 Analizy konkurencji
+                """)
+                
+                # Get user data for notes
+                from data.users_new import get_current_user_data
+                user_data = get_current_user_data(username)
+                
+                if user_data and "user_id" in user_data:
+                    # Render notes panel with unique key prefix
+                    render_notes_panel(
+                        user_id=user_data["user_id"],
+                        active_tab="product_card",
+                        key_prefix="fmcg_sales_prep_notes"
+                    )
+                else:
+                    st.warning("⚠️ Nie można załadować notatek")
+            
+            st.markdown("---")
             st.markdown("💡 **Wskazówka**: Katalog produktów znajdziesz w zakładce **'📦 Produkty'**")
         
         # =========================================================================
@@ -3549,23 +3704,11 @@ def show_fmcg_playable_game(username: str):
     # TAB: NOTATNIK (Notes Panel)
     # =============================================================================
     
-    with tab_notes:
-        st.markdown("## 📝 Notatnik")
-        st.markdown("Twoje osobiste notatki, pomysły i obserwacje z pracy w terenie")
-        
-        # Get user data for notes
-        from data.users_new import get_current_user_data
-        user_data = get_current_user_data(username)
-        
-        if user_data and "user_id" in user_data:
-            # Render notes panel with unique key prefix
-            render_notes_panel(
-                user_id=user_data["user_id"],
-                active_tab="product_card",
-                key_prefix="fmcg_notes_tab"
-            )
-        else:
-            st.warning("⚠️ Nie można załadować notatek")
+    # =============================================================================
+    # TAB: NOTATNIK - PRZENIESIONY DO DASHBOARD → ZADANIA
+    # =============================================================================
+    # Notatnik został przeniesiony do Dashboard → Zadania & Rozwój (pełny notatnik)
+    # Quick notes są dostępne w sidebarze (implementacja w main.py)
     
     # =============================================================================
     # TAB: HR & TEAM (Human Resources - Rozwój i Wsparcie)

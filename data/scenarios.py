@@ -325,25 +325,11 @@ SCENARIOS = {
                     "priority": "high"
                 },
                 {
-                    "type": "premium_mix",
-                    "target": 40,
-                    "description": "⭐ Utrzymaj 40% wartości sprzedaży z linii premium (Heinz)",
-                    "reward_money": 2000,
-                    "priority": "high"
-                },
-                {
                     "type": "beat_competition",
                     "target": "kotlin",
                     "target_wins": 6,
                     "description": "🥊 Przejmij 6 klientów od Kotlin (switch na Heinz lub Pudliszki)",
                     "reward_money": 1500,
-                    "priority": "medium"
-                },
-                {
-                    "type": "upsell_rate",
-                    "target": 30,
-                    "description": "📈 Osiągnij 30% upsell rate (klienci Pudliszki kupujący też Heinz)",
-                    "reward_money": 1000,
                     "priority": "medium"
                 }
             ],

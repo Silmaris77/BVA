@@ -86,7 +86,42 @@ def main():
             st.markdown(f"### Witaj, {st.session_state.username}!")
             # Nawigacja
             navigation_menu()
-              # Przycisk wylogowania na dole sidebara
+            
+            # # ===== QUICK NOTES (always visible) =====
+            # st.markdown("---")
+            # st.markdown("### 📝 Szybkie notatki")
+            
+            # # Initialize quick notes in session state
+            # if 'quick_notes' not in st.session_state:
+            #     st.session_state['quick_notes'] = ""
+            
+            # quick_note = st.text_area(
+            #     "",
+            #     value=st.session_state.get('quick_notes', ''),
+            #     height=100,
+            #     placeholder="Szybka notatka o kliencie, produkcie, zadaniu...",
+            #     key="sidebar_quick_note",
+            #     help="Notatki są automatycznie zapisywane w sesji"
+            # )
+            
+            # # Auto-save on change
+            # if quick_note != st.session_state.get('quick_notes', ''):
+            #     st.session_state['quick_notes'] = quick_note
+            
+            # col_n1, col_n2 = st.columns(2)
+            
+            # with col_n1:
+            #     if st.button("🗑️ Wyczyść", use_container_width=True, help="Wyczyść szybkie notatki", key="clear_quick_notes"):
+            #         st.session_state['quick_notes'] = ""
+            #         st.rerun()
+            
+            # with col_n2:
+            #     if st.button("📋 Pełny", use_container_width=True, help="Otwórz pełny notatnik", key="open_full_notes"):
+            #         st.info("💡 Pełny notatnik: Dashboard → Zadania & Rozwój")
+            
+            # st.markdown("---")
+            
+            # Przycisk wylogowania na dole sidebara
             if zen_button("🚪 Wyloguj się", key="logout_button", width='stretch'):
                 # JavaScript do zamknięcia sidebar na mobile po wylogowaniu
                 st.markdown("""
