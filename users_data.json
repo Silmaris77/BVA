@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-11-04 10:54:06",
+    "last_login": "2025-11-04 12:56:21",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -483,6 +483,41 @@
         "type": "login",
         "timestamp": "2025-11-04T10:54:06.946068",
         "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T11:32:50.341945",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T12:21:23.872459",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T12:40:56.311349",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T12:44:32.870831",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T12:49:08.272822",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T12:51:49.575753",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T12:56:21.305959",
+        "details": {}
       }
     ],
     "inspirations": {
@@ -525,7 +560,7 @@
           "logo": "🏢",
           "founded": "2025-10-29",
           "level": 1,
-          "reputation": 8,
+          "reputation": 10,
           "color_scheme": "purple",
           "motto": ""
         },
@@ -557,7 +592,7 @@
               "wymagany_poziom": 1,
               "min_slow": 20,
               "emoji": "☕",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-EASY-002",
@@ -578,7 +613,7 @@
               "wymagany_poziom": 1,
               "min_slow": 15,
               "emoji": "🛒",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-EASY-003",
@@ -599,7 +634,7 @@
               "wymagany_poziom": 1,
               "min_slow": 20,
               "emoji": "🧹",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-EASY-004",
@@ -620,7 +655,7 @@
               "wymagany_poziom": 1,
               "min_slow": 15,
               "emoji": "❓",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-EASY-005",
@@ -641,7 +676,7 @@
               "wymagany_poziom": 1,
               "min_slow": 10,
               "emoji": "⭐",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-EASY-006",
@@ -662,7 +697,7 @@
               "wymagany_poziom": 1,
               "min_slow": 15,
               "emoji": "📅",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-STARTER-001",
@@ -684,7 +719,7 @@
               "wymagany_poziom": 1,
               "min_slow": 30,
               "emoji": "🤝",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-AI-001",
@@ -720,7 +755,7 @@
                 "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
               },
               "scenario_context": "**Kontekst scenariusza:**\n\nMark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.\n\n**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**\nMama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)\n2. Zachować relację i zaufanie\n3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)\n4. Pokazać empatię bez rezygnacji z standardów zespołowych\n\n**Możliwe zakończenia:**\n- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera\n- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia\n- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany\n\n**Wskaźniki sukcesu:**\n- Relacja Mark-Firma: czy zostanie i będzie zaangażowany\n- Morale zespołu: czy rozumieją sytuację i wspierają\n- Rozwiązanie: czy jest długofalowe i fair dla wszystkich",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-AI-002",
@@ -756,7 +791,7 @@
                 "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
               },
               "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "speed_urgent_call",
@@ -805,7 +840,7 @@
                   "pivot strategii"
                 ]
               },
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "speed_crisis_decision",
@@ -853,7 +888,7 @@
                   "minimize downtime"
                 ]
               },
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-LEADERSHIP-001",
@@ -876,30 +911,30 @@
               "wymagany_poziom": 1,
               "min_slow": 40,
               "emoji": "🤝",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
-              "id": "CIQ-KULTURA-001",
-              "tytul": "Audit kultury komunikacji w zespole",
-              "kategoria": "Kultura",
-              "klient": "DesignHub",
-              "opis": "Remote team w firmie DesignHub ma niskie zaangażowanie. \nLudzie boją się zadawać pytania na spotkaniach. Atmosfera jest sztywna i formalna.",
-              "zadanie": "Krótka analiza:\n\n1. **Wymień 5 pytań diagnostycznych, które zadasz w wywiadach z zespołem**\n   \n2. **Jakie są 3 główne bariery w psychological safety tego zespołu?** (po 1 zdaniu na każdą)\n   \n3. **Zaproponuj 3 konkretne inicjatywy (rituały/procesy) do wdrożenia** (po 1-2 zdania na każdą)",
+              "id": "CIQ-LEADERSHIP-002",
+              "tytul": "Skip-level meetings strategy",
+              "kategoria": "Leadership",
+              "klient": "GrowthCorp",
+              "opis": "VP Engineering chce wprowadzić skip-level meetings aby lepiej rozumieć \nco się dzieje w zespołach. Nie wie jak to zrobić, żeby nie podważyć autytetu managerów.",
+              "zadanie": "Strategia skip-level:\n\n1. **Jakie są cele skip-level meetings?** (3 cele, po 1 zdaniu)\n   \n2. **Jak przedstawić to managerom, żeby nie czuli zagrożenia?** (3-4 zdania)\n   \n3. **Wymień 10 kluczowych pytań do zadania na skip-level**\n   \n4. **Czego NIE poruszać na skip-level?** (3 tematy z wyjaśnieniem)",
               "wymagana_wiedza": [
-                "Psychological Safety",
-                "Team Dynamics",
-                "Remote Work Best Practices"
+                "Skip-level meetings",
+                "Leadership",
+                "Trust Building"
               ],
               "trudnosc": 3,
-              "nagroda_base": 750,
-              "nagroda_4star": 1000,
-              "nagroda_5star": 1300,
+              "nagroda_base": 700,
+              "nagroda_4star": 900,
+              "nagroda_5star": 1150,
               "reputacja": 50,
               "czas_realizacji_dni": 2,
               "wymagany_poziom": 1,
               "min_slow": 80,
-              "emoji": "🛡️",
-              "available_until": "2025-11-03 01:02:01"
+              "emoji": "🤝",
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-KRYZYS-001",
@@ -922,7 +957,7 @@
               "wymagany_poziom": 1,
               "min_slow": 120,
               "emoji": "🚨",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             },
             {
               "id": "CIQ-KRYZYS-002",
@@ -945,14 +980,14 @@
               "wymagany_poziom": 1,
               "min_slow": 200,
               "emoji": "🚨",
-              "available_until": "2025-11-03 01:02:01"
+              "available_until": "2025-11-05 13:03:30"
             }
           ],
-          "last_refresh": "2025-11-02 01:02:01"
+          "last_refresh": "2025-11-04 13:03:30"
         },
         "stats": {
           "total_revenue": 0,
-          "total_costs": 300,
+          "total_costs": 450,
           "net_profit": 0,
           "contracts_completed": 0,
           "contracts_5star": 0,
@@ -1092,9 +1127,36 @@
                 "coins": -150
               },
               "manual_roll": true
+            },
+            {
+              "event_id": "internet_outage",
+              "timestamp": "2025-11-04 13:03:31",
+              "title": "Awaria Internetu",
+              "emoji": "📡",
+              "type": "negative",
+              "description": "Twój internet padł na cały dzień. Straciłeś cenny czas i musiałeś pracować z kawiarni.",
+              "choice": null,
+              "effects": {
+                "coins": -150
+              },
+              "manual_roll": false
+            },
+            {
+              "event_id": "beginner_luck",
+              "timestamp": "2025-11-04 13:03:39",
+              "title": "Szczęście Początkującego",
+              "emoji": "🍀",
+              "type": "positive",
+              "description": "Natrafiłeś na klienta, który akurat pilnie potrzebuje pomocy i jest gotów zapłacić więcej!",
+              "choice": null,
+              "effects": {
+                "next_contract_bonus": 1.3,
+                "reputation": 2
+              },
+              "manual_roll": true
             }
           ],
-          "last_roll": "2025-11-02 01:29:18",
+          "last_roll": "2025-11-04 13:03:39",
           "active_effects": [
             {
               "type": "next_contract_bonus",
@@ -1115,12 +1177,17 @@
               "type": "next_contract_bonus",
               "multiplier": 1.3,
               "expires": null
+            },
+            {
+              "type": "next_contract_bonus",
+              "multiplier": 1.3,
+              "expires": null
             }
           ],
-          "last_auto_event": "2025-11-02 01:02:02",
-          "last_manual_roll": "2025-11-02 01:29:18"
+          "last_auto_event": "2025-11-04 13:03:31",
+          "last_manual_roll": "2025-11-04 13:03:39"
         },
-        "money": -300,
+        "money": -450,
         "history": {
           "transactions": [
             {
@@ -1136,6 +1203,13 @@
               "event_id": "internet_outage",
               "event_title": "Awaria Internetu",
               "timestamp": "2025-11-02 01:29:18"
+            },
+            {
+              "type": "event_cost",
+              "amount": -150,
+              "event_id": "internet_outage",
+              "event_title": "Awaria Internetu",
+              "timestamp": "2025-11-04 13:03:31"
             }
           ],
           "level_ups": [],
@@ -1259,7 +1333,7 @@
           "monthly_actual_sales": 0,
           "monthly_best_sales": 0,
           "weekly_history": [],
-          "last_activity_date": "2025-11-04T11:02:57.173542",
+          "last_activity_date": "2025-11-04T13:05:21.440624",
           "last_visit_client_id": null,
           "company": "Heinz Polska",
           "clients": {
@@ -2146,6 +2220,20 @@
               "upsell_potential": "medium"
             }
           },
+          "reputation": {
+            "clients": {},
+            "company": {
+              "task_performance": 100,
+              "sales_performance": 0,
+              "professionalism": 100
+            },
+            "overall_rating": 0,
+            "tier": "Trainee",
+            "unlock_tokens": 0,
+            "training_credits": 0,
+            "xp": 0,
+            "level": 1
+          },
           "scenario_id": "heinz_food_service",
           "clients_total": 25
         },
@@ -2244,7 +2332,7 @@
       "monthly_actual_sales": 0,
       "monthly_best_sales": 0,
       "weekly_history": [],
-      "last_activity_date": "2025-11-04T11:02:57.173542",
+      "last_activity_date": "2025-11-04T13:05:21.440624",
       "last_visit_client_id": null,
       "company": "Heinz Polska",
       "clients": {
@@ -3130,6 +3218,20 @@
           ],
           "upsell_potential": "medium"
         }
+      },
+      "reputation": {
+        "clients": {},
+        "company": {
+          "task_performance": 100,
+          "sales_performance": 0,
+          "professionalism": 100
+        },
+        "overall_rating": 0,
+        "tier": "Trainee",
+        "unlock_tokens": 0,
+        "training_credits": 0,
+        "xp": 0,
+        "level": 1
       },
       "scenario_id": "heinz_food_service",
       "clients_total": 25

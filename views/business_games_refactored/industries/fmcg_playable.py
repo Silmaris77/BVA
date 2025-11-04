@@ -15,6 +15,20 @@ import html
 import os
 import base64
 
+# Import tasks system (Phase 1)
+from data.tasks import (
+    get_weekly_tasks,
+    create_task_from_template,
+    check_task_completion,
+    payout_task_reward
+)
+from utils.task_tracking_helpers import (
+    reset_weekly_task_stats,
+    track_visit_for_tasks,
+    track_client_activation,
+    initialize_weekly_stats_if_needed
+)
+
 # Import FMCG mechanics
 from utils.fmcg_mechanics import (
     execute_visit_placeholder,
@@ -699,6 +713,9 @@ def show_fmcg_playable_game(username: str):
     # TABS NAVIGATION
     # =============================================================================
     
+    # Initialize weekly task stats if needed
+    initialize_weekly_stats_if_needed(game_state)
+    
     # Pre-calculate common variables used across tabs
     energy_pct = game_state.get("energy", 100)
     status_summary = get_client_status_summary(clients)
@@ -733,6 +750,47 @@ def show_fmcg_playable_game(username: str):
         tasks_completed_count = 3 - get_pending_tasks_count(st.session_state)
         all_done = all_tasks_completed(st.session_state)
         
+        # Reputation System (NEW)
+        from utils.reputation_system import (
+            calculate_overall_rating,
+            get_tier,
+            get_next_tier
+        )
+        
+        # Initialize reputation if not exists
+        if "reputation" not in game_state:
+            from utils.reputation_system import initialize_reputation_system
+            game_state["reputation"] = initialize_reputation_system()
+        
+        # Calculate overall rating (needs clients dict)
+        overall_rating = calculate_overall_rating(game_state, clients)
+        current_tier = get_tier(overall_rating)
+        next_tier = get_next_tier(current_tier["name"])
+        
+        unlock_tokens = game_state.get("reputation", {}).get("unlock_tokens", 0)
+        training_credits = game_state.get("reputation", {}).get("training_credits", 0)
+        
+        # Progress to next tier
+        if next_tier:
+            progress_to_next = ((overall_rating - current_tier["min_rating"]) / 
+                               (next_tier["min_rating"] - current_tier["min_rating"])) * 100
+            points_needed = next_tier["min_rating"] - overall_rating
+        else:
+            progress_to_next = 100
+            points_needed = 0
+        
+        # Format values for display
+        overall_rating_fmt = f"{overall_rating:.1f}"
+        progress_to_next_fmt = f"{progress_to_next:.0f}"
+        points_needed_fmt = f"{points_needed:.0f}"
+        current_tier_emoji = current_tier["emoji"]
+        current_tier_name = current_tier["name"]
+        next_tier_emoji = next_tier["emoji"] if next_tier else "✨"
+        next_tier_name = next_tier["name"] if next_tier else "Maximum"
+        next_tier_text = (f"Progress to {next_tier_emoji} {next_tier_name}: {points_needed_fmt} points needed" 
+                         if next_tier else "✨ Maximum tier achieved!")
+
+        
         # Energy emoji based on level
         if energy_pct > 66:
             energy_emoji = "⚡"
@@ -757,48 +815,64 @@ def show_fmcg_playable_game(username: str):
             tasks_color = "#ef4444"
         
         # Hero Section - Gaming Style
-        st.markdown(f"""
-        <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; border-radius: 16px; color: white; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);'>
-            <div style='margin-bottom: 20px;'>
-                <div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px; font-weight: 600;'>{energy_emoji} ENERGIA</div>
-                <div style='background: rgba(255,255,255,0.2); height: 32px; border-radius: 16px; overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);'>
-                    <div style='background: linear-gradient(90deg, #10b981 0%, #34d399 100%); height: 100%; width: {energy_pct}%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); transition: width 0.3s ease;'>{energy_pct}%</div>
-                </div>
-            </div>
-            <div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;'>
-                <div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
-                    <div style='font-size: 32px; font-weight: 700; margin-bottom: 4px;'>{status_summary.get("PROSPECT", 0)}</div>
-                    <div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>🔓 PROSPECT</div>
-                </div>
-                <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
-                    <div style='font-size: 32px; font-weight: 700; margin-bottom: 4px;'>{status_summary.get("ACTIVE", 0)}</div>
-                    <div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>✅ ACTIVE</div>
-                </div>
-                <div style='background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
-                    <div style='font-size: 32px; font-weight: 700; margin-bottom: 4px;'>{status_summary.get("LOST", 0)}</div>
-                    <div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>❌ LOST</div>
-                </div>
-                <div style='background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
-                    <div style='font-size: 28px; font-weight: 700; margin-bottom: 4px;'>{game_state.get('monthly_sales', 0):,}</div>
-                    <div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>💰 SPRZEDAŻ PLN</div>
-                </div>
-            </div>
-            <div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px;'>
-                <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2);'>
-                    <div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>{current_day}</div>
-                    <div style='font-size: 11px; opacity: 0.9;'>📅 Dzień</div>
-                </div>
-                <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2);'>
-                    <div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>Tydzień {current_week}</div>
-                    <div style='font-size: 11px; opacity: 0.9;'>📆 Okres</div>
-                </div>
-                <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2); border-left: 3px solid {tasks_color};'>
-                    <div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>{tasks_status}</div>
-                    <div style='font-size: 11px; opacity: 0.9;'>📋 Zadania</div>
-                </div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"""<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; border-radius: 16px; color: white; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);'>
+<div style='background: rgba(255,255,255,0.15); padding: 16px; border-radius: 12px; margin-bottom: 20px; border: 2px solid rgba(255,255,255,0.3);'>
+<div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;'>
+<div>
+<div style='font-size: 14px; opacity: 0.9; font-weight: 600; margin-bottom: 4px;'>⭐ OVERALL RATING</div>
+<div style='font-size: 32px; font-weight: 700;'>{overall_rating_fmt}/100 {current_tier_emoji} {current_tier_name}</div>
+</div>
+<div style='text-align: right;'>
+<div style='font-size: 14px; opacity: 0.9; font-weight: 600;'>🎟️ {unlock_tokens} Tokens</div>
+<div style='font-size: 14px; opacity: 0.9; font-weight: 600;'>📚 {training_credits} Credits</div>
+</div>
+</div>
+<div style='background: rgba(255,255,255,0.2); height: 24px; border-radius: 12px; overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);'>
+<div style='background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%); height: 100%; width: {progress_to_next_fmt}%; box-shadow: 0 0 12px rgba(251, 191, 36, 0.6); transition: width 0.3s ease;'></div>
+</div>
+<div style='font-size: 12px; opacity: 0.9; margin-top: 6px;'>
+{next_tier_text}
+</div>
+</div>
+<div style='margin-bottom: 20px;'>
+<div style='font-size: 14px; opacity: 0.9; margin-bottom: 8px; font-weight: 600;'>{energy_emoji} ENERGIA</div>
+<div style='background: rgba(255,255,255,0.2); height: 32px; border-radius: 16px; overflow: hidden; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);'>
+<div style='background: linear-gradient(90deg, #10b981 0%, #34d399 100%); height: 100%; width: {energy_pct}%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); transition: width 0.3s ease;'>{energy_pct}%</div>
+</div>
+</div>
+<div style='display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;'>
+<div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
+<div style='font-size: 32px; font-weight: 700; margin-bottom: 4px;'>{status_summary.get("PROSPECT", 0)}</div>
+<div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>🔓 PROSPECT</div>
+</div>
+<div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
+<div style='font-size: 32px; font-weight: 700; margin-bottom: 4px;'>{status_summary.get("ACTIVE", 0)}</div>
+<div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>✅ ACTIVE</div>
+</div>
+<div style='background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
+<div style='font-size: 32px; font-weight: 700; margin-bottom: 4px;'>{status_summary.get("LOST", 0)}</div>
+<div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>❌ LOST</div>
+</div>
+<div style='background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 16px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); border: 2px solid rgba(255,255,255,0.2);'>
+<div style='font-size: 28px; font-weight: 700; margin-bottom: 4px;'>{game_state.get('monthly_sales', 0):,}</div>
+<div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>💰 SPRZEDAŻ PLN</div>
+</div>
+</div>
+<div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px;'>
+<div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2);'>
+<div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>{current_day}</div>
+<div style='font-size: 11px; opacity: 0.9;'>📅 Dzień</div>
+</div>
+<div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2);'>
+<div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>Tydzień {current_week}</div>
+<div style='font-size: 11px; opacity: 0.9;'>📆 Okres</div>
+</div>
+<div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2); border-left: 3px solid {tasks_color};'>
+<div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>{tasks_status}</div>
+<div style='font-size: 11px; opacity: 0.9;'>📋 Zadania</div>
+</div>
+</div>
+</div>""", unsafe_allow_html=True)
         
         # Quick Actions
         col1, col2, col3 = st.columns(3)
@@ -964,6 +1038,77 @@ def show_fmcg_playable_game(username: str):
     </div>
     </div>"""
             st.markdown(monthly_html, unsafe_allow_html=True)
+            
+            # =============================================================================
+            # REPUTATION BREAKDOWN (NEW)
+            # =============================================================================
+            st.markdown("### 💎 Reputation Breakdown")
+            
+            from utils.reputation_system import (
+                calculate_average_client_reputation,
+                calculate_company_reputation
+            )
+            
+            # Calculate components
+            client_rep = calculate_average_client_reputation(game_state)
+            company_rep = calculate_company_reputation(game_state)
+            
+            # Get company components
+            task_perf = game_state.get("reputation", {}).get("company", {}).get("task_performance", 100)
+            sales_perf = game_state.get("reputation", {}).get("company", {}).get("sales_performance", 0)
+            prof = game_state.get("reputation", {}).get("company", {}).get("professionalism", 100)
+            
+            # Display breakdown
+            col_rep1, col_rep2 = st.columns(2)
+            
+            with col_rep1:
+                client_color = "#10b981" if client_rep >= 75 else "#f59e0b" if client_rep >= 50 else "#ef4444"
+                st.markdown(f"""
+                <div style='background: {client_color}15; border: 2px solid {client_color}; border-radius: 12px; padding: 20px;'>
+                    <div style='font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 8px;'>👥 CLIENT REPUTATION (60% weight)</div>
+                    <div style='font-size: 42px; font-weight: 700; color: {client_color}; margin-bottom: 12px;'>{client_rep:.1f}/100</div>
+                    <div style='background: #e5e7eb; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 16px;'>
+                        <div style='width: {client_rep}%; height: 100%; background: {client_color};'></div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Top clients
+                st.markdown("**🔝 Top Clients:**")
+                clients_with_rep = []
+                for client_id, client_data in clients.items():
+                    if client_data.get("status") in ["ACTIVE", "PARTNER"]:
+                        from utils.reputation_system import calculate_client_reputation
+                        rep = calculate_client_reputation(client_data, game_state)
+                        clients_with_rep.append((client_data.get("name", client_id), rep))
+                
+                clients_with_rep.sort(key=lambda x: x[1], reverse=True)
+                for i, (name, rep) in enumerate(clients_with_rep[:3], 1):
+                    emoji = "🟢" if rep >= 75 else "🟡" if rep >= 50 else "🔴"
+                    st.markdown(f"{emoji} **{name}**: {rep:.0f}/100")
+                
+                if not clients_with_rep:
+                    st.info("📊 Brak aktywnych klientów z reputacją")
+            
+            with col_rep2:
+                company_color = "#3b82f6" if company_rep >= 75 else "#f59e0b" if company_rep >= 50 else "#ef4444"
+                st.markdown(f"""
+                <div style='background: {company_color}15; border: 2px solid {company_color}; border-radius: 12px; padding: 20px;'>
+                    <div style='font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 8px;'>🏢 COMPANY REPUTATION (40% weight)</div>
+                    <div style='font-size: 42px; font-weight: 700; color: {company_color}; margin-bottom: 12px;'>{company_rep:.1f}/100</div>
+                    <div style='background: #e5e7eb; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 16px;'>
+                        <div style='width: {company_rep}%; height: 100%; background: {company_color};'></div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Components
+                st.markdown("**📊 Components:**")
+                st.markdown(f"📋 **Task Performance (30%)**: {task_perf:.0f}%")
+                st.markdown(f"💰 **Sales Performance (40%)**: {sales_perf:.0f}%")
+                st.markdown(f"💼 **Professionalism (30%)**: {prof:.0f}%")
+            
+            st.markdown("---")
             
             # SCENARIO-SPECIFIC GOALS
             st.markdown("### 🎯 Cele Scenariusza")
@@ -1332,6 +1477,149 @@ def show_fmcg_playable_game(username: str):
                 """, unsafe_allow_html=True)
         
         with dash_tasks:
+            # =============================================================================
+            # ZADANIA TYGODNIOWE (PHASE 1 - Weekly Tasks)
+            # =============================================================================
+            
+            current_week = game_state.get("current_week", 1)
+            
+            # Initialize weekly tasks if not exists or if new week
+            if "weekly_tasks" not in st.session_state:
+                st.session_state.weekly_tasks = []
+            
+            if "last_task_week" not in st.session_state:
+                st.session_state.last_task_week = 0
+            
+            # Assign new tasks if new week started
+            if current_week > st.session_state.last_task_week and current_week > 1:
+                # Get tasks for this week
+                week_tasks = get_weekly_tasks(scenario_id, current_week, game_state)
+                
+                if week_tasks:
+                    # Create task instances with dates
+                    for template in week_tasks:
+                        task_instance = create_task_from_template(template, datetime.now())
+                        st.session_state.weekly_tasks.append(task_instance)
+                    
+                    st.session_state.last_task_week = current_week
+                    st.success(f"📋 **Nowe zadania tygodniowe!** Otrzymałeś {len(week_tasks)} nowych zadań.")
+            
+            # Auto-check task completion
+            completed_tasks_this_check = []
+            for task in st.session_state.weekly_tasks:
+                if task["status"] == "active":
+                    just_completed = check_task_completion(task, game_state, clients)
+                    if just_completed:
+                        completed_tasks_this_check.append(task)
+            
+            # Payout rewards for just-completed tasks
+            for task in completed_tasks_this_check:
+                reward_summary = payout_task_reward(task, game_state, clients)
+                
+                # Task completion popup with multi-currency rewards
+                st.balloons()
+                st.success(f"🎉 **ZADANIE UKOŃCZONE!** {task['title']}")
+                
+                # Build reward display
+                reward_parts = []
+                
+                if reward_summary.get("xp"):
+                    reward_parts.append(f"🔹 **+{reward_summary['xp']} XP**")
+                
+                if reward_summary.get("unlock_tokens"):
+                    reward_parts.append(f"� **+{reward_summary['unlock_tokens']} Unlock Tokens** 🎟️")
+                
+                if reward_summary.get("client_reputation_boost"):
+                    clients_affected = reward_summary.get("clients_affected", 0)
+                    reward_parts.append(
+                        f"🔹 **+{reward_summary['client_reputation_boost']} Client Reputation** "
+                        f"({clients_affected} klientów)"
+                    )
+                
+                if reward_summary.get("company_reputation_boost"):
+                    reward_parts.append(
+                        f"🔹 **+{reward_summary['company_reputation_boost']} Company Reputation** "
+                        f"(Task Performance)"
+                    )
+                
+                if reward_summary.get("training_credits"):
+                    reward_parts.append(f"🔹 **+{reward_summary['training_credits']} Training Credits** 📚")
+                
+                # Show rewards
+                if reward_parts:
+                    st.markdown("**NAGRODY:**")
+                    for part in reward_parts:
+                        st.markdown(part)
+                
+                # Show tier progression
+                if reward_summary.get("tier_up"):
+                    st.success(f"⭐ **AWANS!** Nowy tier: **{reward_summary['tier_up']}**")
+                elif reward_summary.get("rating_change", 0) > 0:
+                    new_rating = game_state.get("reputation", {}).get("overall_rating", 0)
+                    st.info(f"⭐ **Overall Rating:** {new_rating:.1f}/100 (+{reward_summary['rating_change']:.1f})")
+                
+                # Story completion message
+                if task.get("story", {}).get("completion"):
+                    st.markdown(f"💬 {task['story']['completion']}")
+            
+            # Display weekly tasks
+            active_tasks = [t for t in st.session_state.weekly_tasks if t["status"] == "active"]
+            completed_tasks = [t for t in st.session_state.weekly_tasks if t["status"] == "completed"]
+            
+            if current_week > 1 and (active_tasks or completed_tasks):
+                st.markdown("### 📅 Zadania Tygodniowe")
+                
+                # Show active tasks
+                if active_tasks:
+                    for task in active_tasks:
+                        priority = task.get("priority", "MEDIUM")
+                        priority_colors = {
+                            "CRITICAL": {"bg": "#fef2f2", "border": "#ef4444", "icon": "🔴"},
+                            "HIGH": {"bg": "#fef3c7", "border": "#f59e0b", "icon": "🟡"},
+                            "MEDIUM": {"bg": "#eff6ff", "border": "#3b82f6", "icon": "🔵"},
+                            "LOW": {"bg": "#f0fdf4", "border": "#10b981", "icon": "🟢"}
+                        }
+                        
+                        color = priority_colors.get(priority, priority_colors["MEDIUM"])
+                        progress_pct = task["progress"]["percentage"]
+                        
+                        with st.expander(f"{color['icon']} **{task['title']}** ({progress_pct}%)", expanded=(priority in ["CRITICAL", "HIGH"])):
+                            st.markdown(f"**{task['description']}**")
+                            st.caption(f"👤 Zlecił: {task['assigned_by']} | ⏰ Deadline: {task['deadline']}")
+                            
+                            # Progress bar
+                            current = task["progress"]["current"]
+                            target = task["progress"]["target"]
+                            
+                            st.progress(progress_pct / 100)
+                            st.caption(f"Postęp: {current}/{target}")
+                            
+                            # Reward preview
+                            reward = task.get("reward", {})
+                            reward_items = []
+                            if reward.get("cash"):
+                                reward_items.append(f"💰 {reward['cash']} PLN")
+                            if reward.get("xp"):
+                                reward_items.append(f"⭐ {reward['xp']} XP")
+                            if reward.get("reputation"):
+                                reward_items.append(f"❤️ +{reward['reputation']} rep")
+                            
+                            if reward_items:
+                                st.success("🎁 Nagroda: " + " | ".join(reward_items))
+                            
+                            # Story intro
+                            if task.get("story", {}).get("intro"):
+                                with st.expander("📖 Historia zadania", expanded=False):
+                                    st.markdown(task["story"]["intro"])
+                
+                # Show completed tasks (collapsed)
+                if completed_tasks:
+                    with st.expander(f"✅ Ukończone zadania ({len(completed_tasks)})", expanded=False):
+                        for task in completed_tasks:
+                            st.markdown(f"✅ **{task['title']}** - ukończono {task['completed_date']}")
+                
+                st.markdown("---")
+            
             # =============================================================================
             # ZADANIA (ONBOARDING) - jako sekcja w Dashboard
             # =============================================================================

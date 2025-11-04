@@ -497,6 +497,30 @@ def initialize_fmcg_game_new(username: str, scenario: str = "quick_start") -> Di
         # Fallback to quick_start
         return initialize_fmcg_game_new(username, scenario="quick_start")
     
+    # Import reputation system
+    try:
+        from utils.reputation_system import initialize_reputation_system
+        reputation_data = initialize_reputation_system()
+    except ImportError:
+        # Fallback if reputation system not available
+        reputation_data = {
+            "clients": {},
+            "company": {
+                "task_performance": 100,
+                "sales_performance": 0,
+                "professionalism": 100
+            },
+            "overall_rating": 0,
+            "tier": "Trainee",
+            "unlock_tokens": 0,
+            "training_credits": 0,
+            "xp": 0,
+            "level": 1
+        }
+    
+    # Add reputation to game_state
+    game_state["reputation"] = reputation_data
+    
     # Zwróć kompletny stan gry
     return {
         # Metadata

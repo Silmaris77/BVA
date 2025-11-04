@@ -339,7 +339,18 @@ Tekst do poprawy:
         if st.button("💾 Zapisz i przejdź dalej", type="primary", use_container_width=True, key=f"save_visit_{client_id}"):
             # Update client data
             client["last_visit_day"] = game_state.get("current_day", 0)
-            client["reputation"] = min(100, client.get("reputation", 50) + (quality_score - 3) * 5)
+            
+            # Update client reputation based on visit quality (using new reputation system)
+            # Quality score 1-5 → impact on reputation
+            reputation_change = (quality_score - 3) * 5  # -10 to +10
+            client["reputation"] = min(100, max(0, client.get("reputation", 50) + reputation_change))
+            
+            # Update company reputation (professionalism component)
+            # Poor quality visit (<3⭐) = penalty
+            if quality_score < 3:
+                from utils.reputation_system import update_company_reputation_component
+                penalty = (3 - quality_score) * 3  # -3 or -6 points
+                update_company_reputation_component(game_state, "professionalism", -penalty)
             
             # Add to visit history
             if "visit_history" not in client:
