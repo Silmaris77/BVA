@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tier Visualization Options - FMCG Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .option-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .option-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .option-title {
+            flex: 1;
+        }
+        
+        .option-title h2 {
+            color: #1e293b;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .option-title p {
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .pros {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+        }
+        
+        .cons {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .pros h3 {
+            color: #15803d;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .cons h3 {
+            color: #991b1b;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .pros ul, .cons ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .pros li, .cons li {
+            padding: 5px 0;
+            font-size: 14px;
+        }
+        
+        .pros li:before {
+            content: "✅ ";
+            margin-right: 5px;
+        }
+        
+        .cons li:before {
+            content: "❌ ";
+            margin-right: 5px;
+        }
+        
+        /* OPTION 1: Compact Bar */
+        .compact-bar-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 12px;
+            color: white;
+        }
+        
+        .tier-mini-map {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .tier-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 6px;
+        }
+        
+        .tier-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            opacity: 0.7;
+        }
+        
+        /* OPTION 2: Expandable Tooltip */
+        .tooltip-demo {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .tier-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .tier-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+        
+        .tier-item.current {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 3px solid #667eea;
+        }
+        
+        .tier-item-header {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .tier-item-desc {
+            font-size: 12px;
+            color: #64748b;
+        }
+        
+        /* OPTION 3: Full Tier Map */
+        .tier-map-demo {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        
+        .tier-ladder {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .tier-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .tier-card.completed {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            opacity: 0.7;
+        }
+        
+        .tier-card.current {
+            background: rgba(102, 126, 234, 0.25);
+            border-color: #667eea;
+            opacity: 1;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .tier-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .tier-emoji {
+            font-size: 36px;
+        }
+        
+        .tier-details h4 {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        
+        .tier-range {
+            font-size: 13px;
+            color: #64748b;
+        }
+        
+        .tier-status {
+            font-size: 28px;
+        }
+        
+        .tier-benefits {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .tier-benefits h4 {
+            color: #92400e;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .benefit-item {
+            padding: 8px 0;
+            font-size: 14px;
+            color: #78350f;
+        }
+        
+        /* COMBO Demo */
+        .combo-demo {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 30px;
+            border-radius: 16px;
+        }
+        
+        .combo-hero {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .combo-stats {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .hero-rating {
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            margin: 10px 0;
+        }
+        
+        .hero-tier {
+            font-size: 24px;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .recommendation {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Tier Visualization Options - FMCG Game</h1>
+        
+        <!-- OPTION 1 -->
+        <div class="option-section">
+            <div class="option-header">
+                <div class="option-number">1</div>
+                <div class="option-title">
+                    <h2>Kompaktowy Pasek Tierów</h2>
+                    <p>Subtelny pasek pod "Trainee" w Hero Section - zawsze widoczny</p>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Zalety</h3>
+                    <ul>
+                        <li>Zawsze widoczny - nie trzeba klikać</li>
+                        <li>Nie zajmuje dużo miejsca</li>
+                        <li>Szybka orientacja gdzie jesteś</li>
+                        <li>Edukuje o progach bez przytłaczania</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Wady</h3>
+                    <ul>
+                        <li>Mało miejsca na szczegóły</li>
+                        <li>Brak opisów tierów</li>
+                        <li>Może być nieczytelne na mobile</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="compact-bar-demo">
+                <div style="text-align: center;">
+                    <div class="hero-badge">🎮 Overall Rating</div>
+                    <div class="hero-rating">42.5</div>
+                    <div class="hero-tier">🔵 Junior Sales Rep</div>
+                </div>
+                
+                <div class="tier-mini-map">
+                    <div class="tier-labels">
+                        <span>🟤 Trainee</span>
+                        <span>🔵 Junior</span>
+                        <span>🟢 Regular</span>
+                        <span>🟡 Gold</span>
+                        <span>💎 Master</span>
+                    </div>
+                    <div class="tier-values">
+                        <span>0</span>
+                        <span>40</span>
+                        <span>60</span>
+                        <span>80</span>
+                        <span>95</span>
+                        <span>100</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- OPTION 2 -->
+        <div class="option-section">
+            <div class="option-header">
+                <div class="option-number">2</div>
+                <div class="option-title">
+                    <h2>Rozwijany Expander z Tierami</h2>
+                    <p>Kliknięcie pokazuje wszystkie tiery z opisami</p>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Zalety</h3>
+                    <ul>
+                        <li>Pełne informacje o każdym tierze</li>
+                        <li>Nie zajmuje miejsca gdy nieużywany</li>
+                        <li>Czytelne opisy i zakresy</li>
+                        <li>Wizualne wyróżnienie aktualnego</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Wady</h3>
+                    <ul>
+                        <li>Trzeba kliknąć żeby zobaczyć</li>
+                        <li>Nie motywuje pasywnie</li>
+                        <li>Łatwo przegapić</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tooltip-demo">
+                <div style="text-align: center; margin-bottom: 15px; color: #64748b;">
+                    <strong>Kliknij "🎯 Zobacz wszystkie tiery" aby rozwinąć ↓</strong>
+                </div>
+                
+                <div class="tier-item completed">
+                    <div class="tier-item-header">🟤 Trainee (0-39 pkt)</div>
+                    <div class="tier-item-desc">Nowy w branży - uczysz się podstaw</div>
+                </div>
+                
+                <div class="tier-item current">
+                    <div class="tier-item-header">🔵 Junior (40-59 pkt) ← JESTEŚ TUTAJ</div>
+                    <div class="tier-item-desc">Rozwijasz się - pierwsze sukcesy</div>
+                </div>
+                
+                <div class="tier-item">
+                    <div class="tier-item-header">🟢 Regular (60-79 pkt)</div>
+                    <div class="tier-item-desc">Solidny profesjonalista - stabilne wyniki</div>
+                </div>
+                
+                <div class="tier-item">
+                    <div class="tier-item-header">🟡 Gold (80-94 pkt)</div>
+                    <div class="tier-item-desc">Ekspert w swojej dziedzinie - top performer</div>
+                </div>
+                
+                <div class="tier-item">
+                    <div class="tier-item-header">💎 Master (95-100 pkt)</div>
+                    <div class="tier-item-desc">Elite sales professional - wzór do naśladowania</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- OPTION 3 -->
+        <div class="option-section">
+            <div class="option-header">
+                <div class="option-number">3</div>
+                <div class="option-title">
+                    <h2>Pełna Tier Map w Dashboard</h2>
+                    <p>Wizualna drabina w sekcji Statystyki z benefitami</p>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Zalety</h3>
+                    <ul>
+                        <li>Najbardziej motywująca wizualizacja</li>
+                        <li>Pokazuje kompletną ścieżkę rozwoju</li>
+                        <li>Benefity następnego tiera = cel</li>
+                        <li>Checkmarki (✅/👉/🔒) super czytelne</li>
+                        <li>Profesjonalny, gamifikacyjny look</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Wady</h3>
+                    <ul>
+                        <li>Tylko w Dashboard (nie zawsze widoczne)</li>
+                        <li>Zajmuje więcej miejsca</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tier-map-demo">
+                <div class="tier-ladder">
+                    <div class="tier-card completed">
+                        <div class="tier-info">
+                            <div class="tier-emoji">🟤</div>
+                            <div class="tier-details">
+                                <h4>Trainee</h4>
+                                <div class="tier-range">0-39 points</div>
+                            </div>
+                        </div>
+                        <div class="tier-status">✅</div>
+                    </div>
+                    
+                    <div class="tier-card current">
+                        <div class="tier-info">
+                            <div class="tier-emoji">🔵</div>
+                            <div class="tier-details">
+                                <h4>Junior</h4>
+                                <div class="tier-range">40-59 points</div>
+                            </div>
+                        </div>
+                        <div class="tier-status">👉</div>
+                    </div>
+                    
+                    <div class="tier-card">
+                        <div class="tier-info">
+                            <div class="tier-emoji">🟢</div>
+                            <div class="tier-details">
+                                <h4>Regular</h4>
+                                <div class="tier-range">60-79 points</div>
+                            </div>
+                        </div>
+                        <div class="tier-status">🔒</div>
+                    </div>
+                    
+                    <div class="tier-card">
+                        <div class="tier-info">
+                            <div class="tier-emoji">🟡</div>
+                            <div class="tier-details">
+                                <h4>Gold</h4>
+                                <div class="tier-range">80-94 points</div>
+                            </div>
+                        </div>
+                        <div class="tier-status">🔒</div>
+                    </div>
+                    
+                    <div class="tier-card">
+                        <div class="tier-info">
+                            <div class="tier-emoji">💎</div>
+                            <div class="tier-details">
+                                <h4>Master</h4>
+                                <div class="tier-range">95-100 points</div>
+                            </div>
+                        </div>
+                        <div class="tier-status">🔒</div>
+                    </div>
+                </div>
+                
+                <div class="tier-benefits">
+                    <h4>🎁 Korzyści następnego tiera (Regular):</h4>
+                    <div class="benefit-item">✨ 👥 Dostęp do VIP klientów</div>
+                    <div class="benefit-item">✨ 📊 Zaawansowana analityka</div>
+                    <div class="benefit-item">✨ 🎟️ +3 Unlock Tokens/tydzień</div>
+                    <div class="benefit-item">✨ 💰 Wyższe prowizje bazowe</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- COMBO RECOMMENDATION -->
+        <div class="option-section" style="border: 4px solid #10b981;">
+            <div class="option-header">
+                <div class="option-number" style="background: linear-gradient(135deg, #10b981, #059669);">★</div>
+                <div class="option-title">
+                    <h2>🏆 REKOMENDACJA: Opcja 1 + 3 (COMBO)</h2>
+                    <p>Kompaktowy pasek w Hero + Pełna mapa w Dashboard = Best of Both Worlds</p>
+                </div>
+            </div>
+            
+            <div class="pros-cons">
+                <div class="pros">
+                    <h3>✅ Dlaczego to najlepsze?</h3>
+                    <ul>
+                        <li><strong>Opcja 1 w Hero:</strong> Zawsze widoczne przypomnienie gdzie jesteś</li>
+                        <li><strong>Opcja 3 w Dashboard:</strong> Pełna wizualizacja dla zmotywowanych</li>
+                        <li>Nie przytłacza - każdy ma to czego potrzebuje</li>
+                        <li>Nowi gracze: patrzą na pasek, jak zrozumieją idą do mapy</li>
+                        <li>Doświadczeni: ignorują pasek, fokus na mapie i benefitach</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h3>❌ Potencjalne wyzwania</h3>
+                    <ul>
+                        <li>Redundancja (ale to plus - wielokrotne exposition)</li>
+                        <li>Więcej kodu do utrzymania (2 miejsca zamiast 1)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3 style="margin: 25px 0 15px 0; color: #1e293b;">Przykład wdrożenia COMBO:</h3>
+            
+            <!-- Hero Section Demo -->
+            <div class="combo-demo">
+                <div class="combo-hero">
+                    <div style="text-align: center;">
+                        <div class="hero-badge">🎮 Overall Rating</div>
+                        <div class="hero-rating">42.5</div>
+                        <div class="hero-tier">🔵 Junior Sales Rep</div>
+                    </div>
+                    
+                    <div class="tier-mini-map">
+                        <div class="tier-labels">
+                            <span>🟤 Trainee</span>
+                            <span style="font-weight: bold; text-decoration: underline;">🔵 Junior</span>
+                            <span>🟢 Regular</span>
+                            <span>🟡 Gold</span>
+                            <span>💎 Master</span>
+                        </div>
+                        <div class="tier-values">
+                            <span>0</span>
+                            <span style="font-weight: bold;">40</span>
+                            <span>60</span>
+                            <span>80</span>
+                            <span>95</span>
+                            <span>100</span>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 15px; color: rgba(255,255,255,0.8); font-size: 13px;">
+                        ⬆️ Kompaktowy pasek - zawsze widoczny w Hero Section
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin: 20px 0; text-align: center; color: #64748b; font-weight: bold;">
+                +<br>
+                (w Dashboard → Statystyki)
+            </div>
+            
+            <!-- Dashboard Map Demo -->
+            <div class="combo-stats">
+                <h3 style="margin-bottom: 20px; color: #1e293b;">🎯 Tier Progression Map</h3>
+                
+                <div class="tier-map-demo">
+                    <div class="tier-ladder">
+                        <div class="tier-card completed">
+                            <div class="tier-info">
+                                <div class="tier-emoji">🟤</div>
+                                <div class="tier-details">
+                                    <h4>Trainee</h4>
+                                    <div class="tier-range">0-39 points</div>
+                                </div>
+                            </div>
+                            <div class="tier-status">✅</div>
+                        </div>
+                        
+                        <div class="tier-card current">
+                            <div class="tier-info">
+                                <div class="tier-emoji">🔵</div>
+                                <div class="tier-details">
+                                    <h4>Junior</h4>
+                                    <div class="tier-range">40-59 points · Twój obecny tier</div>
+                                </div>
+                            </div>
+                            <div class="tier-status">👉</div>
+                        </div>
+                        
+                        <div class="tier-card">
+                            <div class="tier-info">
+                                <div class="tier-emoji">🟢</div>
+                                <div class="tier-details">
+                                    <h4>Regular</h4>
+                                    <div class="tier-range">60-79 points · Brakuje 17.5 pkt</div>
+                                </div>
+                            </div>
+                            <div class="tier-status">🔒</div>
+                        </div>
+                        
+                        <div class="tier-card">
+                            <div class="tier-info">
+                                <div class="tier-emoji">🟡</div>
+                                <div class="tier-details">
+                                    <h4>Gold</h4>
+                                    <div class="tier-range">80-94 points</div>
+                                </div>
+                            </div>
+                            <div class="tier-status">🔒</div>
+                        </div>
+                        
+                        <div class="tier-card">
+                            <div class="tier-info">
+                                <div class="tier-emoji">💎</div>
+                                <div class="tier-details">
+                                    <h4>Master</h4>
+                                    <div class="tier-range">95-100 points</div>
+                                </div>
+                            </div>
+                            <div class="tier-status">🔒</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tier-benefits">
+                        <h4>🎁 Korzyści następnego tiera (Regular):</h4>
+                        <div class="benefit-item">✨ 👥 Dostęp do VIP klientów</div>
+                        <div class="benefit-item">✨ 📊 Zaawansowana analityka</div>
+                        <div class="benefit-item">✨ 🎟️ +3 Unlock Tokens/tydzień</div>
+                        <div class="benefit-item">✨ 💰 Wyższe prowizje bazowe</div>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 2px dashed #f59e0b; font-size: 12px; color: #92400e; font-style: italic;">
+                            Zostało tylko 17.5 punktów! 🚀
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 15px; color: #64748b; font-size: 13px;">
+                    ⬆️ Pełna mapa z benefitami - w Dashboard dla zmotywowanych graczy
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <span class="recommendation">
+                    ⭐ TO JEST NAJLEPSZA OPCJA! ⭐
+                </span>
+            </div>
+        </div>
+        
+        <!-- Implementation Summary -->
+        <div class="option-section" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
+            <h2 style="color: #92400e; margin-bottom: 20px;">📋 Podsumowanie Implementacji</h2>
+            
+            <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                <h3 style="color: #78350f; margin-bottom: 10px;">🎯 Opcja 1 (Kompaktowy Pasek)</h3>
+                <ul style="color: #78350f; line-height: 1.8;">
+                    <li><strong>Gdzie:</strong> Hero Section, zaraz pod "Junior Sales Rep"</li>
+                    <li><strong>Kod:</strong> ~10 linii HTML w st.markdown()</li>
+                    <li><strong>Update:</strong> Automatyczny (używa current_tier_name)</li>
+                    <li><strong>Mobile:</strong> Responsive (flex layout)</li>
+                </ul>
+            </div>
+            
+            <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                <h3 style="color: #78350f; margin-bottom: 10px;">🗺️ Opcja 3 (Pełna Mapa)</h3>
+                <ul style="color: #78350f; line-height: 1.8;">
+                    <li><strong>Gdzie:</strong> Dashboard → Statystyki, po "Reputation Breakdown"</li>
+                    <li><strong>Kod:</strong> ~80 linii (tier cards + benefits box)</li>
+                    <li><strong>Update:</strong> Dynamiczny (checkmarki, kolory, benefity)</li>
+                    <li><strong>Mobile:</strong> Może wymagać stack layout (kolumny → rzędy)</li>
+                </ul>
+            </div>
+            
+            <div style="background: white; padding: 20px; border-radius: 12px;">
+                <h3 style="color: #78350f; margin-bottom: 10px;">🏆 COMBO (Opcja 1 + 3)</h3>
+                <ul style="color: #78350f; line-height: 1.8;">
+                    <li><strong>Effort:</strong> Średni (2 miejsca do zakodowania)</li>
+                    <li><strong>Maintainability:</strong> Dobra (używają tych samych danych)</li>
+                    <li><strong>User Experience:</strong> Najlepsza! 🌟</li>
+                    <li><strong>Motywacja:</strong> Maksymalna (pasywna + aktywna)</li>
+                    <li><strong>Rekomendacja:</strong> <strong style="color: #10b981;">✅ WDRAŻAJ TO!</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

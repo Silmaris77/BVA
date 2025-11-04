@@ -2376,6 +2376,25 @@ def show_fmcg_playable_game(username: str):
                             </div>
                             """
                         
+                            # Tooltip HTML (pełna karta jak popup, ale bez interakcji)
+                            tooltip_html = f"""
+                            <div style='min-width: 250px; font-family: system-ui;'>
+                                <h3 style='margin: 0 0 8px 0; color: {pin_color};'>{type_emoji} {name}</h3>
+                                {route_badge}
+                                <div style='background: {pin_color}20; padding: 8px; border-radius: 6px; margin-bottom: 8px;'>
+                                    <b>Segment:</b> {segment.upper()}<br>
+                                    <b>Potencjał:</b> {potential_kg} kg/mies<br>
+                                    <b>Dystans:</b> {distance:.1f} km<br>
+                                    <b>{color_emoji} Ostatnia wizyta:</b> {visit_status}
+                                </div>
+                                <p style='margin: 4px 0; font-size: 13px;'><b>Obecnie:</b> {current_supplier}</p>
+                                <p style='margin: 4px 0; font-size: 13px;'><b>Rekomendacja:</b><br>{products_str}</p>
+                                <div style='background: {"#10b981" if upsell_pot in ["very_high", "guaranteed"] else "#f59e0b" if upsell_pot == "high" else "#94a3b8"}; color: white; padding: 4px 8px; border-radius: 4px; text-align: center; font-size: 12px; font-weight: 600; margin-top: 8px;'>
+                                    Upsell: {upsell_pot.upper()}
+                                </div>
+                            </div>
+                            """
+                        
                             # Custom marker - numbered for route or colored pin
                             if is_in_route:
                                 # Numbered purple marker for route
@@ -2398,7 +2417,7 @@ def show_fmcg_playable_game(username: str):
                                             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
                                         ">{route_number}</div>
                                     """),
-                                    tooltip=f"⭐ #{route_number} - {name}"
+                                    tooltip=folium.Tooltip(tooltip_html, sticky=True)
                                 ).add_to(m)
                             else:
                                 # Regular colored pin by visit recency
@@ -2406,7 +2425,7 @@ def show_fmcg_playable_game(username: str):
                                     [lat, lon],
                                     popup=folium.Popup(popup_html, max_width=300),
                                     icon=folium.Icon(color=pin_color_by_time, icon="cutlery", prefix="fa"),
-                                    tooltip=f"{color_emoji} {name} - {visit_status}"
+                                    tooltip=folium.Tooltip(tooltip_html, sticky=True)
                                 ).add_to(m)
                     
                         # Draw route line if planned_route exists
