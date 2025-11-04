@@ -784,7 +784,7 @@ def show_fmcg_playable_game(username: str):
                     <div style='font-size: 12px; opacity: 0.9; font-weight: 600;'>💰 SPRZEDAŻ PLN</div>
                 </div>
             </div>
-            <div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;'>
+            <div style='display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px;'>
                 <div style='background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.2);'>
                     <div style='font-size: 20px; font-weight: 700; margin-bottom: 2px;'>{current_day}</div>
                     <div style='font-size: 11px; opacity: 0.9;'>📅 Dzień</div>
@@ -800,6 +800,20 @@ def show_fmcg_playable_game(username: str):
             </div>
         </div>
         """, unsafe_allow_html=True)
+        
+        # Quick Actions
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("⏭️ Zakończ dzień", use_container_width=True, type="primary"):
+                st.session_state["advance_day"] = True
+                st.rerun()
+        with col2:
+            if st.button("🗺️ Zaplanuj trasę", use_container_width=True):
+                st.session_state["show_route_planner"] = True
+                st.info("💡 Przejdź do zakładki **Sprzedaż** aby zaplanować trasę wizyt")
+        with col3:
+            if st.button("🎯 Zobacz cele", use_container_width=True):
+                st.info("💡 Przewiń w dół do sekcji **Cele & Postęp** lub kliknij zakładkę **📊 Statystyki**")
         
         # =============================================================================
         # SUB-TABY dla szczegółów
@@ -951,6 +965,37 @@ def show_fmcg_playable_game(username: str):
     </div>
     </div>"""
             st.markdown(monthly_html, unsafe_allow_html=True)
+            
+            # WEEKLY HISTORY - Last 4 weeks
+            st.markdown("### 📅 Historia Tygodniowa")
+            
+            weekly_history = game_state.get("weekly_history", [])
+            if weekly_history:
+                # Show last 4 weeks
+                recent_weeks = weekly_history[-4:]
+                cols = st.columns(len(recent_weeks))
+                
+                for idx, week_data in enumerate(recent_weeks):
+                    with cols[idx]:
+                        week_num = week_data.get("week", idx + 1)
+                        sales = week_data.get("sales", 0)
+                        target = week_data.get("target", 8000)
+                        achieved = sales >= target
+                        
+                        color = "#22c55e" if achieved else "#94a3b8"
+                        emoji = "✅" if achieved else "📊"
+                        
+                        week_card = f"""
+                        <div style='background: {color}15; border: 2px solid {color}; border-radius: 8px; padding: 12px; text-align: center;'>
+                            <div style='font-size: 20px; margin-bottom: 4px;'>{emoji}</div>
+                            <div style='font-weight: 700; color: {color}; margin-bottom: 4px;'>Tydz. {week_num}</div>
+                            <div style='font-size: 14px; color: #64748b;'>{sales:,} PLN</div>
+                            <div style='font-size: 11px; color: #94a3b8;'>Cel: {target:,}</div>
+                        </div>
+                        """
+                        st.markdown(week_card, unsafe_allow_html=True)
+            else:
+                st.info("📊 Rozpocznij grę aby zobaczyć historię wyników")
         
         # ========================================================================
         # SUB-TAB: ALERTY & AKCJE (Reputacja, Status Klientów)
@@ -1040,10 +1085,42 @@ def show_fmcg_playable_game(username: str):
             
                 Brak klientów zagrożonych - dobra robota! 🎉
                 """)
-        
-            # ========================================================================
-            # SUB-TAB: ZADANIA & ONBOARDING (Onboarding Tasks, Historia Wizyt)
-            # ========================================================================
+            
+            # CLIENT STATUS BREAKDOWN
+            st.markdown("---")
+            st.markdown("### 📊 Status Klientów")
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                prospect_count = status_summary.get("PROSPECT", 0)
+                st.markdown(f"""
+                <div style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 16px; border-radius: 12px; text-align: center;'>
+                    <div style='font-size: 36px; font-weight: 700; margin-bottom: 4px;'>{prospect_count}</div>
+                    <div style='font-size: 14px; opacity: 0.9;'>🔓 PROSPECT</div>
+                    <div style='font-size: 11px; opacity: 0.7; margin-top: 4px;'>Potencjalni klienci</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            with col2:
+                active_count = status_summary.get("ACTIVE", 0)
+                st.markdown(f"""
+                <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px; border-radius: 12px; text-align: center;'>
+                    <div style='font-size: 36px; font-weight: 700; margin-bottom: 4px;'>{active_count}</div>
+                    <div style='font-size: 14px; opacity: 0.9;'>✅ ACTIVE</div>
+                    <div style='font-size: 11px; opacity: 0.7; margin-top: 4px;'>Aktywni klienci</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            with col3:
+                lost_count = status_summary.get("LOST", 0)
+                st.markdown(f"""
+                <div style='background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 16px; border-radius: 12px; text-align: center;'>
+                    <div style='font-size: 36px; font-weight: 700; margin-bottom: 4px;'>{lost_count}</div>
+                    <div style='font-size: 14px; opacity: 0.9;'>❌ LOST</div>
+                    <div style='font-size: 11px; opacity: 0.7; margin-top: 4px;'>Utraceni klienci</div>
+                </div>
+                """, unsafe_allow_html=True)
         
         with dash_tasks:
             # =============================================================================
@@ -2772,11 +2849,11 @@ def show_fmcg_playable_game(username: str):
             else:
                 st.info(f"📊 Znaleziono **{len(filtered_products)}** produktów")
         
-            # Display products in grid (3 columns)
-            for i in range(0, len(filtered_products), 3):
-                col1, col2, col3 = st.columns(3)
+            # Display products in grid (2 columns)
+            for i in range(0, len(filtered_products), 2):
+                col1, col2 = st.columns(2)
             
-                for idx, col in enumerate([col1, col2, col3]):
+                for idx, col in enumerate([col1, col2]):
                     if i + idx < len(filtered_products):
                         product = filtered_products[i + idx]
                     

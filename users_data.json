@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-11-04 08:40:55",
+    "last_login": "2025-11-04 09:05:47",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -467,6 +467,11 @@
       {
         "type": "login",
         "timestamp": "2025-11-04T08:40:55.076818",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T09:05:47.653717",
         "details": {}
       }
     ],
@@ -1244,7 +1249,7 @@
           "monthly_actual_sales": 0,
           "monthly_best_sales": 0,
           "weekly_history": [],
-          "last_activity_date": "2025-11-04T08:41:22.960955",
+          "last_activity_date": "2025-11-04T09:06:20.476582",
           "last_visit_client_id": null,
           "company": "Heinz Polska",
           "clients": {
@@ -2229,7 +2234,7 @@
       "monthly_actual_sales": 0,
       "monthly_best_sales": 0,
       "weekly_history": [],
-      "last_activity_date": "2025-11-04T08:41:22.960955",
+      "last_activity_date": "2025-11-04T09:06:20.476582",
       "last_visit_client_id": null,
       "company": "Heinz Polska",
       "clients": {
