@@ -42,20 +42,29 @@ def initialize_reputation_system() -> Dict:
     Returns:
         Dict with reputation structure ready to add to game_state
     """
-    return {
+    initial_state = {
         "clients": {},  # {client_id: reputation_score}
         "company": {
-            "task_performance": 100,      # % zadań wykonanych (start: 100%)
-            "sales_performance": 0,       # % postępu celów scenariusza
-            "professionalism": 100        # Start: 100, penalties odejmują
+            "task_performance": 0,        # Start: 0 (no tasks completed yet)
+            "sales_performance": 0,       # Start: 0 (no sales yet)
+            "professionalism": 100        # Start: 100, penalties subtract
         },
-        "overall_rating": 0,
         "tier": "Trainee",
         "unlock_tokens": 0,
         "training_credits": 0,
         "xp": 0,
         "level": 1
     }
+    
+    # Calculate initial overall_rating based on starting values
+    # Client Rep = 0 (no clients), Company Rep = 30 (only professionalism 100 × 0.30)
+    # Overall = (0 × 0.60) + (30 × 0.40) = 12
+    company_rep_initial = 100 * 0.30  # professionalism only
+    overall_rating_initial = (0 * 0.60) + (company_rep_initial * 0.40)
+    
+    initial_state["overall_rating"] = round(overall_rating_initial, 1)  # 12.0
+    
+    return initial_state
 
 
 # =============================================================================
@@ -181,7 +190,9 @@ def calculate_task_performance(game_state: Dict) -> float:
     if total_assigned > 0:
         return round((total_completed / total_assigned) * 100, 1)
     else:
-        return 100.0  # No tasks yet = perfect performance
+        # No tasks assigned yet = 0 performance (not perfect, just nothing done)
+        # Will use saved value from game_state["reputation"]["company"]["task_performance"]
+        return game_state.get("reputation", {}).get("company", {}).get("task_performance", 0)
 
 
 def calculate_sales_performance(game_state: Dict) -> float:
@@ -230,7 +241,8 @@ def calculate_sales_performance(game_state: Dict) -> float:
         # Cap at 150% (50% growth is excellent)
         weekly_trend = min(growth_rate, 150)
     else:
-        weekly_trend = 100  # No previous week = neutral
+        # No previous week or week 1 = use 0 (no trend data yet)
+        weekly_trend = 0
     
     # Weighted average
     sales_performance = (

@@ -65,72 +65,111 @@ def evaluate_task_with_ai(task_id: str, submission_text: str, task_data: Dict) -
         print("🔍 Tworzę model gemini-2.0-flash-exp...")
         model = genai.GenerativeModel('gemini-2.0-flash-exp')
         
-        # Build evaluation prompt
-        prompt = f"""Jesteś mentorem w grze symulacyjnej sprzedaży FMCG. Oceniasz wykonanie zadania przez początkującego handlowca.
+        # Get task assigner info (default to Sales Manager if not specified)
+        assigner = task_data.get('assigned_by', {
+            'role': 'Sales Manager',
+            'name': 'Krzysztof Nowak'
+        })
+        
+        # Build evaluation prompt - role-play as the task assigner
+        prompt = f"""Jesteś {assigner['name']}, {assigner['role']} w firmie FreshLife. 
+Przydzieliłeś zadanie swojemu nowemu handlowcowi i teraz oceniasz jego wykonanie.
 
-**ZADANIE:**
+**ZADANIE, KTÓRE PRZYDZIELIŁEŚ:**
 {task_data['title']}
 
-**OPIS ZADANIA:**
+**INSTRUKCJE, KTÓRE DAŁEŚ:**
 {task_data['description']}
 
-**KRYTERIA SUKCESU:**
+**CZEGO OCZEKIWAŁEŚ (kryteria sukcesu):**
 {chr(10).join(f"- {criterion}" for criterion in task_data['success_criteria'])}
 
-**ZGŁOSZENIE UŻYTKOWNIKA:**
+**ZGŁOSZENIE OD HANDLOWCA:**
 {submission_text}
 
-**INSTRUKCJE OCENY:**
-1. Przeanalizuj czy zgłoszenie spełnia wszystkie kryteria sukcesu
-2. Oceń jakość, kompletność i praktyczność rozwiązania
-3. Sprawdź czy użytkownik zrozumiał cel zadania
+**TWOJA ROLA:**
+Jesteś doświadczonym managerem, który:
+- Traktuje handlowca jako część zespołu (zwracaj się przez "Ty")
+- Daje konkretny, praktyczny feedback
+- Jest wspierający i rozumie, że handlowiec się uczy
+- Akceptuje przyzwoite próby (to gra edukacyjna, nie egzamin!)
+- Mówi bezpośrednio, bez zbędnych ozdobników
+- Używa przykładów z doświadczenia
+
+**FILOZOFIA OCENY:**
+🎯 **Domyślnie AKCEPTUJ, jeśli:**
+- Handlowiec zrozumiał sens zadania (nawet jeśli wykonanie nie jest idealne)
+- Odpowiedź ma podstawowe elementy wymagane w zadaniu
+- Widać wysiłek i przemyślenie (nie jest przypadkowa/śmieciowa)
+- Da się z tym pracować w terenie (nawet jeśli wymaga dopracowania)
+
+⚠️ **BEZWZGLĘDNIE ODRZUĆ, jeśli:**
+- **Ktoś tylko skopiował treść zadania** (to nie jest wykonanie!)
+- **Brak konkretnego wykonania** (np. zadanie wymaga planu, a jest "nie wiem co dalej")
+- **Wulgaryzmy/chamstwo** (nieakceptowalne w miejscu pracy)
+- **Kompletnie nie na temat** (widać, że nie przeczytał zadania)
+- **Brak minimalnego wysiłku** (1 zdanie na zadanie wymagające analizy)
+- **Nieczytelny bełkot** (nie da się zrozumieć intencji)
+
+⚠️ **ODRZUĆ jeśli:**
+- Brakuje kluczowych elementów (np. w elevator pitch nie ma wartości firmy)
+- Odpowiedź jest zbyt ogólnikowa bez żadnych konkretów
+- Nie spełnia podstawowych kryteriów sukcesu z zadania
+- **ZADANIA O OBIEKCJACH/ODPOWIEDZIACH**: jeśli odpowiedź ma mniej niż 3-4 zdania lub brakuje konkretnej argumentacji (samo "warto mieć" to za mało!)
+
+**SPECJALNA UWAGA dla zadań typu "odpowiedź na obiekcję":**
+Takie zadania wymagają KOMPLETNEJ odpowiedzi z:
+- Akceptacją punktu klienta
+- Konkretną argumentacją (nie "warto mieć", ale DLACZEGO i JAK)
+- Przykładem zastosowania lub korzyścią
+- Pytaniem angażującym
+Odpowiedź w stylu "rozumiem, ale warto mieć" to ODRZUĆ - to nie jest profesjonalna obsługa obiekcji!
 
 **FORMAT FEEDBACKU:**
 
-Jeśli zadanie ZAAKCEPTOWANE (spełnia wszystkie kryteria):
+Jeśli AKCEPTUJESZ zadanie (większość przypadków!):
 ```
 ACCEPT
-✅ **Świetna robota!**
-
-**Co zrobiłeś dobrze:**
-- [konkretne punkty co było OK]
-- [użyj emoji ✅]
-
-💡 **Następny krok:**
-[co powinien zrobić dalej]
-
-🎯 **Wskazówka praktyczna:**
-[praktyczna rada do zastosowania w grze]
-```
-
-Jeśli zadanie WYMAGA POPRAWY (nie spełnia kryteriów):
-```
-REVISE
-⚠️ **Dobre rozpoczęcie, ale wymaga poprawek**
+✅ **Dobra robota - puszczam Cię dalej!**
 
 **Co jest OK:**
-✅ [co było dobre]
+- [konkretne punkty - co handlowiec zrobił dobrze]
+- [oceń pozytywnie wysiłek]
 
-**Co wymaga poprawy:**
-❌ [konkretne braki - max 3 punkty]
-❌ [wskaż co dokładnie poprawić]
+💡 **Co możesz dopracować w praktyce:**
+[1-2 konstruktywne wskazówki na przyszłość - NIE wymaga poprawy w zadaniu, tylko rada do zastosowania potem]
 
-💡 **Jak poprawić:**
-1. [konkretna instrukcja]
-2. [konkretna instrukcja]
-
-🔄 **Możesz poprawić i wysłać ponownie.**
+🎯 **Z mojego doświadczenia:**
+[praktyczna rada z perspektywy managera]
 ```
 
-**WAŻNE:**
-- Feedback w języku polskim
-- Konkretny i merytoryczny (nie ogólniki!)
-- Zachęcający (to gra edukacyjna!)
-- Pierwsza linia MUSI być: "ACCEPT" lub "REVISE"
-- Używaj emoji dla czytelności
-- Maksymalnie 150 słów
+Jeśli ODRZUCASZ (rzeczywiście słabe - brak wykonania):
+```
+REVISE
+⚠️ **To nie jest gotowe - musisz wykonać zadanie**
 
-Wygeneruj feedback:"""
+**Problem:**
+❌ [konkretnie czego brakuje - np. "To tylko skopiowana treść zadania, nie Twoja praca"]
+❌ [co jest źle - np. "Brak konkretnej listy sklepów z przypisaniem do kategorii"]
+
+💡 **Co musisz zrobić:**
+1. [konkretna instrukcja - np. "Weź listę 20 sklepów z gry i przypisz każdy do A/B/C"]
+2. [przykład dobrego rozwiązania]
+
+🔄 **Poświęć chwilę i zrób to porządnie - wtedy puszczę Cię dalej.**
+```
+
+**WAŻNE ZASADY:**
+- Piszesz jako {assigner['name']} ({assigner['role']}) - to feedback od managera, nie ocena komputera
+- Język polski, forma "Ty" (jak w normalnej rozmowie z podwładnym)
+- **BĄŚ WYROZUMIAŁY** - to początkujący handlowiec w grze edukacyjnej!
+- Konkretny feedback odnoszący się do tego co napisał
+- Pierwsza linia MUSI być: "ACCEPT" lub "REVISE"
+- Emoji dla czytelności
+- Maksymalnie 150 słów
+- Brzmi jak prawdziwa rozmowa w firmie (nie jak AI)
+
+Wygeneruj feedback jako {assigner['name']}:"""
 
         # Generate feedback
         response = model.generate_content(
@@ -145,20 +184,49 @@ Wygeneruj feedback:"""
         
         feedback_text = response.text.strip()
         
-        # Parse decision (first line)
-        first_line = feedback_text.split('\n')[0].strip().upper()
-        is_accepted = "ACCEPT" in first_line
+        print(f"🔍 RAW AI Response:\n{feedback_text[:200]}")
         
-        print(f"🔍 AI Response first line: {first_line}")
-        print(f"🔍 Decision: {'ACCEPTED' if is_accepted else 'REVISE'}")
+        # Remove code block markers if present
+        if feedback_text.startswith('```'):
+            # Remove opening ```
+            lines = feedback_text.split('\n')
+            lines = lines[1:]  # Skip first ```
+            if lines and lines[-1].strip() == '```':
+                lines = lines[:-1]  # Skip closing ```
+            feedback_text = '\n'.join(lines).strip()
         
-        # Remove decision line from feedback
-        feedback_lines = feedback_text.split('\n')[1:]
-        clean_feedback = '\n'.join(feedback_lines).strip()
+        # Parse decision (check entire response for ACCEPT/REVISE)
+        is_accepted = False
+        decision_line = ""
         
-        print(f"🔍 Clean feedback length: {len(clean_feedback)} chars")
+        for line in feedback_text.split('\n'):
+            line_upper = line.strip().upper()
+            if 'ACCEPT' in line_upper and 'REVISE' not in line_upper:
+                is_accepted = True
+                decision_line = line
+                break
+            elif 'REVISE' in line_upper:
+                is_accepted = False
+                decision_line = line
+                break
         
-        return clean_feedback, is_accepted
+        print(f"🔍 Decision line found: {decision_line}")
+        print(f"🔍 Decision: {'ACCEPTED ✅' if is_accepted else 'REVISE ⚠️'}")
+        
+        # Remove decision line from feedback (keep the rest)
+        if decision_line:
+            feedback_text = feedback_text.replace(decision_line, '', 1).strip()
+        
+        # Clean up any remaining code block artifacts
+        feedback_text = feedback_text.replace('```', '').strip()
+        
+        # Remove any stray HTML closing tags that might appear
+        import re
+        feedback_text = re.sub(r'</?(div|p|span)>', '', feedback_text)
+        
+        print(f"🔍 Clean feedback length: {len(feedback_text)} chars")
+        
+        return feedback_text, is_accepted
         
     except Exception as e:
         print(f"❌ Błąd AI evaluation: {e}")
@@ -172,105 +240,17 @@ Wygeneruj feedback:"""
 ONBOARDING_TASKS = {
     "task_001": {
         "id": "task_001",
-        "title": "📊 Segmentacja ABC terytorium",
-        "description": """
-        Przeanalizuj listę klientów i podziel ich na kategorie A/B/C według potencjału sprzedażowego.
-        
-        **Wytyczne:**
-        - **Kategoria A** (Kluczowi): 20% klientów = 80% potencjału (duże sklepy, 80-150 m²)
-        - **Kategoria B** (Potencjalni): 30% klientów = 15% potencjału (średnie, 40-80 m²)
-        - **Kategoria C** (Małe): 50% klientów = 5% potencjału (małe, 20-40 m²)
-        
-        **Alokacja czasu:**
-        - A: 60% czasu
-        - B: 30% czasu
-        - C: 10% czasu
-        """,
-        "required_article": "🗺️ Planowanie terytorium sprzedażowego",
-        "order": 1,
-        "input_type": "textarea",
-        "placeholder": """Przykład:
-
-KATEGORIA A (4 sklepy - 20%):
-- Sklep "Osiedlowy" ul. Puławska 120 (150 m²) - duży ruch, wysokie obroty
-- Sklep "Centrum" ul. Marszałkowska 80 (120 m²) - lokalizacja premium
-...
-
-KATEGORIA B (6 sklepów - 30%):
-- Sklep "Wiśniowa" ul. Wiśniowa 5 (60 m²) - stabilny, potencjał wzrostu
-...
-
-KATEGORIA C (10 sklepów - 50%):
-- Mały sklep ul. Kwiatowa 12 (30 m²) - ograniczony budżet
-...
-
-PLAN CZASU:
-- Kategoria A: 60% (3-4 wizyty/mies na sklep)
-- Kategoria B: 30% (1-2 wizyty/mies)
-- Kategoria C: 10% (raz na 2-3 mies)
-        """,
-        "success_criteria": [
-            "Podział na 3 kategorie (A/B/C)",
-            "Proporcje zbliżone do 20/30/50",
-            "Uwzględnienie wielkości sklepów",
-            "Plan alokacji czasu (60/30/10)"
-        ]
-    },
-    
-    "task_002": {
-        "id": "task_002",
-        "title": "🗺️ Plan tygodnia - Routing i klasteryzacja",
-        "description": """
-        Zaplanuj trasówkę na pierwszy tydzień pracy. Pogrupuj sklepy geograficznie w klastry 
-        i przypisz je do konkretnych dni tygodnia.
-        
-        **Wytyczne:**
-        - Sklepy w jednym klastrze powinny być blisko siebie (max 3-5 km)
-        - Jeden dzień = jeden klaster (unikaj krzyżowania się po mieście)
-        - 5-6 wizyt dziennie (początkujący handlowiec)
-        - Zaczynaj od klientów B i C (Quick Wins First!)
-        
-        **Zasada:** Klasteryzacja > Chaos (oszczędność 100 km dziennie!)
-        """,
-        "required_article": "🗺️ Planowanie terytorium sprzedażowego",
-        "order": 2,
-        "input_type": "textarea",
-        "placeholder": """Przykład:
-
-KLASTER 1: Mokotów Zachód (Poniedziałki)
-1. Sklep B1 - ul. Puławska 50
-2. Sklep B2 - ul. Wiśniowa 12
-3. Sklep C1 - ul. Konstruktorska 8
-4. Sklep C2 - ul. Wołoska 15
-5. Sklep C3 - ul. Racławicka 22
-Dystans: ~20 km | Wizyty: 5
-
-KLASTER 2: Ursynów (Wtorki)
-1. Sklep B3 - al. KEN 80
-2. Sklep C4 - ul. Hawajska 12
-...
-
-STRATEGIA PIERWSZEGO TYGODNIA:
-- Poniedziałek-Środa: Klienci B i C (Quick Wins)
-- Czwartek-Piątek: Pierwsi klienci A (z referencjami)
-        """,
-        "success_criteria": [
-            "Klastry geograficzne (sklepy blisko siebie)",
-            "Plan PN-PT z przypisanymi sklepami",
-            "5-6 wizyt dziennie",
-            "Strategia Quick Wins First (B/C przed A)"
-        ]
-    },
-    
-    "task_003": {
-        "id": "task_003",
         "title": "🎤 Elevator Pitch - Przedstawienie firmy",
+        "assigned_by": {
+            "role": "Sales Manager",
+            "name": "Krzysztof Nowak"
+        },
         "description": """
-        Napisz krótkie (30 sekund), profesjonalne przedstawienie firmy FreshLife i Twojej oferty.
+        Napisz krótkie (30 sekund), profesjonalne przedstawienie firmy Heinz Food Service i Twojej oferty.
         
         **Struktura:**
         1. Kim jesteś? (imię, firma)
-        2. Co robicie? (branża, specjalizacja)
+        2. Co robicie? (branża, specjalizacja - produkty Heinz i Pudliszki dla HoReCa)
         3. Jaka jest wartość? (USP - unique selling proposition)
         4. Social proof (liczby, referencje)
         5. Call to action (pytanie otwarte)
@@ -282,17 +262,17 @@ STRATEGIA PIERWSZEGO TYGODNIA:
         - Brzmi naturalnie (nie jak reklama)
         """,
         "required_article": "🗺️ Planowanie terytorium sprzedażowego",
-        "order": 3,
+        "order": 1,
         "input_type": "textarea",
         "placeholder": """Przykład:
 
-"Dzień dobry! Jestem [Twoje imię] z FreshLife. Specjalizujemy się w dystrybucji produktów FMCG dla małych i średnich sklepów. 
+"Dzień dobry! Jestem [Twoje imię] z Heinz Food Service. Specjalizujemy się w dostawach produktów premium dla gastronomii - ketchupy Heinz, sosy Pudliszki, produkty convenience.
 
-Naszą mocną stroną jest terminowość dostaw - 98% on-time delivery - oraz elastyczność. Dowozimy już od 10 sztuk, podczas gdy konkurencja wymaga minimum 50. 
+Naszą mocną stroną jest jakość marki Heinz oraz kompleksowe wsparcie - szkolenia dla kuchni, materiały POS, pomoc w kreowaniu menu.
 
-Współpracujemy z ponad 120 sklepami w Warszawie. 
+Obsługujemy ponad 500 restauracji w całej Polsce.
 
-Mogę zadać kilka pytań o Pana biznes?"
+Mogę opowiedzieć jak pomagamy restauracjom zwiększać marże?"
 
 [Twoja wersja tutaj...]
         """,
@@ -301,6 +281,107 @@ Mogę zadać kilka pytań o Pana biznes?"
             "Zawiera USP (unikalną wartość)",
             "Wspomina social proof (liczby)",
             "Kończy się pytaniem otwartym"
+        ]
+    },
+    
+    "task_002": {
+        "id": "task_002",
+        "title": "❓ Pytania do nowego klienta",
+        "assigned_by": {
+            "role": "Sales Manager",
+            "name": "Krzysztof Nowak"
+        },
+        "description": """
+        Przygotuj listę 3-4 pytań, które zadasz klientowi przy pierwszym kontakcie.
+        
+        **Cel pytań:**
+        - Zrozumieć potrzeby klienta (typ kuchni, profil gości)
+        - Poznać obecne rozwiązania (co teraz używa, skąd kupuje)
+        - Zidentyfikować problemy/wyzwania (z czym się boryka)
+        - Znaleźć punkt zaczepienia dla oferty
+        
+        **Zasady dobrych pytań:**
+        - Pytania OTWARTE (nie tak/nie)
+        - Konkretne (nie ogólniki w stylu "jak idą interesy?")
+        - Nastawione na klienta (nie na sprzedaż produktu)
+        - Logiczna kolejność (od ogółu do szczegółu)
+        """,
+        "required_article": "🗺️ Planowanie terytorium sprzedażowego",
+        "order": 2,
+        "input_type": "textarea",
+        "placeholder": """Przykład:
+
+1. "Jaki typ kuchni Państwo prowadzicie i kto jest Waszym głównym gościem?"
+   [Cel: zrozumieć profil - burger bar vs fine dining vs food truck]
+
+2. "Z jakimi produktami w kategorii sosów i ketchupów pracujecie teraz?"
+   [Cel: poznać konkurencję, poziom jakości, cenę]
+
+3. "Jakie są Wasze największe wyzwania jeśli chodzi o koszty w kuchni?"
+   [Cel: znaleźć pain point - marnotrawstwo, jakość, standaryzacja]
+
+4. "Jak podejmujecie decyzje o zmianie dostawcy lub wypróbowaniu nowych produktów?"
+   [Cel: zrozumieć proces decyzyjny, kto ma głos]
+
+[Twoja lista pytań tutaj...]
+        """,
+        "success_criteria": [
+            "3-4 pytania otwarte",
+            "Pytania konkretne (nie ogólniki)",
+            "Nastawione na poznanie klienta (nie na sprzedaż)",
+            "Logiczna kolejność"
+        ]
+    },
+    
+    "task_003": {
+        "id": "task_003",
+        "title": "💬 Odpowiedź na obiekcję: 'Mam już Heinz'",
+        "assigned_by": {
+            "role": "Sales Manager",
+            "name": "Krzysztof Nowak"
+        },
+        "description": """
+        Klient mówi: "Skoro już mam ketchup Heinz, to po co mi Pudliszki?"
+        
+        Przygotuj swoją odpowiedź na tę obiekcję.
+        
+        **Struktura dobrej odpowiedzi:**
+        1. **Akceptacja** - przyznaj rację ("Faktycznie, Heinz to świetny wybór...")
+        2. **Uzupełnienie** - pokaż wartość dodatkową Pudliszek ("Pudliszki to coś innego...")
+        3. **Korzyść konkretna** - co klient zyska ("Dzięki temu możesz...")
+        4. **Przykład/dowód** - konkretna sytuacja lub zastosowanie
+        5. **Pytanie/CTA** - zaangażuj ("Czy Wasz profil gości...?")
+        
+        **Wskazówki:**
+        - Nie atakuj Heinza (to też nasz produkt!)
+        - Pokaż komplementarność: Heinz = premium/międzynarodowe, Pudliszki = tradycja/polska kuchnia
+        - Konkretne przykłady zastosowań (nie ogólniki!)
+        - Minimum 4-5 zdań rozbudowanej argumentacji
+        """,
+        "required_article": "🗺️ Planowanie terytorium sprzedażowego",
+        "order": 3,
+        "input_type": "textarea",
+        "placeholder": """Przykład:
+
+"Świetnie, że macie Heinz - to najlepsza jakość premium! 
+
+Pudliszki to segment complementary - bardziej tradycyjny, polski smak, który pasuje do zupełnie innych dań. Heinz idealnie sprawdza się przy burgerach i steakach, ale Pudliszki lepiej komponuje się z polską kuchnią - żeberkami, schabowym, pierogami.
+
+Dzięki obu markom możecie dopasować sos do profilu dania i gościa - turysta zagraniczny dostaje Heinz przy burgerze, polski klient biznesowy Pudliszki do tradycyjnego obiadu.
+
+W Restauracji 'Polskie Smaki' używają Heinza w menu premium, a Pudliszek w menu dnia - i obie marki się uzupełniają.
+
+Czy w Waszym menu są dania, gdzie polski, tradycyjny smak sosu byłby lepszym dopasowaniem?"
+
+[Twoja odpowiedź tutaj...]
+        """,
+        "success_criteria": [
+            "Akceptacja obiekcji (nie atak na Heinz)",
+            "Wyjaśnienie komplementarności (Heinz vs Pudliszki - różne zastosowania)",
+            "Konkretne korzyści dla klienta (nie ogólniki!)",
+            "Przykład lub konkretne zastosowanie",
+            "Pytanie angażujące na koniec",
+            "Odpowiedź ma minimum 4-5 rozbudowanych zdań"
         ]
     }
 }
@@ -554,13 +635,23 @@ Zakończ pytaniem: "Mogę zadać kilka pytań o Pana biznes?"
     return "Feedback nierozpoznany."
 
 def complete_task(session_state, task_id, feedback):
-    """Oznacz zadanie jako ukończone"""
+    """Oznacz zadanie jako ukończone i zapisz historię"""
     if "completed_tasks" not in session_state:
         session_state.completed_tasks = {}
     
     if task_id in session_state.completed_tasks:
         session_state.completed_tasks[task_id]["status"] = "completed"
         session_state.completed_tasks[task_id]["feedback"] = feedback
+        session_state.completed_tasks[task_id]["completed_at"] = datetime.now().isoformat()
+    else:
+        # Jeśli nie było submitted, utwórz nowy wpis
+        session_state.completed_tasks[task_id] = {
+            "status": "completed",
+            "submission": "",
+            "feedback": feedback,
+            "submitted_at": datetime.now().isoformat(),
+            "completed_at": datetime.now().isoformat()
+        }
 
 def all_tasks_completed(session_state):
     """Sprawdź czy wszystkie zadania ukończone"""

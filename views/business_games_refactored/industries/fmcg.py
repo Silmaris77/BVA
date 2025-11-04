@@ -31,6 +31,7 @@ from utils.fmcg_products import (
     get_portfolio_summary,
     FRESHLIFE_PRODUCTS
 )
+from utils.ai_task_evaluator import evaluate_task_solution
 
 # =============================================================================
 # MIGRATION & INITIALIZATION
@@ -517,8 +518,9 @@ def show_fmcg_tasks_tab(username, user_data, industry_id):
                             st.error("⚠️ Rozwiązanie musi mieć co najmniej 50 znaków!")
                         else:
                             # WYKONAJ ZADANIE
-                            # Podstawowa ocena jakości (bez AI - na podstawie długości)
-                            quality_score = min(1.0, len(solution.strip()) / 200)  # Max 1.0 przy 200+ znakach
+                            # AI Evaluation
+                            with st.spinner("🤖 AI ocenia Twoje rozwiązanie..."):
+                                quality_score, feedback, detailed_scores = evaluate_task_solution(task, solution)
                             
                             # Oblicz nagrody z modyfikatorem jakości (FMCG uses direct keys)
                             actual_sales = int(task.get('sales_impact', 0) * quality_score)
@@ -544,6 +546,8 @@ def show_fmcg_tasks_tab(username, user_data, industry_id):
                                 "task_id": task_id,
                                 "solution": solution,
                                 "quality_score": quality_score,
+                                "ai_feedback": feedback,
+                                "ai_scores": detailed_scores,
                                 "rewards_earned": {
                                     "sales": actual_sales,
                                     "market_share": actual_share,
@@ -595,6 +599,48 @@ def show_fmcg_tasks_tab(username, user_data, industry_id):
                             # Pokaż rezultat
                             st.success(f"✅ Zadanie wykonane!")
                             st.balloons()
+                            
+                            # AI Feedback Card
+                            tone_emoji = "😊" if "pozytywny" in feedback.lower() else "🤔" if "neutralny" in feedback.lower() else "⚠️"
+                            st.markdown(f"""
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; margin: 10px 0;">
+<h4 style="color: white; margin: 0 0 10px 0;">{tone_emoji} Ocena AI: {int(quality_score * 100)}%</h4>
+<p style="color: white; margin: 0; font-size: 14px;">{feedback}</p>
+<p style="color: rgba(255,255,255,0.7); margin: 10px 0 0 0; font-size: 12px;">💡 Twoje nagrody zostały zmodyfikowane o {int(quality_score * 100)}%</p>
+</div>
+""", unsafe_allow_html=True)
+                            
+                            # Detailed Scores
+                            with st.expander("📊 Szczegółowa ocena"):
+                                score_cols = st.columns(4)
+                                
+                                categories = [
+                                    ("Trafność", detailed_scores.get("relevance", 0), "🎯"),
+                                    ("Wykonalność", detailed_scores.get("actionability", 0), "⚙️"),
+                                    ("Wpływ biznesowy", detailed_scores.get("business_impact", 0), "💼"),
+                                    ("Kreatywność", detailed_scores.get("creativity", 0), "💡")
+                                ]
+                                
+                                for idx, (name, score, emoji) in enumerate(categories):
+                                    with score_cols[idx]:
+                                        # Color based on score
+                                        if score >= 8:
+                                            color = "#10b981"  # green
+                                        elif score >= 6:
+                                            color = "#f59e0b"  # amber
+                                        else:
+                                            color = "#ef4444"  # red
+                                        
+                                        st.markdown(f"""
+<div style="text-align: center; padding: 10px; background: #f8fafc; border-radius: 8px;">
+<div style="font-size: 24px;">{emoji}</div>
+<div style="font-size: 12px; color: #64748b; margin: 5px 0;">{name}</div>
+<div style="font-size: 20px; font-weight: bold; color: {color};">{score}/10</div>
+<div style="background: #e2e8f0; height: 4px; border-radius: 2px; margin-top: 8px;">
+<div style="background: {color}; width: {score * 10}%; height: 4px; border-radius: 2px;"></div>
+</div>
+</div>
+""", unsafe_allow_html=True)
                             
                             col_r1, col_r2, col_r3, col_r4 = st.columns(4)
                             with col_r1:

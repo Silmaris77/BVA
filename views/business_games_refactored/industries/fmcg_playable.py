@@ -726,10 +726,11 @@ def show_fmcg_playable_game(username: str):
     pending_tasks = get_pending_tasks_count(st.session_state)
     tasks_badge = f" ({pending_tasks})" if pending_tasks > 0 else ""
     
-    tab_dashboard, tab_sales, tab_hr, tab_settings = st.tabs([
+    tab_dashboard, tab_sales, tab_hr, tab_instructions, tab_settings = st.tabs([
         f"📊 Dashboard{tasks_badge}",
         "🎯 Sprzedaż",
         "👥 HR & Team",
+        "📖 Instrukcja",
         "⚙️ Ustawienia"
     ])
     
@@ -762,8 +763,13 @@ def show_fmcg_playable_game(username: str):
             from utils.reputation_system import initialize_reputation_system
             game_state["reputation"] = initialize_reputation_system()
         
-        # Calculate overall rating (needs clients dict)
-        overall_rating = calculate_overall_rating(game_state, clients)
+        # Use saved overall_rating if exists, otherwise calculate
+        if "overall_rating" in game_state.get("reputation", {}):
+            overall_rating = game_state["reputation"]["overall_rating"]
+        else:
+            overall_rating = calculate_overall_rating(game_state, clients)
+            game_state["reputation"]["overall_rating"] = overall_rating
+        
         current_tier = get_tier(overall_rating)
         next_tier = get_next_tier(current_tier["name"])
         
@@ -1653,14 +1659,13 @@ def show_fmcg_playable_game(username: str):
             
                 for task_id, task in ONBOARDING_TASKS.items():
                     task_status = get_task_status(st.session_state, task_id)
+                    
+                    # Skip completed tasks - they're shown in Historia realizacji zadań
+                    if task_status["status"] == "completed":
+                        continue
                 
                     # Determine icon and color based on status
-                    if task_status["status"] == "completed":
-                        status_icon = "✅"
-                        status_color = "#10b981"
-                        button_text = "Ukończone"
-                        button_disabled = True
-                    elif task_status["status"] == "submitted":
+                    if task_status["status"] == "submitted":
                         status_icon = "⏳"
                         status_color = "#f59e0b"
                         button_text = "Sprawdź wynik"
@@ -1744,25 +1749,80 @@ def show_fmcg_playable_game(username: str):
                     
                         if task_status["status"] == "completed":
                             st.success(f"✅ **Zadanie ukończone!**")
-                        
-                            if task_status.get("feedback"):
-                                st.info(f"💬 Feedback: {task_status['feedback']}")
+                            st.info("� Zobacz szczegóły w 'Historia realizacji zadań' poniżej")
                     
                         elif task_status["status"] == "submitted":
-                            st.warning("⏳ Zadanie złożone, oczekuje na weryfikację...")
-                        
+                            # Show submission and allow re-edit
+                            submission_text = task_status.get("submission", "")
+                            
+                            st.warning("⏳ **Zadanie złożone** - AI nie zaakceptowało jeszcze tej odpowiedzi")
+                            
+                            # Show previous submission
+                            with st.expander("� Twoja poprzednia odpowiedź", expanded=False):
+                                st.markdown(submission_text)
+                            
+                            # Re-evaluation button
                             col_check, col_resubmit = st.columns([1, 1])
                         
                             with col_check:
-                                if st.button("🔍 Sprawdź wynik", key=f"check_{task_id}", use_container_width=True):
-                                    # Simulate evaluation
-                                    feedback = get_static_feedback(task_id)
-                                    complete_task(st.session_state, task_id, feedback=feedback)
-                                    st.rerun()
+                                if st.button("🔍 Sprawdź ponownie AI", key=f"check_{task_id}", use_container_width=True):
+                                    # AI evaluation
+                                    with st.spinner("🤖 AI ocenia Twoje rozwiązanie..."):
+                                        feedback, is_accepted = evaluate_task_with_ai(task_id, submission_text, task)
+                                    
+                                    if is_accepted:
+                                        complete_task(st.session_state, task_id, feedback=feedback)
+                                        
+                                        # Update Company Reputation
+                                        from utils.reputation_system import (
+                                            calculate_company_reputation,
+                                            calculate_overall_rating,
+                                            get_tier
+                                        )
+                                        
+                                        if "reputation" not in game_state:
+                                            game_state["reputation"] = {
+                                                "company": {"task_performance": 0},
+                                                "overall_rating": 0,
+                                                "tier": "Trainee"
+                                            }
+                                        
+                                        if "task_performance" not in game_state["reputation"]["company"]:
+                                            game_state["reputation"]["company"]["task_performance"] = 0
+                                        
+                                        game_state["reputation"]["company"]["task_performance"] = min(
+                                            game_state["reputation"]["company"]["task_performance"] + 5,
+                                            15
+                                        )
+                                        
+                                        company_rep = calculate_company_reputation(game_state)
+                                        game_state["reputation"]["company_reputation"] = company_rep
+                                        
+                                        overall = calculate_overall_rating(game_state, clients)
+                                        game_state["reputation"]["overall_rating"] = overall
+                                        
+                                        tier = get_tier(overall)
+                                        game_state["reputation"]["tier"] = tier
+                                        
+                                        # Persist updated reputation to database
+                                        try:
+                                            update_fmcg_game_state_sql(username, game_state, clients)
+                                        except Exception as e:
+                                            st.warning(f"⚠️ Nie udało się zapisać postępu: {e}")
+                                        
+                                        st.success("🎉 **Zadanie zaakceptowane!**")
+                                        st.balloons()
+                                        st.rerun()
+                                    else:
+                                        st.warning("⚠️ **Wymaga poprawek**")
+                                        st.markdown(f"**Feedback:** {feedback}")
+                                        st.info("Kliknij '🔄 Edytuj odpowiedź' aby poprawić")
                         
                             with col_resubmit:
-                                if st.button("🔄 Złóż ponownie", key=f"resub_{task_id}", use_container_width=True):
-                                    st.session_state[f"{task_id}_submitted"] = False
+                                if st.button("🔄 Edytuj odpowiedź", key=f"resub_{task_id}", use_container_width=True):
+                                    # Reset task to allow editing
+                                    if "completed_tasks" in st.session_state and task_id in st.session_state.completed_tasks:
+                                        del st.session_state.completed_tasks[task_id]
                                     st.rerun()
                     
                         else:
@@ -1774,20 +1834,99 @@ def show_fmcg_playable_game(username: str):
                                 height=100
                             )
                         
-                            col_submit, col_skip = st.columns([2, 1])
-                        
-                            with col_submit:
-                                if st.button(f"📤 Złóż zadanie", key=f"submit_{task_id}", type="primary", use_container_width=True):
-                                    if user_answer and len(user_answer) >= 10:
-                                        submit_task(st.session_state, task_id, user_answer)
-                                        st.success("✅ Zadanie złożone!")
-                                        st.rerun()
+                            if st.button(f"📤 Złóż zadanie", key=f"submit_{task_id}", type="primary", use_container_width=True):
+                                if user_answer and len(user_answer) >= 10:
+                                    # Submit task first
+                                    submit_task(st.session_state, task_id, user_answer)
+                                    
+                                    # Immediate AI evaluation
+                                    with st.spinner("🤖 AI ocenia Twoje rozwiązanie..."):
+                                        feedback, is_accepted = evaluate_task_with_ai(task_id, user_answer, task)
+                                    
+                                    if is_accepted:
+                                        # Complete task immediately
+                                        complete_task(st.session_state, task_id, feedback=feedback)
+                                        
+                                        # Update Company Reputation - Task Performance component
+                                        from utils.reputation_system import (
+                                            calculate_company_reputation,
+                                            calculate_overall_rating,
+                                            get_tier
+                                        )
+                                        
+                                        # Boost task_performance component by 5 points per completed task
+                                        if "reputation" not in game_state:
+                                            game_state["reputation"] = {
+                                                "company": {"task_performance": 0},
+                                                "overall_rating": 0,
+                                                "tier": "Trainee"
+                                            }
+                                        
+                                        if "task_performance" not in game_state["reputation"]["company"]:
+                                            game_state["reputation"]["company"]["task_performance"] = 0
+                                        
+                                        # Add 5 points per completed onboarding task (max 15 for 3 tasks)
+                                        game_state["reputation"]["company"]["task_performance"] = min(
+                                            game_state["reputation"]["company"]["task_performance"] + 5,
+                                            15  # Max 15 from onboarding tasks
+                                        )
+                                        
+                                        # Recalculate company reputation and overall rating
+                                        company_rep = calculate_company_reputation(game_state)
+                                        game_state["reputation"]["company_reputation"] = company_rep
+                                        
+                                        overall = calculate_overall_rating(game_state, clients)
+                                        game_state["reputation"]["overall_rating"] = overall
+                                        
+                                        tier = get_tier(overall)
+                                        game_state["reputation"]["tier"] = tier
+                                        
+                                        # Persist updated reputation to database
+                                        try:
+                                            update_fmcg_game_state_sql(username, game_state, clients)
+                                        except Exception as e:
+                                            st.warning(f"⚠️ Nie udało się zapisać postępu: {e}")
+                                        
+                                        st.success("🎉 **Zadanie zaakceptowane!**")
+                                        st.balloons()
+                                        
+                                        # Show reputation boost
+                                        st.success(f"📈 **Company Reputation:** +5 Task Performance → Overall Rating: {overall:.1f}/100")
+                                        
+                                        # Show feedback from task assigner
+                                        st.markdown(f"""
+<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            padding: 20px; border-radius: 12px; color: white; margin: 16px 0;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);'>
+    <div style='font-size: 16px; font-weight: 700; margin-bottom: 8px;'>💬 Feedback</div>
+    <div style='font-size: 14px; line-height: 1.6; opacity: 0.95;'>{feedback}</div>
+</div>
+""", unsafe_allow_html=True)
+                                        
+                                        # Close button to refresh
+                                        if st.button("✅ Zamknij i odśwież", key=f"close_{task_id}", type="primary", use_container_width=True):
+                                            st.rerun()
                                     else:
-                                        st.error("❌ Odpowiedź zbyt krótka (min. 10 znaków)")
-                        
-                            with col_skip:
-                                if st.button("⏭️ Pomiń", key=f"skip_{task_id}", use_container_width=True):
-                                    st.info("💡 Możesz wrócić do tego zadania później")
+                                        # Not accepted - reset to "not submitted" state so user can edit
+                                        if "completed_tasks" in st.session_state and task_id in st.session_state.completed_tasks:
+                                            del st.session_state.completed_tasks[task_id]
+                                        
+                                        # Show feedback
+                                        st.warning("⚠️ **Wymaga poprawek**")
+                                        
+                                        st.markdown(f"""
+<div style='background: #fef3c7; padding: 20px; border-radius: 12px; 
+            border-left: 4px solid #f59e0b; margin: 16px 0;'>
+    <div style='font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #92400e;'>
+        � Feedback
+    </div>
+    <div style='font-size: 14px; line-height: 1.6; color: #78350f;'>{feedback}</div>
+</div>
+""", unsafe_allow_html=True)
+                                        
+                                        st.info("💡 Przeczytaj feedback i popraw swoją odpowiedź powyżej. Następnie kliknij ponownie 'Złóż zadanie'.")
+                                else:
+                                    st.error("❌ Odpowiedź zbyt krótka (min. 10 znaków)")
             
                 # Summary at bottom
                 st.markdown("---")
@@ -1796,6 +1935,63 @@ def show_fmcg_playable_game(username: str):
             
                 Po ukończeniu wszystkich zadań będziesz gotowy do efektywnej pracy w terenie!
                 """)
+        
+            # =============================================================================
+            # HISTORIA REALIZACJI ZADAŃ
+            # =============================================================================
+            
+            # Collect completed tasks history
+            completed_tasks_history = []
+            if "completed_tasks" in st.session_state:
+                for task_id, task_data in st.session_state.completed_tasks.items():
+                    if task_data.get("status") == "completed" and task_id in ONBOARDING_TASKS:
+                        completed_tasks_history.append({
+                            "task_id": task_id,
+                            "title": ONBOARDING_TASKS[task_id]["title"],
+                            "submission": task_data.get("submission", ""),
+                            "feedback": task_data.get("feedback", ""),
+                            "submitted_at": task_data.get("submitted_at", ""),
+                            "completed_at": task_data.get("completed_at", "")
+                        })
+            
+            if completed_tasks_history:
+                with st.expander(f"📚 Historia realizacji zadań ({len(completed_tasks_history)})", expanded=False):
+                    # Sort by completion date - newest first
+                    sorted_tasks = sorted(
+                        completed_tasks_history, 
+                        key=lambda x: x.get('completed_at', ''), 
+                        reverse=True
+                    )
+                    
+                    for task_history in sorted_tasks:
+                        # Each completed task in its own expander
+                        with st.expander(f"✅ {task_history['title']}", expanded=False):
+                            # Task description
+                            task_description = ONBOARDING_TASKS[task_history['task_id']].get('description', '')
+                            if task_description:
+                                st.markdown("**📋 Treść zadania:**")
+                                st.markdown(task_description)
+                                st.markdown("---")
+                            
+                            # Timestamps
+                            col_t1, col_t2 = st.columns(2)
+                            with col_t1:
+                                if task_history['submitted_at']:
+                                    st.caption(f"📅 Złożono: {task_history['submitted_at'][:16]}")
+                            with col_t2:
+                                if task_history['completed_at']:
+                                    st.caption(f"✅ Ukończono: {task_history['completed_at'][:16]}")
+                            
+                            st.markdown("---")
+                            
+                            # Submission
+                            st.markdown("**📄 Twoja odpowiedź:**")
+                            st.info(task_history['submission'])
+                            
+                            # Feedback
+                            if task_history['feedback']:
+                                st.markdown("**💬 Feedback:**")
+                                st.success(task_history['feedback'])
         
             # =============================================================================
             # HISTORIA WIZYT - jako sekcja w Dashboard
@@ -4953,6 +5149,334 @@ def show_fmcg_playable_game(username: str):
         st.markdown("---")
         st.info("💡 **Więcej artykułów wkrótce!** Pracujemy nad materiałami dotyczącymi merchandisingu, negocjacji i budowania relacji z klientami.")
         
+    
+    # =============================================================================
+    # TAB: INSTRUKCJA
+    # =============================================================================
+    
+    with tab_instructions:
+        st.markdown("# 📖 Instrukcja Gry - Heinz Food Service")
+        
+        # Hero banner
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    padding: 30px; border-radius: 15px; margin-bottom: 30px; text-align: center;'>
+            <h2 style='color: white; margin: 0;'>🎮 Witaj w Heinz Food Service Challenge!</h2>
+            <p style='color: #e0e7ff; font-size: 18px; margin-top: 10px;'>
+                Symulacja sprzedaży produktów premium dla gastronomii
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Quick Start Guide
+        st.markdown("### 🚀 Szybki Start")
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown("""
+            <div style='background: #f0f9ff; padding: 20px; border-radius: 12px; border-left: 4px solid #3b82f6;'>
+                <h4 style='color: #1e40af; margin-top: 0;'>1️⃣ Rozpocznij od Onboardingu</h4>
+                <p style='color: #1e3a8a; font-size: 14px;'>
+                    Wykonaj 3 zadania wprowadzające w zakładce <strong>Dashboard → Zadania</strong>. 
+                    Otrzymasz feedback od AI i pierwsze punkty reputacji.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown("""
+            <div style='background: #f0fdf4; padding: 20px; border-radius: 12px; border-left: 4px solid #22c55e;'>
+                <h4 style='color: #15803d; margin-top: 0;'>2️⃣ Planuj Wizyty</h4>
+                <p style='color: #14532d; font-size: 14px;'>
+                    Przejdź do <strong>Sprzedaż → Wizyty Handlowe</strong>. Wybieraj klientów strategicznie 
+                    i buduj relacje przez regularny kontakt.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown("""
+            <div style='background: #fef3c7; padding: 20px; border-radius: 12px; border-left: 4px solid #f59e0b;'>
+                <h4 style='color: #92400e; margin-top: 0;'>3️⃣ Rozwijaj Zespół</h4>
+                <p style='color: #78350f; font-size: 14px;'>
+                    W <strong>HR & Team → Wiedza Produktowa</strong> ucz się o produktach Heinz i Pudliszki. 
+                    Zdobywaj certyfikaty i odblokuj nowe możliwości.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Główne mechaniki gry
+        st.markdown("### 🎯 Główne Mechaniki Gry")
+        
+        with st.expander("📊 **System Reputacji** - Twój Główny Cel", expanded=True):
+            st.markdown("""
+            **Overall Rating** to Twój główny wskaźnik sukcesu, obliczany jako:
+            
+            - **60% Client Reputation** (średnia reputacja u wszystkich klientów)
+            - **40% Company Reputation** składająca się z:
+              - 30% Task Performance (wykonanie zadań)
+              - 40% Sales Performance (wyniki sprzedaży)
+              - 30% Professionalism (profesjonalizm w działaniu)
+            
+            **Tiery reputacji:**
+            - 🥉 **Bronze** (0-25): Początkujący
+            - 🥈 **Silver** (25-50): Rozwijający się
+            - 🥇 **Gold** (50-75): Profesjonalista
+            - 💎 **Platinum** (75-90): Ekspert
+            - 👑 **Diamond** (90+): Mistrz sprzedaży
+            
+            **Jak podnosić reputację?**
+            - Wykonuj zadania i otrzymuj pozytywny feedback
+            - Prowadź udane wizyty handlowe (ocena 4-5⭐)
+            - Podpisuj kontrakty i realizuj dostawy na czas
+            - Utrzymuj profesjonalizm (unikaj wizyt <3⭐)
+            """)
+        
+        with st.expander("🎓 **Zadania Onboardingowe** - Twój Start", expanded=False):
+            st.markdown("""
+            **3 zadania wprowadzające oceniane przez AI:**
+            
+            1. **🎤 Elevator Pitch** - Przedstawienie firmy Heinz Food Service
+               - Struktura: Kim jesteś → Co robicie → Wartość → Social proof → Pytanie
+               - AI oceni: długość, USP, konkretność, pytanie na koniec
+            
+            2. **❓ Pytania do Klienta** - Przygotowanie 3-4 pytań otwartych
+               - Cel: zrozumieć potrzeby, poznać obecne rozwiązania
+               - AI oceni: czy pytania są otwarte, konkretne, nastawione na klienta
+            
+            3. **💬 Obsługa Obiekcji** - Odpowiedź na "Mam już Heinz, po co mi Pudliszki?"
+               - Struktura: Akceptacja → Uzupełnienie → Korzyść → Przykład → Pytanie
+               - AI oceni: kompletność argumentacji, konkretne przykłady, profesjonalizm
+            
+            **Feedback od AI:**
+            - Natychmiastowa ocena Twojej odpowiedzi
+            - Konkretne wskazówki co poprawić
+            - Możliwość ponownego wysłania przy odrzuceniu
+            """)
+        
+        with st.expander("🤝 **Wizyty Handlowe** - Serce Gry", expanded=False):
+            st.markdown("""
+            **Proces wizyty:**
+            
+            1. **Wybór Klienta** - Zobacz listę restauracji z kategoryzacją:
+               - 🏆 **Premium** (fine dining, hotele) - wysokie marże, wymagający
+               - 🍔 **Casual** (burger bary, bistro) - średnie wolumeny, elastyczni
+               - 🌮 **Quick Service** (food trucki, fast food) - szybkie obroty, cena
+            
+            2. **Cele Wizyty** - Wybierz 1-2 cele:
+               - Budowanie relacji
+               - Prezentacja produktów
+               - Negocjacje kontraktu
+               - Wsparcie merchandising
+            
+            3. **Notatki & Discovery** - Zapisuj informacje o kliencie:
+               - Profil kuchni i gości
+               - Obecni dostawcy i wyzwania
+               - Potencjał i plany rozwoju
+            
+            4. **Ocena Wizyty** - System gwiazdkowy (1-5⭐):
+               - 5⭐ = +3 reputacja u klienta
+               - 4⭐ = +2 reputacja
+               - 3⭐ = +1 reputacja
+               - <3⭐ = -5 professionalism (Company Rep)
+            
+            **Wskazówki:**
+            - Regularność > jednorazowe akcje (odwiedzaj co 2-4 tygodnie)
+            - Dostosuj produkty do typu kuchni
+            - Buduj relację przed próbą sprzedaży
+            """)
+        
+        with st.expander("📦 **Portfolio Produktów** - Co Sprzedajesz", expanded=False):
+            st.markdown("""
+            **Heinz** - Marka premium dla gastronomii:
+            - **Heinz Tomato Ketchup** - ikona jakości, rozpoznawalność międzynarodowa
+            - **Heinz BBQ Sauce** - różne warianty (Classic, Smoky, Honey)
+            - **Heinz Mayonnaise** - kremowa konsystencja, stabilna jakość
+            - Idealny dla: burgery, steaki, kuchnia amerykańska/międzynarodowa
+            
+            **Pudliszki** - Tradycja i polski smak:
+            - **Pudliszki Ketchup Łagodny** - klasyczny polski smak
+            - **Pudliszki Musztarda** - różne rodzaje (Sarepska, Dijon)
+            - **Pudliszki Chrzan** - autentyczny, ostry
+            - Idealny dla: polska kuchnia, pierogi, żeberka, schabowe
+            
+            **Strategie sprzedaży:**
+            - **Complementary, nie konkurencja** - Heinz i Pudliszki uzupełniają się
+            - **Segmentacja menu** - premium burger = Heinz, tradycyjny obiad = Pudliszki
+            - **Portfolio approach** - sprzedawaj rozwiązania, nie produkty
+            """)
+        
+        with st.expander("👥 **Rozwój & Wiedza** - Nauka w Grze", expanded=False):
+            st.markdown("""
+            **Artykuły Wiedzy (HR & Team → Wiedza Produktowa):**
+            
+            - **🗺️ Planowanie Terytorium** - segmentacja ABC, routing, klasteryzacja
+            - **🔥 Heinz - Historia Marki** - 150 lat tradycji, wartości, positioning
+            - **🇵🇱 Pudliszki - Polski Smak** - lokalna marka, autentyczność
+            
+            **System uczenia:**
+            - Quiz po przeczytaniu artykułu
+            - Certyfikat po zaliczeniu (70%+)
+            - Odblokowanie nowych funkcji
+            
+            **Rozwój handlowca:**
+            - Zdobywaj XP przez zadania i wizyty
+            - Awansuj w tierach reputacji
+            - Odblokuj zaawansowane strategie sprzedaży
+            """)
+        
+        with st.expander("💰 **Ekonomia Gry** - Waluty i Nagrody", expanded=False):
+            st.markdown("""
+            **Waluty w grze:**
+            
+            - **XP (Experience Points)** - ogólny poziom doświadczenia
+            - **Unlock Tokens** - odblokowują nowe funkcje/produkty
+            - **Company Credits** - waluta do rozwoju (przyszła funkcja)
+            - **Reputation Points** - główny wskaźnik sukcesu
+            
+            **Źródła nagród:**
+            - Wykonane zadania: XP + Tokens + Reputacja
+            - Udane wizyty: Reputacja u klienta + XP
+            - Zaliczone quizy: Certyfikaty + XP
+            - Kontrakty (coming soon): Credits + Sales Performance
+            
+            **Progresja:**
+            - Bronze → Silver: wykonaj onboarding, zrób 5 wizyt
+            - Silver → Gold: podpisz pierwsze kontrakty, zbuduj portfolio
+            - Gold → Platinum: maksymalizuj reputację, zarządzaj wieloma klientami
+            """)
+        
+        st.markdown("---")
+        
+        # Wskazówki strategiczne
+        st.markdown("### 💡 Wskazówki Strategiczne")
+        
+        col_a, col_b = st.columns(2)
+        
+        with col_a:
+            st.markdown("""
+            **✅ DO:**
+            - ✅ Zacznij od zadań onboardingowych
+            - ✅ Czytaj artykuły przed wizytami
+            - ✅ Rób notatki o każdym kliencie
+            - ✅ Odwiedzaj regularnie (co 2-4 tygodnie)
+            - ✅ Dopasuj produkty do typu kuchni
+            - ✅ Buduj relację przed sprzedażą
+            - ✅ Używaj Heinz + Pudliszki jako portfolio
+            - ✅ Zapisuj feedback z wizyt
+            """)
+        
+        with col_b:
+            st.markdown("""
+            **❌ DON'T:**
+            - ❌ Nie ignoruj reputacji u klientów
+            - ❌ Nie sprzedawaj bez zrozumienia potrzeb
+            - ❌ Nie traktuj Heinz i Pudliszki jako konkurencji
+            - ❌ Nie zaniedbuj profesjonalizmu (<3⭐ boli!)
+            - ❌ Nie rób wizyt "na ślepo" bez przygotowania
+            - ❌ Nie obiecuj jeśli nie możesz dostarczyć
+            - ❌ Nie rezygnuj po jednej nieudanej wizycie
+            - ❌ Nie pomijaj onboardingu - to fundament!
+            """)
+        
+        st.markdown("---")
+        
+        # FAQ
+        st.markdown("### ❓ Najczęstsze Pytania (FAQ)")
+        
+        with st.expander("Jak podnieść Overall Rating?"):
+            st.markdown("""
+            **Overall Rating = (Client Rep × 60%) + (Company Rep × 40%)**
+            
+            **Podniesienie Client Reputation:**
+            - Rób wizyty 4-5⭐ (quality matters!)
+            - Odwiedzaj regularnie (częstotliwość liczy się)
+            - Rozwiązuj problemy klientów
+            - Dostarczaj wartość, nie tylko sprzedawaj
+            
+            **Podniesienie Company Reputation:**
+            - **Task Performance**: wykonuj zadania i dostawaj feedback ACCEPT
+            - **Sales Performance**: podpisuj kontrakty, realizuj dostawy (coming soon)
+            - **Professionalism**: unikaj wizyt <3⭐ (każda to -5 punktów!)
+            """)
+        
+        with st.expander("Co jeśli zadanie zostanie odrzucone przez AI?"):
+            st.markdown("""
+            **Nie ma problemu - możesz poprawić!**
+            
+            1. Przeczytaj uważnie feedback od AI
+            2. Zobacz co konkretnie wymaga poprawy
+            3. Edytuj swoją odpowiedź
+            4. Kliknij "Sprawdź ponownie AI"
+            5. Otrzymasz nową ocenę
+            
+            **Pamiętaj:**
+            - AI ocenia według kryteriów sukcesu z zadania
+            - Feedback jest konstruktywny - mówi CO i DLACZEGO
+            - Możesz próbować wielokrotnie
+            - Odrzucenie ≠ porażka, to szansa na naukę!
+            """)
+        
+        with st.expander("Jak często powinienem odwiedzać klientów?"):
+            st.markdown("""
+            **Złota zasada: 2-4 tygodnie między wizytami**
+            
+            **Premium Clients:**
+            - Co 2 tygodnie w fazie budowania relacji
+            - Co 3-4 tygodnie po podpisaniu kontraktu
+            - Więcej przy problemach/nowych produktach
+            
+            **Casual & Quick Service:**
+            - Co 3-4 tygodnie standardowo
+            - Co miesiąc w fazie maintenance
+            
+            **Wskaźniki:**
+            - Jeśli reputacja u klienta <50: zwiększ częstotliwość
+            - Jeśli >80: możesz wydłużyć cykl
+            - Obserwuj "ostatnia wizyta" w liście klientów
+            """)
+        
+        with st.expander("Czym różni się Heinz od Pudliszek?"):
+            st.markdown("""
+            **Heinz** - Premium, międzynarodowy:
+            - **Positioning**: jakość światowej klasy, rozpoznawalność
+            - **Cena**: wyższa (premium)
+            - **Idealny dla**: kuchnia amerykańska, burgery, steaki, hotele
+            - **Target**: goście międzynarodowi, menu premium
+            - **Argumenty**: brand recognition, consistent quality, 150 lat tradycji
+            
+            **Pudliszki** - Tradycja, polski smak:
+            - **Positioning**: autentyczny polski smak, lokalność
+            - **Cena**: niższa (accessible)
+            - **Idealny dla**: polska kuchnia, pierogi, żeberka, schabowe
+            - **Target**: polscy goście, menu tradycyjne/dnia
+            - **Argumenty**: lokalny smak, autentyczność, dopasowanie do polskich dań
+            
+            **Strategia PORTFOLIO:**
+            Nie "albo/albo", tylko "both/and"! Klient z obiema markami może:
+            - Segmentować menu (premium vs casual)
+            - Dopasować do profilu gościa (zagraniczny vs polski)
+            - Różnicować cenowo (fine dining vs daily lunch)
+            """)
+        
+        st.markdown("---")
+        
+        # Call to Action
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+                    padding: 25px; border-radius: 12px; text-align: center; margin-top: 30px;'>
+            <h3 style='color: white; margin: 0;'>🚀 Gotowy do Startu?</h3>
+            <p style='color: #d1fae5; font-size: 16px; margin: 15px 0;'>
+                Przejdź do zakładki <strong>Dashboard</strong> i rozpocznij od zadań onboardingowych!
+            </p>
+            <p style='color: #a7f3d0; font-size: 14px; margin: 0;'>
+                Powodzenia w budowaniu kariery w Heinz Food Service! 💪
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
     
     # =============================================================================
     # TAB: USTAWIENIA

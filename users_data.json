@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-11-04 12:56:21",
+    "last_login": "2025-11-04 15:40:13",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -517,6 +517,61 @@
       {
         "type": "login",
         "timestamp": "2025-11-04T12:56:21.305959",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T13:30:44.037383",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T13:33:26.552689",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T13:48:01.956311",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T13:59:38.632638",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T14:31:28.816901",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T14:39:43.548761",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T14:47:19.835980",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T14:53:01.412606",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T15:08:42.687522",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T15:28:44.012167",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T15:40:13.848838",
         "details": {}
       }
     ],
@@ -1333,7 +1388,7 @@
           "monthly_actual_sales": 0,
           "monthly_best_sales": 0,
           "weekly_history": [],
-          "last_activity_date": "2025-11-04T13:05:21.440624",
+          "last_activity_date": "2025-11-04T15:40:30.928399",
           "last_visit_client_id": null,
           "company": "Heinz Polska",
           "clients": {
@@ -2223,19 +2278,28 @@
           "reputation": {
             "clients": {},
             "company": {
-              "task_performance": 100,
-              "sales_performance": 0,
+              "task_performance": 15,
+              "sales_performance": 0.0,
               "professionalism": 100
             },
-            "overall_rating": 0,
-            "tier": "Trainee",
+            "tier": {
+              "name": "Trainee",
+              "emoji": "🟤",
+              "min_rating": 0,
+              "max_rating": 40
+            },
             "unlock_tokens": 0,
             "training_credits": 0,
             "xp": 0,
-            "level": 1
+            "level": 1,
+            "overall_rating": 13.8,
+            "company_reputation": 34.5
           },
           "scenario_id": "heinz_food_service",
-          "clients_total": 25
+          "clients_total": 25,
+          "mentor_questions_today": 0,
+          "mentor_last_reset_day": "Monday",
+          "mentor_conversation_history": []
         },
         "office": {
           "type": "company_office",
@@ -2332,7 +2396,7 @@
       "monthly_actual_sales": 0,
       "monthly_best_sales": 0,
       "weekly_history": [],
-      "last_activity_date": "2025-11-04T13:05:21.440624",
+      "last_activity_date": "2025-11-04T15:40:30.928399",
       "last_visit_client_id": null,
       "company": "Heinz Polska",
       "clients": {
@@ -3222,19 +3286,28 @@
       "reputation": {
         "clients": {},
         "company": {
-          "task_performance": 100,
-          "sales_performance": 0,
+          "task_performance": 15,
+          "sales_performance": 0.0,
           "professionalism": 100
         },
-        "overall_rating": 0,
-        "tier": "Trainee",
+        "tier": {
+          "name": "Trainee",
+          "emoji": "🟤",
+          "min_rating": 0,
+          "max_rating": 40
+        },
         "unlock_tokens": 0,
         "training_credits": 0,
         "xp": 0,
-        "level": 1
+        "level": 1,
+        "overall_rating": 13.8,
+        "company_reputation": 34.5
       },
       "scenario_id": "heinz_food_service",
-      "clients_total": 25
+      "clients_total": 25,
+      "mentor_questions_today": 0,
+      "mentor_last_reset_day": "Monday",
+      "mentor_conversation_history": []
     },
     "fmcg_clients": {
       "client_001": {
