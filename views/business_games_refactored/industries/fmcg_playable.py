@@ -1000,6 +1000,21 @@ def show_fmcg_playable_game(username: str):
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
+                    with st.expander("📖 Jak osiągnąć?"):
+                        st.markdown("""
+                        **💰 Nagroda:** 3,000 PLN | **Priorytet:** 🔴 CRITICAL
+                        
+                        **Co to znaczy:**  
+                        Zdobądź co najmniej **15 aktywnych punktów sprzedaży** z 25 dostępnych w regionie Dzięgielów (60% dystrybucji).
+                        
+                        **Strategia:**
+                        - ✅ Podpisz umowy z różnymi lokalami Food Service
+                        - ✅ Nieważne czy kupują Heinz, Pudliszki, czy obie marki
+                        - 🎯 Zacznij od Easy Wins (klienci znający markę)
+                        - 🥊 Przejmuj klientów od Kotlin
+                        - 📊 Portfolio play: Pudliszki dla budżetowych, Heinz dla premium
+                        """)
                 
                 with col_g2:
                     sales_color = "#10b981" if monthly_sales >= sales_target else "#f59e0b" if monthly_sales >= 10000 else "#ef4444"
@@ -1013,6 +1028,24 @@ def show_fmcg_playable_game(username: str):
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
+                    with st.expander("📖 Jak osiągnąć?"):
+                        st.markdown("""
+                        **💰 Nagroda:** 2,500 PLN | **Priorytet:** 🟠 HIGH
+                        
+                        **Co to znaczy:**  
+                        Osiągnij łączną sprzedaż **15,000 PLN** w skali miesiąca (Heinz + Pudliszki).
+                        
+                        **Strategia:**
+                        - 📦 Sprzedawaj regularnie do aktywnych klientów
+                        - 📈 Zwiększaj wielkość zamówień (volume play)
+                        - ⭐ Mix: Heinz (wyższa marża) + Pudliszki (wyższy wolumen)
+                        - 🎯 Priorytetyzuj klientów z wysokim potencjałem (kg/mies)
+                        
+                        **Przykładowa ścieżka:**
+                        - 10 klientów × 1,500 PLN = 15,000 PLN
+                        - LUB: 6 premium (2k) + 8 value (750) = 18,000 PLN
+                        """)
                 
                 with col_g3:
                     kotlin_color = "#10b981" if kotlin_wins >= kotlin_target else "#f59e0b" if kotlin_wins >= 4 else "#ef4444"
@@ -1026,6 +1059,25 @@ def show_fmcg_playable_game(username: str):
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
+                    with st.expander("📖 Jak osiągnąć?"):
+                        st.markdown("""
+                        **💰 Nagroda:** 1,500 PLN | **Priorytet:** 🟡 MEDIUM
+                        
+                        **Co to znaczy:**  
+                        Przejmij **6 z 8 klientów** używających obecnie ketchupów Kotlin.
+                        
+                        **Strategia:**
+                        - 🔍 Klienci Kotlin oznaczeni w bazie
+                        - 💬 Techniki: FOZ, Kompensacja, Perspektywizacja
+                        - 🎯 Argument: jakość Heinz / polska marka Pudliszki
+                        - ✅ Pudliszki też się liczy jako win!
+                        
+                        **Easy Wins:**
+                        - Kebab Express (problemy z dostawami)
+                        - Pizza House (niespójna jakość)
+                        - Burger Craft (chce uprościć dostawców)
+                        """)
                 
                 st.markdown("---")
             
@@ -1061,6 +1113,17 @@ def show_fmcg_playable_game(username: str):
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
+                    with st.expander("📖 Jak osiągnąć?"):
+                        st.markdown("""
+                        **Cel:** Zdobądź co najmniej 10 aktywnych klientów w swoim portfolio.
+                        
+                        **Strategia:**
+                        - 👥 Odwiedzaj prospectów i przekonuj ich do współpracy
+                        - 💬 Używaj różnych technik sprzedażowych (FOZ, Kompensacja, etc.)
+                        - 🤝 Dbaj o relacje z klientami (reputation)
+                        - 📈 Regularnie odwiedzaj i obsługuj klientów
+                        """)
                 
                 with col_g2:
                     products_color = "#10b981" if products_sold >= products_target else "#f59e0b" if products_sold >= 10 else "#ef4444"
@@ -1074,6 +1137,17 @@ def show_fmcg_playable_game(username: str):
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
+                    with st.expander("📖 Jak osiągnąć?"):
+                        st.markdown("""
+                        **Cel:** Sprzedaj co najmniej 15 różnych produktów ze swojego portfolio.
+                        
+                        **Strategia:**
+                        - 🎯 Oferuj różnorodne produkty różnym klientom
+                        - 🏪 Dostosuj ofertę do potrzeb segmentu
+                        - 📦 Cross-selling: klient kupuje A → zaproponuj B
+                        - ⬆️ Upselling: upgrade do produktów premium
+                        """)
                 
                 with col_g3:
                     rep_color = "#10b981" if avg_reputation >= reputation_target else "#f59e0b" if avg_reputation >= 25 else "#ef4444"
@@ -1087,6 +1161,17 @@ def show_fmcg_playable_game(username: str):
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
+                    
+                    with st.expander("📖 Jak osiągnąć?"):
+                        st.markdown("""
+                        **Cel:** Utrzymuj średnią reputację na poziomie +50 punktów wśród aktywnych klientów.
+                        
+                        **Strategia:**
+                        - ✅ Regularnie odwiedzaj klientów (nie zapomnij o nich!)
+                        - 🤝 Dotrzymuj obietnic i terminów
+                        - ⚡ Rozwiązuj problemy szybko i skutecznie
+                        - 🎁 Oferuj wartość dodaną (porady, wsparcie)
+                        """)
                 
                 st.markdown("---")
             
@@ -4773,6 +4858,138 @@ def show_fmcg_playable_game(username: str):
         
         for key, value in scenario_info.items():
             st.markdown(f"**{key}:** {value}")
+        
+        # SCENARIO OBJECTIVES DETAILS
+        st.markdown("---")
+        st.markdown("### 🎯 Cele Scenariusza - Szczegóły")
+        
+        if is_heinz_scenario:
+            st.markdown("**📋 Heinz Food Service Challenge - 3 Kluczowe Cele**")
+            st.markdown("")
+            
+            # Objective 1: Numeric Distribution
+            with st.expander("🎯 **CEL 1: Dystrybucja Numeryczna - 15/25 punktów (60%)**", expanded=False):
+                st.markdown("""
+                **Nagroda:** 💰 3,000 PLN  
+                **Priorytet:** 🔴 CRITICAL
+                
+                **Opis:**  
+                Zdobądź co najmniej **15 aktywnych punktów sprzedaży** z 25 dostępnych w regionie Dzięgielów. 
+                To oznacza 60% dystrybucji numerycznej portfolio Heinz (Heinz Premium + Pudliszki Value).
+                
+                **Jak to osiągnąć:**
+                - ✅ Podpisz umowy z 15 różnymi lokalami Food Service
+                - ✅ Każdy aktywny klient liczy się jako 1 punkt dystrybucji
+                - ✅ Nieważne czy kupują Heinz, Pudliszki, czy obie marki
+                
+                **Strategia:**
+                - Zacznij od **Easy Wins** (klienci już znający markę)
+                - Przejmuj klientów od konkurencji (szczególnie Kotlin)
+                - Wykorzystaj portfolio play: Pudliszki dla budżetowych, Heinz dla premium
+                
+                **Wskaźnik sukcesu:**  
+                Liczba aktywnych klientów ≥ 15 → ✅ Cel osiągnięty
+                """)
+            
+            # Objective 2: Monthly Sales
+            with st.expander("💰 **CEL 2: Sprzedaż Miesięczna - 15,000 PLN**", expanded=False):
+                st.markdown("""
+                **Nagroda:** 💰 2,500 PLN  
+                **Priorytet:** 🟠 HIGH
+                
+                **Opis:**  
+                Osiągnij łączną sprzedaż na poziomie **15,000 PLN** w skali miesiąca. 
+                Liczy się suma przychodów z obu marek: Heinz Premium + Pudliszki Value.
+                
+                **Jak to osiągnąć:**
+                - 📦 Sprzedawaj regularnie do aktywnych klientów
+                - 📈 Zwiększaj wielkość zamówień (volume play)
+                - ⭐ Mix produktów: Heinz (wyższa marża) + Pudliszki (wyższy wolumen)
+                
+                **Przykładowa ścieżka do 15,000 PLN:**
+                - 10 klientów × 1,500 PLN/miesiąc = 15,000 PLN
+                - LUB: 6 premium (Heinz, ~2,000 PLN) + 8 value (Pudliszki, ~750 PLN) = 18,000 PLN
+                
+                **Strategia:**
+                - Priorytetyzuj klientów z wysokim **potencjałem** (kg/mies)
+                - Dystrybutorzy = duże wolumeny (100+ kg/mies)
+                - Upselluj: jeśli klient kupuje Pudliszki, zaproponuj Heinz na menu premium
+                
+                **Wskaźnik sukcesu:**  
+                Suma sprzedaży miesięcznej ≥ 15,000 PLN → ✅ Cel osiągnięty
+                """)
+            
+            # Objective 3: Beat Kotlin
+            with st.expander("🥊 **CEL 3: Przejęcia z Kotlin - 6 wygranych**", expanded=False):
+                st.markdown("""
+                **Nagroda:** 💰 1,500 PLN  
+                **Priorytet:** 🟡 MEDIUM
+                
+                **Opis:**  
+                Przejmij **co najmniej 6 klientów** od konkurencji - marki **Kotlin**. 
+                Kotlin ma obecnie 8 klientów w Twoim regionie - Twój cel to zdobyć 6 z nich.
+                
+                **Jak to osiągnąć:**
+                - 🔍 Zidentyfikuj klientów używających Kotlin (oznaczeni w bazie)
+                - 💬 Użyj technik sprzedażowych: FOZ, Kompensacja, Perspektywizacja
+                - 🎯 Pokaż przewagę: jakość Heinz vs Kotlin, polska marka Pudliszki
+                
+                **Klienci Kotlin (8 total - cel: 6 wins):**
+                1. Burger Station (price sensitive - target: Pudliszki)
+                2. Hot Dog Heaven (brand matters - target: Heinz)
+                3. Kebab King (volume play - target: Pudliszki)
+                4. Kebab Express (delivery issues - EASY WIN)
+                5. Burger Craft (mix suppliers - chce uprościć)
+                6. Bar Mleczny Smaczek (no-name currently)
+                7. Stołówka Zakładowa (kontrakt wygasa)
+                8. Pizza House (niespójna jakość - EASY WIN)
+                
+                **Strategia:**
+                - Start od najłatwiejszych: Kebab Express (problemy z dostawami), Pizza House (jakość)
+                - Nie musisz sprzedawać Heinz - **Pudliszki też się liczy!**
+                - Argument: "Kotlin to marka niszowa, Pudliszki/Heinz = узнаваемость"
+                
+                **Wskaźnik sukcesu:**  
+                Liczba przejętych klientów od Kotlin ≥ 6 → ✅ Cel osiągnięty
+                """)
+            
+            st.info("💡 **Tip:** Wszystkie 3 cele są niezależne - możesz je realizować równolegle. Priorytetyzuj według nagród i Twojego stylu gry!")
+        
+        else:
+            # Standard scenarios (Quick Start, Lifetime)
+            st.markdown("**🚀 Podstawowe Cele - Quick Start / Lifetime**")
+            st.markdown("")
+            
+            with st.expander("🎯 **CEL 1: Aktywni Klienci - 10 punktów**", expanded=False):
+                st.markdown("""
+                **Opis:** Zdobądź co najmniej 10 aktywnych klientów w swoim portfolio.
+                
+                **Jak to osiągnąć:**
+                - Odwiedzaj prospectów i przekonuj ich do współpracy
+                - Używaj różnych technik sprzedażowych
+                - Dbaj o relacje z klientami (reputation)
+                """)
+            
+            with st.expander("📦 **CEL 2: Dywersyfikacja Produktowa - 15 różnych produktów**", expanded=False):
+                st.markdown("""
+                **Opis:** Sprzedaj co najmniej 15 różnych produktów ze swojego portfolio.
+                
+                **Jak to osiągnąć:**
+                - Oferuj różnorodne produkty różnym klientom
+                - Dostosuj ofertę do potrzeb segmentu
+                - Cross-selling i upselling
+                """)
+            
+            with st.expander("⭐ **CEL 3: Satysfakcja Klientów - Średnia reputacja +50**", expanded=False):
+                st.markdown("""
+                **Opis:** Utrzymaj średnią reputację na poziomie +50 punktów wśród aktywnych klientów.
+                
+                **Jak to osiągnąć:**
+                - Regularnie odwiedzaj klientów
+                - Dotrzymuj obietnic
+                - Rozwiązuj problemy szybko i skutecznie
+                """)
+
     
     # =============================================================================
     # DEBUG INFO (collapsible)
