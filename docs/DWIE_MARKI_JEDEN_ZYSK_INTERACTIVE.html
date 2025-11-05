@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dwie marki, jeden zysk – Heinz i Pudliszki</title>
+    <style>
+        /* ============================================================================
+           BVA EDUCATIONAL MATERIALS - Style według standardu
+           Zobacz: bva_educational_styles.css i BVA_STYLE_GUIDE.md
+           
+           Kolory boxów (semantic):
+           🔵 info-box - teoria, definicje
+           🟢 success-box - dobre praktyki
+           🔴 error-box - błędy, pułapki
+           🟡 warning-box - wskazówki, tipy
+           🟠 highlight-box - case studies
+           
+           Emoji standardy:
+           📖 = Teoria/Wprowadzenie
+           🎯 = Praktyka/Zastosowanie
+           💬 = Komunikacja/Rozmowy
+           📊 = Dane/Analiza
+           ✅ = Podsumowanie/Checklist
+           ============================================================================ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #1e293b;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #334155;
+            font-size: 1.4rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #475569;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #475569;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .brand-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-top: 4px solid;
+        }
+        
+        .brand-card.heinz {
+            border-top-color: #dc2626;
+        }
+        
+        .brand-card.pudliszki {
+            border-top-color: #f59e0b;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            border-left: 5px solid #3b82f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 5px solid #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+            border-left: 5px solid #dc2626;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        blockquote {
+            background: #f1f5f9;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #475569;
+            border-radius: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f8fafc;
+        }
+        
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .vs-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .dialogue-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .dialogue-label {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .dialogue-text {
+            font-style: italic;
+            color: #475569;
+            line-height: 1.7;
+        }
+        
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .strategy-column h4 {
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .heinz-strategy h4 {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+        
+        .pudliszki-strategy h4 {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .argument-list {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .argument-list li {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .heinz-strategy .argument-list li {
+            border-left-color: #dc2626;
+        }
+        
+        .pudliszki-strategy .argument-list li {
+            border-left-color: #f59e0b;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        .footer-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .footer-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Dwie marki, jeden zysk</h1>
+        <p class="subtitle">Jak sprzedawać ekonomicznie Heinz i Pudliszki</p>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'intro')">� Wprowadzenie</button>
+            <button class="tab-button" onclick="openTab(event, 'pozycjonowanie')">🎯 Pozycjonowanie</button>
+            <button class="tab-button" onclick="openTab(event, 'argumenty')">💬 Argumenty</button>
+            <button class="tab-button" onclick="openTab(event, 'portfolio')">📊 Smart Portfolio</button>
+            <button class="tab-button" onclick="openTab(event, 'praktyka')">✅ Praktyka</button>
+        </div>
+        
+        <!-- Tab 1: Wprowadzenie -->
+        <div id="intro" class="tab-content active">
+            <h2>� Dwie marki – jedno portfolio</h2>
+            
+            <blockquote>
+                "Heinz i Pudliszki nie konkurują ze sobą — tworzą strategiczny duet. 
+                Heinz otwiera drzwi prestiżem, Pudliszki pozwala utrzymać szerokie portfolio i elastyczność oferty."
+            </blockquote>
+            
+            <div class="info-box">
+                <h3 style="margin-top: 0;">🏢 Heinz Polska zarządza dwoma silnymi markami</h3>
+                <p style="font-size: 1.1rem;">
+                    Te marki razem pokrywają <strong>cały rynek gastronomii</strong> – 
+                    od stołówek po restauracje premium.
+                </p>
+            </div>
+            
+            <div class="grid">
+                <div class="brand-card heinz">
+                    <h3 style="color: #dc2626; margin-top: 0;">🔴 Heinz</h3>
+                    <p style="font-size: 1.05rem; line-height: 1.8;">
+                        <strong>Marka premium</strong><br>
+                        ✓ Kojarzona z jakością<br>
+                        ✓ Wydajność i powtarzalność<br>
+                        ✓ Wizerunek globalny<br>
+                        ✓ Prestiż i zaufanie
+                    </p>
+                </div>
+                
+                <div class="brand-card pudliszki">
+                    <h3 style="color: #f59e0b; margin-top: 0;">🟡 Pudliszki</h3>
+                    <p style="font-size: 1.05rem; line-height: 1.8;">
+                        <strong>Marka value-for-money</strong><br>
+                        ✓ Polska, lokalna<br>
+                        ✓ Ekonomiczna i dostępna<br>
+                        ✓ Dobra jakość w rozsądnej cenie<br>
+                        ✓ Szeroka dystrybucja
+                    </p>
+                </div>
+            </div>
+            
+            <div class="success-box">
+                <h3 style="margin-top: 0;">🎯 Zadanie Professional Handlowca (PH)</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Dobrać <strong>argumenty ekonomiczne</strong> odpowiednie do:
+                </p>
+                <ul style="font-size: 1.05rem; line-height: 1.8;">
+                    <li>Segmentu klienta</li>
+                    <li>Jego potrzeb biznesowych</li>
+                    <li>Potencjału zakupowego</li>
+                    <li>Struktury menu (premium vs volume)</li>
+                </ul>
+            </div>
+            
+            <div class="highlight-box">
+                <h3 style="margin-top: 0;">💡 Kluczowa zasada</h3>
+                <p style="font-size: 1.2rem; font-weight: bold; text-align: center;">
+                    Heinz otwiera drzwi prestiżem.<br>
+                    Pudliszki pozwala utrzymać szerokie portfolio.
+                </p>
+                <p style="font-size: 1.05rem; margin-top: 15px; text-align: center;">
+                    Razem zwiększają <strong>udział Heinz Polska</strong> w zakupach klienta 
+                    i stabilność długoterminowej współpracy.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Tab 2: Pozycjonowanie -->
+        <div id="pozycjonowanie" class="tab-content">
+            <h2>🎯 Pozycjonowanie ekonomiczne marek</h2>
+            
+            <blockquote>
+                "Heinz = argument jakościowy i wizerunkowy. Pudliszki = argument kosztowy i dostępnościowy. 
+                Obie marki mają uzasadnienie ekonomiczne, tylko w różnych językach."
+            </blockquote>
+            
+            <h3 style="margin-top: 30px;">📊 Porównanie strategiczne</h3>
+            
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Marka</th>
+                            <th>Segment</th>
+                            <th>Klient docelowy</th>
+                            <th>Główna wartość</th>
+                            <th>Strategia ceny</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #fef2f2;">
+                            <td><strong style="color: #dc2626;">🔴 Heinz</strong></td>
+                            <td>Premium HoReCa</td>
+                            <td>Restauracje, hotele, burgerownie craftowe</td>
+                            <td>Wysoka jakość, wydajność, prestiż</td>
+                            <td>Wyższa cena jednostkowa, <strong>niższy koszt porcji</strong></td>
+                        </tr>
+                        <tr style="background: #fffbeb;">
+                            <td><strong style="color: #f59e0b;">🟡 Pudliszki</strong></td>
+                            <td>Value segment</td>
+                            <td>Stołówki, bary mleczne, fast foody, cateringi</td>
+                            <td>Polskie pochodzenie, dobra jakość w rozsądnej cenie</td>
+                            <td>Niska cena jednostkowa, większe zużycie</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3 style="margin-top: 40px;">🧠 Jak myśli klient Heinz vs klient Pudliszki</h3>
+            
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Typ klienta</th>
+                            <th>Co dla niego najważniejsze</th>
+                            <th>Jak mówi o pieniądzach</th>
+                            <th>Czego się boi</th>
+                            <th>Co doceni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #fef2f2;">
+                            <td><strong style="color: #dc2626;">Restauracja premium / burgerownia</strong></td>
+                            <td>Smak, reputacja, powtarzalność, opinie gości</td>
+                            <td><em>„Jakość musi się obronić."</em></td>
+                            <td>Spadku jakości, negatywnych recenzji</td>
+                            <td>Stabilność, wizerunek, globalną markę</td>
+                        </tr>
+                        <tr style="background: #fffbeb;">
+                            <td><strong style="color: #f59e0b;">Stołówka, fast food, catering</strong></td>
+                            <td>Niski food cost, łatwe dozowanie, lokalność</td>
+                            <td><em>„Ma się zgadzać koszt talerza."</em></td>
+                            <td>Braku rabatów, problemów z logistyką</td>
+                            <td>Cena, promocje, dostępność w hurtowni</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="info-box" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">💡 Kluczowy wniosek</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Nie ma „lepszej" marki – jest <strong>lepiej dopasowana</strong> do potrzeb konkretnego klienta.<br><br>
+                    Professional Handlowiec rozpoznaje, <strong>w jakim języku mówi klient</strong>, 
+                    i dopasowuje markę oraz argumentację ekonomiczną.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Tab 3: Argumenty -->
+        <div id="argumenty" class="tab-content">
+            <h2>💬 Argumenty ekonomiczne dla każdej marki</h2>
+            
+            <div class="strategy-grid">
+                <!-- Heinz -->
+                <div class="heinz-strategy strategy-column">
+                    <h4>🔴 HEINZ – język wartości i efektywności</h4>
+                    
+                    <div class="info-box" style="background: #fef2f2; border-left-color: #dc2626;">
+                        <p style="font-size: 1.05rem; font-weight: bold;">
+                            Heinz to marka, której siłą nie jest niska cena — tylko <strong>opłacalność w użyciu</strong>.
+                        </p>
+                    </div>
+                    
+                    <h4 style="background: none; color: #334155; text-align: left; padding: 0;">🔹 Kluczowe argumenty:</h4>
+                    
+                    <ul class="argument-list">
+                        <li>
+                            <strong>Wydajność produktu</strong><br>
+                            <span style="color: #64748b;">„Heinz jest droższy na kilogramie, ale tańszy na talerzu. Wystarczy 20 g zamiast 25."</span>
+                        </li>
+                        <li>
+                            <strong>Powtarzalność jakości</strong><br>
+                            <span style="color: #64748b;">„Smak i konsystencja są identyczne, niezależnie od sezonu pomidorów."</span>
+                        </li>
+                        <li>
+                            <strong>Stabilność food costu</strong><br>
+                            <span style="color: #64748b;">„Nie ryzykuje Pan wahań – produkt jest powtarzalny i przewidywalny."</span>
+                        </li>
+                        <li>
+                            <strong>Prestiż marki</strong><br>
+                            <span style="color: #64748b;">„Klienci zapłacą 1 zł więcej za burgera, jeśli wiedzą, że używacie Heinz."</span>
+                        </li>
+                        <li>
+                            <strong>Bezpieczeństwo i serwis</strong><br>
+                            <span style="color: #64748b;">„Zamawia Pan w pakietach gastronomicznych, bez ryzyka przerw w dostępności."</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="dialogue-box">
+                        <div class="dialogue-label">Klient:</div>
+                        <div class="dialogue-text">„Heinz jest za drogi."</div>
+                        
+                        <div class="dialogue-label" style="margin-top: 15px; color: #10b981;">PH:</div>
+                        <div class="dialogue-text">
+                            „To prawda, ale dzięki gęstości Heinz zużywa się o 20% mniej. 
+                            W praktyce koszt porcji wychodzi taki sam, a Pan zyskuje stabilność i prestiż. 
+                            To inwestycja, która się zwraca — nie tylko w kuchni, ale też w opinii gości."
+                        </div>
+                    </div>
+                    
+                    <p style="text-align: center; font-weight: bold; color: #dc2626; margin-top: 20px;">
+                        ➡️ Język: wartość, efektywność, reputacja, spokój
+                    </p>
+                </div>
+                
+                <!-- Pudliszki -->
+                <div class="pudliszki-strategy strategy-column">
+                    <h4>🟡 PUDLISZKI – język oszczędności i lokalności</h4>
+                    
+                    <div class="info-box" style="background: #fffbeb; border-left-color: #f59e0b;">
+                        <p style="font-size: 1.05rem; font-weight: bold;">
+                            Pudliszki to marka racjonalna, bliska polskiej gastronomii – <strong>rozsądny balans ceny i jakości</strong>.
+                        </p>
+                    </div>
+                    
+                    <h4 style="background: none; color: #334155; text-align: left; padding: 0;">🔹 Kluczowe argumenty:</h4>
+                    
+                    <ul class="argument-list">
+                        <li>
+                            <strong>Atrakcyjny food cost</strong><br>
+                            <span style="color: #64748b;">„Koszt porcji 25 g to około 0,30 zł – idealny do menu w segmencie 25–30% foodcostu."</span>
+                        </li>
+                        <li>
+                            <strong>Stabilna, polska marka</strong><br>
+                            <span style="color: #64748b;">„Z polskich pomidorów, nie importowanych koncentratów."</span>
+                        </li>
+                        <li>
+                            <strong>Dostępność w dystrybucji</strong><br>
+                            <span style="color: #64748b;">„Zawsze Pan dostanie – w każdej hurtowni, codziennie."</span>
+                        </li>
+                        <li>
+                            <strong>Promocje i pakiety</strong><br>
+                            <span style="color: #64748b;">„Pakiet 4+1 lub rabat kwartalny – łatwe obniżenie ceny jednostkowej."</span>
+                        </li>
+                        <li>
+                            <strong>Spójność z Heinz</strong><br>
+                            <span style="color: #64748b;">„Jeśli lokal ma różne segmenty menu, możemy dobrać Heinz do premium pozycji, a Pudliszki do zestawów lunchowych."</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="dialogue-box">
+                        <div class="dialogue-label">Klient:</div>
+                        <div class="dialogue-text">„Nie stać mnie na Heinz, potrzebuję czegoś tańszego."</div>
+                        
+                        <div class="dialogue-label" style="margin-top: 15px; color: #10b981;">PH:</div>
+                        <div class="dialogue-text">
+                            „Rozumiem. W takim razie polecę Pudliszki – polski produkt, ta sama stabilność dostaw, 
+                            a cena lepiej dopasowana do stołówkowego foodcostu. Dla burgerów premium zostawmy Heinz – 
+                            tak rozdzielają to inne lokale."
+                        </div>
+                    </div>
+                    
+                    <p style="text-align: center; font-weight: bold; color: #f59e0b; margin-top: 20px;">
+                        ➡️ Język: oszczędność, elastyczność, bezpieczeństwo, dopasowanie
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab 4: Smart Portfolio -->
+        <div id="portfolio" class="tab-content">
+            <h2>📊 Smart Portfolio – kiedy i jak łączyć marki</h2>
+            
+            <blockquote>
+                "W praktyce wielu klientów potrzebuje obu marek jednocześnie – 
+                bo ich kuchnia pracuje w różnych segmentach."
+            </blockquote>
+            
+            <div class="success-box">
+                <h3 style="margin-top: 0;">🏨 Przykład: Restauracja hotelowa</h3>
+                
+                <div class="grid" style="margin-top: 20px;">
+                    <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                        <h4 style="color: #f59e0b; margin-top: 0;">🟡 Pudliszki</h4>
+                        <p style="font-size: 1.05rem;">
+                            <strong>Lunch dnia w bufecie</strong><br>
+                            ✓ Duże wolumeny<br>
+                            ✓ Niski food cost<br>
+                            ✓ Segment ekonomiczny
+                        </p>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #dc2626;">
+                        <h4 style="color: #dc2626; margin-top: 0;">🔴 Heinz</h4>
+                        <p style="font-size: 1.05rem;">
+                            <strong>A la carte & room service</strong><br>
+                            ✓ Prestiż i jakość<br>
+                            ✓ Wizerunek premium<br>
+                            ✓ Goście płacą za markę
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="info-box" style="margin-top: 20px;">
+                    <h4 style="margin-top: 0;">✅ Co zyskuje klient?</h4>
+                    <ul style="font-size: 1.05rem; line-height: 1.8;">
+                        <li>Spójność smaku i jakości w całym menu</li>
+                        <li>Efektywność ekonomiczna – każda marka tam, gdzie przynosi najwięcej</li>
+                        <li>Większy udział Heinz Polska w zakupach (jeden dostawca, jedna logistyka)</li>
+                        <li>Elastyczność i bezpieczeństwo</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px;">🎯 Zasada „Smart Portfolio"</h3>
+            
+            <div class="highlight-box">
+                <p style="font-size: 1.3rem; font-weight: bold; text-align: center; margin-bottom: 20px;">
+                    Nie wybieraj między Heinz a Pudliszki.<br>
+                    Dobierz każdą markę tam, gdzie przynosi największy zysk.
+                </p>
+                
+                <div class="grid" style="margin-top: 20px;">
+                    <div style="background: white; padding: 20px; border-radius: 8px;">
+                        <h4 style="color: #dc2626; margin-top: 0;">🔴 Heinz →</h4>
+                        <p style="font-size: 1.05rem;">
+                            Produkty premium, ekspozycyjne, prestiżowe<br>
+                            <em>(burgery signature, dania à la carte)</em>
+                        </p>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 8px;">
+                        <h4 style="color: #f59e0b; margin-top: 0;">🟡 Pudliszki →</h4>
+                        <p style="font-size: 1.05rem;">
+                            Produkty podstawowe, duże wolumeny, stołówkowe<br>
+                            <em>(lunch dnia, zestawy, bufety)</em>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 40px;">💼 Przykład argumentacji łączonej</h3>
+            
+            <div class="dialogue-box" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-left-color: #10b981;">
+                <div class="dialogue-label" style="color: #10b981;">Professional Handlowiec:</div>
+                <div class="dialogue-text" style="font-size: 1.1rem; line-height: 1.8;">
+                    „Panie Piotrze, rozumiem, że potrzebuje Pan elastyczności.<br><br>
+                    
+                    W burgerach premium <strong style="color: #dc2626;">zostawmy Heinz</strong> – 
+                    gwarancja smaku i prestiżu, klienci to docenią.<br><br>
+                    
+                    Ale do bufetów i zestawów lunchowych mogę dobrać <strong style="color: #f59e0b;">Pudliszki</strong> – 
+                    ten sam dostawca, ta sama logistyka, niższy koszt jednostkowy.<br><br>
+                    
+                    W efekcie łączny food cost pozostaje taki sam, 
+                    a zyskuje Pan spokój i jakość tam, gdzie goście najbardziej patrzą."
+                </div>
+                
+                <p style="text-align: center; font-weight: bold; color: #10b981; margin-top: 20px; font-size: 1.1rem;">
+                    ➡️ Język: ekonomia użycia + segmentacja wartości + partnerskie doradztwo
+                </p>
+            </div>
+            
+            <div class="card" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">📈 Efekty strategii Smart Portfolio</h3>
+                
+                <div class="grid">
+                    <div class="info-box" style="margin: 0;">
+                        <h4 style="margin-top: 0;">Dla klienta:</h4>
+                        <ul style="font-size: 1.05rem;">
+                            <li>✅ Optymalizacja kosztów</li>
+                            <li>✅ Prestiż tam, gdzie potrzeba</li>
+                            <li>✅ Jeden dostawca, mniej logistyki</li>
+                            <li>✅ Elastyczność i bezpieczeństwo</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="success-box" style="margin: 0;">
+                        <h4 style="margin-top: 0;">Dla PH:</h4>
+                        <ul style="font-size: 1.05rem;">
+                            <li>✅ Większy udział w zakupach klienta</li>
+                            <li>✅ Długoterminowa współpraca</li>
+                            <li>✅ Cross-selling naturalny</li>
+                            <li>✅ Pozycja partnera, nie dostawcy</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab 5: Praktyka -->
+        <div id="praktyka" class="tab-content">
+            <h2>✅ Jak używać argumentów w rozmowie – praktyka</h2>
+            
+            <h3>📋 Matryca odpowiedzi na obiekcje</h3>
+            
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Typ obiekcji</th>
+                            <th>Odpowiedź Heinz</th>
+                            <th>Odpowiedź Pudliszki</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>„Za drogo."</strong></td>
+                            <td style="background: #fef2f2;">„Cena za kilogram wyższa, ale koszt porcji niższy."</td>
+                            <td style="background: #fffbeb;">„Tańszy produkt, a jednocześnie zachowujemy dobry smak i gęstość."</td>
+                        </tr>
+                        <tr>
+                            <td><strong>„Klient nie widzi różnicy."</strong></td>
+                            <td style="background: #fef2f2;">„Nie widzi, ale czuje – w smaku i stabilności sosu."</td>
+                            <td style="background: #fffbeb;">„W tym segmencie liczy się koszt i lokalność – Pudliszki to polska marka."</td>
+                        </tr>
+                        <tr>
+                            <td><strong>„Nie chcę ryzykować zmiany."</strong></td>
+                            <td style="background: #fef2f2;">„Dlatego daję test – 1 danie, 1 dzień, sam Pan oceni."</td>
+                            <td style="background: #fffbeb;">„Możemy wprowadzić na próbę do jednej linii produktów."</td>
+                        </tr>
+                        <tr>
+                            <td><strong>„Nie potrzebuję premium."</strong></td>
+                            <td style="background: #fef2f2;">„Zrozumiałe – dlatego Heinz stosujemy tylko w kluczowych daniach."</td>
+                            <td style="background: #fffbeb;">„Właśnie dlatego proponuję Pudliszki – optymalna jakość w tej cenie."</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3 style="margin-top: 40px;">🗣️ Jak mówić jednym językiem dwóch marek</h3>
+            
+            <div class="strategy-grid">
+                <div class="heinz-strategy">
+                    <div class="highlight-box" style="background: #fef2f2; border-left-color: #dc2626;">
+                        <h4 style="color: #dc2626; margin-top: 0;">🔴 HEINZ – język prestiżu</h4>
+                        <ul style="font-size: 1.05rem; line-height: 1.8;">
+                            <li>„Wydajność, prestiż, stabilność, powtarzalność."</li>
+                            <li>„Produkt, który pomaga zarabiać na jakości."</li>
+                            <li>„Premium nie znaczy drogo – znaczy przewidywalnie."</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="pudliszki-strategy">
+                    <div class="warning-box" style="background: #fffbeb; border-left-color: #f59e0b;">
+                        <h4 style="color: #f59e0b; margin-top: 0;">🟡 PUDLISZKI – język efektywności</h4>
+                        <ul style="font-size: 1.05rem; line-height: 1.8;">
+                            <li>„Polska jakość, rozsądna cena."</li>
+                            <li>„Dobry smak bez ryzyka dla foodcostu."</li>
+                            <li>„Idealne do dużych wolumenów – pewne i tanie w użyciu."</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="success-box" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">💡 Złota zasada</h3>
+                <p style="font-size: 1.2rem; text-align: center; font-weight: bold; line-height: 1.8;">
+                    W praktyce:<br>
+                    Heinz buduje <span style="color: #dc2626;">wizerunek</span>,<br>
+                    Pudliszki utrzymuje <span style="color: #f59e0b;">rentowność</span>.<br><br>
+                    Wspólnie zwiększają udział Heinz Polska w rynku<br>
+                    i stabilność współpracy z klientem.
+                </p>
+            </div>
+            
+            <h3 style="margin-top: 40px;">🔟 Wnioski i wskazówki praktyczne</h3>
+            
+            <div class="card">
+                <ol style="font-size: 1.05rem; line-height: 2;">
+                    <li>
+                        <strong>Nie konkuruj markami – zarządzaj portfelem.</strong><br>
+                        <span style="color: #64748b;">Heinz i Pudliszki to dwa narzędzia do różnych sytuacji klienta.</span>
+                    </li>
+                    <li style="margin-top: 15px;">
+                        <strong>Dobieraj argumenty do motywacji, nie do ceny.</strong><br>
+                        <span style="color: #64748b;">Klient premium szuka przewagi w jakości, klient ekonomiczny – bezpieczeństwa w kosztach.</span>
+                    </li>
+                    <li style="margin-top: 15px;">
+                        <strong>Rozmawiaj językiem liczb i korzyści.</strong><br>
+                        <span style="color: #64748b;">Porównuj koszt porcji, nie cenę za kilogram.</span>
+                    </li>
+                    <li style="margin-top: 15px;">
+                        <strong>Łącz marki w strategii „Smart Portfolio".</strong><br>
+                        <span style="color: #64748b;">Heinz dla prestiżu, Pudliszki dla efektywności.</span>
+                    </li>
+                    <li style="margin-top: 15px;">
+                        <strong>Zawsze pokazuj logikę biznesową:</strong><br>
+                        <span style="color: #64748b;">
+                            • Heinz <span style="color: #10b981;">zwiększa przychód</span><br>
+                            • Pudliszki <span style="color: #3b82f6;">obniża koszt</span><br>
+                            • Razem – <span style="color: #dc2626; font-weight: bold;">podnoszą zysk</span>
+                        </span>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="highlight-box" style="margin-top: 40px;">
+                <h2 style="margin: 0 0 20px 0; text-align: center; color: #1e293b;">🎯 Podsumowanie</h2>
+                <p style="font-size: 1.2rem; text-align: center; line-height: 1.9;">
+                    <strong>Heinz i Pudliszki to dwie strony tej samej monety – zysku.</strong><br><br>
+                    
+                    Jedna marka daje wartość emocjonalną i wizerunkową,<br>
+                    druga – stabilność ekonomiczną i dostępność.<br><br>
+                    
+                    Handlowiec, który potrafi argumentować ekonomicznie w obu językach,<br>
+                    <strong style="color: #dc2626;">nie sprzedaje sosu</strong> – 
+                    <strong style="color: #10b981;">sprzedaje strategię rentowności dla całego lokalu</strong>.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div>
+            <button class="footer-button" onclick="scrollToTop()">
+                ⬆️ Powrót na górę
+            </button>
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">
+            BVA Educational Materials
+        </div>
+        <div style="opacity: 0.9; font-size: 0.95rem;">
+            Dwie marki, jeden zysk | Data: 2025-11-05 | Wersja: 1.0
+        </div>
+    </div>
+    
+    <script>
+        function openTab(evt, tabName) {
+            // Ukryj wszystkie taby
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            // Usuń aktywną klasę z przycisków
+            var tabButtons = document.getElementsByClassName("tab-button");
+            for (var i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            
+            // Pokaż wybrany tab
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

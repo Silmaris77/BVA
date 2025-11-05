@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Marketing - Część 2C: Zwiększanie Visibility</title>
+    <style>
+        /* ============================================================================
+           BVA EDUCATIONAL MATERIALS - Style według standardu
+           Zobacz: bva_educational_styles.css i BVA_STYLE_GUIDE.md
+           
+           Kolory boxów (semantic):
+           🔵 info-box - teoria, definicje
+           🟢 success-box - dobre praktyki
+           🔴 error-box - błędy, pułapki
+           🟡 warning-box - wskazówki, tipy
+           🟠 highlight-box - case studies
+           
+           Emoji standardy:
+           📖 = Teoria/Wprowadzenie
+           🎯 = Praktyka/Zastosowanie
+           💬 = Komunikacja/Rozmowy
+           📊 = Dane/Analiza
+           ✅ = Podsumowanie/Checklist
+           ============================================================================ */
+        
+        /* ===== BVA EDUCATIONAL STYLES - UNIVERSAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* UNIVERSAL BOXES */
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .success-box h3, .success-box h4 {
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+        
+        .error-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #ef4444;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .error-box h3, .error-box h4 {
+            color: #991b1b;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .info-box h3, .info-box h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box h3, .warning-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-left: 4px solid #f97316;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .highlight-box h3, .highlight-box h4 {
+            color: #9a3412;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f8fafc;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        .footer-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .footer-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        blockquote {
+            border-left: 4px solid #94a3b8;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        h2 {
+            color: #1e293b;
+            margin: 30px 0 15px 0;
+            font-size: 2rem;
+        }
+        
+        h3 {
+            color: #334155;
+            margin: 20px 0 10px 0;
+            font-size: 1.5rem;
+        }
+        
+        h4 {
+            color: #475569;
+            margin: 15px 0 10px 0;
+            font-size: 1.2rem;
+        }
+        
+        p {
+            margin: 10px 0;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .placement-visual {
+            text-align: center;
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 2rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Trade Marketing - Część 2C</h1>
+            <p>Zwiększanie Visibility - Strategie Zaawansowane</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('wprowadzenie')">📖 Wprowadzenie</button>
+            <button class="tab" onclick="openTab('placements')">� Special Placements</button>
+            <button class="tab" onclick="openTab('cross')">� Cross-merchandising</button>
+            <button class="tab" onclick="openTab('podsumowanie')">✅ Podsumowanie TM</button>
+        </div>
+        
+        <div class="content">
+            <!-- Tab 1: Wprowadzenie -->
+            <div id="wprowadzenie" class="tab-content active">
+                <blockquote>
+                    "Out of sight, out of mind. Jeśli klient nie widzi produktu - nie kupi go. Punkt."
+                </blockquote>
+                
+                <h2>📖 Czym jest Visibility w Trade Marketing?</h2>
+                
+                <div class="info-box">
+                    <h3>🎯 Definicja</h3>
+                    <p style="font-size: 1.1rem;">
+                        <strong>Visibility (widoczność)</strong> to <strong>prawdopodobieństwo, że klient zobaczy Twój produkt</strong> 
+                        w sklepie. Im wyższa visibility = tym wyższa sprzedaż.
+                    </p>
+                    
+                    <h4 style="margin-top: 20px;">Równanie visibility:</h4>
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 8px; margin: 15px 0;">
+                        <p style="font-size: 1.3rem; font-weight: 600; color: #667eea;">
+                            Visibility = Lokalizacja × Rozmiar × Powtórzenia × Kontrast
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 30px;">📊 Dlaczego visibility = sprzedaż?</h3>
+                
+                <div class="highlight-box">
+                    <h4>🧠 Psychologia zakupów impulsywnych</h4>
+                    <ul style="font-size: 1.05rem; line-height: 1.8;">
+                        <li><strong>60-70% zakupów</strong> w FMCG to decyzje <strong>impulsywne</strong> (nie planowane)</li>
+                        <li><strong>Widzę = chcę</strong> - wzrok uruchamia emocje, emocje uruchamiają portfel</li>
+                        <li><strong>3 punkty kontaktu</strong> = 80% szansa zakupu (klient widzi produkt 3× w sklepie)</li>
+                        <li><strong>Golden Zone + Endcap</strong> = +150-300% sprzedaży tego samego produktu!</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 30px;">🎯 Strategia zwiększania visibility</h3>
+                
+                <div class="card">
+                    <h4>4-stopniowa eskalacja visibility:</h4>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Poziom</th>
+                                <th>Strategia</th>
+                                <th>Koszt</th>
+                                <th>Uplift</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #dbeafe;">
+                                <td><strong>1️⃣ BASIC</strong></td>
+                                <td>Golden Zone + facings</td>
+                                <td>0 zł (negocjacje)</td>
+                                <td>+30-50%</td>
+                            </tr>
+                            <tr style="background: #d1fae5;">
+                                <td><strong>2️⃣ MEDIUM</strong></td>
+                                <td>+ POS materials (wobblery, shelf strips)</td>
+                                <td>5-20 zł/sklep</td>
+                                <td>+50-80%</td>
+                            </tr>
+                            <tr style="background: #fef3c7;">
+                                <td><strong>3️⃣ ADVANCED</strong></td>
+                                <td>+ Secondary placement (endcap, kasa)</td>
+                                <td>50-150 zł/miesiąc</td>
+                                <td>+100-200%</td>
+                            </tr>
+                            <tr style="background: #ffedd5;">
+                                <td><strong>4️⃣ PREMIUM</strong></td>
+                                <td>+ Event marketing, degustacje</td>
+                                <td>200-500 zł/event</td>
+                                <td>+200-400%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="comparison-grid" style="margin-top: 30px;">
+                    <div class="error-box">
+                        <h3>❌ NISKA visibility</h3>
+                        <ul>
+                            <li>1 placement (tylko główna półka)</li>
+                            <li>Dolna/górna strefa (poza Golden Zone)</li>
+                            <li>2-3 facings</li>
+                            <li>Brak materiałów POS</li>
+                            <li>Produkt "zagubiony" między konkurencją</li>
+                        </ul>
+                        <p style="margin-top: 15px; font-size: 1.1rem;"><strong>Sprzedaż:</strong> 100 jednostek/tydzień</p>
+                    </div>
+                    
+                    <div class="success-box">
+                        <h3>✅ WYSOKA visibility</h3>
+                        <ul>
+                            <li>3+ placements (półka + endcap + kasa)</li>
+                            <li>Golden Zone (90-150cm)</li>
+                            <li>6-8 facings</li>
+                            <li>Wobblery + shelf strips + tester</li>
+                            <li>Focal point (wyróżniony vs konkurencja)</li>
+                        </ul>
+                        <p style="margin-top: 15px; font-size: 1.1rem;"><strong>Sprzedaż:</strong> 300+ jednostek/tydzień (+200%!) 🚀</p>
+                    </div>
+                </div>
+                
+                <div class="info-box" style="margin-top: 30px;">
+                    <h4>💡 Kluczowa zasada:</h4>
+                    <p style="font-size: 1.2rem; font-weight: 600;">
+                        "Więcej miejsc = więcej sprzedaży"
+                    </p>
+                    <p style="font-size: 1.05rem; margin-top: 10px;">
+                        Każde dodatkowe miejsce w sklepie to <strong>+30-50% dodatkowej sprzedaży</strong>. 
+                        Walcz o każdy centymetr przestrzeni!
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Special Placements -->
+            <div id="placements" class="tab-content">
+                <h2>� Special Placements - Miejsca premium</h2>
+                
+                <h3>📍 Rodzaje Special Placements</h3>
+                
+                <div class="card">
+                    <div class="highlight-box">
+                        <h3>1️⃣ ENDCAP (Czołówka regału)</h3>
+                        
+                        <div class="placement-visual">
+                            🛒 → 🎯 ENDCAP 🎯 ← 🏬<br>
+                            <span style="font-size: 1rem; color: #64748b;">↑ Koniec alejki - wszyscy przechodzą obok</span>
+                        </div>
+                        
+                        <h4>Co to jest?</h4>
+                        <p>
+                            <strong>Endcap</strong> to koniec regału - najbardziej widoczne miejsce w alejce. 
+                            Klient przechodzi obok <strong>100% pewnie</strong>.
+                        </p>
+                        
+                        <h4 style="margin-top: 20px;">💰 Koszt i ROI:</h4>
+                        <table>
+                            <tr>
+                                <td><strong>Koszt wynajmu:</strong></td>
+                                <td>100-300 zł/miesiąc (zależy od sklepu)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Uplift sprzedaży:</strong></td>
+                                <td>+150-300%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ROI:</strong></td>
+                                <td>300-500% (zwrot w 1-2 tygodnie!)</td>
+                            </tr>
+                        </table>
+                        
+                        <h4 style="margin-top: 20px;">✅ Kiedy warto?</h4>
+                        <ul>
+                            <li>Launch nowego produktu</li>
+                            <li>Promocja cenowa (wysokie volume)</li>
+                            <li>Sezonowość (lato = napoje, zima = herbaty)</li>
+                            <li>Sklep z dużym ruchem (200+ klientów/dzień)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="success-box">
+                        <h3>2️⃣ KASA (Checkout placement)</h3>
+                        
+                        <div class="placement-visual">
+                            💳 KASA 💳<br>
+                            🍫 🍬 🍭 ← impulsywne produkty<br>
+                            <span style="font-size: 1rem; color: #64748b;">↑ Kolejka = czas na decyzję</span>
+                        </div>
+                        
+                        <h4>Co to jest?</h4>
+                        <p>
+                            Miejsce przy kasie - klient stoi, czeka, nudzi się... i kupuje impulsywnie!
+                        </p>
+                        
+                        <h4 style="margin-top: 20px;">💰 Koszt i ROI:</h4>
+                        <table>
+                            <tr>
+                                <td><strong>Koszt wynajmu:</strong></td>
+                                <td>50-150 zł/miesiąc</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Uplift sprzedaży:</strong></td>
+                                <td>+200-400%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Conversion rate:</strong></td>
+                                <td>15-25% (1 na 5 kupuje!)</td>
+                            </tr>
+                        </table>
+                        
+                        <h4 style="margin-top: 20px;">✅ Produkty idealne dla kasy:</h4>
+                        <ul>
+                            <li>Małe opakowania (travel size, saszetki)</li>
+                            <li>Cena do 10 zł (impulse buy threshold)</li>
+                            <li>Nowości (ciekawość)</li>
+                            <li>Funkcjonalne (balsam do ust, chusteczki)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="info-box">
+                        <h3>3️⃣ GONDOLA (Wyspa środkowa)</h3>
+                        
+                        <div class="placement-visual">
+                            🛒 ← →<br>
+                            🏝️ GONDOLA 🏝️<br>
+                            ← 360° visibility →<br>
+                            <span style="font-size: 1rem; color: #64748b;">↑ Środek sklepu - widoczna ze wszystkich stron</span>
+                        </div>
+                        
+                        <h4>Co to jest?</h4>
+                        <p>
+                            Wolnostojąca wyspa w środku sklepu - 360° visibility!
+                        </p>
+                        
+                        <h4 style="margin-top: 20px;">💰 Koszt i ROI:</h4>
+                        <table>
+                            <tr>
+                                <td><strong>Koszt wynajmu:</strong></td>
+                                <td>150-400 zł/miesiąc</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Uplift sprzedaży:</strong></td>
+                                <td>+100-200%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Najlepszy do:</strong></td>
+                                <td>Promocje, zestawy, nowości</td>
+                            </tr>
+                        </table>
+                        
+                        <h4 style="margin-top: 20px;">✅ Kiedy warto?</h4>
+                        <ul>
+                            <li>Duża promocja (2+1, -30%)</li>
+                            <li>Event (Walentynki, Dzień Matki)</li>
+                            <li>Zestawy tematyczne ("Rytuał oczyszczania")</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="warning-box">
+                        <h3>4️⃣ NEAR ENTRY (Przy wejściu)</h3>
+                        
+                        <div class="placement-visual">
+                            🚪 WEJŚCIE 🚪<br>
+                            🎯 DISPLAY 🎯<br>
+                            <span style="font-size: 1rem; color: #64748b;">↑ Pierwsze wrażenie - fresh mind</span>
+                        </div>
+                        
+                        <h4>Co to jest?</h4>
+                        <p>
+                            Miejsce zaraz po wejściu - klient ma <strong>świeży umysł</strong>, nie jest jeszcze zmęczony zakupami.
+                        </p>
+                        
+                        <h4 style="margin-top: 20px;">💰 Koszt i ROI:</h4>
+                        <table>
+                            <tr>
+                                <td><strong>Koszt wynajmu:</strong></td>
+                                <td>100-250 zł/miesiąc</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Uplift sprzedaży:</strong></td>
+                                <td>+80-150%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Najlepszy do:</strong></td>
+                                <td>Nowości, produkty premium</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📊 Porównanie Special Placements</h3>
+                
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Placement</th>
+                                <th>Koszt/mies</th>
+                                <th>Uplift</th>
+                                <th>ROI</th>
+                                <th>Najlepszy dla...</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>🎯 Endcap</strong></td>
+                                <td>100-300 zł</td>
+                                <td>+150-300%</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>Promocje, launch</td>
+                            </tr>
+                            <tr>
+                                <td><strong>💳 Kasa</strong></td>
+                                <td>50-150 zł</td>
+                                <td>+200-400%</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>Małe produkty, impulse buy</td>
+                            </tr>
+                            <tr>
+                                <td><strong>🏝️ Gondola</strong></td>
+                                <td>150-400 zł</td>
+                                <td>+100-200%</td>
+                                <td>⭐⭐⭐⭐</td>
+                                <td>Duże promocje, eventy</td>
+                            </tr>
+                            <tr>
+                                <td><strong>🚪 Near Entry</strong></td>
+                                <td>100-250 zł</td>
+                                <td>+80-150%</td>
+                                <td>⭐⭐⭐</td>
+                                <td>Nowości, premium</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 20px;">
+                    <h4>💡 Strategia maksymalnej visibility:</h4>
+                    <p style="font-size: 1.1rem;">
+                        <strong>Kombinuj placements!</strong> Główna półka (Golden Zone) + Endcap + Kasa = <strong>3 punkty kontaktu</strong> 
+                        = 80% szansa zakupu. To jest recepta na sukces w FMCG!
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Cross-merchandising -->
+            <div id="cross" class="tab-content">
+                <h2>� Cross-merchandising - Sprzedaż skojarzeniowa</h2>
+                
+                <blockquote>
+                    "Produkty, które używa się razem - powinny leżeć razem."
+                </blockquote>
+                
+                <h3>🎯 Co to jest Cross-merchandising?</h3>
+                
+                <div class="info-box">
+                    <h4>📖 Definicja</h4>
+                    <p style="font-size: 1.1rem;">
+                        <strong>Cross-merchandising</strong> to umieszczanie produktów <strong>z różnych kategorii obok siebie</strong>, 
+                        jeśli są używane razem lub się uzupełniają.
+                    </p>
+                    
+                    <h4 style="margin-top: 20px;">🧠 Psychologia:</h4>
+                    <p style="font-size: 1.05rem;">
+                        Klient widzi produkt A (np. szampon) → mózg automatycznie myśli o produkcie B (odżywka) 
+                        → jeśli B jest obok = <strong>kupuje oba!</strong>
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">✅ Przykłady cross-merchandisingu w FMCG</h3>
+                
+                <div class="grid">
+                    <div class="card">
+                        <div class="success-box">
+                            <h4>🧴 Pielęgnacja włosów</h4>
+                            <p style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                <strong>Szampon</strong> + <strong>Odżywka</strong> + <strong>Maska</strong><br>
+                                <span style="color: #64748b; font-size: 0.95rem;">"Pełny rytuał pielęgnacji"</span>
+                            </p>
+                            <p><strong>Efekt:</strong> +45% basket value (klient kupuje 2-3 produkty zamiast 1)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="success-box">
+                            <h4>🧼 Higiena twarzy</h4>
+                            <p style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                <strong>Żel do mycia</strong> + <strong>Tonik</strong> + <strong>Krem</strong><br>
+                                <span style="color: #64748b; font-size: 0.95rem;">"3 kroki do czystej skóry"</span>
+                            </p>
+                            <p><strong>Efekt:</strong> +60% konwersji (klient "dokłada" produkt do koszyka)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="success-box">
+                            <h4>☀️ Ochrona przeciwsłoneczna</h4>
+                            <p style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                <strong>Filtr SPF</strong> + <strong>After-sun</strong> + <strong>Samoopalacz</strong><br>
+                                <span style="color: #64748b; font-size: 0.95rem;">"Zestaw na wakacje"</span>
+                            </p>
+                            <p><strong>Efekt:</strong> +70% sprzedaży (sezonowość + storytelling)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="success-box">
+                            <h4>🎁 Prezenty</h4>
+                            <p style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                <strong>Zestaw kosmetyków</strong> + <strong>Pudełko prezentowe</strong> + <strong>Wstążka</strong><br>
+                                <span style="color: #64748b; font-size: 0.95rem;">"Gotowy prezent na Dzień Matki"</span>
+                            </p>
+                            <p><strong>Efekt:</strong> +90% konwersji (convenience = klient płaci więcej)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🏗️ Jak zbudować cross-merchandising display?</h3>
+                
+                <div class="card">
+                    <div class="highlight-box">
+                        <h4>📐 Krok po kroku:</h4>
+                        
+                        <ol style="font-size: 1.05rem; line-height: 1.8;">
+                            <li>
+                                <strong>Zidentyfikuj powiązanie:</strong><br>
+                                Produkty używane razem (szampon+odżywka) lub w podobnej sytuacji (urlop = SPF+after sun)
+                            </li>
+                            
+                            <li style="margin-top: 15px;">
+                                <strong>Storytelling:</strong><br>
+                                Stwórz "historię" - "Rytuał 3-minutowy", "Zestaw na wakacje", "Idealne na prezent"
+                            </li>
+                            
+                            <li style="margin-top: 15px;">
+                                <strong>Layout:</strong><br>
+                                Produkty OBOK SIEBIE (nie rozdzielone!), wizualnie zgrupowane (shelf strip lub wobbler łączący)
+                            </li>
+                            
+                            <li style="margin-top: 15px;">
+                                <strong>POS support:</strong><br>
+                                Shelf strip: "Używaj razem dla lepszych efektów" lub "Kup komplet -15%"
+                            </li>
+                            
+                            <li style="margin-top: 15px;">
+                                <strong>Promo bundle:</strong><br>
+                                Promocja na zestaw (np. "Kup 2 produkty = -15%") zwiększa konwersję o +40-60%
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📊 Cross-merchandising ROI</h3>
+                
+                <div class="comparison-grid">
+                    <div class="error-box">
+                        <h3>❌ BEZ Cross-merchandisingu</h3>
+                        <ul>
+                            <li>Szampon w alejce "Pielęgnacja włosów"</li>
+                            <li>Odżywka 2 metry dalej</li>
+                            <li>Maska w innej sekcji</li>
+                            <li>Klient kupuje tylko 1 produkt (szampon)</li>
+                        </ul>
+                        <p style="margin-top: 15px; padding: 15px; background: white; border-radius: 8px;">
+                            <strong>Basket value:</strong> 15 zł<br>
+                            <strong>Konwersja na "pełny rytuał":</strong> 5%
+                        </p>
+                    </div>
+                    
+                    <div class="success-box">
+                        <h3>✅ Z Cross-merchandisingiem</h3>
+                        <ul>
+                            <li>Szampon + Odżywka + Maska razem</li>
+                            <li>Shelf strip: "3 kroki do pięknych włosów"</li>
+                            <li>Promo: "Kup komplet -15%"</li>
+                            <li>Klient kupuje wszystkie 3 produkty</li>
+                        </ul>
+                        <p style="margin-top: 15px; padding: 15px; background: white; border-radius: 8px;">
+                            <strong>Basket value:</strong> 38 zł (+153%!)<br>
+                            <strong>Konwersja na "pełny rytuał":</strong> 35% (+600%!)
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">💡 Zaawansowane techniki</h3>
+                
+                <div class="grid">
+                    <div class="card">
+                        <div class="info-box">
+                            <h4>🎯 Seasonal Cross-merchandising</h4>
+                            <p>Produkty na SEZON:</p>
+                            <ul>
+                                <li><strong>Lato:</strong> SPF + After-sun + Samoopalacz</li>
+                                <li><strong>Zima:</strong> Krem ochronny + Balsam do ust + Krem do rąk</li>
+                                <li><strong>Wiosna:</strong> Peeling + Serum + Lekki krem</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><strong>Efekt:</strong> +80% uplift w sezonie</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="warning-box">
+                            <h4>🏝️ Occasion-based Cross-merchandising</h4>
+                            <p>Produkty na OKAZJĘ:</p>
+                            <ul>
+                                <li><strong>Urlop:</strong> Travel size (wszystko mini)</li>
+                                <li><strong>Siłownia:</strong> Żel pod prysznic + Dezodorant</li>
+                                <li><strong>Randka:</strong> Perfumy + Żel do twarzy + Wosk do włosów</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><strong>Efekt:</strong> +60% basket value</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <h4>🚀 Golden Rule of Cross-merchandising:</h4>
+                    <p style="font-size: 1.2rem; font-weight: 600;">
+                        "Think like the customer. What problem are they solving? Give them the COMPLETE solution."
+                    </p>
+                    <p style="margin-top: 10px; font-size: 1.05rem;">
+                        Klient nie kupuje szamponu - kupuje <strong>piękne włosy</strong>. 
+                        Daj mu cały rytuał = wyższa sprzedaż + zadowolony klient!
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Podsumowanie -->
+            <div id="podsumowanie" class="tab-content">
+                <h2>✅ Podsumowanie: Trade Marketing - wszystkie części</h2>
+                
+                <blockquote>
+                    "Trade Marketing to nie koszt - to najlepsza inwestycja w FMCG. 1 zł wydany = 3-5 zł zwrotu."
+                </blockquote>
+                
+                <h3>📚 Recap: Co przeszliśmy?</h3>
+                
+                <div class="card">
+                    <div class="info-box">
+                        <h4>📖 Część 1: Podstawy + Merchandising + POS</h4>
+                        <ul style="font-size: 1.05rem;">
+                            <li>🎯 Trade Marketing vs Marketing - różnice</li>
+                            <li>📏 Golden Zone (90-150cm) = 70% sprzedaży</li>
+                            <li>🔢 Facings - 4-6 facings w Golden Zone = ideał</li>
+                            <li>📦 FIFO rotation - świeżość produktu</li>
+                            <li>🎨 POS materials: wobblery (0.5-2zł, +15-25%), shelf strips (3-10zł), testery (20-50zł, +40-60%)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="success-box">
+                        <h4>🎪 Część 2A: Promocje</h4>
+                        <ul style="font-size: 1.05rem;">
+                            <li>🎯 4 cele promocji: Trial, Volume, Frequency, Clearance</li>
+                            <li>💰 Typy promocji: Price-off (-20-30%), Multi-buy (2+1), Bundle, Degustacje (+40-80%), GWP</li>
+                            <li>📊 SMART goals - konkretne, mierzalne cele</li>
+                            <li>💵 Budget calculator - przykład: 495zł koszt, 304% ROI</li>
+                            <li>📈 Post-campaign analysis - mierzenie efektów</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="highlight-box">
+                        <h4>🎨 Część 2B: Visual Merchandising</h4>
+                        <ul style="font-size: 1.05rem;">
+                            <li>🌈 Psychologia kolorów: czerwony (energia), niebieski (zaufanie), zielony (natura), fioletowy (luksus)</li>
+                            <li>🔺 Pyramid Rule - trójkąt przyciąga wzrok</li>
+                            <li>👁️ Focal Point - 1-2 punkty uwagi (max!)</li>
+                            <li>📊 Vertical > Horizontal blocking</li>
+                            <li>🧹 Czystość = +15-25% perceived value</li>
+                            <li>📸 10 minut VM = +60% sprzedaży</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="warning-box">
+                        <h4>🚀 Część 2C: Zwiększanie Visibility</h4>
+                        <ul style="font-size: 1.05rem;">
+                            <li>🎯 Visibility = Lokalizacja × Rozmiar × Powtórzenia × Kontrast</li>
+                            <li>🏆 Special Placements: Endcap (+150-300%), Kasa (+200-400%), Gondola (+100-200%), Near Entry (+80-150%)</li>
+                            <li>🔄 Cross-merchandising = produkty używane razem leżą razem (+45-90% basket value)</li>
+                            <li>🎁 Storytelling: "Rytuał 3-minutowy", "Zestaw na wakacje"</li>
+                            <li>📍 3 punkty kontaktu = 80% szansa zakupu</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🎯 Trade Marketing - Masterplan</h3>
+                
+                <div class="card">
+                    <div class="success-box">
+                        <h4>🏆 Kompletna strategia Trade Marketing (wszystko razem):</h4>
+                        
+                        <table style="margin-top: 20px;">
+                            <thead>
+                                <tr>
+                                    <th>Element</th>
+                                    <th>Działanie</th>
+                                    <th>Koszt</th>
+                                    <th>Uplift</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>1. Merchandising</strong></td>
+                                    <td>Golden Zone + 6 facings + FIFO</td>
+                                    <td>0 zł (negocjacje)</td>
+                                    <td>+30-50%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>2. POS</strong></td>
+                                    <td>Wobbler + Shelf strip + Tester</td>
+                                    <td>25-60 zł/sklep</td>
+                                    <td>+20-40%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3. Visual Merchandising</strong></td>
+                                    <td>Pyramid display + Focal point + Czystość</td>
+                                    <td>0 zł (10 min pracy)</td>
+                                    <td>+40-60%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>4. Promocja</strong></td>
+                                    <td>Price-off -25% przez 2 tygodnie</td>
+                                    <td>25% margin sacrifice</td>
+                                    <td>+80-150%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>5. Special Placement</strong></td>
+                                    <td>Endcap + Kasa</td>
+                                    <td>150-450 zł/mies</td>
+                                    <td>+150-300%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>6. Cross-merchandising</strong></td>
+                                    <td>Zestaw "Rytuał pielęgnacji"</td>
+                                    <td>0 zł (rearranging)</td>
+                                    <td>+45-90% basket</td>
+                                </tr>
+                                <tr style="background: #d1fae5; font-weight: 600;">
+                                    <td colspan="3"><strong>ŁĄCZNY EFEKT (synergy!):</strong></td>
+                                    <td><strong>+300-500%! 🚀</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <p style="margin-top: 20px; font-size: 1.1rem; padding: 15px; background: white; border-radius: 8px;">
+                            <strong>💡 Kluczowa lekcja:</strong> Elementy Trade Marketingu się <strong>mnożą</strong>, nie dodają! 
+                            Golden Zone + POS + VM + Promocja + Endcap = efekt <strong>wykładniczy</strong>, nie liniowy.
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📊 ROI Calculator - Trade Marketing</h3>
+                
+                <div class="card">
+                    <div class="info-box">
+                        <h4>💰 Przykład: Sklep 200 klientów/dzień</h4>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Scenariusz</th>
+                                    <th>Inwestycja</th>
+                                    <th>Sprzedaż/mies</th>
+                                    <th>ROI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: #fee2e2;">
+                                    <td><strong>BRAK TM</strong><br><span style="font-size: 0.9rem; color: #64748b;">Produkt "sam się sprzedaje"</span></td>
+                                    <td>0 zł</td>
+                                    <td>300 szt × 10zł = 3,000 zł</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr style="background: #dbeafe;">
+                                    <td><strong>BASIC TM</strong><br><span style="font-size: 0.9rem; color: #64748b;">Golden Zone + POS</span></td>
+                                    <td>60 zł</td>
+                                    <td>500 szt × 10zł = 5,000 zł</td>
+                                    <td>3,233%</td>
+                                </tr>
+                                <tr style="background: #d1fae5;">
+                                    <td><strong>ADVANCED TM</strong><br><span style="font-size: 0.9rem; color: #64748b;">+ VM + Promocja</span></td>
+                                    <td>200 zł</td>
+                                    <td>900 szt × 8zł = 7,200 zł</td>
+                                    <td>2,000%</td>
+                                </tr>
+                                <tr style="background: #fef3c7;">
+                                    <td><strong>PREMIUM TM</strong><br><span style="font-size: 0.9rem; color: #64748b;">+ Endcap + Cross-merch</span></td>
+                                    <td>500 zł</td>
+                                    <td>1,500 szt × 8zł = 12,000 zł</td>
+                                    <td>1,700%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <p style="margin-top: 20px; font-size: 1.1rem; padding: 15px; background: #d1fae5; border-radius: 8px;">
+                            <strong>🎯 Wniosek:</strong> Nawet PREMIUM TM (500 zł/mies) daje ROI 1,700% = zwrot inwestycji w <strong>2 dni</strong>!
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">✅ Checklist: Trade Marketing Excellence</h3>
+                
+                <div class="card">
+                    <div class="highlight-box">
+                        <h4>🏆 Czy robisz wszystko dobrze? Sprawdź!</h4>
+                        
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                            <h4 style="color: #667eea;">📍 MERCHANDISING:</h4>
+                            <ul>
+                                <li>☑️ Produkt w Golden Zone (90-150cm)?</li>
+                                <li>☑️ 4-6 facings dla bestsellera?</li>
+                                <li>☑️ FIFO rotation (świeże produkty na pierwszy plan)?</li>
+                                <li>☑️ Planogram zgodny z wytycznymi marki?</li>
+                            </ul>
+                            
+                            <h4 style="color: #667eea; margin-top: 20px;">🎨 POS & VISUAL:</h4>
+                            <ul>
+                                <li>☑️ Wobbler zamontowany (czytelny, nieskrzywiony)?</li>
+                                <li>☑️ Shelf strip przyklejony równo?</li>
+                                <li>☑️ Tester dostępny (napełniony, czysty)?</li>
+                                <li>☑️ Focal Point wyraźny (1-2 produkty wyróżnione)?</li>
+                                <li>☑️ Pyramid display jeśli możliwy?</li>
+                                <li>☑️ Produkty czyste (bez kurzu, odcisków)?</li>
+                            </ul>
+                            
+                            <h4 style="color: #667eea; margin-top: 20px;">🎪 PROMOCJE:</h4>
+                            <ul>
+                                <li>☑️ Cel promocji jasny (trial/volume/frequency)?</li>
+                                <li>☑️ Komunikacja wyraźna ("TANIEJ -30%")?</li>
+                                <li>☑️ Stock wystarczający na cały okres?</li>
+                                <li>☑️ POS wspiera promocję (czerwony wobbler)?</li>
+                            </ul>
+                            
+                            <h4 style="color: #667eea; margin-top: 20px;">🏆 VISIBILITY:</h4>
+                            <ul>
+                                <li>☑️ Special Placement wynegocjowany (endcap/kasa)?</li>
+                                <li>☑️ 2-3 punkty kontaktu w sklepie?</li>
+                                <li>☑️ Cross-merchandising (produkty razem)?</li>
+                                <li>☑️ Storytelling ("Zestaw na...")?</li>
+                            </ul>
+                            
+                            <h4 style="color: #667eea; margin-top: 20px;">📊 TRACKING:</h4>
+                            <ul>
+                                <li>☑️ Zdjęcie BEFORE + AFTER?</li>
+                                <li>☑️ Sprzedaż przed vs po optymalizacji?</li>
+                                <li>☑️ ROI policzone?</li>
+                                <li>☑️ Raport do managera wysłany?</li>
+                            </ul>
+                        </div>
+                        
+                        <p style="margin-top: 20px; font-size: 1.1rem; padding: 15px; background: #d1fae5; border-radius: 8px;">
+                            <strong>🎯 Wszystko ✅?</strong> Gratulacje - jesteś Trade Marketing PRO! 🚀
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🎓 Final Thoughts</h3>
+                
+                <div class="success-box">
+                    <h4>💡 3 Złote Zasady Trade Marketingu:</h4>
+                    <ol style="font-size: 1.1rem; line-height: 2;">
+                        <li>
+                            <strong>"Out of sight, out of mind"</strong><br>
+                            <span style="font-size: 0.95rem; color: #064e3b;">
+                                Jeśli klient nie widzi produktu - nie kupi go. Visibility to fundament.
+                            </span>
+                        </li>
+                        
+                        <li style="margin-top: 15px;">
+                            <strong>"Więcej miejsc = więcej sprzedaży"</strong><br>
+                            <span style="font-size: 0.95rem; color: #064e3b;">
+                                Każde dodatkowe miejsce w sklepie to +30-50% dodatkowej sprzedaży. Walcz o każdy centymetr!
+                            </span>
+                        </li>
+                        
+                        <li style="margin-top: 15px;">
+                            <strong>"Konsystencja > jednorazowe akcje"</strong><br>
+                            <span style="font-size: 0.95rem; color: #064e3b;">
+                                Lepiej mieć dobry merchandising w 100 sklepach STALE, niż idealny w 10 sklepach przez tydzień.
+                            </span>
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="info-box" style="margin-top: 30px;">
+                    <h4>🚀 Następny krok:</h4>
+                    <p style="font-size: 1.1rem;">
+                        Przejdź do <strong>praktyki</strong> - wybierz 5 sklepów i zastosuj wszystkie techniki Trade Marketingu. 
+                        Mierz efekty (before-after), ucz się, optymalizuj. Teoria bez praktyki = 0 sprzedaży!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div>
+            <button class="footer-button" onclick="scrollToTop()">
+                ⬆️ Powrót na górę
+            </button>
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">
+            🎉 Gratulacje! Ukończyłeś pełny kurs Trade Marketing! 🎉
+        </div>
+        <div style="opacity: 0.9; font-size: 0.95rem; margin-top: 10px;">
+            BVA Educational Materials | Trade Marketing - Część 2C/3 (FINAŁ)
+        </div>
+        <div style="opacity: 0.9; font-size: 0.95rem;">
+            Data: 2025-11-05 | Wersja: 1.0
+        </div>
+    </div>
+    
+    <script>
+        function openTab(tabName) {
+            var tabContents = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            var tabs = document.getElementsByClassName('tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

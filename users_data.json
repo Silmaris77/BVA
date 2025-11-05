@@ -40874,11 +40874,11 @@
     "user_id": "df31af40-0aef-40ed-8591-9eba07c46818",
     "password": "Krzysio",
     "degen_type": null,
-    "xp": 0,
+    "xp": 8,
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-11-02",
-    "last_login": "2025-11-03 00:13:43",
+    "last_login": "2025-11-05 16:23:08",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -40895,6 +40895,18 @@
       },
       "2025-11-03": {
         "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-11-04": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-11-05": {
+        "xp": 8,
         "degencoins": 0,
         "level": 1,
         "completed_lessons": 0
@@ -40941,7 +40953,7 @@
         "firm": {
           "name": "FMCG Corp",
           "logo": "🏪",
-          "founded": "2025-11-03",
+          "founded": "2025-11-05",
           "level": 1,
           "reputation": 0
         },
@@ -40999,7 +41011,7 @@
           "monthly_actual_sales": 0,
           "monthly_best_sales": 0,
           "weekly_history": [],
-          "last_activity_date": "2025-11-03T00:14:02.251132",
+          "last_activity_date": "2025-11-05T16:23:25.935040",
           "last_visit_client_id": null,
           "company": "Heinz Polska",
           "clients": {
@@ -41886,6 +41898,20 @@
               "upsell_potential": "medium"
             }
           },
+          "reputation": {
+            "clients": {},
+            "company": {
+              "task_performance": 0,
+              "sales_performance": 0,
+              "professionalism": 100
+            },
+            "tier": "Trainee",
+            "unlock_tokens": 0,
+            "training_credits": 0,
+            "xp": 0,
+            "level": 1,
+            "overall_rating": 12.0
+          },
           "scenario_id": "heinz_food_service",
           "clients_total": 25
         },
@@ -41984,7 +42010,7 @@
       "monthly_actual_sales": 0,
       "monthly_best_sales": 0,
       "weekly_history": [],
-      "last_activity_date": "2025-11-03T00:14:02.251132",
+      "last_activity_date": "2025-11-05T16:23:25.935040",
       "last_visit_client_id": null,
       "company": "Heinz Polska",
       "clients": {
@@ -42870,6 +42896,20 @@
           ],
           "upsell_potential": "medium"
         }
+      },
+      "reputation": {
+        "clients": {},
+        "company": {
+          "task_performance": 0,
+          "sales_performance": 0,
+          "professionalism": 100
+        },
+        "tier": "Trainee",
+        "unlock_tokens": 0,
+        "training_credits": 0,
+        "xp": 0,
+        "level": 1,
+        "overall_rating": 12.0
       },
       "scenario_id": "heinz_food_service",
       "clients_total": 25
@@ -43803,7 +43843,107 @@
         "type": "login",
         "timestamp": "2025-11-03T00:13:43.890594",
         "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T17:11:12.375801",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T17:21:15.515121",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T18:19:49.916192",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T19:31:06.765956",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T19:50:37.923551",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T20:04:28.805960",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T22:11:06.832292",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-04T23:53:20.558692",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T00:03:52.453977",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T00:55:23.352715",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T09:14:43.281616",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T12:12:39.365303",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T15:59:30.363407",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T16:03:37.745299",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T16:13:39.398085",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T16:14:26.581303",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T16:16:41.164256",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T16:23:08.596035",
+        "details": {}
       }
-    ]
+    ],
+    "layout_preference": "standard",
+    "lesson_progress": {
+      "11. Od słów do zaufania - Conversational Intelligence": {
+        "intro_xp_awarded": true,
+        "intro_completed": true,
+        "intro_xp": 8,
+        "intro_degencoins": 0,
+        "intro_timestamp": "2025-11-05 16:17:10"
+      }
+    }
   }
 }

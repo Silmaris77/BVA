@@ -2,22 +2,32 @@
    BVA EDUCATIONAL MATERIALS - STANDARD KOLORYSTYCZNY
    ============================================================================
    
-   KATEGORIE TEMATYCZNE (Header/Stopka):
-   - Kanał & Dystrybucja: #667eea → #764ba2 (fiolet)
-   - Sprzedaż & Negocjacje: #f093fb → #f5576c (różowo-czerwony)
-   - Merchandising & Shelf: #3b82f6 → #1e40af (niebieski)
-   - Finanse & Marże: #f59e0b → #d97706 (złoty)
-   - Relacje & Komunikacja: #10b981 → #059669 (zielony)
+   SEMANTIC COLOR SYSTEM - Uniwersalne znaczenia kolorów:
    
-   UNIWERSALNE ELEMENTY (zawsze te same):
-   - Success/Zalety: #10b981 (zielony)
-   - Error/Wady: #ef4444 (czerwony)
-   - Info/Informacja: #3b82f6 (niebieski)
-   - Warning/Uwaga: #f59e0b (żółty/pomarańczowy)
-   - Highlight/Ważne: #f97316 (intensywny pomarańczowy)
+   🔵 NIEBIESKI (#3b82f6) - Info Box
+      Użyj: teoria, definicje, wyjaśnienia, kontekst
+      
+   🟢 ZIELONY (#10b981) - Success Box  
+      Użyj: dobre praktyki, checklisty, "tak rób", przykłady sukcesu
+      
+   🔴 CZERWONY (#ef4444) - Error Box
+      Użyj: błędy, pułapki, "tak NIE rób", ostrzeżenia krytyczne
+      
+   🟡 ŻÓŁTY (#f59e0b) - Warning Box
+      Użyj: uwaga, wskazówki, tipy, porady praktyczne
+      
+   🟠 POMARAŃCZOWY (#f97316) - Highlight Box
+      Użyj: przykłady, case studies, scenariusze praktyczne
+      
+   🟣 FIOLETOWY (#a855f7) - Tool Box  
+      Użyj: narzędzia, kalkulatory, elementy interaktywne
    
-   Wersja: 1.0
-   Data: 2025-10-30
+   HEADER/FOOTER - Zawsze fioletowy gradient (#667eea → #764ba2)
+   
+   Zobacz: BVA_STYLE_GUIDE.md dla pełnej dokumentacji
+   
+   Wersja: 2.0
+   Data: 2025-11-05
    ============================================================================ */
 
 /* ===== BASE STYLES ===== */
@@ -188,6 +198,20 @@ body {
 
 .highlight-box h3, .highlight-box h4 {
     color: #9a3412;
+    margin-bottom: 10px;
+}
+
+/* Tool Box - Fioletowy (narzędzia, kalkulatory, interaktywność) */
+.tool-box {
+    background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
+    border-left: 4px solid #a855f7;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+.tool-box h3, .tool-box h4 {
+    color: #6b21a8;
     margin-bottom: 10px;
 }
 

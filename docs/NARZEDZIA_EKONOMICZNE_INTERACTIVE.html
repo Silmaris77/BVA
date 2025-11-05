@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narzędzia ekonomiczne w gastronomii</title>
+    <style>
+        /* ============================================================================
+           BVA EDUCATIONAL MATERIALS - Style według standardu
+           Zobacz: bva_educational_styles.css i BVA_STYLE_GUIDE.md
+           
+           Kolory boxów (semantic):
+           🔵 info-box - teoria, definicje
+           🟢 success-box - dobre praktyki
+           🔴 error-box - błędy, pułapki
+           🟡 warning-box - wskazówki, tipy
+           🟠 highlight-box - case studies
+           🟣 tool-box - kalkulatory, narzędzia
+           
+           Emoji standardy:
+           📖 = Teoria/Wprowadzenie
+           🎯 = Praktyka/Zastosowanie
+           💬 = Komunikacja/Rozmowy
+           📊 = Dane/Analiza
+           ✅ = Podsumowanie/Checklist
+           🧮 = Narzędzia/Kalkulatory
+           ============================================================================ */
+        
+        /* ===== BVA EDUCATIONAL STYLES - UNIVERSAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #a855f7;
+            border-bottom: 3px solid #a855f7;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* UNIVERSAL BOXES */
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .success-box h3, .success-box h4 {
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+        
+        .error-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #ef4444;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .error-box h3, .error-box h4 {
+            color: #991b1b;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .info-box h3, .info-box h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box h3, .warning-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-left: 4px solid #f97316;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .highlight-box h3, .highlight-box h4 {
+            color: #9a3412;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f8fafc;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        .footer-button {
+            background: white;
+            color: #a855f7;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .footer-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        blockquote {
+            border-left: 4px solid #94a3b8;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        h2 {
+            color: #1e293b;
+            margin: 30px 0 15px 0;
+            font-size: 2rem;
+        }
+        
+        h3 {
+            color: #334155;
+            margin: 20px 0 10px 0;
+            font-size: 1.5rem;
+        }
+        
+        h4 {
+            color: #475569;
+            margin: 15px 0 10px 0;
+            font-size: 1.2rem;
+        }
+        
+        p {
+            margin: 10px 0;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        /* CALCULATOR STYLES - używamy tool-box jako podstawy */
+        .calculator {
+            /* Dziedziczy styl z .tool-box (fioletowy gradient) */
+            background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
+            border: 2px solid #a855f7;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        
+        .calculator-input {
+            margin: 20px 0;
+        }
+        
+        .calculator-input label {
+            display: block;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+        
+        .calculator-input input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        .calculator-input input[type="number"]:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+        }
+        
+        .calculator-input input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #cbd5e1;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .calculator-input input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+        
+        .calculator-input input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .calculator-output {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .result-row:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #475569;
+            font-size: 1.05rem;
+        }
+        
+        .result-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #6b21a8;
+        }
+        
+        .result-value.good {
+            color: #10b981;
+        }
+        
+        .result-value.warning {
+            color: #f59e0b;
+        }
+        
+        .result-value.bad {
+            color: #ef4444;
+        }
+        
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-table {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .product-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .product-card h4 {
+            color: #6b21a8;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚙️ Narzędzia ekonomiczne w gastronomii</h1>
+            <p>Jak liczyć, analizować i rozmawiać o wartości zamiast o cenie</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('foodcost')">🧮 Kalkulator Food Cost</button>
+            <button class="tab" onclick="openTab('porcja')">🎯 Cena → Porcja → Marża</button>
+            <button class="tab" onclick="openTab('tracking')">� Tracking cenowy</button>
+            <button class="tab" onclick="openTab('rabaty')">� Rozmowy o rabatach</button>
+        </div>
+        
+        <div class="content">
+            <!-- Tab 1: Kalkulator Food Cost -->
+            <div id="foodcost" class="tab-content active">
+                <blockquote>
+                    "Kalkulator foodcostu pozwala w prosty sposób obliczyć, ile naprawdę kosztuje przygotowanie dania, jaka jest jego marża brutto i czy zachowany jest wymagany poziom rentowności."
+                </blockquote>
+                
+                <h2>🧮 Kalkulator Food Cost - Interaktywny</h2>
+                
+                <div class="info-box">
+                    <h3>🎯 Cel narzędzia</h3>
+                    <p style="font-size: 1.05rem;">
+                        To narzędzie <strong>kluczowe dla każdego menedżera gastronomii</strong> — oraz dla handlowca, 
+                        który chce rozmawiać językiem ekonomii kuchni, a nie katalogu cen.
+                    </p>
+                </div>
+                
+                <div class="calculator">
+                    <h3 style="margin-top: 0; color: #6b21a8;">💻 Kalkulator Live</h3>
+                    
+                    <div class="calculator-input">
+                        <label for="fc-koszt">Koszt wszystkich składników dania (zł):</label>
+                        <input type="number" id="fc-koszt" value="8.40" step="0.10" min="0" oninput="calculateFoodCost()">
+                    </div>
+                    
+                    <div class="calculator-input">
+                        <label for="fc-cena">Cena sprzedaży dania (zł):</label>
+                        <input type="number" id="fc-cena" value="30.00" step="0.50" min="0" oninput="calculateFoodCost()">
+                    </div>
+                    
+                    <div class="calculator-output">
+                        <div class="result-row">
+                            <span class="result-label">Food Cost:</span>
+                            <span class="result-value" id="fc-procent">28%</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Marża brutto:</span>
+                            <span class="result-value good" id="fc-marza">72%</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Zysk na daniu:</span>
+                            <span class="result-value good" id="fc-zysk">21,60 zł</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Ocena:</span>
+                            <span class="result-value good" id="fc-ocena">✅ Bardzo dobra rentowność</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📐 Podstawowy wzór</h3>
+                
+                <div class="card">
+                    <div class="highlight-box">
+                        <div style="text-align: center; padding: 20px; background: white; border-radius: 8px; margin: 15px 0;">
+                            <p style="font-size: 1rem; color: #64748b; margin-bottom: 10px;">Wzór:</p>
+                            <p style="font-size: 1.4rem; font-weight: 600; color: #6b21a8;">
+                                Food Cost (%) = (koszt surowców / cena sprzedaży) × 100
+                            </p>
+                        </div>
+                        
+                        <h4 style="margin-top: 25px;">💡 Przykład: Burger</h4>
+                        <p style="font-size: 1.05rem;">
+                            Burger sprzedawany za <strong>30 zł</strong>, a koszt składników to <strong>8,40 zł</strong>.
+                        </p>
+                        <p style="font-size: 1.1rem; margin-top: 10px;">
+                            → Food cost = 8,40 / 30 × 100 = <strong style="color: #10b981;">28%</strong>
+                        </p>
+                        <p style="margin-top: 15px; font-size: 1.05rem;">
+                            To oznacza, że restauracja zarabia <strong>72% marży brutto</strong> na daniu, 
+                            zanim odliczy inne koszty (pracę, czynsz, media).
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📊 Zasada interpretacji</h3>
+                
+                <div class="grid">
+                    <div class="success-box">
+                        <h4>✅ Food Cost 27–30%</h4>
+                        <p style="font-size: 1.1rem; font-weight: 600;">Bardzo dobra rentowność</p>
+                        <p>Danie generuje wysoką marżę. Idealny poziom dla większości restauracji.</p>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h4>⚠️ Food Cost 30–33%</h4>
+                        <p style="font-size: 1.1rem; font-weight: 600;">Akceptowalna</p>
+                        <p>Danie jest rentowne, ale wymaga kontroli kosztów innych składników.</p>
+                    </div>
+                    
+                    <div class="error-box">
+                        <h4>❌ Food Cost >35%</h4>
+                        <p style="font-size: 1.1rem; font-weight: 600;">Danie może być nierentowne</p>
+                        <p>Konieczna optymalizacja: zmniejszenie porcji, zmiana dostawcy lub podniesienie ceny.</p>
+                    </div>
+                </div>
+                
+                <div class="info-box" style="margin-top: 30px;">
+                    <h4>💡 Kluczowa zasada:</h4>
+                    <p style="font-size: 1.1rem;">
+                        Najbardziej opłacalne produkty w karcie to te, które łączą <strong>niskie koszty surowców</strong> 
+                        z <strong>wysoką postrzeganą wartością</strong> dla gościa.
+                    </p>
+                    <p style="font-size: 1.05rem; margin-top: 10px;">
+                        Dlatego właśnie ketchup, sosy czy dodatki, choć tanie, mają <strong>ogromny wpływ</strong> 
+                        na całkowity food cost talerza.
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🎯 Wskazówki praktyczne dla handlowca</h3>
+                
+                <div class="card">
+                    <div class="success-box">
+                        <ol style="font-size: 1.05rem; line-height: 1.8;">
+                            <li>
+                                <strong>Restauratorzy często nie liczą kosztu porcji</strong> – możesz im w tym pomóc!
+                            </li>
+                            <li style="margin-top: 15px;">
+                                <strong>Warto pokazać</strong>, jak droższy, ale wydajniejszy produkt (np. Heinz) 
+                                utrzymuje food cost w tym samym zakresie.
+                            </li>
+                            <li style="margin-top: 15px;">
+                                <strong>W rozmowie używaj języka kalkulatora:</strong><br>
+                                <span style="color: #065f46; font-style: italic;">
+                                    „To nie jest 15 zł za kilogram, tylko 0,29 zł za porcję, czyli mniej niż 1% wartości burgera."
+                                </span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Cena → Porcja → Marża -->
+            <div id="porcja" class="tab-content">
+                <h2>🎯 Narzędzie: Cena → Koszt porcji → Marża</h2>
+                
+                <blockquote>
+                    "To proste, wizualne narzędzie, które pomaga przeliczyć, jak cena zakupu przekłada się na koszt porcji, food cost i marżę dania."
+                </blockquote>
+                
+                <div class="info-box">
+                    <h3>🎯 Idea narzędzia</h3>
+                    <p style="font-size: 1.05rem;">
+                        Narzędzie automatycznie pokazuje, jak zmiana <strong>ceny zakupu lub gramatury</strong> 
+                        wpływa na rentowność dania.
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">💻 Kalkulator interaktywny - Porównanie produktów</h3>
+                
+                <!-- Layout: 2 kolumny (Sliders + Wyniki) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    
+                    <!-- KOLUMNA 1: Sliders / Ustawienia -->
+                    <div>
+                        <div class="calculator">
+                            <h4 style="margin-top: 0; color: #6b21a8;">📱 Produkt 1: Heinz Professional</h4>
+                            
+                            <div class="calculator-input">
+                                <label for="p1-cena" style="font-size: 0.95rem;">Cena netto/kg: <strong><span id="p1-cena-display">15.00</span> zł</strong></label>
+                                <input type="range" id="p1-cena" min="10" max="25" step="0.50" value="15.00" oninput="calculatePortion()">
+                            </div>
+                            
+                            <div class="calculator-input">
+                                <label for="p1-gramatura" style="font-size: 0.95rem;">Gramatura: <strong><span id="p1-gramatura-display">20</span> g</strong></label>
+                                <input type="range" id="p1-gramatura" min="10" max="50" step="1" value="20" oninput="calculatePortion()">
+                            </div>
+                            
+                            <hr style="margin: 20px 0; border: none; border-top: 1px solid #cbd5e1;">
+                            
+                            <h4 style="color: #f59e0b; margin-top: 15px;">📱 Produkt 2: Produkt standardowy</h4>
+                            
+                            <div class="calculator-input">
+                                <label for="p2-cena" style="font-size: 0.95rem;">Cena netto/kg: <strong><span id="p2-cena-display">12.00</span> zł</strong></label>
+                                <input type="range" id="p2-cena" min="10" max="25" step="0.50" value="12.00" oninput="calculatePortion()">
+                            </div>
+                            
+                            <div class="calculator-input">
+                                <label for="p2-gramatura" style="font-size: 0.95rem;">Gramatura: <strong><span id="p2-gramatura-display">25</span> g</strong></label>
+                                <input type="range" id="p2-gramatura" min="10" max="50" step="1" value="25" oninput="calculatePortion()">
+                            </div>
+                            
+                            <hr style="margin: 20px 0; border: none; border-top: 1px solid #cbd5e1;">
+                            
+                            <div class="calculator-input">
+                                <label for="danie-cena" style="font-size: 0.95rem;">💰 Cena sprzedaży dania (zł):</label>
+                                <input type="number" id="danie-cena" value="30.00" step="0.50" min="0" oninput="calculatePortion()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- KOLUMNA 2: Wyniki porównania -->
+                    <div>
+                        <h4 style="margin-top: 0; color: #334155; background: #f1f5f9; padding: 12px; border-radius: 8px;">📊 Wyniki porównania</h4>
+                        
+                        <div class="product-card" style="margin-bottom: 15px;">
+                            <h4 style="color: #6b21a8; font-size: 1.05rem;">Produkt 1: Heinz</h4>
+                            <div class="calculator-output">
+                                <div class="result-row">
+                                    <span class="result-label">Koszt porcji:</span>
+                                    <span class="result-value" id="p1-koszt" style="font-weight: bold; color: #6b21a8;">0,30 zł</span>
+                                </div>
+                                <div class="result-row">
+                                    <span class="result-label">Food Cost:</span>
+                                    <span class="result-value" id="p1-fc" style="font-weight: bold; color: #6b21a8;">1,0%</span>
+                                </div>
+                                <div class="result-row">
+                                    <span class="result-label">Koszt miesięczny:</span>
+                                    <span class="result-value" id="p1-miesieczny" style="font-weight: bold; color: #6b21a8;">900 zł</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <h4 style="color: #f59e0b; font-size: 1.05rem;">Produkt 2: Standard</h4>
+                            <div class="calculator-output">
+                                <div class="result-row">
+                                    <span class="result-label">Koszt porcji:</span>
+                                    <span class="result-value" id="p2-koszt" style="font-weight: bold; color: #f59e0b;">0,30 zł</span>
+                                </div>
+                                <div class="result-row">
+                                    <span class="result-label">Food Cost:</span>
+                                    <span class="result-value" id="p2-fc" style="font-weight: bold; color: #f59e0b;">1,0%</span>
+                                </div>
+                                <div class="result-row">
+                                    <span class="result-label">Koszt miesięczny:</span>
+                                    <span class="result-value" id="p2-miesieczny" style="font-weight: bold; color: #f59e0b;">900 zł</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p style="margin-top: 15px; font-size: 0.85rem; color: #64748b; font-style: italic;">
+                            ⚙️ Koszt miesięczny: 3000 porcji × koszt porcji
+                        </p>
+                    </div>
+                    
+                </div>
+                
+                <!-- WNIOSKI - pełna szerokość pod kalkulatorem -->
+                <div id="porownanie-wynik" class="info-box" style="margin-top: 20px;">
+                    <h4 style="margin-top: 0;">🎯 Wnioski:</h4>
+                    <p id="porownanie-tekst" style="font-size: 1.05rem; line-height: 1.7;">
+                        Oba produkty mają identyczny koszt porcji!
+                    </p>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📋 Struktura kalkulacji (dla zaawansowanych)</h3>
+                
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pole</th>
+                                <th>Opis</th>
+                                <th>Przykład</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Cena produktu netto za kg</strong></td>
+                                <td>Cena zakupu u dystrybutora</td>
+                                <td>15,00 zł</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gramatura porcji (g)</strong></td>
+                                <td>Ile produktu używamy w jednym daniu</td>
+                                <td>20 g</td>
+                            </tr>
+                            <tr style="background: #dbeafe;">
+                                <td><strong>Koszt porcji</strong></td>
+                                <td>= (Cena za kg × gramatura) / 1000</td>
+                                <td><strong>0,30 zł</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cena sprzedaży dania</strong></td>
+                                <td>Cena, którą płaci gość</td>
+                                <td>30,00 zł</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Food cost (%)</strong></td>
+                                <td>= (koszt porcji / cena dania) × 100</td>
+                                <td>1,0%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Food cost całego dania</strong></td>
+                                <td>Po zsumowaniu wszystkich składników</td>
+                                <td>27%</td>
+                            </tr>
+                            <tr style="background: #d1fae5;">
+                                <td><strong>Marża brutto (%)</strong></td>
+                                <td>= 100 – Food cost</td>
+                                <td><strong>73%</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <h3>💡 Wartość dla handlowca:</h3>
+                    <p style="font-size: 1.1rem;">
+                        Handlowiec, który potrafi użyć takiego narzędzia, <strong>przestaje być sprzedawcą</strong>,
+                        a staje się <strong>partnerem ekonomicznym restauratora</strong>.
+                    </p>
+                    <p style="font-size: 1.05rem; margin-top: 10px;">
+                        To zupełnie inna jakość rozmowy — zamiast „za drogo", słychać „rozumiem, że się opłaca".
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Tracking cenowy -->
+            <div id="tracking" class="tab-content">
+                <h2>� Tracking cenowy - jak monitorować zmiany i reagować</h2>
+                
+                <blockquote>
+                    "Rynek gastronomiczny jest dynamiczny. Tracking cenowy pozwala przewidywać zmiany, utrzymywać stabilny food cost i argumentować cenę w rozmowie z klientem."
+                </blockquote>
+                
+                <h3>🎯 Po co monitorować ceny?</h3>
+                
+                <div class="info-box">
+                    <p style="font-size: 1.05rem;">
+                        Rynek gastronomiczny jest dynamiczny: ceny pomidorów, olejów czy produktów przetworzonych 
+                        potrafią zmieniać się <strong>co miesiąc</strong>.
+                    </p>
+                    
+                    <h4 style="margin-top: 20px;">Tracking cenowy pozwala:</h4>
+                    <ul style="font-size: 1.05rem; line-height: 1.8;">
+                        <li>📊 <strong>Przewidywać zmiany</strong> kosztów surowców</li>
+                        <li>💰 <strong>Utrzymywać stabilny</strong> food cost</li>
+                        <li>🤝 <strong>Argumentować cenę</strong> w rozmowie z klientem (transparentność)</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📋 Jak prowadzić tracking?</h3>
+                
+                <div class="card">
+                    <div class="highlight-box">
+                        <h4>📊 Arkusz porównawczy (aktualizowany co 2 tygodnie)</h4>
+                        
+                        <table style="margin-top: 20px;">
+                            <thead>
+                                <tr>
+                                    <th>Produkt</th>
+                                    <th>Dostawca</th>
+                                    <th>Cena netto/kg</th>
+                                    <th>Trend</th>
+                                    <th>Uwagi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: #d1fae5;">
+                                    <td><strong>Heinz Professional</strong></td>
+                                    <td>Dystrybutor A</td>
+                                    <td>15,00 zł</td>
+                                    <td>↔ stabilna</td>
+                                    <td>Pakiety 4+1, rabaty kwartalne</td>
+                                </tr>
+                                <tr style="background: #fef3c7;">
+                                    <td><strong>Produkt Standard</strong></td>
+                                    <td>Dystrybutor B</td>
+                                    <td>12,50 zł</td>
+                                    <td>↑ +0,50 zł</td>
+                                    <td>Brak promocji, cena rośnie</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Produkt Budget</strong></td>
+                                    <td>Cash&Carry</td>
+                                    <td>11,90 zł</td>
+                                    <td>↓ -0,10 zł</td>
+                                    <td>Brak rabatów kwartalnych</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <p style="margin-top: 20px; font-size: 1.05rem;">
+                            Dzięki temu możesz w rozmowie z klientem pokazać:
+                        </p>
+                        <p style="font-size: 1.1rem; padding: 15px; background: white; border-radius: 8px; margin-top: 10px; font-style: italic; color: #065f46;">
+                            „Nasze ceny są stabilne mimo rosnących kosztów surowców, 
+                            a w pakiecie 4+1 efektywna cena porcji spada o 15%."
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🎯 Jak reagować na zmiany cen?</h3>
+                
+                <div class="grid">
+                    <div class="success-box">
+                        <h4>✅ Konkurencja schodzi z ceną</h4>
+                        <p style="font-size: 1.05rem;">
+                            Pokaż różnicę w <strong>wartości</strong>:<br>
+                            wydajność, stabilność smaku, mniejsze straty.
+                        </p>
+                        <p style="margin-top: 10px; font-style: italic; color: #065f46;">
+                            „Ich ketchup jest tańszy, ale zużyjesz 25% więcej na porcję."
+                        </p>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>📈 Rynek rośnie (inflacja)</h4>
+                        <p style="font-size: 1.05rem;">
+                            Podkreśl, że Heinz <strong>utrzymuje stabilne ceny</strong> 
+                            i ciągłość dostaw.
+                        </p>
+                        <p style="margin-top: 10px; font-style: italic; color: #1e40af;">
+                            „Gwarantujemy tę cenę przez cały kwartał, bez niespodzianek."
+                        </p>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h4>⚡ Dystrybutor ma wahania</h4>
+                        <p style="font-size: 1.05rem;">
+                            Zaproponuj <strong>prognozowanie zamówień</strong> 
+                            i plan kwartalny.
+                        </p>
+                        <p style="margin-top: 10px; font-style: italic; color: #92400e;">
+                            „Zamówmy na 3 miesiące z rabatem – zabezpieczymy stałą cenę."
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📊 Narzędzie: Tracker cenowy (szablon)</h3>
+                
+                <div class="card">
+                    <div class="info-box">
+                        <h4>📝 Co powinieneś śledzić?</h4>
+                        
+                        <ol style="font-size: 1.05rem; line-height: 1.8;">
+                            <li>
+                                <strong>Ceny konkurencji</strong> - minimum 2-3 alternatywne produkty
+                            </li>
+                            <li style="margin-top: 10px;">
+                                <strong>Trendy rynkowe</strong> - czy ceny rosną czy spadają w kategorii?
+                            </li>
+                            <li style="margin-top: 10px;">
+                                <strong>Promocje dystrybutorów</strong> - pakiety, rabaty, warunki płatności
+                            </li>
+                            <li style="margin-top: 10px;">
+                                <strong>Sezonowość</strong> - lato/zima mogą wpływać na ceny sosów
+                            </li>
+                            <li style="margin-top: 10px;">
+                                <strong>Dostępność</strong> - czy produkty są na stanie? Jakie terminy dostaw?
+                            </li>
+                        </ol>
+                        
+                        <p style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; font-size: 1.05rem;">
+                            <strong>💡 Pro tip:</strong> Aktualizuj tracking <strong>przed spotkaniami z klientami</strong> - 
+                            świeże dane = silniejsza pozycja negocjacyjna!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Rozmowy o rabatach -->
+            <div id="rabaty" class="tab-content">
+                <h2>� Jak rozmawiać o rabatach bez psucia wartości produktu</h2>
+                
+                <blockquote>
+                    "Każdy rabat jest potrzebny, ale nie każdy jest zdrowy. Zbyt częste obniżki psują postrzeganą wartość marki i uczą klientów, że cena jest 'umowna'."
+                </blockquote>
+                
+                <h3>🎯 Zasada ogólna</h3>
+                
+                <div class="warning-box">
+                    <h4>⚠️ Problem z rabatami procentowymi</h4>
+                    <p style="font-size: 1.05rem;">
+                        W kanale HoReCa lepiej dawać <strong>korzyści ekonomiczne</strong>, nie rabaty procentowe.
+                    </p>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                        <h4 style="color: #92400e; margin-top: 0;">Dlaczego?</h4>
+                        <ul style="font-size: 1.05rem;">
+                            <li>❌ Rabat = obniżenie wartości marki („skoro dał -10%, to mógł -15%")</li>
+                            <li>❌ Klient przyzwyczaja się do rabatów („zadzwonię po obniżkę")</li>
+                            <li>❌ Marka premium staje się „tania" w oczach rynku</li>
+                            <li>❌ Trudno wrócić do pełnej ceny</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">✅ Zasady rozmowy o rabatach</h3>
+                
+                <div class="grid">
+                    <div class="card">
+                        <div class="success-box">
+                            <h4>1️⃣ Zamień rabat w inwestycję</h4>
+                            <p style="font-size: 1.05rem; margin-top: 10px;">
+                                <strong>❌ Zamiast:</strong><br>
+                                „Dam Panu 5% rabatu."
+                            </p>
+                            <p style="font-size: 1.05rem; margin-top: 15px;">
+                                <strong>✅ Powiedz:</strong><br>
+                                <span style="color: #065f46; font-style: italic;">
+                                    „Zamiast 5% rabatu, mogę dać pakiet 4+1 – to realna oszczędność 
+                                    <strong>20% na porcji</strong>, a nie na fakturze."
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="info-box">
+                            <h4>2️⃣ Podkreśl długofalowość</h4>
+                            <p style="font-size: 1.05rem; margin-top: 10px;">
+                                <strong>❌ Zamiast:</strong><br>
+                                „Obniżam cenę na ten miesiąc."
+                            </p>
+                            <p style="font-size: 1.05rem; margin-top: 15px;">
+                                <strong>✅ Powiedz:</strong><br>
+                                <span style="color: #1e40af; font-style: italic;">
+                                    „Wolę zagwarantować Panu <strong>stabilną cenę przez 3 miesiące</strong> 
+                                    niż rabat jednorazowy, który za chwilę będzie nieaktualny."
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="highlight-box">
+                            <h4>3️⃣ Odwołaj się do foodcostu</h4>
+                            <p style="font-size: 1.05rem; margin-top: 10px;">
+                                <strong>❌ Zamiast:</strong><br>
+                                „To najtańsza oferta na rynku."
+                            </p>
+                            <p style="font-size: 1.05rem; margin-top: 15px;">
+                                <strong>✅ Powiedz:</strong><br>
+                                <span style="color: #9a3412; font-style: italic;">
+                                    „Ten rabat nie zmienia kosztu porcji – Heinz już teraz daje 
+                                    <strong>optymalny food cost 1%</strong>. 
+                                    Dodatkowa zniżka nie poprawi rentowności dania."
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="success-box">
+                            <h4>4️⃣ Wprowadź wartość dodaną</h4>
+                            <p style="font-size: 1.05rem; margin-top: 10px;">
+                                <strong>❌ Zamiast:</strong><br>
+                                „Dam 10% rabatu."
+                            </p>
+                            <p style="font-size: 1.05rem; margin-top: 15px;">
+                                <strong>✅ Powiedz:</strong><br>
+                                <span style="color: #065f46; font-style: italic;">
+                                    „Zamiast rabatu dorzucam <strong>szkolenie dla zespołu kuchni</strong> 
+                                    z optymalizacji porcji oraz <strong>materiały POS</strong> do menu. 
+                                    To realna wartość 500 zł."
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🎭 Przykłady rozmów - dobre vs złe</h3>
+                
+                <div class="card">
+                    <div class="error-box">
+                        <h4>❌ ZŁA rozmowa (niszczenie wartości)</h4>
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                            <p style="font-size: 1.05rem; line-height: 1.8;">
+                                <strong>Klient:</strong> „Konkurencja daje mi -10%. Co Ty możesz?"<br><br>
+                                <strong>Handlowiec:</strong> „OK, dam Panu -12%."<br><br>
+                                <strong>Efekt:</strong> 😞 Marka tania, klient nauczył się negocjować, marża zniszczona.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="success-box" style="margin-top: 30px;">
+                        <h4>✅ DOBRA rozmowa (budowanie wartości)</h4>
+                        <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                            <p style="font-size: 1.05rem; line-height: 1.8;">
+                                <strong>Klient:</strong> „Konkurencja daje mi -10%. Co Ty możesz?"<br><br>
+                                <strong>Handlowiec:</strong> „Rozumiem, że cena jest ważna. Ale zobaczmy na koszty porcji..."<br>
+                                <em>[pokazuje kalkulator]</em><br><br>
+                                „Heinz przy 20g na porcję = 0,30 zł. Ich produkt przy 25g = 0,30 zł. 
+                                Ten sam koszt, ale Heinz daje <strong>mniejsze straty</strong> (gęstszy produkt) 
+                                i <strong>stabilny smak</strong> - zero reklamacji.<br><br>
+                                Co więcej, mogę dać <strong>pakiet 4+1</strong> - to 20% efektywnego rabatu na porcji. 
+                                Plus <strong>gwarancja ceny na kwartał</strong> - bez niespodzianek.<br><br>
+                                I jako bonus: szkolenie zespołu + shelf talkery do menu z logo Heinz. 
+                                To buduje prestiż lokalu."<br><br>
+                                <strong>Efekt:</strong> 🚀 Klient widzi wartość, nie cenę. Heinz = partner, nie dostawca.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">💡 Podsumowanie - obrona wartości</h3>
+                
+                <div class="highlight-box">
+                    <h4>🎯 Kluczowe zasady:</h4>
+                    <ol style="font-size: 1.05rem; line-height: 1.8;">
+                        <li>
+                            <strong>Nie daj rabatu - daj wartość</strong><br>
+                            <span style="color: #9a3412;">Pakiet 4+1, szkolenia, stabilna cena, wsparcie POS</span>
+                        </li>
+                        <li style="margin-top: 15px;">
+                            <strong>Rozmawiaj o koszcie porcji, nie cenie zakupu</strong><br>
+                            <span style="color: #9a3412;">„0,30 zł/porcja" brzmi lepiej niż „15 zł/kg"</span>
+                        </li>
+                        <li style="margin-top: 15px;">
+                            <strong>Pokazuj food cost i marżę</strong><br>
+                            <span style="color: #9a3412;">Klient widzi, że Heinz = rentowność, nie koszt</span>
+                        </li>
+                        <li style="margin-top: 15px;">
+                            <strong>Buduj długoterminowe relacje</strong><br>
+                            <span style="color: #9a3412;">Partner biznesowy > jednorazowy rabat</span>
+                        </li>
+                    </ol>
+                    
+                    <p style="margin-top: 25px; font-size: 1.1rem; padding: 20px; background: white; border-radius: 8px; font-weight: 600;">
+                        🎓 Dzięki temu klient widzi w Heinz partnera, który pomaga mu utrzymać marżę i jakość, 
+                        a nie tylko kogoś, kto „walczy ceną". To najskuteczniejszy sposób obrony wartości marki premium.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div>
+            <button class="footer-button" onclick="scrollToTop()">
+                ⬆️ Powrót na górę
+            </button>
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">
+            BVA Educational Materials
+        </div>
+        <div style="opacity: 0.9; font-size: 0.95rem;">
+            Narzędzia ekonomiczne w gastronomii | Data: 2025-11-05 | Wersja: 1.0
+        </div>
+    </div>
+    
+    <script>
+        // Tab switching
+        function openTab(tabName) {
+            var tabContents = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            var tabs = document.getElementsByClassName('tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Food Cost Calculator
+        function calculateFoodCost() {
+            const koszt = parseFloat(document.getElementById('fc-koszt').value) || 0;
+            const cena = parseFloat(document.getElementById('fc-cena').value) || 1;
+            
+            const foodCost = (koszt / cena) * 100;
+            const marza = 100 - foodCost;
+            const zysk = cena - koszt;
+            
+            document.getElementById('fc-procent').textContent = foodCost.toFixed(1) + '%';
+            document.getElementById('fc-marza').textContent = marza.toFixed(1) + '%';
+            document.getElementById('fc-zysk').textContent = zysk.toFixed(2) + ' zł';
+            
+            // Ocena
+            let ocena = '';
+            let klasa = 'good';
+            if (foodCost <= 30) {
+                ocena = '✅ Bardzo dobra rentowność';
+                klasa = 'good';
+            } else if (foodCost <= 33) {
+                ocena = '⚠️ Akceptowalna';
+                klasa = 'warning';
+            } else {
+                ocena = '❌ Danie może być nierentowne';
+                klasa = 'bad';
+            }
+            
+            const ocenaElement = document.getElementById('fc-ocena');
+            ocenaElement.textContent = ocena;
+            ocenaElement.className = 'result-value ' + klasa;
+            
+            // Update other elements
+            const procentElement = document.getElementById('fc-procent');
+            const marzaElement = document.getElementById('fc-marza');
+            const zyskElement = document.getElementById('fc-zysk');
+            
+            procentElement.className = 'result-value ' + klasa;
+            marzaElement.className = 'result-value ' + (foodCost <= 30 ? 'good' : foodCost <= 33 ? 'warning' : 'bad');
+            zyskElement.className = 'result-value ' + (zysk > 20 ? 'good' : zysk > 15 ? 'warning' : 'bad');
+        }
+        
+        // Portion Calculator
+        function calculatePortion() {
+            // Product 1
+            const p1Cena = parseFloat(document.getElementById('p1-cena').value);
+            const p1Gramatura = parseFloat(document.getElementById('p1-gramatura').value);
+            document.getElementById('p1-cena-display').textContent = p1Cena.toFixed(2);
+            document.getElementById('p1-gramatura-display').textContent = p1Gramatura;
+            
+            // Product 2
+            const p2Cena = parseFloat(document.getElementById('p2-cena').value);
+            const p2Gramatura = parseFloat(document.getElementById('p2-gramatura').value);
+            document.getElementById('p2-cena-display').textContent = p2Cena.toFixed(2);
+            document.getElementById('p2-gramatura-display').textContent = p2Gramatura;
+            
+            // Dish price
+            const danieCena = parseFloat(document.getElementById('danie-cena').value) || 30;
+            
+            // Calculate costs
+            const p1Koszt = (p1Cena * p1Gramatura) / 1000;
+            const p2Koszt = (p2Cena * p2Gramatura) / 1000;
+            
+            const p1FC = (p1Koszt / danieCena) * 100;
+            const p2FC = (p2Koszt / danieCena) * 100;
+            
+            const p1Miesieczny = p1Koszt * 3000;
+            const p2Miesieczny = p2Koszt * 3000;
+            
+            // Update display
+            document.getElementById('p1-koszt').textContent = p1Koszt.toFixed(2) + ' zł';
+            document.getElementById('p1-fc').textContent = p1FC.toFixed(1) + '%';
+            document.getElementById('p1-miesieczny').textContent = p1Miesieczny.toFixed(0) + ' zł';
+            
+            document.getElementById('p2-koszt').textContent = p2Koszt.toFixed(2) + ' zł';
+            document.getElementById('p2-fc').textContent = p2FC.toFixed(1) + '%';
+            document.getElementById('p2-miesieczny').textContent = p2Miesieczny.toFixed(0) + ' zł';
+            
+            // Comparison
+            const roznica = Math.abs(p1Koszt - p2Koszt);
+            const roznicaMies = Math.abs(p1Miesieczny - p2Miesieczny);
+            let porownanieTekst = '';
+            
+            if (roznica < 0.02) {
+                porownanieTekst = `Oba produkty mają <strong>prawie identyczny koszt porcji</strong> (różnica ${roznica.toFixed(2)} zł)! 
+                    <br><br>Jednak Produkt 1 zużywa <strong>${((p2Gramatura - p1Gramatura) / p2Gramatura * 100).toFixed(0)}% mniej</strong> produktu na porcję, 
+                    co oznacza mniejsze straty i wyższą wydajność.`;
+            } else if (p1Koszt < p2Koszt) {
+                porownanieTekst = `<strong>Produkt 1 jest tańszy o ${roznica.toFixed(2)} zł/porcję!</strong>
+                    <br>Oszczędność miesięczna: <strong>${roznicaMies.toFixed(0)} zł</strong> (przy 3000 porcjach).`;
+            } else {
+                porownanieTekst = `<strong>Produkt 2 jest tańszy o ${roznica.toFixed(2)} zł/porcję!</strong>
+                    <br>Oszczędność miesięczna: <strong>${roznicaMies.toFixed(0)} zł</strong> (przy 3000 porcjach).`;
+            }
+            
+            document.getElementById('porownanie-tekst').innerHTML = porownanieTekst;
+        }
+        
+        // Initialize calculators on load
+        window.onload = function() {
+            calculateFoodCost();
+            calculatePortion();
+        };
+    </script>
+</body>
+</html>

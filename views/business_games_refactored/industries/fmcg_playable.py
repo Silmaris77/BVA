@@ -5081,203 +5081,359 @@ def show_fmcg_playable_game(username: str):
         # HR TAB: SZKOLENIA
         # =============================
         with hr_tab_training:
-            st.markdown("### 📚 Szkolenia i Materiały Edukacyjne")
-            st.markdown("Rozwijaj swoje umiejętności sprzedażowe dzięki specjalistycznym materiałom")
-            
-            # Training categories
+            st.markdown("### 📚 Akademia Handlowca FMCG")
+            st.markdown("Kompleksowe szkolenia z wszystkich aspektów sprzedaży w kanale tradycyjnym")
+        
+            # Training categories - NOWA STRUKTURA
             training_categories = st.tabs([
-                "🗺️ Planowanie", 
-                "💬 Rozmowy sprzedażowe", 
-                "🏪 Merchandising",
-                "📊 Analityka"
+                "🗺️ Planowanie i Routing",
+                "💬 Rozmowy i Relacje",
+                "📦 Portfolio Produktowe",
+                "🏪 Kanały Dystrybucji",
+                "🎨 Trade Marketing",
+                "📊 Analityka Biznesowa"
             ])
-            
-            # PLANOWANIE TRAINING
+        
+            # =============================
+            # TAB 1: PLANOWANIE I ROUTING
+            # =============================
             with training_categories[0]:
-                st.markdown("#### 🗺️ Planowanie Terytorium Sprzedażowego")
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                            padding: 30px; 
+                            border-radius: 15px; 
+                            color: white; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🗺️ Planowanie i Routing</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
+                        Segmentacja ABC, optymalizacja trasy, strategia prospectingowa
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
                 
-                with st.expander("**Planowanie terytorium - od analizy do pierwszej wizyty**", expanded=False):
-                    # Elegancki preview
-                    st.markdown("""
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                                padding: 30px; 
-                                border-radius: 15px; 
-                                color: white; 
-                                margin-bottom: 20px;
-                                box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);">
-                        <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🗺️ Zacznij od planu!</h2>
-                        <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
-                            Segmentacja ABC, routing, strategia prospectingowa i przygotowanie do pierwszej wizyty
-                        </p>
-                    </div>
-                    """, unsafe_allow_html=True)
+                # Lekcja: Planowanie terytorium sprzedażowego (Lokalny HTML)
+                with st.expander("📚 Lekcja: Planowanie terytorium sprzedażowego - Od analizy do pierwszej wizyty", expanded=False):
+                    # Wczytaj i wyświetl lokalny plik HTML
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "PLANOWANIE_TERYTORIUM_INTERACTIVE.html")
                     
-                    # Highlights
-                    col1, col2, col3 = st.columns(3)
-                    with col1:
-                        st.markdown("""
-                        <div style="background: #d1fae5; padding: 15px; border-radius: 10px; border-left: 4px solid #10b981;">
-                            <div style="font-size: 2rem; margin-bottom: 5px;">🔤</div>
-                            <strong>Segmentacja ABC</strong><br>
-                            <span style="color: #64748b; font-size: 0.9rem;">20% klientów = 80% przychodów</span>
-                        </div>
-                        """, unsafe_allow_html=True)
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        # Wyświetl HTML w iframe przez components.html
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+                        st.info("💡 Upewnij się, że plik PLANOWANIE_TERYTORIUM_INTERACTIVE.html znajduje się w folderze docs/")
+               
+            # =============================
+            # TAB 2: ROZMOWY I RELACJE
+            # =============================
+            with training_categories[1]:
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+                            padding: 30px; 
+                            border-radius: 15px; 
+                            color: white; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 8px 24px rgba(240, 147, 251, 0.3);">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">💬 Rozmowy i Relacje</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
+                        Sondowanie potrzeb, budowanie zaufania, techniki negocjacyjne
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Lekcja: Sondowanie potrzeb klienta
+                with st.expander("🎯 Lekcja: Sondowanie potrzeb klienta - Sztuka zadawania właściwych pytań", expanded=False):
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "SONDOWANIE_POTRZEB_INTERACTIVE.html")
                     
-                    with col2:
-                        st.markdown("""
-                        <div style="background: #dbeafe; padding: 15px; border-radius: 10px; border-left: 4px solid #3b82f6;">
-                            <div style="font-size: 2rem; margin-bottom: 5px;">🚀</div>
-                            <strong>Quick Wins First</strong><br>
-                            <span style="color: #64748b; font-size: 0.9rem;">Od kogo zacząć? B→C→A</span>
-                        </div>
-                        """, unsafe_allow_html=True)
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        # Wyświetl HTML w iframe przez components.html
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+                        st.info("💡 Upewnij się, że plik SONDOWANIE_POTRZEB_INTERACTIVE.html znajduje się w folderze docs/")
+            
+            # =============================
+            # TAB 3: PORTFOLIO PRODUKTOWE
+            # =============================
+            with training_categories[2]:
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+                            padding: 30px; 
+                            border-radius: 15px; 
+                            color: #1e293b; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 8px 24px rgba(168, 237, 234, 0.3);">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">📦 Portfolio Produktowe</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.85; margin: 0;">
+                        Znajomość produktów, kategorii FMCG, argumentacja sprzedażowa
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                st.markdown("""
+                <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; text-align: center; border: 2px dashed #dee2e6; margin-top: 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">📦</div>
+                    <h3 style="color: #6c757d; margin-bottom: 10px;">Materiały w przygotowaniu</h3>
+                    <p style="color: #6c757d;">Wkrótce znajdziesz tutaj:</p>
+                    <ul style="color: #adb5bd; font-size: 0.9rem; text-align: left; max-width: 500px; margin: 20px auto;">
+                        <li>Kategorie FMCG (Personal Care, Food, Beverages...)</li>
+                        <li>USP produktów FreshLife</li>
+                        <li>Argumenty value vs premium</li>
+                        <li>Cross-selling i up-selling</li>
+                        <li>Konkurencja - Dove, Nivea, L'Oreal</li>
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # =============================
+            # TAB 4: KANAŁY DYSTRYBUCJI
+            # =============================
+            with training_categories[3]:
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+                            padding: 30px; 
+                            border-radius: 15px; 
+                            color: white; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 8px 24px rgba(79, 172, 254, 0.3);">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🏪 Kanały Dystrybucji</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
+                        Traditional Trade, Modern Trade, modele dystrybucji, ekonomika sklepu
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Lekcja: Kanał Tradycyjny
+                with st.expander("🏪 Lekcja: Kanał Tradycyjny - Charakterystyka i Modele Dystrybucji", expanded=False):
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "KANAL_TRADYCYJNY_INTERACTIVE.html")
                     
-                    with col3:
-                        st.markdown("""
-                        <div style="background: #ffedd5; padding: 15px; border-radius: 10px; border-left: 4px solid #f97316;">
-                    <div style="font-size: 2rem; margin-bottom: 5px;">🗺️</div>
-                    <strong>Routing + Klasteryzacja</strong><br>
-                    <span style="color: #64748b; font-size: 0.9rem;">Oszczędź 100 km dziennie!</span>
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        # Wyświetl HTML w iframe przez components.html
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+                        st.info("💡 Upewnij się, że plik KANAL_TRADYCYJNY_INTERACTIVE.html znajduje się w folderze docs/")
+            
+            # =============================
+            # TAB 5: TRADE MARKETING
+            # =============================
+            with training_categories[4]:
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); 
+                            padding: 30px; 
+                            border-radius: 15px; 
+                            color: white; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 8px 24px rgba(250, 112, 154, 0.3);">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🎨 Trade Marketing</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
+                        Merchandising, materiały POS, promocje, visual merchandising, visibility w sklepie
+                    </p>
                 </div>
                 """, unsafe_allow_html=True)
-            
-            st.markdown("---")
-            
-            # Wyświetl HTML
-            html_path = os.path.join("docs", "PLANOWANIE_TERYTORIUM_INTERACTIVE.html")
-            if os.path.exists(html_path):
-                with open(html_path, "r", encoding="utf-8") as f:
-                    html_content = f.read()
                 
-                components.html(html_content, height=800, scrolling=True)
-            else:
-                st.error("⚠️ Plik HTML nie został znaleziony.")
-        
-        st.markdown("---")
-        
-        # Artykuł 1: Kanał Tradycyjny
-        with st.expander("🏪 **Kanał Tradycyjny - Charakterystyka i Modele Dystrybucji**", expanded=False):
-            # Elegancki preview w stylu karty
-            st.markdown("""
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                        padding: 30px; 
-                        border-radius: 15px; 
-                        color: white; 
-                        margin-bottom: 20px;
-                        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);">
-                <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">📚 Kompleksowy przewodnik po kanale tradycyjnym</h2>
-                <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
-                    Dowiedz się wszystkiego o sprzedaży FMCG w małych sklepach osiedlowych
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Highlights w kartach
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.markdown("""
-                <div style="background: #f0fdf4; padding: 15px; border-radius: 10px; border-left: 4px solid #10b981;">
-                    <div style="font-size: 2rem; margin-bottom: 5px;">🔄</div>
-                    <strong>4 Modele Dystrybucji</strong><br>
-                    <span style="color: #64748b; font-size: 0.9rem;">Od bezpośredniej do Cash & Carry</span>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col2:
-                st.markdown("""
-                <div style="background: #eff6ff; padding: 15px; border-radius: 10px; border-left: 4px solid #3b82f6;">
-                    <div style="font-size: 2rem; margin-bottom: 5px;">💰</div>
-                    <strong>Ekonomika Sklepu</strong><br>
-                    <span style="color: #64748b; font-size: 0.9rem;">Marża, rotacja, kapitał obrotowy</span>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col3:
-                st.markdown("""
-                <div style="background: #fef3c7; padding: 15px; border-radius: 10px; border-left: 4px solid #f59e0b;">
-                    <div style="font-size: 2rem; margin-bottom: 5px;">💬</div>
-                    <strong>Argumenty + Obiekcje</strong><br>
-                    <span style="color: #64748b; font-size: 0.9rem;">Gotowe odpowiedzi na wyzwania</span>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            st.markdown("---")
-            
-            # Wyświetl HTML bezpośrednio
-            html_path = os.path.join("docs", "KANAL_TRADYCYJNY_INTERACTIVE.html")
-            if os.path.exists(html_path):
-                with open(html_path, "r", encoding="utf-8") as f:
-                    html_content = f.read()
+                # Lekcja 1: Trade Marketing - Podstawy + Merchandising + POS
+                with st.expander("📚 Lekcja 1: Trade Marketing - Podstawy, Merchandising i Materiały POS", expanded=False):
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "TRADE_MARKETING_PART1_INTERACTIVE.html")
+                    
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+                        st.info("💡 Upewnij się, że plik TRADE_MARKETING_PART1_INTERACTIVE.html znajduje się w folderze docs/")
                 
-                # Wyświetl HTML w komponencie (scrollable)
-                components.html(html_content, height=800, scrolling=True)
-            else:
-                st.error("⚠️ Plik HTML nie został znaleziony.")
-        
-        # Artykuł 2: Sondowanie potrzeb klienta
-        with st.expander("🎯 **Sondowanie potrzeb klienta - sztuka zadawania właściwych pytań**", expanded=False):
-            # Elegancki preview
-            st.markdown("""
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                        padding: 30px; 
-                        border-radius: 15px; 
-                        color: white; 
-                        margin-bottom: 20px;
-                        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);">
-                <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🎯 Kompetencje > Reputacja</h2>
-                <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
-                    Odkryj jak profesjonalne pytania odblokowują capacity nawet przy reputacji 0
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Highlights
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.markdown("""
-                <div style="background: #fef3c7; padding: 15px; border-radius: 10px; border-left: 4px solid #f59e0b;">
-                    <div style="font-size: 2rem; margin-bottom: 5px;">❓</div>
-                    <strong>5 Technik Sondowania</strong><br>
-                    <span style="color: #64748b; font-size: 0.9rem;">Od pytań otwartych do capacity questions</span>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col2:
-                st.markdown("""
-                <div style="background: #f0fdf4; padding: 15px; border-radius: 10px; border-left: 4px solid #10b981;">
-                    <div style="font-size: 2rem; margin-bottom: 5px;">🔄</div>
-                    <strong>SPIN Selling</strong><br>
-                    <span style="color: #64748b; font-size: 0.9rem;">Sprawdzona metodyka 4 pytań</span>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col3:
-                st.markdown("""
-                <div style="background: #eff6ff; padding: 15px; border-radius: 10px; border-left: 4px solid #3b82f6;">
-                    <div style="font-size: 2rem; margin-bottom: 5px;">💬</div>
-                    <strong>Przykładowa Rozmowa</strong><br>
-                    <span style="color: #64748b; font-size: 0.9rem;">7 kroków od kontaktu do zamknięcia</span>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            st.markdown("---")
-            
-            # Wyświetl HTML bezpośrednio (jak w pierwszym artykule)
-            html_path = os.path.join("docs", "SONDOWANIE_POTRZEB_INTERACTIVE.html")
-            if os.path.exists(html_path):
-                with open(html_path, "r", encoding="utf-8") as f:
-                    html_content = f.read()
+                # Lekcja 2A: Trade Marketing - Promocje
+                with st.expander("🎪 Lekcja 2A: Trade Marketing - Planowanie i Realizacja Promocji", expanded=False):
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "TRADE_MARKETING_PART2A_INTERACTIVE.html")
+                    
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+                        st.info("💡 Upewnij się, że plik TRADE_MARKETING_PART2A_INTERACTIVE.html znajduje się w folderze docs/")
                 
-                # Wyświetl HTML w komponencie (scrollable)
-                components.html(html_content, height=800, scrolling=True)
-            else:
-                st.error("⚠️ Plik HTML nie został znaleziony.")
-        
-        # Placeholder na kolejne artykuły
-        st.markdown("---")
-        st.info("💡 **Więcej artykułów wkrótce!** Pracujemy nad materiałami dotyczącymi merchandisingu, negocjacji i budowania relacji z klientami.")
-        
-    
+                # Lekcja 2B: Trade Marketing - Visual Merchandising
+                with st.expander("🎨 Lekcja 2B: Trade Marketing - Visual Merchandising i Psychologia Kolorów", expanded=False):
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "TRADE_MARKETING_PART2B_INTERACTIVE.html")
+                    
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+                        st.info("💡 Upewnij się, że plik TRADE_MARKETING_PART2B_INTERACTIVE.html znajduje się w folderze docs/")
+                
+                # Lekcja 2C: Trade Marketing - Zwiększanie Visibility
+                with st.expander("🚀 Lekcja 2C: Trade Marketing - Zwiększanie Visibility i Special Placements", expanded=False):
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "TRADE_MARKETING_PART2C_INTERACTIVE.html")
+                    
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+                        st.info("💡 Upewnij się, że plik TRADE_MARKETING_PART2C_INTERACTIVE.html znajduje się w folderze docs/")
+                
+                st.markdown("<br>", unsafe_allow_html=True)
+                
+                # NAGŁÓWEK: Ekonomia talerza
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+                            padding: 30px; 
+                            border-radius: 15px; 
+                            color: white; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 8px 24px rgba(245, 87, 108, 0.3);">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🍽️ Ekonomia talerza</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
+                        Jak gastronomia liczy pieniądze - Food Cost, struktura kosztów, koszt porcji
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Lekcja: Ekonomia talerza
+                with st.expander("📊 Lekcja: Ekonomia talerza - Jak gastronomia liczy pieniądze", expanded=False):
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "EKONOMIA_TALERZA_INTERACTIVE.html")
+                    
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+                
+                st.markdown("<br>", unsafe_allow_html=True)
+                
+                # NAGŁÓWEK: Narzędzia ekonomiczne
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                            padding: 30px; 
+                            border-radius: 15px; 
+                            color: white; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 8px 24px rgba(118, 75, 162, 0.3);">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🧮 Narzędzia ekonomiczne</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
+                        Interaktywne kalkulatory: Food Cost, porównywanie produktów, monitoring cen
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Lekcja: Narzędzia ekonomiczne
+                with st.expander("🔧 Lekcja: Narzędzia ekonomiczne - Kalkulatory dla handlowców", expanded=False):
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "NARZEDZIA_EKONOMICZNE_INTERACTIVE.html")
+                    
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+                
+                st.markdown("<br>", unsafe_allow_html=True)
+                
+                # NAGŁÓWEK: Dwie marki, jeden zysk
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #dc2626 0%, #f59e0b 100%); 
+                            padding: 30px; 
+                            border-radius: 15px; 
+                            color: white; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">🎯 Dwie marki, jeden zysk</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
+                        Jak sprzedawać ekonomicznie Heinz i Pudliszki - Smart Portfolio
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Lekcja: Dwie marki, jeden zysk
+                with st.expander("🔴🟡 Lekcja: Dwie marki, jeden zysk - Heinz i Pudliszki", expanded=False):
+                    import os
+                    html_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 
+                                            "docs", "DWIE_MARKI_JEDEN_ZYSK_INTERACTIVE.html")
+                    
+                    if os.path.exists(html_path):
+                        with open(html_path, 'r', encoding='utf-8') as f:
+                            html_content = f.read()
+                        
+                        components.html(html_content, height=800, scrolling=True)
+                    else:
+                        st.error(f"⚠️ Nie znaleziono pliku lekcji: {html_path}")
+            
+            # =============================
+            # TAB 6: ANALITYKA BIZNESOWA
+            # =============================
+            with training_categories[5]:
+                st.markdown("""
+                <div style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); 
+                            padding: 30px; 
+                            border-radius: 15px; 
+                            color: white; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 8px 24px rgba(48, 207, 208, 0.3);">
+                    <h2 style="margin: 0 0 15px 0; font-size: 1.8rem;">📊 Analityka Biznesowa</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.95; margin: 0;">
+                        KPI, dashboardy, analiza sprzedaży, forecasting, reporting
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                st.markdown("""
+                <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; text-align: center; border: 2px dashed #dee2e6; margin-top: 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 15px;">📊</div>
+                    <h3 style="color: #6c757d; margin-bottom: 10px;">Materiały w przygotowaniu</h3>
+                    <p style="color: #6c757d;">Wkrótce znajdziesz tutaj:</p>
+                    <ul style="color: #adb5bd; font-size: 0.9rem; text-align: left; max-width: 500px; margin: 20px auto;">
+                        <li>KPI handlowca (sell-in, sell-out, distribution)</li>
+                        <li>Analiza trendów sprzedażowych</li>
+                        <li>Forecasting i planowanie zamówień</li>
+                        <li>Reporting dla managera</li>
+                        <li>Data-driven decision making</li>
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
+
     # =============================================================================
     # TAB: INSTRUKCJA
     # =============================================================================

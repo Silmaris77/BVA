@@ -174,20 +174,20 @@ button[kind="header"] {
 }
 
 .stTabs [data-baseweb="tab"] {
-    color: #64748b !important;
+    color: #1e40af !important;
     font-weight: 500 !important;
     font-size: 16px !important;
     padding: 12px 24px !important;
     border-radius: 8px 8px 0 0 !important;
-    background: transparent !important;
+    background: #dbeafe !important;
     border: none !important;
     transition: all 0.3s ease !important;
     position: relative !important;
 }
 
 .stTabs [data-baseweb="tab"]:hover:not([aria-selected="true"]) {
-    color: #475569 !important;
-    background: rgba(102, 126, 234, 0.05) !important;
+    color: #1e3a8a !important;
+    background: #bfdbfe !important;
 }
 
 .stTabs [aria-selected="true"] {
@@ -1811,5 +1811,4 @@ div[data-testid="column"] > div > div {
         padding: 10px 12px !important;
     }
 }
-
 

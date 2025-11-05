@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Marketing - Część 2A: Planowanie Promocji</title>
+    <style>
+        /* ============================================================================
+           BVA EDUCATIONAL MATERIALS - Style według standardu
+           Zobacz: bva_educational_styles.css i BVA_STYLE_GUIDE.md
+           
+           Kolory boxów (semantic):
+           🔵 info-box - teoria, definicje
+           🟢 success-box - dobre praktyki
+           🔴 error-box - błędy, pułapki
+           🟡 warning-box - wskazówki, tipy
+           🟠 highlight-box - case studies
+           
+           Emoji standardy:
+           📖 = Teoria/Wprowadzenie
+           🎯 = Praktyka/Zastosowanie
+           💬 = Komunikacja/Rozmowy
+           📊 = Dane/Analiza
+           ✅ = Podsumowanie/Checklist
+           ============================================================================ */
+        
+        /* ===== BVA EDUCATIONAL STYLES - UNIVERSAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* UNIVERSAL BOXES */
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .success-box h3, .success-box h4 {
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+        
+        .error-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #ef4444;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .error-box h3, .error-box h4 {
+            color: #991b1b;
+            margin-bottom: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .info-box h3, .info-box h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box h3, .warning-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-left: 4px solid #f97316;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .highlight-box h3, .highlight-box h4 {
+            color: #9a3412;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f8fafc;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        .footer-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .footer-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        blockquote {
+            border-left: 4px solid #94a3b8;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        h2 {
+            color: #1e293b;
+            margin: 30px 0 15px 0;
+            font-size: 2rem;
+        }
+        
+        h3 {
+            color: #334155;
+            margin: 20px 0 10px 0;
+            font-size: 1.5rem;
+        }
+        
+        h4 {
+            color: #475569;
+            margin: 15px 0 10px 0;
+            font-size: 1.2rem;
+        }
+        
+        p {
+            margin: 10px 0;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎪 Trade Marketing - Część 2A</h1>
+            <p>Planowanie i Realizacja Promocji</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('wprowadzenie')">📖 Wprowadzenie</button>
+            <button class="tab" onclick="openTab('typy')">🎯 Typy promocji</button>
+            <button class="tab" onclick="openTab('planowanie')">� Planowanie</button>
+            <button class="tab" onclick="openTab('realizacja')">✅ Realizacja</button>
+        </div>
+        
+        <div class="content">
+            <!-- Tab 1: Wprowadzenie -->
+            <div id="wprowadzenie" class="tab-content active">
+                <blockquote>
+                    "Promocja bez planu = spalanie budżetu. Promocja z planem = inwestycja w sprzedaż."
+                </blockquote>
+                
+                <h2>📖 Dlaczego promocje są kluczowe w Trade Marketingu?</h2>
+                
+                <div class="highlight-box">
+                    <h3>💰 Statystyki</h3>
+                    <ul style="font-size: 1.1rem; line-height: 1.8;">
+                        <li><strong>67% konsumentów</strong> kupuje produkty na promocji</li>
+                        <li><strong>+80-150%</strong> wzrost sprzedaży podczas dobrze zaplanowanej promocji</li>
+                        <li><strong>3x więcej</strong> nowych klientów próbuje produktu z rabatem</li>
+                        <li><strong>40%</strong> klientów wraca po promocji i kupuje w pełnej cenie</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 30px;">🎯 Cele promocji</h3>
+                
+                <div class="grid">
+                    <div class="success-box">
+                        <h4>1. Trial (Próba produktu)</h4>
+                        <p><strong>Cel:</strong> Zachęcić nowych klientów do wypróbowania</p>
+                        <ul>
+                            <li>Launch nowego produktu</li>
+                            <li>Wejście na nowy rynek</li>
+                            <li>Zbudowanie bazy lojalnych klientów</li>
+                        </ul>
+                        <p style="margin-top: 10px; padding: 10px; background: #d1fae5; border-radius: 6px;">
+                            <strong>Przykład:</strong> "-30% na pierwszy zakup!"
+                        </p>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>2. Volume (Zwiększenie wolumenu)</h4>
+                        <p><strong>Cel:</strong> Sprzedać więcej obecnym klientom</p>
+                        <ul>
+                            <li>Sezonowe wyprzedaże</li>
+                            <li>Upselling (większe opakowania)</li>
+                            <li>Rotacja zapasów</li>
+                        </ul>
+                        <p style="margin-top: 10px; padding: 10px; background: #dbeafe; border-radius: 6px;">
+                            <strong>Przykład:</strong> "Kup 2, zapłać za 1"
+                        </p>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h4>3. Frequency (Częstotliwość zakupów)</h4>
+                        <p><strong>Cel:</strong> Klienci mają kupować CZĘŚCIEJ</p>
+                        <ul>
+                            <li>Programy lojalnościowe</li>
+                            <li>Konkursy z nagrodami</li>
+                            <li>Limited time offers</li>
+                        </ul>
+                        <p style="margin-top: 10px; padding: 10px; background: #fef3c7; border-radius: 6px;">
+                            <strong>Przykład:</strong> "Każdy piątek -20%!"
+                        </p>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <h4>4. Clearance (Wyprzedaż zapasów)</h4>
+                        <p><strong>Cel:</strong> Pozbyć się starego stock'u</p>
+                        <ul>
+                            <li>Produkty przed wycofaniem</li>
+                            <li>Końcówki serii</li>
+                            <li>Sezonowe (np. krem do opalania jesienią)</li>
+                        </ul>
+                        <p style="margin-top: 10px; padding: 10px; background: #ffedd5; border-radius: 6px;">
+                            <strong>Przykład:</strong> "-50% ostatnie sztuki!"
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="error-box" style="margin-top: 30px;">
+                    <h3>⚠️ Najczęstszy błąd: Promocja bez celu</h3>
+                    <p style="font-size: 1.1rem;">
+                        <strong>Źle:</strong> "Zróbmy -20%, bo konkurencja też robi promocje"
+                    </p>
+                    <p style="font-size: 1.1rem; margin-top: 10px;">
+                        <strong>Dobrze:</strong> "Robimy -20% na nowy szampon, cel: 500 nowych klientów w 2 tygodnie, 
+                        sukces = 40% z nich wraca na pełną cenę w następnym miesiącu"
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Typy promocji -->
+            <div id="typy" class="tab-content">
+                <h2>🎯 Typy promocji - co wybrac?</h2>
+                
+                <div class="card">
+                    <h3>1️⃣ Promocje cenowe (Price-off)</h3>
+                    
+                    <div class="info-box">
+                        <h4>💰 Rabaty procentowe (-X%)</h4>
+                        <p><strong>Jak działa:</strong> Obniżasz cenę o procent (np. -20%, -30%)</p>
+                        
+                        <div class="comparison-grid" style="margin-top: 20px;">
+                            <div class="success-box">
+                                <h4>✅ Zalety</h4>
+                                <ul>
+                                    <li>Prosty komunikat</li>
+                                    <li>Łatwy do zrozumienia</li>
+                                    <li>Działa na impulse buying</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="warning-box">
+                                <h4>⚠️ Uwagi</h4>
+                                <ul>
+                                    <li>Obniża marżę</li>
+                                    <li>Może "przecenić" markę</li>
+                                    <li>Klienci przyzwyczajają się</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <p style="margin-top: 15px; padding: 15px; background: #dbeafe; border-radius: 8px;">
+                            <strong>💡 Kiedy stosować:</strong> Launch nowego produktu, sezonowe wyprzedaże, 
+                            produkty premium (małe rabaty jak -10% wystarczą)
+                        </p>
+                    </div>
+                    
+                    <div class="info-box" style="margin-top: 20px;">
+                        <h4>🎁 Multi-buy (Kup X, zapłać za Y)</h4>
+                        <p><strong>Jak działa:</strong> "Kup 2, zapłać za 1", "3 w cenie 2", "2+1 gratis"</p>
+                        
+                        <div class="comparison-grid" style="margin-top: 20px;">
+                            <div class="success-box">
+                                <h4>✅ Zalety</h4>
+                                <ul>
+                                    <li>Zwiększa volume (średnia wartość koszyka)</li>
+                                    <li>Nie obniża perceived value marki</li>
+                                    <li>Doskonałe dla produktów fast-moving</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="warning-box">
+                                <h4>⚠️ Uwagi</h4>
+                                <ul>
+                                    <li>Wymaga większego stocku</li>
+                                    <li>Może "jeść" marżę z przyszłych zakupów</li>
+                                    <li>Nie dla produktów long-lasting</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <p style="margin-top: 15px; padding: 15px; background: #dbeafe; border-radius: 8px;">
+                            <strong>💡 Kiedy stosować:</strong> FMCG (żele, szampony, kremy), produkty zużywalne, 
+                            budowanie stocku u klienta (żeby nie kupował konkurencji)
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 30px;">
+                    <h3>2️⃣ Promocje wiązane (Bundle)</h3>
+                    
+                    <div class="highlight-box">
+                        <h4>📦 Zestawy produktów</h4>
+                        <p><strong>Jak działa:</strong> "Szampon + odżywka = -25%", "Zestaw pielęgnacyjny 3w1"</p>
+                        
+                        <div class="success-box" style="margin-top: 15px;">
+                            <h4>🎯 Strategia cross-sellingu</h4>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Produkt A (anchor)</th>
+                                        <th>Produkt B (add-on)</th>
+                                        <th>Rabat</th>
+                                        <th>Efekt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Szampon (bestseller)</td>
+                                        <td>Odżywka (wolniej rotująca)</td>
+                                        <td>-20% na zestaw</td>
+                                        <td>Zwiększa sprzedaż odżywki +60%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Żel pod prysznic</td>
+                                        <td>Balsam do ciała</td>
+                                        <td>-15% na zestaw</td>
+                                        <td>Wyższa wartość koszyka</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Krem do twarzy (dzień)</td>
+                                        <td>Krem do twarzy (noc)</td>
+                                        <td>-25% na duo</td>
+                                        <td>Kompleksowa pielęgnacja</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <p style="margin-top: 15px; padding: 15px; background: #ffedd5; border-radius: 8px;">
+                            <strong>💡 Golden rule:</strong> Produkt A = bestseller (anchor), 
+                            Produkt B = wolniej rotujący (chcesz go "wypchnąć")
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 30px;">
+                    <h3>3️⃣ Promocje experiential (Doświadczenie)</h3>
+                    
+                    <div class="grid">
+                        <div class="info-box">
+                            <h4>🍰 Degustacje / Sampling</h4>
+                            <p><strong>Jak działa:</strong> Klient próbuje produkt na miejscu</p>
+                            <ul>
+                                <li>Stoisko w sklepie z promotorką</li>
+                                <li>Testowanie produktu (krem, perfumy)</li>
+                                <li>Próbki do domu</li>
+                            </ul>
+                            <p style="margin-top: 10px; padding: 10px; background: white; border-radius: 6px; border: 2px solid #3b82f6;">
+                                <strong>Efektywność:</strong> +40-80% sprzedaży podczas wydarzenia!
+                            </p>
+                        </div>
+                        
+                        <div class="success-box">
+                            <h4>🎁 Gift with Purchase (GWP)</h4>
+                            <p><strong>Jak działa:</strong> "Kup X, otrzymasz gratis Y"</p>
+                            <ul>
+                                <li>Mała próbka nowego produktu</li>
+                                <li>Gadżet (torba, kubek z logo)</li>
+                                <li>Travel size produktu</li>
+                            </ul>
+                            <p style="margin-top: 10px; padding: 10px; background: white; border-radius: 6px; border: 2px solid #10b981;">
+                                <strong>Cel:</strong> Trial nowych produktów + perceived value
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📊 Porównanie skuteczności promocji</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Typ promocji</th>
+                            <th>Koszt</th>
+                            <th>Wzrost sprzedaży</th>
+                            <th>ROI</th>
+                            <th>Najlepsze dla...</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Rabat -20%</strong></td>
+                            <td>🟡 Średni</td>
+                            <td>+60-100%</td>
+                            <td>🟢 Wysoki</td>
+                            <td>Launch, clearance</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2+1 gratis</strong></td>
+                            <td>🔴 Wysoki</td>
+                            <td>+80-150%</td>
+                            <td>🟡 Średni</td>
+                            <td>FMCG, volume boost</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bundle</strong></td>
+                            <td>🟢 Niski</td>
+                            <td>+40-80%</td>
+                            <td>🟢 Wysoki</td>
+                            <td>Cross-selling</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Degustacje</strong></td>
+                            <td>🔴 Bardzo wysoki</td>
+                            <td>+100-200%</td>
+                            <td>🟡 Średni</td>
+                            <td>Launch premium, doświadczenie</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GWP (gratis)</strong></td>
+                            <td>🟡 Średni</td>
+                            <td>+50-90%</td>
+                            <td>🟢 Wysoki</td>
+                            <td>Trial nowych SKU</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Tab 3: Planowanie -->
+            <div id="planowanie" class="tab-content">
+                <h2>� Planowanie promocji - krok po kroku</h2>
+                
+                <blockquote>
+                    "Nie pytaj 'Czy zrobić promocję?', pytaj 'KIEDY, DLA KOGO i PO CO?'"
+                </blockquote>
+                
+                <div class="card">
+                    <h3>KROK 1: Ustal CEL (SMART)</h3>
+                    
+                    <div class="info-box">
+                        <h4>🎯 Cel SMART</h4>
+                        <p style="font-size: 1.1rem; margin-bottom: 15px;">
+                            <strong>S</strong>pecific, <strong>M</strong>easurable, <strong>A</strong>chievable, 
+                            <strong>R</strong>elevant, <strong>T</strong>ime-bound
+                        </p>
+                        
+                        <div class="comparison-grid">
+                            <div class="error-box">
+                                <h4>❌ ZŁY cel</h4>
+                                <p>"Zwiększyć sprzedaż szamponu"</p>
+                                <ul>
+                                    <li>Nie wiadomo o ile</li>
+                                    <li>Nie wiadomo kiedy</li>
+                                    <li>Nie da się zmierzyć</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="success-box">
+                                <h4>✅ DOBRY cel (SMART)</h4>
+                                <p><strong>"Zwiększyć sprzedaż szamponu FreshLife Argan o 80% w sklepach A i B w ciągu 2 tygodni (1-14 czerwca)"</strong></p>
+                                <ul>
+                                    <li>✅ Specific: szampon Argan, sklepy A i B</li>
+                                    <li>✅ Measurable: +80%</li>
+                                    <li>✅ Achievable: realne 2 tygodnie</li>
+                                    <li>✅ Relevant: nowy produkt, potrzeba trial</li>
+                                    <li>✅ Time-bound: 1-14 czerwca</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>KROK 2: Wybierz TYP promocji</h3>
+                    
+                    <div class="highlight-box">
+                        <h4>🧮 Formuła wyboru promocji</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>CEL</th>
+                                    <th>Rekomendowany typ</th>
+                                    <th>Dlaczego?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Trial (nowy produkt)</strong></td>
+                                    <td>Rabat -20-30% + testery</td>
+                                    <td>Niski próg wejścia, zachęca do próby</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Volume (więcej sprzedać)</strong></td>
+                                    <td>2+1 gratis / Bundle</td>
+                                    <td>Większa wartość koszyka</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Frequency (częściej)</strong></td>
+                                    <td>Konkurs / Loyalty program</td>
+                                    <td>Powracające wizyty</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Clearance (pozbyć się)</strong></td>
+                                    <td>-40-50% "ostatnie sztuki"</td>
+                                    <td>Maksymalne oczyszczenie stocku</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>KROK 3: Budżet i timeline</h3>
+                    
+                    <div class="info-box">
+                        <h4>💰 Kalkulator budżetu promocji</h4>
+                        
+                        <p style="font-size: 1.05rem; padding: 15px; background: #f1f5f9; border-radius: 8px; margin: 15px 0;">
+                            <strong>Przykład:</strong> Promocja "-20%" na szampon Argan w 5 sklepach przez 2 tygodnie
+                        </p>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Pozycja</th>
+                                    <th>Koszt jednostkowy</th>
+                                    <th>Ilość</th>
+                                    <th>RAZEM</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Rabat -20% (marża)</td>
+                                    <td>2 zł/szt</td>
+                                    <td>200 szt</td>
+                                    <td><strong>400 zł</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Wobblery (5 sklepów × 4 szt)</td>
+                                    <td>1 zł/szt</td>
+                                    <td>20 szt</td>
+                                    <td><strong>20 zł</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Testery (5 sklepów)</td>
+                                    <td>10 zł/szt</td>
+                                    <td>5 szt</td>
+                                    <td><strong>50 zł</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Plakaty A3</td>
+                                    <td>5 zł/szt</td>
+                                    <td>5 szt</td>
+                                    <td><strong>25 zł</strong></td>
+                                </tr>
+                                <tr style="background: #fef3c7;">
+                                    <td colspan="3"><strong>CAŁKOWITY KOSZT PROMOCJI</strong></td>
+                                    <td><strong>495 zł</strong></td>
+                                </tr>
+                                <tr style="background: #d1fae5;">
+                                    <td colspan="3"><strong>Spodziewany przychód (+80%)</strong></td>
+                                    <td><strong>2000 zł</strong></td>
+                                </tr>
+                                <tr style="background: #dbeafe;">
+                                    <td colspan="3"><strong>ROI</strong></td>
+                                    <td><strong>304%</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="warning-box" style="margin-top: 20px;">
+                        <h4>⏰ Timeline promocji</h4>
+                        <ol style="font-size: 1.05rem; line-height: 1.8;">
+                            <li><strong>T-14 dni:</strong> Zaplanuj promocję (cel, typ, budżet)</li>
+                            <li><strong>T-10 dni:</strong> Zamów materiały POS (wobblery, plakaty)</li>
+                            <li><strong>T-7 dni:</strong> Pre-sell do właścicieli ("Przygotujcie się!")</li>
+                            <li><strong>T-3 dni:</strong> Dostarcz materiały do sklepów</li>
+                            <li><strong>T-1 dzień:</strong> Montaż materiałów POS (wobblery, testery)</li>
+                            <li><strong>T (start):</strong> Launch promocji 🎉</li>
+                            <li><strong>T+7 dni:</strong> Mid-campaign check (czy wszystko działa?)</li>
+                            <li><strong>T+14 dni:</strong> Koniec + analiza wyników</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Realizacja -->
+            <div id="realizacja" class="tab-content">
+                <h2>✅ Realizacja promocji - praktyczne kroki</h2>
+                
+                <h3>📋 Checklist: Dzień przed startem promocji</h3>
+                
+                <div class="card">
+                    <div class="success-box">
+                        <h4>✅ 24h przed startem - co zrobić?</h4>
+                        
+                        <ul style="list-style: none; margin-left: 0;">
+                            <li style="padding: 12px; margin: 8px 0; background: #f8fafc; border-radius: 8px; border-left: 4px solid #10b981;">
+                                <strong>☐ Sprawdź stock w sklepach</strong><br>
+                                <span style="color: #64748b;">Czy jest wystarczająco dużo produktów? (minimum 2x zwykły tygodniowy obrót)</span>
+                            </li>
+                            <li style="padding: 12px; margin: 8px 0; background: #f8fafc; border-radius: 8px; border-left: 4px solid #10b981;">
+                                <strong>☐ Zamontuj materiały POS</strong><br>
+                                <span style="color: #64748b;">Wobblery, shelf strips, plakaty - wszystko na miejscu?</span>
+                            </li>
+                            <li style="padding: 12px; margin: 8px 0; background: #f8fafc; border-radius: 8px; border-left: 4px solid #10b981;">
+                                <strong>☐ Brief dla właściciela sklepu</strong><br>
+                                <span style="color: #64748b;">"Od jutra promocja -20%, proszę pilnować ceny w kasie!"</span>
+                            </li>
+                            <li style="padding: 12px; margin: 8px 0; background: #f8fafc; border-radius: 8px; border-left: 4px solid #10b981;">
+                                <strong>☐ Zrób zdjęcie BEFORE</strong><br>
+                                <span style="color: #64748b;">Dokumentacja półki przed promocją (do porównania)</span>
+                            </li>
+                            <li style="padding: 12px; margin: 8px 0; background: #f8fafc; border-radius: 8px; border-left: 4px solid #10b981;">
+                                <strong>☐ Testuj testery</strong><br>
+                                <span style="color: #64748b;">Czy są czyste? Czy działają? Czy instrukcja jest widoczna?</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">📊 Monitorowanie podczas promocji</h3>
+                
+                <div class="grid">
+                    <div class="info-box">
+                        <h4>📈 Co mierzyć?</h4>
+                        <ul>
+                            <li><strong>Daily sales:</strong> Sprzedaż dzień po dniu</li>
+                            <li><strong>Stock level:</strong> Czy nie zabraknie?</li>
+                            <li><strong>Conversion:</strong> Ile osób kupuje z promocji?</li>
+                            <li><strong>Compliance:</strong> Czy materiały POS są na miejscu?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h4>🚨 Red flags (alarmy)</h4>
+                        <ul>
+                            <li>❌ Stock < 20% - DOPOSAŻENIE!</li>
+                            <li>❌ Wobblery znikły - RE-MONTAŻ!</li>
+                            <li>❌ Sprzedaż < 50% planu - DIAGNOZA!</li>
+                            <li>❌ Konkurencja zrobiła lepszą promocję - REAKCJA!</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🎯 Po promocji - analiza wyników</h3>
+                
+                <div class="card">
+                    <div class="highlight-box">
+                        <h4>📊 Template raportu post-promocyjnego</h4>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Metryka</th>
+                                    <th>Plan</th>
+                                    <th>Realizacja</th>
+                                    <th>%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Wzrost sprzedaży</td>
+                                    <td>+80%</td>
+                                    <td>+92%</td>
+                                    <td style="color: #10b981;"><strong>115% ✅</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Liczba sprzedanych sztuk</td>
+                                    <td>200 szt</td>
+                                    <td>230 szt</td>
+                                    <td style="color: #10b981;"><strong>115% ✅</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Koszt promocji</td>
+                                    <td>495 zł</td>
+                                    <td>520 zł</td>
+                                    <td style="color: #f59e0b;"><strong>105% ⚠️</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Przychód</td>
+                                    <td>2000 zł</td>
+                                    <td>2300 zł</td>
+                                    <td style="color: #10b981;"><strong>115% ✅</strong></td>
+                                </tr>
+                                <tr style="background: #d1fae5;">
+                                    <td><strong>ROI</strong></td>
+                                    <td>304%</td>
+                                    <td><strong>342%</strong></td>
+                                    <td style="color: #10b981;"><strong>🎉 SUKCES!</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <p style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; border: 2px solid #f97316;">
+                            <strong>🔍 Wnioski:</strong><br>
+                            ✅ Promocja przekroczyła założenia o 15%<br>
+                            ✅ ROI 342% - bardzo dobry wynik<br>
+                            ⚠️ Koszt nieznacznie wyższy (dodatkowe wobblery w sklep C)<br>
+                            💡 Rekomendacja: Powtórzyć podobną akcję za miesiąc!
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🎮 W grze - jak wykorzystać wiedzę?</h3>
+                
+                <div class="success-box">
+                    <h4>✅ Twój plan akcji:</h4>
+                    <ol style="font-size: 1.05rem; line-height: 1.8;">
+                        <li><strong>Wybierz 1 produkt</strong> do promocji (najlepiej nowy lub wolnoobrotowy)</li>
+                        <li><strong>Ustal cel SMART:</strong> "Zwiększyć sprzedaż produktu X o Y% w Z sklepach do [data]"</li>
+                        <li><strong>Wybierz typ promocji:</strong> Rabat? Bundle? 2+1?</li>
+                        <li><strong>Zaplanuj budżet:</strong> Materiały POS + marża na rabat</li>
+                        <li><strong>Wykonaj timeline:</strong> Kiedy zamówić materiały? Kiedy montaż? Kiedy start?</li>
+                        <li><strong>Monitoruj wyniki:</strong> Daily check, mid-campaign pivot jeśli trzeba</li>
+                        <li><strong>Raport końcowy:</strong> Co się udało? Co poprawić następnym razem?</li>
+                    </ol>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <h3>🎯 Kluczowe zasady:</h3>
+                    <ul style="font-size: 1.05rem; line-height: 1.8;">
+                        <li>🎯 <strong>CEL > TYP > BUDŻET > REALIZACJA</strong> (w tej kolejności!)</li>
+                        <li>📊 <strong>Mierz wszystko</strong> - bez danych nie ma optymalizacji</li>
+                        <li>🔄 <strong>Iteruj</strong> - każda promocja to lekcja na przyszłość</li>
+                        <li>💬 <strong>Komunikuj</strong> - sklepy muszą wiedzieć, co się dzieje</li>
+                        <li>⏰ <strong>Timing is everything</strong> - nie rób promocji w Random Tuesday, planuj!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div>
+            <button class="footer-button" onclick="scrollToTop()">
+                ⬆️ Powrót na górę
+            </button>
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 10px;">
+            BVA Educational Materials
+        </div>
+        <div style="opacity: 0.9; font-size: 0.95rem;">
+            Trade Marketing - Część 2A/3 | Data: 2025-11-05 | Wersja: 1.0
+        </div>
+    </div>
+    
+    <script>
+        function openTab(tabName) {
+            var tabContents = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            var tabs = document.getElementsByClassName('tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
