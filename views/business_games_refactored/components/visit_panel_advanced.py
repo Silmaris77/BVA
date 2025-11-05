@@ -237,11 +237,11 @@ Tekst do poprawy:
             on_change=sync_textarea_to_state
         )
         
-        # Przyciski
-        col_send, col_end = st.columns([3, 1])
+        # Przyciski w jednej linii
+        col_send, col_end = st.columns(2)
         
         with col_send:
-            if st.button("Wyślij", 
+            if st.button("📤 Wyślij", 
                         type="primary", 
                         use_container_width=True,
                         disabled=not player_message.strip(),
@@ -283,113 +283,15 @@ Tekst do poprawy:
                         except Exception as e:
                             st.error(f"Błąd AI: {str(e)}")
         
-        # Przycisk zakończenia wizyty
-        if st.button("Zakończ wizytę", type="primary", use_container_width=True, key=f"end_visit_{client_id}"):
-            # Oznacz wizytę jako zakończoną
-            conv_state["visit_completed"] = True
-            st.rerun()
-    
-    # =================================================================
-    # VISIT COMPLETED - SAVE RESULTS
-    # =================================================================
-    
-    else:
-        st.success("🎉 Wizyta zakończona!")
-        
-        st.markdown("### 📊 Podsumowanie wizyty")
-        
-        # Ocena jakości
-        quality_score = st.slider(
-            "⭐ Jak oceniasz jakość tej wizyty?",
-            min_value=1,
-            max_value=5,
-            value=3,
-            help="Autorefleksja: Jak dobrze przeprowadziłeś tę wizytę?",
-            key=f"quality_{client_id}"
-        )
-        
-        # Wartość zamówienia
-        order_value = st.number_input(
-            "💰 Wartość zamówienia (PLN)",
-            min_value=0,
-            max_value=50000,
-            value=0,
-            step=100,
-            key=f"order_{client_id}"
-        )
-        
-        # Marża
-        margin_pct = st.number_input(
-            "📈 Marża (%)",
-            min_value=0,
-            max_value=100,
-            value=20,
-            step=5,
-            key=f"margin_{client_id}"
-        )
-        
-        # Notatki
-        visit_notes = st.text_area(
-            "📝 Notatki z wizyty",
-            placeholder="Co ważnego się wydarzyło? Jakie ustalenia?",
-            key=f"notes_{client_id}"
-        )
-        
-        # Zapisz wyniki
-        if st.button("💾 Zapisz i przejdź dalej", type="primary", use_container_width=True, key=f"save_visit_{client_id}"):
-            # Update client data
-            client["last_visit_day"] = game_state.get("current_day", 0)
-            
-            # Update client reputation based on visit quality (using new reputation system)
-            # Quality score 1-5 → impact on reputation
-            reputation_change = (quality_score - 3) * 5  # -10 to +10
-            client["reputation"] = min(100, max(0, client.get("reputation", 50) + reputation_change))
-            
-            # Update company reputation (professionalism component)
-            # Poor quality visit (<3⭐) = penalty
-            if quality_score < 3:
-                from utils.reputation_system import update_company_reputation_component
-                penalty = (3 - quality_score) * 3  # -3 or -6 points
-                update_company_reputation_component(game_state, "professionalism", -penalty)
-            
-            # Add to visit history
-            if "visit_history" not in client:
-                client["visit_history"] = []
-            
-            client["visit_history"].append({
-                "day": game_state.get("current_day", 0),
-                "quality": quality_score,
-                "order_value": order_value,
-                "margin_pct": margin_pct,
-                "notes": visit_notes,
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            })
-            
-            # Update sales stats
-            if order_value > 0:
-                game_state["total_sales"] = game_state.get("total_sales", 0) + order_value
-                game_state["total_margin"] = game_state.get("total_margin", 0) + (order_value * margin_pct / 100)
-            
-            # Mark visit as completed
-            completed_visits = game_state.get("completed_visits_today", [])
-            if client_id not in completed_visits:
-                completed_visits.append(client_id)
-                game_state["completed_visits_today"] = completed_visits
-            
-            # Save to database
-            try:
-                update_fmcg_game_state_sql(username, game_state)
-                st.success("✅ Wizyta zapisana!")
-                time.sleep(1)
-                
-                # Clear conversation state
-                del st.session_state[conversation_key]
-                
+        with col_end:
+            # Przycisk zakończenia wizyty
+            if st.button("🏁 Zakończ wizytę", type="secondary", use_container_width=True, key=f"end_visit_{client_id}"):
+                # Oznacz wizytę jako zakończoną
+                conv_state["visit_completed"] = True
                 st.rerun()
-            except Exception as e:
-                st.error(f"Błąd zapisu: {str(e)}")
         
-        # Notatnik w expanderze (na dole)
+        # Notatnik dostępny w trakcie wizyty
+        st.markdown("---")
         with st.expander("📓 Notatnik", expanded=False):
             user_data = get_current_user_data()
             if user_data:
@@ -398,5 +300,177 @@ Tekst do poprawy:
                     active_tab="client_profile",
                     scenario_context=f"Wizyta FMCG u {client_name}",
                     client_name=client_name,
-                    key_prefix=f"fmcg_visit_{client_id}"
+                    key_prefix=f"visit_{client_id}"
                 )
+    
+    # =================================================================
+    # VISIT COMPLETED - SAVE RESULTS
+    # =================================================================
+    
+    else:
+        st.success("🎉 Wizyta zakończona!")
+        
+        st.markdown("###  Zamówienie")
+        
+        # Panel zamówienia - produkty i ilości
+        st.markdown("#### Produkty do zamówienia:")
+        
+        # TODO: Tutaj będzie lista produktów z możliwością wyboru ilości
+        # Na razie placeholder
+        st.info("🚧 Panel zamówień produktów - w przygotowaniu")
+        
+        # Temporary simple order input
+        col1, col2 = st.columns(2)
+        with col1:
+            order_value = st.number_input(
+                "💰 Wartość zamówienia (PLN)",
+                min_value=0,
+                max_value=50000,
+                value=0,
+                step=100,
+                key=f"order_{client_id}"
+            )
+        with col2:
+            margin_pct = st.number_input(
+                "📈 Marża (%)",
+                min_value=0,
+                max_value=100,
+                value=20,
+                step=5,
+                key=f"margin_{client_id}"
+            )
+        
+        # Podsumowanie zamówienia
+        if order_value > 0:
+            st.markdown("#### 💼 Podsumowanie zamówienia:")
+            col_summary1, col_summary2, col_summary3 = st.columns(3)
+            with col_summary1:
+                st.metric("Wartość brutto", f"{order_value:,.0f} PLN")
+            with col_summary2:
+                margin_value = order_value * margin_pct / 100
+                st.metric("Marża", f"{margin_value:,.0f} PLN")
+            with col_summary3:
+                st.metric("Marża %", f"{margin_pct}%")
+        
+        # Użyte narzędzia (z conversation metadata)
+        st.markdown("#### 🛠️ Użyte narzędzia:")
+        # TODO: Wyciągnąć z metadanych konwersacji jakie narzędzia użył gracz
+        st.info("🚧 Lista użytych narzędzi sprzedażowych - w przygotowaniu")
+        
+        # Zapisz wyniki
+        if st.button("💾 Zapisz i przejdź dalej", type="primary", use_container_width=True, key=f"save_visit_{client_id}"):
+            # Get conversation messages for analysis
+            conv_state = st.session_state.get(conversation_key, {})
+            messages = conv_state.get("messages", [])
+            
+            # Update client data
+            client["last_visit_day"] = game_state.get("current_day", 0)
+            client["last_visit_date"] = datetime.now().isoformat()
+            
+            # Calculate reputation change based on conversation and order
+            reputation_change = 10  # Base for completing visit
+            if total_value > 0:
+                # Bonus based on order value
+                if total_value >= 500:
+                    reputation_change += 20
+                elif total_value >= 200:
+                    reputation_change += 15
+                else:
+                    reputation_change += 10
+            
+            client["reputation"] = min(100, max(0, client.get("reputation", 50) + reputation_change))
+            
+            # Update knowledge level based on conversation
+            current_knowledge = client.get("knowledge_level", 0)
+            if current_knowledge < 5:
+                # Increase knowledge level after visit
+                client["knowledge_level"] = min(5, current_knowledge + 1)
+            
+            # Extract and update discovered info from conversation
+            if "discovered_info" not in client:
+                client["discovered_info"] = {}
+            
+            discovered = client["discovered_info"]
+            
+            # After first visit, discover basic info
+            if current_knowledge == 0:
+                discovered["personality_description"] = client.get("owner_profile", {}).get("personality", {}).get("type", "Unknown")
+                discovered["trust_level"] = "Pierwszy kontakt"
+            
+            # After subsequent visits, discover more
+            if current_knowledge >= 1 and "decision_priorities" not in discovered:
+                discovered["decision_priorities"] = ["Cena", "Jakość", "Dostępność"]
+            
+            if current_knowledge >= 2 and "pain_points" not in discovered:
+                discovered["pain_points"] = ["Konkurencja cenowa", "Rotacja produktów"]
+            
+            if current_knowledge >= 3 and "typical_order_value" not in discovered:
+                discovered["typical_order_value"] = f"{total_value:.0f} PLN" if total_value > 0 else "300-500 PLN"
+            
+            # Update sales_capacity_discovered for Food category
+            if "sales_capacity_discovered" not in discovered:
+                discovered["sales_capacity_discovered"] = {}
+            
+            # After visit, discover the Food category (Ketchup potential)
+            if "Food" not in discovered["sales_capacity_discovered"]:
+                discovered["sales_capacity_discovered"]["Food"] = {
+                    "weekly_sales_volume": client.get("monthly_volume_kg", 0) // 4,
+                    "shelf_space_facings": 3,
+                    "max_order_per_sku": 50,
+                    "rotation_days": 14,
+                    "discovered_date": datetime.now().isoformat()
+                }
+            
+            # Add to visit history
+            if "visit_history" not in client:
+                client["visit_history"] = []
+            
+            visit_record = {
+                "day": game_state.get("current_day", 0),
+                "order_value": total_value,
+                "order_items": order_items,
+                "reputation_change": reputation_change,
+                "knowledge_level_after": client["knowledge_level"],
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+            client["visit_history"].append(visit_record)
+            
+            # Update sales stats
+            if total_value > 0:
+                game_state["total_sales"] = game_state.get("total_sales", 0) + total_value
+                # Calculate weighted margin
+                total_margin = sum(item["total"] * item["margin_pct"] / 100 for item in order_items)
+                game_state["total_margin"] = game_state.get("total_margin", 0) + total_margin
+            
+            # Mark visit as completed
+            completed_visits = game_state.get("completed_visits_today", [])
+            if client_id not in completed_visits:
+                completed_visits.append(client_id)
+                game_state["completed_visits_today"] = completed_visits
+            
+            # Update clients dict in game_state
+            if "clients" not in game_state:
+                game_state["clients"] = {}
+            game_state["clients"][client_id] = client
+            
+            # Save to database (with correct parameters)
+            try:
+                from utils.fmcg_mechanics import update_fmcg_game_state_sql
+                update_fmcg_game_state_sql(username, game_state, game_state["clients"])
+                
+                # Clear conversation state BEFORE showing success
+                if conversation_key in st.session_state:
+                    del st.session_state[conversation_key]
+                
+                # Set flag to prevent re-entering visit mode
+                st.session_state[f"visit_saved_{client_id}"] = True
+                
+                st.success("✅ Wizyta zapisana!")
+                st.info("🔄 Odświeżanie widoku...")
+                time.sleep(1)
+                
+                st.rerun()
+            except Exception as e:
+                st.error(f"Błąd zapisu: {str(e)}")
+                import traceback
+                st.code(traceback.format_exc())

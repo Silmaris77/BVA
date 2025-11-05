@@ -2097,8 +2097,6 @@ def show_fmcg_playable_game(username: str):
                     # =====================================================================
                     # HEINZ FOOD SERVICE - ENHANCED CLIENT VIEW
                     # =====================================================================
-                    st.subheader("🍅 Heinz Food Service - Portfolio Klientów")
-                    st.caption(f"25 punktów Food Service w regionie Dzięgielów • {len(clients)} total")
                 
                     # =====================================================================
                     # SEKCJA 1: FILTRY I SORTOWANIE (na górze)
@@ -2202,54 +2200,9 @@ def show_fmcg_playable_game(username: str):
                     st.markdown("---")
                     
                     # =====================================================================
-                    # SEKCJA 2: LISTA KLIENTÓW (kompaktowa)
+                    # TABS - MAPA | LISTA KLIENTÓW
                     # =====================================================================
-                    st.markdown("### 📋 Lista klientów")
-                    
-                    for client_id, client in list(filtered_clients.items())[:10]:  # Pokazuj tylko pierwsze 10
-                        name = client.get("name", client_id)
-                        segment = client.get("segment", "mixed")
-                        distance = client.get("distance_from_base", 0)
-                        potential_kg = client.get("monthly_volume_kg", 0)
-                        
-                        # Oblicz dni od ostatniej wizyty
-                        last_visit_date = client.get("last_visit_date")
-                        if last_visit_date:
-                            try:
-                                if isinstance(last_visit_date, str):
-                                    last_visit_dt = datetime.fromisoformat(last_visit_date)
-                                else:
-                                    last_visit_dt = last_visit_date
-                                days_since_visit = (datetime.now() - last_visit_dt).days
-                            except:
-                                days_since_visit = None
-                        else:
-                            days_since_visit = None
-                        
-                        color_emoji = get_color_emoji_by_days(days_since_visit)
-                        visit_text = f"{days_since_visit} dni" if days_since_visit is not None else "Nowy"
-                        
-                        # Segment emoji
-                        segment_emoji = {"premium": "💜", "value": "💚", "mixed": "🧡"}.get(segment, "⚪")
-                        
-                        col1, col2 = st.columns([4, 1])
-                        with col1:
-                            st.markdown(f"{segment_emoji} **{name}** • {distance:.1f}km • {potential_kg}kg/mies • {color_emoji} {visit_text}")
-                        with col2:
-                            if st.button("📞", key=f"visit_quick_{client_id}", help="Odwiedź klienta"):
-                                st.session_state['show_client_detail'] = True
-                                st.session_state['selected_client_id'] = client_id
-                                st.rerun()
-                    
-                    if len(filtered_clients) > 10:
-                        st.caption(f"... i {len(filtered_clients) - 10} więcej klientów (zobacz w tabeli poniżej)")
-                    
-                    st.markdown("---")
-                    
-                    # =====================================================================
-                    # SEKCJA 3: TABS - MAPA | TABELA
-                    # =====================================================================
-                    view_tab_map, view_tab_table = st.tabs(["🗺️ Mapa", "📋 Szczegóły (tabela)"])
+                    view_tab_map, view_tab_table = st.tabs(["🗺️ Mapa", "📋 Lista klientów"])
                     
                     with view_tab_map:
                         st.markdown("**Legenda - ostatnia wizyta:**")
@@ -2657,94 +2610,111 @@ def show_fmcg_playable_game(username: str):
                         """, unsafe_allow_html=True)
                 
                     with view_tab_table:
-                        # Table view with detailed info
-                        for client_id, client in filtered_clients.items():
-                            name = client.get("name", client_id)
-                            owner = client.get("owner", "N/A")
-                            segment = client.get("segment", "mixed")
-                            client_type = client.get("type", "")
-                            distance = client.get("distance_from_base", 0)
-                            potential_kg = client.get("monthly_volume_kg", 0)
-                            current_supplier = client.get("current_supplier", "Brak")
-                            personality = client.get("personality", "N/A")
-                            upsell_pot = client.get("upsell_potential", "medium")
-                            recommended_strategy = client.get("recommended_strategy", "")
+                        # Table view with detailed info in two columns
+                        clients_list = list(filtered_clients.items())
+                        
+                        # Split into two columns
+                        col1, col2 = st.columns(2)
+                        
+                        # Distribute clients evenly between columns
+                        mid_point = len(clients_list) // 2 + len(clients_list) % 2
+                        
+                        for idx, (client_id, client) in enumerate(clients_list):
+                            # Choose which column to use
+                            current_col = col1 if idx < mid_point else col2
                             
-                            # Oblicz dni od ostatniej wizyty
-                            last_visit_date = client.get("last_visit_date")
-                            if last_visit_date:
-                                try:
-                                    if isinstance(last_visit_date, str):
-                                        last_visit_dt = datetime.fromisoformat(last_visit_date)
-                                    else:
-                                        last_visit_dt = last_visit_date
-                                    days_since_visit = (datetime.now() - last_visit_dt).days
-                                except:
+                            with current_col:
+                                name = client.get("name", client_id)
+                                owner = client.get("owner", "N/A")
+                                segment = client.get("segment", "mixed")
+                                client_type = client.get("type", "")
+                                distance = client.get("distance_from_base", 0)
+                                potential_kg = client.get("monthly_volume_kg", 0)
+                                current_supplier = client.get("current_supplier", "Brak")
+                                personality = client.get("personality", "N/A")
+                                upsell_pot = client.get("upsell_potential", "medium")
+                                recommended_strategy = client.get("recommended_strategy", "")
+                                
+                                # Check if potential is discovered (Food category discovered)
+                                discovered_info = client.get("discovered_info", {})
+                                sales_capacity_discovered = discovered_info.get("sales_capacity_discovered", {})
+                                is_potential_discovered = "Food" in sales_capacity_discovered
+                                
+                                # Oblicz dni od ostatniej wizyty
+                                last_visit_date = client.get("last_visit_date")
+                                if last_visit_date:
+                                    try:
+                                        if isinstance(last_visit_date, str):
+                                            last_visit_dt = datetime.fromisoformat(last_visit_date)
+                                        else:
+                                            last_visit_dt = last_visit_date
+                                        days_since_visit = (datetime.now() - last_visit_dt).days
+                                    except:
+                                        days_since_visit = None
+                                else:
                                     days_since_visit = None
-                            else:
-                                days_since_visit = None
+                                
+                                # Emoji koloru dla ostatniej wizyty
+                                color_emoji = get_color_emoji_by_days(days_since_visit)
+                                if days_since_visit is None:
+                                    visit_text = "Nowy klient"
+                                else:
+                                    visit_text = f"{days_since_visit} dni temu"
                             
-                            # Emoji koloru dla ostatniej wizyty
-                            color_emoji = get_color_emoji_by_days(days_since_visit)
-                            if days_since_visit is None:
-                                visit_text = "Nowy klient"
-                            else:
-                                visit_text = f"{days_since_visit} dni temu"
-                        
-                            # Segment badge color
-                            segment_colors_badge = {
-                                "premium": "#7c3aed",
-                                "value": "#10b981",
-                                "mixed": "#f59e0b"
-                            }
-                            seg_color = segment_colors_badge.get(segment, "#64748b")
-                        
-                            # Upsell badge
-                            upsell_colors = {
-                                "very_high": "#10b981", "guaranteed": "#10b981",
-                                "high": "#3b82f6", "medium": "#f59e0b",
-                                "low": "#94a3b8", "very_low": "#ef4444"
-                            }
-                            upsell_color = upsell_colors.get(upsell_pot, "#94a3b8")
-                        
-                            st.markdown(f"""
-                            <div style='background: linear-gradient(135deg, {seg_color}15 0%, {seg_color}05 100%); 
-                                        border-left: 4px solid {seg_color}; padding: 16px; border-radius: 12px; margin-bottom: 12px;'>
-                                <div style='display: flex; justify-content: space-between; align-items: flex-start;'>
-                                    <div style='flex: 1;'>
-                                        <div style='font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 4px;'>
-                                            {name}
-                                            <span style='background: {seg_color}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px;'>
-                                                {segment.upper()}
-                                            </span>
-                                        </div>
-                                        <div style='font-size: 13px; color: #64748b; margin-bottom: 8px;'>
-                                            👤 {owner} • 📍 {distance:.1f} km • {color_emoji} {visit_text} • 💼 MBTI: {personality}
-                                        </div>
-                                        <div style='display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;'>
-                                            <div style='background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-size: 12px;'>
-                                                📦 Obecnie: <b>{current_supplier}</b>
+                                # Segment badge color
+                                segment_colors_badge = {
+                                    "premium": "#7c3aed",
+                                    "value": "#10b981",
+                                    "mixed": "#f59e0b"
+                                }
+                                seg_color = segment_colors_badge.get(segment, "#64748b")
+                            
+                                # Upsell badge
+                                upsell_colors = {
+                                    "very_high": "#10b981", "guaranteed": "#10b981",
+                                    "high": "#3b82f6", "medium": "#f59e0b",
+                                    "low": "#94a3b8", "very_low": "#ef4444"
+                                }
+                                upsell_color = upsell_colors.get(upsell_pot, "#94a3b8")
+                            
+                                st.markdown(f"""
+                                <div style='background: linear-gradient(135deg, {seg_color}15 0%, {seg_color}05 100%); 
+                                            border-left: 4px solid {seg_color}; padding: 16px; border-radius: 12px; margin-bottom: 12px;'>
+                                    <div style='display: flex; justify-content: space-between; align-items: flex-start;'>
+                                        <div style='flex: 1;'>
+                                            <div style='font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 4px;'>
+                                                {name}
+                                                <span style='background: {seg_color}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px;'>
+                                                    {segment.upper()}
+                                                </span>
                                             </div>
-                                            <div style='background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-size: 12px;'>
-                                                💰 Potencjał: <b>{potential_kg} kg/mies</b>
+                                            <div style='font-size: 13px; color: #64748b; margin-bottom: 4px;'>
+                                                {owner} • MBTI: {personality}
                                             </div>
-                                            <div style='background: {upsell_color}; color: white; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;'>
-                                                ⬆️ Upsell: {upsell_pot.upper()}
+                                            <div style='font-size: 13px; color: #64748b; margin-bottom: 8px;'>
+                                                📍 {distance:.1f} km • {color_emoji} {visit_text}
                                             </div>
-                                        </div>
-                                        <div style='margin-top: 8px; font-size: 12px; color: #64748b; font-style: italic;'>
-                                            💡 Strategia: {recommended_strategy}
+                                            <div style='display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;'>
+                                                <div style='background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-size: 12px;'>
+                                                    📦 Obecnie: <b>{current_supplier}</b>
+                                                </div>
+                                                <div style='background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-size: 12px;'>
+                                                    💰 Potencjał: <b>{"Nieznany" if not is_potential_discovered else f"{potential_kg} kg/mies"}</b>
+                                                </div>
+                                                <div style='background: {upsell_color}; color: white; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;'>
+                                                    ⬆️ Upsell: {upsell_pot.upper()}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            """, unsafe_allow_html=True)
-                        
-                            # Action button
-                            if st.button(f"📞 Odwiedź {name}", key=f"visit_heinz_{client_id}", use_container_width=True):
-                                st.session_state['show_client_detail'] = True
-                                st.session_state['selected_client_id'] = client_id
-                                st.rerun()
+                                """, unsafe_allow_html=True)
+                            
+                                # Action button
+                                if st.button("Szczegóły", key=f"visit_heinz_{client_id}", use_container_width=True):
+                                    st.session_state['show_client_detail'] = True
+                                    st.session_state['selected_client_id'] = client_id
+                                    st.rerun()
                     
                     # =====================================================================
                     # SEKCJA 4: PLANOWANIE TRASY (na samym dole)
