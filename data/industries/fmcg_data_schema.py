@@ -328,7 +328,7 @@ def create_new_client(
         "first_contact_date": None,
         "visits_count": 0,
         "decision_deadline": None,
-        "reputation": 0,
+        "reputation": 50,  # 0-100, wartość początkowa 50 (neutralna)
         "last_visit_date": None,
         "visit_frequency_required": 14,
         "products_portfolio": [],

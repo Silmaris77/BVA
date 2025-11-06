@@ -164,7 +164,7 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
     
     with col_reputation:
         # Reputation card with blue border (like client card)
-        reputation = client_data.get("reputation", 0)
+        reputation = client_data.get("reputation", 50)  # Wartość domyślna 50 (neutralna)
         rep_status = get_reputation_status(reputation)
         
         st.markdown(f"""
@@ -613,6 +613,60 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
     
     st.markdown("### 📜 Historia Wydarzeń")
     
+    # First show visit history (detailed with transcripts)
+    visit_history = client_data.get("visit_history", [])
+    
+    if visit_history:
+        st.markdown("#### 💬 Historia Wizyt")
+        # Show last 5 visits
+        recent_visits = sorted(visit_history, key=lambda x: x.get('timestamp', ''), reverse=True)[:5]
+        
+        for idx, visit in enumerate(recent_visits, 1):
+            date = visit.get('date', visit.get('timestamp', 'N/A'))[:16]  # YYYY-MM-DD HH:MM
+            order_value = visit.get('order_value', 0)
+            rep_change = visit.get('reputation_change', 0)
+            discoveries = visit.get('discoveries_count', 0)
+            knowledge_after = visit.get('knowledge_level_after', 0)
+            
+            # Color based on success
+            if order_value > 0:
+                color = "#10b981"
+                icon = "💰"
+            else:
+                color = "#f59e0b"
+                icon = "👔"
+            
+            with st.expander(f"{icon} Wizyta {date} - {order_value:.0f} PLN (+{rep_change} rep)", expanded=False):
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("Zamówienie", f"{order_value:.0f} PLN")
+                with col2:
+                    st.metric("Reputacja", f"+{rep_change}")
+                with col3:
+                    st.metric("Znajomość", f"{knowledge_after}⭐")
+                
+                if discoveries > 0:
+                    st.success(f"✅ Odkryto {discoveries} nowych informacji")
+                    new_discoveries = visit.get('new_discoveries', [])
+                    if new_discoveries:
+                        st.markdown("**Odkryte pola:** " + ", ".join(new_discoveries))
+                
+                # Show ordered products
+                order_items = visit.get('order_items', [])
+                if order_items:
+                    st.markdown("**📦 Zamówione produkty:**")
+                    for item in order_items:
+                        st.markdown(f"- {item['product']}: {item['quantity']} szt × {item['unit_price']:.2f} PLN = {item['total']:.2f} PLN")
+                
+                # Show conversation transcript
+                transcript = visit.get('conversation_transcript', '')
+                if transcript:
+                    with st.expander("📝 Transkrypcja rozmowy", expanded=False):
+                        st.text(transcript)
+                else:
+                    st.info("Brak zapisanej transkrypcji")
+    
+    # Then show general timeline
     timeline = client_data.get("events_timeline", [])
     
     if timeline:

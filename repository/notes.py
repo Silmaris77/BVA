@@ -9,6 +9,9 @@ Kategorie notatek:
 - manager_feedback: Feedback od menedżera
 - client_profile: Profile klientów
 - personal: Notatki własne
+- visit_ideas: Pomysły na wizyty (NOWE 2025-11-06)
+- market_analysis: Analiza rynku/konkurencji (NOWE 2025-11-06)
+- training_notes: Notatki ze szkoleń (NOWE 2025-11-06)
 """
 
 import sqlite3

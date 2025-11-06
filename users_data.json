@@ -40878,7 +40878,7 @@
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-11-02",
-    "last_login": "2025-11-05 16:23:08",
+    "last_login": "2025-11-05 23:24:45",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -40906,6 +40906,12 @@
         "completed_lessons": 0
       },
       "2025-11-05": {
+        "xp": 8,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-11-06": {
         "xp": 8,
         "degencoins": 0,
         "level": 1,
@@ -40953,7 +40959,7 @@
         "firm": {
           "name": "FMCG Corp",
           "logo": "🏪",
-          "founded": "2025-11-05",
+          "founded": "2025-11-06",
           "level": 1,
           "reputation": 0
         },
@@ -40976,13 +40982,13 @@
           "customer_satisfaction_avg": 0,
           "current_week": 1,
           "current_day": "Monday",
-          "visits_this_week": 0,
+          "visits_this_week": 1,
           "visits_scheduled": [],
           "current_location": null,
           "planned_visits_today": [],
           "completed_visits_today": [
-            "client_008",
-            "client_020"
+            "client_015",
+            "client_013"
           ],
           "total_distance_today": 0.0,
           "route_optimization_used": false,
@@ -41014,7 +41020,7 @@
           "monthly_actual_sales": 0,
           "monthly_best_sales": 0,
           "weekly_history": [],
-          "last_activity_date": "2025-11-05T16:23:25.935040",
+          "last_activity_date": "2025-11-05T23:25:06.481164",
           "last_visit_client_id": null,
           "company": "Heinz Polska",
           "clients": {
@@ -41300,49 +41306,7 @@
               "recommended_products": [
                 "pudliszki_ketchup_ostry"
               ],
-              "upsell_potential": "medium",
-              "last_visit_day": "Monday",
-              "reputation": 65,
-              "visit_history": [
-                {
-                  "day": "Monday",
-                  "quality": 3,
-                  "order_value": 0,
-                  "margin_pct": 20,
-                  "notes": "",
-                  "timestamp": "2025-11-05 18:19:16"
-                },
-                {
-                  "day": "Monday",
-                  "order_value": 0,
-                  "margin_pct": 20,
-                  "timestamp": "2025-11-05 18:28:38"
-                },
-                {
-                  "day": "Monday",
-                  "order_value": 0,
-                  "margin_pct": 20,
-                  "timestamp": "2025-11-05 18:31:05"
-                },
-                {
-                  "day": "Monday",
-                  "order_value": 0,
-                  "margin_pct": 20,
-                  "timestamp": "2025-11-05 18:31:19"
-                }
-              ],
-              "last_visit_date": "2025-11-05T18:31:19.463593",
-              "discovered_info": {
-                "sales_capacity_discovered": {
-                  "Food": {
-                    "weekly_sales_volume": 7,
-                    "shelf_space_facings": 3,
-                    "max_order_per_sku": 50,
-                    "rotation_days": 14,
-                    "discovered_date": "2025-11-05T18:28:38.975055"
-                  }
-                }
-              }
+              "upsell_potential": "medium"
             },
             "client_009": {
               "id": "client_009",
@@ -41520,7 +41484,70 @@
               "recommended_products": [
                 "pudliszki_ketchup_lagodny"
               ],
-              "upsell_potential": "medium"
+              "upsell_potential": "medium",
+              "last_visit_day": "Monday",
+              "last_visit_date": "2025-11-06T01:31:42.194269",
+              "visits_count": 1,
+              "reputation": 60,
+              "discovered_info": {
+                "personality_description": "Praktyczna, skupiona na konkretach, niechętna \"marketingowym gierkom\", zabiegana.",
+                "decision_priorities": [
+                  "cena",
+                  "smak",
+                  "duże opakowanie",
+                  "regularne dostawy"
+                ],
+                "main_customers": "Pracownicy fabryki mebli",
+                "pain_points": [
+                  "Problemy z regularnymi dostawami i koniecznością dopytywania się o towar"
+                ],
+                "business_goals": [
+                  "Zapewnienie pracownikom jedzenia w przerwie"
+                ],
+                "best_selling_categories": [
+                  "Ketchup",
+                  "Frytki",
+                  "Kiełbaski z grilla"
+                ],
+                "seasonal_patterns": "Większe spożycie ketchupu podczas grilla",
+                "trust_level": "Sceptyczny",
+                "preferred_communication": "Konkretna, szybka",
+                "sales_capacity_discovered": {
+                  "Food": {
+                    "weekly_sales_volume": 15,
+                    "monthly_volume_kg": 60,
+                    "discovered_date": "2025-11-06T01:31:44.710654",
+                    "discovered_method": "conversation"
+                  }
+                }
+              },
+              "knowledge_level": 3,
+              "visit_history": [
+                {
+                  "day": "Monday",
+                  "date": "2025-11-06 01:31",
+                  "order_value": 0,
+                  "order_items": [],
+                  "reputation_change": 10,
+                  "reputation_after": 60,
+                  "knowledge_level_after": 3,
+                  "discoveries_count": 10,
+                  "new_discoveries": [
+                    "personality_description",
+                    "decision_priorities",
+                    "main_customers",
+                    "pain_points",
+                    "business_goals",
+                    "best_selling_categories",
+                    "seasonal_patterns",
+                    "trust_level",
+                    "preferred_communication",
+                    "sales_capacity_discovered_Food"
+                  ],
+                  "conversation_transcript": "🎮 Handlowiec: Witam Pani Anno, Paweł KSiążyk Heinz. CZy możemy chwilkę porozmawiać o rozwoju Pan biznesu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Dzień dobry, panie Pawle. Rozwój biznesu? No, zawsze można porozmawiać, ale nie wiem, czy akurat ja mogę panu coś ciekawego powiedzieć. Stołówka to stołówka, wiadomo. Co konkretnie ma pan na myśli?\n\n\n🎮 Handlowiec: chciałbym przedstawić swoje pomysły na wsparcie, ale czy mógłbym wcześniej zapytać o kilka kwestii?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No dobrze, panie Pawle, pytaj pan śmiało. Tylko nie obiecuję, że będę miała czas na długie wywody. Zależy mi, żeby ludzie mieli co zjeść w przerwie, a nie, żebym ja się tu w jakieś marketingowe gierki bawiła. No ale słucham.\n\n\n🎮 Handlowiec: CZym się Panie kieruje przy wyborze dostawcy ketchupu ?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Kieruję się przede wszystkim ceną, panie Pawle. Fabryka mebli to nie restauracja z gwiazdką Michelin. Musi być smaczny, musi być w dużej butelce, żeby szybko się nie skończył, i musi być w dobrej cenie. Wiadomo, że pracownicy lubią ten ketchup do frytek czy kiełbaski z grilla. No i żeby dostawy były regularne i bez problemów. Nie mam czasu na zamawianie po kilka razy i dopytywanie się gdzie jest towar. To takie podstawowe kryteria. Co pan ma do zaoferowania?\n\n\n🎮 Handlowiec: a ile średnio potrzebuje Pani ketchupy w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Panie Pawle, ciężko mi tak dokładnie powiedzieć. To zależy. Czasem pracownicy więcej jedzą frytek, czasem mniej. Jak jest grill, to idzie więcej. Tak na oko, to myślę, że tak z 10, może 12 butelek takich dużych, wiesz, tych po 5 kg, to schodzi na miesiąc. Mówię orientacyjnie, bo nie prowadzę dokładnych statystyk. Zależy też, ile osób w danym miesiącu pracuje, bo mamy trochę rotacji.\n\n\n🎮 Handlowiec: czyli mniej więcej 12 butelek razy 5 kg - 60 kg ketchupu w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No tak, mniej więcej. Może trochę więcej, może trochę mniej. Zależy od miesiąca, tak jak mówiłam. Panie Pawle, ale do czego pan zmierza z tą ilością? Chce mi pan powiedzieć, że mam za dużo tego ketchupu, czy jak? Bo nie bardzo rozumiem. Mam teraz czas tylko chwilę, więc proszę konkretnie.\n",
+                  "timestamp": "2025-11-06 01:31:44"
+                }
+              ]
             },
             "client_014": {
               "id": "client_014",
@@ -41591,7 +41618,39 @@
               "recommended_products": [
                 "heinz_ketchup_classic"
               ],
-              "upsell_potential": "high"
+              "upsell_potential": "high",
+              "last_visit_day": "Monday",
+              "last_visit_date": "2025-11-06T00:09:12.242360",
+              "reputation": 60,
+              "discovered_info": {
+                "personality_description": "Czas to pieniądz, lubi stałą współpracę.",
+                "decision_priorities": [
+                  "cena",
+                  "jakość",
+                  "dostępność",
+                  "stabilność"
+                ],
+                "main_customers": "studenci i młodzi ludzie",
+                "customer_demographics": "Przekrój przez społeczeństwo, od dzieciaków po emerytów.",
+                "business_goals": [
+                  "zarabiać (marża)"
+                ],
+                "delivery_preferences": "Na czas i bez problemów.",
+                "trust_level": "Sceptyczny",
+                "preferred_communication": "Konkretny, bez owijania w bawełnę."
+              },
+              "knowledge_level": 3,
+              "visit_history": [
+                {
+                  "day": "Monday",
+                  "order_value": 0,
+                  "order_items": [],
+                  "reputation_change": 10,
+                  "knowledge_level_after": 3,
+                  "discoveries_count": 8,
+                  "timestamp": "2025-11-06 00:09:14"
+                }
+              ]
             },
             "client_016": {
               "id": "client_016",
@@ -41766,41 +41825,7 @@
                 "heinz_ketchup_hot",
                 "pudliszki_ketchup_lagodny"
               ],
-              "upsell_potential": "very_high",
-              "last_visit_day": "Monday",
-              "last_visit_date": "2025-11-05T18:53:25.784856",
-              "reputation": 75,
-              "visit_history": [
-                {
-                  "day": "Monday",
-                  "order_value": 400,
-                  "margin_pct": 20,
-                  "timestamp": "2025-11-05 18:47:31"
-                },
-                {
-                  "day": "Monday",
-                  "order_value": 0,
-                  "margin_pct": 20,
-                  "timestamp": "2025-11-05 18:48:02"
-                },
-                {
-                  "day": "Monday",
-                  "order_value": 0,
-                  "margin_pct": 20,
-                  "timestamp": "2025-11-05 18:53:25"
-                }
-              ],
-              "discovered_info": {
-                "sales_capacity_discovered": {
-                  "Food": {
-                    "weekly_sales_volume": 30,
-                    "shelf_space_facings": 3,
-                    "max_order_per_sku": 50,
-                    "rotation_days": 14,
-                    "discovered_date": "2025-11-05T18:47:31.041562"
-                  }
-                }
-              }
+              "upsell_potential": "very_high"
             },
             "client_021": {
               "id": "client_021",
@@ -41993,11 +42018,17 @@
           },
           "scenario_id": "heinz_food_service",
           "clients_total": 25,
-          "mentor_questions_today": 0,
+          "mentor_questions_today": 1,
           "mentor_last_reset_day": "Monday",
-          "mentor_conversation_history": [],
-          "total_sales": 400,
-          "total_margin": 80.0
+          "mentor_conversation_history": [
+            {
+              "question": "Jak zbudować zaufanie na pierwszej wizycie handlowej?",
+              "answer": "Zbudowanie zaufania na pierwszej wizycie w sklepie osiedlowym to podstawa. Oto kilka konkretnych kroków i fraz, które możesz wykorzystać:\n\n**1. Przygotowanie to podstawa:**\n\n*   **Zbadaj teren:** Dowiedz się czegoś o sklepie przed wizytą. Jak długo działają? Jakie produkty sprzedają się najlepiej? To pokaże, że jesteś zainteresowany ich biznesem.\n*   **Wygląd:** Zadbaj o schludny wygląd. W kanale tradycyjnym ludzie kupują od ludzi, których lubią i którym ufają.\n\n**2. Rozpoczęcie rozmowy:**\n\n*   **Przedstaw się z uśmiechem:** \"Dzień dobry, nazywam się [Twoje imię i nazwisko] i reprezentuję firmę [Nazwa firmy]. Słyszałem, że prowadzicie Państwo ten sklep już od [liczba] lat. Gratuluję!\"\n*   **Zacznij od pytania, nie od oferty:** \"Zanim przejdę do prezentacji, chciałbym zapytać, jakie produkty z kategorii [kategoria produktów, które sprzedajesz] cieszą się u Państwa największą popularnością?\" – To pokaże, że słuchasz.\n\n**3. Budowanie relacji i zaufania:**\n\n*   **Pokaż, że rozumiesz ich potrzeby:** \"Rozumiem, że w małym sklepie liczy się rotacja i marża. Dlatego przygotowałem dla Państwa specjalną ofertę na [produkt], która pozwoli na szybki obrót i solidny zysk w PLN.\"\n*   **Bądź transparentny:** \"Jestem tu, żeby pomóc Państwu zwiększyć sprzedaż. Jeśli coś nie będzie dla Państwa korzystne, powiem to wprost.\"\n*   **Zaoferuj pomoc, nie tylko sprzedaż:** \"Wiem, że miejsce na półce jest ograniczone. Mogę pomóc w optymalnym ułożeniu produktów, aby maksymalizować ich widoczność i sprzedaż.\"\n*   **Użyj konkretnych przykładów:** \"Podobne sklepy w okolicy, które wprowadziły [produkt], odnotowały wzrost sprzedaży w kategorii [kategoria] o [procent/kwota] w ciągu [czas].\"\n\n**4. Zakończenie wizyty:**\n\n*   **Podsumuj:** \"Podsumowując, proponuję Państwu [krótkie podsumowanie oferty]. Co Państwo na to?\"\n*   **Zostaw wizytówkę i obietnicę kontaktu:** \"Bardzo dziękuję za poświęcony czas. Zostawiam swoją wizytówkę. Skontaktuję się za kilka dni, żeby omówić szczegóły i odpowiedzieć na ewentualne pytania.\"\n\n**Pamiętaj:** Bądź autentyczny, słuchaj uważnie i koncentruj się na korzyściach dla sklepu, a nie tylko na sprzedaży.\n",
+              "client_name": null,
+              "product_name": null,
+              "timestamp": "Monday"
+            }
+          ]
         },
         "office": {
           "type": "company_office",
@@ -42014,7 +42045,7 @@
           "total_sales": 0,
           "clients_acquired": 0,
           "clients_lost": 0,
-          "visits_completed": 0,
+          "visits_completed": 1,
           "avg_conversation_rating": 0.0,
           "total_reputation_gained": 0
         },
@@ -42059,13 +42090,13 @@
       "customer_satisfaction_avg": 0,
       "current_week": 1,
       "current_day": "Monday",
-      "visits_this_week": 0,
+      "visits_this_week": 1,
       "visits_scheduled": [],
       "current_location": null,
       "planned_visits_today": [],
       "completed_visits_today": [
-        "client_008",
-        "client_020"
+        "client_015",
+        "client_013"
       ],
       "total_distance_today": 0.0,
       "route_optimization_used": false,
@@ -42097,7 +42128,7 @@
       "monthly_actual_sales": 0,
       "monthly_best_sales": 0,
       "weekly_history": [],
-      "last_activity_date": "2025-11-05T16:23:25.935040",
+      "last_activity_date": "2025-11-05T23:25:06.481164",
       "last_visit_client_id": null,
       "company": "Heinz Polska",
       "clients": {
@@ -42383,49 +42414,7 @@
           "recommended_products": [
             "pudliszki_ketchup_ostry"
           ],
-          "upsell_potential": "medium",
-          "last_visit_day": "Monday",
-          "reputation": 65,
-          "visit_history": [
-            {
-              "day": "Monday",
-              "quality": 3,
-              "order_value": 0,
-              "margin_pct": 20,
-              "notes": "",
-              "timestamp": "2025-11-05 18:19:16"
-            },
-            {
-              "day": "Monday",
-              "order_value": 0,
-              "margin_pct": 20,
-              "timestamp": "2025-11-05 18:28:38"
-            },
-            {
-              "day": "Monday",
-              "order_value": 0,
-              "margin_pct": 20,
-              "timestamp": "2025-11-05 18:31:05"
-            },
-            {
-              "day": "Monday",
-              "order_value": 0,
-              "margin_pct": 20,
-              "timestamp": "2025-11-05 18:31:19"
-            }
-          ],
-          "last_visit_date": "2025-11-05T18:31:19.463593",
-          "discovered_info": {
-            "sales_capacity_discovered": {
-              "Food": {
-                "weekly_sales_volume": 7,
-                "shelf_space_facings": 3,
-                "max_order_per_sku": 50,
-                "rotation_days": 14,
-                "discovered_date": "2025-11-05T18:28:38.975055"
-              }
-            }
-          }
+          "upsell_potential": "medium"
         },
         "client_009": {
           "id": "client_009",
@@ -42603,7 +42592,70 @@
           "recommended_products": [
             "pudliszki_ketchup_lagodny"
           ],
-          "upsell_potential": "medium"
+          "upsell_potential": "medium",
+          "last_visit_day": "Monday",
+          "last_visit_date": "2025-11-06T01:31:42.194269",
+          "visits_count": 1,
+          "reputation": 60,
+          "discovered_info": {
+            "personality_description": "Praktyczna, skupiona na konkretach, niechętna \"marketingowym gierkom\", zabiegana.",
+            "decision_priorities": [
+              "cena",
+              "smak",
+              "duże opakowanie",
+              "regularne dostawy"
+            ],
+            "main_customers": "Pracownicy fabryki mebli",
+            "pain_points": [
+              "Problemy z regularnymi dostawami i koniecznością dopytywania się o towar"
+            ],
+            "business_goals": [
+              "Zapewnienie pracownikom jedzenia w przerwie"
+            ],
+            "best_selling_categories": [
+              "Ketchup",
+              "Frytki",
+              "Kiełbaski z grilla"
+            ],
+            "seasonal_patterns": "Większe spożycie ketchupu podczas grilla",
+            "trust_level": "Sceptyczny",
+            "preferred_communication": "Konkretna, szybka",
+            "sales_capacity_discovered": {
+              "Food": {
+                "weekly_sales_volume": 15,
+                "monthly_volume_kg": 60,
+                "discovered_date": "2025-11-06T01:31:44.710654",
+                "discovered_method": "conversation"
+              }
+            }
+          },
+          "knowledge_level": 3,
+          "visit_history": [
+            {
+              "day": "Monday",
+              "date": "2025-11-06 01:31",
+              "order_value": 0,
+              "order_items": [],
+              "reputation_change": 10,
+              "reputation_after": 60,
+              "knowledge_level_after": 3,
+              "discoveries_count": 10,
+              "new_discoveries": [
+                "personality_description",
+                "decision_priorities",
+                "main_customers",
+                "pain_points",
+                "business_goals",
+                "best_selling_categories",
+                "seasonal_patterns",
+                "trust_level",
+                "preferred_communication",
+                "sales_capacity_discovered_Food"
+              ],
+              "conversation_transcript": "🎮 Handlowiec: Witam Pani Anno, Paweł KSiążyk Heinz. CZy możemy chwilkę porozmawiać o rozwoju Pan biznesu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Dzień dobry, panie Pawle. Rozwój biznesu? No, zawsze można porozmawiać, ale nie wiem, czy akurat ja mogę panu coś ciekawego powiedzieć. Stołówka to stołówka, wiadomo. Co konkretnie ma pan na myśli?\n\n\n🎮 Handlowiec: chciałbym przedstawić swoje pomysły na wsparcie, ale czy mógłbym wcześniej zapytać o kilka kwestii?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No dobrze, panie Pawle, pytaj pan śmiało. Tylko nie obiecuję, że będę miała czas na długie wywody. Zależy mi, żeby ludzie mieli co zjeść w przerwie, a nie, żebym ja się tu w jakieś marketingowe gierki bawiła. No ale słucham.\n\n\n🎮 Handlowiec: CZym się Panie kieruje przy wyborze dostawcy ketchupu ?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Kieruję się przede wszystkim ceną, panie Pawle. Fabryka mebli to nie restauracja z gwiazdką Michelin. Musi być smaczny, musi być w dużej butelce, żeby szybko się nie skończył, i musi być w dobrej cenie. Wiadomo, że pracownicy lubią ten ketchup do frytek czy kiełbaski z grilla. No i żeby dostawy były regularne i bez problemów. Nie mam czasu na zamawianie po kilka razy i dopytywanie się gdzie jest towar. To takie podstawowe kryteria. Co pan ma do zaoferowania?\n\n\n🎮 Handlowiec: a ile średnio potrzebuje Pani ketchupy w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Panie Pawle, ciężko mi tak dokładnie powiedzieć. To zależy. Czasem pracownicy więcej jedzą frytek, czasem mniej. Jak jest grill, to idzie więcej. Tak na oko, to myślę, że tak z 10, może 12 butelek takich dużych, wiesz, tych po 5 kg, to schodzi na miesiąc. Mówię orientacyjnie, bo nie prowadzę dokładnych statystyk. Zależy też, ile osób w danym miesiącu pracuje, bo mamy trochę rotacji.\n\n\n🎮 Handlowiec: czyli mniej więcej 12 butelek razy 5 kg - 60 kg ketchupu w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No tak, mniej więcej. Może trochę więcej, może trochę mniej. Zależy od miesiąca, tak jak mówiłam. Panie Pawle, ale do czego pan zmierza z tą ilością? Chce mi pan powiedzieć, że mam za dużo tego ketchupu, czy jak? Bo nie bardzo rozumiem. Mam teraz czas tylko chwilę, więc proszę konkretnie.\n",
+              "timestamp": "2025-11-06 01:31:44"
+            }
+          ]
         },
         "client_014": {
           "id": "client_014",
@@ -42674,7 +42726,39 @@
           "recommended_products": [
             "heinz_ketchup_classic"
           ],
-          "upsell_potential": "high"
+          "upsell_potential": "high",
+          "last_visit_day": "Monday",
+          "last_visit_date": "2025-11-06T00:09:12.242360",
+          "reputation": 60,
+          "discovered_info": {
+            "personality_description": "Czas to pieniądz, lubi stałą współpracę.",
+            "decision_priorities": [
+              "cena",
+              "jakość",
+              "dostępność",
+              "stabilność"
+            ],
+            "main_customers": "studenci i młodzi ludzie",
+            "customer_demographics": "Przekrój przez społeczeństwo, od dzieciaków po emerytów.",
+            "business_goals": [
+              "zarabiać (marża)"
+            ],
+            "delivery_preferences": "Na czas i bez problemów.",
+            "trust_level": "Sceptyczny",
+            "preferred_communication": "Konkretny, bez owijania w bawełnę."
+          },
+          "knowledge_level": 3,
+          "visit_history": [
+            {
+              "day": "Monday",
+              "order_value": 0,
+              "order_items": [],
+              "reputation_change": 10,
+              "knowledge_level_after": 3,
+              "discoveries_count": 8,
+              "timestamp": "2025-11-06 00:09:14"
+            }
+          ]
         },
         "client_016": {
           "id": "client_016",
@@ -42849,41 +42933,7 @@
             "heinz_ketchup_hot",
             "pudliszki_ketchup_lagodny"
           ],
-          "upsell_potential": "very_high",
-          "last_visit_day": "Monday",
-          "last_visit_date": "2025-11-05T18:53:25.784856",
-          "reputation": 75,
-          "visit_history": [
-            {
-              "day": "Monday",
-              "order_value": 400,
-              "margin_pct": 20,
-              "timestamp": "2025-11-05 18:47:31"
-            },
-            {
-              "day": "Monday",
-              "order_value": 0,
-              "margin_pct": 20,
-              "timestamp": "2025-11-05 18:48:02"
-            },
-            {
-              "day": "Monday",
-              "order_value": 0,
-              "margin_pct": 20,
-              "timestamp": "2025-11-05 18:53:25"
-            }
-          ],
-          "discovered_info": {
-            "sales_capacity_discovered": {
-              "Food": {
-                "weekly_sales_volume": 30,
-                "shelf_space_facings": 3,
-                "max_order_per_sku": 50,
-                "rotation_days": 14,
-                "discovered_date": "2025-11-05T18:47:31.041562"
-              }
-            }
-          }
+          "upsell_potential": "very_high"
         },
         "client_021": {
           "id": "client_021",
@@ -43076,11 +43126,17 @@
       },
       "scenario_id": "heinz_food_service",
       "clients_total": 25,
-      "mentor_questions_today": 0,
+      "mentor_questions_today": 1,
       "mentor_last_reset_day": "Monday",
-      "mentor_conversation_history": [],
-      "total_sales": 400,
-      "total_margin": 80.0
+      "mentor_conversation_history": [
+        {
+          "question": "Jak zbudować zaufanie na pierwszej wizycie handlowej?",
+          "answer": "Zbudowanie zaufania na pierwszej wizycie w sklepie osiedlowym to podstawa. Oto kilka konkretnych kroków i fraz, które możesz wykorzystać:\n\n**1. Przygotowanie to podstawa:**\n\n*   **Zbadaj teren:** Dowiedz się czegoś o sklepie przed wizytą. Jak długo działają? Jakie produkty sprzedają się najlepiej? To pokaże, że jesteś zainteresowany ich biznesem.\n*   **Wygląd:** Zadbaj o schludny wygląd. W kanale tradycyjnym ludzie kupują od ludzi, których lubią i którym ufają.\n\n**2. Rozpoczęcie rozmowy:**\n\n*   **Przedstaw się z uśmiechem:** \"Dzień dobry, nazywam się [Twoje imię i nazwisko] i reprezentuję firmę [Nazwa firmy]. Słyszałem, że prowadzicie Państwo ten sklep już od [liczba] lat. Gratuluję!\"\n*   **Zacznij od pytania, nie od oferty:** \"Zanim przejdę do prezentacji, chciałbym zapytać, jakie produkty z kategorii [kategoria produktów, które sprzedajesz] cieszą się u Państwa największą popularnością?\" – To pokaże, że słuchasz.\n\n**3. Budowanie relacji i zaufania:**\n\n*   **Pokaż, że rozumiesz ich potrzeby:** \"Rozumiem, że w małym sklepie liczy się rotacja i marża. Dlatego przygotowałem dla Państwa specjalną ofertę na [produkt], która pozwoli na szybki obrót i solidny zysk w PLN.\"\n*   **Bądź transparentny:** \"Jestem tu, żeby pomóc Państwu zwiększyć sprzedaż. Jeśli coś nie będzie dla Państwa korzystne, powiem to wprost.\"\n*   **Zaoferuj pomoc, nie tylko sprzedaż:** \"Wiem, że miejsce na półce jest ograniczone. Mogę pomóc w optymalnym ułożeniu produktów, aby maksymalizować ich widoczność i sprzedaż.\"\n*   **Użyj konkretnych przykładów:** \"Podobne sklepy w okolicy, które wprowadziły [produkt], odnotowały wzrost sprzedaży w kategorii [kategoria] o [procent/kwota] w ciągu [czas].\"\n\n**4. Zakończenie wizyty:**\n\n*   **Podsumuj:** \"Podsumowując, proponuję Państwu [krótkie podsumowanie oferty]. Co Państwo na to?\"\n*   **Zostaw wizytówkę i obietnicę kontaktu:** \"Bardzo dziękuję za poświęcony czas. Zostawiam swoją wizytówkę. Skontaktuję się za kilka dni, żeby omówić szczegóły i odpowiedzieć na ewentualne pytania.\"\n\n**Pamiętaj:** Bądź autentyczny, słuchaj uważnie i koncentruj się na korzyściach dla sklepu, a nie tylko na sprzedaży.\n",
+          "client_name": null,
+          "product_name": null,
+          "timestamp": "Monday"
+        }
+      ]
     },
     "fmcg_clients": {
       "client_001": {
@@ -43365,49 +43421,7 @@
         "recommended_products": [
           "pudliszki_ketchup_ostry"
         ],
-        "upsell_potential": "medium",
-        "last_visit_day": "Monday",
-        "reputation": 65,
-        "visit_history": [
-          {
-            "day": "Monday",
-            "quality": 3,
-            "order_value": 0,
-            "margin_pct": 20,
-            "notes": "",
-            "timestamp": "2025-11-05 18:19:16"
-          },
-          {
-            "day": "Monday",
-            "order_value": 0,
-            "margin_pct": 20,
-            "timestamp": "2025-11-05 18:28:38"
-          },
-          {
-            "day": "Monday",
-            "order_value": 0,
-            "margin_pct": 20,
-            "timestamp": "2025-11-05 18:31:05"
-          },
-          {
-            "day": "Monday",
-            "order_value": 0,
-            "margin_pct": 20,
-            "timestamp": "2025-11-05 18:31:19"
-          }
-        ],
-        "last_visit_date": "2025-11-05T18:31:19.463593",
-        "discovered_info": {
-          "sales_capacity_discovered": {
-            "Food": {
-              "weekly_sales_volume": 7,
-              "shelf_space_facings": 3,
-              "max_order_per_sku": 50,
-              "rotation_days": 14,
-              "discovered_date": "2025-11-05T18:28:38.975055"
-            }
-          }
-        }
+        "upsell_potential": "medium"
       },
       "client_009": {
         "id": "client_009",
@@ -43585,7 +43599,70 @@
         "recommended_products": [
           "pudliszki_ketchup_lagodny"
         ],
-        "upsell_potential": "medium"
+        "upsell_potential": "medium",
+        "last_visit_day": "Monday",
+        "last_visit_date": "2025-11-06T01:31:42.194269",
+        "visits_count": 1,
+        "reputation": 60,
+        "discovered_info": {
+          "personality_description": "Praktyczna, skupiona na konkretach, niechętna \"marketingowym gierkom\", zabiegana.",
+          "decision_priorities": [
+            "cena",
+            "smak",
+            "duże opakowanie",
+            "regularne dostawy"
+          ],
+          "main_customers": "Pracownicy fabryki mebli",
+          "pain_points": [
+            "Problemy z regularnymi dostawami i koniecznością dopytywania się o towar"
+          ],
+          "business_goals": [
+            "Zapewnienie pracownikom jedzenia w przerwie"
+          ],
+          "best_selling_categories": [
+            "Ketchup",
+            "Frytki",
+            "Kiełbaski z grilla"
+          ],
+          "seasonal_patterns": "Większe spożycie ketchupu podczas grilla",
+          "trust_level": "Sceptyczny",
+          "preferred_communication": "Konkretna, szybka",
+          "sales_capacity_discovered": {
+            "Food": {
+              "weekly_sales_volume": 15,
+              "monthly_volume_kg": 60,
+              "discovered_date": "2025-11-06T01:31:44.710654",
+              "discovered_method": "conversation"
+            }
+          }
+        },
+        "knowledge_level": 3,
+        "visit_history": [
+          {
+            "day": "Monday",
+            "date": "2025-11-06 01:31",
+            "order_value": 0,
+            "order_items": [],
+            "reputation_change": 10,
+            "reputation_after": 60,
+            "knowledge_level_after": 3,
+            "discoveries_count": 10,
+            "new_discoveries": [
+              "personality_description",
+              "decision_priorities",
+              "main_customers",
+              "pain_points",
+              "business_goals",
+              "best_selling_categories",
+              "seasonal_patterns",
+              "trust_level",
+              "preferred_communication",
+              "sales_capacity_discovered_Food"
+            ],
+            "conversation_transcript": "🎮 Handlowiec: Witam Pani Anno, Paweł KSiążyk Heinz. CZy możemy chwilkę porozmawiać o rozwoju Pan biznesu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Dzień dobry, panie Pawle. Rozwój biznesu? No, zawsze można porozmawiać, ale nie wiem, czy akurat ja mogę panu coś ciekawego powiedzieć. Stołówka to stołówka, wiadomo. Co konkretnie ma pan na myśli?\n\n\n🎮 Handlowiec: chciałbym przedstawić swoje pomysły na wsparcie, ale czy mógłbym wcześniej zapytać o kilka kwestii?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No dobrze, panie Pawle, pytaj pan śmiało. Tylko nie obiecuję, że będę miała czas na długie wywody. Zależy mi, żeby ludzie mieli co zjeść w przerwie, a nie, żebym ja się tu w jakieś marketingowe gierki bawiła. No ale słucham.\n\n\n🎮 Handlowiec: CZym się Panie kieruje przy wyborze dostawcy ketchupu ?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Kieruję się przede wszystkim ceną, panie Pawle. Fabryka mebli to nie restauracja z gwiazdką Michelin. Musi być smaczny, musi być w dużej butelce, żeby szybko się nie skończył, i musi być w dobrej cenie. Wiadomo, że pracownicy lubią ten ketchup do frytek czy kiełbaski z grilla. No i żeby dostawy były regularne i bez problemów. Nie mam czasu na zamawianie po kilka razy i dopytywanie się gdzie jest towar. To takie podstawowe kryteria. Co pan ma do zaoferowania?\n\n\n🎮 Handlowiec: a ile średnio potrzebuje Pani ketchupy w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Panie Pawle, ciężko mi tak dokładnie powiedzieć. To zależy. Czasem pracownicy więcej jedzą frytek, czasem mniej. Jak jest grill, to idzie więcej. Tak na oko, to myślę, że tak z 10, może 12 butelek takich dużych, wiesz, tych po 5 kg, to schodzi na miesiąc. Mówię orientacyjnie, bo nie prowadzę dokładnych statystyk. Zależy też, ile osób w danym miesiącu pracuje, bo mamy trochę rotacji.\n\n\n🎮 Handlowiec: czyli mniej więcej 12 butelek razy 5 kg - 60 kg ketchupu w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No tak, mniej więcej. Może trochę więcej, może trochę mniej. Zależy od miesiąca, tak jak mówiłam. Panie Pawle, ale do czego pan zmierza z tą ilością? Chce mi pan powiedzieć, że mam za dużo tego ketchupu, czy jak? Bo nie bardzo rozumiem. Mam teraz czas tylko chwilę, więc proszę konkretnie.\n",
+            "timestamp": "2025-11-06 01:31:44"
+          }
+        ]
       },
       "client_014": {
         "id": "client_014",
@@ -43656,7 +43733,39 @@
         "recommended_products": [
           "heinz_ketchup_classic"
         ],
-        "upsell_potential": "high"
+        "upsell_potential": "high",
+        "last_visit_day": "Monday",
+        "last_visit_date": "2025-11-06T00:09:12.242360",
+        "reputation": 60,
+        "discovered_info": {
+          "personality_description": "Czas to pieniądz, lubi stałą współpracę.",
+          "decision_priorities": [
+            "cena",
+            "jakość",
+            "dostępność",
+            "stabilność"
+          ],
+          "main_customers": "studenci i młodzi ludzie",
+          "customer_demographics": "Przekrój przez społeczeństwo, od dzieciaków po emerytów.",
+          "business_goals": [
+            "zarabiać (marża)"
+          ],
+          "delivery_preferences": "Na czas i bez problemów.",
+          "trust_level": "Sceptyczny",
+          "preferred_communication": "Konkretny, bez owijania w bawełnę."
+        },
+        "knowledge_level": 3,
+        "visit_history": [
+          {
+            "day": "Monday",
+            "order_value": 0,
+            "order_items": [],
+            "reputation_change": 10,
+            "knowledge_level_after": 3,
+            "discoveries_count": 8,
+            "timestamp": "2025-11-06 00:09:14"
+          }
+        ]
       },
       "client_016": {
         "id": "client_016",
@@ -43831,41 +43940,7 @@
           "heinz_ketchup_hot",
           "pudliszki_ketchup_lagodny"
         ],
-        "upsell_potential": "very_high",
-        "last_visit_day": "Monday",
-        "last_visit_date": "2025-11-05T18:53:25.784856",
-        "reputation": 75,
-        "visit_history": [
-          {
-            "day": "Monday",
-            "order_value": 400,
-            "margin_pct": 20,
-            "timestamp": "2025-11-05 18:47:31"
-          },
-          {
-            "day": "Monday",
-            "order_value": 0,
-            "margin_pct": 20,
-            "timestamp": "2025-11-05 18:48:02"
-          },
-          {
-            "day": "Monday",
-            "order_value": 0,
-            "margin_pct": 20,
-            "timestamp": "2025-11-05 18:53:25"
-          }
-        ],
-        "discovered_info": {
-          "sales_capacity_discovered": {
-            "Food": {
-              "weekly_sales_volume": 30,
-              "shelf_space_facings": 3,
-              "max_order_per_sku": 50,
-              "rotation_days": 14,
-              "discovered_date": "2025-11-05T18:47:31.041562"
-            }
-          }
-        }
+        "upsell_potential": "very_high"
       },
       "client_021": {
         "id": "client_021",
@@ -44176,6 +44251,11 @@
       {
         "type": "login",
         "timestamp": "2025-11-05T16:23:08.596035",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-05T23:24:45.313366",
         "details": {}
       }
     ],

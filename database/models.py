@@ -105,6 +105,7 @@ class User(Base):
             dict: Dane użytkownika w formacie JSON
         """
         result = {
+            "id": self.id,  # INTEGER PRIMARY KEY - DODANE dla kompatybilności z notatkami
             "user_id": str(self.user_id),
             "password": self.password_hash,
             "degen_type": self.degen_type,

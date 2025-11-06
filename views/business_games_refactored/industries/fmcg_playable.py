@@ -2923,7 +2923,7 @@ def show_fmcg_playable_game(username: str):
                         name = client_data.get('name', client_id)
                         location = client_data.get('location', 'N/A')
                         owner = client_data.get('owner', 'N/A')
-                        reputation = client_data.get('reputation', 0)
+                        reputation = client_data.get('reputation', 50)  # Wartość domyślna 50 (neutralna)
                         potential = client_data.get('monthly_revenue_potential', 0)
                         distance = client_data.get('distance_from_base', client_data.get('distance_km', 0))
                         status = client_data.get("status", "PROSPECT").upper()
@@ -3241,7 +3241,7 @@ def show_fmcg_playable_game(username: str):
                             name = client_data.get('name', client_id)
                             location = client_data.get('location', 'N/A')
                             owner = client_data.get('owner', 'N/A')
-                            reputation = client_data.get('reputation', 0)
+                            reputation = client_data.get('reputation', 50)  # Wartość domyślna 50 (neutralna)
                             potential = client_data.get('monthly_revenue_potential', 0)
                             distance = client_data.get('distance_from_base', client_data.get('distance_km', 0))
                             status = client_data.get("status", "PROSPECT").upper()
@@ -3529,8 +3529,35 @@ def show_fmcg_playable_game(username: str):
                         # Show current visit - get client data for panel
                         client = clients.get(next_client_id, {})
                         
+                        # Prepare product list for notes
+                        all_products = get_all_products()
+                        products_list = [
+                            {
+                                "id": prod_id, 
+                                "name": prod.get("name", "Nieznany"),
+                                "sku": prod.get("sku", prod_id)
+                            } 
+                            for prod_id, prod in all_products.items()
+                        ]
+                        
+                        # Prepare client list for notes
+                        clients_list = [
+                            {
+                                "id": client_id,
+                                "name": client.get("name", client_id)
+                            }
+                            for client_id, client in game_state.get("clients", {}).items()
+                        ]
+                        
                         # Show advanced AI visit panel (zawiera wszystko - nagłówek, info, przyciski, rozmowę, podsumowanie)
-                        render_visit_panel_advanced(next_client_id, clients, game_state, username)
+                        render_visit_panel_advanced(
+                            next_client_id, 
+                            clients, 
+                            game_state, 
+                            username,
+                            available_products=products_list,
+                            available_clients=clients_list
+                        )
             
         # =================================================================
         # ROUTE PLANNING - Multi-select clients + optimization
@@ -3566,15 +3593,45 @@ def show_fmcg_playable_game(username: str):
                 
                 # Get user data for notes
                 from data.users_new import get_current_user_data
+                from utils.user_helpers import get_user_sql_id
                 user_data = get_current_user_data(username)
                 
                 if user_data and "user_id" in user_data:
-                    # Render notes panel with unique key prefix
-                    render_notes_panel(
-                        user_id=user_data["user_id"],
-                        active_tab="product_card",
-                        key_prefix="fmcg_sales_prep_notes"
-                    )
+                    # Get INTEGER user id from SQL (for notes foreign key)
+                    sql_user_id = get_user_sql_id(username)
+                    
+                    if not sql_user_id:
+                        st.warning(f"⚠️ Nie można załadować notatek - użytkownik '{username}' nie istnieje w bazie SQL")
+                        st.caption("💡 Tylko użytkownicy z bazy SQL mogą używać notatnika. Skontaktuj się z administratorem.")
+                    else:
+                        # Prepare product list for notes
+                        all_products = get_all_products()
+                        products_list = [
+                            {
+                                "id": prod_id, 
+                                "name": prod.get("name", "Nieznany"),
+                                "sku": prod.get("sku", prod_id)
+                            } 
+                            for prod_id, prod in all_products.items()
+                        ]
+                        
+                        # Prepare client list for notes
+                        clients_list = [
+                            {
+                                "id": client_id,
+                                "name": client.get("name", client_id)
+                            }
+                            for client_id, client in game_state.get("clients", {}).items()
+                        ]
+                        
+                        # Render notes panel with unique key prefix and products/clients
+                        render_notes_panel(
+                            user_id=sql_user_id,  # INTEGER PRIMARY KEY z tabeli users
+                            active_tab="product_card",
+                            key_prefix="fmcg_sales_prep_notes",
+                            available_products=products_list,
+                            available_clients=clients_list
+                        )
                 else:
                     st.warning("⚠️ Nie można załadować notatek")
             

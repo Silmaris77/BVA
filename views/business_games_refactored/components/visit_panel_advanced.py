@@ -10,11 +10,21 @@ from utils.fmcg_ai_conversation import conduct_fmcg_conversation
 from utils.fmcg_mechanics import update_fmcg_game_state_sql
 from utils.notes_panel import render_notes_panel
 from data.users_new import get_current_user_data
+from utils.user_helpers import get_user_sql_id
 
 
-def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict, username: str):
+def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict, username: str, 
+                                available_products: List[Dict] = None, available_clients: List[Dict] = None):
     """
     Panel wizyty FMCG wykorzystujący sprawdzoną logikę z consulting conversation contracts
+    
+    Args:
+        client_id: ID odwiedzanego klienta
+        clients: Słownik wszystkich klientów
+        game_state: Stan gry
+        username: Nazwa użytkownika
+        available_products: Lista produktów dla notatnika
+        available_clients: Lista klientów dla notatnika
     """
     client = clients.get(client_id, {})
     client_name = client.get('name', client_id)
@@ -295,13 +305,21 @@ Tekst do poprawy:
         with st.expander("📓 Notatnik", expanded=False):
             user_data = get_current_user_data()
             if user_data:
-                render_notes_panel(
-                    user_id=user_data.get("id"),
-                    active_tab="client_profile",
-                    scenario_context=f"Wizyta FMCG u {client_name}",
-                    client_name=client_name,
-                    key_prefix=f"visit_{client_id}"
-                )
+                # Get INTEGER user id from SQL (for notes foreign key)
+                sql_user_id = get_user_sql_id(username)
+                
+                if sql_user_id:
+                    render_notes_panel(
+                        user_id=sql_user_id,  # INTEGER PRIMARY KEY z tabeli users
+                        active_tab="client_profile",
+                        scenario_context=f"Wizyta FMCG u {client_name}",
+                        client_name=client_name,
+                        key_prefix=f"visit_{client_id}",
+                        available_products=available_products,
+                        available_clients=available_clients
+                    )
+                else:
+                    st.warning("⚠️ Notatnik niedostępny - użytkownik nie w bazie SQL")
     
     # =================================================================
     # VISIT COMPLETED - SAVE RESULTS
@@ -310,51 +328,60 @@ Tekst do poprawy:
     else:
         st.success("🎉 Wizyta zakończona!")
         
-        st.markdown("###  Zamówienie")
+        st.markdown("### 📦 Zamówienie")
         
-        # Panel zamówienia - produkty i ilości
+        # Panel zamówienia - produkty Heinz
         st.markdown("#### Produkty do zamówienia:")
         
-        # TODO: Tutaj będzie lista produktów z możliwością wyboru ilości
-        # Na razie placeholder
-        st.info("🚧 Panel zamówień produktów - w przygotowaniu")
+        # Produkty Heinz - Ketchup
+        heinz_products = {
+            "Heinz Ketchup 500ml": {"price": 12.50, "margin": 25},
+            "Heinz Ketchup 1kg": {"price": 22.00, "margin": 25},
+            "Heinz Ketchup saszetki 100szt": {"price": 45.00, "margin": 20},
+            "Heinz BBQ Sauce 500ml": {"price": 15.00, "margin": 25},
+            "Heinz Musztarda 500ml": {"price": 11.00, "margin": 25}
+        }
         
-        # Temporary simple order input
-        col1, col2 = st.columns(2)
-        with col1:
-            order_value = st.number_input(
-                "💰 Wartość zamówienia (PLN)",
-                min_value=0,
-                max_value=50000,
-                value=0,
-                step=100,
-                key=f"order_{client_id}"
-            )
-        with col2:
-            margin_pct = st.number_input(
-                "📈 Marża (%)",
-                min_value=0,
-                max_value=100,
-                value=20,
-                step=5,
-                key=f"margin_{client_id}"
-            )
+        # Product selection
+        order_items = []
+        total_value = 0
+        
+        for product_name, product_info in heinz_products.items():
+            col_prod, col_qty = st.columns([3, 1])
+            with col_prod:
+                st.markdown(f"**{product_name}** - {product_info['price']:.2f} PLN (marża {product_info['margin']}%)")
+            with col_qty:
+                qty = st.number_input(
+                    "Ilość",
+                    min_value=0,
+                    max_value=500,
+                    value=0,
+                    step=1,
+                    key=f"qty_{client_id}_{product_name.replace(' ', '_')}",
+                    label_visibility="collapsed"
+                )
+                if qty > 0:
+                    item_value = qty * product_info['price']
+                    order_items.append({
+                        "product": product_name,
+                        "quantity": qty,
+                        "unit_price": product_info['price'],
+                        "total": item_value,
+                        "margin_pct": product_info['margin']
+                    })
+                    total_value += item_value
+        
+        st.markdown("---")
         
         # Podsumowanie zamówienia
-        if order_value > 0:
+        if total_value > 0:
             st.markdown("#### 💼 Podsumowanie zamówienia:")
-            col_summary1, col_summary2, col_summary3 = st.columns(3)
-            with col_summary1:
-                st.metric("Wartość brutto", f"{order_value:,.0f} PLN")
-            with col_summary2:
-                margin_value = order_value * margin_pct / 100
-                st.metric("Marża", f"{margin_value:,.0f} PLN")
-            with col_summary3:
-                st.metric("Marża %", f"{margin_pct}%")
+            st.metric("**Wartość całkowita**", f"{total_value:,.2f} PLN")
+        else:
+            st.info("Nie wybrano żadnych produktów do zamówienia")
         
         # Użyte narzędzia (z conversation metadata)
         st.markdown("#### 🛠️ Użyte narzędzia:")
-        # TODO: Wyciągnąć z metadanych konwersacji jakie narzędzia użył gracz
         st.info("🚧 Lista użytych narzędzi sprzedażowych - w przygotowaniu")
         
         # Zapisz wyniki
@@ -367,59 +394,113 @@ Tekst do poprawy:
             client["last_visit_day"] = game_state.get("current_day", 0)
             client["last_visit_date"] = datetime.now().isoformat()
             
+            # Update client status - PROSPECT becomes ACTIVE after first order
+            if client.get("status") == "PROSPECT" and total_value > 0:
+                client["status"] = "ACTIVE"
+                client["status_since"] = datetime.now().isoformat()
+                st.success("🎉 Klient zmienił status: PROSPECT → ACTIVE!")
+            
+            # Update visits count
+            client["visits_count"] = client.get("visits_count", 0) + 1
+            
+            # Save reputation BEFORE change (for accurate display)
+            reputation_before = client.get("reputation", 50)
+            
             # Calculate reputation change based on conversation and order
-            reputation_change = 10  # Base for completing visit
+            # Reputacja: skala 0-100, wartość początkowa 50 (neutralna)
+            # Budowanie reputacji jest powolne i wymaga wielu wizyt
+            reputation_change = 2  # Baza za wizytę (mała zmiana)
+            
             if total_value > 0:
-                # Bonus based on order value
+                # Bonus based on order value (umiarkowany)
                 if total_value >= 500:
-                    reputation_change += 20
+                    reputation_change += 5  # Duże zamówienie: razem +7
                 elif total_value >= 200:
-                    reputation_change += 15
+                    reputation_change += 3  # Średnie zamówienie: razem +5
                 else:
-                    reputation_change += 10
+                    reputation_change += 1  # Małe zamówienie: razem +3
             
-            client["reputation"] = min(100, max(0, client.get("reputation", 50) + reputation_change))
+            # Apply reputation change (max 100, min 0)
+            client["reputation"] = min(100, max(0, reputation_before + reputation_change))
             
-            # Update knowledge level based on conversation
-            current_knowledge = client.get("knowledge_level", 0)
-            if current_knowledge < 5:
-                # Increase knowledge level after visit
-                client["knowledge_level"] = min(5, current_knowledge + 1)
+            # ====================================================================
+            # EXTRACT DISCOVERED INFO FROM CONVERSATION USING AI
+            # ====================================================================
             
-            # Extract and update discovered info from conversation
             if "discovered_info" not in client:
                 client["discovered_info"] = {}
             
             discovered = client["discovered_info"]
             
-            # After first visit, discover basic info
-            if current_knowledge == 0:
-                discovered["personality_description"] = client.get("owner_profile", {}).get("personality", {}).get("type", "Unknown")
-                discovered["trust_level"] = "Pierwszy kontakt"
+            # Use AI to extract what client actually said in conversation
+            try:
+                from utils.fmcg_ai_conversation import extract_discovered_info_from_conversation
+                
+                st.info("🤖 Analizuję rozmowę i wyciągam informacje o kliencie...")
+                
+                new_discoveries = extract_discovered_info_from_conversation(
+                    conversation_messages=messages,
+                    client=client,
+                    current_discovered_info=discovered
+                )
+                
+                # DEBUG: Show what AI found
+                if new_discoveries:
+                    with st.expander("🔍 DEBUG: Co AI znalazło w rozmowie", expanded=False):
+                        st.json(new_discoveries)
+                
+                # Update discovered_info with new discoveries
+                discoveries_count = 0
+                for field, value in new_discoveries.items():
+                    if field == "sales_capacity_discovered_Food":
+                        # Special handling for Food category capacity
+                        if "sales_capacity_discovered" not in discovered:
+                            discovered["sales_capacity_discovered"] = {}
+                        if "Food" not in discovered["sales_capacity_discovered"]:
+                            discovered["sales_capacity_discovered"]["Food"] = value
+                            discoveries_count += 1
+                            monthly_kg = value.get('monthly_volume_kg', 0)
+                            st.success(f"✅ Odkryto potencjał ketchupowy: {monthly_kg} kg/mies")
+                        else:
+                            st.info("💡 Potencjał ketchupowy już był znany")
+                    else:
+                        # Regular discovered_info field
+                        if discovered.get(field) is None:  # Only if not discovered yet
+                            discovered[field] = value
+                            discoveries_count += 1
+                            
+                            # Show discovery notification
+                            field_labels = {
+                                "personality_description": "Opis osobowości",
+                                "decision_priorities": "Priorytety decyzyjne",
+                                "main_customers": "Główni klienci sklepu",
+                                "pain_points": "Problemy biznesowe",
+                                "typical_order_value": "Typowa wartość zamówienia",
+                                "preferred_frequency": "Preferowana częstotliwość",
+                                "trust_level": "Poziom zaufania"
+                            }
+                            label = field_labels.get(field, field)
+                            st.success(f"✅ Odkryto: {label}")
+                
+                if discoveries_count > 0:
+                    st.success(f"🎉 Odkryto {discoveries_count} nowych informacji o kliencie!")
+                else:
+                    st.info("💡 Klient nie ujawnił nowych informacji w tej rozmowie")
+                    
+            except Exception as e:
+                st.warning(f"⚠️ Nie udało się przeanalizować rozmowy: {e}")
+                import traceback
+                st.code(traceback.format_exc())
             
-            # After subsequent visits, discover more
-            if current_knowledge >= 1 and "decision_priorities" not in discovered:
-                discovered["decision_priorities"] = ["Cena", "Jakość", "Dostępność"]
+            # Calculate knowledge level based on discovered fields count
+            from utils.fmcg_ai_conversation import calculate_knowledge_level
+            client["knowledge_level"] = calculate_knowledge_level(discovered)
             
-            if current_knowledge >= 2 and "pain_points" not in discovered:
-                discovered["pain_points"] = ["Konkurencja cenowa", "Rotacja produktów"]
-            
-            if current_knowledge >= 3 and "typical_order_value" not in discovered:
-                discovered["typical_order_value"] = f"{total_value:.0f} PLN" if total_value > 0 else "300-500 PLN"
-            
-            # Update sales_capacity_discovered for Food category
-            if "sales_capacity_discovered" not in discovered:
-                discovered["sales_capacity_discovered"] = {}
-            
-            # After visit, discover the Food category (Ketchup potential)
-            if "Food" not in discovered["sales_capacity_discovered"]:
-                discovered["sales_capacity_discovered"]["Food"] = {
-                    "weekly_sales_volume": client.get("monthly_volume_kg", 0) // 4,
-                    "shelf_space_facings": 3,
-                    "max_order_per_sku": 50,
-                    "rotation_days": 14,
-                    "discovered_date": datetime.now().isoformat()
-                }
+            # Build conversation transcript for history
+            conversation_transcript = "\n\n".join([
+                f"{'🎮 Handlowiec' if msg['role'] == 'user' else '🏪 ' + client_name}: {msg['content']}"
+                for msg in messages
+            ])
             
             # Add to visit history
             if "visit_history" not in client:
@@ -427,10 +508,15 @@ Tekst do poprawy:
             
             visit_record = {
                 "day": game_state.get("current_day", 0),
+                "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
                 "order_value": total_value,
                 "order_items": order_items,
                 "reputation_change": reputation_change,
+                "reputation_after": client["reputation"],
                 "knowledge_level_after": client["knowledge_level"],
+                "discoveries_count": discoveries_count if 'discoveries_count' in locals() else 0,
+                "new_discoveries": list(new_discoveries.keys()) if 'new_discoveries' in locals() else [],
+                "conversation_transcript": conversation_transcript,
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
             client["visit_history"].append(visit_record)
@@ -442,11 +528,30 @@ Tekst do poprawy:
                 total_margin = sum(item["total"] * item["margin_pct"] / 100 for item in order_items)
                 game_state["total_margin"] = game_state.get("total_margin", 0) + total_margin
             
+            # Update weekly/monthly stats
+            game_state["visits_this_week"] = game_state.get("visits_this_week", 0) + 1
+            
+            # Calculate and deduct energy cost
+            from utils.fmcg_mechanics import calculate_visit_energy_cost
+            distance = client.get("distance_from_base", client.get("distance_km", 0))
+            energy_cost = calculate_visit_energy_cost(distance, visit_duration_minutes=45)
+            
+            current_energy = game_state.get("energy", 100)
+            new_energy = max(0, current_energy - energy_cost)
+            game_state["energy"] = new_energy
+            
             # Mark visit as completed
             completed_visits = game_state.get("completed_visits_today", [])
             if client_id not in completed_visits:
                 completed_visits.append(client_id)
                 game_state["completed_visits_today"] = completed_visits
+            
+            # IMPORTANT: Also update session_state for route tracking
+            if hasattr(st.session_state, 'completed_visits_today'):
+                if client_id not in st.session_state.completed_visits_today:
+                    st.session_state.completed_visits_today.append(client_id)
+            else:
+                st.session_state.completed_visits_today = [client_id]
             
             # Update clients dict in game_state
             if "clients" not in game_state:
@@ -458,18 +563,41 @@ Tekst do poprawy:
                 from utils.fmcg_mechanics import update_fmcg_game_state_sql
                 update_fmcg_game_state_sql(username, game_state, game_state["clients"])
                 
-                # Clear conversation state BEFORE showing success
+                # Clear conversation state BEFORE showing success & rerun
                 if conversation_key in st.session_state:
                     del st.session_state[conversation_key]
                 
-                # Set flag to prevent re-entering visit mode
-                st.session_state[f"visit_saved_{client_id}"] = True
+                # Clear visit_saved flag (in case it exists from before)
+                if f"visit_saved_{client_id}" in st.session_state:
+                    del st.session_state[f"visit_saved_{client_id}"]
                 
                 st.success("✅ Wizyta zapisana!")
-                st.info("🔄 Odświeżanie widoku...")
-                time.sleep(1)
                 
-                st.rerun()
+                # Show summary before continuing
+                st.markdown("---")
+                st.markdown("### 📊 Podsumowanie wizyty:")
+                st.markdown(f"**Reputacja:** {client.get('reputation', 0)}/100 (+{reputation_change})")
+                st.markdown(f"**Poziom znajomości:** {client.get('knowledge_level', 0)}⭐ ")
+                st.markdown(f"**Status:** {client.get('status', 'PROSPECT')}")
+                st.markdown(f"**Energia:** {new_energy}% (-{energy_cost}%) 🔋")
+                if total_value > 0:
+                    st.markdown(f"**Zamówienie:** {total_value:.2f} PLN")
+                st.markdown("---")
+                
+                # Check if there are more visits on route
+                if hasattr(st.session_state, 'planned_route') and st.session_state.planned_route:
+                    remaining = [cid for cid in st.session_state.planned_route if cid not in st.session_state.completed_visits_today]
+                    if remaining:
+                        next_client_name = clients.get(remaining[0], {}).get('name', remaining[0])
+                        if st.button("➡️ Przejdź do kolejnej wizyty", type="primary", use_container_width=True):
+                            st.rerun()
+                    else:
+                        st.info("🎉 Wszystkie wizyty na trasie ukończone!")
+                        if st.button("🏠 Wróć do listy klientów", type="primary", use_container_width=True):
+                            st.rerun()
+                else:
+                    if st.button("🏠 Wróć do listy klientów", type="primary", use_container_width=True):
+                        st.rerun()
             except Exception as e:
                 st.error(f"Błąd zapisu: {str(e)}")
                 import traceback

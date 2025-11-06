@@ -895,3 +895,137 @@ JSON:"""
         import traceback
         traceback.print_exc()
         return {}
+
+
+def extract_discovered_info_from_conversation(
+    conversation_messages: List[Dict],
+    client: Dict,
+    current_discovered_info: Dict
+) -> Dict:
+    """
+    Wyciąga informacje o kliencie z rozmowy używając AI.
+    Analizuje co klient powiedział i wypełnia pola w discovered_info.
+    
+    Args:
+        conversation_messages: Lista wiadomości z rozmowy
+        client: Dane klienta
+        current_discovered_info: Aktualne odkryte informacje (FMCGClientDiscoveredInfo)
+    
+    Returns:
+        Dict z nowymi odkryciami (tylko pola, które zostały odkryte w tej rozmowie)
+    """
+    # Initialize Gemini
+    if not initialize_gemini():
+        print("⚠️ Gemini API niedostępne - nie można wyciągnąć informacji")
+        return {}
+    
+    # Build conversation transcript
+    conversation_text = "\n\n".join([
+        f"{'Handlowiec' if msg['role'] == 'player' else 'Klient'}: {msg['content']}"
+        for msg in conversation_messages
+    ])
+    
+    client_name = client.get("name", "klient")
+    
+    # Prompt for AI to extract discovered information
+    extraction_prompt = f"""
+Jesteś ekspertem od analizy rozmów handlowych FMCG. 
+Przeanalizuj poniższą rozmowę i wyciągnij TYLKO te informacje, które KLIENT faktycznie powiedział lub wyraźnie zasugerował.
+
+KLIENT: {client_name}
+
+ROZMOWA:
+{conversation_text}
+
+ZADANIE:
+Wypełnij poniższe pola TYLKO jeśli klient wyraźnie przekazał te informacje w rozmowie.
+Jeśli klient NIE powiedział czegoś - zostaw pole jako null.
+
+Odpowiedz w formacie JSON (bez markdown):
+{{
+    "personality_description": "string lub null - Jak klient opisuje siebie, swój styl prowadzenia biznesu",
+    "decision_priorities": ["string", ...] lub null - Co jest dla klienta najważniejsze (cena, jakość, wsparcie itp.)",
+    "main_customers": "string lub null - Kto kupuje w jego sklepie (seniorzy, rodziny, młodzież)",
+    "customer_demographics": "string lub null - Demografia klientów sklepu",
+    "competing_brands": ["string", ...] lub null - Jakie marki konkurencyjne ma na półce",
+    "shelf_space_constraints": "string lub null - Ograniczenia półkowe, które klient wspomniał",
+    "pain_points": ["string", ...] lub null - Problemy, którymi się dzielił",
+    "business_goals": ["string", ...] lub null - Cele biznesowe, które wspomniał",
+    "typical_order_value": "string lub null - Typowa wartość zamówienia (jeśli powiedział)",
+    "preferred_frequency": "string lub null - Jak często chce zamawiać",
+    "payment_terms": "string lub null - Preferowane warunki płatności",
+    "delivery_preferences": "string lub null - Kiedy woli dostawy",
+    "best_selling_categories": ["string", ...] lub null - Które kategorie sprzedają się najlepiej",
+    "seasonal_patterns": "string lub null - Wzorce sezonowe, które opisał",
+    "trust_level": "string lub null - Oceń poziom zaufania do handlowca (Sceptyczny/Otwarty/Zaufany partner)",
+    "preferred_communication": "string lub null - Styl komunikacji klienta",
+    "ketchup_potential_kg_monthly": number lub null - Ile kg ketchupu miesięcznie sprzedaje (jeśli powiedział konkretną liczbę lub można oszacować z kontekstu)
+}}
+
+WAŻNE:
+- Wypełniaj TYLKO pola, gdzie klient faktycznie coś powiedział
+- Nie wymyślaj informacji
+- Jeśli klient nie wspomniał o czymś - daj null
+- Dla ketchup_potential_kg_monthly: szukaj konkretnych liczb (np. "sprzedaję 50kg miesięcznie", "2 kartony tygodniowo")
+
+Odpowiedź (tylko JSON):
+"""
+    
+    try:
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        
+        response = model.generate_content(
+            extraction_prompt,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.2,  # Low temperature for factual extraction
+                top_p=0.9,
+                max_output_tokens=800,
+            )
+        )
+        
+        # Parse JSON response
+        import json
+        import re
+        
+        # Get response text safely
+        try:
+            response_text = response.text.strip()
+        except AttributeError:
+            print(f"❌ Błąd: response nie ma atrybutu 'text'")
+            return {}
+        
+        # Remove markdown code blocks if present
+        response_text = re.sub(r'```json\s*', '', response_text)
+        response_text = re.sub(r'```\s*$', '', response_text)
+        response_text = response_text.strip()
+        
+        try:
+            extracted = json.loads(response_text)
+        except json.JSONDecodeError as json_err:
+            print(f"❌ Błąd parsowania JSON w extract_discovered_info: {json_err}")
+            print(f"Response text: {response_text[:300]}...")
+            return {}
+        
+        # Filter out null values - zwracamy tylko faktycznie odkryte pola
+        discoveries = {}
+        for field, value in extracted.items():
+            if value is not None and value != "" and value != []:
+                # Special handling for ketchup potential
+                if field == "ketchup_potential_kg_monthly" and isinstance(value, (int, float)) and value > 0:
+                    # Convert to sales_capacity_discovered format
+                    discoveries["sales_capacity_discovered_Food"] = {
+                        "weekly_sales_volume": int(value / 4),  # monthly to weekly
+                        "monthly_volume_kg": int(value),
+                        "discovered_date": datetime.now().isoformat(),
+                        "discovered_method": "conversation"
+                    }
+                else:
+                    discoveries[field] = value
+        
+        return discoveries
+        
+    except Exception as e:
+        print(f"❌ Błąd wyciągania informacji z rozmowy: {e}")
+        import traceback
+        traceback.print_exc()
+        return {}

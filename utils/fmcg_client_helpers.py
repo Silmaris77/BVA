@@ -23,7 +23,7 @@ def create_new_client_entry(client_id: str, status: str = "prospect") -> Dict:
         "status": status,
         
         # Reputacja i wizyty
-        "reputation": 0,  # -100 do +100
+        "reputation": 50,  # 0-100, wartość początkowa 50 (neutralna)
         "last_visit_date": None,
         "visit_frequency_required": 14,  # dni
         "next_visit_due": None,
@@ -273,33 +273,33 @@ def get_reputation_status(reputation: int) -> Dict:
     Zwraca status reputacji z kolorami i emoji
     
     Args:
-        reputation: Wartość reputacji (-100 do +100)
+        reputation: Wartość reputacji (0 do 100, neutralna = 50)
     
     Returns:
-        Dict z label, color, emoji, progress (0-1)
+        Dict z label, color, emoji, progress (0-100%)
     """
-    if reputation <= -50:
+    if reputation < 20:
         return {
             "label": "LOST",
             "color": "#ef4444",
             "emoji": "💀",
-            "progress": (reputation + 100) / 2,  # 0% to 25%
+            "progress": reputation,  # 0-20%
             "description": "Klient utracony - krytyczna reputacja"
         }
-    elif reputation < 0:
+    elif reputation < 40:
         return {
             "label": "AT RISK",
             "color": "#f97316",
             "emoji": "⚠️",
-            "progress": (reputation + 100) / 2,  # 25% to 50%
+            "progress": reputation,  # 20-40%
             "description": "Zagrożenie utratą klienta"
         }
-    elif reputation < 50:
+    elif reputation < 60:
         return {
             "label": "NEUTRAL",
             "color": "#eab308",
             "emoji": "😐",
-            "progress": (reputation + 100) / 2,  # 50% to <75%
+            "progress": reputation,  # 40-60% (50 = środek)
             "description": "Neutralna relacja - potencjał wzrostu"
         }
     elif reputation < 80:
@@ -307,7 +307,7 @@ def get_reputation_status(reputation: int) -> Dict:
             "label": "GOOD",
             "color": "#22c55e",
             "emoji": "😊",
-            "progress": (reputation + 100) / 2,  # 75% to <90%
+            "progress": reputation,  # 60-80%
             "description": "Dobra współpraca"
         }
     else:
@@ -315,6 +315,6 @@ def get_reputation_status(reputation: int) -> Dict:
             "label": "CHAMPION",
             "color": "#3b82f6",
             "emoji": "🏆",
-            "progress": (reputation + 100) / 2,  # 90% to 100%
+            "progress": reputation,  # 80-100%
             "description": "Klient-ambasador marki!"
         }

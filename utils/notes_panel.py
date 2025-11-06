@@ -13,17 +13,21 @@ def render_notes_panel(
     active_tab: str = "product_card",
     scenario_context: Optional[str] = None,
     client_name: Optional[str] = None,
-    key_prefix: str = "notes"
+    key_prefix: str = "notes",
+    available_products: Optional[List[Dict]] = None,
+    available_clients: Optional[List[Dict]] = None
 ):
     """
     Renderuje floating panel z notatkami gracza
     
     Args:
         user_id: ID użytkownika
-        active_tab: Domyślnie aktywna zakładka ('product_card', 'elevator_pitch', 'client_profile')
+        active_tab: Domyślnie aktywna zakładka
         scenario_context: Opcjonalny kontekst scenariusza (do auto-sugestii)
         client_name: Nazwa klienta (do filtrowania notatek)
         key_prefix: Prefix dla kluczy widgetów (aby uniknąć duplikatów)
+        available_products: Lista dostępnych produktów (dla menu rozwijanego)
+        available_clients: Lista dostępnych klientów (dla menu rozwijanego)
     """
     
     # Inicjalizacja repository
@@ -32,11 +36,14 @@ def render_notes_panel(
     # Panel header
     st.markdown("### 📔 Notatnik")
     
-    # Zakładki
+    # Zakładki - ROZSZERZONE
     tab_mapping = {
         "📦 Produkty": "product_card",
         "🎯 Pitches": "elevator_pitch",
-        "👤 Klient": "client_profile"
+        "👤 Klient": "client_profile",
+        "💡 Pomysły": "visit_ideas",
+        "📊 Analiza": "market_analysis",
+        "🎓 Szkolenie": "training_notes"
     }
     
     selected_tab = st.tabs(list(tab_mapping.keys()))
@@ -60,7 +67,14 @@ def render_notes_panel(
             
             # Formularz dodawania (jeśli aktywny)
             if st.session_state.get(f'{key_prefix}_adding_note_{category}', False):
-                _render_add_note_form(user_id, category, repo, key_prefix)
+                _render_add_note_form(
+                    user_id, 
+                    category, 
+                    repo, 
+                    key_prefix,
+                    available_products=available_products if category == "product_card" else None,
+                    available_clients=available_clients if category == "client_profile" else None
+                )
 
 
 def _render_note_item(note: Dict, repo: NotesRepository, user_id: int, key_prefix: str = "notes"):
@@ -110,13 +124,43 @@ def _render_note_item(note: Dict, repo: NotesRepository, user_id: int, key_prefi
         st.markdown("---")
 
 
-def _render_add_note_form(user_id: int, category: str, repo: NotesRepository, key_prefix: str = "notes"):
-    """Renderuje formularz dodawania notatki"""
+def _render_add_note_form(user_id: int, category: str, repo: NotesRepository, key_prefix: str = "notes", 
+                          available_products=None, available_clients=None):
+    """Renderuje formularz dodawania notatki z opcjonalnymi menu rozwijalnymi"""
     
     with st.form(key=f"{key_prefix}_add_note_form_{category}"):
         st.markdown("**➕ Nowa notatka**")
         
         title = st.text_input("Tytuł", key=f"{key_prefix}_note_title_{category}")
+        
+        # Menu rozwijane dla produktów
+        selected_product_id = None
+        if category == "product_card" and available_products:
+            product_options = {f"{p.get('name', 'Nieznany')} ({p.get('sku', '')})" : p.get('id') for p in available_products}
+            product_options = {"-- Wybierz produkt (opcjonalnie) --": None, **product_options}
+            
+            selected_product_name = st.selectbox(
+                "Produkt",
+                options=list(product_options.keys()),
+                key=f"{key_prefix}_note_product_{category}",
+                help="Powiąż notatkę z konkretnym produktem"
+            )
+            selected_product_id = product_options.get(selected_product_name)
+        
+        # Menu rozwijane dla klientów
+        selected_client_id = None
+        if category == "client_profile" and available_clients:
+            client_options = {f"{c.get('name', 'Nieznany')} ({c.get('id', '')})" : c.get('id') for c in available_clients}
+            client_options = {"-- Wybierz klienta (opcjonalnie) --": None, **client_options}
+            
+            selected_client_name = st.selectbox(
+                "Klient",
+                options=list(client_options.keys()),
+                key=f"{key_prefix}_note_client_{category}",
+                help="Powiąż notatkę z konkretnym klientem"
+            )
+            selected_client_id = client_options.get(selected_client_name)
+        
         content = st.text_area("Treść", key=f"{key_prefix}_note_content_{category}", height=100)
         
         tags_input = st.text_input(
@@ -137,12 +181,14 @@ def _render_add_note_form(user_id: int, category: str, repo: NotesRepository, ke
             # Parsuj tagi
             tags = [tag.strip() for tag in tags_input.split(",") if tag.strip()]
             
-            # Utwórz notatkę
+            # Utwórz notatkę z powiązaniami
             repo.create_note(
                 user_id=user_id,
                 category=category,
                 title=title,
                 content=content,
+                related_product_id=selected_product_id,  # NOWE!
+                related_client_id=selected_client_id,    # NOWE!
                 is_pinned=is_pinned,
                 tags=tags if tags else None
             )
