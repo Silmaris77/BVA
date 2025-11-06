@@ -3,10 +3,10 @@
 # Zapewniamy, że moduł config jest rozpoznawany jako package
 __all__ = ['settings']
 
-# Import głównych konfiguracji
+# Bezpieczny import - nie rzucamy błędów jeśli import nie działa
 try:
     from .settings import PAGE_CONFIG, XP_LEVELS, LESSONS_FILE_PATH
-except ImportError:
+except Exception:
     # Fallback w przypadku problemów z importem
     PAGE_CONFIG = {
         "page_title": "BrainventureAcademy",

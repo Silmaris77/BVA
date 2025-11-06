@@ -439,7 +439,6 @@ class UserRepository(BaseRepository):
             # Dodaj 'money' jeśli brakuje (saldo firmy)
             if "money" not in game_data:
                 game_data["money"] = 0
-                print(f"Migration: Added 'money' field to {industry_id} game for user")
             
             # Dodaj 'financial_settings' jeśli brakuje
             if "financial_settings" not in game_data:
@@ -451,7 +450,6 @@ class UserRepository(BaseRepository):
                     "auto_transfer_threshold": 30000,
                     "auto_transfer_amount": 5000
                 }
-                print(f"Migration: Added 'financial_settings' to {industry_id} game")
             
             # Dodaj 'notifications' jeśli brakuje
             if "notifications" not in game_data:
@@ -465,21 +463,17 @@ class UserRepository(BaseRepository):
                     "employee_alerts": True,
                     "reputation_alerts": True
                 }
-                print(f"Migration: Added 'notifications' to {industry_id} game")
             
             # Dodaj pola w 'firm' jeśli brakuje
             if "firm" in game_data:
                 if "color_scheme" not in game_data["firm"]:
                     game_data["firm"]["color_scheme"] = "purple"
-                    print(f"Migration: Added 'color_scheme' to firm in {industry_id} game")
                 
                 if "motto" not in game_data["firm"]:
                     game_data["firm"]["motto"] = ""
-                    print(f"Migration: Added 'motto' to firm in {industry_id} game")
                 
                 if "founded" not in game_data["firm"]:
                     game_data["firm"]["founded"] = datetime.now().strftime("%Y-%m-%d")
-                    print(f"Migration: Added 'founded' to firm in {industry_id} game")
         
         return user_data
     
