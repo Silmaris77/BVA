@@ -20,6 +20,7 @@ class FMCGClientData(TypedDict):
     name: str
     type: str  # "Sklep osiedlowy", "Dyskont", "Sieć lokalna"
     segment: str  # "traditional_trade", "modern_trade", "convenience"
+    avatar: str  # Unikalne emoji właściciela (np. "👩", "👨", "👴")
     
     # Location
     location: str  # "Warszawa, Ursynów, Os. Kabaty"
@@ -307,7 +308,8 @@ def create_new_client(
     owner_name: str,
     potential: int,
     size_sqm: int = 80,
-    employees: int = 2
+    employees: int = 2,
+    avatar: str = "👤"  # Domyślny avatar jeśli nie podano
 ) -> FMCGClientData:
     """Tworzy nowego klienta w statusie PROSPECT"""
     # Import sales_capacity generator
@@ -322,6 +324,7 @@ def create_new_client(
         "latitude": lat,
         "longitude": lon,
         "distance_from_base": distance,
+        "avatar": avatar,  # Unikalne emoji twarzy właściciela
         "status": "PROSPECT",
         "status_since": datetime.now().isoformat(),
         "interest_level": 30,  # Starting interest

@@ -63,18 +63,54 @@ def create_financial_chart(bg_data, period=7, cumulative=False):
         except Exception as e:
             continue
     
-    # Stwórz range dat dla wybranego okresu
+    # Pobierz datę założenia firmy (founded) jako punkt startowy
+    firm_founded_str = bg_data.get("firm", {}).get("founded")
+    
+    if firm_founded_str:
+        try:
+            # Firma ma datę założenia - użyj jej jako start
+            firm_founded = datetime.strptime(firm_founded_str, "%Y-%m-%d")
+        except (ValueError, TypeError):
+            # Jeśli format niepoprawny, użyj pierwszej transakcji lub dzisiaj
+            firm_founded = None
+    else:
+        firm_founded = None
+    
+    # Jeśli brak daty założenia, użyj pierwszej transakcji
+    if not firm_founded and daily_data:
+        sorted_dates = sorted(daily_data.keys())
+        if sorted_dates:
+            firm_founded = datetime.strptime(sorted_dates[0], "%Y-%m-%d")
+    
+    # Jeśli wciąż brak daty, użyj dzisiaj
+    if not firm_founded:
+        firm_founded = datetime.now()
+    
+    # Określ zakres wyświetlania
     end_date = datetime.now()
-    start_date = end_date - timedelta(days=period - 1)
+    
+    # Start = data założenia firmy (ale nie więcej niż 'period' dni wstecz)
+    max_start_date = end_date - timedelta(days=period - 1)
+    
+    if firm_founded < max_start_date:
+        # Firma jest starsza niż okres wyświetlania - pokaż tylko ostatnie X dni
+        start_date = max_start_date
+    else:
+        # Firma jest młodsza - pokaż od daty założenia
+        start_date = firm_founded
     
     dates = []
     revenues = []
     costs = []
     
-    for i in range(period):
+    # Oblicz liczbę dni do wyświetlenia
+    days_to_show = (end_date - start_date).days + 1
+    
+    for i in range(days_to_show):
         date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
         dates.append(date)
         
+        # Pobierz dane lub użyj 0 (pokazujemy wszystkie dni, nawet puste)
         day_data = daily_data.get(date, {"revenue": 0, "costs": 0})
         revenues.append(day_data["revenue"])
         costs.append(day_data["costs"])
@@ -102,8 +138,18 @@ def create_financial_chart(bg_data, period=7, cumulative=False):
         costs = costs_cum
         profits = profits_cum
     
-    # Formatuj daty (krótko)
-    dates_formatted = [datetime.strptime(d, "%Y-%m-%d").strftime("%d.%m") for d in dates]
+    # Formatuj daty na osi X (format: DD.MM np. 06.11)
+    if not dates:
+        # Zabezpieczenie - jeśli brak dat, zwróć pusty wykres
+        dates_formatted = []
+    else:
+        dates_formatted = []
+        for d in dates:
+            try:
+                date_obj = datetime.strptime(d, "%Y-%m-%d")
+                dates_formatted.append(date_obj.strftime("%d.%m"))
+            except (ValueError, TypeError):
+                dates_formatted.append(d)  # Fallback - użyj oryginalnej wartości
     
     # Twórz wykres - GRYWALIZACYJNY STYL
     fig = go.Figure()
@@ -163,7 +209,13 @@ def create_financial_chart(bg_data, period=7, cumulative=False):
     ))
     
     # Layout - PROFESJONALNY I GRYWALIZACYJNY
-    title_text = f"{'📈 Wartości Skumulowane' if cumulative else '📊 Przychody i Koszty'} (ostatnie {period} dni)"
+    # Stwórz tytuł z rzeczywistym zakresem dat
+    if dates_formatted:
+        date_range = f"({dates_formatted[0]} - {dates_formatted[-1]})"
+    else:
+        date_range = ""
+    
+    title_text = f"{'📈 Wartości Skumulowane' if cumulative else '📊 Przychody i Koszty'} {date_range}"
     
     fig.update_layout(
         title=dict(
@@ -173,14 +225,17 @@ def create_financial_chart(bg_data, period=7, cumulative=False):
             xanchor='center'
         ),
         xaxis=dict(
-            title="",
+            title="Data",
+            type='category',  # Traktuj etykiety jako kategorie (tekst), nie liczby
             showgrid=True,
             gridcolor='#e2e8f0',
             gridwidth=1,
             showline=True,
             linecolor='#cbd5e1',
             linewidth=2,
-            tickfont=dict(size=12, color='#64748b', family='Arial')
+            tickfont=dict(size=11, color='#64748b', family='Arial'),
+            tickangle=-45,  # Obróć etykiety dla lepszej czytelności
+            tickmode='linear'  # Pokaż wszystkie etykiety
         ),
         yaxis=dict(
             title="",

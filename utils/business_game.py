@@ -34,7 +34,8 @@ try:
     from data.industries.fmcg_piaseczno_customers import (
         PIASECZNO_BASE,
         PIASECZNO_CUSTOMERS,
-        get_starter_clients
+        get_starter_clients,
+        CLIENT_AVATARS  # Import słownika avatarów
     )
     from data.industries.fmcg_data_schema import (
         initialize_fmcg_game_state,
@@ -450,6 +451,9 @@ def initialize_fmcg_game_new(username: str, scenario: str = "quick_start") -> Di
         # Konwertuj na format z pełnymi danymi klienta
         clients = {}
         for client_id, client_data in starter_clients_dict.items():
+            # Pobierz avatar dla klienta (unikalne emoji twarzy)
+            client_avatar = CLIENT_AVATARS.get(client_id, "👤")  # Domyślnie 👤 jeśli brak
+            
             clients[client_id] = create_new_client(
                 client_id=client_data["id"],
                 name=client_data["name"],
@@ -462,7 +466,8 @@ def initialize_fmcg_game_new(username: str, scenario: str = "quick_start") -> Di
                 owner_name=client_data.get("owner_profile", {}).get("name", client_data.get("owner", "")),
                 potential=client_data.get("potential_monthly", 2000),
                 size_sqm=client_data.get("size_sqm", 80),
-                employees=client_data.get("characteristics", {}).get("employees", 2)
+                employees=client_data.get("characteristics", {}).get("employees", 2),
+                avatar=client_avatar  # Przekaż avatar
             )
             
             # Dodaj dodatkowe dane z customer database (dla AI conversations)

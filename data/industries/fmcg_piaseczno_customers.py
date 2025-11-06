@@ -4,6 +4,35 @@ Traditional Trade: sklepy osiedlowe, kioski, małe sieci lokalne
 Modern Trade: dyskonty, supermarkety
 """
 
+# Unikalne twarze (avatary) dla każdego klienta - 25 różnych emoji
+CLIENT_AVATARS = {
+    "pias_001": "👩",  # Danuta Kowalska
+    "pias_002": "👨",  # Marek Wiśniewski
+    "pias_003": "👴",  # Pan Stanisław
+    "pias_004": "👩‍🦰",  # Katarzyna
+    "pias_005": "🧔",  # Tomasz
+    "pias_006": "👨‍🦳",  # Pan Henryk
+    "pias_007": "👩‍🦱",  # Pani Zofia
+    "pias_008": "🧑",  # Manager
+    "pias_009": "👨‍💼",  # Dyrektor
+    "pias_010": "👩‍💼",  # Kierowniczka
+    "pias_011": "👱‍♂️",  # Młody właściciel
+    "pias_012": "👱‍♀️",  # Młoda właścicielka
+    "pias_013": "🧓",  # Senior
+    "pias_014": "👵",  # Pani Senior
+    "pias_015": "👨‍🦲",  # Łysy pan
+    "pias_016": "🧑‍🦰",  # Rudy właściciel
+    "pias_017": "🧑‍🦱",  # Kręcone włosy
+    "pias_018": "👩‍🦳",  # Siwa pani
+    "pias_019": "🧑‍💼",  # Biznesmen
+    "pias_020": "👨‍🍳",  # Szef kuchni
+    "pias_021": "👩‍🔧",  # Właścicielka praktyczna
+    "pias_022": "🧑‍🏫",  # Wykształcony właściciel
+    "pias_023": "👨‍⚕️",  # Pan doktor (były)
+    "pias_024": "👩‍⚖️",  # Pani prawniczka (była)
+    "pias_025": "🧑‍🎓"   # Młody absolwent
+}
+
 # Współrzędne geograficzne Piaseczna
 PIASECZNO_BASE = {
     "name": "Piaseczno - Biuro Regionalne FreshLife",

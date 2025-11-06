@@ -385,7 +385,7 @@ def queue_for_game_master(
         "contract_id": contract["id"],
         "contract_title": contract["tytul"],
         "contract_category": contract["kategoria"],
-        "contract_difficulty": contract["poziom_trudnosci"],
+        "contract_difficulty": contract.get("trudnosc", 3),  # Poprawiono klucz
         "contract_description": contract["opis"],
         "contract_min_words": contract.get("min_slow", 300),
         "solution": solution,
