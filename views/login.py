@@ -200,7 +200,11 @@ def show_login_page():
     with col_spacer:
         if os.path.exists(logo_path):
             st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-            st.image(logo_path, use_container_width=True)
+            try:
+                st.image(logo_path, use_column_width=True)
+            except TypeError:
+                # Fallback for older Streamlit versions
+                st.image(logo_path, width=300)
             st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown('<h1 class="login-title">BrainVenture Academy</h1>', unsafe_allow_html=True)

@@ -1274,7 +1274,7 @@ def show_xp_history_section():
         # Wyświetl jako DataFrame
         import pandas as pd
         df_breakdown = pd.DataFrame(breakdown_data)
-        st.dataframe(df_breakdown, width="stretch", hide_index=True)
+        st.dataframe(df_breakdown, use_container_width=True, hide_index=True)
     
     st.markdown("---")
     
@@ -1359,7 +1359,7 @@ def show_xp_history_section():
         else:
             df_page = df
         
-        st.dataframe(df_page, width="stretch", hide_index=True)
+        st.dataframe(df_page, use_container_width=True, hide_index=True)
         
         # Statystyka na końcu
         st.caption(f"Wyświetlono {len(df_page)} z {len(table_data)} aktywności")
@@ -1410,7 +1410,7 @@ def show_weekly_reports_tab(username: str):
     col1, col2 = st.columns([3, 1])
     
     with col1:
-        if st.button("📊 Wygeneruj nowy raport tygodniowy", type="primary", width="stretch"):
+        if st.button("📊 Wygeneruj nowy raport tygodniowy", type="primary", use_container_width=True):
             with st.spinner("🤖 AI analizuje Twoją aktywność..."):
                 # Zbierz dane
                 activity_summary = get_activity_summary(username, days=7)
@@ -1438,7 +1438,7 @@ def show_weekly_reports_tab(username: str):
                 data=report_json,
                 file_name=f"raport_{username}_{datetime.now().strftime('%Y%m%d')}.json",
                 mime="application/json",
-                width="stretch"
+                use_container_width=True
             )
     
     st.markdown("---")
@@ -1573,7 +1573,7 @@ def show_who_am_i_report_tab(username: str):
     with col1:
         st.info(f"✅ Masz ukończone **{tests_count}/3** testy diagnostyczne. Kliknij przycisk aby wygenerować kompleksowy raport.")
     with col2:
-        generate_button = st.button("🔍 Wygeneruj raport", type="primary", width="stretch")
+        generate_button = st.button("🔍 Wygeneruj raport", type="primary", use_container_width=True)
     
     # Generuj raport jeśli kliknięto przycisk
     if generate_button:
@@ -2243,7 +2243,7 @@ def show_test_results():
             st.rerun()
     
     with col_close:
-        if st.button("❌ Zamknij test", width="stretch", key="close_neuroleader_from_results"):
+        if st.button("❌ Zamknij test", use_container_width=True, key="close_neuroleader_from_results"):
             st.session_state.active_tool = None
             st.rerun()
 
@@ -2334,7 +2334,7 @@ def show_current_neuroleader_type():
                     st.rerun()
             
             with col_close:
-                if st.button("❌ Zamknij test", width="stretch", key="close_neuroleader_from_type"):
+                if st.button("❌ Zamknij test", use_container_width=True, key="close_neuroleader_from_type"):
                     st.session_state.active_tool = None
                     st.rerun()
     else:
@@ -2491,7 +2491,7 @@ def generate_who_am_i_report_ui(username: str):
     # Przycisk PDF na górze
     col_left, col_right = st.columns([3, 1])
     with col_right:
-        if st.button("📥 Pobierz PDF", type="secondary", width="stretch"):
+        if st.button("📥 Pobierz PDF", type="secondary", use_container_width=True):
             with st.spinner("Generuję PDF..."):
                 try:
                     pdf_bytes = generate_who_am_i_pdf(profile_data)
@@ -2500,7 +2500,7 @@ def generate_who_am_i_report_ui(username: str):
                         data=pdf_bytes,
                         file_name=f"Kim_Jestem_{username}_{datetime.now().strftime('%Y%m%d')}.pdf",
                         mime="application/pdf",
-                        width="stretch"
+                        use_container_width=True
                     )
                 except Exception as e:
                     st.error(f"❌ Błąd: {str(e)}")

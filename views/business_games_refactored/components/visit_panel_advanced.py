@@ -57,7 +57,13 @@ def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict,
     # HEADER
     # =================================================================
     
+    # Pobierz avatar właściciela
+    avatar = client.get("avatar", "👤")
+    owner_name = client.get("owner", client.get("owner_name", ""))
+    
     st.markdown(f"### 💬 Wizyta u {client_name}")
+    if owner_name:
+        st.caption(f"{avatar} Właściciel: **{owner_name}**")
     
     # Client info (compact)
     col_c1, col_c2, col_c3, col_c4 = st.columns(4)
@@ -90,7 +96,7 @@ def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict,
                 st.markdown(f"""
                 <div style='background: #f8fafc; padding: 16px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid #3b82f6;'>
                     <div style='display: flex; align-items: center; margin-bottom: 8px;'>
-                        <span style='font-size: 24px; margin-right: 8px;'>🏪</span>
+                        <span style='font-size: 24px; margin-right: 8px;'>{avatar}</span>
                         <div>
                             <div style='font-weight: 600; color: #1e293b;'>{client_name}</div>
                             <div style='font-size: 11px; color: #64748b;'>{timestamp}</div>
@@ -141,16 +147,46 @@ def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict,
         st.session_state.setdefault(transcription_version_key, 0)
         st.session_state.setdefault(last_audio_hash_key, None)
         
-        audio_data = st.audio_input(
-            "🎤 Nagrywanie...",
-            key=f"audio_input_fmcg_visit_{client_id}"
+        # Counter for recorder key to ensure fresh recorder each time
+        recorder_counter_key = f"audio_recorder_counter_{client_id}"
+        st.session_state.setdefault(recorder_counter_key, 0)
+        
+        # Audio recording with button
+        from audio_recorder_streamlit import audio_recorder
+        
+        st.markdown("#### 🎤 Nagraj swoją odpowiedź")
+        st.markdown("**Kliknij przycisk mikrofonu poniżej, mów, a następnie kliknij ponownie aby zakończyć nagrywanie.**")
+        
+        # Tip for better recording
+        st.info("💡 **Wskazówka:** Mów wyraźnie przez co najmniej 2-3 sekundy. Zbyt krótkie nagrania mogą nie zostać rozpoznane poprawnie.")
+        
+        # Display audio recorder - returns audio bytes when recording is done
+        # Use counter in key to create fresh recorder after each use
+        audio_bytes_recorded = audio_recorder(
+            text="Kliknij aby nagrać",
+            recording_color="#e74c3c",
+            neutral_color="#3498db",
+            icon_name="microphone",
+            icon_size="3x",
+            key=f"audio_recorder_{client_id}_{st.session_state[recorder_counter_key]}"
         )
+        
+        # Use recorded audio or file upload
+        audio_data = None
+        if audio_bytes_recorded:
+            # Convert bytes to file-like object
+            import io
+            audio_data = io.BytesIO(audio_bytes_recorded)
+            audio_data.name = "recording.wav"
+            st.success("✅ Nagranie zakończone! Przetwarzam...")
+            # Increment counter so next recorder is fresh
+            st.session_state[recorder_counter_key] += 1
         
         # Przetwarzanie nagrania audio (tylko jeśli to NOWE nagranie!)
         if audio_data is not None:
             import hashlib
             
-            audio_bytes = audio_data.getvalue()
+            audio_bytes = audio_data.getvalue() if hasattr(audio_data, 'getvalue') else audio_data.read()
             audio_hash = hashlib.md5(audio_bytes).hexdigest()
             
             if audio_hash != st.session_state[last_audio_hash_key]:
@@ -163,14 +199,27 @@ def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict,
                 
                 with st.spinner("🤖 Rozpoznaję mowę..."):
                     try:
-                        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+                        # Detect file extension
+                        file_ext = ".webm"
+                        if hasattr(audio_data, 'name'):
+                            if audio_data.name.endswith('.wav'):
+                                file_ext = ".wav"
+                            elif audio_data.name.endswith('.mp3'):
+                                file_ext = ".mp3"
+                            elif audio_data.name.endswith('.m4a'):
+                                file_ext = ".m4a"
+                            elif audio_data.name.endswith('.ogg'):
+                                file_ext = ".ogg"
+                        
+                        with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp_file:
                             tmp_file.write(audio_bytes)
                             tmp_path = tmp_file.name
                         
                         wav_path = None
                         try:
+                            # Convert to WAV format for speech recognition
                             audio = AudioSegment.from_file(tmp_path)
-                            wav_path = tmp_path.replace(".wav", "_converted.wav")
+                            wav_path = tmp_path.replace(file_ext, "_converted.wav")
                             audio.export(wav_path, format="wav")
                             
                             recognizer = sr.Recognizer()
@@ -209,6 +258,7 @@ Tekst do poprawy:
                                 st.session_state[transcription_key] = transcription
                             
                             st.session_state[transcription_version_key] += 1
+                            st.success("✅ Transkrypcja ukończona!")
                             
                         except sr.UnknownValueError:
                             st.error("❌ Nie udało się rozpoznać mowy. Spróbuj ponownie lub mów wyraźniej.")

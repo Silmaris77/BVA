@@ -397,7 +397,7 @@ def render_industry_card(industry_id, title, slogan, description, features, avai
     # Przycisk
     if available:
         button_label = "🎮 Kontynuuj" if has_progress else "🚀 Zacznij grę"
-        if st.button(button_label, key=f"start_{industry_id}", type="primary", width="stretch"):
+        if st.button(button_label, key=f"start_{industry_id}", type="primary", use_container_width=True):
             # Ustaw aktywną branżę
             st.session_state["selected_industry"] = industry_id
             
@@ -410,7 +410,7 @@ def render_industry_card(industry_id, title, slogan, description, features, avai
             
             st.rerun()
     else:
-        st.button("🔒 Wkrótce dostępne", key=f"locked_{industry_id}", disabled=True, width="stretch")
+        st.button("🔒 Wkrótce dostępne", key=f"locked_{industry_id}", disabled=True, use_container_width=True)
     
     st.markdown("<div style='margin: 20px 0;'></div>", unsafe_allow_html=True)
 
@@ -3748,7 +3748,7 @@ def render_employee_card(employee, username, user_data, bg_data, industry_id="co
         """, unsafe_allow_html=True)
         
         # Przycisk zwolnienia
-        if st.button("🗑️ Zwolnij", key=f"fire_{employee['id']}", type="secondary", width="stretch"):
+        if st.button("🗑️ Zwolnij", key=f"fire_{employee['id']}", type="secondary", use_container_width=True):
             updated_user_data, success, message = fire_employee(user_data, employee['id'], industry_id)
             if success:
                 user_data.update(updated_user_data)
@@ -3784,9 +3784,9 @@ def render_hire_card(emp_type, emp_data, username, user_data, bg_data, industry_
         # Przycisk zatrudnienia
         if not can_hire:
             st.button("🔒 Niedostępny", key=f"hire_{emp_type}_locked", disabled=True, 
-                     help=reason, width="stretch")
+                     help=reason, use_container_width=True)
         else:
-            if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary", width="stretch"):
+            if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary", use_container_width=True):
                 updated_user_data, success, message = hire_employee(user_data, emp_type, industry_id)
                 if success:
                     user_data.update(updated_user_data)
@@ -4241,7 +4241,7 @@ def show_pl_statement(financial_data, period_type, show_comparison):
     # Stylowanie tabeli
     st.dataframe(
         df,
-        width="stretch",
+        use_container_width=True,
         hide_index=True,
         height=500
     )
@@ -4435,7 +4435,7 @@ def show_employee_roi_analysis(financial_data, bg_data):
         })
     
     df = pd.DataFrame(roi_data)
-    st.dataframe(df, width="stretch", hide_index=True)
+    st.dataframe(df, use_container_width=True, hide_index=True)
     
     # Wykres kosztów pracowników
     if employee_stats:
@@ -4513,7 +4513,7 @@ def show_category_analysis(financial_data, bg_data):
     table_data.sort(key=lambda x: float(x["Średni przychód"].replace(" 💰", "").replace(",", "")), reverse=True)
     
     df = pd.DataFrame(table_data)
-    st.dataframe(df, width="stretch", hide_index=True)
+    st.dataframe(df, use_container_width=True, hide_index=True)
     
     # Wykres słupkowy - przychody per kategoria
     import plotly.graph_objects as go
@@ -4912,7 +4912,7 @@ def render_event_choice_modal(event_id: str, event_data: dict, username: str, us
     
     for idx, (col, choice) in enumerate(zip(cols, event_data["choices"])):
         with col:
-            if st.button(choice["text"], key=f"event_choice_{event_hash}_{idx}", type="primary" if idx == 0 else "secondary", width="stretch"):
+            if st.button(choice["text"], key=f"event_choice_{event_hash}_{idx}", type="primary" if idx == 0 else "secondary", use_container_width=True):
                 # Sprawdź czy to ręczne losowanie
                 is_manual = st.session_state.get("pending_event_manual", False)
                 industry_id = st.session_state.get("selected_industry", "consulting")

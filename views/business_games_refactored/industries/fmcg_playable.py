@@ -1613,10 +1613,10 @@ def show_fmcg_playable_game(username: str):
                             if reward_items:
                                 st.success("🎁 Nagroda: " + " | ".join(reward_items))
                             
-                            # Story intro
+                            # Story intro (without nested expander - not allowed in Streamlit)
                             if task.get("story", {}).get("intro"):
-                                with st.expander("📖 Historia zadania", expanded=False):
-                                    st.markdown(task["story"]["intro"])
+                                st.markdown("**📖 Historia zadania:**")
+                                st.info(task["story"]["intro"])
                 
                 # Show completed tasks (collapsed)
                 if completed_tasks:
@@ -1676,225 +1676,236 @@ def show_fmcg_playable_game(username: str):
                         button_text = "Rozpocznij"
                         button_disabled = False
                 
-                    # Create expandable for each task
-                    with st.expander(f"{status_icon} **{task['title']}**", expanded=(task_status["status"] != "completed" and pending <= 2)):
-                        st.markdown(f"**Opis:** {task['description']}")
-                        st.caption(f"⏱️ Deadline: {task.get('deadline', 'Brak')}")
-                        st.caption(f"🎯 Wymagane do: {task.get('required_for', 'Ogólny postęp')}")
+                    # Display task as a card (not nested expander)
+                    st.markdown(f"""
+                    <div style='background: {"#fff3cd" if task_status["status"] == "submitted" else "#f8f9fa"}; 
+                                 border-left: 4px solid {status_color}; 
+                                 padding: 16px; 
+                                 margin-bottom: 16px; 
+                                 border-radius: 8px;'>
+                        <div style='font-size: 18px; font-weight: 600; margin-bottom: 8px;'>
+                            {status_icon} {task['title']}
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
                     
-                        # Show task-specific content based on type
-                        if task_id == "task_company":
-                            st.markdown("""
-                            **Informacje do przeczytania:**
-                            - 🏢 Firma: FreshLife
-                            - 📦 Główne produkty: świeże owoce, warzywa, produkty ekologiczne
-                            - 🎯 Misja: Dostawa świeżości prosto do biznesów
-                            - 💡 USP: Dostawa w 24h, 100% świeżości gwarantowane
-                            """)
+                    st.markdown(f"**Opis:** {task['description']}")
+                    st.caption(f"⏱️ Deadline: {task.get('deadline', 'Brak')}")
+                    st.caption(f"🎯 Wymagane do: {task.get('required_for', 'Ogólny postęp')}")
                     
-                        elif task_id == "task_territory":
-                            # Show mini-map preview
-                            territory_lat = game_state.get("territory_latitude", 52.0846)
-                            territory_lon = game_state.get("territory_longitude", 21.0250)
-                        
-                            # Note: folium already imported at top of file
-                        
-                            mini_map = folium.Map(
-                                location=[territory_lat, territory_lon],
-                                zoom_start=12,
-                                tiles="OpenStreetMap",
-                                width=600,
-                                height=300
-                            )
-                        
-                            # Add base marker
-                            folium.Marker(
-                                [territory_lat, territory_lon],
-                                popup="Twoja baza",
-                                icon=folium.Icon(color="red", icon="home")
-                            ).add_to(mini_map)
-                        
-                            # Add client markers (sample)
-                            client_count = len([c for c in clients.values() if c.get("status") == "PROSPECT"])
-                            folium.CircleMarker(
-                                [territory_lat + 0.01, territory_lon + 0.01],
-                                radius=5,
-                                popup=f"{client_count} klientów w okolicy",
-                                color="blue",
-                                fill=True
-                            ).add_to(mini_map)
-                        
-                            folium_static(mini_map)
-                        
-                            st.markdown(f"""
-                            **Twoje terytorium:**
-                            - 📍 Baza: {game_state.get('territory_name', 'Piaseczno')}
-                            - 👥 Klienci: {len(clients)} punktów
-                            - 🎯 Status: {status_summary.get("PROSPECT", 0)} prospektów, {status_summary.get("ACTIVE", 0)} aktywnych
-                            """)
+                    # Show task-specific content based on type
+                    if task_id == "task_company":
+                        st.markdown("""
+                        **Informacje do przeczytania:**
+                        - 🏢 Firma: FreshLife
+                        - 📦 Główne produkty: świeże owoce, warzywa, produkty ekologiczne
+                        - 🎯 Misja: Dostawa świeżości prosto do biznesów
+                        - 💡 USP: Dostawa w 24h, 100% świeżości gwarantowane
+                        """)
                     
-                        elif task_id == "task_product":
-                            st.markdown("""
-                            **Przykładowe produkty FreshLife:**
-                            - 🥗 Mixy sałat premium
-                            - 🍎 Owoce sezonowe
-                            - 🥕 Warzywa organiczne
-                            - 🌿 Zioła świeże
+                    elif task_id == "task_territory":
+                        # Show mini-map preview
+                        territory_lat = game_state.get("territory_latitude", 52.0846)
+                        territory_lon = game_state.get("territory_longitude", 21.0250)
                         
-                            Pełny katalog znajdziesz w zakładce 'Produkty'
-                            """)
-                    
-                        # Submission area
-                        st.markdown("---")
-                    
-                        if task_status["status"] == "completed":
-                            st.success(f"✅ **Zadanie ukończone!**")
-                            st.info("� Zobacz szczegóły w 'Historia realizacji zadań' poniżej")
-                    
-                        elif task_status["status"] == "submitted":
-                            # Show submission and allow re-edit
-                            submission_text = task_status.get("submission", "")
-                            
-                            st.warning("⏳ **Zadanie złożone** - AI nie zaakceptowało jeszcze tej odpowiedzi")
-                            
-                            # Show previous submission
-                            with st.expander("� Twoja poprzednia odpowiedź", expanded=False):
-                                st.markdown(submission_text)
-                            
-                            # Re-evaluation button
-                            col_check, col_resubmit = st.columns([1, 1])
+                        # Note: folium already imported at top of file
                         
-                            with col_check:
-                                if st.button("🔍 Sprawdź ponownie AI", key=f"check_{task_id}", use_container_width=True):
-                                    # AI evaluation
-                                    with st.spinner("🤖 AI ocenia Twoje rozwiązanie..."):
-                                        feedback, is_accepted = evaluate_task_with_ai(task_id, submission_text, task)
+                        mini_map = folium.Map(
+                            location=[territory_lat, territory_lon],
+                            zoom_start=12,
+                            tiles="OpenStreetMap",
+                            width=600,
+                            height=300
+                        )
+                        
+                        # Add base marker
+                        folium.Marker(
+                            [territory_lat, territory_lon],
+                            popup="Twoja baza",
+                            icon=folium.Icon(color="red", icon="home")
+                        ).add_to(mini_map)
+                        
+                        # Add client markers (sample)
+                        client_count = len([c for c in clients.values() if c.get("status") == "PROSPECT"])
+                        folium.CircleMarker(
+                            [territory_lat + 0.01, territory_lon + 0.01],
+                            radius=5,
+                            popup=f"{client_count} klientów w okolicy",
+                            color="blue",
+                            fill=True
+                        ).add_to(mini_map)
+                        
+                        folium_static(mini_map)
+                        
+                        st.markdown(f"""
+                        **Twoje terytorium:**
+                        - 📍 Baza: {game_state.get('territory_name', 'Piaseczno')}
+                        - 👥 Klienci: {len(clients)} punktów
+                        - 🎯 Status: {status_summary.get("PROSPECT", 0)} prospektów, {status_summary.get("ACTIVE", 0)} aktywnych
+                        """)
+                    
+                    elif task_id == "task_product":
+                        st.markdown("""
+                        **Przykładowe produkty FreshLife:**
+                        - 🥗 Mixy sałat premium
+                        - 🍎 Owoce sezonowe
+                        - 🥕 Warzywa organiczne
+                        - 🌿 Zioła świeże
+                        
+                        Pełny katalog znajdziesz w zakładce 'Produkty'
+                        """)
+                    
+                    # Submission area
+                    st.markdown("---")
+                    
+                    if task_status["status"] == "completed":
+                        st.success(f"✅ **Zadanie ukończone!**")
+                        st.info("📚 Zobacz szczegóły w 'Historia realizacji zadań' poniżej")
+                    
+                    elif task_status["status"] == "submitted":
+                        # Show submission and allow re-edit
+                        submission_text = task_status.get("submission", "")
+                        
+                        st.warning("⏳ **Zadanie złożone** - AI nie zaakceptowało jeszcze tej odpowiedzi")
+                        
+                        # Show previous submission (without nested expander)
+                        st.markdown("**💬 Twoja poprzednia odpowiedź:**")
+                        st.info(submission_text)
+                        
+                        # Re-evaluation button
+                        col_check, col_resubmit = st.columns([1, 1])
+                        
+                        with col_check:
+                            if st.button("🔍 Sprawdź ponownie AI", key=f"check_{task_id}", use_container_width=True):
+                                # AI evaluation
+                                with st.spinner("🤖 AI ocenia Twoje rozwiązanie..."):
+                                    feedback, is_accepted = evaluate_task_with_ai(task_id, submission_text, task)
+                                
+                                if is_accepted:
+                                    complete_task(st.session_state, task_id, feedback=feedback)
                                     
-                                    if is_accepted:
-                                        complete_task(st.session_state, task_id, feedback=feedback)
-                                        
-                                        # Update Company Reputation
-                                        from utils.reputation_system import (
-                                            calculate_company_reputation,
-                                            calculate_overall_rating,
-                                            get_tier
-                                        )
-                                        
-                                        if "reputation" not in game_state:
-                                            game_state["reputation"] = {
-                                                "company": {"task_performance": 0},
-                                                "overall_rating": 0,
-                                                "tier": "Trainee"
-                                            }
-                                        
-                                        if "task_performance" not in game_state["reputation"]["company"]:
-                                            game_state["reputation"]["company"]["task_performance"] = 0
-                                        
-                                        game_state["reputation"]["company"]["task_performance"] = min(
-                                            game_state["reputation"]["company"]["task_performance"] + 5,
-                                            15
-                                        )
-                                        
-                                        company_rep = calculate_company_reputation(game_state)
-                                        game_state["reputation"]["company_reputation"] = company_rep
-                                        
-                                        overall = calculate_overall_rating(game_state, clients)
-                                        game_state["reputation"]["overall_rating"] = overall
-                                        
-                                        tier = get_tier(overall)
-                                        game_state["reputation"]["tier"] = tier
-                                        
-                                        # Persist updated reputation to database
-                                        try:
-                                            update_fmcg_game_state_sql(username, game_state, clients)
-                                        except Exception as e:
-                                            st.warning(f"⚠️ Nie udało się zapisać postępu: {e}")
-                                        
-                                        st.success("🎉 **Zadanie zaakceptowane!**")
-                                        st.balloons()
-                                        st.rerun()
-                                    else:
-                                        st.warning("⚠️ **Wymaga poprawek**")
-                                        st.markdown(f"**Feedback:** {feedback}")
-                                        st.info("Kliknij '🔄 Edytuj odpowiedź' aby poprawić")
-                        
-                            with col_resubmit:
-                                if st.button("🔄 Edytuj odpowiedź", key=f"resub_{task_id}", use_container_width=True):
-                                    # Reset task to allow editing
-                                    if "completed_tasks" in st.session_state and task_id in st.session_state.completed_tasks:
-                                        del st.session_state.completed_tasks[task_id]
+                                    # Update Company Reputation
+                                    from utils.reputation_system import (
+                                        calculate_company_reputation,
+                                        calculate_overall_rating,
+                                        get_tier
+                                    )
+                                    
+                                    if "reputation" not in game_state:
+                                        game_state["reputation"] = {
+                                            "company": {"task_performance": 0},
+                                            "overall_rating": 0,
+                                            "tier": "Trainee"
+                                        }
+                                    
+                                    if "task_performance" not in game_state["reputation"]["company"]:
+                                        game_state["reputation"]["company"]["task_performance"] = 0
+                                    
+                                    game_state["reputation"]["company"]["task_performance"] = min(
+                                        game_state["reputation"]["company"]["task_performance"] + 5,
+                                        15
+                                    )
+                                    
+                                    company_rep = calculate_company_reputation(game_state)
+                                    game_state["reputation"]["company_reputation"] = company_rep
+                                    
+                                    overall = calculate_overall_rating(game_state, clients)
+                                    game_state["reputation"]["overall_rating"] = overall
+                                    
+                                    tier = get_tier(overall)
+                                    game_state["reputation"]["tier"] = tier
+                                    
+                                    # Persist updated reputation to database
+                                    try:
+                                        update_fmcg_game_state_sql(username, game_state, clients)
+                                    except Exception as e:
+                                        st.warning(f"⚠️ Nie udało się zapisać postępu: {e}")
+                                    
+                                    st.success("🎉 **Zadanie zaakceptowane!**")
+                                    st.balloons()
                                     st.rerun()
-                    
-                        else:
-                            # Input area for submission
-                            user_answer = st.text_area(
-                                "Twoja odpowiedź:",
-                                placeholder="Napisz krótkie podsumowanie tego, czego się nauczyłeś...",
-                                key=f"answer_{task_id}",
-                                height=100
-                            )
+                                else:
+                                    st.warning("⚠️ **Wymaga poprawek**")
+                                    st.markdown(f"**Feedback:** {feedback}")
+                                    st.info("Kliknij '🔄 Edytuj odpowiedź' aby poprawić")
                         
-                            if st.button(f"📤 Złóż zadanie", key=f"submit_{task_id}", type="primary", use_container_width=True):
-                                if user_answer and len(user_answer) >= 10:
-                                    # Submit task first
-                                    submit_task(st.session_state, task_id, user_answer)
+                        with col_resubmit:
+                            if st.button("🔄 Edytuj odpowiedź", key=f"resub_{task_id}", use_container_width=True):
+                                # Reset task to allow editing
+                                if "completed_tasks" in st.session_state and task_id in st.session_state.completed_tasks:
+                                    del st.session_state.completed_tasks[task_id]
+                                st.rerun()
+                    
+                    else:
+                        # Input area for submission
+                        user_answer = st.text_area(
+                            "Twoja odpowiedź:",
+                            placeholder="Napisz krótkie podsumowanie tego, czego się nauczyłeś...",
+                            key=f"answer_{task_id}",
+                            height=100
+                        )
+                        
+                        if st.button(f"📤 Złóż zadanie", key=f"submit_{task_id}", type="primary", use_container_width=True):
+                            if user_answer and len(user_answer) >= 10:
+                                # Submit task first
+                                submit_task(st.session_state, task_id, user_answer)
+                                
+                                # Immediate AI evaluation
+                                with st.spinner("🤖 AI ocenia Twoje rozwiązanie..."):
+                                    feedback, is_accepted = evaluate_task_with_ai(task_id, user_answer, task)
+                                
+                                if is_accepted:
+                                    # Complete task immediately
+                                    complete_task(st.session_state, task_id, feedback=feedback)
                                     
-                                    # Immediate AI evaluation
-                                    with st.spinner("🤖 AI ocenia Twoje rozwiązanie..."):
-                                        feedback, is_accepted = evaluate_task_with_ai(task_id, user_answer, task)
+                                    # Update Company Reputation - Task Performance component
+                                    from utils.reputation_system import (
+                                        calculate_company_reputation,
+                                        calculate_overall_rating,
+                                        get_tier
+                                    )
                                     
-                                    if is_accepted:
-                                        # Complete task immediately
-                                        complete_task(st.session_state, task_id, feedback=feedback)
-                                        
-                                        # Update Company Reputation - Task Performance component
-                                        from utils.reputation_system import (
-                                            calculate_company_reputation,
-                                            calculate_overall_rating,
-                                            get_tier
-                                        )
-                                        
-                                        # Boost task_performance component by 5 points per completed task
-                                        if "reputation" not in game_state:
-                                            game_state["reputation"] = {
-                                                "company": {"task_performance": 0},
-                                                "overall_rating": 0,
-                                                "tier": "Trainee"
-                                            }
-                                        
-                                        if "task_performance" not in game_state["reputation"]["company"]:
-                                            game_state["reputation"]["company"]["task_performance"] = 0
-                                        
-                                        # Add 5 points per completed onboarding task (max 15 for 3 tasks)
-                                        game_state["reputation"]["company"]["task_performance"] = min(
-                                            game_state["reputation"]["company"]["task_performance"] + 5,
-                                            15  # Max 15 from onboarding tasks
-                                        )
-                                        
-                                        # Recalculate company reputation and overall rating
-                                        company_rep = calculate_company_reputation(game_state)
-                                        game_state["reputation"]["company_reputation"] = company_rep
-                                        
-                                        overall = calculate_overall_rating(game_state, clients)
-                                        game_state["reputation"]["overall_rating"] = overall
-                                        
-                                        tier = get_tier(overall)
-                                        game_state["reputation"]["tier"] = tier
-                                        
-                                        # Persist updated reputation to database
-                                        try:
-                                            update_fmcg_game_state_sql(username, game_state, clients)
-                                        except Exception as e:
-                                            st.warning(f"⚠️ Nie udało się zapisać postępu: {e}")
-                                        
-                                        st.success("🎉 **Zadanie zaakceptowane!**")
-                                        st.balloons()
-                                        
-                                        # Show reputation boost
-                                        st.success(f"📈 **Company Reputation:** +5 Task Performance → Overall Rating: {overall:.1f}/100")
-                                        
-                                        # Show feedback from task assigner
-                                        st.markdown(f"""
+                                    # Boost task_performance component by 5 points per completed task
+                                    if "reputation" not in game_state:
+                                        game_state["reputation"] = {
+                                            "company": {"task_performance": 0},
+                                            "overall_rating": 0,
+                                            "tier": "Trainee"
+                                        }
+                                    
+                                    if "task_performance" not in game_state["reputation"]["company"]:
+                                        game_state["reputation"]["company"]["task_performance"] = 0
+                                    
+                                    # Add 5 points per completed onboarding task (max 15 for 3 tasks)
+                                    game_state["reputation"]["company"]["task_performance"] = min(
+                                        game_state["reputation"]["company"]["task_performance"] + 5,
+                                        15  # Max 15 from onboarding tasks
+                                    )
+                                    
+                                    # Recalculate company reputation and overall rating
+                                    company_rep = calculate_company_reputation(game_state)
+                                    game_state["reputation"]["company_reputation"] = company_rep
+                                    
+                                    overall = calculate_overall_rating(game_state, clients)
+                                    game_state["reputation"]["overall_rating"] = overall
+                                    
+                                    tier = get_tier(overall)
+                                    game_state["reputation"]["tier"] = tier
+                                    
+                                    # Persist updated reputation to database
+                                    try:
+                                        update_fmcg_game_state_sql(username, game_state, clients)
+                                    except Exception as e:
+                                        st.warning(f"⚠️ Nie udało się zapisać postępu: {e}")
+                                    
+                                    st.success("🎉 **Zadanie zaakceptowane!**")
+                                    st.balloons()
+                                    
+                                    # Show reputation boost
+                                    st.success(f"📈 **Company Reputation:** +5 Task Performance → Overall Rating: {overall:.1f}/100")
+                                    
+                                    # Show feedback from task assigner
+                                    st.markdown(f"""
 <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
             padding: 20px; border-radius: 12px; color: white; margin: 16px 0;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);'>
@@ -1902,31 +1913,34 @@ def show_fmcg_playable_game(username: str):
     <div style='font-size: 14px; line-height: 1.6; opacity: 0.95;'>{feedback}</div>
 </div>
 """, unsafe_allow_html=True)
-                                        
-                                        # Close button to refresh
-                                        if st.button("✅ Zamknij i odśwież", key=f"close_{task_id}", type="primary", use_container_width=True):
-                                            st.rerun()
-                                    else:
-                                        # Not accepted - reset to "not submitted" state so user can edit
-                                        if "completed_tasks" in st.session_state and task_id in st.session_state.completed_tasks:
-                                            del st.session_state.completed_tasks[task_id]
-                                        
-                                        # Show feedback
-                                        st.warning("⚠️ **Wymaga poprawek**")
-                                        
-                                        st.markdown(f"""
+                                    
+                                    # Close button to refresh
+                                    if st.button("✅ Zamknij i odśwież", key=f"close_{task_id}", type="primary", use_container_width=True):
+                                        st.rerun()
+                                else:
+                                    # Not accepted - reset to "not submitted" state so user can edit
+                                    if "completed_tasks" in st.session_state and task_id in st.session_state.completed_tasks:
+                                        del st.session_state.completed_tasks[task_id]
+                                    
+                                    # Show feedback
+                                    st.warning("⚠️ **Wymaga poprawek**")
+                                    
+                                    st.markdown(f"""
 <div style='background: #fef3c7; padding: 20px; border-radius: 12px; 
             border-left: 4px solid #f59e0b; margin: 16px 0;'>
     <div style='font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #92400e;'>
-        � Feedback
+        💬 Feedback
     </div>
     <div style='font-size: 14px; line-height: 1.6; color: #78350f;'>{feedback}</div>
 </div>
 """, unsafe_allow_html=True)
-                                        
-                                        st.info("💡 Przeczytaj feedback i popraw swoją odpowiedź powyżej. Następnie kliknij ponownie 'Złóż zadanie'.")
-                                else:
-                                    st.error("❌ Odpowiedź zbyt krótka (min. 10 znaków)")
+                                    
+                                    st.info("💡 Przeczytaj feedback i popraw swoją odpowiedź powyżej. Następnie kliknij ponownie 'Złóż zadanie'.")
+                            else:
+                                st.error("❌ Odpowiedź zbyt krótka (min. 10 znaków)")
+                    
+                    # Add separator between tasks
+                    st.markdown("---")
             
                 # Summary at bottom
                 st.markdown("---")
@@ -1963,15 +1977,16 @@ def show_fmcg_playable_game(username: str):
                         reverse=True
                     )
                     
-                    for task_history in sorted_tasks:
-                        # Each completed task in its own expander
-                        with st.expander(f"✅ {task_history['title']}", expanded=False):
-                            # Task description
-                            task_description = ONBOARDING_TASKS[task_history['task_id']].get('description', '')
-                            if task_description:
-                                st.markdown("**📋 Treść zadania:**")
-                                st.markdown(task_description)
-                                st.markdown("---")
+                    for idx, task_history in enumerate(sorted_tasks):
+                        # Each completed task as a card (not nested expander)
+                        st.markdown(f"### ✅ {task_history['title']}")
+                        
+                        # Task description
+                        task_description = ONBOARDING_TASKS[task_history['task_id']].get('description', '')
+                        if task_description:
+                            st.markdown("**📋 Treść zadania:**")
+                            st.markdown(task_description)
+                            st.markdown("---")
                             
                             # Timestamps
                             col_t1, col_t2 = st.columns(2)
@@ -1992,6 +2007,10 @@ def show_fmcg_playable_game(username: str):
                             if task_history['feedback']:
                                 st.markdown("**💬 Feedback:**")
                                 st.success(task_history['feedback'])
+                            
+                            # Add separator between tasks (except last one)
+                            if idx < len(sorted_tasks) - 1:
+                                st.markdown("---")
         
             # =============================================================================
             # HISTORIA WIZYT - jako sekcja w Dashboard

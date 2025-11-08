@@ -40878,7 +40878,7 @@
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-11-02",
-    "last_login": "2025-11-06 10:04:13",
+    "last_login": "2025-11-08 19:30:59",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -40912,6 +40912,12 @@
         "completed_lessons": 0
       },
       "2025-11-06": {
+        "xp": 8,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-11-08": {
         "xp": 8,
         "degencoins": 0,
         "level": 1,
@@ -40959,11 +40965,9 @@
         "firm": {
           "name": "FMCG Corp",
           "logo": "🏪",
-          "founded": "2025-11-06",
+          "founded": "2025-11-08",
           "level": 1,
-          "reputation": 0,
-          "color_scheme": "purple",
-          "motto": ""
+          "reputation": 0
         },
         "fmcg_state": {
           "level": 1,
@@ -40984,14 +40988,11 @@
           "customer_satisfaction_avg": 0,
           "current_week": 1,
           "current_day": "Monday",
-          "visits_this_week": 1,
+          "visits_this_week": 0,
           "visits_scheduled": [],
           "current_location": null,
           "planned_visits_today": [],
-          "completed_visits_today": [
-            "client_015",
-            "client_013"
-          ],
+          "completed_visits_today": [],
           "total_distance_today": 0.0,
           "route_optimization_used": false,
           "visit_history": [],
@@ -41022,7 +41023,7 @@
           "monthly_actual_sales": 0,
           "monthly_best_sales": 0,
           "weekly_history": [],
-          "last_activity_date": "2025-11-05T23:25:06.481164",
+          "last_activity_date": "2025-11-08T19:31:13.418826",
           "last_visit_client_id": null,
           "company": "Heinz Polska",
           "clients": {
@@ -41486,70 +41487,7 @@
               "recommended_products": [
                 "pudliszki_ketchup_lagodny"
               ],
-              "upsell_potential": "medium",
-              "last_visit_day": "Monday",
-              "last_visit_date": "2025-11-06T01:31:42.194269",
-              "visits_count": 1,
-              "reputation": 60,
-              "discovered_info": {
-                "personality_description": "Praktyczna, skupiona na konkretach, niechętna \"marketingowym gierkom\", zabiegana.",
-                "decision_priorities": [
-                  "cena",
-                  "smak",
-                  "duże opakowanie",
-                  "regularne dostawy"
-                ],
-                "main_customers": "Pracownicy fabryki mebli",
-                "pain_points": [
-                  "Problemy z regularnymi dostawami i koniecznością dopytywania się o towar"
-                ],
-                "business_goals": [
-                  "Zapewnienie pracownikom jedzenia w przerwie"
-                ],
-                "best_selling_categories": [
-                  "Ketchup",
-                  "Frytki",
-                  "Kiełbaski z grilla"
-                ],
-                "seasonal_patterns": "Większe spożycie ketchupu podczas grilla",
-                "trust_level": "Sceptyczny",
-                "preferred_communication": "Konkretna, szybka",
-                "sales_capacity_discovered": {
-                  "Food": {
-                    "weekly_sales_volume": 15,
-                    "monthly_volume_kg": 60,
-                    "discovered_date": "2025-11-06T01:31:44.710654",
-                    "discovered_method": "conversation"
-                  }
-                }
-              },
-              "knowledge_level": 3,
-              "visit_history": [
-                {
-                  "day": "Monday",
-                  "date": "2025-11-06 01:31",
-                  "order_value": 0,
-                  "order_items": [],
-                  "reputation_change": 10,
-                  "reputation_after": 60,
-                  "knowledge_level_after": 3,
-                  "discoveries_count": 10,
-                  "new_discoveries": [
-                    "personality_description",
-                    "decision_priorities",
-                    "main_customers",
-                    "pain_points",
-                    "business_goals",
-                    "best_selling_categories",
-                    "seasonal_patterns",
-                    "trust_level",
-                    "preferred_communication",
-                    "sales_capacity_discovered_Food"
-                  ],
-                  "conversation_transcript": "🎮 Handlowiec: Witam Pani Anno, Paweł KSiążyk Heinz. CZy możemy chwilkę porozmawiać o rozwoju Pan biznesu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Dzień dobry, panie Pawle. Rozwój biznesu? No, zawsze można porozmawiać, ale nie wiem, czy akurat ja mogę panu coś ciekawego powiedzieć. Stołówka to stołówka, wiadomo. Co konkretnie ma pan na myśli?\n\n\n🎮 Handlowiec: chciałbym przedstawić swoje pomysły na wsparcie, ale czy mógłbym wcześniej zapytać o kilka kwestii?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No dobrze, panie Pawle, pytaj pan śmiało. Tylko nie obiecuję, że będę miała czas na długie wywody. Zależy mi, żeby ludzie mieli co zjeść w przerwie, a nie, żebym ja się tu w jakieś marketingowe gierki bawiła. No ale słucham.\n\n\n🎮 Handlowiec: CZym się Panie kieruje przy wyborze dostawcy ketchupu ?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Kieruję się przede wszystkim ceną, panie Pawle. Fabryka mebli to nie restauracja z gwiazdką Michelin. Musi być smaczny, musi być w dużej butelce, żeby szybko się nie skończył, i musi być w dobrej cenie. Wiadomo, że pracownicy lubią ten ketchup do frytek czy kiełbaski z grilla. No i żeby dostawy były regularne i bez problemów. Nie mam czasu na zamawianie po kilka razy i dopytywanie się gdzie jest towar. To takie podstawowe kryteria. Co pan ma do zaoferowania?\n\n\n🎮 Handlowiec: a ile średnio potrzebuje Pani ketchupy w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Panie Pawle, ciężko mi tak dokładnie powiedzieć. To zależy. Czasem pracownicy więcej jedzą frytek, czasem mniej. Jak jest grill, to idzie więcej. Tak na oko, to myślę, że tak z 10, może 12 butelek takich dużych, wiesz, tych po 5 kg, to schodzi na miesiąc. Mówię orientacyjnie, bo nie prowadzę dokładnych statystyk. Zależy też, ile osób w danym miesiącu pracuje, bo mamy trochę rotacji.\n\n\n🎮 Handlowiec: czyli mniej więcej 12 butelek razy 5 kg - 60 kg ketchupu w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No tak, mniej więcej. Może trochę więcej, może trochę mniej. Zależy od miesiąca, tak jak mówiłam. Panie Pawle, ale do czego pan zmierza z tą ilością? Chce mi pan powiedzieć, że mam za dużo tego ketchupu, czy jak? Bo nie bardzo rozumiem. Mam teraz czas tylko chwilę, więc proszę konkretnie.\n",
-                  "timestamp": "2025-11-06 01:31:44"
-                }
-              ]
+              "upsell_potential": "medium"
             },
             "client_014": {
               "id": "client_014",
@@ -41620,39 +41558,7 @@
               "recommended_products": [
                 "heinz_ketchup_classic"
               ],
-              "upsell_potential": "high",
-              "last_visit_day": "Monday",
-              "last_visit_date": "2025-11-06T00:09:12.242360",
-              "reputation": 60,
-              "discovered_info": {
-                "personality_description": "Czas to pieniądz, lubi stałą współpracę.",
-                "decision_priorities": [
-                  "cena",
-                  "jakość",
-                  "dostępność",
-                  "stabilność"
-                ],
-                "main_customers": "studenci i młodzi ludzie",
-                "customer_demographics": "Przekrój przez społeczeństwo, od dzieciaków po emerytów.",
-                "business_goals": [
-                  "zarabiać (marża)"
-                ],
-                "delivery_preferences": "Na czas i bez problemów.",
-                "trust_level": "Sceptyczny",
-                "preferred_communication": "Konkretny, bez owijania w bawełnę."
-              },
-              "knowledge_level": 3,
-              "visit_history": [
-                {
-                  "day": "Monday",
-                  "order_value": 0,
-                  "order_items": [],
-                  "reputation_change": 10,
-                  "knowledge_level_after": 3,
-                  "discoveries_count": 8,
-                  "timestamp": "2025-11-06 00:09:14"
-                }
-              ]
+              "upsell_potential": "high"
             },
             "client_016": {
               "id": "client_016",
@@ -42008,7 +41914,7 @@
             "clients": {},
             "company": {
               "task_performance": 0,
-              "sales_performance": 0.0,
+              "sales_performance": 0,
               "professionalism": 100
             },
             "tier": "Trainee",
@@ -42019,18 +41925,7 @@
             "overall_rating": 12.0
           },
           "scenario_id": "heinz_food_service",
-          "clients_total": 25,
-          "mentor_questions_today": 1,
-          "mentor_last_reset_day": "Monday",
-          "mentor_conversation_history": [
-            {
-              "question": "Jak zbudować zaufanie na pierwszej wizycie handlowej?",
-              "answer": "Zbudowanie zaufania na pierwszej wizycie w sklepie osiedlowym to podstawa. Oto kilka konkretnych kroków i fraz, które możesz wykorzystać:\n\n**1. Przygotowanie to podstawa:**\n\n*   **Zbadaj teren:** Dowiedz się czegoś o sklepie przed wizytą. Jak długo działają? Jakie produkty sprzedają się najlepiej? To pokaże, że jesteś zainteresowany ich biznesem.\n*   **Wygląd:** Zadbaj o schludny wygląd. W kanale tradycyjnym ludzie kupują od ludzi, których lubią i którym ufają.\n\n**2. Rozpoczęcie rozmowy:**\n\n*   **Przedstaw się z uśmiechem:** \"Dzień dobry, nazywam się [Twoje imię i nazwisko] i reprezentuję firmę [Nazwa firmy]. Słyszałem, że prowadzicie Państwo ten sklep już od [liczba] lat. Gratuluję!\"\n*   **Zacznij od pytania, nie od oferty:** \"Zanim przejdę do prezentacji, chciałbym zapytać, jakie produkty z kategorii [kategoria produktów, które sprzedajesz] cieszą się u Państwa największą popularnością?\" – To pokaże, że słuchasz.\n\n**3. Budowanie relacji i zaufania:**\n\n*   **Pokaż, że rozumiesz ich potrzeby:** \"Rozumiem, że w małym sklepie liczy się rotacja i marża. Dlatego przygotowałem dla Państwa specjalną ofertę na [produkt], która pozwoli na szybki obrót i solidny zysk w PLN.\"\n*   **Bądź transparentny:** \"Jestem tu, żeby pomóc Państwu zwiększyć sprzedaż. Jeśli coś nie będzie dla Państwa korzystne, powiem to wprost.\"\n*   **Zaoferuj pomoc, nie tylko sprzedaż:** \"Wiem, że miejsce na półce jest ograniczone. Mogę pomóc w optymalnym ułożeniu produktów, aby maksymalizować ich widoczność i sprzedaż.\"\n*   **Użyj konkretnych przykładów:** \"Podobne sklepy w okolicy, które wprowadziły [produkt], odnotowały wzrost sprzedaży w kategorii [kategoria] o [procent/kwota] w ciągu [czas].\"\n\n**4. Zakończenie wizyty:**\n\n*   **Podsumuj:** \"Podsumowując, proponuję Państwu [krótkie podsumowanie oferty]. Co Państwo na to?\"\n*   **Zostaw wizytówkę i obietnicę kontaktu:** \"Bardzo dziękuję za poświęcony czas. Zostawiam swoją wizytówkę. Skontaktuję się za kilka dni, żeby omówić szczegóły i odpowiedzieć na ewentualne pytania.\"\n\n**Pamiętaj:** Bądź autentyczny, słuchaj uważnie i koncentruj się na korzyściach dla sklepu, a nie tylko na sprzedaży.\n",
-              "client_name": null,
-              "product_name": null,
-              "timestamp": "Monday"
-            }
-          ]
+          "clients_total": 25
         },
         "office": {
           "type": "company_office",
@@ -42047,7 +41942,7 @@
           "total_sales": 0,
           "clients_acquired": 0,
           "clients_lost": 0,
-          "visits_completed": 1,
+          "visits_completed": 0,
           "avg_conversation_rating": 0.0,
           "total_reputation_gained": 0
         },
@@ -42070,24 +41965,6 @@
         "history": {
           "transactions": [],
           "milestones": []
-        },
-        "financial_settings": {
-          "savings_goal": 0,
-          "low_balance_alert": -10000,
-          "high_balance_alert": 50000,
-          "auto_transfer_enabled": false,
-          "auto_transfer_threshold": 30000,
-          "auto_transfer_amount": 5000
-        },
-        "notifications": {
-          "deadline_alert_hours": 24,
-          "deadline_alert_enabled": true,
-          "new_contracts_alert": true,
-          "balance_alerts_enabled": true,
-          "events_alerts_enabled": true,
-          "level_up_alerts": true,
-          "employee_alerts": true,
-          "reputation_alerts": true
         }
       },
       "consulting": {
@@ -42131,7 +42008,7 @@
           "logo": "🏢",
           "founded": "2025-11-06",
           "level": 1,
-          "reputation": -33,
+          "reputation": -34,
           "color_scheme": "red",
           "motto": ""
         },
@@ -42200,6 +42077,27 @@
           ],
           "available_pool": [
             {
+              "id": "CIQ-EASY-001",
+              "tytul": "Krótka rozmowa 1:1 z pracownikiem",
+              "kategoria": "Leadership",
+              "klient": "LocalCafe",
+              "opis": "Właściciel małej kawiarni chce porozmawiać z barista, który ostatnio jest spóźniony.",
+              "zadanie": "Odpowiedz BARDZO KRÓTKO:\n\n1. **Jak rozpoczniesz rozmowę?** (1 zdanie)\n\n2. **Jakie 2 pytania zadasz?** (lista)\n\n3. **Jak zakończysz spotkanie?** (1 zdanie)",
+              "wymagana_wiedza": [
+                "Podstawy komunikacji"
+              ],
+              "trudnosc": 1,
+              "nagroda_base": 200,
+              "nagroda_4star": 250,
+              "nagroda_5star": 350,
+              "reputacja": 15,
+              "czas_realizacji_dni": 1,
+              "wymagany_poziom": 1,
+              "min_slow": 20,
+              "emoji": "☕",
+              "available_until": "2025-11-09 01:39:07"
+            },
+            {
               "id": "CIQ-EASY-002",
               "tytul": "Feedback dla nowego pracownika",
               "kategoria": "Feedback",
@@ -42218,7 +42116,7 @@
               "wymagany_poziom": 1,
               "min_slow": 15,
               "emoji": "🛒",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "CIQ-EASY-003",
@@ -42239,7 +42137,7 @@
               "wymagany_poziom": 1,
               "min_slow": 20,
               "emoji": "🧹",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "CIQ-EASY-004",
@@ -42260,7 +42158,7 @@
               "wymagany_poziom": 1,
               "min_slow": 15,
               "emoji": "❓",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "CIQ-EASY-005",
@@ -42281,7 +42179,7 @@
               "wymagany_poziom": 1,
               "min_slow": 10,
               "emoji": "⭐",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "CIQ-EASY-006",
@@ -42302,7 +42200,7 @@
               "wymagany_poziom": 1,
               "min_slow": 15,
               "emoji": "📅",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "CIQ-STARTER-001",
@@ -42324,7 +42222,7 @@
               "wymagany_poziom": 1,
               "min_slow": 30,
               "emoji": "🤝",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "CIQ-AI-001",
@@ -42360,7 +42258,7 @@
                 "fallback_response": "Rozumiem. Może... może muszę po prostu być bardziej zdyscyplinowany."
               },
               "scenario_context": "**Kontekst scenariusza:**\n\nMark jest Twoim najlepszym senior developerem - 5 lat w firmie, kluczowy dla głównego projektu. Ostatnio jest systematycznie spóźniony - to już trzecie spóźnienie w tym tygodniu (poniedziałek, środa, piątek). Zespół to zauważa - Sarah musiała dzisiaj prezentować jego część na daily standup.\n\n**Ukryty kontekst (który Mark może ujawnić jeśli się otworzy):**\nMama Marka ma raka i właśnie zaczęła chemioterapię. Wymaga codziennego transportu do szpitala o 8:00 rano. Mark nie ma rodzeństwa, ojciec zmarł. On jest jedyną osobą która może ją zawieźć. Jest wykończony emocjonalnie i fizycznie, ale boi się o tym mówić bo myśli że zostanie zwolniony lub uznany za niewydajnego.\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą przyczynę spóźnień (nie zakładać z góry)\n2. Zachować relację i zaufanie\n3. Znaleźć rozwiązanie win-win (np. flex hours, remote work, team support)\n4. Pokazać empatię bez rezygnacji z standardów zespołowych\n\n**Możliwe zakończenia:**\n- SUCCESS: Mark się otwiera, wypracowujecie elastyczne rozwiązanie, zespół wspiera\n- NEUTRAL: Problem rozwiązany powierzchownie, ale bez prawdziwego zrozumienia\n- FAILURE: Mark się zblokował lub złożył wypowiedzenie, zespół zdemotywowany\n\n**Wskaźniki sukcesu:**\n- Relacja Mark-Firma: czy zostanie i będzie zaangażowany\n- Morale zespołu: czy rozumieją sytuację i wspierają\n- Rozwiązanie: czy jest długofalowe i fair dla wszystkich",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "CIQ-AI-002",
@@ -42396,7 +42294,7 @@
                 "fallback_response": "Rozumiem. Muszę to przemyśleć i przedyskutować z zarządem."
               },
               "scenario_context": "**Kontekst scenariusza:**\n\nTechVentures LLC to Twój największy klient - 500k zł/rok, stanowi 40% Twojego revenue. Współpraca trwa 3 lata, zawsze byli zadowoleni. W zeszłym roku Twoja optymalizacja procesów zaoszczędziła im 880k zł (mierzalne ROI). \n\n**Ukryty kontekst:**\n- Zarząd TechVentures wprowadza policy: wszystkie koszty vendor down 40%\n- Michael (CEO) dostał ofertę od tańszej firmy (40% cheaper)\n- Michael WIE że jesteś lepszy (proof: 880k savings), ale potrzebuje ammunition do obrony przed zarządem\n- Prawdziwy problem: nie cena, ale brak uzasadnienia dla zarządu DLACZEGO premium service is worth it\n- Jeśli pomożesz mu zbudować business case dla zarządu → zostaje i może nawet zwiększy budżet\n- Jeśli od razu dasz zniżkę → straci szacunek i będzie demand more\n- Jeśli będziesz zbyt sztywny bez pokazania wartości → odejdzie bo nie ma choice\n\n**Cel rozmowy:**\n1. Odkryć prawdziwą motywację (zarząd, nie Michael)\n2. Przypomnieć o wartości (880k ROI)\n3. Zaproponować kreatywne rozwiązanie (np. tiered service, ROI-based pricing, long-term contract z bonusami)\n4. Pomóc Michaelowi zbudować argument dla zarządu\n\n**Możliwe rozwiązania (od najlepszego):**\n- ROI Report dla zarządu (0% zniżka, ale clear justification)\n- Custom package (ta sama cena, ale więcej value)\n- Tiered service model (basic cheaper, premium upsell)\n- Długoterminowy kontrakt (2-3 lata, 10% discount overall)\n- Performance-based pricing (pay for results)\n- Bundle z innymi usługami (percepcja oszczędności)\n\n**WORST solution:**\n- Natychmiastowa kapitulacja (40% zniżka) → Michael traci respect, Ty tracisz margin i credibility",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "speed_urgent_call",
@@ -42445,7 +42343,7 @@
                   "pivot strategii"
                 ]
               },
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "speed_crisis_decision",
@@ -42493,30 +42391,30 @@
                   "minimize downtime"
                 ]
               },
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
-              "id": "CIQ-LEADERSHIP-001",
-              "tytul": "Framework dla efektywnych 1:1",
-              "kategoria": "Leadership",
+              "id": "CIQ-COACHING-001",
+              "tytul": "Sesja coachingowa dla middle managera",
+              "kategoria": "Coaching",
               "klient": "MarketPro",
-              "opis": "Firma MarketPro (50 osób) nie ma struktury 1:1 meetings. \nLeadership chce wprowadzić best practices dla wszystkich managerów.",
-              "zadanie": "Odpowiedz krótko:\n\n1. **Jak często i jak długo powinny trwać 1:1?** (1 zdanie)\n   \n2. **Wymień 5 tematów, które należy poruszać na 1:1** (lista)\n   \n3. **Jakie 3 błędy managerowie najczęściej popełniają na 1:1?** (lista)",
+              "opis": "Manager w firmie MarketPro ma problemy z delegowaniem zadań. \nZespół czuje się mikromanagowany, co wpływa na zaangażowanie i autonomię.",
+              "zadanie": "Odpowiedz krótko:\n\n1. **Jaki jest cel tej sesji coachingowej?** (1 zdanie)\n   \n2. **Wymień 5 kluczowych pytań coachingowych dla tego managera** (lista pytań)\n   \n3. **Jaki konkretny feedback dasz managerowi?** (2-3 zdania używając COIN)",
               "wymagana_wiedza": [
-                "1:1 Conversations",
-                "Active Listening",
-                "Coaching"
+                "Coaching conversations",
+                "GROW Model",
+                "COIN Framework"
               ],
               "trudnosc": 2,
-              "nagroda_base": 500,
-              "nagroda_4star": 650,
-              "nagroda_5star": 850,
-              "reputacja": 40,
+              "nagroda_base": 550,
+              "nagroda_4star": 720,
+              "nagroda_5star": 900,
+              "reputacja": 35,
               "czas_realizacji_dni": 1,
               "wymagany_poziom": 1,
-              "min_slow": 40,
-              "emoji": "🤝",
-              "available_until": "2025-11-07 09:47:31"
+              "min_slow": 50,
+              "emoji": "🎯",
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "CIQ-KULTURA-002",
@@ -42539,30 +42437,30 @@
               "wymagany_poziom": 1,
               "min_slow": 80,
               "emoji": "🛡️",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             },
             {
-              "id": "CIQ-KRYZYS-001",
-              "tytul": "Komunikacja po błędzie projektowym",
-              "kategoria": "Kryzys",
-              "klient": "TechStart",
-              "opis": "Startup wprowadził feature, który spowodował bug u 30% użytkowników. \nSocial media buzują negatywnymi komentarzami. CEO jest w panice.",
-              "zadanie": "Plan komunikacji kryzysowej:\n\n1. **Napisz krótki komunikat do klientów (email)** - max 150 słów\n   \n2. **Jakie elementy MUSI zawierać komunikat kryzysowy?** (5 elementów)\n   \n3. **Co powiedzieć zespołowi engineering?** (3-4 zdania)\n   \n4. **Przygotuj 5 talking points dla CEO na rozmowy z inwestorami**\n   \n5. **Plan follow-up na 7 dni** (5 kroków)",
+              "id": "CIQ-COACHING-002",
+              "tytul": "Executive coaching - transformacja lidera",
+              "kategoria": "Coaching",
+              "klient": "InnovateCorp",
+              "opis": "C-level executive ma problemy z komunikacją w stresie. \nZespół odbiera go jako agresywnego i nieprzewidywalnego. Board chce interwencji.",
+              "zadanie": "Program coachingowy (3 miesiące):\n\n1. **Jakie narzędzia diagnostyczne wykorzystasz?** (wymień 5 + krótko dlaczego każde)\n   \n2. **Podaj 5 przykładowych pytań z 360-degree feedback**\n   \n3. **Określ 3 główne cele transformacji** (po 2-3 zdania na każdy)\n   \n4. **Zaproponuj po 2 konkretne działania na każdy miesiąc** (6 działań total)\n   \n5. **Jak zmierzysz sukces programu?** (3 KPI + jak je mierzyć)",
               "wymagana_wiedza": [
-                "Crisis Communication",
-                "Stakeholder Management",
-                "Psychological Safety"
+                "Executive Coaching",
+                "Emotional Intelligence",
+                "Leadership Development"
               ],
               "trudnosc": 4,
-              "nagroda_base": 950,
-              "nagroda_4star": 1250,
-              "nagroda_5star": 1600,
-              "reputacja": 65,
-              "czas_realizacji_dni": 1,
+              "nagroda_base": 1200,
+              "nagroda_4star": 1600,
+              "nagroda_5star": 2000,
+              "reputacja": 70,
+              "czas_realizacji_dni": 3,
               "wymagany_poziom": 1,
               "min_slow": 120,
-              "emoji": "🚨",
-              "available_until": "2025-11-07 09:47:31"
+              "emoji": "🎯",
+              "available_until": "2025-11-09 01:39:07"
             },
             {
               "id": "CIQ-KRYZYS-002",
@@ -42585,13 +42483,13 @@
               "wymagany_poziom": 1,
               "min_slow": 200,
               "emoji": "🚨",
-              "available_until": "2025-11-07 09:47:31"
+              "available_until": "2025-11-09 01:39:07"
             }
           ],
-          "last_refresh": "2025-11-06 09:47:31"
+          "last_refresh": "2025-11-08 01:39:07"
         },
         "stats": {
-          "total_revenue": 250,
+          "total_revenue": 350,
           "total_costs": 150,
           "net_profit": 0,
           "contracts_completed": 1,
@@ -42679,20 +42577,54 @@
                 "reputation": 2
               },
               "manual_roll": true
+            },
+            {
+              "event_id": "client_confusion",
+              "timestamp": "2025-11-08 01:39:07",
+              "title": "Nieporozumienie z Klientem",
+              "emoji": "❓",
+              "type": "negative",
+              "description": "Klient źle zrozumiał zakres usługi i oczekuje więcej pracy. Musisz poświęcić dodatkowy czas na wyjaśnienia.",
+              "choice": null,
+              "effects": {
+                "capacity_penalty": -1,
+                "duration_days": 2,
+                "reputation": -2
+              },
+              "manual_roll": false
+            },
+            {
+              "event_id": "free_coffee",
+              "timestamp": "2025-11-08 01:39:12",
+              "title": "Darmowa Kawa od Klienta",
+              "emoji": "☕",
+              "type": "positive",
+              "description": "Klient był pod wrażeniem Twojej pracy i wysłał voucher na miesiąc darmowej kawy. Mała rzecz, a cieszy!",
+              "choice": null,
+              "effects": {
+                "reputation": 1,
+                "coins": 100
+              },
+              "manual_roll": true
             }
           ],
-          "last_roll": "2025-11-06 09:47:38",
+          "last_roll": "2025-11-08 01:39:12",
           "active_effects": [
             {
               "type": "next_contract_bonus",
               "multiplier": 1.3,
               "expires": null
+            },
+            {
+              "type": "capacity_penalty",
+              "value": -1,
+              "expires": "2025-11-10 01:39:07"
             }
           ],
-          "last_auto_event": "2025-11-06 09:47:32",
-          "last_manual_roll": "2025-11-06 09:47:38"
+          "last_auto_event": "2025-11-08 01:39:07",
+          "last_manual_roll": "2025-11-08 01:39:12"
         },
-        "money": -29900,
+        "money": -29800,
         "history": {
           "transactions": [
             {
@@ -42716,6 +42648,13 @@
               "amount": 250,
               "rating": 4,
               "timestamp": "2025-11-06 09:48:12"
+            },
+            {
+              "type": "event_reward",
+              "amount": 100,
+              "event_id": "free_coffee",
+              "event_title": "Darmowa Kawa od Klienta",
+              "timestamp": "2025-11-08 01:39:12"
             }
           ],
           "level_ups": [],
@@ -42777,14 +42716,11 @@
       "customer_satisfaction_avg": 0,
       "current_week": 1,
       "current_day": "Monday",
-      "visits_this_week": 1,
+      "visits_this_week": 0,
       "visits_scheduled": [],
       "current_location": null,
       "planned_visits_today": [],
-      "completed_visits_today": [
-        "client_015",
-        "client_013"
-      ],
+      "completed_visits_today": [],
       "total_distance_today": 0.0,
       "route_optimization_used": false,
       "visit_history": [],
@@ -42815,7 +42751,7 @@
       "monthly_actual_sales": 0,
       "monthly_best_sales": 0,
       "weekly_history": [],
-      "last_activity_date": "2025-11-05T23:25:06.481164",
+      "last_activity_date": "2025-11-08T19:31:13.418826",
       "last_visit_client_id": null,
       "company": "Heinz Polska",
       "clients": {
@@ -43279,70 +43215,7 @@
           "recommended_products": [
             "pudliszki_ketchup_lagodny"
           ],
-          "upsell_potential": "medium",
-          "last_visit_day": "Monday",
-          "last_visit_date": "2025-11-06T01:31:42.194269",
-          "visits_count": 1,
-          "reputation": 60,
-          "discovered_info": {
-            "personality_description": "Praktyczna, skupiona na konkretach, niechętna \"marketingowym gierkom\", zabiegana.",
-            "decision_priorities": [
-              "cena",
-              "smak",
-              "duże opakowanie",
-              "regularne dostawy"
-            ],
-            "main_customers": "Pracownicy fabryki mebli",
-            "pain_points": [
-              "Problemy z regularnymi dostawami i koniecznością dopytywania się o towar"
-            ],
-            "business_goals": [
-              "Zapewnienie pracownikom jedzenia w przerwie"
-            ],
-            "best_selling_categories": [
-              "Ketchup",
-              "Frytki",
-              "Kiełbaski z grilla"
-            ],
-            "seasonal_patterns": "Większe spożycie ketchupu podczas grilla",
-            "trust_level": "Sceptyczny",
-            "preferred_communication": "Konkretna, szybka",
-            "sales_capacity_discovered": {
-              "Food": {
-                "weekly_sales_volume": 15,
-                "monthly_volume_kg": 60,
-                "discovered_date": "2025-11-06T01:31:44.710654",
-                "discovered_method": "conversation"
-              }
-            }
-          },
-          "knowledge_level": 3,
-          "visit_history": [
-            {
-              "day": "Monday",
-              "date": "2025-11-06 01:31",
-              "order_value": 0,
-              "order_items": [],
-              "reputation_change": 10,
-              "reputation_after": 60,
-              "knowledge_level_after": 3,
-              "discoveries_count": 10,
-              "new_discoveries": [
-                "personality_description",
-                "decision_priorities",
-                "main_customers",
-                "pain_points",
-                "business_goals",
-                "best_selling_categories",
-                "seasonal_patterns",
-                "trust_level",
-                "preferred_communication",
-                "sales_capacity_discovered_Food"
-              ],
-              "conversation_transcript": "🎮 Handlowiec: Witam Pani Anno, Paweł KSiążyk Heinz. CZy możemy chwilkę porozmawiać o rozwoju Pan biznesu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Dzień dobry, panie Pawle. Rozwój biznesu? No, zawsze można porozmawiać, ale nie wiem, czy akurat ja mogę panu coś ciekawego powiedzieć. Stołówka to stołówka, wiadomo. Co konkretnie ma pan na myśli?\n\n\n🎮 Handlowiec: chciałbym przedstawić swoje pomysły na wsparcie, ale czy mógłbym wcześniej zapytać o kilka kwestii?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No dobrze, panie Pawle, pytaj pan śmiało. Tylko nie obiecuję, że będę miała czas na długie wywody. Zależy mi, żeby ludzie mieli co zjeść w przerwie, a nie, żebym ja się tu w jakieś marketingowe gierki bawiła. No ale słucham.\n\n\n🎮 Handlowiec: CZym się Panie kieruje przy wyborze dostawcy ketchupu ?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Kieruję się przede wszystkim ceną, panie Pawle. Fabryka mebli to nie restauracja z gwiazdką Michelin. Musi być smaczny, musi być w dużej butelce, żeby szybko się nie skończył, i musi być w dobrej cenie. Wiadomo, że pracownicy lubią ten ketchup do frytek czy kiełbaski z grilla. No i żeby dostawy były regularne i bez problemów. Nie mam czasu na zamawianie po kilka razy i dopytywanie się gdzie jest towar. To takie podstawowe kryteria. Co pan ma do zaoferowania?\n\n\n🎮 Handlowiec: a ile średnio potrzebuje Pani ketchupy w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Panie Pawle, ciężko mi tak dokładnie powiedzieć. To zależy. Czasem pracownicy więcej jedzą frytek, czasem mniej. Jak jest grill, to idzie więcej. Tak na oko, to myślę, że tak z 10, może 12 butelek takich dużych, wiesz, tych po 5 kg, to schodzi na miesiąc. Mówię orientacyjnie, bo nie prowadzę dokładnych statystyk. Zależy też, ile osób w danym miesiącu pracuje, bo mamy trochę rotacji.\n\n\n🎮 Handlowiec: czyli mniej więcej 12 butelek razy 5 kg - 60 kg ketchupu w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No tak, mniej więcej. Może trochę więcej, może trochę mniej. Zależy od miesiąca, tak jak mówiłam. Panie Pawle, ale do czego pan zmierza z tą ilością? Chce mi pan powiedzieć, że mam za dużo tego ketchupu, czy jak? Bo nie bardzo rozumiem. Mam teraz czas tylko chwilę, więc proszę konkretnie.\n",
-              "timestamp": "2025-11-06 01:31:44"
-            }
-          ]
+          "upsell_potential": "medium"
         },
         "client_014": {
           "id": "client_014",
@@ -43413,39 +43286,7 @@
           "recommended_products": [
             "heinz_ketchup_classic"
           ],
-          "upsell_potential": "high",
-          "last_visit_day": "Monday",
-          "last_visit_date": "2025-11-06T00:09:12.242360",
-          "reputation": 60,
-          "discovered_info": {
-            "personality_description": "Czas to pieniądz, lubi stałą współpracę.",
-            "decision_priorities": [
-              "cena",
-              "jakość",
-              "dostępność",
-              "stabilność"
-            ],
-            "main_customers": "studenci i młodzi ludzie",
-            "customer_demographics": "Przekrój przez społeczeństwo, od dzieciaków po emerytów.",
-            "business_goals": [
-              "zarabiać (marża)"
-            ],
-            "delivery_preferences": "Na czas i bez problemów.",
-            "trust_level": "Sceptyczny",
-            "preferred_communication": "Konkretny, bez owijania w bawełnę."
-          },
-          "knowledge_level": 3,
-          "visit_history": [
-            {
-              "day": "Monday",
-              "order_value": 0,
-              "order_items": [],
-              "reputation_change": 10,
-              "knowledge_level_after": 3,
-              "discoveries_count": 8,
-              "timestamp": "2025-11-06 00:09:14"
-            }
-          ]
+          "upsell_potential": "high"
         },
         "client_016": {
           "id": "client_016",
@@ -43801,7 +43642,7 @@
         "clients": {},
         "company": {
           "task_performance": 0,
-          "sales_performance": 0.0,
+          "sales_performance": 0,
           "professionalism": 100
         },
         "tier": "Trainee",
@@ -43812,18 +43653,7 @@
         "overall_rating": 12.0
       },
       "scenario_id": "heinz_food_service",
-      "clients_total": 25,
-      "mentor_questions_today": 1,
-      "mentor_last_reset_day": "Monday",
-      "mentor_conversation_history": [
-        {
-          "question": "Jak zbudować zaufanie na pierwszej wizycie handlowej?",
-          "answer": "Zbudowanie zaufania na pierwszej wizycie w sklepie osiedlowym to podstawa. Oto kilka konkretnych kroków i fraz, które możesz wykorzystać:\n\n**1. Przygotowanie to podstawa:**\n\n*   **Zbadaj teren:** Dowiedz się czegoś o sklepie przed wizytą. Jak długo działają? Jakie produkty sprzedają się najlepiej? To pokaże, że jesteś zainteresowany ich biznesem.\n*   **Wygląd:** Zadbaj o schludny wygląd. W kanale tradycyjnym ludzie kupują od ludzi, których lubią i którym ufają.\n\n**2. Rozpoczęcie rozmowy:**\n\n*   **Przedstaw się z uśmiechem:** \"Dzień dobry, nazywam się [Twoje imię i nazwisko] i reprezentuję firmę [Nazwa firmy]. Słyszałem, że prowadzicie Państwo ten sklep już od [liczba] lat. Gratuluję!\"\n*   **Zacznij od pytania, nie od oferty:** \"Zanim przejdę do prezentacji, chciałbym zapytać, jakie produkty z kategorii [kategoria produktów, które sprzedajesz] cieszą się u Państwa największą popularnością?\" – To pokaże, że słuchasz.\n\n**3. Budowanie relacji i zaufania:**\n\n*   **Pokaż, że rozumiesz ich potrzeby:** \"Rozumiem, że w małym sklepie liczy się rotacja i marża. Dlatego przygotowałem dla Państwa specjalną ofertę na [produkt], która pozwoli na szybki obrót i solidny zysk w PLN.\"\n*   **Bądź transparentny:** \"Jestem tu, żeby pomóc Państwu zwiększyć sprzedaż. Jeśli coś nie będzie dla Państwa korzystne, powiem to wprost.\"\n*   **Zaoferuj pomoc, nie tylko sprzedaż:** \"Wiem, że miejsce na półce jest ograniczone. Mogę pomóc w optymalnym ułożeniu produktów, aby maksymalizować ich widoczność i sprzedaż.\"\n*   **Użyj konkretnych przykładów:** \"Podobne sklepy w okolicy, które wprowadziły [produkt], odnotowały wzrost sprzedaży w kategorii [kategoria] o [procent/kwota] w ciągu [czas].\"\n\n**4. Zakończenie wizyty:**\n\n*   **Podsumuj:** \"Podsumowując, proponuję Państwu [krótkie podsumowanie oferty]. Co Państwo na to?\"\n*   **Zostaw wizytówkę i obietnicę kontaktu:** \"Bardzo dziękuję za poświęcony czas. Zostawiam swoją wizytówkę. Skontaktuję się za kilka dni, żeby omówić szczegóły i odpowiedzieć na ewentualne pytania.\"\n\n**Pamiętaj:** Bądź autentyczny, słuchaj uważnie i koncentruj się na korzyściach dla sklepu, a nie tylko na sprzedaży.\n",
-          "client_name": null,
-          "product_name": null,
-          "timestamp": "Monday"
-        }
-      ]
+      "clients_total": 25
     },
     "fmcg_clients": {
       "client_001": {
@@ -44286,70 +44116,7 @@
         "recommended_products": [
           "pudliszki_ketchup_lagodny"
         ],
-        "upsell_potential": "medium",
-        "last_visit_day": "Monday",
-        "last_visit_date": "2025-11-06T01:31:42.194269",
-        "visits_count": 1,
-        "reputation": 60,
-        "discovered_info": {
-          "personality_description": "Praktyczna, skupiona na konkretach, niechętna \"marketingowym gierkom\", zabiegana.",
-          "decision_priorities": [
-            "cena",
-            "smak",
-            "duże opakowanie",
-            "regularne dostawy"
-          ],
-          "main_customers": "Pracownicy fabryki mebli",
-          "pain_points": [
-            "Problemy z regularnymi dostawami i koniecznością dopytywania się o towar"
-          ],
-          "business_goals": [
-            "Zapewnienie pracownikom jedzenia w przerwie"
-          ],
-          "best_selling_categories": [
-            "Ketchup",
-            "Frytki",
-            "Kiełbaski z grilla"
-          ],
-          "seasonal_patterns": "Większe spożycie ketchupu podczas grilla",
-          "trust_level": "Sceptyczny",
-          "preferred_communication": "Konkretna, szybka",
-          "sales_capacity_discovered": {
-            "Food": {
-              "weekly_sales_volume": 15,
-              "monthly_volume_kg": 60,
-              "discovered_date": "2025-11-06T01:31:44.710654",
-              "discovered_method": "conversation"
-            }
-          }
-        },
-        "knowledge_level": 3,
-        "visit_history": [
-          {
-            "day": "Monday",
-            "date": "2025-11-06 01:31",
-            "order_value": 0,
-            "order_items": [],
-            "reputation_change": 10,
-            "reputation_after": 60,
-            "knowledge_level_after": 3,
-            "discoveries_count": 10,
-            "new_discoveries": [
-              "personality_description",
-              "decision_priorities",
-              "main_customers",
-              "pain_points",
-              "business_goals",
-              "best_selling_categories",
-              "seasonal_patterns",
-              "trust_level",
-              "preferred_communication",
-              "sales_capacity_discovered_Food"
-            ],
-            "conversation_transcript": "🎮 Handlowiec: Witam Pani Anno, Paweł KSiążyk Heinz. CZy możemy chwilkę porozmawiać o rozwoju Pan biznesu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Dzień dobry, panie Pawle. Rozwój biznesu? No, zawsze można porozmawiać, ale nie wiem, czy akurat ja mogę panu coś ciekawego powiedzieć. Stołówka to stołówka, wiadomo. Co konkretnie ma pan na myśli?\n\n\n🎮 Handlowiec: chciałbym przedstawić swoje pomysły na wsparcie, ale czy mógłbym wcześniej zapytać o kilka kwestii?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No dobrze, panie Pawle, pytaj pan śmiało. Tylko nie obiecuję, że będę miała czas na długie wywody. Zależy mi, żeby ludzie mieli co zjeść w przerwie, a nie, żebym ja się tu w jakieś marketingowe gierki bawiła. No ale słucham.\n\n\n🎮 Handlowiec: CZym się Panie kieruje przy wyborze dostawcy ketchupu ?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Kieruję się przede wszystkim ceną, panie Pawle. Fabryka mebli to nie restauracja z gwiazdką Michelin. Musi być smaczny, musi być w dużej butelce, żeby szybko się nie skończył, i musi być w dobrej cenie. Wiadomo, że pracownicy lubią ten ketchup do frytek czy kiełbaski z grilla. No i żeby dostawy były regularne i bez problemów. Nie mam czasu na zamawianie po kilka razy i dopytywanie się gdzie jest towar. To takie podstawowe kryteria. Co pan ma do zaoferowania?\n\n\n🎮 Handlowiec: a ile średnio potrzebuje Pani ketchupy w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: Panie Pawle, ciężko mi tak dokładnie powiedzieć. To zależy. Czasem pracownicy więcej jedzą frytek, czasem mniej. Jak jest grill, to idzie więcej. Tak na oko, to myślę, że tak z 10, może 12 butelek takich dużych, wiesz, tych po 5 kg, to schodzi na miesiąc. Mówię orientacyjnie, bo nie prowadzę dokładnych statystyk. Zależy też, ile osób w danym miesiącu pracuje, bo mamy trochę rotacji.\n\n\n🎮 Handlowiec: czyli mniej więcej 12 butelek razy 5 kg - 60 kg ketchupu w miesiącu?\n\n🏪 Stołówka Zakładowa - Fabryka Mebli: No tak, mniej więcej. Może trochę więcej, może trochę mniej. Zależy od miesiąca, tak jak mówiłam. Panie Pawle, ale do czego pan zmierza z tą ilością? Chce mi pan powiedzieć, że mam za dużo tego ketchupu, czy jak? Bo nie bardzo rozumiem. Mam teraz czas tylko chwilę, więc proszę konkretnie.\n",
-            "timestamp": "2025-11-06 01:31:44"
-          }
-        ]
+        "upsell_potential": "medium"
       },
       "client_014": {
         "id": "client_014",
@@ -44420,39 +44187,7 @@
         "recommended_products": [
           "heinz_ketchup_classic"
         ],
-        "upsell_potential": "high",
-        "last_visit_day": "Monday",
-        "last_visit_date": "2025-11-06T00:09:12.242360",
-        "reputation": 60,
-        "discovered_info": {
-          "personality_description": "Czas to pieniądz, lubi stałą współpracę.",
-          "decision_priorities": [
-            "cena",
-            "jakość",
-            "dostępność",
-            "stabilność"
-          ],
-          "main_customers": "studenci i młodzi ludzie",
-          "customer_demographics": "Przekrój przez społeczeństwo, od dzieciaków po emerytów.",
-          "business_goals": [
-            "zarabiać (marża)"
-          ],
-          "delivery_preferences": "Na czas i bez problemów.",
-          "trust_level": "Sceptyczny",
-          "preferred_communication": "Konkretny, bez owijania w bawełnę."
-        },
-        "knowledge_level": 3,
-        "visit_history": [
-          {
-            "day": "Monday",
-            "order_value": 0,
-            "order_items": [],
-            "reputation_change": 10,
-            "knowledge_level_after": 3,
-            "discoveries_count": 8,
-            "timestamp": "2025-11-06 00:09:14"
-          }
-        ]
+        "upsell_potential": "high"
       },
       "client_016": {
         "id": "client_016",
@@ -44953,6 +44688,41 @@
       {
         "type": "login",
         "timestamp": "2025-11-06T10:04:13.298170",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-08T01:35:57.349236",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-08T01:36:49.764851",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-08T01:41:37.231948",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-08T02:09:41.587421",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-08T02:21:34.445094",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-08T16:12:09.301593",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-08T19:30:59.066257",
         "details": {}
       }
     ],

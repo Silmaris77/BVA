@@ -62,6 +62,45 @@ def main():
     # Aplikuj wszystkie style (base + user theme)
     ThemeManager.apply_all()
     
+    # Mobile sidebar helper - widoczny przycisk na górze strony
+    if st.session_state.logged_in:
+        st.markdown("""
+        <style>
+        /* Mobile sidebar helper button */
+        @media (max-width: 768px) {
+            .mobile-sidebar-btn {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                z-index: 9999;
+                background: #3498db;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                font-size: 18px;
+                cursor: pointer;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                display: block;
+            }
+            .mobile-sidebar-btn:hover {
+                background: #2980b9;
+            }
+        }
+        @media (min-width: 769px) {
+            .mobile-sidebar-btn {
+                display: none;
+            }
+        }
+        </style>
+        <div class="mobile-sidebar-btn" onclick="
+            const sidebar = window.parent.document.querySelector('[data-testid=\\'stSidebar\\']');
+            if (sidebar) {
+                const isHidden = sidebar.getAttribute('aria-expanded') === 'false';
+                sidebar.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+            }
+        ">☰ Menu</div>
+        """, unsafe_allow_html=True)
+    
     # Sidebar for logged-in users
     if st.session_state.logged_in:
         with st.sidebar:

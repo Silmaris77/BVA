@@ -80,6 +80,7 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
         # Get client data
         name = client_data.get("name", client_id)
         owner = client_data.get("owner", "N/A")
+        avatar = client_data.get("avatar", "👤")  # Unikalne emoji twarzy właściciela
         segment = client_data.get("segment", "mixed")
         distance = client_data.get("distance_from_base", 0)
         personality = client_data.get("personality", "N/A")
@@ -141,7 +142,7 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
                         </span>
                     </div>
                     <div style='font-size: 13px; color: #64748b; margin-bottom: 4px;'>
-                        {owner} • MBTI: {personality}
+                        {avatar} {owner} • MBTI: {personality}
                     </div>
                     <div style='font-size: 13px; color: #64748b; margin-bottom: 8px;'>
                         📍 {distance:.1f} km • {color_emoji} {visit_text}

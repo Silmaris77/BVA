@@ -102,10 +102,10 @@ def _render_note_item(note: Dict, repo: NotesRepository, user_id: int, key_prefi
         
         # Treść notatki
         content = note['content']
-        # Skróć jeśli za długa
+        # Skróć jeśli za długa (bez nested expander)
         if len(content) > 200:
-            with st.expander("📄 Pokaż więcej", expanded=False):
-                st.text(content)
+            st.markdown("**Pełna treść:**")
+            st.text(content)
         else:
             st.text(content)
         

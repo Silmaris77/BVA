@@ -165,6 +165,42 @@ class ThemeManager:
         """
         ThemeManager.apply_base_styles()
         ThemeManager.apply_theme()
+        
+        # Mobile sidebar fix - wymuszenie działania przycisku
+        mobile_sidebar_fix = """
+        <style>
+        /* Ensure sidebar toggle works on mobile */
+        @media (max-width: 768px) {
+            /* Make sidebar toggle button always visible and clickable */
+            [data-testid="collapsedControl"] {
+                display: flex !important;
+                pointer-events: auto !important;
+                cursor: pointer !important;
+                z-index: 9999 !important;
+                position: fixed !important;
+                top: 1rem !important;
+                left: 1rem !important;
+            }
+            
+            /* Ensure sidebar can be opened */
+            [data-testid="stSidebar"] {
+                transition: transform 0.3s ease-in-out !important;
+            }
+            
+            /* When sidebar is expanded */
+            [data-testid="stSidebar"][aria-expanded="true"] {
+                transform: translateX(0) !important;
+                display: block !important;
+            }
+            
+            /* When sidebar is collapsed */
+            [data-testid="stSidebar"][aria-expanded="false"] {
+                transform: translateX(-100%) !important;
+            }
+        }
+        </style>
+        """
+        st.markdown(mobile_sidebar_fix, unsafe_allow_html=True)
     
     @staticmethod
     def get_theme_info(theme_key: str) -> Optional[Dict]:

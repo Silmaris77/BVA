@@ -207,16 +207,26 @@ def zen_button(label, on_click=None, key=None, disabled=False, help=None, width=
     Zwraca:
     - Bool: True jeśli przycisk został kliknięty
     """
-    # Konwertuj stary parametr width='stretch' na nowy width="stretch"
+    # Konwertuj stary parametr width='stretch' na use_container_width
     if width == 'stretch':
-        return st.button(
-            label, 
-            on_click=on_click, 
-            key=key, 
-            disabled=disabled, 
-            help=help, 
-            width="stretch"
-        )
+        try:
+            return st.button(
+                label, 
+                on_click=on_click, 
+                key=key, 
+                disabled=disabled, 
+                help=help, 
+                use_container_width=True
+            )
+        except TypeError:
+            # Fallback dla starszych wersji Streamlit
+            return st.button(
+                label, 
+                on_click=on_click, 
+                key=key, 
+                disabled=disabled, 
+                help=help
+            )
     else:
         return st.button(
             label, 
