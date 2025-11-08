@@ -128,14 +128,10 @@ def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict,
         # =================================================================
         
         st.markdown("---")
-        st.markdown("### ✍️ Twoja odpowiedź")
         
-        # Wskazówki kontekstowe
+        # Wskazówki kontekstowe - tylko przy pierwszej turze
         if current_turn == 1:
-            st.info(f"💡 **Wskazówka**: {client_name} ma swoje potrzeby i oczekiwania. Spróbuj zrozumieć sytuację z jego punktu widzenia.")
-        
-        # === SPEECH-TO-TEXT INTERFACE (jak w contract_card) ===
-        st.markdown("**🎤 Nagraj** (wielokrotnie, jeśli chcesz) **lub ✍️ pisz bezpośrednio w polu poniżej:**")
+            st.info(f"💡 {client_name} ma swoje potrzeby i oczekiwania. Spróbuj zrozumieć sytuację z jego punktu widzenia.")
         
         # Klucze dla transkrypcji i wersjonowania
         transcription_key = f"fmcg_visit_transcription_{client_id}"
@@ -154,20 +150,14 @@ def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict,
         # Audio recording with button
         from audio_recorder_streamlit import audio_recorder
         
-        st.markdown("#### 🎤 Nagraj swoją odpowiedź")
-        st.markdown("**Kliknij przycisk mikrofonu poniżej, mów, a następnie kliknij ponownie aby zakończyć nagrywanie.**")
-        
-        # Tip for better recording
-        st.info("💡 **Wskazówka:** Mów wyraźnie przez co najmniej 2-3 sekundy. Zbyt krótkie nagrania mogą nie zostać rozpoznane poprawnie.")
-        
         # Display audio recorder - returns audio bytes when recording is done
         # Use counter in key to create fresh recorder after each use
         audio_bytes_recorded = audio_recorder(
-            text="Kliknij aby nagrać",
+            text="",
             recording_color="#e74c3c",
             neutral_color="#3498db",
             icon_name="microphone",
-            icon_size="3x",
+            icon_size="2x",
             key=f"audio_recorder_{client_id}_{st.session_state[recorder_counter_key]}"
         )
         
@@ -289,11 +279,11 @@ Tekst do poprawy:
         
         # Text area dla odpowiedzi
         player_message = st.text_area(
-            "📝 Możesz edytować transkrypcję lub pisać bezpośrednio:",
+            "✍️ Twoja odpowiedź:",
             value=current_text,
             height=dynamic_height,
             key=text_area_key,
-            placeholder=f"Wpisz swoją odpowiedź do {client_name}... lub użyj mikrofonu powyżej",
+            placeholder=f"Mów przez mikrofon lub pisz tutaj...",
             on_change=sync_textarea_to_state
         )
         

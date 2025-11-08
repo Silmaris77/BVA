@@ -40976,7 +40976,7 @@
           "territory_name": "Dzięgielów Food Service",
           "territory_latitude": 49.7271667,
           "territory_longitude": 18.7025833,
-          "energy": 100,
+          "energy": 80,
           "energy_max": 100,
           "marketing_budget": 2000,
           "marketing_budget_used": 0,
@@ -40988,11 +40988,13 @@
           "customer_satisfaction_avg": 0,
           "current_week": 1,
           "current_day": "Monday",
-          "visits_this_week": 0,
+          "visits_this_week": 1,
           "visits_scheduled": [],
           "current_location": null,
           "planned_visits_today": [],
-          "completed_visits_today": [],
+          "completed_visits_today": [
+            "client_011"
+          ],
           "total_distance_today": 0.0,
           "route_optimization_used": false,
           "visit_history": [],
@@ -41415,7 +41417,60 @@
               "recommended_products": [
                 "pudliszki_ketchup_lagodny"
               ],
-              "upsell_potential": "very_low"
+              "upsell_potential": "very_low",
+              "last_visit_day": "Monday",
+              "last_visit_date": "2025-11-08T19:50:35.170475",
+              "visits_count": 1,
+              "reputation": 52,
+              "discovered_info": {
+                "personality_description": "Zagoniony, praktyczny, nerwowy, bezpośredni",
+                "decision_priorities": [
+                  "Cena",
+                  "Jakość (pomidorowy, gęsty)",
+                  "Akceptacja klientów"
+                ],
+                "main_customers": "Studenci, emeryci, pracownicy biurowi",
+                "customer_demographics": "Różnorodna klientela: studenci, emeryci, pracownicy biurowi",
+                "pain_points": [
+                  "Brak czasu",
+                  "Pilnowanie gotujących się potraw"
+                ],
+                "best_selling_categories": [
+                  "Pierogi ruskie",
+                  "Naleśniki na słodko",
+                  "Zupy (pomidorowa, ogórkowa, rosół)",
+                  "Kotlet schabowy",
+                  "Kaszę gryczana z gulaszem",
+                  "Placki ziemniaczane"
+                ],
+                "trust_level": "Sceptyczny",
+                "preferred_communication": "Szybka, konkretna"
+              },
+              "knowledge_level": 3,
+              "visit_history": [
+                {
+                  "day": "Monday",
+                  "date": "2025-11-08 19:50",
+                  "order_value": 0,
+                  "order_items": [],
+                  "reputation_change": 2,
+                  "reputation_after": 52,
+                  "knowledge_level_after": 3,
+                  "discoveries_count": 8,
+                  "new_discoveries": [
+                    "personality_description",
+                    "decision_priorities",
+                    "main_customers",
+                    "customer_demographics",
+                    "pain_points",
+                    "best_selling_categories",
+                    "trust_level",
+                    "preferred_communication"
+                  ],
+                  "conversation_transcript": "🎮 Handlowiec: Czy możemy chwileczkę porozmawiać?\n\n\n\n🏪 Bar Mleczny Smaczek: No pewnie, jasne. Mam chwilkę, co tam?\n\n\n🎮 Handlowiec: Mam kilka spraw do omówienia z panem.\n\n🏪 Bar Mleczny Smaczek: No dobrze, to słucham uważnie. Tylko proszę, nie za długo, bo zaraz pora obiadowa i trzeba będzie garów pilnować. Co tam masz?\n\n\n🎮 Handlowiec: A ile ma pan czasu?\n\n🏪 Bar Mleczny Smaczek: Nooo, tak z 15 minut znajdę, ale więcej to już będzie ciężko. Zaraz się zacznie schodzić ekipa na obiad, a ja sama wszystkiego nie ogarnę. To co tam masz, gadaj szybko.\n\n\n🎮 Handlowiec: No to super! A czy mógłbym Panu zadać jeszcze wcześniej kilka pytań, zanim przedstawię swoją propozycję?\n\nChodzi dosłownie o dwa, trzy pytania.\n\n🏪 Bar Mleczny Smaczek: No dobra, ale żeby to były naprawdę tylko dwa, trzy, bo mi tu zaraz kociołki zaczną wykipywać. Pytaj pan, pytaj.\n\n\n🎮 Handlowiec: Przestań, panie, pierdolić o kociołkach!\n\n🏪 Bar Mleczny Smaczek: No co pan! Jak to pierdolić? Kociołki same się nie upilnują! A jak przypalę zupę, to kto to będzie jadł? Pan? No dobrze, dobra, pytaj pan szybko, bo mi tu nerwy puszczają. No dawaj, te swoje dwa, trzy pytania i do widzenia!\n\n\n🎮 Handlowiec: Teraz to nie wiem, czy zadam te pytania?\n\n🏪 Bar Mleczny Smaczek: No co pan, teraz to już musi pan zadać! Przecież obiecał pan, że szybko, a ja tu mam roboty po pachy. No, śmiało, pytaj pan, bo zaraz się rozmyślę i pana wygonię z tymi pytaniami. No, dawaj pan te swoje mądrości!\n\n\n🎮 Handlowiec: Czym się pan kieruje w wyborze dostawcy ketchupu?\n\n🏪 Bar Mleczny Smaczek: No wie pan, ketchup to ketchup, ale parę rzeczy musi być. Po pierwsze, żeby był pomidorowy, a nie sama chemia. Po drugie, żeby był w miarę gęsty, a nie jak woda. A po trzecie, no i to chyba najważniejsze, żeby ludzie go lubili! Bo co mi z ketchupu, który stoi i nikt go nie je? No i cena, oczywiście, też gra rolę. Nie mogę przepłacać, bo to bar mleczny, a nie luksusowa restauracja. To co, zadajesz to drugie pytanie, czy już idziesz?\n\n\n🎮 Handlowiec: A jaką ma pan klientelę? Co oni najbardziej lubią kupować?\n\n🏪 Bar Mleczny Smaczek: No wie pan, u mnie to różna klientela bywa. I studenciaki wpadają, i emeryci na tanie obiady, i pracownicy z okolicznych biur na szybki lunch. Każdy coś innego lubi. Studenci to wiadomo, pierogi ruskie i naleśniki na słodko biorą najczęściej, bo tanio i szybko. Emeryci to zupki lubią, pomidorową, ogórkową, rosół, no i kotlet schabowy klasyczny, ziemniaczki i surówka. A ci z biur to różnie, czasem kaszę gryczaną z gulaszem wezmą, czasem jakieś placki ziemniaczane. No, każdy ma swoje upodobania. Ale powiem panu, że u mnie to wszystko schodzi jak ciepłe bułeczki. No i co, pytasz pan dalej, czy już mnie pan zostawi w spokoju? Bo mi się ta zupa zaraz przypali!\n\n\n🎮 Handlowiec: To już ostatnie pytanie?\n\nA ile tego ketchupu mniej więcej schodzi u pana w miesiącu?\n\n🏪 Bar Mleczny Smaczek: Panie, no skąd ja mam to wiedzieć dokładnie? Ja nie prowadzę żadnych tam skomplikowanych statystyk. Ale tak na oko, to z 5, a może i 6 butelek takiego dużego ketchupu w miesiącu zejdzie. Zależy, czy akurat mamy jakieś danie z frytkami, czy nie. No i jak dzieciaki przyjdą na te swoje parówy z bułki. No, mniej więcej tyle. To już wszystko? Bo jak tak, to ja lecę do tej zupy, bo mi się przypali i będzie pan miał mnie na sumieniu!\n",
+                  "timestamp": "2025-11-08 19:50:38"
+                }
+              ]
             },
             "client_012": {
               "id": "client_012",
@@ -41914,7 +41969,7 @@
             "clients": {},
             "company": {
               "task_performance": 0,
-              "sales_performance": 0,
+              "sales_performance": 0.0,
               "professionalism": 100
             },
             "tier": "Trainee",
@@ -41925,7 +41980,10 @@
             "overall_rating": 12.0
           },
           "scenario_id": "heinz_food_service",
-          "clients_total": 25
+          "clients_total": 25,
+          "mentor_questions_today": 0,
+          "mentor_last_reset_day": "Monday",
+          "mentor_conversation_history": []
         },
         "office": {
           "type": "company_office",
@@ -41942,7 +42000,7 @@
           "total_sales": 0,
           "clients_acquired": 0,
           "clients_lost": 0,
-          "visits_completed": 0,
+          "visits_completed": 1,
           "avg_conversation_rating": 0.0,
           "total_reputation_gained": 0
         },
@@ -42704,7 +42762,7 @@
       "territory_name": "Dzięgielów Food Service",
       "territory_latitude": 49.7271667,
       "territory_longitude": 18.7025833,
-      "energy": 100,
+      "energy": 80,
       "energy_max": 100,
       "marketing_budget": 2000,
       "marketing_budget_used": 0,
@@ -42716,11 +42774,13 @@
       "customer_satisfaction_avg": 0,
       "current_week": 1,
       "current_day": "Monday",
-      "visits_this_week": 0,
+      "visits_this_week": 1,
       "visits_scheduled": [],
       "current_location": null,
       "planned_visits_today": [],
-      "completed_visits_today": [],
+      "completed_visits_today": [
+        "client_011"
+      ],
       "total_distance_today": 0.0,
       "route_optimization_used": false,
       "visit_history": [],
@@ -43143,7 +43203,60 @@
           "recommended_products": [
             "pudliszki_ketchup_lagodny"
           ],
-          "upsell_potential": "very_low"
+          "upsell_potential": "very_low",
+          "last_visit_day": "Monday",
+          "last_visit_date": "2025-11-08T19:50:35.170475",
+          "visits_count": 1,
+          "reputation": 52,
+          "discovered_info": {
+            "personality_description": "Zagoniony, praktyczny, nerwowy, bezpośredni",
+            "decision_priorities": [
+              "Cena",
+              "Jakość (pomidorowy, gęsty)",
+              "Akceptacja klientów"
+            ],
+            "main_customers": "Studenci, emeryci, pracownicy biurowi",
+            "customer_demographics": "Różnorodna klientela: studenci, emeryci, pracownicy biurowi",
+            "pain_points": [
+              "Brak czasu",
+              "Pilnowanie gotujących się potraw"
+            ],
+            "best_selling_categories": [
+              "Pierogi ruskie",
+              "Naleśniki na słodko",
+              "Zupy (pomidorowa, ogórkowa, rosół)",
+              "Kotlet schabowy",
+              "Kaszę gryczana z gulaszem",
+              "Placki ziemniaczane"
+            ],
+            "trust_level": "Sceptyczny",
+            "preferred_communication": "Szybka, konkretna"
+          },
+          "knowledge_level": 3,
+          "visit_history": [
+            {
+              "day": "Monday",
+              "date": "2025-11-08 19:50",
+              "order_value": 0,
+              "order_items": [],
+              "reputation_change": 2,
+              "reputation_after": 52,
+              "knowledge_level_after": 3,
+              "discoveries_count": 8,
+              "new_discoveries": [
+                "personality_description",
+                "decision_priorities",
+                "main_customers",
+                "customer_demographics",
+                "pain_points",
+                "best_selling_categories",
+                "trust_level",
+                "preferred_communication"
+              ],
+              "conversation_transcript": "🎮 Handlowiec: Czy możemy chwileczkę porozmawiać?\n\n\n\n🏪 Bar Mleczny Smaczek: No pewnie, jasne. Mam chwilkę, co tam?\n\n\n🎮 Handlowiec: Mam kilka spraw do omówienia z panem.\n\n🏪 Bar Mleczny Smaczek: No dobrze, to słucham uważnie. Tylko proszę, nie za długo, bo zaraz pora obiadowa i trzeba będzie garów pilnować. Co tam masz?\n\n\n🎮 Handlowiec: A ile ma pan czasu?\n\n🏪 Bar Mleczny Smaczek: Nooo, tak z 15 minut znajdę, ale więcej to już będzie ciężko. Zaraz się zacznie schodzić ekipa na obiad, a ja sama wszystkiego nie ogarnę. To co tam masz, gadaj szybko.\n\n\n🎮 Handlowiec: No to super! A czy mógłbym Panu zadać jeszcze wcześniej kilka pytań, zanim przedstawię swoją propozycję?\n\nChodzi dosłownie o dwa, trzy pytania.\n\n🏪 Bar Mleczny Smaczek: No dobra, ale żeby to były naprawdę tylko dwa, trzy, bo mi tu zaraz kociołki zaczną wykipywać. Pytaj pan, pytaj.\n\n\n🎮 Handlowiec: Przestań, panie, pierdolić o kociołkach!\n\n🏪 Bar Mleczny Smaczek: No co pan! Jak to pierdolić? Kociołki same się nie upilnują! A jak przypalę zupę, to kto to będzie jadł? Pan? No dobrze, dobra, pytaj pan szybko, bo mi tu nerwy puszczają. No dawaj, te swoje dwa, trzy pytania i do widzenia!\n\n\n🎮 Handlowiec: Teraz to nie wiem, czy zadam te pytania?\n\n🏪 Bar Mleczny Smaczek: No co pan, teraz to już musi pan zadać! Przecież obiecał pan, że szybko, a ja tu mam roboty po pachy. No, śmiało, pytaj pan, bo zaraz się rozmyślę i pana wygonię z tymi pytaniami. No, dawaj pan te swoje mądrości!\n\n\n🎮 Handlowiec: Czym się pan kieruje w wyborze dostawcy ketchupu?\n\n🏪 Bar Mleczny Smaczek: No wie pan, ketchup to ketchup, ale parę rzeczy musi być. Po pierwsze, żeby był pomidorowy, a nie sama chemia. Po drugie, żeby był w miarę gęsty, a nie jak woda. A po trzecie, no i to chyba najważniejsze, żeby ludzie go lubili! Bo co mi z ketchupu, który stoi i nikt go nie je? No i cena, oczywiście, też gra rolę. Nie mogę przepłacać, bo to bar mleczny, a nie luksusowa restauracja. To co, zadajesz to drugie pytanie, czy już idziesz?\n\n\n🎮 Handlowiec: A jaką ma pan klientelę? Co oni najbardziej lubią kupować?\n\n🏪 Bar Mleczny Smaczek: No wie pan, u mnie to różna klientela bywa. I studenciaki wpadają, i emeryci na tanie obiady, i pracownicy z okolicznych biur na szybki lunch. Każdy coś innego lubi. Studenci to wiadomo, pierogi ruskie i naleśniki na słodko biorą najczęściej, bo tanio i szybko. Emeryci to zupki lubią, pomidorową, ogórkową, rosół, no i kotlet schabowy klasyczny, ziemniaczki i surówka. A ci z biur to różnie, czasem kaszę gryczaną z gulaszem wezmą, czasem jakieś placki ziemniaczane. No, każdy ma swoje upodobania. Ale powiem panu, że u mnie to wszystko schodzi jak ciepłe bułeczki. No i co, pytasz pan dalej, czy już mnie pan zostawi w spokoju? Bo mi się ta zupa zaraz przypali!\n\n\n🎮 Handlowiec: To już ostatnie pytanie?\n\nA ile tego ketchupu mniej więcej schodzi u pana w miesiącu?\n\n🏪 Bar Mleczny Smaczek: Panie, no skąd ja mam to wiedzieć dokładnie? Ja nie prowadzę żadnych tam skomplikowanych statystyk. Ale tak na oko, to z 5, a może i 6 butelek takiego dużego ketchupu w miesiącu zejdzie. Zależy, czy akurat mamy jakieś danie z frytkami, czy nie. No i jak dzieciaki przyjdą na te swoje parówy z bułki. No, mniej więcej tyle. To już wszystko? Bo jak tak, to ja lecę do tej zupy, bo mi się przypali i będzie pan miał mnie na sumieniu!\n",
+              "timestamp": "2025-11-08 19:50:38"
+            }
+          ]
         },
         "client_012": {
           "id": "client_012",
@@ -43642,7 +43755,7 @@
         "clients": {},
         "company": {
           "task_performance": 0,
-          "sales_performance": 0,
+          "sales_performance": 0.0,
           "professionalism": 100
         },
         "tier": "Trainee",
@@ -43653,7 +43766,10 @@
         "overall_rating": 12.0
       },
       "scenario_id": "heinz_food_service",
-      "clients_total": 25
+      "clients_total": 25,
+      "mentor_questions_today": 0,
+      "mentor_last_reset_day": "Monday",
+      "mentor_conversation_history": []
     },
     "fmcg_clients": {
       "client_001": {
@@ -44044,7 +44160,60 @@
         "recommended_products": [
           "pudliszki_ketchup_lagodny"
         ],
-        "upsell_potential": "very_low"
+        "upsell_potential": "very_low",
+        "last_visit_day": "Monday",
+        "last_visit_date": "2025-11-08T19:50:35.170475",
+        "visits_count": 1,
+        "reputation": 52,
+        "discovered_info": {
+          "personality_description": "Zagoniony, praktyczny, nerwowy, bezpośredni",
+          "decision_priorities": [
+            "Cena",
+            "Jakość (pomidorowy, gęsty)",
+            "Akceptacja klientów"
+          ],
+          "main_customers": "Studenci, emeryci, pracownicy biurowi",
+          "customer_demographics": "Różnorodna klientela: studenci, emeryci, pracownicy biurowi",
+          "pain_points": [
+            "Brak czasu",
+            "Pilnowanie gotujących się potraw"
+          ],
+          "best_selling_categories": [
+            "Pierogi ruskie",
+            "Naleśniki na słodko",
+            "Zupy (pomidorowa, ogórkowa, rosół)",
+            "Kotlet schabowy",
+            "Kaszę gryczana z gulaszem",
+            "Placki ziemniaczane"
+          ],
+          "trust_level": "Sceptyczny",
+          "preferred_communication": "Szybka, konkretna"
+        },
+        "knowledge_level": 3,
+        "visit_history": [
+          {
+            "day": "Monday",
+            "date": "2025-11-08 19:50",
+            "order_value": 0,
+            "order_items": [],
+            "reputation_change": 2,
+            "reputation_after": 52,
+            "knowledge_level_after": 3,
+            "discoveries_count": 8,
+            "new_discoveries": [
+              "personality_description",
+              "decision_priorities",
+              "main_customers",
+              "customer_demographics",
+              "pain_points",
+              "best_selling_categories",
+              "trust_level",
+              "preferred_communication"
+            ],
+            "conversation_transcript": "🎮 Handlowiec: Czy możemy chwileczkę porozmawiać?\n\n\n\n🏪 Bar Mleczny Smaczek: No pewnie, jasne. Mam chwilkę, co tam?\n\n\n🎮 Handlowiec: Mam kilka spraw do omówienia z panem.\n\n🏪 Bar Mleczny Smaczek: No dobrze, to słucham uważnie. Tylko proszę, nie za długo, bo zaraz pora obiadowa i trzeba będzie garów pilnować. Co tam masz?\n\n\n🎮 Handlowiec: A ile ma pan czasu?\n\n🏪 Bar Mleczny Smaczek: Nooo, tak z 15 minut znajdę, ale więcej to już będzie ciężko. Zaraz się zacznie schodzić ekipa na obiad, a ja sama wszystkiego nie ogarnę. To co tam masz, gadaj szybko.\n\n\n🎮 Handlowiec: No to super! A czy mógłbym Panu zadać jeszcze wcześniej kilka pytań, zanim przedstawię swoją propozycję?\n\nChodzi dosłownie o dwa, trzy pytania.\n\n🏪 Bar Mleczny Smaczek: No dobra, ale żeby to były naprawdę tylko dwa, trzy, bo mi tu zaraz kociołki zaczną wykipywać. Pytaj pan, pytaj.\n\n\n🎮 Handlowiec: Przestań, panie, pierdolić o kociołkach!\n\n🏪 Bar Mleczny Smaczek: No co pan! Jak to pierdolić? Kociołki same się nie upilnują! A jak przypalę zupę, to kto to będzie jadł? Pan? No dobrze, dobra, pytaj pan szybko, bo mi tu nerwy puszczają. No dawaj, te swoje dwa, trzy pytania i do widzenia!\n\n\n🎮 Handlowiec: Teraz to nie wiem, czy zadam te pytania?\n\n🏪 Bar Mleczny Smaczek: No co pan, teraz to już musi pan zadać! Przecież obiecał pan, że szybko, a ja tu mam roboty po pachy. No, śmiało, pytaj pan, bo zaraz się rozmyślę i pana wygonię z tymi pytaniami. No, dawaj pan te swoje mądrości!\n\n\n🎮 Handlowiec: Czym się pan kieruje w wyborze dostawcy ketchupu?\n\n🏪 Bar Mleczny Smaczek: No wie pan, ketchup to ketchup, ale parę rzeczy musi być. Po pierwsze, żeby był pomidorowy, a nie sama chemia. Po drugie, żeby był w miarę gęsty, a nie jak woda. A po trzecie, no i to chyba najważniejsze, żeby ludzie go lubili! Bo co mi z ketchupu, który stoi i nikt go nie je? No i cena, oczywiście, też gra rolę. Nie mogę przepłacać, bo to bar mleczny, a nie luksusowa restauracja. To co, zadajesz to drugie pytanie, czy już idziesz?\n\n\n🎮 Handlowiec: A jaką ma pan klientelę? Co oni najbardziej lubią kupować?\n\n🏪 Bar Mleczny Smaczek: No wie pan, u mnie to różna klientela bywa. I studenciaki wpadają, i emeryci na tanie obiady, i pracownicy z okolicznych biur na szybki lunch. Każdy coś innego lubi. Studenci to wiadomo, pierogi ruskie i naleśniki na słodko biorą najczęściej, bo tanio i szybko. Emeryci to zupki lubią, pomidorową, ogórkową, rosół, no i kotlet schabowy klasyczny, ziemniaczki i surówka. A ci z biur to różnie, czasem kaszę gryczaną z gulaszem wezmą, czasem jakieś placki ziemniaczane. No, każdy ma swoje upodobania. Ale powiem panu, że u mnie to wszystko schodzi jak ciepłe bułeczki. No i co, pytasz pan dalej, czy już mnie pan zostawi w spokoju? Bo mi się ta zupa zaraz przypali!\n\n\n🎮 Handlowiec: To już ostatnie pytanie?\n\nA ile tego ketchupu mniej więcej schodzi u pana w miesiącu?\n\n🏪 Bar Mleczny Smaczek: Panie, no skąd ja mam to wiedzieć dokładnie? Ja nie prowadzę żadnych tam skomplikowanych statystyk. Ale tak na oko, to z 5, a może i 6 butelek takiego dużego ketchupu w miesiącu zejdzie. Zależy, czy akurat mamy jakieś danie z frytkami, czy nie. No i jak dzieciaki przyjdą na te swoje parówy z bułki. No, mniej więcej tyle. To już wszystko? Bo jak tak, to ja lecę do tej zupy, bo mi się przypali i będzie pan miał mnie na sumieniu!\n",
+            "timestamp": "2025-11-08 19:50:38"
+          }
+        ]
       },
       "client_012": {
         "id": "client_012",

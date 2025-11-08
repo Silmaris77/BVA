@@ -662,8 +662,15 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
                 # Show conversation transcript
                 transcript = visit.get('conversation_transcript', '')
                 if transcript:
-                    with st.expander("📝 Transkrypcja rozmowy", expanded=False):
-                        st.text(transcript)
+                    st.markdown("**📝 Transkrypcja rozmowy:**")
+                    with st.container():
+                        st.text_area(
+                            "Transkrypcja",
+                            value=transcript,
+                            height=200,
+                            disabled=True,
+                            label_visibility="collapsed"
+                        )
                 else:
                     st.info("Brak zapisanej transkrypcji")
     
