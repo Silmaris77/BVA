@@ -169,6 +169,19 @@ class ThemeManager:
         # Mobile sidebar fix - wymuszenie działania przycisku
         mobile_sidebar_fix = """
         <style>
+        /* DISABLE Streamlit scroll restoration - always start at top */
+        section.main > div {
+            overflow-anchor: none !important;
+        }
+        
+        /* Force scroll position reset on page load */
+        section.main,
+        [data-testid="stMain"],
+        [data-testid="stAppViewContainer"] {
+            scroll-behavior: auto !important;
+            overflow-anchor: none !important;
+        }
+        
         /* Zwiększona szerokość sidebar */
         [data-testid="stSidebar"] {
             min-width: 280px !important;

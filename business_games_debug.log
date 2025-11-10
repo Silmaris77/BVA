@@ -178,3 +178,13 @@
 [2025-11-06 09:48:12] ✅ Otrzymano odpowiedź z Gemini
 [2025-11-06 09:48:12] Długość odpowiedzi: 980 znaków
 [2025-11-06 09:48:12] ✅ JSON sparsowany pomyślnie
+[2025-11-10 19:43:52] get_active_evaluation_mode() wywołane
+[2025-11-10 19:43:52] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-10 19:43:52] DEFAULT_EVALUATION_MODE = ai
+[2025-11-10 19:43:52] Plik config/business_games_active_mode.json istnieje
+[2025-11-10 19:43:52] Z pliku odczytano tryb: 'ai'
+[2025-11-10 20:00:04] get_active_evaluation_mode() wywołane
+[2025-11-10 20:00:04] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-10 20:00:04] DEFAULT_EVALUATION_MODE = ai
+[2025-11-10 20:00:04] Plik config/business_games_active_mode.json istnieje
+[2025-11-10 20:00:04] Z pliku odczytano tryb: 'ai'

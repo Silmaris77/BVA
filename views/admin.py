@@ -952,7 +952,6 @@ def show_business_games_admin_panel():
         
         # Wybór trybu
         mode_options = {
-            "heuristic": f"{EVALUATION_MODES['heuristic']['name']} - {EVALUATION_MODES['heuristic']['subtitle']}",
             "ai": f"{EVALUATION_MODES['ai']['name']} - {EVALUATION_MODES['ai']['subtitle']}",
             "game_master": f"{EVALUATION_MODES['game_master']['name']} - {EVALUATION_MODES['game_master']['subtitle']}"
         }
@@ -961,23 +960,13 @@ def show_business_games_admin_panel():
             "Wybierz tryb oceny:",
             options=list(mode_options.keys()),
             format_func=lambda x: mode_options[x],
-            index=list(mode_options.keys()).index(current_mode)
+            index=list(mode_options.keys()).index(current_mode) if current_mode in mode_options else 0
         )
         
         # Info o wybranym trybie
         st.markdown("---")
         
-        if selected_mode == "heuristic":
-            st.success("""
-            **⚡ Heurystyka:**
-            - ✅ Natychmiastowa ocena po przesłaniu
-            - ✅ Oparta na długości i strukturze tekstu
-            - ✅ Brak kosztów
-            - ✅ Dobra dla testów i MVP
-            - ⚠️ Niska jakość merytoryczna
-            """)
-        
-        elif selected_mode == "ai":
+        if selected_mode == "ai":
             st.warning("""
             **🤖 Ocena AI (Google Gemini):**
             - ✅ Szczegółowa analiza merytoryczna

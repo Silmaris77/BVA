@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-11-10 16:12:37",
+    "last_login": "2025-11-10 20:27:43",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -649,6 +649,36 @@
       {
         "type": "login",
         "timestamp": "2025-11-10T16:12:37.737488",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T19:43:33.273651",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T19:54:23.586373",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T19:57:44.749761",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T20:01:22.896146",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T20:07:33.228015",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T20:27:43.387075",
         "details": {}
       }
     ],
@@ -36525,7 +36555,7 @@
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-11-02",
-    "last_login": "2025-11-10 16:53:25",
+    "last_login": "2025-11-10 20:12:59",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -39072,6 +39102,36 @@
       {
         "type": "login",
         "timestamp": "2025-11-10T16:53:25.210074",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T18:31:13.746054",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T18:32:11.203050",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T19:33:05.929608",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T19:35:29.027220",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T19:39:17.897789",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-11-10T20:12:59.308777",
         "details": {}
       }
     ],

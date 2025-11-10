@@ -437,6 +437,10 @@ def navigation_menu():
                 if 'initializing_game' in st.session_state:
                     st.session_state['initializing_game'] = False
             
+            # Ustaw flagę zmiany strony dla scroll reset
+            st.session_state['page_changed'] = True
+            st.session_state['scroll_position'] = 0
+            
             st.session_state.page = option['id']
             st.rerun()
 
