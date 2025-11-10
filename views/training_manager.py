@@ -67,7 +67,7 @@ def show_timer_tab():
     
     with col3:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🚀 START", type="primary", width="stretch"):
+        if st.button("START", key="timer_start", type="primary", use_container_width=True, icon="🚀"):
             total_seconds = minutes * 60 + seconds
             if total_seconds > 0:
                 st.session_state.training_timer_end = datetime.now() + timedelta(seconds=total_seconds)
@@ -75,7 +75,7 @@ def show_timer_tab():
     
     with col4:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("⏹️ STOP", width="stretch"):
+        if st.button("STOP", key="timer_stop", use_container_width=True, icon="⏹️"):
             if st.session_state.training_timer_end:
                 st.session_state.training_timer_end = None
                 if 'training_timer_total' in st.session_state:
@@ -236,7 +236,7 @@ def show_timer_tab():
             </style>
             """, unsafe_allow_html=True)
             
-            if st.button("🔄 Nowy timer", type="primary", width="stretch"):
+            if st.button("🔄 Nowy timer", type="primary", use_container_width=True):
                 st.session_state.training_timer_end = None
                 st.rerun()
 
@@ -278,14 +278,14 @@ def show_auction_tab():
     # Przyciski w jednej linii
     col1, col2 = st.columns([3, 1])
     with col1:
-        if st.button("💵 Aktualizuj wszystkie oferty", type="primary", width="stretch"):
+        if st.button("💵 Aktualizuj wszystkie oferty", type="primary", use_container_width=True):
             for team in teams:
                 team['bid'] = bid_updates.get(team['name'], 0)
             st.success("✅ Oferty zaktualizowane!")
             st.rerun()
     
     with col2:
-        if st.button("🔄 Reset", type="secondary", width="stretch"):
+        if st.button("🔄 Reset", type="secondary", use_container_width=True):
             for team in teams:
                 team['bid'] = 0
             st.success("Oferty wyzerowane!")
@@ -371,14 +371,14 @@ def show_auction_tab():
             seconds = st.number_input("Sekundy:", min_value=0, max_value=300, value=60, key="auction_seconds", label_visibility="collapsed")
         
         with col2:
-            if st.button("▶️", key="auction_start", type="primary", width="stretch"):
+            if st.button("▶️", key="auction_start", type="primary", use_container_width=True):
                 if seconds > 0:
                     st.session_state.auction_timer_running = True
                     st.session_state.auction_timer_end = datetime.now() + timedelta(seconds=seconds)
                     st.rerun()
         
         with col3:
-            if st.button("⏹️", key="auction_stop", type="secondary", width="stretch"):
+            if st.button("⏹️", key="auction_stop", type="secondary", use_container_width=True):
                 st.session_state.auction_timer_running = False
                 st.session_state.auction_timer_end = None
                 st.rerun()
@@ -582,7 +582,7 @@ def show_rankings_tab():
         # Tabela EDYTOWALNA (przyrosty)
         edited_revenue = st.data_editor(
             df_revenue,
-            width="stretch",
+            use_container_width=True,
             hide_index=True,
             column_config=column_config,
             key='revenue_editor'
@@ -666,7 +666,7 @@ def show_rankings_tab():
         # Tabela EDYTOWALNA (przyrosty)
         edited_efficiency = st.data_editor(
             df_efficiency,
-            width="stretch",
+            use_container_width=True,
             hide_index=True,
             column_config=column_config,
             key='efficiency_editor'
@@ -1066,7 +1066,7 @@ def show_settings_tab():
         )
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("➕ Dodaj", type="primary", width="stretch"):
+        if st.button("➕ Dodaj", type="primary", use_container_width=True):
             if new_team_name:
                 # Użyj następnego koloru i logo w kolejności
                 next_idx = len(teams)
@@ -1091,7 +1091,7 @@ def show_settings_tab():
     with col1:
         st.markdown("**Uwaga:** To usunie wszystkie dane i przywróci ustawienia domyślne.")
     with col2:
-        if st.button("🔥 RESET", type="secondary", width="stretch"):
+        if st.button("🔥 RESET", type="secondary", use_container_width=True):
             st.session_state.training_teams = [
                 {"name": "Zespół 1", "bid": 0, "revenue": [100], "efficiency": [9], 
                  "color": "#667eea", "logo": "🏢"},
@@ -1108,3 +1108,4 @@ def show_settings_tab():
 
 if __name__ == "__main__":
     show_training_manager()
+

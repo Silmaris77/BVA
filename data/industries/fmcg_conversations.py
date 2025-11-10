@@ -22,19 +22,37 @@ def build_conversation_prompt(customer, conversation_history, player_message, co
     owner_profile = customer.get('owner_profile', {})
     characteristics = customer.get('characteristics', {})
     
+    # Kompatybilność dla różnych typów klientów (sklepy vs restauracje Heinz)
+    owner_name = (customer.get('owner') or 
+                  owner_profile.get('name') or 
+                  customer.get('chef_name') or 
+                  customer.get('decision_maker') or 
+                  'Nieznany')
+    
+    location = (customer.get('location') or 
+                customer.get('address') or 
+                'Nieznana')
+    
+    # Dla restauracji (Heinz) używamy monthly_covers zamiast size_sqm
+    size_info = ""
+    if 'size_sqm' in customer:
+        size_info = f"Wielkość sklepu: {customer.get('size_sqm', 80)} m²"
+    elif 'monthly_covers' in customer:
+        size_info = f"Pokrycia miesięczne: {customer.get('monthly_covers', 0)}"
+    
     customer_context = f"""
 KLIENT: {customer.get('name', 'Nieznany')}
-Właściciel: {customer.get('owner', owner_profile.get('name', 'Nieznany'))}
+Właściciel/Chef: {owner_name}
 Typ: {customer.get('type', 'Sklep')}
-Lokalizacja: {customer.get('location', 'Nieznana')}
-Wielkość sklepu: {customer.get('size_sqm', 80)} m²
+Lokalizacja: {location}
+{size_info}
     
 CHARAKTERYSTYKA KLIENTA:
-{customer.get('description', 'Brak opisu')}
+{customer.get('description') or customer.get('notes') or 'Brak opisu'}
 
 Miesięczny obrót: {characteristics.get('monthly_revenue', 'nieznany')} PLN
 Klienci dziennie: {characteristics.get('customers_per_day', 'nieznana liczba')}
-Konkurencja: {characteristics.get('competition', 'brak informacji')}
+Konkurencja: {characteristics.get('competition') or 'brak informacji'}
 
 OSOBOWOŚĆ właściciela:
 {owner_profile.get('personality', 'Nieznana osobowość')}
@@ -51,7 +69,9 @@ Obawy: {', '.join(owner_profile.get('concerns', ['Brak']))}
     if sales_capacity:
         from utils.fmcg_order_realism import get_segment_name
         
-        segment_name = get_segment_name(customer.get('size_sqm', 80))
+        # Dla sklepów używamy size_sqm, dla restauracji segment
+        size_sqm = customer.get('size_sqm', 80)
+        segment_name = get_segment_name(size_sqm) if size_sqm else customer.get('segment', 'mixed')
         
         sales_capacity_context = f"""
 💼 BARDZO WAŻNE - TWOJE OGRANICZENIA JAKO WŁAŚCICIELA SKLEPU ({segment_name}):
@@ -239,7 +259,7 @@ Relationship score: {context.get('relationship_score', 0)}/100
 
     # Prompt systemowy
     system_prompt = f"""
-Jesteś {customer['owner']}, właścicielem {customer['name']}.
+Jesteś {owner_name}, właścicielem {customer.get('name', 'tego sklepu')}.
 
 {customer_context}
 
@@ -276,7 +296,7 @@ TWOJA WYPOWIEDŹ:
 Gracz pisze:
 "{player_message}"
 
-Odpowiedz jako {customer['owner']} (kontynuuj rozmowę, NIE zaczynaj od nowa):
+Odpowiedz jako {owner_name} (kontynuuj rozmowę, NIE zaczynaj od nowa):
 """
     
     return system_prompt

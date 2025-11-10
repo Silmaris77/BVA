@@ -2655,7 +2655,7 @@ def render_employee_card(employee, username, user_data, bg_data, industry_id="co
         """, unsafe_allow_html=True)
         
         # Przycisk zwolnienia
-        if st.button("🗑️ Zwolnij", key=f"fire_{employee['id']}", type="secondary", width="stretch"):
+        if st.button("🗑️ Zwolnij", key=f"fire_{employee['id']}", type="secondary", use_container_width=True):
             updated_user_data, success, message = fire_employee(user_data, employee['id'], industry_id)
             if success:
                 user_data.update(updated_user_data)
@@ -2691,9 +2691,9 @@ def render_hire_card(emp_type, emp_data, username, user_data, bg_data, industry_
         # Przycisk zatrudnienia
         if not can_hire:
             st.button("🔒 Niedostępny", key=f"hire_{emp_type}_locked", disabled=True, 
-                     help=reason, width="stretch")
+                     help=reason, use_container_width=True)
         else:
-            if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary", width="stretch"):
+            if st.button("✅ Zatrudnij", key=f"hire_{emp_type}", type="primary", use_container_width=True):
                 updated_user_data, success, message = hire_employee(user_data, emp_type, industry_id)
                 if success:
                     user_data.update(updated_user_data)
@@ -3148,7 +3148,7 @@ def show_pl_statement(financial_data, period_type, show_comparison):
     # Stylowanie tabeli
     st.dataframe(
         df,
-        width="stretch",
+        use_container_width=True,
         hide_index=True,
         height=500
     )
@@ -3342,7 +3342,7 @@ def show_employee_roi_analysis(financial_data, bg_data):
         })
     
     df = pd.DataFrame(roi_data)
-    st.dataframe(df, width="stretch", hide_index=True)
+    st.dataframe(df, use_container_width=True, hide_index=True)
     
     # Wykres kosztów pracowników
     if employee_stats:
@@ -3420,7 +3420,7 @@ def show_category_analysis(financial_data, bg_data):
     table_data.sort(key=lambda x: float(x["Średni przychód"].replace(" 💰", "").replace(",", "")), reverse=True)
     
     df = pd.DataFrame(table_data)
-    st.dataframe(df, width="stretch", hide_index=True)
+    st.dataframe(df, use_container_width=True, hide_index=True)
     
     # Wykres słupkowy - przychody per kategoria
     import plotly.graph_objects as go
@@ -3908,5 +3908,6 @@ def show_events_tab(username, user_data, industry_id="consulting"):
         # Pokazuj tylko ostatnie 10
         for event in history_sorted[:10]:
             render_event_history_card(event)
+
 
 

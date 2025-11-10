@@ -47,8 +47,8 @@ from views.business_games_refactored.industries import fmcg
 def show_business_games(username, user_data):
     """Główna funkcja obsługująca Business Games"""
     
-    # Przewiń na górę strony
-    scroll_to_top()
+    # Przewiń na górę strony - TEMPORARILY DISABLED for debugging
+    # scroll_to_top()
     
     # Zastosuj style Material 3
     apply_material3_theme()

@@ -3,7 +3,6 @@ Utilities for handling page scrolling in Streamlit applications.
 """
 
 import streamlit as st
-import streamlit.components.v1 as components
 
 
 def scroll_to_top():
@@ -38,7 +37,8 @@ def scroll_to_top():
     </script>
     """
     
-    components.html(js_code, height=0)
+    # Używamy st.markdown zamiast components.html aby uniknąć dodatkowej przestrzeni od iframe
+    st.markdown(js_code, unsafe_allow_html=True)
 
 
 def scroll_to_top_with_delay(delay_ms=100):
@@ -73,7 +73,8 @@ def scroll_to_top_with_delay(delay_ms=100):
     </script>
     """
     
-    components.html(js_code, height=0)
+    # Używamy st.markdown zamiast components.html aby uniknąć dodatkowej przestrzeni od iframe
+    st.markdown(js_code, unsafe_allow_html=True)
 
 
 def scroll_to_top_smooth():
@@ -112,7 +113,8 @@ def scroll_to_top_smooth():
     </script>
     """
     
-    components.html(js_code, height=0)
+    # Używamy st.markdown zamiast components.html aby uniknąć dodatkowej przestrzeni od iframe
+    st.markdown(js_code, unsafe_allow_html=True)
 
 
 def auto_scroll_on_tab_change(tab_key=None):

@@ -570,7 +570,7 @@ def show_kolb_test():
             st.markdown("<div style='margin-bottom: 10px;'></div>", unsafe_allow_html=True)
         
         # Przycisk do obliczenia wyniku
-        if st.button("📊 Oblicz mój styl uczenia się", type="primary", width="stretch"):
+        if st.button("📊 Oblicz mój styl uczenia się", type="primary", use_container_width=True):
             if len(st.session_state.kolb_answers) == len(questions):
                 calculate_kolb_results()
                 st.session_state.kolb_completed = True
@@ -2381,19 +2381,19 @@ def display_kolb_results():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("👨‍🏫 Trener", width="stretch", type="secondary", key="prof_trainer"):
+        if st.button("👨‍🏫 Trener", use_container_width=True, type="secondary", key="prof_trainer"):
             st.session_state.kolb_profession = "Trener"
             st.session_state.kolb_ai_generated = False
             st.rerun()
     
     with col2:
-        if st.button("👔 Menedżer", width="stretch", type="secondary", key="prof_manager"):
+        if st.button("👔 Menedżer", use_container_width=True, type="secondary", key="prof_manager"):
             st.session_state.kolb_profession = "Menedżer"
             st.session_state.kolb_ai_generated = False
             st.rerun()
     
     with col3:
-        if st.button("💼 Sprzedawca", width="stretch", type="secondary", key="prof_sales"):
+        if st.button("💼 Sprzedawca", use_container_width=True, type="secondary", key="prof_sales"):
             st.session_state.kolb_profession = "Sprzedawca"
             st.session_state.kolb_ai_generated = False
             st.rerun()
@@ -2515,7 +2515,7 @@ def display_kolb_results():
             </div>
             """, unsafe_allow_html=True)
         else:
-            if st.button("? Wygeneruj wskazówki AI", type="primary", width="stretch", key="generate_ai_tips"):
+            if st.button("? Wygeneruj wskazówki AI", type="primary", use_container_width=True, key="generate_ai_tips"):
                 with st.spinner("🤖 AI generuje spersonalizowane wskazówki..."):
                     generate_kolb_ai_tips(dominant, st.session_state.kolb_profession)
                     st.session_state.kolb_ai_generated = True
@@ -2526,7 +2526,7 @@ def display_kolb_results():
     col_pdf, col_reset, col_close = st.columns([1, 1, 1])
     
     with col_pdf:
-        if st.button("📄 Wygeneruj raport PDF", width="stretch", type="primary", key="download_kolb_pdf"):
+        if st.button("📄 Wygeneruj raport PDF", use_container_width=True, type="primary", key="download_kolb_pdf"):
             try:
                 html_content = generate_kolb_html_report()
                 
@@ -2563,7 +2563,7 @@ def display_kolb_results():
                 st.error(f"? Błąd podczas generowania raportu: {str(e)}")
     
     with col_reset:
-        if st.button("▶️ Rozpocznij test od nowa", width="stretch", key="restart_kolb_test"):
+        if st.button("▶️ Rozpocznij test od nowa", use_container_width=True, key="restart_kolb_test"):
             # Ustaw flagę reset, aby zapobiec automatycznemu wczytywaniu wyników z bazy
             st.session_state.kolb_reset = True
             st.session_state.kolb_answers = {}
@@ -2579,7 +2579,7 @@ def display_kolb_results():
             st.rerun()
     
     with col_close:
-        if st.button("? Zamknij test", width="stretch", key="close_kolb_from_results"):
+        if st.button("? Zamknij test", use_container_width=True, key="close_kolb_from_results"):
             st.session_state.active_tool = None
             st.rerun()
 
@@ -4832,7 +4832,7 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
                 st.markdown(f"**Rozmówca:** {selected_scenario['ai_role']}")
             
             st.markdown("")
-            if st.button("▶️ Rozpocznij symulację", type="primary", width="stretch", key=f"start_{selected_id}"):
+            if st.button("▶️ Rozpocznij symulację", type="primary", use_container_width=True, key=f"start_{selected_id}"):
                 st.session_state.simulator_scenario = selected_id
                 st.session_state.simulator_started = True
                 st.session_state.simulator_waiting_for_next = False  # Reset flagi
@@ -4914,7 +4914,7 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
         # Przyciski: nowy scenariusz lub zamknij
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("?? Spróbuj innego scenariusza", type="primary", width="stretch"):
+            if st.button("?? Spróbuj innego scenariusza", type="primary", use_container_width=True):
                 st.session_state.simulator_started = False
                 st.session_state.simulator_messages = []
                 st.session_state.simulator_scenario = None
@@ -4924,7 +4924,7 @@ Odpowiedz TYLKO kontekstem. Format: "Negocjujesz z [partner] ws. [przedmiot]. Pu
                 st.session_state.simulator_final_report = None
                 st.rerun()
         with col2:
-            if st.button("? Zamknij", width="stretch"):
+            if st.button("? Zamknij", use_container_width=True):
                 st.session_state.active_simulator = None
                 st.session_state.simulator_started = False
                 st.session_state.simulator_messages = []
@@ -6835,7 +6835,7 @@ def show_mi_test():
         # Przycisk start
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if st.button("🚀 Rozpocznij Test (10-15 min)", width="stretch", type="primary", key="start_mi_test"):
+            if st.button("🚀 Rozpocznij Test (10-15 min)", use_container_width=True, type="primary", key="start_mi_test"):
                 st.session_state.mi_test_started = True
                 st.rerun()
         
@@ -6922,7 +6922,7 @@ def show_mi_test_questions():
     if len(st.session_state.mi_answers) == total_questions:
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if st.button("✅ Zakończ test i zobacz wyniki", width="stretch", type="primary", key="finish_mi_test"):
+            if st.button("✅ Zakończ test i zobacz wyniki", use_container_width=True, type="primary", key="finish_mi_test"):
                 calculate_and_save_mi_results()
                 st.session_state.mi_completed = True
                 st.rerun()
@@ -7082,7 +7082,7 @@ def show_mi_results():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("📥 Pobierz raport PDF", width="stretch", key="download_mi_pdf"):
+        if st.button("📥 Pobierz raport PDF", use_container_width=True, key="download_mi_pdf"):
             pdf_bytes = generate_mi_pdf_report(results)
             if pdf_bytes:
                 st.download_button(
@@ -7094,13 +7094,13 @@ def show_mi_results():
                 )
     
     with col2:
-        if st.button("✅ Zastosuj rekomendacje w profilu", width="stretch", key="apply_mi_recs"):
+        if st.button("✅ Zastosuj rekomendacje w profilu", use_container_width=True, key="apply_mi_recs"):
             apply_mi_recommendations_to_profile(results)
             st.success("✅ Profil zaktualizowany!")
             st.balloons()
     
     with col3:
-        if st.button("🔄 Wykonaj test ponownie", width="stretch", key="reset_mi_test"):
+        if st.button("🔄 Wykonaj test ponownie", use_container_width=True, key="reset_mi_test"):
             # Reset testu
             for key in ['mi_test_started', 'mi_answers', 'mi_results', 'mi_completed']:
                 if key in st.session_state:

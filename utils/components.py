@@ -263,6 +263,16 @@ def zen_header(title, subtitle=None):
     - title: Tytuł strony
     - subtitle: Podtytuł (opcjonalny)
     """
+    # Dodaj style dla konsystentnego wyświetlania nagłówka
+    st.markdown("""
+    <style>
+    .zen-header {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.markdown(f"<h1 class='zen-header'>{title}</h1>", unsafe_allow_html=True)
     if subtitle:
         st.markdown(f"<p class='zen-subtitle'>{subtitle}</p>", unsafe_allow_html=True)

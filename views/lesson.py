@@ -597,7 +597,7 @@ def show_lessons_content():
                                 key=f"nav_step_{step}_{col_index}", 
                                 type=button_type,
                                 disabled=disabled,
-                                width='stretch',
+                                use_container_width=True,
                                 help=help_text
                             ):
                                 if not is_current:  # Tylko jeśli nie jest to aktualny krok
@@ -696,7 +696,7 @@ def show_lessons_content():
                             st.markdown("---")
                             col1, col2, col3 = st.columns([1, 1, 1])
                             with col2:
-                                if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_legacy_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
+                                if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_legacy_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
                                     # Reset stanu quizu samodiagnozy
                                     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                     
@@ -1126,7 +1126,7 @@ def show_lessons_content():
                                         st.markdown("---")
                                         col1, col2, col3 = st.columns([1, 1, 1])
                                         with col2:
-                                            if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
+                                            if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
                                                 # Reset stanu quizu
                                                 quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                 closing_quiz_key = f"closing_quiz_{lesson_id}"  # Definiuj tutaj
@@ -1251,7 +1251,7 @@ def show_lessons_content():
                                                 # Przycisk pokazania odpowiedzi
                                                 col1, col2, col3 = st.columns([1, 2, 1])
                                                 with col2:
-                                                    if st.button("📌 Pokaż odpowiedź", key=f"show_back_{card_id}", type="primary", width="stretch"):
+                                                    if st.button("📌 Pokaż odpowiedź", key=f"show_back_{card_id}", type="primary", use_container_width=True):
                                                         flashcard_state['show_back'] = True
                                                         st.rerun()
                                             
@@ -1284,7 +1284,7 @@ def show_lessons_content():
                                                 col1, col2, col3 = st.columns(3)
                                                 
                                                 with col1:
-                                                    if st.button("? Nie wiedziałem", key=f"incorrect_{card_id}", type="secondary", width="stretch"):
+                                                    if st.button("? Nie wiedziałem", key=f"incorrect_{card_id}", type="secondary", use_container_width=True):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         flashcard_state['incorrect_answers'].add(card_id)
                                                         flashcard_state['correct_answers'].discard(card_id)  # Usuń z poprawnych jeśli było
@@ -1293,7 +1293,7 @@ def show_lessons_content():
                                                         st.rerun()
                                                 
                                                 with col2:
-                                                    if st.button("📌 Częściowo", key=f"partial_{card_id}", width="stretch"):
+                                                    if st.button("📌 Częściowo", key=f"partial_{card_id}", use_container_width=True):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         # Częściowa wiedza = nie dodawaj do żadnej kategorii
                                                         flashcard_state['show_back'] = False
@@ -1301,7 +1301,7 @@ def show_lessons_content():
                                                         st.rerun()
                                                 
                                                 with col3:
-                                                    if st.button("? Wiedziałem", key=f"correct_{card_id}", type="primary", width="stretch"):
+                                                    if st.button("? Wiedziałem", key=f"correct_{card_id}", type="primary", use_container_width=True):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         flashcard_state['correct_answers'].add(card_id)
                                                         flashcard_state['incorrect_answers'].discard(card_id)  # Usuń z niepoprawnych jeśli było
@@ -1796,7 +1796,7 @@ def show_lessons_content():
                                             st.markdown("---")
                                             col1, col2, col3 = st.columns([1, 1, 1])
                                             with col2:
-                                                if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_practical_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", width='stretch'):
+                                                if st.button("🔄 Przystąp ponownie", key=f"retry_autodiag_quiz_practical_{lesson_id}", help="Możesz ponownie wypełnić quiz autodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
                                                     # Reset stanu quizu autodiagnozy
                                                     quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                                     if quiz_id in st.session_state:

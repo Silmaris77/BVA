@@ -519,7 +519,7 @@ def show_business_simulator():
                 if st.button(
                     diff_info['name'],
                     help=diff_info['description'],
-                    width="stretch",
+                    use_container_width=True,
                     type="primary" if idx == 1 else "secondary"
                 ):
                     st.session_state.sim_difficulty = diff_id
@@ -534,7 +534,7 @@ def show_business_simulator():
             st.markdown("---")
             st.markdown("#### 🎬 Krok 2: Wygeneruj szczegółowy kontekst")
             
-            if st.button("🤖 Generuj kontekst scenariusza przez AI", type="primary", width="stretch"):
+            if st.button("🤖 Generuj kontekst scenariusza przez AI", type="primary", use_container_width=True):
                 with st.spinner("🔄 AI tworzy realistyczny kontekst sytuacji..."):
                     context = generate_scenario_context(selected_id, st.session_state.sim_difficulty)
                     
@@ -580,7 +580,7 @@ def show_business_simulator():
         # Przyciski
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("▶️ Rozpocznij symulację", type="primary", width="stretch"):
+            if st.button("▶️ Rozpocznij symulację", type="primary", use_container_width=True):
                 st.session_state.sim_started = True
                 st.session_state.sim_messages = []
                 st.session_state.sim_awaiting_user_response = True  # Zawsze czekamy na użytkownika
@@ -608,7 +608,7 @@ def show_business_simulator():
                 st.rerun()
         
         with col2:
-            if st.button("🔄 Wygeneruj inny kontekst", width="stretch"):
+            if st.button("🔄 Wygeneruj inny kontekst", use_container_width=True):
                 st.session_state.sim_context_generated = False
                 st.session_state.sim_context = None
                 st.rerun()
@@ -716,7 +716,7 @@ def show_business_simulator():
                         col_space1, col_btn1, col_btn2, col_btn3, col_space2 = st.columns([1, 2, 2, 2, 1])
                         
                         with col_btn1:
-                            if st.button("🔄 Powtórz", key=f"retry_{idx}", width="stretch", help="Usuń swoją odpowiedź i spróbuj ponownie"):
+                            if st.button("🔄 Powtórz", key=f"retry_{idx}", use_container_width=True, help="Usuń swoją odpowiedź i spróbuj ponownie"):
                                 # Usuń ostatnią wiadomość użytkownika
                                 st.session_state.sim_messages.pop()
                                 # Ustaw flagę aby pokazać pole czatu
@@ -724,7 +724,7 @@ def show_business_simulator():
                                 st.rerun()
                         
                         with col_btn2:
-                            if st.button("✅ Dalej", key=f"continue_{idx}", type="primary", width="stretch", help="Kontynuuj rozmowę"):
+                            if st.button("✅ Dalej", key=f"continue_{idx}", type="primary", use_container_width=True, help="Kontynuuj rozmowę"):
                                 # Generuj odpowiedź AI
                                 with st.spinner(f"💭 {context.get('ai_name')} myśli..."):
                                     user_ciq = analysis.get('level', 'nieznany')
@@ -746,7 +746,7 @@ def show_business_simulator():
                                     st.rerun()
                         
                         with col_btn3:
-                            if st.button("🏁 Zakończ", key=f"finish_{idx}", width="stretch", help="Zakończ rozmowę i zobacz podsumowanie"):
+                            if st.button("🏁 Zakończ", key=f"finish_{idx}", use_container_width=True, help="Zakończ rozmowę i zobacz podsumowanie"):
                                 st.session_state.sim_completed = True
                                 st.rerun()
     
@@ -1110,7 +1110,7 @@ To pokazuje, że rozumiesz kiedy niższe poziomy C-IQ są właściwym wyborem!""
         data=transcript_text,
         file_name=filename,
         mime="text/plain",
-        width="stretch"
+        use_container_width=True
     )
     
     st.markdown("---")
@@ -1135,12 +1135,13 @@ To pokazuje, że rozumiesz kiedy niższe poziomy C-IQ są właściwym wyborem!""
     st.markdown("---")
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("🎯 Nowa symulacja", type="primary", width="stretch"):
+        if st.button("🎯 Nowa symulacja", type="primary", use_container_width=True):
             reset_simulator()
             st.rerun()
     with col2:
-        if st.button("❌ Zamknij", width="stretch"):
+        if st.button("❌ Zamknij", use_container_width=True):
             reset_simulator()
             if 'active_simulator' in st.session_state:
                 st.session_state.active_simulator = None
             st.rerun()
+

@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple
 import random
 import math
+from utils.delayed_orders_processor import process_daily_delayed_orders
 
 from data.industries.fmcg_data_schema import (
     FMCGClientData,
@@ -925,6 +926,7 @@ def advance_day(game_state: FMCGGameState, clients: Dict[str, FMCGClientData]) -
     - Aplikuje reputation decay
     - Sprawdza statusy klientów
     - Resetuje licznik wizyt tygodniowych (jeśli piątek)
+    - Przetwarza delayed orders (Heinz scenario)
     
     Args:
         game_state: Stan gry
@@ -933,6 +935,33 @@ def advance_day(game_state: FMCGGameState, clients: Dict[str, FMCGClientData]) -
     Returns:
         (updated_game_state, updated_clients)
     """
+    # =============================================================================
+    # DELAYED ORDERS PROCESSING (Heinz Scenario)
+    # =============================================================================
+    # Pobierz aktualną datę gry (jeśli nie ma, użyj dzisiejszej)
+    current_game_date = game_state.get("current_game_date")
+    if not current_game_date:
+        current_game_date = datetime.now().strftime("%Y-%m-%d")
+        game_state["current_game_date"] = current_game_date
+    else:
+        # Zwiększ datę o 1 dzień
+        current_date_obj = datetime.strptime(current_game_date, "%Y-%m-%d")
+        next_date_obj = current_date_obj + timedelta(days=1)
+        current_game_date = next_date_obj.strftime("%Y-%m-%d")
+        game_state["current_game_date"] = current_game_date
+    
+    # Przetwórz delayed orders dla nowej daty
+    game_state, pull_through_notifications = process_daily_delayed_orders(
+        game_state,
+        current_game_date
+    )
+    
+    # Zapisz notyfikacje do wyświetlenia
+    if pull_through_notifications:
+        if "pending_notifications" not in game_state:
+            game_state["pending_notifications"] = []
+        game_state["pending_notifications"].extend(pull_through_notifications)
+    
     # Regenerate energy
     game_state = regenerate_energy(game_state)
     
@@ -1270,32 +1299,10 @@ def update_fmcg_game_state_sql(
         
         if success:
             print(f"[FMCG] Game state updated in SQL for {username}")
+            return True
         else:
             print(f"[FMCG] Failed to update FMCG game state in SQL (user may not exist)")
-        
-        # ALWAYS save to JSON as well (fallback for users without SQL)
-        try:
-            import json
-            import os
-            
-            users_file = "users_data.json"
-            if os.path.exists(users_file):
-                with open(users_file, 'r', encoding='utf-8') as f:
-                    users_data = json.load(f)
-                
-                if username in users_data:
-                    users_data[username]["fmcg_game_state"] = game_state
-                    users_data[username]["fmcg_clients"] = clients
-                    
-                    with open(users_file, 'w', encoding='utf-8') as f:
-                        json.dump(users_data, f, indent=2, ensure_ascii=False)
-                    
-                    print(f"[FMCG] Game state saved to JSON for {username}")
-                    return True
-        except Exception as json_error:
-            print(f"[FMCG] Failed to save to JSON: {json_error}")
-        
-        return success
+            return False
         
     except Exception as e:
         print(f"[FMCG] Error updating FMCG game state: {e}")
@@ -1306,7 +1313,7 @@ def update_fmcg_game_state_sql(
 
 def load_fmcg_game_state_sql(username: str) -> Optional[Tuple[FMCGGameState, Dict[str, FMCGClientData]]]:
     """
-    Wczytuje stan gry FMCG z JSON lub SQL
+    Wczytuje stan gry FMCG z SQL
     
     Args:
         username: Nazwa użytkownika
@@ -1315,24 +1322,7 @@ def load_fmcg_game_state_sql(username: str) -> Optional[Tuple[FMCGGameState, Dic
         Tuple (game_state, clients) lub None jeśli brak gry
     """
     try:
-        # Try loading from JSON first (primary storage)
-        import json
-        import os
-        
-        users_file = "users_data.json"
-        
-        if os.path.exists(users_file):
-            with open(users_file, 'r', encoding='utf-8') as f:
-                users_data = json.load(f)
-            
-            if username in users_data:
-                game_state = users_data[username].get("fmcg_game_state")
-                clients = users_data[username].get("fmcg_clients")
-                
-                if game_state and clients:
-                    return (game_state, clients)
-        
-        # Fallback to SQL/repository
+        # Load from SQL (primary and only storage)
         repo = BusinessGameRepository()
         game_data = repo.get(username, "fmcg")
         
@@ -1342,7 +1332,7 @@ def load_fmcg_game_state_sql(username: str) -> Optional[Tuple[FMCGGameState, Dic
         
         # Extract state and clients
         game_state = game_data.get("fmcg_state")
-        clients = game_data.get("clients", {})
+        clients = game_state.get("clients", {}) if game_state else {}
         
         if not game_state:
             print(f"[FMCG] FMCG game data missing fmcg_state for {username}")
@@ -1353,6 +1343,8 @@ def load_fmcg_game_state_sql(username: str) -> Optional[Tuple[FMCGGameState, Dic
         
     except Exception as e:
         print(f"[FMCG] Error loading FMCG game state: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 

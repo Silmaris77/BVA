@@ -1,0 +1,400 @@
+{
+  "rest_001": {
+    "id": "rest_001",
+    "name": "Burger Station Wisła",
+    "address": "Rynek 1, 43-460 Wisła",
+    "latitude": 49.6547,
+    "longitude": 18.8615,
+    "distance_from_base": 15.2,
+    "type": "Burger Joint",
+    "segment": "premium",
+    "distributor_id": "farutex",
+    "chef_name": "Marek Kowalski",
+    "chef_phone": "+48 601 234 567",
+    "decision_maker": "Chef + Właściciel",
+    "monthly_covers": 1200,
+    "avg_check": 32.00,
+    "relationship_score": 45,
+    "last_visit_date": "2025-01-15",
+    "visits_count": 2,
+    "convinced_products": {},
+    "conviction_data": {
+      "heinz_ketchup_premium_5kg": {
+        "stage": "discovery",
+        "progress": 25,
+        "conversation_history": [
+          {
+            "date": "2025-01-15",
+            "player_argument": "Heinz Ketchup Premium ma Brix 29% - najgęstszy na rynku. To oznacza 15% mniejsze zużycie niż tańsze marki.",
+            "ai_score": 75,
+            "ai_feedback": "Dobry argument oparty na faktach. Wspomniałeś konkretną korzyść finansową. W następnym kroku spróbuj dodać przykład z życia - ile to oszczędności w PLN miesięcznie dla tego typu burgerowni.",
+            "progress_gain": 25,
+            "stage_after": "discovery"
+          }
+        ],
+        "last_interaction_date": "2025-01-15",
+        "total_attempts": 1,
+        "started_date": "2025-01-15"
+      }
+    },
+    "current_competitors": {
+      "ketchup": "Kotlin",
+      "majonez": "Winiary",
+      "bbq_sauce": "brak (okazja)"
+    },
+    "notes": "Burgerownia w centrum Wisły. Chef zainteresowany produktami premium do burgerów."
+  },
+  "rest_002": {
+    "id": "rest_002",
+    "name": "Restauracja Stok",
+    "address": "ul. Beskidzka 10, 43-460 Wisła",
+    "latitude": 49.6490,
+    "longitude": 18.8500,
+    "distance_from_base": 14.8,
+    "type": "Restauracja premium",
+    "segment": "premium",
+    "distributor_id": "bidfood",
+    "chef_name": "Anna Nowak",
+    "chef_phone": "+48 602 345 678",
+    "decision_maker": "Chef",
+    "monthly_covers": 950,
+    "avg_check": 85.00,
+    "relationship_score": 60,
+    "last_visit_date": "2025-01-20",
+    "visits_count": 3,
+    "convinced_products": {
+      "heinz_ketchup_premium_5kg": {
+        "convinced_date": "2025-01-20",
+        "ordering_status": "active",
+        "monthly_volume_kg": 10.0,
+        "conviction_progress": 100
+      }
+    },
+    "conviction_data": {
+      "heinz_majonez_delikatny_5kg": {
+        "stage": "pitch",
+        "progress": 50,
+        "conversation_history": [
+          {
+            "date": "2025-01-20",
+            "player_argument": "Pani Anno, używa Pani Heinz Ketchup - to świadczy o dobrym guście. Majonez Heinz ma 78% oleju, stabilną konsystencję i pasuje do premium menu. Goście rozpoznają markę.",
+            "ai_score": 80,
+            "ai_feedback": "Świetnie połączyłeś wcześniejsze doświadczenie klienta z nowym produktem. Chef już zna jakość Heinz. Przejście do Pitch - teraz czas na konkretną ofertę cenową.",
+            "progress_gain": 50,
+            "stage_after": "pitch"
+          }
+        ],
+        "last_interaction_date": "2025-01-20",
+        "total_attempts": 1,
+        "started_date": "2025-01-20"
+      }
+    },
+    "current_competitors": {
+      "ketchup": "Heinz (przekonano!)",
+      "majonez": "Develey",
+      "korean_sauce": "brak (okazja)"
+    },
+    "notes": "Restauracja przy stoku narciarskim. Przekonana do Heinz Ketchup Premium."
+  },
+  "rest_003": {
+    "id": "rest_003",
+    "name": "Bar Ustroń",
+    "address": "ul. Sanatoryjna 7, 43-450 Ustroń",
+    "latitude": 49.7178,
+    "longitude": 18.8230,
+    "distance_from_base": 9.8,
+    "type": "Bar mleczny / fast casual",
+    "segment": "value",
+    "distributor_id": "selgros_horeca",
+    "chef_name": "Janusz Wiśniewski",
+    "chef_phone": "+48 603 456 789",
+    "decision_maker": "Właściciel",
+    "monthly_covers": 3500,
+    "avg_check": 22.00,
+    "relationship_score": 30,
+    "last_visit_date": "2025-01-10",
+    "visits_count": 1,
+    "convinced_products": {},
+    "conviction_data": {},
+    "current_competitors": {
+      "ketchup": "Targroch (najtańszy)",
+      "majonez": "Winiary",
+      "bbq_sauce": "brak"
+    },
+    "notes": "Bardzo wrażliwy na cenę. Pudliszki może być dobrą propozycją."
+  },
+  "rest_004": {
+    "id": "rest_004",
+    "name": "Burger House Skoczów",
+    "address": "Plac Hoffa 8, 43-430 Skoczów",
+    "latitude": 49.7783,
+    "longitude": 18.7894,
+    "distance_from_base": 7.2,
+    "type": "QSR / Burger Bar",
+    "segment": "mixed",
+    "distributor_id": "transgourmet",
+    "chef_name": "Tomasz Kwiatkowski",
+    "chef_phone": "+48 604 567 890",
+    "decision_maker": "Manager operacyjny",
+    "monthly_covers": 2200,
+    "avg_check": 35.00,
+    "relationship_score": 50,
+    "last_visit_date": "2025-01-18",
+    "visits_count": 2,
+    "convinced_products": {
+      "heinz_ketchup_premium_5kg": {
+        "convinced_date": "2025-01-05",
+        "ordering_status": "active",
+        "monthly_volume_kg": 25.0,
+        "conviction_progress": 100
+      },
+      "heinz_majonez_delikatny_5kg": {
+        "convinced_date": "2025-01-18",
+        "ordering_status": "active",
+        "monthly_volume_kg": 15.0,
+        "conviction_progress": 100
+      }
+    },
+    "conviction_data": {},
+    "current_competitors": {
+      "ketchup": "Heinz (przekonano!)",
+      "majonez": "Heinz (przekonano!)",
+      "bbq_sauce": "Develey (do wymiany)"
+    },
+    "notes": "Klient modelowy! Zamawia regularnie przez Transgourmet. Okazja: BBQ Sauce."
+  },
+  "rest_005": {
+    "id": "rest_005",
+    "name": "Hotel Beskid - Restauracja",
+    "address": "ul. Wczasowa 181, 43-450 Ustroń",
+    "latitude": 49.7150,
+    "longitude": 18.8320,
+    "distance_from_base": 10.5,
+    "type": "Hotel 4* - restauracja",
+    "segment": "premium",
+    "distributor_id": "orbico",
+    "chef_name": "Michał Zieliński",
+    "chef_phone": "+48 605 678 901",
+    "decision_maker": "Chef + F&B Manager",
+    "monthly_covers": 800,
+    "avg_check": 120.00,
+    "relationship_score": 70,
+    "last_visit_date": "2025-01-22",
+    "visits_count": 4,
+    "convinced_products": {
+      "heinz_sticky_korean_sauce_2_35kg": {
+        "convinced_date": "2025-01-22",
+        "ordering_status": "trial",
+        "monthly_volume_kg": 2.35,
+        "conviction_progress": 75
+      }
+    },
+    "conviction_data": {
+      "heinz_ketchup_premium_5kg": {
+        "stage": "convince",
+        "progress": 75,
+        "conversation_history": [
+          {
+            "date": "2025-01-15",
+            "player_argument": "Hotel Beskid to 4 gwiazdki - goście oczekują premium brandów. Heinz Ketchup to sygnał jakości rozpoznawalny międzynarodowo.",
+            "ai_score": 70,
+            "ai_feedback": "Dobry argument reputacyjny. Jednak hotel już testuje Korean Sauce Heinz - możesz użyć tego jako dźwigni. 'Już Państwo poznaliście jakość Heinz w Korean Sauce - ketchup to ten sam standard'.",
+            "progress_gain": 35,
+            "stage_after": "pitch"
+          },
+          {
+            "date": "2025-01-22",
+            "player_argument": "Państwo testujecie Korean Sauce Heinz i widzicie reakcję gości. Ketchup Heinz Premium to ten sam poziom - Brix 29%, konsystencja idealna do śniadaniowych jajek i lunchowych burgerów. Przez Orbico mogę dostarczyć 5kg po 38 PLN.",
+            "ai_score": 85,
+            "ai_feedback": "Perfekcyjne połączenie! Wykorzystałeś trwający test jako dowód społeczny. Plus konkretna oferta przez dystrybutora, którego już znają. Chef widzi sense - jeszcze jeden krok i sprawa zamknięta.",
+            "progress_gain": 40,
+            "stage_after": "convince"
+          }
+        ],
+        "last_interaction_date": "2025-01-22",
+        "total_attempts": 2,
+        "started_date": "2025-01-15"
+      }
+    },
+    "current_competitors": {
+      "ketchup": "Hellmann's",
+      "majonez": "Hellmann's",
+      "korean_sauce": "Heinz (test!)",
+      "bbq_sauce": "Jack Daniel's (premium)"
+    },
+    "notes": "W trakcie testu Korean Sauce. Relacja bardzo dobra – okazja na cały portfel Heinz."
+  },
+  "rest_006": {
+    "id": "rest_006",
+    "name": "Pizzeria Bella Vista",
+    "address": "ul. Daszyńskiego 2, 43-400 Cieszyn",
+    "latitude": 49.7490,
+    "longitude": 18.6314,
+    "distance_from_base": 6.8,
+    "type": "Pizzeria casual dining",
+    "segment": "mixed",
+    "distributor_id": "farutex",
+    "chef_name": "Giuseppe Rossi",
+    "chef_phone": "+48 606 789 012",
+    "decision_maker": "Właściciel (włoski szef)",
+    "monthly_covers": 1400,
+    "avg_check": 42.00,
+    "relationship_score": 25,
+    "last_visit_date": "2025-01-12",
+    "visits_count": 1,
+    "convinced_products": {},
+    "conviction_data": {},
+    "current_competitors": {
+      "ketchup": "Mutti (włoski)",
+      "majonez": "brak",
+      "bbq_sauce": "brak"
+    },
+    "notes": "Pizzeria w Cieszynie. Lojalność do włoskich marek. Trudny klient – wymaga czasu."
+  },
+  "rest_007": {
+    "id": "rest_007",
+    "name": "Cafe & Lunch Dzięgielów",
+    "address": "ul. Lipowa 15, 43-445 Dzięgielów",
+    "latitude": 49.7260,
+    "longitude": 18.7015,
+    "distance_from_base": 0.3,
+    "type": "Cafe z lunchami / catering",
+    "segment": "mixed",
+    "distributor_id": "bidfood",
+    "chef_name": "Katarzyna Dąbrowska",
+    "chef_phone": "+48 607 890 123",
+    "decision_maker": "Manager",
+    "monthly_covers": 1800,
+    "avg_check": 28.00,
+    "relationship_score": 40,
+    "last_visit_date": "2025-01-16",
+    "visits_count": 2,
+    "convinced_products": {},
+    "conviction_data": {
+      "heinz_bbq_sauce_original_2_5kg": {
+        "stage": "discovery",
+        "progress": 30,
+        "conversation_history": [
+          {
+            "date": "2025-01-16",
+            "player_argument": "Heinz BBQ Sauce będzie idealny do wrap'ów. Ma gęstą konsystencję - nie przecieka przez tortillę. Goście to docenią.",
+            "ai_score": 70,
+            "ai_feedback": "Dobry start - dostrzegłeś problem (przeciekające sosy) i zaproponowałeś rozwiązanie. Jednak brakuje liczb. Ile wrap'ów robicie dziennie? Ile sosu zużywacie? W następnym kroku dodaj konkretne wyliczenie.",
+            "progress_gain": 30,
+            "stage_after": "discovery"
+          }
+        ],
+        "last_interaction_date": "2025-01-16",
+        "total_attempts": 1,
+        "started_date": "2025-01-16"
+      }
+    },
+    "current_competitors": {
+      "ketchup": "Pudliszki",
+      "majonez": "Winiary",
+      "bbq_sauce": "brak (okazja)"
+    },
+    "notes": "Lokalna kawiarnia w Dzięgielowie. Zainteresowanie BBQ Sauce do wrap'ów."
+  },
+  "rest_008": {
+    "id": "rest_008",
+    "name": "Stołówka Szkolna Skoczów",
+    "address": "ul. Mickiewicza 12, 43-430 Skoczów",
+    "latitude": 49.7820,
+    "longitude": 18.7910,
+    "distance_from_base": 7.5,
+    "type": "Stołówka szkolna",
+    "segment": "value",
+    "distributor_id": "transgourmet",
+    "chef_name": "Andrzej Kowalski",
+    "chef_phone": "+48 608 901 234",
+    "decision_maker": "Kierownik zaopatrzenia",
+    "monthly_covers": 5500,
+    "avg_check": 15.00,
+    "relationship_score": 35,
+    "last_visit_date": "2025-01-08",
+    "visits_count": 1,
+    "convinced_products": {},
+    "conviction_data": {},
+    "current_competitors": {
+      "ketchup": "no-name (najtańszy)",
+      "majonez": "Kotlin",
+      "bbq_sauce": "brak"
+    },
+    "notes": "Duże wolumeny, pressure na koszt. Pudliszki może zadziałać – polska marka."
+  },
+  "rest_009": {
+    "id": "rest_009",
+    "name": "Grill Bar Smokehouse",
+    "address": "ul. Główna 22, 43-460 Wisła",
+    "latitude": 49.6520,
+    "longitude": 18.8580,
+    "distance_from_base": 15.0,
+    "type": "Grill / BBQ restaurant",
+    "segment": "premium",
+    "distributor_id": "farutex",
+    "chef_name": "Piotr Grabowski",
+    "chef_phone": "+48 609 012 345",
+    "decision_maker": "Chef-Właściciel",
+    "monthly_covers": 1100,
+    "avg_check": 75.00,
+    "relationship_score": 55,
+    "last_visit_date": "2025-01-21",
+    "visits_count": 3,
+    "convinced_products": {
+      "heinz_bbq_sauce_original_2_5kg": {
+        "convinced_date": "2025-01-21",
+        "ordering_status": "active",
+        "monthly_volume_kg": 7.5,
+        "conviction_progress": 100
+      }
+    },
+    "conviction_data": {},
+    "current_competitors": {
+      "ketchup": "Hellmann's",
+      "majonez": "Hellmann's",
+      "bbq_sauce": "Heinz (przekonano!)"
+    },
+    "notes": "BBQ Smokehouse w Wiśle. BBQ Sauce wdrożony! Okazja: cross-sell Ketchup + Majonez."
+  },
+  "rest_010": {
+    "id": "rest_010",
+    "name": "McDonald's Cieszyn",
+    "address": "ul. Bobrecka 29, 43-400 Cieszyn",
+    "latitude": 49.7513,
+    "longitude": 18.6280,
+    "distance_from_base": 7.0,
+    "type": "QSR Chain",
+    "segment": "premium",
+    "distributor_id": "transgourmet",
+    "chef_name": "Jacek Lewandowski",
+    "chef_phone": "+48 610 123 456",
+    "decision_maker": "Regional Purchasing Manager",
+    "monthly_covers": 12000,
+    "avg_check": 25.00,
+    "relationship_score": 80,
+    "last_visit_date": "2025-01-25",
+    "visits_count": 5,
+    "convinced_products": {
+      "heinz_mayonnaise_professional_10l": {
+        "convinced_date": "2024-12-10",
+        "ordering_status": "active",
+        "monthly_volume_kg": 80.0,
+        "conviction_progress": 100
+      },
+      "heinz_ketchup_premium_5kg": {
+        "convinced_date": "2024-12-10",
+        "ordering_status": "active",
+        "monthly_volume_kg": 60.0,
+        "conviction_progress": 100
+      }
+    },
+    "conviction_data": {},
+    "current_competitors": {
+      "ketchup": "Heinz (przekonano!)",
+      "majonez": "Heinz Professional (przekonano!)",
+      "bbq_sauce": "kontrakt własny (brak okazji)"
+    },
+    "notes": "Najważniejszy klient! McDonald's w Cieszynie. Wysoki wolumen, długoterminowa umowa."
+  }
+}

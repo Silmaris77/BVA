@@ -99,7 +99,7 @@ from utils.fmcg_products import (
 
 # Import client detail card component
 from views.business_games_refactored.components.client_detail_card import render_client_detail_card
-from views.business_games_refactored.components.visit_panel_advanced import render_visit_panel_advanced
+from views.business_games_refactored.components.visit_panel_simple import render_visit_panel_simple
 
 
 def get_pin_color_by_days(days_since_visit):
@@ -165,7 +165,11 @@ def _get_product_price(product: Dict) -> float:
     Returns:
         float: Cena produktu
     """
-    # Food Service (Heinz scenario)
+    # Food Service - NEW format (Heinz through distributor)
+    if "price_distributor" in product:
+        return product["price_distributor"]
+    
+    # Food Service - OLD format (Heinz scenario)
     if "price_foodservice" in product:
         return product["price_foodservice"]
     
@@ -184,7 +188,14 @@ def _get_product_margin(product: Dict) -> tuple[float, float]:
     if "margin_shop_percent" in product:
         return product["margin_shop_percent"], product.get("margin_shop_pln", 0)
     
-    # Food Service (Heinz)
+    # Food Service - NEW format (Heinz through distributor)
+    if "margin_pct" in product:
+        margin_percent = product["margin_pct"]
+        price = _get_product_price(product)
+        margin_pln = price * margin_percent / 100
+        return margin_percent, margin_pln
+    
+    # Food Service - OLD format (Heinz)
     if "margin_foodservice_pct" in product:
         margin_percent = product["margin_foodservice_pct"]
         price = _get_product_price(product)
@@ -428,34 +439,6 @@ def show_fmcg_playable_game(username: str):
         "heinz_food_service": "🍅 Heinz Food Service Challenge - Dzięgielów",
         "lifetime": "♾️ Lifetime Mode - Unlimited"
     }
-    
-    # Ensure territory/base coords are set to Pelikanów 2 if still using old defaults
-    try:
-        # New desired base coordinates (Piaseczno, ul. Pelikanów 2)
-        desired_lat = 52.0534
-        desired_lon = 21.0689
-
-        current_lat = game_state.get("territory_latitude")
-        current_lon = game_state.get("territory_longitude")
-
-        # If missing or equal to old default, update and persist
-        if (current_lat is None and current_lon is None) or (
-            abs(current_lat - 52.0846) < 1e-6 and abs(current_lon - 21.0250) < 1e-6
-        ):
-            game_state["territory_latitude"] = desired_lat
-            game_state["territory_longitude"] = desired_lon
-            # Persist updated state (if DB save function available)
-            try:
-                update_fmcg_game_state_sql(username, game_state, clients)
-            except Exception:
-                # Non-fatal: just update session state
-                pass
-            # Also update session copy
-            st.session_state["fmcg_game_state"] = game_state
-
-    except Exception:
-        # Don't block UI on failures here
-        pass
 
     # =============================================================================
     # DATA MIGRATION CHECK
@@ -504,7 +487,7 @@ def show_fmcg_playable_game(username: str):
         st.markdown("---")
         
         # Scenario selection
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             st.markdown("""
@@ -541,11 +524,11 @@ def show_fmcg_playable_game(username: str):
                     Poziom: Średni
                 </div>
                 <div style="font-size: 0.9rem; color: #1f2937; line-height: 1.5;">
-                    <strong>Portfolio Management!</strong><br><br>
-                    • 25 klientów Food Service<br>
-                    • Heinz (premium) + Pudliszki (value)<br>
-                    • Strategia dwóch marek<br>
-                    • Przejmowanie z Kotlin<br><br>
+                    <strong>Through Distributor Model!</strong><br><br>
+                    • 10 klientów - region Dzięgielów<br>
+                    • Portfolio 6 SKU Heinz<br>
+                    • Przekonuj restauracje, buduj PULL<br>
+                    • Dystrybutorzy: Farutex, Transgourmet<br><br>
                     <em>⏱️ Czas gry: 8 tygodni</em>
                 </div>
             </div>
@@ -575,6 +558,29 @@ def show_fmcg_playable_game(username: str):
             """, unsafe_allow_html=True)
             scenario_lifetime = st.button("Wybierz Lifetime", key="btn_lifetime", use_container_width=True)
         
+        with col4:
+            st.markdown("""
+            <div style="background: linear-gradient(135deg, #8b5cf615 0%, #8b5cf605 100%); 
+                        padding: 20px; border-radius: 12px; border: 2px solid #8b5cf6; min-height: 320px;">
+                <div style="font-size: 2.5rem; text-align: center; margin-bottom: 10px;">💬</div>
+                <div style="font-size: 1.3rem; font-weight: 700; color: #5b21b6; margin-bottom: 8px; text-align: center;">
+                    Rozmowa AI
+                </div>
+                <div style="font-size: 0.85rem; color: #7c3aed; margin-bottom: 12px; text-align: center;">
+                    Poziom: Trening
+                </div>
+                <div style="font-size: 0.9rem; color: #1f2937; line-height: 1.5;">
+                    <strong>Symulacja rozmowy!</strong><br><br>
+                    • Wirtualna wizyta u klienta<br>
+                    • AI wciela się w rolę właściciela<br>
+                    • Naturalna, realistyczna rozmowa<br>
+                    • Ocena i feedback po wizycie<br><br>
+                    <em>⏱️ Czas gry: 15-20 min</em>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            scenario_simple = st.button("Wybierz Rozmowę", key="btn_simple", use_container_width=True)
+        
         st.markdown("---")
         
         # Handle scenario selection
@@ -585,8 +591,19 @@ def show_fmcg_playable_game(username: str):
             selected_scenario = "heinz_food_service"
         elif scenario_lifetime:
             selected_scenario = "lifetime"
+        elif scenario_simple:
+            selected_scenario = "simple_visit"
         
         if selected_scenario:
+            # Simple Visit scenario - direct to conversation
+            if selected_scenario == "simple_visit":
+                from views.scenarios.simple_visit_panel import render_simple_visit_panel
+                st.session_state["fmcg_scenario"] = "simple_visit"
+                st.session_state["fmcg_game_initialized"] = True  # Mark as initialized to avoid loop
+                render_simple_visit_panel(username)
+                return
+            
+            # Other scenarios - full game initialization
             with st.spinner(f"🎮 Inicjalizacja scenariusza..."):
                 # Import scenario loader
                 from data.scenarios import load_scenario_clients, SCENARIOS
@@ -605,15 +622,20 @@ def show_fmcg_playable_game(username: str):
                     if clients_db:
                         game_state["clients"] = clients_db
                         game_state["scenario_id"] = "heinz_food_service"
+                        game_state["scenario"] = {
+                            "id": "heinz_food_service",
+                            "model": "through_distributor",
+                            "company": "Heinz Polska"
+                        }
                         game_state["company"] = "Heinz Polska"
                         game_state["territory_name"] = "Dzięgielów Food Service"
                         game_state["territory_latitude"] = 49.7271667  # Lipowa 29 (49°43'37.8"N)
                         game_state["territory_longitude"] = 18.7025833  # 18°42'09.3"E
-                        game_state["clients_total"] = 25
-                        game_state["clients_prospect"] = 25
-                        game_state["clients_active"] = 0
+                        game_state["clients_total"] = len(clients_db)
+                        game_state["clients_prospect"] = len([c for c in clients_db.values() if not c.get("convinced_products")])
+                        game_state["clients_active"] = len([c for c in clients_db.values() if c.get("convinced_products")])
                         
-                        st.info(f"✅ Załadowano {len(clients_db)} klientów Food Service z regionu Dzięgielów")
+                        st.info(f"✅ Załadowano {len(clients_db)} klientów Food Service z regionu Dzięgielów (Wisła, Ustroń, Skoczów, Cieszyn)")
                     
                     clients = game_state.get("clients", {})
                 else:
@@ -640,6 +662,12 @@ def show_fmcg_playable_game(username: str):
             st.info("👆 Wybierz scenariusz aby rozpocząć grę")
             return
     else:
+        # Check if it's a simple_visit scenario - handle differently
+        if st.session_state.get("fmcg_scenario") == "simple_visit":
+            from views.scenarios.simple_visit_panel import render_simple_visit_panel
+            render_simple_visit_panel(username)
+            return
+        
         # Load from session state (or SQL if session empty)
         game_state = st.session_state.get("fmcg_game_state")
         clients = st.session_state.get("fmcg_clients")
@@ -659,6 +687,35 @@ def show_fmcg_playable_game(username: str):
                     desired_lat = 49.7271667  # Lipowa 29, Dzięgielów (49°43'37.8"N)
                     desired_lon = 18.7025833  # 18°42'09.3"E
                     territory_name = "Dzięgielów Food Service"
+                    
+                    # MIGRATION: Dodaj scenario dict jeśli brakuje
+                    if "scenario" not in game_state or "model" not in game_state.get("scenario", {}):
+                        game_state["scenario"] = {
+                            "id": "heinz_food_service",
+                            "model": "through_distributor",
+                            "company": "Heinz Polska"
+                        }
+                        st.info("🔄 Zaktualizowano strukturę scenariusza Heinz (dodano model: through_distributor)")
+                    
+                    # MIGRATION: Check if clients need updating to new Heinz client base
+                    # Old clients had IDs like "client_001", new ones have "rest_001"
+                    if clients and any(client_id.startswith("client_") for client_id in clients.keys()):
+                        st.info("🔄 Wykryto starą bazę klientów Heinz - ładuję nową bazę z regionu Dzięgielów...")
+                        
+                        # Load new Heinz clients from JSON
+                        from data.scenarios import load_scenario_clients
+                        new_clients = load_scenario_clients("fmcg_clients_heinz_foodservice")
+                        
+                        if new_clients:
+                            clients = new_clients
+                            game_state["clients_total"] = len(new_clients)
+                            game_state["clients_prospect"] = len([c for c in new_clients.values() if not c.get("convinced_products")])
+                            game_state["clients_active"] = len([c for c in new_clients.values() if c.get("convinced_products")])
+                            
+                            st.success(f"✅ Załadowano {len(new_clients)} klientów z nowej bazy (region Dzięgielów)")
+                            
+                            # Save updated state (function already imported at top of file)
+                            update_fmcg_game_state_sql(username, game_state, clients)
                 else:
                     # Quick Start / Lifetime - Piaseczno
                     desired_lat = 52.0748  # Centrum Piaseczna (Rynek)
@@ -713,6 +770,31 @@ def show_fmcg_playable_game(username: str):
     # TABS NAVIGATION
     # =============================================================================
     
+    # =============================================================================
+    # PULL-THROUGH NOTIFICATIONS (Heinz Scenario)
+    # =============================================================================
+    # Wyświetl notyfikacje o nowych zamówieniach pull-through
+    if "pending_notifications" in game_state and game_state["pending_notifications"]:
+        st.markdown("### 🎯 Nowe Zamówienia Pull-Through!")
+        
+        for notification in game_state["pending_notifications"]:
+            if notification.get("type") == "pull_through_order":
+                with st.expander(f"✨ {notification['title']} - {notification.get('client_id', 'Client')}", expanded=True):
+                    st.markdown(notification["message"])
+                    
+                    col1, col2 = st.columns([3, 1])
+                    with col2:
+                        if st.button("OK, rozumiem", key=f"notif_{notification.get('client_id')}_{notification.get('date')}"):
+                            # Usuń tę notyfikację
+                            game_state["pending_notifications"] = [
+                                n for n in game_state["pending_notifications"] 
+                                if not (n.get("client_id") == notification.get("client_id") and n.get("date") == notification.get("date"))
+                            ]
+                            update_fmcg_game_state_sql(username, game_state)
+                            st.rerun()
+        
+        st.markdown("---")
+    
     # Initialize weekly task stats if needed
     initialize_weekly_stats_if_needed(game_state)
     
@@ -726,10 +808,11 @@ def show_fmcg_playable_game(username: str):
     pending_tasks = get_pending_tasks_count(st.session_state)
     tasks_badge = f" ({pending_tasks})" if pending_tasks > 0 else ""
     
-    tab_dashboard, tab_sales, tab_hr, tab_instructions, tab_settings = st.tabs([
+    tab_dashboard, tab_sales, tab_hr, tab_scenario, tab_instructions, tab_settings = st.tabs([
         f"📊 Dashboard{tasks_badge}",
         "🎯 Sprzedaż",
         "👥 HR & Team",
+        "🎮 Scenariusz",
         "📖 Instrukcja",
         "⚙️ Ustawienia"
     ])
@@ -1157,14 +1240,17 @@ def show_fmcg_playable_game(username: str):
                         **💰 Nagroda:** 3,000 PLN | **Priorytet:** 🔴 CRITICAL
                         
                         **Co to znaczy:**  
-                        Zdobądź co najmniej **15 aktywnych punktów sprzedaży** z 25 dostępnych w regionie Dzięgielów (60% dystrybucji).
+                        Przekonaj co najmniej **15 restauracji** do produktów Heinz w regionie Dzięgielów (Wisła, Ustroń, Skoczów, Cieszyn).
+                        
+                        **Model Through Distributor:**
+                        - 🎯 Ty przekonujesz szefów kuchni (Discovery → Pitch → Convince)
+                        - 📦 Oni zamawiają przez dystrybutorów HoReCa
+                        - 📊 Sukces = pull-through rate (ile restauracji regularnie zamawia)
                         
                         **Strategia:**
-                        - ✅ Podpisz umowy z różnymi lokalami Food Service
-                        - ✅ Nieważne czy kupują Heinz, Pudliszki, czy obie marki
-                        - 🎯 Zacznij od Easy Wins (klienci znający markę)
-                        - 🥊 Przejmuj klientów od Kotlin
-                        - 📊 Portfolio play: Pudliszki dla budżetowych, Heinz dla premium
+                        - ✅ Burger joints & QSR: Quick Wins (otwarci na zmiany)
+                        - 🍴 Premium: Korean Sauce, BBQ do grilli
+                        - 🏨 Hotele: Portfolio play (Mayo 10L + Korean Sauce)
                         """)
                 
                 with col_g2:
@@ -1229,6 +1315,15 @@ def show_fmcg_playable_game(username: str):
                         - Pizza House (niespójna jakość)
                         - Burger Craft (chce uprościć dostawców)
                         """)
+                
+                st.markdown("---")
+                
+                # =================================================================
+                # HEINZ CONVICTION KPIs (TASK 7)
+                # =================================================================
+                from utils.conviction_kpis import render_conviction_kpis_widget
+                
+                render_conviction_kpis_widget(clients, game_state)
                 
                 st.markdown("---")
             
@@ -2105,7 +2200,7 @@ def show_fmcg_playable_game(username: str):
                         'characteristics': client_data.get('characteristics', {})
                     }
                 
-                    render_client_detail_card(client_data, client_info)
+                    render_client_detail_card(client_data, client_info, game_state)
                 else:
                     st.error("❌ Błąd - klient nie istnieje")
                     st.session_state['show_client_detail'] = False
@@ -3070,14 +3165,14 @@ def show_fmcg_playable_game(username: str):
                                     ">{route_number}</div>
                                 """),
                                 tooltip=f"{name} - Wizyta #{route_number}"
-                            ).add_to(m)
-                        else:
-                            folium.Marker(
-                                [lat, lon],
-                                popup=folium.Popup(popup_html, max_width=300),
-                                icon=folium.Icon(color=color, icon=icon, prefix="fa"),
-                                tooltip=f"{name} ({status})"
-                            ).add_to(m)
+                                ).add_to(m)
+                            else:
+                                folium.Marker(
+                                    [lat, lon],
+                                    popup=folium.Popup(popup_html, max_width=300),
+                                    icon=folium.Icon(color=color, icon=icon, prefix="fa"),
+                                    tooltip=f"{name} ({status})"
+                                ).add_to(m)
                     
                     # Draw route line if planned
                     if hasattr(st.session_state, 'planned_route') and st.session_state.planned_route:
@@ -3568,8 +3663,8 @@ def show_fmcg_playable_game(username: str):
                             for client_id, client in game_state.get("clients", {}).items()
                         ]
                         
-                        # Show advanced AI visit panel (zawiera wszystko - nagłówek, info, przyciski, rozmowę, podsumowanie)
-                        render_visit_panel_advanced(
+                        # Show simple natural visit panel (naturalna rozmowa, ocena na końcu)
+                        render_visit_panel_simple(
                             next_client_id, 
                             clients, 
                             game_state, 
@@ -3665,8 +3760,8 @@ def show_fmcg_playable_game(username: str):
         
             # Dynamic header based on scenario
             if is_heinz_scenario:
-                st.subheader("🍅 Portfolio Ketchupów Heinz")
-                st.info("📋 **Scenariusz Heinz**: Koncentrujemy się wyłącznie na kategorii ketchupów (4 SKU)")
+                st.subheader("🍅 Portfolio Heinz Food Service")
+                st.info("📋 **Scenariusz Heinz**: 6 SKU Portfolio (Ketchup, Majonez, BBQ, Korean Sauce, Mayo 10L + Pudliszki Ketchup) - Through Distributor Model")
             else:
                 st.subheader("📦 Katalog Produktów")
         
@@ -3699,21 +3794,36 @@ def show_fmcg_playable_game(username: str):
         
             # Get products based on scenario
             if is_heinz_scenario:
-                # ONLY KETCHUPS for Heinz scenario
-                heinz_ketchup_ids = [
-                    "heinz_ketchup_classic",
-                    "heinz_ketchup_hot",
-                    "pudliszki_ketchup_lagodny",
-                    "pudliszki_ketchup_ostry"
-                ]
-                all_products = {k: v for k, v in get_all_products().items() if k in heinz_ketchup_ids}
+                # Load products from scenario config (6 SKU for Heinz Food Service)
+                scenario_products_data = scenario_config.get("products", {}).get("own", [])
+                heinz_product_ids = [p["id"] for p in scenario_products_data]
+                all_products = {k: v for k, v in get_all_products().items() if k in heinz_product_ids}
+                
+                # If products not found in get_all_products(), use scenario data directly
+                if len(all_products) < len(heinz_product_ids):
+                    # Convert scenario products to display format
+                    all_products = {}
+                    for prod in scenario_products_data:
+                        all_products[prod["id"]] = {
+                            "id": prod["id"],
+                            "name": prod["name"],
+                            "brand": prod["brand"],
+                            "category": prod.get("category", "sosy"),
+                            # Keep original keys for backward compatibility with helper functions
+                            "price_distributor": prod.get("price_distributor", 0),
+                            "margin_pct": prod.get("margin_pct", 0),
+                            "popularity": prod.get("target_segment", "Food Service"),
+                            "usp": prod.get("usp", ""),
+                            "tier": prod.get("tier", ""),
+                            "target_segment": prod.get("target_segment", "")
+                        }
             else:
                 # All products for other scenarios
                 all_products = get_all_products()
         
             # Filter products (only for non-Heinz scenarios)
             if is_heinz_scenario:
-                # All 4 ketchups are already filtered
+                # All Heinz products are already filtered
                 filtered_products = list(all_products.values())
             else:
                 # Apply filters for full product catalog
@@ -3741,7 +3851,7 @@ def show_fmcg_playable_game(username: str):
         
             # Display count
             if is_heinz_scenario:
-                st.success(f"🍅 **{len(filtered_products)} ketchupy** w portfolio Heinz")
+                st.success(f"🍅 **{len(filtered_products)} SKU** w portfolio Heinz Food Service")
             else:
                 st.info(f"📊 Znaleziono **{len(filtered_products)}** produktów")
         
@@ -3815,12 +3925,28 @@ def show_fmcg_playable_game(username: str):
                             bg_color = "#f0fdf4" if is_freshlife else "#f8fafc"
                         
                             # Popularity bar (with fallback for products without popularity field)
-                            popularity = product.get("popularity", 50)
+                            popularity_raw = product.get("popularity", 50)
+                            # Handle both numeric popularity (old format) and string popularity (new Heinz format)
+                            if isinstance(popularity_raw, (int, float)):
+                                popularity = popularity_raw
+                            else:
+                                # String popularity - use default neutral value
+                                popularity = 50
+                            
                             pop_color = "#10b981" if popularity >= 70 else "#f59e0b" if popularity >= 40 else "#ef4444"
                         
                             # Get margin and price with backward compatibility
                             margin_percent, margin_pln = _get_product_margin(product)
                             price = _get_product_price(product)
+                            
+                            # Popularity handling
+                            popularity_raw = product.get("popularity", 50)
+                            if isinstance(popularity_raw, (int, float)):
+                                popularity = popularity_raw
+                                popularity_display = f"{popularity}%"
+                            else:
+                                popularity = 50  # Default for progress bar
+                                popularity_display = popularity_raw  # Show as text
                         
                             # Use container for card
                             with st.container():
@@ -3843,20 +3969,23 @@ def show_fmcg_playable_game(username: str):
                                         <span style="color: #64748b; font-size: 13px;">Marża: </span>
                                         <span style="font-weight: 700; color: #10b981; font-size: 14px;">{margin_percent}%</span>
                                     </div>
-                                    <div style="margin-top: 12px;">
+                                </div>
+                                """, unsafe_allow_html=True)
+                                
+                                # Popularity or Segment
+                                if isinstance(popularity_raw, (int, float)):
+                                    st.markdown(f"""
+                                    <div style="margin-bottom: 12px;">
                                         <div style="color: #64748b; font-size: 11px; margin-bottom: 4px;">Popularność:</div>
                                         <div style="background: #e2e8f0; border-radius: 4px; height: 8px; overflow: hidden;">
                                             <div style="background: {pop_color}; height: 100%; width: {popularity}%;"></div>
                                         </div>
                                     </div>
-                                </div>
-                                """, unsafe_allow_html=True)
+                                    """, unsafe_allow_html=True)
+                                else:
+                                    st.caption(f"Segment: **{popularity_raw}**")
                             
-                                st.markdown(f"""
-                                <div style="text-align: center; padding: 8px; background: rgba(255,255,255,0.7); border-radius: 6px; font-size: 11px; color: #64748b; margin-bottom: 12px;">
-                                    {product['category']}
-                                </div>
-                                """, unsafe_allow_html=True)
+                            st.caption(f"Kategoria: {product['category']}")
                         
                             # Details button (for all products, but especially useful for FreshLife)
                             if st.button(f"ℹ️ Szczegóły", key=f"details_{product['id']}", use_container_width=True):
@@ -5483,6 +5612,35 @@ def show_fmcg_playable_game(username: str):
     # =============================================================================
     # TAB: INSTRUKCJA
     # =============================================================================
+    # TAB: PROSTY SCENARIUSZ
+    # =============================================================================
+    
+    with tab_scenario:
+        # Import prostego panelu scenariusza
+        try:
+            from views.scenarios.simple_visit_panel import render_simple_visit_panel, show_simple_scenario_intro
+            
+            # Sprawdź czy użytkownik już rozpoczął scenariusz
+            if 'simple_scenario_started' not in st.session_state:
+                st.session_state['simple_scenario_started'] = False
+            
+            if not st.session_state['simple_scenario_started']:
+                # Pokaż intro
+                show_simple_scenario_intro()
+            else:
+                # Renderuj panel wizyty
+                render_simple_visit_panel(username=username)
+                
+        except Exception as e:
+            st.error(f"❌ Błąd ładowania scenariusza: {e}")
+            st.code(str(e))
+            import traceback
+            with st.expander("🔍 Szczegóły błędu"):
+                st.code(traceback.format_exc())
+    
+    # =============================================================================
+    # TAB: INSTRUKCJA
+    # =============================================================================
     
     with tab_instructions:
         st.markdown("# 📖 Instrukcja Gry - Heinz Food Service")
@@ -5493,7 +5651,10 @@ def show_fmcg_playable_game(username: str):
                     padding: 30px; border-radius: 15px; margin-bottom: 30px; text-align: center;'>
             <h2 style='color: white; margin: 0;'>🎮 Witaj w Heinz Food Service Challenge!</h2>
             <p style='color: #e0e7ff; font-size: 18px; margin-top: 10px;'>
-                Symulacja sprzedaży produktów premium dla gastronomii
+                Region Dzięgielów - Wisła, Ustroń, Skoczów, Cieszyn
+            </p>
+            <p style='color: #c7d2fe; font-size: 14px; margin-top: 5px;'>
+                📍 Twoja baza: Lipowa 29, 43-445 Dzięgielów
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -6010,27 +6171,27 @@ def show_fmcg_playable_game(username: str):
             st.markdown("")
             
             # Objective 1: Numeric Distribution
-            with st.expander("🎯 **CEL 1: Dystrybucja Numeryczna - 15/25 punktów (60%)**", expanded=False):
+            with st.expander("🎯 **CEL 1: Dystrybucja Numeryczna - 15 przekonanych restauracji (60%)**", expanded=False):
                 st.markdown("""
                 **Nagroda:** 💰 3,000 PLN  
                 **Priorytet:** 🔴 CRITICAL
                 
                 **Opis:**  
-                Zdobądź co najmniej **15 aktywnych punktów sprzedaży** z 25 dostępnych w regionie Dzięgielów. 
-                To oznacza 60% dystrybucji numerycznej portfolio Heinz (Heinz Premium + Pudliszki Value).
+                Przekonaj co najmniej **15 restauracji** z 10 dostępnych w regionie Dzięgielów (Wisła, Ustroń, Skoczów, Cieszyn) do produktów Heinz. 
+                Model **Through Distributor**: Ty przekonujesz szefów kuchni, oni zamawiają przez dystrybutorów HoReCa.
                 
                 **Jak to osiągnąć:**
-                - ✅ Podpisz umowy z 15 różnymi lokalami Food Service
-                - ✅ Każdy aktywny klient liczy się jako 1 punkt dystrybucji
-                - ✅ Nieważne czy kupują Heinz, Pudliszki, czy obie marki
+                - ✅ Przekonuj restauracje do produktów Heinz (Discovery → Pitch → Convince)
+                - ✅ Każda przekonana restauracja generuje pull-through demand
+                - ✅ Zamówienia przechodzą przez 5 dystrybutorów (Farutex, Transgourmet, Bidfood, Selgros, Orbico)
                 
                 **Strategia:**
-                - Zacznij od **Easy Wins** (klienci już znający markę)
-                - Przejmuj klientów od konkurencji (szczególnie Kotlin)
-                - Wykorzystaj portfolio play: Pudliszki dla budżetowych, Heinz dla premium
+                - Zacznij od **Quick Wins** (burger joints, QSR - są otwarci na zmiany)
+                - Buduj relacje regularnym kontaktem (nie sprzedajesz bezpośrednio!)
+                - Portfolio play: Korean Sauce dla premium, BBQ dla grilli, Majonez dla burgerów
                 
                 **Wskaźnik sukcesu:**  
-                Liczba aktywnych klientów ≥ 15 → ✅ Cel osiągnięty
+                Liczba przekonanych restauracji (convinced_products > 0) ≥ 15 → ✅ Cel osiągnięty
                 """)
             
             # Objective 2: Monthly Sales

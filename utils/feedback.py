@@ -77,7 +77,7 @@ def show_feedback_form():
             
             content = st.text_area("Twoja opinia")
             
-            if st.button("Wyślij opinię", width='stretch'):
+            if st.button("Wyślij opinię", use_container_width=True):
                 if content:
                     save_feedback(
                         st.session_state.username,
@@ -99,7 +99,7 @@ def show_error_report_form():
         description = st.text_area("Opis błędu")
         steps = st.text_area("Kroki do odtworzenia (opcjonalnie)")
         
-        if st.button("Zgłoś błąd", width='stretch'):
+        if st.button("Zgłoś błąd", use_container_width=True):
             if description:
                 report_error(
                     st.session_state.username,

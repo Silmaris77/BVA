@@ -7,8 +7,32 @@ REORGANIZED VERSION - proper section order
 import streamlit as st
 from typing import Dict, Optional
 from datetime import datetime
+import json
+import os
 from utils.fmcg_client_helpers import get_reputation_status, is_visit_overdue
 from utils.fmcg_products import get_product_info, get_portfolio_summary, suggest_cross_sell_products
+from views.business_games_refactored.components.distributor_orders_view import (
+    render_distributor_orders_modal, 
+    get_pull_through_badge_count
+)
+
+
+def _load_distributors():
+    """Ładuje dane dystrybutorów z JSON"""
+    distributor_path = os.path.join("data", "fmcg", "distributors.json")
+    if os.path.exists(distributor_path):
+        with open(distributor_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {}
+
+
+def _load_heinz_products():
+    """Ładuje produkty Heinz z JSON"""
+    products_path = os.path.join("data", "fmcg", "heinz_products.json")
+    if os.path.exists(products_path):
+        with open(products_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {}
 
 
 def _count_discovered_fields(discovered_info: Dict) -> int:
@@ -53,7 +77,7 @@ def _render_discovery_field(value: Optional[str], placeholder: str):
         st.markdown(f"❓ *{placeholder} - do ustalenia podczas wizyty*")
 
 
-def render_client_detail_card(client_data: Dict, client_info: Dict):
+def render_client_detail_card(client_data: Dict, client_info: Dict, game_state: Optional[Dict] = None):
     """
     Renderuje rozszerzoną kartę klienta z:
     - Client info card + Reputation gauge (2 columns)
@@ -65,6 +89,7 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
     Args:
         client_data: Dict z danymi klienta (z nowej struktury)
         client_info: Dict z database info (name, location, etc.)
+        game_state: Dict z game_state (opcjonalne, dla distributor orders)
     """
     
     client_id = client_data.get("id", "unknown")
@@ -341,6 +366,215 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # =============================================================================
+    # SECTION 2A: DYSTRYBUTOR (NEW - Heinz Food Service Model)
+    # =============================================================================
+    
+    distributor_id = client_data.get("distributor_id")
+    
+    if distributor_id:
+        distributors = _load_distributors()
+        distributor = distributors.get(distributor_id, {})
+        
+        if distributor:
+            st.markdown("### 🚚 Dystrybutor")
+            
+            # Dystributor header
+            dist_name = distributor.get("name", "N/A")
+            dist_segment = distributor.get("segment", "N/A")
+            contact_person = distributor.get("contact_person", {})
+            
+            st.markdown(f"""
+            <div style='background: linear-gradient(135deg, #10b98115 0%, #10b98105 100%); 
+                        padding: 16px; border-radius: 12px; margin-bottom: 16px;'>
+                <div style='font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 8px;'>
+                    {dist_name}
+                </div>
+                <div style='font-size: 14px; color: #64748b;'>
+                    Segment: {dist_segment}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Dystributor details in 2 columns
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**📊 Stan magazynu Heinz**")
+                stock_level_raw = distributor.get("heinz_stock_level", "N/A")
+                monthly_sales = distributor.get("monthly_heinz_sales_kg", 0)
+                
+                # Convert numeric stock level to text
+                if isinstance(stock_level_raw, (int, float)):
+                    if stock_level_raw >= 700:
+                        stock_level = "wysoki"
+                    elif stock_level_raw >= 400:
+                        stock_level = "średni"
+                    elif stock_level_raw > 0:
+                        stock_level = "niski"
+                    else:
+                        stock_level = "brak"
+                    stock_display = f"{stock_level_raw} kg"
+                else:
+                    stock_level = str(stock_level_raw).lower() if stock_level_raw != "N/A" else "brak"
+                    stock_display = stock_level_raw
+                
+                stock_colors = {
+                    "wysoki": "#10b981",
+                    "średni": "#f59e0b", 
+                    "niski": "#ef4444",
+                    "brak": "#dc2626"
+                }
+                stock_color = stock_colors.get(stock_level, "#6b7280")
+                
+                st.markdown(f"""
+                <div style='background: white; padding: 12px; border-radius: 8px; border-left: 3px solid {stock_color};'>
+                    <div style='font-size: 16px; font-weight: 600; color: {stock_color};'>
+                        {stock_level.upper()}
+                    </div>
+                    <div style='font-size: 12px; color: #64748b; margin-top: 4px;'>
+                        Stan: {stock_display} | Sprzedaż/mies.: {monthly_sales} kg
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                st.markdown("**🤝 Relacja z dystrybutorem**")
+                relationship = distributor.get("relationship_score", 0)
+                pull_through = distributor.get("pull_through_rate", 0)
+                
+                st.metric("Relacja", f"{relationship}/100")
+                st.metric("Pull-Through Rate", f"{pull_through}%")
+            
+            with col2:
+                st.markdown("**📞 Osoba kontaktowa**")
+                person_name = contact_person.get("name", "N/A")
+                person_role = contact_person.get("role", "N/A")
+                person_phone = contact_person.get("phone", "N/A")
+                person_email = contact_person.get("email", "N/A")
+                
+                st.markdown(f"""
+                <div style='background: white; padding: 12px; border-radius: 8px;'>
+                    <div style='font-size: 14px; font-weight: 600; color: #1e293b;'>
+                        {person_name}
+                    </div>
+                    <div style='font-size: 12px; color: #64748b; margin-top: 4px;'>
+                        {person_role}
+                    </div>
+                    <div style='font-size: 12px; color: #3b82f6; margin-top: 8px;'>
+                        📞 {person_phone}
+                    </div>
+                    <div style='font-size: 12px; color: #3b82f6;'>
+                        ✉️ {person_email}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # Cooperation actions
+            st.markdown("**🔧 Współpraca z dystrybutorem**")
+            
+            # Sprawdź ile nowych zamówień pull-through
+            new_orders_count = 0
+            if game_state:
+                new_orders_count = get_pull_through_badge_count(game_state, dist_name)
+            
+            action_col1, action_col2, action_col3 = st.columns(3)
+            
+            with action_col1:
+                if st.button("📞 Zadzwoń", key="call_distributor", use_container_width=True):
+                    st.info("💬 Telefonowanie do dystrybutora (5 pkt aktywności)")
+                    # TODO: Implement call action
+            
+            with action_col2:
+                joint_visit_available = distributor.get("next_joint_visit_available", True)
+                if joint_visit_available:
+                    if st.button("🤝 Wspólna wizyta", key="joint_visit", use_container_width=True):
+                        st.success("✅ Wspólna wizyta zaplanowana! (+20% szansy na convince)")
+                        # TODO: Implement joint visit bonus
+                else:
+                    st.button("🤝 Wspólna wizyta", key="joint_visit_disabled", disabled=True, use_container_width=True)
+                    st.caption("⏰ Kolejna za 7 dni")
+            
+            with action_col3:
+                # Badge dla nowych zamówień
+                badge_text = f" ({new_orders_count})" if new_orders_count > 0 else ""
+                button_label = f"� Zamówienia{badge_text}"
+                
+                if st.button(button_label, key="check_orders", use_container_width=True, type="primary" if new_orders_count > 0 else "secondary"):
+                    # Wyświetl modal z zamówieniami
+                    if game_state:
+                        with st.container():
+                            render_distributor_orders_modal(game_state, dist_name, days_back=14)
+                    else:
+                        st.warning("⚠️ Brak dostępu do game_state - nie można pobrać zamówień.")
+    
+    st.markdown("---")
+    
+    # =============================================================================
+    # SECTION 2B: PRZEKONANE PRODUKTY (NEW - Convinced Products)
+    # =============================================================================
+    
+    convinced_products = client_data.get("convinced_products", {})
+    current_competitors = client_data.get("current_competitors", {})
+    heinz_products = _load_heinz_products()
+    
+    if convinced_products or current_competitors:
+        st.markdown("### 🎯 Portfolio produktowe")
+        
+        # Convinced products first
+        if convinced_products:
+            st.markdown("**✅ Przekonane produkty Heinz** (zamawiają przez dystrybutora)")
+            
+            for product_id, product_data in convinced_products.items():
+                product_info = heinz_products.get(product_id, {})
+                product_name = product_info.get("name", product_id)
+                
+                convinced_date = product_data.get("convinced_date", "N/A")[:10]
+                status = product_data.get("ordering_status", "unknown")
+                monthly_volume = product_data.get("monthly_volume_kg", 0)
+                conviction_progress = product_data.get("conviction_progress", 0)
+                
+                # Status color
+                status_colors = {
+                    "active": "#10b981",
+                    "trial": "#f59e0b",
+                    "paused": "#6b7280",
+                    "stopped": "#ef4444"
+                }
+                status_emoji = {
+                    "active": "✅",
+                    "trial": "🧪",
+                    "paused": "⏸️",
+                    "stopped": "❌"
+                }
+                
+                status_color = status_colors.get(status, "#6b7280")
+                status_icon = status_emoji.get(status, "❓")
+                
+                with st.expander(f"{status_icon} {product_name} - {monthly_volume} kg/mies.", expanded=False):
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.metric("Data przekonania", convinced_date)
+                        st.metric("Status", status.upper())
+                    with col2:
+                        st.metric("Wolumen miesięczny", f"{monthly_volume} kg")
+                        st.progress(conviction_progress / 100, text=f"Przekonanie: {conviction_progress}%")
+        
+        # Current competitors
+        if current_competitors:
+            with st.expander("🛒 Obecnie używane marki (konkurencja)", expanded=False):
+                st.markdown("**Co restauracja używa ZANIM przekonamy do Heinz:**")
+                
+                for category, brand in current_competitors.items():
+                    # Check if we convinced them already
+                    is_convinced = "heinz" in brand.lower() or "przekonano" in brand.lower()
+                    
+                    if is_convinced:
+                        st.markdown(f"✅ **{category}**: {brand}")
+                    else:
+                        st.markdown(f"🎯 **{category}**: {brand} *(okazja!)*")
     
     st.markdown("---")
     

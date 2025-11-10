@@ -1096,8 +1096,8 @@ def show_dashboard():
     if DEVELOPMENT_MODE:
         st.info("⚡ **TRYB DEVELOPERSKI** - Zmiany zapisywane tylko w pamięci (szybkie logowanie!)")
     
-    # Przewiń na górę strony
-    scroll_to_top()
+    # Przewiń na górę strony - TEMPORARILY DISABLED for debugging
+    # scroll_to_top()
     
     # Zastosuj style Material 3
     apply_material3_theme()

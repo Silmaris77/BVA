@@ -11,6 +11,8 @@ from utils.fmcg_mechanics import update_fmcg_game_state_sql
 from utils.notes_panel import render_notes_panel
 from data.users_new import get_current_user_data
 from utils.user_helpers import get_user_sql_id
+from utils.fmcg_conviction_ai import evaluate_sales_argument
+from utils.delayed_orders import create_pending_order, format_pending_order_notification
 
 
 def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict, username: str, 
@@ -81,6 +83,195 @@ def render_visit_panel_advanced(client_id: str, clients: Dict, game_state: Dict,
         st.caption(f"Ostatnia: **{last_visit}**")
     
     st.markdown("---")
+    
+    # =================================================================
+    # CONVICTION PROCESS (dla Heinz scenario)
+    # =================================================================
+    
+    # Sprawdź czy to scenario Heinz (Through Distributor model)
+    scenario_type = game_state.get('scenario', {}).get('model', '')
+    is_heinz_scenario = scenario_type == 'through_distributor'
+    
+    # DEBUG - sprawdź co jest w game_state
+    # st.info(f"🔍 DEBUG: scenario_type='{scenario_type}', is_heinz_scenario={is_heinz_scenario}, scenario_id={game_state.get('scenario_id', 'BRAK')}")
+    
+    # Fallback - jeśli brak 'scenario' dict, sprawdź scenario_id
+    if not is_heinz_scenario and 'heinz' in game_state.get('scenario_id', '').lower():
+        is_heinz_scenario = True
+        # Napraw game_state - dodaj brakujący scenario dict
+        if 'scenario' not in game_state:
+            game_state['scenario'] = {
+                'id': 'heinz_food_service',
+                'model': 'through_distributor',
+                'company': 'Heinz Polska'
+            }
+            st.success("🔄 Zaktualizowano strukturę gry Heinz - dodano model 'through_distributor'")
+    
+    # Dodatkowy fallback - sprawdź czy klient ma conviction_data (wtedy na pewno Heinz)
+    if not is_heinz_scenario and client.get('conviction_data'):
+        is_heinz_scenario = True
+        st.info("🔄 Wykryto klienta Heinz po conviction_data - włączam Conviction Panel")
+    
+    if is_heinz_scenario:
+        # Pobierz conviction_data dla klienta
+        conviction_data = client.get('conviction_data', {})
+        
+        # Jeśli klient ma jakiekolwiek conviction_data, pokaż panel
+        if conviction_data:
+            st.markdown("### 🎯 Proces Przekonywania")
+            
+            # Dla każdego produktu w trakcie conviction
+            for product_id, conv_info in conviction_data.items():
+                stage = conv_info.get('stage', 'discovery')
+                progress = conv_info.get('progress', 0)
+                conversation_history = conv_info.get('conversation_history', [])
+                
+                # Znajdź nazwę produktu
+                product_name = product_id.replace('_', ' ').title()
+                
+                # Mapowanie stagów na procenty
+                stage_mapping = {
+                    'discovery': ('🔍 Discovery', 0, 33),
+                    'pitch': ('💼 Pitch', 34, 66),
+                    'convince': ('🎯 Convince', 67, 100),
+                    'won': ('✅ Won', 100, 100)
+                }
+                
+                stage_info = stage_mapping.get(stage, ('🔍 Discovery', 0, 33))
+                stage_label, stage_min, stage_max = stage_info
+                
+                # Expander dla każdego produktu
+                with st.expander(f"**{product_name}** - {stage_label} ({progress}%)", expanded=True):
+                    # Progress bar z kolorami
+                    if progress < 34:
+                        bar_color = "#3b82f6"  # niebieski
+                    elif progress < 67:
+                        bar_color = "#f59e0b"  # pomarańczowy
+                    else:
+                        bar_color = "#10b981"  # zielony
+                    
+                    st.markdown(f"""
+                    <div style='background: #f1f5f9; border-radius: 8px; padding: 4px; margin-bottom: 12px;'>
+                        <div style='background: {bar_color}; height: 24px; border-radius: 6px; width: {progress}%; 
+                                    display: flex; align-items: center; justify-content: center; color: white; 
+                                    font-weight: 600; font-size: 13px; transition: width 0.3s ease;'>
+                            {progress}%
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # Etapy z checkmarkami
+                    col_d, col_p, col_c = st.columns(3)
+                    with col_d:
+                        if progress >= 1:
+                            st.markdown("✅ **Discovery**")
+                        else:
+                            st.markdown("⚪ **Discovery**")
+                    with col_p:
+                        if progress >= 34:
+                            st.markdown("✅ **Pitch**")
+                        else:
+                            st.markdown("⚪ **Pitch**")
+                    with col_c:
+                        if progress >= 67:
+                            st.markdown("✅ **Convince**")
+                        else:
+                            st.markdown("⚪ **Convince**")
+                    
+                    # Pokaż ostatni feedback AI (jeśli istnieje)
+                    if conversation_history:
+                        last_conv = conversation_history[-1]
+                        last_feedback = last_conv.get('ai_feedback', '')
+                        last_score = last_conv.get('ai_score', 0)
+                        
+                        if last_feedback:
+                            st.markdown("**📝 Ostatni feedback AI:**")
+                            feedback_color = "#10b981" if last_score >= 80 else "#f59e0b" if last_score >= 60 else "#ef4444"
+                            st.markdown(f"""
+                            <div style='background: #f8fafc; padding: 12px; border-radius: 6px; 
+                                        border-left: 4px solid {feedback_color}; margin-top: 8px;'>
+                                <div style='color: #64748b; font-size: 12px; margin-bottom: 4px;'>
+                                    Ocena: <strong style='color: {feedback_color};'>{last_score}/100</strong>
+                                </div>
+                                <div style='color: #334155; font-size: 14px; line-height: 1.5;'>
+                                    {last_feedback}
+                                </div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                    
+                    # Info o następnym kroku
+                    if progress < 34:
+                        st.info("💡 **Cel Discovery:** Zrozum potrzeby klienta i przedstaw główne korzyści produktu.")
+                    elif progress < 67:
+                        st.info("💡 **Cel Pitch:** Przedstaw konkretną ofertę cenową i warunki współpracy.")
+                    elif progress < 100:
+                        st.info("💡 **Cel Convince:** Zamknij sprzedaż - odpowiedz na ostatnie obiekcje i uzyskaj commitment.")
+                    else:
+                        st.success("🎉 **Klient przekonany!** Zamówienie zostanie złożone przez dystrybutora w ciągu 1-3 dni.")
+                        
+                        # Pokaż pending orders jeśli istnieją
+                        if selected_product_id and 'pending_orders' in conviction_data.get(selected_product_id, {}):
+                            pending_orders = conviction_data[selected_product_id]['pending_orders']
+                            
+                            # Znajdź aktywne pending order
+                            active_pending = [o for o in pending_orders if o['status'] == 'pending']
+                            completed_orders = [o for o in pending_orders if o['status'] == 'ordered']
+                            
+                            if active_pending:
+                                pending = active_pending[0]
+                                st.markdown(f"""
+                                <div style='background: #fef3c7; padding: 12px; border-radius: 6px; border-left: 4px solid #f59e0b; margin-top: 8px;'>
+                                    <div style='font-weight: 600; color: #92400e; margin-bottom: 8px;'>
+                                        ⏳ Oczekiwane zamówienie
+                                    </div>
+                                    <div style='color: #78350f; font-size: 13px; line-height: 1.6;'>
+                                        📦 <strong>Produkt:</strong> {pending['product_id']}<br>
+                                        📊 <strong>Przewidywana ilość:</strong> ~{pending['quantity']} szt.<br>
+                                        📅 <strong>Przekonany:</strong> {pending['date_convinced']}<br>
+                                        🎯 <strong>Spodziewane zamówienie:</strong> {pending['expected_order_date']} (za {pending['delay_days']} dni)<br>
+                                        🏢 <strong>Dystrybutor:</strong> {pending['distributor_name']}
+                                    </div>
+                                </div>
+                                """, unsafe_allow_html=True)
+                            
+                            if completed_orders:
+                                st.markdown(f"""
+                                <div style='background: #dcfce7; padding: 12px; border-radius: 6px; border-left: 4px solid #10b981; margin-top: 8px;'>
+                                    <div style='font-weight: 600; color: #065f46; margin-bottom: 8px;'>
+                                        ✅ Zrealizowane zamówienia: {len(completed_orders)}
+                                    </div>
+                                </div>
+                                """, unsafe_allow_html=True)
+            
+            st.markdown("---")
+        
+        # Dla Heinz scenario - selektor produktu do przekonywania
+        if is_heinz_scenario and not conviction_data:
+            st.markdown("### 📦 Wybierz Produkt do Prezentacji")
+            st.info("💡 Wybierz produkt Heinz, który chcesz zaproponować temu klientowi.")
+            
+            # Lista dostępnych produktów Heinz
+            available_heinz_products = [
+                ("heinz_ketchup_premium_5kg", "🍅 Heinz Ketchup Premium 5kg"),
+                ("heinz_majonez_delikatny_5kg", "🥚 Heinz Majonez Delikatny 5kg"),
+                ("heinz_majonez_premium_5l", "🥚 Heinz Majonez Premium 5L"),
+                ("heinz_bbq_sauce_original_2_5kg", "🔥 Heinz BBQ Sauce Original 2.5kg"),
+                ("heinz_bbq_premium_3l", "🔥 Heinz BBQ Premium 3L"),
+                ("heinz_sticky_korean_sauce_2_35kg", "🌶️ Heinz Sticky Korean Sauce 2.35kg"),
+                ("heinz_mayonnaise_professional_10l", "🥚 Heinz Mayonnaise Professional 10L")
+            ]
+            
+            selected_product_id = st.selectbox(
+                "Wybierz produkt:",
+                options=[p[0] for p in available_heinz_products],
+                format_func=lambda x: next((p[1] for p in available_heinz_products if p[0] == x), x),
+                key=f"product_selector_{client_id}"
+            )
+            
+            # Zapisz wybrany produkt w session_state
+            st.session_state[f"selected_product_{client_id}"] = selected_product_id
+            
+            st.markdown("---")
     
     # =================================================================
     # CONVERSATION HISTORY
@@ -277,13 +468,25 @@ Tekst do poprawy:
         num_lines = current_text.count('\n') + 1
         dynamic_height = max(120, min(400, 120 + (num_lines - 3) * 25))
         
+        # Dostosuj placeholder i labele dla Heinz scenario
+        if is_heinz_scenario:
+            textarea_label = "🎯 Twój argument sprzedażowy:"
+            placeholder_text = "Przedstaw swój argument przekonujący klienta do produktu Heinz..."
+            button_label = "🎯 Prezentuj Argument"
+            spinner_text = "🤖 AI Gemini ocenia Twój argument i generuje reakcję klienta..."
+        else:
+            textarea_label = "✍️ Twoja odpowiedź:"
+            placeholder_text = "Mów przez mikrofon lub pisz tutaj..."
+            button_label = "📤 Wyślij"
+            spinner_text = "🤖 AI analizuje Twoją odpowiedź i generuje reakcję..."
+        
         # Text area dla odpowiedzi
         player_message = st.text_area(
-            "✍️ Twoja odpowiedź:",
+            textarea_label,
             value=current_text,
             height=dynamic_height,
             key=text_area_key,
-            placeholder=f"Mów przez mikrofon lub pisz tutaj...",
+            placeholder=placeholder_text,
             on_change=sync_textarea_to_state
         )
         
@@ -291,13 +494,13 @@ Tekst do poprawy:
         col_send, col_end = st.columns(2)
         
         with col_send:
-            if st.button("📤 Wyślij", 
+            if st.button(button_label, 
                         type="primary", 
                         use_container_width=True,
                         disabled=not player_message.strip(),
                         key=f"send_msg_fmcg_{client_id}_{current_turn}"):
                 if player_message.strip():
-                    with st.spinner("🤖 AI analizuje Twoją odpowiedź i generuje reakcję..."):
+                    with st.spinner(spinner_text):
                         # Dodaj wiadomość gracza
                         conv_state["messages"].append({
                             "role": "user",
@@ -305,7 +508,195 @@ Tekst do poprawy:
                             "timestamp": datetime.now().strftime("%H:%M")
                         })
                         
-                        # Wywołaj AI klienta (używając sprawdzonej funkcji z fmcg_ai_conversation)
+                        # =================================================================
+                        # REALISTYCZNA ROZMOWA HANDLOWA (dla wszystkich scenariuszy)
+                        # =================================================================
+                        # AI wciela się w klienta i prowadzi naturalną rozmowę
+                        # Ocena i feedback są DOPIERO PO zakończeniu wizyty
+                        
+                        if False:  # DISABLED - old evaluation mode
+                            # Pobierz wybrany produkt
+                            selected_product_id = st.session_state.get(f"selected_product_{client_id}")
+                            
+                            if not selected_product_id:
+                                # Jeśli brak wyboru - użyj pierwszego produktu z conviction_data lub defaultowy
+                                conviction_data = client.get('conviction_data', {})
+                                if conviction_data:
+                                    selected_product_id = list(conviction_data.keys())[0]
+                                else:
+                                    selected_product_id = "heinz_ketchup_premium_5kg"
+                            
+                            # Pobierz dane conviction dla tego produktu
+                            conviction_data = client.get('conviction_data', {})
+                            product_conviction = conviction_data.get(selected_product_id, {})
+                            
+                            current_stage = product_conviction.get('stage', 'discovery')
+                            current_progress = product_conviction.get('progress', 0)
+                            conversation_history = product_conviction.get('conversation_history', [])
+                            
+                            try:
+                                # Wywołaj AI evaluation
+                                score, feedback, stage_complete, next_stage = evaluate_sales_argument(
+                                    client_data=client,
+                                    product_id=selected_product_id,
+                                    argument_text=player_message,
+                                    current_stage=current_stage,
+                                    current_progress=current_progress,
+                                    conversation_history=conversation_history
+                                )
+                                
+                                # Oblicz nowy progress
+                                if score >= 90:
+                                    progress_gain = 40
+                                elif score >= 80:
+                                    progress_gain = 30
+                                elif score >= 70:
+                                    progress_gain = 20
+                                elif score >= 60:
+                                    progress_gain = 15
+                                elif score >= 50:
+                                    progress_gain = 10
+                                else:
+                                    progress_gain = 5
+                                
+                                new_progress = min(100, current_progress + progress_gain)
+                                
+                                # Aktualizuj stage jeśli potrzeba
+                                if current_stage == 'discovery' and new_progress >= 34:
+                                    next_stage = 'pitch'
+                                elif current_stage == 'pitch' and new_progress >= 67:
+                                    next_stage = 'convince'
+                                elif current_stage == 'convince' and new_progress >= 100:
+                                    next_stage = 'won'
+                                else:
+                                    next_stage = current_stage
+                                
+                                # Przygotuj AI response
+                                if next_stage != current_stage:
+                                    stage_names = {
+                                        'pitch': 'Pitch',
+                                        'convince': 'Convince',
+                                        'won': 'WON - Klient przekonany!'
+                                    }
+                                    ai_response = f"""🎉 **Świetnie! Przechodzisz do etapu: {stage_names.get(next_stage, next_stage)}**
+
+{feedback}
+
+---
+**Ocena argumentu: {score}/100**
+**Progress: {current_progress}% → {new_progress}%** (+{progress_gain}%)
+"""
+                                else:
+                                    ai_response = f"""📊 **Feedback AI:**
+
+{feedback}
+
+---
+**Ocena argumentu: {score}/100**
+**Progress: {current_progress}% → {new_progress}%** (+{progress_gain}%)
+**Etap: {current_stage.upper()}** - kontynuuj!
+"""
+                                
+                                # Dodaj odpowiedź AI do konwersacji
+                                conv_state["messages"].append({
+                                    "role": "assistant",
+                                    "content": ai_response,
+                                    "timestamp": datetime.now().strftime("%H:%M")
+                                })
+                                
+                                # Zaktualizuj conviction_data w client
+                                if selected_product_id not in client.get('conviction_data', {}):
+                                    if 'conviction_data' not in client:
+                                        client['conviction_data'] = {}
+                                    client['conviction_data'][selected_product_id] = {
+                                        'stage': 'discovery',
+                                        'progress': 0,
+                                        'conversation_history': [],
+                                        'started_date': datetime.now().strftime("%Y-%m-%d"),
+                                        'total_attempts': 0
+                                    }
+                                
+                                # Dodaj do historii
+                                client['conviction_data'][selected_product_id]['conversation_history'].append({
+                                    'date': datetime.now().strftime("%Y-%m-%d"),
+                                    'player_argument': player_message,
+                                    'ai_score': score,
+                                    'ai_feedback': feedback,
+                                    'progress_gain': progress_gain,
+                                    'stage_after': next_stage
+                                })
+                                
+                                # Aktualizuj status
+                                client['conviction_data'][selected_product_id]['stage'] = next_stage
+                                client['conviction_data'][selected_product_id]['progress'] = new_progress
+                                client['conviction_data'][selected_product_id]['last_interaction_date'] = datetime.now().strftime("%Y-%m-%d")
+                                client['conviction_data'][selected_product_id]['total_attempts'] = len(client['conviction_data'][selected_product_id]['conversation_history'])
+                                
+                                # =================================================================
+                                # DELAYED ORDER LOGIC - jeśli osiągnięto 100% (WON)
+                                # =================================================================
+                                if new_progress >= 100 and next_stage == 'won':
+                                    # Sprawdź czy pending order już nie istnieje
+                                    if 'pending_orders' not in client['conviction_data'][selected_product_id]:
+                                        client['conviction_data'][selected_product_id]['pending_orders'] = []
+                                    
+                                    existing_pending = [
+                                        o for o in client['conviction_data'][selected_product_id]['pending_orders']
+                                        if o['status'] == 'pending'
+                                    ]
+                                    
+                                    if not existing_pending:
+                                        # Utwórz pending order
+                                        pending_order = create_pending_order(
+                                            client_id=client_id,
+                                            client_name=client.get('name', client.get('chef_name', 'Nieznany')),
+                                            product_id=selected_product_id,
+                                            date_convinced=datetime.now().strftime("%Y-%m-%d"),
+                                            distributor_name="Orbico"
+                                        )
+                                        
+                                        client['conviction_data'][selected_product_id]['pending_orders'].append(pending_order)
+                                        
+                                        # Dodaj notyfikację do konwersacji
+                                        delay_info = f"""
+
+---
+
+🎯 **Klient przekonany!**
+
+{client.get('name', client.get('chef_name', 'Klient'))} jest przekonany do produktu.  
+W ciągu **{pending_order['delay_days']} dni** klient sam zadzwoni do dystrybutora **{pending_order['distributor_name']}** i złoży zamówienie.
+
+📦 **Oczekiwane zamówienie:** ~{pending_order['quantity']} szt.  
+📅 **Przewidywana data:** {pending_order['expected_order_date']}
+
+💡 Sprawdź kartę dystrybutora za kilka dni, żeby zobaczyć efekt "pull-through"!
+"""
+                                        # Dodaj do ostatniej wiadomości AI
+                                        conv_state["messages"][-1]["content"] += delay_info
+                                
+                                # Zapisz do game_state (będzie zapisane przez update_fmcg_game_state_sql)
+                                if 'clients' not in game_state:
+                                    game_state['clients'] = {}
+                                game_state['clients'][client_id] = client
+                                
+                                # Zapisz do SQL
+                                try:
+                                    update_fmcg_game_state_sql(username, game_state)
+                                except Exception as e:
+                                    st.warning(f"⚠️ Nie udało się zapisać do SQL: {e}")
+                                
+                            except Exception as e:
+                                ai_response = f"❌ Błąd AI evaluation: {str(e)[:200]}"
+                                conv_state["messages"].append({
+                                    "role": "assistant",
+                                    "content": ai_response,
+                                    "timestamp": datetime.now().strftime("%H:%M")
+                                })
+                        
+                        # =================================================================
+                        # REALISTYCZNA ROZMOWA - AI GRA KLIENTA (dla wszystkich scenariuszy)
+                        # =================================================================
                         try:
                             ai_response, metadata = conduct_fmcg_conversation(
                                 client=client,
@@ -314,24 +705,30 @@ Tekst do poprawy:
                                 current_messages=conv_state["messages"]
                             )
                             
-                            # Dodaj odpowiedź AI
+                            # Dodaj odpowiedź AI (klient mówi naturalnie)
                             conv_state["messages"].append({
                                 "role": "assistant",
                                 "content": ai_response,
                                 "timestamp": datetime.now().strftime("%H:%M")
                             })
                             
-                            # Inkrementuj turę
-                            conv_state["current_turn"] += 1
-                            
-                            # Wyczyść transkrypcję dla nowej wiadomości
-                            st.session_state[transcription_key] = ""
-                            st.session_state[transcription_version_key] += 1
-                            
-                            st.rerun()
-                            
                         except Exception as e:
-                            st.error(f"Błąd AI: {str(e)}")
+                            # Zapisz błąd jako wiadomość AI
+                            error_msg = f"❌ Przepraszam, wystąpił błąd podczas generowania odpowiedzi.\n\nSzczegóły: {str(e)[:200]}"
+                            conv_state["messages"].append({
+                                "role": "assistant",
+                                "content": error_msg,
+                                "timestamp": datetime.now().strftime("%H:%M")
+                            })
+                        
+                        # Inkrementuj turę
+                        conv_state["current_turn"] += 1
+                        
+                        # Wyczyść transkrypcję dla nowej wiadomości
+                        st.session_state[transcription_key] = ""
+                        st.session_state[transcription_version_key] += 1
+                        
+                        st.rerun()
         
         with col_end:
             # Przycisk zakończenia wizyty
@@ -446,10 +843,50 @@ Tekst do poprawy:
             # Save reputation BEFORE change (for accurate display)
             reputation_before = client.get("reputation", 50)
             
-            # Calculate reputation change based on conversation and order
+            # ====================================================================
+            # OCEŃ JAKOŚĆ ROZMOWY UŻYWAJĄC AI
+            # ====================================================================
+            st.info("🤖 Analizuję rozmowę...")
+            
+            conversation_evaluation = {}
+            try:
+                from utils.fmcg_ai_conversation import evaluate_conversation_quality
+                
+                conversation_evaluation = evaluate_conversation_quality(
+                    conversation_messages=messages,
+                    client=client
+                )
+                
+                # Wyświetl ocenę
+                quality = conversation_evaluation.get("quality", 3)
+                feedback = conversation_evaluation.get("feedback", "Brak oceny")
+                
+                # Gwiazdki wizualne
+                stars = "⭐" * quality + "☆" * (5 - quality)
+                
+                with st.expander("📊 Ocena rozmowy", expanded=True):
+                    st.markdown(f"### {stars} {quality}/5")
+                    st.markdown(feedback)
+                    
+                    if conversation_evaluation.get("order_likely"):
+                        st.success(f"💰 Szacowana wartość zamówienia: {conversation_evaluation.get('order_value', 0)} PLN")
+                
+            except Exception as e:
+                st.warning(f"⚠️ Nie udało się ocenić rozmowy: {e}")
+                conversation_evaluation = {
+                    "quality": 3,
+                    "order_likely": False,
+                    "order_value": 0,
+                    "reputation_change": 0,
+                    "feedback": "Automatyczna ocena niedostępna"
+                }
+            
+            # Calculate reputation change based on conversation quality AND order
             # Reputacja: skala 0-100, wartość początkowa 50 (neutralna)
             # Budowanie reputacji jest powolne i wymaga wielu wizyt
-            reputation_change = 2  # Baza za wizytę (mała zmiana)
+            
+            # Bazowa zmiana z jakości rozmowy (z AI evaluation)
+            reputation_change = conversation_evaluation.get("reputation_change", 0)
             
             if total_value > 0:
                 # Bonus based on order value (umiarkowany)

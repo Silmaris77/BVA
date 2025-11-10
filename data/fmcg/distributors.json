@@ -1,0 +1,107 @@
+{
+  "farutex": {
+    "id": "farutex",
+    "name": "Farutex",
+    "segment": "premium_horeca",
+    "description": "Sieci restauracyjne, hotele, kuchnie premium",
+    "heinz_stock_level": 500,
+    "monthly_heinz_sales_kg": 1200,
+    "relationship_score": 70,
+    "active_customers_using_heinz": 18,
+    "pull_through_rate": 42,
+    "brands_portfolio": ["Heinz", "Hellmann's", "Knorr", "Barilla"],
+    "contact_person": {
+      "name": "Marek Kowalski",
+      "role": "Key Account Manager HoReCa",
+      "phone": "+48 601 234 567",
+      "email": "m.kowalski@farutex.pl"
+    },
+    "cooperation_level": "strategic_partner",
+    "last_meeting_date": "2025-10-15",
+    "next_joint_visit_available": true
+  },
+  "transgourmet": {
+    "id": "transgourmet",
+    "name": "Transgourmet",
+    "segment": "chains_and_canteens",
+    "description": "Stabilność, duże wolumeny, standardowe marki",
+    "heinz_stock_level": 800,
+    "monthly_heinz_sales_kg": 2000,
+    "relationship_score": 65,
+    "active_customers_using_heinz": 35,
+    "pull_through_rate": 38,
+    "brands_portfolio": ["Heinz", "Kotlin", "Pudliszki", "Develey"],
+    "contact_person": {
+      "name": "Anna Nowak",
+      "role": "Category Manager Sauces",
+      "phone": "+48 602 345 678",
+      "email": "a.nowak@transgourmet.pl"
+    },
+    "cooperation_level": "active_partner",
+    "last_meeting_date": "2025-09-28",
+    "next_joint_visit_available": true
+  },
+  "bidfood": {
+    "id": "bidfood",
+    "name": "Bidfood",
+    "segment": "modern_gastronomy",
+    "description": "Trendy, małe restauracje, catering",
+    "heinz_stock_level": 300,
+    "monthly_heinz_sales_kg": 600,
+    "relationship_score": 75,
+    "active_customers_using_heinz": 12,
+    "pull_through_rate": 45,
+    "brands_portfolio": ["Heinz", "Kühne", "Inproba", "Fuchs"],
+    "contact_person": {
+      "name": "Tomasz Wiśniewski",
+      "role": "Sales Manager Food Service",
+      "phone": "+48 603 456 789",
+      "email": "t.wisniewski@bidfood.pl"
+    },
+    "cooperation_level": "growing_partner",
+    "last_meeting_date": "2025-11-01",
+    "next_joint_visit_available": true
+  },
+  "selgros_horeca": {
+    "id": "selgros_horeca",
+    "name": "Selgros HoReCa",
+    "segment": "cash_and_carry_value",
+    "description": "Fast foody, bary mleczne, value segment",
+    "heinz_stock_level": 600,
+    "monthly_heinz_sales_kg": 900,
+    "relationship_score": 55,
+    "active_customers_using_heinz": 25,
+    "pull_through_rate": 28,
+    "brands_portfolio": ["Heinz", "Pudliszki", "Kotlin", "Fanex"],
+    "contact_person": {
+      "name": "Piotr Dąbrowski",
+      "role": "Business Development Manager",
+      "phone": "+48 604 567 890",
+      "email": "p.dabrowski@selgros.pl"
+    },
+    "cooperation_level": "transactional",
+    "last_meeting_date": "2025-08-20",
+    "next_joint_visit_available": false
+  },
+  "orbico": {
+    "id": "orbico",
+    "name": "Orbico Food Service",
+    "segment": "hotels_and_events",
+    "description": "Hotele 4★+, korporacje, gastronomia kontraktowa",
+    "heinz_stock_level": 400,
+    "monthly_heinz_sales_kg": 800,
+    "relationship_score": 80,
+    "active_customers_using_heinz": 15,
+    "pull_through_rate": 50,
+    "brands_portfolio": ["Heinz", "Hellmann's", "Tabasco", "Lea & Perrins"],
+    "contact_person": {
+      "name": "Katarzyna Lewandowska",
+      "role": "National Account Manager",
+      "phone": "+48 605 678 901",
+      "email": "k.lewandowska@orbico.pl"
+    },
+    "cooperation_level": "strategic_partner",
+    "last_meeting_date": "2025-10-30",
+    "next_joint_visit_available": true
+  }
+}

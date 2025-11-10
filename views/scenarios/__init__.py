@@ -1,0 +1,3 @@
+"""
+Moduł widoków scenariuszy
+"""

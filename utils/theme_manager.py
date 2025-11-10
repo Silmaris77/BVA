@@ -169,6 +169,21 @@ class ThemeManager:
         # Mobile sidebar fix - wymuszenie działania przycisku
         mobile_sidebar_fix = """
         <style>
+        /* Zwiększona szerokość sidebar */
+        [data-testid="stSidebar"] {
+            min-width: 280px !important;
+            width: 280px !important;
+        }
+        
+        /* Szersze przyciski w sidebar */
+        [data-testid="stSidebar"] .stButton > button {
+            width: 100% !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            min-height: 3rem !important;
+            padding: 0.5rem 1rem !important;
+        }
+        
         /* Ensure sidebar toggle works on mobile */
         @media (max-width: 768px) {
             /* Make sidebar toggle button always visible and clickable */

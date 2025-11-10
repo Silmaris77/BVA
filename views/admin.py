@@ -328,7 +328,7 @@ def show_admin_dashboard():
                 "test_taken": "Test wykonany",
                 "streak": "Seria dni"
             },
-            width="stretch"
+            use_container_width=True
         )
         
         # Dodaj opcję eksportu danych
@@ -368,7 +368,7 @@ def show_admin_dashboard():
                     format="%{value:.2f}"
                 )
             },
-            width="stretch"
+            use_container_width=True
         )
         
         # Wykres popularności lekcji (top 10)
@@ -445,7 +445,7 @@ def show_admin_dashboard():
                     "neuroleader_type": "Typ neuroleader",
                     "score": "Wynik"
                 },
-                width="stretch"
+                use_container_width=True
             )
         else:
             st.info("Brak danych o wynikach testów.")
@@ -507,7 +507,7 @@ def show_admin_dashboard():
                 title='Rozkład stylów uczenia się wśród użytkowników'
             )
             
-            st.altair_chart(chart, width="stretch")
+            st.altair_chart(chart, use_container_width=True)
             
             # GŁÓWNA WIZUALIZACJA: Siatka wszystkich użytkowników
             st.markdown("---")
@@ -690,7 +690,7 @@ def show_admin_dashboard():
                     "completed_date": "Data ukończenia"
                 },
                 hide_index=True,
-                width="stretch"
+                use_container_width=True
             )
             
             # Opcja eksportu
@@ -1192,7 +1192,7 @@ def show_business_games_admin_panel():
                         "✅ Zatwierdź ocenę",
                         key=f"approve_{review['id']}",
                         type="primary",
-                        width="stretch"
+                        use_container_width=True
                     ):
                         admin_username = st.session_state.get('username', 'admin')
                         
@@ -1212,7 +1212,7 @@ def show_business_games_admin_panel():
                     if st.button(
                         "⏭️ Pomiń na później",
                         key=f"skip_{review['id']}",
-                        width="stretch"
+                        use_container_width=True
                     ):
                         st.info("Przeskoczono do następnego")
     

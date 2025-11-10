@@ -5,6 +5,9 @@ Każda branża może mieć wiele scenariuszy z różnymi warunkami startowymi,
 modyfikatorami i celami do osiągnięcia.
 """
 
+import json
+import os
+
 # Import klientów dla scenariuszy FMCG
 def load_scenario_clients(client_database_id):
     """
@@ -17,11 +20,19 @@ def load_scenario_clients(client_database_id):
         Dict z klientami lub pusty dict jeśli nie znaleziono
     """
     if client_database_id == "fmcg_clients_heinz_foodservice":
+        # Nowa implementacja - ładuje z clients_heinz.json
         try:
-            from data.industries.fmcg_clients_heinz_foodservice import HEINZ_FOODSERVICE_CLIENTS
-            return HEINZ_FOODSERVICE_CLIENTS
-        except ImportError:
-            print(f"⚠️ Nie można załadować bazy klientów: {client_database_id}")
+            clients_path = os.path.join("data", "fmcg", "clients_heinz.json")
+            if os.path.exists(clients_path):
+                with open(clients_path, 'r', encoding='utf-8') as f:
+                    clients_data = json.load(f)
+                print(f"✅ Załadowano {len(clients_data)} klientów Heinz z clients_heinz.json")
+                return clients_data
+            else:
+                print(f"⚠️ Plik {clients_path} nie istnieje")
+                return {}
+        except Exception as e:
+            print(f"⚠️ Błąd ładowania clients_heinz.json: {e}")
             return {}
     return {}
 
@@ -200,26 +211,29 @@ SCENARIOS = {
         "heinz_food_service": {
             "id": "heinz_food_service",
             "name": "🍅 Heinz Food Service Challenge",
-            "description": "Zostań Junior Sales Representative w Heinz Polska. Zarządzaj portfolio dwóch marek (Heinz Premium + Pudliszki Value) w kanale Food Service. 8 tygodni intensywnej sprzedaży w regionie Dzięgielów!",
+            "description": "Zostań Junior Sales Representative w Heinz Polska. Region Dzięgielów + okolice (Wisła, Ustroń, Skoczów, Cieszyn). Zarządzaj portfolio 6 SKU w kanale Food Service. Model 'through distributor' - przekonuj szefów kuchni do produktów Heinz, buduj popyt pull-through! Zamówienia przechodzą przez dystrybutorów HoReCa.",
             "icon": "🍅",
             "difficulty": "medium",
+            "model": "through_distributor",
             "company": "Heinz Polska",
             "territory": {
+                "name": "Dzięgielów Food Service",
                 "base_address": "Lipowa 29, 43-445 Dzięgielów",
                 "base_lat": 49.7271667,  # 49°43'37.8"N
                 "base_lng": 18.7025833,  # 18°42'09.3"E
-                "radius_km": 30
+                "radius_km": 15,
+                "region": "Beskidy - Dzięgielów, Wisła, Ustroń, Skoczów, Cieszyn"
             },
             "duration_weeks": 8,
             "client_database": "fmcg_clients_heinz_foodservice",  # Referencja do pliku z klientami
-            "total_clients": 25,
+            "total_clients": 10,
             "client_breakdown": {
-                "burgerownie_street_food": 6,
-                "kebabownie_fast_food": 4,
-                "stołówki_bary": 3,
-                "pizzerie_casual": 4,
-                "hotele": 2,
-                "dystrybutorzy": 6
+                "burger_joints": 2,
+                "restauracje_premium": 2,
+                "bary_stołówki": 2,
+                "pizzerie_casual": 1,
+                "hotele": 1,
+                "qsr_chains": 2
             },
             "initial_conditions": {
                 "level": 1,
@@ -235,71 +249,102 @@ SCENARIOS = {
             },
             "products": {
                 "own": [
-                    # HEINZ PREMIUM LINE
+                    # HEINZ PREMIUM LINE - Full Food Service Portfolio
                     {
-                        "id": "heinz_ketchup_classic",
-                        "name": "Heinz Ketchup Klasyczny 875ml",
+                        "id": "heinz_ketchup_premium_5kg",
+                        "name": "Heinz Ketchup Premium 5kg",
                         "brand": "Heinz",
                         "tier": "premium",
-                        "category": "ketchup",
-                        "price_foodservice": 28.50,
+                        "category": "sosy_pomidorowe",
+                        "price_distributor": 29.50,
                         "margin_pct": 35,
                         "target_segment": "Restauracje premium, burger joints craft, bistro",
-                        "usp": "Marka #1 na świecie, najlepsze pomidory, zero konserwantów, Instagram appeal"
+                        "usp": "Najgęstszy ketchup w segmencie HoReCa (Brix 29%). Wysoka wydajność: o 15% mniejsze zużycie niż tańsze marki."
                     },
                     {
-                        "id": "heinz_ketchup_hot",
-                        "name": "Heinz Ketchup Pikantny 875ml",
+                        "id": "heinz_majonez_delikatny_5kg",
+                        "name": "Heinz Majonez Delikatny 5kg",
                         "brand": "Heinz",
                         "tier": "premium",
-                        "category": "ketchup",
-                        "price_foodservice": 29.50,
-                        "margin_pct": 35,
-                        "target_segment": "BBQ restaurants, pub food, foodtrucki z ostrymi daniami",
-                        "usp": "Premium spicy, naturalna ostrość, upsell opportunity (+2 zł do burgera)"
+                        "category": "sosy_bazowe",
+                        "price_distributor": 42.00,
+                        "margin_pct": 32,
+                        "target_segment": "Restauracje premium, burger joints, bistro",
+                        "usp": "Stabilny w temperaturze, idealny do sosów i sałatek. Bazowy produkt do burgerowych sosów własnych."
+                    },
+                    {
+                        "id": "heinz_bbq_sauce_original_2_5kg",
+                        "name": "Heinz BBQ Sauce Original 2.5kg",
+                        "brand": "Heinz",
+                        "tier": "premium_specialty",
+                        "category": "sosy_bbq",
+                        "price_distributor": 36.00,
+                        "margin_pct": 38,
+                        "target_segment": "BBQ restaurants, burger joints premium, pub food",
+                        "usp": "Uniwersalny sos BBQ – baza do marynat i burgerów 'smoky'. Produkt o dużym potencjale upsellingowym."
+                    },
+                    {
+                        "id": "heinz_sticky_korean_sauce_2_35kg",
+                        "name": "Heinz Sticky Korean Sauce 2.35kg",
+                        "brand": "Heinz",
+                        "tier": "premium_innovative",
+                        "category": "sosy_azjatyckie",
+                        "price_distributor": 44.00,
+                        "margin_pct": 40,
+                        "target_segment": "Restauracje premium, fusion cuisine, modern gastro",
+                        "usp": "Sos o orientalnym profilu smakowym – unikalny w segmencie. W połączeniu z majonezem tworzy modny 'Korean Mayo'."
+                    },
+                    {
+                        "id": "heinz_mayonnaise_professional_10l",
+                        "name": "Heinz Mayonnaise Professional 10L",
+                        "brand": "Heinz",
+                        "tier": "premium_b2b",
+                        "category": "sosy_bazowe_bulk",
+                        "price_distributor": 72.00,
+                        "margin_pct": 30,
+                        "target_segment": "QSR chains, catering, duże sieci gastronomiczne",
+                        "usp": "Wysoka wydajność, system bag-in-box do dozowników – mniej strat, kontrola zużycia."
                     },
                     # PUDLISZKI VALUE LINE
                     {
-                        "id": "pudliszki_ketchup_lagodny",
-                        "name": "Pudliszki Ketchup Łagodny 980g",
+                        "id": "pudliszki_ketchup_lagodny_5kg",
+                        "name": "Pudliszki Ketchup Łagodny 5kg",
                         "brand": "Pudliszki",
                         "tier": "value",
-                        "category": "ketchup",
-                        "price_foodservice": 18.50,
-                        "margin_pct": 32,
-                        "target_segment": "Stołówki, fast food budget, jadłodajnie",
-                        "usp": "Polski lider, świetna cena, sprawdzony smak, duża pojemność"
-                    },
-                    {
-                        "id": "pudliszki_ketchup_ostry",
-                        "name": "Pudliszki Ketchup Ostry 980g",
-                        "brand": "Pudliszki",
-                        "tier": "value",
-                        "category": "ketchup",
-                        "price_foodservice": 18.90,
-                        "margin_pct": 32,
-                        "target_segment": "Food courts, kebaby, budżetowe restauracje",
-                        "usp": "Najlepsza relacja cena/jakość, duża pojemność"
+                        "category": "sosy_pomidorowe_value",
+                        "price_distributor": 18.90,
+                        "margin_pct": 28,
+                        "target_segment": "Stołówki, fast food budget, jadłodajnie, bary mleczne",
+                        "usp": "Dobra relacja jakości do ceny. Polskie pomidory, niska zawartość cukru. Dla stołówek z naciskiem na koszt porcji."
                     }
                 ],
                 "competition": [
                     {
-                        "id": "kotlin_ketchup",
-                        "name": "Kotlin Ketchup 900g",
-                        "brand": "Kotlin",
-                        "category": "ketchup",
-                        "price_foodservice": 16.80,
-                        "market_share_foodservice": 18,
-                        "weaknesses": "Niska узнаваемость marki, zmienność smaku, słabsze wsparcie marketingowe"
+                        "id": "hellmanns_mayo",
+                        "name": "Hellmann's Mayonnaise 5kg",
+                        "brand": "Hellmann's",
+                        "category": "sosy_bazowe",
+                        "price_distributor": 45.00,
+                        "market_share_foodservice": 25,
+                        "weaknesses": "Droższy od Heinz, mniejsza wydajność, brak bag-in-box opcji"
                     },
                     {
-                        "id": "develey_ketchup",
-                        "name": "Develey Ketchup 875ml",
+                        "id": "develey_bbq",
+                        "name": "Develey BBQ Sauce 2.5kg",
                         "brand": "Develey",
-                        "category": "ketchup",
-                        "price_foodservice": 24.50,
-                        "market_share_foodservice": 8,
-                        "weaknesses": "Niemiecka marka, słaba узнаваемость w PL, droższy od Pudliszek a słabszy od Heinza"
+                        "category": "sosy_bbq",
+                        "price_distributor": 38.00,
+                        "market_share_foodservice": 15,
+                        "weaknesses": "Niemiecka marka, słaba rozpoznawalność w PL, droższy od Heinz"
+                    },
+                    {
+                        "id": "winiary_mayo",
+                        "name": "Winiary Majonez 5kg",
+                        "brand": "Winiary",
+                        "category": "sosy_bazowe",
+                        "price_distributor": 32.00,
+                        "market_share_foodservice": 20,
+                        "weaknesses": "Niższa jakość, nie stabilny w temperaturze, consumer brand positioning"
                     }
                 ]
             },
@@ -311,63 +356,77 @@ SCENARIOS = {
             },
             "objectives": [
                 {
-                    "type": "numeric_distribution",
+                    "type": "convince_clients",
                     "target": 15,
-                    "description": "🎯 Zdobądź 15 punktów sprzedaży (60% dystrybucji numerycznej portfolio Heinz)",
+                    "description": "🎯 Przekonaj 15 restauracji do produktów Heinz (active clients z convinced_products)",
                     "reward_money": 3000,
                     "priority": "critical"
                 },
                 {
-                    "type": "monthly_sales",
-                    "target": 15000,
-                    "description": "💰 Osiągnij 15,000 PLN sprzedaży (Heinz + Pudliszki łącznie)",
+                    "type": "sell_out_volume",
+                    "target": 1200,
+                    "description": "� Osiągnij 1200 kg sell-out volume (quarterly goal - suma przez dystrybutorów)",
                     "reward_money": 2500,
                     "priority": "high"
                 },
                 {
-                    "type": "beat_competition",
-                    "target": "kotlin",
-                    "target_wins": 6,
-                    "description": "🥊 Przejmij 6 klientów od Kotlin (switch na Heinz lub Pudliszki)",
+                    "type": "pull_through_rate",
+                    "target": 35,
+                    "description": "📊 Utrzymaj 35% pull-through rate (% Heinz stock dystrybutorów → sprzedaż)",
                     "reward_money": 1500,
+                    "priority": "medium"
+                },
+                {
+                    "type": "portfolio_penetration",
+                    "target": 3.0,
+                    "description": "🎨 Osiągnij średnio 3 SKU na aktywnego klienta (cross-sell success)",
+                    "reward_money": 1000,
                     "priority": "medium"
                 }
             ],
             "kpis": {
                 "primary": [
-                    "numeric_distribution",
-                    "revenue_total",
-                    "premium_mix_percent"
+                    "sell_out_volume_kg",
+                    "active_clients_count",
+                    "pull_through_rate_percent",
+                    "relationship_index"
                 ],
                 "secondary": [
-                    "heinz_penetration",
-                    "pudliszki_volume",
-                    "average_basket_value",
-                    "upsell_success_rate"
+                    "convinced_products_total",
+                    "avg_sku_per_client",
+                    "distributor_relationships",
+                    "conviction_success_rate"
                 ]
             },
             "selling_strategy": {
-                "premium_clients": "Heinz primary (Pudliszki jako backup/volume option)",
-                "value_clients": "Pudliszki primary (Heinz jako upsell/premium option)",
-                "portfolio_approach": "Two-brand strategy: pokryj cały rynek od stołówek do fine dining"
+                "premium_clients": "Full Heinz portfolio (Ketchup, Mayo, BBQ, Korean Sauce) - focus on innovation & quality",
+                "mixed_clients": "Heinz basics (Ketchup, Mayo) + Pudliszki for volume - balanced approach",
+                "value_clients": "Pudliszki Ketchup + Heinz Mayo Professional 10L for efficiency - cost-conscious positioning",
+                "distributor_cooperation": "Build strong relationships: joint visits (+20% convince), trade promotions, pull-through reporting",
+                "conviction_process": "Discovery → Pitch → Convince (3-stage flow, AI-evaluated arguments)"
             },
             "special_events": [],
             "is_lifetime": False,
             "onboarding_tasks": [
                 {
+                    "id": "distributor_mapping",
+                    "name": "Poznaj dystrybutorów",
+                    "description": "Zidentyfikuj 5 dystrybutorów HoReCa: Farutex, Transgourmet, Bidfood, Selgros, Orbico - sprawdź ich segmenty i stock levels"
+                },
+                {
                     "id": "territory_analysis",
                     "name": "Segmentacja Food Service",
-                    "description": "Podziel 25 punktów na 3 segmenty: Premium (Heinz focus), Value (Pudliszki focus), Mixed (portfolio approach)"
+                    "description": "Podziel 10 restauracji na 3 segmenty: Premium (Full Heinz), Mixed (Basics + Pudliszki), Value (Pudliszki + Mayo 10L)"
                 },
                 {
                     "id": "route_planning",
                     "name": "Plan wizyt tygodniowych",
-                    "description": "Zaplanuj trasę wizyt minimalizując koszty dojazdu i maksymalizując coverage"
+                    "description": "Zaplanuj trasę wizyt minimalizując koszty dojazdu i maksymalizując coverage - uwzględnij wspólne wizyty z dystrybutorami"
                 },
                 {
                     "id": "portfolio_pitch",
-                    "name": "Elevator Pitch - Portfolio Heinz",
-                    "description": "Przygotuj pitch: 'Heinz Polska oferuje rozwiązania dla każdego segmentu - od Pudliszek do Heinz premium'"
+                    "name": "Elevator Pitch - Portfolio 6 SKU",
+                    "description": "Przygotuj pitch: 'Heinz Food Service - 6 SKU od value (Pudliszki) do innovation (Korean Sauce). Through distributor model - budujesz PULL demand!'"
                 }
             ]
         },

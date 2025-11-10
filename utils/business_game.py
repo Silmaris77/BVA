@@ -417,6 +417,35 @@ def initialize_fmcg_game_with_scenario(username: str, scenario_id: str) -> Dict:
     }
 
 
+def load_heinz_clients():
+    """
+    Ładuje klientów z clients_heinz.json dla scenariusza Heinz Food Service
+    Baza gracza: Lipowa 29, 43-445 Dzięgielów (49.7271667°N, 18.7025833°E)
+    Region: Dzięgielów + okolice (Wisła, Ustroń, Skoczów, Cieszyn), promień ~15km
+    
+    Returns:
+        Dict: Słownik klientów {client_id: client_data}
+    """
+    import os
+    
+    clients_path = os.path.join("data", "fmcg", "clients_heinz.json")
+    
+    if not os.path.exists(clients_path):
+        print(f"⚠️ Plik {clients_path} nie istnieje. Zwracam pustą listę klientów.")
+        return {}
+    
+    try:
+        with open(clients_path, 'r', encoding='utf-8') as f:
+            clients_data = json.load(f)
+        
+        print(f"✅ Załadowano {len(clients_data)} klientów Heinz Food Service z regionu Dzięgielów")
+        return clients_data
+    
+    except Exception as e:
+        print(f"❌ Błąd ładowania clients_heinz.json: {e}")
+        return {}
+
+
 def initialize_fmcg_game_new(username: str, scenario: str = "quick_start") -> Dict:
     """
     NOWA IMPLEMENTACJA - Inicjalizuje FMCG game z systemem klientów
@@ -486,16 +515,20 @@ def initialize_fmcg_game_new(username: str, scenario: str = "quick_start") -> Di
         scenario_id = f"fmcg_{scenario}_v1"
         
     elif scenario == "heinz_food_service":
-        # Heinz scenario - będzie ładowany przez fmcg_playable.py
-        # Tutaj tylko podstawowa struktura
+        # Heinz scenario - ładuje klientów z clients_heinz.json
         game_state = initialize_fmcg_game_state(
             territory="Dzięgielów Food Service",
             lat=49.7271667,  # Lipowa 29, 43-445 Dzięgielów (49°43'37.8"N)
             lon=18.7025833   # 18°42'09.3"E
         )
         game_state["company"] = "Heinz Polska"
-        game_state["clients"] = {}  # Będzie wypełnione przez load_scenario_clients
-        game_state["clients_prospect"] = 25
+        
+        # Załaduj klientów Heinz Food Service
+        heinz_clients = load_heinz_clients()
+        game_state["clients"] = heinz_clients
+        game_state["clients_prospect"] = len([c for c in heinz_clients.values() if not c.get("convinced_products")])
+        game_state["clients_active"] = len([c for c in heinz_clients.values() if c.get("convinced_products")])
+        
         scenario_id = "fmcg_heinz_food_service_v1"
         
     else:

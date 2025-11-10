@@ -504,11 +504,11 @@ def show_single_inspiration_card(inspiration, featured=False, card_index=0):
         # Przyciski Streamlit wewnątrz karty
         col1, col2 = st.columns(2)
         with col1:
-            if st.button(f"{fav_icon} Ulubione", key=f"fav_{inspiration['id']}_{card_index}", width='stretch'):
+            if st.button(f"{fav_icon} Ulubione", key=f"fav_{inspiration['id']}_{card_index}", use_container_width=True):
                 toggle_inspiration_favorite(inspiration['id'])
                 st.rerun()
         with col2:
-            if st.button(button_text, key=f"read_{inspiration['id']}_{card_index}", width='stretch'):
+            if st.button(button_text, key=f"read_{inspiration['id']}_{card_index}", use_container_width=True):
                 st.session_state.current_inspiration = inspiration['id']
                 st.session_state.inspiration_view_mode = 'detail'
                 increment_inspiration_views(inspiration['id'])
