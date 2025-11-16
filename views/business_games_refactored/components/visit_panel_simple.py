@@ -14,7 +14,7 @@ from typing import Dict, List
 from utils.fmcg_ai_conversation import conduct_fmcg_conversation, evaluate_conversation_quality
 from utils.fmcg_mechanics import update_fmcg_game_state_sql
 from utils.notes_panel import render_notes_panel
-from data.users_new import get_current_user_data
+from data.users_new import get_current_user_data, save_single_user
 from utils.user_helpers import get_user_sql_id
 
 
@@ -646,6 +646,10 @@ Tekst do poprawy:
                 completed_visits.append(client_id)
                 game_state["completed_visits_today"] = completed_visits
             
+            # INCREMENT WEEKLY VISIT COUNTER
+            game_state["visits_this_week"] = game_state.get("visits_this_week", 0) + 1
+            print(f"\n{'='*80}\n✅ WIZYTA ZAPISANA - visits_this_week: {game_state['visits_this_week']}\n{'='*80}\n")
+            
             # Update session state for route tracking
             if hasattr(st.session_state, 'completed_visits_today'):
                 if client_id not in st.session_state.completed_visits_today:
@@ -667,37 +671,47 @@ Tekst do poprawy:
             if "fmcg_game_state" in st.session_state:
                 st.session_state["fmcg_game_state"] = game_state
             
-            # Save to database
-            try:
-                # DEBUG: Show what we're saving
-                with st.expander("🔍 DEBUG: Dane do zapisu", expanded=False):
-                    st.write("**discovered_info:**")
-                    st.json(client.get("discovered_info", {}))
-                    st.write(f"**knowledge_level:** {client.get('knowledge_level', 0)}")
-                    if client.get('conviction_data'):
-                        st.write("**conviction_data:**")
-                        st.json(client.get('conviction_data', {}))
+            # DUAL-WRITE MODE: Save to both JSON and SQL
+            user_data = get_current_user_data(username)
+            if user_data:
+                # Update the game_state in user_data structure
+                if "business_games" not in user_data:
+                    user_data["business_games"] = {}
+                if "fmcg" not in user_data["business_games"]:
+                    user_data["business_games"] = {}
                 
-                update_fmcg_game_state_sql(username, game_state, game_state["clients"])
+                # Save updated game_state back to structure
+                user_data["business_games"]["fmcg"]["game_state"] = game_state
+                user_data["business_games"]["fmcg"]["clients"] = clients
                 
-                # Clear conversation state
-                if conversation_key in st.session_state:
-                    del st.session_state[conversation_key]
+                # Write to JSON
+                save_single_user(username, user_data)
+                print(f"\n{'='*80}\n✅ ZAPISANO DO JSON - visits: {game_state.get('visits_this_week', 0)}, clients: {len(clients)}\n{'='*80}\n")
                 
-                # CRITICAL: Clear current_visit flag to return to main view
-                if "current_visit_client_id" in st.session_state:
-                    del st.session_state["current_visit_client_id"]
-                
-                st.success("✅ Wizyta zapisana!")
-                st.info("🔄 Powrót do widoku głównego...")
-                
-                # Summary
-                st.markdown("#### 📊 Podsumowanie:")
-                st.markdown(f"**Reputacja:** {client['reputation']}/100 ({'+' if reputation_change > 0 else ''}{reputation_change})")
-                st.markdown(f"**Energia:** {new_energy}% (-{energy_cost}%)")
-                st.markdown(f"**Status:** {client.get('status', 'PROSPECT')}")
-                
-                st.rerun()
-                
-            except Exception as e:
-                st.error(f"❌ Błąd zapisu: {str(e)}")
+                # Write to SQL
+                sql_success = update_fmcg_game_state_sql(username, game_state, clients)
+                if sql_success:
+                    print(f"✅ ZAPISANO DO SQL - visits: {game_state.get('visits_this_week', 0)}")
+                else:
+                    print(f"⚠️ Zapis do SQL nieudany (user może nie istnieć w SQL)")
+            else:
+                st.error("❌ Nie znaleziono danych użytkownika!")
+            
+            # Clear conversation state
+            if conversation_key in st.session_state:
+                del st.session_state[conversation_key]
+            
+            # CRITICAL: Clear current_visit flag to return to main view
+            if "current_visit_client_id" in st.session_state:
+                del st.session_state["current_visit_client_id"]
+            
+            st.success("✅ Wizyta zapisana!")
+            st.info("🔄 Powrót do widoku głównego...")
+            
+            # Summary
+            st.markdown("#### 📊 Podsumowanie:")
+            st.markdown(f"**Reputacja:** {client['reputation']}/100 ({'+' if reputation_change > 0 else ''}{reputation_change})")
+            st.markdown(f"**Energia:** {new_energy}% (-{energy_cost}%)")
+            st.markdown(f"**Status:** {client.get('status', 'PROSPECT')}")
+            
+            st.rerun()

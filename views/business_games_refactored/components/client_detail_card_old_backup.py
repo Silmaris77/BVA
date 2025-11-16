@@ -430,7 +430,8 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
             
             st.markdown("**⚖️ Priorytety decyzyjne**")
             priorities = discovered_info.get("decision_priorities")
-            if priorities:
+            # Fix: ensure priorities is a list, not string "null"
+            if priorities and isinstance(priorities, list) and priorities != ["null"]:
                 st.markdown(f"✅ {', '.join(priorities)}")
             else:
                 st.markdown("❓ *Do ustalenia podczas wizyty*")
@@ -444,16 +445,18 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
             
             st.markdown("**📊 Najlepiej sprzedające się kategorie**")
             categories = discovered_info.get("best_selling_categories")
-            if categories:
+            # Fix: ensure categories is a list, not string "null"
+            if categories and isinstance(categories, list) and categories != ["null"]:
                 st.markdown(f"✅ {', '.join(categories)}")
             else:
                 st.markdown("❓ *Do ustalenia*")
         
         with col2:
             # Competition
-            st.markdown("**🛒 Obecnie sprzedawane marki**")
+            st.markdown("**🛍️ Obecnie sprzedawane marki**")
             brands = discovered_info.get("competing_brands")
-            if brands:
+            # Fix: ensure brands is a list, not string "null"
+            if brands and isinstance(brands, list) and brands != ["null"]:
                 st.markdown(f"✅ {', '.join(brands)}")
             else:
                 st.markdown("❓ *Do ustalenia*")
@@ -461,7 +464,8 @@ def render_client_detail_card(client_data: Dict, client_info: Dict):
             # Business Needs
             st.markdown("**💡 Potrzeby/Bolesności**")
             pain_points = discovered_info.get("pain_points")
-            if pain_points:
+            # Fix: ensure pain_points is a list, not string "null"
+            if pain_points and isinstance(pain_points, list) and pain_points != ["null"]:
                 for pain in pain_points:
                     st.markdown(f"• {pain}")
             else:

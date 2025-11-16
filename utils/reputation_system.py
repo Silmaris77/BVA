@@ -12,13 +12,14 @@ from datetime import datetime
 # TIER DEFINITIONS
 # =============================================================================
 
+# Tier definitions - now based on POINTS not 0-100 scale
 REPUTATION_TIERS = [
-    {"name": "Trainee", "emoji": "🟤", "min_rating": 0, "max_rating": 40},
-    {"name": "Junior", "emoji": "🔵", "min_rating": 41, "max_rating": 55},
-    {"name": "Regular", "emoji": "🟢", "min_rating": 56, "max_rating": 70},
-    {"name": "Senior", "emoji": "🟡", "min_rating": 71, "max_rating": 85},
-    {"name": "Expert", "emoji": "🟠", "min_rating": 86, "max_rating": 95},
-    {"name": "Master", "emoji": "🔴", "min_rating": 96, "max_rating": 100}
+    {"name": "Trainee", "emoji": "🟤", "min_points": 0, "max_points": 100},
+    {"name": "Junior", "emoji": "🔵", "min_points": 101, "max_points": 250},
+    {"name": "Regular", "emoji": "🟢", "min_points": 251, "max_points": 500},
+    {"name": "Senior", "emoji": "🟡", "min_points": 501, "max_points": 1000},
+    {"name": "Expert", "emoji": "🟠", "min_points": 1001, "max_points": 2000},
+    {"name": "Master", "emoji": "🔴", "min_points": 2001, "max_points": 999999}
 ]
 
 # Unlockable features per tier
@@ -97,7 +98,8 @@ def calculate_client_reputation(client_data: Dict, game_state: Dict) -> float:
         visit_quality_pct = 0
     
     # 2. Relationship Level (30%)
-    relationship = client_data.get("relationship", 0)  # Already 0-100
+    # Use either 'reputation' field (direct value) or 'relationship' (legacy)
+    relationship = client_data.get("reputation", client_data.get("relationship", 0))  # 0-100
     
     # 3. Contract Performance (20%)
     orders = client_data.get("orders", [])
@@ -128,38 +130,139 @@ def calculate_client_reputation(client_data: Dict, game_state: Dict) -> float:
     return round(client_reputation, 1)
 
 
-def calculate_average_client_reputation(game_state: Dict, clients: Dict = None) -> float:
-    """Calculate average reputation across all active clients
+# =============================================================================
+# CLIENT REPUTATION WEIGHTS
+# =============================================================================
+
+# Weights for different client statuses in reputation calculation
+CLIENT_REPUTATION_WEIGHTS = {
+    "ACTIVE": 1.0,      # Full impact - paying customers
+    "PARTNER": 1.0,     # Full impact - strategic partners
+    "LOST": 0.7,        # High impact - failure should be visible
+    "PROSPECT": 0.5,    # Medium impact - shows prospecting skills
+}
+
+
+def get_client_weight(client: Dict) -> float:
+    """Get reputation weight for a client based on status and contact history
+    
+    Args:
+        client: Client data dict
+    
+    Returns:
+        float: Weight (0.0-1.0) for reputation calculation
+    """
+    # Get status - handle both old and new structure
+    status = client.get("status")
+    if not status:
+        # New Heinz structure - determine from convinced_products
+        if client.get("convinced_products"):
+            status = "ACTIVE"
+        else:
+            status = "PROSPECT"
+    
+    # PROSPECT not contacted has 0 weight
+    if status == "PROSPECT" and not is_client_contacted(client):
+        return 0.0
+    
+    return CLIENT_REPUTATION_WEIGHTS.get(status, 0.5)
+
+
+def is_client_contacted(client: Dict) -> bool:
+    """Check if client has been contacted/visited
+    
+    Args:
+        client: Client data dict
+    
+    Returns:
+        bool: True if client has been visited at least once
+    """
+    return (
+        client.get("visits_count", 0) > 0 or
+        client.get("visit_history") or
+        client.get("last_visit_date") is not None or
+        client.get("first_contact_date") is not None
+    )
+
+
+def calculate_average_client_reputation(game_state: Dict, clients: Dict = None) -> Tuple[float, Dict[str, int]]:
+    """Calculate weighted average reputation across all contacted clients
+    
+    Uses weights based on client status:
+    - ACTIVE/PARTNER: 1.0 (100%) - full impact
+    - LOST: 0.7 (70%) - failure should be visible
+    - PROSPECT (contacted): 0.5 (50%) - shows prospecting ability
+    - PROSPECT (not contacted): 0.0 - ignored (no interaction yet)
     
     Args:
         game_state: Full game state
         clients: Optional clients dict (if None, uses game_state["clients"])
     
     Returns:
-        Float 0-100 average client reputation
+        Tuple[float, Dict]: (weighted_average_reputation, breakdown_by_status)
     """
     # Use provided clients or get from game_state
     if clients is None:
         clients = game_state.get("clients", {})
     
-    reputation_scores = []
+    weighted_sum = 0.0
+    total_weight = 0.0
+    
+    # Count clients by status for breakdown
+    breakdown = {
+        "ACTIVE": 0,
+        "PARTNER": 0,
+        "LOST": 0,
+        "PROSPECT_CONTACTED": 0,
+        "PROSPECT_NOT_CONTACTED": 0
+    }
     
     for client_id, client_data in clients.items():
-        # Only count ACTIVE and PARTNER clients
-        status = client_data.get("status", "PROSPECT")
-        if status in ["ACTIVE", "PARTNER"]:
-            rep_score = calculate_client_reputation(client_data, game_state)
-            reputation_scores.append(rep_score)
-            
-            # Update stored reputation
-            if "reputation" not in game_state:
-                game_state["reputation"] = initialize_reputation_system()
-            game_state["reputation"]["clients"][client_id] = rep_score
+        # Get weight for this client (handles status + contact check)
+        weight = get_client_weight(client_data)
+        
+        # Skip if no weight (e.g., PROSPECT not contacted)
+        if weight == 0:
+            breakdown["PROSPECT_NOT_CONTACTED"] += 1
+            continue
+        
+        # Get status for breakdown
+        status = client_data.get("status")
+        if not status:
+            # New Heinz structure
+            if client_data.get("convinced_products"):
+                status = "ACTIVE"
+            else:
+                status = "PROSPECT"
+        
+        # Check if contacted (for breakdown)
+        contacted = is_client_contacted(client_data)
+        
+        # Calculate reputation score
+        rep_score = calculate_client_reputation(client_data, game_state)
+        
+        # Add to weighted sum
+        weighted_sum += rep_score * weight
+        total_weight += weight
+        
+        # Update breakdown
+        if status == "PROSPECT":
+            breakdown["PROSPECT_CONTACTED"] += 1
+        else:
+            breakdown[status] = breakdown.get(status, 0) + 1
+        
+        # Update stored reputation
+        if "reputation" not in game_state:
+            game_state["reputation"] = initialize_reputation_system()
+        game_state["reputation"]["clients"][client_id] = rep_score
     
-    if reputation_scores:
-        return round(sum(reputation_scores) / len(reputation_scores), 1)
+    # Calculate weighted average
+    if total_weight > 0:
+        avg_reputation = round(weighted_sum / total_weight, 1)
     else:
-        return 0.0
+        avg_reputation = 0.0
+    
+    return avg_reputation, breakdown
 
 
 # =============================================================================
@@ -359,42 +462,75 @@ def calculate_company_reputation(game_state: Dict) -> float:
 # =============================================================================
 
 def calculate_overall_rating(game_state: Dict, clients: Dict = None) -> float:
-    """Calculate overall rating from client + company reputation
+    """Calculate overall rating as POINTS (not 0-100 scale)
     
-    Formula: (Client Rep × 60%) + (Company Rep × 40%)
+    Point-based system:
+    - Company Points: Base score from task/sales/professionalism (30-50 typical)
+    - Client Points: Sum of (client_reputation × weight) for all contacted clients
+      - ACTIVE: reputation × 1.0
+      - PROSPECT: reputation × 0.5  
+      - LOST: reputation × 0.7
+    
+    Total Points = Company Points + Sum(Client Points)
     
     Args:
         game_state: Full game state
         clients: Optional clients dict (if None, uses game_state["clients"])
     
     Returns:
-        Float 0-100 overall rating
+        Float: Total points (unbounded, typically 30-2000+)
     """
-    client_rep = calculate_average_client_reputation(game_state, clients)
+    # Get company reputation (0-100 scale)
     company_rep = calculate_company_reputation(game_state)
     
-    overall = (client_rep * 0.60) + (company_rep * 0.40)
+    # Convert to points (scale down to reasonable base)
+    # Company rep 0-100 → 0-50 points base
+    company_points = company_rep * 0.5
+    
+    # Get client points
+    if clients is None:
+        clients = game_state.get("clients", {})
+    
+    client_points = 0.0
+    
+    for client_id, client_data in clients.items():
+        # Get weight (includes contact check)
+        weight = get_client_weight(client_data)
+        
+        if weight == 0:
+            continue  # Skip uncontacted prospects
+        
+        # Get client reputation score
+        rep_score = calculate_client_reputation(client_data, game_state)
+        
+        # Add weighted points
+        client_points += rep_score * weight
+    
+    # Total points
+    total_points = company_points + client_points
     
     # Update stored value
     if "reputation" not in game_state:
         game_state["reputation"] = initialize_reputation_system()
     
-    game_state["reputation"]["overall_rating"] = round(overall, 1)
+    game_state["reputation"]["overall_rating"] = round(total_points, 1)
+    game_state["reputation"]["company_points"] = round(company_points, 1)
+    game_state["reputation"]["client_points"] = round(client_points, 1)
     
-    return round(overall, 1)
+    return round(total_points, 1)
 
 
 def get_tier(overall_rating: float) -> Dict:
-    """Get tier information for given overall rating
+    """Get tier information for given overall rating (points)
     
     Args:
-        overall_rating: Float 0-100
+        overall_rating: Total points (unbounded)
     
     Returns:
-        Dict with tier info: {name, emoji, min_rating, max_rating}
+        Dict with tier info: {name, emoji, min_points, max_points}
     """
     for tier in REPUTATION_TIERS:
-        if tier["min_rating"] <= overall_rating <= tier["max_rating"]:
+        if tier["min_points"] <= overall_rating <= tier["max_points"]:
             return tier
     
     # Fallback to Trainee
@@ -555,7 +691,7 @@ def recalculate_all_reputation(game_state: Dict) -> Dict:
         Updated game_state with fresh reputation calculations
     """
     # Recalculate everything
-    calculate_average_client_reputation(game_state)
+    _, _ = calculate_average_client_reputation(game_state)  # Updates stored values
     calculate_company_reputation(game_state)
     overall_rating = calculate_overall_rating(game_state)
     

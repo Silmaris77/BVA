@@ -184,6 +184,181 @@ def render_simple_visit_panel(username: str):
                 conversation_history=conv_state["messages"]
             )
         
+        # ========================================================================
+        # SAVE VISIT TO USER DATA
+        # ========================================================================
+        
+        # DEBUG: Check if already saved
+        st.info(f"🔍 DEBUG: visit_saved = {conv_state.get('visit_saved', 'NOT SET')}")
+        
+        if "visit_saved" not in conv_state:
+            from data.users_new import load_user_data, save_user_data
+            
+            user_data = load_user_data(username)
+            if user_data:
+                # Get or initialize FMCG game state
+                if "business_games" not in user_data:
+                    user_data["business_games"] = {}
+                if "fmcg" not in user_data["business_games"]:
+                    user_data["business_games"]["fmcg"] = {}
+                
+                fmcg_data = user_data["business_games"]["fmcg"]
+                
+                # Get or initialize game state
+                if "game_state" not in fmcg_data:
+                    from data.industries.fmcg_data_schema import initialize_fmcg_game_state
+                    fmcg_data["game_state"] = initialize_fmcg_game_state()
+                
+                game_state = fmcg_data["game_state"]
+                
+                # Increment visit counter
+                game_state["visits_this_week"] = game_state.get("visits_this_week", 0) + 1
+                
+                # CRITICAL: Update the reference in fmcg_data to ensure it's saved
+                fmcg_data["game_state"] = game_state
+                
+                # Add to visit history
+                if "visit_history" not in game_state:
+                    game_state["visit_history"] = []
+                
+                # Calculate order value and reputation change from analysis
+                order_value = 0
+                reputation_change = 0
+                
+                if analysis.get("order_likely", False):
+                    order_size_kg = analysis.get("order_size_kg", 5)
+                    # Heinz Ketchup Premium 5kg - przykładowa cena 120 PLN/5kg
+                    order_value = int((order_size_kg / 5) * 120)
+                    reputation_change = 5  # Successful visit with order
+                else:
+                    # No order but decent conversation
+                    if score >= 60:
+                        reputation_change = 2  # Positive visit
+                    elif score >= 40:
+                        reputation_change = 0  # Neutral visit
+                    else:
+                        reputation_change = -2  # Poor visit
+                
+                visit_record = {
+                    "client_id": client["id"],
+                    "client_name": client["name"],
+                    "date": datetime.now().isoformat(),
+                    "quality": score,
+                    "conversation_summary": feedback[:200] if feedback else "",
+                    "order_value": order_value,
+                    "reputation_change": reputation_change,
+                    "outcome": "success" if analysis.get("order_likely") else "no_order"
+                }
+                
+                game_state["visit_history"].append(visit_record)
+                
+                # Update sales
+                if order_value > 0:
+                    game_state["monthly_sales"] = game_state.get("monthly_sales", 0) + order_value
+                    game_state["weekly_actual_sales"] = game_state.get("weekly_actual_sales", 0) + order_value
+                
+                # CRITICAL: Update the reference back to ensure all changes are saved
+                fmcg_data["game_state"] = game_state
+                
+                # DEBUG: Log what we're saving
+                st.info(f"🔍 DEBUG: Zapisuję visits_this_week = {game_state['visits_this_week']}")
+                
+                # Save updated user data
+                save_user_data(username, user_data)
+                conv_state["visit_saved"] = True
+                
+                # UPDATE SESSION STATE for dashboard to see changes
+                if "fmcg_game_state" not in st.session_state:
+                    # Initialize session state from saved data
+                    st.session_state["fmcg_game_state"] = game_state
+                else:
+                    # Update existing session state
+                    st.session_state["fmcg_game_state"]["visits_this_week"] = game_state["visits_this_week"]
+                    st.session_state["fmcg_game_state"]["visit_history"] = game_state.get("visit_history", [])
+                    if order_value > 0:
+                        st.session_state["fmcg_game_state"]["monthly_sales"] = game_state.get("monthly_sales", 0)
+                        st.session_state["fmcg_game_state"]["weekly_actual_sales"] = game_state.get("weekly_actual_sales", 0)
+                
+                # UPDATE SQL for persistence
+                import logging
+                import sys
+                
+                # Configure logging to both file and console
+                logger = logging.getLogger("simple_visit_debug")
+                logger.setLevel(logging.DEBUG)
+                
+                # File handler
+                fh = logging.FileHandler('simple_visit_debug.log', encoding='utf-8')
+                fh.setLevel(logging.DEBUG)
+                
+                # Console handler
+                ch = logging.StreamHandler(sys.stdout)
+                ch.setLevel(logging.DEBUG)
+                
+                # Formatter
+                formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+                fh.setFormatter(formatter)
+                ch.setFormatter(formatter)
+                
+                # Add handlers if not already added
+                if not logger.handlers:
+                    logger.addHandler(fh)
+                    logger.addHandler(ch)
+                
+                logger.info("="*80)
+                logger.info(f"ROZPOCZYNAM ZAPIS WIZYTY - User: {username}")
+                logger.info(f"visits_this_week przed zapisem: {game_state.get('visits_this_week', 0)}")
+                
+                try:
+                    from utils.fmcg_mechanics import update_fmcg_game_state_sql
+                    # Get clients - check multiple possible locations
+                    clients = {}
+                    if "customers" in fmcg_data:
+                        clients = fmcg_data["customers"].get("clients", {})
+                        logger.info(f"Znalazłem {len(clients)} klientów w fmcg_data['customers']['clients']")
+                    elif "clients" in fmcg_data:
+                        clients = fmcg_data["clients"]
+                        logger.info(f"Znalazłem {len(clients)} klientów w fmcg_data['clients']")
+                    else:
+                        logger.warning("Brak klientów w fmcg_data")
+                    
+                    # If no clients, create empty dict to satisfy SQL function
+                    if not clients:
+                        clients = {}
+                    
+                    logger.info(f"Wywołuję update_fmcg_game_state_sql()")
+                    logger.info(f"  - username: {username}")
+                    logger.info(f"  - game_state keys: {list(game_state.keys())}")
+                    logger.info(f"  - clients count: {len(clients)}")
+                    
+                    print(f"\n{'='*80}\nZAPIS WIZYTY DO SQL - User: {username}, Visits: {game_state.get('visits_this_week', 0)}\n{'='*80}\n")
+                    
+                    sql_success = update_fmcg_game_state_sql(username, game_state, clients)
+                    
+                    logger.info(f"update_fmcg_game_state_sql zwrócił: {sql_success}")
+                    
+                    if sql_success:
+                        st.success("✅ Zapis do SQL udany!")
+                        logger.info("✅ SUKCES - Zapis do SQL powiódł się!")
+                        print(f"\n{'='*80}\n✅ SUKCES - visits_this_week: {game_state.get('visits_this_week', 0)}\n{'='*80}\n")
+                    else:
+                        st.error("❌ Zapis do SQL zwrócił False (user może nie istnieć w repo)")
+                        logger.error("❌ update_fmcg_game_state_sql zwrócił False")
+                        print(f"\n{'='*80}\n❌ BŁĄD - SQL returned False\n{'='*80}\n")
+                        
+                except Exception as e:
+                    st.error(f"❌ BŁĄD zapisu do SQL: {e}")
+                    import traceback
+                    error_trace = traceback.format_exc()
+                    st.code(error_trace, language="python")
+                    logger.error(f"❌ WYJĄTEK: {e}")
+                    logger.error(f"Stacktrace:\n{error_trace}")
+                    print(f"\n{'='*80}\n❌ EXCEPTION:\n{error_trace}\n{'='*80}\n")
+                
+                st.success(f"💾 Wizyta zapisana! Reputacja: {'+' if reputation_change > 0 else ''}{reputation_change}")
+                if order_value > 0:
+                    st.success(f"💰 Sprzedaż: {order_value} PLN")
+        
         # Display score
         col1, col2, col3 = st.columns([1, 2, 1])
         

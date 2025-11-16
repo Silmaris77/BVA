@@ -35,7 +35,7 @@
     "strict_mode": false
   },
   "feature_flags": {
-    "enable_sql_read": false,
+    "enable_sql_read": true,
     "enable_sql_write": true,
     "enable_dual_write": true,
     "gradual_rollout_percentage": 100

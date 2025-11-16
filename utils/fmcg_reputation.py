@@ -62,9 +62,9 @@ def update_client_reputation(
     # Oblicz zmianę
     change = custom_change if custom_change is not None else REPUTATION_CHANGES.get(event_type, 0)
     
-    # Zastosuj zmianę (max -100, min +100)
-    old_rep = client_data.get("reputation", 0)
-    new_rep = max(-100, min(100, old_rep + change))
+    # Zastosuj zmianę (0-100, start: 50 neutral)
+    old_rep = client_data.get("reputation", 50)
+    new_rep = max(0, min(100, old_rep + change))
     client_data["reputation"] = new_rep
     
     # Przygotuj opis

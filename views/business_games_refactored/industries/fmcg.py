@@ -31,9 +31,9 @@ from utils.fmcg_products import (
     get_portfolio_summary,
     FRESHLIFE_PRODUCTS
 )
-from utils.ai_task_evaluator import evaluate_task_solution
 
 # =============================================================================
+
 # MIGRATION & INITIALIZATION
 # =============================================================================
 
@@ -520,6 +520,7 @@ def show_fmcg_tasks_tab(username, user_data, industry_id):
                             # WYKONAJ ZADANIE
                             # AI Evaluation
                             with st.spinner("🤖 AI ocenia Twoje rozwiązanie..."):
+                                from utils.ai_task_evaluator import evaluate_task_solution
                                 quality_score, feedback, detailed_scores = evaluate_task_solution(task, solution)
                             
                             # Oblicz nagrody z modyfikatorem jakości (FMCG uses direct keys)

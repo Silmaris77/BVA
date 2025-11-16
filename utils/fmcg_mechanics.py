@@ -503,10 +503,10 @@ def lose_client(client: FMCGClientData, reason: str) -> FMCGClientData:
     client["win_back_attempts"] = 0
     
     # Calculate win-back difficulty based on reason and reputation
-    reputation = client.get("reputation", 0)
+    reputation = client.get("reputation", 50)
     if reason == "no_visits":
         difficulty = 2  # Łatwiej odzyskać - zaniedbanie
-    elif reason == "dissatisfaction" and reputation < -50:
+    elif reason == "dissatisfaction" and reputation < 25:
         difficulty = 5  # Bardzo trudno - zły stosunek
     elif reason == "competition":
         difficulty = 4  # Trudno - konkurencja oferuje więcej
@@ -550,8 +550,8 @@ def win_back_client(client: FMCGClientData) -> FMCGClientData:
     deadline = datetime.now() + timedelta(days=14)
     client["decision_deadline"] = deadline.isoformat()
     
-    # Reset reputation to 0 (fresh start)
-    client["reputation"] = 0
+    # Reset reputation to 50 (neutral - fresh start)
+    client["reputation"] = 50
     
     return client
 
@@ -566,10 +566,17 @@ def check_client_status_changes(client: FMCGClientData) -> Optional[str]:
     Returns:
         Powód zmiany statusu lub None jeśli brak zmian:
         - "no_visits_timeout" - brak wizyt > 30 dni
-        - "reputation_too_low" - reputacja < -50
+        - "reputation_too_low" - reputacja < 25 (skala 0-100)
         - "decision_deadline_passed" - PROSPECT nie zdecydował w terminie
     """
-    status = client["status"]
+    # Get status - handle both old and new structure
+    status = client.get("status")
+    if not status:
+        # New Heinz structure - determine status from convinced_products
+        if client.get("convinced_products"):
+            status = "ACTIVE"
+        else:
+            status = "PROSPECT"
     
     # ACTIVE → LOST checks
     if status == "ACTIVE":
@@ -582,9 +589,9 @@ def check_client_status_changes(client: FMCGClientData) -> Optional[str]:
             if days_since_visit > 30:
                 return "no_visits_timeout"
         
-        # Check reputation
-        reputation = client.get("reputation", 0)
-        if reputation < -50:
+        # Check reputation (0-100 scale, start: 50 neutral)
+        reputation = client.get("reputation", 50)
+        if reputation < 25:
             return "reputation_too_low"
     
     # PROSPECT → LOST checks
@@ -678,7 +685,12 @@ def apply_reputation_decay(client: FMCGClientData, days_since_last_visit: int) -
     Returns:
         Zmiana reputacji (zawsze <= 0)
     """
-    if client["status"] != "ACTIVE":
+    # Get status - handle both old and new structure
+    client_status = client.get("status")
+    if not client_status:
+        client_status = "ACTIVE" if client.get("convinced_products") else "PROSPECT"
+    
+    if client_status != "ACTIVE":
         return 0
     
     visit_frequency = client.get("visit_frequency_required", 14)
@@ -712,11 +724,11 @@ def update_client_reputation(client: FMCGClientData, reputation_change: int) -> 
         # Tylko ACTIVE clients mają reputację
         return client
     
-    current_reputation = client.get("reputation", 0)
+    current_reputation = client.get("reputation", 50)
     new_reputation = current_reputation + reputation_change
     
-    # Cap at -100 to +100
-    new_reputation = max(-100, min(100, new_reputation))
+    # Cap at 0 to 100 (start: 50 neutral)
+    new_reputation = max(0, min(100, new_reputation))
     
     client["reputation"] = new_reputation
     
@@ -825,8 +837,14 @@ def execute_visit_placeholder(
     client["last_visit_date"] = datetime.now().isoformat()
     client["visits_count"] = client.get("visits_count", 0) + 1
     
+    # Get current status - handle both old and new structure
+    client_status = client.get("status")
+    if not client_status:
+        client_status = "ACTIVE" if client.get("convinced_products") else "PROSPECT"
+        client["status"] = client_status  # Set it for consistency
+    
     # Handle PROSPECT first visit
-    if client["status"] == "PROSPECT" and client.get("first_contact_date") is None:
+    if client_status == "PROSPECT" and client.get("first_contact_date") is None:
         client["first_contact_date"] = datetime.now().isoformat()
         # Set decision deadline (2 weeks)
         deadline = datetime.now() + timedelta(days=14)
@@ -834,12 +852,13 @@ def execute_visit_placeholder(
     
     # Handle PROSPECT → ACTIVE conversion
     was_converted = False
-    if client["status"] == "PROSPECT" and order_value > 0:
+    if client_status == "PROSPECT" and order_value > 0:
         client = convert_prospect_to_active(client, order_value)
         was_converted = True
+        client_status = "ACTIVE"  # Update after conversion
     
     # Update reputation (only for ACTIVE)
-    if client["status"] == "ACTIVE":
+    if client_status == "ACTIVE":
         client = update_client_reputation(client, reputation_change)
         
         # Update sales stats (but not if just converted - already done in convert_prospect_to_active)
@@ -855,7 +874,7 @@ def execute_visit_placeholder(
     game_state["monthly_actual_sales"] = game_state.get("monthly_actual_sales", 0) + order_value
     
     # Update client counts in game state
-    if client["status"] == "ACTIVE" and client.get("orders_count", 0) == 1:
+    if client_status == "ACTIVE" and client.get("orders_count", 0) == 1:
         # First order - increment active count
         game_state["clients_active"] = game_state.get("clients_active", 0) + 1
         game_state["clients_prospect"] = game_state.get("clients_prospect", 0) - 1
@@ -1026,7 +1045,16 @@ def advance_day(game_state: FMCGGameState, clients: Dict[str, FMCGClientData]) -
     clients_to_lose = []
     
     for client_id, client in clients.items():
-        if client["status"] == "ACTIVE":
+        # Get status - handle both old (status field) and new (convinced_products field) structure
+        client_status = client.get("status")
+        if not client_status:
+            # New Heinz structure - determine status from convinced_products
+            if client.get("convinced_products"):
+                client_status = "ACTIVE"
+            else:
+                client_status = "PROSPECT"
+        
+        if client_status == "ACTIVE":
             # Calculate reputation decay
             last_visit = client.get("last_visit_date")
             if last_visit:
@@ -1068,7 +1096,10 @@ def get_client_status_summary(clients: Dict[str, FMCGClientData]) -> Dict[str, i
     summary = {"PROSPECT": 0, "ACTIVE": 0, "LOST": 0}
     
     for client in clients.values():
-        status = client.get("status", "PROSPECT")
+        status = client.get("status")
+        if not status:
+            # New Heinz structure - determine from convinced_products
+            status = "ACTIVE" if client.get("convinced_products") else "PROSPECT"
         summary[status] = summary.get(status, 0) + 1
     
     return summary
@@ -1088,7 +1119,12 @@ def get_clients_needing_visit(clients: Dict[str, FMCGClientData], urgent_thresho
     urgent = []
     
     for client_id, client in clients.items():
-        if client.get("status") == "ACTIVE":
+        # Get status - handle both old and new structure
+        client_status = client.get("status")
+        if not client_status:
+            client_status = "ACTIVE" if client.get("convinced_products") else "PROSPECT"
+        
+        if client_status == "ACTIVE":
             last_visit = client.get("last_visit_date")
             if last_visit:
                 last_visit_date = datetime.fromisoformat(last_visit)

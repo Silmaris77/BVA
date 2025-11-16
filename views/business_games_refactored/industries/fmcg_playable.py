@@ -798,6 +798,43 @@ def show_fmcg_playable_game(username: str):
     # Initialize weekly task stats if needed
     initialize_weekly_stats_if_needed(game_state)
     
+    # =============================================================================
+    # HANDLE DAY ADVANCEMENT
+    # =============================================================================
+    if st.session_state.get("advance_day"):
+        st.session_state["advance_day"] = False  # Reset flag
+        
+        with st.spinner("⏰ Kończę dzień..."):
+            # Call advance_day from fmcg_mechanics
+            updated_game_state, updated_clients = advance_day(game_state, clients)
+            
+            # Update session state
+            st.session_state["fmcg_game_state"] = updated_game_state
+            st.session_state["fmcg_clients"] = updated_clients
+            
+            # Save to both JSON and SQL
+            from data.users_new import get_current_user_data, save_single_user
+            user_data = get_current_user_data(username)
+            if user_data:
+                if "business_games" not in user_data:
+                    user_data["business_games"] = {}
+                if "fmcg" not in user_data["business_games"]:
+                    user_data["business_games"]["fmcg"] = {}
+                
+                user_data["business_games"]["fmcg"]["game_state"] = updated_game_state
+                user_data["business_games"]["fmcg"]["clients"] = updated_clients
+                
+                save_single_user(username, user_data)
+                
+                # Save to SQL
+                sql_success = update_fmcg_game_state_sql(username, updated_game_state, updated_clients)
+                if sql_success:
+                    print(f"✅ Day advanced - saved to SQL")
+            
+            st.success(f"✅ Dzień zakończony! Nowy dzień: {updated_game_state.get('current_day', 'Monday')}")
+            time.sleep(1)
+            st.rerun()
+    
     # Pre-calculate common variables used across tabs
     energy_pct = game_state.get("energy", 100)
     status_summary = get_client_status_summary(clients)
@@ -846,12 +883,9 @@ def show_fmcg_playable_game(username: str):
             from utils.reputation_system import initialize_reputation_system
             game_state["reputation"] = initialize_reputation_system()
         
-        # Use saved overall_rating if exists, otherwise calculate
-        if "overall_rating" in game_state.get("reputation", {}):
-            overall_rating = game_state["reputation"]["overall_rating"]
-        else:
-            overall_rating = calculate_overall_rating(game_state, clients)
-            game_state["reputation"]["overall_rating"] = overall_rating
+        # ALWAYS recalculate overall_rating to show latest changes after visits
+        overall_rating = calculate_overall_rating(game_state, clients)
+        game_state["reputation"]["overall_rating"] = overall_rating
         
         current_tier = get_tier(overall_rating)
         next_tier = get_next_tier(current_tier["name"])
@@ -859,17 +893,17 @@ def show_fmcg_playable_game(username: str):
         unlock_tokens = game_state.get("reputation", {}).get("unlock_tokens", 0)
         training_credits = game_state.get("reputation", {}).get("training_credits", 0)
         
-        # Progress to next tier
+        # Progress to next tier (now points-based)
         if next_tier:
-            progress_to_next = ((overall_rating - current_tier["min_rating"]) / 
-                               (next_tier["min_rating"] - current_tier["min_rating"])) * 100
-            points_needed = next_tier["min_rating"] - overall_rating
+            progress_to_next = ((overall_rating - current_tier["min_points"]) / 
+                               (next_tier["min_points"] - current_tier["min_points"])) * 100
+            points_needed = next_tier["min_points"] - overall_rating
         else:
             progress_to_next = 100
             points_needed = 0
         
         # Format values for display
-        overall_rating_fmt = f"{overall_rating:.1f}"
+        overall_rating_fmt = f"{overall_rating:.0f} pts"  # Show as points
         progress_to_next_fmt = f"{progress_to_next:.0f}"
         points_needed_fmt = f"{points_needed:.0f}"
         current_tier_emoji = current_tier["emoji"]
@@ -909,7 +943,7 @@ def show_fmcg_playable_game(username: str):
 <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;'>
 <div>
 <div style='font-size: 14px; opacity: 0.9; font-weight: 600; margin-bottom: 4px;'>⭐ OVERALL RATING</div>
-<div style='font-size: 32px; font-weight: 700;'>{overall_rating_fmt}/100 {current_tier_emoji} {current_tier_name}</div>
+<div style='font-size: 32px; font-weight: 700;'>{overall_rating_fmt} {current_tier_emoji} {current_tier_name}</div>
 </div>
 <div style='text-align: right;'>
 <div style='font-size: 14px; opacity: 0.9; font-weight: 600;'>🎟️ {unlock_tokens} Tokens</div>
@@ -1139,13 +1173,61 @@ def show_fmcg_playable_game(username: str):
             )
             
             # Calculate components
-            client_rep = calculate_average_client_reputation(game_state)
+            client_rep, client_breakdown = calculate_average_client_reputation(game_state, clients)
             company_rep = calculate_company_reputation(game_state)
             
-            # Get company components
+            # Get company components for breakdown display
             task_perf = game_state.get("reputation", {}).get("company", {}).get("task_performance", 100)
             sales_perf = game_state.get("reputation", {}).get("company", {}).get("sales_performance", 0)
             prof = game_state.get("reputation", {}).get("company", {}).get("professionalism", 100)
+            
+            # Calculate points
+            company_points = company_rep * 0.5  # 0-100 → 0-50 points
+            client_points = 0
+            for status, count in client_breakdown.items():
+                if count > 0 and status != "PROSPECT_NOT_CONTACTED":
+                    from utils.reputation_system import CLIENT_REPUTATION_WEIGHTS, ClientStatus
+                    weight = CLIENT_REPUTATION_WEIGHTS.get(getattr(ClientStatus, status, None), 0)
+                    # Approximate client points (count * client_rep * weight)
+                    client_points += count * client_rep * weight
+            
+            total_points_breakdown = company_points + client_points
+            
+            # Display client reputation breakdown
+            total_counted = client_breakdown["ACTIVE"] + client_breakdown["PARTNER"] + client_breakdown["LOST"] + client_breakdown["PROSPECT_CONTACTED"]
+            if total_counted > 0:
+                st.caption(f"📊 Klienci w reputacji: {total_counted} total (" +
+                          f"{client_breakdown['ACTIVE']} ACTIVE, " +
+                          f"{client_breakdown['PROSPECT_CONTACTED']} PROSPECT, " +
+                          f"{client_breakdown['LOST']} LOST) | " +
+                          f"{client_breakdown['PROSPECT_NOT_CONTACTED']} nieodwiedzonych")
+                
+                with st.expander("ℹ️ Jak obliczane są punkty?"):
+                    st.markdown(f"""
+                    **System punktowy - różne źródła punktów:**
+                    
+                    **🏢 Company Reputation** → Points (50% conversion)
+                    - Current: {company_rep:.1f}/100 → **{company_points:.1f} points**
+                    - Components:
+                      - Task Performance (30%): {task_perf:.0f}%
+                      - Sales Performance (40%): {sales_perf:.0f}%
+                      - Professionalism (30%): {prof:.0f}%
+                    
+                    **👥 Client Reputation** → Points (weighted by status)
+                    - 🟢 **ACTIVE** (weight 1.0): {client_breakdown['ACTIVE']} clients × {client_rep:.1f} × 1.0 = **{client_breakdown['ACTIVE'] * client_rep * 1.0:.1f} pts**
+                    - 🟡 **PROSPECT contacted** (weight 0.5): {client_breakdown['PROSPECT_CONTACTED']} clients × {client_rep:.1f} × 0.5 = **{client_breakdown['PROSPECT_CONTACTED'] * client_rep * 0.5:.1f} pts**
+                    - 🔴 **LOST** (weight 0.7): {client_breakdown['LOST']} clients × {client_rep:.1f} × 0.7 = **{client_breakdown['LOST'] * client_rep * 0.7:.1f} pts**
+                    - ⚪ **PROSPECT not contacted** (weight 0.0): No impact
+                    
+                    **Total Points:** {company_points:.1f} + {client_points:.1f} = **{total_points_breakdown:.1f} pts**
+                    
+                    *Tiers: Trainee (0-100), Junior (101-250), Regular (251-500), Senior (501-1000), Expert (1001-2000), Master (2001+)*
+                    """)
+            else:
+                st.info("📊 Brak klientów z reputacją - odwiedź pierwszego klienta!")
+            
+            # Get company components (already loaded above)
+            # task_perf, sales_perf, prof already defined
             
             # Display breakdown
             col_rep1, col_rep2 = st.columns(2)
@@ -1154,8 +1236,9 @@ def show_fmcg_playable_game(username: str):
                 client_color = "#10b981" if client_rep >= 75 else "#f59e0b" if client_rep >= 50 else "#ef4444"
                 st.markdown(f"""
                 <div style='background: {client_color}15; border: 2px solid {client_color}; border-radius: 12px; padding: 20px;'>
-                    <div style='font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 8px;'>👥 CLIENT REPUTATION (60% weight)</div>
-                    <div style='font-size: 42px; font-weight: 700; color: {client_color}; margin-bottom: 12px;'>{client_rep:.1f}/100</div>
+                    <div style='font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 8px;'>👥 CLIENT POINTS (weighted by status)</div>
+                    <div style='font-size: 42px; font-weight: 700; color: {client_color}; margin-bottom: 12px;'>{client_points:.1f} pts</div>
+                    <div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>Avg reputation: {client_rep:.1f}/100</div>
                     <div style='background: #e5e7eb; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 16px;'>
                         <div style='width: {client_rep}%; height: 100%; background: {client_color};'></div>
                     </div>
@@ -1183,8 +1266,9 @@ def show_fmcg_playable_game(username: str):
                 company_color = "#3b82f6" if company_rep >= 75 else "#f59e0b" if company_rep >= 50 else "#ef4444"
                 st.markdown(f"""
                 <div style='background: {company_color}15; border: 2px solid {company_color}; border-radius: 12px; padding: 20px;'>
-                    <div style='font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 8px;'>🏢 COMPANY REPUTATION (40% weight)</div>
-                    <div style='font-size: 42px; font-weight: 700; color: {company_color}; margin-bottom: 12px;'>{company_rep:.1f}/100</div>
+                    <div style='font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 8px;'>🏢 COMPANY POINTS (50% conversion)</div>
+                    <div style='font-size: 42px; font-weight: 700; color: {company_color}; margin-bottom: 12px;'>{company_points:.1f} pts</div>
+                    <div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>Company reputation: {company_rep:.1f}/100</div>
                     <div style='background: #e5e7eb; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 16px;'>
                         <div style='width: {company_rep}%; height: 100%; background: {company_color};'></div>
                     </div>
@@ -1396,14 +1480,14 @@ def show_fmcg_playable_game(username: str):
                         """)
                 
                 with col_g3:
-                    rep_color = "#10b981" if avg_reputation >= reputation_target else "#f59e0b" if avg_reputation >= 25 else "#ef4444"
+                    rep_color = "#10b981" if avg_reputation >= reputation_target else "#f59e0b" if avg_reputation >= 45 else "#ef4444"
                     st.markdown(f"""
                     <div style='background: {rep_color}15; border: 2px solid {rep_color}; border-radius: 8px; padding: 16px; text-align: center;'>
-                        <div style='font-size: 28px; font-weight: 700; color: {rep_color}; margin-bottom: 4px;'>{avg_reputation:+.0f}</div>
+                        <div style='font-size: 28px; font-weight: 700; color: {rep_color}; margin-bottom: 4px;'>{avg_reputation:.0f}</div>
                         <div style='font-size: 12px; color: #64748b; margin-bottom: 8px;'>Średnia reputacja</div>
-                        <div style='font-size: 11px; color: #94a3b8;'>Cel: +{reputation_target}</div>
+                        <div style='font-size: 11px; color: #94a3b8;'>Cel: {reputation_target}</div>
                         <div style='background: #e5e7eb; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden;'>
-                            <div style='width: {min(100, max(0, (avg_reputation+100)/200*100))}%; height: 100%; background: {rep_color};'></div>
+                            <div style='width: {min(100, max(0, avg_reputation))}%; height: 100%; background: {rep_color};'></div>
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
@@ -1459,23 +1543,23 @@ def show_fmcg_playable_game(username: str):
         with dash_alerts:
             st.subheader("⚠️ Alerty Reputacji")
         
-            # Analyze clients by reputation
-            at_risk_clients = []  # -49 to 0
-            critical_clients = []  # -100 to -50 (LOST)
+            # Analyze clients by reputation (scale 0-100, start: 50 neutral)
+            at_risk_clients = []  # 26-45 (low reputation)
+            critical_clients = []  # 0-25 (critical - risk of LOST)
             overdue_clients = []  # ACTIVE with overdue visits
         
             for client_id, client_data in clients.items():
                 if client_data.get("status", "PROSPECT").upper() == "ACTIVE":
-                    reputation = client_data.get("reputation", 0)
+                    reputation = client_data.get("reputation", 50)
                 
-                    # Check reputation thresholds
-                    if reputation <= -50:
+                    # Check reputation thresholds (0-100 scale)
+                    if reputation <= 25:
                         critical_clients.append({
                             "id": client_id,
                             "name": client_data.get("name", client_id),
                             "reputation": reputation
                         })
-                    elif reputation < 0:
+                    elif reputation <= 45:
                         at_risk_clients.append({
                             "id": client_id,
                             "name": client_data.get("name", client_id),
@@ -5121,7 +5205,7 @@ def show_fmcg_playable_game(username: str):
                                     **Klient:** {client.get('name')}
                                     - Typ: {client.get('client_type', 'Unknown')}
                                     - Status: {client.get('status', 'Unknown')}
-                                    - Reputacja: {client.get('reputation', 0)}/100
+                                    - Reputacja: {client.get('reputation', 50)}/100
                                     """)
                             
                             # Add product context

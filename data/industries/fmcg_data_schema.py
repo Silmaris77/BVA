@@ -39,7 +39,7 @@ class FMCGClientData(TypedDict):
     decision_deadline: Optional[str]
     
     # ACTIVE specific
-    reputation: int  # -100 to +100
+    reputation: int  # 0-100 (start: 50 neutral)
     last_visit_date: Optional[str]
     visit_frequency_required: int  # days (7/14/30)
     products_portfolio: List[str]  # ["PRODUCT_001", "PRODUCT_002"]

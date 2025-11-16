@@ -1009,18 +1009,24 @@ Odpowiedź (tylko JSON):
         # Filter out null values - zwracamy tylko faktycznie odkryte pola
         discoveries = {}
         for field, value in extracted.items():
-            if value is not None and value != "" and value != []:
-                # Special handling for ketchup potential
-                if field == "ketchup_potential_kg_monthly" and isinstance(value, (int, float)) and value > 0:
-                    # Convert to sales_capacity_discovered format
-                    discoveries["sales_capacity_discovered_Food"] = {
-                        "weekly_sales_volume": int(value / 4),  # monthly to weekly
-                        "monthly_volume_kg": int(value),
-                        "discovered_date": datetime.now().isoformat(),
-                        "discovered_method": "conversation"
-                    }
-                else:
-                    discoveries[field] = value
+            # Skip null values, empty strings, empty lists, and string "null"
+            if value is None or value == "" or value == [] or value == "null":
+                continue
+            # Skip lists containing only "null" string
+            if isinstance(value, list) and (not value or value == ["null"]):
+                continue
+            
+            # Special handling for ketchup potential
+            if field == "ketchup_potential_kg_monthly" and isinstance(value, (int, float)) and value > 0:
+                # Convert to sales_capacity_discovered format
+                discoveries["sales_capacity_discovered_Food"] = {
+                    "weekly_sales_volume": int(value / 4),  # monthly to weekly
+                    "monthly_volume_kg": int(value),
+                    "discovered_date": datetime.now().isoformat(),
+                    "discovered_method": "conversation"
+                }
+            else:
+                discoveries[field] = value
         
         return discoveries
         

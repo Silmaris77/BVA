@@ -546,3 +546,47 @@ class BusinessGameRepository(BaseRepository):
             return False
         
         return True
+
+
+# =============================================================================
+# PUBLIC HELPER FUNCTIONS FOR FMCG GAME
+# =============================================================================
+
+def update_fmcg_game_state_sql(username: str, game_state: Dict[str, Any], clients: List[Dict[str, Any]]) -> bool:
+    """
+    Public wrapper to save FMCG game state to SQL
+    
+    Args:
+        username: User's username
+        game_state: Game state dict (visits_this_week, week_number, etc.)
+        clients: List of client dicts
+    
+    Returns:
+        bool: True if save succeeded, False otherwise
+    """
+    try:
+        repo = BusinessGameRepository()
+        
+        # Build game_data structure for SQL
+        game_data = {
+            "game_state": game_state,
+            "clients": clients,
+            "scenario_id": "fmcg_heinz_foodservice",
+            "firm": {
+                "name": "FMCG Company",
+                "logo": "🏢",
+                "level": 1
+            },
+            "employees": [],
+            "office": {},
+            "contracts": {"active": [], "completed": [], "failed": [], "available_pool": []},
+            "stats": {},
+            "history": {"transactions": []}
+        }
+        
+        return repo._save_to_sql(username, "fmcg", game_data)
+    except Exception as e:
+        print(f"❌ Error in update_fmcg_game_state_sql: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
