@@ -288,11 +288,47 @@ def navigation_menu():
         {"id": "profile", "name": "Profil", "icon": "👤"}
     ]
     
-    # Dodaj opcję Admin dla uprawnionych użytkowników
+    # Filtruj menu według uprawnień użytkownika
+    if st.session_state.get('logged_in', False):
+        from utils.permissions import has_access_to_tool
+        from data.repositories.user_repository import UserRepository
+        from database.connection import session_scope
+        
+        try:
+            username = st.session_state.get('username')
+            if username:
+                from database.models import User
+                with session_scope() as session:
+                    user_repo = UserRepository(session)
+                    user_obj = session.query(User).filter_by(username=username).first()
+                    user_dict = user_obj.to_dict() if user_obj else {}
+                    
+                    # Filtruj menu - zostawiamy tylko pozycje, do których użytkownik ma dostęp
+                    accessible_menu = []
+                    for option in menu_options:
+                        tool_id = option["id"]
+                        # Mapowanie: "lesson" w menu -> "learn" w permissions
+                        permission_tool_id = "learn" if tool_id == "lesson" else tool_id
+                        
+                        if has_access_to_tool(permission_tool_id, user_dict):
+                            accessible_menu.append(option)
+                    
+                    menu_options = accessible_menu
+                    
+                    # Dodaj Admin jeśli użytkownik ma dostęp
+                    if has_access_to_tool("admin_panel", user_dict):
+                        menu_options.append({"id": "admin", "name": "Admin", "icon": "⚙️"})
+        except Exception as e:
+            print(f"Error filtering navigation menu: {e}")
+            # W przypadku błędu, pozostawiamy wszystkie opcje menu
+    
+    # Stara logika admin - fallback dla compatibility
     if st.session_state.get('logged_in', False):
         admin_users = ["admin", "zenmaster", "Anna"]  # Lista administratorów
         if st.session_state.get('username') in admin_users:
-            menu_options.append({"id": "admin", "name": "Admin", "icon": "⚙️"})
+            # Sprawdź czy admin już nie został dodany przez nowy system
+            if not any(opt["id"] == "admin" for opt in menu_options):
+                menu_options.append({"id": "admin", "name": "Admin", "icon": "⚙️"})
     
     # JavaScript do automatycznego zamykania sidebar w wersji mobilnej
     mobile_sidebar_script = """

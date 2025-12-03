@@ -6,10 +6,13 @@ import altair as alt
 import plotly.graph_objects as go
 import math
 from datetime import datetime, timedelta
+from pathlib import Path
 import time
 import json
+import secrets
+import string
 # Importy są OK tutaj - lazy loading jest w samym users_new
-from data.users_new import load_user_data, save_user_data
+from data.users_sql import load_user_data, save_user_data
 from data.lessons import load_lessons
 from utils.scroll_utils import scroll_to_top
 from data.neuroleader_test_questions import NEUROLEADER_TYPES
@@ -17,6 +20,7 @@ from config.settings import XP_LEVELS
 from utils.material3_components import apply_material3_theme
 from utils.components import zen_header, zen_button, notification, data_chart, stat_card
 from utils.layout import get_device_type, responsive_grid, toggle_device_view
+from utils.permissions import load_company_templates, get_available_companies
 
 def check_admin_auth():
     """Sprawdza uwierzytelnienie administratora"""
@@ -207,6 +211,201 @@ def delete_user_completely(username: str) -> bool:
         json_success = False
     
     return sql_success and json_success
+
+def generate_password(length=12):
+    """Generuje losowe hasło"""
+    alphabet = string.ascii_letters + string.digits + "!@#$%^&*"
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+
+def create_user_form():
+    """Formularz tworzenia nowego użytkownika z uprawnieniami"""
+    
+    # Get available companies
+    companies = get_available_companies()
+    company_options = [comp['name'] for comp in companies]
+    company_codes = {comp['name']: comp['code'] for comp in companies}
+    
+    # Load templates for preview
+    templates = load_company_templates()
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        new_username = st.text_input("Nazwa użytkownika", key="new_user_username", 
+                                     help="Login użytkownika (unikalny)")
+        
+        # Password generation
+        if 'generated_password' not in st.session_state:
+            st.session_state.generated_password = generate_password()
+        
+        password_col1, password_col2 = st.columns([3, 1])
+        with password_col1:
+            new_password = st.text_input("Hasło", value=st.session_state.generated_password, 
+                                        type="password", key="new_user_password")
+        with password_col2:
+            if st.button("🔄 Generuj", key="regenerate_password"):
+                st.session_state.generated_password = generate_password()
+                st.rerun()
+        
+        # Show password checkbox
+        if st.checkbox("Pokaż hasło", key="show_password"):
+            st.code(new_password)
+    
+    with col2:
+        selected_company_name = st.selectbox("Firma", options=company_options, 
+                                             key="new_user_company")
+        selected_company_code = company_codes.get(selected_company_name)
+        
+        # Preview template
+        if selected_company_code:
+            template = templates.get(selected_company_code, {})
+            st.info(f"📋 Szablon: **{selected_company_name}**")
+            
+            # Show summary
+            content = template.get('content', {})
+            tools = template.get('tools', {})
+            ranking = template.get('ranking', {})
+            
+            st.caption(f"✓ Lekcje: {len(content.get('lessons', [])) if content.get('lessons') else 'Wszystkie'}")
+            st.caption(f"✓ BG Scenariusze: {len(content.get('business_games', {}).get('scenarios', [])) if content.get('business_games', {}).get('scenarios') else 'Wszystkie'}")
+            st.caption(f"✓ Ranking: {ranking.get('scope', 'global')}")
+    
+    # Advanced settings
+    with st.expander("⚙️ Zaawansowane ustawienia (opcjonalne)"):
+        st.markdown("**Dostosuj uprawnienia** (jeśli puste - użyje szablonu firmy)")
+        
+        custom_permissions = st.checkbox("Niestandardowe uprawnienia", key="custom_permissions")
+        
+        if custom_permissions:
+            st.warning("⚠️ Włączono tryb niestandardowy - szablon firmy zostanie zignorowany")
+            
+            # Tools access
+            st.markdown("**Dostęp do narzędzi:**")
+            tools_cols = st.columns(3)
+            
+            custom_tools = {}
+            tool_list = ['dashboard', 'profile', 'learn', 'inspirations', 'practice', 
+                        'business_games', 'shop', 'personality_tests', 'rankings', 'notes']
+            
+            for idx, tool in enumerate(tool_list):
+                with tools_cols[idx % 3]:
+                    custom_tools[tool] = st.checkbox(tool.replace('_', ' ').title(), 
+                                                     value=True, key=f"tool_{tool}")
+            
+            # Content access
+            st.markdown("**Dostęp do treści:**")
+            lessons_input = st.text_area("ID Lekcji (po przecinku)", 
+                                        placeholder="intro_1, leadership_2, sales_3",
+                                        key="custom_lessons")
+            
+            scenarios_input = st.text_area("ID Scenariuszy BG (po przecinku)", 
+                                          placeholder="consulting_1, fmcg_heinz",
+                                          key="custom_scenarios")
+            
+            # Ranking settings
+            st.markdown("**Ustawienia rankingu:**")
+            ranking_scope = st.radio("Tryb rankingu", 
+                                    options=['none', 'company', 'global'],
+                                    key="custom_ranking_scope")
+            
+            visible_in_global = st.checkbox("Widoczny w globalnym rankingu", 
+                                           value=True, key="custom_visible_global")
+    
+    # Create button
+    st.markdown("---")
+    if st.button("✅ Utwórz konto", type="primary", use_container_width=True):
+        # Validation
+        if not new_username:
+            st.error("Podaj nazwę użytkownika")
+            return
+        
+        if not new_password or len(new_password) < 6:
+            st.error("Hasło musi mieć minimum 6 znaków")
+            return
+        
+        # Check if user exists
+        users_data = load_user_data()
+        if new_username in users_data:
+            st.error(f"Użytkownik '{new_username}' już istnieje")
+            return
+        
+        # Build permissions
+        if custom_permissions:
+            # Custom permissions
+            lessons_list = [l.strip() for l in lessons_input.split(',')] if lessons_input else None
+            scenarios_list = [s.strip() for s in scenarios_input.split(',')] if scenarios_input else None
+            
+            permissions = {
+                'content': {
+                    'lessons': lessons_list,
+                    'tests': None,
+                    'business_games': {
+                        'scenarios': scenarios_list,
+                        'types': None
+                    },
+                    'inspirations': None
+                },
+                'tools': custom_tools,
+                'ranking': {
+                    'scope': ranking_scope,
+                    'visible_in_global': visible_in_global
+                }
+            }
+        else:
+            # Use company template
+            template = templates.get(selected_company_code, templates.get('_default', {}))
+            permissions = {
+                'content': template.get('content', {}),
+                'tools': template.get('tools', {}),
+                'ranking': template.get('ranking', {})
+            }
+        
+        # Create new user
+        try:
+            from database.models import User
+            from database.connection import session_scope
+            import uuid
+            
+            # Prepare user data
+            user_id = str(uuid.uuid4())
+            joined_date = datetime.now()
+            
+            # Zapisz użytkownika do SQL (jedyne źródło prawdy)
+            with session_scope() as session:
+                new_user = User(
+                    user_id=user_id,
+                    username=new_username,
+                    password_hash=new_password,  # TODO: Hash password properly
+                    company=selected_company_code,
+                    permissions=permissions,
+                    account_created_by=st.session_state.get('username', 'admin'),
+                    xp=0,
+                    level=1,
+                    degencoins=0,
+                    test_taken=False,
+                    joined_date=joined_date.date()
+                )
+                
+                session.add(new_user)
+                session.commit()
+            
+            st.info("✓ Użytkownik utworzony w bazie SQL")
+            
+            st.success(f"✅ Utworzono konto: **{new_username}**")
+            st.info(f"🔑 Hasło: `{new_password}` (przekaż użytkownikowi)")
+            
+            # Reset form
+            st.session_state.generated_password = generate_password()
+            
+            time.sleep(2)
+            st.rerun()
+            
+        except Exception as e:
+            st.error(f"❌ Błąd podczas tworzenia konta: {e}")
+            import traceback
+            st.code(traceback.format_exc())
+
 
 def show_admin_dashboard():
     """Wyświetla panel administratora"""
@@ -769,6 +968,15 @@ def show_admin_dashboard():
     with admin_tabs[5]:
         st.subheader("Zarządzanie użytkownikami")
         
+        # === TWORZENIE NOWEGO UŻYTKOWNIKA ===
+        st.markdown("---")
+        st.subheader("➕ Utwórz nowe konto użytkownika")
+        
+        with st.expander("Formularz tworzenia użytkownika", expanded=False):
+            create_user_form()
+        
+        st.markdown("---")
+        
         # Pobierz dane
         users_data = load_user_data()
         usernames = list(users_data.keys())
@@ -1300,14 +1508,25 @@ def show_business_games_admin_panel():
 
 
 def get_lesson_access_status(username, lesson_id):
-    """Sprawdź czy użytkownik ma dostęp do lekcji"""
-    users_data = load_user_data()
+    """Sprawdź czy użytkownik ma dostęp do lekcji - nowy system z utils/permissions.py"""
+    from utils.permissions import has_access_to_lesson
+    from data.repositories.user_repository import UserRepository
+    from database.connection import session_scope
     
-    if username not in users_data:
-        return True  # Domyślnie dostępne dla nowych użytkowników
-    
-    lesson_access = users_data[username].get('lesson_access', {})
-    return lesson_access.get(lesson_id, True)  # Domyślnie dostępne jeśli nie ustawiono
+    try:
+        from database.models import User
+        with session_scope() as session:
+            user_repo = UserRepository(session)
+            user = session.query(User).filter_by(username=username).first()
+            
+            if not user:
+                return True  # Domyślnie dostępne dla nowych użytkowników
+            
+            user_data = user.to_dict()
+            return has_access_to_lesson(lesson_id, user_data)
+    except Exception as e:
+        print(f"Error checking lesson access: {e}")
+        return True  # Domyślnie dostępne przy błędzie
 
 def is_lesson_accessible(username, lesson_id):
     """Wrapper function dla łatwiejszego użycia"""

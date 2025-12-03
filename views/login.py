@@ -1,5 +1,5 @@
 import streamlit as st
-from data.users import register_user, login_user
+from data.users_sql import register_user, login_user
 from utils.css_loader import ensure_css_files, load_login_css
 from utils.scroll_utils import scroll_to_top
 from config.settings import DEVELOPMENT_MODE

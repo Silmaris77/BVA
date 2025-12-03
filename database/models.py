@@ -77,6 +77,11 @@ class User(Base):
     degencoins = Column(Integer, default=0)
     level = Column(Integer, default=1)
     
+    # Company & Permissions (NEW)
+    company = Column(String(100))  # Warta, Heinz, Milwaukee, etc.
+    permissions = Column(JSONEncoded)  # Full permissions structure
+    account_created_by = Column(String(100))  # Admin who created account
+    
     # Timestamps
     joined_date = Column(Date, nullable=False, default=datetime.utcnow)
     last_login = Column(DateTime)
@@ -112,6 +117,9 @@ class User(Base):
             "xp": self.xp,
             "degencoins": self.degencoins,
             "level": self.level,
+            "company": self.company,
+            "permissions": self.permissions,
+            "account_created_by": self.account_created_by,
             "joined_date": self.joined_date.strftime("%Y-%m-%d") if self.joined_date else None,
             "last_login": self.last_login.strftime("%Y-%m-%d %H:%M:%S") if self.last_login else None,
             "test_taken": self.test_taken,
@@ -182,6 +190,9 @@ class User(Base):
             xp=data.get("xp", 0),
             degencoins=data.get("degencoins", 0),
             level=data.get("level", 1),
+            company=data.get("company"),
+            permissions=data.get("permissions"),
+            account_created_by=data.get("account_created_by"),
             joined_date=joined_date,
             last_login=last_login,
             test_taken=data.get("test_taken", False)
@@ -207,6 +218,12 @@ class User(Base):
             self.level = data["level"]
         if "test_taken" in data:
             self.test_taken = data["test_taken"]
+        if "company" in data:
+            self.company = data["company"]
+        if "permissions" in data:
+            self.permissions = data["permissions"]
+        if "account_created_by" in data:
+            self.account_created_by = data["account_created_by"]
         
         # Update dates
         if "last_login" in data and data["last_login"]:

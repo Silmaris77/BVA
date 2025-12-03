@@ -1,0 +1,167 @@
+{
+  "Warta": {
+    "display_name": "Warta",
+    "content": {
+      "lessons": [
+        "insurance_basics",
+        "sales_techniques",
+        "customer_service",
+        "insurance_products"
+      ],
+      "tests": [
+        "insurance_knowledge",
+        "sales_skills"
+      ],
+      "business_games": {
+        "scenarios": [
+          "insurance_client_meeting",
+          "insurance_claim_handling"
+        ],
+        "types": ["Consulting", "Sales", "Customer_Service"]
+      },
+      "inspirations": [
+        "sales",
+        "customer_service",
+        "insurance"
+      ]
+    },
+    "tools": {
+      "dashboard": true,
+      "profile": true,
+      "learn": true,
+      "inspirations": true,
+      "practice": true,
+      "business_games": true,
+      "shop": false,
+      "admin_panel": false,
+      "personality_tests": true,
+      "rankings": true,
+      "notes": true
+    },
+    "ranking": {
+      "scope": "company",
+      "visible_in_global": false
+    }
+  },
+  "Heinz": {
+    "display_name": "Heinz",
+    "content": {
+      "lessons": [
+        "fmcg_intro",
+        "supply_chain",
+        "brand_management",
+        "retail_execution"
+      ],
+      "tests": [
+        "fmcg_knowledge",
+        "supply_chain_test"
+      ],
+      "business_games": {
+        "scenarios": [
+          "fmcg_heinz_scenario",
+          "fmcg_route_planning",
+          "fmcg_product_launch"
+        ],
+        "types": ["FMCG"]
+      },
+      "inspirations": [
+        "marketing",
+        "fmcg",
+        "supply_chain",
+        "branding"
+      ]
+    },
+    "tools": {
+      "dashboard": true,
+      "profile": true,
+      "learn": true,
+      "inspirations": true,
+      "practice": true,
+      "business_games": true,
+      "shop": true,
+      "admin_panel": false,
+      "personality_tests": true,
+      "rankings": true,
+      "notes": true
+    },
+    "ranking": {
+      "scope": "global",
+      "visible_in_global": true
+    }
+  },
+  "Milwaukee": {
+    "display_name": "Milwaukee",
+    "content": {
+      "lessons": [
+        "tools_sales",
+        "b2b_negotiation",
+        "product_knowledge",
+        "dealer_management"
+      ],
+      "tests": [
+        "tools_knowledge",
+        "b2b_sales_test"
+      ],
+      "business_games": {
+        "scenarios": [
+          "milwaukee_dealer_meeting",
+          "milwaukee_product_demo",
+          "milwaukee_territory_planning"
+        ],
+        "types": ["B2B", "Sales", "Distribution"]
+      },
+      "inspirations": [
+        "b2b",
+        "negotiation",
+        "tools",
+        "sales"
+      ]
+    },
+    "tools": {
+      "dashboard": true,
+      "profile": true,
+      "learn": true,
+      "inspirations": true,
+      "practice": true,
+      "business_games": true,
+      "shop": false,
+      "admin_panel": false,
+      "personality_tests": true,
+      "rankings": true,
+      "notes": true
+    },
+    "ranking": {
+      "scope": "company",
+      "visible_in_global": false
+    }
+  },
+  "_default": {
+    "display_name": "Standard",
+    "content": {
+      "lessons": null,
+      "tests": null,
+      "business_games": {
+        "scenarios": null,
+        "types": null
+      },
+      "inspirations": null
+    },
+    "tools": {
+      "dashboard": true,
+      "profile": true,
+      "learn": true,
+      "inspirations": true,
+      "practice": true,
+      "business_games": true,
+      "shop": true,
+      "admin_panel": false,
+      "personality_tests": true,
+      "rankings": true,
+      "notes": true
+    },
+    "ranking": {
+      "scope": "global",
+      "visible_in_global": true
+    }
+  }
+}

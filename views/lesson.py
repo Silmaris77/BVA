@@ -1,7 +1,7 @@
 ﻿import streamlit as st
 from datetime import datetime
 from data.lessons import load_lessons
-from data.users import load_user_data, save_user_data
+from data.users_sql import load_user_data, save_user_data
 from utils.components import zen_header, zen_button, notification, content_section, tip_block, quote_block, progress_bar, embed_content, lesson_card
 from utils.components import youtube_video  # Osobny import dla youtube_video
 from utils.material3_components import apply_material3_theme
@@ -146,7 +146,7 @@ def show_lessons_content():
     if 'current_lesson' not in st.session_state or not st.session_state.current_lesson:
         # WIDOK PRZEGLĄDU LEKCJI
         # Pobierz dane użytkownika dla oznaczenia ukończonych lekcji
-        from data.users import get_current_user_data
+        from data.users_sql import get_current_user_data
         user_data = get_current_user_data(st.session_state.username)
         completed_lessons = user_data.get('completed_lessons', [])
         

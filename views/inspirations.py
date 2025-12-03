@@ -347,6 +347,30 @@ def show_overview():
     st.subheader("📚 Wszystkie Inspiracje")
     all_inspirations = get_all_inspirations()
     
+    # Filtruj inspiracje według uprawnień użytkownika (po kategoriach)
+    from utils.permissions import has_access_to_inspiration_category
+    from data.repositories.user_repository import UserRepository
+    from database.connection import session_scope
+    
+    try:
+        username = st.session_state.get('username')
+        if username:
+            from database.models import User
+            with session_scope() as session:
+                user_repo = UserRepository(session)
+                user_obj = session.query(User).filter_by(username=username).first()
+                user_dict = user_obj.to_dict() if user_obj else {}
+                
+                # Filtruj inspiracje - zostawiamy tylko te z dostępnych kategorii
+                accessible_inspirations = [
+                    insp for insp in all_inspirations
+                    if has_access_to_inspiration_category(insp.get('category', ''), user_dict)
+                ]
+                all_inspirations = accessible_inspirations
+    except Exception as e:
+        print(f"Error filtering inspirations: {e}")
+        # W przypadku błędu, pozostawiamy wszystkie inspiracje
+    
     if all_inspirations:
         st.info(f"📖 Dostępnych jest **{len(all_inspirations)}** inspiracji do przeczytania!")
         display_inspirations_grid(all_inspirations, featured=False)
@@ -370,6 +394,30 @@ def show_categories_view():
         category_list = list(categories)
     else:
         category_list = list(categories) if categories else []
+    
+    # Filtruj kategorie według uprawnień użytkownika
+    from utils.permissions import has_access_to_inspiration_category
+    from data.repositories.user_repository import UserRepository
+    from database.connection import session_scope
+    
+    try:
+        username = st.session_state.get('username')
+        if username:
+            from database.models import User
+            with session_scope() as session:
+                user_repo = UserRepository(session)
+                user_obj = session.query(User).filter_by(username=username).first()
+                user_dict = user_obj.to_dict() if user_obj else {}
+                
+                # Filtruj kategorie - zostawiamy tylko te, do których użytkownik ma dostęp
+                accessible_categories = [
+                    cat for cat in category_list
+                    if has_access_to_inspiration_category(cat, user_dict)
+                ]
+                category_list = accessible_categories
+    except Exception as e:
+        print(f"Error filtering inspiration categories: {e}")
+        # W przypadku błędu, pozostawiamy wszystkie kategorie
     
     # Category selector
     category_options = ["Wszystkie"] + category_list

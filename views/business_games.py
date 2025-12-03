@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 
 from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG, FIRM_LOGOS, OFFICE_TYPES, OFFICE_UPGRADE_PATH
 from data.scenarios import get_available_scenarios, get_scenario
-from data.users_new import save_single_user as save_user_data
+from data.users_sql import save_single_user as save_user_data
 from utils.business_game import (
     initialize_business_game, initialize_business_game_with_scenario, refresh_contract_pool, accept_contract,
     submit_contract_solution, submit_contract_conversation, hire_employee, fire_employee,
@@ -614,6 +614,32 @@ def show_scenario_selector(username, user_data, industry_id):
     
     if not scenarios:
         st.warning("Brak dostępnych scenariuszy dla tej branży.")
+        return
+    
+    # Filtruj scenariusze według uprawnień użytkownika
+    from utils.permissions import has_access_to_business_game_scenario
+    from data.repositories.user_repository import UserRepository
+    from database.connection import session_scope
+    
+    try:
+        from database.models import User
+        with session_scope() as session:
+            user_repo = UserRepository(session)
+            user_obj = session.query(User).filter_by(username=username).first()
+            user_dict = user_obj.to_dict() if user_obj else {}
+            
+            # Filtruj scenariusze - zostawiamy tylko te, do których użytkownik ma dostęp
+            accessible_scenarios = {
+                s_id: s_data for s_id, s_data in scenarios.items()
+                if has_access_to_business_game_scenario(s_id, user_dict)
+            }
+            scenarios = accessible_scenarios
+    except Exception as e:
+        print(f"Error filtering scenarios: {e}")
+        # W przypadku błędu, pozostawiamy wszystkie scenariusze
+    
+    if not scenarios:
+        st.warning("Nie masz dostępu do żadnych scenariuszy w tej branży. Skontaktuj się z administratorem.")
         return
     
     # Sortuj scenariusze - lifetime na końcu
@@ -2910,7 +2936,35 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
     # Lista kontraktów
     available_contracts = bg_data["contracts"]["available_pool"]
     
-    # Filtrowanie
+    # Filtruj kontrakty według uprawnień użytkownika do typów gier
+    from utils.permissions import has_access_to_business_game_type
+    from data.repositories.user_repository import UserRepository
+    from database.connection import session_scope
+    
+    try:
+        from database.models import User
+        with session_scope() as session:
+            user_repo = UserRepository(session)
+            user_obj = session.query(User).filter_by(username=username).first()
+            user_dict = user_obj.to_dict() if user_obj else {}
+            
+            # Filtruj kontrakty - zostawiamy tylko te typy, do których użytkownik ma dostęp
+            accessible_contracts = []
+            for contract in available_contracts:
+                contract_type = contract.get("contract_type", "standard")
+                # Obsługa starych nazw
+                if contract_type == "ai_conversation":
+                    contract_type = "conversation"
+                
+                if has_access_to_business_game_type(contract_type, user_dict):
+                    accessible_contracts.append(contract)
+            
+            available_contracts = accessible_contracts
+    except Exception as e:
+        print(f"Error filtering contract types: {e}")
+        # W przypadku błędu, pozostawiamy wszystkie kontrakty
+    
+    # Filtrowanie po kategorii
     if category_filter != "Wszystkie":
         available_contracts = [c for c in available_contracts if c["kategoria"] == category_filter]
     
@@ -5089,8 +5143,55 @@ def show_rankings_content(username, user_data, industry_id="consulting"):
     st.markdown("---")
     
     # Pobierz PRAWDZIWE dane wszystkich użytkowników
-    from data.users_new import load_user_data
+    from data.users_sql import load_user_data
     all_users = load_user_data()
+    
+    # Filtruj użytkowników według scope rankingów
+    from utils.permissions import get_ranking_scope, is_visible_in_global_ranking
+    from data.repositories.user_repository import UserRepository
+    from database.connection import session_scope
+    
+    try:
+        from database.models import User
+        with session_scope() as session:
+            user_repo = UserRepository(session)
+            current_user_obj = session.query(User).filter_by(username=username).first()
+            current_user_dict = current_user_obj.to_dict() if current_user_obj else {}
+            
+            # Sprawdź scope rankingu dla bieżącego użytkownika
+            ranking_scope = get_ranking_scope(current_user_dict)
+            current_user_company = current_user_dict.get('company', '')
+            
+            # Filtruj użytkowników według scope
+            filtered_users = {}
+            if ranking_scope == 'none':
+                # Brak dostępu do rankingów - nie pokazuj nikogo (tylko siebie)
+                filtered_users = {username: all_users.get(username, {})}
+            elif ranking_scope == 'company':
+                # Tylko użytkownicy z tej samej firmy
+                for user, data in all_users.items():
+                    # Pobierz dane użytkownika z SQL
+                    user_obj = session.query(User).filter_by(username=user).first()
+                    if user_obj:
+                        user_dict = user_obj.to_dict()
+                        user_company = user_dict.get('company', '')
+                        # Dodaj jeśli z tej samej firmy
+                        if user_company == current_user_company:
+                            filtered_users[user] = data
+            elif ranking_scope == 'global':
+                # Wszyscy użytkownicy widoczni w globalnym rankingu
+                for user, data in all_users.items():
+                    user_obj = session.query(User).filter_by(username=user).first()
+                    if user_obj:
+                        user_dict = user_obj.to_dict()
+                        # Dodaj jeśli użytkownik jest widoczny w globalnym rankingu
+                        if is_visible_in_global_ranking(user_dict):
+                            filtered_users[user] = data
+            
+            all_users = filtered_users
+    except Exception as e:
+        print(f"Error filtering ranking users: {e}")
+        # W przypadku błędu, pozostawiamy wszystkich użytkowników
     
     # Zbierz firmy z business_game
     all_firms = []

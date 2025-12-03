@@ -7,7 +7,7 @@
     "degencoins": 236,
     "level": 1,
     "joined_date": "2025-08-22",
-    "last_login": "2025-11-27 19:26:50",
+    "last_login": "2025-12-03 12:58:47",
     "test_taken": false,
     "daily_stats": {
       "2025-10-29": {
@@ -89,6 +89,12 @@
         "completed_lessons": 2
       },
       "2025-11-27": {
+        "xp": 297,
+        "degencoins": 236,
+        "level": 1,
+        "completed_lessons": 2
+      },
+      "2025-12-03": {
         "xp": 297,
         "degencoins": 236,
         "level": 1,
@@ -744,6 +750,46 @@
       {
         "type": "login",
         "timestamp": "2025-11-27T19:26:50.232260",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T12:11:56.150095",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T12:22:05.498943",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T12:24:12.587764",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T12:39:05.066254",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T12:46:14.302380",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T12:51:55.553247",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T12:57:18.947260",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T12:58:47.600135",
         "details": {}
       }
     ],
@@ -13952,7 +13998,7 @@
     "degencoins": 0,
     "level": 1,
     "joined_date": "2025-11-18",
-    "last_login": "2025-11-27 19:51:25",
+    "last_login": "2025-12-03 11:41:44",
     "completed_lessons": [],
     "badges": [],
     "test_taken": false,
@@ -13962,6 +14008,12 @@
     },
     "daily_stats": {
       "2025-11-27": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      },
+      "2025-12-03": {
         "xp": 0,
         "degencoins": 0,
         "level": 1,
@@ -14455,6 +14507,16 @@
       {
         "type": "login",
         "timestamp": "2025-11-27T19:51:25.230746",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T11:37:21.027288",
+        "details": {}
+      },
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T11:41:44.752763",
         "details": {}
       }
     ]
@@ -15016,6 +15078,67 @@
           "milestones": []
         }
       }
+    }
+  },
+  "Heinz3": {
+    "user_id": "cb3dc940-0fd8-4620-94fe-9c98381cef29",
+    "password": "Heinz3",
+    "xp": 0,
+    "level": 1,
+    "degencoins": 0,
+    "completed_lessons": [],
+    "quiz_scores": {},
+    "test_taken": false,
+    "neuroleader_type": null,
+    "joined_date": "2025-12-03",
+    "last_login": "2025-12-03 12:58:20",
+    "company": "Heinz",
+    "permissions": {
+      "content": {
+        "lessons": null,
+        "tests": null,
+        "business_games": {
+          "scenarios": null,
+          "types": null
+        },
+        "inspirations": null
+      },
+      "tools": {
+        "dashboard": true,
+        "profile": true,
+        "learn": true,
+        "inspirations": false,
+        "practice": true,
+        "business_games": true,
+        "shop": true,
+        "personality_tests": true,
+        "rankings": true,
+        "notes": true
+      },
+      "ranking": {
+        "scope": "none",
+        "visible_in_global": true
+      }
+    },
+    "account_created_by": "admin",
+    "daily_stats": {
+      "2025-12-03": {
+        "xp": 0,
+        "degencoins": 0,
+        "level": 1,
+        "completed_lessons": 0
+      }
+    },
+    "activity_log": [
+      {
+        "type": "login",
+        "timestamp": "2025-12-03T12:58:20.760024",
+        "details": {}
+      }
+    ],
+    "inspirations": {
+      "read": [],
+      "favorites": []
     }
   }
 }
