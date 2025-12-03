@@ -11,7 +11,7 @@ def load_lessons():
         return {}
 
     for i, filename in enumerate(sorted(os.listdir(lessons_dir))):
-        if filename.endswith('.json') and not filename.startswith('lesson_template'):
+        if filename.endswith('.json') and not filename.startswith('lesson_template') and not filename.startswith('backup_'):
             try:
                 with open(os.path.join(lessons_dir, filename), 'r', encoding='utf-8') as file:
                     lesson_data = json.load(file)

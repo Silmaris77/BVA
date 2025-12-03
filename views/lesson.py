@@ -153,12 +153,28 @@ def show_lessons_content():
         # Sprawdź dostępność lekcji dla użytkownika
         username = st.session_state.get('username')
         
-        # Podziel lekcje na dostępne i niedostępne
+        # Import nowego systemu tagowania
+        from utils.resource_access import get_resource_tags, has_access_to_resource
+        
+        # Pobierz company użytkownika
+        user_company = user_data.get('company', 'General')
+        
+        # FILTRUJ LEKCJE: pokaż tylko te z tagiem użytkownika lub General
+        filtered_lessons = {}
+        for lesson_id, lesson in lessons.items():
+            lesson_tags = get_resource_tags('lessons', lesson_id)
+            
+            # Sprawdź czy lekcja ma tag użytkownika lub General
+            if user_company in lesson_tags or 'General' in lesson_tags:
+                # Lekcja jest dla tej grupy - dodaj ją
+                filtered_lessons[lesson_id] = lesson
+        
+        # Teraz podziel PRZEFILTROWANE lekcje na dostępne i niedostępne
         available_lessons = {}
         unavailable_lessons = {}
         
-        for lesson_id, lesson in lessons.items():
-            is_accessible = is_lesson_accessible(username, lesson_id) if username else True
+        for lesson_id, lesson in filtered_lessons.items():
+            is_accessible = has_access_to_resource('lessons', lesson_id, user_data)
             category = lesson.get("category", "Inne")
             
             if is_accessible:

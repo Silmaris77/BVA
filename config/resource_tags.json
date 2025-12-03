@@ -1,0 +1,205 @@
+{
+  "_info": {
+    "description": "System tagowania zasobów dla grup użytkowników",
+    "version": "1.0",
+    "last_updated": "2025-12-03"
+  },
+  "companies": [
+    {
+      "code": "General",
+      "display_name": "Ogólne",
+      "description": "Zasoby dostępne dla wszystkich użytkowników",
+      "color": "#6c757d"
+    },
+    {
+      "code": "Warta",
+      "display_name": "Warta",
+      "description": "Zasoby dla grupy Warta (ubezpieczenia)",
+      "color": "#dc3545"
+    },
+    {
+      "code": "Heinz",
+      "display_name": "Heinz",
+      "description": "Zasoby dla grupy Heinz (FMCG)",
+      "color": "#e74c3c"
+    },
+    {
+      "code": "Milwaukee",
+      "display_name": "Milwaukee",
+      "description": "Zasoby dla grupy Milwaukee (B2B/narzędzia)",
+      "color": "#f39c12"
+    },
+    {
+      "code": "Degen",
+      "display_name": "Degen",
+      "description": "Zasoby dla grupy Degen (trading/crypto)",
+      "color": "#9b59b6"
+    }
+  ],
+  "lessons": {
+    "0. Wprowadzenie do neuroprzywództwa": [
+      "Warta"
+    ],
+    "1. Mózg emocjonalny_copy": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "2. Chemia mózgu": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "3. Model SCARF": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "4. Model SEEDS": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "5. Stres i odporność psychiczna": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "6. Podejmowanie decyzji i ryzyko": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "7. Pamięć i uwaga": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "8. Kondycja mózgu": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "9. Kształtowanie nawyków": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "10. Wyzwania menedżerskie": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "11. Od słów do zaufania - Conversational Intelligence": [
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "DEGEN_1_Trading_Psychology": [
+      "Degen"
+    ]
+  },
+  "business_games_scenarios": {
+    "fmcg_heinz_scenario": [
+      "Heinz"
+    ],
+    "consulting_basic": [
+      "General"
+    ],
+    "insurance_client_meeting": [
+      "Warta"
+    ],
+    "milwaukee_dealer_meeting": [
+      "Milwaukee"
+    ],
+    "degen_trading_challenge": [
+      "Degen"
+    ]
+  },
+  "business_games_types": {
+    "Consulting": [
+      "General"
+    ],
+    "FMCG": [
+      "Heinz"
+    ],
+    "Insurance": [
+      "Warta"
+    ],
+    "B2B": [
+      "Milwaukee"
+    ],
+    "Trading": [
+      "Degen"
+    ],
+    "Sales": [
+      "General"
+    ],
+    "Customer_Service": [
+      "General"
+    ]
+  },
+  "inspirations_categories": {
+    "leadership": [
+      "General"
+    ],
+    "neuroscience": [
+      "General"
+    ],
+    "productivity": [
+      "General"
+    ],
+    "communication": [
+      "General"
+    ],
+    "sales": [
+      "General",
+      "Warta",
+      "Milwaukee"
+    ],
+    "customer_service": [
+      "General",
+      "Warta"
+    ],
+    "insurance": [
+      "Warta"
+    ],
+    "marketing": [
+      "General",
+      "Heinz"
+    ],
+    "fmcg": [
+      "Heinz"
+    ],
+    "supply_chain": [
+      "Heinz"
+    ],
+    "branding": [
+      "Heinz"
+    ],
+    "b2b": [
+      "Milwaukee"
+    ],
+    "negotiation": [
+      "Milwaukee"
+    ],
+    "tools": [
+      "Milwaukee"
+    ],
+    "trading": [
+      "Degen"
+    ],
+    "crypto": [
+      "Degen"
+    ],
+    "investments": [
+      "Degen"
+    ],
+    "risk_taking": [
+      "Degen"
+    ],
+    "financial_psychology": [
+      "Degen"
+    ]
+  }
+}

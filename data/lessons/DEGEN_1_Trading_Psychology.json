@@ -1,0 +1,243 @@
+{
+  "_lesson_info": {
+    "version": "1.0",
+    "description": "Lekcja dla grupy Degen - Psychologia tradingu i zarządzanie emocjami",
+    "created": "2025-12-03",
+    "target_audience": "Degen group only"
+  },
+  
+  "id": "degen_mindset",
+  "title": "Psychologia Degena: Emocje, Ryzyko i Decyzje",
+  "description": "Poznaj psychologiczne mechanizmy stojące za decyzjami tradingowymi. Dowiedz się, jak emocje wpływają na Twoje inwestycje i jak kontrolować impulsywne zachowania.",
+  "tag": "Degen Mindset",
+  "xp_reward": 150,
+  "difficulty": "advanced",
+  
+  "intro": {
+    "main": "<div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: white;'>🎲 Witaj w Degen Mindset</h1><p style='font-size: 1.2rem; text-align: center; margin-bottom: 30px;'>Poznaj psychologiczne podstawy podejmowania ryzykownych decyzji finansowych</p></div><h2>🧠 Czego się nauczysz:</h2><div style='background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f5576c;'><ul style='line-height: 1.8;'><li>💭 <strong>Neurobiologia ryzyka</strong> - jak mózg reaguje na niepewność i potencjalne zyski</li><li>🎯 <strong>Cognitive biases w tradingu</strong> - najczęstsze pułapki psychologiczne</li><li>🔥 <strong>FOMO i Revenge Trading</strong> - mechanizmy impulsywnych decyzji</li><li>🧘 <strong>Kontrola emocjonalna</strong> - techniki zarządzania stresem w czasie sesji</li><li>📊 <strong>Position sizing</strong> - psychologia zarządzania kapitałem</li></ul></div><div style='background: #fff3cd; padding: 20px; border-radius: 10px; border-left: 4px solid #ffc107; margin: 20px 0;'><p style='margin: 0;'><strong>⚠️ Uwaga:</strong> Ta lekcja nie zawiera porad inwestycyjnych. Skupia się wyłącznie na psychologicznych aspektach podejmowania decyzji w warunkach niepewności.</p></div>",
+    "case_study": "<div style='background: #ffe6e6; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #dc3545;'><h3 style='color: #dc3545; margin-bottom: 20px;'>📖 Case Study: Dzień z życia tradera</h3><p style='margin-bottom: 15px;'><strong>6:00 AM</strong> - Budzisz się i od razu sprawdzasz rynek. Twoja pozycja z wczoraj jest -15% na minusie. Serce zaczyna bić szybciej.</p><p style='margin-bottom: 15px;'><strong>9:00 AM</strong> - Decydujesz się 'doubledown' - dokupujesz więcej, żeby obniżyć średnią. \"Przecież to musi odbić\" - mówisz sobie.</p><p style='margin-bottom: 15px;'><strong>12:00 PM</strong> - Pozycja jest już -30%. Widzisz inny token, który właśnie pompuje +50%. FOMO Cię paraliżuje.</p><p style='margin-bottom: 15px;'><strong>3:00 PM</strong> - W desperacji zamykasz stratną pozycję i all-in w pompujący token. Kupujesz blisko topu.</p><p style='margin-bottom: 15px;'><strong>6:00 PM</strong> - Nowy token zrzuca -40%. Jesteś totalnie wykończony. \"Jutro będzie inaczej\" - obiecujesz sobie.</p><div style='background: white; padding: 15px; border-radius: 8px; margin-top: 20px;'><p style='margin: 0; font-style: italic; color: #666;'>💭 <strong>Pytanie:</strong> Która część tej historii przypomina Twoje doświadczenia? Czy rozpoznajesz te wzorce?</p></div></div>",
+    "quiz_samodiagnozy": {
+      "title": "Quiz Samodiagnozy - Twój profil psychologiczny",
+      "description": "Oceń, jak często doświadczasz następujących sytuacji w tradingu (1 = nigdy, 5 = bardzo często)",
+      "questions": [
+        {
+          "question": "Czuję niepokój lub stres, gdy nie mam otwartych pozycji",
+          "options": [
+            "Nigdy",
+            "Rzadko",
+            "Czasami",
+            "Często",
+            "Bardzo często"
+          ],
+          "correct_answer": 0,
+          "explanation": "To klasyczny objaw uzależnienia od akcji. Potrzeba ciągłego bycia 'w grze' może prowadzić do overtradingu i słabych decyzji."
+        },
+        {
+          "question": "Po stratnej transakcji natychmiast otwieram nową, żeby 'odegrać się'",
+          "options": [
+            "Nigdy",
+            "Rzadko", 
+            "Czasami",
+            "Często",
+            "Bardzo często"
+          ],
+          "correct_answer": 0,
+          "explanation": "Revenge trading to jedna z najniebezpieczniejszych pułapek. Decyzje podejmowane pod wpływem emocji prawie zawsze kończą się kolejnymi stratami."
+        },
+        {
+          "question": "Widzę rosnący token i czuję presję, żeby natychmiast kupić (FOMO)",
+          "options": [
+            "Nigdy",
+            "Rzadko",
+            "Czasami", 
+            "Często",
+            "Bardzo często"
+          ],
+          "correct_answer": 0,
+          "explanation": "FOMO (Fear Of Missing Out) aktywuje system nagrody w mózgu. To czysta emocja, nie analiza. Najlepsze transakcje to te bez presji czasowej."
+        },
+        {
+          "question": "Trzymam stratne pozycje za długo, licząc że 'zaraz odbije'",
+          "options": [
+            "Nigry",
+            "Rzadko",
+            "Czasami",
+            "Często", 
+            "Bardzo często"
+          ],
+          "correct_answer": 0,
+          "explanation": "Loss aversion - awersja do straty. Mózg boli nas bardziej przy stracie niż cieszy przy zysku. To prowadzi do trzymania 'martwych kotów' i powiększania strat."
+        },
+        {
+          "question": "Analizuję rynek obiektywnie, nie kierując się emocjami",
+          "options": [
+            "Nigdy",
+            "Rzadko",
+            "Czasami",
+            "Często",
+            "Bardzo często"
+          ],
+          "correct_answer": 4,
+          "explanation": "To pozytywna cecha. Obiektywna analiza bez emocjonalnego zaangażowania to klucz do długoterminowego sukcesu."
+        }
+      ]
+    }
+  },
+  
+  "sections": {
+    "learning": {
+      "sections": [
+        {
+          "title": "Neurobiologia Ryzyka - Jak Mózg Podejmuje Decyzje",
+          "content": "<div style='background: #e3f2fd; padding: 25px; border-radius: 10px; margin: 20px 0;'><h3 style='color: #1976d2;'>🧠 Trzy Systemy Mózgu w Tradingu</h3><p style='margin-bottom: 20px;'>Podczas każdej decyzji tradingowej walczą w Tobie trzy systemy:</p><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0;'><h4 style='color: #dc3545;'>🔴 1. Układ Limbiczny (Mózg Emocjonalny)</h4><p><strong>Funkcja:</strong> Szybkie reakcje, instynkt przetrwania</p><p><strong>W tradingu:</strong></p><ul><li>✅ <strong>Pomaga:</strong> Szybko wychodzić z niebezpiecznych sytuacji</li><li>❌ <strong>Szkodzi:</strong> Panic sell, FOMO, revenge trading</li></ul><p style='background: #ffe6e6; padding: 10px; border-radius: 5px; margin-top: 10px;'><strong>Przykład:</strong> Widzisz -20% i instynkt krzyczy 'UCIEKAJ!' zanim włączy się logiczne myślenie.</p></div><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0;'><h4 style='color: #28a745;'>🟢 2. Kora Przedczołowa (Mózg Racjonalny)</h4><p><strong>Funkcja:</strong> Analiza, planowanie, kontrola impulsów</p><p><strong>W tradingu:</strong></p><ul><li>✅ <strong>Pomaga:</strong> Analiza wykresów, risk management, trzymanie planu</li><li>❌ <strong>Słabość:</strong> Wolniejszy, wymaga energii, wyłącza się pod stresem</li></ul><p style='background: #e6ffe6; padding: 10px; border-radius: 5px; margin-top: 10px;'><strong>Przykład:</strong> Dokładnie analizujesz setup, czekasz na confirmation, wchodzisz z planem exit strategy.</p></div><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0;'><h4 style='color: #f093fb;'>🟣 3. Układ Nagrody (Dopamina)</h4><p><strong>Funkcja:</strong> Motywacja, antycypacja nagrody</p><p><strong>W tradingu:</strong></p><ul><li>✅ <strong>Pomaga:</strong> Motywuje do działania, uczenia się</li><li>❌ <strong>Szkodzi:</strong> Uzależnienie od 'haju' z wygranych, overtrading</li></ul><p style='background: #fce4ec; padding: 10px; border-radius: 5px; margin-top: 10px;'><strong>Przykład:</strong> Po wygranej transakcji czujesz euforię i od razu chcesz kolejnej - to dopamina, nie strategia.</p></div></div><div style='background: #fff3cd; padding: 20px; border-radius: 10px; border-left: 4px solid #ffc107; margin: 20px 0;'><h3 style='color: #856404;'>⚖️ Kluczowy Insight</h3><p style='margin: 0;'>Najlepsi traderzy nie eliminują emocji - <strong>rozpoznają je</strong> i <strong>nie pozwalają im podejmować decyzji</strong>. Kluczem jest zbudowanie systemów, które działają niezależnie od stanu emocjonalnego.</p></div>",
+          "video": {
+            "url": "https://youtu.be/example_neuro_risk",
+            "title": "Neurobiologia podejmowania ryzyka finansowego",
+            "description": "Jak mózg przetwarza ryzyko i niepewność w kontekście inwestycji"
+          }
+        },
+        {
+          "title": "Najczęstsze Cognitive Biases w Tradingu",
+          "content": "<div style='background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0;'><h3 style='color: #dc3545; margin-bottom: 20px;'>🎭 Pułapki Psychologiczne - Poznaj Swojego Wroga</h3><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #dc3545;'><h4>1. 🔴 Loss Aversion (Awersja do Straty)</h4><p><strong>Co to jest:</strong> Ból straty jest 2x silniejszy niż radość z zysku tej samej wartości.</p><p><strong>W praktyce:</strong></p><ul><li>Trzymasz stratne pozycje za długo ('przecież może odbić')</li><li>Zamykasz zyskowne pozycje za szybko (strach, że oddasz zysk)</li><li>Średnujesz w dół zamiast zaakceptować stratę</li></ul><p style='background: #ffe6e6; padding: 10px; border-radius: 5px;'><strong>💊 Antidotum:</strong> Ustaw stop loss PRZED wejściem. Zaakceptuj, że strata jest częścią gry. Nie średniuj pozycji bez planu.</p></div><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ff6b35;'><h4>2. 🟠 Confirmation Bias (Błąd Potwierdzenia)</h4><p><strong>Co to jest:</strong> Szukasz tylko informacji potwierdzających Twoją tezę, ignorujesz przeciwne sygnały.</p><p><strong>W praktyce:</strong></p><ul><li>Jesteś long i czytasz tylko bullish newsy</li><li>Ignorujesz niedźwiedzie divergencje bo 'przecież to pump'</li><li>Na Twitterze followujesz tylko maksymalistów swojego coina</li></ul><p style='background: #fff3e6; padding: 10px; border-radius: 5px;'><strong>💊 Antidotum:</strong> Devil's advocate - aktywnie szukaj argumentów PRZECIW swojej tezie. Follow ludzi z przeciwnymi poglądami.</p></div><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ffc107;'><h4>3. 🟡 Recency Bias (Efekt Świeżości)</h4><p><strong>Co to jest:</strong> Nadajesz zbyt dużą wagę ostatnim wydarzeniom.</p><p><strong>W praktyce:</strong></p><ul><li>Po 3 wygranych z rzędu czujesz się niezniszczalny</li><li>Po 3 stratach z rzędu myślisz 'nic mi nie wychodzi'</li><li>Ostatni crash sprawia, że widzisz tylko niedźwiedzie scenariusze</li></ul><p style='background: #fffae6; padding: 10px; border-radius: 5px;'><strong>💊 Antidotum:</strong> Trading journal. Śledź długoterminowe statystyki, nie pojedyncze trade'y. Sample size matters.</p></div><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #28a745;'><h4>4. 🟢 Anchoring (Zakotwiczenie)</h4><p><strong>Co to jest:</strong> Pierwsza informacja determinuje Twoje myślenie o wartości.</p><p><strong>W praktyce:</strong></p><ul><li>'Kupiłem po $100, więc nie sprzedam poniżej' (sunk cost fallacy)</li><li>'ATH było $500, teraz $50 to okazja!' (ignoring fundamentals)</li><li>Oczekujesz powrotu do ceny wejścia zamiast patrzeć na obecną sytuację</li></ul><p style='background: #e6ffe6; padding: 10px; border-radius: 5px;'><strong>💊 Antidotum:</strong> Każdego dnia patrz na pozycję jakbyś ją kupował dzisiaj. 'Czy wchodziłbym teraz po tej cenie?'</p></div><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff;'><h4>5. 🔵 Overconfidence (Nadmierna Pewność Siebie)</h4><p><strong>Co to jest:</strong> Przeceniasz swoje umiejętności i wiedzę.</p><p><strong>W praktyce:</strong></p><ul><li>Po winning streak myślisz że 'przełamałeś kod'</li><li>Zwiększasz size bo 'teraz wiem jak to działa'</li><li>Przestajesz używać stop lossów bo 'wyczuwasz rynek'</li></ul><p style='background: #e3f2fd; padding: 10px; border-radius: 5px;'><strong>💊 Antidotum:</strong> Pamiętaj: bull market makes everyone look like a genius. Największa pewność siebie = największe ryzyko błędu.</p></div></div><div style='background: #dc3545; color: white; padding: 20px; border-radius: 10px; margin: 20px 0;'><h3 style='color: white; margin-bottom: 15px;'>🎯 Praktyczne Zadanie</h3><p style='margin: 0;'>Przez następny tydzień, przy każdej decyzji tradingowej zadaj sobie pytanie: <strong>'Którym biasem właśnie się kieruję?'</strong> Zapisz to w notesie. Świadomość to pierwszy krok do kontroli.</p></div>"
+        },
+        {
+          "title": "FOMO, Revenge Trading i Kontrola Emocji",
+          "content": "<div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 25px; border-radius: 10px; color: white; margin: 20px 0;'><h3 style='color: white; margin-bottom: 15px;'>🔥 FOMO - Fear Of Missing Out</h3><p style='margin: 0; font-size: 1.1rem;'>Najbardziej kosztowna emocja w tradingu</p></div><div style='background: white; padding: 25px; border-radius: 10px; margin: 20px 0; border: 2px solid #f093fb;'><h4 style='color: #f5576c;'>⚡ Anatomia FOMO</h4><p style='margin-bottom: 15px;'><strong>Co się dzieje w mózgu:</strong></p><ol style='line-height: 1.8;'><li>Widzisz zielone candle +50%</li><li>Układ nagrody dostaje SPIKE dopaminy (antycypacja zysku)</li><li>Amygdala krzyczy 'STRACIISZ OKAZJĘ!'</li><li>Kora przedczołowa wyłącza się pod presją</li><li>Kupujesz blisko topu, bez analizy</li></ol><p style='background: #ffe6e6; padding: 15px; border-radius: 8px; margin-top: 15px;'><strong>📉 Rezultat:</strong> 80% FOMO trades kończy się stratą. Kupujesz hype, sprzedajesz rozczarowanie.</p><h4 style='color: #f5576c; margin-top: 25px;'>💊 Jak Walczyć z FOMO:</h4><div style='background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;'><p><strong>1. Watchlist Rule</strong></p><p>Traduj tylko assety z Twojej watchlisty. Jeśli czegoś tam nie ma - nie kupujesz, koniec.</p></div><div style='background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;'><p><strong>2. Wait 30 Minutes</strong></p><p>Czujesz FOMO? Zaczekaj 30 minut. Jeśli setup nadal ma sens - wchodzisz. W 90% przypadków FOMO mija.</p></div><div style='background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;'><p><strong>3. Abundance Mindset</strong></p><p>Rynek jest ZAWSZE. Każdego dnia są setki setupów. Przegapienie jednego to zero problemu.</p></div></div><div style='background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); padding: 25px; border-radius: 10px; color: white; margin: 20px 0;'><h3 style='color: white; margin-bottom: 15px;'>😤 Revenge Trading</h3><p style='margin: 0; font-size: 1.1rem;'>Trading z zemsty na rynku - najszybsza droga do wyzerowania konta</p></div><div style='background: white; padding: 25px; border-radius: 10px; margin: 20px 0; border: 2px solid #ff6b6b;'><h4 style='color: #ee5a6f;'>⚡ Cykl Revenge Trading</h4><ol style='line-height: 1.8; margin-bottom: 20px;'><li><strong>Strata</strong> - Czujesz ból, frustrację, złość</li><li><strong>Denial</strong> - 'To niemożliwe, to był pewny trade'</li><li><strong>Revenge</strong> - 'Odegram się NATYCHMIAST'</li><li><strong>Impulsywny entry</strong> - Bez analizy, większy size</li><li><strong>Kolejna strata</strong> - Jeszcze większa, bo większy size</li><li><strong>Spirala</strong> - Powtarzasz aż do wyzerowania</li></ol><p style='background: #ffe6e6; padding: 15px; border-radius: 8px;'><strong>🧠 Neurobiologia:</strong> Kortyzol (stres) + dopamina (chęć odegrania) = wyłączony mózg racjonalny. Decyzje podejmuje reptilian brain.</p><h4 style='color: #ee5a6f; margin-top: 25px;'>💊 Jak Przerwać Cykl:</h4><div style='background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;'><p><strong>1. Daily Loss Limit</strong></p><p>Ustal max stratę dzienną (np. 2% portfolio). Przekroczyłeś? KONIEC na dziś. Zero dyskusji.</p></div><div style='background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;'><p><strong>2. Physical Break</strong></p><p>Po stracie: spacer, trening, zimny prysznic. Potrzebujesz 30-60 min żeby kortyzol spadł.</p></div><div style='background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;'><p><strong>3. Journal Entry</strong></p><p>Przed następnym trade zapisz: 'Czy to revenge trade?' Jeśli tak - nie wchodzisz.</p></div></div><div style='background: #e3f2fd; padding: 25px; border-radius: 10px; margin: 20px 0;'><h3 style='color: #1976d2; margin-bottom: 20px;'>🧘 System Kontroli Emocji - Daily Routine</h3><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0;'><h4 style='color: #28a745;'>✅ Pre-Trading Checklist</h4><ul style='line-height: 1.8;'><li>☕ Jestem wypoczęty (min 6h snu)</li><li>🧘 Zrobiłem 5 min medytacji/breathing exercises</li><li>📋 Mam plan na dziś (watchlist, setups, max risk)</li><li>🎯 Znam swoją strategię i nie będę od niej odbiegać</li><li>❌ Nie mam emocjonalnego 'bagażu' z wczoraj</li></ul></div><div style='background: white; padding: 20px; border-radius: 8px; margin: 15px 0;'><h4 style='color: #ffc107;'>⚠️ During Trading - Red Flags</h4><p>STOP natychmiast jeśli:</p><ul style='line-height: 1.8;'><li>Serce bije szybciej / pocisz się</li><li>Myślisz 'muszę to odegrać'</li><li>Przeglądasz TikTok/Twitter szukając potwierdzenia</li><li>Zwiększasz size bez powodu</li><li>Otwierasz pozycję 'bo nudy'</li></ul></div></div>"
+        }
+      ]
+    },
+    
+    "practical_exercises": {
+      "exercises": {
+        "title": "Ćwiczenia Praktyczne",
+        "description": "Zbuduj swój system kontroli emocji",
+        "sections": [
+          {
+            "title": "Ćwiczenie 1: Stwórz Swój Trading Journal",
+            "content": "<div style='background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0;'><p style='margin-bottom: 20px;'>Przy każdej transakcji zapisuj:</p><div style='background: white; padding: 20px; border-radius: 8px;'><h4>📊 Sekcja Techniczna:</h4><ul><li>Asset, entry price, size, stop loss, take profit</li><li>Dlaczego wszedłem (setup, sygnały)</li></ul><h4 style='margin-top: 20px;'>🧠 Sekcja Psychologiczna (KLUCZOWA):</h4><ul><li>Jak się czułem przed wejściem? (1-10 spokój vs. ekscytacja)</li><li>Czy to był planowany trade czy impuls?</li><li>Który bias mógł wpłynąć na decyzję?</li><li>Jakie emocje czuję trzymając pozycję?</li></ul><h4 style='margin-top: 20px;'>📈 Po zamknięciu:</h4><ul><li>Rezultat (% P/L)</li><li>Czy trzymałem się planu?</li><li>Co bym zmienił?</li><li>Jedna lekcja z tego trade'u</li></ul></div><p style='background: #e3f2fd; padding: 15px; border-radius: 8px; margin-top: 20px;'><strong>🎯 Cel:</strong> Po miesiącu zobaczysz wzorce. Odkryjesz, że Twoje największe straty to nie złe setupy, ale złe emocje.</p></div>"
+          },
+          {
+            "title": "Ćwiczenie 2: Breathing Technique - 4-7-8",
+            "content": "<div style='background: #e8f5e8; padding: 25px; border-radius: 10px; margin: 20px 0;'><h4 style='color: #28a745; margin-bottom: 15px;'>🫁 Technika 4-7-8 (Dr. Andrew Weil)</h4><p style='margin-bottom: 20px;'><strong>Kiedy używać:</strong> Przed sesją, po stracie, gdy czujesz FOMO lub chęć revenge trade.</p><div style='background: white; padding: 20px; border-radius: 8px;'><p style='margin-bottom: 15px;'><strong>Jak wykonać:</strong></p><ol style='line-height: 1.8;'><li>Wydech przez usta (whoosh sound) - opróżnij płuca</li><li><strong>Wdech przez nos</strong> - na 4 sekundy</li><li><strong>Zatrzymaj oddech</strong> - na 7 sekund</li><li><strong>Wydech przez usta</strong> - na 8 sekund (whoosh)</li><li>Powtórz 4 razy</li></ol><p style='background: #e3f2fd; padding: 15px; border-radius: 8px; margin-top: 20px;'><strong>🧠 Jak to działa:</strong> Aktywuje układ przywspółczulny, obniża kortyzol, włącza mózg racjonalny. Po 2 minutach jesteś w stanie podejmować lepsze decyzje.</p></div></div>"
+          },
+          {
+            "title": "Ćwiczenie 3: Position Sizing Matrix",
+            "content": "<div style='background: #fff3cd; padding: 25px; border-radius: 10px; margin: 20px 0;'><h4 style='color: #856404; margin-bottom: 15px;'>📊 Psychologia Position Sizing</h4><p style='margin-bottom: 20px;'>Ustal size na podstawie PEWNOŚCI i EMOCJI, nie tylko setupu:</p><div style='background: white; padding: 20px; border-radius: 8px;'><table style='width: 100%; border-collapse: collapse;'><tr style='background: #f8f9fa;'><th style='padding: 10px; border: 1px solid #ddd;'>Pewność</th><th style='padding: 10px; border: 1px solid #ddd;'>Stan Emocjonalny</th><th style='padding: 10px; border: 1px solid #ddd;'>Size</th></tr><tr><td style='padding: 10px; border: 1px solid #ddd;'>Wysoka (A+ setup)</td><td style='padding: 10px; border: 1px solid #ddd;'>Spokojny</td><td style='padding: 10px; border: 1px solid #ddd;'><strong>2% risk</strong></td></tr><tr style='background: #f8f9fa;'><td style='padding: 10px; border: 1px solid #ddd;'>Wysoka</td><td style='padding: 10px; border: 1px solid #ddd;'>Po stracie / FOMO</td><td style='padding: 10px; border: 1px solid #ddd;'><strong>0.5% risk</strong></td></tr><tr><td style='padding: 10px; border: 1px solid #ddd;'>Średnia (B setup)</td><td style='padding: 10px; border: 1px solid #ddd;'>Spokojny</td><td style='padding: 10px; border: 1px solid #ddd;'><strong>1% risk</strong></td></tr><tr style='background: #f8f9fa;'><td style='padding: 10px; border: 1px solid #ddd;'>Średnia</td><td style='padding: 10px; border: 1px solid #ddd;'>Po stracie / Zmęczony</td><td style='padding: 10px; border: 1px solid #ddd;'><strong>0% - NIE TRADUJ</strong></td></tr></table></div><p style='background: #ffe6e6; padding: 15px; border-radius: 8px; margin-top: 20px;'><strong>🚨 Zasada:</strong> Nigdy nie zwiększaj size po stracie. To nie odwaga, to desperacja.</p></div>"
+          }
+        ]
+      },
+      "closing_quiz": {
+        "title": "Quiz Końcowy - Sprawdź Swoją Wiedzę",
+        "description": "Test z psychologii tradingu",
+        "questions": [
+          {
+            "question": "Które z poniższych zachowań jest objawem revenge trading?",
+            "options": [
+              "Robisz przerwę po stracie i wracasz następnego dnia",
+              "Natychmiast po stracie otwierasz nową pozycję, żeby 'odegrać się'",
+              "Analizujesz co poszło nie tak i zapisujesz wnioski",
+              "Zmniejszasz size po stracie"
+            ],
+            "correct_answer": 1,
+            "explanation": "Revenge trading to impulsywne otwieranie nowych pozycji zaraz po stracie, kierowane emocjami a nie analizą. To najszybsza droga do wyzerowania konta."
+          },
+          {
+            "question": "Co się dzieje w mózgu podczas FOMO?",
+            "options": [
+              "Kora przedczołowa przejmuje kontrolę",
+              "Układ nagrody dostaje spike dopaminy, kora przedczołowa wyłącza się",
+              "Amygdala uspokaja się",
+              "Nic specjalnego, to tylko błąd logiczny"
+            ],
+            "correct_answer": 1,
+            "explanation": "FOMO to neurobiologiczna reakcja: układ nagrody antycypuje zysk (dopamina), amygdala krzyczy o zagrożeniu straceniem okazji, a kora przedczołowa (logika) wyłącza się pod presją."
+          },
+          {
+            "question": "Najlepsza strategia walki z overconfidence po winning streak to:",
+            "options": [
+              "Zwiększ size, skoro jesteś 'na fali'",
+              "Przestań używać stop lossów, bo teraz 'wyczuwasz' rynek",
+              "Pamiętaj że bull market makes everyone look like genius i trzymaj się swojego systemu",
+              "All-in w najbardziej pewny trade"
+            ],
+            "correct_answer": 2,
+            "explanation": "Overconfidence po wygranych to pułapka. Właśnie wtedy jesteś najbardziej narażony na katastrofę. Trzymanie się systemu niezależnie od emocji to klucz do przetrwania."
+          },
+          {
+            "question": "Loss aversion to:",
+            "options": [
+              "Strach przed otwieraniem pozycji",
+              "Ból straty jest 2x silniejszy niż radość z zysku tej samej wartości",
+              "Unikanie tradingu po dużej stracie",
+              "Strategia zawsze wychodząca na stop lossie"
+            ],
+            "correct_answer": 1,
+            "explanation": "Loss aversion: mózg boli nas bardziej przy stracie niż cieszy przy zysku. To prowadzi do trzymania stratnych pozycji za długo ('może odbije') i szybkiego zamykania zyskownych ('nie chcę stracić zysku')."
+          },
+          {
+            "question": "Po dużej stracie najlepiej:",
+            "options": [
+              "Natychmiast all-in żeby odegrać",
+              "Zwiększyć size w następnym trade",
+              "Zrobić przerwę (spacer, trening), poczekać aż kortyzol spadnie (30-60 min)",
+              "Przeglądać Twitter szukając potwierdzenia swojej tezy"
+            ],
+            "correct_answer": 2,
+            "explanation": "Po stracie poziom kortyzolu (hormonu stresu) jest wysoki i wyłącza racjonalne myślenie. Potrzebujesz 30-60 minut fizycznej przerwy, żeby móc znowu podejmować dobre decyzje."
+          }
+        ]
+      }
+    }
+  },
+  
+  "summary": {
+    "main": "<div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: white;'>🎯 Gratulacje Degen!</h1><p style='font-size: 1.2rem; text-align: center;'>Ukończyłeś pierwszą lekcję z psychologii tradingu</p></div><div style='background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0;'><h3 style='color: #f5576c; margin-bottom: 20px;'>🧠 Czego się nauczyłeś:</h3><ul style='line-height: 1.8; margin-bottom: 0;'><li>✅ <strong>Neurobiologia ryzyka</strong> - jak trzy systemy mózgu walczą podczas każdego trade'u</li><li>✅ <strong>5 kluczowych cognitive biases</strong> - loss aversion, confirmation bias, recency bias, anchoring, overconfidence</li><li>✅ <strong>FOMO i Revenge Trading</strong> - najtrudniejsze emocje i jak je kontrolować</li><li>✅ <strong>Praktyczne techniki</strong> - trading journal, breathing exercises, position sizing matrix</li><li>✅ <strong>Daily routine</strong> - pre-trading checklist i red flags</li></ul></div><div style='background: #e3f2fd; padding: 25px; border-radius: 10px; margin: 20px 0;'><h3 style='color: #1976d2; margin-bottom: 20px;'>💡 Kluczowe Wnioski:</h3><div style='background: white; padding: 20px; border-radius: 8px; margin: 10px 0;'><p style='margin: 0;'><strong>1.</strong> Nie jesteś swoimi emocjami. Rozpoznaj je, nazwij je, ale nie pozwól im podejmować decyzji.</p></div><div style='background: white; padding: 20px; border-radius: 8px; margin: 10px 0;'><p style='margin: 0;'><strong>2.</strong> Najlepsze trade'y to te bez presji czasowej i emocjonalnej. Jeśli czujesz 'muszę' - to red flag.</p></div><div style='background: white; padding: 20px; border-radius: 8px; margin: 10px 0;'><p style='margin: 0;'><strong>3.</strong> System > Emocje. Zbuduj zasady i trzymaj się ich niezależnie od stanu emocjonalnego.</p></div></div><div style='background: #fff3cd; padding: 25px; border-radius: 10px; margin: 20px 0;'><h3 style='color: #856404; margin-bottom: 15px;'>📝 Twoje Zadania na Następny Tydzień:</h3><ol style='line-height: 1.8;'><li>📓 Załóż trading journal i zapisuj KAŻDY trade (tech + emotions)</li><li>🫁 Praktykuj 4-7-8 breathing przed każdą sesją</li><li>🚨 Ustaw daily loss limit i TRZYMAJ SIĘ GO</li><li>⏸️ Po każdej stracie - 30 min break, zero dyskusji</li><li>📊 Analizuj biases - który wpływa na Ciebie najczęściej?</li></ol></div><div style='background: linear-gradient(135deg, #28a745 0%, #20c997 100%); padding: 25px; border-radius: 10px; color: white; text-align: center; margin: 30px 0;'><h3 style='color: white; margin-bottom: 15px;'>🚀 Następna Lekcja</h3><p style='margin-bottom: 0; font-size: 1.1rem;'><strong>Risk Management & Position Sizing</strong><br>Jak zarządzać kapitałem, żeby przetrwać długoterminowo</p></div>",
+    "key_points": [
+      "Trzy systemy mózgu: emocjonalny (szybki, instynktowny), racjonalny (wolny, analityczny), nagrody (motywacja, dopamina)",
+      "Najczęstsze biases: loss aversion, confirmation bias, recency bias, anchoring, overconfidence",
+      "FOMO i Revenge Trading to najtrudniejsze emocje - walcz z nimi systemem, nie silną wolą",
+      "Trading journal to najpotężniejsze narzędzie development - zapisuj tech + emotions",
+      "System kontroli: daily loss limit, breathing exercises, pre-trading checklist, physical breaks po stratach"
+    ],
+    "next_steps": [
+      "Załóż trading journal i zapisz co najmniej 10 trade'ów z pełną dokumentacją psychologiczną",
+      "Przećwicz breathing technique 4-7-8 rano przez tydzień, żeby zautomatyzować",
+      "Stwórz swój position sizing matrix uwzględniający stan emocjonalny",
+      "Przeanalizuj ostatnie 20 trade'ów - które biasy wpłynęły na decyzje?",
+      "Zaimplementuj daily loss limit i przetestuj przez miesiąc"
+    ],
+    "resources": [
+      {
+        "title": "Trading in the Zone - Mark Douglas",
+        "url": "https://example.com/trading-zone",
+        "type": "book"
+      },
+      {
+        "title": "Thinking, Fast and Slow - Daniel Kahneman",
+        "url": "https://example.com/thinking-fast-slow",
+        "type": "book"
+      },
+      {
+        "title": "The Psychology of Money - Morgan Housel",
+        "url": "https://example.com/psychology-money",
+        "type": "book"
+      },
+      {
+        "title": "Behavioral Finance Research",
+        "url": "https://example.com/behavioral-finance",
+        "type": "article"
+      }
+    ]
+  },
+  
+  "estimated_time": "35-40 minutes",
+  "learning_objectives": [
+    "Zrozumieć neurobiologię podejmowania ryzyka i rolę trzech systemów mózgu",
+    "Rozpoznać 5 kluczowych cognitive biases wpływających na trading",
+    "Opanować techniki kontroli FOMO i Revenge Trading",
+    "Stworzyć własny trading journal z sekcją psychologiczną",
+    "Zaimplementować system kontroli emocji (checklist, breathing, loss limits)"
+  ],
+  "prerequisites": [],
+  "tags": ["degen", "trading", "psychology", "emotions", "risk", "cognitive_biases", "FOMO", "revenge_trading"]
+}

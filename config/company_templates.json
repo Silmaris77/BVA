@@ -135,6 +135,50 @@
       "visible_in_global": false
     }
   },
+  "Degen": {
+    "display_name": "Degen",
+    "content": {
+      "lessons": [
+        "DEGEN_1_Trading_Psychology"
+      ],
+      "tests": [
+        "degen_knowledge",
+        "trading_skills"
+      ],
+      "business_games": {
+        "scenarios": [
+          "degen_trading_challenge",
+          "degen_portfolio_management",
+          "degen_market_timing"
+        ],
+        "types": ["Trading", "Crypto", "Investment"]
+      },
+      "inspirations": [
+        "trading",
+        "crypto",
+        "investments",
+        "risk_taking",
+        "financial_psychology"
+      ]
+    },
+    "tools": {
+      "dashboard": true,
+      "profile": true,
+      "learn": true,
+      "inspirations": true,
+      "practice": true,
+      "business_games": true,
+      "shop": true,
+      "admin_panel": false,
+      "personality_tests": true,
+      "rankings": true,
+      "notes": true
+    },
+    "ranking": {
+      "scope": "company",
+      "visible_in_global": true
+    }
+  },
   "_default": {
     "display_name": "Standard",
     "content": {

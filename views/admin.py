@@ -442,7 +442,7 @@ def show_admin_dashboard():
         st.rerun()
     
     # Zakładki główne panelu administratora
-    admin_tabs = st.tabs(["Przegląd", "Użytkownicy", "Lekcje", "Dostępność", "Testy", "Zarządzanie", "Business Games"])
+    admin_tabs = st.tabs(["Przegląd", "Użytkownicy", "Lekcje", "Testy", "Zarządzanie", "Business Games", "Tagowanie Zasobów"])
     
     # 1. Zakładka Przegląd
     with admin_tabs[0]:
@@ -547,58 +547,66 @@ def show_admin_dashboard():
     
     # 2. Zakładka Użytkownicy
     with admin_tabs[1]:
-        st.subheader("Szczegóły użytkowników")
+        # Sub-zakładki: Lista użytkowników / Edycja użytkownika
+        user_subtabs = st.tabs(["👥 Lista użytkowników", "✏️ Edycja użytkownika"])
         
-        # Pobierz dane
-        user_df = get_user_activity_data()
-        
-        # Filtrowanie użytkowników
-        filter_cols = st.columns(3)
-        with filter_cols[0]:
-            min_xp = st.number_input("Min XP", min_value=0, value=0)
-        with filter_cols[1]:
-            neuroleader_filter = st.selectbox("Filtruj wg typu neuroleader", 
-                                       options=["Wszystkie"] + list(user_df['neuroleader_type'].unique()))
-        with filter_cols[2]:
-            sort_by = st.selectbox("Sortuj wg", 
-                                   options=["xp", "level", "completed_lessons", "username"])
-        
-        # Zastosuj filtry
-        filtered_df = user_df
-        if min_xp > 0:
-            filtered_df = filtered_df[filtered_df['xp'] >= min_xp]
-        
-        if neuroleader_filter != "Wszystkie":
-            filtered_df = filtered_df[filtered_df['neuroleader_type'] == neuroleader_filter]
-        
-        # Sortuj dane
-        filtered_df = filtered_df.sort_values(by=sort_by, ascending=False)
-          # Wyświetl tabelę użytkowników
-        st.dataframe(
-            filtered_df,
-            column_config={
-                "username": "Nazwa użytkownika",
-                "xp": "XP",
-                "level": "Poziom",
-                "completed_lessons": "Ukończone lekcje",
-                "neuroleader_type": "Typ neuroleader",
-                "registration_date": "Data rejestracji",
-                "last_login": "Ostatnie logowanie",
-                "test_taken": "Test wykonany",
-                "streak": "Seria dni"
-            },
-            use_container_width=True
-        )
-        
-        # Dodaj opcję eksportu danych
-        if zen_button("Eksportuj dane użytkowników do CSV"):
-            csv = filtered_df.to_csv(index=False)
-            st.download_button(
-                label="Pobierz CSV",
-                data=csv,
-                file_name="users_data.csv",
-                mime="text/csv"
+        with user_subtabs[0]:
+            st.subheader("Szczegóły użytkowników")
+            
+            # Pobierz dane
+            user_df = get_user_activity_data()
+            
+            # Filtrowanie użytkowników
+            filter_cols = st.columns(3)
+            with filter_cols[0]:
+                min_xp = st.number_input("Min XP", min_value=0, value=0)
+            with filter_cols[1]:
+                neuroleader_filter = st.selectbox("Filtruj wg typu neuroleader", 
+                                           options=["Wszystkie"] + list(user_df['neuroleader_type'].unique()))
+            with filter_cols[2]:
+                sort_by = st.selectbox("Sortuj wg", 
+                                       options=["xp", "level", "completed_lessons", "username"])
+            
+            # Zastosuj filtry
+            filtered_df = user_df
+            if min_xp > 0:
+                filtered_df = filtered_df[filtered_df['xp'] >= min_xp]
+            
+            if neuroleader_filter != "Wszystkie":
+                filtered_df = filtered_df[filtered_df['neuroleader_type'] == neuroleader_filter]
+            
+            # Sortuj dane
+            filtered_df = filtered_df.sort_values(by=sort_by, ascending=False)
+            
+            # Wyświetl tabelę użytkowników
+            st.dataframe(
+                filtered_df,
+                column_config={
+                    "username": "Nazwa użytkownika",
+                    "xp": "XP",
+                    "level": "Poziom",
+                    "completed_lessons": "Ukończone lekcje",
+                    "neuroleader_type": "Typ neuroleader",
+                    "registration_date": "Data rejestracji",
+                    "last_login": "Ostatnie logowanie",
+                    "test_taken": "Test wykonany",
+                    "streak": "Seria dni"
+                },
+                use_container_width=True
             )
+        
+            # Dodaj opcję eksportu danych
+            if zen_button("Eksportuj dane użytkowników do CSV"):
+                csv = filtered_df.to_csv(index=False)
+                st.download_button(
+                    label="Pobierz CSV",
+                    data=csv,
+                    file_name="users_data.csv",
+                    mime="text/csv"
+                )
+        
+        with user_subtabs[1]:
+            show_user_edit_panel()
     
     # 3. Zakładka Lekcje
     with admin_tabs[2]:
@@ -651,12 +659,8 @@ def show_admin_dashboard():
         else:
             st.info("Brak danych o ukończonych lekcjach.")
     
-    # 4. Zakładka Dostępność lekcji
+    # 4. Zakładka Testy (poprzednio 5)
     with admin_tabs[3]:
-        manage_lesson_access()
-    
-    # 5. Zakładka Testy
-    with admin_tabs[4]:
         st.subheader("Wyniki testów Neurolidera")
         
         # Pobierz dane o użytkownikach
@@ -964,8 +968,8 @@ def show_admin_dashboard():
         else:
             st.info("Brak użytkowników, którzy ukończyli test stylów uczenia się Kolba.")
     
-    # 6. Zakładka Zarządzanie
-    with admin_tabs[5]:
+    # 5. Zakładka Zarządzanie (poprzednio 6)
+    with admin_tabs[4]:
         st.subheader("Zarządzanie użytkownikami")
         
         # === TWORZENIE NOWEGO UŻYTKOWNIKA ===
@@ -1079,122 +1083,24 @@ def show_admin_dashboard():
                 mime="application/json"
             )
     
-    # 7. Zakładka Business Games
-    with admin_tabs[6]:
+    # 6. Zakładka Business Games (poprzednio 7)
+    with admin_tabs[5]:
         show_business_games_admin_panel()
+    
+    # 7. Zakładka Tagowanie Zasobów (poprzednio 8)
+    with admin_tabs[6]:
+        show_resource_tagging_panel()
 
 def manage_lesson_access():
-    """Panel zarządzania dostępnością lekcji dla użytkowników"""
-    st.subheader("🔐 Zarządzanie dostępnością lekcji")
+    """
+    DEPRECATED: Stary system zarządzania dostępnością lekcji
+    Zastąpiony przez system tagowania zasobów (zakładka "Tagowanie Zasobów")
+    """
+    st.warning("⚠️ Ta funkcja została zastąpiona przez nowy system tagowania zasobów.")
+    st.info("👉 Użyj zakładki **'Tagowanie Zasobów'** do zarządzania dostępem do lekcji.")
     
-    users_data = load_user_data()
-    lessons = load_lessons()
-    
-    if not users_data:
-        st.warning("Brak danych użytkowników.")
-        return
-    
-    if not lessons:
-        st.warning("Brak danych lekcji.")
-        return
-    
-    # Wybór użytkownika
-    usernames = list(users_data.keys())
-    selected_user = st.selectbox("Wybierz użytkownika:", usernames)
-    
-    if selected_user:
-        st.write(f"**Zarządzanie dostępem dla: {selected_user}**")
-        
-        # Sprawdź czy użytkownik ma już dane o dostępności lekcji
-        if 'lesson_access' not in users_data[selected_user]:
-            users_data[selected_user]['lesson_access'] = {}
-        
-        lesson_access = users_data[selected_user]['lesson_access']
-        
-        # Wyświetl wszystkie lekcje z checkboxami
-        st.write("**Dostępne lekcje:**")
-        
-        changes_made = False
-        
-        # Utwórz kolumny dla lepszego układu
-        col1, col2 = st.columns([3, 1])
-        
-        for lesson_id, lesson_data in lessons.items():
-            lesson_title = lesson_data.get('title', lesson_id)
-            
-            with col1:
-                st.write(f"📚 {lesson_title}")
-            
-            with col2:
-                # Sprawdź aktualny status (domyślnie True jeśli nie ustawiono)
-                current_status = lesson_access.get(lesson_id, True)
-                
-                # Checkbox do zmiany statusu
-                new_status = st.checkbox(
-                    "Dostępna", 
-                    value=current_status,
-                    key=f"lesson_access_{selected_user}_{lesson_id}"
-                )
-                
-                # Sprawdź czy nastąpiła zmiana
-                if new_status != current_status:
-                    lesson_access[lesson_id] = new_status
-                    changes_made = True
-        
-        # Przycisk zapisywania zmian
-        if changes_made:
-            st.warning("⚠️ Masz niezapisane zmiany!")
-        
-        if st.button("💾 Zapisz zmiany dostępności", type="primary"):
-            try:
-                users_data[selected_user]['lesson_access'] = lesson_access
-                save_user_data(users_data)
-                st.success(f"✅ Zapisano zmiany dostępności lekcji dla użytkownika {selected_user}")
-                time.sleep(1)
-                st.rerun()
-            except Exception as e:
-                st.error(f"❌ Błąd podczas zapisywania: {str(e)}")
-        
-        # Pokaż aktualny status dostępności
-        st.write("**Aktualny status dostępności:**")
-        accessible_lessons = [lesson_id for lesson_id, access in lesson_access.items() if access]
-        blocked_lessons = [lesson_id for lesson_id, access in lesson_access.items() if not access]
-        
-        if accessible_lessons:
-            st.write("✅ **Dostępne lekcje:**")
-            for lesson_id in accessible_lessons:
-                lesson_title = lessons.get(lesson_id, {}).get('title', lesson_id)
-                st.write(f"  • {lesson_title}")
-        
-        if blocked_lessons:
-            st.write("🔒 **Zablokowane lekcje:**")
-            for lesson_id in blocked_lessons:
-                lesson_title = lessons.get(lesson_id, {}).get('title', lesson_id)
-                st.write(f"  • {lesson_title}")
-        
-        # Szybkie akcje
-        st.write("**Szybkie akcje:**")
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            if st.button("🔓 Odblokuj wszystkie lekcje"):
-                for lesson_id in lessons.keys():
-                    lesson_access[lesson_id] = True
-                users_data[selected_user]['lesson_access'] = lesson_access
-                save_user_data(users_data)
-                st.success("Odblokowano wszystkie lekcje!")
-                time.sleep(1)
-                st.rerun()
-        
-        with col2:
-            if st.button("🔒 Zablokuj wszystkie lekcje"):
-                for lesson_id in lessons.keys():
-                    lesson_access[lesson_id] = False
-                users_data[selected_user]['lesson_access'] = lesson_access
-                save_user_data(users_data)
-                st.success("Zablokowano wszystkie lekcje!")
-                time.sleep(1)
-                st.rerun()
+    if st.button("Przejdź do Tagowania Zasobów"):
+        st.rerun()
 
 def show_business_games_admin_panel():
     """Panel administracyjny Business Games"""
@@ -1508,22 +1414,22 @@ def show_business_games_admin_panel():
 
 
 def get_lesson_access_status(username, lesson_id):
-    """Sprawdź czy użytkownik ma dostęp do lekcji - nowy system z utils/permissions.py"""
-    from utils.permissions import has_access_to_lesson
-    from data.repositories.user_repository import UserRepository
+    """Sprawdź czy użytkownik ma dostęp do lekcji - NOWY SYSTEM tagowania"""
+    from utils.resource_access import has_access_to_resource
     from database.connection import session_scope
     
     try:
         from database.models import User
         with session_scope() as session:
-            user_repo = UserRepository(session)
             user = session.query(User).filter_by(username=username).first()
             
             if not user:
                 return True  # Domyślnie dostępne dla nowych użytkowników
             
             user_data = user.to_dict()
-            return has_access_to_lesson(lesson_id, user_data)
+            
+            # NOWY SYSTEM: sprawdź tagi zasobu
+            return has_access_to_resource('lessons', lesson_id, user_data)
     except Exception as e:
         print(f"Error checking lesson access: {e}")
         return True  # Domyślnie dostępne przy błędzie
@@ -1533,29 +1439,254 @@ def is_lesson_accessible(username, lesson_id):
     return get_lesson_access_status(username, lesson_id)
 
 def initialize_lesson_access_for_user(username):
-    """Zainicjalizuj domyślny dostęp do lekcji dla nowego użytkownika"""
-    users_data = load_user_data()
+    """
+    DEPRECATED: Stary system inicjalizacji dostępu do lekcji
+    Zastąpiony przez system tagowania zasobów (resource_tags.json)
+    Funkcja zachowana dla kompatybilności wstecznej, ale nie robi nic.
+    """
+    # Nowy system nie wymaga inicjalizacji - używa tagów z resource_tags.json
+    return True
+
+
+def show_user_edit_panel():
+    """Panel edycji użytkowników - zmiana company i custom permissions"""
+    st.subheader("✏️ Edycja Użytkowników")
     
-    if username not in users_data:
-        return False
+    from database.models import User
+    from database.connection import session_scope
+    from utils.resource_access import get_all_companies
     
-    if 'lesson_access' not in users_data[username]:
+    # Pobierz listę użytkowników z SQL
+    try:
+        with session_scope() as session:
+            users = session.query(User).all()
+            
+            if not users:
+                st.info("Brak użytkowników w systemie.")
+                return
+            
+            # Wybór użytkownika
+            user_options = {u.username: u for u in users}
+            selected_username = st.selectbox(
+                "Wybierz użytkownika do edycji:",
+                options=list(user_options.keys())
+            )
+            
+            if selected_username:
+                user = user_options[selected_username]
+                
+                st.markdown("---")
+                st.markdown(f"### Edycja: **{user.username}**")
+                
+                # Informacje podstawowe
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.metric("XP", user.xp)
+                    st.metric("Level", user.level)
+                with col2:
+                    st.metric("Utworzone przez", user.account_created_by or "Rejestracja")
+                    st.metric("Ostatnie logowanie", user.last_login.strftime("%Y-%m-%d %H:%M") if user.last_login else "Nigdy")
+                
+                st.markdown("---")
+                
+                # Edycja company
+                st.markdown("#### 🏢 Przypisanie do grupy")
+                companies = get_all_companies()
+                company_names = {c['display_name']: c['code'] for c in companies}
+                current_company_name = next((c['display_name'] for c in companies if c['code'] == user.company), "Ogólne")
+                
+                new_company_name = st.selectbox(
+                    "Grupa użytkownika:",
+                    options=list(company_names.keys()),
+                    index=list(company_names.keys()).index(current_company_name) if current_company_name in company_names.keys() else 0
+                )
+                new_company_code = company_names[new_company_name]
+                
+                # Niestandardowe uprawnienia
+                st.markdown("#### ⚙️ Niestandardowe uprawnienia (opcjonalne)")
+                use_custom_permissions = st.checkbox(
+                    "Użyj niestandardowych uprawnień zamiast szablonu grupy",
+                    value=bool(user.permissions)
+                )
+                
+                custom_permissions = None
+                if use_custom_permissions:
+                    st.warning("⚠️ Niestandardowe uprawnienia nadpiszą szablon grupy")
+                    
+                    # Edytor JSON dla permissions
+                    current_permissions = user.permissions or {}
+                    permissions_json = st.text_area(
+                        "Uprawnienia (JSON):",
+                        value=json.dumps(current_permissions, indent=2, ensure_ascii=False),
+                        height=300
+                    )
+                    
+                    try:
+                        custom_permissions = json.loads(permissions_json)
+                    except json.JSONDecodeError as e:
+                        st.error(f"Błąd w JSON: {e}")
+                        custom_permissions = None
+                
+                # Przycisk zapisu
+                st.markdown("---")
+                if st.button("💾 Zapisz zmiany", type="primary", use_container_width=True):
+                    try:
+                        # Aktualizuj dane użytkownika
+                        user.company = new_company_code
+                        if use_custom_permissions and custom_permissions is not None:
+                            user.permissions = custom_permissions
+                        else:
+                            user.permissions = None  # Użyje szablonu grupy
+                        
+                        session.commit()
+                        st.success(f"✅ Zaktualizowano użytkownika {user.username}")
+                        time.sleep(1)
+                        st.rerun()
+                    except Exception as e:
+                        session.rollback()
+                        st.error(f"❌ Błąd podczas zapisywania: {e}")
+                
+                # Podgląd uprawnień
+                st.markdown("---")
+                st.markdown("#### 👁️ Podgląd uprawnień")
+                
+                from utils.permissions import get_user_permissions
+                final_permissions = get_user_permissions(user.to_dict())
+                
+                st.json(final_permissions)
+                
+    except Exception as e:
+        st.error(f"Błąd: {e}")
+
+
+def show_resource_tagging_panel():
+    """Panel tagowania zasobów - przypisywanie lekcji/inspiracji/BG do grup"""
+    st.subheader("🏷️ Tagowanie Zasobów")
+    
+    from utils.resource_access import (
+        load_resource_tags, save_resource_tags, 
+        get_all_companies, get_resource_tags, set_resource_tags,
+        clear_resource_tags_cache
+    )
+    
+    # Przycisk do wymuszonego przeładowania cache
+    col1, col2 = st.columns([3, 1])
+    with col2:
+        if st.button("🔄 Reload Cache", help="Wymusza ponowne załadowanie tagów z pliku"):
+            clear_resource_tags_cache()
+            st.success("Cache wyczyszczony!")
+            st.rerun()
+    from data.lessons import load_lessons
+    
+    st.markdown("""
+    Przypisuj zasoby (lekcje, inspiracje, scenariusze) do grup użytkowników.
+    
+    - **General** = dostępne dla wszystkich
+    - **Warta/Heinz/Milwaukee/Degen** = tylko dla danej grupy
+    """)
+    
+    # Wybór typu zasobu
+    resource_type_options = {
+        "📚 Lekcje": "lessons",
+        "💡 Inspiracje (kategorie)": "inspirations_categories",
+        "🎮 Business Games (scenariusze)": "business_games_scenarios",
+        "🎯 Business Games (typy)": "business_games_types"
+    }
+    
+    selected_type_name = st.selectbox("Wybierz typ zasobu:", list(resource_type_options.keys()))
+    resource_type = resource_type_options[selected_type_name]
+    
+    # Pobierz listę zasobów
+    tags_data = load_resource_tags()
+    resources_dict = tags_data.get(resource_type, {})
+    
+    # Dla lekcji pobierz z plików
+    if resource_type == "lessons":
         lessons = load_lessons()
-        users_data[username]['lesson_access'] = {}
-        
-        # Domyślnie wszystkie lekcje dostępne, ale można to zmienić
-        for lesson_id in lessons.keys():
-            # Specjalne reguły: np. "Wprowadzenie" dostępne zawsze, reszta może być zablokowana
-            if "Wprowadzenie" in lesson_id or "wprowadzenie" in lesson_id.lower():
-                users_data[username]['lesson_access'][lesson_id] = True
-            else:
-                # Dla przykładu: blokuj "Mózg emocjonalny" domyślnie
-                if "Mózg emocjonalny" in lesson_id:
-                    users_data[username]['lesson_access'][lesson_id] = False
-                else:
-                    users_data[username]['lesson_access'][lesson_id] = True
-        
-        save_user_data(users_data)
-        return True
+        resource_ids = list(lessons.keys())
+        resource_display = {lid: lessons[lid].get('title', lid) for lid in resource_ids}
+    else:
+        resource_ids = list(resources_dict.keys())
+        resource_display = {rid: rid for rid in resource_ids}
     
-    return False
+    if not resource_ids:
+        st.info(f"Brak zasobów typu {selected_type_name}")
+        
+        # Możliwość dodania nowego
+        st.markdown("---")
+        st.markdown("#### ➕ Dodaj nowy zasób")
+        new_resource_id = st.text_input("ID zasobu:")
+        if st.button("Dodaj") and new_resource_id:
+            if new_resource_id not in resources_dict:
+                set_resource_tags(resource_type, new_resource_id, ["General"])
+                st.success(f"Dodano: {new_resource_id}")
+                time.sleep(1)
+                st.rerun()
+            else:
+                st.error("Ten zasób już istnieje!")
+        return
+    
+    # Wybór zasobu do edycji
+    selected_resource = st.selectbox(
+        "Wybierz zasób do edycji:",
+        options=resource_ids,
+        format_func=lambda x: resource_display.get(x, x)
+    )
+    
+    if selected_resource:
+        st.markdown("---")
+        st.markdown(f"### Edycja tagów: **{resource_display.get(selected_resource, selected_resource)}**")
+        
+        # Pobierz aktualne tagi
+        current_tags = get_resource_tags(resource_type, selected_resource)
+        
+        # Wyświetl checkboxy dla każdej grupy
+        companies = get_all_companies()
+        new_tags = []
+        
+        st.markdown("**Zaznacz grupy, które mają dostęp:**")
+        
+        cols = st.columns(len(companies))
+        for idx, company in enumerate(companies):
+            with cols[idx]:
+                is_checked = company['code'] in current_tags
+                if st.checkbox(
+                    company['display_name'],
+                    value=is_checked,
+                    key=f"tag_{resource_type}_{selected_resource}_{company['code']}"
+                ):
+                    new_tags.append(company['code'])
+        
+        # Pokaż aktualny stan
+        st.markdown("---")
+        st.markdown("**Aktualne tagi:**")
+        if current_tags:
+            tag_labels = [next((c['display_name'] for c in companies if c['code'] == tag), tag) for tag in current_tags]
+            st.info(", ".join(tag_labels))
+        else:
+            st.warning("Brak tagów (zasób niedostępny dla nikogo!)")
+        
+        # Przycisk zapisu
+        if st.button("💾 Zapisz tagi", type="primary", use_container_width=True):
+            if not new_tags:
+                st.error("Musisz wybrać przynajmniej jedną grupę!")
+            else:
+                if set_resource_tags(resource_type, selected_resource, new_tags):
+                    st.success(f"✅ Zaktualizowano tagi dla {selected_resource}")
+                    time.sleep(1)
+                    st.rerun()
+                else:
+                    st.error("❌ Błąd podczas zapisywania tagów")
+    
+    # Szybki podgląd wszystkich tagów
+    st.markdown("---")
+    st.markdown("### 📋 Przegląd wszystkich tagów")
+    
+    if st.checkbox("Pokaż wszystkie tagi"):
+        companies = get_all_companies()
+        company_display = {c['code']: c['display_name'] for c in companies}
+        
+        for resource_id in resource_ids:
+            tags = get_resource_tags(resource_type, resource_id)
+            tag_labels = [company_display.get(tag, tag) for tag in tags]
+            st.write(f"**{resource_display.get(resource_id, resource_id)}**: {', '.join(tag_labels)}")
