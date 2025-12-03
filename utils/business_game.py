@@ -525,9 +525,59 @@ def initialize_fmcg_game_new(username: str, scenario: str = "quick_start") -> Di
         
         # Załaduj klientów Heinz Food Service
         heinz_clients = load_heinz_clients()
+        
+        # CLEAN STATE FOR NEW PLAYER - remove demo data
+        # The JSON file contains example conviction_data for demonstration,
+        # but new players should start with clean slate
+        for client_id, client_data in heinz_clients.items():
+            # Set explicit PROSPECT status (critical - prevents fallback to ACTIVE)
+            client_data["status"] = "PROSPECT_NOT_CONTACTED"  # Changed from PROSPECT
+            client_data["status_since"] = datetime.now().isoformat()
+            
+            # Clear conviction progress (keep conviction_data structure but reset to empty)
+            if "conviction_data" in client_data:
+                client_data["conviction_data"] = {}  # Completely empty - no products in progress
+            
+            # Clear convinced products (no won products on start)
+            # CRITICAL: Must be empty dict to prevent has_active_products check
+            client_data["convinced_products"] = {}
+            
+            # Clear current competitors - no Heinz products mentioned
+            if "current_competitors" in client_data:
+                # Reset to generic competitors (no "Heinz (przekonano!)" mentions)
+                client_data["current_competitors"] = {
+                    "ketchup": "Kotlin/Develey",
+                    "majonez": "Winiary/Develey",
+                    "bbq_sauce": "brak"
+                }
+            
+            # Clear notes about Heinz products
+            if "notes" in client_data:
+                # Remove any mentions of Heinz/convinced
+                notes = client_data["notes"]
+                notes = notes.replace("Przekonana do Heinz", "Potencjalny klient")
+                notes = notes.replace("przekonano", "do przekonania")
+                notes = notes.replace("Heinz", "premium produkty")
+                notes = notes.replace("(przekonano!)", "")
+                client_data["notes"] = notes
+            
+            # Reset visit data to 0 (NOT contacted)
+            client_data["visits_count"] = 0
+            client_data["last_visit_date"] = None
+            client_data["first_contact_date"] = None
+            
+            # Reset reputation to neutral starting value (0-100 scale)
+            client_data["reputation"] = 50  # Neutral starting reputation
+            
+            # Reset relationship score to starting value
+            client_data["relationship_score"] = 50  # Neutral relationship (affects 30% of rep)
+            
+            # Clear visit history (no past visits)
+            client_data["visit_history"] = []
+        
         game_state["clients"] = heinz_clients
-        game_state["clients_prospect"] = len([c for c in heinz_clients.values() if not c.get("convinced_products")])
-        game_state["clients_active"] = len([c for c in heinz_clients.values() if c.get("convinced_products")])
+        game_state["clients_prospect"] = len(heinz_clients)  # All start as PROSPECT
+        game_state["clients_active"] = 0  # None are active yet
         
         scenario_id = "fmcg_heinz_food_service_v1"
         
@@ -558,6 +608,9 @@ def initialize_fmcg_game_new(username: str, scenario: str = "quick_start") -> Di
     
     # Add reputation to game_state
     game_state["reputation"] = reputation_data
+    
+    # Add scenario_id to game_state (for easy access in UI)
+    game_state["scenario_id"] = scenario_id
     
     # Zwróć kompletny stan gry
     return {

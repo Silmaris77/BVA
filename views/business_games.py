@@ -405,8 +405,14 @@ def render_industry_card(industry_id, title, slogan, description, features, avai
             if has_progress:
                 st.session_state["bg_view"] = "game"
             else:
-                # Nie ma gry → pokaż selektor scenariuszy
-                st.session_state["bg_view"] = "scenario_selector"
+                # FMCG ma własny selektor scenariuszy wbudowany w fmcg_playable.py
+                # Inne branże używają ogólnego show_scenario_selector()
+                if industry_id == "fmcg":
+                    # FMCG: Idź od razu do gry, tam jest selektor scenariuszy
+                    st.session_state["bg_view"] = "game"
+                else:
+                    # Inne branże: Pokaż ogólny selektor scenariuszy
+                    st.session_state["bg_view"] = "scenario_selector"
             
             st.rerun()
     else:

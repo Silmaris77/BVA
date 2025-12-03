@@ -58,12 +58,17 @@ def initialize_reputation_system() -> Dict:
     }
     
     # Calculate initial overall_rating based on starting values
-    # Client Rep = 0 (no clients), Company Rep = 30 (only professionalism 100 × 0.30)
-    # Overall = (0 × 0.60) + (30 × 0.40) = 12
-    company_rep_initial = 100 * 0.30  # professionalism only
-    overall_rating_initial = (0 * 0.60) + (company_rep_initial * 0.40)
+    # Company Rep = 30 (only professionalism 100 × 0.30)
+    # Company Points = 30 × 0.5 = 15
+    # Client Points = 0 (no contacted clients)
+    # Overall = 15 + 0 = 15
+    company_rep_initial = 100 * 0.30  # professionalism only = 30
+    company_points_initial = company_rep_initial * 0.5  # 30 × 0.5 = 15
+    overall_rating_initial = company_points_initial + 0  # 15 + 0 = 15
     
-    initial_state["overall_rating"] = round(overall_rating_initial, 1)  # 12.0
+    initial_state["overall_rating"] = round(overall_rating_initial, 1)  # 15.0
+    initial_state["company_points"] = round(company_points_initial, 1)  # 15.0
+    initial_state["client_points"] = 0.0  # No contacted clients
     
     return initial_state
 
@@ -156,14 +161,30 @@ def get_client_weight(client: Dict) -> float:
     status = client.get("status")
     if not status:
         # New Heinz structure - determine from convinced_products
-        if client.get("convinced_products"):
+        # Client is ACTIVE only if has products with ordering_status="active" (not just in_progress)
+        convinced = client.get("convinced_products", {})
+        has_active_products = any(
+            prod.get("ordering_status") == "active" 
+            for prod in convinced.values() 
+            if isinstance(prod, dict)
+        )
+        
+        if has_active_products:
             status = "ACTIVE"
         else:
+            # Has conviction_data (in progress) but no won products yet = still PROSPECT
             status = "PROSPECT"
     
-    # PROSPECT not contacted has 0 weight
-    if status == "PROSPECT" and not is_client_contacted(client):
+    # PROSPECT not contacted has 0 weight (includes PROSPECT_NOT_CONTACTED status)
+    if "PROSPECT" in status and not is_client_contacted(client):
         return 0.0
+    
+    # Map status to weight (handles both PROSPECT and PROSPECT_NOT_CONTACTED)
+    if status == "PROSPECT_NOT_CONTACTED":
+        return 0.0
+    elif "PROSPECT" in status:
+        # PROSPECT_CONTACTED (has visits)
+        return CLIENT_REPUTATION_WEIGHTS.get("PROSPECT_CONTACTED", 0.5)
     
     return CLIENT_REPUTATION_WEIGHTS.get(status, 0.5)
 
@@ -226,17 +247,21 @@ def calculate_average_client_reputation(game_state: Dict, clients: Dict = None) 
             breakdown["PROSPECT_NOT_CONTACTED"] += 1
             continue
         
-        # Get status for breakdown
+        # Get status for breakdown - use same logic as get_client_weight
         status = client_data.get("status")
         if not status:
-            # New Heinz structure
-            if client_data.get("convinced_products"):
+            # New Heinz structure - determine from convinced_products
+            convinced = client_data.get("convinced_products", {})
+            has_active_products = any(
+                prod.get("ordering_status") == "active" 
+                for prod in convinced.values() 
+                if isinstance(prod, dict)
+            )
+            
+            if has_active_products:
                 status = "ACTIVE"
             else:
                 status = "PROSPECT"
-        
-        # Check if contacted (for breakdown)
-        contacted = is_client_contacted(client_data)
         
         # Calculate reputation score
         rep_score = calculate_client_reputation(client_data, game_state)

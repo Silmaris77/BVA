@@ -193,3 +193,98 @@
 [2025-11-10 21:16:59] DEFAULT_EVALUATION_MODE = ai
 [2025-11-10 21:16:59] Plik config/business_games_active_mode.json istnieje
 [2025-11-10 21:16:59] Z pliku odczytano tryb: 'ai'
+[2025-11-16 17:25:08] get_active_evaluation_mode() wywołane
+[2025-11-16 17:25:08] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-16 17:25:09] DEFAULT_EVALUATION_MODE = ai
+[2025-11-16 17:25:09] Plik config/business_games_active_mode.json istnieje
+[2025-11-16 17:25:09] Z pliku odczytano tryb: 'ai'
+[2025-11-17 01:37:54] get_active_evaluation_mode() wywołane
+[2025-11-17 01:37:54] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-17 01:37:54] DEFAULT_EVALUATION_MODE = ai
+[2025-11-17 01:37:54] Plik config/business_games_active_mode.json istnieje
+[2025-11-17 01:37:55] Z pliku odczytano tryb: 'ai'
+[2025-11-17 01:38:32] get_active_evaluation_mode() wywołane
+[2025-11-17 01:38:32] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-17 01:38:32] DEFAULT_EVALUATION_MODE = ai
+[2025-11-17 01:38:32] Plik config/business_games_active_mode.json istnieje
+[2025-11-17 01:38:32] Z pliku odczytano tryb: 'ai'
+[2025-11-17 01:38:39] get_active_evaluation_mode() wywołane
+[2025-11-17 01:38:39] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-17 01:38:39] DEFAULT_EVALUATION_MODE = ai
+[2025-11-17 01:38:39] Plik config/business_games_active_mode.json istnieje
+[2025-11-17 01:38:39] Z pliku odczytano tryb: 'ai'
+[2025-11-17 01:38:45] get_active_evaluation_mode() wywołane
+[2025-11-17 01:38:45] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-17 01:38:45] DEFAULT_EVALUATION_MODE = ai
+[2025-11-17 01:38:45] Plik config/business_games_active_mode.json istnieje
+[2025-11-17 01:38:45] Z pliku odczytano tryb: 'ai'
+[2025-11-17 01:39:05] get_active_evaluation_mode() wywołane
+[2025-11-17 01:39:05] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-17 01:39:05] DEFAULT_EVALUATION_MODE = ai
+[2025-11-17 01:39:05] Plik config/business_games_active_mode.json istnieje
+[2025-11-17 01:39:05] Z pliku odczytano tryb: 'ai'
+[2025-11-17 01:39:30] get_active_evaluation_mode() wywołane
+[2025-11-17 01:39:30] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-17 01:39:30] DEFAULT_EVALUATION_MODE = ai
+[2025-11-17 01:39:30] Plik config/business_games_active_mode.json istnieje
+[2025-11-17 01:39:30] Z pliku odczytano tryb: 'ai'
+[2025-11-17 01:39:36] get_active_evaluation_mode() wywołane
+[2025-11-17 01:39:36] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-17 01:39:36] DEFAULT_EVALUATION_MODE = ai
+[2025-11-17 01:39:36] Plik config/business_games_active_mode.json istnieje
+[2025-11-17 01:39:36] Z pliku odczytano tryb: 'ai'
+[2025-11-17 01:39:52] get_active_evaluation_mode() wywołane
+[2025-11-17 01:39:52] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-17 01:39:52] DEFAULT_EVALUATION_MODE = ai
+[2025-11-17 01:39:52] Plik config/business_games_active_mode.json istnieje
+[2025-11-17 01:39:52] Z pliku odczytano tryb: 'ai'
+[2025-11-17 09:55:23] get_active_evaluation_mode() wywołane
+[2025-11-17 09:55:23] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-17 09:55:23] DEFAULT_EVALUATION_MODE = ai
+[2025-11-17 09:55:23] Plik config/business_games_active_mode.json istnieje
+[2025-11-17 09:55:23] Z pliku odczytano tryb: 'ai'
+[2025-11-18 16:25:19] get_active_evaluation_mode() wywołane
+[2025-11-18 16:25:19] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-18 16:25:19] DEFAULT_EVALUATION_MODE = ai
+[2025-11-18 16:25:19] Plik config/business_games_active_mode.json istnieje
+[2025-11-18 16:25:19] Z pliku odczytano tryb: 'ai'
+[2025-11-18 16:35:31] get_active_evaluation_mode() wywołane
+[2025-11-18 16:35:31] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-18 16:35:31] DEFAULT_EVALUATION_MODE = ai
+[2025-11-18 16:35:31] Plik config/business_games_active_mode.json istnieje
+[2025-11-18 16:35:31] Z pliku odczytano tryb: 'ai'
+[2025-11-18 16:35:44] get_active_evaluation_mode() wywołane
+[2025-11-18 16:35:44] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-18 16:35:44] DEFAULT_EVALUATION_MODE = ai
+[2025-11-18 16:35:44] Plik config/business_games_active_mode.json istnieje
+[2025-11-18 16:35:44] Z pliku odczytano tryb: 'ai'
+[2025-11-18 16:35:50] get_active_evaluation_mode() wywołane
+[2025-11-18 16:35:50] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-18 16:35:50] DEFAULT_EVALUATION_MODE = ai
+[2025-11-18 16:35:50] Plik config/business_games_active_mode.json istnieje
+[2025-11-18 16:35:50] Z pliku odczytano tryb: 'ai'
+[2025-11-18 16:35:58] get_active_evaluation_mode() wywołane
+[2025-11-18 16:35:58] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-18 16:35:58] DEFAULT_EVALUATION_MODE = ai
+[2025-11-18 16:35:59] Plik config/business_games_active_mode.json istnieje
+[2025-11-18 16:35:59] Z pliku odczytano tryb: 'ai'
+[2025-11-27 19:47:32] get_active_evaluation_mode() wywołane
+[2025-11-27 19:47:32] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-27 19:47:32] DEFAULT_EVALUATION_MODE = ai
+[2025-11-27 19:47:32] Plik config/business_games_active_mode.json istnieje
+[2025-11-27 19:47:32] Z pliku odczytano tryb: 'ai'
+[2025-11-27 19:48:00] get_active_evaluation_mode() wywołane
+[2025-11-27 19:48:00] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-27 19:48:00] DEFAULT_EVALUATION_MODE = ai
+[2025-11-27 19:48:00] Plik config/business_games_active_mode.json istnieje
+[2025-11-27 19:48:00] Z pliku odczytano tryb: 'ai'
+[2025-11-27 19:48:04] get_active_evaluation_mode() wywołane
+[2025-11-27 19:48:04] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-27 19:48:04] DEFAULT_EVALUATION_MODE = ai
+[2025-11-27 19:48:04] Plik config/business_games_active_mode.json istnieje
+[2025-11-27 19:48:04] Z pliku odczytano tryb: 'ai'
+[2025-11-27 19:48:11] get_active_evaluation_mode() wywołane
+[2025-11-27 19:48:11] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-11-27 19:48:11] DEFAULT_EVALUATION_MODE = ai
+[2025-11-27 19:48:11] Plik config/business_games_active_mode.json istnieje
+[2025-11-27 19:48:11] Z pliku odczytano tryb: 'ai'

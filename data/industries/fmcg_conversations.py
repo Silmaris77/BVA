@@ -293,6 +293,15 @@ TWOJA WYPOWIEDŹ:
 - Nie używaj bullet points - mów normalnie
 - Możesz wyrażać emocje (zadowolenie, frustrację, podekscytowanie)
 
+FORMAT ODPOWIEDZI:
+- Jeśli dodajesz opisy zachowań/gestów, umieszczaj je w nawiasach
+- WAŻNE: Opisy zachowań pisz w TRZECIEJ OSOBIE, np:
+  ✅ DOBRZE: "(Podnosi wzrok znad gazety.)"
+  ✅ DOBRZE: "(Uśmiecha się nieśmiało.)"
+  ❌ ŹLE: "(Podnoszę wzrok znad gazety.)"
+  ❌ ŹLE: "(Uśmiecham się nieśmiało.)"
+- Wypowiedzi właściciela pisz normalnie w pierwszej osobie (to jest dialog)
+
 Gracz pisze:
 "{player_message}"
 

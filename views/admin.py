@@ -148,6 +148,66 @@ def plot_user_activity_over_time():
     
     return activity_df
 
+
+def delete_user_completely(username: str) -> bool:
+    """
+    Usuwa użytkownika całkowicie - z JSON i SQL
+    
+    Args:
+        username: Nazwa użytkownika do usunięcia
+        
+    Returns:
+        bool: True jeśli usunięto z SQL i JSON, False jeśli tylko z JSON
+    """
+    sql_success = False
+    json_success = False
+    
+    # 1. Usuń z SQL (jeśli dostępny)
+    try:
+        from database.models import User, BusinessGame
+        from database.connection import session_scope
+        
+        with session_scope() as session:
+            # Znajdź użytkownika
+            user = session.query(User).filter_by(username=username).first()
+            
+            if user:
+                # CASCADE usuwa automatycznie:
+                # - lesson_progress
+                # - completed_lessons
+                # - lesson_access
+                # - business_games (wraz z employees, contracts, transactions, stats)
+                session.delete(user)
+                session.commit()
+                sql_success = True
+                print(f"✅ Usunięto użytkownika '{username}' z SQL")
+            else:
+                print(f"ℹ️  Użytkownik '{username}' nie istnieje w SQL")
+                sql_success = True  # Nie ma w SQL = sukces
+                
+    except Exception as e:
+        print(f"⚠️  Nie udało się usunąć z SQL: {e}")
+        sql_success = False
+    
+    # 2. Usuń z JSON
+    try:
+        users_data = load_user_data()
+        
+        if username in users_data:
+            users_data.pop(username, None)
+            save_user_data(users_data)
+            json_success = True
+            print(f"✅ Usunięto użytkownika '{username}' z JSON")
+        else:
+            print(f"ℹ️  Użytkownik '{username}' nie istnieje w JSON")
+            json_success = True  # Nie ma w JSON = sukces
+            
+    except Exception as e:
+        print(f"❌ Błąd podczas usuwania z JSON: {e}")
+        json_success = False
+    
+    return sql_success and json_success
+
 def show_admin_dashboard():
     """Wyświetla panel administratora"""
     
@@ -757,16 +817,21 @@ def show_admin_dashboard():
             with action_cols[2]:
                 if zen_button("🗑️ Usuń użytkownika", key="delete_user"):
                     if st.session_state.get('confirm_delete', False):
-                        # Wykonaj usunięcie użytkownika
-                        users_data.pop(selected_user, None)
-                        save_user_data(users_data)
+                        # Wykonaj usunięcie użytkownika z JSON i SQL
+                        success = delete_user_completely(selected_user)
+                        
                         st.session_state.confirm_delete = False
-                        notification("Usunięto użytkownika.", type="success")
+                        
+                        if success:
+                            notification("Usunięto użytkownika z JSON i SQL.", type="success")
+                        else:
+                            notification("Usunięto użytkownika z JSON (SQL może być niedostępny).", type="warning")
+                        
                         time.sleep(1)
                         st.rerun()
                     else:
                         st.session_state.confirm_delete = True
-                        st.warning("Czy na pewno chcesz usunąć tego użytkownika? Ta operacja jest nieodwracalna! Kliknij ponownie, aby potwierdzić.")
+                        st.warning("Czy na pewno chcesz usunąć tego użytkownika? Ta operacja usunie wszystkie dane (JSON + SQL) i jest nieodwracalna! Kliknij ponownie, aby potwierdzić.")
             
             # Dodatkowe ustawienia użytkownika
             st.subheader("Edycja danych użytkownika")

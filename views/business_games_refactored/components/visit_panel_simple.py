@@ -166,100 +166,103 @@ def render_visit_panel_simple(client_id: str, clients: Dict, game_state: Dict, u
             audio_data = None
             if audio_bytes_recorded:
                 import io
-                audio_data = io.BytesIO(audio_bytes_recorded)
-                audio_data.name = "recording.wav"
-                st.success("✅ Nagranie zakończone! Przetwarzam...")
-                st.session_state[recorder_counter_key] += 1
-            
-            # Przetwarzanie nagrania audio
-            if audio_data is not None:
                 import hashlib
                 
-                audio_bytes = audio_data.getvalue() if hasattr(audio_data, 'getvalue') else audio_data.read()
-                audio_hash = hashlib.md5(audio_bytes).hexdigest()
+                # Sprawdź czy to nowe nagranie
+                audio_hash = hashlib.md5(audio_bytes_recorded).hexdigest()
                 
                 if audio_hash != st.session_state[last_audio_hash_key]:
                     st.session_state[last_audio_hash_key] = audio_hash
-                    
-                    import speech_recognition as sr
-                    import tempfile
-                    import os
-                    from pydub import AudioSegment
-                    
-                    with st.spinner("🤖 Rozpoznaję mowę..."):
+                    audio_data = io.BytesIO(audio_bytes_recorded)
+                    audio_data.name = "recording.wav"
+                    st.success("✅ Nagranie zakończone! Przetwarzam...")
+            
+            # Przetwarzanie nagrania audio
+            if audio_data is not None:
+                import speech_recognition as sr
+                import tempfile
+                import os
+                from pydub import AudioSegment
+                
+                # Pobierz bajty audio
+                audio_bytes = audio_data.getvalue() if hasattr(audio_data, 'getvalue') else audio_data.read()
+                
+                with st.spinner("🤖 Rozpoznaję mowę..."):
+                    try:
+                        file_ext = ".webm"
+                        if hasattr(audio_data, 'name'):
+                            if audio_data.name.endswith('.wav'):
+                                file_ext = ".wav"
+                            elif audio_data.name.endswith('.mp3'):
+                                file_ext = ".mp3"
+                            elif audio_data.name.endswith('.m4a'):
+                                file_ext = ".m4a"
+                            elif audio_data.name.endswith('.ogg'):
+                                file_ext = ".ogg"
+                        
+                        with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp_file:
+                            tmp_file.write(audio_bytes)
+                            tmp_path = tmp_file.name
+                        
+                        wav_path = None
                         try:
-                            file_ext = ".webm"
-                            if hasattr(audio_data, 'name'):
-                                if audio_data.name.endswith('.wav'):
-                                    file_ext = ".wav"
-                                elif audio_data.name.endswith('.mp3'):
-                                    file_ext = ".mp3"
-                                elif audio_data.name.endswith('.m4a'):
-                                    file_ext = ".m4a"
-                                elif audio_data.name.endswith('.ogg'):
-                                    file_ext = ".ogg"
+                            audio = AudioSegment.from_file(tmp_path)
+                            wav_path = tmp_path.replace(file_ext, "_converted.wav")
+                            audio.export(wav_path, format="wav")
                             
-                            with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp_file:
-                                tmp_file.write(audio_bytes)
-                                tmp_path = tmp_file.name
+                            recognizer = sr.Recognizer()
+                            with sr.AudioFile(wav_path) as source:
+                                audio_data_sr = recognizer.record(source)
+                                
+                            transcription = recognizer.recognize_google(audio_data_sr, language="pl-PL")
                             
-                            wav_path = None
+                            # Post-processing: Dodaj interpunkcję przez Gemini
                             try:
-                                audio = AudioSegment.from_file(tmp_path)
-                                wav_path = tmp_path.replace(file_ext, "_converted.wav")
-                                audio.export(wav_path, format="wav")
+                                import google.generativeai as genai
                                 
-                                recognizer = sr.Recognizer()
-                                with sr.AudioFile(wav_path) as source:
-                                    audio_data_sr = recognizer.record(source)
-                                    
-                                transcription = recognizer.recognize_google(audio_data_sr, language="pl-PL")
+                                api_key = st.secrets["API_KEYS"]["gemini"]
+                                genai.configure(api_key=api_key)
                                 
-                                # Post-processing: Dodaj interpunkcję przez Gemini
-                                try:
-                                    import google.generativeai as genai
-                                    
-                                    api_key = st.secrets["API_KEYS"]["gemini"]
-                                    genai.configure(api_key=api_key)
-                                    
-                                    model = genai.GenerativeModel("models/gemini-2.0-flash-exp")
-                                    prompt = f"""Dodaj interpunkcję (kropki, przecinki, pytajniki, wykrzykniki) do poniższego tekstu.
+                                model = genai.GenerativeModel("models/gemini-2.0-flash-exp")
+                                prompt = f"""Dodaj interpunkcję (kropki, przecinki, pytajniki, wykrzykniki) do poniższego tekstu.
 Nie zmieniaj słów, tylko dodaj znaki interpunkcyjne. Zachowaj strukturę i podział na zdania.
 Zwróć tylko poprawiony tekst, bez dodatkowych komentarzy.
 
 Tekst do poprawy:
 {transcription}"""
-                                    response = model.generate_content(prompt)
-                                    transcription_with_punctuation = response.text.strip()
-                                    transcription = transcription_with_punctuation
-                                    
-                                except Exception:
-                                    pass
+                                response = model.generate_content(prompt)
+                                transcription_with_punctuation = response.text.strip()
+                                transcription = transcription_with_punctuation
                                 
-                                # DOPISZ do istniejącego tekstu
-                                existing_text = st.session_state.get(transcription_key, "")
+                            except Exception:
+                                pass
+                            
+                            # DOPISZ do istniejącego tekstu
+                            existing_text = st.session_state.get(transcription_key, "")
+                            
+                            if existing_text.strip():
+                                st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
+                            else:
+                                st.session_state[transcription_key] = transcription
+                            
+                            st.session_state[transcription_version_key] += 1
+                            # Inkrementuj counter aby zresetować audio_recorder
+                            st.session_state[recorder_counter_key] += 1
+                            st.success("✅ Transkrypcja ukończona!")
+                            
+                        except sr.UnknownValueError:
+                            st.error("❌ Nie udało się rozpoznać mowy. Spróbuj ponownie lub mów wyraźniej.")
+                        except sr.RequestError as e:
+                            st.error(f"❌ Błąd połączenia z usługą rozpoznawania mowy: {str(e)}")
+                        finally:
+                            if os.path.exists(tmp_path):
+                                os.unlink(tmp_path)
+                            if wav_path and os.path.exists(wav_path):
+                                os.unlink(wav_path)
                                 
-                                if existing_text.strip():
-                                    st.session_state[transcription_key] = existing_text.rstrip() + "\n\n" + transcription
-                                else:
-                                    st.session_state[transcription_key] = transcription
-                                
-                                st.session_state[transcription_version_key] += 1
-                                st.success("✅ Transkrypcja ukończona!")
-                                
-                            except sr.UnknownValueError:
-                                st.error("❌ Nie udało się rozpoznać mowy. Spróbuj ponownie lub mów wyraźniej.")
-                            except sr.RequestError as e:
-                                st.error(f"❌ Błąd połączenia z usługą rozpoznawania mowy: {str(e)}")
-                            finally:
-                                if os.path.exists(tmp_path):
-                                    os.unlink(tmp_path)
-                                if wav_path and os.path.exists(wav_path):
-                                    os.unlink(wav_path)
-                                    
-                        except Exception as e:
-                            st.error(f"❌ Błąd podczas transkrypcji: {str(e)}")
-                            st.info("💡 Możesz wprowadzić tekst ręcznie w polu poniżej.")
+                    except Exception as e:
+                        st.error(f"❌ Błąd podczas transkrypcji: {str(e)}")
+                        st.info("💡 Możesz wprowadzić tekst ręcznie w polu poniżej.")
             
             # Dynamiczny klucz który zmienia się po transkrypcji
             text_area_key = f"simple_visit_input_{client_id}_{len(conv_state['messages'])}_v{st.session_state[transcription_version_key]}"
@@ -678,7 +681,7 @@ Tekst do poprawy:
                 if "business_games" not in user_data:
                     user_data["business_games"] = {}
                 if "fmcg" not in user_data["business_games"]:
-                    user_data["business_games"] = {}
+                    user_data["business_games"]["fmcg"] = {}  # FIX: Create fmcg dict, not overwrite business_games
                 
                 # Save updated game_state back to structure
                 user_data["business_games"]["fmcg"]["game_state"] = game_state
@@ -697,16 +700,7 @@ Tekst do poprawy:
             else:
                 st.error("❌ Nie znaleziono danych użytkownika!")
             
-            # Clear conversation state
-            if conversation_key in st.session_state:
-                del st.session_state[conversation_key]
-            
-            # CRITICAL: Clear current_visit flag to return to main view
-            if "current_visit_client_id" in st.session_state:
-                del st.session_state["current_visit_client_id"]
-            
             st.success("✅ Wizyta zapisana!")
-            st.info("🔄 Powrót do widoku głównego...")
             
             # Summary
             st.markdown("#### 📊 Podsumowanie:")
@@ -714,4 +708,16 @@ Tekst do poprawy:
             st.markdown(f"**Energia:** {new_energy}% (-{energy_cost}%)")
             st.markdown(f"**Status:** {client.get('status', 'PROSPECT')}")
             
-            st.rerun()
+            st.markdown("---")
+            
+            # Button to return to main view
+            if st.button("🔙 Powrót do gry", type="primary", use_container_width=True):
+                # Clear conversation state
+                if conversation_key in st.session_state:
+                    del st.session_state[conversation_key]
+                
+                # CRITICAL: Clear current_visit flag to return to main view
+                if "current_visit_client_id" in st.session_state:
+                    del st.session_state["current_visit_client_id"]
+                
+                st.rerun()

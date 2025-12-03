@@ -1,17 +1,17 @@
 {
-  "storage_backend": "json",
-  "dual_write_enabled": true,
-  "read_from_sql_percentage": 0,
-  "rollback_enabled": true,
+  "storage_backend": "sql",
+  "dual_write_enabled": false,
+  "read_from_sql_percentage": 100,
+  "rollback_enabled": false,
   "per_user_backend": {
-    "*": "json"
+    "*": "sql"
   },
   "migration_status": {
-    "phase": "sql_active",
+    "phase": "sql_only",
     "started_at": "2025-10-24T07:52:00",
-    "last_updated": "2025-10-29T00:52:00",
+    "last_updated": "2025-11-16T00:00:00",
     "migration_complete": true,
-    "users_migrated": ["admin", "Piotr", "Pawel"]
+    "users_migrated": ["admin", "Piotr", "Pawel", "Marcin", "Iwo"]
   },
   "database": {
     "type": "sqlite",
@@ -37,7 +37,7 @@
   "feature_flags": {
     "enable_sql_read": true,
     "enable_sql_write": true,
-    "enable_dual_write": true,
+    "enable_dual_write": false,
     "gradual_rollout_percentage": 100
   },
   "logging": {

@@ -223,7 +223,10 @@ def _render_product_details(product: Dict, scenario_id: str = 'lifetime'):
         scenario_id: ID scenariusza (heinz_food_service, quick_start, lifetime)
     """
     # Determine if product is "own brand" based on scenario
-    if scenario_id == "heinz_food_service":
+    # Heinz scenarios: heinz_food_service, fmcg_heinz_food_service_v1
+    is_heinz_scenario = "heinz" in scenario_id.lower()
+    
+    if is_heinz_scenario:
         # In Heinz scenario, Heinz and Pudliszki are own brands
         is_own_brand = product.get("brand") in ["Heinz", "Pudliszki"]
     else:
@@ -309,12 +312,19 @@ def _render_product_details(product: Dict, scenario_id: str = 'lifetime'):
             pop = product.get('popularity', 0)
             st.metric("📊 Popularność", f"{pop}%")
     
-    # For FreshLife products - show extended description
+    # For own brand products - show extended description
     if is_freshlife:
         st.markdown("---")
         
-        # Description
-        description = product.get("description", "Wysokiej jakości produkt marki FreshLife.")
+        # Description (with scenario-specific default)
+        product_brand = product.get("brand", "")
+        if is_heinz_scenario:
+            default_description = f"Wysokiej jakości produkt marki {product_brand}."
+        else:
+            default_description = "Wysokiej jakości produkt marki FreshLife."
+        
+        # Try description, then USP, then default
+        description = product.get("description") or product.get("usp") or default_description
         st.markdown(f"### 📖 O produkcie")
         st.markdown(description)
         
@@ -404,7 +414,7 @@ def _render_product_details(product: Dict, scenario_id: str = 'lifetime'):
     else:
         # For competitor products - basic info only
         st.markdown("---")
-        if scenario_id == "heinz_food_service":
+        if is_heinz_scenario:
             st.info("ℹ️ To produkt konkurencji (nie należy do portfolio Heinz).")
         else:
             st.info("ℹ️ To produkt konkurencji. FreshLife nie sprzedaje tego produktu.")
@@ -605,47 +615,28 @@ def show_fmcg_playable_game(username: str):
             
             # Other scenarios - full game initialization
             with st.spinner(f"🎮 Inicjalizacja scenariusza..."):
-                # Import scenario loader
-                from data.scenarios import load_scenario_clients, SCENARIOS
+                # Initialize game with scenario (includes cleanup for Heinz)
+                game_data = initialize_fmcg_game_new(username, scenario=selected_scenario)
+                game_state = game_data["fmcg_state"]
+                clients = game_state.get("clients", {})
                 
-                # Initialize game with scenario
+                # Heinz-specific post-initialization setup
                 if selected_scenario == "heinz_food_service":
-                    # Load Heinz scenario
+                    from data.scenarios import SCENARIOS
                     scenario_config = SCENARIOS["fmcg"]["heinz_food_service"]
-                    clients_db = load_scenario_clients(scenario_config.get("client_database"))
                     
-                    # Initialize game state
-                    game_data = initialize_fmcg_game_new(username, scenario=selected_scenario)
-                    game_state = game_data["fmcg_state"]
+                    # Verify cleanup worked
+                    num_active = len([c for c in clients.values() if c.get("status") == "ACTIVE"])
+                    num_prospect = len([c for c in clients.values() if "PROSPECT" in c.get("status", "")])
                     
-                    # Override with Heinz clients
-                    if clients_db:
-                        game_state["clients"] = clients_db
-                        game_state["scenario_id"] = "heinz_food_service"
-                        game_state["scenario"] = {
-                            "id": "heinz_food_service",
-                            "model": "through_distributor",
-                            "company": "Heinz Polska"
-                        }
-                        game_state["company"] = "Heinz Polska"
-                        game_state["territory_name"] = "Dzięgielów Food Service"
-                        game_state["territory_latitude"] = 49.7271667  # Lipowa 29 (49°43'37.8"N)
-                        game_state["territory_longitude"] = 18.7025833  # 18°42'09.3"E
-                        game_state["clients_total"] = len(clients_db)
-                        game_state["clients_prospect"] = len([c for c in clients_db.values() if not c.get("convinced_products")])
-                        game_state["clients_active"] = len([c for c in clients_db.values() if c.get("convinced_products")])
-                        
-                        st.info(f"✅ Załadowano {len(clients_db)} klientów Food Service z regionu Dzięgielów (Wisła, Ustroń, Skoczów, Cieszyn)")
+                    st.info(f"✅ Załadowano {len(clients)} klientów Heinz Food Service (Dzięgielów)")
+                    st.info(f"   📊 Status: {num_prospect} PROSPECT, {num_active} ACTIVE (powinno być 0)")
                     
-                    clients = game_state.get("clients", {})
-                else:
-                    # Quick Start or Lifetime - standard initialization
-                    game_data = initialize_fmcg_game_new(username, scenario=selected_scenario)
-                    game_state = game_data["fmcg_state"]
-                    game_state["scenario_id"] = selected_scenario
-                    clients = game_state.get("clients", {})
+                    # Verify all clients have status PROSPECT_NOT_CONTACTED
+                    if num_active > 0:
+                        st.warning(f"⚠️ CLEANUP NIE ZADZIAŁAŁ! {num_active} klientów ma status ACTIVE")
                 
-                # Save initial state (will overwrite existing data)
+                # Save initial state
                 save_success = update_fmcg_game_state_sql(username, game_state, clients)
                 
                 if save_success:
@@ -699,23 +690,11 @@ def show_fmcg_playable_game(username: str):
                     
                     # MIGRATION: Check if clients need updating to new Heinz client base
                     # Old clients had IDs like "client_001", new ones have "rest_001"
-                    if clients and any(client_id.startswith("client_") for client_id in clients.keys()):
-                        st.info("🔄 Wykryto starą bazę klientów Heinz - ładuję nową bazę z regionu Dzięgielów...")
-                        
-                        # Load new Heinz clients from JSON
-                        from data.scenarios import load_scenario_clients
-                        new_clients = load_scenario_clients("fmcg_clients_heinz_foodservice")
-                        
-                        if new_clients:
-                            clients = new_clients
-                            game_state["clients_total"] = len(new_clients)
-                            game_state["clients_prospect"] = len([c for c in new_clients.values() if not c.get("convinced_products")])
-                            game_state["clients_active"] = len([c for c in new_clients.values() if c.get("convinced_products")])
-                            
-                            st.success(f"✅ Załadowano {len(new_clients)} klientów z nowej bazy (region Dzięgielów)")
-                            
-                            # Save updated state (function already imported at top of file)
-                            update_fmcg_game_state_sql(username, game_state, clients)
+                    # DISABLED: This migration loads raw JSON data without cleanup!
+                    # New clients should be initialized via initialize_fmcg_game_new() which applies cleanup
+                    # if clients and any(client_id.startswith("client_") for client_id in clients.keys()):
+                    #     st.info("🔄 Migration disabled - use game initialization instead")
+                    pass
                 else:
                     # Quick Start / Lifetime - Piaseczno
                     desired_lat = 52.0748  # Centrum Piaseczna (Rynek)
@@ -1183,15 +1162,14 @@ def show_fmcg_playable_game(username: str):
             
             # Calculate points
             company_points = company_rep * 0.5  # 0-100 → 0-50 points
-            client_points = 0
-            for status, count in client_breakdown.items():
-                if count > 0 and status != "PROSPECT_NOT_CONTACTED":
-                    from utils.reputation_system import CLIENT_REPUTATION_WEIGHTS, ClientStatus
-                    weight = CLIENT_REPUTATION_WEIGHTS.get(getattr(ClientStatus, status, None), 0)
-                    # Approximate client points (count * client_rep * weight)
-                    client_points += count * client_rep * weight
             
-            total_points_breakdown = company_points + client_points
+            # Calculate actual client points by summing individual client contributions
+            # (This is the REAL calculation, not an approximation)
+            from utils.reputation_system import calculate_overall_rating
+            actual_total_points = calculate_overall_rating(game_state, clients)
+            client_points = actual_total_points - company_points  # Subtract company to get client portion
+            
+            total_points_breakdown = actual_total_points
             
             # Display client reputation breakdown
             total_counted = client_breakdown["ACTIVE"] + client_breakdown["PARTNER"] + client_breakdown["LOST"] + client_breakdown["PROSPECT_CONTACTED"]
@@ -1203,23 +1181,55 @@ def show_fmcg_playable_game(username: str):
                           f"{client_breakdown['PROSPECT_NOT_CONTACTED']} nieodwiedzonych")
                 
                 with st.expander("ℹ️ Jak obliczane są punkty?"):
-                    st.markdown(f"""
-                    **System punktowy - różne źródła punktów:**
+                    # Calculate detailed client points breakdown
+                    from utils.reputation_system import get_client_weight, calculate_client_reputation
                     
-                    **🏢 Company Reputation** → Points (50% conversion)
-                    - Current: {company_rep:.1f}/100 → **{company_points:.1f} points**
+                    client_points_details = []
+                    for client_id, client_data in clients.items():
+                        weight = get_client_weight(client_data)
+                        if weight > 0:  # Only show clients that contribute
+                            rep = calculate_client_reputation(client_data, game_state)
+                            points = rep * weight
+                            status = client_data.get('status', 'UNKNOWN')
+                            if not status or status == 'UNKNOWN':
+                                # Determine from convinced_products
+                                status = 'ACTIVE' if client_data.get('convinced_products') else 'PROSPECT'
+                            
+                            name = client_data.get('name', client_id[:15])
+                            client_points_details.append((name, status, rep, weight, points))
+                    
+                    # Sort by points descending
+                    client_points_details.sort(key=lambda x: x[4], reverse=True)
+                    
+                    st.markdown(f"""
+                    **System punktowy - rzeczywiste obliczenia:**
+                    
+                    **🏢 Company Points** (50% conversion)
+                    - Company Reputation: {company_rep:.1f}/100
+                    - Conversion: {company_rep:.1f} × 0.5 = **{company_points:.1f} pts**
                     - Components:
                       - Task Performance (30%): {task_perf:.0f}%
                       - Sales Performance (40%): {sales_perf:.0f}%
                       - Professionalism (30%): {prof:.0f}%
                     
-                    **👥 Client Reputation** → Points (weighted by status)
-                    - 🟢 **ACTIVE** (weight 1.0): {client_breakdown['ACTIVE']} clients × {client_rep:.1f} × 1.0 = **{client_breakdown['ACTIVE'] * client_rep * 1.0:.1f} pts**
-                    - 🟡 **PROSPECT contacted** (weight 0.5): {client_breakdown['PROSPECT_CONTACTED']} clients × {client_rep:.1f} × 0.5 = **{client_breakdown['PROSPECT_CONTACTED'] * client_rep * 0.5:.1f} pts**
-                    - 🔴 **LOST** (weight 0.7): {client_breakdown['LOST']} clients × {client_rep:.1f} × 0.7 = **{client_breakdown['LOST'] * client_rep * 0.7:.1f} pts**
-                    - ⚪ **PROSPECT not contacted** (weight 0.0): No impact
+                    **👥 Client Points** (weighted by status & contact)
+                    """)
                     
-                    **Total Points:** {company_points:.1f} + {client_points:.1f} = **{total_points_breakdown:.1f} pts**
+                    # Show top clients
+                    for name, status, rep, weight, points in client_points_details[:10]:
+                        emoji = "🟢" if status == "ACTIVE" else "🟡" if "PROSPECT" in status else "🔴"
+                        weight_pct = int(weight * 100)
+                        st.markdown(f"- {emoji} **{name}** ({status}): {rep:.1f} × {weight:.1f} = **{points:.1f} pts** (weight {weight_pct}%)")
+                    
+                    if len(client_points_details) > 10:
+                        st.caption(f"... i {len(client_points_details) - 10} więcej klientów")
+                    
+                    st.markdown(f"""
+                    
+                    **📊 Total Calculation:**
+                    - Company Points: **{company_points:.1f}**
+                    - Client Points: **{client_points:.1f}**
+                    - **TOTAL: {total_points_breakdown:.1f} pts**
                     
                     *Tiers: Trainee (0-100), Junior (101-250), Regular (251-500), Senior (501-1000), Expert (1001-2000), Master (2001+)*
                     """)
@@ -3879,6 +3889,8 @@ def show_fmcg_playable_game(username: str):
             # Get products based on scenario
             if is_heinz_scenario:
                 # Load products from scenario config (6 SKU for Heinz Food Service)
+                from data.scenarios import SCENARIOS
+                scenario_config = SCENARIOS.get("fmcg", {}).get("heinz_food_service", {})
                 scenario_products_data = scenario_config.get("products", {}).get("own", [])
                 heinz_product_ids = [p["id"] for p in scenario_products_data]
                 all_products = {k: v for k, v in get_all_products().items() if k in heinz_product_ids}
