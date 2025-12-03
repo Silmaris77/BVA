@@ -181,9 +181,10 @@ def show_login_page():
                     elif new_password != confirm_password:
                         st.error("❌ Hasła nie pasują do siebie.")
                     else:
-                        registration_result = register_user(new_username, new_password, confirm_password)
+                        # Rejestracja - nowa funkcja SQL zwraca True/False
+                        success = register_user(new_username, new_password)
                         
-                        if registration_result == "Registration successful!":
+                        if success:
                             st.success("✅ Rejestracja udana! Przekierowuję do dashboardu...")
                             # Automatyczne logowanie po rejestracji
                             st.session_state.logged_in = True
@@ -191,4 +192,4 @@ def show_login_page():
                             st.session_state.page = 'dashboard'
                             st.rerun()
                         else:
-                            st.error(f"❌ {registration_result}")
+                            st.error("❌ Użytkownik już istnieje lub wystąpił błąd")
