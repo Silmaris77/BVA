@@ -1502,6 +1502,8 @@ def show_user_edit_panel():
                 )
                 new_company_code = company_names[new_company_name]
                 
+                st.info("💡 **Motyw lekcji (Layout)** można zmienić w Profilu → Ustawienia")
+                
                 # Niestandardowe uprawnienia
                 st.markdown("#### ⚙️ Niestandardowe uprawnienia (opcjonalne)")
                 use_custom_permissions = st.checkbox(
@@ -1531,7 +1533,7 @@ def show_user_edit_panel():
                 st.markdown("---")
                 if st.button("💾 Zapisz zmiany", type="primary", use_container_width=True):
                     try:
-                        # Aktualizuj dane użytkownika
+                        # Aktualizuj dane użytkownika w SQL
                         user.company = new_company_code
                         if use_custom_permissions and custom_permissions is not None:
                             user.permissions = custom_permissions
@@ -1539,7 +1541,8 @@ def show_user_edit_panel():
                             user.permissions = None  # Użyje szablonu grupy
                         
                         session.commit()
-                        st.success(f"✅ Zaktualizowano użytkownika {user.username}")
+                        
+                        st.success(f"✅ Zaktualizowano użytkownika {user.username} (company: {new_company_name})")
                         time.sleep(1)
                         st.rerun()
                     except Exception as e:

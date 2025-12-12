@@ -1,0 +1,425 @@
+/* ============================================================================
+   BVA EDUCATIONAL MATERIALS - Standardowy plik CSS
+   Wersja: 2.0 (Grudzień 2025)
+   
+   Zastosowanie: Materiały HTML (lekcje, inspiracje, case studies)
+   Grupy: General, Warta, Heinz, Milwaukee, Degen
+   ============================================================================ */
+
+/* === RESET & BASE === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #1e293b;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+/* === CONTAINER === */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+/* === TYPOGRAPHY === */
+h1 {
+    color: #1e293b;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #334155;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 30px 0 15px 0;
+}
+
+h3 {
+    color: #475569;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 25px 0 12px 0;
+}
+
+h4 {
+    color: #64748b;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 20px 0 10px 0;
+}
+
+p {
+    font-size: 1.05rem;
+    margin-bottom: 15px;
+}
+
+.lead-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    font-weight: 400;
+}
+
+.small-text {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* === SEMANTIC BOXES === */
+.info-box {
+    background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+    border-left: 5px solid #3b82f6;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.success-box {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-left: 5px solid #10b981;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.warning-box {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 5px solid #f59e0b;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.error-box {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-left: 5px solid #ef4444;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.highlight-box {
+    background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+    border-left: 5px solid #f97316;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+/* === BRAND CARDS === */
+.brand-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-top: 4px solid;
+    margin-bottom: 20px;
+}
+
+.brand-card.general {
+    border-top-color: #6c757d;
+}
+
+.brand-card.warta {
+    border-top-color: #dc3545;
+}
+
+.brand-card.heinz {
+    border-top-color: #dc2626;
+}
+
+.brand-card.milwaukee {
+    border-top-color: #f39c12;
+}
+
+.brand-card.degen {
+    border-top-color: #9b59b6;
+}
+
+/* === HERO SECTIONS === */
+.hero-general {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    padding: 60px 40px;
+    text-align: center;
+    border-radius: 16px;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.hero-warta {
+    background: linear-gradient(135deg, #dc3545 0%, #a02828 100%);
+    padding: 60px 40px;
+    text-align: center;
+    border-radius: 16px;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.hero-heinz {
+    background: linear-gradient(135deg, #D32F2F 0%, #A02020 100%);
+    padding: 60px 40px;
+    text-align: center;
+    border-radius: 16px;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.hero-milwaukee {
+    background: linear-gradient(135deg, #f39c12 0%, #d68910 100%);
+    padding: 60px 40px;
+    text-align: center;
+    border-radius: 16px;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.hero-degen {
+    background: linear-gradient(135deg, #9b59b6 0%, #7d3c98 100%);
+    padding: 60px 40px;
+    text-align: center;
+    border-radius: 16px;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.hero h1 {
+    color: white;
+    font-size: 2.8rem;
+    margin-bottom: 16px;
+}
+
+.hero p {
+    color: white;
+    font-size: 1.3rem;
+    line-height: 1.6;
+}
+
+/* === STRATEGY COLUMNS === */
+.strategy-column {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.strategy-column h4 {
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.heinz-strategy h4 {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+}
+
+.milwaukee-strategy h4 {
+    background: linear-gradient(135deg, #f39c12 0%, #d68910 100%);
+}
+
+.argument-list {
+    list-style: none;
+    margin-left: 0;
+}
+
+.argument-list li {
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.heinz-strategy .argument-list li {
+    border-left-color: #dc2626;
+}
+
+.milwaukee-strategy .argument-list li {
+    border-left-color: #f39c12;
+}
+
+/* === QUIZ ELEMENTS === */
+.quiz-question {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 2px solid #0ea5e9;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+}
+
+.quiz-question h4 {
+    color: #0369a1;
+    margin-top: 0;
+}
+
+.option-btn {
+    background: white;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.option-btn:hover {
+    background: #f1f5f9;
+    border-color: #0ea5e9;
+    transform: translateX(5px);
+}
+
+.option-btn.correct {
+    background: #d1fae5;
+    border-color: #10b981;
+}
+
+.option-btn.incorrect {
+    background: #fee2e2;
+    border-color: #ef4444;
+}
+
+/* === PROGRESS BAR === */
+.progress-container {
+    background: #e2e8f0;
+    border-radius: 10px;
+    height: 24px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: width 0.5s ease;
+}
+
+/* === CHECKLIST === */
+.checklist {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+}
+
+.checklist ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.checklist li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.checklist li:last-child {
+    border-bottom: none;
+}
+
+/* === TABS === */
+.tabs-container {
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    padding: 12px 24px;
+    margin-right: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #64748b;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: #334155;
+}
+
+.tab-btn.active {
+    color: #3b82f6;
+    border-bottom-color: #3b82f6;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        border-radius: 12px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    .hero-general,
+    .hero-warta,
+    .hero-heinz,
+    .hero-milwaukee,
+    .hero-degen {
+        padding: 40px 20px;
+    }
+    
+    .strategy-column {
+        margin-bottom: 20px;
+    }
+    
+    .tab-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* === UTILITIES === */
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.p-20 {
+    padding: 20px;
+}

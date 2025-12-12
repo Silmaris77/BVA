@@ -1,0 +1,116 @@
+{
+  "_lesson_info": {
+    "version": "1.0",
+    "description": "Lekcja dla grupy Milwaukee - Warunki gwarancji produktów Milwaukee",
+    "created": "2025-12-11",
+    "target_audience": "Milwaukee group only"
+  },
+  
+  "id": "milwaukee_warranty_care",
+  "title": "🛡️ Milwaukee Care: Od Reklamacji do Satysfakcji Klienta",
+  "description": "Kompleksowy przewodnik po warunkach gwarancyjnych Milwaukee. Naucz się profesjonalnie obsługiwać reklamacje, doradzać klientom i przekształcać problemy w lojalność.",
+  "tag": "Milwaukee",
+  "xp_reward": 150,
+  "difficulty": "intermediate",
+  
+  "intro": {
+    "main": "<div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: white;'>🛡️ Milwaukee Care: Od Reklamacji do Satysfakcji Klienta</h1><p style='font-size: 1.2rem; text-align: center; margin-bottom: 30px;'>Kompleksowy przewodnik po warunkach gwarancyjnych Milwaukee</p></div><div style='background: #f8f9fa; padding: 25px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f5576c;'><p style='line-height: 1.8;'><strong>TREŚĆ WPROWADZENIA - DO UZUPEŁNIENIA</strong></p></div>",
+    "case_study": "<div style='background: #f8f9fa; padding: 25px; border-radius: 12px; border-left: 5px solid #dc3545; margin: 20px 0;'><h3 style='color: #721c24; margin-bottom: 20px;'>📖 Case Study Wprowadzający</h3><p><strong>TREŚĆ CASE STUDY - DO UZUPEŁNIENIA</strong></p></div>",
+    "quiz_samodiagnozy": {
+      "title": "Quiz Samodiagnozy - Twoja wiedza o gwarancji Milwaukee",
+      "description": "Oceń swoją wiedzę o warunkach gwarancyjnych Milwaukee",
+      "questions": [
+        {
+          "question": "Jak oceniasz swoją wiedzę o gwarancji Milwaukee?",
+          "options": [
+            "Podstawowa - znam tylko, że jest 3 lata",
+            "Średnia - obsługiwałem już kilka reklamacji",
+            "Zaawansowana - ale chcę odświeżyć szczegóły"
+          ],
+          "correct_answer": 0,
+          "explanation": "To doskonałe miejsce, aby pogłębić swoją wiedzę o gwarancji Milwaukee!"
+        }
+      ]
+    }
+  },
+  
+  "sections": {
+    "learning": {
+      "tabs": [
+        {
+          "id": "tekst",
+          "title": "📚 Tekst",
+          "icon": "📚",
+          "sections": [
+            {
+              "title": "🔑 Podstawy Gwarancji Milwaukee",
+              "content": "<div style='background: #f8f9fa; padding: 25px; border-radius: 10px;'><p><strong>TREŚĆ SEKCJI 1 - DO UZUPEŁNIENIA</strong></p></div>"
+            },
+            {
+              "title": "📋 Procedura Reklamacyjna Krok Po Kroku",
+              "content": "<div style='background: #f8f9fa; padding: 25px; border-radius: 10px;'><p><strong>TREŚĆ SEKCJI 2 - DO UZUPEŁNIENIA</strong></p></div>"
+            },
+            {
+              "title": "🚨 Trudne Sytuacje i FAQ",
+              "content": "<div style='background: #f8f9fa; padding: 25px; border-radius: 10px;'><p><strong>TREŚĆ SEKCJI 3 - DO UZUPEŁNIENIA</strong></p></div>"
+            },
+            {
+              "title": "⏰ Przedłużenie Gwarancji - Program Rejestracji",
+              "content": "<div style='background: #f8f9fa; padding: 25px; border-radius: 10px;'><p><strong>TREŚĆ SEKCJI 4 - DO UZUPEŁNIENIA</strong></p></div>"
+            }
+          ]
+        }
+      ]
+    },
+    
+    "practical_exercises": {
+      "exercises": {
+        "title": "Ćwiczenia Praktyczne",
+        "description": "Zastosuj wiedzę w praktyce",
+        "sections": [
+          {
+            "title": "Case Study 1: Wiertarka po upadku",
+            "content": "<div style='background: #f8f9fa; padding: 25px; border-radius: 10px;'><p><strong>TREŚĆ ĆWICZENIA 1 - DO UZUPEŁNIENIA</strong></p></div>"
+          },
+          {
+            "title": "Case Study 2: Zgubiony paragon",
+            "content": "<div style='background: #f8f9fa; padding: 25px; border-radius: 10px;'><p><strong>TREŚĆ ĆWICZENIA 2 - DO UZUPEŁNIENIA</strong></p></div>"
+          }
+        ]
+      },
+      "closing_quiz": {
+        "title": "Quiz końcowy",
+        "description": "Sprawdź, ile zapamiętałeś z tej lekcji",
+        "questions": [
+          {
+            "question": "Jak długo trwa standardowa gwarancja na elektronarzędzia Milwaukee?",
+            "options": [
+              "12 miesięcy",
+              "24 miesiące",
+              "36 miesięcy",
+              "5 lat"
+            ],
+            "correct_answer": 2,
+            "explanation": "Elektronarzędzia Milwaukee mają standardowo 3 lata (36 miesięcy) gwarancji."
+          },
+          {
+            "question": "W jakim czasie od zakupu klient musi zarejestrować produkt, żeby dostać +1 rok gwarancji?",
+            "options": [
+              "7 dni",
+              "14 dni",
+              "30 dni",
+              "90 dni"
+            ],
+            "correct_answer": 2,
+            "explanation": "Klient ma 30 dni od daty zakupu na zarejestrowanie produktu."
+          }
+        ]
+      }
+    }
+  },
+  
+  "summary": {
+    "main": "<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px; border-radius: 12px; margin: 20px 0; color: white;'><div style='background: rgba(255,255,255,0.95); padding: 25px; border-radius: 10px; color: #2c3e50;'><h3 style='text-align: center; margin-bottom: 20px;'>✅ Podsumowanie</h3><p><strong>TREŚĆ PODSUMOWANIA - DO UZUPEŁNIENIA</strong></p></div></div>",
+    "case_study": "<div style='background: #f8f9fa; padding: 25px; border-radius: 10px;'><p><strong>KOŃCOWE CASE STUDY - DO UZUPEŁNIENIA</strong></p></div>"
+  }
+}

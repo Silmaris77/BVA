@@ -49,6 +49,13 @@ class ThemeManager:
             'description': 'Navy & Gold dla kadry zarządzającej - elegancja i prestiż',
             'icon': '💼',
             'colors': ['#1E3A8A', '#F59E0B', '#E5E7EB']
+        },
+        'milwaukee': {
+            'name': 'Milwaukee',
+            'css_file': 'milwaukee.css',
+            'description': 'Heavy Duty Professional - czerwono-czarno-biały branding Milwaukee',
+            'icon': '🔴',
+            'colors': ['#C8102E', '#1A1A1A', '#FFFFFF']
         }
     }
     

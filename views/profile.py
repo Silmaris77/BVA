@@ -705,11 +705,17 @@ def show_profile():
                 "description": "Profesjonalny design dla kadry zarządzającej - Navy, Gold, Platinum",
                 "icon": "💼",
                 "colors": ["#1E3A8A", "#F59E0B", "#E5E7EB"]
+            },
+            "Milwaukee": {
+                "value": "milwaukee",
+                "description": "Heavy Duty Professional - czerwono-czarno-biały branding Milwaukee",
+                "icon": "🔴",
+                "colors": ["#C8102E", "#1A1A1A", "#FFFFFF"]
             }
         }
         
         # Display layout cards
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4, col5 = st.columns(5)
         
         with col1:
             # Przygotuj HTML dla kolorów Standard
@@ -870,6 +876,46 @@ def show_profile():
                 st.success("💼 Layout zmieniony na Executive Pro!")
                 st.info("🔄 Odśwież stronę (F5), aby zobaczyć zmiany")
         
+        with col5:
+            # Przygotuj HTML dla kolorów Milwaukee
+            milwaukee_colors_html = ''.join([
+                f'<div style="width: 40px; height: 40px; border-radius: 4px; background: {color}; border: 1px solid {"#333" if color == "#FFFFFF" else "transparent"}; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);"></div>'
+                for color in layout_options['Milwaukee']['colors']
+            ])
+            
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
+                border-radius: 12px;
+                padding: 20px;
+                border: {'3px solid #C8102E' if current_layout == 'milwaukee' else '1px solid #4A4A4A'};
+                box-shadow: {'0 0 20px rgba(200, 16, 46, 0.6)' if current_layout == 'milwaukee' else 'none'};
+                transition: all 0.3s ease;
+                min-height: 200px;
+            ">
+                <div style="font-size: 48px; text-align: center; margin-bottom: 10px;">
+                    {layout_options['Milwaukee']['icon']}
+                </div>
+                <h3 style="color: #FFFFFF; text-align: center; margin-bottom: 10px; font-weight: 700;">
+                    Milwaukee
+                </h3>
+                <p style="color: #E5E5E5; text-align: center; font-size: 14px; margin-bottom: 15px;">
+                    {layout_options['Milwaukee']['description']}
+                </p>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                    {milwaukee_colors_html}
+                </div>
+                {'<div style="text-align: center; margin-top: 15px; color: #C8102E; font-weight: 700; text-shadow: 0 0 10px rgba(200, 16, 46, 0.8);">✓ Aktywny</div>' 
+                 if current_layout == 'milwaukee' else ''}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("Wybierz Milwaukee 🔴", key="select_milwaukee", use_container_width=True):
+                users_data[st.session_state.username]['layout_preference'] = 'milwaukee'
+                save_user_data(users_data)
+                st.success("🔴 Layout zmieniony na Milwaukee!")
+                st.info("🔄 Odśwież stronę (F5), aby zobaczyć zmiany")
+        
         st.markdown("---")
         
         # Feature comparison
@@ -925,6 +971,16 @@ def show_profile():
                 "✅ Professional gradient",
                 "Biznesowy, premium",
                 "Kadra zarządzająca, corpo"
+            ],
+            "Milwaukee": [
+                "Milwaukee Red + Black + White",
+                "Industrial shadows",
+                "✅ Czerwona poświata",
+                "❌ Brak (czysty design)",
+                "✅ Heavy Duty transitions",
+                "✅ Red accent bars",
+                "Heavy Duty Professional",
+                "Milwaukee, przemysł, branding"
             ]
         }
         

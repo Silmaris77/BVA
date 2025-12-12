@@ -1,0 +1,407 @@
+/* ====================================
+   MILWAUKEE THEME - Heavy Duty Professional
+   Paleta: Czerwień #C8102E, Czarny #1A1A1A, Biały #FFFFFF
+   
+   UWAGA: Ten theme nadpisuje WSZYSTKIE style inline w lekcjach!
+   Używa bardzo specyficznych selektorów z !important
+   ==================================== */
+
+/* ===== ZMIENNE CSS ===== */
+:root {
+    --milwaukee-red: #C8102E;
+    --milwaukee-red-dark: #A4031F;
+    --milwaukee-red-light: #E63946;
+    --milwaukee-black: #1A1A1A;
+    --milwaukee-gray-dark: #4A4A4A;
+    --milwaukee-gray-medium: #6E6E6E;
+    --milwaukee-gray-light: #BDBDBD;
+    --milwaukee-bg-light: #F5F5F5;
+    --milwaukee-bg-ultralight: #FAFAFA;
+    --milwaukee-white: #FFFFFF;
+}
+
+/* ===== OVERRIDES GLOBALNE DLA LEKCJI ===== */
+
+/* Nagłówki główne - czerwone zamiast kolorowych */
+h1, .stMarkdown h1, div[data-testid="stMarkdownContainer"] h1 {
+    color: var(--milwaukee-black) !important;
+    font-weight: 700 !important;
+    border-left: 6px solid var(--milwaukee-red) !important;
+    padding-left: 15px !important;
+}
+
+h2, .stMarkdown h2, div[data-testid="stMarkdownContainer"] h2 {
+    color: var(--milwaukee-red) !important;
+    font-weight: 600 !important;
+}
+
+h3, .stMarkdown h3, div[data-testid="stMarkdownContainer"] h3 {
+    color: var(--milwaukee-black) !important;
+    font-weight: 600 !important;
+}
+
+h4, .stMarkdown h4, div[data-testid="stMarkdownContainer"] h4 {
+    color: var(--milwaukee-gray-dark) !important;
+}
+
+/* Tekst body - szary dla lepszej czytelności */
+p, .stMarkdown p, div[data-testid="stMarkdownContainer"] p,
+li, .stMarkdown li, div[data-testid="stMarkdownContainer"] li,
+td, .stMarkdown td, div[data-testid="stMarkdownContainer"] td,
+span:not([style*="color"]) {
+    color: var(--milwaukee-gray-dark) !important;
+    line-height: 1.8 !important;
+}
+
+/* Strong/Bold - czarny */
+strong, .stMarkdown strong, div[data-testid="stMarkdownContainer"] strong {
+    color: var(--milwaukee-black) !important;
+    font-weight: 600 !important;
+}
+
+/* ===== NADPISANIE INLINE STYLES W DIVACH ===== */
+
+/* Wszystkie divy z gradientami - zamień na Milwaukee */
+div[style*="linear-gradient"][style*="#f093fb"],
+div[style*="linear-gradient"][style*="rgb(240, 147, 251)"] {
+    background: linear-gradient(135deg, #1A1A1A 0%, #4A4A4A 100%) !important;
+    border-left: 8px solid #C8102E !important;
+}
+
+/* Divy z kolorowymi tłami - zamień na Milwaukee palette */
+div[style*="background"][style*="#f8f9fa"],
+div[style*="background"][style*="rgb(248, 249, 250)"] {
+    background: #F5F5F5 !important;
+    border-left: 4px solid #C8102E !important;
+}
+
+div[style*="background"][style*="#fff3cd"],
+div[style*="background"][style*="#ffebee"],
+div[style*="background"][style*="#fff3e0"] {
+    background: #1A1A1A !important;
+    border: 2px solid #C8102E !important;
+    border-left: 6px solid #C8102E !important;
+}
+
+div[style*="background"][style*="#e8f5e8"],
+div[style*="background"][style*="#d1ecf1"],
+div[style*="background"][style*="#e3f2fd"] {
+    background: #FFFFFF !important;
+    border-left: 4px solid #C8102E !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* ===== GRADIENTY MILWAUKEE ===== */
+
+/* Gradient czarno-szary dla headerów */
+.milwaukee-gradient-header {
+    background: linear-gradient(135deg, var(--milwaukee-black) 0%, var(--milwaukee-gray-dark) 100%) !important;
+    color: var(--milwaukee-white) !important;
+    border-left: 8px solid var(--milwaukee-red) !important;
+}
+
+/* Gradient czerwony dla akcentów */
+.milwaukee-gradient-red {
+    background: linear-gradient(135deg, var(--milwaukee-red-light) 0%, var(--milwaukee-red-dark) 100%) !important;
+    color: var(--milwaukee-white) !important;
+}
+
+/* Gradient subtelny dla tła sekcji */
+.milwaukee-gradient-subtle {
+    background: linear-gradient(135deg, var(--milwaukee-bg-ultralight) 0%, var(--milwaukee-bg-light) 100%) !important;
+}
+
+/* ===== TABELE ===== */
+
+/* Nagłówki tabel - czarne z czerwonym dolnym borderem */
+.lesson-content table thead tr {
+    background: var(--milwaukee-black) !important;
+    color: var(--milwaukee-white) !important;
+    border-bottom: 3px solid var(--milwaukee-red) !important;
+}
+
+.lesson-content table thead th {
+    background: var(--milwaukee-black) !important;
+    color: var(--milwaukee-white) !important;
+    font-weight: 600 !important;
+    padding: 15px 12px !important;
+}
+
+/* Rzędy tabel - alternujące szare/białe */
+.lesson-content table tbody tr:nth-child(odd) {
+    background: var(--milwaukee-white) !important;
+}
+
+.lesson-content table tbody tr:nth-child(even) {
+    background: var(--milwaukee-bg-light) !important;
+}
+
+.lesson-content table tbody td {
+    color: var(--milwaukee-gray-dark) !important;
+    border: 1px solid var(--milwaukee-gray-light) !important;
+    padding: 12px !important;
+}
+
+/* ===== CALLOUT BOXY ===== */
+
+/* Czerwony callout - ostrzeżenia/ważne */
+.milwaukee-callout-warning {
+    background: var(--milwaukee-black) !important;
+    border: 2px solid var(--milwaukee-red) !important;
+    border-left: 6px solid var(--milwaukee-red) !important;
+    color: var(--milwaukee-white) !important;
+    padding: 20px !important;
+    border-radius: 6px !important;
+    margin: 20px 0 !important;
+}
+
+.milwaukee-callout-warning h3,
+.milwaukee-callout-warning h4,
+.milwaukee-callout-warning p,
+.milwaukee-callout-warning li {
+    color: var(--milwaukee-white) !important;
+}
+
+/* Biały callout z czerwonym borderem - standardowe info */
+.milwaukee-callout-info {
+    background: var(--milwaukee-white) !important;
+    border-left: 4px solid var(--milwaukee-red) !important;
+    padding: 20px !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    margin: 20px 0 !important;
+}
+
+/* Szary callout - neutralne tło */
+.milwaukee-callout-neutral {
+    background: var(--milwaukee-bg-light) !important;
+    border-left: 4px solid var(--milwaukee-gray-dark) !important;
+    padding: 20px !important;
+    border-radius: 6px !important;
+    margin: 20px 0 !important;
+}
+
+/* ===== LISTY I CHECKLISTY ===== */
+
+/* Checklisty - czerwone checkmarki */
+.lesson-content ul li::marker {
+    color: var(--milwaukee-red) !important;
+}
+
+/* Lista z czerwonymi bulletami */
+.milwaukee-list-red li {
+    color: var(--milwaukee-gray-dark) !important;
+}
+
+.milwaukee-list-red li::before {
+    content: "■" !important;
+    color: var(--milwaukee-red) !important;
+    font-weight: bold !important;
+    display: inline-block !important;
+    width: 1em !important;
+    margin-left: -1em !important;
+}
+
+/* ===== PRZYCISKI I LINKI ===== */
+
+/* Przyciski Milwaukee style */
+.milwaukee-btn {
+    background: var(--milwaukee-red) !important;
+    color: var(--milwaukee-white) !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.milwaukee-btn:hover {
+    background: var(--milwaukee-red-dark) !important;
+    box-shadow: 0 4px 12px rgba(200, 16, 46, 0.3) !important;
+}
+
+/* Linki - czerwone */
+.lesson-content a {
+    color: var(--milwaukee-red) !important;
+    text-decoration: underline !important;
+}
+
+.lesson-content a:hover {
+    color: var(--milwaukee-red-dark) !important;
+}
+
+/* ===== QUIZ I ĆWICZENIA ===== */
+
+/* Quiz options - czarne bordery z czerwonym akcentem przy wyborze */
+.milwaukee-quiz-option {
+    border: 2px solid var(--milwaukee-gray-light) !important;
+    border-radius: 6px !important;
+    padding: 12px !important;
+    margin: 8px 0 !important;
+    transition: all 0.3s ease !important;
+}
+
+.milwaukee-quiz-option:hover {
+    border-color: var(--milwaukee-red) !important;
+    background: var(--milwaukee-bg-ultralight) !important;
+}
+
+.milwaukee-quiz-option.selected {
+    border: 2px solid var(--milwaukee-red) !important;
+    background: var(--milwaukee-bg-light) !important;
+}
+
+/* ===== SEPARATORY ===== */
+
+/* Gruba czerwona linia separująca */
+.milwaukee-separator {
+    border: none !important;
+    border-top: 3px solid var(--milwaukee-red) !important;
+    margin: 30px 0 !important;
+}
+
+/* Subtelny szary separator */
+.milwaukee-separator-light {
+    border: none !important;
+    border-top: 1px solid var(--milwaukee-gray-light) !important;
+    margin: 20px 0 !important;
+}
+
+/* ===== BOX SHADOWS - Industrial Look ===== */
+
+.milwaukee-shadow {
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15) !important;
+}
+
+.milwaukee-shadow-heavy {
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25) !important;
+}
+
+/* ===== BADGES I TAGI ===== */
+
+.milwaukee-badge {
+    background: var(--milwaukee-red) !important;
+    color: var(--milwaukee-white) !important;
+    padding: 4px 12px !important;
+    border-radius: 4px !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    display: inline-block !important;
+}
+
+.milwaukee-badge-outline {
+    background: transparent !important;
+    border: 2px solid var(--milwaukee-red) !important;
+    color: var(--milwaukee-red) !important;
+    padding: 4px 12px !important;
+    border-radius: 4px !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    display: inline-block !important;
+}
+
+/* ===== RESPONSYWNOŚĆ ===== */
+
+@media (max-width: 768px) {
+    .lesson-content h1 {
+        font-size: 1.8rem !important;
+    }
+    
+    .lesson-content h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    .lesson-content h3 {
+        font-size: 1.2rem !important;
+    }
+    
+    .milwaukee-callout-warning,
+    .milwaukee-callout-info,
+    .milwaukee-callout-neutral {
+        padding: 15px !important;
+    }
+}
+
+/* ===== NADPISANIA DLA ISTNIEJĄCYCH GRADIENTÓW ===== */
+
+/* Klasa do ręcznego nadpisania kolorowych gradientów */
+.milwaukee-override {
+    background: linear-gradient(135deg, var(--milwaukee-black) 0%, var(--milwaukee-gray-dark) 100%) !important;
+    color: var(--milwaukee-white) !important;
+    border-left: 6px solid var(--milwaukee-red) !important;
+}
+
+.milwaukee-override h1,
+.milwaukee-override h2,
+.milwaukee-override h3,
+.milwaukee-override h4,
+.milwaukee-override p,
+.milwaukee-override li {
+    color: var(--milwaukee-white) !important;
+}
+
+/* ===== SPECIFIC OVERRIDES FOR LESSON CONTENT ===== */
+
+/* Intro sections */
+.lesson-content > div:first-of-type[style*="linear-gradient"] {
+    background: linear-gradient(135deg, #1A1A1A 0%, #4A4A4A 100%) !important;
+    border-left: 8px solid #C8102E !important;
+}
+
+/* Case study boxes - szare z czerwonym akcentem */
+.lesson-content div[style*="#f8f9fa"] {
+    background: var(--milwaukee-bg-light) !important;
+    border-left: 4px solid var(--milwaukee-red) !important;
+}
+
+/* Warning/alert boxes - czarne z czerwonym */
+.lesson-content div[style*="#fff3cd"],
+.lesson-content div[style*="#ffebee"],
+.lesson-content div[style*="#fff3e0"] {
+    background: var(--milwaukee-black) !important;
+    border: 2px solid var(--milwaukee-red) !important;
+    border-left: 6px solid var(--milwaukee-red) !important;
+}
+
+.lesson-content div[style*="#fff3cd"] p,
+.lesson-content div[style*="#ffebee"] p,
+.lesson-content div[style*="#fff3e0"] p,
+.lesson-content div[style*="#fff3cd"] li,
+.lesson-content div[style*="#ffebee"] li,
+.lesson-content div[style*="#fff3e0"] li {
+    color: var(--milwaukee-white) !important;
+}
+
+/* Success/green boxes - biały z czerwonym borderem */
+.lesson-content div[style*="#e8f5e8"],
+.lesson-content div[style*="#d1ecf1"],
+.lesson-content div[style*="#e3f2fd"] {
+    background: var(--milwaukee-white) !important;
+    border-left: 4px solid var(--milwaukee-red) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* Purple/violet boxes - szare z czarnym akcentem */
+.lesson-content div[style*="#f3e5f5"] {
+    background: var(--milwaukee-bg-light) !important;
+    border-left: 4px solid var(--milwaukee-black) !important;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+.milwaukee-text-red { color: var(--milwaukee-red) !important; }
+.milwaukee-text-black { color: var(--milwaukee-black) !important; }
+.milwaukee-text-white { color: var(--milwaukee-white) !important; }
+.milwaukee-text-gray { color: var(--milwaukee-gray-dark) !important; }
+
+.milwaukee-bg-red { background: var(--milwaukee-red) !important; }
+.milwaukee-bg-black { background: var(--milwaukee-black) !important; }
+.milwaukee-bg-white { background: var(--milwaukee-white) !important; }
+.milwaukee-bg-gray { background: var(--milwaukee-bg-light) !important; }
+
+.milwaukee-border-red { border-color: var(--milwaukee-red) !important; }
+.milwaukee-border-left-red { border-left: 4px solid var(--milwaukee-red) !important; }
+.milwaukee-border-left-black { border-left: 4px solid var(--milwaukee-black) !important; }
+
+/* ===== END OF MILWAUKEE THEME ===== */

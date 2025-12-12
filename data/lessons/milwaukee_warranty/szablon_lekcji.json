@@ -1,0 +1,317 @@
+{
+  "id": "milwaukee_warranty_care",
+  "title": "🛡️ Milwaukee Care: Od Reklamacji do Satysfakcji Klienta",
+  "category": "Milwaukee",
+  "difficulty": "intermediate",
+  "estimated_time": "33 min",
+  "xp_reward": 150,
+  "description": "Kompleksowy przewodnik po warunkach gwarancyjnych Milwaukee. Naucz się profesjonalnie obsługiwać reklamacje, doradzać klientom i przekształcać problemy w lojalność.",
+  "learning_objectives": [
+    "Poznać pełny zakres i długość gwarancji dla różnych kategorii produktów Milwaukee",
+    "Opanować procedurę reklamacyjną krok po kroku - od zgłoszenia do rozwiązania",
+    "Skutecznie doradzać klientom w trudnych sytuacjach (zgubiony paragon, uszkodzenia)",
+    "Rozpoznawać przypadki wyłączone z gwarancji i profesjonalnie je komunikować",
+    "Wykorzystywać gwarancję jako narzędzie sprzedażowe i budowania lojalności"
+  ],
+  "intro": {
+    "content": "# Witaj w Milwaukee Care!\n\n## 🎯 Dlaczego ta lekcja jest ważna?\n\nGwarancja Milwaukee to **Twoja tajna broń** w sprzedaży! To nie tylko dokument - to:\n\n✅ **Argument zamykający transakcję** - \"3 lata gwarancji vs 1 rok u konkurencji\"\n✅ **Budowanie zaufania** - \"Milwaukee stoi za jakością swoich produktów\"\n✅ **Przewaga konkurencyjna** - możliwość przedłużenia do 4 lat!\n✅ **Źródło lojalności** - profesjonalna obsługa reklamacji = powracający klient\n\n## 📚 Czego się nauczysz?\n\nPo tej lekcji będziesz:\n- Znać na pamięć okresy gwarancyjne dla każdej kategorii produktów\n- Prowadzić klienta przez proces reklamacji krok po kroku\n- Rozwiązywać trudne sytuacje (zgubiony paragon, uszkodzenia mechaniczne)\n- Wykorzystywać program rejestracji do przedłużenia gwarancji\n- Odpowiadać pewnie na 90% pytań o gwarancję\n\n## ⏱️ Czas: ~33 minuty\n\n**Gotowy? Sprawdźmy najpierw Twój aktualny poziom wiedzy!**",
+    "quiz_samodiagnozy": {
+      "pytanie": "Jak oceniasz swoją wiedzę o gwarancji Milwaukee?",
+      "odpowiedzi": [
+        {
+          "tekst": "Podstawowa - znam tylko, że jest 3 lata",
+          "punkty": 1,
+          "feedback": "Świetnie, że jesteś tutaj! Po tej lekcji będziesz ekspertem."
+        },
+        {
+          "tekst": "Średnia - obsługiwałem już kilka reklamacji",
+          "punkty": 2,
+          "feedback": "Dobra baza! Teraz ustrukturyzujemy Twoją wiedzę."
+        },
+        {
+          "tekst": "Zaawansowana - ale chcę odświeżyć szczegóły",
+          "punkty": 3,
+          "feedback": "Doskonale! Sprawdź czy znasz wszystkie niuanse."
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "id": "podstawy_gwarancji",
+      "title": "🔑 Podstawy Gwarancji Milwaukee",
+      "content": "## Zakres czasowy - musisz to znać na pamięć!\n\n### 📅 Okresy gwarancyjne:\n\n| Kategoria produktu | Okres gwarancji | Możliwość przedłużenia |\n|-------------------|-----------------|------------------------|\n| **Elektronarzędzia** 🔨 | **3 lata** | +1 rok (rejestracja) = **4 lata** |\n| **Akumulatory i ładowarki** 🔋 | **2 lata** | +1 rok = **3 lata** |\n| **Wyposażenie** (akcesoria) 🛠️ | **1 rok** | +1 rok = **2 lata** |\n\n### 🎯 Kluczowa informacja:\n\n**Rejestracja produktu w ciągu 30 dni od zakupu = dodatkowy rok gwarancji!**\n\nTo OGROMNY argument sprzedażowy:\n- \"Konkurencja daje 1 rok, Milwaukee **4 lata** po rejestracji!\"\n- \"Rejestracja zajmuje 2 minuty, zyskujesz rok ochrony\"\n\n---\n\n## Co OBEJMUJE gwarancja Milwaukee?\n\n✅ **Wady materiałowe** - wadliwy materiał użyty w produkcji\n✅ **Wady produkcyjne** - błędy w procesie wytwarzania\n✅ **Naprawa lub wymiana** - według decyzji serwisu\n✅ **Bezpłatna diagnostyka** w ASG\n\n### 🔵 Info: Różnica między gwarancjami\n\n**Gwarancja producenta (Milwaukee):**\n- Dotyczy wad fabrycznych\n- Obsługa przez ASG (Autoryzowane Stacje Gwarancyjne)\n- Wymaga dowodu zakupu\n\n**Gwarancja sprzedawcy (sklep):**\n- Uprawnienia konsumenckie (2 lata)\n- Domniemanie wady w pierwszych 12 miesiącach\n- Odwołanie do sklepu, nie producenta\n\n💡 **Pro Tip:** Klient może wybrać, którą gwarancję wykorzystać!\n\n---\n\n## Co NIE jest objęte gwarancją?\n\n### ❌ Kluczowe wyłączenia (zapamiętaj!)\n\n1. **Naturalne zużycie eksploatacyjne:**\n   - Szczotki węglowe\n   - Łożyska kulkowe\n   - Uszczelki\n   - Ostrza, tarcze, wiertła\n\n2. **Uszkodzenia mechaniczne:**\n   - Upadek narzędzia\n   - Pęknięcia obudowy\n   - Uszkodzenia transportowe\n\n3. **Korozja i zaniedbania:**\n   - Rdza (przechowywanie w wilgoci)\n   - Brak konserwacji\n   - Przeciążenie (użycie niezgodne z przeznaczeniem)\n\n4. **Nieautoryzowane naprawy:**\n   - Ingerencja osób nieuprawnionych\n   - Naprawa poza ASG\n   - Wymiana na części niezgodne\n\n### 🟡 Uwaga: Częsty błąd!\n\n**Klient:** \"Wiertarka się zepsuła po roku, to gwarancja!\"\n**Ty sprawdzasz:** Pęknięta obudowa po upadku z rusztowania\n**Wynik:** ❌ Uszkodzenie mechaniczne - BRAK gwarancji\n\n**Jak to komunikować?**\n\"Rozumiem frustrację, ale gwarancja nie obejmuje uszkodzeń mechanicznych. Mogę zaproponować płatną naprawę w ASG lub rabat na nowy produkt.\"\n\n---\n\n## 📌 Kluczowe zasady (do zapamiętania)\n\n1. **Karta gwarancyjna NIE jest wymagana** - wystarczy paragon!\n2. **Data zakupu liczy się od paragonu**, nie od pierwszego użycia\n3. **Tylko ASG może przeprowadzić naprawę gwarancyjną**\n4. **Produkty z importu równoległego** - gwarancja tylko w kraju zakupu\n5. **Przedłużenie przez rejestrację** - musi być w ciągu 30 dni\n\n### ✅ Checklist wiedzy:\n\n- ☑️ Znam okresy: 3 lata (elektronarzędzia), 2 lata (baterie), 1 rok (wyposażenie)\n- ☑️ Wiem, że rejestracja daje +1 rok\n- ☑️ Potrafię wymienić 4 główne wyłączenia\n- ☑️ Rozumiem różnicę między gwarancją producenta a sprzedawcy\n- ☑️ Wiem, że karta gwarancyjna jest opcjonalna",
+      "interactive_elements": [
+        {
+          "type": "mini_quiz",
+          "question": "Klient kupił wiertarkę Milwaukee 3 miesiące temu i zarejestrował ją. Jak długo ma gwarancję?",
+          "options": ["3 lata", "4 lata", "5 lat"],
+          "correct": 1,
+          "explanation": "3 lata standardowo + 1 rok za rejestrację = 4 lata łącznie!"
+        }
+      ]
+    },
+    {
+      "id": "procedury_reklamacyjne",
+      "title": "📋 Procedura Reklamacyjna Krok Po Kroku",
+      "content": "## Wymagane dokumenty - co MUSISZ mieć?\n\n### 📄 Absolutne minimum:\n\n1. **Dowód zakupu** (paragon lub faktura)\n   - Data zakupu MUSI być czytelna\n   - Jeśli wyblakły paragon → zrób skan/zdjęcie ZARAZ po zakupie!\n   - **Bez paragonu = BRAK gwarancji producenta**\n\n2. **Opis usterki** (pisemny)\n   - Co się dzieje? (np. \"wiertarka nie włącza się\")\n   - Kiedy problem wystąpił?\n   - Co klient robił przed awarią?\n\n### 📋 Opcjonalne (ale pomocne):\n\n- Karta gwarancyjna (jeśli była wypełniona)\n- Numer seryjny produktu (znajduje się na tabliczce znamionowej)\n- Oryginalne opakowanie (ułatwia transport)\n\n---\n\n## 5 kroków procesu reklamacyjnego\n\n### 🔄 Standardowy przepływ:\n\n**KROK 1: KONTAKT Z ASG** ☎️\n- Klient dzwoni do wybranej ASG (lista na milwaukee.eu)\n- Opisuje problem\n- ASG potwierdza, czy przyjmie sprzęt\n\n**KROK 2: DOSTARCZENIE PRODUKTU** 📦\n- Klient dostarcza osobiście LUB wysyła kurierem\n- Wraz z dowodem zakupu i opisem usterki\n- ASG wystawia **potwierdzenie przyjęcia**\n\n**KROK 3: DIAGNOSTYKA** 🔍\n- Serwis sprawdza, czy usterka jest objęta gwarancją\n- Czas: 3-14 dni roboczych (zależy od obciążenia ASG)\n- Jeśli NIE gwarancja → kontakt z klientem (wycena płatnej naprawy)\n\n**KROK 4: NAPRAWA LUB WYMIANA** 🔧\n- **Naprawa:** Wymiana wadliwej części\n- **Wymiana:** Jeśli naprawa niemożliwa/nieopłacalna\n- **Zwrot pieniędzy:** Ostateczność (jeśli produktu brak w magazynie)\n\n**KROK 5: ODBIÓR** ✅\n- Klient odbiera naprawiony/wymieniony produkt\n- Otrzymuje protokół naprawy\n- Gwarancja biegnie dalej (nie zaczyna się od nowa!)\n\n### ⏱️ Czas realizacji:\n\n| Scenariusz | Typowy czas |\n|-----------|-------------|\n| Prosta naprawa | 7-14 dni |\n| Wymiana części (musi zamówić) | 14-21 dni |\n| Wymiana produktu | 7-10 dni |\n| Płatna naprawa (akceptacja klienta) | +3-5 dni (decyzja) |\n\n---\n\n## Rola ASG - tylko oni mogą naprawiać!\n\n### 🏭 Autoryzowane Stacje Gwarancyjne (ASG)\n\n**Co to jest ASG?**\n- Serwisy upoważnione przez Milwaukee/TTI Techtronic Industries\n- Przeszkolony personel\n- Dostęp do oryginalnych części zamiennych\n- Narzędzia diagnostyczne Milwaukee\n\n**Dlaczego TYLKO ASG?**\n- ✅ Naprawa przez ASG = gwarancja zachowana\n- ❌ Naprawa przez zwykły serwis = **utrata gwarancji**\n\n### 🌐 Jak znaleźć ASG?\n\n1. **Strona milwaukee.eu** → Serwis → Lista ASG\n2. **Filtruj po województwie**\n3. **Sprawdź opinie** (Google Maps)\n4. **Zadzwoń wcześniej** - nie wszystkie ASG przyjmują od ręki!\n\n### 🟢 Zalecenie dla klienta:\n\n\"Najlepiej wybrać ASG blisko miejsca pracy/domu - łatwiej dostarczyć i odebrać. Niektóre oferują usługę kurierską!\"\n\n---\n\n## 📌 Checklist dla sprzedawcy\n\nKiedy klient zgłasza reklamację:\n\n- ☑️ Sprawdź datę zakupu (czy w okresie gwarancji?)\n- ☑️ Zapytaj o symptomy (wady produkcyjne vs uszkodzenie mechaniczne?)\n- ☑️ Upewnij się, że ma paragon\n- ☑️ Podaj listę ASG w okolicy\n- ☑️ Wyjaśnij proces (5 kroków) - zarządzaj oczekiwaniami!\n- ☑️ Zaproponuj produkt zastępczy (wypożyczenie/wynajem) jeśli klient profesjonalista",
+      "interactive_elements": [
+        {
+          "type": "flowchart",
+          "title": "Schemat procesu reklamacyjnego",
+          "steps": [
+            "1️⃣ Kontakt z ASG",
+            "2️⃣ Dostarczenie produktu + dokumenty",
+            "3️⃣ Diagnostyka (3-14 dni)",
+            "4️⃣ Naprawa/wymiana",
+            "5️⃣ Odbiór naprawionego produktu"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "czeste_pytania",
+      "title": "🚨 Trudne Sytuacje i FAQ",
+      "content": "## Case Study 1: Zgubiony paragon\n\n### 📋 Scenariusz:\n\n**Klient:** \"Kupiłem wiertarkę Milwaukee rok temu u Was, ale zgubiłem paragon. Wiertarka nie działa, czy mogę zgłosić reklamację?\"\n\n**Twoja reakcja:**\n\n1. **Sprawdź historię zakupów** (jeśli klient ma kartę lojalnościową lub fakturę VAT)\n2. **Duplikat paragonu:**\n   - Jeśli płacił kartą → możesz wydrukować duplikat z systemu fiskalnego\n   - Jeśli gotówka → trudniejsze, ale czasem możliwe po numerze seryjnym produktu\n3. **Gwarancja sprzedawcy:**\n   - Nawet bez paragonu klient ma uprawnienia konsumenckie (2 lata)\n   - Ale to TY musisz udowodnić, że nie kupił u Ciebie (domniemanie na korzyść konsumenta)\n\n### ✅ Rozwiązanie:\n\n**Jeśli znajdziesz dowód zakupu:**\n\"Świetnie! Znalazłem Pana zakup w systemie. Wydrukuję duplikat paragonu i może Pan zgłosić reklamację w ASG.\"\n\n**Jeśli nie ma dowodu:**\n\"Rozumiem sytuację. Bez paragonu nie mogę skierować Pana do serwisu Milwaukee, ALE jako sprzedawca przyjmuję reklamację na podstawie gwarancji ustawowej. Proszę opisać usterkę, a my zajmiemy się sprawą.\"\n\n💡 **Pro Tip:** Zawsze proponuj zrobienie zdjęcia paragonu przy sprzedaży drogich narzędzi!\n\n---\n\n## Case Study 2: Uszkodzenie mechaniczne\n\n### 📋 Scenariusz:\n\n**Klient:** \"Szlifierka przestała działać po 6 miesiącach. To gwarancja!\"\n\n**Ty sprawdzasz:** Pęknięta obudowa, ślady upadku\n\n**Klient (defensywnie):** \"Ona spadła raz z wysokości 50 cm, to nic wielkiego! Przecież to narzędzie profesjonalne!\"\n\n### ❌ Co NIE robić:\n\n- ~~\"To Pana wina, że upuścił\"~~ (oskarżanie)\n- ~~\"Gwarancja nie obejmuje\"~~ (koniec rozmowy)\n- ~~\"Nic nie mogę zrobić\"~~ (brak empatii)\n\n### ✅ Jak to obsłużyć:\n\n**KROK 1: EMPATIA**\n\"Rozumiem frustrację - po 6 miesiącach oczekuje Pan, że narzędzie będzie działać.\"\n\n**KROK 2: EDUKACJA**\n\"Gwarancja Milwaukee obejmuje wady materiałowe i produkcyjne, ale nie uszkodzenia mechaniczne jak pęknięcia obudowy po upadku. To standard w całej branży.\"\n\n**KROK 3: ROZWIĄZANIE**\n\"Mam dla Pana dwie opcje:\n1. **Płatna naprawa w ASG** - mogę podać kontakty, zazwyczaj to 150-300 zł\n2. **Wymiana na nowy model** - mogę zaproponować 15% rabatu jako gest dobrej woli\"\n\n**KROK 4: PREWENCJA**\n\"Na przyszłość polecam gumowe etui ochronne - kosztuje 50 zł, ale zabezpiecza przed takimi sytuacjami.\"\n\n### 🔑 Kluczowa lekcja:\n\nKlient z problemem to szansa na budowanie lojalności! Nawet jeśli nie możesz pomóc na gwarancji, pomóż inaczej.\n\n---\n\n## FAQ - Najczęstsze pytania\n\n### ❓ \"Czy muszę mieć kartę gwarancyjną?\"\n\n**Odpowiedź:** NIE! Wystarczy paragon lub faktura. Karta gwarancyjna to tylko dodatek ułatwiający identyfikację produktu.\n\n---\n\n### ❓ \"Kupiłem w Polsce, mieszkam w Niemczech. Czy mogę zgłosić reklamację tam?\"\n\n**Odpowiedź:** TAK, gwarancja Milwaukee jest **międzynarodowa** w krajach UE. Wystarczy dowód zakupu i kontakt z lokalną ASG.\n\n⚠️ **UWAGA:** Import równoległy (produkty spoza oficjalnego dystrybutora) - gwarancja tylko w kraju zakupu!\n\n---\n\n### ❓ \"Ile razy mogę zgłosić reklamację tego samego produktu?\"\n\n**Odpowiedź:** **Bez limitu**, o ile jesteś w okresie gwarancji i usterki są objęte gwarancją.\n\n💡 **Bonus:** Jeśli ten sam produkt był naprawiany 3 razy z tego samego powodu, klient może żądać wymiany na nowy!\n\n---\n\n### ❓ \"Naprawa trwa już miesiąc. Czy mi się przedłuży gwarancja?\"\n\n**Odpowiedź:** TAK! Okres gwarancji **przedłuża się** o czas, w którym produkt był w naprawie.\n\nPrzykład:\n- Gwarancja do: 31.12.2025\n- W serwisie: 1.06.2025 - 1.07.2025 (30 dni)\n- Nowa data końca gwarancji: **31.01.2026**\n\n---\n\n### ❓ \"Kupiłem używane narzędzie Milwaukee. Czy mam gwarancję?\"\n\n**Odpowiedź:** ZALEŻY!\n\n✅ **Jeśli oryginalny okres gwarancji jeszcze trwa** - TAK, gwarancja przechodzi na nowego właściciela\n✅ **Potrzebny:** Oryginalny paragon pierwszego właściciela\n❌ **Jeśli gwarancja wygasła** - niestety nie\n\n---\n\n### ❓ \"Czy mogę zgłosić reklamację bezpośrednio w Milwaukee?\"\n\n**Odpowiedź:** NIE bezpośrednio. Proces:\n1. **Kontakt z ASG** (Autoryzowaną Stacją Gwarancyjną)\n2. ASG kontaktuje się z Milwaukee w sprawie części/autoryzacji\n3. Klient komunikuje się TYLKO z ASG\n\n📞 **Wyjątek:** Skargi/eskalacje - reklamacje@milwaukeetool.pl\n\n---\n\n## 🎯 Sytuacje, które wymagają eskalacji\n\n### Kiedy kierować do Milwaukee Polska?\n\n1. **Naprawa trwa ponad 2 miesiące** bez komunikacji z ASG\n2. **ASG odmawia przyjęcia** produktu objętego gwarancją\n3. **Konflikt z ASG** (np. nieuczciwa wycena naprawy płatnej)\n4. **Produkty z defektem seryjnym** (wiele sztuk tego samego modelu)\n\n### 📧 Kontakt:\n\n- Email: reklamacje@milwaukeetool.pl\n- Infolinia: +48 22 555 10 10 (pon-pt, 8:00-16:00)\n- W wiadomości: numer seryjny, opis problemu, kontakt do ASG\n\n---\n\n## 💡 Pro Tips dla sprzedawców\n\n### Tip 1: Edukuj przy sprzedaży\n\n\"Panie Janku, proszę zrobić zdjęcie paragonu na telefon - jeśli kiedyś będzie potrzebna reklamacja, nie będzie Pan szukał papieru!\"\n\n### Tip 2: Rejestracja = lojalność\n\n\"Widzę, że kupił Pan wiertarkę za 800 zł. Proszę zarejestrować ją w ciągu 30 dni na milwaukee.eu - dostanie Pan +1 rok gwarancji. Mogę pomóc to zrobić teraz na tablecie?\"\n\n### Tip 3: Produkty zastępcze\n\n\"Jeśli Pan oddaje narzędzie do serwisu i jest ono niezbędne do pracy, mogę zaproponować wynajem takiego samego modelu na czas naprawy. Koszt: 30 zł/dzień.\"\n\n### Tip 4: Follow-up po reklamacji\n\n\"Dzień dobry, dzwonię sprawdzić, czy narzędzie działa OK po naprawie. Jeśli jakiekolwiek pytania, jestem do dyspozycji!\"\n\n**Efekt:** Klient czuje się zaopiekowany → poleca sklep → wraca po kolejne zakupy\n\n---\n\n## ✅ Checklist: Trudne sytuacje\n\n- ☑️ Potrafię pomóc klientowi bez paragonu (duplikat lub gwarancja sprzedawcy)\n- ☑️ Komunikuję wyłączenia z gwarancji z empatią\n- ☑️ Proponuję alternatywy (płatna naprawa, rabat na nowy produkt)\n- ☑️ Znam odpowiedzi na 6 najczęstszych pytań o gwarancję\n- ☑️ Wiem, kiedy eskalować sprawę do Milwaukee Polska",
+      "interactive_elements": [
+        {
+          "type": "decision_tree",
+          "title": "Co robić gdy klient zgubił paragon?",
+          "scenario": "Klient bez paragonu zgłasza reklamację",
+          "options": [
+            {
+              "action": "Sprawdź historię zakupów (karta lojalnościowa/faktura)",
+              "result": "✅ Możliwość wydruku duplikatu"
+            },
+            {
+              "action": "Zapytaj o sposób płatności",
+              "result": "Jeśli karta → transakcja w systemie → duplikat"
+            },
+            {
+              "action": "Przyjmij reklamację na podstawie gwarancji sprzedawcy",
+              "result": "✅ 2 lata uprawnienia konsumenckie"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "przedluzenie_gwarancji",
+      "title": "⏰ Przedłużenie Gwarancji - Program Rejestracji",
+      "content": "## 🎁 +1 rok gwarancji GRATIS - najlepszy argument sprzedażowy!\n\n### Jak to działa?\n\n**Standardowa gwarancja:** 3 lata (elektronarzędzia)\n**Po rejestracji:** **4 lata** (3+1)\n\n**Koszt:** 0 zł\n**Czas:** 2 minuty\n**Wymaganie:** Rejestracja w ciągu **30 dni** od zakupu\n\n---\n\n## 📝 Proces rejestracji krok po kroku\n\n### Dla klienta:\n\n**KROK 1: Wejdź na milwaukee.eu**\n- Kliknij \"Rejestracja produktu\" w górnym menu\n- LUB bezpośredni link: https://warranty.milwaukeetool.eu/\n\n**KROK 2: Wypełnij formularz** (2 minuty)\nPotrzebne dane:\n- ✉️ Adres email\n- 📞 Numer telefonu\n- 🏠 Adres\n- 🛒 Data zakupu (z paragonu!)\n- 🔢 Numer seryjny produktu (na tabliczce znamionowej)\n- 📸 Zdjęcie paragonu (skan lub foto)\n\n**KROK 3: Potwierdzenie**\n- Email z potwierdzeniem rejestracji\n- Certyfikat przedłużonej gwarancji (PDF)\n- Przechowuj ten email!\n\n---\n\n## 💼 Twoja rola jako sprzedawcy - MAKSYMALIZUJ REJESTRACJE!\n\n### Dlaczego to ważne?\n\n1. **Zwiększa wartość transakcji** - klient kupuje droższy produkt, bo \"4 lata gwarancji to pewność\"\n2. **Buduje lojalność** - zarejestrowany klient wraca po akcesoria\n3. **Milwaukee docenia** - sprzedawcy z wysokim % rejestracji dostają bonusy/wsparcie\n4. **Mniej reklamacji** - klienci lepiej dbają o zarejestrowane narzędzia\n\n### 🎯 Skrypt sprzedażowy (użyj przy kasie!):\n\n**Wersja 1: Bezpośrednia**\n\n\"Panie Janku, kupił Pan wiertarkę za 800 zł. Ma Pan teraz **30 dni** na zarejestrowanie jej na milwaukee.eu i dostanie Pan **+1 rok gwarancji gratis**. To dosłownie 2 minuty, a ma Pan 4 lata zamiast 3. Mogę pomóc to zrobić teraz na tablecie?\"\n\n**Wersja 2: Porównawcza**\n\n\"Wie Pan, że konkurencja daje 1 rok, Milwaukee daje 3, ALE po rejestracji ma Pan **4 lata**? To najlepsza gwarancja na rynku. Pokażę Panu jak to zrobić?\"\n\n**Wersja 3: Fear of Missing Out (FOMO)**\n\n\"Ważne! Ma Pan tylko 30 dni na rejestrację. Jeśli zapomni Pan, straci Pan dodatkowy rok gwarancji. Mogę wysłać Panu linka SMS-em?\"\n\n---\n\n## 📊 Korzyści dla WSZYSTKICH\n\n### Dla klienta:\n\n✅ **Dłuższa ochrona** - 4 lata zamiast 3\n✅ **Dowód zakupu online** - nie trzeba szukać paragonu\n✅ **Priorytetowe powiadomienia** - informacje o akcjach, nowych produktach\n✅ **Historia narzędzi** - widzi wszystkie zarejestrowane produkty w panelu\n\n### Dla Ciebie (sprzedawcy):\n\n✅ **Argument zamykający sprzedaż** - \"4 lata vs 1 rok u konkurencji\"\n✅ **Cross-selling** - \"Skoro rejestruje Pan wiertarkę, potrzebuje Pan akcesoriów?\"\n✅ **Baza kontaktów** - zarejestrowany klient = możliwość newslettera/ofert\n✅ **Bonusy od Milwaukee** - programy lojalnościowe dla sklepów z wysokim % rejestracji\n\n### Dla Milwaukee:\n\n✅ **Dane o użytkownikach** - komunikacja marketingowa\n✅ **Analityka produktów** - które modele są najpopularniejsze\n✅ **Walka z importem równoległym** - tylko oryginalne produkty można zarejestrować\n\n---\n\n## 🚨 Częste problemy z rejestracją\n\n### Problem 1: \"Minęło 30 dni\"\n\n**Klient:** \"Kupiłem 2 miesiące temu, czy mogę jeszcze zarejestrować?\"\n\n**Odpowiedź:** Niestety nie. Deadline 30 dni jest sztywny.\n\n**Alternatywa:** \"Nadal ma Pan 3 lata gwarancji standardowej, tylko bez przedłużenia. Na przyszłość: kupując kolejne narzędzie, zarejestrujmy od razu!\"\n\n---\n\n### Problem 2: \"Numer seryjny nieczytelny\"\n\n**Klient:** \"Tabliczka się starła, nie widzę numeru\"\n\n**Rozwiązanie:**\n1. Sprawdź **na opakowaniu** - czasem jest duplikat naklejki\n2. Świeć latarką pod kątem - numer może być wytłoczony\n3. Ostateczność: Kontakt do Milwaukee (może zidentyfikować po dacie produkcji + modelu)\n\n---\n\n### Problem 3: \"Strona nie działa\"\n\n**Klient:** \"Formularz nie wysyła, błąd\"\n\n**Checklist:**\n- ✅ Sprawdź przeglądarkę (Chrome/Firefox najlepiej)\n- ✅ Wyczyść cache\n- ✅ Spróbuj z telefonu zamiast komputera\n- ✅ Sprawdź czy zdjęcie paragonu nie jest za duże (max 5 MB)\n- ✅ Ostateczność: Email do support@milwaukeetool.pl\n\n---\n\n## 💡 Pro Tips: Jak zwiększyć % rejestracji w Twoim sklepie?\n\n### Tip 1: Rejestruj przy kasie (tablet)\n\n\"Mamy tablet, mogę Panu pomóc zarejestrować teraz - zajmie minutę!\"\n\n**Efekt:** 70-80% klientów się zgadza (vs 20% jeśli muszą zrobić to sami w domu)\n\n---\n\n### Tip 2: Kartka informacyjna w pudełku\n\n Wydrukuj kartkę A5:\n\n```\n🎁 +1 ROK GWARANCJI GRATIS!\n\nMasz 30 dni na rejestrację:\n1. Wejdź na: milwaukee.eu\n2. Kliknij \"Rejestracja produktu\"\n3. Wypełnij formularz (2 min)\n4. GOTOWE! 4 lata gwarancji zamiast 3!\n\nPytania? Zadzwoń: [TWÓJ TELEFON]\n```\n\nWłóż do każdego opakowania Milwaukee.\n\n---\n\n### Tip 3: SMS reminder\n\n\"Panie Janku, dzwonię przypomnieć o rejestracji wiertarki. Zostało Panu jeszcze 15 dni na dodatkowy rok gwarancji. Mogę pomóc?\"\n\n**Kiedy dzwonić:** 20-25 dzień po zakupie\n\n---\n\n### Tip 4: QR Code na paragonie\n\nJeśli masz nowoczesną kasę:\n- Dodaj QR code prowadzący do strony rejestracji\n- Drukuje się na dole paragonu\n- Klient skanuje telefonem → od razu formularz\n\n---\n\n## 📌 Checklist: Przedłużenie gwarancji\n\n- ☑️ Znam deadline: 30 dni od zakupu\n- ☑️ Potrafię przeprowadzić rejestrację na tablecie (2 minuty)\n- ☑️ Znam 3 wersje skryptu sprzedażowego\n- ☑️ Umiem rozwiązać problemy (nieczytelny numer seryjny, błąd strony)\n- ☑️ Stosuję przynajmniej 1 metodę zwiększania % rejestracji w sklepie\n\n---\n\n## ✅ Podsumowanie sekcji\n\n**Zapamiętaj:**\n- Rejestracja = +1 rok (4 lata total dla elektronarzędzi)\n- Deadline: 30 dni od zakupu (sztywny!)\n- Proces: 2 minuty, potrzebny paragon + numer seryjny\n- **Twoja rola:** Maksymalizuj % rejestracji → szczęśliwsi klienci + bonusy od Milwaukee\n\n**Akcja:** Następnym razem gdy sprzedasz Milwaukee, zaproponuj rejestrację od razu!",
+      "interactive_elements": [
+        {
+          "type": "mini_quiz",
+          "question": "Klient kupił wiertarkę 25 dni temu. Czy może jeszcze zarejestrować ją do przedłużenia gwarancji?",
+          "options": ["Tak, ma jeszcze 5 dni", "Nie, minął termin", "Tak, ale tylko jeśli ma fakturę VAT"],
+          "correct": 0,
+          "explanation": "Ma jeszcze 5 dni (30 dni - 25 dni = 5 dni). To dobry moment na przypomnienie SMS!"
+        }
+      ]
+    }
+  ],
+  "practical_exercises": {
+    "title": "🎯 Ćwiczenia Praktyczne",
+    "exercises": [
+      {
+        "type": "case_study",
+        "title": "Case Study 1: Wiertarka po upadku",
+        "content": "**Scenariusz:**\n\nKlient Jan Kowalski (budowlaniec) przychodzi do sklepu z wiertarką Milwaukee M18 FDD2. Produkt ma 8 miesięcy, paragon zachowany.\n\n**Klient:** \"Dzień dobry, wiertarka przestała działać. Mam gwarancję, prawda?\"\n\n**Ty sprawdzasz:** Pęknięta obudowa z tyłu, ślad uderzenia. Pytasz co się stało.\n\n**Klient:** \"No spadła z drabiny, z metra wysokości. Ale to przecież profesjonalne narzędzie! Powinno wytrzymać!\"\n\nKlient jest zdenerwowany, ma dziś zlecenie i potrzebuje wiertarki.\n\n**Twoje zadanie:** Obsłuż sytuację tak, żeby:\n1. Wyjaśnić dlaczego to nie jest przypadek gwarancyjny\n2. Zaproponować rozwiązanie\n3. Zachować klienta (nie stracić go do konkurencji)\n4. Idealnie - sprzedać dodatkowy produkt",
+        "question": "Jak poprowadzisz rozmowę? Napisz krok po kroku co powiesz i zaproponujesz.",
+        "feedback": "**Przykładowe rozwiązanie:**\n\n**KROK 1: EMPATIA**\n\"Panie Janie, rozumiem frustrację - po 8 miesiącach oczekuje Pan, że narzędzie działa. Szczególnie gdy ma Pan dziś zlecenie.\"\n\n**KROK 2: DIAGNOZA (z udziałem klienta)**\n\"Widzę pęknięcie obudowy z tyłu. To niestety uszkodzenie mechaniczne po upadku. Niestety gwarancja obejmuje wady fabryczne, nie uszkodzenia mechaniczne - to standard w całej branży, także u Makity czy Bosch.\"\n\n**KROK 3: ROZWIĄZANIA (opcje!)**\n\"Mam dla Pana kilka opcji:\n1. **Płatna naprawa w ASG** - mogę podać kontakt, zazwyczaj 200-350 zł, czas 10-14 dni\n2. **Wymiana na nowy model** - mogę zaproponować 20% rabatu jako gest dobrej woli (640 zł zamiast 800 zł)\n3. **Wynajem na czas naprawy** - 35 zł/dzień, od dziś dostępna taka sama wiertarka\"\n\n**KROK 4: CROSS-SELL + PREWENCJA**\n\"Panie Janie, jeśli zdecyduje się Pan na nowy model, polecam gumowe etui ochronne (69 zł). Pracuje Pan na wysokości - to się zwraca po pierwszym upadku.\"\n\n**KROK 5: REJESTRACJA**\n\"I jeszcze jedno - czy zarejestrował Pan poprzednią wiertarkę na milwaukee.eu? To +1 rok gwarancji. Jeśli kupi Pan nową, zarejestrujmy ją od razu przy kasie.\"\n\n**Efekt:**\n- Klient rozumie sytuację (edukacja)\n- Dostaje 3 opcje (czuje kontrolę)\n- Może kontynuować pracę (wynajem)\n- Ty zwiększasz szansę na sprzedaż (rabat + etui + rejestracja)\n- Budowanie lojalności (follow-up za tydzień)"
+      },
+      {
+        "type": "case_study",
+        "title": "Case Study 2: Zgubiony paragon + podejrzliwy klient",
+        "content": "**Scenariusz:**\n\nKlientka Anna Nowak przychodzi z szlifierką kątową Milwaukee AG 800-115. Produkt ma 14 miesięcy (w okresie 2-letniej gwarancji ustawowej).\n\n**Klientka:** \"Szlifierka nie włącza się. Kupiłam u Was rok temu, ale nie mam paragonu - wyrzuciłam. Chcę wymianę!\"\n\n**Ty sprawdzasz w systemie:** Brak transakcji na jej nazwisko, nie ma karty lojalnościowej.\n\n**Klientka (podejrzliwie):** \"Ale przecież kupowałam! Nie znam się na komputerach, może źle szukacie. I czytałam w internecie, że sprzedawca musi udowodnić że NIE kupiłam!\"\n\nKlientka jest zdeterminowana i zna swoje prawa konsumenckie.\n\n**Twoje zadanie:** Obsłuż reklamację zgodnie z prawem, zachowując profesjonalizm.",
+        "question": "Jak poprowadzisz rozmowę i proces reklamacyjny?",
+        "feedback": "**Przykładowe rozwiązanie:**\n\n**KROK 1: POTWIERDŹ PRAWA KLIENTA**\n\"Pani Anno, ma Pani rację - jako konsumentka ma Pani uprawnienia do reklamacji nawet bez paragonu. Chętnie pomogę.\"\n\n**KROK 2: ZBIERZ INFORMACJE**\n\"Żeby przyspieszyć proces, proszę mi pomóc ustalić szczegóły:\n- Kiedy dokładnie kupowała Pani szlifierkę? (miesiąc/rok)\n- Czy płaciła Pani gotówką czy kartą?\n- Czy pamięta Pani która kasjerka obsługiwała?\n- Czy kupowała Pani coś jeszcze wtedy?\"\n\n**KROK 3: PRÓBA ODNALEZIENIA DOWODU**\n*Jeśli płaciła kartą:*\n\"Jeśli płaciła Pani kartą, mogę sprawdzić transakcje z tamtego okresu. Ma Pani wyciąg bankowy lub aplikację banku? Możemy znaleźć kwotę i datę.\"\n\n**KROK 4: PRZYJĘCIE REKLAMACJI**\n*Jeśli nie znajdziesz dowodu:*\n\"W porządku. Przyjmuję reklamację na podstawie gwarancji ustawowej. Proszę wypełnić formularz reklamacyjny - opisz Pani co się dzieje z szlifierką.\"\n\n**KROK 5: PROCES**\n\"Produkt przekażemy do serwisu na diagnostykę. Mamy 14 dni na ustosunkowanie się do reklamacji. Dostanie Pani potwierdzenie przyjęcia (SMS + email). Jak ustalimy przyczynę usterki, skontaktuję się z Panią.\"\n\n**KROK 6: EDUKACJA (delikatnie)**\n\"Pani Anno, na przyszłość polecam robić zdjęcie paragonu telefonem zaraz po zakupie - ułatwia to reklamacje. A jeśli kupi Pani kolejne narzędzie Milwaukee, zarejestrujmy je na milwaukee.eu - wtedy dowód zakupu jest online.\"\n\n**⚖️ Prawny kontekst:**\n- Bez paragonu MOŻESZ przyjąć reklamację (gwarancja ustawowa 2 lata)\n- Domniemanie wady w pierwszych 12 miesiącach (minęło, ale nadal 2 lata gwarancji)\n- Jeśli usterka fabryczna → naprawa/wymiana\n- Jeśli uszkodzenie mechaniczne → możesz odmówić (ale udowodnij!)\n\n**Efekt:**\n- Klientka czuje się wysłuchana (nie walczysz z nią)\n- Reklamacja przyjęta zgodnie z prawem\n- Próba znalezienia dowodu (ułatwia proces)\n- Edukacja na przyszłość (rejestracja online)"
+      }
+    ]
+  },
+  "quiz": {
+    "passing_score": 80,
+    "questions": [
+      {
+        "id": 1,
+        "type": "single_choice",
+        "question": "Jak długo trwa standardowa gwarancja na elektronarzędzia Milwaukee?",
+        "options": [
+          "12 miesięcy",
+          "24 miesiące",
+          "36 miesięcy",
+          "5 lat"
+        ],
+        "correct": 2,
+        "explanation": "Elektronarzędzia Milwaukee mają standardowo 3 lata (36 miesięcy) gwarancji. Po rejestracji można przedłużyć do 4 lat."
+      },
+      {
+        "id": 2,
+        "type": "single_choice",
+        "question": "W jakim czasie od zakupu klient musi zarejestrować produkt, żeby dostać +1 rok gwarancji?",
+        "options": [
+          "7 dni",
+          "14 dni",
+          "30 dni",
+          "90 dni"
+        ],
+        "correct": 2,
+        "explanation": "Klient ma 30 dni od daty zakupu na zarejestrowanie produktu na milwaukee.eu. Po tym terminie przedłużenie nie jest już możliwe."
+      },
+      {
+        "id": 3,
+        "type": "single_choice",
+        "question": "Które z poniższych NIE jest objęte gwarancją Milwaukee?",
+        "options": [
+          "Wada materiałowa silnika",
+          "Zużyte szczotki węglowe po 2 latach intensywnej pracy",
+          "Uszkodzony łożysk z fabryki",
+          "Błąd w produkcji elektroniki"
+        ],
+        "correct": 1,
+        "explanation": "Szczotki węglowe to element eksploatacyjny - ich naturalne zużycie NIE jest objęte gwarancją. Wady fabryczne (materiałowe, produkcyjne) - TAK."
+      },
+      {
+        "id": 4,
+        "type": "single_choice",
+        "question": "Klient zgubił paragon. Co powinieneś zrobić jako sprzedawca?",
+        "options": [
+          "Odmówić przyjęcia reklamacji",
+          "Sprawdzić historię zakupów i spróbować wydrukować duplikat",
+          "Skierować go do producenta Milwaukee",
+          "Powiedzieć, że bez paragonu nic nie można zrobić"
+        ],
+        "correct": 1,
+        "explanation": "Najpierw spróbuj odnaleźć dowód zakupu w systemie (jeśli płacił kartą/ma kartę lojalnościową). Możesz też przyjąć reklamację na podstawie gwarancji ustawowej (2 lata)."
+      },
+      {
+        "id": 5,
+        "type": "multiple_choice",
+        "question": "Które dokumenty są WYMAGANE do zgłoszenia reklamacji w ASG? (wybierz wszystkie poprawne)",
+        "options": [
+          "Dowód zakupu (paragon lub faktura)",
+          "Karta gwarancyjna",
+          "Opis usterki",
+          "Oryginalne opakowanie"
+        ],
+        "correct": [0, 2],
+        "explanation": "WYMAGANE: (1) Dowód zakupu i (2) Opis usterki. Karta gwarancyjna i opakowanie są POMOCNE, ale nie wymagane."
+      },
+      {
+        "id": 6,
+        "type": "single_choice",
+        "question": "Klient kupił wiertarkę 2 lata temu i zarejestrował ją w ciągu 30 dni. Teraz się zepsuła (wada fabryczna). Czy ma gwarancję?",
+        "options": [
+          "Nie, gwarancja już wygasła (2 lata minęły)",
+          "Tak, ma jeszcze 2 lata gwarancji (do 4 roku)",
+          "Tak, ale tylko jeśli ma kartę gwarancyjną",
+          "Nie, rejestracja przedłuża tylko gwarancję na akumulatory"
+        ],
+        "correct": 1,
+        "explanation": "Zarejestrował = 4 lata gwarancji (3 standardowe + 1 za rejestrację). Po 2 latach ma jeszcze 2 lata ochrony!"
+      },
+      {
+        "id": 7,
+        "type": "single_choice",
+        "question": "Kto może przeprowadzić naprawę gwarancyjną produktu Milwaukee?",
+        "options": [
+          "Dowolny serwis elektronarzędzi",
+          "Tylko Autoryzowane Stacje Gwarancyjne (ASG)",
+          "Sam klient (jeśli ma doświadczenie)",
+          "Sprzedawca (sklep)"
+        ],
+        "correct": 1,
+        "explanation": "TYLKO ASG (Autoryzowane Stacje Gwarancyjne) mogą przeprowadzić naprawę gwarancyjną. Naprawa gdzie indziej = utrata gwarancji!"
+      },
+      {
+        "id": 8,
+        "type": "single_choice",
+        "question": "Naprawa gwarancyjna trwała 20 dni. Co dzieje się z okresem gwarancji?",
+        "options": [
+          "Nic - gwarancja biegnie normalnie",
+          "Przedłuża się o 20 dni",
+          "Zaczyna się od nowa (np. 3 lata od naprawy)",
+          "Skraca się o 20 dni"
+        ],
+        "correct": 1,
+        "explanation": "Okres gwarancji PRZEDŁUŻA SIĘ o czas, w którym produkt był w naprawie. 20 dni w serwisie = +20 dni gwarancji na końcu."
+      },
+      {
+        "id": 9,
+        "type": "single_choice",
+        "question": "Klient: 'Wiertarka przestała działać po upadku z wysokości 2 metrów. To reklamacja!' Co powiesz?",
+        "options": [
+          "To Pana wina, gwarancja nie obejmuje",
+          "Rozumiem frustrację, ale gwarancja nie obejmuje uszkodzeń mechanicznych. Mogę zaproponować płatną naprawę lub rabat na nowy produkt",
+          "Proszę zgłosić do ASG, oni zdecydują",
+          "Nic nie mogę zrobić, przykro mi"
+        ],
+        "correct": 1,
+        "explanation": "Komunikuj z EMPATIĄ, wyjaśnij dlaczego (uszkodzenie mechaniczne), zaproponuj ROZWIĄZANIE (płatna naprawa/rabat). Nie oskarżaj, nie kończyj rozmowy."
+      },
+      {
+        "id": 10,
+        "type": "single_choice",
+        "question": "Klient kupił używaną wiertarkę Milwaukee z rąk prywatnych. Oryginalny paragon ma datę sprzed 1 roku. Czy ma gwarancję?",
+        "options": [
+          "Nie, gwarancja nie przechodzi na kolejnego właściciela",
+          "Tak, ma jeszcze 2 lata gwarancji (3 lata - 1 rok)",
+          "Tak, ale tylko jeśli sprzedawca wypełnił kartę gwarancyjną",
+          "Tak, ale gwarancja zaczyna się od nowa od daty zakupu używanego produktu"
+        ],
+        "correct": 1,
+        "explanation": "Gwarancja Milwaukee PRZECHODZI na kolejnego właściciela, o ile oryginalny okres jeszcze trwa. 1 rok od zakupu = zostały 2 lata (z 3 standardowych)."
+      }
+    ]
+  },
+  "summary": {
+    "title": "✅ Podsumowanie - Jesteś Ekspertem od Gwarancji Milwaukee!",
+    "key_points": [
+      "**Okresy gwarancji:** 3 lata (elektronarzędzia), 2 lata (akumulatory), 1 rok (wyposażenie) - PO rejestracji +1 rok!",
+      "**Rejestracja = MUST:** 30 dni od zakupu, 2 minuty procesu, milwaukee.eu → +1 rok gwarancji GRATIS",
+      "**Procedura reklamacji:** Kontakt z ASG → Dostarczenie + dokumenty → Diagnostyka → Naprawa → Odbiór (7-21 dni)",
+      "**Wyłączenia:** Naturalne zużycie (szczotki, łożyska), uszkodzenia mechaniczne (upadki), korozja, nieautoryzowane naprawy",
+      "**Trudne sytuacje:** Zgubiony paragon = sprawdź historię/duplikat lub gwarancja sprzedawcy (2 lata). Uszkodzenie mechaniczne = empatia + płatna naprawa/rabat",
+      "**Gwarancja jako narzędzie sprzedaży:** '4 lata Milwaukee vs 1 rok konkurencji' = argument zamykający transakcję + budowanie lojalności"
+    ],
+    "checklist": [
+      "☑️ Znam na pamięć okresy: 3/2/1 lat + możliwość przedłużenia",
+      "☑️ Potrafię przeprowadzić rejestrację klienta przy kasie (tablet/telefon)",
+      "☑️ Umiem wyjaśnić 5 kroków procesu reklamacyjnego",
+      "☑️ Rozpoznaję przypadki wyłączone z gwarancji (4 kategorie)",
+      "☑️ Komunikuję wyłączenia z empatią i proponuję alternatywne rozwiązania",
+      "☑️ Znam odpowiedzi na 6 najczęstszych pytań o gwarancję",
+      "☑️ Wiem jak pomóc klientowi bez paragonu (duplikat/gwarancja sprzedawcy)",
+      "☑️ Stosuję gwarancję jako argument sprzedażowy ('4 lata vs konkurencja')"
+    ],
+    "next_steps": [
+      "**Praktyka:** Przy następnej sprzedaży Milwaukee zaproponuj rejestrację od razu - zmierz czas (cel: <3 minuty)",
+      "**Materiały:** Wydrukuj kartki informacyjne o rejestracji (A5) i wkładaj do każdego opakowania Milwaukee",
+      "**Sieć:** Zapisz kontakty do 3 najbliższych ASG (telefon + adres) - będziesz podawać klientom",
+      "**Follow-up:** Za 20-25 dni po sprzedaży Milwaukee zadzwoń do klienta - przypomnienie o rejestracji (jeśli nie zarejestrował przy kasie)",
+      "**Deepening:** Przejdź do lekcji zaawansowanej: 'Obsługa trudnych klientów' lub 'Cross-selling akcesoriów Milwaukee'"
+    ]
+  },
+  "resources": [
+    {
+      "title": "Warunki gwarancji Milwaukee (PDF źródłowy)",
+      "url": "materialy_zrodlowe/Warunki gwarancji.pdf",
+      "type": "document"
+    },
+    {
+      "title": "Strona rejestracji gwarancji Milwaukee",
+      "url": "https://warranty.milwaukeetool.eu/",
+      "type": "external"
+    },
+    {
+      "title": "Lista Autoryzowanych Stacji Gwarancyjnych (ASG)",
+      "url": "https://www.milwaukee.eu/pl/pl/serwis/",
+      "type": "external"
+    },
+    {
+      "title": "Kontakt Milwaukee Polska - Reklamacje",
+      "url": "mailto:reklamacje@milwaukeetool.pl",
+      "type": "email"
+    }
+  ]
+}

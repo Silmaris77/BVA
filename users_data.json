@@ -471,5 +471,35 @@
         }
       }
     }
+  },
+  "admin": {
+    "company": "Milwaukee",
+    "layout_preference": "standard",
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "completed_lessons": [
+      "2. Chemia mózgu",
+      "TEST_LESSON_DELETE_ME"
+    ],
+    "lesson_access": {
+      "0. Wprowadzenie do neuroprzywództwa": true,
+      "1. Mózg emocjonalny_copy": false,
+      "lesson_template": true,
+      "10. Wyzwania menedżerskie": false,
+      "2. Chemia mózgu": false,
+      "3. Model SCARF": false,
+      "4. Model SEEDS": false,
+      "5. Stres i odporność psychiczna": false,
+      "6. Podejmowanie decyzji i ryzyko": false,
+      "7. Pamięć i uwaga": false,
+      "8. Kondycja mózgu": false,
+      "9. Kształtowanie nawyków": false,
+      "backup_lesson_11_20251007_004910": false,
+      "backup_lesson_11_20251007_010417": false,
+      "TEST_LESSON_DELETE_ME": true
+    },
+    "xp": 344
   }
 }
