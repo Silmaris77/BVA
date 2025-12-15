@@ -528,97 +528,85 @@ def show_lessons_content():
             st.markdown('<div class="lesson-nav-container">', unsafe_allow_html=True)
             st.markdown('<div class="lesson-nav-title">🗺️ Nawigacja lekcji</div>', unsafe_allow_html=True)
             
-            # Stwórz kolumny dla przycisków nawigacji z responsive grid
+            # Mapowanie kroków na ikony
+            step_icons = {
+                'intro': '📖',
+                'content': '📚',
+                'practical_exercises': '🎯',
+                'summary': '🎓'
+            }
+            
+            # Wszystkie kroki w jednym wierszu - 4 kolumny
             available_steps_in_order = [step for step in step_order if step in available_steps]
+            cols = st.columns(len(available_steps_in_order))
             
-            # Użyj responsive grid: 2 kolumny na desktop i tablet, 1 na mobile
-            device_type = get_device_type()
-            if device_type == 'mobile':
-                cols_per_row = 1
-            else:  # desktop i tablet
-                cols_per_row = 2
-            
-            # Podziel przyciski na wiersze
-            rows = []
-            for i in range(0, len(available_steps_in_order), cols_per_row):
-                rows.append(available_steps_in_order[i:i + cols_per_row])
-            
-            # Wyświetl każdy wiersz osobno
-            for row_steps in rows:
-                cols = st.columns(cols_per_row)
-                for col_index, step in enumerate(row_steps):
-                    if col_index < len(cols):  # Sprawdź czy kolumna istnieje
-                        with cols[col_index]:
-                            step_name = step_names.get(step, step.capitalize())
-                            step_number = step_order.index(step) + 1  # Numer kroku w oryginalnej kolejności
-                            
-                            # Sprawdź status kroku
-                            is_completed = st.session_state.lesson_progress.get(step, False)
-                            is_current = (step == st.session_state.lesson_step)
-                            
-                            # Specjalna logika dla sekcji "Podsumowanie" - wymaga zaliczenia quizu końcowego
-                            if step == 'summary':
-                                # Sprawdź czy quiz końcowy został zdany z minimum 75%
-                                lesson_title = lesson.get("title", "")
-                                closing_quiz_key = f"closing_quiz_{lesson_id}"
-                                closing_quiz_state = st.session_state.get(closing_quiz_key, {})
-                                quiz_passed = closing_quiz_state.get("quiz_passed", False)
-                                
-                                # Dla lekcji "Wprowadzenie do neuroprzywództwa" nie ma blokowania
-                                if lesson_title != "Wprowadzenie do neuroprzywództwa" and not quiz_passed and not is_current:
-                                    # Blokuj dostęp do podsumowania jeśli quiz nie został zdany
-                                    button_text = f"🔄 {step_number}. {step_name}"
-                                    button_type = "secondary"
-                                    disabled = True
-                                    help_text = "Musisz zaliczyć quiz końcowy (min. 75%) w sekcji 'Praktyka', aby odblokować podsumowanie"
-                                elif is_current:
-                                    button_text = f"🔄 {step_number}. {step_name}"
-                                    button_type = "primary"
-                                    disabled = False
-                                    help_text = f"Przejdź do: {step_name}"
-                                elif is_completed:
-                                    button_text = f"✅ {step_number}. {step_name}"
-                                    button_type = "secondary"
-                                    disabled = False
-                                    help_text = f"Przejdź do: {step_name}"
-                                else:
-                                    button_text = f"{step_number}. {step_name}"
-                                    button_type = "secondary"
-                                    disabled = True
-                                    help_text = f"Ukończ poprzednie kroki aby odblokować: {step_name}"
-                            else:
-                                # Standardowa logika dla innych kroków
-                                if is_current:
-                                    # Aktualny krok - niebieski
-                                    button_text = f"🔄 {step_number}. {step_name}"
-                                    button_type = "primary"
-                                    disabled = False
-                                    help_text = f"Przejdź do: {step_name}"
-                                elif is_completed:
-                                    # Ukończony krok - zielony z checkmarkiem
-                                    button_text = f"✅ {step_number}. {step_name}"
-                                    button_type = "secondary"
-                                    disabled = False
-                                    help_text = f"Przejdź do: {step_name}"
-                                else:
-                                    # Przyszły krok - szary, zablokowany
-                                    button_text = f"{step_number}. {step_name}"
-                                    button_type = "secondary"
-                                    disabled = True
-                                    help_text = f"Ukończ poprzednie kroki aby odblokować: {step_name}"
-                            
-                            # Wyświetl przycisk
-                            if st.button(
-                                button_text, 
-                                key=f"nav_step_{step}_{col_index}", 
-                                type=button_type,
-                                disabled=disabled,
-                                use_container_width=True,
-                                help=help_text
-                            ):
-                                if not is_current:  # Tylko jeśli nie jest to aktualny krok
-                                    st.session_state.lesson_step = step
-                                    st.rerun()
+            for col_index, step in enumerate(available_steps_in_order):
+                with cols[col_index]:
+                    step_name = step_names.get(step, step.capitalize())
+                    step_icon = step_icons.get(step, '📄')
+                    step_number = step_order.index(step) + 1
+                    
+                    # Sprawdź status kroku
+                    is_completed = st.session_state.lesson_progress.get(step, False)
+                    is_current = (step == st.session_state.lesson_step)
+                    
+                    # Specjalna logika dla sekcji "Podsumowanie"
+                    if step == 'summary':
+                        lesson_title = lesson.get("title", "")
+                        closing_quiz_key = f"closing_quiz_{lesson_id}"
+                        closing_quiz_state = st.session_state.get(closing_quiz_key, {})
+                        quiz_passed = closing_quiz_state.get("quiz_passed", False)
+                        
+                        if lesson_title != "Wprowadzenie do neuroprzywództwa" and not quiz_passed and not is_current:
+                            button_text = f"{step_icon} {step_name}"
+                            button_type = "secondary"
+                            disabled = True
+                            help_text = "Musisz zaliczyć quiz końcowy (min. 75%) w sekcji 'Praktyka'"
+                        elif is_current:
+                            button_text = f"🔄 {step_icon} {step_name}"
+                            button_type = "primary"
+                            disabled = False
+                            help_text = f"Obecnie: {step_name}"
+                        elif is_completed:
+                            button_text = f"✅ {step_icon} {step_name}"
+                            button_type = "secondary"
+                            disabled = False
+                            help_text = f"Przejdź do: {step_name}"
+                        else:
+                            button_text = f"{step_icon} {step_name}"
+                            button_type = "secondary"
+                            disabled = True
+                            help_text = f"Ukończ poprzednie kroki"
+                    else:
+                        # Standardowa logika
+                        if is_current:
+                            button_text = f"🔄 {step_icon} {step_name}"
+                            button_type = "primary"
+                            disabled = False
+                            help_text = f"Obecnie: {step_name}"
+                        elif is_completed:
+                            button_text = f"✅ {step_icon} {step_name}"
+                            button_type = "secondary"
+                            disabled = False
+                            help_text = f"Przejdź do: {step_name}"
+                        else:
+                            button_text = f"{step_icon} {step_name}"
+                            button_type = "secondary"
+                            disabled = True
+                            help_text = f"Ukończ poprzednie kroki"
+                    
+                    # Wyświetl przycisk
+                    if st.button(
+                        button_text, 
+                        key=f"nav_step_{step}_{col_index}", 
+                        type=button_type,
+                        disabled=disabled,
+                        use_container_width=True,
+                        help=help_text
+                    ):
+                        if not is_current:
+                            st.session_state.lesson_step = step
+                            st.rerun()
             
             st.markdown('</div>', unsafe_allow_html=True)
         
@@ -1049,53 +1037,53 @@ def show_lessons_content():
                     
                     # Fiszki - sprawdzanie wiedzy (nowa funkcjonalność)
                     if 'flashcards' in practical_data:
-                        available_tabs.append("📌 Fiszki")
+                        available_tabs.append("🎴 Fiszki")
                         tab_keys.append('flashcards')
                         sub_tabs_data['flashcards'] = practical_data['flashcards']
                     
                     # Nowa struktura z 'exercises' i 'closing_quiz'
                     if 'exercises' in practical_data:
-                        available_tabs.append("📌 Ćwiczenia")
+                        available_tabs.append("✏️ Ćwiczenia")
                         tab_keys.append('exercises')
                         sub_tabs_data['exercises'] = practical_data['exercises']
                     
                     # Case Studies - interaktywne przypadki do analizy
                     if 'case_studies' in practical_data:
-                        available_tabs.append("📌 Case Studies")
+                        available_tabs.append("📊 Case Studies")
                         tab_keys.append('case_studies')
                         sub_tabs_data['case_studies'] = practical_data['case_studies']
                     
                     # AI Exercises - interaktywne ćwiczenia sprawdzane przez AI
                     if 'ai_exercises' in practical_data:
-                        available_tabs.append("📌 Ćwiczenia AI")
+                        available_tabs.append("🤖 Ćwiczenia AI")
                         tab_keys.append('ai_exercises')
                         sub_tabs_data['ai_exercises'] = practical_data['ai_exercises']
                     
                     # Pytania otwarte z oceną AI
                     if 'ai_questions' in practical_data:
-                        available_tabs.append("📌 Pytania AI")
+                        available_tabs.append("💬 Pytania AI")
                         tab_keys.append('ai_questions')
                         sub_tabs_data['ai_questions'] = practical_data['ai_questions']
                     
                     # Challenge - AI generuje przypadki do rozwiązania
                     if 'generated_case_studies' in practical_data:
-                        available_tabs.append("📌 Challenge")
+                        available_tabs.append("🏆 Challenge")
                         tab_keys.append('generated_case_studies')
                         sub_tabs_data['generated_case_studies'] = practical_data['generated_case_studies']
                     
                     if 'closing_quiz' in practical_data:
-                        available_tabs.append("📌 Quiz końcowy")
+                        available_tabs.append("✅ Quiz końcowy")
                         tab_keys.append('closing_quiz')
                         sub_tabs_data['closing_quiz'] = practical_data['closing_quiz']
                     
                     # Backward compatibility - stara struktura bezpośrednia (reflection, application, closing_quiz)
                     if 'reflection' in practical_data:
-                        available_tabs.append("📌 Refleksja")
+                        available_tabs.append("💭 Refleksja")
                         tab_keys.append('reflection')
                         sub_tabs_data['reflection'] = practical_data['reflection']
                     
                     if 'application' in practical_data:
-                        available_tabs.append("📌 Zadania Praktyczne")
+                        available_tabs.append("📝 Zadania Praktyczne")
                         tab_keys.append('application')
                         sub_tabs_data['application'] = practical_data['application']
                     
@@ -1247,18 +1235,18 @@ def show_lessons_content():
                                             current_card = cards[flashcard_state['current_card']]
                                             card_id = current_card['id']
                                             
-                                            # Wyświetl kartę
+                                            # Nagłówek (zawsze widoczny)
+                                            st.markdown(f"### 🎴 Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
+                                            
+                                            # Wyświetl kartę w jednolitym kontenerze
                                             if not flashcard_state['show_back']:
-                                                # Przód karty
-                                                st.markdown(f"### 📌 Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
-                                                
-                                                # Pytanie
+                                                # Przód karty (pytanie)
                                                 st.markdown(f"""
                                                 <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                                                           padding: 30px; border-radius: 15px; color: white; 
-                                                           margin: 20px 0; text-align: center; min-height: 200px; 
+                                                           padding: 40px; border-radius: 15px; color: white; 
+                                                           margin: 20px 0; text-align: center; min-height: 250px; 
                                                            display: flex; align-items: center; justify-content: center;'>
-                                                    <h3 style='color: white; margin: 0; font-size: 1.3rem; line-height: 1.4;'>
+                                                    <h3 style='color: white; margin: 0; font-size: 1.3rem; line-height: 1.5;'>
                                                         {current_card['front']}
                                                     </h3>
                                                 </div>
@@ -1267,31 +1255,26 @@ def show_lessons_content():
                                                 # Przycisk pokazania odpowiedzi
                                                 col1, col2, col3 = st.columns([1, 2, 1])
                                                 with col2:
-                                                    if st.button("📌 Pokaż odpowiedź", key=f"show_back_{card_id}", type="primary", use_container_width=True):
+                                                    if st.button("👁️ Pokaż odpowiedź", key=f"show_back_{card_id}", type="primary", use_container_width=True):
                                                         flashcard_state['show_back'] = True
                                                         st.rerun()
                                             
                                             else:
-                                                # Tył karty
-                                                st.markdown(f"### 📌 Fiszka {flashcard_state['current_card'] + 1}/{total_cards}")
-                                                
-                                                # Pytanie (mniejsze)
-                                                st.markdown(f"""
-                                                <div style='background: #f8f9fa; padding: 15px; border-radius: 10px; 
-                                                           border-left: 4px solid #667eea; margin: 15px 0;'>
-                                                    <strong>Pytanie:</strong> {current_card['front']}
-                                                </div>
-                                                """, unsafe_allow_html=True)
-                                                
-                                                # Odpowiedź
+                                                # Tył karty (pytanie + odpowiedź w jednym kontenerze)
                                                 st.markdown(f"""
                                                 <div style='background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); 
-                                                           padding: 30px; border-radius: 15px; color: white; 
-                                                           margin: 20px 0; min-height: 150px;'>
-                                                    <h4 style='color: white; margin-bottom: 15px;'>? Odpowiedź:</h4>
-                                                    <p style='color: white; margin: 0; font-size: 1.1rem; line-height: 1.5;'>
-                                                        {current_card['back']}
-                                                    </p>
+                                                           padding: 40px; border-radius: 15px; color: white; 
+                                                           margin: 20px 0; min-height: 250px;'>
+                                                    <div style='background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; margin-bottom: 20px;'>
+                                                        <strong style='color: white;'>📖 Pytanie:</strong><br/>
+                                                        <span style='color: white; font-size: 1.05rem;'>{current_card['front']}</span>
+                                                    </div>
+                                                    <div style='padding-top: 10px;'>
+                                                        <strong style='color: white; font-size: 1.1rem;'>✅ Odpowiedź:</strong><br/><br/>
+                                                        <p style='color: white; margin: 0; font-size: 1.1rem; line-height: 1.6;'>
+                                                            {current_card['back']}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                                 """, unsafe_allow_html=True)
                                                 
@@ -1300,7 +1283,7 @@ def show_lessons_content():
                                                 col1, col2, col3 = st.columns(3)
                                                 
                                                 with col1:
-                                                    if st.button("? Nie wiedziałem", key=f"incorrect_{card_id}", type="secondary", use_container_width=True):
+                                                    if st.button("❌ Nie wiedziałem", key=f"incorrect_{card_id}", type="secondary", use_container_width=True):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         flashcard_state['incorrect_answers'].add(card_id)
                                                         flashcard_state['correct_answers'].discard(card_id)  # Usuń z poprawnych jeśli było
@@ -1309,7 +1292,7 @@ def show_lessons_content():
                                                         st.rerun()
                                                 
                                                 with col2:
-                                                    if st.button("📌 Częściowo", key=f"partial_{card_id}", use_container_width=True):
+                                                    if st.button("🤔 Częściowo", key=f"partial_{card_id}", use_container_width=True):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         # Częściowa wiedza = nie dodawaj do żadnej kategorii
                                                         flashcard_state['show_back'] = False
@@ -1317,7 +1300,7 @@ def show_lessons_content():
                                                         st.rerun()
                                                 
                                                 with col3:
-                                                    if st.button("? Wiedziałem", key=f"correct_{card_id}", type="primary", use_container_width=True):
+                                                    if st.button("✅ Wiedziałem", key=f"correct_{card_id}", type="primary", use_container_width=True):
                                                         flashcard_state['studied_cards'].add(card_id)
                                                         flashcard_state['correct_answers'].add(card_id)
                                                         flashcard_state['incorrect_answers'].discard(card_id)  # Usuń z niepoprawnych jeśli było
@@ -1330,7 +1313,7 @@ def show_lessons_content():
                                             col1, col2 = st.columns(2)
                                             
                                             with col1:
-                                                if st.button("📌 Reset postępu", key=f"reset_flashcards_{lesson_id}"):
+                                                if st.button("🔄 Reset postępu", key=f"reset_flashcards_{lesson_id}"):
                                                     flashcard_state['current_card'] = 0
                                                     flashcard_state['show_back'] = False
                                                     flashcard_state['studied_cards'] = set()
@@ -1340,7 +1323,7 @@ def show_lessons_content():
                                                     st.rerun()
                                             
                                             with col2:
-                                                if st.button("📌 Tylko niepoprawne", key=f"review_incorrect_{lesson_id}", disabled=len(flashcard_state['incorrect_answers']) == 0):
+                                                if st.button("🔁 Tylko niepoprawne", key=f"review_incorrect_{lesson_id}", disabled=len(flashcard_state['incorrect_answers']) == 0):
                                                     # Znajdź pierwszą niepoprawną kartę
                                                     for i, card in enumerate(cards):
                                                         if card['id'] in flashcard_state['incorrect_answers']:
@@ -2516,29 +2499,29 @@ def show_lessons_content():
         key_steps_info = []
         if 'intro' in step_order:
             completed = fragment_progress.get('intro_completed', False)
-            key_steps_info.append(f"📌 Intro: {step_xp_values['intro']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"📖 Intro: {step_xp_values['intro']} XP {'✅' if completed else ''}")
         
         # opening_quiz usunięte - jest teraz zintegrowane w zakładce intro
         
         if 'content' in step_order:
             completed = fragment_progress.get('content_completed', False)
-            key_steps_info.append(f"📌 Treść: {step_xp_values['content']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"📚 Treść: {step_xp_values['content']} XP {'✅' if completed else ''}")
         
         if 'practical_exercises' in step_order:
             completed = fragment_progress.get('practical_exercises_completed', False)
-            key_steps_info.append(f"📌 Ćwiczenia praktyczne: {step_xp_values['practical_exercises']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"🎯 Ćwiczenia praktyczne: {step_xp_values['practical_exercises']} XP {'✅' if completed else ''}")
         
         if 'reflection' in step_order:
             completed = fragment_progress.get('reflection_completed', False)
-            key_steps_info.append(f"📌 Refleksja: {step_xp_values['reflection']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"💭 Refleksja: {step_xp_values['reflection']} XP {'✅' if completed else ''}")
         
         if 'application' in step_order:
             completed = fragment_progress.get('application_completed', False)
-            key_steps_info.append(f"📌 Zadania: {step_xp_values['application']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"✏️ Zadania: {step_xp_values['application']} XP {'✅' if completed else ''}")
         
         if 'summary' in step_order:
             completed = fragment_progress.get('summary_completed', False)
-            key_steps_info.append(f"📌 Podsumowanie: {step_xp_values['summary']} XP {'?' if completed else ''}")
+            key_steps_info.append(f"🎓 Podsumowanie: {step_xp_values['summary']} XP {'✅' if completed else ''}")
         
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
@@ -2553,10 +2536,12 @@ def show_lessons_content():
                     <div style="background: linear-gradient(90deg, #4caf50, #2196f3); 
                                 width: {completion_percent}%; height: 100%; transition: width 0.3s ease;"></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; flex-wrap: wrap; gap: 5px;">
-                    {' '.join([f'<span>{info}</span>' for info in key_steps_info[:3]])}
+                <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 15px; flex-wrap: wrap; gap: 8px;">
+                    {' '.join([f'<span>{info}</span>' for info in key_steps_info[:2]])}
                 </div>
-                {f'<div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 12px; flex-wrap: wrap; gap: 5px;">{" ".join([f"<span>{info}</span>" for info in key_steps_info[3:]])}</div>' if len(key_steps_info) > 3 else ''}
+                <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 15px; flex-wrap: wrap; gap: 8px;">
+                    {' '.join([f'<span>{info}</span>' for info in key_steps_info[2:4]])}
+                </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
