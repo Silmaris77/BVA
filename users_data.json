@@ -500,6 +500,58 @@
       "backup_lesson_11_20251007_010417": false,
       "TEST_LESSON_DELETE_ME": true
     },
-    "xp": 403
+    "xp": 438,
+    "reports": [
+      {
+        "summary_headline": "Tydzień przerwy? Czas wrócić na ścieżkę rozwoju!",
+        "engagement_score": 1,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Zdobyte 297 XP świadczą o wcześniejszym zaangażowaniu.",
+          "Potencjał rozwoju osobistego pozostaje wysoki.",
+          "Ukończono 0 lekcji, więc jest jeszcze wiele do odkrycia!"
+        ],
+        "concerns": [
+          "Brak logowań w ciągu ostatnich 7 dni wskazuje na spadek aktywności.",
+          "Nieużywanie narzędzi i brak postępów w lekcjach hamują rozwój."
+        ],
+        "insights": [
+          "Brak aktywności sugeruje potrzebę ponownego zdefiniowania celów nauki.",
+          "Nieukończone testy (Kolba, Neurolidera) uniemożliwiają pełne spersonalizowanie ścieżki rozwoju."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaloguj się i poświęć 15 minut na powtórzenie jednej z lekcji.",
+            "why": "Regularne, nawet krótkie sesje, pomogą Ci wrócić do nawyku nauki.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "wysoki",
+            "action": "Wykonaj test Kolba i test Neurolidera.",
+            "why": "Poznanie swojego stylu uczenia się i profilu neurolidera pozwoli Ci lepiej dopasować materiały i metody.",
+            "estimated_time": "30 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Przejrzyj listę dostępnych lekcji i wybierz jedną, która najbardziej Cię interesuje.",
+            "why": "Zacznij od tematu, który Cię naprawdę wciągnie, aby zwiększyć motywację.",
+            "estimated_time": "5 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Przeczytanie jednej inspiracji dziennie.",
+            "why": "Mała dawka motywacji na początek dnia pomoże Ci utrzymać pozytywne nastawienie.",
+            "estimated_time": "2 minuty"
+          }
+        ],
+        "motivational_message": "Każdy dzień to nowa szansa na rozwój. Zacznij od małego kroku, a szybko zobaczysz postępy! Pamiętaj, że małe zmiany prowadzą do wielkich rezultatów.",
+        "generated_at": "2025-12-16T00:16:24.837557",
+        "period_start": "2025-12-09",
+        "period_end": "2025-12-16",
+        "report_type": "weekly",
+        "username": "admin"
+      }
+    ]
   }
 }
