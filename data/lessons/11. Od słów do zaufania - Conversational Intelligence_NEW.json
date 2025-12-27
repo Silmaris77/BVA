@@ -1,0 +1,239 @@
+{
+  "_template_info": {
+    "version": "2.0",
+    "description": "Lekcja v2.0 - Conversational Intelligence",
+    "last_updated": "2025-12-24",
+    "status": "skeleton - do wypełnienia"
+  },
+  
+  "id": "NEUROLEADERSHIP_LESSON_11",
+  "title": "Od słów do zaufania - Conversational Intelligence",
+  "description": "Odkryj, jak budować zaufanie przez skuteczną komunikację, wykorzystując najnowsze odkrycia neurobiologii rozmowy.",
+  "tag": "Neuroprzywództwo",
+  "xp_reward": 160,
+  "difficulty": "advanced",
+  "available": true,
+  "estimated_time": "90 min",
+  "learning_objectives": [
+    "Zrozumiesz, jak rozmowy wpływają na neurochemię mózgu (oksytocyna vs kortyzol)",
+    "Nauczysz się rozpoznawać 3 poziomy rozmów i świadomie przechodzić na Poziom III",
+    "Opanujesz praktyczne narzędzia C-IQ: TRUST, Trzy R, Leadershift",
+    "Dowiesz się, jak budować kulturę zaufania przez codzienne rytuały konwersacyjne"
+  ],
+  "prerequisites": [],
+  "tags": ["neuroprzywództwo", "komunikacja", "zaufanie", "C-IQ", "Judith Glaser"],
+  
+  "wprowadzenie": {
+    "glowny": "<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: white;'>🗣️🧠 Od słów do zaufania</h1><p style='font-size: 1.2rem; text-align: center; margin-bottom: 30px;'>Conversational Intelligence w praktyce neuroprzywództwa</p></div><div style='background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 25px; border-radius: 12px; margin: 20px 0;'><div style='background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);'><p style='color: #2c3e50; line-height: 1.8; font-size: 1.1rem; margin-bottom: 20px;'>Każdego dnia prowadzisz dziesiątki rozmów – z zespołem, z szefem, z klientami. To może się wydawać oczywiste, ale <strong>każda z tych rozmów ma realny wpływ na chemię Twojego mózgu i mózgu rozmówców</strong>. W zależności od tego, jak mówisz, jak słuchasz i jakie emocje towarzyszą waszej wymianie, możesz uruchomić w drugiej osobie hormony zaufania i współpracy – albo stres i obronę.</p><div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 8px; margin: 20px 0; color: white;'><h4 style='color: white; margin-bottom: 15px;'>🧠 Neurobiologia rozmowy</h4><p style='line-height: 1.7; margin-bottom: 15px;'>Nauki neurokognitywne dowodzą, że <strong>jakość naszych rozmów wpływa bezpośrednio na poziom hormonów w mózgu</strong>. Kiedy czujesz się zrozumiany i szanowany, Twój mózg uwalnia oksytocynę – hormon zaufania i więzi. Myślisz jaśniej, jesteś bardziej kreatywny i otwarty na współpracę.</p><p style='line-height: 1.7; margin-bottom: 0;'>Z drugiej strony, gdy odczuwasz krytykę, brak zrozumienia czy presję, uruchamia się kortyzol – hormon stresu. Wówczas przełączasz się w tryb obrony, tracisz dostęp do logicznego myślenia i zamykasz się na pomysły innych.</p></div><div style='background: #e8f5e8; padding: 20px; border-radius: 8px; border-left: 5px solid #4caf50; margin: 20px 0;'><h4 style='color: #2e7d32; margin-bottom: 15px;'>💡 Conversational Intelligence (C-IQ)</h4><p style='color: #2e7d32; line-height: 1.7; margin-bottom: 15px;'>To właśnie tutaj pojawia się <strong>inteligencja konwersacyjna (C-IQ)</strong> – umiejętność prowadzenia rozmów, które budują zaufanie zamiast je niszczyć, które inspirują zamiast stresować.</p><p style='color: #2e7d32; line-height: 1.7; margin-bottom: 0;'>Lider z wysokim C-IQ nie tylko przekazuje informacje – on <strong>kształtuje emocjonalny klimat zespołu</strong> poprzez sposób, w jaki rozmawia. Wie, że każda rozmowa to szansa na wzmocnienie zaufania lub... jego pogorszenie.</p></div><div style='background: #fff3e0; padding: 20px; border-radius: 8px; margin: 20px 0;'><h4 style='color: #e65100; margin-bottom: 15px;'>🔄 Od kontroli do współtworzenia</h4><p style='color: #bf360c; line-height: 1.7; margin-bottom: 15px;'>Większość liderów prowadzi rozmowy w trybie "ja mówię, ty słuchasz" lub "przekonuję cię do mojego zdania". C-IQ proponuje inne podejście: <strong>"odkrywamy razem"</strong>.</p><p style='color: #bf360c; line-height: 1.7; margin-bottom: 0;'>Zamiast narzucać rozwiązania, zadajesz pytania. Zamiast oceniać, okazujesz ciekawość. Zamiast bronić swojej racji, szukasz wspólnych celów. To właśnie takie rozmowy uruchamiają w ludziach motywację, kreatywność i zaangażowanie.</p></div><div style='background: #f3e5f5; padding: 20px; border-radius: 8px; margin: 20px 0;'><h4 style='color: #7b1fa2; margin-bottom: 15px;'>🎯 Praktyczne rezultaty</h4><p style='color: #4a148c; line-height: 1.7; margin-bottom: 0;'>Gdy opanujesz C-IQ, zauważysz realną zmianę: Twój zespół będzie bardziej otwarty na feedback, chętniej będzie dzielić się pomysłami, a trudne rozmowy staną się okazją do rozwoju, a nie źródłem stresu. <strong>To nie teoria – to neurobiologia w praktyce.</strong></p></div></div></div>",
+    
+    "case_study": {
+      "title": "Opening Case Study - Spotkanie, które poszło nie tak",
+      "description": "Historia Marty i nieudanej prezentacji kampanii",
+      "content": "<div style='padding: 20px;'><p>[TREŚĆ CASE STUDY DO UZUPEŁNIENIA]</p></div>",
+      "questions": [
+        "Jak myślisz, co poszło nie tak w komunikacji Marty?",
+        "Czy rozpoznajesz podobne sytuacje w swojej pracy?"
+      ]
+    },
+    
+    "quiz_samodiagnozy": {
+      "title": "Quiz - Twój styl komunikacji",
+      "description": "Oceń swoje umiejętności w prowadzeniu rozmów budujących zaufanie",
+      "questions": [
+        {
+          "question": "Jak często w rozmowach najpierw słuchasz, a potem mówisz?",
+          "options": [
+            "Rzadko - zazwyczaj przerywam i wyrażam swoją opinię",
+            "Czasami - zależy od sytuacji",
+            "Często - staram się najpierw zrozumieć",
+            "Zawsze - słuchanie jest dla mnie priorytetem"
+          ],
+          "explanation": "[DO UZUPEŁNIENIA]"
+        },
+        {
+          "question": "Jak reagujesz, gdy ktoś krytykuje Twój pomysł?",
+          "options": [
+            "Bronię się i tłumaczę, dlaczego mam rację",
+            "Czuję frustrację, ale staram się ukryć",
+            "Próbuję zrozumieć perspektywę drugiej osoby",
+            "Traktuję to jako okazję do wspólnego poszukiwania lepszego rozwiązania"
+          ],
+          "explanation": "[DO UZUPEŁNIENIA]"
+        }
+      ]
+    }
+  },
+  
+  "nauka": {
+    "tabs": {
+      "tekst": {
+        "sekcje": [
+          {
+            "title": "📖 Neurobiologia rozmowy",
+            "content": "<div style='padding: 20px;'><p>[TREŚĆ SEKCJI 1 DO UZUPEŁNIENIA]</p></div>"
+          },
+          {
+            "title": "📖 Trzy poziomy rozmów",
+            "content": "<div style='padding: 20px;'><p>[TREŚĆ SEKCJI 2 DO UZUPEŁNIENIA]</p></div>"
+          },
+          {
+            "title": "📖 Narzędzia C-IQ",
+            "content": "<div style='padding: 20px;'><p>[TREŚĆ SEKCJI 3 DO UZUPEŁNIENIA]</p></div>"
+          }
+        ]
+      },
+      
+      "fiszki": {
+        "title": "🃏 Fiszki - Kluczowe pojęcia C-IQ",
+        "description": "Najważniejsze terminy i narzędzia",
+        "sets": [
+          {
+            "title": "Podstawy C-IQ",
+            "cards": [
+              {
+                "front": "Conversational Intelligence (C-IQ)",
+                "back": "[DEFINICJA DO UZUPEŁNIENIA]"
+              },
+              {
+                "front": "Oksytocyna",
+                "back": "[DEFINICJA DO UZUPEŁNIENIA]"
+              },
+              {
+                "front": "Kortyzol",
+                "back": "[DEFINICJA DO UZUPEŁNIENIA]"
+              }
+            ]
+          }
+        ]
+      },
+      
+      "podcast": {
+        "title": "🎧 Podcast - C-IQ w praktyce",
+        "description": "Rozmowa o zastosowaniu inteligencji konwersacyjnej",
+        "url": "https://www.youtube.com/watch?v=PLACEHOLDER",
+        "duration": "20 min",
+        "content": "<div style='padding: 20px;'><p>[TREŚĆ PODCASTU DO UZUPEŁNIENIA LUB USUŃ TĘ SEKCJĘ]</p></div>"
+      },
+      
+      "video": {
+        "title": "🎬 Video - Conversational Intelligence",
+        "description": "Prezentacja koncepcji Judith Glaser",
+        "url": "https://youtu.be/zWBujW9o2Hc",
+        "duration": "10 min",
+        "content": "<div style='padding: 20px;'><p>[TREŚĆ VIDEO DO UZUPEŁNIENIA]</p><iframe src='https://www.youtube.com/embed/zWBujW9o2Hc' width='100%' height='400'></iframe></div>"
+      }
+    }
+  },
+  
+  "praktyka": {
+    "glowny": "<div style='padding: 20px;'><h2>⚡ Praktyka</h2><p>[WPROWADZENIE DO PRAKTYKI DO UZUPEŁNIENIA]</p></div>",
+    
+    "cwiczenia": [
+      {
+        "title": "Ćwiczenie 1: Analiza własnych rozmów",
+        "description": "[OPIS ĆWICZENIA DO UZUPEŁNIENIA]",
+        "steps": [
+          "Krok 1: [DO UZUPEŁNIENIA]",
+          "Krok 2: [DO UZUPEŁNIENIA]",
+          "Krok 3: [DO UZUPEŁNIENIA]"
+        ]
+      }
+    ],
+    
+    "quiz_koncowy": {
+      "title": "Quiz końcowy - Sprawdź swoją wiedzę o C-IQ",
+      "passing_score": 70,
+      "questions": [
+        {
+          "id": 1,
+          "pytanie": "Co to jest Conversational Intelligence?",
+          "opcje": [
+            "Umiejętność szybkiego mówienia",
+            "Zdolność do prowadzenia rozmów budujących zaufanie i współpracę",
+            "Inteligencja emocjonalna",
+            "Technika negocjacyjna"
+          ],
+          "poprawna": 1,
+          "wyjaśnienie": "[WYJAŚNIENIE DO UZUPEŁNIENIA]"
+        }
+      ]
+    }
+  },
+  
+  "podsumowanie": {
+    "glowny": "<div style='padding: 20px;'><h1>🎯 Podsumowanie: Conversational Intelligence</h1><p>[KLUCZOWE WNIOSKI DO UZUPEŁNIENIA]</p></div>",
+    
+    "case_study": {
+      "title": "Closing Case Study - Co dalej?",
+      "description": "Rezultaty wdrożenia C-IQ",
+      "resolution": "<div style='padding: 20px;'><p>[ROZWIĄZANIE CASE STUDY DO UZUPEŁNIENIA]</p></div>"
+    },
+    
+    "mapa_mysli": {
+      "title": "🗺️ Mind Map - C-IQ",
+      "description": "Wizualna mapa Conversational Intelligence",
+      "central_concept": "Conversational Intelligence",
+      "branches": [
+        {
+          "name": "Neurobiologia",
+          "subbranches": ["Oksytocyna", "Kortyzol", "Dopamina"]
+        },
+        {
+          "name": "Poziomy rozmów",
+          "subbranches": ["Poziom I", "Poziom II", "Poziom III"]
+        },
+        {
+          "name": "Narzędzia",
+          "subbranches": ["TRUST", "Trzy R", "Leadershift"]
+        }
+      ]
+    },
+    
+    "sciagawka": {
+      "title": "📄 Cheat Sheet - C-IQ w pigułce",
+      "description": "Quick reference dla praktyka",
+      "content": "<div style='padding: 20px;'><h3>Kluczowe zasady C-IQ:</h3><ul><li>[ZASADA 1 DO UZUPEŁNIENIA]</li><li>[ZASADA 2 DO UZUPEŁNIENIA]</li></ul></div>"
+    },
+    
+    "szablon_planu_dzialan": {
+      "title": "📋 Action Plan - Wdrożenie C-IQ",
+      "description": "Twój plan na najbliższe tygodnie",
+      "sections": [
+        {
+          "title": "1. Pierwsza rozmowa C-IQ",
+          "prompt": "Z kim przeprowadzisz pierwszą rozmowę zgodną z zasadami C-IQ? Kiedy?"
+        },
+        {
+          "title": "2. Narzędzia do praktyki",
+          "prompt": "Które narzędzie (TRUST, Trzy R, Leadershift) zastosujesz jako pierwsze?"
+        },
+        {
+          "title": "3. Pomiar postępów",
+          "prompt": "Jak będziesz mierzył poprawę jakości swoich rozmów?"
+        }
+      ]
+    },
+    
+    "dziennik_refleksji": {
+      "title": "📓 Dziennik Refleksji",
+      "description": "3 pytania do przemyślenia",
+      "pytania": [
+        {
+          "id": "q1",
+          "pytanie": "Co najbardziej zaskoczyło Cię w tej lekcji o C-IQ?",
+          "placeholder": "Pomyśl o neurobiologii, poziomach rozmów, narzędziach..."
+        },
+        {
+          "id": "q2",
+          "pytanie": "Którą ze swoich rozmów chciałbyś przeprowadzić inaczej?",
+          "placeholder": "Opisz konkretną sytuację..."
+        },
+        {
+          "id": "q3",
+          "pytanie": "Jakie będzie Twoje pierwsze działanie po tej lekcji?",
+          "placeholder": "Konkretny krok, który podejmiesz..."
+        }
+      ]
+    }
+  }
+}

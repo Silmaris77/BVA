@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milwaukee Theme - Layout Preview</title>
+    <style>
+        /* ====================================
+           MILWAUKEE THEME - Heavy Duty Professional
+           Paleta: Czerwień #C8102E, Czarny #1A1A1A, Biały #FFFFFF
+        ==================================== */
+
+        /* ===== ZMIENNE CSS ===== */
+        :root {
+            --milwaukee-red: #C8102E;
+            --milwaukee-red-dark: #A4031F;
+            --milwaukee-red-light: #E63946;
+            --milwaukee-black: #1A1A1A;
+            --milwaukee-gray-dark: #4A4A4A;
+            --milwaukee-gray-medium: #6E6E6E;
+            --milwaukee-gray-light: #BDBDBD;
+            --milwaukee-bg-light: #F5F5F5;
+            --milwaukee-bg-ultralight: #FAFAFA;
+            --milwaukee-white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--milwaukee-bg-ultralight);
+            color: var(--milwaukee-gray-dark);
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        /* ===== NAGŁÓWKI ===== */
+        h1 {
+            color: var(--milwaukee-black);
+            font-weight: 700;
+            border-left: 6px solid var(--milwaukee-red);
+            padding-left: 15px;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: var(--milwaukee-red);
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        h3 {
+            color: var(--milwaukee-black);
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        h4 {
+            color: var(--milwaukee-gray-dark);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.25rem;
+        }
+
+        /* ===== TEKST ===== */
+        p {
+            margin-bottom: 15px;
+            color: var(--milwaukee-gray-dark);
+        }
+
+        strong {
+            color: var(--milwaukee-black);
+            font-weight: 600;
+        }
+
+        /* ===== GRADIENTY ===== */
+        .milwaukee-gradient-header {
+            background: linear-gradient(135deg, var(--milwaukee-black) 0%, var(--milwaukee-gray-dark) 100%);
+            color: var(--milwaukee-white);
+            border-left: 8px solid var(--milwaukee-red);
+            padding: 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .milwaukee-gradient-header h3 {
+            color: var(--milwaukee-white);
+            margin: 0;
+        }
+
+        .milwaukee-gradient-red {
+            background: linear-gradient(135deg, var(--milwaukee-red-light) 0%, var(--milwaukee-red-dark) 100%);
+            color: var(--milwaukee-white);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .milwaukee-gradient-subtle {
+            background: linear-gradient(135deg, var(--milwaukee-bg-ultralight) 0%, var(--milwaukee-bg-light) 100%);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        /* ===== CALLOUT BOXY ===== */
+        .milwaukee-callout-warning {
+            background: var(--milwaukee-black);
+            border: 2px solid var(--milwaukee-red);
+            border-left: 6px solid var(--milwaukee-red);
+            color: var(--milwaukee-white);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .milwaukee-callout-warning h4,
+        .milwaukee-callout-warning p {
+            color: var(--milwaukee-white);
+        }
+
+        .milwaukee-callout-info {
+            background: var(--milwaukee-white);
+            border-left: 4px solid var(--milwaukee-red);
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+
+        .milwaukee-callout-neutral {
+            background: var(--milwaukee-bg-light);
+            border-left: 4px solid var(--milwaukee-gray-dark);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        /* ===== TABELE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            border: 1px solid var(--milwaukee-gray-light);
+        }
+
+        thead {
+            background: var(--milwaukee-black);
+            color: var(--milwaukee-white);
+            border-bottom: 3px solid var(--milwaukee-red);
+        }
+
+        th {
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        tbody tr:nth-child(odd) {
+            background: var(--milwaukee-white);
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--milwaukee-bg-light);
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid var(--milwaukee-gray-light);
+            color: var(--milwaukee-gray-dark);
+        }
+
+        /* ===== LISTY ===== */
+        ul {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+            color: var(--milwaukee-gray-dark);
+        }
+
+        ul li::marker {
+            color: var(--milwaukee-red);
+        }
+
+        .milwaukee-list-red li::before {
+            content: "■";
+            color: var(--milwaukee-red);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        /* ===== PRZYCISKI ===== */
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--milwaukee-red);
+            color: var(--milwaukee-white);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 10px 10px 10px 0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: var(--milwaukee-red-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(200, 16, 46, 0.3);
+        }
+
+        .button-secondary {
+            background: var(--milwaukee-black);
+        }
+
+        .button-secondary:hover {
+            background: var(--milwaukee-gray-dark);
+        }
+
+        .button-outline {
+            background: transparent;
+            border: 2px solid var(--milwaukee-red);
+            color: var(--milwaukee-red);
+        }
+
+        .button-outline:hover {
+            background: var(--milwaukee-red);
+            color: var(--milwaukee-white);
+        }
+
+        /* ===== GRID ===== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: var(--milwaukee-white);
+            border: 1px solid var(--milwaukee-gray-light);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+
+        .card h4 {
+            margin-top: 0;
+            color: var(--milwaukee-red);
+        }
+
+        /* ===== STATYSTYKI ===== */
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            background: var(--milwaukee-bg-light);
+            border-radius: 8px;
+            border-left: 4px solid var(--milwaukee-red);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--milwaukee-red);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--milwaukee-gray-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        .progress-container {
+            background: var(--milwaukee-bg-light);
+            border-radius: 10px;
+            height: 30px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--milwaukee-red-light), var(--milwaukee-red-dark));
+            height: 100%;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* ===== RESPONSYWNOŚĆ ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* ===== COLOR PALETTE ===== */
+        .color-palette {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .color-swatch span {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <h1>🔧 Milwaukee Theme Layout</h1>
+        <p><strong>Heavy Duty Professional</strong> - Charakterystyczna czerwień #C8102E, czerń #1A1A1A i profesjonalizm w każdym detalu.</p>
+
+        <!-- COLOR PALETTE -->
+        <h2>Paleta Kolorów</h2>
+        <div class="color-palette">
+            <div class="color-swatch" style="background: #C8102E;">
+                RED<br><span>#C8102E</span>
+            </div>
+            <div class="color-swatch" style="background: #A4031F;">
+                RED DARK<br><span>#A4031F</span>
+            </div>
+            <div class="color-swatch" style="background: #E63946;">
+                RED LIGHT<br><span>#E63946</span>
+            </div>
+            <div class="color-swatch" style="background: #1A1A1A;">
+                BLACK<br><span>#1A1A1A</span>
+            </div>
+            <div class="color-swatch" style="background: #4A4A4A;">
+                GRAY DARK<br><span>#4A4A4A</span>
+            </div>
+            <div class="color-swatch" style="background: #BDBDBD; color: #1A1A1A;">
+                GRAY LIGHT<br><span>#BDBDBD</span>
+            </div>
+        </div>
+
+        <!-- GRADIENTS -->
+        <h2>Gradient Header - Czarno-Szary</h2>
+        <div class="milwaukee-gradient-header">
+            <h3>🔧 Profesjonalny Header</h3>
+            <p>To jest gradient czarno-szary z czerwoną lewą krawędzią - używany do nagłówków sekcji</p>
+        </div>
+
+        <div class="milwaukee-gradient-red">
+            <strong>Gradient Czerwony</strong> - używany do akcentów i wyróżnień
+        </div>
+
+        <div class="milwaukee-gradient-subtle">
+            <strong>Gradient Subtelny</strong> - jasne tło dla sekcji bez dominującego koloru
+        </div>
+
+        <!-- CALLOUT BOXES -->
+        <h2>Callout Boxy</h2>
+
+        <div class="milwaukee-callout-warning">
+            <h4>⚠️ Ostrzeżenie - Czarne tło</h4>
+            <p>Ważne informacje na czarnym tle z czerwonym borderem - maksymalna uwaga!</p>
+        </div>
+
+        <div class="milwaukee-callout-info">
+            <h4>ℹ️ Informacja - Białe tło</h4>
+            <p>Standardowe informacje na białym tle z czerwoną lewą krawędzią i cieniem</p>
+        </div>
+
+        <div class="milwaukee-callout-neutral">
+            <h4>📝 Notatka - Szare tło</h4>
+            <p>Neutralne informacje na szarym tle z szarą lewą krawędzią</p>
+        </div>
+
+        <!-- BUTTONS -->
+        <h2>Przyciski</h2>
+        <div>
+            <button class="button">Przycisk Główny</button>
+            <button class="button button-secondary">Przycisk Drugorzędny</button>
+            <button class="button button-outline">Przycisk Outline</button>
+        </div>
+
+        <!-- TABLE -->
+        <h2>Tabela</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Funkcja</th>
+                    <th>Opis</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Nagłówek</strong></td>
+                    <td>Czarne tło z białym tekstem</td>
+                    <td>✅ Aktywne</td>
+                </tr>
+                <tr>
+                    <td><strong>Rzędy parzyste</strong></td>
+                    <td>Szare tło #F5F5F5</td>
+                    <td>✅ Aktywne</td>
+                </tr>
+                <tr>
+                    <td><strong>Rzędy nieparzyste</strong></td>
+                    <td>Białe tło</td>
+                    <td>✅ Aktywne</td>
+                </tr>
+                <tr>
+                    <td><strong>Border dolny nagłówka</strong></td>
+                    <td>Czerwony 3px solid</td>
+                    <td>✅ Aktywne</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- LISTS -->
+        <h2>Listy</h2>
+        <h3>Lista standardowa (czerwone markery)</h3>
+        <ul>
+            <li><strong>Czerwony marker</strong> - automatyczny kolor markera</li>
+            <li>Tekst szary dla lepszej czytelności</li>
+            <li>Odstępy między elementami</li>
+        </ul>
+
+        <!-- GRID LAYOUT -->
+        <h2>Grid Layout - 3 kolumny</h2>
+        <div class="grid-3">
+            <div class="stat-card">
+                <span class="stat-number">85%</span>
+                <span class="stat-label">Postęp</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">42</span>
+                <span class="stat-label">Lekcje</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">1250</span>
+                <span class="stat-label">XP</span>
+            </div>
+        </div>
+
+        <!-- CARDS -->
+        <h2>Karty - 2 kolumny</h2>
+        <div class="grid-2">
+            <div class="card">
+                <h4>🎯 Feature 1</h4>
+                <p>Opis funkcjonalności z czerwonym nagłówkiem i hover efektem</p>
+            </div>
+            <div class="card">
+                <h4>⚡ Feature 2</h4>
+                <p>Druga karta z tym samym stylem - cień i animacja przy hover</p>
+            </div>
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <h2>Progress Bar</h2>
+        <div class="progress-container">
+            <div class="progress-bar" style="width: 70%;">70% ukończone</div>
+        </div>
+
+        <!-- TYPOGRAPHY SHOWCASE -->
+        <h2>Typografia</h2>
+        <h1>Nagłówek H1 - Czarny z czerwoną krawędzią</h1>
+        <h2>Nagłówek H2 - Czerwony</h2>
+        <h3>Nagłówek H3 - Czarny</h3>
+        <h4>Nagłówek H4 - Ciemnoszary</h4>
+        
+        <p>Paragraph - Tekst w ciemnoszarym kolorze (#4A4A4A) z line-height 1.8 dla lepszej czytelności. <strong>Bold text jest czarny (#1A1A1A)</strong> dla kontrastu.</p>
+
+        <!-- DESIGN PRINCIPLES -->
+        <h2>Zasady Designu Milwaukee</h2>
+        <div class="milwaukee-callout-info">
+            <h4>🎨 Kluczowe Elementy</h4>
+            <ul>
+                <li><strong>Czerwień #C8102E</strong> - używana TYLKO do akcentów (nagłówki H2, markery, bordery, przyciski)</li>
+                <li><strong>Czerń #1A1A1A</strong> - nagłówki H1, H3, tła headerów, bold text</li>
+                <li><strong>Szarość #4A4A4A</strong> - tekst body dla lepszej czytelności</li>
+                <li><strong>Białe tło</strong> - główne tło content z subtelnymi cieniami</li>
+                <li><strong>Lewy border</strong> - charakterystyczny element (6-8px solid czerwony)</li>
+                <li><strong>Gradient czarno-szary</strong> - profesjonalne tła sekcji</li>
+            </ul>
+        </div>
+
+        <!-- COMPARISON -->
+        <h2>Porównanie z innymi theme'ami</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Element</th>
+                    <th>Milwaukee</th>
+                    <th>Standard/Kolorowy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Kolor główny</strong></td>
+                    <td>Czerwień #C8102E</td>
+                    <td>Różne (fiolet, niebieski, zielony)</td>
+                </tr>
+                <tr>
+                    <td><strong>Gradienty</strong></td>
+                    <td>Czarno-szare + czerwony accent</td>
+                    <td>Kolorowe (fiolet-różowy, niebieski)</td>
+                </tr>
+                <tr>
+                    <td><strong>Tło tabel</strong></td>
+                    <td>Czarne z czerwonym borderem</td>
+                    <td>Kolorowe (niebieski, fioletowy)</td>
+                </tr>
+                <tr>
+                    <td><strong>Callout boxy</strong></td>
+                    <td>Czarny z czerwonym lub biały</td>
+                    <td>Pastelowe kolory (żółty, różowy, niebieski)</td>
+                </tr>
+                <tr>
+                    <td><strong>Charakterystyka</strong></td>
+                    <td>Surowy, profesjonalny, minimalistyczny</td>
+                    <td>Przyjazny, kolorowy, edukacyjny</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="milwaukee-gradient-header" style="margin-top: 50px;">
+            <h3>🔧 To jest Milwaukee - Heavy Duty Professional</h3>
+            <p>Czerwień, czerń, profesjonalizm. Zero kompromisów.</p>
+        </div>
+    </div>
+</body>
+</html>

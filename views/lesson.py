@@ -19,6 +19,28 @@ from utils.streamlit_compat import tabs_with_fallback, display_compatibility_inf
 from views.skills_new import show_skill_tree
 from views.admin import is_lesson_accessible
 
+def is_lesson_v2(lesson):
+    """
+    Sprawdza czy lekcja ma strukturę v2.0 (polskie klucze)
+    
+    Args:
+        lesson: Słownik z danymi lekcji
+        
+    Returns:
+        bool: True jeśli lekcja ma strukturę v2.0, False jeśli ma starą strukturę
+    """
+    # Sprawdź czy ma polskie główne klucze bloków
+    v2_keys = ['wprowadzenie', 'nauka', 'praktyka', 'podsumowanie']
+    
+    # Jeśli ma explicite _template_info.version = "2.0"
+    if lesson.get('_template_info', {}).get('version') == '2.0':
+        return True
+    
+    # Jeśli ma co najmniej 2 z 4 polskich kluczy - uznajemy za v2.0
+    present_v2_keys = sum(1 for key in v2_keys if key in lesson)
+    return present_v2_keys >= 2
+
+
 def get_difficulty_stars(difficulty):
     """Konwertuje poziom trudności (liczba lub tekst) na odpowiednią liczbę gwiazdek."""
     difficulty_map = {
@@ -114,9 +136,9 @@ def show_lessons_by_category(lessons_by_category, completed_lessons, device_type
                         button_text="Powtórz lekcję" if is_completed else "Rozpocznij",
                         button_key=f"start_{lesson_id}",
                         lesson_id=lesson_id,
-                        on_click=lambda _, lid=lesson_id: (
+                        on_click=lambda _, lid=lesson_id, les=lesson: (
                             setattr(st.session_state, 'current_lesson', lid),
-                            setattr(st.session_state, 'lesson_step', 'intro'),
+                            setattr(st.session_state, 'lesson_step', 'wprowadzenie' if is_lesson_v2(les) else 'intro'),
                             setattr(st.session_state, 'quiz_score', 0) if 'quiz_score' in st.session_state else None,
                             scroll_to_top(),
                             st.rerun()
@@ -236,8 +258,15 @@ def show_lessons_content():
                 st.rerun()
             return
             
+        # Sprawdź wersję lekcji przed inicjalizacją lesson_step
+        is_v2_check = is_lesson_v2(lesson)
+        
         if 'lesson_step' not in st.session_state:
-            st.session_state.lesson_step = 'intro'
+            # Ustaw pierwszy krok w zależności od wersji lekcji
+            if is_v2_check:
+                st.session_state.lesson_step = 'wprowadzenie'
+            else:
+                st.session_state.lesson_step = 'intro'
         if 'quiz_score' not in st.session_state:
             st.session_state.quiz_score = 0
         # Get current user's lesson progress using the new fragment system
@@ -251,54 +280,90 @@ def show_lessons_content():
                 'reflection': fragment_progress.get('reflection_completed', False),  # backward compatibility
                 'application': fragment_progress.get('application_completed', False),  # backward compatibility
                 'summary': fragment_progress.get('summary_completed', False),
-            'summary': fragment_progress.get('summary_completed', False),
                 'total_xp_earned': fragment_progress.get('total_xp_earned', 0),
                 'steps_completed': 0,
                 'quiz_scores': {},
                 'answers': {}
-            }# Oblicz całkowitą liczbę dostępnych kroków w tej lekcji
-        available_steps = ['intro', 'content', 'summary']
-        if 'sections' in lesson:
-            # Usunięto opening_quiz i closing_quiz z osobnych kroków - są teraz zintegrowane w zakładkach
-            if 'practical_exercises' in lesson.get('sections', {}):
-                available_steps.append('practical_exercises')
-            elif 'reflection' in lesson.get('sections', {}) or 'application' in lesson.get('sections', {}):
+            }
+        
+        # Sprawdź wersję lekcji
+        is_v2 = is_lesson_v2(lesson)
+        
+        # Oblicz całkowitą liczbę dostępnych kroków w tej lekcji
+        if is_v2:
+            # Struktura v2.0 - polskie klucze
+            available_steps = []
+            if 'wprowadzenie' in lesson:
+                available_steps.append('wprowadzenie')
+            if 'nauka' in lesson:
+                available_steps.append('nauka')
+            if 'praktyka' in lesson:
+                available_steps.append('praktyka')
+            if 'podsumowanie' in lesson:
+                available_steps.append('podsumowanie')
+        else:
+            # Stara struktura - angielskie klucze
+            available_steps = ['intro', 'content', 'summary']
+            if 'sections' in lesson:
+                # Usunięto opening_quiz i closing_quiz z osobnych kroków - są teraz zintegrowane w zakładkach
+                # Praktyka jest na poziomie głównym, nie w sections
+                if 'practical_exercises' in lesson:
+                    available_steps.append('practical_exercises')
+                elif 'reflection' in lesson.get('sections', {}) or 'application' in lesson.get('sections', {}):
+                    # Backward compatibility dla starszych lekcji
+                    if 'reflection' in lesson.get('sections', {}):
+                        available_steps.append('reflection')
+                    if 'application' in lesson.get('sections', {}):
+                        available_steps.append('application')
+        
+        # Ustal kolejność kroków
+        if is_v2:
+            # v2.0 - ustala kolejność z available_steps
+            step_order = available_steps
+        else:
+            # Stara struktura (bez opening_quiz i closing_quiz jako osobnych kroków)
+            step_order = ['intro']
+            step_order.extend(['content'])
+            
+            # Nowa sekcja ćwiczeń praktycznych zamiast osobnych reflection i application
+            # closing_quiz jest teraz zintegrowany w sekcji practical_exercises
+            if 'practical_exercises' in available_steps:
+                step_order.append('practical_exercises')
+            elif 'reflection' in available_steps or 'application' in available_steps:
                 # Backward compatibility dla starszych lekcji
-                if 'reflection' in lesson.get('sections', {}):
-                    available_steps.append('reflection')
-                if 'application' in lesson.get('sections', {}):
-                    available_steps.append('application')
-          # Ustal kolejność kroków (bez opening_quiz i closing_quiz jako osobnych kroków)
-        step_order = ['intro']
-        step_order.extend(['content'])
-        
-        # Nowa sekcja ćwiczeń praktycznych zamiast osobnych reflection i application
-        # closing_quiz jest teraz zintegrowany w sekcji practical_exercises
-        if 'practical_exercises' in available_steps:
-            step_order.append('practical_exercises')
-        elif 'reflection' in available_steps or 'application' in available_steps:
-            # Backward compatibility dla starszych lekcji
-            if 'reflection' in available_steps:
-                step_order.append('reflection')
-            if 'application' in available_steps:
-                step_order.append('application')
-        
-        # closing_quiz usunięty jako osobny krok - jest teraz w zakładce practical_exercises
-        step_order.append('summary')
+                if 'reflection' in available_steps:
+                    step_order.append('reflection')
+                if 'application' in available_steps:
+                    step_order.append('application')
+            
+            # closing_quiz usunięty jako osobny krok - jest teraz w zakładce practical_exercises
+            step_order.append('summary')
         
         total_steps = len(step_order)
-        base_xp = lesson.get('xp_reward', 100)        # Mapowanie kroków do nazw wyświetlanych (usunięto opening_quiz i closing_quiz)
-        step_names = {
-            'intro': 'Wprowadzenie',
-            'content': 'Nauka',
-            'practical_exercises': 'Praktyka',
-            'reflection': 'Refleksja',  # backward compatibility
-            'application': 'Zadania praktyczne',  # backward compatibility
-            'summary': 'Podsumowanie'
-        }
+        base_xp = lesson.get('xp_reward', 100)        
+        
+        # Mapowanie kroków do nazw wyświetlanych
+        if is_v2:
+            # v2.0 - polskie nazwy
+            step_names = {
+                'wprowadzenie': 'Wprowadzenie',
+                'nauka': 'Nauka',
+                'praktyka': 'Praktyka',
+                'podsumowanie': 'Podsumowanie'
+            }
+        else:
+            # Stara struktura (usunięto opening_quiz i closing_quiz)
+            step_names = {
+                'intro': 'Wprowadzenie',
+                'content': 'Nauka',
+                'practical_exercises': 'Praktyka',
+                'reflection': 'Refleksja',  # backward compatibility
+                'application': 'Zadania praktyczne',  # backward compatibility
+                'summary': 'Podsumowanie'
+            }
         
         # Specjalne nazwy dla lekcji "Wprowadzenie do neuroprzywództwa"
-        if lesson.get('title') == 'Wprowadzenie do neuroprzywództwa':
+        if not is_v2 and lesson.get('title') == 'Wprowadzenie do neuroprzywództwa':
             step_names = {
                 'intro': 'Wprowadzenie',
                 'content': 'Case Study',
@@ -306,15 +371,32 @@ def show_lessons_content():
                 'reflection': 'Refleksja',  # backward compatibility
                 'application': 'Zadania praktyczne',  # backward compatibility
                 'summary': 'AUTODIAGNOZA'
-            }# Mapowanie kroków do wartości XP (usunięto opening_quiz i closing_quiz)
-        step_xp_values = {
-            'intro': int(base_xp * 0.05),          # 5% całkowitego XP
-            'content': int(base_xp * 0.30),        # 30% całkowitego XP (Merytoryka)
-            'practical_exercises': int(base_xp * 0.60),  # 60% całkowitego XP (nowa połączona sekcja z quizem końcowym)
-            'reflection': int(base_xp * 0.20),     # 20% całkowitego XP (backward compatibility)
-            'application': int(base_xp * 0.20),    # 20% całkowitego XP (backward compatibility)
-            'summary': int(base_xp * 0.05)         # 5% całkowitego XP
-        }
+            }
+        
+        # Mapowanie kroków do wartości XP
+        if is_v2:
+            # v2.0 - rozkład XP dla nowej struktury
+            step_xp_values = {
+                'wprowadzenie': int(base_xp * 0.05),   # 5% całkowitego XP
+                'nauka': int(base_xp * 0.30),          # 30% całkowitego XP
+                'praktyka': int(base_xp * 0.60),       # 60% całkowitego XP
+                'podsumowanie': int(base_xp * 0.05),   # 5% całkowitego XP
+                # Aliasy dla kompatybilności z kodem używającym starych kluczy
+                'intro': int(base_xp * 0.05),
+                'content': int(base_xp * 0.30),
+                'practical_exercises': int(base_xp * 0.60),
+                'summary': int(base_xp * 0.05)
+            }
+        else:
+            # Stara struktura (usunięto opening_quiz i closing_quiz)
+            step_xp_values = {
+                'intro': int(base_xp * 0.05),          # 5% całkowitego XP
+                'content': int(base_xp * 0.30),        # 30% całkowitego XP (Merytoryka)
+                'practical_exercises': int(base_xp * 0.60),  # 60% całkowitego XP (nowa połączona sekcja z quizem końcowym)
+                'reflection': int(base_xp * 0.20),     # 20% całkowitego XP (backward compatibility)
+                'application': int(base_xp * 0.20),    # 20% całkowitego XP (backward compatibility)
+                'summary': int(base_xp * 0.05)         # 5% całkowitego XP
+            }
         
         # Oblicz rzeczywiste maksimum XP jako sumę wszystkich dostępnych kroków
         max_xp = sum(step_xp_values[step] for step in step_order)
@@ -326,6 +408,110 @@ def show_lessons_content():
         # Style dla paska postępu i interfejsu
         st.markdown("""
         <style>
+        /* ===== BVA EDUCATIONAL STYLES - SEMANTIC COLOR SYSTEM ===== */
+        /* Header - Fioletowy gradient (uniwersalny dla wszystkich nagłówków) */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .header h1, .header h2, .header h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        /* Success Box - Zielony (dobre praktyki, zalety, checklista) */
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .success-box h3, .success-box h4 {
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+        
+        /* Error Box - Czerwony (błędy, wady, ostrzeżenia) */
+        .error-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #ef4444;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .error-box h3, .error-box h4 {
+            color: #991b1b;
+            margin-bottom: 10px;
+        }
+        
+        /* Info Box - Niebieski (teoria, definicje, wyjaśnienia) */
+        .info-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .info-box h3, .info-box h4 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        /* Warning Box - Żółty (uwaga, tipy, wskazówki) */
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .warning-box h3, .warning-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        /* Highlight Box - Pomarańczowy (przykłady, case studies) */
+        .highlight-box {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-left: 4px solid #f97316;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .highlight-box h3, .highlight-box h4 {
+            color: #9a3412;
+            margin-bottom: 10px;
+        }
+        
+        /* Tool Box - Fioletowy (narzędzia, kalkulatory, interaktywne elementy) */
+        .tool-box {
+            background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
+            border-left: 4px solid #a855f7;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .tool-box h3, .tool-box h4 {
+            color: #6b21a8;
+            margin-bottom: 10px;
+        }
+        
+        /* Uniwersalne style dla wszystkich boxów */
+        .success-box p, .error-box p, .info-box p, .warning-box p, .highlight-box p, .tool-box p {
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        .success-box ul, .error-box ul, .info-box ul, .warning-box ul, .highlight-box ul, .tool-box ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        /* ===== END BVA EDUCATIONAL STYLES ===== */
+        
         .progress-container {
             background-color: #f0f2f6;
             border-radius: 10px;
@@ -530,10 +716,16 @@ def show_lessons_content():
             
             # Mapowanie kroków na ikony
             step_icons = {
+                # Stara struktura (angielskie klucze)
                 'intro': '📖',
                 'content': '📚',
                 'practical_exercises': '🎯',
-                'summary': '🎓'
+                'summary': '🎓',
+                # Nowa struktura v2.0 (polskie klucze)
+                'wprowadzenie': '📖',
+                'nauka': '📚',
+                'praktyka': '🎯',
+                'podsumowanie': '🎓'
             }
             
             # Wszystkie kroki w jednym wierszu - 4 kolumny
@@ -550,8 +742,8 @@ def show_lessons_content():
                     is_completed = st.session_state.lesson_progress.get(step, False)
                     is_current = (step == st.session_state.lesson_step)
                     
-                    # Specjalna logika dla sekcji "Podsumowanie"
-                    if step == 'summary':
+                    # Specjalna logika dla sekcji "Podsumowanie" (tylko dla starych lekcji)
+                    if step == 'summary' and not is_v2:
                         lesson_title = lesson.get("title", "")
                         closing_quiz_key = f"closing_quiz_{lesson_id}"
                         closing_quiz_state = st.session_state.get(closing_quiz_key, {})
@@ -579,21 +771,40 @@ def show_lessons_content():
                             help_text = f"Ukończ poprzednie kroki"
                     else:
                         # Standardowa logika
-                        if is_current:
-                            button_text = f"🔄 {step_icon} {step_name}"
-                            button_type = "primary"
-                            disabled = False
-                            help_text = f"Obecnie: {step_name}"
-                        elif is_completed:
-                            button_text = f"✅ {step_icon} {step_name}"
-                            button_type = "secondary"
-                            disabled = False
-                            help_text = f"Przejdź do: {step_name}"
+                        # Dla lekcji v2.0 wszystkie sekcje są zawsze dostępne
+                        if is_v2:
+                            if is_current:
+                                button_text = f"🔄 {step_icon} {step_name}"
+                                button_type = "primary"
+                                disabled = False
+                                help_text = f"Obecnie: {step_name}"
+                            elif is_completed:
+                                button_text = f"✅ {step_icon} {step_name}"
+                                button_type = "secondary"
+                                disabled = False
+                                help_text = f"Przejdź do: {step_name}"
+                            else:
+                                button_text = f"{step_icon} {step_name}"
+                                button_type = "secondary"
+                                disabled = False  # ZAWSZE DOSTĘPNE w v2.0
+                                help_text = f"Przejdź do: {step_name}"
                         else:
-                            button_text = f"{step_icon} {step_name}"
-                            button_type = "secondary"
-                            disabled = True
-                            help_text = f"Ukończ poprzednie kroki"
+                            # Dla starych lekcji - sekwencyjna nawigacja
+                            if is_current:
+                                button_text = f"🔄 {step_icon} {step_name}"
+                                button_type = "primary"
+                                disabled = False
+                                help_text = f"Obecnie: {step_name}"
+                            elif is_completed:
+                                button_text = f"✅ {step_icon} {step_name}"
+                                button_type = "secondary"
+                                disabled = False
+                                help_text = f"Przejdź do: {step_name}"
+                            else:
+                                button_text = f"{step_icon} {step_name}"
+                                button_type = "secondary"
+                                disabled = True
+                                help_text = f"Ukończ poprzednie kroki"
                     
                     # Wyświetl przycisk
                     if st.button(
@@ -618,111 +829,175 @@ def show_lessons_content():
         current_section_title = step_names.get(st.session_state.lesson_step, st.session_state.lesson_step.capitalize())
         st.markdown(f"<h1>{current_section_title}</h1>", unsafe_allow_html=True)
           # Main content logic for each step
-        if st.session_state.lesson_step == 'intro':
-            # Sprawdź tytuł lekcji, aby ukryć niektóre tabs dla konkretnych lekcji
-            lesson_title = lesson.get("title", "")
+        if st.session_state.lesson_step == 'intro' or st.session_state.lesson_step == 'wprowadzenie':
+            # Określ czy to v2.0 czy stara struktura
+            current_step_key = st.session_state.lesson_step
+            xp_key = 'wprowadzenie' if current_step_key == 'wprowadzenie' else 'intro'
             
-            if lesson_title == "Wprowadzenie do neuroprzywództwa":
-                # Dla tej lekcji pokazuj tylko zakładkę "Wprowadzenie"
-                intro_tabs = tabs_with_fallback(["Wprowadzenie"])
+            # v2.0 STRUKTURA - polskie klucze
+            if current_step_key == 'wprowadzenie' and 'wprowadzenie' in lesson:
+                wprowadzenie_data = lesson['wprowadzenie']
                 
-                with intro_tabs[0]:
-                    # Wyświetl główne wprowadzenie
-                    if isinstance(lesson.get("intro"), dict) and "main" in lesson["intro"]:
-                        st.markdown(lesson["intro"]["main"], unsafe_allow_html=True)
-                    elif isinstance(lesson.get("intro"), str):
-                        st.markdown(lesson["intro"], unsafe_allow_html=True)
-                    else:
-                        st.warning("Brak treści wprowadzenia.")
-            else:
-                # Dla wszystkich innych lekcji pokazuj pełne tabs
-                intro_tabs = tabs_with_fallback(["Wprowadzenie", "Case Study", "🔍 Quiz Samodiagnozy"])
+                # Zbierz dostępne zakładki
+                available_tabs = []
+                tab_keys = []
                 
-                with intro_tabs[0]:
-                    # Wyświetl główne wprowadzenie
-                    if isinstance(lesson.get("intro"), dict) and "main" in lesson["intro"]:
-                        st.markdown(lesson["intro"]["main"], unsafe_allow_html=True)
-                    elif isinstance(lesson.get("intro"), str):
-                        st.markdown(lesson["intro"], unsafe_allow_html=True)
-                    else:
-                        st.warning("Brak treści wprowadzenia.")
-            
-                with intro_tabs[1]:
-                    # Wyświetl studium przypadku
-                    if isinstance(lesson.get("intro"), dict) and "case_study" in lesson["intro"]:
-                        st.markdown(lesson["intro"]["case_study"], unsafe_allow_html=True)
-                    else:
-                        st.warning("Brak studium przypadku w tej lekcji.")
-            
-                with intro_tabs[2]:
-                    # Wyświetl quiz samodiagnozy
-                    if (isinstance(lesson.get("intro"), dict) and 
-                        "quiz_samodiagnozy" in lesson["intro"] and 
-                        "questions" in lesson["intro"]["quiz_samodiagnozy"]):
-                        
-                        st.info("💡 **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako lidera. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
-                        
-                        quiz_data = lesson["intro"]["quiz_samodiagnozy"]
-                        quiz_complete, _, earned_points = display_quiz(quiz_data)
-                        # Oznacz quiz jako ukończony po wypełnieniu
-                        if quiz_complete:
-                            quiz_xp_key = f"opening_quiz_xp_{lesson_id}"
-                            if not st.session_state.get(quiz_xp_key, False):
-                                # Award fragment XP for quiz participation
-                                fragment_xp = get_fragment_xp_breakdown(lesson.get('xp_reward', 30))
-                                success, earned_xp = award_fragment_xp(lesson_id, 'intro_quiz', fragment_xp['intro'] // 3)  # 1/3 of intro XP
-                                st.session_state[quiz_xp_key] = True
-                                if success and earned_xp > 0:
-                                    show_xp_notification(earned_xp, "za szczerą samorefleksję")
-                        
-                            st.success("? Dziękujemy za szczerą samorefleksję!")
+                if 'glowny' in wprowadzenie_data:
+                    available_tabs.append("Wprowadzenie")
+                    tab_keys.append('glowny')
+                if 'case_study' in wprowadzenie_data:
+                    available_tabs.append("Case Study")
+                    tab_keys.append('case_study')
+                if 'quiz_samodiagnozy' in wprowadzenie_data:
+                    available_tabs.append("🔍 Quiz Samodiagnozy")
+                    tab_keys.append('quiz_samodiagnozy')
+                
+                # Renderuj zakładki jeśli są dostępne
+                if available_tabs:
+                    intro_tabs = tabs_with_fallback(available_tabs)
                     
-                    elif 'sections' in lesson and 'opening_quiz' in lesson.get('sections', {}):
-                        # Backward compatibility - stary format
-                        st.info("💡 **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako inwestora. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
+                    for i, tab_key in enumerate(tab_keys):
+                        with intro_tabs[i]:
+                            if tab_key == 'glowny':
+                                st.markdown(wprowadzenie_data['glowny'], unsafe_allow_html=True)
+                            
+                            elif tab_key == 'case_study':
+                                case_study = wprowadzenie_data['case_study']
+                                if 'title' in case_study:
+                                    st.markdown(f"### {case_study['title']}")
+                                if 'description' in case_study:
+                                    st.markdown(case_study['description'])
+                                if 'content' in case_study:
+                                    st.markdown(case_study['content'], unsafe_allow_html=True)
+                                if 'questions' in case_study:
+                                    st.markdown("#### 🤔 Pytania do przemyślenia:")
+                                    for q in case_study['questions']:
+                                        st.markdown(f"- {q}")
+                            
+                            elif tab_key == 'quiz_samodiagnozy':
+                                st.info("💡 **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
+                                
+                                quiz_data = wprowadzenie_data['quiz_samodiagnozy']
+                                quiz_complete, _, earned_points = display_quiz(quiz_data)
+                                
+                                if quiz_complete:
+                                    quiz_xp_key = f"opening_quiz_xp_{lesson_id}"
+                                    if not st.session_state.get(quiz_xp_key, False):
+                                        fragment_xp = get_fragment_xp_breakdown(lesson.get('xp_reward', 30))
+                                        success, earned_xp = award_fragment_xp(lesson_id, 'intro_quiz', fragment_xp['wprowadzenie'] // 3)
+                                        st.session_state[quiz_xp_key] = True
+                                        if success and earned_xp > 0:
+                                            show_xp_notification(earned_xp, "za szczerą samorefleksję")
+                                    st.success("✨ Dziękujemy za szczerą samorefleksję!")
+                else:
+                    st.warning("Brak treści wprowadzenia.")
+            
+            # STARA STRUKTURA - angielskie klucze
+            elif current_step_key == 'intro':
+                # Sprawdź tytuł lekcji, aby ukryć niektóre tabs dla konkretnych lekcji
+                lesson_title = lesson.get("title", "")
+                
+                if lesson_title == "Wprowadzenie do neuroprzywództwa":
+                    # Dla tej lekcji pokazuj tylko zakładkę "Wprowadzenie"
+                    intro_tabs = tabs_with_fallback(["Wprowadzenie"])
+                    
+                    with intro_tabs[0]:
+                        # Wyświetl główne wprowadzenie
+                        if isinstance(lesson.get("intro"), dict) and "main" in lesson["intro"]:
+                            st.markdown(lesson["intro"]["main"], unsafe_allow_html=True)
+                        elif isinstance(lesson.get("intro"), str):
+                            st.markdown(lesson["intro"], unsafe_allow_html=True)
+                        else:
+                            st.warning("Brak treści wprowadzenia.")
+                else:
+                    # Dla wszystkich innych lekcji pokazuj pełne tabs
+                    intro_tabs = tabs_with_fallback(["Wprowadzenie", "Case Study", "🔍 Quiz Samodiagnozy"])
+                    
+                    with intro_tabs[0]:
+                        # Wyświetl główne wprowadzenie
+                        if isinstance(lesson.get("intro"), dict) and "main" in lesson["intro"]:
+                            st.markdown(lesson["intro"]["main"], unsafe_allow_html=True)
+                        elif isinstance(lesson.get("intro"), str):
+                            st.markdown(lesson["intro"], unsafe_allow_html=True)
+                        else:
+                            st.warning("Brak treści wprowadzenia.")
+                
+                    with intro_tabs[1]:
+                        # Wyświetl studium przypadku
+                        if isinstance(lesson.get("intro"), dict) and "case_study" in lesson["intro"]:
+                            st.markdown(lesson["intro"]["case_study"], unsafe_allow_html=True)
+                        else:
+                            st.warning("Brak studium przypadku w tej lekcji.")
+                
+                    with intro_tabs[2]:
+                        # Wyświetl quiz samodiagnozy
+                        if (isinstance(lesson.get("intro"), dict) and 
+                            "quiz_samodiagnozy" in lesson["intro"] and 
+                            "questions" in lesson["intro"]["quiz_samodiagnozy"]):
+                            
+                            st.info("💡 **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako lidera. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
+                            
+                            quiz_data = lesson["intro"]["quiz_samodiagnozy"]
+                            quiz_complete, _, earned_points = display_quiz(quiz_data)
+                            # Oznacz quiz jako ukończony po wypełnieniu
+                            if quiz_complete:
+                                quiz_xp_key = f"opening_quiz_xp_{lesson_id}"
+                                if not st.session_state.get(quiz_xp_key, False):
+                                    # Award fragment XP for quiz participation
+                                    fragment_xp = get_fragment_xp_breakdown(lesson.get('xp_reward', 30))
+                                    success, earned_xp = award_fragment_xp(lesson_id, 'intro_quiz', fragment_xp['intro'] // 3)  # 1/3 of intro XP
+                                    st.session_state[quiz_xp_key] = True
+                                    if success and earned_xp > 0:
+                                        show_xp_notification(earned_xp, "za szczerą samorefleksję")
+                            
+                                st.success("? Dziękujemy za szczerą samorefleksję!")
                         
-                        quiz_data = lesson['sections']['opening_quiz']
-                        quiz_complete, _, earned_points = display_quiz(quiz_data)
-                        # Oznacz quiz jako ukończony po wypełnieniu
-                        if quiz_complete:
-                            quiz_xp_key = f"opening_quiz_xp_{lesson_id}"
-                            if not st.session_state.get(quiz_xp_key, False):
-                                # Award fragment XP for quiz participation
-                                fragment_xp = get_fragment_xp_breakdown(lesson.get('xp_reward', 30))
-                                success, earned_xp = award_fragment_xp(lesson_id, 'intro_quiz', fragment_xp['intro'] // 3)  # 1/3 of intro XP
-                                st.session_state[quiz_xp_key] = True
-                                if success and earned_xp > 0:
-                                    show_xp_notification(earned_xp, "za szczerą samorefleksję")
+                        elif 'sections' in lesson and 'opening_quiz' in lesson.get('sections', {}):
+                            # Backward compatibility - stary format
+                            st.info("💡 **Quiz Samodiagnozy** - Ten quiz pomaga Ci lepiej poznać siebie jako inwestora. Nie ma tu dobrych ani złych odpowiedzi - chodzi o szczerą autorefleksję. Twoje odpowiedzi nie wpływają na postęp w lekcji.")
                             
-                            st.success("? Dziękujemy za szczerą samorefleksję!")
-                            
-                            # Dodaj przycisk do ponownego przystąpienia do quizu samodiagnozy
-                            st.markdown("---")
-                            col1, col2, col3 = st.columns([1, 1, 1])
-                            with col2:
-                                if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_legacy_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
-                                    # Reset stanu quizu samodiagnozy
-                                    quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
-                                    
-                                    # Usuń stan główny quizu
-                                    if quiz_id in st.session_state:
-                                        del st.session_state[quiz_id]
-                                    
-                                    # Usuń wszystkie odpowiedzi na pytania
-                                    for i in range(len(quiz_data.get('questions', []))):
-                                        question_key = f"{quiz_id}_q{i}_selected"
-                                        if question_key in st.session_state:
-                                            del st.session_state[question_key]
+                            quiz_data = lesson['sections']['opening_quiz']
+                            quiz_complete, _, earned_points = display_quiz(quiz_data)
+                            # Oznacz quiz jako ukończony po wypełnieniu
+                            if quiz_complete:
+                                quiz_xp_key = f"opening_quiz_xp_{lesson_id}"
+                                if not st.session_state.get(quiz_xp_key, False):
+                                    # Award fragment XP for quiz participation
+                                    fragment_xp = get_fragment_xp_breakdown(lesson.get('xp_reward', 30))
+                                    success, earned_xp = award_fragment_xp(lesson_id, 'intro_quiz', fragment_xp['intro'] // 3)  # 1/3 of intro XP
+                                    st.session_state[quiz_xp_key] = True
+                                    if success and earned_xp > 0:
+                                        show_xp_notification(earned_xp, "za szczerą samorefleksję")
+                                
+                                st.success("? Dziękujemy za szczerą samorefleksję!")
+                                
+                                # Dodaj przycisk do ponownego przystąpienia do quizu samodiagnozy
+                                st.markdown("---")
+                                col1, col2, col3 = st.columns([1, 1, 1])
+                                with col2:
+                                    if st.button("🔄 Przystąp ponownie", key=f"retry_self_diagnosis_legacy_{lesson_id}", help="Możesz ponownie wypełnić quiz samodiagnozy aby zaktualizować swoją autorefleksję", use_container_width=True):
+                                        # Reset stanu quizu samodiagnozy
+                                        quiz_id = f"quiz_{quiz_data.get('title', '').replace(' ', '_').lower()}"
                                         
-                                        # Usuń także klucze suwaków jeśli istnieją
-                                        slider_key = f"{quiz_id}_q{i}_slider"
-                                        if slider_key in st.session_state:
-                                            del st.session_state[slider_key]
-                                    
-                                    st.rerun()
-                    
-                    else:
-                        st.info("Ten quiz samodiagnozy nie jest dostępny dla tej lekcji.")
+                                        # Usuń stan główny quizu
+                                        if quiz_id in st.session_state:
+                                            del st.session_state[quiz_id]
+                                        
+                                        # Usuń wszystkie odpowiedzi na pytania
+                                        for i in range(len(quiz_data.get('questions', []))):
+                                            question_key = f"{quiz_id}_q{i}_selected"
+                                            if question_key in st.session_state:
+                                                del st.session_state[question_key]
+                                            
+                                            # Usuń także klucze suwaków jeśli istnieją
+                                            slider_key = f"{quiz_id}_q{i}_slider"
+                                            if slider_key in st.session_state:
+                                                del st.session_state[slider_key]
+                                        
+                                        st.rerun()
+                        
+                        else:
+                            st.info("Ten quiz samodiagnozy nie jest dostępny dla tej lekcji.")
                         
             # Przycisk "Dalej" po wprowadzeniu            
             # Użyj kolumn aby ograniczyć szerokość przycisku
@@ -730,11 +1005,11 @@ def show_lessons_content():
             with col2:
                 if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                     # Award fragment XP using the new system
-                    success, xp_awarded = award_fragment_xp(lesson_id, 'intro', step_xp_values['intro'])
+                    success, xp_awarded = award_fragment_xp(lesson_id, xp_key, step_xp_values[xp_key])
                     
                     if success and xp_awarded > 0:
                         # Update session state for UI compatibility
-                        st.session_state.lesson_progress['intro'] = True
+                        st.session_state.lesson_progress[xp_key] = True
                         st.session_state.lesson_progress['steps_completed'] += 1
                         st.session_state.lesson_progress['total_xp_earned'] += xp_awarded
                         # Show real-time XP notification
@@ -752,30 +1027,184 @@ def show_lessons_content():
                     scroll_to_top()
                     st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
-        elif st.session_state.lesson_step == 'content':
-            # Sprawdź strukturę learning - obsługuj zarówno tabs jak i sections
-            if 'sections' not in lesson:
-                st.error("Lekcja nie zawiera klucza 'sections'!")
-            elif 'learning' not in lesson.get('sections', {}):
-                st.error("Lekcja nie zawiera sekcji 'learning'!")
-            else:
-                learning_data = lesson['sections']['learning']
+        
+        elif st.session_state.lesson_step == 'content' or st.session_state.lesson_step == 'nauka':
+            # Określ czy to v2.0 czy stara struktura
+            current_step_key = st.session_state.lesson_step
+            xp_key = 'nauka' if current_step_key == 'nauka' else 'content'
+            
+            # v2.0 STRUKTURA - polskie klucze
+            if current_step_key == 'nauka' and 'nauka' in lesson:
+                nauka_data = lesson['nauka']
+                st.markdown("### 📖 Materiał do nauki")
                 
-                # Nowa struktura z tabs (jak w lekcji 11)
-                if 'tabs' in learning_data:
-                    st.markdown("### 📖 Materiał do nauki")
+                # CSS dla ekspanderów
+                st.markdown("""
+                    <style>
+                    div[data-testid="stExpander"] {
+                        width: 100% !important;
+                        margin: 0 !important;
+                        border-radius: 8px !important;
+                        border: 1px solid #e0e0e0 !important;
+                    }
+                    </style>
+                """, unsafe_allow_html=True)
+                
+                # Zbierz dostępne zakładki
+                available_tabs = []
+                tab_keys = []
+                
+                if 'tekst' in nauka_data:
+                    available_tabs.append("📚 Tekst")
+                    tab_keys.append('tekst')
+                if 'podcast' in nauka_data:
+                    available_tabs.append("🎧 Podcast")
+                    tab_keys.append('podcast')
+                if 'video' in nauka_data:
+                    available_tabs.append("🎬 Video")
+                    tab_keys.append('video')
+                if 'fiszki' in nauka_data:
+                    available_tabs.append("🃏 Fiszki")
+                    tab_keys.append('fiszki')
+                if 'case_studies' in nauka_data:
+                    available_tabs.append("📋 Case Studies")
+                    tab_keys.append('case_studies')
+                
+                # Renderuj zakładki
+                if available_tabs:
+                    nauka_tabs = tabs_with_fallback(available_tabs)
                     
-                    # CSS dla pełnej szerokości expanderów w tabsie "Tekst"
-                    st.markdown("""
-                        <style>
-                        /* Expander w tabsie "Tekst" wypełnia całą szerokość */
-                        div[data-testid="stExpander"] {
-                            width: 100% !important;
-                            margin: 0 !important;
-                            border-radius: 8px !important;
-                            border: 1px solid #e0e0e0 !important;
-                            margin-bottom: 0.5rem !important;
-                        }
+                    for i, tab_key in enumerate(tab_keys):
+                        with nauka_tabs[i]:
+                            if tab_key == 'tekst':
+                                tekst_data = nauka_data['tekst']
+                                if 'sekcje' in tekst_data:
+                                    for j, sekcja in enumerate(tekst_data['sekcje']):
+                                        section_title = sekcja.get('tytul', f'Sekcja {j+1}')
+                                        is_expanded = (j == 0)
+                                        
+                                        with st.expander(section_title, expanded=is_expanded):
+                                            content = sekcja.get('tresc', 'Brak treści')
+                                            render_embedded_content(content, sekcja)
+                            
+                            elif tab_key == 'podcast':
+                                podcast_data = nauka_data['podcast']
+                                if 'title' in podcast_data:
+                                    st.markdown(f"### {podcast_data['title']}")
+                                if 'description' in podcast_data:
+                                    st.markdown(podcast_data['description'])
+                                if 'url' in podcast_data:
+                                    from utils.components import youtube_video
+                                    youtube_video(
+                                        podcast_data['url'],
+                                        podcast_data.get('title', 'Podcast'),
+                                        podcast_data.get('description', '')
+                                    )
+                                if 'transcript' in podcast_data:
+                                    with st.expander("📝 Transkrypt"):
+                                        st.markdown(podcast_data['transcript'])
+                            
+                            elif tab_key == 'video':
+                                video_data = nauka_data['video']
+                                if 'title' in video_data:
+                                    st.markdown(f"### {video_data['title']}")
+                                if 'description' in video_data:
+                                    st.markdown(video_data['description'])
+                                if 'url' in video_data:
+                                    from utils.components import youtube_video
+                                    youtube_video(
+                                        video_data['url'],
+                                        video_data.get('title', 'Video'),
+                                        video_data.get('description', '')
+                                    )
+                            
+                            elif tab_key == 'fiszki':
+                                fiszki_data = nauka_data['fiszki']
+                                if 'title' in fiszki_data:
+                                    st.markdown(f"### {fiszki_data['title']}")
+                                if 'description' in fiszki_data:
+                                    st.markdown(fiszki_data['description'])
+                                
+                                if 'karty' in fiszki_data:
+                                    # Prosty renderer fiszek
+                                    for idx, karta in enumerate(fiszki_data['karty']):
+                                        card_key = f"flashcard_{lesson_id}_{idx}"
+                                        if card_key not in st.session_state:
+                                            st.session_state[card_key] = False  # False = przód, True = tył
+                                        
+                                        col1, col2, col3 = st.columns([1, 3, 1])
+                                        with col2:
+                                            # Karta
+                                            if not st.session_state[card_key]:
+                                                st.markdown(f"""
+                                                <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                                     padding: 40px; border-radius: 15px; text-align: center; 
+                                                     color: white; min-height: 150px; display: flex; 
+                                                     align-items: center; justify-content: center;'>
+                                                    <h3 style='color: white; margin: 0;'>{karta.get('przod', '')}</h3>
+                                                </div>
+                                                """, unsafe_allow_html=True)
+                                            else:
+                                                st.markdown(f"""
+                                                <div style='background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
+                                                     padding: 40px; border-radius: 15px; text-align: center; 
+                                                     color: white; min-height: 150px; display: flex; 
+                                                     align-items: center; justify-content: center;'>
+                                                    <p style='color: white; margin: 0; font-size: 1.1rem;'>{karta.get('tyl', '')}</p>
+                                                </div>
+                                                """, unsafe_allow_html=True)
+                                            
+                                            # Przycisk przewracania
+                                            if st.button("🔄 Przewróć", key=f"flip_{card_key}", use_container_width=True):
+                                                st.session_state[card_key] = not st.session_state[card_key]
+                                                st.rerun()
+                                            
+                                            st.markdown("---")
+                            
+                            elif tab_key == 'case_studies':
+                                case_studies_list = nauka_data['case_studies']
+                                for cs in case_studies_list:
+                                    if 'title' in cs:
+                                        st.markdown(f"### {cs['title']}")
+                                    if 'description' in cs:
+                                        st.markdown(cs['description'])
+                                    if 'context' in cs:
+                                        st.markdown(cs['context'], unsafe_allow_html=True)
+                                    if 'challenge' in cs:
+                                        st.markdown(f"**Wyzwanie:** {cs['challenge']}")
+                                    if 'questions' in cs:
+                                        st.markdown("#### 🤔 Pytania do przemyślenia:")
+                                        for q in cs['questions']:
+                                            st.markdown(f"- {q}")
+                                    st.markdown("---")
+                else:
+                    st.warning("Brak materiałów do nauki.")
+            
+            # STARA STRUKTURA - angielskie klucze
+            elif current_step_key == 'content':
+                # Sprawdź strukturę learning - obsługuj zarówno tabs jak i sections
+                if 'sections' not in lesson:
+                    st.error("Lekcja nie zawiera klucza 'sections'!")
+                elif 'learning' not in lesson.get('sections', {}):
+                    st.error("Lekcja nie zawiera sekcji 'learning'!")
+                else:
+                    learning_data = lesson['sections']['learning']
+                    
+                    # Nowa struktura z tabs (jak w lekcji 11)
+                    if 'tabs' in learning_data:
+                        st.markdown("### 📖 Materiał do nauki")
+                        
+                        # CSS dla pełnej szerokości expanderów w tabsie "Tekst"
+                        st.markdown("""
+                            <style>
+                            /* Expander w tabsie "Tekst" wypełnia całą szerokość */
+                            div[data-testid="stExpander"] {
+                                width: 100% !important;
+                                margin: 0 !important;
+                                border-radius: 8px !important;
+                                border: 1px solid #e0e0e0 !important;
+                                margin-bottom: 0.5rem !important;
+                            }
                         
                         div[data-testid="stExpander"] > div {
                             width: 100% !important;
@@ -873,75 +1302,59 @@ def show_lessons_content():
                         }
                         </style>
                     """, unsafe_allow_html=True)
-                    
-                    # Utwórz tabs dla różnych typów treści
-                    tab_names = [tab.get('title', f'Tab {i+1}') for i, tab in enumerate(learning_data['tabs'])]
-                    tabs = st.tabs(tab_names)
-                    
-                    for i, (tab_container, tab_data) in enumerate(zip(tabs, learning_data['tabs'])):
-                        with tab_container:
-                            # Wyświetl sekcje w tym tab
-                            if 'sections' in tab_data:
-                                tab_title = tab_data.get('title', '')
-                                
-                                # Dla tab "Tekst" używaj expanderów
-                                if 'Tekst' in tab_title:
-                                    for j, section in enumerate(tab_data['sections']):
-                                        section_title = section.get('title', f'Sekcja {j+1}')
-                                        # Pierwszy expander domyślnie otwarty
-                                        is_expanded = (j == 0)
-                                        
-                                        with st.expander(section_title, expanded=is_expanded):
+                        
+                        # Utwórz tabs dla różnych typów treści
+                        tab_names = [tab.get('title', f'Tab {i+1}') for i, tab in enumerate(learning_data['tabs'])]
+                        tabs = st.tabs(tab_names)
+                        
+                        for i, (tab_container, tab_data) in enumerate(zip(tabs, learning_data['tabs'])):
+                            with tab_container:
+                                # Wyświetl sekcje w tym tab
+                                if 'sections' in tab_data:
+                                    tab_title = tab_data.get('title', '')
+                                    
+                                    # Dla tab "Tekst" używaj expanderów
+                                    if 'Tekst' in tab_title:
+                                        for j, section in enumerate(tab_data['sections']):
+                                            section_title = section.get('title', f'Sekcja {j+1}')
+                                            # Pierwszy expander domyślnie otwarty
+                                            is_expanded = (j == 0)
+                                            
+                                            with st.expander(section_title, expanded=is_expanded):
+                                                # Użyj nowego renderera obsługującego osadzone media
+                                                content = section.get('content', 'Brak treści')
+                                                render_embedded_content(content, section)
+                                    else:
+                                        # Dla pozostałych tabs (Podcast, Video) standardowe wyświetlanie
+                                        for section in tab_data['sections']:
+                                            if 'title' in section:
+                                                st.markdown(f"### {section['title']}")
+                                            
                                             # Użyj nowego renderera obsługującego osadzone media
                                             content = section.get('content', 'Brak treści')
                                             render_embedded_content(content, section)
                                 else:
-                                    # Dla pozostałych tabs (Podcast, Video) standardowe wyświetlanie
-                                    for section in tab_data['sections']:
-                                        if 'title' in section:
-                                            st.markdown(f"### {section['title']}")
-                                        
-                                        # Użyj nowego renderera obsługującego osadzone media
-                                        content = section.get('content', 'Brak treści')
-                                        render_embedded_content(content, section)
-                            else:
-                                st.warning(f"Tab '{tab_data.get('title', 'Bez nazwy')}' nie zawiera sekcji.")
-                
-                # Stara struktura z sections (kompatybilność wsteczna)
-                elif 'sections' in learning_data:
-                    # Sprawdź, czy sekcja learning istnieje i czy zawiera sections
-                    for i, section in enumerate(learning_data["sections"]):
-                        # Dla lekcji "Wprowadzenie do neuroprzywództwa" pierwszy expander jest otwarty
-                        is_expanded = False
-                        if lesson.get('title') == 'Wprowadzenie do neuroprzywództwa' and i == 0:
-                            is_expanded = True
-                        
-                        with st.expander(section.get("title", f"Sekcja {i+1}"), expanded=is_expanded):
-                            # Wyświetl treść sekcji używając nowego renderera
-                            content = section.get("content", "Brak treści")
-                            render_embedded_content(content, section)
+                                    st.warning(f"Tab '{tab_data.get('title', 'Bez nazwy')}' nie zawiera sekcji.")
+                    
+                    # Stara struktura z sections (kompatybilność wsteczna)
+                    elif 'sections' in learning_data:
+                        # Sprawdź, czy sekcja learning istnieje i czy zawiera sections
+                        for i, section in enumerate(learning_data["sections"]):
+                            # Dla lekcji "Wprowadzenie do neuroprzywództwa" pierwszy expander jest otwarty
+                            is_expanded = False
+                            if lesson.get('title') == 'Wprowadzenie do neuroprzywództwa' and i == 0:
+                                is_expanded = True
                             
-                            # Sprawdź czy sekcja zawiera film YouTube (pojedynczy)
-                            if 'video' in section and section['video']:
-                                video_data = section['video']
-                                video_url = video_data.get('url')
-                                video_title = video_data.get('title')
-                                video_description = video_data.get('description')
+                            with st.expander(section.get("title", f"Sekcja {i+1}"), expanded=is_expanded):
+                                # Wyświetl treść sekcji używając nowego renderera
+                                content = section.get("content", "Brak treści")
+                                render_embedded_content(content, section)
                                 
-                                if video_url:
-                                    from utils.components import youtube_video
-                                    youtube_video(
-                                        video_url=video_url,
-                                        title=video_title,
-                                        description=video_description
-                                    )
-                            
-                            # Sprawdź czy sekcja zawiera wiele filmów YouTube (videos)
-                            if 'videos' in section and section['videos']:
-                                st.markdown("### 🎥 Materiały wideo")
-                                for j, video_data in enumerate(section['videos']):
+                                # Sprawdź czy sekcja zawiera film YouTube (pojedynczy)
+                                if 'video' in section and section['video']:
+                                    video_data = section['video']
                                     video_url = video_data.get('url')
-                                    video_title = video_data.get('title', f'Film {j+1}')
+                                    video_title = video_data.get('title')
                                     video_description = video_data.get('description')
                                     
                                     if video_url:
@@ -951,22 +1364,39 @@ def show_lessons_content():
                                             title=video_title,
                                             description=video_description
                                         )
+                                
+                                # Sprawdź czy sekcja zawiera wiele filmów YouTube (videos)
+                                if 'videos' in section and section['videos']:
+                                    st.markdown("### 🎥 Materiały wideo")
+                                    for j, video_data in enumerate(section['videos']):
+                                        video_url = video_data.get('url')
+                                        video_title = video_data.get('title', f'Film {j+1}')
+                                        video_description = video_data.get('description')
                                         
-                                        # Dodaj separator między filmami
-                                        if j < len(section['videos']) - 1:
-                                            st.markdown("---")
-                else:
-                    st.error("Sekcja 'learning' nie zawiera ani 'tabs' ani 'sections'!")
-                                            # Przycisk "Dalej" po treści lekcji
+                                        if video_url:
+                                            from utils.components import youtube_video
+                                            youtube_video(
+                                                video_url=video_url,
+                                                title=video_title,
+                                                description=video_description
+                                            )
+                                            
+                                            # Dodaj separator między filmami
+                                            if j < len(section['videos']) - 1:
+                                                st.markdown("---")
+                    else:
+                        st.error("Sekcja 'learning' nie zawiera ani 'tabs' ani 'sections'!")
+                                            
+            # Przycisk "Dalej" po treści lekcji
             col1, col2, col3 = st.columns([1, 1, 1])
             with col2:
                 if zen_button(f"Dalej: {step_names.get(next_step, next_step.capitalize())}", width='stretch'):
                     # Award fragment XP using the new system
-                    success, xp_awarded = award_fragment_xp(lesson_id, 'content', step_xp_values['content'])
+                    success, xp_awarded = award_fragment_xp(lesson_id, xp_key, step_xp_values[xp_key])
                     
                     if success and xp_awarded > 0:
                         # Update session state for UI compatibility
-                        st.session_state.lesson_progress['content'] = True
+                        st.session_state.lesson_progress[xp_key] = True
                         st.session_state.lesson_progress['steps_completed'] += 1
                         st.session_state.lesson_progress['total_xp_earned'] += xp_awarded
                           # Show real-time XP notification
@@ -985,59 +1415,163 @@ def show_lessons_content():
                     st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
         
-        elif st.session_state.lesson_step == 'practical_exercises':
-            # Sekcja ćwiczeń praktycznych - dla lekcji "Wprowadzenie do neuroprzywództwa" specjalna obsługa
-            if 'sections' not in lesson:
-                st.error("Lekcja nie zawiera klucza 'sections'!")
-            elif 'practical_exercises' not in lesson.get('sections', {}):
-                st.error("Lekcja nie zawiera sekcji 'practical_exercises'!")
-            else:
-                practical_data = lesson['sections']['practical_exercises']
-                lesson_title = lesson.get("title", "")
+        elif st.session_state.lesson_step == 'practical_exercises' or st.session_state.lesson_step == 'praktyka':
+            # Określ czy to v2.0 czy stara struktura
+            current_step_key = st.session_state.lesson_step
+            xp_key = 'praktyka' if current_step_key == 'praktyka' else 'practical_exercises'
+            
+            # v2.0 STRUKTURA - polskie klucze
+            if current_step_key == 'praktyka' and 'praktyka' in lesson:
+                praktyka_data = lesson['praktyka']
                 
-                # Specjalna obsługa dla lekcji "Wprowadzenie do neuroprzywództwa"
-                if lesson_title == "Wprowadzenie do neuroprzywództwa" and 'case_study_analysis' in practical_data:
-                    case_study_data = practical_data['case_study_analysis']
-                    
-                    # Wyświetl tytuł i opis
-                    st.markdown(f"### {case_study_data['title']}")
-                    st.markdown(case_study_data['description'])
-                    st.markdown("---")
-                    
-                    # Wyświetl każdą część case study
-                    for part in case_study_data['parts']:
-                        with st.expander(f"**Część {part['id']}: {part['title']}**", expanded=False):
-                            # Pole tekstowe z case content
-                            st.markdown("#### 📋 Opis sytuacji")
-                            st.markdown(f"<div style='background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff; margin: 15px 0;'>{part['case_content']}</div>", unsafe_allow_html=True)
-                            
-                            # Film omawiający tę część
-                            st.markdown("#### 📌 Analiza neurobiologiczna")
-                            
-                            # Wyświetl video jeśli URL nie jest placeholder
-                            video_url = part['video']['url']
-                            if "PLACEHOLDER" not in video_url:
-                                from utils.components import youtube_video
-                                youtube_video(
-                                    video_url,
-                                    part['video']['title'],
-                                    part['video']['description']
-                                )
-                            else:
-                                st.info(f"📌 **{part['video']['title']}**\n\n{part['video']['description']}\n\n*Film będzie dostępny wkrótce.*")
-                            
-                            st.markdown("---")
+                # Zbierz dostępne zakładki
+                available_tabs = []
+                tab_keys = []
                 
+                if 'cwiczenia' in praktyka_data:
+                    available_tabs.append("✏️ Ćwiczenia")
+                    tab_keys.append('cwiczenia')
+                if 'wyzwanie' in praktyka_data:
+                    available_tabs.append("🎯 Wyzwanie")
+                    tab_keys.append('wyzwanie')
+                if 'cwiczenia_ai' in praktyka_data:
+                    available_tabs.append("🤖 Ćwiczenia AI")
+                    tab_keys.append('cwiczenia_ai')
+                if 'quiz_koncowy' in praktyka_data:
+                    available_tabs.append("✅ Quiz Końcowy")
+                    tab_keys.append('quiz_koncowy')
+                
+                # Renderuj zakładki
+                if available_tabs:
+                    praktyka_tabs = tabs_with_fallback(available_tabs)
+                    
+                    for i, tab_key in enumerate(tab_keys):
+                        with praktyka_tabs[i]:
+                            if tab_key == 'cwiczenia':
+                                cwiczenia_data = praktyka_data['cwiczenia']
+                                # v2.0 struktura: cwiczenia.tresc zawiera HTML string
+                                if isinstance(cwiczenia_data, dict) and 'tresc' in cwiczenia_data:
+                                    st.markdown(cwiczenia_data['tresc'], unsafe_allow_html=True)
+                                elif isinstance(cwiczenia_data, list):
+                                    # Stara struktura z listą ćwiczeń
+                                    for ex in cwiczenia_data:
+                                        st.markdown(f"### {ex.get('title', 'Ćwiczenie')}")
+                                        if 'description' in ex:
+                                            st.markdown(ex['description'])
+                                        if 'instructions' in ex:
+                                            st.markdown(ex['instructions'], unsafe_allow_html=True)
+                                        if 'time_required' in ex:
+                                            st.info(f"⏱️ Szacowany czas: {ex['time_required']}")
+                                        st.markdown("---")
+                                else:
+                                    st.warning("Nieprawidłowa struktura ćwiczeń")
+                            
+                            elif tab_key == 'wyzwanie':
+                                wyzwanie = praktyka_data['wyzwanie']
+                                st.markdown(f"### {wyzwanie.get('title', 'Wyzwanie')}")
+                                if 'description' in wyzwanie:
+                                    st.markdown(wyzwanie['description'])
+                                if 'generator_prompt' in wyzwanie:
+                                    st.markdown("#### 🤖 Prompt generatora:")
+                                    st.info(wyzwanie['generator_prompt'])
+                                if 'difficulty' in wyzwanie:
+                                    st.markdown(f"**Poziom trudności:** {wyzwanie['difficulty']}")
+                            
+                            elif tab_key == 'cwiczenia_ai':
+                                ai_ex = praktyka_data['cwiczenia_ai']
+                                if 'title' in ai_ex:
+                                    st.markdown(f"### {ai_ex['title']}")
+                                if 'description' in ai_ex:
+                                    st.markdown(ai_ex['description'])
+                                if 'scenarios' in ai_ex:
+                                    for scenario in ai_ex['scenarios']:
+                                        with st.expander(f"📋 {scenario.get('title', 'Scenariusz')}"):
+                                            if 'description' in scenario:
+                                                st.markdown(scenario['description'])
+                                            if 'ai_role' in scenario:
+                                                st.markdown(f"**Rola AI:** {scenario['ai_role']}")
+                                            if 'user_task' in scenario:
+                                                st.markdown(f"**Twoje zadanie:** {scenario['user_task']}")
+                            
+                            elif tab_key == 'quiz_koncowy':
+                                quiz_data = praktyka_data['quiz_koncowy']
+                                if 'title' in quiz_data:
+                                    st.markdown(f"### {quiz_data['title']}")
+                                if 'description' in quiz_data:
+                                    st.markdown(quiz_data['description'])
+                                
+                                # Render quiz
+                                quiz_complete, score, earned_points = display_quiz(quiz_data)
+                                
+                                if quiz_complete:
+                                    closing_quiz_xp_key = f"closing_quiz_xp_{lesson_id}"
+                                    if not st.session_state.get(closing_quiz_xp_key, False):
+                                        fragment_xp = get_fragment_xp_breakdown(lesson.get('xp_reward', 30))
+                                        success, earned_xp = award_fragment_xp(lesson_id, 'closing_quiz', fragment_xp['praktyka'] // 2)
+                                        st.session_state[closing_quiz_xp_key] = True
+                                        if success and earned_xp > 0:
+                                            show_xp_notification(earned_xp, f"za ukończenie quizu (wynik: {score}%)")
+                                    
+                                    if score >= quiz_data.get('passing_score', 70):
+                                        st.success(f"🎉 Gratulacje! Zaliczyłeś quiz z wynikiem {score}%!")
+                                    else:
+                                        st.warning(f"📚 Twój wynik: {score}%. Powtórz materiał i spróbuj ponownie.")
                 else:
-                    # Standardowa obsługa dla innych lekcji
-                    # Przygotuj zakładki dla różnych typów ćwiczeń
-                    available_tabs = []
-                    tab_keys = []
-                    sub_tabs_data = {}
+                    st.warning("Brak ćwiczeń praktycznych.")
+            
+            # STARA STRUKTURA - angielskie klucze
+            elif current_step_key == 'practical_exercises':
+                # Sekcja ćwiczeń praktycznych - dla lekcji "Wprowadzenie do neuroprzywództwa" specjalna obsługa
+                # practical_exercises jest na poziomie głównym, nie w sections
+                if 'practical_exercises' not in lesson:
+                    st.error("Lekcja nie zawiera sekcji 'practical_exercises'!")
+                else:
+                    practical_data = lesson['practical_exercises']
+                    lesson_title = lesson.get("title", "")
                     
-                    # Fiszki - sprawdzanie wiedzy (nowa funkcjonalność)
-                    if 'flashcards' in practical_data:
-                        available_tabs.append("🎴 Fiszki")
+                    # Specjalna obsługa dla lekcji "Wprowadzenie do neuroprzywództwa"
+                    if lesson_title == "Wprowadzenie do neuroprzywództwa" and 'case_study_analysis' in practical_data:
+                        case_study_data = practical_data['case_study_analysis']
+                        
+                        # Wyświetl tytuł i opis
+                        st.markdown(f"### {case_study_data['title']}")
+                        st.markdown(case_study_data['description'])
+                        st.markdown("---")
+                        
+                        # Wyświetl każdą część case study
+                        for part in case_study_data['parts']:
+                            with st.expander(f"**Część {part['id']}: {part['title']}**", expanded=False):
+                                # Pole tekstowe z case content
+                                st.markdown("#### 📋 Opis sytuacji")
+                                st.markdown(f"<div style='background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff; margin: 15px 0;'>{part['case_content']}</div>", unsafe_allow_html=True)
+                                
+                                # Film omawiający tę część
+                                st.markdown("#### 📌 Analiza neurobiologiczna")
+                                
+                                # Wyświetl video jeśli URL nie jest placeholder
+                                video_url = part['video']['url']
+                                if "PLACEHOLDER" not in video_url:
+                                    from utils.components import youtube_video
+                                    youtube_video(
+                                        video_url,
+                                        part['video']['title'],
+                                        part['video']['description']
+                                    )
+                                else:
+                                    st.info(f"📌 **{part['video']['title']}**\n\n{part['video']['description']}\n\n*Film będzie dostępny wkrótce.*")
+                                
+                                st.markdown("---")
+                    
+                    else:
+                        # Standardowa obsługa dla innych lekcji
+                        # Przygotuj zakładki dla różnych typów ćwiczeń
+                        available_tabs = []
+                        tab_keys = []
+                        sub_tabs_data = {}
+                        
+                        # Fiszki - sprawdzanie wiedzy (nowa funkcjonalność)
+                        if 'flashcards' in practical_data:
+                            available_tabs.append("🎴 Fiszki")
                         tab_keys.append('flashcards')
                         sub_tabs_data['flashcards'] = practical_data['flashcards']
                     
@@ -2180,300 +2714,450 @@ def show_lessons_content():
                         st.rerun()
             
             st.markdown("</div>", unsafe_allow_html=True)
-        elif st.session_state.lesson_step == 'summary':
-            # Wyświetl podsumowanie lekcji w podziale na zakładki, podobnie jak wprowadzenie
-            if 'summary' in lesson:
-                # Sprawdź tytuł lekcji, aby ukryć niektóre tabs dla konkretnych lekcji
-                lesson_title = lesson.get("title", "")
+        
+        elif st.session_state.lesson_step == 'summary' or st.session_state.lesson_step == 'podsumowanie':
+            # Określ czy to v2.0 czy stara struktura
+            current_step_key = st.session_state.lesson_step
+            xp_key = 'podsumowanie' if current_step_key == 'podsumowanie' else 'summary'
+            
+            # v2.0 STRUKTURA - polskie klucze
+            if current_step_key == 'podsumowanie' and 'podsumowanie' in lesson:
+                podsumowanie_data = lesson['podsumowanie']
                 
-                if lesson_title == "Wprowadzenie do neuroprzywództwa":
-                    # Dla tej lekcji pokazuj dwie zakładki: Quiz Autodiagnozy i Podsumowanie
-                    summary_tabs = tabs_with_fallback(["📌 Quiz Autodiagnozy", "📌 Podsumowanie"])
+                # Zbierz dostępne zakładki
+                available_tabs = []
+                tab_keys = []
+                
+                if 'glowny' in podsumowanie_data:
+                    available_tabs.append("Podsumowanie")
+                    tab_keys.append('glowny')
+                if 'case_study' in podsumowanie_data:
+                    available_tabs.append("Case Study")
+                    tab_keys.append('case_study')
+                if 'mapa_mysli' in podsumowanie_data:
+                    available_tabs.append("🗺️ Mapa myśli")
+                    tab_keys.append('mapa_mysli')
+                if 'sciagawka' in podsumowanie_data:
+                    available_tabs.append("📌 Cheatsheet")
+                    tab_keys.append('sciagawka')
+                if 'szablon_planu_dzialan' in podsumowanie_data:
+                    available_tabs.append("📋 Action Plan")
+                    tab_keys.append('szablon_planu_dzialan')
+                if 'dziennik_refleksji' in podsumowanie_data:
+                    available_tabs.append("📓 Dziennik")
+                    tab_keys.append('dziennik_refleksji')
+                
+                # Renderuj zakładki
+                if available_tabs:
+                    podsumowanie_tabs = tabs_with_fallback(available_tabs)
                     
-                    with summary_tabs[0]:
-                        # Wyświetl quiz autodiagnozy
-                        if 'closing_quiz' in lesson['summary']:
-                            quiz_passed, can_continue, score = display_quiz(lesson['summary']['closing_quiz'])
+                    for i, tab_key in enumerate(tab_keys):
+                        with podsumowanie_tabs[i]:
+                            if tab_key == 'glowny':
+                                st.markdown(podsumowanie_data['glowny'], unsafe_allow_html=True)
                             
-                            # Sprawdź czy quiz został ukończony
-                            if quiz_passed:
-                                success, fragment_xp = award_fragment_xp(lesson_id, 'closing_quiz', step_xp_values['summary'])
-                                if success and fragment_xp > 0:
-                                    st.success(f"? Quiz ukończony! Zdobyłeś {fragment_xp} XP!")
-                        else:
-                            st.warning("Brak quizu autodiagnozy.")
-                    
-                    with summary_tabs[1]:
-                        # Wyświetl główne podsumowanie
-                        if 'main' in lesson['summary']:
-                            st.markdown(lesson['summary']['main'], unsafe_allow_html=True)
-                        else:
-                            st.warning("Brak głównego podsumowania.")
-                        
-                        # Rekomendacje szkoleń (ukryte - możliwość przywrócenia w przyszłości)
-                        # try:
-                        #     from utils.training_recommendations import display_training_recommendations, load_recommendations_styles
-                        #     load_recommendations_styles()
-                        #     
-                        #     # Klucz wyników quizu autodiagnozy
-                        #     quiz_results_key = "quiz_quiz_autodiagnozy_results"
-                        #     display_training_recommendations(lesson_id, quiz_results_key)
-                        #     
-                        # except ImportError:
-                        #     st.error("Moduł rekomendacji szkoleń nie jest dostępny.")
-                        # except Exception as e:
-                        # except Exception as e:
-                        #     st.error(f"Błąd podczas ładowania rekomendacji: {str(e)}")
+                            elif tab_key == 'case_study':
+                                case_study = podsumowanie_data['case_study']
+                                if 'title' in case_study:
+                                    st.markdown(f"### {case_study['title']}")
+                                if 'description' in case_study:
+                                    st.markdown(case_study['description'])
+                                if 'resolution' in case_study:
+                                    st.markdown(case_study['resolution'], unsafe_allow_html=True)
+                            
+                            elif tab_key == 'mapa_mysli':
+                                mapa = podsumowanie_data['mapa_mysli']
+                                if 'title' in mapa:
+                                    st.markdown(f"### {mapa['title']}")
+                                if 'description' in mapa:
+                                    st.markdown(mapa['description'])
+                                if 'central_concept' in mapa:
+                                    st.markdown(f"**📍 Centralny koncept:** {mapa['central_concept']}")
+                                if 'branches' in mapa:
+                                    st.markdown("#### Gałęzie mapy:")
+                                    for branch in mapa['branches']:
+                                        branch_name = branch.get('name', 'Gałąź')
+                                        st.markdown(f"**{branch_name}**")
+                                        if 'subbranches' in branch:
+                                            for sub in branch['subbranches']:
+                                                st.markdown(f"- {sub}")
+                            
+                            elif tab_key == 'sciagawka':
+                                sciagawka = podsumowanie_data['sciagawka']
+                                if 'title' in sciagawka:
+                                    st.markdown(f"### {sciagawka['title']}")
+                                if 'description' in sciagawka:
+                                    st.markdown(sciagawka['description'])
+                                if 'content' in sciagawka:
+                                    st.markdown(sciagawka['content'], unsafe_allow_html=True)
+                            
+                            elif tab_key == 'szablon_planu_dzialan':
+                                plan = podsumowanie_data['szablon_planu_dzialan']
+                                if 'opis' in plan:
+                                    st.markdown(plan['opis'])
+                                if 'pola' in plan:
+                                    for pole in plan['pola']:
+                                        # v2.0 struktura: każde pole to obiekt z id, label, placeholder
+                                        label = pole.get('label', 'Pole')
+                                        pole_id = pole.get('id', '')
+                                        placeholder = pole.get('placeholder', '')
+                                        
+                                        st.markdown(f"**{label}**")
+                                        st.text_area(
+                                            "Twoja odpowiedź:",
+                                            key=f"action_plan_{lesson_id}_{pole_id}",
+                                            placeholder=placeholder,
+                                            height=100
+                                        )
+                            
+                            elif tab_key == 'dziennik_refleksji':
+                                dziennik = podsumowanie_data['dziennik_refleksji']
+                                if 'opis' in dziennik:
+                                    st.markdown(dziennik['opis'])
+                                if 'pytania' in dziennik:
+                                    for idx, pytanie_obj in enumerate(dziennik['pytania']):
+                                        # v2.0 struktura: każde pytanie to obiekt z id, pytanie, placeholder
+                                        pytanie_text = pytanie_obj.get('pytanie', str(pytanie_obj))
+                                        pytanie_id = pytanie_obj.get('id', f'q{idx}')
+                                        placeholder = pytanie_obj.get('placeholder', '')
+                                        
+                                        st.markdown(f"**{pytanie_text}**")
+                                        st.text_area(
+                                            "Twoja odpowiedź:",
+                                            key=f"reflection_{lesson_id}_{pytanie_id}",
+                                            placeholder=placeholder,
+                                            height=150
+                                        )
                 else:
-                    # Dla wszystkich innych lekcji pokazuj pełne tabs
-                    # Podziel podsumowanie na cztery zakładki - dodajemy Cheatsheet
-                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli", "📌 Cheatsheet"])
+                    st.warning("Brak materiałów podsumowania.")
+            
+            # STARA STRUKTURA - angielskie klucze
+            elif current_step_key == 'summary':
+                # Wyświetl podsumowanie lekcji w podziale na zakładki, podobnie jak wprowadzenie
+                if 'summary' in lesson:
+                    # Sprawdź tytuł lekcji, aby ukryć niektóre tabs dla konkretnych lekcji
+                    lesson_title = lesson.get("title", "")
                     
-                    with summary_tabs[0]:
-                        # Wyświetl główne podsumowanie
-                        if 'main' in lesson['summary']:
-                            st.markdown(lesson['summary']['main'], unsafe_allow_html=True)
-                        else:
-                            st.warning("Brak głównego podsumowania.")
-                    
-                    with summary_tabs[1]:
-                        # Wyświetl studium przypadku
-                        if 'case_study' in lesson['summary']:
-                            st.markdown(lesson['summary']['case_study'], unsafe_allow_html=True)
-                        else:
-                            st.warning("Brak studium przypadku w podsumowaniu.")
-                
-                    with summary_tabs[2]:
-                        # Wyświetl interaktywną mapę myśli
-                        st.markdown("### 🗺️ Interaktywna mapa myśli")
-                        st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji. Możesz klikać na węzły aby je przesuwać i lepiej eksplorować powiązania między różnymi tematami.")
+                    if lesson_title == "Wprowadzenie do neuroprzywództwa":
+                        # Dla tej lekcji pokazuj dwie zakładki: Quiz Autodiagnozy i Podsumowanie
+                        summary_tabs = tabs_with_fallback(["📌 Quiz Autodiagnozy", "📌 Podsumowanie"])
                         
-                        try:
-                            from utils.mind_map import create_lesson_mind_map
-                            mind_map_result = create_lesson_mind_map(lesson)
-                            
-                            if mind_map_result is None:
-                                st.info("💡 **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
-                        except Exception as e:
-                            st.warning("⚠️ Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
-                            st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
-                    
-                    with summary_tabs[3]:
-                        # Wyświetl cheatsheet
-                        if 'cheatsheet' in lesson['summary']:
-                            st.markdown(lesson['summary']['cheatsheet'], unsafe_allow_html=True)
-                            
-                            # Dodaj przycisk do eksportu PDF (jak w Tools)
-                            st.markdown("---")
-                            
-                            col_export, col_info = st.columns([1, 3])
-                            with col_export:
-                                # Przycisk PDF
-                                if zen_button("📌 Eksportuj PDF", key="export_cheatsheet_pdf"):
-                                    try:
-                                        from utils.cheatsheet_pdf_v5 import generate_cheatsheet_pdf
-                                        
-                                        username = getattr(st.session_state, 'username', 'Użytkownik')
-                                        lesson_title = lesson.get('title', 'Lekcja')
-                                        cheatsheet_content = lesson['summary']['cheatsheet']
-                                        
-                                        # Generuj prawdziwy PDF (jak w Tools)
-                                        pdf_data = generate_cheatsheet_pdf(
-                                            lesson_title=lesson_title,
-                                            cheatsheet_html=cheatsheet_content,
-                                            username=username
-                                        )
-                                        
-                                        # Przygotuj nazwę pliku
-                                        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                                        lesson_id = lesson.get('id', 'lesson').replace(' ', '_')
-                                        filename = f"cheatsheet_{lesson_id}_{timestamp}.pdf"
-                                        
-                                        st.download_button(
-                                            label="📌 Pobierz PDF",
-                                            data=pdf_data,
-                                            file_name=filename,
-                                            mime="application/pdf",
-                                            key="download_cheatsheet_pdf"
-                                        )
-                                        st.success("? Cheatsheet PDF gotowy do pobrania!")
-                                        
-                                    except Exception as e:
-                                        st.error(f"? Błąd podczas generowania PDF: {str(e)}")
-                                        if st.session_state.get('debug_mode', False):
-                                            import traceback
-                                            st.expander("Szczegóły błędu (dla deweloperów)").code(traceback.format_exc())
+                        with summary_tabs[0]:
+                            # Wyświetl quiz autodiagnozy
+                            if 'closing_quiz' in lesson['summary']:
+                                quiz_passed, can_continue, score = display_quiz(lesson['summary']['closing_quiz'])
                                 
-                                # Przycisk PNG
-                                if zen_button("📸 Eksportuj Obraz", key="export_cheatsheet_image"):
-                                    try:
-                                        from utils.cheatsheet_image_generator import generate_cheatsheet_image
-                                        
-                                        lesson_title = lesson.get('title', 'Lekcja')
-                                        cheatsheet_content = lesson['summary']['cheatsheet']
-                                        
-                                        # Generuj obraz PNG
-                                        image_data = generate_cheatsheet_image(
-                                            lesson_title=lesson_title,
-                                            cheatsheet_html=cheatsheet_content,
-                                            format='png'
-                                        )
-                                        
-                                        if image_data:
+                                # Sprawdź czy quiz został ukończony
+                                if quiz_passed:
+                                    success, fragment_xp = award_fragment_xp(lesson_id, 'closing_quiz', step_xp_values['summary'])
+                                    if success and fragment_xp > 0:
+                                        st.success(f"? Quiz ukończony! Zdobyłeś {fragment_xp} XP!")
+                            else:
+                                st.warning("Brak quizu autodiagnozy.")
+                        
+                        with summary_tabs[1]:
+                            # Wyświetl główne podsumowanie
+                            if 'main' in lesson['summary']:
+                                # Sprawdź czy summary zawiera interaktywne notatki (Action Plan/Reflection)
+                                summary_content = lesson['summary']['main']
+                                has_interactive_notes = ('action_today' in summary_content or 
+                                                         'reflection_discovery' in summary_content)
+                                
+                                if has_interactive_notes:
+                                    # Użyj dedykowanego renderera z obsługą zapisywania notatek
+                                    from utils.summary_renderer import render_summary_with_streamlit_widgets
+                                    render_summary_with_streamlit_widgets(lesson_id, lesson)
+                                else:
+                                    # Standardowe wyświetlanie HTML
+                                    st.markdown(summary_content, unsafe_allow_html=True)
+                            else:
+                                st.warning("Brak głównego podsumowania.")
+                            
+                            # Rekomendacje szkoleń (ukryte - możliwość przywrócenia w przyszłości)
+                            # try:
+                            #     from utils.training_recommendations import display_training_recommendations, load_recommendations_styles
+                            #     load_recommendations_styles()
+                            #     
+                            #     # Klucz wyników quizu autodiagnozy
+                            #     quiz_results_key = "quiz_quiz_autodiagnozy_results"
+                            #     display_training_recommendations(lesson_id, quiz_results_key)
+                            #     
+                            # except ImportError:
+                            #     st.error("Moduł rekomendacji szkoleń nie jest dostępny.")
+                            # except Exception as e:
+                            # except Exception as e:
+                            #     st.error(f"Błąd podczas ładowania rekomendacji: {str(e)}")
+                    else:
+                        # Dla wszystkich innych lekcji pokazuj pełne tabs
+                        # Podziel podsumowanie na cztery zakładki - dodajemy Cheatsheet
+                        summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli", "📌 Cheatsheet"])
+                        
+                        with summary_tabs[0]:
+                            # Wyświetl główne podsumowanie
+                            if 'main' in lesson['summary']:
+                                # Sprawdź czy summary zawiera interaktywne notatki
+                                summary_content = lesson['summary']['main']
+                                has_interactive_notes = ('action_today' in summary_content or 
+                                                         'reflection_discovery' in summary_content)
+                                
+                                if has_interactive_notes:
+                                    # Użyj dedykowanego renderera z obsługą zapisywania notatek
+                                    from utils.summary_renderer import render_summary_with_streamlit_widgets
+                                    render_summary_with_streamlit_widgets(lesson_id, lesson)
+                                else:
+                                    # Standardowe wyświetlanie HTML
+                                    st.markdown(summary_content, unsafe_allow_html=True)
+                            else:
+                                st.warning("Brak głównego podsumowania.")
+                        
+                        with summary_tabs[1]:
+                            # Wyświetl studium przypadku
+                            if 'case_study' in lesson['summary']:
+                                st.markdown(lesson['summary']['case_study'], unsafe_allow_html=True)
+                            else:
+                                st.warning("Brak studium przypadku w podsumowaniu.")
+                    
+                        with summary_tabs[2]:
+                            # Wyświetl interaktywną mapę myśli
+                            st.markdown("### 🗺️ Interaktywna mapa myśli")
+                            st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji. Możesz klikać na węzły aby je przesuwać i lepiej eksplorować powiązania między różnymi tematami.")
+                            
+                            try:
+                                from utils.mind_map import create_lesson_mind_map
+                                mind_map_result = create_lesson_mind_map(lesson)
+                                
+                                if mind_map_result is None:
+                                    st.info("💡 **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
+                            except Exception as e:
+                                st.warning("⚠️ Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
+                                st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
+                        
+                        with summary_tabs[3]:
+                            # Wyświetl cheatsheet
+                            if 'cheatsheet' in lesson['summary']:
+                                st.markdown(lesson['summary']['cheatsheet'], unsafe_allow_html=True)
+                                
+                                # Dodaj przycisk do eksportu PDF (jak w Tools)
+                                st.markdown("---")
+                                
+                                col_export, col_info = st.columns([1, 3])
+                                with col_export:
+                                    # Przycisk PDF
+                                    if zen_button("📌 Eksportuj PDF", key="export_cheatsheet_pdf"):
+                                        try:
+                                            from utils.cheatsheet_pdf_v5 import generate_cheatsheet_pdf
+                                            
+                                            username = getattr(st.session_state, 'username', 'Użytkownik')
+                                            lesson_title = lesson.get('title', 'Lekcja')
+                                            cheatsheet_content = lesson['summary']['cheatsheet']
+                                            
+                                            # Generuj prawdziwy PDF (jak w Tools)
+                                            pdf_data = generate_cheatsheet_pdf(
+                                                lesson_title=lesson_title,
+                                                cheatsheet_html=cheatsheet_content,
+                                                username=username
+                                            )
+                                            
                                             # Przygotuj nazwę pliku
                                             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
                                             lesson_id = lesson.get('id', 'lesson').replace(' ', '_')
-                                            filename = f"cheatsheet_{lesson_id}_{timestamp}.png"
+                                            filename = f"cheatsheet_{lesson_id}_{timestamp}.pdf"
                                             
                                             st.download_button(
-                                                label="📌 Pobierz PNG",
-                                                data=image_data,
+                                                label="📌 Pobierz PDF",
+                                                data=pdf_data,
                                                 file_name=filename,
-                                                mime="image/png",
-                                                key="download_cheatsheet_image"
+                                                mime="application/pdf",
+                                                key="download_cheatsheet_pdf"
                                             )
-                                            st.success("? Cheatsheet PNG gotowy do pobrania!")
-                                        else:
-                                            st.error("? Nie udało się wygenerować obrazu")
-                                        
-                                    except Exception as e:
-                                        st.error(f"? Błąd podczas generowania obrazu: {str(e)}")
-                                        if st.session_state.get('debug_mode', False):
-                                            import traceback
-                                            st.expander("Szczegóły błędu (dla deweloperów)").code(traceback.format_exc())
-                            
-                            with col_info:
-                                st.info("💡 Wybierz format: PDF lub Obraz (PNG)")
-                        else:
-                            st.warning("Brak cheatsheet w podsumowaniu.")
-
-                # Wyświetl całkowitą zdobytą ilość XP
-                total_xp = st.session_state.lesson_progress['total_xp_earned']
-                # st.success(f"Gratulacje! Ukończyłeś lekcję i zdobyłeś łącznie {total_xp} XP!")
-                  # Sprawdź czy lekcja została już zakończona
-                lesson_finished = st.session_state.get('lesson_finished', False)
-                
-                if not lesson_finished:
-                    # Pierwszy etap - przycisk "Zakończ lekcję"
-                    st.markdown("<div class='next-button'>", unsafe_allow_html=True)
-                    col1, col2, col3 = st.columns([1, 1, 1])
-                    with col2:
-                        if zen_button("📌 Zakończ lekcję", width='stretch'):
-                            # Sprawdź czy XP za podsumowanie już zostało przyznane
-                            progress = get_lesson_fragment_progress(lesson_id)
-                            if not progress.get('summary_completed', False):
-                                success, xp_awarded = award_fragment_xp(lesson_id, 'summary', step_xp_values['summary'])
-                                
-                                if success and xp_awarded > 0:
-                                    # Update session state for UI compatibility - usunięto podwójne ustawienie
-                                    # award_fragment_xp już ustawia summary_completed
-                                    st.session_state.lesson_progress['steps_completed'] += 1
-                                    st.session_state.lesson_progress['total_xp_earned'] += xp_awarded
+                                            st.success("? Cheatsheet PDF gotowy do pobrania!")
+                                            
+                                        except Exception as e:
+                                            st.error(f"? Błąd podczas generowania PDF: {str(e)}")
+                                            if st.session_state.get('debug_mode', False):
+                                                import traceback
+                                                st.expander("Szczegóły błędu (dla deweloperów)").code(traceback.format_exc())
                                     
-                                    # Show real-time XP notification
-                                    show_xp_notification(xp_awarded, f"Zdobyłeś {xp_awarded} XP za ukończenie podsumowania!")
+                                    # Przycisk PNG
+                                    if zen_button("📸 Eksportuj Obraz", key="export_cheatsheet_image"):
+                                        try:
+                                            from utils.cheatsheet_image_generator import generate_cheatsheet_image
+                                            
+                                            lesson_title = lesson.get('title', 'Lekcja')
+                                            cheatsheet_content = lesson['summary']['cheatsheet']
+                                            
+                                            # Generuj obraz PNG
+                                            image_data = generate_cheatsheet_image(
+                                                lesson_title=lesson_title,
+                                                cheatsheet_html=cheatsheet_content,
+                                                format='png'
+                                            )
+                                            
+                                            if image_data:
+                                                # Przygotuj nazwę pliku
+                                                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                                                lesson_id = lesson.get('id', 'lesson').replace(' ', '_')
+                                                filename = f"cheatsheet_{lesson_id}_{timestamp}.png"
+                                                
+                                                st.download_button(
+                                                    label="📌 Pobierz PNG",
+                                                    data=image_data,
+                                                    file_name=filename,
+                                                    mime="image/png",
+                                                    key="download_cheatsheet_image"
+                                                )
+                                                st.success("? Cheatsheet PNG gotowy do pobrania!")
+                                            else:
+                                                st.error("? Nie udało się wygenerować obrazu")
+                                            
+                                        except Exception as e:
+                                            st.error(f"? Błąd podczas generowania obrazu: {str(e)}")
+                                            if st.session_state.get('debug_mode', False):
+                                                import traceback
+                                                st.expander("Szczegóły błędu (dla deweloperów)").code(traceback.format_exc())
+                                
+                                with col_info:
+                                    st.info("💡 Wybierz format: PDF lub Obraz (PNG)")
+                            else:
+                                st.warning("Brak cheatsheet w podsumowaniu.")
+
+                    # Wyświetl całkowitą zdobytą ilość XP
+                    total_xp = st.session_state.lesson_progress['total_xp_earned']
+                    # st.success(f"Gratulacje! Ukończyłeś lekcję i zdobyłeś łącznie {total_xp} XP!")
+                      # Sprawdź czy lekcja została już zakończona
+                    lesson_finished = st.session_state.get('lesson_finished', False)
+                    
+                    if not lesson_finished:
+                        # Pierwszy etap - przycisk "Zakończ lekcję"
+                        st.markdown("<div class='next-button'>", unsafe_allow_html=True)
+                        col1, col2, col3 = st.columns([1, 1, 1])
+                        with col2:
+                            if zen_button("📌 Zakończ lekcję", width='stretch'):
+                                # Zapisz notatki użytkownika (Action Plan + Reflection) jeśli istnieją
+                                try:
+                                    from utils.lesson_notes import save_lesson_notes_from_session_state
+                                    username = st.session_state.get('username')
+                                    if username:
+                                        save_lesson_notes_from_session_state(username, lesson_id)
+                                except Exception as e:
+                                    print(f"⚠️ Nie udało się zapisać notatek: {e}")
+                                
+                                # Sprawdź czy XP za podsumowanie już zostało przyznane
+                                progress = get_lesson_fragment_progress(lesson_id)
+                                summary_key = xp_key  # 'podsumowanie' lub 'summary'
+                                if not progress.get(f'{summary_key}_completed', False):
+                                    success, xp_awarded = award_fragment_xp(lesson_id, summary_key, step_xp_values[summary_key])
+                                    
+                                    if success and xp_awarded > 0:
+                                        # Update session state for UI compatibility - usunięto podwójne ustawienie
+                                        # award_fragment_xp już ustawia summary_completed
+                                        st.session_state.lesson_progress['steps_completed'] += 1
+                                        st.session_state.lesson_progress['total_xp_earned'] += xp_awarded
+                                        
+                                        # Show real-time XP notification
+                                        show_xp_notification(xp_awarded, f"Zdobyłeś {xp_awarded} XP za ukończenie podsumowania!")
+                                        
+                                        # Refresh user data for real-time updates
+                                        from utils.real_time_updates import refresh_user_data
+                                        refresh_user_data()
+                                        
+                                        # Sprawdź czy lekcja została ukończona
+                                        check_and_mark_lesson_completion(lesson_id)
+                                
+                                # Oznacz lekcję jako zakończoną i zapisz postęp
+                                lesson_completed = check_and_mark_lesson_completion(lesson_id)
+                                
+                                if lesson_completed:
+                                    # Check for achievements after completing lesson
+                                    from utils.achievements import check_achievements
+                                    username = st.session_state.get('username')
+                                    if username:
+                                        check_achievements(username, 'lesson_completion', lesson_id=lesson_id)
                                     
                                     # Refresh user data for real-time updates
                                     from utils.real_time_updates import refresh_user_data
                                     refresh_user_data()
                                     
-                                    # Sprawdź czy lekcja została ukończona
-                                    check_and_mark_lesson_completion(lesson_id)
-                            
-                            # Oznacz lekcję jako zakończoną i zapisz postęp
-                            lesson_completed = check_and_mark_lesson_completion(lesson_id)
-                            
-                            if lesson_completed:
-                                # Check for achievements after completing lesson
-                                from utils.achievements import check_achievements
-                                username = st.session_state.get('username')
-                                if username:
-                                    check_achievements(username, 'lesson_completion', lesson_id=lesson_id)
+                                # Show completion notification - wyświetl faktyczne całkowite XP
+                                final_total_xp = st.session_state.lesson_progress.get('total_xp_earned', 0)
+                                show_xp_notification(0, f"📌 Gratulacje! Ukończyłeś całą lekcję i zdobyłeś {final_total_xp} XP!")
                                 
-                                # Refresh user data for real-time updates
-                                from utils.real_time_updates import refresh_user_data
-                                refresh_user_data()
-                                
-                            # Show completion notification - wyświetl faktyczne całkowite XP
-                            final_total_xp = st.session_state.lesson_progress.get('total_xp_earned', 0)
-                            show_xp_notification(0, f"📌 Gratulacje! Ukończyłeś całą lekcję i zdobyłeś {final_total_xp} XP!")
-                            
-                            # Oznacz lekcję jako zakończoną w sesji
-                            st.session_state.lesson_finished = True
-                            st.rerun()
-                    st.markdown("</div>", unsafe_allow_html=True)
-                else:
-                    # Drugi etap - pokaż podsumowanie i przycisk powrotu
-                    st.balloons()  # Animacja gratulacji
-                    st.markdown("""
-                    <div style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); 
-                                color: white; padding: 20px; border-radius: 15px; margin: 20px 0;
-                                text-align: center; box-shadow: 0 4px 15px rgba(76,175,80,0.3);">
-                        <h2 style="margin: 0 0 10px 0;">🎉 Lekcja ukończona!</h2>
-                        <p style="margin: 0; font-size: 18px;">Świetna robota! Możesz teraz przejść do kolejnych lekcji.</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                    # Przycisk powrotu do wszystkich lekcji
-                    st.markdown("<div class='next-button'>", unsafe_allow_html=True)
-                    col1, col2, col3 = st.columns([1, 1, 1])
-                    with col2:
-                        if zen_button("📌 Wróć do wszystkich lekcji", width='stretch'):
-                            # Wyczyść stan zakończenia lekcji
-                            st.session_state.lesson_finished = False
-                            # Powrót do przeglądu lekcji
-                            st.session_state.current_lesson = None
-                            st.rerun()
-                    st.markdown("</div>", unsafe_allow_html=True)
-            elif 'outro' in lesson:
-                # Backward compatibility - obsługa starszego formatu outro - zakomentowano mapę myśli
-                lesson_title = lesson.get("title", "")
-                
-                if lesson_title == "Wprowadzenie do neuroprzywództwa":
-                    # Dla tej lekcji pokazuj tylko zakładkę "Podsumowanie"
-                    summary_tabs = tabs_with_fallback(["Podsumowanie"])
-                    
-                    with summary_tabs[0]:
-                        # Wyświetl główne podsumowanie
-                        if 'main' in lesson['outro']:
-                            st.markdown(lesson['outro']['main'], unsafe_allow_html=True)
-                        else:
-                            st.warning("Brak głównego podsumowania.")
-                else:
-                    # Dla wszystkich innych lekcji pokazuj pełne tabs
-                    summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli"])
-                    
-                    with summary_tabs[0]:
-                        # Wyświetl główne podsumowanie
-                        if 'main' in lesson['outro']:
-                            st.markdown(lesson['outro']['main'], unsafe_allow_html=True)
-                        else:
-                            st.warning("Brak głównego podsumowania.")
-                    
-                    with summary_tabs[1]:
-                        # Wyświetl studium przypadku
-                        if 'case_study' in lesson['outro']:
-                            st.markdown(lesson['outro']['case_study'], unsafe_allow_html=True)
-                        else:
-                            st.warning("Brak studium przypadku w podsumowaniu.")
-                
-                    with summary_tabs[2]:
-                        # Wyświetl interaktywną mapę myśli
-                        st.markdown("### 🗺️ Interaktywna mapa myśli")
-                        st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji. Możesz klikać na węzły aby je przesuwać i lepiej eksplorować powiązania między różnymi tematami.")
+                                # Oznacz lekcję jako zakończoną w sesji
+                                st.session_state.lesson_finished = True
+                                st.rerun()
+                        st.markdown("</div>", unsafe_allow_html=True)
+                    else:
+                        # Drugi etap - pokaż podsumowanie i przycisk powrotu
+                        st.balloons()  # Animacja gratulacji
+                        st.markdown("""
+                        <div style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); 
+                                    color: white; padding: 20px; border-radius: 15px; margin: 20px 0;
+                                    text-align: center; box-shadow: 0 4px 15px rgba(76,175,80,0.3);">
+                            <h2 style="margin: 0 0 10px 0;">🎉 Lekcja ukończona!</h2>
+                            <p style="margin: 0; font-size: 18px;">Świetna robota! Możesz teraz przejść do kolejnych lekcji.</p>
+                        </div>
+                        """, unsafe_allow_html=True)
                         
-                        try:
-                            from utils.mind_map import create_lesson_mind_map
-                            mind_map_result = create_lesson_mind_map(lesson)
+                        # Przycisk powrotu do wszystkich lekcji
+                        st.markdown("<div class='next-button'>", unsafe_allow_html=True)
+                        col1, col2, col3 = st.columns([1, 1, 1])
+                        with col2:
+                            if zen_button("📌 Wróć do wszystkich lekcji", width='stretch'):
+                                # Wyczyść stan zakończenia lekcji
+                                st.session_state.lesson_finished = False
+                                # Powrót do przeglądu lekcji
+                                st.session_state.current_lesson = None
+                                st.rerun()
+                        st.markdown("</div>", unsafe_allow_html=True)
+                elif 'outro' in lesson:
+                    # Backward compatibility - obsługa starszego formatu outro - zakomentowano mapę myśli
+                    lesson_title = lesson.get("title", "")
+                    
+                    if lesson_title == "Wprowadzenie do neuroprzywództwa":
+                        # Dla tej lekcji pokazuj tylko zakładkę "Podsumowanie"
+                        summary_tabs = tabs_with_fallback(["Podsumowanie"])
+                        
+                        with summary_tabs[0]:
+                            # Wyświetl główne podsumowanie
+                            if 'main' in lesson['outro']:
+                                st.markdown(lesson['outro']['main'], unsafe_allow_html=True)
+                            else:
+                                st.warning("Brak głównego podsumowania.")
+                    else:
+                        # Dla wszystkich innych lekcji pokazuj pełne tabs
+                        summary_tabs = tabs_with_fallback(["Podsumowanie", "Case Study", "🗺️ Mapa myśli"])
+                        
+                        with summary_tabs[0]:
+                            # Wyświetl główne podsumowanie
+                            if 'main' in lesson['outro']:
+                                st.markdown(lesson['outro']['main'], unsafe_allow_html=True)
+                            else:
+                                st.warning("Brak głównego podsumowania.")
+                        
+                        with summary_tabs[1]:
+                            # Wyświetl studium przypadku
+                            if 'case_study' in lesson['outro']:
+                                st.markdown(lesson['outro']['case_study'], unsafe_allow_html=True)
+                            else:
+                                st.warning("Brak studium przypadku w podsumowaniu.")
+                    
+                        with summary_tabs[2]:
+                            # Wyświetl interaktywną mapę myśli
+                            st.markdown("### 🗺️ Interaktywna mapa myśli")
+                            st.markdown("Poniżej znajdziesz interaktywną mapę myśli podsumowującą kluczowe koncepty z tej lekcji. Możesz klikać na węzły aby je przesuwać i lepiej eksplorować powiązania między różnymi tematami.")
                             
-                            if mind_map_result is None:
-                                st.info("💡 **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
-                        except Exception as e:
-                            st.warning("⚠️ Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
-                            st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
-            else:
-                # Brak podsumowania w danych lekcji
-                st.error("Lekcja nie zawiera podsumowania!")
+                            try:
+                                from utils.mind_map import create_lesson_mind_map
+                                mind_map_result = create_lesson_mind_map(lesson)
+                                
+                                if mind_map_result is None:
+                                    st.info("💡 **Mapa myśli w przygotowaniu**\n\nDla tej lekcji przygotowujemy interaktywną mapę myśli, która pomoże Ci lepiej zrozumieć powiązania między różnymi konceptami. Wkrótce będzie dostępna!")
+                            except Exception as e:
+                                st.warning("⚠️ Mapa myśli nie jest obecnie dostępna. Sprawdź, czy wszystkie wymagane biblioteki są zainstalowane.")
+                                st.expander("Szczegóły błędu (dla deweloperów)").write(str(e))
+                else:
+                    # Brak podsumowania w danych lekcji
+                    st.error("Lekcja nie zawiera podsumowania!")
           # Zamknij div .st-bx
         st.markdown("</div>", unsafe_allow_html=True)
         
@@ -2497,31 +3181,50 @@ def show_lessons_content():
         completion_percent = (current_xp / max_xp) * 100 if max_xp > 0 else 0
           # Przygotuj dane o kluczowych krokach do wyświetlenia
         key_steps_info = []
-        if 'intro' in step_order:
-            completed = fragment_progress.get('intro_completed', False)
-            key_steps_info.append(f"📖 Intro: {step_xp_values['intro']} XP {'✅' if completed else ''}")
         
-        # opening_quiz usunięte - jest teraz zintegrowane w zakładce intro
-        
-        if 'content' in step_order:
-            completed = fragment_progress.get('content_completed', False)
-            key_steps_info.append(f"📚 Treść: {step_xp_values['content']} XP {'✅' if completed else ''}")
-        
-        if 'practical_exercises' in step_order:
-            completed = fragment_progress.get('practical_exercises_completed', False)
-            key_steps_info.append(f"🎯 Ćwiczenia praktyczne: {step_xp_values['practical_exercises']} XP {'✅' if completed else ''}")
-        
-        if 'reflection' in step_order:
-            completed = fragment_progress.get('reflection_completed', False)
-            key_steps_info.append(f"💭 Refleksja: {step_xp_values['reflection']} XP {'✅' if completed else ''}")
-        
-        if 'application' in step_order:
-            completed = fragment_progress.get('application_completed', False)
-            key_steps_info.append(f"✏️ Zadania: {step_xp_values['application']} XP {'✅' if completed else ''}")
-        
-        if 'summary' in step_order:
-            completed = fragment_progress.get('summary_completed', False)
-            key_steps_info.append(f"🎓 Podsumowanie: {step_xp_values['summary']} XP {'✅' if completed else ''}")
+        # Dla v2.0 używaj polskich kluczy, dla v1 angielskich
+        if is_v2:
+            if 'wprowadzenie' in step_order:
+                completed = fragment_progress.get('wprowadzenie_completed', False)
+                key_steps_info.append(f"📖 Wprowadzenie: {step_xp_values.get('wprowadzenie', 0)} XP {'✅' if completed else ''}")
+            
+            if 'nauka' in step_order:
+                completed = fragment_progress.get('nauka_completed', False)
+                key_steps_info.append(f"📚 Nauka: {step_xp_values.get('nauka', 0)} XP {'✅' if completed else ''}")
+            
+            if 'praktyka' in step_order:
+                completed = fragment_progress.get('praktyka_completed', False)
+                key_steps_info.append(f"🎯 Praktyka: {step_xp_values.get('praktyka', 0)} XP {'✅' if completed else ''}")
+            
+            if 'podsumowanie' in step_order:
+                completed = fragment_progress.get('podsumowanie_completed', False)
+                key_steps_info.append(f"🎓 Podsumowanie: {step_xp_values.get('podsumowanie', 0)} XP {'✅' if completed else ''}")
+        else:
+            if 'intro' in step_order:
+                completed = fragment_progress.get('intro_completed', False)
+                key_steps_info.append(f"📖 Intro: {step_xp_values.get('intro', 0)} XP {'✅' if completed else ''}")
+            
+            # opening_quiz usunięte - jest teraz zintegrowane w zakładce intro
+            
+            if 'content' in step_order:
+                completed = fragment_progress.get('content_completed', False)
+                key_steps_info.append(f"📚 Treść: {step_xp_values.get('content', 0)} XP {'✅' if completed else ''}")
+            
+            if 'practical_exercises' in step_order:
+                completed = fragment_progress.get('practical_exercises_completed', False)
+                key_steps_info.append(f"🎯 Ćwiczenia praktyczne: {step_xp_values.get('practical_exercises', 0)} XP {'✅' if completed else ''}")
+            
+            if 'reflection' in step_order:
+                completed = fragment_progress.get('reflection_completed', False)
+                key_steps_info.append(f"💭 Refleksja: {step_xp_values.get('reflection', 0)} XP {'✅' if completed else ''}")
+            
+            if 'application' in step_order:
+                completed = fragment_progress.get('application_completed', False)
+                key_steps_info.append(f"✏️ Zadania: {step_xp_values.get('application', 0)} XP {'✅' if completed else ''}")
+            
+            if 'summary' in step_order:
+                completed = fragment_progress.get('summary_completed', False)
+                key_steps_info.append(f"🎓 Podsumowanie: {step_xp_values.get('summary', 0)} XP {'✅' if completed else ''}")
         
         st.markdown(f"""
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 

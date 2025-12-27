@@ -97,6 +97,8 @@ class User(Base):
     lesson_progress = relationship("LessonProgress", back_populates="user", cascade="all, delete-orphan")
     completed_lessons = relationship("CompletedLesson", back_populates="user", cascade="all, delete-orphan")
     lesson_access = relationship("LessonAccess", back_populates="user", cascade="all, delete-orphan")
+    lesson_notes = relationship("LessonNotes", back_populates="user", cascade="all, delete-orphan")
+    activity_logs = relationship("ActivityLog", cascade="all, delete-orphan")
     # badges = relationship("UserBadge", back_populates="user", cascade="all, delete-orphan")
     
     def to_dict(self, include_relations=False):
@@ -239,6 +241,37 @@ class User(Base):
 
 
 # =============================================================================
+# ACTIVITY LOG MODEL
+# =============================================================================
+
+class ActivityLog(Base):
+    """Model dla logów aktywności użytkownika"""
+    __tablename__ = 'activity_logs'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(GUID(), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False, index=True)
+    activity_type = Column(String(50), nullable=False, index=True)  # lesson_started, lesson_completed, tool_used, etc.
+    details = Column(JSONEncoded)  # Dodatkowe szczegóły (xp_earned, lesson_id, tool_name, etc.)
+    timestamp = Column(DateTime, nullable=False, default=datetime.utcnow, index=True)
+    
+    # Index dla szybkiego wyszukiwania po użytkowniku i czasie
+    __table_args__ = (
+        Index('idx_activity_user_time', 'user_id', 'timestamp'),
+    )
+    
+    def to_dict(self):
+        """Konwertuje do formatu kompatybilnego z JSON activity_log"""
+        return {
+            'type': self.activity_type,
+            'timestamp': self.timestamp.isoformat() if self.timestamp else None,
+            'details': self.details or {}
+        }
+    
+    def __repr__(self):
+        return f"<ActivityLog(user_id='{self.user_id}', type='{self.activity_type}', time='{self.timestamp}')>"
+
+
+# =============================================================================
 # LESSON MODELS
 # =============================================================================
 
@@ -333,6 +366,36 @@ class LessonAccess(Base):
         UniqueConstraint('user_id', 'lesson_id', name='uix_user_lesson_access'),
         Index('idx_user_access', 'user_id'),
     )
+
+
+class LessonNotes(Base):
+    """Model dla notatek użytkownika w lekcjach (Action Plan, Reflection Journal)"""
+    __tablename__ = 'lesson_notes'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(GUID(), ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False)
+    lesson_id = Column(String(255), nullable=False)
+    field_name = Column(String(100), nullable=False)  # action_today, reflection_discovery, etc.
+    value = Column(Text, nullable=True)  # Treść notatki
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    user = relationship("User", back_populates="lesson_notes")
+    
+    __table_args__ = (
+        UniqueConstraint('user_id', 'lesson_id', 'field_name', name='uix_user_lesson_field'),
+        Index('idx_user_lesson_notes', 'user_id', 'lesson_id'),
+    )
+    
+    def to_dict(self):
+        """Konwertuje do formatu dict"""
+        return {
+            'field_name': self.field_name,
+            'value': self.value,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None
+        }
 
 
 # =============================================================================

@@ -991,9 +991,145 @@ def show_profile():
         st.markdown("</div>", unsafe_allow_html=True)
 
 def show_xp_history_section():
-    """Wyświetla szczegółową historię zdobywania XP"""
+    """Wyświetla szczegółową historię zdobywania XP w profesjonalnym układzie kart"""
     from utils.activity_tracker import get_xp_history
     from data.users import load_user_data
+    
+    # CSS dla kart
+    st.markdown("""
+    <style>
+    .xp-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin: 16px 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.06);
+    }
+    .xp-card:hover {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+        transform: translateY(-2px);
+    }
+    .xp-metric-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 24px;
+        color: white;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        height: 100%;
+    }
+    .xp-metric-value {
+        font-size: 42px;
+        font-weight: 700;
+        line-height: 1;
+        margin: 12px 0;
+    }
+    .xp-metric-label {
+        font-size: 13px;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        font-weight: 500;
+    }
+    .xp-metric-help {
+        font-size: 12px;
+        opacity: 0.8;
+        margin-top: 8px;
+    }
+    .activity-type-card {
+        background: white;
+        border-radius: 10px;
+        padding: 16px;
+        margin: 8px 0;
+        border-left: 4px solid #667eea;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.2s ease;
+    }
+    .activity-type-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateX(4px);
+    }
+    .activity-type-info {
+        flex: 1;
+    }
+    .activity-type-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+    }
+    .activity-type-stats {
+        font-size: 13px;
+        color: #666;
+    }
+    .activity-type-xp {
+        font-size: 24px;
+        font-weight: 700;
+        color: #667eea;
+    }
+    .history-row {
+        background: #fafafa;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin: 6px 0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: all 0.2s ease;
+    }
+    .history-row:hover {
+        background: #f0f0f0;
+        transform: translateX(2px);
+    }
+    .history-icon {
+        font-size: 24px;
+        min-width: 32px;
+    }
+    .history-content {
+        flex: 1;
+    }
+    .history-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 2px;
+    }
+    .history-details {
+        font-size: 13px;
+        color: #666;
+    }
+    .history-time {
+        font-size: 12px;
+        color: #999;
+        min-width: 120px;
+        text-align: right;
+    }
+    .history-xp {
+        font-size: 16px;
+        font-weight: 700;
+        color: #27ae60;
+        min-width: 60px;
+        text-align: right;
+    }
+    .chart-controls {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 16px;
+        margin: 16px 0;
+    }
+    .filter-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 16px 0;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
     zen_header("💰 Historia Zdobywania XP")
     
@@ -1001,50 +1137,66 @@ def show_xp_history_section():
     users_data = load_user_data()
     user_data = users_data.get(username, {})
     
-    # Podsumowanie na górze
+    # KARTA 1: Główne metryki
     col1, col2, col3 = st.columns(3)
+    
+    current_xp = user_data.get('xp', 0)
+    current_level = user_data.get('level', 1)
+    next_level_xp = current_level * 100
+    progress = min(100, (current_xp % next_level_xp) / next_level_xp * 100)
+    xp_to_next = next_level_xp - (current_xp % next_level_xp)
+    
     with col1:
-        st.metric(
-            "Całkowite XP",
-            user_data.get('xp', 0),
-            help="Suma wszystkich zdobytych punktów doświadczenia"
-        )
+        st.markdown(f"""
+        <div class="xp-metric-card">
+            <div class="xp-metric-label">Całkowite XP</div>
+            <div class="xp-metric-value">{current_xp}</div>
+            <div class="xp-metric-help">Suma wszystkich punktów</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
     with col2:
-        st.metric(
-            "Poziom",
-            user_data.get('level', 1),
-            help="Twój obecny poziom"
-        )
+        st.markdown(f"""
+        <div class="xp-metric-card" style="background: linear-gradient(135deg, #f39c12 0%, #e74c3c 100%);">
+            <div class="xp-metric-label">Poziom</div>
+            <div class="xp-metric-value">{current_level}</div>
+            <div class="xp-metric-help">Twój obecny poziom</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
     with col3:
-        # Oblicz postęp do następnego poziomu
-        current_xp = user_data.get('xp', 0)
-        current_level = user_data.get('level', 1)
-        next_level_xp = current_level * 100  # Uproszczony wzór
-        progress = min(100, (current_xp % next_level_xp) / next_level_xp * 100)
-        st.metric(
-            "Postęp",
-            f"{int(progress)}%",
-            help=f"Do następnego poziomu: {next_level_xp - (current_xp % next_level_xp)} XP"
-        )
+        st.markdown(f"""
+        <div class="xp-metric-card" style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%);">
+            <div class="xp-metric-label">Postęp do {current_level + 1}</div>
+            <div class="xp-metric-value">{int(progress)}%</div>
+            <div class="xp-metric-help">Brakuje: {xp_to_next} XP</div>
+        </div>
+        """, unsafe_allow_html=True)
     
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
     
-    # Wykres XP w czasie z regulacją okresu
-    st.markdown("### 📊 Wykres Zdobywania XP")
+    # KARTA 2: Wykres XP
+    st.markdown("""
+    <div class="xp-card">
+        <h3 style="margin-top: 0; color: #1a1a1a;">📊 Wykres Zdobywania XP</h3>
+    """, unsafe_allow_html=True)
     
-    # Kontrolka okresu dla wykresu
-    chart_period_col1, chart_period_col2 = st.columns([3, 1])
+    # Kontrolki wykresu
+    st.markdown('<div class="chart-controls">', unsafe_allow_html=True)
+    chart_col1, chart_col2 = st.columns([3, 1])
     
-    with chart_period_col1:
+    with chart_col1:
         chart_period = st.select_slider(
-            "Wybierz okres do wyświetlenia:",
+            "Wybierz okres:",
             options=["7 dni", "30 dni", "90 dni", "6 miesięcy", "1 rok", "Wszystko"],
             value="30 dni",
             key="chart_period_slider"
         )
     
-    with chart_period_col2:
-        show_cumulative = st.checkbox("Skumulowane", value=False, help="Pokaż sumę skumulowaną XP zamiast dziennych przyrostów")
+    with chart_col2:
+        show_cumulative = st.checkbox("Skumulowane", value=False, 
+                                      help="Suma narastająca zamiast dziennych przyrostów")
+    st.markdown('</div>', unsafe_allow_html=True)
     
     # Mapuj okres na dni
     chart_period_days = {
@@ -1057,10 +1209,9 @@ def show_xp_history_section():
     }
     chart_days = chart_period_days[chart_period]
     
-    # Pobierz activity_log
-    activity_log = user_data.get('activity_log', [])
-    
-    # Przygotuj dane do wykresu
+    # Pobierz activity_log z SQL
+    from database.models import ActivityLog, User
+    from database.connection import session_scope
     from datetime import datetime, timedelta
     import pandas as pd
     
@@ -1069,34 +1220,34 @@ def show_xp_history_section():
     # Agreguj XP po dniach
     daily_xp = {}
     
-    for entry in activity_log:
-        try:
-            timestamp = datetime.fromisoformat(entry['timestamp'])
-            if timestamp >= chart_cutoff_date:
-                date_key = timestamp.date()
+    with session_scope() as session:
+        # Pobierz użytkownika
+        user = session.query(User).filter_by(username=st.session_state.username).first()
+        
+        if user:
+            # Pobierz aktywności z ostatniego okresu
+            activities = session.query(ActivityLog)\
+                .filter(ActivityLog.user_id == user.user_id)\
+                .filter(ActivityLog.timestamp >= chart_cutoff_date)\
+                .order_by(ActivityLog.timestamp.asc())\
+                .all()
+            
+            for activity in activities:
+                date_key = activity.timestamp.date()
                 
-                # Pobierz XP z details lub użyj domyślnych wartości
-                details = entry.get('details', {})
+                # Pobierz XP z details
+                details = activity.details or {}
                 xp = details.get('xp_earned', 0)
                 
-                # Fallback dla starych wpisów bez xp_earned
-                if xp == 0:
-                    xp_mapping = {
-                        'lesson_started': 5,
-                        'lesson_completed': 50,
-                        'quiz_completed': 20,
-                        'ai_exercise': 15,
-                        'inspiration_read': 1,
-                        'test_completed': 5,
-                        'tool_used': 1
-                    }
-                    xp = xp_mapping.get(entry['type'], 0)
+                # Stare wpisy bez xp_earned - przypisz minimalną wartość
+                if xp == 0 and activity.activity_type in ['lesson_started', 'lesson_completed', 'quiz_completed', 
+                                                           'ai_exercise', 'inspiration_read', 'test_completed', 'tool_used']:
+                    xp = 1
                 
-                if date_key not in daily_xp:
-                    daily_xp[date_key] = 0
-                daily_xp[date_key] += xp
-        except:
-            continue
+                if xp > 0:
+                    if date_key not in daily_xp:
+                        daily_xp[date_key] = 0
+                    daily_xp[date_key] += xp
     
     if daily_xp:
         # Stwórz DataFrame z pełnym zakresem dat (wypełnij brakujące dni zerami)
@@ -1159,11 +1310,21 @@ def show_xp_history_section():
             
             st.plotly_chart(fig, use_container_width=True)
             
-            # Statystyki pod wykresem
+            # Statystyki pod wykresem w kartach
+            st.markdown("<br>", unsafe_allow_html=True)
             col_chart1, col_chart2, col_chart3, col_chart4 = st.columns(4)
+            
             with col_chart1:
                 total_chart_xp = chart_data['XP'].sum() if not show_cumulative else chart_data['XP'].iloc[-1]
-                st.metric("Łącznie XP", f"{int(total_chart_xp)}")
+                st.markdown(f"""
+                <div style="background: linear-gradient(135deg, #e8f5e9, #f1f8f4); 
+                            border-radius: 10px; padding: 16px; text-align: center;
+                            border-left: 4px solid #4caf50;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Łącznie XP</div>
+                    <div style="font-size: 28px; font-weight: 700; color: #27ae60;">{int(total_chart_xp)}</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
             with col_chart2:
                 try:
                     if not show_cumulative:
@@ -1174,7 +1335,15 @@ def show_xp_history_section():
                     avg_val = int(avg_daily_xp) if avg_daily_xp and str(avg_daily_xp) != 'nan' else 0
                 except:
                     avg_val = 0
-                st.metric("Średnio dziennie", f"{avg_val}")
+                st.markdown(f"""
+                <div style="background: linear-gradient(135deg, #e3f2fd, #f0f7fc); 
+                            border-radius: 10px; padding: 16px; text-align: center;
+                            border-left: 4px solid #2196f3;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Średnio/dzień</div>
+                    <div style="font-size: 28px; font-weight: 700; color: #1976d2;">{avg_val}</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
             with col_chart3:
                 try:
                     if not show_cumulative:
@@ -1185,13 +1354,36 @@ def show_xp_history_section():
                     max_val = int(max_daily_xp) if max_daily_xp and str(max_daily_xp) != 'nan' else 0
                 except:
                     max_val = 0
-                st.metric("Najlepszy dzień", f"{max_val}")
+                st.markdown(f"""
+                <div style="background: linear-gradient(135deg, #fff3e0, #fef7ed); 
+                            border-radius: 10px; padding: 16px; text-align: center;
+                            border-left: 4px solid #ff9800;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Najlepszy dzień</div>
+                    <div style="font-size: 28px; font-weight: 700; color: #f57c00;">{max_val}</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
             with col_chart4:
                 days_with_activity = (chart_data['XP'] > 0).sum() if not show_cumulative else None
                 if days_with_activity is not None:
-                    st.metric("Dni aktywnych", f"{days_with_activity}/{len(chart_data)}")
+                    st.markdown(f"""
+                    <div style="background: linear-gradient(135deg, #f3e5f5, #f8f0fa); 
+                                border-radius: 10px; padding: 16px; text-align: center;
+                                border-left: 4px solid #9c27b0;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Dni aktywnych</div>
+                        <div style="font-size: 28px; font-weight: 700; color: #7b1fa2;">{days_with_activity}/{len(chart_data)}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
                 else:
-                    st.metric("Trend", "📈" if chart_data['XP'].iloc[-1] > chart_data['XP'].iloc[0] else "📉")
+                    trend_icon = "📈" if chart_data['XP'].iloc[-1] > chart_data['XP'].iloc[0] else "📉"
+                    st.markdown(f"""
+                    <div style="background: linear-gradient(135deg, #f3e5f5, #f8f0fa); 
+                                border-radius: 10px; padding: 16px; text-align: center;
+                                border-left: 4px solid #9c27b0;">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Trend</div>
+                        <div style="font-size: 28px; font-weight: 700;">{trend_icon}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
             
         except ImportError:
             # Fallback do prostego wykresu Streamlit
@@ -1199,10 +1391,15 @@ def show_xp_history_section():
     else:
         st.info(f"Brak danych XP w wybranym okresie ({chart_period}). Zacznij zdobywać doświadczenie!")
     
-    st.markdown("---")
+    st.markdown("</div>", unsafe_allow_html=True)  # Zamknięcie xp-card
     
-    # Filtry
-    st.markdown("### 🔍 Filtry")
+    # KARTA 3: Filtry
+    st.markdown("""
+    <div class="xp-card">
+        <h3 style="margin-top: 0; color: #1a1a1a;">🔍 Filtry i Statystyki</h3>
+        <div class="filter-card">
+    """, unsafe_allow_html=True)
+    
     col_filter1, col_filter2 = st.columns(2)
     
     with col_filter1:
@@ -1224,6 +1421,8 @@ def show_xp_history_section():
         }
         filter_type = st.selectbox("Typ aktywności", list(activity_types.keys()))
     
+    st.markdown("</div>", unsafe_allow_html=True)  # Zamknięcie filter-card
+    
     # Mapuj okres na dni
     period_days = {
         "Ostatnie 7 dni": 7,
@@ -1233,27 +1432,40 @@ def show_xp_history_section():
     }
     days = period_days[period]
     
-    # Pobierz activity_log
-    activity_log = user_data.get('activity_log', [])
-    
-    # Filtruj po dacie
+    # Pobierz activity_log z SQL
+    from database.models import ActivityLog, User
+    from database.connection import session_scope
     from datetime import datetime, timedelta
     cutoff_date = datetime.now() - timedelta(days=days)
     
     filtered_activities = []
-    for entry in activity_log:
-        try:
-            timestamp = datetime.fromisoformat(entry['timestamp'])
-            if timestamp >= cutoff_date:
+    
+    with session_scope() as session:
+        # Pobierz użytkownika
+        user = session.query(User).filter_by(username=st.session_state.username).first()
+        
+        if user:
+            # Pobierz aktywności z ostatniego okresu
+            activities = session.query(ActivityLog)\
+                .filter(ActivityLog.user_id == user.user_id)\
+                .filter(ActivityLog.timestamp >= cutoff_date)\
+                .order_by(ActivityLog.timestamp.desc())\
+                .all()
+            
+            for activity in activities:
                 # Filtruj po typie aktywności
-                if activity_types[filter_type] is None or entry['type'] in activity_types[filter_type]:
+                if activity_types[filter_type] is None or activity.activity_type in activity_types[filter_type]:
                     # Sprawdź czy ma XP (albo z details, albo domyślne)
-                    xp_earned = entry.get('details', {}).get('xp_earned', 0)
-                    if xp_earned > 0 or entry['type'] in ['lesson_started', 'lesson_completed', 'quiz_completed', 
-                                                            'inspiration_read', 'tool_used', 'ai_exercise', 'test_completed']:
-                        filtered_activities.append(entry)
-        except:
-            continue
+                    details = activity.details or {}
+                    xp_earned = details.get('xp_earned', 0)
+                    if xp_earned > 0 or activity.activity_type in ['lesson_started', 'lesson_completed', 'quiz_completed', 
+                                                                     'inspiration_read', 'tool_used', 'ai_exercise', 'test_completed']:
+                        # Konwertuj do formatu zgodnego z resztą kodu
+                        filtered_activities.append({
+                            'type': activity.activity_type,
+                            'timestamp': activity.timestamp.isoformat(),
+                            'details': details
+                        })
     
     # Statystyki przefiltrowanych danych
     st.markdown("---")
@@ -1264,24 +1476,18 @@ def show_xp_history_section():
     activity_breakdown = {}
     
     for entry in filtered_activities:
-        # Pobierz XP z details lub użyj domyślnych wartości
+        # Pobierz XP z details (powinno zawsze być dla nowych wpisów)
         details = entry.get('details', {})
         xp = details.get('xp_earned', 0)
         
-        # Fallback dla starych wpisów bez xp_earned
+        # Tylko jeśli brak xp_earned (stare wpisy), pomiń lub użyj wartości domyślnej
         if xp == 0:
-            xp_mapping = {
-                'lesson_started': 5,
-                'lesson_completed': 50,
-                'quiz_completed': 20,
-                'ai_exercise': 15,
-                'inspiration_read': 1,
-                'test_completed': 5,
-                'tool_used': 1
-            }
-            xp = xp_mapping.get(entry['type'], 0)
+            # Dla starych wpisów bez xp_earned - pomiń lub przypisz minimalną wartość
+            xp = 1 if entry['type'] in ['lesson_started', 'lesson_completed', 'quiz_completed', 
+                                          'ai_exercise', 'inspiration_read', 'test_completed', 'tool_used'] else 0
         
-        total_xp_period += xp
+        if xp > 0:
+            total_xp_period += xp
         
         # Grupuj po typie
         activity_type = entry['type']
@@ -1290,18 +1496,38 @@ def show_xp_history_section():
         activity_breakdown[activity_type]['count'] += 1
         activity_breakdown[activity_type]['xp'] += xp
     
+    # Statystyki w kartach
     col_stat1, col_stat2, col_stat3 = st.columns(3)
     with col_stat1:
-        st.metric("Zdobyte XP", f"{total_xp_period} XP")
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #667eea, #764ba2); 
+                    border-radius: 10px; padding: 20px; text-align: center; color: white;">
+            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">ZDOBYTE XP</div>
+            <div style="font-size: 32px; font-weight: 700;">{total_xp_period}</div>
+        </div>
+        """, unsafe_allow_html=True)
     with col_stat2:
-        st.metric("Liczba aktywności", len(filtered_activities))
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #f39c12, #e74c3c); 
+                    border-radius: 10px; padding: 20px; text-align: center; color: white;">
+            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">AKTYWNOŚCI</div>
+            <div style="font-size: 32px; font-weight: 700;">{len(filtered_activities)}</div>
+        </div>
+        """, unsafe_allow_html=True)
     with col_stat3:
         avg_xp = total_xp_period / len(filtered_activities) if filtered_activities else 0
-        st.metric("Średnio na aktywność", f"{avg_xp:.1f} XP")
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #27ae60, #229954); 
+                    border-radius: 10px; padding: 20px; text-align: center; color: white;">
+            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">ŚREDNIO/AKTYWNOŚĆ</div>
+            <div style="font-size: 32px; font-weight: 700;">{avg_xp:.1f}</div>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Wykres breakdown po typach
     if activity_breakdown:
-        st.markdown("### 📈 Rozkład XP według typu aktywności")
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<h4 style="color: #1a1a1a; margin: 20px 0 16px 0;">📈 Rozkład XP według typu aktywności</h4>', unsafe_allow_html=True)
         
         # Mapowanie nazw typów aktywności
         type_names = {
@@ -1314,111 +1540,136 @@ def show_xp_history_section():
             'test_completed': '🎯 Testy diagnostyczne'
         }
         
-        # Przygotuj dane do wyświetlenia
-        breakdown_data = []
-        for act_type, stats in activity_breakdown.items():
-            breakdown_data.append({
-                'Typ': type_names.get(act_type, act_type),
-                'Liczba': stats['count'],
-                'XP': stats['xp'],
-                'Średnio': f"{stats['xp'] / stats['count']:.1f}"
-            })
+        # Kolory dla różnych typów
+        type_colors = {
+            'lesson_started': '#3498db',
+            'lesson_completed': '#27ae60',
+            'quiz_completed': '#9b59b6',
+            'inspiration_read': '#f39c12',
+            'tool_used': '#e74c3c',
+            'ai_exercise': '#1abc9c',
+            'test_completed': '#34495e'
+        }
         
         # Sortuj po XP
-        breakdown_data.sort(key=lambda x: x['XP'], reverse=True)
+        sorted_breakdown = sorted(activity_breakdown.items(), key=lambda x: x[1]['xp'], reverse=True)
         
-        # Wyświetl jako DataFrame
-        import pandas as pd
-        df_breakdown = pd.DataFrame(breakdown_data)
-        st.dataframe(df_breakdown, use_container_width=True, hide_index=True)
+        for act_type, stats in sorted_breakdown:
+            color = type_colors.get(act_type, '#667eea')
+            name = type_names.get(act_type, act_type)
+            count = stats['count']
+            xp = stats['xp']
+            avg = xp / count
+            
+            st.markdown(f"""
+            <div class="activity-type-card" style="border-left-color: {color};">
+                <div class="activity-type-info">
+                    <div class="activity-type-name">{name}</div>
+                    <div class="activity-type-stats">{count} aktywności • Średnio {avg:.1f} XP</div>
+                </div>
+                <div class="activity-type-xp" style="color: {color};">{xp} XP</div>
+            </div>
+            """, unsafe_allow_html=True)
     
-    st.markdown("---")
+    st.markdown("</div>", unsafe_allow_html=True)  # Zamknięcie xp-card
     
-    # Szczegółowa tabela aktywności
-    st.markdown("### 📜 Szczegółowa Historia")
+    # KARTA 4: Szczegółowa historia
+    st.markdown("""
+    <div class="xp-card">
+        <h3 style="margin-top: 0; color: #1a1a1a;">📜 Szczegółowa Historia Aktywności</h3>
+    """, unsafe_allow_html=True)
     
     if not filtered_activities:
         st.info(f"Brak aktywności w wybranym okresie ({period}).")
+        st.markdown("</div>", unsafe_allow_html=True)
     else:
-        # Przygotuj dane do tabeli
-        table_data = []
+        # Ikony dla typów aktywności
+        type_icons = {
+            'lesson_started': '📖',
+            'lesson_completed': '✅',
+            'quiz_completed': '📝',
+            'inspiration_read': '💡',
+            'tool_used': '🛠️',
+            'ai_exercise': '🤖',
+            'test_completed': '🎯'
+        }
         
-        for entry in sorted(filtered_activities, key=lambda x: x['timestamp'], reverse=True):
+        type_names = {
+            'lesson_started': 'Rozpoczęcie lekcji',
+            'lesson_completed': 'Ukończenie lekcji',
+            'quiz_completed': 'Quiz',
+            'inspiration_read': 'Przeczytanie inspiracji',
+            'tool_used': 'Użycie narzędzia',
+            'ai_exercise': 'Ćwiczenie AI',
+            'test_completed': 'Test diagnostyczny'
+        }
+        
+        # Sortuj aktywności po czasie (najnowsze pierwsze)
+        sorted_activities = sorted(filtered_activities, key=lambda x: x['timestamp'], reverse=True)
+        
+        # Paginacja
+        items_per_page = 15
+        total_items = len(sorted_activities)
+        total_pages = (total_items - 1) // items_per_page + 1
+        
+        if total_pages > 1:
+            page = st.selectbox("Strona", range(1, total_pages + 1), key="xp_history_page")
+            start_idx = (page - 1) * items_per_page
+            end_idx = min(start_idx + items_per_page, total_items)
+            page_activities = sorted_activities[start_idx:end_idx]
+            st.caption(f"Pokazuję {start_idx + 1}-{end_idx} z {total_items} aktywności")
+        else:
+            page_activities = sorted_activities
+        
+        # Wyświetl aktywności jako karty
+        for entry in page_activities:
             timestamp = datetime.fromisoformat(entry['timestamp'])
             activity_type = entry['type']
             details = entry.get('details', {})
             
-            # Pobierz XP
+            # Pobierz XP z details (powinno zawsze być dla nowych wpisów)
             xp = details.get('xp_earned', 0)
-            if xp == 0:
-                xp_mapping = {
-                    'lesson_started': 5,
-                    'lesson_completed': 50,
-                    'quiz_completed': 20,
-                    'ai_exercise': 15,
-                    'inspiration_read': 1,
-                    'test_completed': 5,
-                    'tool_used': 1
-                }
-                xp = xp_mapping.get(activity_type, 0)
             
-            # Nazwa aktywności
-            type_names = {
-                'lesson_started': '📖 Rozpoczęcie lekcji',
-                'lesson_completed': '✅ Ukończenie lekcji',
-                'quiz_completed': '📝 Quiz',
-                'inspiration_read': '💡 Przeczytanie inspiracji',
-                'tool_used': '🛠️ Użycie narzędzia',
-                'ai_exercise': '🤖 Ćwiczenie AI',
-                'test_completed': '🎯 Test diagnostyczny'
-            }
-            activity_name = type_names.get(activity_type, activity_type)
+            # Stare wpisy bez xp_earned - przypisz minimalną wartość
+            if xp == 0 and activity_type in ['lesson_started', 'lesson_completed', 'quiz_completed', 
+                                               'ai_exercise', 'inspiration_read', 'test_completed', 'tool_used']:
+                xp = 1
             
-            # Dodatkowe szczegóły
+            # Przygotuj szczegóły
             extra_info = ""
             if activity_type == 'quiz_completed':
                 score = details.get('score_percentage', 0)
                 extra_info = f"Wynik: {score}%"
             elif activity_type == 'test_completed':
                 test_name = details.get('test_name', '')
-                extra_info = f"{test_name}"
+                extra_info = test_name
             elif activity_type == 'tool_used':
                 tool_name = details.get('tool_name', '')
-                extra_info = f"{tool_name}"
+                extra_info = tool_name
             elif activity_type == 'ai_exercise':
                 exercise_name = details.get('exercise_name', '')
-                extra_info = f"{exercise_name}"
+                extra_info = exercise_name
             elif activity_type == 'inspiration_read':
                 insp_id = details.get('inspiration_id', '')
-                extra_info = f"ID: {insp_id}"
+                extra_info = f"ID: {insp_id}" if insp_id else ""
             
-            table_data.append({
-                'Data': timestamp.strftime('%Y-%m-%d %H:%M'),
-                'Aktywność': activity_name,
-                'Szczegóły': extra_info,
-                'XP': f"+{xp}"
-            })
+            icon = type_icons.get(activity_type, '📌')
+            name = type_names.get(activity_type, activity_type)
+            time_str = timestamp.strftime('%d.%m.%Y %H:%M')
+            
+            st.markdown(f"""
+            <div class="history-row">
+                <div class="history-icon">{icon}</div>
+                <div class="history-content">
+                    <div class="history-title">{name}</div>
+                    <div class="history-details">{extra_info}</div>
+                </div>
+                <div class="history-time">{time_str}</div>
+                <div class="history-xp">+{xp} XP</div>
+            </div>
+            """, unsafe_allow_html=True)
         
-        # Wyświetl jako DataFrame z paginacją
-        import pandas as pd
-        df = pd.DataFrame(table_data)
-        
-        # Dodaj paginację
-        items_per_page = 20
-        total_pages = (len(table_data) - 1) // items_per_page + 1
-        
-        if total_pages > 1:
-            page = st.selectbox("Strona", range(1, total_pages + 1), key="xp_history_page")
-            start_idx = (page - 1) * items_per_page
-            end_idx = start_idx + items_per_page
-            df_page = df.iloc[start_idx:end_idx]
-        else:
-            df_page = df
-        
-        st.dataframe(df_page, use_container_width=True, hide_index=True)
-        
-        # Statystyka na końcu
-        st.caption(f"Wyświetlono {len(df_page)} z {len(table_data)} aktywności")
+        st.markdown("</div>", unsafe_allow_html=True)  # Zamknięcie xp-card
 
 def show_reports_section():
     """Wyświetla sekcję raportów rozwojowych użytkownika z pod-tabami"""
@@ -1766,16 +2017,198 @@ def display_xp_chart(username: str):
         )
 
 def display_report_detailed(report: Dict):
-    """Wyświetla szczegółowy raport"""
+    """Wyświetla szczegółowy raport w profesjonalnym układzie kart"""
     
-    # Nagłówek
-    st.markdown(f"### {report.get('summary_headline', 'Raport tygodniowy')}")
+    # CSS dla kart Material Design 3
+    st.markdown("""
+    <style>
+    .report-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin: 16px 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.06);
+    }
+    .report-card:hover {
+        box-shadow: 0 4px 16px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+        transform: translateY(-2px);
+    }
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    .card-icon {
+        font-size: 28px;
+        line-height: 1;
+    }
+    .card-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 0;
+    }
+    .metric-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    .metric-value {
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 1;
+        margin: 8px 0;
+    }
+    .metric-label {
+        font-size: 14px;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .metric-trend {
+        font-size: 16px;
+        margin-top: 8px;
+        font-weight: 500;
+    }
+    .strength-item {
+        background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f4 100%);
+        border-left: 4px solid #4caf50;
+        padding: 16px;
+        border-radius: 8px;
+        margin: 8px 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .concern-item {
+        background: linear-gradient(135deg, #fff3e0 0%, #fef7ed 100%);
+        border-left: 4px solid #ff9800;
+        padding: 16px;
+        border-radius: 8px;
+        margin: 8px 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .insight-item {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f0f7fc 100%);
+        border-left: 4px solid #2196f3;
+        padding: 16px;
+        border-radius: 8px;
+        margin: 8px 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .recommendation-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 12px 0;
+        border: 2px solid #e0e0e0;
+        transition: all 0.2s ease;
+    }
+    .recommendation-card:hover {
+        border-color: #667eea;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+    .recommendation-card.priority-high {
+        border-left: 6px solid #e74c3c;
+    }
+    .recommendation-card.priority-medium {
+        border-left: 6px solid #f39c12;
+    }
+    .recommendation-card.priority-low {
+        border-left: 6px solid #27ae60;
+    }
+    .rec-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+    .rec-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+        flex: 1;
+    }
+    .rec-badge {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .rec-badge.high {
+        background: #fee;
+        color: #e74c3c;
+    }
+    .rec-badge.medium {
+        background: #fff4e6;
+        color: #f39c12;
+    }
+    .rec-badge.low {
+        background: #e8f5e9;
+        color: #27ae60;
+    }
+    .rec-why {
+        color: #666;
+        font-size: 15px;
+        line-height: 1.6;
+        margin: 8px 0;
+    }
+    .rec-time {
+        color: #999;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 12px;
+    }
+    .motivational-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        padding: 28px;
+        color: white;
+        margin: 20px 0;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    }
+    .motivational-card h3 {
+        color: white;
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-size: 22px;
+    }
+    .motivational-card p {
+        font-size: 16px;
+        line-height: 1.7;
+        margin: 0;
+        opacity: 0.95;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
+    # Nagłówek raportu
     period_start = datetime.fromisoformat(report['period_start']).strftime('%d.%m.%Y')
     period_end = datetime.fromisoformat(report['period_end']).strftime('%d.%m.%Y')
-    st.caption(f"Okres: {period_start} - {period_end}")
     
-    # Engagement score
+    st.markdown(f"""
+    <div style="text-align: center; margin: 24px 0 32px 0;">
+        <h2 style="margin: 0 0 8px 0; color: #1a1a1a;">{report.get('summary_headline', '📊 Raport Tygodniowy')}</h2>
+        <p style="color: #666; font-size: 16px; margin: 0;">📅 {period_start} - {period_end}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # KARTA 1: Metryka zaangażowania
     score = report.get('engagement_score', 0)
     trend = report.get('engagement_trend', 'stabilny')
     
@@ -1785,128 +2218,228 @@ def display_report_detailed(report: Dict):
         'spadający': '📉'
     }
     
-    col1, col2 = st.columns([1, 2])
-    with col1:
-        st.metric(
-            "Zaangażowanie",
-            f"{score}/10",
-            f"{trend_emoji.get(trend, '➡️')} {trend}"
-        )
-    with col2:
-        # Progress bar
-        progress_html = f"""
-        <div style="background: #e0e0e0; border-radius: 10px; height: 25px; margin-top: 10px;">
-            <div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); 
-                        width: {score * 10}%; 
-                        height: 100%; 
-                        border-radius: 10px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: white;
-                        font-weight: bold;">
-                {score}/10
-            </div>
+    st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-label">Twoje zaangażowanie</div>
+        <div class="metric-value">{score}<span style="font-size: 28px; opacity: 0.8;">/10</span></div>
+        <div class="metric-trend">{trend_emoji.get(trend, '➡️')} {trend.capitalize()}</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # KARTA 2: Wykres XP
+    st.markdown("""
+    <div class="report-card">
+        <div class="card-header">
+            <div class="card-icon">📈</div>
+            <div class="card-title">Przyrost XP w ostatnich 30 dniach</div>
         </div>
-        """
-        st.markdown(progress_html, unsafe_allow_html=True)
-    
-    st.markdown("---")
-    
-    # Wykres przyrostu XP
-    st.markdown("### 📈 Przyrost XP w ostatnich 30 dniach")
+    """, unsafe_allow_html=True)
     display_xp_chart(st.session_state.username)
+    st.markdown("</div>", unsafe_allow_html=True)
     
-    st.markdown("---")
-    
-    # Mocne strony
-    st.markdown("### 💪 Twoje mocne strony")
+    # KARTA 3: Mocne strony
     strengths = report.get('strengths', [])
     if strengths:
+        st.markdown("""
+        <div class="report-card">
+            <div class="card-header">
+                <div class="card-icon">💪</div>
+                <div class="card-title">Twoje mocne strony</div>
+            </div>
+        """, unsafe_allow_html=True)
+        
         for strength in strengths:
-            st.success(f"✓ {strength}")
-    else:
-        st.info("Brak danych")
+            st.markdown(f"""
+            <div class="strength-item">
+                <div style="font-size: 20px;">✓</div>
+                <div style="flex: 1; line-height: 1.5;">{strength}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
     
-    # Obszary do poprawy
-    st.markdown("### 🎓 Obszary do poprawy")
+    # KARTA 4: Obszary do poprawy
     concerns = report.get('concerns', [])
     if concerns:
+        st.markdown("""
+        <div class="report-card">
+            <div class="card-header">
+                <div class="card-icon">🎓</div>
+                <div class="card-title">Obszary do rozwoju</div>
+            </div>
+        """, unsafe_allow_html=True)
+        
         for concern in concerns:
-            st.warning(f"→ {concern}")
-    else:
-        st.info("Świetnie! Nie wykryto istotnych obszarów do poprawy.")
+            st.markdown(f"""
+            <div class="concern-item">
+                <div style="font-size: 20px;">→</div>
+                <div style="flex: 1; line-height: 1.5;">{concern}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
     
-    # Insights
+    # KARTA 5: Wykryte wzorce
     insights = report.get('insights', [])
     if insights:
-        st.markdown("### 🔍 Wykryte wzorce")
+        st.markdown("""
+        <div class="report-card">
+            <div class="card-header">
+                <div class="card-icon">🔍</div>
+                <div class="card-title">Wykryte wzorce</div>
+            </div>
+        """, unsafe_allow_html=True)
+        
         for insight in insights:
-            st.info(f"💡 {insight}")
+            st.markdown(f"""
+            <div class="insight-item">
+                <div style="font-size: 20px;">💡</div>
+                <div style="flex: 1; line-height: 1.5;">{insight}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
     
-    # Rekomendacje
-    st.markdown("### 🎯 Twój plan działania na następny tydzień")
+    # KARTA 6: Rekomendacje
     recommendations = report.get('recommendations', [])
-    
     if recommendations:
-        priority_colors = {
-            'wysoki': '🔴',
-            'średni': '🟡',
-            'niski': '🟢'
+        st.markdown("""
+        <div class="report-card">
+            <div class="card-header">
+                <div class="card-icon">🎯</div>
+                <div class="card-title">Twój plan działania na następny tydzień</div>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        priority_map = {
+            'wysoki': 'high',
+            'średni': 'medium',
+            'niski': 'low'
+        }
+        
+        priority_labels = {
+            'wysoki': 'Wysoki priorytet',
+            'średni': 'Średni priorytet',
+            'niski': 'Niski priorytet'
         }
         
         for i, rec in enumerate(recommendations, 1):
             priority = rec.get('priority', 'średni')
+            priority_class = priority_map.get(priority, 'medium')
+            priority_label = priority_labels.get(priority, 'Średni priorytet')
             action = rec.get('action', '')
             why = rec.get('why', '')
             time = rec.get('estimated_time', '')
             
             st.markdown(f"""
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 10px 0; 
-                        border-left: 4px solid {'#e74c3c' if priority == 'wysoki' else '#f39c12' if priority == 'średni' else '#27ae60'};">
-                <div style="font-weight: bold; margin-bottom: 5px;">
-                    {priority_colors.get(priority, '🟡')} {i}. {action}
+            <div class="recommendation-card priority-{priority_class}">
+                <div class="rec-header">
+                    <div class="rec-title">{i}. {action}</div>
+                    <span class="rec-badge {priority_class}">{priority_label}</span>
                 </div>
-                <div style="font-size: 0.9em; color: #7f8c8d; margin-bottom: 3px;">
-                    <strong>Dlaczego:</strong> {why}
-                </div>
-                <div style="font-size: 0.85em; color: #95a5a6;">
-                    ⏱️ Szacowany czas: {time}
+                <div class="rec-why">{why}</div>
+                <div class="rec-time">
+                    <span>⏱️</span>
+                    <span>Szacowany czas: {time}</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
-    else:
-        st.info("Brak rekomendacji")
+        
+        st.markdown("</div>", unsafe_allow_html=True)
     
-    # Wiadomość motywacyjna
+    # KARTA 7: Wiadomość motywacyjna
     motivational_message = report.get('motivational_message', '')
     if motivational_message:
-        st.markdown("---")
-        st.markdown("### 💬 Wiadomość dla Ciebie")
-        st.success(motivational_message)
+        st.markdown(f"""
+        <div class="motivational-card">
+            <h3>💬 Wiadomość dla Ciebie</h3>
+            <p>{motivational_message}</p>
+        </div>
+        """, unsafe_allow_html=True)
 
 def display_report_compact(report: Dict):
-    """Wyświetla skróconą wersję raportu"""
+    """Wyświetla skróconą wersję raportu w układzie kart"""
     
-    # Podstawowe info
+    # Podstawowe info w kartach
+    col1, col2, col3 = st.columns(3)
+    
     score = report.get('engagement_score', 0)
     trend = report.get('engagement_trend', 'stabilny')
+    recommendations_count = len(report.get('recommendations', []))
     
-    col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("Zaangażowanie", f"{score}/10")
-    with col2:
-        st.metric("Trend", trend)
-    with col3:
-        recommendations_count = len(report.get('recommendations', []))
-        st.metric("Rekomendacje", recommendations_count)
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    border-radius: 12px; padding: 20px; color: white; text-align: center;
+                    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
+            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">ZAANGAŻOWANIE</div>
+            <div style="font-size: 36px; font-weight: 700;">{score}/10</div>
+        </div>
+        """, unsafe_allow_html=True)
     
-    # Najważniejsza rekomendacja
+    with col2:
+        trend_colors = {
+            'rosnący': '#27ae60',
+            'stabilny': '#3498db',
+            'spadający': '#e74c3c'
+        }
+        trend_emoji = {
+            'rosnący': '📈',
+            'stabilny': '➡️',
+            'spadający': '📉'
+        }
+        color = trend_colors.get(trend, '#3498db')
+        emoji = trend_emoji.get(trend, '➡️')
+        
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, {color}e6, {color}); 
+                    border-radius: 12px; padding: 20px; color: white; text-align: center;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">TREND</div>
+            <div style="font-size: 28px; font-weight: 600;">{emoji} {trend.capitalize()}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #f39c12e6, #f39c12); 
+                    border-radius: 12px; padding: 20px; color: white; text-align: center;
+                    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);">
+            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">REKOMENDACJE</div>
+            <div style="font-size: 36px; font-weight: 700;">{recommendations_count}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Top rekomendacja
     recommendations = report.get('recommendations', [])
-    if recommendations:
-        high_priority = [r for r in recommendations if r.get('priority') == 'wysoki']
-        if high_priority:
-            st.info(f"🎯 Priorytet: {high_priority[0].get('action', '')}")
+    high_priority = [r for r in recommendations if r.get('priority') == 'wysoki']
+    
+    if high_priority:
+        action = high_priority[0].get('action', '')
+        st.markdown(f"""
+        <div style="background: white; border-left: 6px solid #e74c3c; 
+                    border-radius: 8px; padding: 16px; margin: 12px 0;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <div style="color: #e74c3c; font-size: 12px; font-weight: 600; 
+                        text-transform: uppercase; margin-bottom: 8px;">🔴 Wysoki priorytet</div>
+            <div style="font-size: 16px; font-weight: 500; color: #1a1a1a;">{action}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    elif recommendations:
+        action = recommendations[0].get('action', '')
+        st.markdown(f"""
+        <div style="background: white; border-left: 6px solid #3498db; 
+                    border-radius: 8px; padding: 16px; margin: 12px 0;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <div style="color: #3498db; font-size: 12px; font-weight: 600; 
+                        text-transform: uppercase; margin-bottom: 8px;">🎯 Top rekomendacja</div>
+            <div style="font-size: 16px; font-weight: 500; color: #1a1a1a;">{action}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
 def show_badges_section():
     """Wyświetl sekcję odznak w profilu - Step 5 Implementation"""

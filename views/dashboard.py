@@ -63,7 +63,7 @@ def save_daily_stats(username):
     save_user_data(users_data)
 
 def calculate_stats_changes(username):
-    """Oblicza zmiany statystyk w stosunku do poprzedniego dnia"""
+    """Oblicza zmiany statystyk w stosunku do poprzedniego dnia (lub początku dnia dla nowych użytkowników)"""
     from datetime import datetime, timedelta
     
     user_data = get_current_user_data(username)
@@ -78,9 +78,14 @@ def calculate_stats_changes(username):
         'completed_lessons': len(user_data.get('completed_lessons', []))
     }
     
-    # Pobierz statystyki z wczoraj
+    # Pobierz statystyki z wczoraj lub początek dnia (dla nowych użytkowników)
     daily_stats = user_data.get('daily_stats', {})
     yesterday_stats = daily_stats.get(yesterday, {})
+    today_stats = daily_stats.get(today, {})
+    
+    # Jeśli nie ma wczorajszych statystyk (nowy użytkownik), użyj dzisiejszego snapshotu jako bazowego
+    if not yesterday_stats and today_stats:
+        yesterday_stats = today_stats
     
     # Oblicz zmiany
     changes = {}

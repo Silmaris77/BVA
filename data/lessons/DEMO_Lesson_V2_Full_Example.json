@@ -1,0 +1,351 @@
+{
+  "_template_info": {
+    "version": "2.0",
+    "description": "Przykładowa lekcja v2.0 - demonstracja nowej struktury",
+    "last_updated": "2025-12-18"
+  },
+  
+  "id": "DEMO_LESSON_V2",
+  "title": "Demo - Nowa Struktura Lekcji v2.0",
+  "description": "Lekcja demonstracyjna pokazująca wszystkie możliwe elementy w nowej strukturze",
+  "tag": "Demo",
+  "xp_reward": 150,
+  "difficulty": "beginner",
+  "available": true,
+  "estimated_time": "45 min",
+  "learning_objectives": [
+    "Zrozumiesz nową strukturę lekcji v2.0",
+    "Zobacz jak renderują się wszystkie elementy",
+    "Przekonasz się o elastyczności systemu"
+  ],
+  "prerequisites": [],
+  "tags": ["demo", "v2", "struktura"],
+  
+  "wprowadzenie": {
+    "glowny": "<div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; margin-bottom: 20px; color: white;'>🎓 Witaj w nowej strukturze!</h1><p style='font-size: 1.2rem; text-align: center;'>To jest demonstracja wszystkich możliwych elementów lekcji v2.0</p></div><div style='padding: 20px;'><h2>Cztery główne bloki:</h2><ul><li><strong>Wprowadzenie</strong> - gdzie jesteśmy teraz</li><li><strong>Nauka</strong> - treść merytoryczna (tekst, podcast, video, fiszki, case studies)</li><li><strong>Praktyka</strong> - ćwiczenia, wyzwania, quiz końcowy</li><li><strong>Podsumowanie</strong> - wnioski, mind map, action plan</li></ul></div>",
+    
+    "case_study": {
+      "title": "Opening Case Study - Chaos w lekcjach",
+      "description": "Historia o tym, jak różne struktury lekcji wprowadzały chaos",
+      "content": "<div style='background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 5px solid #007bff;'><p><strong>Sytuacja:</strong> W BVA mieliśmy 20 lekcji. Każda miała inną strukturę - practical_exercises w różnych miejscach, różne nazwy kluczy, brak standardu.</p><p><strong>Problem:</strong> lesson.py musiało obsługiwać wszystkie warianty, kod był skomplikowany, trudno było dodawać nowe funkcje.</p><p><strong>Rozwiązanie:</strong> Nowa struktura v2.0 - cztery bloki, elastyczne elementy, polski naming.</p></div>",
+      "questions": [
+        "Jak myślisz, jakie problemy powodował brak standardu?",
+        "Co według Ciebie jest najważniejsze w nowej strukturze?"
+      ]
+    },
+    
+    "quiz_samodiagnozy": {
+      "title": "Quiz - Jak ważna jest dla Ciebie standaryzacja?",
+      "description": "Oceń swoją potrzebę uporządkowanej struktury",
+      "questions": [
+        {
+          "question": "Jak często napotykasz problemy z różnymi formatami danych?",
+          "options": [
+            "Rzadko - nie przeszkadza mi to",
+            "Czasami - potrafię sobie poradzić",
+            "Często - frustruje mnie to",
+            "Bardzo często - to mój główny pain point"
+          ],
+          "explanation": "Standardy są kluczowe w projektach, które rosną. Im więcej różnych struktur, tym trudniej utrzymać kod."
+        },
+        {
+          "question": "Jak oceniasz swoją znajomość struktury JSON?",
+          "options": [
+            "Początkujący - dopiero się uczę",
+            "Podstawowa - rozumiem klucze i wartości",
+            "Średnia - potrafię tworzyć zagnieżdżone struktury",
+            "Zaawansowana - JSON to dla mnie naturalne"
+          ],
+          "explanation": "Ta lekcja pomoże Ci zrozumieć, jak dobrze zaprojektowana struktura ułatwia pracę."
+        }
+      ]
+    }
+  },
+  
+  "nauka": {
+    "tekst": {
+      "sekcje": [
+        {
+          "title": "📖 Sekcja 1 - Cztery główne bloki",
+          "content": "<div style='padding: 20px;'><h3>Wprowadzenie</h3><p>Pierwszy kontakt z tematem. Zawiera główną treść, case study i quiz samodiagnozy.</p><h3>Nauka</h3><p>Merytoryka - tekst, podcast, video, fiszki, case studies. Użytkownik wybiera preferowaną formę.</p><h3>Praktyka</h3><p>Ćwiczenia, wyzwania, AI exercises, quiz końcowy. Tu utrwalamy wiedzę.</p><h3>Podsumowanie</h3><p>Mind map, cheat sheet, action plan, dziennik refleksji. Zamknięcie lekcji.</p></div>"
+        },
+        {
+          "title": "📖 Sekcja 2 - Elastyczność systemu",
+          "content": "<div style='padding: 20px;'><p><strong>Kluczowa zasada:</strong> Każdy element jest opcjonalny!</p><ul><li>Nie ma podcastu? Nie renderuj zakładki</li><li>Nie ma mind map? Pomiń w podsumowaniu</li><li>Masz tylko tekst? Pokaż tylko tekst</li></ul><p>To oznacza, że możesz tworzyć zarówno bogate lekcje multimedialne, jak i proste lekcje tekstowe.</p></div>"
+        },
+        {
+          "title": "📖 Sekcja 3 - Polskie nazwy kluczy",
+          "content": "<div style='padding: 20px;'><p>Zdecydowaliśmy się na <strong>polskie nazwy kluczy</strong> w JSON, bo:</p><ol><li><strong>Czytelność</strong> - łatwiej zrozumieć strukturę bez znajomości angielskiego</li><li><strong>Konsystencja</strong> - nazwa w kodzie = nazwa w UI</li><li><strong>Lokalność</strong> - projekt polski, zespół polski</li></ol><p>Przykłady: <code>wprowadzenie</code>, <code>nauka</code>, <code>praktyka</code>, <code>podsumowanie</code></p></div>"
+        }
+      ]
+    },
+    
+    "podcast": {
+      "title": "🎧 Podcast - Rozmowa o nowej strukturze",
+      "description": "15-minutowy podcast o tym, jak powstała nowa struktura lekcji",
+      "url": "https://www.youtube.com/watch?v=DEMO_PODCAST_ID",
+      "duration": "15 min",
+      "transcript": "[PLACEHOLDER] Transkrypt podcastu pojawi się tutaj..."
+    },
+    
+    "video": {
+      "title": "🎬 Video - Wizualizacja przepływu lekcji",
+      "description": "Krótki film pokazujący, jak użytkownik przechodzi przez lekcję",
+      "url": "https://www.youtube.com/watch?v=DEMO_VIDEO_ID",
+      "duration": "8 min"
+    },
+    
+    "fiszki": {
+      "title": "🃏 Fiszki - Kluczowe pojęcia",
+      "description": "Szybkie przypomnienie najważniejszych terminów",
+      "karty": [
+        {
+          "id": 1,
+          "przod": "Co to jest 'wprowadzenie'?",
+          "tyl": "Pierwszy blok lekcji zawierający: główną treść, case study i quiz samodiagnozy.",
+          "kategoria": "Struktura"
+        },
+        {
+          "id": 2,
+          "przod": "Co zawiera blok 'nauka'?",
+          "tyl": "Merytorykę w różnych formatach: tekst (sekcje), podcast, video, fiszki, case studies.",
+          "kategoria": "Struktura"
+        },
+        {
+          "id": 3,
+          "przod": "Czym różni się 'praktyka' od 'nauki'?",
+          "tyl": "Nauka to przyswajanie wiedzy, praktyka to jej zastosowanie przez ćwiczenia, wyzwania i quiz.",
+          "kategoria": "Struktura"
+        },
+        {
+          "id": 4,
+          "przod": "Co znaczy 'opcjonalny element'?",
+          "tyl": "Element, który nie musi być w lekcji. Jeśli go nie ma, po prostu się nie renderuje.",
+          "kategoria": "Elastyczność"
+        }
+      ]
+    },
+    
+    "case_studies": [
+      {
+        "id": 1,
+        "title": "Case Study - Migracja starej lekcji",
+        "description": "Jak przenieść lekcję ze starego formatu do v2.0",
+        "context": "<div style='padding: 15px; background: #e3f2fd; border-radius: 8px;'><p>Masz lekcję ze strukturą: <code>intro → sections.learning.tabs → sections.practical_exercises → summary</code></p><p><strong>Wyzwanie:</strong> Jak ją przekształcić do v2.0?</p></div>",
+        "challenge": "Zaprojektuj skrypt migracyjny, który automatycznie przeniesie treści do nowej struktury",
+        "questions": [
+          "Jakie są główne różnice między starą a nową strukturą?",
+          "Które elementy wymagają ręcznego przepisania, a które można zautomatyzować?",
+          "Jak zachować backwards compatibility w lesson.py?"
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Case Study - Tworzenie lekcji od zera",
+        "description": "Best practices dla nowej lekcji",
+        "context": "<div style='padding: 15px; background: #f3e5f5; border-radius: 8px;'><p>Tworzysz nową lekcję o feedbacku dla menedżerów.</p><p><strong>Założenia:</strong> Chcesz maksymalnie wykorzystać nową strukturę - masz tekst, podcast, 3 ćwiczenia praktyczne i quiz.</p></div>",
+        "challenge": "Zaprojektuj pełną strukturę JSON dla tej lekcji",
+        "questions": [
+          "Które elementy są must-have, a które nice-to-have?",
+          "Jak zorganizować treść, by była logiczna i angażująca?",
+          "Czy case study powinno być w intro czy w nauka?"
+        ]
+      }
+    ]
+  },
+  
+  "praktyka": {
+    "cwiczenia": [
+      {
+        "id": 1,
+        "title": "Ćwiczenie 1 - Stwórz prostą lekcję",
+        "type": "practical",
+        "description": "Wykorzystaj template v2.0 i stwórz lekcję o dowolnym temacie",
+        "instructions": "<div><ol><li>Skopiuj <code>lesson_template_v2.json</code></li><li>Wypełnij podstawowe pola: id, title, description, tag</li><li>Dodaj minimum: wprowadzenie.glowny i nauka.tekst</li><li>Opcjonalnie: dodaj inne elementy według uznania</li><li>Zapisz jako nowy plik JSON</li></ol></div>",
+        "time_required": "20 min"
+      },
+      {
+        "id": 2,
+        "title": "Ćwiczenie 2 - Zweryfikuj strukturę",
+        "type": "validation",
+        "description": "Sprawdź czy Twoja lekcja jest zgodna z standardem v2.0",
+        "instructions": "<div><p><strong>Checklist:</strong></p><ul><li>Czy masz 4 główne klucze: wprowadzenie, nauka, praktyka, podsumowanie?</li><li>Czy nauka ma co najmniej jeden element (tekst/podcast/video)?</li><li>Czy praktyka ma quiz_koncowy?</li><li>Czy wszystkie nazwy są po polsku?</li><li>Czy JSON jest poprawny (brak błędów składni)?</li></ul></div>",
+        "time_required": "10 min"
+      }
+    ],
+    
+    "wyzwanie": {
+      "title": "🎯 Challenge - Zaprojektuj lekcję marzeń",
+      "description": "Stwórz najbogatszą możliwą lekcję wykorzystując WSZYSTKIE elementy struktury v2.0",
+      "generator_prompt": "Wyobraź sobie lekcję, która ma: wprowadzenie z case study i quizem, naukę we wszystkich formatach (tekst, podcast, video, fiszki, 3 case studies), praktykę z ćwiczeniami, wyzwaniem AI i quizem, oraz kompletne podsumowanie z mind map, cheat sheet, action plan i dziennikiem. Temat: [TWÓJ TEMAT]. Co w niej umieścisz?",
+      "difficulty": "hard"
+    },
+    
+    "cwiczenia_ai": {
+      "title": "🤖 Ćwiczenia AI - Konsultacja struktury",
+      "description": "Porozmawiaj z AI o swojej lekcji",
+      "scenarios": [
+        {
+          "id": 1,
+          "title": "Scenariusz 1 - Review struktury",
+          "description": "AI zrobi review Twojej lekcji i zasugeruje ulepszenia",
+          "ai_role": "Ekspert od strukturyzacji treści edukacyjnych",
+          "user_task": "Wklej swoją strukturę JSON (bez treści, same klucze) i zapytaj: 'Czy ta struktura jest logiczna? Co mogę poprawić?'"
+        }
+      ]
+    },
+    
+    "quiz_koncowy": {
+      "title": "📝 Quiz Końcowy - Sprawdź swoją wiedzę",
+      "description": "10 pytań o nową strukturę lekcji",
+      "passing_score": 70,
+      "pytania": [
+        {
+          "id": 1,
+          "pytanie": "Ile jest głównych bloków w strukturze v2.0?",
+          "opcje": [
+            "3 bloki",
+            "4 bloki",
+            "5 bloków",
+            "6 bloków"
+          ],
+          "poprawna": 1,
+          "wyjaśnienie": "Struktura v2.0 ma 4 główne bloki: wprowadzenie, nauka, praktyka, podsumowanie."
+        },
+        {
+          "id": 2,
+          "pytanie": "Co zawiera blok 'wprowadzenie'?",
+          "opcje": [
+            "Tylko główną treść",
+            "Główną treść i quiz końcowy",
+            "Główną treść, case study i quiz samodiagnozy",
+            "Wszystkie materiały edukacyjne"
+          ],
+          "poprawna": 2,
+          "wyjaśnienie": "Wprowadzenie zawiera: główną treść, case study (opcjonalne) i quiz samodiagnozy (opcjonalny)."
+        },
+        {
+          "id": 3,
+          "pytanie": "Która z tych nazw NIE występuje w bloku 'nauka'?",
+          "opcje": [
+            "tekst",
+            "podcast",
+            "sciagawka",
+            "fiszki"
+          ],
+          "poprawna": 2,
+          "wyjaśnienie": "Ściągawka (cheat sheet) jest w bloku 'podsumowanie', nie w 'nauka'."
+        },
+        {
+          "id": 4,
+          "pytanie": "Co oznacza, że element jest 'opcjonalny'?",
+          "opcje": [
+            "Musi być w każdej lekcji",
+            "Jest wymagany tylko w lekcjach advanced",
+            "Może być pominięty - nie będzie się renderował",
+            "Jest deprecated i nie powinien być używany"
+          ],
+          "poprawna": 2,
+          "wyjaśnienie": "Opcjonalny = może go nie być. Jeśli go nie ma, lesson.py po prostu go nie wyświetli."
+        },
+        {
+          "id": 5,
+          "pytanie": "Dlaczego użyliśmy polskich nazw kluczy?",
+          "opcje": [
+            "Bo projekt jest polski",
+            "Dla lepszej czytelności JSON",
+            "Dla konsystencji z UI",
+            "Wszystkie powyższe"
+          ],
+          "poprawna": 3,
+          "wyjaśnienie": "Polskie nazwy to świadoma decyzja ze względu na czytelność, konsystencję i lokalność projektu."
+        }
+      ]
+    }
+  },
+  
+  "podsumowanie": {
+    "glowny": "<div style='background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); padding: 30px; border-radius: 15px; color: white; margin-bottom: 30px;'><h1 style='text-align: center; color: white;'>🎉 Gratulacje!</h1><p style='font-size: 1.2rem; text-align: center;'>Poznałeś nową strukturę lekcji v2.0</p></div><div style='padding: 20px;'><h2>Kluczowe wnioski:</h2><ul><li><strong>4 bloki:</strong> wprowadzenie → nauka → praktyka → podsumowanie</li><li><strong>Elastyczność:</strong> każdy element opcjonalny</li><li><strong>Polskie nazwy:</strong> czytelność i konsystencja</li><li><strong>Tabs w nauce:</strong> użytkownik wybiera preferowaną formę</li></ul><p>Teraz możesz tworzyć uporządkowane, spójne i elastyczne lekcje! 🚀</p></div>",
+    
+    "case_study": {
+      "title": "Closing Case Study - Co dalej?",
+      "description": "Powrót do case study z wprowadzenia",
+      "resolution": "<div style='padding: 20px; background: #e8f5e8; border-radius: 10px;'><p><strong>Rozwiązanie:</strong> Wdrożenie struktury v2.0 zajęło 2 godziny projektowania i 4 godziny implementacji lesson.py.</p><p><strong>Rezultat:</strong></p><ul><li>Wszystkie nowe lekcje mają jednolitą strukturę</li><li>lesson.py jest prostsze i łatwiejsze w utrzymaniu</li><li>Dodawanie nowych elementów trwa minuty, nie godziny</li><li>Twórcy lekcji mają jasny template do wypełnienia</li></ul><p><strong>Następne kroki:</strong> Stopniowa migracja starych lekcji do v2.0</p></div>"
+    },
+    
+    "mapa_mysli": {
+      "title": "🗺️ Mind Map - Struktura Lekcji v2.0",
+      "description": "Wizualna mapa całej struktury",
+      "central_concept": "Lekcja v2.0",
+      "branches": [
+        {
+          "name": "Wprowadzenie",
+          "subbranches": ["Główny", "Case Study", "Quiz Samodiagnozy"]
+        },
+        {
+          "name": "Nauka",
+          "subbranches": ["Tekst", "Podcast", "Video", "Fiszki", "Case Studies"]
+        },
+        {
+          "name": "Praktyka",
+          "subbranches": ["Ćwiczenia", "Wyzwanie", "AI", "Quiz Końcowy"]
+        },
+        {
+          "name": "Podsumowanie",
+          "subbranches": ["Główny", "Mind Map", "Cheat Sheet", "Action Plan", "Dziennik"]
+        }
+      ]
+    },
+    
+    "sciagawka": {
+      "title": "📄 Cheat Sheet - Nowa Struktura",
+      "description": "Quick reference w jednym miejscu",
+      "content": "<div style='background: #fff3cd; padding: 20px; border-radius: 10px; font-family: monospace;'><h3>Struktura JSON v2.0:</h3><pre>{\n  \"wprowadzenie\": {\n    \"glowny\": \"...\",\n    \"case_study\": {...},\n    \"quiz_samodiagnozy\": {...}\n  },\n  \"nauka\": {\n    \"tekst\": {...},\n    \"podcast\": {...},\n    \"video\": {...},\n    \"fiszki\": {...},\n    \"case_studies\": [...]\n  },\n  \"praktyka\": {\n    \"cwiczenia\": [...],\n    \"wyzwanie\": {...},\n    \"cwiczenia_ai\": {...},\n    \"quiz_koncowy\": {...}\n  },\n  \"podsumowanie\": {\n    \"glowny\": \"...\",\n    \"mapa_mysli\": {...},\n    \"sciagawka\": {...},\n    \"szablon_planu_dzialan\": {...},\n    \"dziennik_refleksji\": {...}\n  }\n}</pre><p><strong>Pamiętaj:</strong> Wszystkie elementy oprócz głównych bloków są OPCJONALNE!</p></div>"
+    },
+    
+    "szablon_planu_dzialan": {
+      "title": "📋 Action Plan - Co wdrożę?",
+      "description": "Zaplanuj wykorzystanie nowej struktury",
+      "sections": [
+        {
+          "title": "1. Pierwsza lekcja v2.0",
+          "prompt": "Którą lekcję stworzysz/przemigrujesz jako pierwszą? Kiedy to zrobisz?"
+        },
+        {
+          "title": "2. Elementy do wykorzystania",
+          "prompt": "Które elementy (podcast, fiszki, AI, mind map) chcesz dodać do swoich lekcji?"
+        },
+        {
+          "title": "3. Harmonogram migracji",
+          "prompt": "Ile lekcji tygodniowo chcesz migrować do v2.0? W jakiej kolejności?"
+        },
+        {
+          "title": "4. Wskaźniki sukcesu",
+          "prompt": "Jak poznasz, że migracja się udała? (np. wszystkie lekcje mają quiz końcowy)"
+        }
+      ]
+    },
+    
+    "dziennik_refleksji": {
+      "title": "📓 Dziennik Refleksji",
+      "description": "3 pytania do przemyślenia",
+      "pytania": [
+        {
+          "id": "q1",
+          "pytanie": "Co według Ciebie jest największą zaletą nowej struktury v2.0?",
+          "placeholder": "Pomyśl o elastyczności, przejrzystości, łatwości tworzenia..."
+        },
+        {
+          "id": "q2",
+          "pytanie": "Które elementy będziesz wykorzystywać najczęściej w swoich lekcjach?",
+          "placeholder": "Tekst, podcast, video, fiszki, AI exercises..."
+        },
+        {
+          "id": "q3",
+          "pytanie": "Jakie wyzwania widzisz w migracji starych lekcji do nowego formatu?",
+          "placeholder": "Czas, kompatybilność, priorytety..."
+        }
+      ]
+    }
+  }
+}

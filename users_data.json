@@ -481,7 +481,8 @@
     },
     "completed_lessons": [
       "2. Chemia mózgu",
-      "TEST_LESSON_DELETE_ME"
+      "TEST_LESSON_DELETE_ME",
+      "1. Mózg emocjonalny_copy"
     ],
     "lesson_access": {
       "0. Wprowadzenie do neuroprzywództwa": true,
@@ -500,7 +501,7 @@
       "backup_lesson_11_20251007_010417": false,
       "TEST_LESSON_DELETE_ME": true
     },
-    "xp": 438,
+    "xp": 766,
     "reports": [
       {
         "summary_headline": "Tydzień przerwy? Czas wrócić na ścieżkę rozwoju!",
@@ -552,6 +553,636 @@
         "report_type": "weekly",
         "username": "admin"
       }
+    ],
+    "recent_activities": [
+      {
+        "type": "lesson_completed",
+        "details": {
+          "lesson_id": "1. Mózg emocjonalny_copy"
+        },
+        "timestamp": "2025-12-15T23:43:12.709821+00:00"
+      }
+    ],
+    "badge_data": {
+      "badges": {
+        "first_lesson": {
+          "earned": true,
+          "earned_date": "2025-12-16T00:43:13.405172",
+          "xp_earned": 112,
+          "tier": "silver",
+          "conditions_met": [
+            "main_condition"
+          ],
+          "progress_when_earned": 100,
+          "context": {
+            "lesson_id": "1. Mózg emocjonalny_copy"
+          }
+        },
+        "neuroleader_explorer": {
+          "earned": true,
+          "earned_date": "2025-12-16T00:43:13.405492",
+          "xp_earned": 225,
+          "tier": "silver",
+          "conditions_met": [
+            "xp_progress"
+          ],
+          "progress_when_earned": 100,
+          "context": {
+            "lesson_id": "1. Mózg emocjonalny_copy"
+          }
+        },
+        "pioneer": {
+          "earned": true,
+          "earned_date": "2025-12-16T00:43:13.407377",
+          "xp_earned": 2500,
+          "tier": "diamond",
+          "conditions_met": [
+            "main_condition"
+          ],
+          "progress_when_earned": 100,
+          "context": {
+            "lesson_id": "1. Mózg emocjonalny_copy"
+          }
+        }
+      },
+      "badge_progress": {
+        "lesson_rookie": {
+          "progress": 40.0,
+          "conditions_status": {
+            "lessons_completed": "2/5"
+          },
+          "last_updated": "2025-12-16T00:43:13.405196",
+          "next_steps": [
+            "Ukończ jeszcze 3 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_apprentice": {
+          "progress": 13.333333333333334,
+          "conditions_status": {
+            "lessons_completed": "2/15"
+          },
+          "last_updated": "2025-12-16T00:43:13.405213",
+          "next_steps": [
+            "Ukończ jeszcze 13 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_scholar": {
+          "progress": 6.666666666666667,
+          "conditions_status": {
+            "lessons_completed": "2/30"
+          },
+          "last_updated": "2025-12-16T00:43:13.405229",
+          "next_steps": [
+            "Ukończ jeszcze 28 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "lesson_master": {
+          "progress": 4.0,
+          "conditions_status": {
+            "lessons_completed": "2/50"
+          },
+          "last_updated": "2025-12-16T00:43:13.405242",
+          "next_steps": [
+            "Ukończ jeszcze 48 lekcji"
+          ],
+          "estimated_completion": null
+        },
+        "mindfulness_expert": {
+          "progress": 57.49999999999999,
+          "conditions_status": {
+            "xp_progress": "575/1000"
+          },
+          "last_updated": "2025-12-16T00:43:13.405400",
+          "next_steps": [
+            "Zdobądź jeszcze 425 XP"
+          ],
+          "estimated_completion": null
+        },
+        "psychology_expert": {
+          "progress": 57.49999999999999,
+          "conditions_status": {
+            "xp_progress": "575/1000"
+          },
+          "last_updated": "2025-12-16T00:43:13.405426",
+          "next_steps": [
+            "Zdobądź jeszcze 425 XP"
+          ],
+          "estimated_completion": null
+        },
+        "xp_collector": {
+          "progress": 57.49999999999999,
+          "conditions_status": {
+            "xp_progress": "575/1000"
+          },
+          "last_updated": "2025-12-16T00:43:13.405452",
+          "next_steps": [
+            "Zdobądź jeszcze 425 XP"
+          ],
+          "estimated_completion": null
+        },
+        "xp_master": {
+          "progress": 11.5,
+          "conditions_status": {
+            "xp_progress": "575/5000"
+          },
+          "last_updated": "2025-12-16T00:43:13.405466",
+          "next_steps": [
+            "Zdobądź jeszcze 4425 XP"
+          ],
+          "estimated_completion": null
+        },
+        "welcome": {
+          "progress": 0,
+          "conditions_status": {
+            "account_registered": false
+          },
+          "last_updated": "2025-12-16T00:43:13.405058",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "profile_complete": {
+          "progress": 0.0,
+          "conditions_status": {
+            "degen_type": false,
+            "avatar": false,
+            "theme": false
+          },
+          "last_updated": "2025-12-16T00:43:13.405129",
+          "next_steps": [
+            "Uzupełnij: degen_type, avatar, theme"
+          ],
+          "estimated_completion": null
+        },
+        "first_neuroleader_test": {
+          "progress": 0,
+          "conditions_status": {
+            "test_taken": false,
+            "has_neuroleader_type": false
+          },
+          "last_updated": "2025-12-16T00:43:13.405148",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "quiz_perfectionist": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405258",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "speed_learner": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405276",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "login_streak_3": {
+          "progress": 0.0,
+          "conditions_status": {
+            "streak_progress": "0/3"
+          },
+          "last_updated": "2025-12-16T00:43:13.405292",
+          "next_steps": [
+            "Kontynuuj streak przez 3 dni"
+          ],
+          "estimated_completion": null
+        },
+        "login_streak_7": {
+          "progress": 0.0,
+          "conditions_status": {
+            "streak_progress": "0/3"
+          },
+          "last_updated": "2025-12-16T00:43:13.405307",
+          "next_steps": [
+            "Kontynuuj streak przez 3 dni"
+          ],
+          "estimated_completion": null
+        },
+        "login_streak_30": {
+          "progress": 0.0,
+          "conditions_status": {
+            "streak_progress": "0/3"
+          },
+          "last_updated": "2025-12-16T00:43:13.405319",
+          "next_steps": [
+            "Kontynuuj streak przez 3 dni"
+          ],
+          "estimated_completion": null
+        },
+        "daily_mission_hero": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405333",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "weekend_scholar": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405347",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "night_owl": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405359",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "early_bird": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405372",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "neuroleadership_master": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405384",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "neuroscience_guru": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405413",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "stress_management_master": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405438",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "multi_neuroleader": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405512",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "self_aware_leader": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405524",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "neuroleadership_king": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405540",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "stress_master": {
+          "progress": 0,
+          "conditions_status": {
+            "articles_read": false
+          },
+          "last_updated": "2025-12-16T00:43:13.405556",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "brain_hacker": {
+          "progress": 0,
+          "conditions_status": {
+            "articles_read": false
+          },
+          "last_updated": "2025-12-16T00:43:13.405571",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "community_member": {
+          "progress": 0,
+          "conditions_status": {
+            "community_joined": false
+          },
+          "last_updated": "2025-12-16T00:43:13.405583",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "helpful_friend": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405595",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "mentor": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405605",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "influencer": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405615",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "first_badge": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405626",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "badge_collector": {
+          "progress": 0.0,
+          "conditions_status": {
+            "badges_collected": "0/10"
+          },
+          "last_updated": "2025-12-16T00:43:13.405642",
+          "next_steps": [
+            "Zdobądź jeszcze 10 odznak"
+          ],
+          "estimated_completion": null
+        },
+        "badge_master": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405654",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "achievement_hunter": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.405737",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "legend": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.407414",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "dedicated_student": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.407429",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "secret_discoverer": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.407441",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "midnight_learner": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.407458",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "forrest_gump_fan": {
+          "progress": 0,
+          "conditions_status": {
+            "forrest_article_read": false
+          },
+          "last_updated": "2025-12-16T00:43:13.407475",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "neuroplasticity_enthusiast": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.407495",
+          "next_steps": [],
+          "estimated_completion": null
+        },
+        "mindfulness_practitioner": {
+          "progress": 0,
+          "conditions_status": {},
+          "last_updated": "2025-12-16T00:43:13.407507",
+          "next_steps": [],
+          "estimated_completion": null
+        }
+      },
+      "badge_stats": {
+        "total_earned": 3,
+        "categories_completed": [],
+        "current_streak": 0,
+        "highest_tier_earned": "diamond",
+        "total_badge_xp": 2837,
+        "last_badge_earned": {
+          "badge_id": "pioneer",
+          "earned_date": "2025-12-16T00:43:13.407377"
+        },
+        "earning_rate": 0.0
+      }
+    },
+    "badges": [
+      "first_lesson",
+      "neuroleader_explorer",
+      "pioneer"
     ]
+  },
+  "mil1": {
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    }
+  },
+  "mil2": {
+    "id": 39,
+    "user_id": "474220b8-122e-448b-80de-eb0a50e1e9ae",
+    "password": "milwaukee2",
+    "degen_type": null,
+    "xp": 707,
+    "degencoins": 0,
+    "level": 4,
+    "company": "Milwaukee",
+    "permissions": {
+      "content": {
+        "lessons": null,
+        "tests": null,
+        "business_games": {
+          "scenarios": null,
+          "types": null
+        },
+        "inspirations": null
+      },
+      "tools": {
+        "dashboard": true,
+        "profile": true,
+        "learn": true,
+        "inspirations": true,
+        "practice": true,
+        "business_games": true,
+        "shop": true,
+        "personality_tests": true,
+        "rankings": true,
+        "notes": true
+      },
+      "ranking": {
+        "scope": "none",
+        "visible_in_global": true
+      }
+    },
+    "account_created_by": "admin",
+    "joined_date": "2025-12-16",
+    "last_login": "2025-12-18 12:48:33",
+    "test_taken": false,
+    "inspirations": {
+      "read": [],
+      "favorites": []
+    },
+    "business_games": {
+      "consulting": {
+        "scenario_id": "standard",
+        "scenario_modifiers": {
+          "reputation_gain_multiplier": 1.0,
+          "revenue_multiplier": 1.0,
+          "cost_multiplier": 1.0,
+          "employee_salary_multiplier": 1.0,
+          "contract_difficulty_adjustment": 0
+        },
+        "scenario_objectives": [
+          {
+            "type": "revenue_total",
+            "target": 1000000,
+            "description": "Osiągnij łącznie 1M PLN przychodu",
+            "reward_money": 50000
+          },
+          {
+            "type": "reputation",
+            "target": 80,
+            "description": "Zbuduj reputację na poziomie 80+",
+            "reward_money": 30000
+          },
+          {
+            "type": "level",
+            "target": 5,
+            "description": "Osiągnij poziom 5",
+            "reward_money": 20000
+          }
+        ],
+        "objectives_completed": [],
+        "firm": {
+          "name": "mil2's Consulting",
+          "logo": "🏢",
+          "founded": "2025-12-18",
+          "level": 1,
+          "reputation": 0
+        },
+        "employees": [],
+        "office": {
+          "type": "home_office",
+          "upgraded_at": null
+        },
+        "contracts": {
+          "active": [],
+          "completed": [],
+          "available_pool": [],
+          "last_refresh": "2025-12-18 12:52:21"
+        },
+        "stats": {
+          "total_revenue": 0,
+          "total_costs": 0,
+          "net_profit": 0,
+          "contracts_completed": 0,
+          "contracts_5star": 0,
+          "contracts_4star": 0,
+          "contracts_3star": 0,
+          "contracts_2star": 0,
+          "contracts_1star": 0,
+          "avg_rating": 0.0,
+          "category_stats": {
+            "Konflikt": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Coaching": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kultura": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Kryzys": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            },
+            "Leadership": {
+              "completed": 0,
+              "total_earned": 0,
+              "avg_rating": 0.0
+            }
+          },
+          "last_30_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          },
+          "last_7_days": {
+            "revenue": 0,
+            "contracts": 0,
+            "avg_rating": 0.0
+          }
+        },
+        "ranking": {
+          "overall_score": 0.0,
+          "current_positions": {
+            "overall": null,
+            "revenue": null,
+            "quality": null,
+            "productivity_30d": null
+          },
+          "previous_positions": {},
+          "badges": [],
+          "position_history": []
+        },
+        "events": {
+          "history": [],
+          "last_roll": null,
+          "active_effects": []
+        },
+        "money": 0,
+        "history": {
+          "transactions": [],
+          "level_ups": [],
+          "employees": [],
+          "offices": [
+            {
+              "office_type": "Home Office",
+              "cost": 0,
+              "capacity": 2,
+              "date": "2025-12-18 12:52:21"
+            }
+          ],
+          "milestones": [
+            {
+              "type": "founded",
+              "title": "Założenie firmy",
+              "description": "🎉 Firma mil2's Consulting została założona! Scenariusz: Standard Start",
+              "date": "2025-12-18 12:52:21"
+            }
+          ]
+        },
+        "initial_money": 0
+      }
+    }
   }
 }

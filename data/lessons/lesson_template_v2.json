@@ -1,0 +1,234 @@
+{
+  "_template_info": {
+    "version": "2.0",
+    "description": "Nowy standard struktury lekcji BrainVentureAcademy",
+    "usage": "Skopiuj ten szablon i wypełnij treściami. Opcjonalne elementy można pominąć - nie będą renderowane.",
+    "last_updated": "2025-12-18",
+    "changes": "Cztery główne bloki: wprowadzenie, nauka, praktyka, podsumowanie. Wszystkie elementy opcjonalne."
+  },
+  
+  "id": "LESSON_TEMPLATE_V2",
+  "title": "[Tytuł lekcji]",
+  "description": "[Krótki opis lekcji - 1-2 zdania]",
+  "tag": "[Neuroprzywództwo/Finanse/Trading/Milwaukee/etc]",
+  "xp_reward": 100,
+  "difficulty": "beginner",
+  "available": true,
+  "estimated_time": "30 min",
+  "learning_objectives": [
+    "Cel 1",
+    "Cel 2", 
+    "Cel 3"
+  ],
+  "prerequisites": [],
+  "tags": ["tag1", "tag2"],
+  
+  "wprowadzenie": {
+    "glowny": "<div><h1>Wprowadzenie</h1><p>Główna treść wprowadzenia w HTML...</p></div>",
+    
+    "case_study": {
+      "title": "Studium przypadku - Wprowadzenie",
+      "description": "Krótki opis case study",
+      "content": "<div>Treść case study...</div>",
+      "questions": [
+        "Pytanie refleksyjne 1?",
+        "Pytanie refleksyjne 2?"
+      ]
+    },
+    
+    "quiz_samodiagnozy": {
+      "title": "Quiz Samodiagnozy - Jak ważna jest dla Ciebie ta lekcja?",
+      "description": "Oceń, na ile zagadnienia z tej lekcji mogą pomóc Ci w Twoich wyzwaniach",
+      "questions": [
+        {
+          "question": "Pytanie diagnostyczne 1?",
+          "options": [
+            "Odpowiedź A - niska wartość",
+            "Odpowiedź B - średnia wartość",
+            "Odpowiedź C - wysoka wartość",
+            "Odpowiedź D - bardzo wysoka wartość"
+          ],
+          "explanation": "Dlaczego to pytanie jest ważne..."
+        }
+      ]
+    }
+  },
+  
+  "nauka": {
+    "tekst": {
+      "sekcje": [
+        {
+          "title": "📖 Sekcja 1 - [Tytuł]",
+          "content": "<div>Treść sekcji 1 w HTML...</div>"
+        },
+        {
+          "title": "📖 Sekcja 2 - [Tytuł]",
+          "content": "<div>Treść sekcji 2 w HTML...</div>"
+        }
+      ]
+    },
+    
+    "podcast": {
+      "title": "🎧 Podcast - [Tytuł]",
+      "description": "Opis podcastu",
+      "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+      "duration": "15 min",
+      "transcript": "Opcjonalny transkrypt..."
+    },
+    
+    "video": {
+      "title": "🎬 Video - [Tytuł]",
+      "description": "Opis filmu",
+      "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+      "duration": "10 min"
+    },
+    
+    "fiszki": {
+      "title": "🃏 Fiszki - Sprawdź swoją wiedzę",
+      "description": "Interaktywne fiszki do utrwalenia kluczowych pojęć",
+      "karty": [
+        {
+          "id": 1,
+          "przod": "Pytanie/Pojęcie 1",
+          "tyl": "Odpowiedź/Definicja 1",
+          "kategoria": "Podstawy"
+        },
+        {
+          "id": 2,
+          "przod": "Pytanie/Pojęcie 2",
+          "tyl": "Odpowiedź/Definicja 2",
+          "kategoria": "Zaawansowane"
+        }
+      ]
+    },
+    
+    "case_studies": [
+      {
+        "id": 1,
+        "title": "Case Study 1 - [Tytuł]",
+        "description": "Krótki opis sytuacji",
+        "context": "<div>Kontekst case study...</div>",
+        "challenge": "Główne wyzwanie do rozwiązania",
+        "questions": [
+          "Pytanie analityczne 1?",
+          "Pytanie analityczne 2?"
+        ]
+      }
+    ]
+  },
+  
+  "praktyka": {
+    "cwiczenia": [
+      {
+        "id": 1,
+        "title": "Ćwiczenie 1 - [Tytuł]",
+        "type": "practical",
+        "description": "Opis ćwiczenia",
+        "instructions": "<div>Instrukcje krok po kroku...</div>",
+        "time_required": "10 min"
+      }
+    ],
+    
+    "wyzwanie": {
+      "title": "🎯 Challenge - Wygenerowane Case Study",
+      "description": "Unikalny case study wygenerowany dla Ciebie",
+      "generator_prompt": "Szablon promptu do generowania case study...",
+      "difficulty": "medium"
+    },
+    
+    "cwiczenia_ai": {
+      "title": "🤖 Ćwiczenia AI",
+      "description": "Interaktywne ćwiczenia z AI",
+      "scenarios": [
+        {
+          "id": 1,
+          "title": "Scenariusz AI 1",
+          "description": "Opis scenariusza",
+          "ai_role": "Rola AI w tym ćwiczeniu",
+          "user_task": "Zadanie dla użytkownika"
+        }
+      ]
+    },
+    
+    "quiz_koncowy": {
+      "title": "📝 Quiz Końcowy",
+      "description": "Sprawdź swoją wiedzę",
+      "passing_score": 70,
+      "pytania": [
+        {
+          "id": 1,
+          "pytanie": "Pytanie testowe 1?",
+          "opcje": [
+            "Odpowiedź A",
+            "Odpowiedź B",
+            "Odpowiedź C",
+            "Odpowiedź D"
+          ],
+          "poprawna": 0,
+          "wyjaśnienie": "Dlaczego ta odpowiedź jest poprawna..."
+        }
+      ]
+    }
+  },
+  
+  "podsumowanie": {
+    "glowny": "<div><h1>Podsumowanie</h1><p>Główne wnioski z lekcji...</p></div>",
+    
+    "case_study": {
+      "title": "Case Study - Zakończenie",
+      "description": "Powrót do początkowego case study",
+      "resolution": "<div>Rozwiązanie i wnioski...</div>"
+    },
+    
+    "mapa_mysli": {
+      "title": "🗺️ Mind Map",
+      "description": "Wizualna mapa kluczowych pojęć",
+      "central_concept": "Główne pojęcie",
+      "branches": [
+        {
+          "name": "Gałąź 1",
+          "subbranches": ["Podgałąź 1.1", "Podgałąź 1.2"]
+        },
+        {
+          "name": "Gałąź 2",
+          "subbranches": ["Podgałąź 2.1", "Podgałąź 2.2"]
+        }
+      ]
+    },
+    
+    "sciagawka": {
+      "title": "📄 Cheat Sheet",
+      "description": "Najważniejsze punkty w pigułce",
+      "content": "<div>Krótkie przypomnienie kluczowych koncepcji...</div>"
+    },
+    
+    "szablon_planu_dzialan": {
+      "title": "📋 Action Plan Template",
+      "description": "Szablon do zaplanowania wdrożenia",
+      "sections": [
+        {
+          "title": "Co chcę wdrożyć?",
+          "prompt": "Wybierz 1-3 najważniejsze działania..."
+        },
+        {
+          "title": "Kiedy zacznę?",
+          "prompt": "Określ konkretne daty..."
+        },
+        {
+          "title": "Jak będę mierzyć postępy?",
+          "prompt": "Zdefiniuj wskaźniki sukcesu..."
+        }
+      ]
+    },
+    
+    "dziennik_refleksji": {
+      "title": "📓 Dziennik Refleksji",
+      "description": "3 pytania do przemyślenia",
+      "pytania": [
+        "Co było dla mnie największym odkryciem w tej lekcji?",
+        "Jak mogę zastosować tę wiedzę w mojej codziennej pracy?",
+        "Jakie konkretne działanie podejmę w ciągu najbliższych 7 dni?"
+      ]
+    }
+  }
+}

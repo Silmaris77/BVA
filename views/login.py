@@ -2,6 +2,7 @@ import streamlit as st
 from data.users_sql import register_user, login_user
 from utils.css_loader import ensure_css_files, load_login_css
 from utils.scroll_utils import scroll_to_top
+from utils.activity_tracker import initialize_activity_tracking
 from config.settings import DEVELOPMENT_MODE
 
 def show_login_page():
@@ -153,9 +154,18 @@ def show_login_page():
                     password = st.session_state.login_password
                     
                     if login_user(username, password):
+                        # Załaduj pełne dane użytkownika
+                        from data.users import load_user_data
+                        users_data = load_user_data()
+                        
                         st.session_state.logged_in = True
                         st.session_state.username = username
+                        st.session_state.user_data = users_data.get(username, {})
                         st.session_state.page = 'dashboard'
+                        
+                        # Inicjalizuj activity tracking dla użytkownika
+                        initialize_activity_tracking(username)
+                        
                         st.rerun()
                     else:
                         st.error("❌ Niepoprawna nazwa użytkownika lub hasło.")
@@ -185,11 +195,20 @@ def show_login_page():
                         success = register_user(new_username, new_password)
                         
                         if success:
+                            # Załaduj pełne dane nowo utworzonego użytkownika
+                            from data.users import load_user_data
+                            users_data = load_user_data()
+                            
                             st.success("✅ Rejestracja udana! Przekierowuję do dashboardu...")
                             # Automatyczne logowanie po rejestracji
                             st.session_state.logged_in = True
                             st.session_state.username = new_username
+                            st.session_state.user_data = users_data.get(new_username, {})
                             st.session_state.page = 'dashboard'
+                            
+                            # Inicjalizuj activity tracking dla nowego użytkownika
+                            initialize_activity_tracking(new_username)
+                            
                             st.rerun()
                         else:
                             st.error("❌ Użytkownik już istnieje lub wystąpił błąd")

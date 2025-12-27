@@ -38,7 +38,8 @@
   ],
   "lessons": {
     "0. Wprowadzenie do neuroprzywództwa": [
-      "Warta"
+      "General",
+      "Milwaukee"
     ],
     "1. Mózg emocjonalny_copy": [
       "Warta",
@@ -100,6 +101,19 @@
     ],
     "DEGEN_1_Trading_Psychology": [
       "Degen"
+    ],
+    "MILWAUKEE_Application_First_Canvas": [
+      "General",
+      "Milwaukee"
+    ],
+    "MILWAUKEE_Value_Impact_M1_Decision_Loss": [
+      "Milwaukee"
+    ],
+    "MILWAUKEE_Value_Impact_M2_Value_Translation": [
+      "Milwaukee"
+    ],
+    "MILWAUKEE_JSS_Rules_of_Engagement": [
+      "Milwaukee"
     ]
   },
   "business_games_scenarios": {

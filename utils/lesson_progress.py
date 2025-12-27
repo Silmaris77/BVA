@@ -4,6 +4,7 @@ from datetime import datetime
 import streamlit as st
 from data.users import load_user_data, save_user_data
 from data.repositories import LessonRepository
+from utils.activity_tracker import log_activity
 
 # Initialize repository (will use config to determine backend)
 _lesson_repo = None
@@ -109,20 +110,9 @@ def award_fragment_xp(lesson_id, fragment_type, xp_amount):
     # Sprawdź czy XP za ten fragment już zostało przyznane
     fragment_key = f"{fragment_type}_xp_awarded"
     if not lesson_progress.get(fragment_key, False):
-        # Pobierz user_data dla XP (nadal w JSON/SQL przez UserRepository)
-        users_data = load_user_data()
-        if username not in users_data:
-            return False, 0
-        
-        user_data = users_data[username]
-        
-        # Dodaj XP (ale NIE DODAWAJ już monet - tylko w Business Games!)
-        current_xp = user_data.get('xp', 0)
-        user_data['xp'] = current_xp + xp_amount
-        
-        # Zapisz user_data (XP)
-        users_data[username] = user_data
-        save_user_data(users_data)
+        # Dodaj XP do SQL
+        from data.users import update_user_xp
+        update_user_xp(username, xp_amount)
         
         # Przygotuj dane postępu
         progress_data = {
@@ -136,15 +126,16 @@ def award_fragment_xp(lesson_id, fragment_type, xp_amount):
         # Zapisz postęp przez repository
         repo.save_lesson_progress(username, lesson_id, fragment_type, progress_data)
         
-        # Odśwież session_state
-        st.session_state.user_data = user_data
-        
-        # Aktualizuj dzisiejsze statystyki
-        try:
-            from views.dashboard import update_daily_stats_if_needed
-            update_daily_stats_if_needed(username)
-        except ImportError:
-            pass  # Dashboard module not available
+        # LOGUJ AKTYWNOŚĆ DO ACTIVITY_LOG (dla dashboard i historii XP)
+        log_activity(
+            username=username,
+            activity_type='lesson_completed' if fragment_type == 'summary' else 'lesson_started',
+            details={
+                'lesson_id': lesson_id,
+                'fragment_type': fragment_type,
+                'xp_earned': xp_amount
+            }
+        )
         
         return True, xp_amount
     

@@ -8,7 +8,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Parametry
-username_to_add = "Krzysio"
+username_to_add = "mil2"
 
 # Ścieżki
 db_path = Path(__file__).parent / "database" / "bva_app.db"
@@ -56,8 +56,8 @@ try:
         INSERT INTO users (
             user_id, username, password_hash, degen_type,
             xp, degencoins, level, joined_date, test_taken,
-            created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            company, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         user_data.get('user_id'),
         username_to_add,
@@ -68,6 +68,7 @@ try:
         user_data.get('level', 1),
         user_data.get('joined_date', datetime.now().strftime('%Y-%m-%d')),
         1 if user_data.get('test_taken', False) else 0,
+        user_data.get('company', 'Milwaukee'),  # Company z JSON lub domyślnie Milwaukee
         datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     ))

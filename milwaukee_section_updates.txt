@@ -1,0 +1,113 @@
+MILWAUKEE LESSON - SEKCJE DO AKTUALIZACJI (JSS/ASR + CECHY→KORZYŚCI)
+
+===========================================
+SEKCJA 2: PROCEDURA REKLAMACYJNA
+===========================================
+
+GŁÓWNE ZMIANY:
+1. Dodać nagłówek: "Twoja rola JSS/ASR: Przewodnik klienta przez proces"
+2. Story sprzedażowe przy każdym kroku (5 kroków):
+   - KROK 1 (Kontakt z ASG): CECHA → KORZYŚĆ = "Specjalistyczny serwis vs lokalny mechanik"
+   - KROK 2 (Dostarczenie): Story o kliencie, który sam dostarczył vs wysłał kurierem
+   - KROK 3 (Diagnostyka): Story "ASG odkrył wadę fabryczną, której nikt inny by nie znalazł"
+   - KROK 4 (Naprawa): "Oryginalne części = produkt jak nowy, nie 'zaklejony'"
+   - KROK 5 (Odbiór): "Gwarancja biegnie dalej - nie jest to nowy produkt"
+
+3. Dodać box: "🎯 Jak JSS/ASR zarządza oczekiwaniami klienta"
+   - "Typowy czas: 2 tygodnie - komunikuj to OD RAZU"
+   - "Proponuj produkt zastępczy dla profesjonalistów"
+   - "Edukuj o ASG vs lokalny serwis"
+
+4. Checklist for JSS/ASR: Co sprawdzić przed wysłaniem do ASG
+
+===========================================
+SEKCJA 3: TRUDNE SYTUACJE
+===========================================
+
+GŁÓWNE ZMIANY:
+1. Przekształcić każdą sytuację w format:
+   ❌ ZŁA odpowiedź (sprzedawca defensywny) → Konsekwencje biznesowe
+   ✅ DOBRA odpowiedź (JSS/ASR proaktywny) → Opportunity
+
+2. Dodać story do każdej sytuacji:
+   - Zgubiony paragon: Story "Klient znalazł duplikat w banku, wrócił po 3 narzędzia więcej"
+   - Uszkodzenie mechaniczne: "ASG znalazł wadę materiałową mimo pęknięcia - klient dostał wymianę"
+   - Produkt używany: "Upselling - zaproponowałem trade-in + rabat na nowy model"
+   - Import równoległy: "Klient zrozumiał ryzyko szarej strefy, teraz kupuje tylko u nas"
+
+3. Dodać box: "🎤 Sales Scripts dla JSS/ASR - Gotowe frazy na trudne sytuacje"
+
+4. FAQ z perspektywy sprzedażowej - każda odpowiedź kończy się upselling/cross-selling
+
+===========================================
+SEKCJA 4: PRZEDŁUŻENIE GWARANCJI
+===========================================
+
+GŁÓWNE ZMIANY:
+1. Nagłówek: "Rejestracja = Twoje narzędzie zamykające transakcje"
+
+2. Story sprzedażowe:
+   - "Klient, który rejestrował = wrócił po baterie i młot (cross-sell)"
+   - "Firma z 30 narzędziami - 1 rejestracja = relacja na lata"
+   - "Konkurent stracił klienta, bo nie edukował o rejestracji"
+
+3. Dodać: "🎯 KPI dla JSS/ASR: Cel 70% konwersji rejestracji"
+   - Jak mierzyć?
+   - Jak gamifikować?
+   - Co robić, gdy klient odmawia?
+
+4. Box: "🎤 10 najlepszych fraz sprzedażowych o rejestracji"
+   - Przy prezentacji produktu
+   - Przy zamykaniu transakcji
+   - Przy obiekcji "nie mam czasu"
+   - Przy obiekcji "zrobię to później"
+
+5. Dodać checklist: "Przy KAŻDEJ sprzedaży Milwaukee - 5 kroków edukacji o rejestracji"
+
+===========================================
+EXERCISES: CASE STUDIES
+===========================================
+
+PRZEKSZTAŁCENIE CASE STUDY 1 (Wiertarka po upadku):
+
+DODAĆ SEKCJĘ: "🎯 Twoja odpowiedź jako JSS/ASR - Sales Approach"
+
+Po każdym pytaniu dodać:
+- Jak wykorzystać tę sytuację do budowania relacji?
+- Jakie produkty możesz zaproponować? (cross-sell/upsell)
+- Jak przekształcić problem w edukację długoterminową?
+
+KOŃCOWE WNIOSKI - zmienić na:
+"🏆 Rezultat biznesowy - Jak JSS/ASR wygrywa w tej sytuacji:
+- Klient wysłany do ASG (dobra wola)
+- Zaproponowany wynajem/pożyczka narzędzia zastępczego
+- Edukacja o walizkach ochronnych (dodatkowa sprzedaż)
+- Klient wrócił po 2 narzędzia więcej w tym miesiącu
+- Polecił 2 kolegów z budowy"
+
+===========================================
+SUMMARY
+===========================================
+
+PRZEKSZTAŁCENIE NA: "Plan Działania dla JSS/ASR"
+
+1. "🎯 Twoje narzędzia sprzedażowe (gwarancja jako USP)"
+   - 3 najważniejsze argumenty zamykające transakcje
+   - Gotowe frazy na każdy etap sprzedaży
+   - Jak odpowiadać na obiekcje cenowe
+
+2. "📊 KPI do śledzenia"
+   - % rejestracji klientów (cel: 70%)
+   - Liczba edukacji o gwarancji na budowach/spotkaniach
+   - Feedback klientów o obsłudze reklamacji
+
+3. "🚀 Akcja na dziś - JSS/ASR Checklist"
+   - Wydrukuj ulotki rejestracji
+   - Przygotuj listę ASG w regionie
+   - Naucz się 5 kluczowych story sprzedażowych
+   - Zaplanuj szkolenie dla dystrybutorów (dla ASR)
+
+4. Case Study KOŃCOWY - zmienić na historię sukcesu JSS/ASR:
+   "Jak zwiększyłem sprzedaż Milwaukee o 40% przez edukację o gwarancji"
+
+===========================================

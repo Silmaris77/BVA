@@ -223,21 +223,43 @@ def login_user(username, password):
     return None
 
 def update_user_xp(username, xp_amount):
-    """Update user's XP and level"""
-    users_data = load_user_data()
-    if username in users_data:
-        users_data[username]["xp"] += xp_amount
-        save_user_data(users_data)
+    """Update user's XP and level in SQL"""
+    try:
+        from database.connection import session_scope
+        from database.models import User
+        from utils.xp_system import get_user_level
         
-        # Aktualizuj dzisiejsze statystyki jeśli istnieją
-        try:
-            from views.dashboard import update_daily_stats_if_needed
-            update_daily_stats_if_needed(username)
-        except ImportError:
-            pass  # Ignore if dashboard module is not available
-        
-        return True
-    return False
+        with session_scope() as session:
+            user = session.query(User).filter_by(username=username).first()
+            
+            if user:
+                # Zaktualizuj XP
+                user.xp += xp_amount
+                
+                # Przelicz poziom na podstawie nowego XP
+                user.level = get_user_level(user.xp)
+                
+                session.commit()
+                
+                # Odśwież session_state.user_data jeśli użytkownik jest zalogowany
+                if 'user_data' in st.session_state and st.session_state.get('username') == username:
+                    st.session_state.user_data['xp'] = user.xp
+                    st.session_state.user_data['level'] = user.level
+                
+                # Aktualizuj dzisiejsze statystyki jeśli istnieją
+                try:
+                    from views.dashboard import update_daily_stats_if_needed
+                    update_daily_stats_if_needed(username)
+                except ImportError:
+                    pass  # Ignore if dashboard module is not available
+                
+                return True
+            
+            return False
+            
+    except Exception as e:
+        print(f"Error updating user XP: {e}")
+        return False
 
 def award_xp_for_activity(username: str, activity_type: str, xp_amount: int, details: Optional[dict] = None):
     """
