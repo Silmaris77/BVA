@@ -122,28 +122,25 @@ def has_access_to_resource(resource_type: str, resource_id: str, user_data: Opti
     if user_data is None:
         user_data = st.session_state.get('user_data', {})
     
-    # Pobierz company użytkownika
+    # Pobierz company użytkownika (TYLKO NOWY SYSTEM TAGÓW)
     user_company = user_data.get('company', 'General')
     
-    # Jeśli użytkownik ma custom permissions, sprawdź je
-    custom_permissions = user_data.get('permissions', {})
-    if custom_permissions:
-        # Sprawdź custom permissions (stary system)
-        from utils.permissions import get_user_permissions, has_access_to_lesson, has_access_to_business_game_scenario, has_access_to_business_game_type, has_access_to_inspiration_category
-        
-        if resource_type == 'lessons':
-            return has_access_to_lesson(resource_id, user_data)
-        elif resource_type == 'business_games_scenarios':
-            return has_access_to_business_game_scenario(resource_id, user_data)
-        elif resource_type == 'business_games_types':
-            return has_access_to_business_game_type(resource_id, user_data)
-        elif resource_type == 'inspirations_categories':
-            return has_access_to_inspiration_category(resource_id, user_data)
-    
-    # Nowy system tagów
+    # Pobierz tagi zasobu
     resource_tags = get_resource_tags(resource_type, resource_id)
     
-    # Jeśli zasób ma tag "General" lub tag użytkownika - dostęp
+    # Sprawdź czy grupa użytkownika wyklucza zasoby "General"
+    company_info = get_company_info(user_company)
+    exclude_general = company_info.get('exclude_general', False) if company_info else False
+    
+    # Jeśli grupa wyklucza General:
+    # 1. Zasób NIE MOŻE mieć tagu "General"
+    # 2. Zasób MUSI mieć tag użytkownika
+    if exclude_general:
+        if "General" in resource_tags:
+            return False  # Zawiera General - BRAK DOSTĘPU
+        return user_company in resource_tags
+    
+    # Standardowo: zasób ma tag "General" lub tag użytkownika - dostęp
     return "General" in resource_tags or user_company in resource_tags
 
 

@@ -1,0 +1,418 @@
+{
+  "applications": {
+    "hydraulik_instalacje_wewnetrzne": {
+      "id": "hydraulik_instalacje_wewnetrzne",
+      "title": "Hydraulik – instalacje wewnętrzne (mieszkania, domy)",
+      "category": "Instalacje sanitarne",
+      "icon": "🚰",
+      
+      "context": {
+        "typ_klienta": "Instalator / Hydraulik",
+        "typ_pracy": "Serwisowa / Projektowa",
+        "materialy_srodowisko": ["Beton", "Cegła", "Pustak", "Wilgoć"],
+        "skala": "Solo / 2-3 osoby"
+      },
+      
+      "charakterystyka": [
+        "Praca w ciasnych przestrzeniach",
+        "Częste wiercenie w betonie / cegle",
+        "Montaż sanitarny, stelaże, kotwy",
+        "Praca u klienta, często bez dostępu do 230V",
+        "Liczy się waga, ergonomia, niezawodność"
+      ],
+      
+      "discovery_questions": [
+        {
+          "question": "Ile prac robisz w ciasnych szachtach / łazienkach?",
+          "purpose": "Identyfikacja potrzeby kompaktowych narzędzi M12",
+          "follow_up": "Czy jest to główna część Twojej działalności?"
+        },
+        {
+          "question": "Co częściej Cię spowalnia: brak mocy czy zmęczenie ręki?",
+          "purpose": "Balans między mocą a ergonomią - M12 vs M18",
+          "follow_up": "Jak długo pracujesz dziennie z narzędziami?"
+        },
+        {
+          "question": "Czy wiercisz więcej w betonie czy w cegle/pustaku?",
+          "purpose": "Dobór odpowiedniego młota i wierteł",
+          "follow_up": "Jakie średnice otworów są najczęstsze?"
+        },
+        {
+          "question": "Jak często tracisz czas na czekanie, aż bateria się naładuje?",
+          "purpose": "Liczba i pojemność baterii",
+          "follow_up": "Czy masz dostęp do ładowania na budowie?"
+        }
+      ],
+      
+      "recommended_ecosystem": {
+        "narzedzia": [
+          {
+            "sku": "M12_CH",
+            "priority": 1,
+            "reason": "Lekki młot idealny do montażu w ciasnych przestrzeniach - waga vs moc"
+          },
+          {
+            "sku": "M12_FPD",
+            "priority": 2,
+            "reason": "Kompaktowa wiertarko-wkrętarka do uniwersalnych zadań montażowych"
+          },
+          {
+            "sku": "M12_FID",
+            "priority": 3,
+            "reason": "Zakrętarka udarowa do szybkiego montażu stelaży i kotew"
+          }
+        ],
+        "baterie": [
+          {
+            "sku": "M12_4_0AH",
+            "quantity": 2,
+            "reason": "Balans między czasem pracy a wagą - cały dzień pracy"
+          },
+          {
+            "sku": "M12_2_0AH",
+            "quantity": 1,
+            "reason": "Lekka robocza do szybkich zadań"
+          }
+        ],
+        "akcesoria": [
+          {
+            "sku": "WIERTLA_SDS_PLUS_SET",
+            "reason": "Zestaw wierteł 5-10mm do typowych montaży sanitarnych"
+          },
+          {
+            "sku": "BITY_SHOCKWAVE",
+            "reason": "Wytrzymałe bity montażowe - mniej przerw na wymianę"
+          }
+        ],
+        "ppe_dodatki": [
+          {
+            "sku": "OKULARY_MILWAUKEE",
+            "reason": "Ochrona oczu przy wierceniu w betonie - profesjonalny wizerunek"
+          },
+          {
+            "sku": "REKAWICE_MILWAUKEE",
+            "reason": "Ochrona dłoni i lepszy chwyt w wilgotnych warunkach"
+          }
+        ]
+      },
+      
+      "persuasion_script": {
+        "headline": "90% instalacji w mieszkaniu bez zmiany platformy",
+        "problem": "W łazienkach liczą się minuty - nie możesz mieć przy sobie ciężkiego sprzętu, ale potrzebujesz mocy do betonu.",
+        "consequence": "Zmęczenie po 3-4 łazienkach = wolniejsza praca = mniej zleceń w tygodniu.",
+        "solution": "Platforma M12 FUEL daje Ci moc M18 w rozmiarze, który możesz trzymać cały dzień.",
+        "benefits": [
+          "40% lżejszy zestaw = mniej zmęczenia",
+          "Cały dzień pracy na 2 bateriach 4.0Ah",
+          "Jeden system baterii = zero przestojów",
+          "Kompakt pozwala pracować w szachtach 30x30cm"
+        ],
+        "proof": "Instalatorzy sanitarni raportują średnio 1-2 dodatkowe zlecenia tygodniowo po przejściu na M12 - to 4-8 instalacji miesięcznie.",
+        "objection_handling": {
+          "Za drogie": "Jeśli zarabiasz na instalacji 800-1200 zł, jedno dodatkowe zlecenie miesięcznie zwraca inwestycję w 6 miesięcy.",
+          "Mam już Bosch/Makita": "M12 FUEL ma 25% więcej momentu niż Bosch 12V i 30% dłuższy czas pracy - możesz zrobić test porównawczy.",
+          "Czy to wystarczy do betonu": "M12 CH wiertuje otwory do fi10mm w betonie tak szybko jak 18V konkurencji, ale waży o 40% mniej."
+        },
+        "next_step": "Czy chciałbyś przetestować M12 CH na swojej budowie przez tydzień i sam zobaczyć różnicę?"
+      },
+      
+      "roi_calculator": {
+        "time_savings_per_job": 30,
+        "time_unit": "minut",
+        "jobs_per_week_increase": 1.5,
+        "avg_job_value": 1000,
+        "investment": 3500,
+        "payback_months": 6
+      },
+      
+      "case_studies": [
+        {
+          "customer": "Hydraulik Nowak - Warszawa",
+          "problem": "Zmęczenie po 3-4 łazienkach dziennie, ciężkie narzędzia 18V",
+          "solution": "Przejście na M12 FUEL + 3 baterie 4.0Ah",
+          "results": "Wzrost z 3-4 do 5 instalacji dziennie, redukcja zmęczenia o 60%",
+          "quote": "Kiedyś kończyłem dzień z bolącymi rękoma. Teraz robię więcej i wracam do domu z energią."
+        }
+      ]
+    },
+    
+    "warsztat_serwis_samochodowy": {
+      "id": "warsztat_serwis_samochodowy",
+      "title": "Warsztat samochodowy – serwis aut osobowych",
+      "category": "Automotive",
+      "icon": "🚗",
+      
+      "context": {
+        "typ_klienta": "Warsztat samochodowy",
+        "typ_pracy": "Ciągła / Wysoka powtarzalność",
+        "materialy_srodowisko": ["Metal", "Zapieczenie śrub", "Korozja", "Praca w kanale"],
+        "skala": "2-5 osób"
+      },
+      
+      "charakterystyka": [
+        "Praca ciągła, wysoka powtarzalność",
+        "Odkręcanie zapieczonych śrub",
+        "Częste zmiany narzędzi",
+        "Liczy się moment obrotowy + szybkość",
+        "Często praca w kanale / na podnośniku"
+      ],
+      
+      "discovery_questions": [
+        {
+          "question": "Ile kół robisz dziennie?",
+          "purpose": "Skalowanie powtarzalności - ROI na czasie",
+          "follow_up": "Ile to zajmuje czasu w porównaniu do całego serwisu?"
+        },
+        {
+          "question": "Co Cię bardziej wkurza: brak mocy czy czas?",
+          "purpose": "Identyfikacja głównego pain point - moment vs szybkość",
+          "follow_up": "Czy zdarza się, że narzędzie nie daje rady?"
+        },
+        {
+          "question": "Czy używasz pneumatyki czy chcesz z niej zejść?",
+          "purpose": "Migracja z pneumatyki - koszty kompresora, węże",
+          "follow_up": "Ile czasu tracisz na przeciąganie węży?"
+        },
+        {
+          "question": "Jak często zapieczenie śruby blokuje Ci pracę?",
+          "purpose": "Potrzeba HIGH OUTPUT momentu obrotowego",
+          "follow_up": "Czy używasz dodatkowych środków (płyny penetrujące, nagrzewanie)?"
+        }
+      ],
+      
+      "recommended_ecosystem": {
+        "narzedzia": [
+          {
+            "sku": "M18_FHIWF12",
+            "priority": 1,
+            "reason": "Klucz udarowy 1/2\" z najwyższym momentem w klasie - zamiennik pneumatyki"
+          },
+          {
+            "sku": "M18_FID",
+            "priority": 2,
+            "reason": "Zakrętarka udarowa do szybkiego odkręcania elementów karoserii"
+          },
+          {
+            "sku": "M12_FIR",
+            "priority": 3,
+            "reason": "Kompaktowa grzechotka do pracy w ciasnych miejscach pod maską"
+          }
+        ],
+        "baterie": [
+          {
+            "sku": "M18_5_0AH",
+            "quantity": 2,
+            "reason": "Standardowa bateria do codziennej pracy"
+          },
+          {
+            "sku": "M18_8_0AH_HIGH_OUTPUT",
+            "quantity": 1,
+            "reason": "Maksymalny moment dla zapieczonych śrub - awaryjne zadania"
+          }
+        ],
+        "akcesoria": [
+          {
+            "sku": "NASADKI_UDAROWE_1_2",
+            "reason": "Wytrzymałe nasadki udarowe - nie pękają przy wysokim momencie"
+          },
+          {
+            "sku": "PRZEDLUZKI_UDAROWE",
+            "reason": "Dostęp do trudnych miejsc (np. śruby amortyzatorów)"
+          }
+        ],
+        "organizacja": [
+          {
+            "sku": "PACKOUT_SKRZYNKA",
+            "reason": "Mobilna organizacja narzędzi - przejście między stanowiskami"
+          },
+          {
+            "sku": "PACKOUT_ORGANIZER_NASADKI",
+            "reason": "Szybki dostęp do nasadek = zero czasu na szukanie"
+          }
+        ]
+      },
+      
+      "persuasion_script": {
+        "headline": "To nie jest kwestia mocy — tylko ile aut zrobisz więcej w tygodniu",
+        "problem": "W warsztacie czas = pieniądz. Każda minuta tracona na zablokowaną śrubę, szukanie nasadki lub przeciąganie węża to strata.",
+        "consequence": "1 auto mniej dziennie = 5 aut tygodniowo = 20 aut miesięcznie. To 20 000 - 40 000 zł straconego obrotu.",
+        "solution": "M18 FUEL kończy z pneumatyką i daje większy moment niż kompresory za 15 000 zł.",
+        "benefits": [
+          "1100 Nm momentu - odkręca zapieczenia bez płynów penetrujących",
+          "Zero węży = szybsze przejście między autami",
+          "Cichsza praca = lepsza atmosfera w warsztacie",
+          "PACKOUT = wszystko pod ręką, zero szukania"
+        ],
+        "proof": "Warsztaty raportują średnio 15-20% wzrost przepustowości po migracji z pneumatyki na M18 FUEL - to 3-4 auta więcej tygodniowo.",
+        "objection_handling": {
+          "Mam kompresor": "Kompresor zużywa 3-5 kW/h. M18 kosztuje 0.2 zł na pełne naładowanie. Oszczędność na energii = 200-300 zł miesięcznie.",
+          "Pneumatyka jest mocniejsza": "M18 FHIWF12 ma 1100 Nm. To więcej niż większość kluczy pneumatycznych za 2000 zł. Możemy zrobić test.",
+          "Baterie się rozładują": "3 baterie (2x 5.0Ah + 1x 8.0Ah) = cały dzień pracy dla 2-3 mechaników. Ładowanie w nocy."
+        },
+        "next_step": "Czy mogę przyjechać i przetestować M18 FHIWF12 na Twoich najtrudniejszych śrubach? Jeśli nie odkręci, nie kupujesz."
+      },
+      
+      "roi_calculator": {
+        "time_savings_per_job": 15,
+        "time_unit": "minut",
+        "jobs_per_week_increase": 3,
+        "avg_job_value": 400,
+        "investment": 5500,
+        "payback_months": 4
+      },
+      
+      "case_studies": [
+        {
+          "customer": "Auto-Serwis Kowalski - Kraków",
+          "problem": "Pneumatyka - węże blokują przejścia, kompresor hałasuje",
+          "solution": "Pełna migracja na M18 FUEL (3 klucze + 9 baterii)",
+          "results": "Z 8 aut dziennie do 10 aut dziennie, redukcja kosztów energii o 250 zł/mc",
+          "quote": "Pierwszy tydzień był dziwny - za cicho. Teraz nie wyobrażam sobie powrotu do węży."
+        }
+      ]
+    },
+    
+    "serwis_mobilny_utrzymanie_ruchu": {
+      "id": "serwis_mobilny_utrzymanie_ruchu",
+      "title": "Serwis mobilny / technik utrzymania ruchu",
+      "category": "Utrzymanie ruchu / Mobilny serwis",
+      "icon": "🔧",
+      
+      "context": {
+        "typ_klienta": "Serwis mobilny / Technik UR",
+        "typ_pracy": "Awaryjna / Różnorodna",
+        "materialy_srodowisko": ["Metal", "Blacha", "Konstrukcje", "Różnorodne materiały"],
+        "skala": "Solo / 2-3 osoby"
+      },
+      
+      "charakterystyka": [
+        "Dojazdy, brak stałego stanowiska",
+        "Różnorodne materiały (metal, blacha, konstrukcje)",
+        "Awaria = przestój",
+        "Liczy się uniwersalność + czas reakcji",
+        "Nie można wrócić po narzędzie"
+      ],
+      
+      "discovery_questions": [
+        {
+          "question": "Co się dzieje, gdy masz awarię i nie masz właściwego narzędzia?",
+          "purpose": "Koszt przestoju vs koszt narzędzia - ROI natychmiastowe",
+          "follow_up": "Ile wynosi godzina przestoju Twojego klienta?"
+        },
+        {
+          "question": "Ile czasu tracisz na powrót po sprzęt?",
+          "purpose": "Wartość czasu - mobilność vs kompletność zestawu",
+          "follow_up": "Czy zdarzyło się, że musiałeś wrócić na bazę po narzędzie?"
+        },
+        {
+          "question": "Czy pracujesz częściej w metalu czy w konstrukcjach?",
+          "purpose": "Dobór narzędzi - wiercenie, cięcie, montaż",
+          "follow_up": "Jakie zadania powtarzają się najczęściej?"
+        },
+        {
+          "question": "Jak ważna jest organizacja sprzętu przy dojazdach?",
+          "purpose": "PACKOUT system - szybkość reakcji",
+          "follow_up": "Ile czasu tracisz na szukanie narzędzia w samochodzie?"
+        }
+      ],
+      
+      "recommended_ecosystem": {
+        "narzedzia": [
+          {
+            "sku": "M18_FPD",
+            "priority": 1,
+            "reason": "Uniwersalna wiertarko-wkrętarka - 70% zadań serwisowych"
+          },
+          {
+            "sku": "M18_FID",
+            "priority": 2,
+            "reason": "Zakrętarka udarowa - szybki demontaż konstrukcji"
+          },
+          {
+            "sku": "M18_FMT",
+            "priority": 3,
+            "reason": "Multitool - cięcie, szlifowanie, skrobanie - ratuje 20% awarii"
+          }
+        ],
+        "baterie": [
+          {
+            "sku": "M18_5_0AH",
+            "quantity": 2,
+            "reason": "Uniwersalna pojemność do 8h pracy"
+          },
+          {
+            "sku": "M18_8_0AH_HIGH_OUTPUT",
+            "quantity": 1,
+            "reason": "Długie zadania (wiercenie serii otworów) + backup"
+          }
+        ],
+        "akcesoria": [
+          {
+            "sku": "BRZESZCZOTY_MULTITOOL",
+            "reason": "Różne materiały - drewno, metal, plastik"
+          },
+          {
+            "sku": "WIERTLA_METAL_SHOCKWAVE",
+            "reason": "Wytrzymałe wiertła do stali - częste wiercenie w maszynach"
+          }
+        ],
+        "organizacja": [
+          {
+            "sku": "PACKOUT_TORBA",
+            "reason": "Mobilność - szybkie wejście/wyjście z serwisu"
+          },
+          {
+            "sku": "PACKOUT_ORGANIZER_DROBNICOWY",
+            "reason": "Śruby, wkręty, złączki - wszystko pod ręką"
+          }
+        ]
+      },
+      
+      "persuasion_script": {
+        "headline": "80% awarii bez powrotu do bazy",
+        "problem": "W serwisie mobilnym największy koszt to nie narzędzie, tylko czas dojazdu. Jeśli musisz wrócić po sprzęt, tracisz 2-3 godziny.",
+        "consequence": "2 dojazdy zamiast 1 = podwójny koszt paliwa, połowa produktywności. Przy 1000 zł za wyjazd to 500 zł straty.",
+        "solution": "M18 FUEL + PACKOUT to kompletna mobilna stacja serwisowa. Wszystko w jednym samochodzie.",
+        "benefits": [
+          "3 narzędzia = 80% typowych awarii",
+          "PACKOUT = 5 minut na załadunek, nie 30 minut",
+          "Baterie 8.0Ah = cały dzień bez ładowania",
+          "Multitool = narzędzie ratunkowe, gdy nic innego nie działa"
+        ],
+        "proof": "Serwisy mobilne raportują redukcję powrotów po sprzęt z 15% do 2% po wdrożeniu systemu M18 + PACKOUT.",
+        "objection_handling": {
+          "Za dużo narzędzi": "To nie jest kwestia ilości, tylko uniwersalności. 3 narzędzia M18 zastępują 10 narzędzi konkurencji.",
+          "Mam już zestaw": "Jeśli chociaż raz w miesiącu musisz wrócić po narzędzie, tracisz więcej niż kosztuje M18 FMT.",
+          "PACKOUT to za drogo": "Jeśli tracisz 10 minut dziennie na szukanie w samochodzie, to 40 godzin rocznie. Ile wynosi Twoja godzina?"
+        },
+        "next_step": "Czy chcesz przetestować M18 FUEL + PACKOUT przy następnej awarii i zobaczyć, ile czasu oszczędzisz?"
+      },
+      
+      "roi_calculator": {
+        "time_savings_per_job": 45,
+        "time_unit": "minut",
+        "jobs_per_week_increase": 2,
+        "avg_job_value": 800,
+        "investment": 6000,
+        "payback_months": 3
+      },
+      
+      "case_studies": [
+        {
+          "customer": "Tech-Serwis Mobilny - Gdańsk",
+          "problem": "15% awarii wymagało powrotu po narzędzie, strata czasu i pieniędzy",
+          "solution": "M18 FUEL zestaw (FPD + FID + FMT) + PACKOUT",
+          "results": "Redukcja powrotów do 2%, wzrost liczby serwisów o 20%",
+          "quote": "Teraz klient pyta 'jak szybko możesz być' zamiast 'czy masz narzędzie'. To zmienia wszystko."
+        }
+      ]
+    }
+  },
+  
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2025-12-28",
+    "total_applications": 3,
+    "status": "MVP - ready for testing"
+  }
+}

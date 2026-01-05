@@ -2608,9 +2608,13 @@ def show_tools_page():
         st.info("💡 Jesteś w zakładce **🔍 Autodiagnoza** - pierwsza zakładka poniżej")
         # Wyczyść flagę po wyświetleniu
         st.session_state.tools_tab = None
+    elif st.session_state.get('tools_tab') == 'milwaukee':
+        st.info("💡 Jesteś w zakładce **🔴 Milwaukee** - ostatnia zakładka poniżej")
+        # Wyczyść flagę po wyświetleniu
+        st.session_state.tools_tab = None
     
     # Główne kategorie w tabach
-    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs([
         "🔍 Autodiagnoza",
         "💬 C-IQ Tools", 
         "🎭 Symulatory",
@@ -2618,7 +2622,8 @@ def show_tools_page():
         "📊 Analityki", 
         "🤖 AI Asystent",
         "⏱️ Zarządzanie Szkoleniem",
-        "🎓 Coaching on-the-job"
+        "🎓 Coaching on-the-job",
+        "🔴 Milwaukee"
     ])
     
     with tab1:
@@ -2644,8 +2649,40 @@ def show_tools_page():
         show_training_manager()
     
     with tab8:
-        from utils.coaching_tool import show_coaching_on_the_job
-        show_coaching_on_the_job()
+        try:
+            from utils.coaching_tool import show_coaching_on_the_job
+            show_coaching_on_the_job()
+        except ImportError as e:
+            st.warning("🔧 Coaching on-the-job")
+            st.error(f"Błąd ładowania modułu: {e}")
+            st.info("Zainstaluj brakujące zależności: `pip install google-generativeai`")
+    
+    with tab9:
+        # Milwaukee Application Engine - tylko dla użytkowników Milwaukee
+        from utils.resource_access import has_access_to_resource
+        from data.repositories.user_repository import UserRepository
+        from database.connection import session_scope
+        from database.models import User
+        
+        username = st.session_state.get('username')
+        has_milwaukee_access = False
+        
+        if username:
+            try:
+                with session_scope() as session:
+                    user_obj = session.query(User).filter_by(username=username).first()
+                    user_dict = user_obj.to_dict() if user_obj else {}
+                    has_milwaukee_access = has_access_to_resource('tools_menu', 'milwaukee_app_engine', user_dict)
+            except Exception as e:
+                st.error(f"Błąd sprawdzania uprawnień: {e}")
+        
+        if has_milwaukee_access:
+            from views.milwaukee_application_engine import milwaukee_application_engine
+            milwaukee_application_engine()
+        else:
+            st.warning("🔴 Milwaukee Application Engine")
+            st.info("Ta funkcja jest dostępna tylko dla użytkowników Milwaukee.")
+            st.markdown("Skontaktuj się z administratorem aby uzyskać dostęp.")
 
 def show_ciq_tools():
     """Narzędzia Conversational Intelligence"""

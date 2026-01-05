@@ -1,0 +1,344 @@
+{
+  "context_questions": {
+    "typ_klienta": {
+      "question": "Jaki jest główny profil Twojego klienta?",
+      "options": [
+        {
+          "value": "hydraulik",
+          "label": "Instalator / Hydraulik",
+          "description": "Instalacje sanitarne, CO, wod-kan"
+        },
+        {
+          "value": "warsztat",
+          "label": "Warsztat samochodowy",
+          "description": "Serwis aut osobowych / dostawczych"
+        },
+        {
+          "value": "serwis_mobilny",
+          "label": "Serwis mobilny / Technik UR",
+          "description": "Dojazdy, awarie, utrzymanie ruchu"
+        },
+        {
+          "value": "elektryk",
+          "label": "Elektryk / Instalacje elektryczne",
+          "description": "Instalacje elektryczne, oświetlenie"
+        },
+        {
+          "value": "stolarstwo",
+          "label": "Stolarz / Cieśla",
+          "description": "Zabudowy, meble, konstrukcje drewniane"
+        },
+        {
+          "value": "budowa",
+          "label": "Budownictwo ogólne",
+          "description": "Murowanie, wylewki, ogólnobudowlane"
+        }
+      ]
+    },
+    
+    "typ_pracy": {
+      "question": "Jaki jest charakter pracy Twojego klienta?",
+      "options": [
+        {
+          "value": "ciagla",
+          "label": "Praca ciągła",
+          "description": "Codzienne powtarzalne zadania (np. warsztat, produkcja)"
+        },
+        {
+          "value": "projektowa",
+          "label": "Praca projektowa",
+          "description": "Projekty wielodniowe (np. instalacje w budynkach)"
+        },
+        {
+          "value": "serwisowa",
+          "label": "Praca serwisowa",
+          "description": "Krótkie interwencje, różne lokalizacje"
+        },
+        {
+          "value": "awaryjna",
+          "label": "Praca awaryjna",
+          "description": "Reakcja na awarie, nieprzewidywalność"
+        }
+      ]
+    },
+    
+    "materialy_srodowisko": {
+      "question": "W jakich materiałach / środowisku pracuje najczęściej?",
+      "options": [
+        {
+          "value": "beton",
+          "label": "Beton / Kamień",
+          "implications": ["Potrzeba młotów SDS", "Wytrzymałe wiertła", "Wysoka moc"]
+        },
+        {
+          "value": "metal",
+          "label": "Metal / Stal",
+          "implications": ["Wysokie momenty obrotowe", "Wiertła kobaltowe", "Klucze udarowe"]
+        },
+        {
+          "value": "drewno",
+          "label": "Drewno",
+          "implications": ["Precyzja", "Długie serie pracy", "Wkrętarki"]
+        },
+        {
+          "value": "wilgoc",
+          "label": "Wilgoć / Kurz",
+          "implications": ["Ochrona IP65", "Systemy odpylania", "PPE"]
+        },
+        {
+          "value": "ciasneprzestrzenie",
+          "label": "Ciasne przestrzenie",
+          "implications": ["Kompaktowe narzędzia M12", "Ergonomia", "Lekkie baterie"]
+        },
+        {
+          "value": "wysokosc",
+          "label": "Praca na wysokości",
+          "implications": ["Lekkie narzędzia", "Bezpieczeństwo", "Organizacja PACKOUT"]
+        }
+      ],
+      "multi_select": true
+    },
+    
+    "skala": {
+      "question": "Jaka jest skala działalności?",
+      "options": [
+        {
+          "value": "solo",
+          "label": "Solo / 1 osoba",
+          "implications": ["Uniwersalność", "Mobilność", "Jeden system baterii"]
+        },
+        {
+          "value": "2-3",
+          "label": "2-3 osoby",
+          "implications": ["Wymiana narzędzi", "Więcej baterii", "Organizacja PACKOUT"]
+        },
+        {
+          "value": "5-10",
+          "label": "5-10 osób",
+          "implications": ["Standaryzacja", "Kompatybilność", "Fleet management"]
+        },
+        {
+          "value": "10plus",
+          "label": "10+ osób",
+          "implications": ["ONE-KEY tracking", "Duże ilości baterii", "Szkolenia"]
+        }
+      ]
+    }
+  },
+  
+  "deepening_questions": {
+    "hydraulik": [
+      {
+        "id": "h1",
+        "question": "Ile prac robisz w ciasnych szachtach / łazienkach miesięcznie?",
+        "purpose": "Identyfikacja potrzeby kompaktowych narzędzi M12",
+        "type": "scale",
+        "scale": ["Rzadko (1-5)", "Czasami (5-10)", "Często (10-20)", "Głównie (20+)"],
+        "scoring": {
+          "Rzadko (1-5)": {"M18": 2, "M12": 1},
+          "Czasami (5-10)": {"M18": 1, "M12": 2},
+          "Często (10-20)": {"M18": 0, "M12": 3},
+          "Głównie (20+)": {"M18": 0, "M12": 4}
+        }
+      },
+      {
+        "id": "h2",
+        "question": "Co częściej Cię spowalnia podczas pracy?",
+        "purpose": "Balans między mocą a ergonomią",
+        "type": "choice",
+        "options": ["Brak mocy narzędzia", "Zmęczenie ręki/ramienia", "Czas ładowania baterii", "Dostęp do miejsca pracy"],
+        "scoring": {
+          "Brak mocy narzędzia": {"M18": 3, "M12": 0, "HIGH_OUTPUT": 2},
+          "Zmęczenie ręki/ramienia": {"M18": 0, "M12": 4, "ergonomia": 3},
+          "Czas ładowania baterii": {"baterie_extra": 3, "HIGH_OUTPUT": 2},
+          "Dostęp do miejsca pracy": {"M12": 4, "kompakt": 3}
+        }
+      },
+      {
+        "id": "h3",
+        "question": "Czy wiercisz więcej w betonie czy w cegle/pustaku?",
+        "purpose": "Dobór odpowiedniego młota i wierteł",
+        "type": "choice",
+        "options": ["Głównie beton", "Głównie cegła/pustak", "50/50", "Rzadko wiercę"],
+        "scoring": {
+          "Głównie beton": {"M12_CH": 3, "wiertla_sds": 3},
+          "Głównie cegła/pustak": {"M12_CH": 2, "M12_FPD": 2},
+          "50/50": {"M12_CH": 3, "M12_FPD": 2},
+          "Rzadko wiercę": {"M12_FPD": 3}
+        }
+      },
+      {
+        "id": "h4",
+        "question": "Ile godzin dziennie średnio pracujesz z narzędziami?",
+        "purpose": "Liczba i pojemność baterii",
+        "type": "scale",
+        "scale": ["2-4h", "4-6h", "6-8h", "8h+"],
+        "scoring": {
+          "2-4h": {"M12_2_0AH": 2},
+          "4-6h": {"M12_4_0AH": 2},
+          "6-8h": {"M12_4_0AH": 3, "baterie_count": 2},
+          "8h+": {"M12_4_0AH": 3, "baterie_count": 3, "HIGH_OUTPUT": 2}
+        }
+      }
+    ],
+    
+    "warsztat": [
+      {
+        "id": "w1",
+        "question": "Ile kompletów kół obsługujesz dziennie średnio?",
+        "purpose": "Skalowanie ROI - czas vs produktywność",
+        "type": "scale",
+        "scale": ["1-3", "3-6", "6-10", "10+"],
+        "scoring": {
+          "1-3": {"M18_FHIWF12": 2},
+          "3-6": {"M18_FHIWF12": 3, "M18_8_0AH": 2},
+          "6-10": {"M18_FHIWF12": 4, "M18_8_0AH": 3, "baterie_count": 2},
+          "10+": {"M18_FHIWF12": 4, "M18_8_0AH": 4, "baterie_count": 3}
+        }
+      },
+      {
+        "id": "w2",
+        "question": "Czy obecnie używasz pneumatyki w warsztacie?",
+        "purpose": "Migracja z pneumatyki - koszty, komfort",
+        "type": "yes_no",
+        "options": ["Tak, głównie pneumatyka", "Częściowo", "Nie, akumulatorowe", "Nie mam kluczy udarowych"],
+        "scoring": {
+          "Tak, głównie pneumatyka": {"M18_FHIWF12": 4, "M18_8_0AH": 3, "roi_pneumatyka": 4},
+          "Częściowo": {"M18_FHIWF12": 3, "upgrade": 2},
+          "Nie, akumulatorowe": {"upgrade_check": 2},
+          "Nie mam kluczy udarowych": {"M18_FHIWF12": 3, "education": 3}
+        }
+      },
+      {
+        "id": "w3",
+        "question": "Jak często zapieczenie śruby blokuje Ci pracę?",
+        "purpose": "Potrzeba HIGH OUTPUT momentu",
+        "type": "scale",
+        "scale": ["Rzadko", "Kilka razy w tygodniu", "Codziennie", "Kilka razy dziennie"],
+        "scoring": {
+          "Rzadko": {"M18_5_0AH": 2},
+          "Kilka razy w tygodniu": {"M18_8_0AH": 2, "HIGH_OUTPUT": 2},
+          "Codziennie": {"M18_8_0AH": 3, "HIGH_OUTPUT": 3},
+          "Kilka razy dziennie": {"M18_8_0AH": 4, "HIGH_OUTPUT": 4, "nasadki_udarowe": 3}
+        }
+      },
+      {
+        "id": "w4",
+        "question": "Ile osób jednocześnie pracuje w warsztacie z narzędziami elektrycznymi?",
+        "purpose": "Liczba zestawów, baterii, organizacja",
+        "type": "number",
+        "scoring_logic": "Każda osoba = +2 baterie, +1 PACKOUT"
+      }
+    ],
+    
+    "serwis_mobilny": [
+      {
+        "id": "s1",
+        "question": "Ile kosztuje godzina przestoju Twojego typowego klienta?",
+        "purpose": "ROI - koszt awarii vs koszt narzędzia",
+        "type": "scale",
+        "scale": ["100-500 zł", "500-1000 zł", "1000-5000 zł", "5000+ zł"],
+        "scoring": {
+          "100-500 zł": {"roi_low": 1},
+          "500-1000 zł": {"roi_medium": 2, "M18_FMT": 2},
+          "1000-5000 zł": {"roi_high": 3, "M18_FMT": 3, "backup_tools": 2},
+          "5000+ zł": {"roi_critical": 4, "M18_FMT": 4, "full_ecosystem": 4}
+        }
+      },
+      {
+        "id": "s2",
+        "question": "Jak często musisz wracać na bazę po narzędzie, którego zabrakło?",
+        "purpose": "Kompletność zestawu - mobilność",
+        "type": "scale",
+        "scale": ["Praktycznie nigdy", "Rzadko (raz w miesiącu)", "Czasami (raz w tygodniu)", "Często (kilka razy w tygodniu)"],
+        "scoring": {
+          "Praktycznie nigdy": {"current_setup_good": 1},
+          "Rzadko (raz w miesiącu)": {"M18_FMT": 2, "optimization": 1},
+          "Czasami (raz w tygodniu)": {"M18_FMT": 3, "PACKOUT": 3, "planning": 2},
+          "Często (kilka razy w tygodniu)": {"M18_FMT": 4, "PACKOUT": 4, "full_ecosystem": 3}
+        }
+      },
+      {
+        "id": "s3",
+        "question": "Jakie są 3 najczęstsze zadania w Twoich serwisach?",
+        "purpose": "Dopasowanie narzędzi do realnych zadań",
+        "type": "multi_choice",
+        "options": [
+          "Wiercenie otworów",
+          "Odkręcanie / dokręcanie śrub",
+          "Cięcie rur / profili",
+          "Szlifowanie / czyszczenie",
+          "Montaż / demontaż konstrukcji",
+          "Diagnostyka / pomiary",
+          "Spawanie / lutowanie",
+          "Prace hydrauliczne"
+        ],
+        "scoring": {
+          "Wiercenie otworów": {"M18_FPD": 3},
+          "Odkręcanie / dokręcanie śrub": {"M18_FID": 3},
+          "Cięcie rur / profili": {"M18_FMT": 4},
+          "Szlifowanie / czyszczenie": {"M18_FMT": 3},
+          "Montaż / demontaż konstrukcji": {"M18_FID": 3, "M18_FPD": 2},
+          "Diagnostyka / pomiary": {"tools_other": 1},
+          "Spawanie / lutowanie": {"tools_other": 1},
+          "Prace hydrauliczne": {"M12_system": 2}
+        }
+      },
+      {
+        "id": "s4",
+        "question": "Jak uporządkowany jest Twój samochód serwisowy?",
+        "purpose": "Potrzeba PACKOUT organizacji",
+        "type": "choice",
+        "options": [
+          "Wszystko ma swoje miejsce",
+          "W miarę uporządkowane",
+          "Czasami szukam narzędzi",
+          "Chaos, tracę dużo czasu"
+        ],
+        "scoring": {
+          "Wszystko ma swoje miejsce": {"PACKOUT": 1},
+          "W miarę uporządkowane": {"PACKOUT": 2},
+          "Czasami szukam narzędzi": {"PACKOUT": 3, "productivity_gain": 2},
+          "Chaos, tracę dużo czasu": {"PACKOUT": 4, "productivity_gain": 4}
+        }
+      }
+    ]
+  },
+  
+  "objection_questions": {
+    "price": {
+      "trigger": "To jest drogie",
+      "response_question": "Ile zarabiasz na typowym zleceniu?",
+      "purpose": "ROI calculation",
+      "follow_up": "Jeśli zarabiasz [X] zł, a narzędzie pozwoli Ci zrobić [Y] zleceń więcej miesięcznie, zwrot inwestycji to [Z] miesięcy. Czy to akceptowalne?"
+    },
+    
+    "competition": {
+      "trigger": "Mam już Bosch / Makita / DeWalt",
+      "response_question": "Co Cię frustruje w obecnych narzędziach?",
+      "purpose": "Pain point identification",
+      "follow_up": "Możemy zrobić test porównawczy na Twoim zadaniu. Jeśli Milwaukee nie będzie lepsze, nie kupujesz."
+    },
+    
+    "power_doubt": {
+      "trigger": "Czy M12 wystarczy do betonu?",
+      "response_question": "Jakie średnice otworów wiercisz najczęściej?",
+      "purpose": "Technical match",
+      "follow_up": "M12 CH wiercuje do fi10mm tak szybko jak 18V konkurencji, ale waży 40% mniej. Czy chcesz przetestować?"
+    },
+    
+    "battery_life": {
+      "trigger": "Baterie się rozładują",
+      "response_question": "Ile godzin dziennie pracujesz z narzędziem?",
+      "purpose": "Battery sizing",
+      "follow_up": "2 baterie [X] Ah to [Y] godzin pracy. Ładowanie w nocy daje Ci pełną gotowość rano. Czy to wystarczy?"
+    }
+  },
+  
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2025-12-28",
+    "total_question_sets": 3,
+    "status": "MVP - ready for testing"
+  }
+}

@@ -181,15 +181,26 @@ def show_lessons_content():
         # Pobierz company użytkownika
         user_company = user_data.get('company', 'General')
         
-        # FILTRUJ LEKCJE: pokaż tylko te z tagiem użytkownika lub General
+        # Pobierz informacje o firmie (czy exclude_general)
+        from utils.resource_access import get_company_info
+        company_info = get_company_info(user_company)
+        exclude_general = company_info.get('exclude_general', False) if company_info else False
+        
+        # FILTRUJ LEKCJE: używamy tej samej logiki co has_access_to_resource()
         filtered_lessons = {}
         for lesson_id, lesson in lessons.items():
             lesson_tags = get_resource_tags('lessons', lesson_id)
             
-            # Sprawdź czy lekcja ma tag użytkownika lub General
-            if user_company in lesson_tags or 'General' in lesson_tags:
-                # Lekcja jest dla tej grupy - dodaj ją
-                filtered_lessons[lesson_id] = lesson
+            # Jeśli firma wyklucza General:
+            # 1. Lekcja NIE MOŻE mieć tagu "General"
+            # 2. Lekcja MUSI mieć tag użytkownika
+            if exclude_general:
+                if "General" not in lesson_tags and user_company in lesson_tags:
+                    filtered_lessons[lesson_id] = lesson
+            else:
+                # Standardowo: tag użytkownika lub General
+                if user_company in lesson_tags or 'General' in lesson_tags:
+                    filtered_lessons[lesson_id] = lesson
         
         # Teraz podziel PRZEFILTROWANE lekcje na dostępne i niedostępne
         available_lessons = {}

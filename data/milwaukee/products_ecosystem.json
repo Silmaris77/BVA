@@ -1,0 +1,535 @@
+{
+  "products": {
+    "M12_CH": {
+      "sku": "M12_CH",
+      "full_name": "M12 FUEL™ SDS-Plus Rotary Hammer",
+      "category": "Młoty",
+      "platform": "M12",
+      "price_pln": 899,
+      "key_features": [
+        "Kompaktowa konstrukcja - idealny do ciasnych przestrzeni",
+        "2.0 J energii udaru - wystarczający do betonu do fi10mm",
+        "Waga tylko 2.3 kg z baterią - 40% lżejszy niż M18",
+        "REDLINK PLUS™ - ochrona przed przegrzaniem"
+      ],
+      "benefits": [
+        "Praca cały dzień bez zmęczenia rąk",
+        "Dostęp do miejsc niemożliwych dla większych młotów",
+        "Wysoka wydajność przy minimalnej wadze"
+      ],
+      "applications": ["hydraulik_instalacje_wewnetrzne"],
+      "typical_use": "Wiercenie otworów montażowych w betonie/cegle do fi10mm"
+    },
+    
+    "M12_FPD": {
+      "sku": "M12_FPD",
+      "full_name": "M12 FUEL™ Percussion Drill",
+      "category": "Wiertarko-wkrętarki",
+      "platform": "M12",
+      "price_pln": 749,
+      "key_features": [
+        "44 Nm momentu obrotowego",
+        "Kompaktowa długość 175mm",
+        "Funkcja udaru do lekkich materiałów",
+        "POWERSTATE™ brushless motor"
+      ],
+      "benefits": [
+        "Uniwersalne narzędzie do 80% zadań montażowych",
+        "Ergonomia = mniej zmęczenia",
+        "Precyzja przy wkręcaniu"
+      ],
+      "applications": ["hydraulik_instalacje_wewnetrzne"],
+      "typical_use": "Montaż stelaży, wiercenie w drewnie/metalu, wkręcanie"
+    },
+    
+    "M12_FID": {
+      "sku": "M12_FID",
+      "full_name": "M12 FUEL™ Impact Driver",
+      "category": "Zakrętarki udarowe",
+      "platform": "M12",
+      "price_pln": 699,
+      "key_features": [
+        "170 Nm momentu obrotowego",
+        "4-mode DRIVE CONTROL™",
+        "Kompaktowa budowa 132mm",
+        "Hex 1/4\" - szybka wymiana bitów"
+      ],
+      "benefits": [
+        "Szybki montaż kotew i stelaży",
+        "Kontrola momentu = zero uszkodzeń",
+        "Najlżejsza w klasie"
+      ],
+      "applications": ["hydraulik_instalacje_wewnetrzne"],
+      "typical_use": "Wkręcanie dużych ilości śrub (stelaże, konstrukcje)"
+    },
+    
+    "M18_FHIWF12": {
+      "sku": "M18_FHIWF12",
+      "full_name": "M18 FUEL™ High Torque Impact Wrench 1/2\"",
+      "category": "Klucze udarowe",
+      "platform": "M18",
+      "price_pln": 1899,
+      "key_features": [
+        "1100 Nm momentu obrotowego",
+        "1200 Nm momentu zrywającego",
+        "4-mode DRIVE CONTROL™",
+        "ONE-KEY™ connectivity (opcja)"
+      ],
+      "benefits": [
+        "Zastępuje pneumatykę - koniec z wężami",
+        "Najwyższy moment w klasie akumulatorowej",
+        "Odkręca zapieczenia bez środków chemicznych"
+      ],
+      "applications": ["warsztat_serwis_samochodowy"],
+      "typical_use": "Odkręcanie kół, śrub amortyzatorów, zawieszenia"
+    },
+    
+    "M18_FPD": {
+      "sku": "M18_FPD",
+      "full_name": "M18 FUEL™ Percussion Drill",
+      "category": "Wiertarko-wkrętarki",
+      "platform": "M18",
+      "price_pln": 899,
+      "key_features": [
+        "135 Nm momentu obrotowego",
+        "Funkcja udaru",
+        "Metal chuck 13mm",
+        "REDLINK PLUS™"
+      ],
+      "benefits": [
+        "Uniwersalność - drewno, metal, beton",
+        "Moc do profesjonalnych zastosowań",
+        "Długi czas pracy"
+      ],
+      "applications": ["serwis_mobilny_utrzymanie_ruchu"],
+      "typical_use": "Wiercenie w konstrukcjach, montaż, serwis maszyn"
+    },
+    
+    "M18_FID": {
+      "sku": "M18_FID",
+      "full_name": "M18 FUEL™ Impact Driver",
+      "category": "Zakrętarki udarowe",
+      "platform": "M18",
+      "price_pln": 799,
+      "key_features": [
+        "220 Nm momentu obrotowego",
+        "4-mode DRIVE CONTROL™",
+        "Hex 1/4\"",
+        "TRI-LED lighting"
+      ],
+      "benefits": [
+        "Szybki demontaż konstrukcji",
+        "Wysoka wydajność przy kompaktowych wymiarach",
+        "Precyzyjna kontrola momentu"
+      ],
+      "applications": ["warsztat_serwis_samochodowy", "serwis_mobilny_utrzymanie_ruchu"],
+      "typical_use": "Demontaż elementów karoserii, konstrukcji stalowych"
+    },
+    
+    "M18_FMT": {
+      "sku": "M18_FMT",
+      "full_name": "M18 FUEL™ Multi-Tool",
+      "category": "Narzędzia wielofunkcyjne",
+      "platform": "M18",
+      "price_pln": 899,
+      "key_features": [
+        "Oscylacja 10 000 - 20 000 OPM",
+        "REDLINK PLUS™",
+        "Universal fit akcesoria",
+        "Szybka wymiana brzeszczotów bez klucza"
+      ],
+      "benefits": [
+        "Ratuje awarie - cięcie, szlifowanie, skrobanie",
+        "Dostęp do trudnych miejsc",
+        "Uniwersalne akcesoria = zero problemu z dostępnością"
+      ],
+      "applications": ["serwis_mobilny_utrzymanie_ruchu"],
+      "typical_use": "Cięcie rur, skrobanie, szlifowanie - zadania awaryjne"
+    },
+    
+    "M12_FIR": {
+      "sku": "M12_FIR",
+      "full_name": "M12 FUEL™ Ratchet 3/8\"",
+      "category": "Grzechotki",
+      "platform": "M12",
+      "price_pln": 649,
+      "key_features": [
+        "55 Nm momentu obrotowego",
+        "Wąska główka - dostęp do ciasnych miejsc",
+        "Variable speed trigger",
+        "TRI-LED"
+      ],
+      "benefits": [
+        "Praca pod maską - dostęp gdzie nie sięga klucz",
+        "Szybkość vs grzechotka ręczna",
+        "Precyzja w ciasnych przestrzeniach"
+      ],
+      "applications": ["warsztat_serwis_samochodowy"],
+      "typical_use": "Praca pod maską, demontaż w trudnodostępnych miejscach"
+    },
+    
+    "M12_4_0AH": {
+      "sku": "M12_4_0AH",
+      "full_name": "M12™ REDLITHIUM™ HIGH OUTPUT™ 4.0Ah Battery",
+      "category": "Baterie",
+      "platform": "M12",
+      "price_pln": 349,
+      "key_features": [
+        "4.0 Ah pojemności",
+        "HIGH OUTPUT™ technology",
+        "REDLINK™ Intelligence",
+        "Odporność na warunki budowy"
+      ],
+      "benefits": [
+        "Cały dzień pracy na 2 bateriach",
+        "Balans waga/pojemność",
+        "Szybkie ładowanie"
+      ],
+      "applications": ["hydraulik_instalacje_wewnetrzne"],
+      "typical_use": "Podstawowa bateria robocza do M12"
+    },
+    
+    "M12_2_0AH": {
+      "sku": "M12_2_0AH",
+      "full_name": "M12™ REDLITHIUM™ 2.0Ah Battery",
+      "category": "Baterie",
+      "platform": "M12",
+      "price_pln": 199,
+      "key_features": [
+        "2.0 Ah pojemności",
+        "Kompaktowa budowa",
+        "REDLINK™ Intelligence"
+      ],
+      "benefits": [
+        "Najlżejsza - idealna do pracy w ograniczonych przestrzeniach",
+        "Szybkie zadania",
+        "Backup bateria"
+      ],
+      "applications": ["hydraulik_instalacje_wewnetrzne"],
+      "typical_use": "Lekkie zadania, backup"
+    },
+    
+    "M18_5_0AH": {
+      "sku": "M18_5_0AH",
+      "full_name": "M18™ REDLITHIUM™ 5.0Ah Battery",
+      "category": "Baterie",
+      "platform": "M18",
+      "price_pln": 449,
+      "key_features": [
+        "5.0 Ah pojemności",
+        "REDLITHIUM™ technology",
+        "Individual cell monitoring"
+      ],
+      "benefits": [
+        "Uniwersalna pojemność",
+        "Długi czas pracy",
+        "Optymalna waga/pojemność"
+      ],
+      "applications": ["warsztat_serwis_samochodowy", "serwis_mobilny_utrzymanie_ruchu"],
+      "typical_use": "Standardowa bateria robocza M18"
+    },
+    
+    "M18_8_0AH_HIGH_OUTPUT": {
+      "sku": "M18_8_0AH_HIGH_OUTPUT",
+      "full_name": "M18™ REDLITHIUM™ HIGH OUTPUT™ 8.0Ah Battery",
+      "category": "Baterie",
+      "platform": "M18",
+      "price_pln": 699,
+      "key_features": [
+        "8.0 Ah pojemności",
+        "HIGH OUTPUT™ - 50% więcej mocy",
+        "21700 cells technology",
+        "Najdłuższy czas pracy"
+      ],
+      "benefits": [
+        "Maksymalny moment dla kluczy udarowych",
+        "Cały dzień intensywnej pracy",
+        "Brak przestojów"
+      ],
+      "applications": ["warsztat_serwis_samochodowy", "serwis_mobilny_utrzymanie_ruchu"],
+      "typical_use": "Ciężkie zadania, długie sesje pracy"
+    },
+    
+    "WIERTLA_SDS_PLUS_SET": {
+      "sku": "WIERTLA_SDS_PLUS_SET",
+      "full_name": "Milwaukee SDS-Plus Drill Bit Set (5-10mm)",
+      "category": "Akcesoria",
+      "platform": "Universal",
+      "price_pln": 249,
+      "key_features": [
+        "Zestaw 5-10mm",
+        "4-ostrza REBAR GUARD™",
+        "Zwiększona żywotność"
+      ],
+      "benefits": [
+        "Szybsze wiercenie betonu",
+        "Dłuższa żywotność = mniej wymian",
+        "Gotowy zestaw do typowych montaży"
+      ],
+      "applications": ["hydraulik_instalacje_wewnetrzne"],
+      "typical_use": "Wiercenie otworów montażowych"
+    },
+    
+    "BITY_SHOCKWAVE": {
+      "sku": "BITY_SHOCKWAVE",
+      "full_name": "Milwaukee SHOCKWAVE™ Impact Duty Bit Set",
+      "category": "Akcesoria",
+      "platform": "Universal",
+      "price_pln": 199,
+      "key_features": [
+        "Custom Alloy76™",
+        "Shockzone™ - absorbcja momentu",
+        "Laser-etched oznaczenia"
+      ],
+      "benefits": [
+        "10x dłuższa żywotność vs standardowe",
+        "Mniej przerw na wymianę",
+        "Precyzyjne dopasowanie"
+      ],
+      "applications": ["hydraulik_instalacje_wewnetrzne"],
+      "typical_use": "Montaż stelaży, wkręcanie"
+    },
+    
+    "NASADKI_UDAROWE_1_2": {
+      "sku": "NASADKI_UDAROWE_1_2",
+      "full_name": "Milwaukee SHOCKWAVE™ Impact Duty Socket Set 1/2\"",
+      "category": "Akcesoria",
+      "platform": "Universal",
+      "price_pln": 549,
+      "key_features": [
+        "Chromium-molybdenum steel",
+        "Laser-etched rozmiary",
+        "Dual-hole design dla pinów"
+      ],
+      "benefits": [
+        "Nie pękają przy 1100 Nm",
+        "Precyzyjne dopasowanie = zero uszkodzeń śrub",
+        "Długa żywotność"
+      ],
+      "applications": ["warsztat_serwis_samochodowy"],
+      "typical_use": "Praca z kluczami udarowymi M18"
+    },
+    
+    "PRZEDLUZKI_UDAROWE": {
+      "sku": "PRZEDLUZKI_UDAROWE",
+      "full_name": "Milwaukee SHOCKWAVE™ Impact Duty Extension Set",
+      "category": "Akcesoria",
+      "platform": "Universal",
+      "price_pln": 299,
+      "key_features": [
+        "3\", 6\", 10\" długości",
+        "Chromium-molybdenum steel",
+        "Kompatybilne z kluczami udarowymi"
+      ],
+      "benefits": [
+        "Dostęp do trudnych miejsc (np. amortyzatory)",
+        "Wytrzymałość na udary",
+        "Uniwersalność"
+      ],
+      "applications": ["warsztat_serwis_samochodowy"],
+      "typical_use": "Dostęp do śrub amortyzatorów, zawieszenia"
+    },
+    
+    "BRZESZCZOTY_MULTITOOL": {
+      "sku": "BRZESZCZOTY_MULTITOOL",
+      "full_name": "Milwaukee Multi-Tool Blade Set (Wood/Metal/Universal)",
+      "category": "Akcesoria",
+      "platform": "Universal",
+      "price_pln": 199,
+      "key_features": [
+        "Różne materiały (drewno, metal, plastik)",
+        "Universal fit",
+        "Długa żywotność"
+      ],
+      "benefits": [
+        "Gotowość na każdą awarię",
+        "Szybka wymiana bez narzędzi",
+        "Uniwersalność"
+      ],
+      "applications": ["serwis_mobilny_utrzymanie_ruchu"],
+      "typical_use": "Cięcie rur, profili, demontaż"
+    },
+    
+    "WIERTLA_METAL_SHOCKWAVE": {
+      "sku": "WIERTLA_METAL_SHOCKWAVE",
+      "full_name": "Milwaukee SHOCKWAVE™ RED HELIX™ Metal Drill Bit Set",
+      "category": "Akcesoria",
+      "platform": "Universal",
+      "price_pln": 349,
+      "key_features": [
+        "RED HELIX™ design - szybsze wiercenie",
+        "135° split point - precyzyjny start",
+        "Kobaltowa stal"
+      ],
+      "benefits": [
+        "2x szybsze wiercenie stali",
+        "Długa żywotność",
+        "Precyzja"
+      ],
+      "applications": ["serwis_mobilny_utrzymanie_ruchu"],
+      "typical_use": "Wiercenie w konstrukcjach stalowych, maszynach"
+    },
+    
+    "PACKOUT_SKRZYNKA": {
+      "sku": "PACKOUT_SKRZYNKA",
+      "full_name": "Milwaukee PACKOUT™ Tool Box",
+      "category": "Organizacja",
+      "platform": "PACKOUT",
+      "price_pln": 349,
+      "key_features": [
+        "Modular system",
+        "IP65 rating - wodoodporność",
+        "Metal zamki reinforced",
+        "Stackable"
+      ],
+      "benefits": [
+        "Wszystko w jednym miejscu",
+        "Ochrona narzędzi",
+        "Szybki transport między stanowiskami"
+      ],
+      "applications": ["warsztat_serwis_samochodowy"],
+      "typical_use": "Przechowywanie i transport narzędzi w warsztacie"
+    },
+    
+    "PACKOUT_ORGANIZER_NASADKI": {
+      "sku": "PACKOUT_ORGANIZER_NASADKI",
+      "full_name": "Milwaukee PACKOUT™ Socket Organizer",
+      "category": "Organizacja",
+      "platform": "PACKOUT",
+      "price_pln": 199,
+      "key_features": [
+        "Custom foam insert",
+        "Przejrzysta organizacja",
+        "PACKOUT compatible"
+      ],
+      "benefits": [
+        "Zero czasu na szukanie nasadki",
+        "Widoczność braków",
+        "Profesjonalny wizerunek"
+      ],
+      "applications": ["warsztat_serwis_samochodowy"],
+      "typical_use": "Organizacja nasadek i kluczy"
+    },
+    
+    "PACKOUT_TORBA": {
+      "sku": "PACKOUT_TORBA",
+      "full_name": "Milwaukee PACKOUT™ Tech Bag",
+      "category": "Organizacja",
+      "platform": "PACKOUT",
+      "price_pln": 299,
+      "key_features": [
+        "35 kieszeni organizacyjnych",
+        "Wytrzymały materiał",
+        "PACKOUT stackable",
+        "Wzmocnione dno"
+      ],
+      "benefits": [
+        "Mobilność - szybkie wejście/wyjście",
+        "Wszystko pod ręką",
+        "Profesjonalny wizerunek"
+      ],
+      "applications": ["serwis_mobilny_utrzymanie_ruchu"],
+      "typical_use": "Transport narzędzi do serwisów mobilnych"
+    },
+    
+    "PACKOUT_ORGANIZER_DROBNICOWY": {
+      "sku": "PACKOUT_ORGANIZER_DROBNICOWY",
+      "full_name": "Milwaukee PACKOUT™ Compact Organizer",
+      "category": "Organizacja",
+      "platform": "PACKOUT",
+      "price_pln": 149,
+      "key_features": [
+        "10 komór regulowanych",
+        "IP65 rating",
+        "Przejrzysta pokrywa"
+      ],
+      "benefits": [
+        "Organizacja śrub, wkrętów, złączek",
+        "Widoczność zawartości",
+        "Ochrona przed wilgocią"
+      ],
+      "applications": ["serwis_mobilny_utrzymanie_ruchu"],
+      "typical_use": "Przechowywanie drobnych elementów montażowych"
+    },
+    
+    "OKULARY_MILWAUKEE": {
+      "sku": "OKULARY_MILWAUKEE",
+      "full_name": "Milwaukee Safety Glasses",
+      "category": "PPE",
+      "platform": "Universal",
+      "price_pln": 79,
+      "key_features": [
+        "ANSI Z87.1+ certified",
+        "Anti-scratch coating",
+        "Anti-fog"
+      ],
+      "benefits": [
+        "Ochrona oczu przy wierceniu",
+        "Profesjonalny wizerunek",
+        "Komfort pracy"
+      ],
+      "applications": ["hydraulik_instalacje_wewnetrzne"],
+      "typical_use": "Ochrona przy wierceniu w betonie"
+    },
+    
+    "REKAWICE_MILWAUKEE": {
+      "sku": "REKAWICE_MILWAUKEE",
+      "full_name": "Milwaukee Work Gloves - Demolition",
+      "category": "PPE",
+      "platform": "Universal",
+      "price_pln": 99,
+      "key_features": [
+        "Reinforced palms",
+        "Touchscreen compatible",
+        "Breathable material"
+      ],
+      "benefits": [
+        "Ochrona dłoni",
+        "Lepszy chwyt w wilgotnych warunkach",
+        "Możliwość obsługi telefonu"
+      ],
+      "applications": ["hydraulik_instalacje_wewnetrzne"],
+      "typical_use": "Ochrona dłoni przy montażu"
+    }
+  },
+  
+  "bundles": {
+    "hydraulik_starter_pack": {
+      "name": "Hydraulik - Zestaw Startowy M12",
+      "description": "Kompletny zestaw do instalacji sanitarnych",
+      "products": ["M12_CH", "M12_FPD", "M12_FID", "M12_4_0AH", "M12_4_0AH", "M12_2_0AH", "WIERTLA_SDS_PLUS_SET", "BITY_SHOCKWAVE"],
+      "total_price_pln": 4200,
+      "bundle_price_pln": 3799,
+      "savings_pln": 401,
+      "target_application": "hydraulik_instalacje_wewnetrzne"
+    },
+    
+    "warsztat_pneumatyka_replacement": {
+      "name": "Warsztat - Zamiennik Pneumatyki",
+      "description": "Pełne zastąpienie pneumatyki w warsztacie",
+      "products": ["M18_FHIWF12", "M18_FID", "M12_FIR", "M18_5_0AH", "M18_5_0AH", "M18_8_0AH_HIGH_OUTPUT", "NASADKI_UDAROWE_1_2", "PACKOUT_SKRZYNKA"],
+      "total_price_pln": 6100,
+      "bundle_price_pln": 5499,
+      "savings_pln": 601,
+      "target_application": "warsztat_serwis_samochodowy"
+    },
+    
+    "serwis_mobilny_pro": {
+      "name": "Serwis Mobilny - Zestaw PRO",
+      "description": "Kompletna mobilna stacja serwisowa",
+      "products": ["M18_FPD", "M18_FID", "M18_FMT", "M18_5_0AH", "M18_5_0AH", "M18_8_0AH_HIGH_OUTPUT", "BRZESZCZOTY_MULTITOOL", "WIERTLA_METAL_SHOCKWAVE", "PACKOUT_TORBA", "PACKOUT_ORGANIZER_DROBNICOWY"],
+      "total_price_pln": 6500,
+      "bundle_price_pln": 5899,
+      "savings_pln": 601,
+      "target_application": "serwis_mobilny_utrzymanie_ruchu"
+    }
+  },
+  
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2025-12-28",
+    "total_products": 26,
+    "platforms": ["M12", "M18", "PACKOUT", "Universal"],
+    "status": "MVP - ready for testing"
+  }
+}

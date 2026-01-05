@@ -1043,3 +1043,33 @@
 [2025-12-18 15:43:29] DEFAULT_EVALUATION_MODE = ai
 [2025-12-18 15:43:29] Plik config/business_games_active_mode.json istnieje
 [2025-12-18 15:43:29] Z pliku odczytano tryb: 'ai'
+[2025-12-27 19:58:23] get_active_evaluation_mode() wywołane
+[2025-12-27 19:58:23] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-12-27 19:58:23] DEFAULT_EVALUATION_MODE = ai
+[2025-12-27 19:58:23] Plik config/business_games_active_mode.json istnieje
+[2025-12-27 19:58:23] Z pliku odczytano tryb: 'ai'
+[2025-12-27 19:58:48] get_active_evaluation_mode() wywołane
+[2025-12-27 19:58:48] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-12-27 19:58:48] DEFAULT_EVALUATION_MODE = ai
+[2025-12-27 19:58:48] Plik config/business_games_active_mode.json istnieje
+[2025-12-27 19:58:48] Z pliku odczytano tryb: 'ai'
+[2025-12-27 19:58:57] get_active_evaluation_mode() wywołane
+[2025-12-27 19:58:57] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-12-27 19:58:57] DEFAULT_EVALUATION_MODE = ai
+[2025-12-27 19:58:57] Plik config/business_games_active_mode.json istnieje
+[2025-12-27 19:58:57] Z pliku odczytano tryb: 'ai'
+[2025-12-27 19:59:56] get_active_evaluation_mode() wywołane
+[2025-12-27 19:59:56] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-12-27 19:59:56] DEFAULT_EVALUATION_MODE = ai
+[2025-12-27 19:59:56] Plik config/business_games_active_mode.json istnieje
+[2025-12-27 19:59:56] Z pliku odczytano tryb: 'ai'
+[2025-12-27 20:00:01] get_active_evaluation_mode() wywołane
+[2025-12-27 20:00:01] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-12-27 20:00:01] DEFAULT_EVALUATION_MODE = ai
+[2025-12-27 20:00:01] Plik config/business_games_active_mode.json istnieje
+[2025-12-27 20:00:01] Z pliku odczytano tryb: 'ai'
+[2025-12-27 20:00:09] get_active_evaluation_mode() wywołane
+[2025-12-27 20:00:09] SETTINGS_FILE = config/business_games_active_mode.json
+[2025-12-27 20:00:09] DEFAULT_EVALUATION_MODE = ai
+[2025-12-27 20:00:09] Plik config/business_games_active_mode.json istnieje
+[2025-12-27 20:00:09] Z pliku odczytano tryb: 'ai'

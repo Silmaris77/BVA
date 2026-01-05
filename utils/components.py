@@ -291,6 +291,7 @@ def navigation_menu():
     # Filtruj menu według uprawnień użytkownika
     if st.session_state.get('logged_in', False):
         from utils.permissions import has_access_to_tool
+        from utils.resource_access import has_access_to_resource
         from data.repositories.user_repository import UserRepository
         from database.connection import session_scope
         
@@ -307,6 +308,7 @@ def navigation_menu():
                     accessible_menu = []
                     for option in menu_options:
                         tool_id = option["id"]
+                        
                         # Mapowanie: "lesson" w menu -> "learn" w permissions
                         permission_tool_id = "learn" if tool_id == "lesson" else tool_id
                         
@@ -472,6 +474,11 @@ def navigation_menu():
                 st.session_state['selected_industry'] = None
                 if 'initializing_game' in st.session_state:
                     st.session_state['initializing_game'] = False
+            
+            # Jeśli klikamy na "Narzędzia", możemy przekierować do konkretnego taba
+            if option['id'] == 'tools' and st.session_state.get('tools_tab'):
+                # Zachowaj ustawiony tab (np. 'milwaukee' z dashboardu)
+                pass
             
             # Ustaw flagę zmiany strony dla scroll reset
             st.session_state['page_changed'] = True

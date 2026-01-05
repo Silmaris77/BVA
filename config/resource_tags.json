@@ -9,31 +9,36 @@
       "code": "General",
       "display_name": "Ogólne",
       "description": "Zasoby dostępne dla wszystkich użytkowników",
-      "color": "#6c757d"
+      "color": "#6c757d",
+      "exclude_general": false
     },
     {
       "code": "Warta",
       "display_name": "Warta",
       "description": "Zasoby dla grupy Warta (ubezpieczenia)",
-      "color": "#dc3545"
+      "color": "#dc3545",
+      "exclude_general": false
     },
     {
       "code": "Heinz",
       "display_name": "Heinz",
       "description": "Zasoby dla grupy Heinz (FMCG)",
-      "color": "#e74c3c"
+      "color": "#e74c3c",
+      "exclude_general": false
     },
     {
       "code": "Milwaukee",
       "display_name": "Milwaukee",
-      "description": "Zasoby dla grupy Milwaukee (B2B/narzędzia)",
-      "color": "#f39c12"
+      "description": "Zasoby dla grupy Milwaukee (B2B/narzędzia) - TYLKO Milwaukee",
+      "color": "#f39c12",
+      "exclude_general": true
     },
     {
       "code": "Degen",
       "display_name": "Degen",
       "description": "Zasoby dla grupy Degen (trading/crypto)",
-      "color": "#9b59b6"
+      "color": "#9b59b6",
+      "exclude_general": false
     }
   ],
   "lessons": {
@@ -43,58 +48,47 @@
     ],
     "1. Mózg emocjonalny_copy": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "2. Chemia mózgu": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "3. Model SCARF": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "4. Model SEEDS": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "5. Stres i odporność psychiczna": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "6. Podejmowanie decyzji i ryzyko": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "7. Pamięć i uwaga": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "8. Kondycja mózgu": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "9. Kształtowanie nawyków": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "10. Wyzwania menedżerskie": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "11. Od słów do zaufania - Conversational Intelligence": [
       "Warta",
-      "Heinz",
-      "Milwaukee"
+      "Heinz"
     ],
     "MILWAUKEE_Warunki_Gwarancji": [
       "Milwaukee"
@@ -114,6 +108,36 @@
     ],
     "MILWAUKEE_JSS_Rules_of_Engagement": [
       "Milwaukee"
+    ],
+    "MILWAUKEE_JSS_Rules_of_Engagement_V2": [
+      "Milwaukee"
+    ],
+    "11. Od słów do zaufania - Conversational Intelligence V2": [
+      "General",
+      "Warta",
+      "Heinz",
+      "Milwaukee"
+    ],
+    "DEMO_Lesson_V2_Full_Example": [
+      "General"
+    ],
+    "1. Mózg emocjonalny copy": [
+      "General"
+    ],
+    "11. Od słów do zaufania - Conversational Intelligence_NEW": [
+      "General"
+    ],
+    "MILWAUKEE_Application_First_Canvas_original": [
+      "Milwaukee"
+    ],
+    "MILWAUKEE_Application_First_Canvas_v1_backup": [
+      "Milwaukee"
+    ],
+    "lesson_template": [
+      "General"
+    ],
+    "lesson_template_v2": [
+      "General"
     ]
   },
   "business_games_scenarios": {
@@ -217,6 +241,11 @@
     ],
     "financial_psychology": [
       "Degen"
+    ]
+  },
+  "tools_menu": {
+    "milwaukee_app_engine": [
+      "Milwaukee"
     ]
   }
 }
