@@ -1058,8 +1058,55 @@ def show_admin_dashboard():
             # Admin status
             is_admin = st.checkbox("Administrator", value=selected_user in ["admin", "zenmaster"])
             
-            # Zapisz zmiany
-            if zen_button("Zapisz zmiany"):
+            # === ZMIANA HASŁA ===
+            st.markdown("---")
+            st.subheader("🔐 Zmiana hasła użytkownika")
+            
+            with st.expander("Zmień hasło", expanded=False):
+                new_password = st.text_input(
+                    "Nowe hasło:",
+                    type="password",
+                    key="admin_new_password",
+                    help="Wprowadź nowe hasło dla użytkownika (min. 4 znaki)"
+                )
+                confirm_password = st.text_input(
+                    "Potwierdź hasło:",
+                    type="password",
+                    key="admin_confirm_password"
+                )
+                
+                if zen_button("🔐 Zmień hasło", key="change_password_btn"):
+                    if not new_password or len(new_password) < 4:
+                        st.error("❌ Hasło musi mieć co najmniej 4 znaki!")
+                    elif new_password != confirm_password:
+                        st.error("❌ Hasła nie są identyczne!")
+                    else:
+                        try:
+                            import bcrypt
+                            from database.connection import session_scope
+                            from database.models import User
+                            
+                            # Hashuj nowe hasło
+                            password_hash = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+                            
+                            # Zapisz w bazie SQL
+                            with session_scope() as session:
+                                user_obj = session.query(User).filter_by(username=selected_user).first()
+                                if user_obj:
+                                    user_obj.password_hash = password_hash
+                                    session.commit()
+                                    st.success(f"✅ Hasło użytkownika {selected_user} zostało zmienione!")
+                                    time.sleep(1)
+                                    st.rerun()
+                                else:
+                                    st.error("❌ Nie znaleziono użytkownika w bazie SQL!")
+                        except Exception as e:
+                            st.error(f"❌ Błąd podczas zmiany hasła: {e}")
+            
+            st.markdown("---")
+            
+            # Zapisz zmiany XP/Level
+            if zen_button("Zapisz zmiany XP/Level"):
                 users_data[selected_user]['xp'] = new_xp
                 users_data[selected_user]['level'] = new_level
                 

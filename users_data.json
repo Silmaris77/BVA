@@ -1183,6 +1183,69 @@
         },
         "initial_money": 0
       }
+    },
+    "completed_lessons": [
+      "MILWAUKEE_Application_First_Canvas"
+    ],
+    "layout_preference": "standard",
+    "reports": [
+      {
+        "summary_headline": "Małe kroki prowadzą do wielkich sukcesów!",
+        "engagement_score": 2,
+        "engagement_trend": "spadający",
+        "strengths": [
+          "Wysoka średnia wyników quizów: 78.3%",
+          "Wysoki wskaźnik zdawalności quizów: 83.3%",
+          "Rosnący trend wyników w quizach w ciągu ostatnich 30 dni"
+        ],
+        "concerns": [
+          "Brak logowań w ciągu ostatnich 7 dni (0/7)",
+          "Brak rozpoczętych lub ukończonych lekcji w ciągu ostatnich 7 dni",
+          "Jeden quiz z wynikiem poniżej 70%"
+        ],
+        "insights": [
+          "Pomimo braku aktywności w ostatnich dniach, wyniki quizów wskazują na dobre zrozumienie materiału.",
+          "Niska aktywność może wskazywać na brak czasu lub motywacji. Warto zacząć od małych kroków."
+        ],
+        "recommendations": [
+          {
+            "priority": "wysoki",
+            "action": "Zaloguj się do platformy i poświęć 15 minut na powtórkę materiału z quizu, w którym uzyskałeś/aś wynik poniżej 70%.",
+            "why": "Utrwalisz wiedzę i zwiększysz pewność siebie.",
+            "estimated_time": "15 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Wybierz jedną lekcję 'W trakcie' i postaraj się ją ukończyć w tym tygodniu.",
+            "why": "Ukończenie zaległych lekcji pomoże Ci poczuć satysfakcję i odzyskać rytm.",
+            "estimated_time": "30-60 minut"
+          },
+          {
+            "priority": "średni",
+            "action": "Wykorzystaj sesję ćwiczeń AI, aby sprawdzić swoją wiedzę w praktyce.",
+            "why": "Ćwiczenia AI pomogą Ci zidentyfikować obszary, w których potrzebujesz dodatkowej powtórki.",
+            "estimated_time": "20 minut"
+          },
+          {
+            "priority": "niski",
+            "action": "Zaplanuj regularne sesje nauki, nawet krótkie, aby utrzymać ciągłość i uniknąć nagromadzenia zaległości.",
+            "why": "Regularność jest kluczem do sukcesu w nauce.",
+            "estimated_time": "5 minut (na zaplanowanie)"
+          }
+        ],
+        "motivational_message": "Pamiętaj, że każdy krok, nawet najmniejszy, przybliża Cię do celu. Twoje wyniki quizów pokazują, że masz potencjał – wykorzystaj go! Skup się na małych, regularnych działaniach i obserwuj, jak rośnie Twoja pewność siebie i wiedza.",
+        "generated_at": "2026-01-05T21:46:48.486066",
+        "period_start": "2025-12-29",
+        "period_end": "2026-01-05",
+        "report_type": "weekly",
+        "username": "mil2"
+      }
+    ]
+  },
+  "cicha": {
+    "inspirations": {
+      "read": [],
+      "favorites": []
     }
   }
 }

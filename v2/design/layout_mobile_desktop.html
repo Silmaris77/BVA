@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BVA v2 - Mobile + Desktop Glassmorphism</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow-x: hidden;
+            color: white;
+            background: #0f0c29;
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(188, 19, 254, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.2) 0%, transparent 25%);
+        }
+
+        /* Device Switcher */
+        .device-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            gap: 8px;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .device-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .device-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .device-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Viewport Container */
+        .viewport-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.5s ease;
+        }
+
+        .device-frame {
+            width: 100%;
+            height: 100vh;
+            background: #0f0c29;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s ease;
+            border-radius: 0;
+        }
+
+        /* Mobile Frame */
+        .device-frame.mobile {
+            max-width: 375px;
+            height: 812px;
+            border-radius: 40px;
+            border: 12px solid #1a1a2e;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .device-frame.mobile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #1a1a2e;
+            border-radius: 0 0 20px 20px;
+            z-index: 10001;
+        }
+
+        /* Background blobs */
+        .bg-gradient-blobs {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .blob-purple {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50%;
+            height: 50%;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            filter: blur(100px);
+        }
+
+        .blob-blue {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.2);
+            filter: blur(100px);
+        }
+
+        /* App Wrapper */
+        .app-wrapper {
+            display: flex;
+            min-height: 100%;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        /* Desktop Sidebar */
+        .sidebar-desktop {
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: rgba(15, 12, 41, 0.8);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Mobile: Hide desktop sidebar */
+        .device-frame.mobile .sidebar-desktop {
+            display: none;
+        }
+
+        /* Logo */
+        .logo-area {
+            padding: 32px 32px 16px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 1.3;
+            color: white;
+        }
+
+        .logo-text .accent {
+            color: #3b82f6;
+        }
+
+        /* Navigation */
+        nav {
+            flex: 1;
+            padding: 0 16px;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            color: #9ca3af;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 24px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+        }
+
+        .nav-item .icon {
+            font-size: 20px;
+        }
+
+        .nav-item.active .icon {
+            color: #3b82f6;
+        }
+
+        /* Bottom Actions (Desktop) */
+        .bottom-actions {
+            padding: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .bottom-actions .nav-item {
+            margin: 4px 0;
+        }
+
+        /* Mobile Bottom Navigation */
+        .mobile-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: none;
+            width: calc(100% - 40px);
+            max-width: 400px;
+        }
+
+        .device-frame.mobile .mobile-nav {
+            display: block;
+        }
+
+        .mobile-nav-container {
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 12px 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            color: #6b7280;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s;
+            position: relative;
+            min-width: 60px;
+        }
+
+        .mobile-nav-item .icon {
+            font-size: 22px;
+            transition: all 0.3s;
+        }
+
+        .mobile-nav-item .label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mobile-nav-item.active {
+            color: white;
+        }
+
+        .mobile-nav-item.active .icon {
+            color: #3b82f6;
+            transform: scale(1.2);
+        }
+
+        .mobile-nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            position: relative;
+            z-index: 10;
+            padding: 20px 16px 120px 16px;
+            overflow-y: auto;
+        }
+
+        /* Desktop: Add margin for sidebar */
+        .device-frame:not(.mobile) .main-content {
+            margin-left: 280px;
+            padding: 32px 64px;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .header-title h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .device-frame:not(.mobile) .header-title h1 {
+            font-size: 48px;
+        }
+
+        .username {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            color: #9ca3af;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .device-frame:not(.mobile) .header-subtitle {
+            font-size: 18px;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .device-frame:not(.mobile) .glass-card {
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .device-frame:not(.mobile) .stats-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .device-frame:not(.mobile) .stat-card {
+            padding: 24px;
+        }
+
+        .stat-card:active {
+            transform: scale(0.95);
+        }
+
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        .device-frame:not(.mobile) .stat-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .device-frame:not(.mobile) .stat-value {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #9ca3af;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .device-frame:not(.mobile) .stat-label {
+            font-size: 14px;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .device-frame:not(.mobile) .section-title {
+            font-size: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* Lessons Grid */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .device-frame:not(.mobile) .lessons-grid {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .lesson-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-frame:not(.mobile) .lesson-card {
+            padding: 24px;
+        }
+
+        .lesson-card:active {
+            transform: scale(0.98);
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .lesson-card:active::before {
+            opacity: 1;
+        }
+
+        .lesson-category {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            color: #93c5fd;
+            margin-bottom: 12px;
+        }
+
+        .lesson-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .device-frame:not(.mobile) .lesson-title {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .lesson-description {
+            font-size: 13px;
+            color: #9ca3af;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .device-frame:not(.mobile) .lesson-description {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .lesson-xp {
+            font-size: 12px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .lesson-duration {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        /* Activity List */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .activity-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 2px;
+            font-size: 13px;
+        }
+
+        .activity-meta {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .activity-time {
+            color: #6b7280;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .progress-label {
+            color: #9ca3af;
+        }
+
+        .progress-value {
+            color: white;
+            font-weight: 700;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            width: 62.5%;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Device Switcher -->
+    <div class="device-switcher">
+        <button class="device-btn active" onclick="switchDevice('desktop')">🖥️ Desktop</button>
+        <button class="device-btn" onclick="switchDevice('mobile')">📱 Mobile</button>
+    </div>
+
+    <!-- Viewport Container -->
+    <div class="viewport-container">
+        <div class="device-frame" id="device-frame">
+            <!-- Background Blobs -->
+            <div class="bg-gradient-blobs">
+                <div class="blob-purple"></div>
+                <div class="blob-blue"></div>
+            </div>
+
+            <!-- App Wrapper -->
+            <div class="app-wrapper">
+                <!-- Desktop Sidebar -->
+                <aside class="sidebar-desktop">
+                    <!-- Logo -->
+                    <div class="logo-area">
+                        <a href="#" class="logo-link">
+                            <div class="logo-icon">🧠</div>
+                            <div class="logo-text">
+                                Brain Venture<br>
+                                <span class="accent">Academy</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Navigation -->
+                    <nav>
+                        <a href="#" class="nav-item active">
+                            <span class="icon">📊</span>
+                            Pulpit
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="icon">📚</span>
+                            Lekcje
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="icon">🔧</span>
+                            Narzędzia
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="icon">🎮</span>
+                            Symulacje
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="icon">👤</span>
+                            Profil
+                        </a>
+                    </nav>
+
+                    <!-- Bottom Actions -->
+                    <div class="bottom-actions">
+                        <a href="#" class="nav-item">
+                            <span class="icon">⚙️</span>
+                            Ustawienia
+                        </a>
+                    </div>
+                </aside>
+
+                <!-- Mobile Bottom Navigation -->
+                <div class="mobile-nav">
+                    <div class="mobile-nav-container">
+                        <a href="#" class="mobile-nav-item active">
+                            <span class="icon">📊</span>
+                            <span class="label">Pulpit</span>
+                        </a>
+                        <a href="#" class="mobile-nav-item">
+                            <span class="icon">📚</span>
+                            <span class="label">Lekcje</span>
+                        </a>
+                        <a href="#" class="mobile-nav-item">
+                            <span class="icon">🔧</span>
+                            <span class="label">Narzędzia</span>
+                        </a>
+                        <a href="#" class="mobile-nav-item">
+                            <span class="icon">👤</span>
+                            <span class="label">Profil</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <main class="main-content">
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="header-title">
+                            <h1>
+                                Witaj, <span class="username">Neo</span>
+                            </h1>
+                            <p class="header-subtitle">Twoje centrum dowodzenia w Brain Venture Academy</p>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-value">1,250</div>
+                            <div class="stat-label">XP</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🏆</div>
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Poziom</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📚</div>
+                            <div class="stat-value">12/24</div>
+                            <div class="stat-label">Lekcje</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💎</div>
+                            <div class="stat-value">500</div>
+                            <div class="stat-label">Coins</div>
+                        </div>
+                    </div>
+
+                    <!-- Lessons Section -->
+                    <div class="glass-card">
+                        <h2 class="section-title">Dostępne Lekcje</h2>
+                        <div class="lessons-grid">
+                            <div class="lesson-card">
+                                <div class="lesson-category">Psychologia</div>
+                                <h3 class="lesson-title">Trading Psychology</h3>
+                                <p class="lesson-description">
+                                    Poznaj podstawy psychologii tradingu i zarządzania emocjami.
+                                </p>
+                                <div class="lesson-footer">
+                                    <span class="lesson-xp">+100 XP</span>
+                                    <span class="lesson-duration">⏱️ 15 min</span>
+                                </div>
+                            </div>
+
+                            <div class="lesson-card">
+                                <div class="lesson-category">Strategia</div>
+                                <h3 class="lesson-title">Błękitny Ocean</h3>
+                                <p class="lesson-description">
+                                    Jak tworzyć nowe rynki zamiast konkurować.
+                                </p>
+                                <div class="lesson-footer">
+                                    <span class="lesson-xp">+150 XP</span>
+                                    <span class="lesson-duration">⏱️ 20 min</span>
+                                </div>
+                            </div>
+
+                            <div class="lesson-card">
+                                <div class="lesson-category">Sales</div>
+                                <h3 class="lesson-title">Techniki Sprzedaży</h3>
+                                <p class="lesson-description">
+                                    Buduj relacje i efektywnie prezentuj ofertę.
+                                </p>
+                                <div class="lesson-footer">
+                                    <span class="lesson-xp">+120 XP</span>
+                                    <span class="lesson-duration">⏱️ 18 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="glass-card">
+                        <h2 class="section-title">Ostatnie Aktywności</h2>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon">📚</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Ukończono lekcję</div>
+                                    <div class="activity-meta">Trading Psychology +100 XP</div>
+                                </div>
+                                <div class="activity-time">2 godz.</div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">🏆</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Nowy poziom!</div>
+                                    <div class="activity-meta">Awansowano na poziom 5</div>
+                                </div>
+                                <div class="activity-time">1 dzień</div>
+                            </div>
+
+                            <div class="activity-item">
+                                <div class="activity-icon">🎮</div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Rozpoczęto symulację</div>
+                                    <div class="activity-meta">FMCG Business Game</div>
+                                </div>
+                                <div class="activity-time">2 dni</div>
+                            </div>
+                        </div>
+
+                        <!-- Progress to Next Level -->
+                        <div class="progress-section">
+                            <div class="progress-header">
+                                <span class="progress-label">Postęp do poziomu 6</span>
+                                <span class="progress-value">1,250 / 2,000 XP</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchDevice(device) {
+            const frame = document.getElementById('device-frame');
+            const buttons = document.querySelectorAll('.device-btn');
+            
+            // Update frame
+            if (device === 'mobile') {
+                frame.classList.add('mobile');
+            } else {
+                frame.classList.remove('mobile');
+            }
+            
+            // Update button states
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Mobile nav interaction
+        const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+        mobileNavItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                mobileNavItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -56,6 +56,13 @@ class ThemeManager:
             'description': 'Heavy Duty Professional - czerwono-czarno-biały branding Milwaukee',
             'icon': '🔴',
             'colors': ['#C8102E', '#1A1A1A', '#FFFFFF']
+        },
+        'glassmorphism': {
+            'name': 'Futurystyczny Neon (Glass)',
+            'css_file': 'glassmorphism.css',
+            'description': 'Nowoczesny styl Glassmorphism z efektami neonowymi',
+            'icon': '🔮',
+            'colors': ['#667eea', '#0f1219', '#ffffff']
         }
     }
     

@@ -59,6 +59,9 @@ def main():
     # Initialize session state
     init_session_state()
     
+    # Wyczyść cache CSS (wymusza przeładowanie plików)
+    ThemeManager.clear_cache()
+    
     # Aplikuj wszystkie style (base + user theme)
     ThemeManager.apply_all()
     

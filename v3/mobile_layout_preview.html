@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BVA - Tactical OS Mobile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-deep: #0f0c29;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --neon-purple: #b000ff;
+            --neon-blue: #00d4ff;
+            --neon-gold: #ffd700;
+            --neon-red: #ff0055;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            opacity: 0.5;
+            animation: floatOrb 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .orb-1 {
+            width: 350px;
+            height: 350px;
+            background: var(--neon-purple);
+            top: -100px;
+            left: -100px;
+            opacity: 0.25;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--neon-blue);
+            bottom: -80px;
+            right: -80px;
+            opacity: 0.25;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: var(--neon-red);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.12;
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(15, 12, 41, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 1.2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .mobile-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #64748b;
+            border: 2px solid var(--neon-purple);
+        }
+
+        /* Main Content */
+        .main {
+            padding: 1.5rem;
+            padding-top: 5.5rem;
+            padding-bottom: 6rem;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .page-title h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-title p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title span {
+            color: var(--neon-blue);
+        }
+
+        /* Alert Badge */
+        .alert-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 0, 85, 0.2);
+            border: 1px solid var(--neon-red);
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            color: #ff8fa3;
+            animation: pulseAlert 2s infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes pulseAlert {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 0, 85, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            padding: 1.2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1.2rem;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+            pointer-events: none;
+        }
+
+        .glass-card:active::before {
+            left: 150%;
+            transition: 0.7s;
+        }
+
+        /* Stat Card */
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1.5rem 1.2rem;
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-subvalue {
+            font-size: 0.7rem;
+        }
+
+        /* Section Title */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        /* Mission Item */
+        .mission-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            transition: 0.2s;
+        }
+
+        .mission-item:active {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 15px rgba(176, 0, 255, 0.15);
+        }
+
+        .mission-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .mission-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2a2a4a, #1a1a2e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-blue);
+            flex-shrink: 0;
+        }
+
+        .mission-info {
+            flex: 1;
+        }
+
+        .mission-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .mission-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .mission-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+
+        .mission-rewards {
+            display: flex;
+            gap: 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .reward-xp {
+            color: var(--neon-gold);
+            font-weight: 700;
+        }
+
+        .reward-vc {
+            color: var(--neon-blue);
+        }
+
+        .btn-glow {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .btn-glow:active {
+            background: var(--neon-purple);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 15px var(--neon-purple);
+        }
+
+        .btn-danger {
+            background: var(--neon-red);
+            border-color: var(--neon-red);
+        }
+
+        .mission-item.crisis {
+            border-color: var(--neon-red);
+            background: rgba(255, 0, 85, 0.05);
+        }
+
+        .mission-item.crisis .mission-icon {
+            color: var(--neon-red);
+        }
+
+        .mission-item.crisis .mission-title {
+            color: #ff8fa3;
+        }
+
+        .mission-item.crisis .mission-subtitle {
+            color: #ff8fa3;
+            opacity: 0.8;
+        }
+
+        /* Leaderboard */
+        .leaderboard-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .leaderboard-row:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .rank-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .rank-1 {
+            background: var(--neon-gold);
+            color: #000;
+            box-shadow: 0 0 10px var(--neon-gold);
+        }
+
+        .rank-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+
+        .rank-you {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem;
+            border-radius: 8px;
+            margin-top: 0.8rem;
+            border: 1px solid var(--neon-blue);
+        }
+
+        .rank-you .rank-badge {
+            background: var(--neon-blue);
+            color: #000;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 250px;
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        /* Mobile Bottom Navigation */
+        .mobile-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(15, 12, 41, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.5rem 1rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 16px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-nav-item.active {
+            background: rgba(176, 0, 255, 0.2);
+            color: var(--neon-purple);
+        }
+
+        .mobile-nav-item span {
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .quick-btn {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+        }
+
+        .quick-btn.secondary {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Ambient Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <div class="mobile-header-content">
+            <div class="mobile-logo">
+                <div class="logo-icon">
+                    <i data-lucide="brain-circuit" size="18" color="white"></i>
+                </div>
+                <span>TACTICAL OS</span>
+            </div>
+            <div class="avatar"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="page-title">
+            <h1>Witaj, Admin Unit.</h1>
+            <p>
+                Status Systemu: <span>ONLINE</span> • Synchronizacja Kalendarza: <span>ACTIVE</span>
+            </p>
+        </div>
+
+        <div class="alert-badge">
+            <i data-lucide="alert-triangle" size="14"></i>
+            MARKET CRASH DETECTED
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="glass-card stat-card">
+            <div class="stat-icon" style="color: var(--neon-purple); border-color: var(--neon-purple); box-shadow: 0 0 15px rgba(176,0,255,0.2);">
+                <i data-lucide="zap" size="28"></i>
+            </div>
+            <div>
+                <div class="stat-label">Doświadczenie</div>
+                <div class="stat-value">2,450 XP</div>
+                <div class="stat-subvalue" style="color: var(--neon-blue);">+12% vs last week</div>
+            </div>
+        </div>
+
+        <div class="glass-card stat-card">
+            <div class="stat-icon" style="color: var(--neon-blue); border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0,212,255,0.2);">
+                <i data-lucide="coins" size="28"></i>
+            </div>
+            <div>
+                <div class="stat-label">Venture Credits</div>
+                <div class="stat-value">340 VC</div>
+                <div class="stat-subvalue" style="color: var(--neon-gold);">Access: Level 3</div>
+            </div>
+        </div>
+
+        <div class="glass-card stat-card">
+            <div class="stat-icon" style="color: var(--neon-red); border-color: var(--neon-red); box-shadow: 0 0 15px rgba(255,0,85,0.2);">
+                <i data-lucide="activity" size="28"></i>
+            </div>
+            <div>
+                <div class="stat-label">Neural Link</div>
+                <div class="stat-value">Stable</div>
+                <div class="stat-subvalue" style="color: var(--text-muted);">Latency: 12ms</div>
+            </div>
+        </div>
+
+        <!-- Active Protocols -->
+        <div class="glass-card">
+            <div class="section-title">
+                <i data-lucide="target" style="color: var(--neon-blue);" size="20"></i>
+                Active Protocols (Missions)
+            </div>
+
+            <div class="mission-item">
+                <div class="mission-header">
+                    <div class="mission-icon">
+                        <i data-lucide="book-open" size="20"></i>
+                    </div>
+                    <div class="mission-info">
+                        <div class="mission-title">Protocol: Blue Ocean Strategy</div>
+                        <div class="mission-subtitle">Implant Calibration Required</div>
+                    </div>
+                </div>
+                <div class="mission-footer">
+                    <div class="mission-rewards">
+                        <span class="reward-xp">+50 XP</span>
+                        <span class="reward-vc">10 VC</span>
+                    </div>
+                    <button class="btn-glow">Initialize</button>
+                </div>
+            </div>
+
+            <div class="mission-item crisis">
+                <div class="mission-header">
+                    <div class="mission-icon">
+                        <i data-lucide="alert-octagon" size="20"></i>
+                    </div>
+                    <div class="mission-info">
+                        <div class="mission-title">CRISIS: Client Churn Risk</div>
+                        <div class="mission-subtitle">Execute retention protocol immediately</div>
+                    </div>
+                </div>
+                <div class="mission-footer">
+                    <div class="mission-rewards">
+                        <span class="reward-xp">+200 XP</span>
+                    </div>
+                    <button class="btn-glow btn-danger">Engage</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Competence Radar -->
+        <div class="glass-card">
+            <div class="section-title" style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                Competence Radar
+            </div>
+            <div class="chart-container">
+                <canvas id="skillsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Top Operators -->
+        <div class="glass-card">
+            <div class="section-title">
+                <i data-lucide="crown" style="color: var(--neon-gold);" size="20"></i>
+                Top Operators
+            </div>
+
+            <div class="leaderboard-row">
+                <div class="leaderboard-left">
+                    <div class="rank-badge rank-1">1</div>
+                    <div class="rank-avatar" style="background: #fff;"></div>
+                    <span style="font-weight: 600;">Anna.K</span>
+                </div>
+                <span style="color: var(--neon-purple); font-weight: 700;">4500</span>
+            </div>
+
+            <div class="leaderboard-row">
+                <div class="leaderboard-left">
+                    <div class="rank-badge">2</div>
+                    <div class="rank-avatar" style="background: #ccc;"></div>
+                    <span style="font-weight: 600; color: var(--text-muted);">Marek.Z</span>
+                </div>
+                <span style="color: var(--text-muted); font-weight: 600;">4120</span>
+            </div>
+
+            <div class="leaderboard-row rank-you">
+                <div class="leaderboard-left">
+                    <div class="rank-badge">15</div>
+                    <span style="font-weight: 600;">YOU</span>
+                </div>
+                <span style="color: #fff; font-weight: 700;">2450</span>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="glass-card">
+            <div class="section-title" style="font-size: 0.95rem;">
+                Quick Actions
+            </div>
+            <div class="quick-actions">
+                <button class="btn-glow quick-btn">
+                    <i data-lucide="mic" size="20"></i>
+                    Voice Sim (Marcus)
+                </button>
+                <button class="btn-glow quick-btn secondary">
+                    <i data-lucide="scan-eye" size="18"></i>
+                    Run VK Protocol
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-item active">
+            <i data-lucide="layout-grid" size="20"></i>
+            <span>War Room</span>
+        </div>
+        <div class="mobile-nav-item">
+            <i data-lucide="zap" size="20"></i>
+            <span>AI Agents</span>
+        </div>
+        <div class="mobile-nav-item">
+            <i data-lucide="user" size="20"></i>
+            <span>Profile</span>
+        </div>
+        <div class="mobile-nav-item">
+            <i data-lucide="target" size="20"></i>
+            <span>Missions</span>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Chart.js Radar Chart
+        const ctx = document.getElementById('skillsChart').getContext('2d');
+        Chart.defaults.color = 'rgba(255, 255, 255, 0.5)';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Strategy', 'Verbal', 'Non-Verbal', 'Relations', 'Tech'],
+                datasets: [{
+                    label: 'Current Status',
+                    data: [85, 65, 90, 75, 60],
+                    fill: true,
+                    backgroundColor: 'rgba(176, 0, 255, 0.2)',
+                    borderColor: '#b000ff',
+                    pointBackgroundColor: '#00d4ff',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#00d4ff',
+                    borderWidth: 2,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        pointLabels: { 
+                            color: 'rgba(255, 255, 255, 0.8)', 
+                            font: { size: 10, family: 'Outfit' } 
+                        },
+                        ticks: { display: false, backdropColor: 'transparent' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Mobile Navigation Interaction
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.mobile-nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

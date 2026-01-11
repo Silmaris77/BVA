@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainVenture V3 - Praktyka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-purple: #b000ff;
+            --neon-blue: #00d4ff;
+            --neon-gold: #ffd700;
+            --neon-green: #00ff88;
+            --neon-red: #ff0055;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            opacity: 0.4;
+            animation: floatOrb 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatOrb {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-30px);
+            }
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--neon-green);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--neon-purple);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        .view-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 6px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Outfit';
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-btn.active {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            transition: transform 0.3s;
+        }
+
+        .app-container.mobile .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin: 4px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: var(--neon-green);
+            color: var(--text-main);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .app-container.mobile .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--neon-green);
+        }
+
+        .bottom-nav-item.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: var(--neon-green);
+            border-radius: 0 0 3px 3px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            transition: margin 0.3s;
+        }
+
+        .app-container.mobile .main-content {
+            margin-left: 0;
+            margin-bottom: 70px;
+        }
+
+        .top-bar {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-family: 'Outfit';
+            font-size: 14px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        .app-container.mobile .content {
+            padding: 20px 16px;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 16px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab.active {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: var(--neon-green);
+            color: var(--text-main);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--neon-green), #00cc70);
+            border-radius: 12px;
+            border: none;
+            color: #000;
+            font-family: 'Outfit';
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .app-container.mobile .tool-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .tool-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tool-card:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-4px);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .tool-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-green);
+        }
+
+        .tool-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .tool-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .activity-item {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-green);
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .activity-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="view-toggle">
+        <button class="toggle-btn" id="mobileBtn" onclick="setView('mobile')">
+            <i data-lucide="smartphone" size="16"></i>
+            Mobile
+        </button>
+        <button class="toggle-btn active" id="desktopBtn" onclick="setView('desktop')">
+            <i data-lucide="monitor" size="16"></i>
+            Desktop
+        </button>
+    </div>
+
+    <div class="app-container" id="appContainer">
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">B</div>
+                <div class="logo-text">BrainVenture</div>
+            </div>
+
+            <div style="margin-bottom: 32px;">
+                <div class="nav-item">
+                    <i data-lucide="home" size="20"></i>
+                    <span>Hub</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="book-open" size="20"></i>
+                    <span>Nauka</span>
+                </div>
+                <div class="nav-item active">
+                    <i data-lucide="gamepad-2" size="20"></i>
+                    <span>Praktyka</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="user" size="20"></i>
+                    <span>Ja</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="nav-item">
+                    <i data-lucide="bot" size="20"></i>
+                    <span>AI Assistant</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="top-bar">
+                <div class="search-bar">
+                    <i data-lucide="search" size="18"></i>
+                    <input type="text" placeholder="Szukaj narzędzi, gier...">
+                </div>
+                <div class="top-bar-actions">
+                    <div class="icon-btn">
+                        <i data-lucide="sparkles" size="20"></i>
+                    </div>
+                    <div class="profile-btn">PK</div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="page-header">
+                    <h1 class="page-title">🎮 Praktyka</h1>
+                    <p class="page-subtitle">Zastosuj wiedzę w praktyce z narzędziami, grami i projektami</p>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab active">
+                        <i data-lucide="wrench" size="16"></i>
+                        Narzędzia
+                    </div>
+                    <div class="tab">
+                        <i data-lucide="gamepad-2" size="16"></i>
+                        Gry
+                    </div>
+                    <div class="tab">
+                        <i data-lucide="lightbulb" size="16"></i>
+                        Inspiracje
+                    </div>
+                    <div class="tab">
+                        <i data-lucide="folder" size="16"></i>
+                        Projekty
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="action-btn">
+                        <i data-lucide="plus-circle" size="20"></i>
+                        Nowy Canvas
+                    </button>
+                    <button class="action-btn"
+                        style="background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));">
+                        <i data-lucide="play" size="20"></i>
+                        Rozpocznij Grę
+                    </button>
+                </div>
+
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <i data-lucide="presentation" size="24"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <h3 class="tool-title">AI Sales Assistant</h3>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Asystent AI do przygotowania rozmów sprzedażowych i symulacji objection
+                            handling</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(176,0,255,0.2); color: var(--neon-purple);">
+                                <i data-lucide="layout-template" size="24"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <h3 class="tool-title">Canvas Generator</h3>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Generuj Business Model Canvas, Value Proposition Canvas i inne frameworki
+                            strategiczne</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(0,212,255,0.2); color: var(--neon-blue);">
+                                <i data-lucide="chart-bar" size="24"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <h3 class="tool-title">Deal Analyzer</h3>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Analizuj potencjał transakcji, ROI i prawdopodobieństwo zamknięcia dealu
+                        </p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(255,215,0,0.2); color: var(--neon-gold);">
+                                <i data-lucide="message-square" size="24"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <h3 class="tool-title">Pitch Simulator</h3>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Symuluj prezentacje pitchowe z feedbackiem AI w czasie rzeczywistym</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(255,0,85,0.2); color: var(--neon-red);">
+                                <i data-lucide="users-2" size="24"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <h3 class="tool-title">Persona Builder</h3>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Twórz szczegółowe persony klientów do targetowania i personalizacji</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">
+                                <i data-lucide="target" size="24"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <h3 class="tool-title">OKR Tracker</h3>
+                            </div>
+                        </div>
+                        <p class="tool-desc">Śledź cele i kluczowe rezultaty (Objectives & Key Results) dla zespołu</p>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h3 class="card-title">📊 Ostatnia Aktywność</h3>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i data-lucide="file-text" size="20"></i>
+                        </div>
+                        <div class="activity-info">
+                            <h4>Milwaukee Canvas - Wersja 2</h4>
+                            <p>Edytowano 2 godziny temu</p>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: rgba(176,0,255,0.2); color: var(--neon-purple);">
+                            <i data-lucide="gamepad-2" size="20"></i>
+                        </div>
+                        <div class="activity-info">
+                            <h4>Symulacja Negocjacji</h4>
+                            <p>Ukończono wczoraj • Wynik: 87/100</p>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: rgba(0,212,255,0.2); color: var(--neon-blue);">
+                            <i data-lucide="message-circle" size="20"></i>
+                        </div>
+                        <div class="activity-info">
+                            <h4>AI Sales Call Practice</h4>
+                            <p>3 dni temu • 15 minut sesji</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="bottom-nav-item">
+                <i data-lucide="home" size="24"></i>
+                <span>Hub</span>
+            </div>
+            <div class="bottom-nav-item">
+                <i data-lucide="book-open" size="24"></i>
+                <span>Nauka</span>
+            </div>
+            <div class="bottom-nav-item active">
+                <i data-lucide="gamepad-2" size="24"></i>
+                <span>Praktyka</span>
+            </div>
+            <div class="bottom-nav-item">
+                <i data-lucide="user" size="24"></i>
+                <span>Ja</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function setView(mode) {
+            const container = document.getElementById('appContainer');
+            const mobileBtn = document.getElementById('mobileBtn');
+            const desktopBtn = document.getElementById('desktopBtn');
+            if (mode === 'mobile') {
+                container.classList.add('mobile');
+                mobileBtn.classList.add('active');
+                desktopBtn.classList.remove('active');
+            } else {
+                container.classList.remove('mobile');
+                desktopBtn.classList.add('active');
+                mobileBtn.classList.remove('active');
+            }
+            lucide.createIcons();
+        }
+    </script>
+</body>
+
+</html>

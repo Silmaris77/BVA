@@ -208,17 +208,18 @@ def get_lesson_completion_stats(username: str) -> Dict:
         completed_ids = [lesson_id for (lesson_id,) in completed_lessons]
         
         # Lekcje rozpoczęte ale nieukończone
-        started_lessons = [
-            lp.lesson_id for lp in in_progress
-            if lp.intro_completed and lp.lesson_id not in completed_ids
-        ]
+        # Szukamy lekcji z ukończonym intro (section_name='intro' i completed=True)
+        started_lesson_ids = set()
+        for lp in in_progress:
+            if lp.section_name == 'intro' and lp.completed and lp.lesson_id not in completed_ids:
+                started_lesson_ids.add(lp.lesson_id)
         
         return {
             'total_available': total_lessons,
             'completed': completed_count,
-            'in_progress': len(started_lessons),
+            'in_progress': len(started_lesson_ids),
             'completion_rate': round((completed_count / total_lessons * 100), 1) if total_lessons > 0 else 0,
-            'abandoned': len(started_lessons),  # Rozpoczęte ale nieukończone
+            'abandoned': len(started_lesson_ids),  # Rozpoczęte ale nieukończone
         }
 
 def initialize_activity_tracking(username: str):

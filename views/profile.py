@@ -711,11 +711,17 @@ def show_profile():
                 "description": "Heavy Duty Professional - czerwono-czarno-biały branding Milwaukee",
                 "icon": "🔴",
                 "colors": ["#C8102E", "#1A1A1A", "#FFFFFF"]
+            },
+            "Glassmorphism": {
+                "value": "glassmorphism",
+                "description": "Futurystyczny Neon - przeźroczystość, blur i neonowe akcenty",
+                "icon": "🔮",
+                "colors": ["#667eea", "#0f1219", "#ffffff"]
             }
         }
         
         # Display layout cards
-        col1, col2, col3, col4, col5 = st.columns(5)
+        col1, col2, col3, col4, col5, col6 = st.columns(6)
         
         with col1:
             # Przygotuj HTML dla kolorów Standard
@@ -914,6 +920,48 @@ def show_profile():
                 users_data[st.session_state.username]['layout_preference'] = 'milwaukee'
                 save_user_data(users_data)
                 st.success("🔴 Layout zmieniony na Milwaukee!")
+                st.info("🔄 Odśwież stronę (F5), aby zobaczyć zmiany")
+
+        with col6:
+            # Przygotuj HTML dla kolorów Glassmorphism
+            glass_colors_html = ''.join([
+                f'<div style="width: 40px; height: 40px; border-radius: 50%; background: {color}; box-shadow: 0 0 10px {color}; border: 1px solid rgba(255,255,255,0.3);"></div>'
+                for color in layout_options['Glassmorphism']['colors']
+            ])
+            
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border-radius: 12px;
+                padding: 20px;
+                border: {'3px solid #00f2ff' if current_layout == 'glassmorphism' else '1px solid rgba(255,255,255,0.1)'};
+                box-shadow: {'0 0 20px rgba(0, 242, 255, 0.4)' if current_layout == 'glassmorphism' else '0 8px 32px 0 rgba(31, 38, 135, 0.37)'};
+                transition: all 0.3s ease;
+                min-height: 200px;
+            ">
+                <div style="font-size: 48px; text-align: center; margin-bottom: 10px;">
+                    {layout_options['Glassmorphism']['icon']}
+                </div>
+                <h3 style="background: linear-gradient(90deg, #00f2ff, #bd00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-bottom: 10px; font-weight: 700;">
+                    Glassmorphism
+                </h3>
+                <p style="color: rgba(255,255,255,0.8); text-align: center; font-size: 14px; margin-bottom: 15px;">
+                    {layout_options['Glassmorphism']['description']}
+                </p>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                    {glass_colors_html}
+                </div>
+                {'<div style="text-align: center; margin-top: 15px; color: #00f2ff; font-weight: 700; text-shadow: 0 0 10px rgba(0, 242, 255, 0.8);">✓ Aktywny</div>' 
+                 if current_layout == 'glassmorphism' else ''}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("Wybierz Glass 🔮", key="select_glassmorphism", use_container_width=True):
+                users_data[st.session_state.username]['layout_preference'] = 'glassmorphism'
+                save_user_data(users_data)
+                st.success("🔮 Layout zmieniony na Glassmorphism!")
                 st.info("🔄 Odśwież stronę (F5), aby zobaczyć zmiany")
         
         st.markdown("---")

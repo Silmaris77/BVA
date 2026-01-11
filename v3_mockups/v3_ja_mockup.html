@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainVenture V3 - Profil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-purple: #b000ff;
+            --neon-blue: #00d4ff;
+            --neon-gold: #ffd700;
+            --neon-green: #00ff88;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            opacity: 0.4;
+            animation: floatOrb 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatOrb {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-30px);
+            }
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--neon-gold);
+            top: -100px;
+            right: -100px;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--neon-blue);
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -5s;
+        }
+
+        .view-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 6px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Outfit';
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-btn.active {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            transition: transform 0.3s;
+        }
+
+        .app-container.mobile .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin: 4px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: var(--neon-gold);
+            color: var(--text-main);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 24px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            padding: 8px 0;
+            z-index: 100;
+        }
+
+        .app-container.mobile .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--neon-gold);
+        }
+
+        .bottom-nav-item.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: var(--neon-gold);
+            border-radius: 0 0 3px 3px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            transition: margin 0.3s;
+        }
+
+        .app-container.mobile .main-content {
+            margin-left: 0;
+            margin-bottom: 70px;
+        }
+
+        .top-bar {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: auto;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        .app-container.mobile .content {
+            padding: 20px 16px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 16px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab.active {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: var(--neon-gold);
+            color: var(--text-main);
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .app-container.mobile .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 800;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.4);
+        }
+
+        .profile-info h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .profile-info p {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--neon-gold), #ff8800);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .app-container.mobile .stats-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+        }
+
+        .stat-box h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--neon-gold);
+        }
+
+        .stat-box p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+        }
+
+        .badge-item {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .badge-item:hover {
+            border-color: var(--neon-gold);
+        }
+
+        .badge-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .badge-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .goal-item {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .goal-header {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            margin-bottom: 12px;
+        }
+
+        .goal-title {
+            font-size: 16px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .goal-progress {
+            font-size: 14px;
+            color: var(--neon-gold);
+            font-weight: 700;
+        }
+
+        .goal-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-gold), var(--neon-green));
+            border-radius: 4px;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="view-toggle">
+        <button class="toggle-btn" id="mobileBtn" onclick="setView('mobile')">
+            <i data-lucide="smartphone" size="16"></i>
+            Mobile
+        </button>
+        <button class="toggle-btn active" id="desktopBtn" onclick="setView('desktop')">
+            <i data-lucide="monitor" size="16"></i>
+            Desktop
+        </button>
+    </div>
+
+    <div class="app-container" id="appContainer">
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">B</div>
+                <div class="logo-text">BrainVenture</div>
+            </div>
+
+            <div style="margin-bottom: 32px;">
+                <div class="nav-item">
+                    <i data-lucide="home" size="20"></i>
+                    <span>Hub</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="book-open" size="20"></i>
+                    <span>Nauka</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="gamepad-2" size="20"></i>
+                    <span>Praktyka</span>
+                </div>
+                <div class="nav-item active">
+                    <i data-lucide="user" size="20"></i>
+                    <span>Ja</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="nav-item">
+                    <i data-lucide="log-out" size="20"></i>
+                    <span>Wyloguj</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="top-bar">
+                <div class="top-bar-actions">
+                    <button class="icon-btn">
+                        <i data-lucide="edit" size="20"></i>
+                    </button>
+                    <button class="icon-btn">
+                        <i data-lucide="share-2" size="20"></i>
+                    </button>
+                    <button class="icon-btn">
+                        <i data-lucide="settings" size="20"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="tabs">
+                    <div class="tab active">
+                        <i data-lucide="user" size="16"></i>
+                        Profil
+                    </div>
+                    <div class="tab">
+                        <i data-lucide="trending-up" size="16"></i>
+                        Postępy
+                    </div>
+                    <div class="tab">
+                        <i data-lucide="target" size="16"></i>
+                        Cele
+                    </div>
+                    <div class="tab">
+                        <i data-lucide="settings" size="16"></i>
+                        Ustawienia
+                    </div>
+                </div>
+
+                <div class="profile-header">
+                    <div class="avatar-large">PK</div>
+                    <div class="profile-info">
+                        <h2>Piotr Kowalski</h2>
+                        <p>Strategist • Członek od stycznia 2024</p>
+                        <div class="level-badge">
+                            <i data-lucide="trophy" size="16"></i>
+                            Level 8 • 2,450 XP
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <h3>12</h3>
+                        <p>Ukończonych lekcji</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>7</h3>
+                        <p>Dni streak</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>8</h3>
+                        <p>Odznaki</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>#8</h3>
+                        <p>Ranking</p>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 20px; font-size: 18px;">🏆 Zdobyte Odznaki</h3>
+                    <div class="badge-grid">
+                        <div class="badge-item">
+                            <div class="badge-icon">🎯</div>
+                            <div class="badge-name">First Steps</div>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">📚</div>
+                            <div class="badge-name">Knowledge Seeker</div>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">🔥</div>
+                            <div class="badge-name">7-Day Streak</div>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">⚡</div>
+                            <div class="badge-name">Fast Learner</div>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">💎</div>
+                            <div class="badge-name">Premium Member</div>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">🎓</div>
+                            <div class="badge-name">Graduate</div>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">🚀</div>
+                            <div class="badge-name">Achiever</div>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">🌟</div>
+                            <div class="badge-name">All-Star</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 20px; font-size: 18px;">📊 Moje Kompetencje</h3>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 20px; font-size: 18px;">🎯 Aktywne Cele</h3>
+
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <div class="goal-title">Ukończ 15 lekcji w styczniu</div>
+                            <div class="goal-progress">12/15</div>
+                        </div>
+                        <div class="goal-desc">⏰ Pozostało 20 dni</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 80%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <div class="goal-title">Osiągnij Level 10</div>
+                            <div class="goal-progress">2,450/3,500 XP</div>
+                        </div>
+                        <div class="goal-desc">🚀 Jeszcze 1,050 XP do celu!</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 70%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="goal-item">
+                        <div class="goal-header">
+                            <div class="goal-title">30-dniowy streak nauki</div>
+                            <div class="goal-progress">7/30</div>
+                        </div>
+                        <div class="goal-desc">🔥 Utrzymuj codzienną aktywność</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 23%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="bottom-nav-item">
+                <i data-lucide="home" size="24"></i>
+                <span>Hub</span>
+            </div>
+            <div class="bottom-nav-item">
+                <i data-lucide="book-open" size="24"></i>
+                <span>Nauka</span>
+            </div>
+            <div class="bottom-nav-item">
+                <i data-lucide="gamepad-2" size="24"></i>
+                <span>Praktyka</span>
+            </div>
+            <div class="bottom-nav-item active">
+                <i data-lucide="user" size="24"></i>
+                <span>Ja</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function setView(mode) {
+            const container = document.getElementById('appContainer');
+            const mobileBtn = document.getElementById('mobileBtn');
+            const desktopBtn = document.getElementById('desktopBtn');
+            if (mode === 'mobile') {
+                container.classList.add('mobile');
+                mobileBtn.classList.add('active');
+                desktopBtn.classList.remove('active');
+            } else {
+                container.classList.remove('mobile');
+                desktopBtn.classList.add('active');
+                mobileBtn.classList.remove('active');
+            }
+            lucide.createIcons();
+        }
+
+        // Radar Chart
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Leadership', 'Communication', 'Strategy', 'Negotiation', 'Sales', 'Analytics'],
+                datasets: [{
+                    label: 'Twoje kompetencje',
+                    data: [85, 72, 90, 65, 78, 88],
+                    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+                    borderColor: '#ffd700',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#ffd700',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#ffd700'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20,
+                            color: 'rgba(255, 255, 255, 0.6)',
+                            backdropColor: 'transparent'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        angleLines: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        pointLabels: {
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            font: {
+                                family: 'Outfit',
+                                size: 12,
+                                weight: '600'
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

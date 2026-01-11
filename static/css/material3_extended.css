@@ -449,6 +449,18 @@ a {
 }
 
 /* Animacje dla zawartości */
-.main .block-container {
-  animation: fadeIn 0.5s ease-out forwards !important;
+
+/* ===== Default Glass Card (Fallback) ===== */
+.glass-card {
+  background-color: var(--md-surface);
+  border-radius: var(--md-radius-medium);
+  padding: 16px;
+  box-shadow: var(--md-elevation-1);
+  border: 1px solid rgba(0,0,0,0.05);
+  margin-bottom: 1rem;
 }
+
+.glass-card:hover {
+  box-shadow: var(--md-elevation-2);
+}
+

@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BVA v2 - Layout Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Layout Switcher */
+        .layout-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .layout-switcher h3 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .layout-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 20px;
+            margin: 5px 0;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .layout-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .layout-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        /* Hide inactive layouts */
+        .layout-container {
+            display: none;
+        }
+
+        .layout-container.active {
+            display: block;
+        }
+
+        /* Common elements */
+        .main-container {
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .stat-card, .lesson-card {
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover, .lesson-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* ============================================
+           LAYOUT 1: GLASSMORPHISM (Original)
+           ============================================ */
+        .glass-layout {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .glass-sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px 20px;
+        }
+
+        .glass-logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .glass-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 8px 0;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .glass-nav-item:hover,
+        .glass-nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .glass-nav-icon {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .glass-content {
+            margin-left: 280px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-header {
+            margin-bottom: 30px;
+        }
+
+        .glass-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .glass-stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .glass-stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-stat-label {
+            color: #666;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        /* ============================================
+           LAYOUT 2: MINIMALIST MODERN
+           ============================================ */
+        .minimal-layout {
+            background: #fafafa;
+        }
+
+        .minimal-sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            padding: 24px 16px;
+        }
+
+        .minimal-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 32px;
+            padding: 0 12px;
+        }
+
+        .minimal-nav-section {
+            margin-bottom: 24px;
+        }
+
+        .minimal-nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 12px;
+            margin-bottom: 8px;
+        }
+
+        .minimal-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            margin: 2px 0;
+            color: #6b7280;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .minimal-nav-item:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .minimal-nav-item.active {
+            background: #111827;
+            color: white;
+        }
+
+        .minimal-nav-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .minimal-content {
+            margin-left: 260px;
+        }
+
+        .minimal-header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+        }
+
+        .minimal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .minimal-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .minimal-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .minimal-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .minimal-stat-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .minimal-stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .minimal-stat-label {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        /* ============================================
+           LAYOUT 3: PREMIUM DARK MODE
+           ============================================ */
+        .dark-layout {
+            background: #0a0a0a;
+        }
+
+        .dark-sidebar {
+            width: 280px;
+            background: #151515;
+            border-right: 1px solid #2a2a2a;
+            padding: 30px 20px;
+        }
+
+        .dark-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .dark-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .dark-logo-text {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .dark-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 6px 0;
+            color: #9ca3af;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .dark-nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            transition: height 0.3s;
+        }
+
+        .dark-nav-item:hover {
+            background: #1f1f1f;
+            color: #fff;
+        }
+
+        .dark-nav-item.active {
+            background: #1f1f1f;
+            color: #fff;
+        }
+
+        .dark-nav-item.active::before {
+            height: 24px;
+        }
+
+        .dark-nav-icon {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .dark-content {
+            margin-left: 280px;
+            background: #0a0a0a;
+        }
+
+        .dark-header {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .dark-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dark-subtitle {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .dark-card {
+            background: #151515;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 25px;
+        }
+
+        .dark-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dark-stat-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 24px;
+            border-radius: 14px;
+        }
+
+        .dark-stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dark-stat-label {
+            color: #9ca3af;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        /* Lessons Grid - shared */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .lesson-card {
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-lesson-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .minimal-lesson-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+        }
+
+        .dark-lesson-card {
+            background: #151515;
+            border: 1px solid #2a2a2a;
+        }
+
+        .lesson-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .glass-lesson-category {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .minimal-lesson-category {
+            background: #111827;
+            color: white;
+        }
+
+        .dark-lesson-category {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+        }
+
+        .lesson-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .glass-lesson-title {
+            color: #333;
+        }
+
+        .minimal-lesson-title {
+            color: #111827;
+        }
+
+        .dark-lesson-title {
+            color: #fff;
+        }
+
+        .lesson-description {
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .glass-lesson-description {
+            color: #666;
+        }
+
+        .minimal-lesson-description {
+            color: #6b7280;
+        }
+
+        .dark-lesson-description {
+            color: #9ca3af;
+        }
+
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid;
+        }
+
+        .glass-lesson-footer {
+            border-top-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .minimal-lesson-footer {
+            border-top-color: #e5e7eb;
+        }
+
+        .dark-lesson-footer {
+            border-top-color: #2a2a2a;
+        }
+
+        .lesson-xp {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .glass-lesson-xp {
+            color: #667eea;
+        }
+
+        .minimal-lesson-xp {
+            color: #111827;
+        }
+
+        .dark-lesson-xp {
+            color: #3b82f6;
+        }
+
+        .lesson-duration {
+            font-size: 13px;
+        }
+
+        .glass-lesson-duration {
+            color: #666;
+        }
+
+        .minimal-lesson-duration {
+            color: #6b7280;
+        }
+
+        .dark-lesson-duration {
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Layout Switcher -->
+    <div class="layout-switcher">
+        <h3>Wybierz Layout:</h3>
+        <button class="layout-btn active" onclick="switchLayout('glass')">
+            🎨 Glassmorphism
+        </button>
+        <button class="layout-btn" onclick="switchLayout('minimal')">
+            ✨ Minimalist Modern
+        </button>
+        <button class="layout-btn" onclick="switchLayout('dark')">
+            🌙 Premium Dark
+        </button>
+    </div>
+
+    <!-- ============================================
+         LAYOUT 1: GLASSMORPHISM
+         ============================================ -->
+    <div id="glass-layout" class="layout-container glass-layout active">
+        <div class="main-container">
+            <!-- Sidebar -->
+            <div class="sidebar glass-sidebar">
+                <div class="glass-logo">BVA</div>
+                <nav>
+                    <a href="#" class="glass-nav-item active">
+                        <span class="glass-nav-icon">📊</span>
+                        Dashboard
+                    </a>
+                    <a href="#" class="glass-nav-item">
+                        <span class="glass-nav-icon">📚</span>
+                        Lekcje
+                    </a>
+                    <a href="#" class="glass-nav-item">
+                        <span class="glass-nav-icon">👤</span>
+                        Profil
+                    </a>
+                    <a href="#" class="glass-nav-item">
+                        <span class="glass-nav-icon">🏆</span>
+                        Rankingi
+                    </a>
+                    <a href="#" class="glass-nav-item">
+                        <span class="glass-nav-icon">⚙️</span>
+                        Ustawienia
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Content -->
+            <div class="content glass-content">
+                <div class="glass-header">
+                    <h1 class="glass-title">Dashboard</h1>
+                </div>
+
+                <!-- Stats -->
+                <div class="glass-stats-grid">
+                    <div class="glass-stat-card stat-card">
+                        <div class="glass-stat-value">1,250</div>
+                        <div class="glass-stat-label">XP</div>
+                    </div>
+                    <div class="glass-stat-card stat-card">
+                        <div class="glass-stat-value">5</div>
+                        <div class="glass-stat-label">Poziom</div>
+                    </div>
+                    <div class="glass-stat-card stat-card">
+                        <div class="glass-stat-value">12/24</div>
+                        <div class="glass-stat-label">Lekcje</div>
+                    </div>
+                    <div class="glass-stat-card stat-card">
+                        <div class="glass-stat-value">500</div>
+                        <div class="glass-stat-label">DegenCoins</div>
+                    </div>
+                </div>
+
+                <!-- Lessons -->
+                <div class="glass-card">
+                    <h2 style="margin-bottom: 20px; font-size: 22px; color: #333;">Dostępne Lekcje</h2>
+                    <div class="lessons-grid">
+                        <div class="lesson-card glass-lesson-card">
+                            <div class="lesson-category glass-lesson-category">Psychologia</div>
+                            <h3 class="lesson-title glass-lesson-title">Wprowadzenie do Trading Psychology</h3>
+                            <p class="lesson-description glass-lesson-description">Poznaj podstawy psychologii tradingu i zarządzania emocjami podczas inwestowania.</p>
+                            <div class="lesson-footer glass-lesson-footer">
+                                <span class="lesson-xp glass-lesson-xp">+100 XP</span>
+                                <span class="lesson-duration glass-lesson-duration">⏱️ 15 min</span>
+                            </div>
+                        </div>
+
+                        <div class="lesson-card glass-lesson-card">
+                            <div class="lesson-category glass-lesson-category">Strategia</div>
+                            <h3 class="lesson-title glass-lesson-title">Błękitny Ocean w Praktyce</h3>
+                            <p class="lesson-description glass-lesson-description">Jak tworzyć nowe rynki zamiast konkurować na istniejących.</p>
+                            <div class="lesson-footer glass-lesson-footer">
+                                <span class="lesson-xp glass-lesson-xp">+150 XP</span>
+                                <span class="lesson-duration glass-lesson-duration">⏱️ 20 min</span>
+                            </div>
+                        </div>
+
+                        <div class="lesson-card glass-lesson-card">
+                            <div class="lesson-category glass-lesson-category">Sales</div>
+                            <h3 class="lesson-title glass-lesson-title">Skuteczne Techniki Sprzedaży</h3>
+                            <p class="lesson-description glass-lesson-description">Naucz się budować relacje i efektywnie prezentować ofertę.</p>
+                            <div class="lesson-footer glass-lesson-footer">
+                                <span class="lesson-xp glass-lesson-xp">+120 XP</span>
+                                <span class="lesson-duration glass-lesson-duration">⏱️ 18 min</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         LAYOUT 2: MINIMALIST MODERN
+         ============================================ -->
+    <div id="minimal-layout" class="layout-container minimal-layout">
+        <div class="main-container">
+            <!-- Sidebar -->
+            <div class="sidebar minimal-sidebar">
+                <div class="minimal-logo">BrainVenture</div>
+                
+                <div class="minimal-nav-section">
+                    <div class="minimal-nav-label">Menu</div>
+                    <a href="#" class="minimal-nav-item active">
+                        <span class="minimal-nav-icon">📊</span>
+                        Dashboard
+                    </a>
+                    <a href="#" class="minimal-nav-item">
+                        <span class="minimal-nav-icon">📚</span>
+                        Lekcje
+                    </a>
+                    <a href="#" class="minimal-nav-item">
+                        <span class="minimal-nav-icon">📈</span>
+                        Progres
+                    </a>
+                </div>
+
+                <div class="minimal-nav-section">
+                    <div class="minimal-nav-label">Konto</div>
+                    <a href="#" class="minimal-nav-item">
+                        <span class="minimal-nav-icon">👤</span>
+                        Profil
+                    </a>
+                    <a href="#" class="minimal-nav-item">
+                        <span class="minimal-nav-icon">⚙️</span>
+                        Ustawienia
+                    </a>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content minimal-content">
+                <div class="minimal-header">
+                    <h1 class="minimal-title">Dashboard</h1>
+                    <p class="minimal-subtitle">Witaj ponownie! Sprawdź swój postęp.</p>
+                </div>
+
+                <!-- Stats -->
+                <div class="minimal-stats-grid">
+                    <div class="minimal-stat-card stat-card">
+                        <div class="minimal-stat-value">1,250</div>
+                        <div class="minimal-stat-label">Punkty doświadczenia</div>
+                    </div>
+                    <div class="minimal-stat-card stat-card">
+                        <div class="minimal-stat-value">5</div>
+                        <div class="minimal-stat-label">Obecny poziom</div>
+                    </div>
+                    <div class="minimal-stat-card stat-card">
+                        <div class="minimal-stat-value">12/24</div>
+                        <div class="minimal-stat-label">Ukończone lekcje</div>
+                    </div>
+                    <div class="minimal-stat-card stat-card">
+                        <div class="minimal-stat-value">500</div>
+                        <div class="minimal-stat-label">DegenCoins</div>
+                    </div>
+                </div>
+
+                <!-- Lessons -->
+                <div class="minimal-card">
+                    <h2 style="margin-bottom: 20px; font-size: 20px; color: #111827; font-weight: 600;">Dostępne Lekcje</h2>
+                    <div class="lessons-grid">
+                        <div class="lesson-card minimal-lesson-card">
+                            <div class="lesson-category minimal-lesson-category">Psychologia</div>
+                            <h3 class="lesson-title minimal-lesson-title">Wprowadzenie do Trading Psychology</h3>
+                            <p class="lesson-description minimal-lesson-description">Poznaj podstawy psychologii tradingu i zarządzania emocjami podczas inwestowania.</p>
+                            <div class="lesson-footer minimal-lesson-footer">
+                                <span class="lesson-xp minimal-lesson-xp">+100 XP</span>
+                                <span class="lesson-duration minimal-lesson-duration">⏱️ 15 min</span>
+                            </div>
+                        </div>
+
+                        <div class="lesson-card minimal-lesson-card">
+                            <div class="lesson-category minimal-lesson-category">Strategia</div>
+                            <h3 class="lesson-title minimal-lesson-title">Błękitny Ocean w Praktyce</h3>
+                            <p class="lesson-description minimal-lesson-description">Jak tworzyć nowe rynki zamiast konkurować na istniejących.</p>
+                            <div class="lesson-footer minimal-lesson-footer">
+                                <span class="lesson-xp minimal-lesson-xp">+150 XP</span>
+                                <span class="lesson-duration minimal-lesson-duration">⏱️ 20 min</span>
+                            </div>
+                        </div>
+
+                        <div class="lesson-card minimal-lesson-card">
+                            <div class="lesson-category minimal-lesson-category">Sales</div>
+                            <h3 class="lesson-title minimal-lesson-title">Skuteczne Techniki Sprzedaży</h3>
+                            <p class="lesson-description minimal-lesson-description">Naucz się budować relacje i efektywnie prezentować ofertę.</p>
+                            <div class="lesson-footer minimal-lesson-footer">
+                                <span class="lesson-xp minimal-lesson-xp">+120 XP</span>
+                                <span class="lesson-duration minimal-lesson-duration">⏱️ 18 min</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         LAYOUT 3: PREMIUM DARK MODE
+         ============================================ -->
+    <div id="dark-layout" class="layout-container dark-layout">
+        <div class="main-container">
+            <!-- Sidebar -->
+            <div class="sidebar dark-sidebar">
+                <div class="dark-logo">
+                    <div class="dark-logo-icon">B</div>
+                    <div class="dark-logo-text">BVA</div>
+                </div>
+                
+                <nav>
+                    <a href="#" class="dark-nav-item active">
+                        <span class="dark-nav-icon">📊</span>
+                        Dashboard
+                    </a>
+                    <a href="#" class="dark-nav-item">
+                        <span class="dark-nav-icon">📚</span>
+                        Lekcje
+                    </a>
+                    <a href="#" class="dark-nav-item">
+                        <span class="dark-nav-icon">👤</span>
+                        Profil
+                    </a>
+                    <a href="#" class="dark-nav-item">
+                        <span class="dark-nav-icon">🏆</span>
+                        Osiągnięcia
+                    </a>
+                    <a href="#" class="dark-nav-item">
+                        <span class="dark-nav-icon">⚙️</span>
+                        Ustawienia
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Content -->
+            <div class="content dark-content">
+                <div class="dark-header">
+                    <h1 class="dark-title">Dashboard</h1>
+                    <p class="dark-subtitle">Czas na naukę i rozwój 🚀</p>
+                </div>
+
+                <!-- Stats -->
+                <div class="dark-stats-grid">
+                    <div class="dark-stat-card stat-card">
+                        <div class="dark-stat-value">1,250</div>
+                        <div class="dark-stat-label">XP</div>
+                    </div>
+                    <div class="dark-stat-card stat-card">
+                        <div class="dark-stat-value">5</div>
+                        <div class="dark-stat-label">Poziom</div>
+                    </div>
+                    <div class="dark-stat-card stat-card">
+                        <div class="dark-stat-value">12/24</div>
+                        <div class="dark-stat-label">Lekcje</div>
+                    </div>
+                    <div class="dark-stat-card stat-card">
+                        <div class="dark-stat-value">500</div>
+                        <div class="dark-stat-label">DegenCoins</div>
+                    </div>
+                </div>
+
+                <!-- Lessons -->
+                <div class="dark-card">
+                    <h2 style="margin-bottom: 20px; font-size: 22px; color: #fff; font-weight: 700;">Dostępne Lekcje</h2>
+                    <div class="lessons-grid">
+                        <div class="lesson-card dark-lesson-card">
+                            <div class="lesson-category dark-lesson-category">Psychologia</div>
+                            <h3 class="lesson-title dark-lesson-title">Wprowadzenie do Trading Psychology</h3>
+                            <p class="lesson-description dark-lesson-description">Poznaj podstawy psychologii tradingu i zarządzania emocjami podczas inwestowania.</p>
+                            <div class="lesson-footer dark-lesson-footer">
+                                <span class="lesson-xp dark-lesson-xp">+100 XP</span>
+                                <span class="lesson-duration dark-lesson-duration">⏱️ 15 min</span>
+                            </div>
+                        </div>
+
+                        <div class="lesson-card dark-lesson-card">
+                            <div class="lesson-category dark-lesson-category">Strategia</div>
+                            <h3 class="lesson-title dark-lesson-title">Błękitny Ocean w Praktyce</h3>
+                            <p class="lesson-description dark-lesson-description">Jak tworzyć nowe rynki zamiast konkurować na istniejących.</p>
+                            <div class="lesson-footer dark-lesson-footer">
+                                <span class="lesson-xp dark-lesson-xp">+150 XP</span>
+                                <span class="lesson-duration dark-lesson-duration">⏱️ 20 min</span>
+                            </div>
+                        </div>
+
+                        <div class="lesson-card dark-lesson-card">
+                            <div class="lesson-category dark-lesson-category">Sales</div>
+                            <h3 class="lesson-title dark-lesson-title">Skuteczne Techniki Sprzedaży</h3>
+                            <p class="lesson-description dark-lesson-description">Naucz się budować relacje i efektywnie prezentować ofertę.</p>
+                            <div class="lesson-footer dark-lesson-footer">
+                                <span class="lesson-xp dark-lesson-xp">+120 XP</span>
+                                <span class="lesson-duration dark-lesson-duration">⏱️ 18 min</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchLayout(layout) {
+            // Hide all layouts
+            document.querySelectorAll('.layout-container').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Show selected layout
+            document.getElementById(`${layout}-layout`).classList.add('active');
+
+            // Update button states
+            document.querySelectorAll('.layout-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+/* 
+   Glassmorphism Theme for BrainVentureAcademy
+   Autor: Antigravity
+   Data: 2026-01-05
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* GLOBALNE ZMIENNE */
+:root {
+    --glass-bg-dark: rgba(16, 20, 30, 0.85);
+    --glass-card-bg: rgba(255, 255, 255, 0.05);
+    /* Półprzezroczyste karty */
+    --glass-card-border: rgba(255, 255, 255, 0.08);
+    /* Delikatne obramowanie */
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    /* Cień głębi */
+    --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --neon-blue: #00f2ff;
+    --neon-purple: #bd00ff;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+}
+
+/* TŁO APLIKACJI */
+/* Streamlit main container */
+/* TŁO APLIKACJI - WYMUSZENIE */
+.stApp {
+    background: linear-gradient(135deg, #0f1219 0%, #1a1a2e 50%, #16213e 100%) !important;
+    background-attachment: fixed !important;
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* SIDEBAR - WYMUSZENIE */
+[data-testid="stSidebar"] {
+    background-color: rgba(16, 20, 30, 0.6) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* KARTY - UNIWERSALNY SELEKTOR SZKŁA */
+.glass-card,
+.degen-card,
+.lesson-card,
+.md-card,
+[data-testid="stMetric"],
+div[data-testid="column"]>div>div.css-1r6slb0,
+/* Kontenery */
+div.css-1r6slb0
+
+/* Kontenery ogólne */
+    {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+    color: #ffffff !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect na karty */
+.glass-card:hover,
+.degen-card:hover,
+.lesson-card:hover,
+.md-card:hover,
+[data-testid="stMetric"]:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* METRYKI SZCZEGÓŁY */
+[data-testid="stMetricLabel"] {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+[data-testid="stMetricValue"] {
+    color: #ffffff !important;
+    text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+}
+
+/* PRZYCISKI */
+.stButton>button {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(10px);
+}
+
+.stButton>button:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: #00f2ff !important;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.3) !important;
+}
+
+/* NAGŁÓWKI */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.mission-title,
+.degen-card-title {
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* PASEK POSTĘPU */
+.stProgress>div>div>div>div {
+    background: linear-gradient(90deg, #00f2ff, #bd00ff) !important;
+}
+
+/* TEXT AREA / INPUTS */
+.stTextInput input,
+.stTextArea textarea,
+.stSelectbox div[data-baseweb="select"] {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+/* WYMUSZENIE KOLORU TEKSTU GLOBALNIE */
+p,
+span,
+div,
+li {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* FIX DLA WARNINGÓW/INFO ŻEBY NIE BYŁY SZKLANE */
+.stAlert {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+.stAlert [data-testid="stMarkdownContainer"] {
+    color: white !important;
+}

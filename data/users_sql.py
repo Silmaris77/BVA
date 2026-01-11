@@ -8,6 +8,7 @@ from datetime import datetime
 from database.models import User
 from database.connection import session_scope
 
+import bcrypt
 
 def login_user(username: str, password: str) -> Optional[Dict[str, Any]]:
     """
@@ -15,7 +16,7 @@ def login_user(username: str, password: str) -> Optional[Dict[str, Any]]:
     
     Args:
         username: Username
-        password: Plain text password (TODO: hash comparison)
+        password: Plain text password
     
     Returns:
         User data dict or None
@@ -24,13 +25,30 @@ def login_user(username: str, password: str) -> Optional[Dict[str, Any]]:
         with session_scope() as session:
             user = session.query(User).filter_by(username=username).first()
             
-            if user and user.password_hash == password:  # TODO: proper hash comparison
-                # Update last login
-                user.last_login = datetime.now()
-                session.commit()
+            if user and user.password_hash:
+                # Check password
+                password_bytes = password.encode('utf-8')
+                hash_bytes = user.password_hash.encode('utf-8')
                 
-                # Return user data as dict
-                return user.to_dict()
+                # Obsługa starych haseł (plain text) dla kompatybilności wstecznej
+                # Jeśli hash nie zaczyna się od $2b$, sprawdź jako plain text i zmigruj
+                if not user.password_hash.startswith('$2b$'):
+                    if user.password_hash == password:
+                        # Migracja starego hasła na bcrypt
+                        new_hash = bcrypt.hashpw(password_bytes, bcrypt.gensalt()).decode('utf-8')
+                        user.password_hash = new_hash
+                        user.last_login = datetime.now()
+                        session.commit()
+                        return user.to_dict()
+                    return None
+                
+                if bcrypt.checkpw(password_bytes, hash_bytes):
+                    # Update last login
+                    user.last_login = datetime.now()
+                    session.commit()
+                    
+                    # Return user data as dict
+                    return user.to_dict()
             
             return None
     except Exception as e:
@@ -57,12 +75,16 @@ def register_user(username: str, password: str, **kwargs) -> bool:
             if existing:
                 return False
             
+            # Hash password
+            password_bytes = password.encode('utf-8')
+            hashed_password = bcrypt.hashpw(password_bytes, bcrypt.gensalt()).decode('utf-8')
+            
             # Create new user
             import uuid
             new_user = User(
                 user_id=str(uuid.uuid4()),
                 username=username,
-                password_hash=password,  # TODO: hash password
+                password_hash=hashed_password,
                 xp=kwargs.get('xp', 0),
                 level=kwargs.get('level', 1),
                 degencoins=kwargs.get('degencoins', 0),

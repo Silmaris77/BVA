@@ -370,19 +370,9 @@ def show_stats_section(user_data, device_type):
     # Użyj przekazanego device_type zamiast wykrywać ponownie
     if device_type == 'mobile':
         # Mobile - jedna karta z czterema statystykami w środku
-        st.markdown("### 📊 Statystyki")
-        
-        # Stwórz jedną dużą kartę z wewnętrznym gridem 2x2
+        # Mobile - jedna karta z czterema statystykami w środku
         st.markdown(f"""
-        <div style="
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            padding: 1.5rem;
-            color: white;
-            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 1.5rem;
-        ">
+        <div class="glass-card" style="display: flex; flex-direction: column;">
             <div style="
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -451,20 +441,18 @@ def show_stats_section(user_data, device_type):
             {"icon": "📚", "value": f"{completed_lessons}", "label": "Ukończone lekcje", "change": lessons_change, "color": lessons_color}
         ]
         
-        # Wygeneruj kartę w każdej kolumnie z gradientowym stylem
+        # Wygeneruj kartę w każdej kolumnie z glassmorphism stylem
         for i, stat in enumerate(stats):
             with cols[i]:
                 st.markdown(f"""
-                <div style="
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    border-radius: 16px;
-                    padding: 0.2rem;
+                <div class="glass-card" style="
+                    padding: 0.5rem;
                     text-align: center;
-                    color: white;
-                    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    min-height: 30px;
-                    margin-bottom: 1rem;
+                    min-height: 140px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
                 ">
                     <div style="font-size: 2rem; margin-bottom: 0.3rem;">{stat['icon']}</div>
                     <div style="font-size: 1.6rem; font-weight: bold; margin-bottom: 0.2rem;">{stat['value']}</div>
