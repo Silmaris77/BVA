@@ -2,9 +2,9 @@
 
 **Wersja:** 3.0  
 **Data:** 2026-01-11  
-**Status:** Design Specification  
-**Architektura:** Next.js 15 + FastAPI + PostgreSQL  
-**Design System:** Glassmorphism / Cyberpunk
+**Status:** Bootstrap MVP Ready  
+**Architektura:** Next.js 16 + Supabase + PostgreSQL  
+**Design System:** Glassmorphism / Cyberpunk (Dark Theme)
 
 ---
 
@@ -17,9 +17,11 @@
 4. [System Nawigacji](#system-nawigacji)
 5. [User Flow](#user-flow)
 6. [Design System](#design-system)
-7. [Responsive Behavior](#responsive-behavior)
-8. [Nawigacja w Poszczególnych Modułach](#nawigacja-w-poszczególnych-modułach)
-9. [Kluczowe Decyzje UX](#kluczowe-decyzje-ux)
+7. [Lesson Content Architecture](#lesson-content-architecture) - JSON/JSONB, Card Types, Media
+8. [Multi-Tenant Data Model](#multi-tenant-data-model) - B2C/B2B, Roles, Organizations
+9. [Responsive Behavior](#responsive-behavior)
+10. [Nawigacja w Poszczególnych Modułach](#nawigacja-w-poszczególnych-modułach)
+11. [Kluczowe Decyzje UX](#kluczowe-decyzje-ux)
 
 ### II. Technologie AI/ML
 10. [Agentic AI Architecture](#agentic-ai-architecture) - 8 wyspecjalizowanych agentów
@@ -421,6 +423,334 @@ box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
    - Card Player (desktop/mobile toggle)
    - Quiz components
    - Progress tracker
+
+---
+
+## 📚 Lesson Content Architecture
+
+### **Content Format: JSON/JSONB**
+
+**Storage Strategy:**
+- ✅ **JSONB** in PostgreSQL (`lessons.cards` column)
+- ✅ **Structured schema** (TypeScript interfaces)
+- ✅ **Flexible** (easy to add new card types)
+- ✅ **Single query perfor**mance
+- ✅ **Indexed** for fast search
+
+### **Lesson Data Model**
+
+```typescript
+interface Lesson {
+  // Metadata
+  id: string
+  title: string
+  description: string
+  category: string
+  difficulty: 'beginner' | 'intermediate' | 'advanced'
+  estimated_minutes: number
+  xp_reward: number
+  
+  // Multi-tenant targeting
+  target_roles: string[] // ['manager', 'salesperson', 'investor']
+  is_public: boolean // true = B2C, false = B2B custom
+  organization_id?: string // For company-specific content
+  
+  // Content (JSONB!)
+  cards: LessonCard[]
+  
+  // Timestamps
+  created_at: string
+  updated_at: string
+}
+```
+
+### **Card Types (Extensible)**
+
+**MVP Card Types (Week 1-4):**
+```typescript
+type CardType = 
+  | 'intro'      // Welcome screen
+  | 'concept'    // Learning content
+  | 'quiz'       // Knowledge check
+  | 'practice'   // Exercises
+  | 'summary'    // Recap
+```
+
+**Future Card Types (Month 2+):**
+```typescript
+type CardType = 
+  | ... // MVP types
+  | 'video'              // YouTube/Vimeo embeds
+  | 'podcast'            // Audio content
+  | 'flashcard'          // Spaced repetition
+  | 'case_study'         // Real-world examples
+  | 'interactive_chart'  // Data visualization
+  | 'reflection'         // Journal prompts
+  | 'simulation'         // Interactive scenarios (advanced)
+```
+
+### **Card Schema (Flexible)**
+
+```typescript
+interface LessonCard {
+  id: number
+  type: string  // Not enum - allows ANY string for future types
+  title: string
+  content?: string  // Optional - not all cards need text
+  
+  // Universal metadata
+  estimated_seconds?: number
+  xp_points?: number
+  icon?: string
+  
+  // Type-specific data (JSONB flexibility)
+  data?: Record<string, any>  // Magic happens here!
+}
+```
+
+**Example Cards:**
+
+```json
+// Concept card
+{
+  "id": 1,
+  "type": "concept",
+  "title": "BATNA Fundamentals",
+  "content": "BATNA stands for Best Alternative To Negotiated Agreement...",
+  "examples": ["Example 1...", "Example 2..."],
+  "estimated_seconds": 180,
+  "xp_points": 20
+}
+
+// Video card (future)
+{
+  "id": 2,
+  "type": "video",
+  "title": "Expert Interview",
+  "data": {
+    "video_url": "https://youtube.com/watch?v=...",
+    "duration": 180,
+    "transcript": "Full text transcript...",
+    "provider": "youtube"
+  }
+}
+
+// Flashcard (future)
+{
+  "id": 3,
+  "type": "flashcard",
+  "title": "Key Terms",
+  "data": {
+    "cards": [
+      {"front": "BATNA", "back": "Best Alternative To Negotiated Agreement"},
+      {"front": "ZOPA", "back": "Zone Of Possible Agreement"}
+    ]
+  }
+}
+```
+
+### **Media Handling**
+
+**MVP Approach:**
+- External URLs (YouTube, Vimeo) - FREE
+- Images via CDN or external hosting
+
+**Future:**
+- Supabase Storage for private content
+- CDN for performance (Cloudflare, Bunny)
+- Subtitle/transcript support
+
+### **Content Creation Workflow**
+
+**MVP (Manual JSON):**
+```typescript
+// Create lesson via SQL or Supabase Dashboard
+const lesson = {
+  title: "Negotiation Basics",
+  cards: [
+    {id: 1, type: "intro", title: "...", content: "..."},
+    {id: 2, type: "concept", title: "...", content: "..."}
+  ]
+}
+await supabase.from('lessons').insert(lesson)
+```
+
+**Month 4+ (Admin UI):**
+- Visual lesson builder
+- Card templates
+- Drag-and-drop ordering
+- Preview mode
+
+**Month 7+ (AI-Assisted):**
+- Generate lesson from outline
+- Auto-create quizzes
+- Suggest examples
+
+---
+
+## 🏢 Multi-Tenant Data Model
+
+### **Architecture Overview**
+
+**Support for:**
+- ✅ **B2C:** Individual learners (managers, salespeople, investors)
+- ✅ **B2B:** Team subscriptions (organizations)
+- ✅ **Enterprise:** Custom content per company
+
+### **Database Schema**
+
+```sql
+-- Organizations (companies)
+CREATE TABLE organizations (
+    id UUID PRIMARY KEY,
+    name TEXT NOT NULL, -- "Milwaukee Tools", "Heinz"
+    tier TEXT DEFAULT 'team', -- 'free', 'team', 'enterprise'
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- User profiles with org + role support
+CREATE TABLE profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id),
+    email TEXT,
+    full_name TEXT,
+    avatar_url TEXT,
+    
+    -- Multi-tenant support
+    organization_id UUID REFERENCES organizations(id), -- NULL for B2C users
+    role TEXT DEFAULT 'manager', -- 'manager', 'salesperson', 'investor', 'admin'
+    
+    -- Gamification
+    xp INTEGER DEFAULT 0,
+    level INTEGER DEFAULT 1,
+    
+    -- User preferences (future)
+    theme_preference TEXT DEFAULT 'dark',
+    
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Lessons with multi-tenant targeting
+CREATE TABLE lessons (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    category TEXT,
+    difficulty TEXT,
+    estimated_minutes INTEGER,
+    xp_reward INTEGER DEFAULT 100,
+    
+    -- Targeting
+    target_roles TEXT[] DEFAULT ARRAY['manager'],
+    is_public BOOLEAN DEFAULT true,
+    
+    -- Content
+    cards JSONB NOT NULL,
+    
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Content access control (for enterprise custom content)
+CREATE TABLE content_access (
+    id UUID PRIMARY KEY,
+    lesson_id UUID REFERENCES lessons(id) ON DELETE CASCADE,
+    organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
+    accessible_roles TEXT[], -- Which roles in org can access
+    
+    UNIQUE(lesson_id, organization_id)
+);
+
+-- User progress
+CREATE TABLE user_progress (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    lesson_id UUID REFERENCES lessons(id) ON DELETE CASCADE,
+    started_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    completed_at TIMESTAMP WITH TIME ZONE,
+    current_card_index INTEGER DEFAULT 0,
+    cards_completed INTEGER DEFAULT 0,
+    total_cards INTEGER,
+    UNIQUE(user_id, lesson_id)
+);
+
+-- Admin activity logs (for auditing)
+CREATE TABLE admin_activity_logs (
+    id UUID PRIMARY KEY,
+    admin_id UUID REFERENCES profiles(id),
+    action TEXT, -- 'user_banned', 'lesson_created', etc
+    target_type TEXT, -- 'user', 'lesson', 'organization'
+    target_id UUID,
+    metadata JSONB,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+### **Content Filtering Strategy**
+
+**Generic Content (Public):**
+```sql
+-- All public lessons for managers
+SELECT * FROM lessons 
+WHERE is_public = true 
+  AND 'manager' = ANY(target_roles);
+```
+
+**Company-Specific Content:**
+```sql
+-- Milwaukee-only content + public content
+SELECT DISTINCT l.* FROM lessons l
+LEFT JOIN content_access ca ON l.id = ca.lesson_id
+WHERE 
+  -- Public content for role
+  (l.is_public = true AND :user_role = ANY(l.target_roles))
+  OR
+  -- Company-specific content  
+  (ca.organization_id = :user_org_id AND :user_role = ANY(ca.accessible_roles));
+```
+
+### **Rollout Strategy**
+
+**Month 1-3 (MVP):**
+- Only `role` field used (`organization_id = NULL` for all users)
+- All content public (`is_public = true`)
+- Simple role-based filtering
+
+**Month 4-6 (B2B Pilot):**
+- Organizations table activated
+- Team subscriptions
+- Still public content only
+
+**Month 7-12 (Enterprise):**
+- Custom content per organization
+- `content_access` table used
+- Premium pricing for exclusive content
+
+### **User Types & Examples**
+
+**B2C Individual:**
+```
+User: Jan Kowalski
+- organization_id: NULL
+- role: 'manager'
+- Access: All public manager content
+```
+
+**B2B Team Member:**
+```
+User: Anna Nowak
+- organization_id: milwaukee-uuid
+- role: 'salesperson'
+- Access: All public sales content
+```
+
+**B2B with Custom Content:**
+```
+User: Piotr Wiśniewski
+- organization_id: milwaukee-uuid
+- role: 'manager'
+- Access: Public + Milwaukee-exclusive content
+```
 
 ---
 
