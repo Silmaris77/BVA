@@ -1,0 +1,10 @@
+                        </div>
+                    </div>
+                )}
+
+                {/* Toast Notification */}
+                {toast && <Toast message={toast} type="success" onClose={() => setToast(null)} />}
+            </div>
+        </div>
+    )
+}

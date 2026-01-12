@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🌊 Zmienność rynku vs Twoje emocje - Degen Training</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-deep: #0f0c29;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --neon-purple: #b000ff;
+            --neon-blue: #00d4ff;
+            --neon-gold: #ffd700;
+            --neon-red: #ff0055;
+            --neon-green: #00ff88;
+            --neon-orange: #f59e0b;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            opacity: 0.5;
+            animation: floatOrb 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatOrb {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--neon-purple);
+            top: -100px;
+            left: -100px;
+            opacity: 0.3;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--neon-blue);
+            bottom: -100px;
+            right: -100px;
+            opacity: 0.3;
+        }
+
+        .device-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 6px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-btn.active {
+            background: var(--neon-blue);
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .lesson-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-container.desktop-view {
+            max-width: 1400px;
+            padding: 40px;
+        }
+
+        .top-bar {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .desktop-view .top-bar {
+            border-radius: 16px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .back-btn,
+        .menu-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .lesson-title {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .desktop-view .lesson-title {
+            font-size: 20px;
+        }
+
+        .progress-container {
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .desktop-view .progress-container {
+            border-radius: 16px;
+            margin-bottom: 24px;
+            border-bottom: none;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 3px;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .desktop-layout {
+            display: none;
+        }
+
+        .desktop-view .desktop-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 0;
+            height: calc(100vh - 240px);
+            overflow: hidden;
+            margin-top: 0;
+        }
+
+        .desktop-view .mobile-swipe {
+            display: none;
+        }
+
+        .lesson-sidebar {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-section h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-left: 12px;
+        }
+
+        .sidebar-card {
+            padding: 12px;
+            margin: 6px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid transparent;
+        }
+
+        .sidebar-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-card.active {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: var(--neon-blue);
+        }
+
+        .sidebar-card.completed {
+            opacity: 0.6;
+        }
+
+        .sidebar-card-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .sidebar-card.active .sidebar-card-num {
+            background: var(--neon-blue);
+            color: #000;
+        }
+
+        .sidebar-card.completed .sidebar-card-num {
+            background: var(--neon-green);
+            color: #000;
+        }
+
+        .sidebar-card-title {
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .sidebar-card-xp {
+            font-size: 11px;
+            color: var(--neon-gold);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .desktop-content {
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+        }
+
+        .desktop-content .lesson-card {
+            position: relative;
+            opacity: 1;
+            transform: none;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card-viewport {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        .desktop-view .card-viewport {
+            padding: 0;
+        }
+
+        .lesson-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            padding: 28px 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-swipe .lesson-card {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            min-height: calc(100% - 40px);
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .mobile-swipe .lesson-card.active {
+            opacity: 1;
+            transform: translateX(0);
+            position: relative;
+            top: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .card-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--neon-blue);
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding: 6px 12px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+        }
+
+        .card-type.intro {
+            color: var(--neon-purple);
+            background: rgba(176, 0, 255, 0.1);
+            border-color: rgba(176, 0, 255, 0.2);
+        }
+
+        .card-type.concept {
+            color: var(--neon-blue);
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.2);
+        }
+
+        .card-type.practice {
+            color: var(--neon-green);
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.2);
+        }
+
+        .card-type.warning {
+            color: var(--neon-red);
+            background: rgba(255, 0, 85, 0.1);
+            border-color: rgba(255, 0, 85, 0.2);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .card-content {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .card-content strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .card-content p {
+            margin-bottom: 14px;
+        }
+
+        .card-content ul {
+            padding-left: 20px;
+        }
+
+        .highlight-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid var(--neon-blue);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .highlight-box h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--neon-blue);
+        }
+
+        .bottom-nav {
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 12px;
+        }
+
+        .desktop-view .bottom-nav {
+            display: none;
+        }
+
+        .nav-button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-button.primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-color: transparent;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .xp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--neon-gold), #ffaa00);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="device-toggle">
+        <button class="toggle-btn" id="mobileBtn" onclick="setView('mobile')">
+            <i data-lucide="smartphone" size="16"></i>
+            Mobile
+        </button>
+        <button class="toggle-btn active" id="desktopBtn" onclick="setView('desktop')">
+            <i data-lucide="monitor" size="16"></i>
+            Desktop
+        </button>
+    </div>
+
+    <div class="lesson-container desktop-view" id="lessonContainer">
+        <div class="top-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i data-lucide="arrow-left" size="20"></i>
+            </div>
+            <div class="lesson-title">🌊 Zmienność rynku vs Twoje emocje</div>
+            <div class="menu-btn">
+                <i data-lucide="more-vertical" size="20"></i>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-info">
+                <span id="progressText">Card 1/22</span>
+                <span id="timeRemaining">⏱️ ~30 min</span>
+                <span id="xpCounter">💎 +180 XP możliwe</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 5%"></div>
+            </div>
+        </div>
+
+        <div class="desktop-layout">
+            <div class="lesson-sidebar" id="lessonSidebar"></div>
+            <div class="desktop-content" id="desktopContent"></div>
+        </div>
+
+        <div class="card-viewport mobile-swipe" id="mobileSwipe"></div>
+
+        <div class="bottom-nav">
+            <button class="nav-button" id="prevBtn" onclick="prevCard()" disabled>
+                <i data-lucide="chevron-left" size="20"></i>
+            </button>
+            <button class="nav-button primary" id="nextBtn" onclick="nextCard()">
+                Dalej
+                <i data-lucide="chevron-right" size="20"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const totalCards = 22;
+        let currentCard = 1;
+        let viewMode = 'desktop';
+        const completedCards = [];
+
+        const cards = [
+            { type: 'intro', title: 'Degen na emocjonalnym rollercoasterze 🎢', content: '<p style="font-size:18px;margin-bottom:16px;">Dzisiaj przechodzimy przez coś, co <strong>każdy degen zna aż za dobrze</strong> 💀</p><p>Ten moment, gdy rynek zaczyna tańczyć sambę, a twój portfel gra horror klasy B 🎬</p><div class="highlight-box"><h4>🚀 → 🏕️ W 5 minut</h4><p>Raz jesteś królem świata, 5 minut później masz ochotę sprzedać wszystko i zamieszkać w jaskini bez Wi-Fi</p></div><p style="margin-top:16px;"><strong>Ale spokojnie – nie jesteś sam!</strong> Ta lekcja to trening przetrwania dla emocjonalnego degena 🎮🔥</p>', xp: 0 },
+
+            { type: 'concept', title: 'Zmienność emocjonalna vs rynkowa', content: '<p style="margin-bottom:12px;">Dwie rzeczy, które zawsze idą w parze:</p><p><strong>🎢 Zmienność emocjonalna:</strong> Rollercoaster w twoim sercu i portfelu</p><p style="margin:12px 0;">Wzrosty? 🚀 Kupujemy! Spadki? 📉 Sprzedajemy! (Nie zawsze mądrze...)</p><p style="margin-top:16px;"><strong>📊 Zmienność rynkowa:</strong> Huśtawka cen na rynku</p><p style="margin:12px 0;">Ta cała jazda, która sprawia, że degeni budzą się co kilka minut by sprawdzić stan inwestycji 🛏️💤</p><div class="highlight-box"><h4>💡 Kluczowy insight</h4><p><strong>Heurystyka afektu:</strong> Podejmujemy decyzje nie w oparciu o fakty, a na podstawie EMOCJI!</p></div>', xp: 10 },
+
+            { type: 'concept', title: 'VIX – Indeks Strachu 😱', content: '<p style="margin-bottom:12px;"><strong>VIX (Volatility Index)</strong> = najbardziej popularny wskaźnik zmienności rynku akcji 🚨</p><div class="highlight-box" style="background:rgba(255,0,85,0.1);border-color:var(--neon-red);"><h4 style="color:var(--neon-red);">🔥 Jak to działa?</h4><p>Wzrost VIX = większy strach na rynku</p><p style="margin-top:8px;">Kiedy inwestorzy się boją → popyt na opcje ochronne rośnie → VIX w górę!</p><p style="margin-top:8px;"><strong>Wyższy VIX = większy strach</strong></p></div><p style="margin-top:16px;">Przykład: Marzec 2020 (pandemia) – VIX poszybował 🚀 Ci co sprzedali w panice? Teraz patrzą z zazdrością na tych, którzy przeczekali 🙄</p>', xp: 15 },
+
+            { type: 'concept', title: 'Beta – Agresywna zmienność 💥', content: '<p style="margin-bottom:12px;"><strong>Beta</strong> = jak bardzo akcja/krypto jest zmienna vs cały rynek 🏦</p><div class="highlight-box"><h4>📈 Jak czytać Betę?</h4><p><strong>Beta = 1:</strong> Zmienność jak średnia rynku</p><p style="margin-top:8px;"><strong>Beta > 1:</strong> Bardziej zmienna niż rynek (ekscytująco ryzykowne! 😎)</p><p style="margin-top:8px;"><strong>Beta < 1:</strong> Mniej zmienna (nudno ale bezpieczniej)</p></div><p style="margin:16px 0;background:rgba(255,0,85,0.1);padding:12px;border-radius:8px;"><strong>⚠️ Memecoin z beta > 1:</strong> Rynek szaleje → token rośnie szybciej. Ale spada JESZCZE szybciej! 🔥</p>', xp: 15 },
+
+            { type: 'warning', title: 'Cykl emocji degena 🎠', content: '<p style="margin-bottom:12px;"><strong>Wzrosty 50%:</strong></p><p style="font-style:italic;margin-bottom:16px;">"Przecież wzrosty nie będą trwać wiecznie" → Sprzedaję!</p><p style="margin-bottom:12px;"><strong>Potem cena +50% więcej:</strong></p><p style="font-style:italic;margin-bottom:16px;">"OMG przegapiłem! Muszę kupić teraz!"</p><div class="highlight-box" style="background:rgba(255,0,85,0.1);border-color:var(--neon-red);"><h4 style="color:var(--neon-red);">🤦‍♂️ Co się stało?</h4><p>Zmienność emocjonalna wkradła się do decyzji!</p><p style="margin-top:8px;">Zamiast zimnej analizy → emocje wzięły ster</p></div>', xp: 15 },
+
+            { type: 'warning', title: 'Panic Selling – najdroższa decyzja 😱💰', content: '<p style="margin-bottom:12px;"><strong>"Muszę sprzedać, bo inaczej nie będzie czego sprzedać!"</strong></p><p style="margin:12px 0;">Strach przed stratą wymusza szybkie decyzje</p><p>Potem rynek się odbija... a my już po wszystkim 😖</p><div class="highlight-box"><h4>📖 Historia z życia wzięta</h4><p>Marzec 2020 – wszyscy degeni sprzedali w panice</p><p style="margin-top:8px;">"Co jeśli gospodarka padnie?!"</p><p style="margin-top:8px;"><strong>Efekt?</strong> Ceny spadły... ale zaraz potem wystrzeliły na niespotykaną skalę! 🚀</p><p style="margin-top:8px;">Ci co poczekali? Teraz uśmiechnięci 😬</p></div>', xp: 20 },
+
+            { type: 'warning', title: 'FOMO – wszyscy zarabiają, a ja? 🤯', content: '<p style="margin-bottom:12px;"><strong>Fear Of Missing Out</strong> w najlepszym wydaniu</p><p>Gdy wszystko rośnie → degen MUSI dołączyć do zabawy!</p><div class="highlight-box" style="background:rgba(255,215,0,0.1);border-color:var(--neon-gold);"><h4 style="color:var(--neon-gold);">⚠️ Przykład 2017</h4><p>Krypto-rynek rozkręcał się do niesamowitych wzrostów</p><p style="margin-top:8px;">Każdy kupował bez zastanowienia – "wszyscy już to robią!" 🤷‍♂️</p><p style="margin-top:8px;"><strong>A potem?</strong> Bańka pękła. Miliony degenów straciło kasę 🏚️</p></div><p style="margin-top:12px;">Nie mogli poczekać, bo przecież "wszyscy już zarabiają!"</p>', xp: 20 },
+
+            { type: 'warning', title: 'Impulsywne zmiany strategii 💀', content: '<p style="margin-bottom:12px;"><strong>"Rzuć wszystko i kupuj!"</strong> staje się codziennością</p><p style="margin:12px 0;">Degeni miotają się jak żółw goniący zająca 🏃‍♂️💨</p><div class="highlight-box"><h4>📅 Typowy dzień degena:</h4><p><strong>Poniedziałek:</strong> "Będę trzymać 10 lat!"</p><p style="margin-top:8px;"><strong>Wtorek (spadek 20%):</strong> "Może coś bezpieczniejszego?"</p><p style="margin-top:8px;"><strong>Środa:</strong> "Teraz akcje ryzykowne, bo rosną!"</p><p style="margin-top:8px;"><strong>Czwartek:</strong> Znowu wszystko zmieniam 😂</p></div><p style="margin-top:12px;"><strong>Efekt?</strong> Totalny chaos w portfelu</p>', xp: 15 },
+
+            { type: 'concept', title: 'VIX = Strach ma swój indeks 🧠📊', content: '<p style="margin-bottom:12px;">Nie bez powodu VIX nazywa się <strong>"indeksem strachu"</strong></p><p>Pokazuje jak bardzo rynek się boi ZANIM coś się wydarzy</p><div class="highlight-box"><h4>🚨 Power VIX:</h4><p>Inwestorzy w tryb "OMG wszystko się zawali!" → masowo kupują opcje ochronne</p><p style="margin-top:8px;">VIX rośnie szybciej niż memecoin po tweecie Elona 📈💥</p></div><p style="margin:16px 0;background:rgba(0,212,255,0.1);padding:12px;border-radius:8px;"><strong>💡 Historia:</strong> Koniec 1999 – pluskwa milenijna miała zjeść komputery. Inwestorzy spanikowali. VIX skoczył. A potem? Nic się nie stało 😎</p>', xp: 10 },
+
+            { type: 'concept', title: 'Sentyment = emocje na sterydach 😨', content: '<p style="margin-bottom:12px;"><strong>Sentyment inwestorów</strong> = zbiorowe "mam nadzieję" albo "aaaa przepadnie!"</p><p>Ten klimat rozbuja rynek bardziej niż jakiekolwiek dane makro 📊</p><div class="highlight-box"><h4>🔬 Co mówią badania?</h4><p>Gdy tłum jest zbyt optymistyczny ALBO zbyt przerażony → ceny wariują mocniej niż powinny</p><p style="margin-top:8px;">Albo euforia i szczyty, albo panika i krater</p></div><p style="margin-top:12px;"><strong>Luty-marzec 2020:</strong> S&P 500 ↓34%, VIX rekordy 🎢</p><p style="margin-top:8px;"><strong>Kwiecień 2020:</strong> Wielki powrót +45% w 3 miesiące! Emocjonalny ping-pong ��</p>', xp: 10 },
+
+            { type: 'concept', title: 'Fear & Greed – duet rządzący giełdą 🎭', content: '<p style="margin-bottom:12px;">Dwa najwięksi bossowie:</p><div class="highlight-box" style="background:rgba(255,0,85,0.1);border-color:var(--neon-red);"><h4 style="color:var(--neon-red);">🧨 STRACH</h4><p>"Sprzedaj wszystko zanim zniknie!"</p></div><div class="highlight-box" style="background:rgba(255,215,0,0.1);border-color:var(--neon-gold);"><h4 style="color:var(--neon-gold);">💎 CHCIWOŚĆ</h4><p>"Wchodzę all-in, wszyscy zarabiają!"</p></div><p style="margin-top:16px;">CNN ma <strong>Fear & Greed Index</strong> który mierzy, w którą stronę ciągnie tłum</p><p style="margin:12px 0;font-style:italic;"><strong>Dziadzio Buffett:</strong> "Bój się gdy inni chciwi. Bądź chciwy gdy inni się boją" 🎯</p>', xp: 15 },
+
+            { type: 'practice', title: 'Bądź swoim psychoterapeutą 🧘‍♂️', content: '<p style="margin-bottom:12px;"><strong>Poznaj siebie!</strong> (Brzmi jak z Instagrama, ale działa)</p><div class="highlight-box"><h4>🔍 Zadaj sobie pytania:</h4><p>• W panice sprzedajesz wszystko na dołku?</p><p style="margin-top:8px;">• W hossie czujesz się jak Elon i pakujesz po uszy w high-risk-shity?</p></div><p style="margin:16px 0;background:rgba(0,255,136,0.1);padding:12px;border-radius:8px;"><strong>💡 Pro tip:</strong> Rób dziennik degena! Notuj co czujesz i co robisz w trakcie wahań. To cheat-code na twoją psychikę!</p>', xp: 15 },
+
+            { type: 'practice', title: 'Zaakceptuj chaos 🌊', content: '<p style="margin-bottom:12px;">Jeśli myślisz że będzie płynnie i przewidywalnie... <strong>zainwestuj w kaktusy</strong> 🌵</p><p>Przynajmniej nie drgają o 20% dziennie 📉📈</p><div class="highlight-box"><h4>🎯 Zmienność = norma</h4><p>To jak zakręty na torze – jak nie lubisz zakrętów, nie siadasz za kierownicą</p><p style="margin-top:8px;">Każda korekta to nie koniec świata. To tylko nowy level w grze 🎮</p></div><p style="margin-top:12px;"><strong>NIE PANIKUJ</strong> kiedy robi się nerwowo. Pamiętaj: to część gry!</p>', xp: 10 },
+
+            { type: 'practice', title: 'Trzymaj się planu 🧭', content: '<p style="margin-bottom:12px;"><strong>Masz strategię? To się jej TRZYMAJ!</strong></p><p>Zamiast reagować na każdy news jak trader ADHD, przypomnij sobie:</p><div class="highlight-box"><h4>🎯 Twój degen-GPS</h4><p>"Gram długoterminowo. Moja emerytura nie zależy od tego co zrobi S&P w piątek"</p></div><p style="margin:16px 0;background:rgba(0,212,255,0.1);padding:12px;border-radius:8px;"><strong>💡 Protip:</strong> Zapisz na kartce co robisz gdy:</p><p>• Spadnie o 20%</p><p>• Rośnie o 30%</p><p style="margin-top:8px;">A potem TRZYMAJ SIĘ TEGO jak hodler pierwszego Bitka! 💎🙌</p>', xp: 15 },
+
+            { type: 'practice', title: 'Zarządzanie ryzykiem = zarządzanie snem 🔐💤', content: '<p style="margin-bottom:12px;">Jeśli po każdej sesji wchodzisz na grupki "czy to już krach?" → <strong>czas przemyśleć alokację</strong> 😬</p><div class="highlight-box"><h4>💡 Rozdziel portfel:</h4><p>• Trochę akcji</p><p>• Nowe projekty</p><p>• Trochę złota</p><p>• Kapka stablecoinów?</p></div><p style="margin-top:12px;"><strong>Zrób sobie emocjonalną poduszkę 🌱</strong></p><p style="margin:12px 0;">A potem sprawdź: Czy po tych ustawieniach śpisz spokojnie?</p><p><strong>Jeśli nie → back to the drawing board!</strong></p>', xp: 15 },
+
+            { type: 'practice', title: 'Odetnij się od szumu 📵', content: '<p style="margin-bottom:12px;">Twitter, alerty, newsy, grupki Telegram, SMS od ziomka "kupuj bo rośnie!"</p><p style="font-size:20px;font-weight:bold;color:var(--neon-red);margin:16px 0;">STOP 🛑</p><div class="highlight-box" style="background:rgba(255,0,85,0.1);border-color:var(--neon-red);"><h4 style="color:var(--neon-red);">⚠️ To nie wiedza – to jazgot</h4><p>Ogranicz bodźce. Wyłącz notyfikacje.</p><p style="margin-top:8px;">Sprawdzaj portfel raz na kilka dni, NIE co 3 minuty</p></div><p style="margin-top:16px;"><strong>Nagłówki żyją z twojej paniki. Ty nie musisz.</strong></p><p style="margin-top:8px;">Cisza = mniej stresu = mniej głupich decyzji 🧘‍♂️</p>', xp: 15 },
+
+            { type: 'practice', title: 'Zbuduj rytuały awaryjne 🧠', content: '<p style="margin-bottom:12px;"><strong>Twój mózg w stresie nie działa racjonalnie</strong></p><p>Więc daj mu plan awaryjny!</p><div class="highlight-box"><h4>🔥 Przychodzi panika?</h4><p><strong>1.</strong> Odchodź od kompa</p><p style="margin-top:8px;"><strong>2.</strong> Robisz kawę ☕</p><p style="margin-top:8px;"><strong>3.</strong> Spacer 🚶</p><p style="margin-top:8px;"><strong>4.</strong> Cokolwiek. Ale NIE klikasz "sprzedaj"</p></div><p style="margin:16px 0;background:rgba(0,212,255,0.1);padding:12px;border-radius:8px;"><strong>💡 Zasada:</strong> Duże decyzje tylko po 24h. I pogadaj z kimś – ziomek albo doradca 🤝</p>', xp: 15 },
+
+            { type: 'practice', title: 'Dostosuj strategię do psychiki 🤖', content: '<p style="margin-bottom:12px;">Nie każdy musi być traderem z 8 monitorami!</p><p>Jeśli jesteś emocjonalny → wybierz <strong>"Zen Degen"</strong> style:</p><div class="highlight-box"><h4>😌 Zen Degen Setup:</h4><p>📈 ETF-y (mniej stresu)</p><p style="margin-top:8px;">📅 Inwestowanie co miesiąc (autopilot)</p><p style="margin-top:8px;">🤖 Automatyzacja (zero emocji)</p><p style="margin-top:8px;">💬 Brak zbędnych analiz (mniej overthinkingu)</p></div><p style="margin-top:12px;"><strong>Im mniej decyzji → tym mniej okazji do spieprzenia!</strong> 😎</p>', xp: 10 },
+
+            { type: 'warning', title: 'Emocje wybijają z rytmu 🔀', content: '<p style="margin-bottom:12px;">Masz plan? Super. Ale potem przychodzi FOMO, panika albo TikTok o "krypto x100 w 2 tygodnie" i...</p><p style="font-size:20px;margin:16px 0;"><strong>BUM! 💥</strong></p><div class="highlight-box" style="background:rgba(255,0,85,0.1);border-color:var(--neon-red);"><h4 style="color:var(--neon-red);">❌ To nie strategia</h4><p>To freestyle. A freestyle działa na parkiecie, nie w inwestycjach 🕺</p></div><p style="margin-top:12px;">Zamiast "kup, sprzedaj, panikuj" → trzymaj się planu!</p>', xp: 10 },
+
+            { type: 'warning', title: 'Market timing – największe kłamstwo 🕰️', content: '<p style="margin-bottom:12px;"><strong>"Wyczuję rynek, chilluj"</strong> – brzmi sexy, ale...</p><p>W praktyce to jak próba złapania spadającego noża 🔪</p><div class="highlight-box"><h4>📊 Co mówią dane?</h4><p>Degen który robi NAJWIĘCEJ klików w "kup/sprzedaj" zwykle zarabia NAJMNIEJ</p><p style="margin-top:12px;">Największe zyski? Dzieją się w kilka kluczowych dni w roku</p><p style="margin-top:8px;">Jeśli wtedy panikujesz i siedzisz na gotówce... no cóż. Portfel płacze 😭</p></div><p style="margin-top:12px;"><strong>Nie bądź Jasnowidzem. Bądź cierpliwym Degenem z planem!</strong></p>', xp: 15 },
+
+            { type: 'warning', title: 'Więcej klików = mniej $$$ 💸', content: '<p style="margin-bottom:12px;"><strong>Emocjonalny degen = aktywny degen</strong></p><p>A aktywny degen płaci:</p><div class="highlight-box" style="background:rgba(255,0,85,0.1);border-color:var(--neon-red);"><h4 style="color:var(--neon-red);">💸 Koszty aktywności:</h4><p>• Prowizje przy każdej transakcji</p><p style="margin-top:8px;">• Podatki od zysków</p><p style="margin-top:8px;">• Błędy z paniki (bezcenne)</p></div><p style="margin:16px 0;background:rgba(0,212,255,0.1);padding:12px;border-radius:8px;"><strong>💡 Paradoks:</strong> Często najlepsze co możesz zrobić... to NIC. Zero transakcji. Zen mode 🧘‍♀️</p>', xp: 10 },
+
+            { type: 'concept', title: 'Emocje jako narzędzie 🐯', content: '<p style="margin-bottom:12px;"><strong>Emocje to nie wróg!</strong></p><p>To dziki zwierzak do oswojenia 🐯</p><div class="highlight-box" style="background:rgba(0,255,136,0.1);border-color:var(--neon-green);"><h4 style="color:var(--neon-green);">🔸 Strach?</h4><p>Może uratować cię przed rzuceniem oszczędności w memcoin z logiem banana</p></div><div class="highlight-box" style="background:rgba(255,215,0,0.1);border-color:var(--neon-gold);"><h4 style="color:var(--neon-gold);">🔸 Euforia?</h4><p>Czasem daje kopa do działania gdy wszyscy czekają na cud</p></div><p style="margin-top:16px;"><strong>Kluczem jest:</strong> żebyś TO TY trzymał lejce, a nie emocje galopowały jak mustangi 🐎</p>', xp: 15 },
+
+            { type: 'concept', title: '🏆 Podsumowanie Boss Mode', content: '<p style="margin-bottom:12px;"><strong>Kiedy emocje nie będą tobą sterować jak NPC-em</strong> 🎮</p><p>A Ty ogarniesz je jak boss...</p><div class="highlight-box"><h4>✨ Wtedy zmienność przestanie być potworem</h4><p>A stanie się tylko kolejnym levelem do przejścia</p></div><p style="margin:20px 0;font-size:18px;font-style:italic;text-align:center;"><strong>"Trzymaj emocje na krótkiej smyczy,<br>a portfel na długim horyzoncie"</strong> 🧘‍♂️📈</p><div class="highlight-box" style="background:rgba(0,255,136,0.1);border-color:var(--neon-green);"><h4 style="color:var(--neon-green);">💪 Pamiętaj!</h4><p>• Samoświadomość</p><p style="margin-top:6px;">• Zarządzanie ryzykiem</p><p style="margin-top:6px;">• Plan awaryjny</p><p style="margin-top:6px;">• Cierpliwość</p></div><div class="xp-badge" style="margin:20px auto;width:fit-content;font-size:18px;padding:16px 32px;">✨ +180 XP TOTAL</div>', xp: 0 }
+        ];
+
+        function setView(mode) {
+            viewMode = mode;
+            const container = document.getElementById('lessonContainer');
+            const mobileBtn = document.getElementById('mobileBtn');
+            const desktopBtn = document.getElementById('desktopBtn');
+
+            if (mode === 'desktop') {
+                container.classList.add('desktop-view');
+                desktopBtn.classList.add('active');
+                mobileBtn.classList.remove('active');
+                renderDesktopSidebar();
+                renderDesktopContent();
+            } else {
+                container.classList.remove('desktop-view');
+                mobileBtn.classList.add('active');
+                desktopBtn.classList.remove('active');
+                renderMobileCards();
+            }
+
+            lucide.createIcons();
+        }
+
+        function renderDesktopSidebar() {
+            const sidebar = document.getElementById('lessonSidebar');
+
+            const sections = [
+                { title: 'Intro', range: [0, 0] },
+                { title: 'Podstawy', range: [1, 4] },
+                { title: 'Typowe pułapki', range: [5, 10] },
+                { title: 'Jak nie zwariować', range: [11, 17] },
+                { title: 'Emocje vs Strategia', range: [18, 20] },
+                { title: 'Finał', range: [21, 21] }
+            ];
+
+            let html = '';
+            sections.forEach(section => {
+                html += `<div class="sidebar-section"><h3>${section.title}</h3>`;
+                for (let i = section.range[0]; i <= section.range[1]; i++) {
+                    const card = cards[i];
+                    const num = i + 1;
+                    const isCompleted = completedCards.includes(num);
+                    const isCurrent = num === currentCard;
+
+                    html += `
+                        <div class="sidebar-card ${isCompleted ? 'completed' : ''} ${isCurrent ? 'active' : ''}" onclick="selectCard(${num})">
+                            <div class="sidebar-card-num">${num}</div>
+                            <div class="sidebar-card-title">${card.title}</div>
+                            ${card.xp > 0 ? `<div class="sidebar-card-xp">+${card.xp}</div>` : ''}
+                        </div>
+                    `;
+                }
+                html += '</div>';
+            });
+
+            sidebar.innerHTML = html;
+        }
+
+        function renderDesktopContent() {
+            const content = document.getElementById('desktopContent');
+            const card = cards[currentCard - 1];
+
+            content.innerHTML = `
+                <div class="lesson-card">
+                    <span class="card-type ${card.type}">${card.type}</span>
+                    <h2 class="card-title">${card.title}</h2>
+                    <div class="card-content">${card.content}</div>
+                    ${card.xp > 0 ? `<div class="xp-badge">+${card.xp} XP</div>` : ''}
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 32px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    <button class="nav-button" onclick="prevCard()" ${currentCard === 1 ? 'disabled' : ''} style="flex: 0 0 auto; padding: 14px 24px;">
+                        <i data-lucide="chevron-left" size="20"></i>
+                        Poprzedni
+                    </button>
+                    <button class="nav-button primary" onclick="nextCard()" ${currentCard === totalCards ? 'disabled' : ''} style="flex: 0 0 auto; padding: 14px 24px;">
+                        ${currentCard === totalCards ? 'Zakończ' : 'Dalej'}
+                        <i data-lucide="chevron-right" size="20"></i>
+                    </button>
+                </div>
+            `;
+
+            lucide.createIcons();
+        }
+
+        function renderMobileCards() {
+            const swipe = document.getElementById('mobileSwipe');
+            swipe.innerHTML = cards.map((card, idx) => {
+                const num = idx + 1;
+                return `
+                    <div class="lesson-card ${num === currentCard ? 'active' : ''}" data-card="${num}">
+                        <span class="card-type ${card.type}">${card.type}</span>
+                        <h2 class="card-title">${card.title}</h2>
+                        <div class="card-content">${card.content}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards) {
+                if (!completedCards.includes(currentCard)) {
+                    completedCards.push(currentCard);
+                }
+                currentCard++;
+                updateView();
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                currentCard--;
+                updateView();
+            }
+        }
+
+        function selectCard(num) {
+            currentCard = num;
+            updateView();
+        }
+
+        function updateView() {
+            updateProgress();
+            if (viewMode === 'mobile') {
+                document.querySelectorAll('.lesson-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                const current = document.querySelector(`[data-card="${currentCard}"]`);
+                if (current) current.classList.add('active');
+
+                document.getElementById('prevBtn').disabled = currentCard === 1;
+            } else {
+                renderDesktopSidebar();
+                renderDesktopContent();
+            }
+            lucide.createIcons();
+        }
+
+        function updateProgress() {
+            const progress = (currentCard / totalCards) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').innerText = `Card ${currentCard}/${totalCards}`;
+
+            const minutesRemaining = Math.ceil((totalCards - currentCard) * 1.3);
+            document.getElementById('timeRemaining').innerText = `⏱️ ~${minutesRemaining} min`;
+        }
+
+        function goBack() {
+            if (confirm('Opuścić lekcję? Postęp zostanie zapisany.')) {
+                alert('Powrót do dashboardu...');
+            }
+        }
+
+        setView('desktop');
+        updateProgress();
+    </script>
+</body>
+
+</html>

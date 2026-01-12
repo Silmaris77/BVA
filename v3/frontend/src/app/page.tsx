@@ -1,473 +1,567 @@
-"use client";
+﻿'use client'
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import {
-  LayoutGrid,
-  Cpu,
-  Zap,
-  Crosshair,
-  User,
-  Shield,
-  Power,
-  BrainCircuit,
-  AlertTriangle,
-  ChevronDown,
-  Activity,
-  Coins,
-  Target,
-  BookOpen,
-  AlertOctagon,
-  Crown,
-  Mic,
-  ScanEye
-} from 'lucide-react';
-import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Radar } from 'react-chartjs-2';
-import { fetchDashboard, type DashboardData } from '@/utils/api';
+import { useAuth } from '@/contexts/AuthContext'
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import { Zap, Trophy, Target, Flame, BookOpen, Brain, ChevronRight, GraduationCap, Search, Bell } from 'lucide-react'
 
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
-
-export default function Home() {
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default function HomePage() {
+  const { user, profile } = useAuth()
+  const [completedLessons, setCompletedLessons] = useState<number>(0)
 
   useEffect(() => {
-    async function loadDashboard() {
-      try {
-        const data = await fetchDashboard();
-        setDashboardData(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load dashboard');
-        setLoading(false);
-      }
+    async function fetchStats() {
+      if (!user) return
+
+      const { count } = await supabase
+        .from('user_progress')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .not('completed_at', 'is', null)
+
+      setCompletedLessons(count || 0)
     }
-    loadDashboard();
-  }, []);
 
-  const radarData = dashboardData ? {
-    labels: dashboardData.competence.labels,
-    datasets: [
-      {
-        label: 'Current Status',
-        data: dashboardData.competence.values,
-        fill: true,
-        backgroundColor: 'rgba(176, 0, 255, 0.2)',
-        borderColor: '#b000ff',
-        pointBackgroundColor: '#00d4ff',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#00d4ff',
-        borderWidth: 2,
-        pointRadius: 4,
-      },
-    ],
-  } : null;
+    fetchStats()
+  }, [user])
 
-  const radarOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      r: {
-        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-        pointLabels: { color: 'rgba(255, 255, 255, 0.8)', font: { size: 11, family: 'Outfit' } },
-        ticks: { display: false, backdropColor: 'transparent' }
-      }
-    },
-    plugins: {
-      legend: { display: false }
-    }
-  };
+  if (!user) return null
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen w-full bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
-        <div className="text-white text-2xl">
-          <BrainCircuit className="animate-pulse w-16 h-16 mx-auto mb-4" />
-          <p>Initializing Tactical OS...</p>
-        </div>
-      </div>
-    );
+  const levelName = (level: number) => {
+    const names = ['Recruit', 'Analyst', 'Associate', 'Manager', 'Director', 'VP', 'SVP', 'Executive', 'Strategist', 'Master']
+    return names[Math.min(level - 1, names.length - 1)] || 'Recruit'
   }
 
-  if (error) {
-    return (
-      <div className="flex items-center justify-center h-screen w-full bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]">
-        <div className="glass-card p-8 max-w-md text-center">
-          <AlertTriangle className="w-16 h-16 mx-auto mb-4 text-[#ff0055]" />
-          <h2 className="text-2xl font-bold mb-2 text-white">System Error</h2>
-          <p className="text-[rgba(255,255,255,0.6)] mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="btn-glow"
-          >
-            Retry Connection
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!dashboardData) return null;
-
+  // Main content area matching mockup structure
   return (
-    <>
-      {/* Ambient Orbs */}
-      <div className="orb orb-1"></div>
-      <div className="orb orb-2"></div>
-      <div className="orb orb-3"></div>
+    <div style={{ minHeight: '100vh' }}>
+      {/* Top Bar */}
+      <div style={{
+        background: 'rgba(0, 0, 0, 0.2)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        padding: '16px 32px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        position: 'sticky',
+        top: 0,
+        zIndex: 50
+      }}>
+        {/* Search */}
+        <div style={{ flex: 1, maxWidth: '400px', position: 'relative' }}>
+          <input
+            type="text"
+            placeholder="Szukaj..."
+            style={{
+              width: '100%',
+              padding: '10px 16px 10px 40px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '12px',
+              color: 'white',
+              fontFamily: 'Outfit, sans-serif',
+              fontSize: '14px',
+              outline: 'none'
+            }}
+          />
+          <Search size={18} style={{
+            position: 'absolute',
+            left: '12px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            color: 'rgba(255, 255, 255, 0.6)'
+          }} />
+        </div>
 
-      {/* Mobile Header */}
-      <div className="mobile-header">
-        <div className="mobile-header-content">
-          <div className="mobile-logo">
-            <div className="logo-icon" style={{ width: '32px', height: '32px' }}>
-              <BrainCircuit size={18} color="white" />
-            </div>
-            <span style={{ fontSize: '0.95rem' }}>TACTICAL OS</span>
-          </div>
+        {/* Actions */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          {/* Notifications */}
           <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: '#64748b',
-            border: '2px solid var(--neon-purple)'
-          }}></div>
-        </div>
-      </div>
-
-      {/* Sidebar */}
-      <div className="sidebar">
-        <div className="logo">
-          <div className="logo-icon">
-            <BrainCircuit size={24} color="white" />
-          </div>
-          <span>TACTICAL OS</span>
-        </div>
-
-        <div className="nav-group">
-          <div className="nav-label">Operations</div>
-          <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div className="nav-item active">
-              <LayoutGrid size={18} /> War Room
-            </div>
-          </Link>
-          <Link href="/implants" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div className="nav-item">
-              <Cpu size={18} /> Neural Implants
-            </div>
-          </Link>
-          <div className="nav-item" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-            <Zap size={18} /> AI Agents
-          </div>
-          <div className="nav-item" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
-            <Crosshair size={18} /> Simulations
-          </div>
-        </div>
-
-        <div className="nav-group">
-          <div className="nav-label">System</div>
-          <div className="nav-item">
-            <User size={18} /> Cyberdeck
-          </div>
-          <div className="nav-item">
-            <Shield size={18} /> Shadow Ops
-          </div>
-        </div>
-
-        <div style={{ marginTop: 'auto' }}>
-          <div className="nav-item" style={{ color: 'var(--neon-red)', borderColor: 'rgba(255,0,85,0.2)' }}>
-            <Power size={18} /> Disconnect
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="main">
-        <div className="header">
-          <div className="page-title">
-            <h1>Witaj, {dashboardData.operator_name}.</h1>
-            <p>
-              Status Systemu: <span style={{ color: 'var(--neon-blue)' }}>{dashboardData.system_status}</span> • Synchronizacja Kalendarza: <span style={{ color: 'var(--neon-blue)' }}>{dashboardData.calendar_sync}</span>
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-            <div className="alert-badge">
-              <AlertTriangle size={14} />
-              MARKET CRASH DETECTED
-            </div>
-
+            width: '40px',
+            height: '40px',
+            borderRadius: '12px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            position: 'relative'
+          }}>
+            <Bell size={20} />
             <div style={{
+              position: 'absolute',
+              top: '-4px',
+              right: '-4px',
+              width: '18px',
+              height: '18px',
+              background: '#ff0055',
+              borderRadius: '50%',
+              fontSize: '10px',
+              fontWeight: 700,
               display: 'flex',
               alignItems: 'center',
-              gap: '1rem',
-              background: 'rgba(0,0,0,0.3)',
-              padding: '0.5rem 1rem',
-              borderRadius: '50px',
-              border: '1px solid var(--glass-border)'
-            }}>
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                background: '#64748b',
-                border: '2px solid var(--neon-purple)'
-              }}></div>
-              <span style={{ fontWeight: 600 }}>{dashboardData.operator_name}</span>
-              <ChevronDown size={16} style={{ opacity: 0.5 }} />
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Row */}
-        <div className="stats-row">
-          <div className="glass-card stat-card">
-            <div className="stat-icon" style={{
-              color: 'var(--neon-purple)',
-              borderColor: 'var(--neon-purple)',
-              boxShadow: '0 0 15px rgba(176,0,255,0.2)'
-            }}>
-              <Zap size={28} />
-            </div>
-            <div>
-              <div className="stat-label">Doświadczenie</div>
-              <div className="stat-value">{dashboardData.stats.xp.toLocaleString()} XP</div>
-              <div style={{ color: 'var(--neon-purple)', fontSize: '0.7rem', marginTop: '5px' }}>
-                {dashboardData.stats.xp_change}
-              </div>
-            </div>
+              justifyContent: 'center'
+            }}>3</div>
           </div>
 
-          <div className="glass-card stat-card">
-            <div className="stat-icon" style={{
-              color: 'var(--neon-blue)',
-              borderColor: 'var(--neon-blue)',
-              boxShadow: '0 0 15px rgba(0,212,255,0.2)'
-            }}>
-              <Coins size={28} />
-            </div>
-            <div>
-              <div className="stat-label">Venture Credits</div>
-              <div className="stat-value">{dashboardData.stats.vc} VC</div>
-              <div style={{ color: 'var(--neon-blue)', fontSize: '0.7rem', marginTop: '5px' }}>
-                Access: Level {dashboardData.stats.vc_level}
-              </div>
-            </div>
+          {/* XP Badge */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '6px 12px',
+            background: 'linear-gradient(135deg, #ffd700, #ff8800)',
+            borderRadius: '20px',
+            fontSize: '13px',
+            fontWeight: 700,
+            color: '#000'
+          }}>
+            <Zap size={16} />
+            <span>{profile?.xp || 0} XP</span>
           </div>
 
-          <div className="glass-card stat-card">
-            <div className="stat-icon" style={{
-              color: 'var(--neon-red)',
-              borderColor: 'var(--neon-red)',
-              boxShadow: '0 0 15px rgba(255,0,85,0.2)'
-            }}>
-              <Activity size={28} />
-            </div>
-            <div>
-              <div className="stat-label">Neural Link</div>
-              <div className="stat-value">{dashboardData.stats.neural_link_status}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.7rem', marginTop: '5px' }}>
-                Latency: {dashboardData.stats.neural_link_latency}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Dashboard Grid */}
-        <div className="dashboard-grid">
-          {/* Left Column */}
-          <div className="col">
-            <div className="glass-card" style={{ flex: 1 }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '1.5rem'
-              }}>
-                <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                  <Target style={{ color: 'var(--neon-blue)' }} />
-                  Active Protocols (Missions)
-                </h3>
-                <button className="btn-glow" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
-                  View All
-                </button>
-              </div>
-
-              {dashboardData.missions.map((mission) => {
-                const iconMap: Record<string, React.ReactNode> = {
-                  'book': <BookOpen size={20} />,
-                  'alert': <AlertOctagon size={20} />
-                };
-                return (
-                  <div
-                    key={mission.id}
-                    className="mission-item"
-                    style={mission.is_crisis ? {
-                      borderColor: 'var(--neon-red)',
-                      background: 'rgba(255,0,85,0.05)'
-                    } : {}}
-                  >
-                    <div className="mission-icon" style={mission.is_crisis ? { color: 'var(--neon-red)' } : {}}>
-                      {iconMap[mission.icon_type] || <Target size={20} />}
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 600, color: mission.is_crisis ? '#ff8fa3' : 'white' }}>{mission.title}</div>
-                      <div style={{ fontSize: '0.8rem', color: mission.is_crisis ? '#ff8fa3' : 'var(--text-muted)', opacity: mission.is_crisis ? 0.8 : 1, marginTop: '2px' }}>
-                        {mission.subtitle}
-                      </div>
-                    </div>
-                    <div style={{ textAlign: 'right', marginRight: '1.5rem' }}>
-                      <div style={{ color: 'var(--neon-gold)', fontWeight: 700, fontSize: '0.9rem' }}>{mission.reward_xp}</div>
-                      {mission.reward_vc && <div style={{ color: 'var(--neon-blue)', fontSize: '0.8rem' }}>{mission.reward_vc}</div>}
-                    </div>
-                    <button
-                      className="btn-glow"
-                      style={mission.is_crisis ? {
-                        background: 'var(--neon-red)',
-                        borderColor: 'var(--neon-red)'
-                      } : {}}
-                    >
-                      {mission.action}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="glass-card" style={{ height: '300px', display: 'flex', flexDirection: 'column' }}>
-              <h3 style={{
-                margin: '0 0 1rem 0',
-                fontSize: '1rem',
-                color: 'var(--text-muted)',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
-              }}>
-                Competence Radar
-              </h3>
-              <div style={{ flex: 1, position: 'relative' }}>
-                {radarData && <Radar data={radarData} options={radarOptions} />}
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="col">
-            <div className="glass-card">
-              <h3 style={{ margin: '0 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Crown style={{ color: 'var(--neon-gold)' }} />
-                Top Operators
-              </h3>
-
-              {dashboardData.top_operators.map((operator) => (
-                <div
-                  key={operator.rank}
-                  className="leaderboard-row"
-                  style={operator.is_current_user ? {
-                    background: 'rgba(255,255,255,0.05)',
-                    padding: '0.5rem',
-                    borderRadius: '8px',
-                    marginTop: '1rem',
-                    border: '1px solid var(--neon-blue)'
-                  } : {}}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div
-                      className={operator.rank === 1 ? 'rank-badge rank-1' : 'rank-badge'}
-                      style={operator.is_current_user ? { background: 'var(--neon-blue)', color: '#000' } : {}}
-                    >
-                      {operator.rank}
-                    </div>
-                    {!operator.is_current_user && (
-                      <div style={{
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '50%',
-                        background: operator.rank === 1 ? '#fff' : '#ccc',
-                        marginRight: '10px'
-                      }}></div>
-                    )}
-                    <span style={{
-                      fontWeight: 600,
-                      color: operator.is_current_user ? '#fff' : (operator.rank === 1 ? 'inherit' : 'var(--text-muted)')
-                    }}>
-                      {operator.name}
-                    </span>
-                  </div>
-                  <span style={{
-                    color: operator.is_current_user ? '#fff' : (operator.rank === 1 ? 'var(--neon-purple)' : 'var(--text-muted)'),
-                    fontWeight: operator.is_current_user || operator.rank === 1 ? 700 : 600
-                  }}>
-                    {operator.score}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="glass-card">
-              <h3 style={{ margin: '0 0 1rem 0', fontSize: '1rem' }}>Quick Actions</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-                <button className="btn-glow" style={{
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  gap: '0.5rem'
-                }}>
-                  <Mic size={20} /> Voice Sim (Marcus)
-                </button>
-                <button className="btn-glow" style={{
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  gap: '0.5rem',
-                  background: 'transparent',
-                  borderColor: 'rgba(255,255,255,0.2)'
-                }}>
-                  <ScanEye size={18} /> Run VK Protocol
-                </button>
-              </div>
-            </div>
+          {/* Profile */}
+          <div style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #b000ff, #00d4ff)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 700,
+            cursor: 'pointer'
+          }}>
+            {profile?.full_name?.substring(0, 2).toUpperCase() || 'U'}
           </div>
         </div>
       </div>
 
-      {/* Mobile Bottom Navigation */}
-      <div className="mobile-nav">
-        <div className="mobile-nav-item active">
-          <LayoutGrid size={20} />
-          <span>War Room</span>
+      {/* Content with padding matching mockup */}
+      <div style={{ padding: '48px 32px 32px 48px' }}>
+        {/* Page Header */}
+        <div style={{ marginBottom: '32px' }}>
+          <h1 style={{
+            fontSize: '28px',
+            fontWeight: 700,
+            marginBottom: ' 8px'
+          }}>
+            Witaj z powrotem, {profile?.full_name?.split(' ')[0] || 'Piotr'}! 👋
+          </h1>
+          <p style={{
+            fontSize: '15px',
+            color: 'rgba(255, 255, 255, 0.6)'
+          }}>
+            Kontynuuj swoją podróż. Dziś masz 3 aktywne misje do ukończenia.
+          </p>
         </div>
-        <div className="mobile-nav-item">
-          <Zap size={20} />
-          <span>AI Agents</span>
+
+        {/* Stats Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '16px',
+          marginBottom: '32px'
+        }}>
+          <StatCard
+            icon={<Trophy size={24} />}
+            iconColor="purple"
+            value="#8"
+            label="Ranking"
+          />
+          <StatCard
+            icon={<Target size={24} />}
+            iconColor="blue"
+            value="12"
+            label="Odznaki"
+          />
+          <StatCard
+            icon={<Target size={24} />}
+            iconColor="gold"
+            value={`${completedLessons}/15`}
+            label="Ukończone lekcje"
+          />
+          <StatCard
+            icon={<Flame size={24} />}
+            iconColor="green"
+            value="7 dni"
+            label="Streak"
+          />
         </div>
-        <div className="mobile-nav-item">
-          <User size={20} />
-          <span>Profile</span>
+
+        {/* Content Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '2fr 1fr',
+          gap: '24px',
+          marginBottom: '32px'
+        }}>
+          {/* Missions */}
+          <GlassCard>
+            <CardHeader title="🎯 Aktywne Misje" action="Zobacz wszystkie" />
+            <MissionItem
+              icon={<GraduationCap size={18} />}
+              title="Milwaukee Canvas - Krok 4/7"
+              meta="🔥 3 karty do końca | ~12 min | +50 XP"
+              progress={57}
+            />
+            <MissionItem
+              icon={<Brain size={18} />}
+              title="Neural Implant: Leadership Basics"
+              meta="⏳ Pobrano | Aktywacja: 24h"
+              progress={0}
+            />
+            <MissionItem
+              icon={<Trophy size={18} />}
+              title="Tygodniowe Wyzwanie: 5 lekcji"
+              meta="🎯 Pozostało 3 dni | 3/5 ukończone"
+              progress={60}
+            />
+          </GlassCard>
+
+          {/* Leaderboard */}
+          <GlassCard>
+            <CardHeader title="🏆 Leaderboard" action="Top 100" />
+            <LeaderboardItem rank={1} initials="AM" name="Anna Marek" level={12} title="Master" xp={5230} top />
+            <LeaderboardItem rank={2} initials="MP" name="Michał P." level={11} title="Expert" xp={4890} top />
+            <LeaderboardItem rank={3} initials="KW" name="Kasia W." level={10} title="Advanced" xp={4250} top />
+            <LeaderboardItem
+              rank={8}
+              initials={profile?.full_name?.substring(0, 2).toUpperCase() || 'PK'}
+              name={`${profile?.full_name || 'Piotr K.'} (Ty)`}
+              level={profile?.level || 8}
+              title={levelName(profile?.level || 8)}
+              xp={profile?.xp || 2450}
+            />
+          </GlassCard>
         </div>
-        <div className="mobile-nav-item">
-          <Target size={20} />
-          <span>Missions</span>
+
+        {/* Radar Chart */}
+        <GlassCard>
+          <CardHeader title="📊 Mapa Kompetencji" action="Szczegóły" />
+          <div style={{
+            height: '300px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'rgba(255, 255, 255, 0.4)',
+            fontSize: '14px'
+          }}>
+            <p>📊 Radar chart kompetencji (wymaga Chart.js - dodamy w następnym kroku)</p>
+          </div>
+        </GlassCard>
+      </div>
+    </div>
+  )
+}
+
+function GlassCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{
+      background: 'rgba(20, 20, 35, 0.4)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      borderRadius: '20px',
+      padding: '24px',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+    }}>
+      {children}
+    </div>
+  )
+}
+
+function CardHeader({ title, action }: { title: string; action: string }) {
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: '20px'
+    }}>
+      <h3 style={{ fontSize: '16px', fontWeight: 600 }}>{title}</h3>
+      <span style={{
+        fontSize: '13px',
+        color: '#00d4ff',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px'
+      }}>
+        {action}
+        <ChevronRight size={16} />
+      </span>
+    </div>
+  )
+}
+
+function StatCard({ icon, iconColor, value, label }: {
+  icon: React.ReactNode
+  iconColor: 'purple' | 'blue' | 'gold' | 'green'
+  value: string
+  label: string
+}) {
+  const iconBgMap = {
+    purple: 'rgba(176, 0, 255, 0.2)',
+    blue: 'rgba(0, 212, 255, 0.2)',
+    gold: 'rgba(255, 215, 0, 0.2)',
+    green: 'rgba(0, 255, 136, 0.2)'
+  }
+
+  const iconColorMap = {
+    purple: '#b000ff',
+    blue: '#00d4ff',
+    gold: '#ffd700',
+    green: '#00ff88'
+  }
+
+  return (
+    <div
+      style={{
+        background: 'rgba(20, 20, 35, 0.4)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '16px',
+        padding: '5px 16px 5px 16px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+      onMouseOver={(e) => {
+        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
+        e.currentTarget.style.transform = 'translateY(-2px)'
+        e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.4)'
+        const shine = e.currentTarget.querySelector('.shine-stat') as HTMLElement
+        if (shine) shine.style.left = '100%'
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.background = 'rgba(20, 20, 35, 0.4)'
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = 'none'
+        const shine = e.currentTarget.querySelector('.shine-stat') as HTMLElement
+        if (shine) shine.style.left = '-100%'
+      }}
+    >
+      <div
+        className="shine-stat"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: '-100%',
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+          transition: 'left 0.6s ease',
+          pointerEvents: 'none',
+          zIndex: 1
+        }}
+      />
+      <div style={{
+        width: '48px',
+        height: '48px',
+        borderRadius: '12px',
+        background: iconBgMap[iconColor],
+        color: iconColorMap[iconColor],
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0
+      }}>
+        {icon}
+      </div>
+      <div>
+        <h3 style={{
+          fontSize: '24px',
+          fontWeight: 700,
+          marginBottom: '4px'
+        }}>{value}</h3>
+        <p style={{
+          fontSize: '13px',
+          color: 'rgba(255, 255, 255, 0.6)'
+        }}>{label}</p>
+      </div>
+    </div>
+  )
+}
+
+function MissionItem({ icon, title, meta, progress }: {
+  icon: React.ReactNode
+  title: string
+  meta: string
+  progress: number
+}) {
+  return (
+    <div
+      style={{
+        padding: '16px',
+        background: 'rgba(255, 255, 255, 0.03)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '12px',
+        marginBottom: '12px',
+        cursor: 'pointer',
+        transition: 'all 0.2s',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+      onMouseOver={(e) => {
+        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
+        e.currentTarget.style.borderColor = '#00d4ff'
+        const shine = e.currentTarget.querySelector('.shine-mission') as HTMLElement
+        if (shine) shine.style.left = '100%'
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'
+        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
+        const shine = e.currentTarget.querySelector('.shine-mission') as HTMLElement
+        if (shine) shine.style.left = '-100%'
+      }}
+    >
+      <div
+        className="shine-mission"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: '-100%',
+          width: '100%',
+          height: '100%',
+          background: 'linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), transparent)',
+          transition: 'left 0.6s ease',
+          pointerEvents: 'none',
+          zIndex: 1
+        }}
+      />
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        marginBottom: '12px'
+      }}>
+        <div style={{
+          width: '36px',
+          height: '36px',
+          borderRadius: '8px',
+          background: 'rgba(0, 212, 255, 0.2)',
+          color: '#00d4ff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {icon}
+        </div>
+        <div style={{ flex: 1 }}>
+          <h4 style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            marginBottom: '4px'
+          }}>{title}</h4>
+          <p style={{
+            fontSize: '12px',
+            color: 'rgba(255, 255, 255, 0.6)'
+          }}>{meta}</p>
         </div>
       </div>
-    </>
-  );
+      <div style={{
+        height: '6px',
+        background: 'rgba(255, 255, 255, 0.1)',
+        borderRadius: '3px',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          height: '100%',
+          width: `${progress}%`,
+          background: 'linear-gradient(90deg, #00d4ff, #b000ff)',
+          borderRadius: '3px',
+          transition: 'width 0.4s ease'
+        }} />
+      </div>
+    </div>
+  )
+}
+
+function LeaderboardItem({ rank, initials, name, level, title, xp, top }: {
+  rank: number
+  initials: string
+  name: string
+  level: number
+  title: string
+  xp: number
+  top?: boolean
+}) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '12px',
+        background: 'rgba(255, 255, 255, 0.03)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '12px',
+        marginBottom: '8px',
+        cursor: 'pointer',
+        transition: 'all 0.2s'
+      }}
+      onMouseOver={(e) => {
+        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'
+      }}
+    >
+      <div style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: '8px',
+        background: top ? 'linear-gradient(135deg, #ffd700, #ff8800)' : 'rgba(255, 215, 0, 0.2)',
+        color: top ? '#000' : '#ffd700',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700,
+        fontSize: '14px',
+        flexShrink: 0
+      }}>
+        {rank}
+      </div>
+      <div style={{
+        width: '36px',
+        height: '36px',
+        borderRadius: '50%',
+        background: 'linear-gradient(135deg, #b000ff, #00d4ff)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 700,
+        fontSize: '14px'
+      }}>
+        {initials}
+      </div>
+      <div style={{ flex: 1 }}>
+        <h4 style={{
+          fontSize: '13px',
+          fontWeight: 600,
+          marginBottom: '2px'
+        }}>{name}</h4>
+        <p style={{
+          fontSize: '11px',
+          color: 'rgba(255, 255, 255, 0.6)'
+        }}>Level {level} • {title}</p>
+      </div>
+      <div style={{
+        fontSize: '14px',
+        fontWeight: 700,
+        color: '#ffd700'
+      }}>
+        {xp.toLocaleString()}
+      </div>
+    </div>
+  )
 }
