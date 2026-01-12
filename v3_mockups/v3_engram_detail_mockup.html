@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engram: Szybkie Decyzje</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #0f0c29;
+            --glass-bg: rgba(20, 20, 35, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-purple: #b000ff;
+            --neon-blue: #00d4ff;
+            --neon-gold: #ffd700;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Background Orb */
+        .orb {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(176, 0, 255, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Player Container */
+        .engram-player {
+            width: 100%;
+            max-width: 480px;
+            height: 90vh;
+            max-height: 850px;
+            background: rgba(10, 10, 20, 0.8);
+            backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .player-header {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .engram-type {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--neon-blue);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Progress */
+        .progress-container {
+            padding: 0 24px;
+            margin-top: 20px;
+        }
+
+        .progress-track {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            display: flex;
+            gap: 2px;
+        }
+
+        .progress-segment {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            transition: 0.3s;
+        }
+
+        .progress-segment.active {
+            background: var(--text-main);
+        }
+
+        .progress-segment.completed {
+            background: var(--neon-blue);
+        }
+
+        /* Main Content Slider */
+        .slider-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+            opacity: 0;
+            transform: translateX(100%);
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        /* Slide Content Styling */
+        .slide-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+        }
+
+        .slide-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            background: linear-gradient(135deg, white, rgba(255, 255, 255, 0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .highlight-box {
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 3px solid var(--neon-blue);
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 24px;
+        }
+
+        .highlight-title {
+            font-size: 12px;
+            color: var(--neon-blue);
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Footer Controls */
+        .player-footer {
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .nav-btn {
+            padding: 16px 32px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+        }
+
+        .btn-secondary:hover {
+            color: white;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Completion State */
+        .completion-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 20, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .completion-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 24px;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.5);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .xp-reward {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd700, #ff8800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb"></div>
+
+    <div class="engram-player">
+        <!-- Header -->
+        <div class="player-header">
+            <div class="engram-type">
+                <i data-lucide="zap" size="14"></i>
+                Neural Engram
+            </div>
+            <div class="close-btn" onclick="alert('Close')">
+                <i data-lucide="x" size="16"></i>
+            </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-container">
+            <div class="progress-track" id="progressTrack">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- Slides -->
+        <div class="slider-container" id="slider">
+
+            <!-- Slide 1: Concept -->
+            <div class="slide active" data-index="0">
+                <div class="slide-icon">⚡</div>
+                <h2 class="slide-title">Paraliż Analityczny</h2>
+                <p class="slide-text">
+                    Czy zdarza Ci się odkładać decyzję w nieskończoność, szukając "jeszcze jednej" informacji? To
+                    klasyczny <strong>paraliż analityczny</strong>.
+                </p>
+                <div class="highlight-box">
+                    <div class="highlight-title">Problem</div>
+                    <div style="font-size: 14px; opacity: 0.9;">
+                        Koszt braku decyzji jest często wyższy niż koszt błędnej decyzji.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Mechanism -->
+            <div class="slide" data-index="1">
+                <div class="slide-icon">🧠</div>
+                <h2 class="slide-title">Reguła 2 Minut</h2>
+                <p class="slide-text">
+                    Jeśli podjęcie decyzji zajmie Ci mniej niż 2 minuty – zrób to natychmiast. Jeśli wymaga więcej
+                    czasu, wyznacz <strong>Dead-line Decyzyjny</strong>.
+                </p>
+                <div class="highlight-box">
+                    <div class="highlight-title">Algorytm</div>
+                    <div style="font-size: 14px; opacity: 0.9;">
+                        1. Czy to odwracalne? Tak → Decyduj szybko.<br>
+                        2. Czy to nieodwracalne? Nie → Analizuj do 60% pewności.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Application -->
+            <div class="slide" data-index="2">
+                <div class="slide-icon">🎯</div>
+                <h2 class="slide-title">Zastosowanie</h2>
+                <p class="slide-text">
+                    W następnej sytuacji decyzyjnej zadaj sobie pytanie: "Jaka jest najgorsza rzecz, która może się
+                    stać, jeśli się pomylę?".
+                </p>
+                <p class="slide-text">
+                    Zazwyczaj ryzyko jest mniejsze, niż podpowiada strach.
+                </p>
+            </div>
+
+            <!-- Slide 4: Verify -->
+            <div class="slide" data-index="3">
+                <div class="slide-icon">❓</div>
+                <h2 class="slide-title">Sprawdzenie</h2>
+                <p class="slide-text">
+                    Kiedy powinieneś analizować decyzję powyżej 60% pewności?
+                </p>
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button class="choice-btn" onclick="selectAnswer(this, false)">Zawsze, dla bezpieczeństwa</button>
+                    <button class="choice-btn" onclick="selectAnswer(this, true)">Tylko gdy decyzja jest
+                        nieodwracalna</button>
+                    <button class="choice-btn" onclick="selectAnswer(this, false)">Gdy mam dużo czasu</button>
+                </div>
+
+                <style>
+                    .choice-btn {
+                        padding: 16px;
+                        background: rgba(255, 255, 255, 0.05);
+                        border: 1px solid var(--glass-border);
+                        border-radius: 12px;
+                        color: white;
+                        text-align: left;
+                        cursor: pointer;
+                        font-family: inherit;
+                        transition: 0.2s;
+                    }
+
+                    .choice-btn:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                    }
+
+                    .choice-btn.correct {
+                        background: rgba(0, 255, 136, 0.2);
+                        border-color: var(--neon-green);
+                    }
+
+                    .choice-btn.wrong {
+                        background: rgba(255, 0, 85, 0.2);
+                        border-color: var(--neon-red);
+                    }
+                </style>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="player-footer">
+            <button class="nav-btn btn-secondary" id="btnPrev" onclick="changeSlide(-1)">Wróć</button>
+            <button class="nav-btn btn-primary" id="btnNext" onclick="changeSlide(1)">
+                Dalej
+                <i data-lucide="arrow-right" size="18"></i>
+            </button>
+        </div>
+
+        <!-- Completion Overlay -->
+        <div class="completion-overlay" id="completionOverlay">
+            <div class="success-icon">✓</div>
+            <div class="xp-reward">+50 XP</div>
+            <h2 style="margin-bottom: 8px;">Engram Zainstalowany</h2>
+            <p style="color: rgba(255,255,255,0.6); margin-bottom: 32px;">Pomyślnie zaktualizowano bazę danych.</p>
+            <button class="nav-btn btn-primary" onclick="location.reload()">Zamknij</button>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        // Init progress
+        const track = document.getElementById('progressTrack');
+        for (let i = 0; i < totalSlides; i++) {
+            const seg = document.createElement('div');
+            seg.className = `progress-segment ${i === 0 ? 'active' : ''}`;
+            track.appendChild(seg);
+        }
+
+        const segments = document.querySelectorAll('.progress-segment');
+
+        function updateUI() {
+            // Slides
+            slides.forEach((s, i) => {
+                s.className = 'slide';
+                if (i === currentSlide) s.classList.add('active');
+                if (i < currentSlide) s.classList.add('prev');
+            });
+
+            // Progress
+            segments.forEach((s, i) => {
+                s.classList.remove('active', 'completed');
+                if (i < currentSlide) s.classList.add('completed');
+                if (i === currentSlide) s.classList.add('active');
+            });
+
+            // Buttons
+            document.getElementById('btnPrev').style.opacity = currentSlide === 0 ? 0 : 1;
+            document.getElementById('btnPrev').style.pointerEvents = currentSlide === 0 ? 'none' : 'all';
+
+            const nextBtn = document.getElementById('btnNext');
+            if (currentSlide === totalSlides - 1) {
+                nextBtn.innerHTML = 'Zakończ <i data-lucide="check"></i>';
+                // Lucide re-render
+                lucide.createIcons();
+            } else {
+                nextBtn.innerHTML = 'Dalej <i data-lucide="arrow-right"></i>';
+                lucide.createIcons();
+            }
+        }
+
+        function changeSlide(dir) {
+            if (dir === 1 && currentSlide === totalSlides - 1) {
+                // Finish
+                // Check if verify slide is answered if needed (skip for prototype)
+                document.getElementById('completionOverlay').classList.add('active');
+                return;
+            }
+
+            if (currentSlide + dir >= 0 && currentSlide + dir < totalSlides) {
+                currentSlide += dir;
+                updateUI();
+            }
+        }
+
+        function selectAnswer(btn, isCorrect) {
+            // Reset others
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.choice-btn').forEach(b => b.className = 'choice-btn');
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                // Auto advance after 1s
+                setTimeout(() => changeSlide(1), 800);
+            } else {
+                btn.classList.add('wrong');
+            }
+        }
+
+    </script>
+</body>
+
+</html>

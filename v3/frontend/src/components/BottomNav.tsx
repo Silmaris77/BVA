@@ -21,14 +21,28 @@ export default function BottomNav() {
 
     return (
         <nav
-            className="md:hidden fixed bottom-0 left-0 right-0 z-50"
+            className="nav-bottom"
             style={{
-                background: 'rgba(20, 20, 35, 0.8)',
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                width: '100%',
+                zIndex: 9999,
+                background: 'rgba(20, 20, 35, 0.95)',
                 backdropFilter: 'blur(20px)',
                 borderTop: '1px solid rgba(255, 255, 255, 0.1)',
             }}
         >
-            <div className="flex items-center justify-around h-20 px-2">
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                width: '100%',
+                height: '80px',
+                padding: '0 16px',
+                boxSizing: 'border-box'
+            }}>
                 {navItems.map((item) => {
                     const Icon = item.icon
                     const active = isActive(item.path)
@@ -37,13 +51,28 @@ export default function BottomNav() {
                         <Link
                             key={item.path}
                             href={item.path}
-                            className="flex flex-col items-center justify-center flex-1 h-full relative group"
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flex: 1,
+                                height: '100%',
+                                position: 'relative',
+                                textDecoration: 'none'
+                            }}
                         >
                             {/* Active indicator */}
                             {active && (
                                 <div
-                                    className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-12 rounded-full"
                                     style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        height: '4px',
+                                        width: '48px',
+                                        borderRadius: '2px',
                                         background: 'linear-gradient(90deg, #b000ff, #00d4ff)',
                                         boxShadow: '0 0 20px rgba(176, 0, 255, 0.6)',
                                     }}
@@ -55,9 +84,8 @@ export default function BottomNav() {
                                 size={24}
                                 style={{
                                     color: active ? '#00d4ff' : 'rgba(255, 255, 255, 0.5)',
-                                    transition: 'all 0.3s ease',
+                                    marginBottom: '4px',
                                 }}
-                                className={`mb-1 ${!active && 'group-hover:text-white'}`}
                             />
 
                             {/* Label */}
@@ -66,9 +94,7 @@ export default function BottomNav() {
                                     fontSize: '11px',
                                     color: active ? '#00d4ff' : 'rgba(255, 255, 255, 0.5)',
                                     fontWeight: active ? 600 : 400,
-                                    transition: 'all 0.3s ease',
                                 }}
-                                className={!active ? 'group-hover:text-white' : ''}
                             >
                                 {item.name}
                             </span>

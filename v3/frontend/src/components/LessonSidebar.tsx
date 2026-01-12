@@ -35,7 +35,7 @@ export default function LessonSidebar({
     }
 
     return (
-        <div style={{
+        <div className="no-scrollbar" style={{
             background: 'rgba(0, 0, 0, 0.2)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
@@ -43,7 +43,7 @@ export default function LessonSidebar({
             height: '100%',
             overflowY: 'auto',
             padding: '20px'
-        }}>
+        } as React.CSSProperties}>
             <div style={{ marginBottom: '32px' }}>
                 <h3 style={{
                     fontSize: '12px',

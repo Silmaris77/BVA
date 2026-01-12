@@ -210,7 +210,7 @@ export default function HomePage() {
             />
             <MissionItem
               icon={<Brain size={18} />}
-              title="Neural Implant: Leadership Basics"
+              title="Neural Engram: Leadership Basics"
               meta="⏳ Pobrano | Aktywacja: 24h"
               progress={0}
             />

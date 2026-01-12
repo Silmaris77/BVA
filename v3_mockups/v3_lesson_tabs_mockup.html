@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lesson Player - Tabs Concept</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Mobile frame simulation */
+        .mobile-frame {
+            max-width: 390px;
+            margin: 20px auto;
+            height: calc(100vh - 40px);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            border-radius: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 60px rgba(176, 0, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .close-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .lesson-info {
+            text-align: center;
+        }
+
+        .lesson-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .lesson-progress {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 2px;
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: rgba(176, 0, 255, 0.2);
+            border-color: #b000ff;
+            color: white;
+            box-shadow: 0 0 15px rgba(176, 0, 255, 0.2);
+        }
+
+        .tab-icon {
+            margin-right: 6px;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- LEKCJA TAB STYLES --- */
+        .card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-type {
+            align-self: flex-start;
+            padding: 6px 14px;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid #00d4ff;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .card p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 12px;
+        }
+
+        /* --- ENGRAMY TAB STYLES --- */
+        .engram-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .engram-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .engram-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .engram-tag {
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .engram-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .engram-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.4;
+        }
+
+        .mindmap-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            height: 120px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+
+        /* --- ZASOBY TAB STYLES --- */
+        .resource-group {
+            margin-bottom: 24px;
+        }
+
+        .group-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .resource-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px;
+        }
+
+        .resource-item:first-child {
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+
+        .resource-item:last-child {
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            border-bottom: none;
+        }
+
+        .resource-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 18px;
+        }
+
+        .resource-icon.pdf {
+            color: #ff4757;
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        .resource-icon.link {
+            color: #2ed573;
+            background: rgba(46, 213, 115, 0.1);
+        }
+
+        .resource-icon.tool {
+            color: #ffa502;
+            background: rgba(255, 165, 2, 0.1);
+        }
+
+        .resource-info {
+            flex: 1;
+        }
+
+        .resource-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .resource-meta {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .action-icon {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Bottom Controls (only for Lekcja) */
+        .bottom-controls {
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-prev {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            color: white;
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mobile-frame">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div style="width: 36px;"></div> <!-- Spacer -->
+            <div class="lesson-info">
+                <div class="lesson-title">Zarządzanie Czasem</div>
+                <div class="lesson-progress">Postęp: 25%</div>
+            </div>
+            <div class="close-btn">✕</div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('lekcja', this)">
+                <span class="tab-icon">🎓</span> Lekcja
+            </button>
+            <button class="tab-btn" onclick="switchTab('engramy', this)">
+                <span class="tab-icon">🧠</span> Engramy
+            </button>
+            <button class="tab-btn" onclick="switchTab('zasoby', this)">
+                <span class="tab-icon">📚</span> Zasoby
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-area">
+
+            <!-- Tab: Lekcja -->
+            <div id="tab-lekcja" class="tab-content active">
+                <div class="card">
+                    <div class="card-type">Concept</div>
+                    <h2>Macierz Eisenhowera</h2>
+                    <p>Ważne vs Pilne. To klucz do zrozumienia priorytetów.</p>
+                    <p><strong>Ważne, nie pilne</strong> - to tutaj powinieneś spędzać najwięcej czasu (planowanie,
+                        strategia, rozwój).</p>
+                    <p><strong>Pilne, nie ważne</strong> - to "złodzieje czasu", które powinieneś delegować.</p>
+                </div>
+            </div>
+
+            <!-- Tab: Engramy -->
+            <div id="tab-engramy" class="tab-content">
+                <div style="margin-bottom: 20px;">
+                    <h3
+                        style="font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 10px; text-transform: uppercase;">
+                        Twoja pamięć podręczna</h3>
+
+                    <div class="mindmap-preview">
+                        🗺️ Interaktywna Mapa Myśli (Kliknij aby otworzyć)
+                    </div>
+                </div>
+
+                <div class="engram-item">
+                    <div class="engram-header">
+                        <span class="engram-title">Fiszka #1</span>
+                        <span class="engram-tag">DEFINICJA</span>
+                    </div>
+                    <div class="engram-desc"><strong>Tyrania Pilności:</strong> Stan, w którym reagujesz tylko na
+                        bieżące kryzysy, zaniedbując zadania strategiczne.</div>
+                </div>
+
+                <div class="engram-item">
+                    <div class="engram-header">
+                        <span class="engram-title">Fiszka #2</span>
+                        <span class="engram-tag">REGUŁA</span>
+                    </div>
+                    <div class="engram-desc"><strong>Zasada 80/20:</strong> 20% zadań generuje 80% wyników. Zidentyfikuj
+                        je.</div>
+                </div>
+
+                <div class="engram-item">
+                    <div class="engram-header">
+                        <span class="engram-title">Kluczowy Wniosek</span>
+                        <span class="engram-tag">WNIOSKI</span>
+                    </div>
+                    <div class="engram-desc">Planowanie tygodniowe jest skuteczniejsze niż dzienne, bo pozwala
+                        uwzględnić "duże kamienie" (priorytety).</div>
+                </div>
+            </div>
+
+            <!-- Tab: Zasoby -->
+            <div id="tab-zasoby" class="tab-content">
+                <div class="resource-group">
+                    <div class="group-title">Do pobrania</div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon pdf">📄</div>
+                        <div class="resource-info">
+                            <div class="resource-name">Szablon Macierzy.pdf</div>
+                            <div class="resource-meta">PDF • 2.4 MB</div>
+                        </div>
+                        <div class="action-icon">⬇️</div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon pdf">📄</div>
+                        <div class="resource-info">
+                            <div class="resource-name">Lista zadań (Printable)</div>
+                            <div class="resource-meta">PDF • 1.1 MB</div>
+                        </div>
+                        <div class="action-icon">⬇️</div>
+                    </div>
+                </div>
+
+                <div class="resource-group">
+                    <div class="group-title">Linki i Narzędzia</div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon link">🔗</div>
+                        <div class="resource-info">
+                            <div class="resource-name">Case Study: Steve Jobs</div>
+                            <div class="resource-meta">Artykuł zewnętrzny</div>
+                        </div>
+                        <div class="action-icon">↗️</div>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-icon tool">🛠️</div>
+                        <div class="resource-info">
+                            <div class="resource-name">Kalkulator Czasu</div>
+                            <div class="resource-meta">Narzędzie online</div>
+                        </div>
+                        <div class="action-icon">↗️</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom Controls (Visible/Hidden Logic needed in JS) -->
+        <div class="bottom-controls" id="lesson-controls">
+            <button class="nav-btn btn-prev">←</button>
+            <button class="nav-btn btn-next">Następna</button>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tabId, btn) {
+            // Remove active class from all contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            // Add active class to selected content
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            // Update buttons state
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+
+            // Show/Hide bottom controls
+            const controls = document.getElementById('lesson-controls');
+            if (tabId === 'lekcja') {
+                controls.style.display = 'flex';
+            } else {
+                controls.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>

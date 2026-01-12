@@ -105,28 +105,222 @@ NAUKA
 │   ├── Zapisane / W trakcie / Ukończone
 │   └── Polecane dla Ciebie
 │
-├── 🧠 Neural Implants (Micro-skills)
+├── 🧠 Engramy (Neural Implants / Micro-skills)
 │   ├── Kategorie (Leadership, Communication, Strategy...)
-│   ├── Pobrane / Do pobrania
-│   └── Aktywne "wszczepy"
+│   ├── Zainstalowane / Dostępne
+│   ├── Status: Stable 🟢 / Fading 🟡 / Critical 🔴
+│   └── Standalone + Wyodrębnione z Lekcji
 │
 └── 📖 Biblioteka Zasobów
     ├── Case Studies
     ├── Frameworks (Canvas, Models)
-    └── Checklists & Templates
+    ├── Checklists & Templates
+    ├── E-books & Masterclasses
+    └── Unlocked / Public
 ```
 
 **Nawigacja wewnętrzna:**
-- **Tabs:** Lekcje | Implants | Zasoby
+- **Tabs:** Lekcje | Engramy | Zasoby
 - **Filtry:** Kategoria, Trudność, Czas trwania, Status
 - **Widoki:** Grid (desktop) | List (mobile)
 
+---
+
+### 🧠 **System Engramów - Szczegółowa Specyfikacja**
+
+**Koncepcja:** Engramy to "Neural Implants" - destylaty wiedzy w formie micro-lessons (3-10 min), zaprojektowane dla szybkiej absorpcji i długoterminowej retencji poprzez Spaced Repetition System.
+
+#### **1. Hierarchia Treści**
+
+```
+Lekcja (20-45 min)
+    ↓ wyodrębnia
+Engramy (3-10 min każdy)
+    ↓ unlockuje
+Zasoby (Templates, Case Studies, E-books)
+```
+
+**Przykład:**
+- **Lekcja:** "Zarządzanie Czasem" (45 min, 8 kart)
+  - **Engram #1:** "Macierz Eisenhowera" (5 min)
+  - **Engram #2:** "Zasada Pareto 80/20" (4 min)
+  - **Engram #3:** "Deep Work Protocol" (7 min)
+  - **Unlocked Resource:** "Weekly Planner Template.xlsx"
+
+#### **2. Struktura Engramu**
+
+**Format:** 3-4 slajdy interaktywne
+1. **Problem** - Identyfikacja wyzwania
+2. **Mechanizm** - Jak to działa (reguła/framework)
+3. **Zastosowanie** - Praktyczny przykład
+4. **Weryfikacja** - Quiz (3 pytania z puli 6-10)
+
+**Pochodzenie:**
+- **Z Lekcji:** Automatycznie wyodrębnione kluczowe koncepty
+- **Standalone:** Niezależne micro-lessons (np. "Pitch 60s", "Szybkie Decyzje")
+
+#### **3. Decay System (Ebbinghaus + Adaptive)**
+
+**Algorytm degradacji "Signal Strength":**
+
+```
+Day 1:  100% → 80%  (rapid initial decay)
+Day 3:  80%  → 60%  (moderate)
+Day 7:  60%  → 40%  (slower)
+Day 14: 40%  → 20%  (minimal)
+```
+
+**Adaptive Modifier:**
+- Jeśli user często odświeża (>3 razy) → decay spada o 20%
+- Formula: `strength = base_decay * (1 + refresh_bonus)`
+
+**UI Indicators:**
+- **100-80%:** 🟢 **Stable** (Green, brak animacji)
+- **79-40%:** 🟡 **Fading** (Yellow, subtle pulse)
+- **<40%:** 🔴 **Critical** (Red, glitch animation effect)
+
+**Notyfikacje:** Pasywne (tylko wizualne wskaźniki w UI)
+
+#### **4. Refresh Mechanics**
+
+**Quiz Pool System:**
+- Każdy Engram ma **6-10 pytań** w puli
+- Przy każdym odświeżeniu: **losowe 3 pytania**
+- **Future:** Adaptive questioning (więcej pytań z obszarów, gdzie user się myli)
+
+**XP Rewards:**
+- Instalacja Engramu: **+50 XP**
+- Odświeżenie (refresh): **+25 XP**
+
+#### **5. Cross-Unlocking System**
+
+**Mechanika:** Ukończenie Lekcji/Engramu/Zasobu może unlockować elementy w innych kategoriach.
+
+**Przykłady:**
+```
+Lekcja "SPIN Selling" (ukończona)
+    ↓ unlockuje
+- Engram: "Objection Handling"
+- Zasób: "SPIN Questions Template.xlsx"
+- Zasób: "Case Study: Heinz Market Share"
+```
+
+```
+Engram "Pitch 60s" (zainstalowany)
+    ↓ sugeruje
+- Lekcja: "Advanced Presentation Skills"
+```
+
+**Typy Zasobów:**
+- **Public:** Zawsze dostępne
+- **Unlockable:** Wymagają ukończenia Lekcji/Engramu
+- **Premium:** (Future) Wymagają subskrypcji
+
+#### **6. Data Model (Supabase)**
+
+**Tabela: `engrams`**
+```sql
+CREATE TABLE engrams (
+    id UUID PRIMARY KEY,
+    title TEXT NOT NULL,
+    category TEXT,
+    slides JSONB NOT NULL,  -- 3-4 slajdy
+    quiz_pool JSONB NOT NULL,  -- 6-10 pytań
+    source_lesson_id UUID,  -- NULL jeśli standalone
+    xp_reward INTEGER DEFAULT 50,
+    estimated_minutes INTEGER,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+**Tabela: `user_engrams`**
+```sql
+CREATE TABLE user_engrams (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    engram_id UUID REFERENCES engrams(id),
+    installed_at TIMESTAMP DEFAULT NOW(),
+    last_refreshed_at TIMESTAMP,
+    strength INTEGER DEFAULT 100,  -- 0-100
+    times_refreshed INTEGER DEFAULT 0,
+    is_public BOOLEAN DEFAULT FALSE,  -- Privacy setting
+    status TEXT DEFAULT 'active',  -- 'active' | 'archived'
+    UNIQUE(user_id, engram_id)
+);
+```
+
+**Tabela: `resources`**
+```sql
+CREATE TABLE resources (
+    id UUID PRIMARY KEY,
+    title TEXT NOT NULL,
+    type TEXT,  -- 'article', 'template', 'video', 'ebook', 'case_study'
+    url TEXT,
+    unlock_condition JSONB,  -- {lesson_id: X} lub {engram_id: Y} lub {public: true}
+    category TEXT,
+    file_size TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### **7. User Journey - Przykład**
+
+**Tydzień 1:**
+1. User ukończył Lekcję "Zarządzanie Czasem" → **+150 XP**
+2. System oferuje: "Zainstaluj 3 Engramy z tej lekcji?"
+3. User instaluje 3 Engramy (quiz każdy) → **+150 XP**
+4. Unlockuje Zasób: "Weekly Planner.xlsx" → **+10 XP**
+
+**Tydzień 2:**
+1. Engram "Macierz Eisenhowera" → Strength: 60% 🟡 (Fading)
+2. User odświeża quiz → Strength: 100% 🟢 → **+25 XP**
+3. Przeglądał Katalog, zainstalował standalone "Pitch 60s" → **+50 XP**
+
+**Tydzień 3:**
+1. Engram "Zasada Pareto" → Strength: 35% 🔴 (Critical, glitch effect)
+2. User odświeżył → Strength: 100% 🟢
+3. Ukończył Lekcję "SPIN Selling" → Unlockował Case Study + Engram
+
+#### **8. Gamifikacja**
+
+**Badges/Achievements:**
+- 🧠 **"Neural Network"** - Zainstaluj 10 Engramów
+- 🔄 **"Maintainer"** - Odśwież 20 Engramów
+- 📚 **"Scholar"** - Ukończ 5 Lekcji z jednej kategorii
+- 💎 **"Collector"** - Pobierz 15 Zasobów
+
+**Dashboard "Moja Wiedza" (w zakładce JA):**
+```
+┌─────────────────────────────────────────┐
+│  🎓 Ukończone Lekcje: 12/50             │
+│  🧠 Zainstalowane Engramy: 8            │
+│     ├─ 🟢 Stable: 5                     │
+│     ├─ 🟡 Fading: 2                     │
+│     └─ 🔴 Critical: 1 ⚠️                │
+│  📚 Pobrane Zasoby: 23                  │
+└─────────────────────────────────────────┘
+```
+
+#### **9. Privacy & Social**
+
+**Ustawienia (w Profil → Ustawienia):**
+- Toggle: "Make my Engrams public" (domyślnie: OFF)
+- Jeśli ON → Public profile pokazuje: "[User] ma X zainstalowanych Engramów w kategorii [Y]"
+
+**Future Features:**
+- Polecanie Engramów znajomym
+- Team Engrams (corporate learning)
+- Engram Marketplace (user-generated content)
+
 **Przykład z V3:**
 ```tsx
-// Już częściowo zaimplementowane:
-- v3/frontend/src/app/implants/page.tsx (Neural Implants)
-- Lesson players w artifacts/*.html
+// Implementacja w:
+- v3/frontend/src/app/learning/engrams/page.tsx (Katalog)
+- v3/frontend/src/app/learning/engrams/[id]/page.tsx (Player)
+- v3/frontend/src/app/learning/resources/page.tsx (Biblioteka)
 ```
+
+
 
 ---
 

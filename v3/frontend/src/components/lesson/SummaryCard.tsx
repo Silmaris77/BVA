@@ -126,7 +126,7 @@ export default function SummaryCard({
                 fontSize: '36px',
                 fontWeight: 700,
                 background: 'linear-gradient(135deg, #00ff88, #00d4ff)',
-                WebkitBackdropClip: 'text',
+                WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 animation: 'fadeInUp 0.6s ease 0.2s both'
             }}>
@@ -193,7 +193,7 @@ export default function SummaryCard({
                     gap: '16px',
                     textAlign: 'left'
                 }}>
-                    {recap.map((item, index) => (
+                    {recap?.map((item, index) => (
                         <div
                             key={index}
                             style={{

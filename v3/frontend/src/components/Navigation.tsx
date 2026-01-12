@@ -20,7 +20,7 @@ export default function Sidebar() {
 
     return (
         <div
-            className="flex flex-col"
+            className="nav-sidebar flex flex-col"
             style={{
                 width: '200px',
                 background: 'rgba(0, 0, 0, 0.3)',

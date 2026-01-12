@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engramy & Zasoby - Mock-up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        .tab-selector {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 16px;
+        }
+        .tab-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .tab-btn.active {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* === ENGRAMY STYLES === */
+        .engram-header {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .engram-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .stat-number {
+            font-weight: 700;
+            font-size: 20px;
+            color: #00d4ff;
+        }
+        .engram-categories {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        .category-chip {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .category-chip:hover { background: rgba(255, 255, 255, 0.1); }
+        .category-chip.active {
+            background: rgba(176, 0, 255, 0.2);
+            border-color: #b000ff;
+            color: #b000ff;
+        }
+        .engram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .engram-card {
+            background: rgba(20, 20, 35, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .engram-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+        }
+        .engram-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        .engram-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .engram-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .engram-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .engram-duration {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .install-btn {
+            padding: 6px 16px;
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .install-btn:hover { transform: scale(1.05); }
+        .installed-badge {
+            padding: 4px 12px;
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #00ff88;
+            font-weight: 600;
+        }
+        
+        /* === ZASOBY STYLES === */
+        .resource-search {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .filter-btn {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .resource-grid {
+            display: grid;
+            gap: 16px;
+        }
+        .resource-card {
+            background: rgba(20, 20, 35, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .resource-card:hover {
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 4px 24px rgba(255, 215, 0, 0.1);
+        }
+        .resource-thumbnail {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffd700, #ff8800);
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        .resource-content {
+            flex: 1;
+        }
+        .resource-meta {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .resource-tag {
+            padding: 4px 10px;
+            background: rgba(255, 215, 0, 0.15);
+            border-radius: 6px;
+            font-size: 11px;
+            color: #ffd700;
+            font-weight: 600;
+        }
+        .resource-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .resource-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        .resource-footer {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .featured-section {
+            background: rgba(176, 0, 255, 0.1);
+            border: 1px solid rgba(176, 0, 255, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .featured-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="font-size: 36px; margin-bottom: 32px;">Engramy & Zasoby - Mock-up</h1>
+    
+    <div class="tab-selector">
+        <button class="tab-btn active" onclick="switchTab('engramy')">🧠 Engramy</button>
+        <button class="tab-btn" onclick="switchTab('zasoby')">📚 Zasoby</button>
+    </div>
+
+    <!-- ENGRAMY TAB -->
+    <div id="engramy" class="tab-content active">
+        <div class="engram-header">
+            <h2 style="font-size: 24px; margin-bottom: 8px;">Twoje Engramy</h2>
+            <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px;">Mikro-szkolenia zaprojektowane dla szybkiej absorpcji wiedzy</p>
+            <div class="engram-stats">
+                <div class="stat-item">
+                    <span class="stat-number">12</span>
+                    <span style="color: rgba(255, 255, 255, 0.7);">zainstalowanych</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">28</span>
+                    <span style="color: rgba(255, 255, 255, 0.7);">dostępnych</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span style="color: rgba(255, 255, 255, 0.7);">ukończonych</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="engram-categories">
+            <div class="category-chip active">Wszystkie</div>
+            <div class="category-chip">💼 Sprzedaż</div>
+            <div class="category-chip">🎯 Leadership</div>
+            <div class="category-chip">🧠 Mindset</div>
+            <div class="category-chip">📊 Analityka</div>
+            <div class="category-chip">🤝 Networking</div>
+        </div>
+
+        <div class="engram-grid">
+            <div class="engram-card">
+                <div class="engram-icon">⚡</div>
+                <div class="engram-title">Szybkie Podejmowanie Decyzji</div>
+                <div class="engram-desc">
+                    Naucz się podejmować skuteczne decyzje biznesowe w czasie rzeczywistym bez paraliżu analitycznego.
+                </div>
+                <div class="engram-footer">
+                    <span class="engram-duration">⏱️ 5 min</span>
+                    <button class="install-btn">Instaluj</button>
+                </div>
+            </div>
+
+            <div class="engram-card">
+                <div class="engram-icon">🎯</div>
+                <div class="engram-title">Pitch Perfekcyjny</div>
+                <div class="engram-desc">
+                    Opanuj sztukę przedstawiania swojego produktu w mniej niż 60 sekund z maksymalnym impaktem.
+                </div>
+                <div class="engram-footer">
+                    <span class="engram-duration">⏱️ 7 min</span>
+                    <span class="installed-badge">✓ Zainstalowane</span>
+                </div>
+            </div>
+
+            <div class="engram-card">
+                <div class="engram-icon">🧘</div>
+                <div class="engram-title">Kontrola Stresu Przedsprzedażowego</div>
+                <div class="engram-desc">
+                    Techniki oddechowe i mentalne do zarządzania stresem przed ważnymi prezentacjami.
+                </div>
+                <div class="engram-footer">
+                    <span class="engram-duration">⏱️ 4 min</span>
+                    <button class="install-btn">Instaluj</button>
+                </div>
+            </div>
+
+            <div class="engram-card">
+                <div class="engram-icon">💡</div>
+                <div class="engram-title">Framework Obiekcji</div>
+                <div class="engram-desc">
+                    Gotowe odpowiedzi na 20 najczęstszych obiekcji klientów w sprzedaży B2B.
+                </div>
+                <div class="engram-footer">
+                    <span class="engram-duration">⏱️ 6 min</span>
+                    <span class="installed-badge">✓ Zainstalowane</span>
+                </div>
+            </div>
+
+            <div class="engram-card">
+                <div class="engram-icon">📈</div>
+                <div class="engram-title">KPI Dashboard Mentality</div>
+                <div class="engram-desc">
+                    Nauczenie się czytania i interpretacji kluczowych metryk biznesowych w czasie rzeczywistym.
+                </div>
+                <div class="engram-footer">
+                    <span class="engram-duration">⏱️ 8 min</span>
+                    <button class="install-btn">Instaluj</button>
+                </div>
+            </div>
+
+            <div class="engram-card">
+                <div class="engram-icon">🤖</div>
+                <div class="engram-title">AI-Powered Prospecting</div>
+                <div class="engram-desc">
+                    Wykorzystaj AI do identyfikacji i kwalifikacji najlepszych prospektów w Twojej branży.
+                </div>
+                <div class="engram-footer">
+                    <span class="engram-duration">⏱️ 10 min</span>
+                    <button class="install-btn">Instaluj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZASOBY TAB -->
+    <div id="zasoby" class="tab-content">
+        <div class="featured-section">
+            <div class="featured-title">
+                ⭐ Polecane dla Ciebie
+            </div>
+            <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">
+                Zasoby wybrane na podstawie Twojego profilu i postępów w nauce
+            </p>
+        </div>
+
+        <div class="resource-search">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Szukaj artykułów, guide'ów, szablonów...">
+            </div>
+            <button class="filter-btn">
+                <span>🎯</span>
+                Filtry
+            </button>
+        </div>
+
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div class="resource-thumbnail">📄</div>
+                <div class="resource-content">
+                    <div class="resource-meta">
+                        <span class="resource-tag">ARTYKUŁ</span>
+                        <span class="resource-tag">SPRZEDAŻ</span>
+                    </div>
+                    <div class="resource-title">Kompletny Guide do SPIN Selling w 2026</div>
+                    <div class="resource-desc">
+                        Dogłębny przewodnik po metodologii SPIN Selling z konkretnymi pytaniami, skryptami i case studies z polskiego rynku B2B.
+                    </div>
+                    <div class="resource-footer">
+                        <span>📖 15 min czytania</span>
+                        <span>👁️ 1,234 wyświetleń</span>
+                        <span>⭐ 4.8/5.0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-thumbnail" style="background: linear-gradient(135deg, #00d4ff, #b000ff);">📊</div>
+                <div class="resource-content">
+                    <div class="resource-meta">
+                        <span class="resource-tag">SZABLON</span>
+                        <span class="resource-tag">EXCEL</span>
+                    </div>
+                    <div class="resource-title">Sales Pipeline Tracker - Szablon Excel</div>
+                    <div class="resource-desc">
+                        Gotowy do użycia szablon do śledzenia pipeline'u sprzedażowego z automatycznymi obliczeniami conversion rate i forecasting.
+                    </div>
+                    <div class="resource-footer">
+                        <span>📥 2,456 pobrań</span>
+                        <span>💾 850 KB</span>
+                        <span>⭐ 4.9/5.0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-thumbnail" style="background: linear-gradient(135deg, #ff0055, #ff8800);">🎥</div>
+                <div class="resource-content">
+                    <div class="resource-meta">
+                        <span class="resource-tag">WIDEO</span>
+                        <span class="resource-tag">MASTERCLASS</span>
+                    </div>
+                    <div class="resource-title">Negocjacje Wysokich Stawek - Masterclass</div>
+                    <div class="resource-desc">
+                        45-minutowy masterclass z ekspertem negocjacji Marcinem Kowalskim. Techniki, taktyki i psychologia negocjacji w sprzedaży enterprise.
+                    </div>
+                    <div class="resource-footer">
+                        <span>▶️ 45 min</span>
+                        <span>👁️ 8,921 wyświetleń</span>
+                        <span>⭐ 5.0/5.0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-thumbnail" style="background: linear-gradient(135deg, #00ff88, #00d4ff);">📚</div>
+                <div class="resource-content">
+                    <div class="resource-meta">
+                        <span class="resource-tag">E-BOOK</span>
+                        <span class="resource-tag">LEADERSHIP</span>
+                    </div>
+                    <div class="resource-title">Od Managera do Lidera - Praktyczny Podręcznik</div>
+                    <div class="resource-desc">
+                        120-stronicowy e-book o transformacji z menedżera operacyjnego w lidera inspirującego zespoły do osiągania ekstraordynaryjnych wyników.
+                    </div>
+                    <div class="resource-footer">
+                        <span>📖 3h czytania</span>
+                        <span>📥 5,678 pobrań</span>
+                        <span>⭐ 4.7/5.0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-thumbnail" style="background: linear-gradient(135deg, #b000ff, #ff0055);">🎯</div>
+                <div class="resource-content">
+                    <div class="resource-meta">
+                        <span class="resource-tag">CASE STUDY</span>
+                        <span class="resource-tag">FMCG</span>
+                    </div>
+                    <div class="resource-title">Jak Heinz zwiększył market share o 23% w 6 miesięcy</div>
+                    <div class="resource-desc">
+                        Szczegółowa analiza strategii dystrybucyjnej Heinz Polska która doprowadziła do spektakularnego wzrostu udziału w rynku premium ketchupów.
+                    </div>
+                    <div class="resource-footer">
+                        <span>📖 12 min czytania</span>
+                        <span>👁️ 3,456 wyświetleń</span>
+                        <span>⭐ 4.9/5.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 32px;">
+            <button style="padding: 12px 32px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
+                Załaduj więcej zasobów
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

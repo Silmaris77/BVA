@@ -568,3 +568,179 @@ body {
         font-size: 0.7rem;
     }
 }
+
+/* V3 Responsive Layout - Navigation & Content */
+
+/* Base styles for V3 navigation components */
+.nav-sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-bottom {
+    display: flex;
+}
+
+.main-content {
+    margin-left: 0;
+    min-height: 100vh;
+    padding-bottom: 100px;
+}
+
+/* Mobile: < 768px - Bottom Nav visible, Sidebar hidden */
+@media (max-width: 767px) {
+    .nav-sidebar {
+        display: none !important;
+    }
+
+    .nav-bottom {
+        display: flex !important;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        padding-bottom: 100px !important;
+    }
+}
+
+/* Desktop: >= 768px - Sidebar visible, Bottom Nav hidden */
+@media (min-width: 768px) {
+    .nav-sidebar {
+        display: flex !important;
+    }
+
+    .nav-bottom {
+        display: none !important;
+    }
+
+    .main-content {
+        margin-left: 200px !important;
+        padding-bottom: 0 !important;
+    }
+}
+
+/* Mobile Lesson Player Drawer */
+.lesson-drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.lesson-drawer-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lesson-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100%;
+    background: rgba(15, 12, 41, 0.98);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+    overflow-y: auto;
+}
+
+.lesson-drawer.active {
+    transform: translateX(0);
+}
+
+/* Hide scrollbars but keep scrolling */
+.lesson-sidebar-desktop,
+.lesson-drawer,
+.lesson-content-area,
+.no-scrollbar {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+.lesson-sidebar-desktop::-webkit-scrollbar,
+.lesson-drawer::-webkit-scrollbar,
+.lesson-content-area::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Opera */
+}
+
+.hamburger-btn {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    margin-right: 16px;
+}
+
+.hamburger-btn span {
+    width: 18px;
+    height: 2px;
+    background: white;
+    border-radius: 1px;
+}
+
+/* Hide sidebar on mobile, show hamburger */
+@media (max-width: 767px) {
+    .lesson-sidebar-desktop {
+        display: none !important;
+        width: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .hamburger-btn {
+        display: flex !important;
+    }
+
+    .lesson-player-grid {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .lesson-content-area {
+        padding: 24px 16px !important;
+    }
+
+    /* Ensure drawer shows on mobile */
+    .lesson-drawer {
+        display: block;
+    }
+
+    .lesson-drawer-overlay {
+        display: block;
+    }
+}
+
+/* Show sidebar on desktop, hide hamburger */
+@media (min-width: 768px) {
+    .lesson-sidebar-desktop {
+        display: block !important;
+    }
+
+    .hamburger-btn {
+        display: none !important;
+    }
+
+    .lesson-drawer,
+    .lesson-drawer-overlay {
+        display: none !important;
+    }
+}

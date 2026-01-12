@@ -1,12 +1,12 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import CardRenderer from '@/components/lesson/CardRenderer'
 import LessonSidebar from '@/components/LessonSidebar'
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Menu } from 'lucide-react'
 import Toast from '@/components/Toast'
 
 interface Card {
@@ -38,6 +38,17 @@ export default function LessonPlayerPage() {
     const [showExitModal, setShowExitModal] = useState(false)
     const [toast, setToast] = useState<string | null>(null)
     const [direction, setDirection] = useState<'left' | 'right'>('right')
+    const [drawerOpen, setDrawerOpen] = useState(false)
+    const contentAreaRef = useRef<HTMLDivElement>(null)
+
+    // Scroll to top when card changes
+    useEffect(() => {
+        if (contentAreaRef.current) {
+            contentAreaRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+        // Also scroll window for mobile
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, [currentCardIndex])
 
     useEffect(() => {
         async function loadLesson() {
@@ -128,7 +139,6 @@ export default function LessonPlayerPage() {
             const newIndex = currentCardIndex + 1
             setCurrentCardIndex(newIndex)
             await saveProgress(newIndex)
-            setToast('Postęp zapisany ✓')
         } else {
             // Last card - complete lesson
             await completeLesson()
@@ -223,9 +233,10 @@ export default function LessonPlayerPage() {
 
     return (
         <div style={{
-            minHeight: '100vh',
+            height: '100vh',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            overflow: 'hidden'
         }}>
             {/* Top Bar - Full Width */}
             <div style={{
@@ -241,7 +252,16 @@ export default function LessonPlayerPage() {
                 top: 0,
                 zIndex: 100
             }}>
-                <div style={{ flex: 1 }}>
+                {/* Hamburger Button (Mobile Only) */}
+                <button
+                    className="hamburger-btn"
+                    onClick={() => setDrawerOpen(true)}
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div style={{
                         fontSize: '14px',
                         color: 'rgba(255, 255, 255, 0.6)',
@@ -255,8 +275,7 @@ export default function LessonPlayerPage() {
                         gap: '12px'
                     }}>
                         <div style={{
-                            flex: 1,
-                            maxWidth: '400px',
+                            width: '400px',
                             height: '8px',
                             background: 'rgba(255, 255, 255, 0.1)',
                             borderRadius: '4px',
@@ -307,14 +326,40 @@ export default function LessonPlayerPage() {
                 </button>
             </div>
 
-            {/* Grid Layout - Sidebar + Content */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: '360px 1fr',
-                flex: 1,
-                overflow: 'hidden'
-            }}>
-                {/* Lesson Sidebar */}
+            {/* Mobile Drawer Overlay */}
+            <div
+                className={`lesson-drawer-overlay ${drawerOpen ? 'active' : ''}`}
+                onClick={() => setDrawerOpen(false)}
+            />
+
+            {/* Mobile Drawer */}
+            <div className={`lesson-drawer ${drawerOpen ? 'active' : ''}`}>
+                <div style={{
+                    padding: '20px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                }}>
+                    <span style={{ fontWeight: 600 }}>📚 Struktura Lekcji</span>
+                    <button
+                        onClick={() => setDrawerOpen(false)}
+                        style={{
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '8px',
+                            background: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            color: 'white'
+                        }}
+                    >
+                        <X size={16} />
+                    </button>
+                </div>
                 <LessonSidebar
                     cards={cards}
                     currentCardIndex={currentCardIndex}
@@ -322,9 +367,32 @@ export default function LessonPlayerPage() {
                     onSelectCard={(index) => {
                         if (index < currentCardIndex || completedCards.includes(index)) {
                             setCurrentCardIndex(index)
+                            setDrawerOpen(false)
                         }
                     }}
                 />
+            </div>
+
+            {/* Grid Layout - Sidebar + Content */}
+            <div className="lesson-player-grid" style={{
+                display: 'grid',
+                gridTemplateColumns: '360px 1fr',
+                flex: 1,
+                overflow: 'hidden'
+            }}>
+                {/* Lesson Sidebar (Desktop Only) */}
+                <div className="lesson-sidebar-desktop" style={{ height: '100%', overflow: 'auto' }}>
+                    <LessonSidebar
+                        cards={cards}
+                        currentCardIndex={currentCardIndex}
+                        completedCards={completedCards}
+                        onSelectCard={(index) => {
+                            if (index < currentCardIndex || completedCards.includes(index)) {
+                                setCurrentCardIndex(index)
+                            }
+                        }}
+                    />
+                </div>
 
                 {/* Main Content Column */}
                 <div style={{
@@ -333,14 +401,19 @@ export default function LessonPlayerPage() {
                     overflow: 'hidden'
                 }}>
                     {/* Card Content Area */}
-                    <div style={{
-                        flex: 1,
-                        padding: '48px 32px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        overflow: 'hidden'
-                    }}>
+                    <div
+                        ref={contentAreaRef}
+                        className="lesson-content-area"
+                        style={{
+                            flex: 1,
+                            padding: '24px 32px 100px 32px',
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            justifyContent: 'center',
+                            overflowY: 'auto',
+                            overflowX: 'hidden'
+                        }}
+                    >
                         <div
                             key={currentCardIndex}
                             style={{
@@ -381,15 +454,19 @@ export default function LessonPlayerPage() {
                         </div>
                     </div>
 
-                    {/* Bottom Navigation */}
+                    {/* Bottom Navigation - Fixed at bottom */}
                     <div style={{
-                        background: 'rgba(0, 0, 0, 0.2)',
-                        backdropFilter: 'blur(20px)',
-                        WebkitBackdropFilter: 'blur(20px)',
-                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                        padding: '24px 32px',
+                        position: 'fixed',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        background: 'transparent',
+                        borderTop: 'none',
+                        padding: '16px 32px',
                         display: 'flex',
-                        justifyContent: 'space-between'
+                        justifyContent: 'flex-end',
+                        gap: '12px',
+                        zIndex: 100
                     }}>
                         <button
                             onClick={handlePrevious}

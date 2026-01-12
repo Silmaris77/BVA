@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainVenture V3 - Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #0f0c29;
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-purple: #b000ff;
+            --neon-blue: #00d4ff;
+            --neon-gold: #ffd700;
+            --neon-red: #ff0055;
+            --neon-green: #00ff88;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- LAYOUT STYLES (From Homepage Mockup) --- */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin: 4px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: var(--neon-blue);
+            color: var(--text-main);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 32px;
+            flex: 1;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+        }
+
+        /* --- LEARNING HUB SPECIFIC STYLES --- */
+
+        /* Tab Navigation */
+        .tabs-container {
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            width: fit-content;
+            border: 1px solid var(--glass-border);
+        }
+
+        .tab-btn {
+            padding: 10px 24px;
+            border-radius: 12px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn.active.lekcje {
+            color: var(--neon-purple);
+            background: rgba(176, 0, 255, 0.15);
+        }
+
+        .tab-btn.active.engramy {
+            color: var(--neon-blue);
+            background: rgba(0, 212, 255, 0.15);
+        }
+
+        .tab-btn.active.zasoby {
+            color: var(--neon-gold);
+            background: rgba(255, 215, 0, 0.15);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- LEKCJE TAB STYLES --- */
+        .lessson-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .lesson-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-purple);
+            box-shadow: 0 10px 30px rgba(176, 0, 255, 0.2);
+        }
+
+        /* --- ENGRAMY TAB STYLES (From User Mockup) --- */
+        .engram-header {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .engram-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .stat-number {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--neon-blue);
+        }
+
+        .engram-categories {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .category-chip {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-chip:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .category-chip.active {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        .engram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .engram-card {
+            background: rgba(20, 20, 35, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engram-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+        }
+
+        .engram-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .engram-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .engram-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .engram-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .engram-duration {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .install-btn {
+            padding: 6px 16px;
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+        }
+
+        .install-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .installed-badge {
+            padding: 4px 12px;
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #00ff88;
+            font-weight: 600;
+        }
+
+
+        /* --- ZASOBY TAB STYLES (From User Mockup) --- */
+        .resource-search-area {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .filter-btn {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .resource-card {
+            background: rgba(20, 20, 35, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .resource-card:hover {
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 4px 24px rgba(255, 215, 0, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .resource-thumbnail {
+            width: 120px;
+            height: 100px;
+            background: linear-gradient(135deg, #ffd700, #ff8800);
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .resource-meta {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .resource-tag {
+            padding: 4px 10px;
+            background: rgba(255, 215, 0, 0.15);
+            border-radius: 6px;
+            font-size: 10px;
+            color: #ffd700;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .resource-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .featured-section {
+            background: rgba(176, 0, 255, 0.1);
+            border: 1px solid rgba(176, 0, 255, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">B</div>
+                <div class="logo-text">BrainVenture</div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-item">
+                    <i data-lucide="home" size="20"></i>
+                    <span>Hub</span>
+                </div>
+                <div class="nav-item active">
+                    <i data-lucide="book-open" size="20"></i>
+                    <span>Nauka</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="gamepad-2" size="20"></i>
+                    <span>Praktyka</span>
+                </div>
+                <div class="nav-item">
+                    <i data-lucide="user" size="20"></i>
+                    <span>Ja</span>
+                </div>
+            </div>
+
+            <div style="margin-top: auto;">
+                <div class="nav-item">
+                    <i data-lucide="settings" size="20"></i>
+                    <span>Ustawienia</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- TOP BAR -->
+            <div class="top-bar">
+                <div class="search-bar">
+                    <i data-lucide="search" size="18"></i>
+                    <input type="text" placeholder="Szukaj w centrum nauki...">
+                </div>
+
+                <div class="top-bar-actions">
+                    <div class="icon-btn">
+                        <i data-lucide="bell" size="20"></i>
+                    </div>
+                    <div class="profile-btn">PK</div>
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="content">
+                <div class="page-header">
+                    <h1 class="page-title">Centrum Nauki 📚</h1>
+                    <p class="page-subtitle">Zarządzaj swoją wiedzą i rozwojem w jednym miejscu.</p>
+                </div>
+
+                <!-- TABS NAVIGATION -->
+                <div class="tabs-container">
+                    <button class="tab-btn active lekcje" onclick="switchTab('lekcje', this)">
+                        <i data-lucide="graduation-cap" size="18"></i>
+                        Lekcje
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('engramy', this)">
+                        <i data-lucide="brain-circuit" size="18"></i>
+                        Engramy
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('zasoby', this)">
+                        <i data-lucide="library" size="18"></i>
+                        Zasoby
+                    </button>
+                </div>
+
+                <!-- TAB: LEKCJE -->
+                <div id="lekcje" class="tab-content active">
+                    <div class="lessson-grid">
+                        <!-- Lesson Card 1 -->
+                        <div class="lesson-card">
+                            <div
+                                style="position: absolute; top:0; left:0; right:0; height: 4px; background: linear-gradient(90deg, #b000ff, #00d4ff);">
+                            </div>
+                            <div
+                                style="background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                                <i data-lucide="clock" color="#00d4ff"></i>
+                            </div>
+                            <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Początki Produktywności
+                            </h3>
+                            <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 20px;">Poznaj 3
+                                fundamentalne zasady, które zmienią Twoje podejście do czasu.</p>
+
+                            <div
+                                style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 13px; font-weight: 600; color: #00d4ff;">W trakcie • 45%</span>
+                                <button
+                                    style="background: rgba(255,255,255,0.1); border: none; padding: 8px 16px; border-radius: 8px; color: white; cursor: pointer;">Wznów</button>
+                            </div>
+                        </div>
+
+                        <!-- Lesson Card 2 -->
+                        <div class="lesson-card">
+                            <div
+                                style="position: absolute; top:0; left:0; right:0; height: 4px; background: rgba(255,255,255,0.1);">
+                            </div>
+                            <div
+                                style="background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                                <i data-lucide="users" color="#b000ff"></i>
+                            </div>
+                            <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Komunikacja Zespołowa
+                            </h3>
+                            <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 20px;">Jak
+                                rozmawiać, aby być zrozumianym i budować zaufanie w zespole.</p>
+
+                            <div
+                                style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.5);">Nie
+                                    rozpoczęto</span>
+                                <button
+                                    style="background: #b000ff; border: none; padding: 8px 16px; border-radius: 8px; color: white; cursor: pointer;">Start</button>
+                            </div>
+                        </div>
+
+                        <!-- Lesson Card 3 -->
+                        <div class="lesson-card">
+                            <div style="position: absolute; top:0; left:0; right:0; height: 4px; background: #00ff88;">
+                            </div>
+                            <div
+                                style="background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                                <i data-lucide="target" color="#00ff88"></i>
+                            </div>
+                            <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Wyznaczanie Celów OKR
+                            </h3>
+                            <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 20px;">Metodologia
+                                Grove'a i Doerra w praktyce dla nowoczesnych liderów.</p>
+
+                            <div
+                                style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 13px; font-weight: 600; color: #00ff88;">Ukończono</span>
+                                <button
+                                    style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 8px; color: white; cursor: pointer;">Powtórz</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: ENGRAMY -->
+                <div id="engramy" class="tab-content">
+                    <div class="engram-header">
+                        <h2 style="font-size: 24px; margin-bottom: 8px;">Katalog Engramów 🧠</h2>
+                        <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px;">Mikro-szkolenia zaprojektowane dla
+                            szybkiej absorpcji wiedzy</p>
+                        <div class="engram-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">12</span>
+                                <span>zainstalowanych</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">28</span>
+                                <span>dostępnych</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">8</span>
+                                <span>ukończonych</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="engram-categories">
+                        <div class="category-chip active">Wszystkie</div>
+                        <div class="category-chip">💼 Sprzedaż</div>
+                        <div class="category-chip">🎯 Leadership</div>
+                        <div class="category-chip">🧠 Mindset</div>
+                        <div class="category-chip">📊 Analityka</div>
+                        <div class="category-chip">🤝 Networking</div>
+                    </div>
+
+                    <div class="engram-grid">
+                        <div class="engram-card">
+                            <div class="engram-icon">⚡</div>
+                            <div class="engram-title">Szybkie Decyzje</div>
+                            <div class="engram-desc">
+                                Naucz się podejmować skuteczne decyzje biznesowe w czasie rzeczywistym.
+                            </div>
+                            <div class="engram-footer">
+                                <span class="engram-duration">⏱️ 5 min</span>
+                                <button class="install-btn">Instaluj</button>
+                            </div>
+                        </div>
+
+                        <div class="engram-card">
+                            <div class="engram-icon">🎯</div>
+                            <div class="engram-title">Pitch Perfekcyjny</div>
+                            <div class="engram-desc">
+                                Opanuj sztukę przedstawiania swojego produktu w mniej niż 60 sekund.
+                            </div>
+                            <div class="engram-footer">
+                                <span class="engram-duration">⏱️ 7 min</span>
+                                <span class="installed-badge">✓ Zainstalowane</span>
+                            </div>
+                        </div>
+
+                        <div class="engram-card">
+                            <div class="engram-icon">🧘</div>
+                            <div class="engram-title">Kontrola Stresu</div>
+                            <div class="engram-desc">
+                                Techniki oddechowe i mentalne do zarządzania stresem przed prezentacjami.
+                            </div>
+                            <div class="engram-footer">
+                                <span class="engram-duration">⏱️ 4 min</span>
+                                <button class="install-btn">Instaluj</button>
+                            </div>
+                        </div>
+
+                        <div class="engram-card">
+                            <div class="engram-icon">🤖</div>
+                            <div class="engram-title">AI Prospecting</div>
+                            <div class="engram-desc">
+                                Wykorzystaj AI do identyfikacji i kwalifikacji najlepszych prospektów.
+                            </div>
+                            <div class="engram-footer">
+                                <span class="engram-duration">⏱️ 10 min</span>
+                                <button class="install-btn">Instaluj</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: ZASOBY -->
+                <div id="zasoby" class="tab-content">
+                    <div class="featured-section">
+                        <div
+                            style="font-size: 20px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                            ⭐ Polecane dla Ciebie
+                        </div>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">
+                            Zasoby wybrane na podstawie Twojego profilu i postępów w nauce.
+                        </p>
+                    </div>
+
+                    <div class="resource-search-area">
+                        <div class="search-bar">
+                            <i data-lucide="search" size="18"></i>
+                            <input type="text" placeholder="Szukaj artykułów, guide'ów, szablonów...">
+                        </div>
+                        <button class="filter-btn">
+                            <i data-lucide="filter" size="18"></i>
+                            Filtry
+                        </button>
+                    </div>
+
+                    <div class="resource-list">
+                        <div class="resource-card">
+                            <div class="resource-thumbnail">📄</div>
+                            <div style="flex: 1;">
+                                <div class="resource-meta">
+                                    <span class="resource-tag">ARTYKUŁ</span>
+                                    <span class="resource-tag">SPRZEDAŻ</span>
+                                </div>
+                                <div class="resource-title">Kompletny Guide do SPIN Selling w 2026</div>
+                                <p style="font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 12px;">Dogłębny
+                                    przewodnik po metodologii SPIN Selling z konkretnymi pytaniami.</p>
+                                <div style="font-size: 12px; color: rgba(255,255,255,0.5); display: flex; gap: 16px;">
+                                    <span>📖 15 min czytania</span>
+                                    <span>👁️ 1,234 wyświetleń</span>
+                                    <span>⭐ 4.8/5.0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-thumbnail"
+                                style="background: linear-gradient(135deg, #00d4ff, #b000ff);">📊</div>
+                            <div style="flex: 1;">
+                                <div class="resource-meta">
+                                    <span class="resource-tag">SZABLON</span>
+                                    <span class="resource-tag">EXCEL</span>
+                                </div>
+                                <div class="resource-title">Sales Pipeline Tracker - Szablon Excel</div>
+                                <p style="font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 12px;">Gotowy do
+                                    użycia szablon do śledzenia pipeline'u sprzedażowego.</p>
+                                <div style="font-size: 12px; color: rgba(255,255,255,0.5); display: flex; gap: 16px;">
+                                    <span>📥 2,456 pobrań</span>
+                                    <span>💾 850 KB</span>
+                                    <span>⭐ 4.9/5.0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resource-card">
+                            <div class="resource-thumbnail"
+                                style="background: linear-gradient(135deg, #00ff88, #00d4ff);">📚</div>
+                            <div style="flex: 1;">
+                                <div class="resource-meta">
+                                    <span class="resource-tag">E-BOOK</span>
+                                    <span class="resource-tag">LEADERSHIP</span>
+                                </div>
+                                <div class="resource-title">Od Managera do Lidera</div>
+                                <p style="font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 12px;">E-book o
+                                    transformacji z menedżera operacyjnego w lidera.</p>
+                                <div style="font-size: 12px; color: rgba(255,255,255,0.5); display: flex; gap: 16px;">
+                                    <span>📖 3h czytania</span>
+                                    <span>📥 5,678 pobrań</span>
+                                    <span>⭐ 4.7/5.0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function switchTab(tabId, btn) {
+            // Remove active from all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+                // Remove specific color classes if needed, or just handle via CSS specificity
+                el.classList.remove('lekcje', 'engramy', 'zasoby');
+            });
+
+            // Add active to selected
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+            btn.classList.add(tabId); // Re-add the specific class for color
+        }
+    </script>
+</body>
+
+</html>

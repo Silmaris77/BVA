@@ -141,7 +141,7 @@ export default function LessonsPage() {
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
                 borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                padding: '16px 32px',
+                padding: '16px 32px 16px 48px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -149,32 +149,72 @@ export default function LessonsPage() {
                 top: 0,
                 zIndex: 50
             }}>
-                {/* Search */}
-                <div style={{ flex: 1, maxWidth: '400px', position: 'relative' }}>
-                    <input
-                        type="text"
-                        placeholder="Szukaj lekcji..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                {/* Main Tabs (Lekcje / Engramy / Zasoby) */}
+                <div style={{
+                    display: 'flex',
+                    gap: '8px',
+                    flex: 1
+                }}>
+                    <button
                         style={{
-                            width: '100%',
-                            padding: '10px 16px 10px 40px',
-                            background: 'rgba(255, 255, 255, 0.05)',
-                            border: '1px solid rgba(255, 255, 255, 0.08)',
-                            borderRadius: '12px',
-                            color: 'white',
+                            padding: '8px 16px',
+                            borderRadius: '8px',
+                            background: 'rgba(0, 212, 255, 0.2)',
+                            border: '1px solid #00d4ff',
+                            color: '#00d4ff',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            cursor: 'pointer',
                             fontFamily: 'Outfit, sans-serif',
-                            fontSize: '14px',
-                            outline: 'none'
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            transition: 'all 0.2s'
                         }}
-                    />
-                    <Search size={18} style={{
-                        position: 'absolute',
-                        left: '12px',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        color: 'rgba(255, 255, 255, 0.6)'
-                    }} />
+                    >
+                        <BookOpen size={16} />
+                        Lekcje
+                    </button>
+                    <button
+                        style={{
+                            padding: '8px 16px',
+                            borderRadius: '8px',
+                            background: 'transparent',
+                            border: '1px solid transparent',
+                            color: 'rgba(255, 255, 255, 0.6)',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            fontFamily: 'Outfit, sans-serif',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        <Brain size={16} />
+                        Engramy
+                    </button>
+                    <button
+                        style={{
+                            padding: '8px 16px',
+                            borderRadius: '8px',
+                            background: 'transparent',
+                            border: '1px solid transparent',
+                            color: 'rgba(255, 255, 255, 0.6)',
+                            fontSize: '13px',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            fontFamily: 'Outfit, sans-serif',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        <Library size={16} />
+                        Zasoby
+                    </button>
                 </div>
 
                 {/* Actions */}
@@ -258,71 +298,76 @@ export default function LessonsPage() {
                     </p>
                 </div>
 
-                {/* Main Tabs (Lekcje / Implants / Zasoby) */}
+                {/* Search and Sort */}
                 <div style={{
                     display: 'flex',
-                    gap: '8px',
-                    marginBottom: '32px',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                    paddingBottom: '16px'
+                    alignItems: 'center',
+                    gap: '16px',
+                    marginBottom: '32px'
                 }}>
-                    <button
-                        style={{
-                            padding: '10px 20px',
-                            borderRadius: '10px',
-                            background: 'rgba(0, 212, 255, 0.15)',
-                            border: '1px solid #00d4ff',
-                            color: 'white',
+                    {/* Search */}
+                    <div style={{ position: 'relative', width: '76%' }}>
+                        <input
+                            type="text"
+                            placeholder="Szukaj lekcji..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '10px 16px 10px 40px',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid rgba(255, 255, 255, 0.08)',
+                                borderRadius: '12px',
+                                color: 'white',
+                                fontFamily: 'Outfit, sans-serif',
+                                fontSize: '14px',
+                                outline: 'none'
+                            }}
+                        />
+                        <Search size={18} style={{
+                            position: 'absolute',
+                            left: '12px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            color: 'rgba(255, 255, 255, 0.6)'
+                        }} />
+                    </div>
+
+                    {/* Sort */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px'
+                    }}>
+                        <span style={{
                             fontSize: '14px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            fontFamily: 'Outfit, sans-serif',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px'
-                        }}
-                    >
-                        <BookOpen size={16} />
-                        Lekcje
-                    </button>
-                    <button
-                        style={{
-                            padding: '10px 20px',
-                            borderRadius: '10px',
-                            background: 'transparent',
-                            border: '1px solid transparent',
                             color: 'rgba(255, 255, 255, 0.6)',
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            fontFamily: 'Outfit, sans-serif',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px'
-                        }}
-                    >
-                        <Brain size={16} />
-                        Implants
-                    </button>
-                    <button
-                        style={{
-                            padding: '10px 20px',
-                            borderRadius: '10px',
-                            background: 'transparent',
-                            border: '1px solid transparent',
-                            color: 'rgba(255, 255, 255, 0.6)',
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            fontFamily: 'Outfit, sans-serif',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px'
-                        }}
-                    >
-                        <Library size={16} />
-                        Zasoby
-                    </button>
+                            fontWeight: 500
+                        }}>
+                            Sortuj:
+                        </span>
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as any)}
+                            style={{
+                                padding: '10px 16px',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                borderRadius: '10px',
+                                color: 'white',
+                                cursor: 'pointer',
+                                fontFamily: 'Outfit, sans-serif',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                outline: 'none'
+                            }}
+                        >
+                            <option value="newest" style={{ background: '#1a1a2e' }}>Najnowsze</option>
+                            <option value="duration" style={{ background: '#1a1a2e' }}>Czas trwania</option>
+                            <option value="xp" style={{ background: '#1a1a2e' }}>Nagroda XP</option>
+                            <option value="difficulty" style={{ background: '#1a1a2e' }}>Poziom trudności</option>
+                        </select>
+                    </div>
                 </div>
 
                 {/* Statistics Bar */}
@@ -391,43 +436,6 @@ export default function LessonsPage() {
                             {cat.name}
                         </button>
                     ))}
-                </div>
-
-                {/* Sort Dropdown */}
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    marginBottom: '24px'
-                }}>
-                    <span style={{
-                        fontSize: '14px',
-                        color: 'rgba(255, 255, 255, 0.6)',
-                        fontWeight: 500
-                    }}>
-                        Sortuj:
-                    </span>
-                    <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value as any)}
-                        style={{
-                            padding: '10px 16px',
-                            background: 'rgba(255, 255, 255, 0.05)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            borderRadius: '10px',
-                            color: 'white',
-                            cursor: 'pointer',
-                            fontFamily: 'Outfit, sans-serif',
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            outline: 'none'
-                        }}
-                    >
-                        <option value="newest" style={{ background: '#1a1a2e' }}>Najnowsze</option>
-                        <option value="duration" style={{ background: '#1a1a2e' }}>Czas trwania</option>
-                        <option value="xp" style={{ background: '#1a1a2e' }}>Nagroda XP</option>
-                        <option value="difficulty" style={{ background: '#1a1a2e' }}>Poziom trudności</option>
-                    </select>
                 </div>
 
                 {/* Lessons Grid */}

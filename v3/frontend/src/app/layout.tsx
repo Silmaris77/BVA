@@ -29,8 +29,8 @@ export default function RootLayout({
 
         <AuthProvider>
           {!isAuthPage && !isLessonPlayer && <Sidebar />}
-          {/* Main content with responsive margins */}
-          <div style={{ marginLeft: '200px' }}>
+          {/* Main content with responsive margins - skip for fullscreen pages */}
+          <div className={!isAuthPage && !isLessonPlayer ? 'main-content' : ''}>
             {children}
           </div>
           {!isAuthPage && !isLessonPlayer && <BottomNav />}
