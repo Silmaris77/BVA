@@ -39,17 +39,48 @@ interface CardRendererProps {
 export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
     switch (card.type) {
         case 'intro':
-            return <IntroCard {...card} />
+            return <IntroCard
+                title={card.title || 'Wstęp'}
+                description={card.description || ''}
+                subtitle={card.subtitle}
+                icon={card.icon}
+            />
         case 'concept':
-            return <ConceptCard {...card} />
+            return <ConceptCard
+                title={card.title || 'Koncepcja'}
+                content={card.content || ''}
+                keyPoints={card.keyPoints}
+                visual={card.visual}
+            />
         case 'question':
-            return <QuestionCard {...card} onAnswer={onAnswer} />
+            return <QuestionCard
+                question={card.question || 'Pytanie'}
+                options={card.options || []}
+                correctAnswer={card.correctAnswer || 0}
+                explanation={card.explanation}
+                onAnswer={onAnswer}
+            />
         case 'summary':
-            return <SummaryCard {...card} />
+            return <SummaryCard
+                title={card.title}
+                recap={card.recap || []}
+                nextSteps={card.nextSteps}
+                badge={card.badge}
+            />
         case 'practice':
-            return <PracticeCard {...card} />
+            return <PracticeCard
+                title={card.title || 'Ćwiczenie'}
+                content={card.content || card.description || ''}
+                actionSteps={card.actionSteps}
+                keyPoints={card.keyPoints}
+            />
         case 'warning':
-            return <WarningCard {...card} />
+            return <WarningCard
+                title={card.title || 'Uwaga'}
+                content={card.content || card.description || ''}
+                warnings={card.warnings || []}
+                example={card.example}
+            />
         default:
             return (
                 <div style={{
