@@ -2,13 +2,21 @@
 
 import { useAuth } from '@/contexts/AuthContext'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, Bell, Zap, Brain, Library, BookOpen, Clock, RefreshCw, Download } from 'lucide-react'
 
 export default function EngramsPage() {
-    const { user, profile } = useAuth()
+    const { user, profile, loading: authLoading } = useAuth()
+    const router = useRouter()
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedCategory, setSelectedCategory] = useState<string>('all')
+
+    useEffect(() => {
+        if (!authLoading && !user) {
+            router.push('/auth/login')
+        }
+    }, [user, authLoading, router])
 
     const categories = [
         { id: 'all', name: 'Wszystkie', color: '#00d4ff' },
@@ -87,6 +95,20 @@ export default function EngramsPage() {
         if (strength >= 80) return 'Stable'
         if (strength >= 40) return 'Fading'
         return 'Critical'
+    }
+
+    if (authLoading) {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255, 255, 255, 0.6)'
+            }}>
+                Ładowanie...
+            </div>
+        )
     }
 
     if (!user) return null

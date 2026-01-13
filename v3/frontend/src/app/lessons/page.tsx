@@ -27,12 +27,18 @@ interface UserProgress {
 }
 
 export default function LessonsPage() {
-    const { user, profile } = useAuth()
+    const { user, profile, loading: authLoading } = useAuth()
     const router = useRouter()
     const [lessons, setLessons] = useState<Lesson[]>([])
     const [progress, setProgress] = useState<Record<string, UserProgress>>({})
     const [loading, setLoading] = useState(true)
     const [selectedCategory, setSelectedCategory] = useState<string>('all')
+
+    useEffect(() => {
+        if (!authLoading && !user) {
+            router.push('/auth/login')
+        }
+    }, [user, authLoading, router])
     const [searchTerm, setSearchTerm] = useState('')
     const [sortBy, setSortBy] = useState<'newest' | 'duration' | 'xp' | 'difficulty'>('newest')
 
@@ -131,6 +137,20 @@ export default function LessonsPage() {
                 return sorted
         }
     }, [filteredLessons, sortBy])
+
+    if (authLoading) {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255, 255, 255, 0.6)'
+            }}>
+                Ładowanie...
+            </div>
+        )
+    }
 
     if (!user) return null
 

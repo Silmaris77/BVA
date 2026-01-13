@@ -1,13 +1,21 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Search, Bell, Zap, Brain, Library, BookOpen, Filter, Lock, ExternalLink, FileText, Table, Video, Book, TrendingUp, Mail, LayoutTemplate } from 'lucide-react'
 
 export default function ResourcesPage() {
-    const { user, profile } = useAuth()
+    const { user, profile, loading: authLoading } = useAuth()
+    const router = useRouter()
     const [searchTerm, setSearchTerm] = useState('')
+
+    useEffect(() => {
+        if (!authLoading && !user) {
+            router.push('/auth/login')
+        }
+    }, [user, authLoading, router])
 
     // Mock resources data
     const mockResources = [
@@ -80,6 +88,20 @@ export default function ResourcesPage() {
 
     const recommendedResources = filteredResources.slice(0, 3)
     const allResources = filteredResources.slice(3)
+
+    if (authLoading) {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255, 255, 255, 0.6)'
+            }}>
+                Ładowanie...
+            </div>
+        )
+    }
 
     if (!user) return null
 

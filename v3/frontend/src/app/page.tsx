@@ -1,13 +1,21 @@
 ﻿'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Zap, Trophy, Target, Flame, BookOpen, Brain, ChevronRight, GraduationCap, Search, Bell } from 'lucide-react'
 
 export default function HomePage() {
-  const { user, profile } = useAuth()
+  const { user, profile, loading } = useAuth()
+  const router = useRouter()
   const [completedLessons, setCompletedLessons] = useState<number>(0)
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/auth/login')
+    }
+  }, [user, loading, router])
 
   useEffect(() => {
     async function fetchStats() {
@@ -24,6 +32,20 @@ export default function HomePage() {
 
     fetchStats()
   }, [user])
+
+  if (loading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'rgba(255, 255, 255, 0.6)'
+      }}>
+        Ładowanie profilu...
+      </div>
+    )
+  }
 
   if (!user) return null
 
