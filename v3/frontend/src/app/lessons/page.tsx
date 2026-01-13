@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import LessonCard from '@/components/LessonCard'
 import { Search, Bell, Zap, Filter, Brain, Library, BookOpen } from 'lucide-react'
@@ -155,7 +156,8 @@ export default function LessonsPage() {
                     gap: '8px',
                     flex: 1
                 }}>
-                    <button
+                    <Link
+                        href="/lessons"
                         style={{
                             padding: '8px 16px',
                             borderRadius: '8px',
@@ -169,13 +171,15 @@ export default function LessonsPage() {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '6px',
-                            transition: 'all 0.2s'
+                            transition: 'all 0.2s',
+                            textDecoration: 'none'
                         }}
                     >
                         <BookOpen size={16} />
                         Lekcje
-                    </button>
-                    <button
+                    </Link>
+                    <Link
+                        href="/engrams"
                         style={{
                             padding: '8px 16px',
                             borderRadius: '8px',
@@ -189,13 +193,15 @@ export default function LessonsPage() {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '6px',
-                            transition: 'all 0.2s'
+                            transition: 'all 0.2s',
+                            textDecoration: 'none'
                         }}
                     >
                         <Brain size={16} />
                         Engramy
-                    </button>
-                    <button
+                    </Link>
+                    <Link
+                        href="/resources"
                         style={{
                             padding: '8px 16px',
                             borderRadius: '8px',
@@ -209,12 +215,13 @@ export default function LessonsPage() {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '6px',
-                            transition: 'all 0.2s'
+                            transition: 'all 0.2s',
+                            textDecoration: 'none'
                         }}
                     >
                         <Library size={16} />
                         Zasoby
-                    </button>
+                    </Link>
                 </div>
 
                 {/* Actions */}
