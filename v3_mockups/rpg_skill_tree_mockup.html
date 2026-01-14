@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainVenture V3 - Skill Tree (RPG Mockup)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tree-container {
+            position: relative;
+            min-height: 800px;
+            padding: 40px;
+        }
+
+        /* SVG Connections */
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .connection {
+            stroke: rgba(176, 0, 255, 0.4);
+            stroke-width: 3;
+            fill: none;
+        }
+
+        .connection.unlocked {
+            stroke: #b000ff;
+            stroke-width: 3;
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                stroke: #b000ff;
+            }
+
+            50% {
+                stroke: #00d4ff;
+            }
+        }
+
+        /* Skill Nodes */
+        .skill-node {
+            position: absolute;
+            width: 180px;
+            padding: 16px;
+            background: rgba(20, 20, 35, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .skill-node:hover {
+            transform: scale(1.05);
+            z-index: 3;
+        }
+
+        .skill-node.unlocked {
+            border-color: #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .skill-node.locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+            cursor: not-allowed;
+        }
+
+        .skill-node.current {
+            border-color: #ffd700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            }
+
+            50% {
+                box-shadow: 0 0 60px rgba(255, 215, 0, 0.8);
+            }
+        }
+
+        .node-icon {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .node-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .node-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+
+        .badge-unlocked {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+        }
+
+        .badge-locked {
+            background: rgba(255, 71, 87, 0.2);
+            border: 1px solid #ff4757;
+            color: #ff4757;
+        }
+
+        .badge-current {
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #ffd700;
+            color: #ffd700;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid #00d4ff;
+            border-radius: 12px;
+            padding: 16px;
+            width: 260px;
+            z-index: 100;
+            display: none;
+            pointer-events: none;
+        }
+
+        .tooltip.show {
+            display: block;
+        }
+
+        .tooltip-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .tooltip-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .tooltip-requires {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tooltip-requires strong {
+            color: #ffd700;
+        }
+
+        /* Legend */
+        .legend {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(20, 20, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            z-index: 50;
+        }
+
+        .legend-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #00d4ff;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .legend-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 2px solid;
+        }
+
+        .legend-box.unlocked {
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .legend-box.current {
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .legend-box.locked {
+            border-color: #ff4757;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🌳 Skill Tree - Leadership Path</h1>
+
+        <div class="tree-container">
+            <!-- SVG Connections -->
+            <svg>
+                <!-- Tier 1 → Tier 2 -->
+                <path d="M 700,100 L 400,250" class="connection unlocked" />
+                <path d="M 700,100 L 1000,250" class="connection unlocked" />
+
+                <!-- Tier 2 → Tier 3 -->
+                <path d="M 400,250 L 400,450" class="connection unlocked" />
+                <path d="M 1000,250 L 700,450" class="connection unlocked" />
+                <path d="M 1000,250 L 1000,450" class="connection" />
+
+                <!-- Tier 3 → Tier 4 -->
+                <path d="M 400,450 L 400,650" class="connection" />
+                <path d="M 700,450 L 550,650" class="connection" />
+                <path d="M 700,450 L 850,650" class="connection" />
+            </svg>
+
+            <!-- Tier 1 - Foundation -->
+            <div class="skill-node unlocked" style="top: 50px; left: 600px;">
+                <div class="node-icon">🧠</div>
+                <div class="node-title">Communication Basics</div>
+                <div class="node-status">
+                    <span class="status-badge badge-unlocked">✓ UNLOCKED</span>
+                </div>
+            </div>
+
+            <!-- Tier 2 - Core Skills -->
+            <div class="skill-node unlocked" style="top: 200px; left: 300px;">
+                <div class="node-icon">👂</div>
+                <div class="node-title">Active Listening</div>
+                <div class="node-status">
+                    <span class="status-badge badge-unlocked">✓ UNLOCKED</span>
+                </div>
+            </div>
+
+            <div class="skill-node unlocked" style="top: 200px; left: 900px;">
+                <div class="node-icon">📖</div>
+                <div class="node-title">Storytelling</div>
+                <div class="node-status">
+                    <span class="status-badge badge-unlocked">✓ UNLOCKED</span>
+                </div>
+            </div>
+
+            <!-- Tier 3 - Advanced -->
+            <div class="skill-node current" style="top: 400px; left: 300px;">
+                <div class="node-icon">🎯</div>
+                <div class="node-title">BATNA Basics</div>
+                <div class="node-status">
+                    <span class="status-badge badge-current">▶ IN PROGRESS</span>
+                </div>
+            </div>
+
+            <div class="skill-node locked" style="top: 400px; left: 600px;">
+                <div class="node-icon">🤝</div>
+                <div class="node-title">Negotiation 101</div>
+                <div class="node-status">
+                    <span class="status-badge badge-locked">🔒 LOCKED</span>
+                </div>
+            </div>
+
+            <div class="skill-node locked" style="top: 400px; left: 900px;">
+                <div class="node-icon">⚡</div>
+                <div class="node-title">OODA Loop</div>
+                <div class="node-status">
+                    <span class="status-badge badge-locked">🔒 LOCKED</span>
+                </div>
+            </div>
+
+            <!-- Tier 4 - Mastery -->
+            <div class="skill-node locked" style="top: 600px; left: 300px;">
+                <div class="node-icon">💎</div>
+                <div class="node-title">Advanced Negotiation</div>
+                <div class="node-status">
+                    <span class="status-badge badge-locked">🔒 LOCKED</span>
+                </div>
+            </div>
+
+            <div class="skill-node locked" style="top: 600px; left: 450px;">
+                <div class="node-icon">👥</div>
+                <div class="node-title">Team Building</div>
+                <div class="node-status">
+                    <span class="status-badge badge-locked">🔒 LOCKED</span>
+                </div>
+            </div>
+
+            <div class="skill-node locked" style="top: 600px; left: 750px;">
+                <div class="node-icon">🏆</div>
+                <div class="node-title">Conflict Resolution</div>
+                <div class="node-status">
+                    <span class="status-badge badge-locked">🔒 LOCKED</span>
+                </div>
+            </div>
+
+            <!-- Tooltip (shows on hover) -->
+            <div class="tooltip" id="tooltip">
+                <div class="tooltip-title">Negotiation 101</div>
+                <div class="tooltip-desc">
+                    Master the fundamentals of win-win negotiation techniques.
+                    Learn how to find the ZOPA and create value.
+                </div>
+                <div style="font-size: 12px; margin-bottom: 8px;">
+                    <strong>Reward:</strong> +50 XP, +20 Leadership
+                </div>
+                <div class="tooltip-requires">
+                    <strong>Unlock Requirements:</strong><br>
+                    • Complete: Active Listening ✓<br>
+                    • Complete: Storytelling ✓<br>
+                    • Complete: BATNA Basics ⏳<br>
+                    • Level: Leadership 3+
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-title">Legend</div>
+            <div class="legend-item">
+                <div class="legend-box unlocked"></div>
+                <span>Unlocked</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box current"></div>
+                <span>In Progress</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box locked"></div>
+                <span>Locked</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple hover tooltip
+        const nodes = document.querySelectorAll('.skill-node');
+        const tooltip = document.getElementById('tooltip');
+
+        nodes.forEach(node => {
+            node.addEventListener('mouseenter', (e) => {
+                if (node.classList.contains('locked')) {
+                    tooltip.style.left = (e.pageX + 20) + 'px';
+                    tooltip.style.top = (e.pageY - 50) + 'px';
+                    tooltip.classList.add('show');
+                }
+            });
+
+            node.addEventListener('mouseleave', () => {
+                tooltip.classList.remove('show');
+            });
+        });
+    </script>
+</body>
+
+</html>

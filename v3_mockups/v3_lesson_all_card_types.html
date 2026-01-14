@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Milwaukee Application First - All Card Types</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .lesson-info {
+            flex: 1;
+            text-align: center;
+            padding: 0 16px;
+        }
+
+        .lesson-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .lesson-progress {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #b000ff, #00d4ff);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 28px;
+            margin-bottom: 20px;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-type {
+            align-self: flex-start;
+            padding: 6px 14px;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid #00d4ff;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .card-type.story {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .card-type.scenario {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .card-type.challenge {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+
+        .card-type.poll {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: #8a2be2;
+            color: #8a2be2;
+        }
+
+        .card-type.progress {
+            background: rgba(255, 165, 0, 0.2);
+            border-color: #ffa500;
+            color: #ffa500;
+        }
+
+        .card-type.comparison {
+            background: rgba(0, 191, 255, 0.2);
+            border-color: #00bfff;
+            color: #00bfff;
+        }
+
+        .card h2 {
+            font-size: 26px;
+            margin-bottom: 16px;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .card p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 16px;
+        }
+
+        /* Story Card */
+        .story-image {
+            width: calc(100% + 56px);
+            height: 180px;
+            margin: -28px -28px 20px -28px;
+            background: linear-gradient(135deg, rgba(176, 0, 255, 0.3), rgba(0, 212, 255, 0.3)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400"><rect fill="%23302b63" width="800" height="400"/></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .story-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 28px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        }
+
+        .story-tag {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Scenario Card */
+        .scenario-situation {
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 3px solid #ffd700;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-goal {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .choice-btn {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .choice-btn::before {
+            content: attr(data-letter);
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(4px);
+        }
+
+        .choice-btn.correct {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: #00ff88;
+        }
+
+        .choice-btn.incorrect {
+            background: rgba(255, 107, 107, 0.15);
+            border-color: #ff6b6b;
+        }
+
+        /* Challenge Card */
+        .challenge-timer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .timer-display {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .challenge-input {
+            width: 100%;
+            min-height: 140px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        .challenge-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .char-counter {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: right;
+            margin-bottom: 12px;
+        }
+
+        .examples-toggle {
+            background: none;
+            border: none;
+            color: #00d4ff;
+            font-size: 13px;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .examples {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .example-item {
+            font-size: 13px;
+            margin-bottom: 10px;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        /* Poll Card */
+        .poll-option {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poll-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .poll-result {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            background: rgba(138, 43, 226, 0.2);
+            z-index: 0;
+            transition: width 0.5s ease;
+        }
+
+        .poll-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .poll-percentage {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            font-size: 13px;
+            z-index: 1;
+        }
+
+        .expert-answer {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #00d4ff;
+            border-radius: 12px;
+        }
+
+        .expert-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        /* Progress Card */
+        .progress-ring {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s;
+        }
+
+        .progress-percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .achievement-pill {
+            display: inline-block;
+            padding: 8px 14px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #ffd700;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* Comparison Card */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .comparison-side {
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid;
+        }
+
+        .comparison-side.bad {
+            background: rgba(255, 107, 107, 0.1);
+            border-color: #ff6b6b;
+        }
+
+        .comparison-side.good {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: #00ff88;
+        }
+
+        .comparison-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .comparison-side.bad .comparison-label {
+            color: #ff6b6b;
+        }
+
+        .comparison-side.good .comparison-label {
+            color: #00ff88;
+        }
+
+        .comparison-example {
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            font-style: italic;
+        }
+
+        .comparison-points {
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .comparison-points div {
+            margin-bottom: 6px;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .comparison-points div::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .key-takeaway {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #00d4ff;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* External Resource Card */
+        .resource-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .resource-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(4px);
+        }
+
+        .resource-icon {
+            font-size: 28px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .resource-content {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .resource-meta {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 6px;
+        }
+
+        .resource-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #00ff88;
+            text-transform: uppercase;
+        }
+
+        .resource-badge.premium {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .resource-badge.bestseller {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        /* Action Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #b000ff, #8a2be2);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(176, 0, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(176, 0, 255, 0.4);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Card Navigation */
+        .card-nav {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .card-nav button {
+            flex: 1;
+        }
+
+        /* Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .achievement-pill {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="back-btn" onclick="alert('← Back to lessons')">
+                ←
+            </div>
+            <div class="lesson-info">
+                <div class="lesson-title">Milwaukee: Application First</div>
+                <div class="lesson-progress">Karta <span id="current-card">1</span> z 12</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 8%"></div>
+                </div>
+            </div>
+            <div class="back-btn" onclick="alert('⋮ Menu')">
+                ⋮
+            </div>
+        </div>
+
+        <!-- Card 1: Story Card -->
+        <div class="card" id="card-1">
+            <div class="story-image">
+                <div class="story-overlay">
+                    <div class="story-tag">📖 Wprowadzenie</div>
+                </div>
+            </div>
+            <div class="card-type story">Story</div>
+            <h2>Jak Tomasz stracił kontrakt na 500k PLN</h2>
+            <p><strong>Bohater:</strong> Tomasz - Account Manager w firmie dystrybucyjnej</p>
+            <p><strong>Sceneria:</strong> Finalna prezentacja oferty dla sieci budowlanej na dostawę narzędzi
+                Milwaukee.</p>
+            <p><strong>Konflikt:</strong> Klient słucha, kiwa głową, ale nagle mówi: <em>"Dziękujemy, damy znać"</em>
+                i kończy spotkanie. Co poszło nie tak?</p>
+            <p style="color: #00d4ff; font-weight: 600;">💡 W tej lekcji nauczysz się podejścia "Application First" -
+                zamiast mówić CO sprzedajesz, pokażesz JAK klient to wykorzysta.</p>
+
+            <div class="card-nav">
+                <button class="btn-primary" onclick="nextCard()">Zacznijmy lekcję →</button>
+            </div>
+        </div>
+
+        <!-- Card 2: Concept Card (MVP) -->
+        <div class="card hidden" id="card-2">
+            <div class="card-type">Concept</div>
+            <h2>Co to jest "Application First"?</h2>
+            <p><strong>Definicja:</strong> Podejście sprzedażowe, w którym zamiast prezentować produkt i jego cechy,
+                zaczynasz od pokazania konkretnego zastosowania w kontekście klienta.</p>
+            <p><strong>Klasyczne podejście (❌ ZŁE):</strong></p>
+            <p style="padding-left: 20px; font-style: italic;">"Milwaukee M18 to najlepsza wiertarko-wkrętarka na
+                rynku. Ma silnik bezszczotkowy, 135 Nm momentu obrotowego i baterię 5.0 Ah..."</p>
+            <p><strong>Application First (✅ DOBRE):</strong></p>
+            <p style="padding-left: 20px; font-style: italic;">"Panie Adamie, rozumiem, że Pana monterzy pracują na
+                budowach gdzie nie ma dostępu do prądu. Z Milwaukee M18 mogą przejść cały dzień na jednej baterii,
+                nawet przy wierceniu w betonie. Jeden z moich klientów skrócił czas montażu o 30% właśnie dzięki
+                temu..."</p>
+
+            <div class="card-nav">
+                <button class="btn-secondary" onclick="prevCard()">← Wstecz</button>
+                <button class="btn-primary" onclick="nextCard()">Dalej →</button>
+            </div>
+        </div>
+
+        <!-- Card 3: Scenario Card -->
+        <div class="card hidden" id="card-3">
+            <div class="card-type scenario">Scenario</div>
+            <h2>Trudna sytuacja: Klient przerywa prezentację</h2>
+
+            <div class="scenario-situation">
+                <p><strong>Sytuacja:</strong> Jesteś w środku prezentacji produktu. Klient przerywa i mówi: <em>"To
+                        wszystko brzmi fajnie, ale mamy już dostawcę. Dlaczego mielibyśmy zmieniać?"</em></p>
+            </div>
+
+            <div class="scenario-goal">
+                🎯 <strong>Twój cel:</strong> Pokazać wartość bez atakowania konkurencji. Co odpowiadasz?
+            </div>
+
+            <button class="choice-btn" data-letter="A" onclick="selectChoice('A', 'incorrect')">
+                "Nasz produkt jest po prostu lepszy. Konkurencja nie ma nawet połowy naszych funkcji."
+            </button>
+
+            <button class="choice-btn" data-letter="B" onclick="selectChoice('B', 'correct')">
+                "Rozumiem, że obecne rozwiązanie działa. Czy mogę zapytać - jakie wyzwanie jest dla Pana teraz
+                najbardziej frustrujące w codziennej pracy Pana zespołu?"
+            </button>
+
+            <button class="choice-btn" data-letter="C" onclick="selectChoice('C', 'incorrect')">
+                "Damy Panu 15% rabatu, jeśli zmieni Pan dostawcę. Co Pan na to?"
+            </button>
+
+            <div id="feedback" class="expert-answer hidden">
+                <div class="expert-label">✅ Odpowiedź B - Świetnie!</div>
+                <p>Zamiast atakować konkurencję lub od razu oferować rabat, pytasz o <strong>problem</strong>. To
+                    otwiera drzwi do rozmowy o <strong>zastosowaniu</strong> (application), nie cenie czy specyfikacji.
+                </p>
+                <p><strong>Bonus XP:</strong> +50 XP za empatyczne podejście!</p>
+            </div>
+
+            <div class="card-nav">
+                <button class="btn-secondary" onclick="prevCard()">← Wstecz</button>
+                <button class="btn-primary" id="btn-next-3" onclick="nextCard()" disabled>Dalej →</button>
+            </div>
+        </div>
+
+        <!-- Card 4: Challenge Card -->
+        <div class="card hidden" id="card-4">
+            <div class="card-type challenge">Challenge</div>
+            <h2>Zadanie: Stwórz swoją "Application Pitch"</h2>
+
+            <div class="challenge-timer">
+                <div>⏱️ Pozostało:</div>
+                <div class="timer-display" id="timer">02:00</div>
+            </div>
+
+            <p>Wyobraź sobie, że sprzedajesz produkty Milwaukee (narzędzia) do firmy budowlanej. Napisz 2-3 zdania w
+                stylu "Application First" - zacznij od konkretnego problemu klienta, a dopiero potem wspomnij produkt.
+            </p>
+
+            <textarea class="challenge-input" id="challenge-text" placeholder="Moja Application Pitch:
+
+Przykład: 'Rozumiem, że Pana ekipy tracą dużo czasu na wymianę baterii w narzędziach. Z systemem Milwaukee M18 REDLITHIUM mogą pracować cały dzień na jednej baterii, co oznacza mniej przestojów i szybszą realizację zleceń...'"
+                oninput="updateCharCounter()"></textarea>
+
+            <div class="char-counter" id="char-counter">0 / 200 znaków (min. 50)</div>
+
+            <button class="examples-toggle" onclick="toggleExamples()">💡 Pokaż przykłady →</button>
+
+            <div class="examples hidden" id="examples">
+                <div class="example-item">✅ <strong>Dobry przykład:</strong> "Zauważyłem, że Pana monterzy często
+                    narzekają na ciężar narzędzi przy pracy na wysokości. Milwaukee M12 waży o 40% mniej niż
+                    standardowe modele, co zmniejsza zmęczenie..."</div>
+                <div class="example-item">❌ <strong>Zły przykład:</strong> "Milwaukee to najlepsza marka narzędzi.
+                    Mamy szeroką gamę produktów i świetne ceny."</div>
+            </div>
+
+            <div class="card-nav">
+                <button class="btn-secondary" onclick="prevCard()">← Wstecz</button>
+                <button class="btn-primary" id="btn-submit-challenge" onclick="submitChallenge()">Wyślij odpowiedź →
+                </button>
+            </div>
+        </div>
+
+        <!-- Card 5: Progress Card -->
+        <div class="card hidden" id="card-5">
+            <div class="card-type progress">Progress</div>
+            <h2 class="text-center">🎯 Jesteś w połowie drogi!</h2>
+
+            <div class="progress-ring">
+                <svg width="140" height="140">
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#b000ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring-circle" cx="70" cy="70" r="60"></circle>
+                    <circle class="progress-ring-fill" cx="70" cy="70" r="60"
+                        stroke-dasharray="377 377"
+                        stroke-dashoffset="188.5"></circle>
+                </svg>
+                <div class="progress-percentage">50%</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">6/12</div>
+                    <div class="stat-label">Karty</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">230</div>
+                    <div class="stat-label">Zdobyte XP</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">~8 min</div>
+                    <div class="stat-label">Pozostało</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+
+            <p class="text-center mb-20"><strong>Gratulacje! Zdobyłeś już:</strong></p>
+            <div class="text-center mb-20">
+                <span class="achievement-pill">🎯 Perfect Scenario</span>
+                <span class="achievement-pill">⚡ Fast Learner</span>
+            </div>
+
+            <p class="text-center" style="color: rgba(255, 255, 255, 0.7);">Świetna robota! Jeszcze 6 kart i opanujesz
+                całość. Jesteś szybszy niż 68% użytkowników! 🚀</p>
+
+            <div class="card-nav">
+                <button class="btn-primary" onclick="nextCard()">Kontynuuj naukę →</button>
+            </div>
+        </div>
+
+        <!-- Card 6: Comparison Card -->
+        <div class="card hidden" id="card-6">
+            <div class="card-type comparison">Comparison</div>
+            <h2>Porównanie: Feature-First vs Application-First</h2>
+
+            <div class="comparison-grid">
+                <div class="comparison-side bad">
+                    <div class="comparison-label">❌ Feature-First</div>
+                    <div class="comparison-example">
+                        "Milwaukee M18 ma silnik bezszczotkowy 135 Nm, baterię 5.0 Ah i 15 trybów pracy."
+                    </div>
+                    <div class="comparison-points">
+                        <div>❌ Nuda (suche fakty)</div>
+                        <div>❌ Brak kontekstu</div>
+                        <div>❌ Klient myśli: "I co z tego?"</div>
+                    </div>
+                </div>
+
+                <div class="comparison-side good">
+                    <div class="comparison-label">✅ Application-First</div>
+                    <div class="comparison-example">
+                        "Pana monterzy mogą pracować cały dzień bez ładowania, nawet przy wierceniu w betonie. Moi
+                        klienci zgłaszali 30% szybszą realizację."
+                    </div>
+                    <div class="comparison-points">
+                        <div>✅ Konkretny benefit</div>
+                        <div>✅ Kontekst klienta</div>
+                        <div>✅ Dowód społeczny (30%)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-takeaway">
+                💡 <strong>Kluczowa lekcja:</strong> Klient nie kupuje specyfikacji. Kupuje <strong>rozwiązanie
+                    problemu</strong>. Zawsze zaczynaj od zastosowania (application), nie od funkcji (features).
+            </div>
+
+            <div class="card-nav">
+                <button class="btn-secondary" onclick="prevCard()">← Wstecz</button>
+                <button class="btn-primary" onclick="nextCard()">Dalej →</button>
+            </div>
+        </div>
+
+        <!-- Card 7: Poll Card -->
+        <div class="card hidden" id="card-7">
+            <div class="card-type poll">Poll</div>
+            <h2>🗳️ Jak postąpiłbyś w tej sytuacji?</h2>
+
+            <p><strong>Sytuacja:</strong> Klient mówi: <em>"Wiem że Milwaukee to dobra marka, ale jest za droga. Mogę
+                    kupić chiński zamiennik za połowę ceny."</em></p>
+            <p style="margin-bottom: 20px;">Co robisz?</p>
+
+            <button class="poll-option" onclick="vote('A')">
+                <div class="poll-result" id="result-A" style="width: 0%"></div>
+                <div class="poll-text">
+                    Pokazuję mu kalkulator TCO (Total Cost of Ownership) - tańsze narzędzie częściej się psuje
+                    <span class="poll-percentage hidden" id="percent-A"></span>
+                </div>
+            </button>
+
+            <button class="poll-option" onclick="vote('B')">
+                <div class="poll-result" id="result-B" style="width: 0%"></div>
+                <div class="poll-text">
+                    Pytam: "Rozumiem. Ile kosztuje Pana przestój gdy narzędzie się zepsuje na budowie?"
+                    <span class="poll-percentage hidden" id="percent-B"></span>
+                </div>
+            </button>
+
+            <button class="poll-option" onclick="vote('C')">
+                <div class="poll-result" id="result-C" style="width: 0%"></div>
+                <div class="poll-text">
+                    Oferuję rabat 10% żeby zbić cenę
+                    <span class="poll-percentage hidden" id="percent-C"></span>
+                </div>
+            </button>
+
+            <button class="poll-option" onclick="vote('D')">
+                <div class="poll-result" id="result-D" style="width: 0%"></div>
+                <div class="poll-text">
+                    Pokazuję case study - inny klient oszczędził 40% kosztów serwisu dzięki Milwaukee
+                    <span class="poll-percentage hidden" id="percent-D"></span>
+                </div>
+            </button>
+
+            <div class="expert-answer hidden" id="poll-feedback">
+                <div class="expert-label">💎 Odpowiedź eksperta</div>
+                <p><strong>Najlepsza odpowiedź: B i D</strong></p>
+                <p>Odpowiedź B (pytanie o koszt przestoju) zmienia perspektywę z "ceny zakupu" na "koszt użytkowania"
+                    (application thinking!).</p>
+                <p>Odpowiedź D (case study) to dowód społeczny - pokazujesz ROI w konkretnym zastosowaniu.</p>
+                <p><strong>Społeczność wybrała:</strong> 56% - B, 28% - D, 12% - A, 4% - C</p>
+            </div>
+
+            <div class="card-nav">
+                <button class="btn-secondary" onclick="prevCard()">← Wstecz</button>
+                <button class="btn-primary" id="btn-next-7" onclick="nextCard()" disabled>Dalej →</button>
+            </div>
+        </div>
+
+        <!-- Card 8: External Resource Card -->
+        <div class="card hidden" id="card-8">
+            <div class="card-type">Resources</div>
+            <h2>📚 Chcesz zgłębić temat?</h2>
+            <p style="margin-bottom: 20px;">Polecane zasoby do dalszej nauki o Application First selling:</p>
+
+            <div class="resource-item">
+                <div class="resource-icon">📄</div>
+                <div class="resource-content">
+                    <div class="resource-title">Harvard Business Review: Solution Selling</div>
+                    <div class="resource-meta">M. Bosworth • 12 min czytania</div>
+                    <span class="resource-badge">FREE</span>
+                </div>
+            </div>
+
+            <div class="resource-item">
+                <div class="resource-icon">🎥</div>
+                <div class="resource-content">
+                    <div class="resource-title">TED: The Art of Asking Better Questions</div>
+                    <div class="resource-meta">Simon Sinek • 18 min • 8.3M wyświetleń</div>
+                    <span class="resource-badge">POPULAR</span>
+                </div>
+            </div>
+
+            <div class="resource-item">
+                <div class="resource-icon">📚</div>
+                <div class="resource-content">
+                    <div class="resource-title">SPIN Selling - Neil Rackham</div>
+                    <div class="resource-meta">⭐ 4.6/5 • 59 PLN na Amazon</div>
+                    <span class="resource-badge bestseller">BESTSELLER</span>
+                </div>
+            </div>
+
+            <div class="resource-item">
+                <div class="resource-icon">📋</div>
+                <div class="resource-content">
+                    <div class="resource-title">Application First Discovery Questions Template</div>
+                    <div class="resource-meta">PDF Worksheet • Unlocked!</div>
+                    <span class="resource-badge">UNLOCKED</span>
+                </div>
+            </div>
+
+            <div class="resource-item">
+                <div class="resource-icon">🎓</div>
+                <div class="resource-content">
+                    <div class="resource-title">Advanced Consultative Selling Masterclass</div>
+                    <div class="resource-meta">Prof. Anna Kowalska • 6h kursu • 299 PLN</div>
+                    <span class="resource-badge premium">PREMIUM</span>
+                </div>
+            </div>
+
+            <div class="card-nav">
+                <button class="btn-secondary" onclick="prevCard()">← Wstecz</button>
+                <button class="btn-primary" onclick="nextCard()">Pomiń zasoby →</button>
+            </div>
+        </div>
+
+        <!-- Card 9: Quiz Card (MVP) -->
+        <div class="card hidden" id="card-9">
+            <div class="card-type">Quiz</div>
+            <h2>🎯 Test wiedzy</h2>
+            <p><strong>Pytanie:</strong> Która wypowiedź NAJLEPIEJ reprezentuje podejście "Application First"?</p>
+
+            <button class="choice-btn" data-letter="A" onclick="selectQuiz('A', 'incorrect')">
+                "Milwaukee ma najlepszą gwarancję na rynku - 5 lat!"
+            </button>
+
+            <button class="choice-btn" data-letter="B" onclick="selectQuiz('B', 'correct')">
+                "Rozumiem że Pana ekipy pracują po 10h dziennie. Z Milwaukee M18 nie będą musieli tracić czasu na
+                ładowanie w środku dnia."
+            </button>
+
+            <button class="choice-btn" data-letter="C" onclick="selectQuiz('C', 'incorrect')">
+                "Milwaukee to marka premium używana przez profesjonalistów na całym świecie."
+            </button>
+
+            <div id="quiz-feedback" class="expert-answer hidden">
+                <div class="expert-label">✅ Brawo!</div>
+                <p>Odpowiedź B zaczyna od <strong>zrozumienia kontekstu klienta</strong> (10h pracy), a dopiero potem
+                    łączy to z benefitem produktu (brak przestojów na ładowanie).</p>
+                <p>Odpowiedzi A i C mówią o produkcie/marce, ale nie łączą tego z konkretnym problemem klienta.</p>
+                <p><strong>+100 XP</strong> za poprawną odpowiedź!</p>
+            </div>
+
+            <div class="card-nav">
+                <button class="btn-secondary" onclick="prevCard()">← Wstecz</button>
+                <button class="btn-primary" id="btn-next-9" onclick="nextCard()" disabled>Dalej →</button>
+            </div>
+        </div>
+
+        <!-- Card 10: Summary Card (MVP) -->
+        <div class="card hidden" id="card-10">
+            <div class="card-type">Summary</div>
+            <h2>📝 Podsumowanie: Application First</h2>
+
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 16px; margin-bottom: 20px;">
+                <p><strong>✅ Czego się nauczyłeś:</strong></p>
+                <p style="padding-left: 20px;">1️⃣ Zamiast mówić "CO sprzedajesz" → pokaż "JAK klient to wykorzysta"</p>
+                <p style="padding-left: 20px;">2️⃣ Zaczynaj od problemu/kontekstu klienta, nie od features produktu</p>
+                <p style="padding-left: 20px;">3️⃣ Używaj konkretnych przykładów i case studies (dowód społeczny)</p>
+                <p style="padding-left: 20px;">4️⃣ Pytaj o koszty przestoju/frustracje zamiast od razu obniżać cenę</p>
+            </div>
+
+            <p><strong>💡 Najważniejsze cytaty z lekcji:</strong></p>
+            <p style="font-style: italic; padding: 16px; background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; border-radius: 12px; margin-bottom: 20px;">
+                "Klient nie kupuje specyfikacji. Kupuje rozwiązanie problemu. Twoja praca to pokazać JAK Twój produkt
+                rozwiązuje JEGO konkretny problem."
+            </p>
+
+            <p><strong>🎯 Następny krok:</strong> Stwórz listę 5 najczęstszych problemów Twoich klientów i przygotuj
+                dla każdego "Application Pitch" (skorzystaj z pobranego template).</p>
+
+            <div class="card-nav">
+                <button class="btn-secondary" onclick="prevCard()">← Wstecz</button>
+                <button class="btn-primary" onclick="nextCard()">Zakończ lekcję →</button>
+            </div>
+        </div>
+
+        <!-- Card 11: Completion Card -->
+        <div class="card hidden" id="card-11">
+            <div class="card-type" style="background: rgba(0, 255, 136, 0.2); border-color: #00ff88; color: #00ff88;">
+                COMPLETED</div>
+            <h2 class="text-center">🎉 Gratulacje!</h2>
+            <p class="text-center" style="font-size: 18px; margin-bottom: 30px;">Ukończyłeś lekcję:<br><strong>Milwaukee
+                    Application First</strong></p>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">+450</div>
+                    <div class="stat-label">Zdobyte XP</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">16m 23s</div>
+                    <div class="stat-label">Czas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">#12</div>
+                    <div class="stat-label">Twój ranking</div>
+                </div>
+            </div>
+
+            <div class="text-center mb-20" style="margin-top: 30px;">
+                <p style="margin-bottom: 12px;"><strong>🏆 Zdobyte odznaki:</strong></p>
+                <span class="achievement-pill">🎯 Perfect Score</span>
+                <span class="achievement-pill">⚡ Fast Learner</span>
+                <span class="achievement-pill">🧠 Critical Thinker</span>
+            </div>
+
+            <p class="text-center" style="color: rgba(255, 255, 255, 0.7); margin-bottom: 30px;">
+                Świetna robota! Byłeś szybszy niż 78% użytkowników i zdobyłeś najwyższą możliwą ocenę. 🚀
+            </p>
+
+            <button class="btn-primary" onclick="alert('🎊 Returning to dashboard...')">
+                Wróć do Dashboard
+            </button>
+            <button class="btn-secondary" onclick="alert('🔄 Restarting lesson...')">
+                Powtórz lekcję
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentCard = 1;
+        const totalCards = 11;
+        let timerInterval;
+        let timeLeft = 120; // 2 minutes for challenge
+
+        function updateProgress() {
+            const percentage = (currentCard / totalCards) * 100;
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('current-card').textContent = currentCard;
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards) {
+                document.getElementById('card-' + currentCard).classList.add('hidden');
+                currentCard++;
+                document.getElementById('card-' + currentCard).classList.remove('hidden');
+                updateProgress();
+
+                // Start timer for challenge card
+                if (currentCard === 4) {
+                    startTimer();
+                }
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                document.getElementById('card-' + currentCard).classList.add('hidden');
+                currentCard--;
+                document.getElementById('card-' + currentCard).classList.remove('hidden');
+                updateProgress();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function selectChoice(choice, result) {
+            // Disable all buttons
+            const buttons = document.querySelectorAll('#card-3 .choice-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+            });
+
+            // Highlight selected
+            event.target.classList.add(result);
+
+            // Show feedback
+            document.getElementById('feedback').classList.remove('hidden');
+
+            // Enable next button
+            document.getElementById('btn-next-3').disabled = false;
+        }
+
+        function selectQuiz(choice, result) {
+            // Disable all buttons
+            const buttons = document.querySelectorAll('#card-9 .choice-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+            });
+
+            // Highlight selected
+            event.target.classList.add(result);
+
+            // Show feedback
+            document.getElementById('quiz-feedback').classList.remove('hidden');
+
+            // Enable next button
+            document.getElementById('btn-next-9').disabled = false;
+        }
+
+        function updateCharCounter() {
+            const text = document.getElementById('challenge-text').value;
+            const counter = document.getElementById('char-counter');
+            const length = text.length;
+            counter.textContent = length + ' / 200 znaków (min. 50)';
+
+            if (length >= 50) {
+                counter.style.color = '#00ff88';
+            } else {
+                counter.style.color = 'rgba(255, 255, 255, 0.5)';
+            }
+        }
+
+        function toggleExamples() {
+            const examples = document.getElementById('examples');
+            examples.classList.toggle('hidden');
+        }
+
+        function submitChallenge() {
+            const text = document.getElementById('challenge-text').value;
+            if (text.length >= 50) {
+                alert('✅ Świetnie! Twoja odpowiedź została zapisana.\n\n+50 XP za ukończenie wyzwania!\n\nTwoja odpowiedź została dodana do portfolio w zakładce "Moje Projekty".');
+                clearInterval(timerInterval);
+                nextCard();
+            } else {
+                alert('❌ Minimalna długość to 50 znaków. Opisz konkretny problem klienta i rozwiązanie.');
+            }
+        }
+
+        function startTimer() {
+            timeLeft = 120;
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent =
+                    minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+
+                if (timeLeft <= 10) {
+                    document.getElementById('timer').style.color = '#ff6b6b';
+                }
+
+                if (timeLeft === 0) {
+                    clearInterval(timerInterval);
+                    alert('⏰ Czas minął! Możesz nadal dokończyć zadanie (bez bonusowego XP za szybkość).');
+                }
+            }, 1000);
+        }
+
+        function vote(option) {
+            // Simulate voting
+            const results = {
+                'A': 12,
+                'B': 56,
+                'C': 4,
+                'D': 28
+            };
+
+            // Show results
+            Object.keys(results).forEach(key => {
+                document.getElementById('result-' + key).style.width = results[key] + '%';
+                const percent = document.getElementById('percent-' + key);
+                percent.textContent = results[key] + '%';
+                percent.classList.remove('hidden');
+            });
+
+            // Show expert feedback
+            setTimeout(() => {
+                document.getElementById('poll-feedback').classList.remove('hidden');
+                document.getElementById('btn-next-7').disabled = false;
+            }, 1000);
+
+            // Disable voting
+            const buttons = document.querySelectorAll('#card-7 .poll-option');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+            });
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+
+</html>

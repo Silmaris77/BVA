@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { Search, Bell, Zap, Brain, Library, BookOpen, Filter, Lock, ExternalLink, FileText, Table, Video, Book, TrendingUp, Mail, LayoutTemplate } from 'lucide-react'
 
@@ -17,73 +18,32 @@ export default function ResourcesPage() {
         }
     }, [user, authLoading, router])
 
-    // Mock resources data
-    const mockResources = [
-        {
-            id: '1',
-            title: 'Kompletny Guide do SPIN Selling w 2026',
-            description: 'Pogłębiony przewodnik po metodologii SPIN z konkretnymi przykładami i pytaniami do B2B.',
-            type: 'ARTYKUŁ',
-            category: 'Sprzedaż',
-            locked: false,
-            Icon: FileText,
-            color: '#00d4ff'
-        },
-        {
-            id: '2',
-            title: 'Sales Pipeline Tracker - Szablon Excel',
-            description: 'Gotowy szablon do śledzenia pipeline\'u sprzedażowego z automatycznymi raportami.',
-            type: 'SZABLON',
-            category: 'Sprzedaż',
-            locked: false,
-            Icon: Table,
-            color: '#00ff88'
-        },
-        {
-            id: '3',
-            title: 'Conversational Intelligence Masterclass',
-            description: 'Nagranie 2-godzinnego warsztatu z praktycznymi ćwiczeniami komunikacyjnymi.',
-            type: 'WIDEO',
-            category: 'Komunikacja',
-            locked: false,
-            Icon: Video,
-            color: '#ffd700'
-        },
-        {
-            id: '4',
-            title: 'Psychologia Negocjacji - E-book',
-            description: '150-stronicowy e-book o technikach negocjacyjnych opartych na psychologii.',
-            type: 'E-BOOK',
-            category: 'Sprzedaż',
-            locked: true,
-            Icon: Book,
-            color: '#b000ff'
-        },
-        {
-            id: '5',
-            title: 'Case Study: Transformacja Zespołu Sprzedaży',
-            description: 'Analiza rzeczywistego przypadku zwiększenia konwersji o 340% w 6 miesięcy.',
-            type: 'CASE STUDY',
-            category: 'Leadership',
-            locked: false,
-            Icon: TrendingUp,
-            color: '#ff6b6b'
-        },
-        {
-            id: '6',
-            title: 'Cold Email Templates Pack',
-            description: 'Zestaw 25 sprawdzonych szablonów cold emaili z wskaźnikiem otwarć 45%+.',
-            type: 'SZABLON',
-            category: 'Sprzedaż',
-            locked: true,
-            Icon: Mail,
-            color: '#00ff88'
-        }
-    ]
+    const [resources, setResources] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
 
-    const filteredResources = mockResources.filter(resource =>
+    useEffect(() => {
+        async function loadResources() {
+            if (!user) return
+
+            try {
+                const { data, error } = await supabase
+                    .from('resources')
+                    .select('*')
+
+                if (error) throw error
+                setResources(data || [])
+            } catch (error) {
+                console.error('Error loading resources:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        loadResources()
+    }, [user])
+
+    const filteredResources = resources.filter(resource =>
         resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        resource.description.toLowerCase().includes(searchTerm.toLowerCase())
+        (resource.description && resource.description.toLowerCase().includes(searchTerm.toLowerCase()))
     )
 
     const recommendedResources = filteredResources.slice(0, 3)
@@ -372,7 +332,36 @@ export default function ResourcesPage() {
 }
 
 function ResourceCard({ resource }: { resource: any }) {
-    const Icon = resource.Icon
+    const getIconForType = (type: string) => {
+        switch (type) {
+            case 'article': return FileText
+            case 'template': return Table
+            case 'video': return Video
+            case 'ebook': return Book
+            case 'case_study': return TrendingUp
+            default: return FileText
+        }
+    }
+
+    const getCategoryColor = (category: string) => {
+        const colors: Record<string, string> = {
+            'Sales': '#00ff88',
+            'Sprzedaż': '#00ff88',
+            'Leadership': '#b000ff',
+            'Communication': '#ffd700',
+            'Komunikacja': '#ffd700',
+            'Mindset': '#ff4757',
+            'Strategy': '#00d4ff',
+            'Management': '#b000ff',
+            'Technology': '#00d4ff',
+            'Tools': '#ffd700',
+            'Skills': '#ff4757'
+        }
+        return colors[category] || '#00d4ff'
+    }
+
+    const Icon = getIconForType(resource.type)
+    const color = getCategoryColor(resource.category)
 
     return (
         <div
@@ -392,8 +381,8 @@ function ResourceCard({ resource }: { resource: any }) {
                 e.currentTarget.style.borderColor = resource.locked ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 255, 136, 0.3)'
                 e.currentTarget.style.transform = 'translateY(-4px)'
                 if (!resource.locked) {
-                    e.currentTarget.style.borderColor = resource.color
-                    e.currentTarget.style.boxShadow = `0 12px 40px ${resource.color}33`
+                    e.currentTarget.style.borderColor = color
+                    e.currentTarget.style.boxShadow = `0 12px 40px ${color}33`
                 }
                 const shine = e.currentTarget.querySelector('.shine-resource') as HTMLElement
                 if (shine) shine.style.left = '100%'
@@ -415,7 +404,7 @@ function ResourceCard({ resource }: { resource: any }) {
                     left: '-100%',
                     width: '100%',
                     height: '100%',
-                    background: `linear-gradient(90deg, transparent, ${resource.color}40, transparent)`,
+                    background: `linear-gradient(90deg, transparent, ${color}40, transparent)`,
                     transition: 'left 0.6s ease',
                     pointerEvents: 'none',
                     zIndex: 1
@@ -448,13 +437,13 @@ function ResourceCard({ resource }: { resource: any }) {
                 width: '56px',
                 height: '56px',
                 borderRadius: '12px',
-                background: `${resource.color}20`,
-                border: `1px solid ${resource.color}`,
+                background: `${color}20`,
+                border: `1px solid ${color}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: '16px',
-                color: resource.color,
+                color: color,
                 position: 'relative',
                 zIndex: 2
             }}>
@@ -465,12 +454,12 @@ function ResourceCard({ resource }: { resource: any }) {
             <div style={{
                 display: 'inline-block',
                 padding: '4px 10px',
-                background: `${resource.color}20`,
-                border: `1px solid ${resource.color}`,
+                background: `${color}20`,
+                border: `1px solid ${color}`,
                 borderRadius: '6px',
                 fontSize: '10px',
                 fontWeight: 700,
-                color: resource.color,
+                color: color,
                 marginBottom: '12px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
@@ -521,12 +510,12 @@ function ResourceCard({ resource }: { resource: any }) {
                 padding: '10px',
                 background: resource.locked
                     ? 'rgba(255, 255, 255, 0.05)'
-                    : `${resource.color}20`,
+                    : `${color}20`,
                 border: resource.locked
                     ? '1px solid rgba(255, 255, 255, 0.1)'
-                    : `1px solid ${resource.color}`,
+                    : `1px solid ${color}`,
                 borderRadius: '8px',
-                color: resource.locked ? 'rgba(255, 255, 255, 0.4)' : resource.color,
+                color: resource.locked ? 'rgba(255, 255, 255, 0.4)' : color,
                 fontSize: '14px',
                 fontWeight: 600,
                 cursor: resource.locked ? 'not-allowed' : 'pointer',

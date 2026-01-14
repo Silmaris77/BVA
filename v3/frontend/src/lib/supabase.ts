@@ -30,7 +30,9 @@ export type Lesson = {
   xp_reward: number
   target_roles: string[]
   is_public: boolean
-  cards: any[]
+  content_json: {
+    cards: any[]
+  }
   created_at: string
   updated_at: string
 }
@@ -39,9 +41,47 @@ export type UserProgress = {
   id: string
   user_id: string
   lesson_id: string
-  started_at: string
+  started_at: string | null
   completed_at: string | null
   current_card_index: number
-  cards_completed: number
-  total_cards: number | null
+  updated_at: string
+}
+
+export type Engram = {
+  id: string
+  title: string
+  category: string
+  description: string | null
+  content_json: {
+    slides: any[]
+    quiz: any[]
+  }
+  source_lesson_id: string | null
+  xp_reward: number
+  estimated_minutes: number
+  created_at: string
+}
+
+export type UserEngram = {
+  id: string
+  user_id: string
+  engram_id: string
+  installed_at: string
+  last_refreshed_at: string | null
+  strength: number // 0-100
+  times_refreshed: number
+  status: 'active' | 'archived'
+}
+
+export type Resource = {
+  id: string
+  title: string
+  type: 'article' | 'video' | 'template' | 'ebook'
+  url: string | null
+  description: string | null
+  category: string
+  image_url: string | null
+  is_locked: boolean
+  xp_cost: number
+  created_at: string
 }

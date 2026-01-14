@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Milwaukee Application First Canvas - Responsive Lesson Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-deep: #0f0c29;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --neon-purple: #b000ff;
+            --neon-blue: #00d4ff;
+            --neon-gold: #ffd700;
+            --neon-red: #ff0055;
+            --neon-green: #00ff88;
+            --neon-orange: #f59e0b;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            opacity: 0.5;
+            animation: floatOrb 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatOrb {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--neon-purple);
+            top: -100px;
+            left: -100px;
+            opacity: 0.3;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--neon-orange);
+            bottom: -100px;
+            right: -100px;
+            opacity: 0.3;
+        }
+
+        .device-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 6px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-btn.active {
+            background: var(--neon-orange);
+            color: white;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .lesson-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-container.desktop-view {
+            max-width: 1400px;
+            padding: 40px;
+        }
+
+        .top-bar {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .desktop-view .top-bar {
+            border-radius: 16px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .back-btn,
+        .menu-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .lesson-title {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .desktop-view .lesson-title {
+            font-size: 20px;
+        }
+
+        .progress-container {
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .desktop-view .progress-container {
+            border-radius: 16px;
+            margin-bottom: 24px;
+            border-bottom: none;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-orange), var(--neon-gold));
+            border-radius: 3px;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--neon-orange);
+        }
+
+        .card-viewport {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        .desktop-view .card-viewport {
+            padding: 0;
+        }
+
+        /* Desktop Layout - Sidebar + Content */
+        .desktop-layout {
+            display: none;
+        }
+
+        .desktop-view .desktop-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 0;
+            height: calc(100vh - 180px);
+            overflow: hidden;
+        }
+
+        .desktop-view .mobile-swipe {
+            display: none;
+        }
+
+        /* Sidebar Navigation */
+        .lesson-sidebar {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-section h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-left: 12px;
+        }
+
+        .sidebar-card {
+            padding: 12px;
+            margin: 6px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid transparent;
+        }
+
+        .sidebar-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-card.active {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: var(--neon-orange);
+        }
+
+        .sidebar-card.completed {
+            opacity: 0.6;
+        }
+
+        .sidebar-card-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .sidebar-card.active .sidebar-card-num {
+            background: var(--neon-orange);
+            color: #000;
+        }
+
+        .sidebar-card.completed .sidebar-card-num {
+            background: var(--neon-green);
+            color: #000;
+        }
+
+        .sidebar-card-title {
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .sidebar-card-xp {
+            font-size: 11px;
+            color: var(--neon-gold);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* Desktop Content Area */
+        .desktop-content {
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+        }
+
+        .desktop-content .lesson-card {
+            position: relative;
+            opacity: 1;
+            transform: none;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .lesson-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            padding: 28px 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-swipe .lesson-card {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            min-height: calc(100% - 40px);
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .mobile-swipe .lesson-card.active {
+            opacity: 1;
+            transform: translateX(0);
+            position: relative;
+            top: auto;
+            left: auto;
+            right: auto;
+        }
+
+        .desktop-grid .lesson-card {
+            cursor: pointer;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .desktop-grid .lesson-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .desktop-grid .lesson-card.completed {
+            opacity: 0.6;
+            border-color: var(--neon-green);
+        }
+
+        .desktop-grid .lesson-card.current {
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .completion-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--neon-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .card-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--neon-orange);
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding: 6px 12px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 20px;
+        }
+
+        .card-type.intro {
+            color: var(--neon-purple);
+            background: rgba(176, 0, 255, 0.1);
+            border-color: rgba(176, 0, 255, 0.2);
+        }
+
+        .card-type.case {
+            color: var(--neon-red);
+            background: rgba(255, 0, 85, 0.1);
+            border-color: rgba(255, 0, 85, 0.2);
+        }
+
+        .card-type.quiz {
+            color: var(--neon-gold);
+            background: rgba(255, 215, 0, 0.1);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .card-type.practice {
+            color: var(--neon-green);
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.2);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .desktop-grid .card-title {
+            font-size: 18px;
+        }
+
+        .card-content {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            flex: 1;
+        }
+
+        .desktop-grid .card-content {
+            font-size: 14px;
+        }
+
+        .card-content strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .card-content p {
+            margin-bottom: 14px;
+        }
+
+        .card-content ul {
+            padding-left: 20px;
+        }
+
+        .highlight-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid var(--neon-orange);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .highlight-box h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--neon-orange);
+        }
+
+        .bottom-nav {
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 12px;
+        }
+
+        .desktop-view .bottom-nav {
+            display: none;
+        }
+
+        .nav-button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-button.primary {
+            background: linear-gradient(135deg, var(--neon-orange), var(--neon-gold));
+            border-color: transparent;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .quiz-option.selected {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: var(--neon-orange);
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: var(--neon-green);
+        }
+
+        .quiz-option.wrong {
+            background: rgba(255, 0, 85, 0.15);
+            border-color: var(--neon-red);
+        }
+
+        .xp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--neon-gold), #ffaa00);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .desktop-grid .card-number {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--neon-orange);
+        }
+
+        .case-box {
+            background: rgba(255, 0, 85, 0.1);
+            border: 2px dashed rgba(255, 0, 85, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--neon-orange);
+            color: #000;
+            font-weight: 700;
+            font-size: 18px;
+            margin-right: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="device-toggle">
+        <button class="toggle-btn" id="mobileBtn" onclick="setView('mobile')">
+            <i data-lucide="smartphone" size="16"></i>
+            Mobile
+        </button>
+        <button class="toggle-btn active" id="desktopBtn" onclick="setView('desktop')">
+            <i data-lucide="monitor" size="16"></i>
+            Desktop
+        </button>
+    </div>
+
+    <div class="lesson-container desktop-view" id="lessonContainer">
+        <div class="top-bar">
+            <div class="back-btn" onclick="goBack()">
+                <i data-lucide="arrow-left" size="20"></i>
+            </div>
+            <div class="lesson-title">Milwaukee Application First Canvas</div>
+            <div class="menu-btn">
+                <i data-lucide="more-vertical" size="20"></i>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-info">
+                <span id="progressText">Card 1/26</span>
+                <span id="timeRemaining">⏱️ ~25 min</span>
+                <span id="xpCounter">💎 +200 XP możliwe</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 4%"></div>
+            </div>
+        </div>
+
+        <!-- Desktop Layout: Sidebar + Content -->
+        <div class="desktop-layout">
+            <div class="lesson-sidebar" id="lessonSidebar"></div>
+            <div class="desktop-content" id="desktopContent"></div>
+        </div>
+
+        <!-- Mobile Layout: Swipe Cards -->
+        <div class="card-viewport mobile-swipe" id="mobileSwipe"></div>
+
+        <div class="bottom-nav">
+            <button class="nav-button" id="prevBtn" onclick="prevCard()" disabled>
+                <i data-lucide="chevron-left" size="20"></i>
+            </button>
+            <button class="nav-button primary" id="nextBtn" onclick="nextCard()">
+                Dalej
+                <i data-lucide="chevron-right" size="20"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const totalCards = 26;
+        let currentCard = 1;
+        let viewMode = 'desktop';
+        const completedCards = [];
+
+        const cards = [
+            { type: 'intro', title: 'Application First Canvas', content: '<p style="color: var(--neon-orange); font-size: 18px;"><strong>Milwaukee JSS Training</strong></p><p>7-krokowa mapa rozmowy dla Job-Site Solution Specialists</p><div class="highlight-box"><h4>💡 Filozofia</h4><p>Application First = rozwiązujesz PRACĘ, nie prezentujesz NARZĘDZIE</p></div>', xp: 0 },
+            { type: 'intro', title: 'Dla kogo jest ta lekcja?', content: '<div class="highlight-box"><h4>🔧 JSS (Job-Site Solution Specialist)</h4><p><strong>Rola terenowa:</strong></p><ul style="line-height: 1.8; margin-top: 10px;"><li>Pracujesz w środowisku użytkownika</li><li>Diagnozujesz realną pracę</li><li>Demo aplikacyjne na miejscu</li><li>Domykasz konkretnymi krokami</li></ul></div>', xp: 0 },
+            { type: 'case', title: 'Case Study: Dwie wizyty', content: '<p style="margin-bottom: 16px;">Montaż instalacji - 200-300 śrub M8 dziennie</p><div class="case-box"><strong>❌ Wizyta #1</strong><br><br>"Mam wiertarkę M18 FUEL. Promocja!"<br><br>Brygadzista: "Mamy Dewalt."<br><br><strong>Rezultat:</strong> "Zostaw katalog."</div>', xp: 0 },
+            { type: 'case', title: 'Application First Success', content: '<div class="case-box" style="background: rgba(0,255,136,0.1); border-color: rgba(0,255,136,0.3);"><strong>✅ Wizyta Kasi</strong><br><br>"<strong>Jak wygląda ta praca?</strong>"<br>"Jakie wyzwania?"<br>"Ile czasu tracisz?"<br><br><strong>Rezultat:</strong> Test tygodniowy, piątek 10:00, 80%+ szans!</div>', xp: 20 },
+            { type: 'concept', title: '7 Kroków Mapy', content: '<div class="highlight-box"><h4>📋 Canvas</h4><p style="margin: 12px 0;"><span class="step-badge">1</span> Aplikacja<br><span class="step-badge">2</span> Problem<br><span class="step-badge">3</span> Konsekwencje<br><span class="step-badge">4</span> Rozwiązanie</p></div>', xp: 0 },
+            { type: 'concept', title: 'Kroki 5-7', content: '<div class="highlight-box"><p style="margin: 12px 0;"><span class="step-badge">5</span> Demo<br><span class="step-badge">6</span> Wartość<br><span class="step-badge">7</span> Next Steps</p><p style="margin-top: 20px;"><strong>Każdy krok ma cel!</strong></p></div>', xp: 0 },
+            { type: 'concept', title: 'KROK 1: Aplikacja', content: '<div class="highlight-box"><h4>🎯 Cel</h4><p>Zrozumieć REALNĄ PRACĘ</p></div><p style="margin: 16px 0;"><strong>Pytania:</strong></p><ul style="line-height: 1.8;"><li>"Jak często?"</li><li>"W jakich warunkach?"</li><li>"Co najtrudniejsze?"</li></ul><p style="margin-top: 16px; padding: 12px; background: rgba(255,0,85,0.1); border-radius: 8px;"><strong>⚠️ NIE mówisz o produkcie!</strong></p>', xp: 0 },
+            { type: 'quiz', title: 'Quiz: KROK 1', content: '<p style="margin-bottom: 16px;">Co JSS robi w KROKU 1?</p><div class="quiz-option" onclick="answer(false)">A) Pokazuje katalog</div><div class="quiz-option" onclick="answer(true)">B) Pyta o pracę i warunki</div><div class="quiz-option" onclick="answer(false)">C) Robi demo</div>', xp: 15 },
+            { type: 'concept', title: 'KROK 2: Pain Points', content: '<div class="highlight-box"><h4>⚠️ Złota zasada</h4><p>"Jeśli klient nie nazwie problemu - nie ma decyzji"</p></div><p style="margin: 16px 0;"><strong>4 kategorie:</strong></p><ul style="line-height: 1.8;"><li>🤕 Ergonomia</li><li>⏱️ Czas</li><li>🛡️ Bezpieczeństwo</li><li>💰 Koszt</li></ul>', xp: 0 },
+            { type: 'concept', title: 'KROK 3: Konsekwencje', content: '<div class="highlight-box"><h4>📊 Kwantyfikacja</h4><p>Problem → Konsekwencje</p></div><p>"Nadgarstki bolą"<br>↓<br>"Ile razy przerwa?"<br>↓<br>"2-3x po 15 min"<br>↓<br><strong>30-45 min/dzień</strong></p><p style="margin-top: 16px; background: rgba(245,158,11,0.1); padding: 12px; border-radius: 8px;">💡 Klient SAM przelicza!</p>', xp: 0 },
+            { type: 'quiz', title: 'Quiz: Konsekwencje', content: '<p style="margin-bottom: 16px;">Co JSS robi w KROKU 3?</p><div class="quiz-option" onclick="answer(false)">A) Kalkuluje ROI w Excelu</div><div class="quiz-option" onclick="answer(true)">B) Pyta "Ile to kosztuje?"</div><div class="quiz-option" onclick="answer(false)">C) Przechodzi do demo</div>', xp: 15 },
+            { type: 'concept', title: 'KROK 4: System', content: '<div class="highlight-box"><h4>🧩 3 elementy</h4><p>1️⃣ Narzędzie bazowe<br>2️⃣ Baterie + ładowarka<br>3️⃣ Akcesoria</p></div><p style="margin: 16px 0;"><strong>Przykład:</strong><br>M18 FUEL + 4 baterie + wiertła Thunderweb</p>', xp: 0 },
+            { type: 'practice', title: 'KROK 5: Demo', content: '<div class="highlight-box"><h4>🎬 3 elementy</h4><p>1. <strong>Cel:</strong> Co sprawdzamy?<br>2. <strong>Kryterium:</strong> Na co patrzymy?<br>3. <strong>Klient pracuje!</strong></p></div><p style="margin: 16px 0;">"Zrobimy 100 otworów. Proszę spróbować!"</p>', xp: 0 },
+            { type: 'quiz', title: 'Quiz: Demo', content: '<p style="margin-bottom: 16px;">Które PRAWDZIWE?</p><div class="quiz-option" onclick="answer(false)">A) JSS robi - klient patrzy</div><div class="quiz-option" onclick="answer(false)">B) Demo bez celu</div><div class="quiz-option" onclick="answer(true)">C) Cel + kryterium + klient pracuje</div>', xp: 20 },
+            { type: 'concept', title: 'KROK 6: Wartość', content: '<div class="highlight-box"><h4>💎 3 pytania</h4><p>1. "Co się zmieniło?"<br>2. "Co łatwiejsze?"<br>3. "Jak wpływa na pracę?"</p></div><p style="margin: 16px 0;"><strong>Klient:</strong> "8h zaoszczędzone!"</p><p>💡 Nie JSS "na siłę"!</p>', xp: 0 },
+            { type: 'practice', title: 'KROK 7: Next Steps', content: '<div class="highlight-box"><h4>✅ KTO-CO-KIEDY</h4><p><strong>KTO:</strong> Kto decyduje?<br><strong>CO:</strong> Test/Oferta?<br><strong>KIEDY:</strong> Data/godzina</p></div><p style="margin: 16px 0;">"Test tygodniowy. Piątek 10:00."</p><p>📧 Follow-up 24h!</p>', xp: 0 },
+            { type: 'practice', title: 'Ćwiczenie: 7 Kroków', content: '<div class="case-box"><strong>Zidentyfikuj kroki:</strong><br><br>Kasia: "Jak wygląda praca?"<br>Klient: "Przegrzewa się"<br>Kasia: "Ile czasu tracisz?"<br>Klient: "30-40 min"<br>Kasia: "M18 FUEL + 4 baterie"</div>', xp: 25 },
+            { type: 'concept', title: 'Produktowa vs Application First', content: '<div class="highlight-box" style="background: rgba(255,0,85,0.1); border-color: var(--neon-red);"><h4 style="color: var(--neon-red);">❌ Produktowa</h4><p>Start od produktu<br>Brak diagnozy<br>Demo "na ślepo"</p></div><div class="highlight-box" style="background: rgba(0,255,136,0.1); border-color: var(--neon-green);"><h4 style="color: var(--neon-green);">✅ Application First</h4><p>Start od aplikacji<br>Diagnoza<br>Demo z celem</p></div>', xp: 0 },
+            { type: 'concept', title: '3 błędy w demo', content: '<div class="highlight-box" style="background: rgba(255,0,85,0.1);"><h4>❌ #1: Pokaz cyrkowy</h4><p>JSS robi - klient patrzy</p></div><div class="highlight-box" style="background: rgba(255,0,85,0.1);"><h4>❌ #2: Bez celu</h4><p>"Pokazuję bo mam"</p></div><div class="highlight-box" style="background: rgba(255,0,85,0.1);"><h4>❌ #3: Na szybko</h4><p>5 minut - nie testuje</p></div>', xp: 0 },
+            { type: 'concept', title: 'System vs Produkt', content: '<p><strong>PRODUKT:</strong><br>"M18 FUEL. 135 Nm..."</p><p style="margin: 20px 0; font-size: 24px; text-align: center;">VS</p><p><strong>SYSTEM:</strong><br>"M18 FUEL + 4 baterie + ładowarka = rozwiązuje przegrzewanie"</p>', xp: 0 },
+            { type: 'practice', title: 'Follow-up 24h', content: '<div class="highlight-box"><h4>📧 Email</h4><p style="font-size: 13px;">✅ Aplikacja: 200-300 śrub<br>✅ Problem: Przegrzewanie<br>✅ System: M18 + 4 baterie<br>✅ Demo: 100 otworów ✓<br>✅ Wartość: "8h"<br><br>Next: Piątek 10:00</p></div>', xp: 0 },
+            { type: 'quiz', title: 'Quiz: Canvas', content: '<p style="margin-bottom: 16px;">Co to Canvas?</p><div class="quiz-option" onclick="answer(false)">A) PowerPoint</div><div class="quiz-option" onclick="answer(true)">B) 7-krokowa struktura</div><div class="quiz-option" onclick="answer(false)">C) Katalog</div>', xp: 20 },
+            { type: 'quiz', title: 'Quiz: Złota zasada', content: '<p style="margin-bottom: 16px;">Zasada KROKU 2:</p><div class="quiz-option" onclick="answer(false)">A) "Sugeruj problemy"</div><div class="quiz-option" onclick="answer(true)">B) "Jeśli klient nie nazwie - nie ma decyzji"</div><div class="quiz-option" onclick="answer(false)">C) "Pomijaj problemy"</div>', xp: 20 },
+            { type: 'concept', title: 'Kluczowe wnioski', content: '<div class="highlight-box"><h4>📚 Zapamiętaj:</h4><ul style="line-height: 2; margin-top: 10px;"><li>✓ Start od aplikacji</li><li>✓ Klient SAM nazywa problem</li><li>✓ Klient SAM kwantyfikuje</li><li>✓ System (3 elementy)</li><li>✓ Demo z celem</li><li>✓ KTO-CO-KIEDY</li></ul></div>', xp: 0 },
+            { type: 'practice', title: 'Action Plan', content: '<div class="highlight-box"><h4>🎯 Co robisz?</h4><p><strong>DZIŚ:</strong> Wydrukuj checklist</p><p><strong>JUTRO:</strong> KROK 1 na wizycie</p><p><strong>ZA TYDZIEŃ:</strong> Przejrzyj fiszki</p></div><p style="margin-top: 20px; background: rgba(245,158,11,0.1); padding: 12px; border-radius: 8px;">💡 +60% szans na zastosowanie!</p>', xp: 0 },
+            { type: 'concept', title: '🏆 Gratulacje!', content: '<div style="text-align: center; padding: 30px 0;"><div style="font-size: 64px; margin-bottom: 20px;">🎓</div><h3>Canvas ukończony!</h3><div class="xp-badge" style="font-size: 22px; padding: 20px 40px; margin: 30px 0;">✨ +200 XP</div><p style="color: var(--text-muted); margin-top: 20px;">Następna: Praktyczne narzędzia JSS<br>30 min · +150 XP</p></div>', xp: 0 }
+        ];
+
+        function setView(mode) {
+            viewMode = mode;
+            const container = document.getElementById('lessonContainer');
+            const mobileBtn = document.getElementById('mobileBtn');
+            const desktopBtn = document.getElementById('desktopBtn');
+
+            if (mode === 'desktop') {
+                container.classList.add('desktop-view');
+                desktopBtn.classList.add('active');
+                mobileBtn.classList.remove('active');
+                renderDesktopSidebar();
+                renderDesktopContent();
+            } else {
+                container.classList.remove('desktop-view');
+                mobileBtn.classList.add('active');
+                desktopBtn.classList.remove('active');
+                renderMobileCards();
+            }
+
+            lucide.createIcons();
+        }
+
+        function renderDesktopSidebar() {
+            const sidebar = document.getElementById('lessonSidebar');
+
+            // Group cards by type for better navigation
+            const sections = [
+                { title: 'Wprowadzenie', range: [0, 3] },
+                { title: '7 Kroków Canvas', range: [4, 15] },
+                { title: 'Praktyka', range: [16, 21] },
+                { title: 'Podsumowanie', range: [22, 25] }
+            ];
+
+            let html = '';
+            sections.forEach(section => {
+                html += `<div class="sidebar-section"><h3>${section.title}</h3>`;
+                for (let i = section.range[0]; i <= section.range[1]; i++) {
+                    const card = cards[i];
+                    const num = i + 1;
+                    const isCompleted = completedCards.includes(num);
+                    const isCurrent = num === currentCard;
+
+                    html += `
+                        <div class="sidebar-card ${isCompleted ? 'completed' : ''} ${isCurrent ? 'active' : ''}" onclick="selectCard(${num})">
+                            <div class="sidebar-card-num">${num}</div>
+                            <div class="sidebar-card-title">${card.title}</div>
+                            ${card.xp > 0 ? `<div class="sidebar-card-xp">+${card.xp}</div>` : ''}
+                        </div>
+                    `;
+                }
+                html += '</div>';
+            });
+
+            sidebar.innerHTML = html;
+        }
+
+        function renderDesktopContent() {
+            const content = document.getElementById('desktopContent');
+            const card = cards[currentCard - 1];
+
+            content.innerHTML = `
+                <div class="lesson-card">
+                    <span class="card-type ${card.type}">${card.type}</span>
+                    <h2 class="card-title">${card.title}</h2>
+                    <div class="card-content">${card.content}</div>
+                    ${card.xp > 0 ? `<div class="xp-badge">+${card.xp} XP</div>` : ''}
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 32px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    <button class="nav-button" onclick="prevCard()" ${currentCard === 1 ? 'disabled' : ''} style="flex: 0 0 auto; padding: 14px 24px;">
+                        <i data-lucide="chevron-left" size="20"></i>
+                        Poprzedni
+                    </button>
+                    <button class="nav-button primary" onclick="nextCard()" ${currentCard === totalCards ? 'disabled' : ''} style="flex: 0 0 auto; padding: 14px 24px;">
+                        ${currentCard === totalCards ? 'Zakończ' : 'Dalej'}
+                        <i data-lucide="chevron-right" size="20"></i>
+                    </button>
+                </div>
+            `;
+
+            lucide.createIcons();
+        }
+
+        function renderMobileCards() {
+            const swipe = document.getElementById('mobileSwipe');
+            swipe.innerHTML = cards.map((card, idx) => {
+                const num = idx + 1;
+                return `
+                    <div class="lesson-card ${num === currentCard ? 'active' : ''}" data-card="${num}">
+                        <span class="card-type ${card.type}">${card.type}</span>
+                        <h2 class="card-title">${card.title}</h2>
+                        <div class="card-content">${card.content}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards) {
+                if (!completedCards.includes(currentCard)) {
+                    completedCards.push(currentCard);
+                }
+                currentCard++;
+                updateView();
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                currentCard--;
+                updateView();
+            }
+        }
+
+        function selectCard(num) {
+            currentCard = num;
+            updateView();
+        }
+
+        function updateView() {
+            updateProgress();
+            if (viewMode === 'mobile') {
+                document.querySelectorAll('.lesson-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                const current = document.querySelector(`[data-card="${currentCard}"]`);
+                if (current) current.classList.add('active');
+
+                document.getElementById('prevBtn').disabled = currentCard === 1;
+            } else {
+                renderDesktopSidebar();
+                renderDesktopContent();
+            }
+            lucide.createIcons();
+        }
+
+        function updateProgress() {
+            const progress = (currentCard / totalCards) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').innerText = `Card ${currentCard}/${totalCards}`;
+
+            const minutesRemaining = Math.ceil((totalCards - currentCard) * 1);
+            document.getElementById('timeRemaining').innerText = `⏱️ ~${minutesRemaining} min`;
+        }
+
+        function answer(isCorrect) {
+            setTimeout(() => {
+                if (isCorrect) nextCard();
+            }, 500);
+        }
+
+        function goBack() {
+            if (confirm('Opuścić lekcję? Postęp zostanie zapisany.')) {
+                alert('Powrót do dashboardu...');
+            }
+        }
+
+        setView('desktop');
+        updateProgress();
+    </script>
+</body>
+
+</html>

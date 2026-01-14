@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { CheckCircle2, XCircle, Info } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 interface QuestionCardProps {
     question: string
@@ -203,13 +205,15 @@ export default function QuestionCard({
                         }}>
                             Wyjaśnienie:
                         </div>
-                        <p style={{
+                        <div style={{
                             fontSize: '15px',
                             lineHeight: '1.6',
                             color: 'rgba(255, 255, 255, 0.9)'
                         }}>
-                            {explanation}
-                        </p>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {explanation}
+                            </ReactMarkdown>
+                        </div>
                     </div>
                 </div>
             )}

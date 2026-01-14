@@ -1,5 +1,8 @@
 'use client'
 
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+
 interface PracticeCardProps {
     title: string
     content: string
@@ -63,7 +66,9 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps }:
                     color: 'rgba(255, 255, 255, 0.9)',
                     marginBottom: keyPoints || actionSteps ? '24px' : '0'
                 }}>
-                    {content}
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {content}
+                    </ReactMarkdown>
                 </div>
 
                 {/* Key Points */}

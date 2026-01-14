@@ -1,5 +1,8 @@
 'use client'
 
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+
 interface IntroCardProps {
     title: string
     subtitle?: string
@@ -74,14 +77,16 @@ export default function IntroCard({ title, subtitle, description, icon = '🎯' 
             )}
 
             {/* Description */}
-            <p style={{
+            <div style={{
                 fontSize: '16px',
                 color: 'rgba(255, 255, 255, 0.7)',
                 lineHeight: '1.7',
                 maxWidth: '600px'
             }}>
-                {description}
-            </p>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {description}
+                </ReactMarkdown>
+            </div>
 
             {/* Decorative gradient line */}
             <div style={{

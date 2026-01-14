@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { Search, Bell, Zap, Brain, Library, BookOpen, Clock, RefreshCw, Download } from 'lucide-react'
 
@@ -25,65 +26,63 @@ export default function EngramsPage() {
         { id: 'Mindset', name: 'Mindset', color: '#ffd700' }
     ]
 
-    // Mock engrams data
-    const mockEngrams = [
-        {
-            id: '1',
-            title: 'Szybkie Podejmowanie Decyzji',
-            description: 'Techniki błyskawicznej analizy sytuacji i podejmowania trafnych decyzji pod presją czasu.',
-            category: 'Leadership',
-            strength: 95,
-            installed: true,
-            lastRefreshed: '2 dni temu'
-        },
-        {
-            id: '2',
-            title: 'Pitch 30-Sekundowy',
-            description: 'Umiejętność zwięzłego przedstawienia wartości produktu w 30 sekund.',
-            category: 'Sales',
-            strength: 45,
-            installed: true,
-            lastRefreshed: '14 dni temu'
-        },
-        {
-            id: '3',
-            title: 'Aktywne Słuchanie',
-            description: 'Techniki głębokiego słuchania i rozumienia potrzeb rozmówcy.',
-            category: 'Sales',
-            strength: 78,
-            installed: true,
-            lastRefreshed: '5 dni temu'
-        },
-        {
-            id: '4',
-            title: 'Growth Mindset Praktycznie',
-            description: 'Przekształcanie porażek w lekcje i budowanie mentalności wzrostu.',
-            category: 'Mindset',
-            strength: 0,
-            installed: false,
-            lastRefreshed: null
-        },
-        {
-            id: '5',
-            title: 'AI-Powered Prospecting',
-            description: 'Wykorzystanie AI do identyfikacji i kwalifikacji potencjalnych klientów.',
-            category: 'Sales',
-            strength: 0,
-            installed: false,
-            lastRefreshed: null
-        }
-    ]
+    const [engrams, setEngrams] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
 
-    const filteredEngrams = mockEngrams.filter(engram => {
+    useEffect(() => {
+        async function loadData() {
+            if (!user) return
+
+            try {
+                // Fetch all engrams
+                const { data: engramsData, error: engramsError } = await supabase
+                    .from('engrams')
+                    .select('*')
+
+                if (engramsError) throw engramsError
+
+                // Fetch user's installed engrams
+                const { data: userEngramsData, error: userEngramsError } = await supabase
+                    .from('user_engrams')
+                    .select('*')
+                    .eq('user_id', user.id)
+
+                if (userEngramsError) throw userEngramsError
+
+                // Merge data
+                const mergedEngrams = engramsData.map(engram => {
+                    const userEngram = userEngramsData.find(ue => ue.engram_id === engram.id)
+                    return {
+                        ...engram,
+                        installed: !!userEngram,
+                        strength: userEngram?.strength || 0,
+                        lastRefreshed: userEngram?.last_refreshed_at
+                            ? new Date(userEngram.last_refreshed_at).toLocaleDateString()
+                            : null
+                    }
+                })
+
+                setEngrams(mergedEngrams)
+            } catch (error) {
+                console.error('Error loading engrams:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        loadData()
+    }, [user])
+
+    const filteredEngrams = engrams.filter(engram => {
         const matchesCategory = selectedCategory === 'all' || engram.category === selectedCategory
         const matchesSearch = engram.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            engram.description.toLowerCase().includes(searchTerm.toLowerCase())
+            (engram.description && engram.description.toLowerCase().includes(searchTerm.toLowerCase()))
         return matchesCategory && matchesSearch
     })
 
-    const installedCount = mockEngrams.filter(e => e.installed).length
-    const availableCount = mockEngrams.filter(e => !e.installed).length
-    const completedCount = mockEngrams.filter(e => e.installed && e.strength === 100).length
+    const installedCount = engrams.filter(e => e.installed).length
+    const availableCount = engrams.filter(e => !e.installed).length
+    const completedCount = engrams.filter(e => e.installed && e.strength === 100).length
 
     const getStrengthColor = (strength: number) => {
         if (strength >= 80) return '#00ff88' // Green - Stable
@@ -549,26 +548,31 @@ export default function EngramsPage() {
                                 )}
 
                                 {/* Action Button */}
-                                <button style={{
-                                    width: '100%',
-                                    padding: '10px',
-                                    background: engram.installed
-                                        ? `${categoryColor}20`
-                                        : `linear-gradient(135deg, ${categoryColor}, #b000ff)`,
-                                    border: engram.installed ? `1px solid ${categoryColor}` : 'none',
-                                    borderRadius: '8px',
-                                    color: 'white',
-                                    fontSize: '14px',
-                                    fontWeight: 600,
-                                    cursor: 'pointer',
-                                    fontFamily: 'Outfit, sans-serif',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '8px',
-                                    position: 'relative',
-                                    zIndex: 2
-                                }}>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        router.push(`/engrams/${engram.id}`)
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '10px',
+                                        background: engram.installed
+                                            ? `${categoryColor}20`
+                                            : `linear-gradient(135deg, ${categoryColor}, #b000ff)`,
+                                        border: engram.installed ? `1px solid ${categoryColor}` : 'none',
+                                        borderRadius: '8px',
+                                        color: 'white',
+                                        fontSize: '14px',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        fontFamily: 'Outfit, sans-serif',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '8px',
+                                        position: 'relative',
+                                        zIndex: 2
+                                    }}>
                                     {engram.installed ? (
                                         <>
                                             <RefreshCw size={14} />

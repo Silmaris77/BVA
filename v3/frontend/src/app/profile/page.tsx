@@ -2,13 +2,29 @@
 
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { User, Bell, Zap, Trophy, Flame, Target, LogOut, TrendingUp, Award, Rocket, BookOpen, Sparkles, Star } from 'lucide-react'
+import { getUserStatsSummary } from '@/lib/rpg-stats'
 
 export default function ProfilePage() {
     const { user, profile, signOut } = useAuth()
     const router = useRouter()
     const [activeTab, setActiveTab] = useState<'informacje' | 'postepy' | 'cele' | 'ustawienia'>('informacje')
+    const [userStats, setUserStats] = useState<any[]>([])
+    const [userClasses, setUserClasses] = useState<any[]>([])
+    const [userCombos, setUserCombos] = useState<any[]>([])
+
+    // Load RPG stats
+    useEffect(() => {
+        async function loadRPGData() {
+            if (!user) return
+            const data = await getUserStatsSummary(user.id)
+            setUserStats(data.stats)
+            setUserClasses(data.classes)
+            setUserCombos(data.combos)
+        }
+        loadRPGData()
+    }, [user])
 
     if (!user) return null
 
@@ -262,17 +278,220 @@ export default function ProfilePage() {
                 )}
 
                 {activeTab === 'postepy' && (
-                    <div style={{
-                        background: 'rgba(20, 20, 35, 0.4)',
-                        backdropFilter: 'blur(20px)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                        borderRadius: '20px',
-                        padding: '32px',
-                        textAlign: 'center',
-                        color: 'rgba(255, 255, 255, 0.6)'
-                    }}>
-                        <p>📊 Szczegółowe wykresy postępów będą dostępne wkrótce</p>
-                    </div>
+                    <>
+                        {/* Character Stats Radar + Bars */}
+                        <div style={{
+                            background: 'rgba(20, 20, 35, 0.4)',
+                            backdropFilter: 'blur(20px)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            borderRadius: '20px',
+                            padding: '32px',
+                            marginBottom: '32px'
+                        }}>
+                            <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                📊 Character Stats
+                            </h3>
+
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
+                                gap: '48px'
+                            }}>
+                                {/* Radar Chart (SVG) */}
+                                <div>
+                                    <div style={{
+                                        width: '100%',
+                                        height: '400px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <svg viewBox="0 0 500 500" style={{ width: '100%', maxWidth: '400px', height: 'auto' }}>
+                                            <defs>
+                                                <linearGradient id="radarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" style={{ stopColor: '#b000ff', stopOpacity: 0.6 }} />
+                                                    <stop offset="100%" style={{ stopColor: '#00d4ff', stopOpacity: 0.6 }} />
+                                                </linearGradient>
+                                            </defs>
+
+                                            {/* Grid */}
+                                            <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                                            <circle cx="250" cy="250" r="150" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                                            <circle cx="250" cy="250" r="100" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                                            <circle cx="250" cy="250" r="50" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+
+                                            {/* Axis */}
+                                            <line x1="250" y1="250" x2="250" y2="50" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                                            <line x1="250" y1="250" x2="440" y2="155" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                                            <line x1="250" y1="250" x2="440" y2="345" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                                            <line x1="250" y1="250" x2="250" y2="450" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                                            <line x1="250" y1="250" x2="60" y2="345" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                                            <line x1="250" y1="250" x2="60" y2="155" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+
+                                            {/* Data Area - Mock values: Leadership:80, Sales:60, Strategy:80, Mindset:70, Tech:40, Comm:45 */}
+                                            <polygon points="250,90 390,175 390,315 250,390 110,315 130,175"
+                                                fill="url(#radarGradient)"
+                                                fillOpacity="0.5"
+                                                stroke="#b000ff"
+                                                strokeWidth="2" />
+
+                                            {/* Points */}
+                                            <circle cx="250" cy="90" r="5" fill="#00ff88" />
+                                            <circle cx="390" cy="175" r="5" fill="#00ff88" />
+                                            <circle cx="390" cy="315" r="5" fill="#00ff88" />
+                                            <circle cx="250" cy="390" r="5" fill="#00ff88" />
+                                            <circle cx="110" cy="315" r="5" fill="#00ff88" />
+                                            <circle cx="130" cy="175" r="5" fill="#00ff88" />
+
+                                            {/* Labels */}
+                                            <text x="250" y="35" textAnchor="middle" fill="white" fontSize="14" fontWeight="600">Leadership</text>
+                                            <text x="465" y="165" textAnchor="start" fill="white" fontSize="14" fontWeight="600">Sales</text>
+                                            <text x="465" y="330" textAnchor="start" fill="white" fontSize="14" fontWeight="600">Strategy</text>
+                                            <text x="250" y="480" textAnchor="middle" fill="white" fontSize="14" fontWeight="600">Mindset</text>
+                                            <text x="35" y="330" textAnchor="end" fill="white" fontSize="14" fontWeight="600">Tech</text>
+                                            <text x="35" y="165" textAnchor="end" fill="white" fontSize="14" fontWeight="600">Comm</text>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                {/* Progress Bars */}
+                                <div>
+                                    <CharacterStatBar
+                                        category="Leadership"
+                                        points={userStats.find(s => s.category === 'Leadership')?.points || 0}
+                                        level={userStats.find(s => s.category === 'Leadership')?.level || 1}
+                                        color="#b000ff"
+                                    />
+                                    <CharacterStatBar
+                                        category="Sales"
+                                        points={userStats.find(s => s.category === 'Sales')?.points || 0}
+                                        level={userStats.find(s => s.category === 'Sales')?.level || 1}
+                                        color="#00ff88"
+                                    />
+                                    <CharacterStatBar
+                                        category="Strategy"
+                                        points={userStats.find(s => s.category === 'Strategy')?.points || 0}
+                                        level={userStats.find(s => s.category === 'Strategy')?.level || 1}
+                                        color="#ffd700"
+                                    />
+                                    <CharacterStatBar
+                                        category="Mindset"
+                                        points={userStats.find(s => s.category === 'Mindset')?.points || 0}
+                                        level={userStats.find(s => s.category === 'Mindset')?.level || 1}
+                                        color="#00d4ff"
+                                    />
+                                    <CharacterStatBar
+                                        category="Technical"
+                                        points={userStats.find(s => s.category === 'Technical')?.points || 0}
+                                        level={userStats.find(s => s.category === 'Technical')?.level || 1}
+                                        color="#ff4757"
+                                    />
+                                    <CharacterStatBar
+                                        category="Communication"
+                                        points={userStats.find(s => s.category === 'Communication')?.points || 0}
+                                        level={userStats.find(s => s.category === 'Communication')?.level || 1}
+                                        color="#ff8800"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Your Classes */}
+                        <div style={{
+                            background: 'rgba(20, 20, 35, 0.4)',
+                            backdropFilter: 'blur(20px)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            borderRadius: '20px',
+                            padding: '32px',
+                            marginBottom: '32px'
+                        }}>
+                            <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '24px' }}>
+                                🏆 Your Classes
+                            </h3>
+
+                            {userClasses.length > 0 ? (
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+                                    {userClasses.map(cls => (
+                                        <ClassBadge
+                                            key={cls.id}
+                                            icon={cls.class_name.includes('Sales') ? '🏆' : cls.class_name.includes('Versatile') ? '🎯' : cls.class_name.includes('Specialist') ? '🚀' : '🧠'}
+                                            title={cls.class_name}
+                                            bonus={cls.class_name.includes('Sales') ? '+50% XP from Sales' : cls.class_name.includes('Versatile') ? '+25% XP from all sources' : 'Special bonuses active'}
+                                            color={cls.class_name.includes('Sales') ? '#b000ff' : cls.class_name.includes('Versatile') ? '#00ff88' : '#ffd700'}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div style={{
+                                    padding: '32px',
+                                    textAlign: 'center',
+                                    color: 'rgba(255, 255, 255, 0.5)',
+                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    borderRadius: '12px'
+                                }}>
+                                    🎯 Nie masz jeszcze żadnej klasy. Zainstaluj więcej engramów!
+                                </div>
+                            )}
+
+                            <div style={{
+                                marginTop: '20px',
+                                padding: '16px',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                borderRadius: '12px',
+                                fontSize: '13px',
+                                color: 'rgba(255, 255, 255, 0.6)'
+                            }}>
+                                💡 Install more engrams to unlock new classes!
+                            </div>
+                        </div>
+
+                        {/* Active Combos */}
+                        <div style={{
+                            background: 'rgba(20, 20, 35, 0.4)',
+                            backdropFilter: 'blur(20px)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            borderRadius: '20px',
+                            padding: '32px'
+                        }}>
+                            <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '24px' }}>
+                                🔥 Active Synergy Combos
+                            </h3>
+
+                            {userCombos.length > 0 ? (
+                                userCombos.map(combo => (
+                                    <SynergyCombo
+                                        key={combo.combo_name}
+                                        name={combo.combo_name}
+                                        engrams={['Engram 1', 'Engram 2', 'Engram 3']} // TODO: fetch real engram names
+                                        bonus="+50% XP bonus active"
+                                    />
+                                ))
+                            ) : (
+                                <div style={{
+                                    padding: '32px',
+                                    textAlign: 'center',
+                                    color: 'rgba(255, 255, 255, 0.5)',
+                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    borderRadius: '12px',
+                                    marginBottom: '20px'
+                                }}>
+                                    🔥 Nie masz jeszcze żadnego combo. Ukończ więcej engramów!
+                                </div>
+                            )}
+
+                            <div style={{
+                                marginTop: '20px',
+                                padding: '16px',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                borderRadius: '12px',
+                                fontSize: '13px',
+                                color: 'rgba(255, 255, 255, 0.6)',
+                                textAlign: 'center'
+                            }}>
+                                🎮 Complete specific engram combinations to unlock powerful synergy bonuses!
+                            </div>
+                        </div>
+                    </>
                 )}
 
                 {activeTab === 'cele' && (
@@ -460,6 +679,136 @@ function GoalItem({ title, progress, current, target, unit }: {
                     borderRadius: '4px',
                     transition: 'width 0.4s ease'
                 }} />
+            </div>
+        </div>
+    )
+}
+
+// RPG Components
+function CharacterStatBar({ category, points, level, color }: {
+    category: string
+    points: number
+    level: number
+    color: string
+}) {
+    const levelNames = ['Novice', 'Apprentice', 'Practitioner', 'Expert', 'Master']
+    const levelName = levelNames[Math.min(level - 1, 4)]
+
+    return (
+        <div style={{ marginBottom: '24px' }}>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '8px'
+            }}>
+                <span style={{ fontSize: '15px', fontWeight: 600 }}>{category}</span>
+                <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                    {points}/100
+                </span>
+            </div>
+            <div style={{
+                height: '12px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '6px',
+                overflow: 'hidden',
+                marginBottom: '8px'
+            }}>
+                <div style={{
+                    height: '100%',
+                    width: `${points}%`,
+                    background: `linear-gradient(90deg, ${color}, ${color}dd)`,
+                    borderRadius: '6px',
+                    transition: 'width 0.6s ease'
+                }} />
+            </div>
+            <span style={{
+                display: 'inline-block',
+                padding: '4px 12px',
+                background: `${color}33`,
+                border: `1px solid ${color}`,
+                borderRadius: '12px',
+                fontSize: '11px',
+                fontWeight: 700,
+                color: color
+            }}>
+                {levelName.toUpperCase()} (Level {level})
+            </span>
+        </div>
+    )
+}
+
+function ClassBadge({ icon, title, bonus, color }: {
+    icon: string
+    title: string
+    bonus: string
+    color: string
+}) {
+    return (
+        <div style={{
+            background: `linear-gradient(135deg, ${color}20, ${color}10)`,
+            border: `2px solid ${color}`,
+            borderRadius: '16px',
+            padding: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+        }}>
+            <span style={{ fontSize: '32px' }}>{icon}</span>
+            <div>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: color, marginBottom: '4px' }}>
+                    {title}
+                </div>
+                <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)' }}>
+                    {bonus}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function SynergyCombo({ name, engrams, bonus }: {
+    name: string
+    engrams: string[]
+    bonus: string
+}) {
+    return (
+        <div style={{
+            background: 'linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 215, 0, 0.2))',
+            border: '2px solid #ff8800',
+            borderRadius: '20px',
+            padding: '24px'
+        }}>
+            <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+                <div style={{ fontSize: '32px', marginBottom: '8px' }}>🔥</div>
+                <div style={{ fontSize: '20px', fontWeight: 700, color: '#ff8800', marginBottom: '8px' }}>
+                    {name}
+                </div>
+            </div>
+
+            <div style={{ marginBottom: '16px' }}>
+                <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)', marginBottom: '8px' }}>
+                    You've mastered:
+                </div>
+                {engrams.map(engram => (
+                    <div key={engram} style={{
+                        fontSize: '15px',
+                        padding: '4px 0',
+                        color: 'white'
+                    }}>
+                        ✓ {engram}
+                    </div>
+                ))}
+            </div>
+
+            <div style={{
+                background: 'rgba(0, 0, 0, 0.3)',
+                padding: '12px',
+                borderRadius: '12px',
+                textAlign: 'center',
+                fontWeight: 600,
+                color: '#ffd700'
+            }}>
+                🎁 Bonus: {bonus}
             </div>
         </div>
     )

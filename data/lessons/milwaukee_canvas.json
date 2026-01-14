@@ -1,0 +1,214 @@
+{
+    "id": "milwaukee-canvas-1",
+    "title": "Milwaukee Application First Canvas",
+    "description": "7-krokowa mapa rozmowy dla Job-Site Solution Specialists. Filozofia Application First.",
+    "category": "Sales",
+    "difficulty": "intermediate",
+    "estimated_minutes": 25,
+    "xp_reward": 200,
+    "target_roles": [
+        "sales",
+        "jss"
+    ],
+    "is_public": true,
+    "cards": [
+        {
+            "id": 1,
+            "type": "intro",
+            "title": "Application First Canvas",
+            "subtitle": "Milwaukee JSS Training",
+            "description": "7-krokowa mapa rozmowy dla Job-Site Solution Specialists\n\n> **💡 Filozofia**\n>\n> Application First = rozwiązujesz PRACĘ, nie prezentujesz NARZĘDZIE",
+            "icon": "Map"
+        },
+        {
+            "id": 2,
+            "type": "intro",
+            "title": "Dla kogo jest ta lekcja?",
+            "description": "> **🔧 JSS (Job-Site Solution Specialist)**\n>\n> **Rola terenowa:**\n> * Pracujesz w środowisku użytkownika\n> * Diagnozujesz realną pracę\n> * Demo aplikacyjne na miejscu\n> * Domykasz konkretnymi krokami",
+            "icon": "Users"
+        },
+        {
+            "id": 3,
+            "type": "concept",
+            "title": "Case Study: Dwie wizyty",
+            "content": "Montaż instalacji - 200-300 śrub M8 dziennie\n\n> **❌ Wizyta #1**\n>\n> \"Mam wiertarkę M18 FUEL. Promocja!\"\n>\n> Brygadzista: \"Mamy Dewalt.\"\n>\n> **Rezultat:** \"Zostaw katalog.\""
+        },
+        {
+            "id": 4,
+            "type": "concept",
+            "title": "Application First Success",
+            "content": "> **✅ Wizyta Kasi**\n>\n> \"**Jak wygląda ta praca?**\"\n> \"Jakie wyzwania?\"\n> \"Ile czasu tracisz?\"\n>\n> **Rezultat:** Test tygodniowy, piątek 10:00, 80%+ szans!",
+            "xp": 20
+        },
+        {
+            "id": 5,
+            "type": "concept",
+            "title": "7 Kroków Mapy",
+            "content": "> **📋 Canvas**\n>\n> 1. Aplikacja\n> 2. Problem\n> 3. Konsekwencje\n> 4. Rozwiązanie"
+        },
+        {
+            "id": 6,
+            "type": "concept",
+            "title": "Kroki 5-7",
+            "content": "> 5. Demo\n> 6. Wartość\n> 7. Next Steps\n>\n> **Każdy krok ma cel!**"
+        },
+        {
+            "id": 7,
+            "type": "concept",
+            "title": "KROK 1: Aplikacja",
+            "content": "> **🎯 Cel**\n>\n> Zrozumieć REALNĄ PRACĘ\n\n**Pytania:**\n* \"Jak często?\"\n* \"W jakich warunkach?\"\n* \"Co najtrudniejsze?\"\n\n> **⚠️ NIE mówisz o produkcie!**"
+        },
+        {
+            "id": 8,
+            "type": "question",
+            "question": "Co JSS robi w KROKU 1?",
+            "options": [
+                "Pokazuje katalog",
+                "Pyta o pracę i warunki",
+                "Robi demo"
+            ],
+            "correctAnswer": 1,
+            "explanation": "W kroku 1 chodzi o zrozumienie pracy, nie sprzedaż.",
+            "xp": 15
+        },
+        {
+            "id": 9,
+            "type": "concept",
+            "title": "KROK 2: Pain Points",
+            "content": "> **⚠️ Złota zasada**\n>\n> \"Jeśli klient nie nazwie problemu - nie ma decyzji\"\n\n**4 kategorie:**\n* 🤕 Ergonomia\n* ⏱️ Czas\n* 🛡️ Bezpieczeństwo\n* 💰 Koszt"
+        },
+        {
+            "id": 10,
+            "type": "concept",
+            "title": "KROK 3: Konsekwencje",
+            "content": "> **📊 Kwantyfikacja**\n>\n> Problem → Konsekwencje\n\n\"Nadgarstki bolą\"\n↓\n\"Ile razy przerwa?\"\n↓\n\"2-3x po 15 min\"\n↓\n**30-45 min/dzień**\n\n> 💡 Klient SAM przelicza!"
+        },
+        {
+            "id": 11,
+            "type": "question",
+            "question": "Co JSS robi w KROKU 3?",
+            "options": [
+                "Kalkuluje ROI w Excelu",
+                "Pyta 'Ile to kosztuje?'",
+                "Przechodzi do demo"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Klient sam musi policzyć konsekwencje (czas/pieniądze).",
+            "xp": 15
+        },
+        {
+            "id": 12,
+            "type": "concept",
+            "title": "KROK 4: System",
+            "content": "> **🧩 3 elementy**\n> 1. Narzędzie bazowe\n> 2. Baterie + ładowarka\n> 3. Akcesoria\n\n**Przykład:**\nM18 FUEL + 4 baterie + wiertła Thunderweb"
+        },
+        {
+            "id": 13,
+            "type": "concept",
+            "title": "KROK 5: Demo",
+            "subtitle": "Ćwiczenie praktyczne",
+            "content": "> **🎬 3 elementy**\n> 1. **Cel:** Co sprawdzamy?\n> 2. **Kryterium:** Na co patrzymy?\n> 3. **Klient pracuje!**\n\n\"Zrobimy 100 otworów. Proszę spróbować!\""
+        },
+        {
+            "id": 14,
+            "type": "question",
+            "question": "Które stwierdzenie o DEMO jest PRAWDZIWE?",
+            "options": [
+                "JSS robi - klient patrzy",
+                "Demo można robić bez celu",
+                "Cel + kryterium + klient pracuje"
+            ],
+            "correctAnswer": 2,
+            "xp": 20
+        },
+        {
+            "id": 15,
+            "type": "concept",
+            "title": "KROK 6: Wartość",
+            "content": "> **💎 3 pytania**\n> 1. \"Co się zmieniło?\"\n> 2. \"Co łatwiejsze?\"\n> 3. \"Jak wpływa na pracę?\"\n\n**Klient:** \"8h zaoszczędzone!\"\n\n💡 Nie JSS \"na siłę\"!"
+        },
+        {
+            "id": 16,
+            "type": "practice",
+            "title": "KROK 7: Next Steps",
+            "content": "> **✅ KTO-CO-KIEDY**\n> **KTO:** Kto decyduje?\n> **CO:** Test/Oferta?\n> **KIEDY:** Data/godzina\n\n\"Test tygodniowy. Piątek 10:00.\"\n\n📧 Follow-up 24h!"
+        },
+        {
+            "id": 17,
+            "type": "practice",
+            "title": "Ćwiczenie: 7 Kroków",
+            "content": "**Zidentyfikuj kroki:**\n\nKasia: \"Jak wygląda praca?\"\nKlient: \"Przegrzewa się\"\nKasia: \"Ile czasu tracisz?\"\nKlient: \"30-40 min\"\nKasia: \"M18 FUEL + 4 baterie\"",
+            "xp": 25
+        },
+        {
+            "id": 18,
+            "type": "concept",
+            "title": "Produktowa vs Application First",
+            "content": "> **❌ Produktowa**\n> Start od produktu\n> Brak diagnozy\n> Demo \"na ślepo\"\n\n> **✅ Application First**\n> Start od aplikacji\n> Diagnoza\n> Demo z celem"
+        },
+        {
+            "id": 19,
+            "type": "concept",
+            "title": "3 błędy w demo",
+            "content": "> **❌ #1: Pokaz cyrkowy**\n> JSS robi - klient patrzy\n\n> **❌ #2: Bez celu**\n> \"Pokazuję bo mam\"\n\n> **❌ #3: Na szybko**\n> 5 minut - nie testuje"
+        },
+        {
+            "id": 20,
+            "type": "concept",
+            "title": "System vs Produkt",
+            "content": "**PRODUKT:**\n\"M18 FUEL. 135 Nm...\"\n\n**VS**\n\n**SYSTEM:**\n\"M18 FUEL + 4 baterie + ładowarka = rozwiązuje przegrzewanie\""
+        },
+        {
+            "id": 21,
+            "type": "practice",
+            "title": "Follow-up 24h",
+            "content": "> **📧 Email**\n> ✅ Aplikacja: 200-300 śrub\n> ✅ Problem: Przegrzewanie\n> ✅ System: M18 + 4 baterie\n> ✅ Demo: 100 otworów ✓\n> ✅ Wartość: \"8h\"\n>\n> Next: Piątek 10:00"
+        },
+        {
+            "id": 22,
+            "type": "question",
+            "question": "Co to Canvas?",
+            "options": [
+                "PowerPoint",
+                "7-krokowa struktura",
+                "Katalog"
+            ],
+            "correctAnswer": 1,
+            "xp": 20
+        },
+        {
+            "id": 23,
+            "type": "question",
+            "question": "Zasada KROKU 2:",
+            "options": [
+                "Sugeruj problemy",
+                "Jeśli klient nie nazwie - nie ma decyzji",
+                "Pomijaj problemy"
+            ],
+            "correctAnswer": 1,
+            "xp": 20
+        },
+        {
+            "id": 24,
+            "type": "concept",
+            "title": "Kluczowe wnioski",
+            "content": "> **📚 Zapamiętaj:**\n> * ✓ Start od aplikacji\n> * ✓ Klient SAM nazywa problem\n> * ✓ Klient SAM kwantyfikuje\n> * ✓ System (3 elementy)\n> * ✓ Demo z celem\n> * ✓ KTO-CO-KIEDY"
+        },
+        {
+            "id": 25,
+            "type": "practice",
+            "title": "Action Plan",
+            "content": "> **🎯 Co robisz?**\n>\n> **DZIŚ:** Wydrukuj checklist\n> **JUTRO:** KROK 1 na wizycie\n> **ZA TYDZIEŃ:** Przejrzyj fiszki\n\n💡 +60% szans na zastosowanie!"
+        },
+        {
+            "id": 26,
+            "type": "summary",
+            "title": "Canvas ukończony!",
+            "recap": [
+                "Ukończyłeś Milwaukee Application First Canvas",
+                "+200 XP zdobyte",
+                "Jesteś gotowy na warsztat w terenie"
+            ]
+        }
+    ]
+}

@@ -38,6 +38,10 @@
 15. [Next Steps](#next-steps---implementacja) - Roadmap implementacji
 16. [Related Documents](#related-documents)
 
+### VI. Burza Mózgów
+17. [RPG Character Card - Advanced Ideas](#rpg-character-card---advanced-ideas) - Pomysły na rozbudowę karty postaci
+18. [Lesson Card Types - Advanced Ideas](#lesson-card-types---advanced-ideas) - Pomysły na nowe typy kart w lekcjach
+
 
 ---
 
@@ -126,26 +130,80 @@ NAUKA
 
 ---
 
+### 📖 **Główne Koncepty: Lekcja, Engram, Zasób**
+
+#### **Definicje i Charakterystyka**
+
+| Aspekt | 📚 Lekcja | 🧠 Engram | 📖 Zasób |
+|--------|-----------|-----------|----------|
+| **Definicja** | Pełna jednostka edukacyjna | Destylat wiedzy - "Neural Implant" | Materiał dodatkowy (template, case study) |
+| **Czas** | 20-45 min | 3-10 min | Nie dotyczy |
+| **Format** | 6-12 kart interaktywnych | 3-4 slajdy + quiz | Plik/link zewnętrzny |
+| **Cel** | Kompleksowa nauka tematu | Pojedyncza umiejętność/koncepcja | Praktyczne narzędzie |
+| **XP** | 100-150 | 50 (install) + 25 (refresh) | 10 |
+| **Specjalne** | Wyodrębnia engramy | **Decay system** (wymaga odświeżania) | **Unlock conditions** |
+| **Miejsce** | 📚 NAUKA → Lekcje | 📚 NAUKA → Engramy | 📚 NAUKA → Zasoby |
+| **DB** | `lessons` (JSONB cards) | `engrams` + `user_engrams` | `resources` |
+
+#### **Hierarchia i Zależności (Top-Down)**
+
+```
+📚 LEKCJA (20-45 min)
+    ↓ wyodrębnia
+🧠 ENGRAMY (3-10 min każdy)
+    ↓ unlockuje
+📖 ZASOBY (templates, case studies)
+```
+
+**Konkretny przykład:**
+
+```
+📚 Lekcja: "Zarządzanie Czasem" (45 min, 8 kart) → +150 XP
+    ↓
+🧠 Wyodrębnia 3 engramy:
+    • Engram #1: "Macierz Eisenhowera" (5 min) → +50 XP
+    • Engram #2: "Zasada Pareto 80/20" (4 min) → +50 XP
+    • Engram #3: "Deep Work Protocol" (7 min) → +50 XP
+    ↓
+📖 Unlockuje zasoby:
+    • "Weekly Planner Template.xlsx" → +10 XP
+    • Case Study: "Time Management w Heinz"
+```
+
+#### **Cross-Unlocking System**
+
+**Mechanika:** Ukończenie Lekcji/Engramu/Zasobu może unlockować elementy w innych kategoriach.
+
+```
+Lekcja "SPIN Selling" (ukończona)
+    ↓ unlockuje
+• Engram: "Objection Handling"
+• Zasób: "SPIN Questions Template.xlsx"
+• Zasób: "Case Study: Heinz Market Share"
+```
+
+```
+Engram "Pitch 60s" (zainstalowany standalone)
+    ↓ sugeruje
+• Lekcja: "Advanced Presentation Skills"
+```
+
+**Typy Zasobów według dostępności:**
+- **Public:** Zawsze dostępne dla wszystkich
+- **Unlockable:** Wymagają ukończenia konkretnej Lekcji/Engramu
+- **Premium:** (Future) Wymagają subskrypcji/zakupu
+
+---
+
 ### 🧠 **System Engramów - Szczegółowa Specyfikacja**
 
 **Koncepcja:** Engramy to "Neural Implants" - destylaty wiedzy w formie micro-lessons (3-10 min), zaprojektowane dla szybkiej absorpcji i długoterminowej retencji poprzez Spaced Repetition System.
 
 #### **1. Hierarchia Treści**
 
-```
-Lekcja (20-45 min)
-    ↓ wyodrębnia
-Engramy (3-10 min każdy)
-    ↓ unlockuje
-Zasoby (Templates, Case Studies, E-books)
-```
-
-**Przykład:**
-- **Lekcja:** "Zarządzanie Czasem" (45 min, 8 kart)
-  - **Engram #1:** "Macierz Eisenhowera" (5 min)
-  - **Engram #2:** "Zasada Pareto 80/20" (4 min)
-  - **Engram #3:** "Deep Work Protocol" (7 min)
-  - **Unlocked Resource:** "Weekly Planner Template.xlsx"
+**Pochodzenie Engramów:**
+- **Z Lekcji:** Automatycznie wyodrębnione kluczowe koncepty (każda lekcja → 2-5 engramów)
+- **Standalone:** Niezależne micro-lessons (np. "Pitch 60s", "Szybkie Decyzje")
 
 #### **2. Struktura Engramu**
 
@@ -154,10 +212,6 @@ Zasoby (Templates, Case Studies, E-books)
 2. **Mechanizm** - Jak to działa (reguła/framework)
 3. **Zastosowanie** - Praktyczny przykład
 4. **Weryfikacja** - Quiz (3 pytania z puli 6-10)
-
-**Pochodzenie:**
-- **Z Lekcji:** Automatycznie wyodrębnione kluczowe koncepty
-- **Standalone:** Niezależne micro-lessons (np. "Pitch 60s", "Szybkie Decyzje")
 
 #### **3. Decay System (Ebbinghaus + Adaptive)**
 
@@ -194,22 +248,7 @@ Day 14: 40%  → 20%  (minimal)
 
 #### **5. Cross-Unlocking System**
 
-**Mechanika:** Ukończenie Lekcji/Engramu/Zasobu może unlockować elementy w innych kategoriach.
-
-**Przykłady:**
-```
-Lekcja "SPIN Selling" (ukończona)
-    ↓ unlockuje
-- Engram: "Objection Handling"
-- Zasób: "SPIN Questions Template.xlsx"
-- Zasób: "Case Study: Heinz Market Share"
-```
-
-```
-Engram "Pitch 60s" (zainstalowany)
-    ↓ sugeruje
-- Lekcja: "Advanced Presentation Skills"
-```
+**(patrz: sekcja "Główne Koncepty" powyżej dla szczegółów cross-unlocking)**
 
 **Typy Zasobów:**
 - **Public:** Zawsze dostępne
@@ -320,9 +359,384 @@ CREATE TABLE resources (
 - v3/frontend/src/app/learning/resources/page.tsx (Biblioteka)
 ```
 
+---
 
+### 🎮 **RPG-Inspired Gamification Mechanics**
+
+**Koncepcja:** Wykorzystanie mechanik RPG do wizualizacji postępów użytkownika i zwiększenia engagementu poprzez systemowe nagrody, kombinacje umiejętności i progresję postaci.
+
+#### **1. Character Stats System (MVP - Phase 1)**
+
+**Radar Chart Visualization**
+
+Każdy zainstalowany engram dodaje punkty do odpowiedniej kategorii statystyk:
+
+```
+Character Stats (0-100 scale):
+├── Leadership: ████████░░ 80%
+├── Sales:      ██████░░░░ 60%
+├── Strategy:   ████████░░ 80%
+├── Mindset:    ███████░░░ 70%
+└── Technical:  ████░░░░░░ 40%
+```
+
+**Point Distribution:**
+- **Basic Engram (3-5 min):** +10 points
+- **Advanced Engram (7-10 min):** +20 points
+- **Refresh Engram:** +5 points (maintain stats)
+
+**Level Up System:**
+- Each category has 5 levels (Novice → Master)
+- **Level 1:** 0-20 points (Novice)
+- **Level 2:** 21-40 points (Apprentice)
+- **Level 3:** 41-60 points (Practitioner)
+- **Level 4:** 61-80 points (Expert)
+- **Level 5:** 81-100 points (Master)
+
+**UI Implementation:**
+- Radar chart on Profile → "Postępy" tab
+- Animated transitions when stats increase
+- Color-coded categories (matching engram badges)
+- Tooltips showing breakdown: "Leadership: 80/100 (Expert)"
 
 ---
+
+#### **2. Skill Tree / Tech Tree (Phase 2)**
+
+**Dependency-Based Unlocking**
+
+```
+            [Advanced Leadership]
+                   / \
+    [Team Building]   [Conflict Resolution]
+           |                  |
+    [Active Listening] ──→ [Negotiation 101]
+           |                  |
+    [Communication Basics] ←─── [Sales Fundamentals]
+```
+
+**Prerequisites:**
+- Some advanced engrams require completing basic engrams first
+- Visual tree shows locked/unlocked paths
+- Hover shows "Unlock by completing: [X, Y, Z]"
+
+**Example Dependencies:**
+```json
+{
+  "engram_id": "advanced-negotiation",
+  "requires": ["active-listening", "batna-basics", "sales-101"],
+  "unlock_level": "Leadership Level 3"
+}
+```
+
+**UI Features:**
+- Interactive node-based graph (similar to Cyberpunk 2077)
+- Pan and zoom on skill tree
+- Glowing paths show completed routes
+- Locked nodes have lock icon + requirements tooltip
+
+---
+
+#### **3. Class System (Character Evolution)**
+
+**Dynamic Class Assignment**
+
+Based on engram combinations, user automatically receives a "Class" title:
+
+**Class Types:**
+```
+🏆 Sales Strategist
+   Requirements: 5+ Sales Engrams + 3+ Mindset Engrams
+   Bonus: +50% XP from Sales lessons
+
+🧠 Learning Architect
+   Requirements: 5+ Leadership + 3+ Technical Engrams
+   Bonus: Early access to advanced content
+
+🎯 Versatile Professional
+   Requirements: 2+ engrams in ALL categories
+   Bonus: +25% XP from all sources
+
+🚀 Specialist
+   Requirements: 10+ engrams in ONE category
+   Bonus: +100 XP per engram refresh in specialty
+```
+
+**Evolution Path:**
+- User starts as "Novice" (no class)
+- First class unlock at 5 total engrams
+- Can have multiple classes simultaneously
+- Class badges shown on profile
+
+**UI Display:**
+```
+┌─────────────────────────────┐
+│  Your Classes:              │
+├─────────────────────────────┤
+│  🏆 Sales Strategist        │
+│     Active Bonus: +50% XP   │
+│                             │
+│  🎯 Versatile Professional  │
+│     Unlocked: Jan 10, 2026  │
+└─────────────────────────────┘
+```
+
+---
+
+#### **4. Synergy Bonuses (Combo System)**
+
+**Engram Combinations Unlock Special Bonuses**
+
+**Example Combos:**
+```
+🔥 "Negotiation Master"
+   Engrams: Active Listening + Storytelling + OODA Loop
+   Bonus: +50% XP from Sales lessons
+
+💎 "Strategic Thinker"  
+   Engrams: Pareto 80/20 + Eisenhower Matrix + BATNA
+   Bonus: Unlock exclusive case study library
+
+⚡ "Speed Learner"
+   Engrams: 5 engrams refreshed within 7 days
+   Bonus: +100 XP one-time reward
+```
+
+**Detection Algorithm:**
+```typescript
+function detectCombos(userEngrams: Engram[]): Combo[] {
+  const combos = [
+    {
+      name: "Negotiation Master",
+      required: ["active-listening", "storytelling", "ooda-loop"],
+      bonus: {type: "xp_multiplier", value: 1.5, category: "Sales"}
+    },
+    // ... more combos
+  ]
+  
+  return combos.filter(combo => 
+    combo.required.every(id => userEngrams.some(e => e.id === id))
+  )
+}
+```
+
+**UI Notification:**
+```
+┌───────────────────────────────┐
+│  🔥 COMBO UNLOCKED!           │
+├───────────────────────────────┤
+│  "Negotiation Master"         │
+│                               │
+│  You've mastered:             │
+│  • Active Listening           │
+│  • Storytelling               │
+│  • OODA Loop                  │
+│                               │
+│  Bonus: +50% XP from Sales    │
+└───────────────────────────────┘
+```
+
+---
+
+#### **5. Engram Load out (Active Slots)**
+
+**Limited Active Slots**
+
+- User can have **unlimited installed** engrams
+- Only **5-7 active slots** at once
+- **Active engrams** provide stat bonuses
+- **Inactive engrams** stored in "Mental Archive"
+
+**Loadout Presets:**
+```
+📋 "Presentation Build"
+   Active: Storytelling, Negotiation, Active Listening, Pitch 60s, BATNA
+   Quick switch before client meeting!
+
+📋 "Strategy Build"
+   Active: OODA Loop, Pareto 80/20, Eisenhower Matrix, Deep Work, Systems Thinking
+   Planning session mode!
+
+📋 "Daily Build"
+   Active: Mix of refreshing engrams
+```
+
+**UI Features:**
+- Drag-and-drop engrams to active slots
+- Save/load preset builds
+- Visual indicator showing active vs. archived
+- Quick switch button before entering lessons
+
+---
+
+#### **6. Neural Matrix Visualization (Advanced)**
+
+**3D Brain Model Concept**
+
+Instead of traditional skill tree → **Interactive 3D brain visualization**:
+
+**Features:**
+- Each engram = **glowing node** in brain
+- Connections between related engrams (synapses)
+- Color-coded by category
+- **Density** shows mastery (more engrams = denser neural network)
+- Hover on node → shows engram details
+- **Animation:** Installing engram = pulse wave from center
+
+**Technical Stack (Future):**
+- Three.js or React Three Fiber
+- WebGL for performance
+- Mobile: 2D simplified version
+
+**Visual Concept:**
+```
+     Leadership (Purple Cluster)
+        ⚡   ⚡   ⚡
+         \ | /
+          🧠  ← Brain Center
+         / | \
+        ⚡   ⚡   ⚡
+     Sales (Green Cluster)
+```
+
+---
+
+#### **7. Memory Decay with Streak Bonuses**
+
+**Enhanced Decay System:**
+
+**Standard Decay:**
+```
+Day 1:  100% → 80%
+Day 7:  80%  → 60%
+Day 14: 60%  → 40%
+Day 30: 40%  → 20%
+```
+
+**Streak Bonus:**
+- Refresh engram same day every week = **Streak +1**
+- **Streak Multiplier:** 
+  - Week 1-4: +5% XP per refresh
+  - Week 5-9: +10% XP per refresh
+  - Week 10+: +15% XP per refresh + engram becomes **"Mastered"**
+
+**Mastered Status:**
+- After 10 consecutive refreshes (weekly)
+- Strength locked at **100%** (permanent)
+- Badge: 🏆 "Mastered"
+- Bonus: +50 XP one-time reward
+
+**UI Indicator:**
+```
+🧠 OODA Loop
+   Status: 🟢 Stable (95%)
+   Streak: 🔥 Week 7 (+10% XP)
+   Next Refresh: 3 days
+```
+
+---
+
+#### **8. Achievement System**
+
+**RPG-Style Badges:**
+```
+🧠 "Neural Network"
+   Unlock: Install 10 Engrams
+   Reward: +100 XP
+
+🔄 "Maintainer"
+   Unlock: Refresh 20 Engrams
+   Reward: +200 XP
+
+🏆 "Class Specialist"
+   Unlock: Achieve Level 5 in any category
+   Reward: Exclusive class title
+
+💎 "Collector"
+   Unlock: Unlock all combos
+   Reward: Special profile badge
+
+⚡ "Speed Demon"
+   Unlock: Complete 5 engrams in 1 day
+   Reward: +150 XP
+```
+
+---
+
+#### **9. Data Model Extensions**
+
+**New Tables:**
+
+```sql
+-- User stats tracking
+CREATE TABLE user_stats (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    category TEXT NOT NULL, -- 'Leadership', 'Sales', etc.
+    points INTEGER DEFAULT 0, -- 0-100
+    level INTEGER DEFAULT 1, -- 1-5
+    updated_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(user_id, category)
+);
+
+-- Class assignments
+CREATE TABLE user_classes (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    class_name TEXT NOT NULL,
+    unlocked_at TIMESTAMP DEFAULT NOW(),
+    is_active BOOLEAN DEFAULT TRUE,
+    UNIQUE(user_id, class_name)
+);
+
+-- Synergy combos
+CREATE TABLE user_combos (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    combo_name TEXT NOT NULL,
+    unlocked_at TIMESTAMP DEFAULT NOW(),
+    bonus_active BOOLEAN DEFAULT TRUE,
+    UNIQUE(user_id, combo_name)
+);
+
+-- Engram loadouts
+CREATE TABLE user_loadouts (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    name TEXT NOT NULL,
+    engram_ids JSONB NOT NULL, -- Array of engram IDs
+    is_active BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+---
+
+#### **10. Implementation Priority**
+
+**Phase 1 (MVP - Week 1-2):**
+- ✅ Character Stats (Radar Chart)
+- ✅ Basic point distribution per engram
+- ✅ Stats display on Profile page
+
+**Phase 2 (Month 1-2):**
+- ⏳ Synergy Combos detection
+- ⏳ Class system (automatic assignment)
+- ⏳ Achievement badges
+
+**Phase 3 (Month 2-3):**
+- ⏳ Skill Tree visualization
+- ⏳ Loadout system
+- ⏳ Streak bonuses
+
+**Phase 4 (Month 3+):**
+- ⏳ Neural Matrix 3D visualization
+- ⏳ Advanced prerequisites
+- ⏳ Mastered status system
+
+---
+
+
 
 #### 🎮 **PRAKTYKA (Practice Hub)**
 **Funkcja:** Narzędzia i gry do zastosowania wiedzy  
@@ -2184,5 +2598,2575 @@ compliance_log = {
 
 ---
 
+## 💡 RPG Character Card - Advanced Ideas
+
+> **Status:** 🧠 **BRAINSTORM** - Pomysły do rozważenia, nie część formalnej specyfikacji MVP  
+> **Cel:** Rozbudowa elementów RPG w karcie postaci - inspiracje z gier RPG dla większego engagement
+
+---
+
+### **📊 Stan Obecny (Zaimplementowany/Zaplanowany)**
+
+**Co już mamy:**
+- ✅ Character Stats (Radar Chart) - 6 kategorii: Leadership, Communication, Strategy, Negotiation, Sales, Analytics
+- ✅ XP + Level System (0-100 scale per category, 5 levels: Novice → Master)
+- ✅ Badge/Achievement System (grid z odznakami)
+- ✅ Class System (Sales Strategist, Learning Architect, Versatile Professional, Specialist)
+- ✅ Synergy Combos (kombinacje engramów = bonusy XP)
+- ✅ Loadout System (5-7 aktywnych slotów engramów)
+- ✅ Streak Bonuses + Mastered Status (10-week streak = permanent 100% strength)
+- ✅ Goals/Objectives (progress bars, deadlines)
+- ✅ Radar Chart visualization (Chart.js)
+
+**Źródła:** 
+- [v3_app_specification.md](#🎮-rpg-inspired-gamification-mechanics) (linie 360-750)
+- [v3_ja_mockup.html](v3_mockups/v3_ja_mockup.html)
+
+---
+
+### **💡 1. Character Attributes (Core Stats)**
+
+**Koncepcja:** Klasyczne atrybuty RPG wpływające na mechaniki gry (build diversity)
+
+**6 Podstawowych Atrybutów:**
+
+```
+┌──────────────────── ATRYBUTY PODSTAWOWE ────────────────────┐
+│                                                              │
+│  💪 Siła Woli (Willpower): ████████░░ 80/100                │
+│     ↳ Wpływ: Streak bonuses +20%, decay slowdown -15%       │
+│     ↳ Level up: +2 za każde 10 punktów                      │
+│                                                              │
+│  🧠 Intelekt (Intelligence): ██████░░░░ 60/100              │
+│     ↳ Wpływ: XP z lekcji +30%, quiz attempts +1             │
+│     ↳ Level up: +3 XP za każde 10 punktów                   │
+│                                                              │
+│  ⚡ Energia (Stamina): ███████░░░ 70/100                    │
+│     ↳ Wpływ: Daily action limit +5, refresh fatigue -20%    │
+│     ↳ Regeneracja: +10 pkt/dzień aktywności                 │
+│                                                              │
+│  🎯 Focus: ████████░░ 80/100                                │
+│     ↳ Wpływ: Card completion speed +15%, distraction -25%   │
+│     ↳ Bonus: Unlock "Deep Work Mode" at 80+                 │
+│                                                              │
+│  🤝 Charyzma: ████░░░░░░ 40/100                             │
+│     ↳ Wpływ: Peer matching quality, leaderboard visibility   │
+│     ↳ Social: Team engrams unlock at 60+                    │
+│                                                              │
+│  🍀 Szczęście (Luck): █████░░░░░ 50/100                     │
+│     ↳ Wpływ: Rare resources +10% chance, bonus XP rolls     │
+│     ↳ Events: Random positive events frequency +5%          │
+└──────────────────────────────────────────────────────────────┘
+```
+
+**Mechanika przydzielania punktów:**
+- **Start:** Każdy atrybut = 20 punktów
+- **Level up bonus:** Co 5 leveli → +5 punktów do rozdania
+- **Soft cap:** Po 80 punktach = diminishing returns (połowa efektu)
+- **Respec:** Możliwość przepisania 1x miesięcznie (lub za premium)
+- **UI:** Modal z sliderami + podgląd bonusów live
+
+**Przykład buildu:**
+```
+"Speed Learner Build"
+- Intelligence: 90 (max XP)
+- Focus: 85 (fast completion)
+- Luck: 60 (item drops)
+- Rest: 20-30 (minimal)
+
+"Persistent Grinder Build"
+- Willpower: 95 (streak god)
+- Stamina: 80 (daily limit)
+- Intelligence: 50 (balanced)
+```
+
+**DB Schema Addition:**
+```sql
+CREATE TABLE user_attributes (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    willpower INTEGER DEFAULT 20,
+    intelligence INTEGER DEFAULT 20,
+    stamina INTEGER DEFAULT 20,
+    focus INTEGER DEFAULT 20,
+    charisma INTEGER DEFAULT 20,
+    luck INTEGER DEFAULT 20,
+    respec_available_at TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(user_id)
+);
+```
+
+---
+
+### **💡 2. Quest/Mission Log System**
+
+**Koncepcja:** Strukturyzowany system questów zamiast luźnych "celów"
+
+**4 Typy Questów:**
+
+```
+┌─────────────────── QUEST LOG ───────────────────┐
+│                                                  │
+│  📖 MAIN QUEST: "Path to Mastery" [4/7]         │
+│     ├─ [✓] Osiągnij Level 5                     │
+│     ├─ [✓] Ukończ 10 lekcji                     │
+│     ├─ [✓] Zainstaluj 5 engramów                │
+│     ├─ [→] Zdobądź klasę "Specialist" 🟡        │
+│     ├─ [ ] Osiągnij 100% w jednej kategorii     │
+│     ├─ [ ] Unlock all Leadership nodes          │
+│     └─ [ ] Complete 50 lessons lifetime         │
+│     Nagroda: 🏆 +500 XP, Tytuł "Master Learner" │
+│     Postęp: ████████░░░░░░ 57%                  │
+│                                                  │
+│  ⭐ DAILY QUESTS (Reset: 6h 23m)                │
+│     ├─ [✓] Zaloguj się dzisiaj +20 XP           │
+│     ├─ [→] Ukończ 1 lekcję (0/1) +50 XP 🔴      │
+│     ├─ [ ] Odśwież 2 engramy +30 XP             │
+│     └─ [ ] Osiągnij 100 XP dzisiaj +25 XP       │
+│                                                  │
+│  🌟 WEEKLY QUEST (Reset: Nd 00:00)              │
+│     └─ [→] Zainstaluj 5 engramów (2/5)          │
+│     Nagroda: +200 XP, 🎁 Mystery Box (Rare)     │
+│                                                  │
+│  🔥 LIMITED CHALLENGE: "January Rush"           │
+│     └─ Ukończ 15 lekcji przed 31.01             │
+│     Czas: ⏰ 17 dni pozostało                   │
+│     Progress: [████░░░░░░] 8/15 (53%)           │
+│     Nagroda: 💎 +500 XP, Badge "Speedster"      │
+│                                                  │
+│  🔒 HIDDEN QUESTS (Discovered: 2/10)            │
+│     ├─ [✓] "First Steps" - Complete 1st lesson │
+│     ├─ [→] "Night Owl" - Learn after 11 PM     │
+│     └─ [ ] ??? (Undiscovered)                   │
+└──────────────────────────────────────────────────┘
+```
+
+**Quest Features:**
+- **Auto-tracking:** Progress aktualizuje się automatycznie
+- **Notifications:** Subtle banner przy unlock/completion
+- **Chaining:** Completing main quest → unlocks next chapter
+- **Randomization:** Daily quests losowane z puli 20+
+- **Hidden quests:** Odkrywane przez exploration
+
+**UI Patterns:**
+- Tab w "📊 JA → Misje"
+- Floating mini-widget na Dashboard (next daily quest)
+- Completion animation (konfetti + sound effect)
+
+---
+
+### **💡 3. Inventory/Equipment System**
+
+**Koncepcja:** "Mental Equipment" - unlockowane przedmioty dające bonusy
+
+**6 Slotów ekwipunku:**
+
+```
+┌─────────────────── EKWIPUNEK MENTALNY ──────────────────┐
+│                                                          │
+│  🧠 HEAD SLOT: [Philosopher's Cap] 🟣 EPIC              │
+│     • +15% XP from Philosophy lessons                   │
+│     • Decay -10% in Mindset category                    │
+│     Źródło: Unlocked via "Stoic Path" combo             │
+│     Durability: ∞ (permanent)                           │
+│                                                          │
+│  📚 MAIN HAND: [SPIN Framework Scroll] 🔵 RARE          │
+│     • +20% XP from Sales lessons                        │
+│     • Quiz: 1 extra attempt per lesson                  │
+│     Źródło: Complete "SPIN Selling" lesson              │
+│     Durability: 30 uses remaining                       │
+│                                                          │
+│  💼 OFF HAND: [MBA Toolkit] 🟢 UNCOMMON                 │
+│     • Access to 5 premium templates                     │
+│     • Case study library unlock                         │
+│     Źródło: Install 10 Strategy engrams                 │
+│                                                          │
+│  ⚡ TRINKET 1: [Focus Crystal] ⚪ COMMON                │
+│     • Card completion time -5%                          │
+│     Źródło: Achieve 7-day streak                        │
+│                                                          │
+│  🔮 TRINKET 2: [Memory Stone] 🟣 EPIC                   │
+│     • All engrams: Decay -20% (massive!)                │
+│     Źródło: Refresh 50 engrams (lifetime achievement)   │
+│                                                          │
+│  🎖️ BADGE SLOT: [Innovator's Crest] 🟠 LEGENDARY       │
+│     • +25% XP from ALL sources                          │
+│     • Peer visibility +50%                              │
+│     • Unlock "VIP Lounge" community feature             │
+│     Źródło: Secret achievement: "First to Master"       │
+│     ⚠️ UNIQUE (only 1 exists per server)                │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Rarity System:**
+- ⚪ **Common:** +5-10% bonuses, easy unlock
+- 🟢 **Uncommon:** +10-15% bonuses, moderate grind
+- 🔵 **Rare:** +20% bonuses + special effects, quest rewards
+- 🟣 **Epic:** +25% bonuses + unique abilities, hard achievements
+- 🟠 **Legendary:** Game-changing, limited quantity (server-wide)
+- 💎 **Mythic:** (Future) Prestige-only, cosmetic glow effects
+
+**Durability System:**
+- Some items have limited uses (consumables)
+- "Repair" via mini-quests or currency
+- Permanent items = infinite durability
+
+**Unlock Methods:**
+- Quest completion rewards
+- Achievement milestones
+- Combo unlocks
+- Time-limited events
+- Rare drops from quizzes (5% RNG)
+- DegenCoin shop (future monetization)
+
+**UI:**
+- Character sheet modal (drag-and-drop slots)
+- Inventory grid (WoW/Diablo style)
+- Item tooltip: hover → full stats + lore text
+- Visual: equipped items show on avatar (cosmetic)
+
+---
+
+### **💡 4. Title/Prestige System**
+
+**Koncepcja:** Zbieralne tytuły wyświetlane na profilu + mechanical bonuses
+
+**Title Collection UI:**
+
+```
+┌────────── TWOJE TYTUŁY (5/45 unlocked) ──────────┐
+│                                                   │
+│  [EQUIPPED]  🏆 "The Strategist"                 │
+│              Unlocked: Jan 5, 2026               │
+│              Req: Achieve 100 Strategy points    │
+│              Bonus: +10% XP from Strategy        │
+│              Visibility: Shows on profile badge  │
+│                                                   │
+│  🎯 "Combo Master"                                │
+│     Unlocked: Dec 28, 2025                       │
+│     Req: Unlock 10 synergy combos                │
+│     Bonus: +5% rare item drop chance             │
+│     [Equip] button                               │
+│                                                   │
+│  ⚡ "Speed Demon"                                 │
+│     Unlocked: Jan 2, 2026                        │
+│     Req: Complete 10 lessons in 1 week           │
+│     Bonus: Fast learner badge visibility         │
+│                                                   │
+│  🔥 "Phoenix"                                     │
+│     Unlocked: Jan 10, 2026                       │
+│     Req: Recover 20 Critical (🔴) engrams        │
+│     Bonus: Decay -5% globally (permanent!)       │
+│                                                   │
+│  🌟 "Early Adopter"                               │
+│     Unlocked: Nov 15, 2025 (Beta)                │
+│     Req: Join during beta period                 │
+│     Bonus: Exclusive cosmetic avatar border      │
+│                                                   │
+│  🔒 "Knowledge Architect" (LOCKED)               │
+│     Req: Install 50 engrams                      │
+│     Progress: [████████░░] 34/50 (68%)           │
+│     Bonus: ???                                   │
+│                                                   │
+│  🔒 "The Untouchable" (LEGENDARY)                │
+│     Req: 100-day streak without break            │
+│     Progress: [████░░░░░░] 42/100 (42%)          │
+│     Bonus: +50% XP, Prestige Level +1            │
+│                                                   │
+│  🔒 "Guild Master" (LOCKED)                      │
+│     Req: Lead team of 10+ members (B2B feature)  │
+│     Bonus: Team-wide +10% XP buff                │
+└───────────────────────────────────────────────────┘
+```
+
+**Mechanika:**
+- **Active title:** Tylko 1 equipped = bonus aktywny
+- **Collection bonus:** Unlock 10/25/45 titles = meta-achievements
+- **Display:** Title shows on:
+  - Profile header (under name)
+  - Leaderboard entries
+  - Comments/peer interactions
+- **Cosmetic variants:** Some titles change avatar border color
+
+**Title Categories:**
+- 🏆 **Achievement-based:** Milestones (Level 50, 100 lessons, etc.)
+- ⚡ **Challenge-based:** Speed runs, streaks, perfection
+- 🎯 **Class-based:** Tied to character classes
+- 🌟 **Event-based:** Limited-time events (seasonal)
+- 🔒 **Secret-based:** Hidden requirements (community mysteries)
+
+---
+
+### **💡 5. Skill Tree (Visual + Interactive)**
+
+**Koncepcja:** Rozbudowane drzewo umiejętności z dependency locks
+
+**Example Tree Structure (Leadership Branch):**
+
+```
+                    [🏆 Leadership Master]
+                    Level 5 | 500 XP req
+                         /           \
+          [Team Building]           [Conflict Management]
+          L4 | 200 XP               L4 | 200 XP
+              /    \                    /      \
+    [Delegation] [Motivation]  [Negotiation] [Mediation]
+    L3 | 100    L3 | 100       L3 | 100     L3 | 100
+         |           |               |            |
+    [Planning]  [Coaching]    [Active Listen] [Empathy]
+    L2 | 50     L2 | 50       L2 | 50        L2 | 50
+         \           /               \          /
+          [Communication Fundamentals] ← Starting Node
+                    L1 | 20 XP
+```
+
+**Visual States:**
+- 🟢 **Completed:** Green glow, checkmark
+- 🔵 **Available:** Blue pulse, clickable
+- 🔒 **Locked:** Gray, shows requirements on hover
+- ⭐ **Current:** Yellow border (user's active learning path)
+
+**Interaction:**
+- **Click node:** Shows engram details + "Start Learning" CTA
+- **Hover:** Tooltip with prerequisites + rewards
+- **Pan/Zoom:** Mouse drag to navigate, scroll to zoom
+- **Multiple paths:** User can choose different routes to same mastery
+
+**Implementation Stack:**
+- **Library:** React Flow / vis.js / D3.js
+- **Mobile:** Simplified tree view (collapsible lists)
+- **Animation:** Completion = pulse wave through connections
+
+**Gamification:**
+- **Path completion:** Unlock entire branch = special badge
+- **Speed bonus:** Complete branch in <30 days = +200 XP
+- **Exploration:** Discover all nodes = achievement
+
+---
+
+### **💡 6. Prestige/Paragon System**
+
+**Koncepcja:** Endgame progression - reset z cumulative bonuses
+
+**Prestige Mechanics:**
+
+```
+┌──────────────── PRESTIGE STATUS ────────────────┐
+│                                                  │
+│  ⭐⭐ PRESTIGE LEVEL: 2 (Elite Learner)         │
+│                                                  │
+│  🎁 LIFETIME BONUSES (Cumulative):              │
+│  • XP multiplier: +20% (+10% per prestige)      │
+│  • Starting level: 10 (skip early grind)        │
+│  • Exclusive cosmetics: Gold avatar border      │
+│  • Prestige-only content: Advanced masterclass  │
+│  • DegenCoins: +1000 per prestige               │
+│  • Rare item: Random Epic drop on reset         │
+│                                                  │
+│  📊 CURRENT PROGRESS:                            │
+│  • Level: 32/50 (64% to Prestige 3)             │
+│  • XP: 8,450 / 15,000                           │
+│  • Estimated time: ~3 weeks (at current pace)   │
+│                                                  │
+│  ⚠️ RESET BĘDZIE ZACHOWAŁ:                      │
+│  ✓ Odznaki i tytuły                             │
+│  ✓ Equipment (inventory)                        │
+│  ✓ Skill tree unlock progress                   │
+│  ✓ Attribute points (bonus +10 per prestige)    │
+│  ✗ Engramy (musisz reinstall) ← Główny grind   │
+│  ✗ Lessons completion (fresh slate)             │
+│                                                  │
+│  [Preview Prestige 3 Rewards] [Reset Now]       │
+└──────────────────────────────────────────────────┘
+```
+
+**Prestige Levels:**
+1. **Prestige 1:** Level 50 → Reset → +10% XP, Gold border
+2. **Prestige 2:** Level 50 (2nd) → +20% XP, Diamond border, +1000 coins
+3. **Prestige 3:** Level 50 (3rd) → +30% XP, Platinum border, Mythic item
+4. **Prestige 5:** "Legendary Scholar" title, server-wide announcement
+5. **Prestige 10:** Hall of Fame entry, unique cosmetic effects
+
+**Why Prestige?**
+- Endgame motivation for completionists
+- Re-experience content with bonuses (faster progression)
+- Exclusive rewards incentivize multiple playthroughs
+- Community status (prestige badge on leaderboard)
+
+---
+
+### **💡 7. Random Events & Loot Drops**
+
+**Koncepcja:** RNG elements for surprise & delight
+
+**A) Lesson Completion Loot:**
+
+```
+┌────────────────────────────────┐
+│  🎁 LESSON COMPLETE!           │
+├────────────────────────────────┤
+│  Base Rewards:                 │
+│  • +150 XP                     │
+│  • Progress saved              │
+│                                │
+│  🎲 BONUS ROLL... (d100: 87)   │
+│  • 💎 Mystery Bonus: +75 XP!   │
+│  • 🔮 [Focus Crystal] (Rare!)  │
+│  • 💰 DegenCoin x5             │
+│                                │
+│  Luck bonus: +10% (from stat)  │
+│  Total XP: 225                 │
+└────────────────────────────────┘
+```
+
+**Loot Table (example):**
+- 70% chance: +25-50 bonus XP
+- 20% chance: Common item drop
+- 8% chance: Uncommon/Rare item
+- 2% chance: Epic item + jackpot XP (+200)
+
+**B) Random Daily Events (5% chance/day):**
+
+```
+🌟 "Knowledge Surge Event"
+   Duration: 2 hours
+   Effect: XP doubled for all activities!
+   Notification: Push alert + dashboard banner
+
+🎯 "Wandering Mentor"
+   NPC: "Alex the Strategist" appears
+   Offers: Special quest (+300 XP reward)
+   Expires: 24 hours
+
+⚡ "Memory Preservation"
+   Effect: All engram decay frozen for 24h
+   Bonus: Perfect time to skip refreshes!
+
+💰 "Treasure Chest Found"
+   Loot: Random Epic item + 500 coins
+   Condition: First 10 users to login today
+
+🔥 "Double Streak Day"
+   Effect: Today counts as 2 days for streaks
+   Strategy: Extend streak faster!
+```
+
+**Implementation:**
+- **Server-side RNG:** Prevents client manipulation
+- **Notification system:** Push alerts for rare events
+- **Activity log:** Track all drops in profile history
+- **Pity timer:** Guaranteed rare drop after 50 lessons w/o one
+
+---
+
+### **💡 8. Hall of Fame / Legacy System**
+
+**Koncepcja:** Permanent records of achievements beyond current progress
+
+**Hall of Fame Display:**
+
+```
+┌───────────── TWOJA LEGENDA ─────────────┐
+│                                          │
+│  📊 LIFETIME STATISTICS:                 │
+│  • Total XP earned: 45,230               │
+│  • Lessons completed: 127                │
+│  • Engrams installed: 89                 │
+│  • Engrams mastered: 34 🏆               │
+│  • Days active: 456                      │
+│  • Longest streak: 42 days 🔥            │
+│  • Combos unlocked: 23                   │
+│  • Prestige level: 2 ⭐⭐                 │
+│                                          │
+│  🏅 HALL OF FAME ENTRIES:                │
+│  • 🥇 #1 in Sales (Week 23, 2025)       │
+│  • 🥈 #2 Overall (Month: August 2025)   │
+│  • 🎖️ First to unlock "Phoenix" title   │
+│  • 🌟 Beta tester (Top 100)             │
+│                                          │
+│  💫 LEGENDARY MOMENTS:                   │
+│  • Jan 15, 2026: "Perfect Week"          │
+│    Completed 10 lessons, 0 mistakes      │
+│                                          │
+│  • Feb 3, 2026: "Leadership Master"      │
+│    Unlocked all Leadership tree nodes    │
+│                                          │
+│  • Mar 12, 2026: "Prestige Achieved"     │
+│    First prestige - Level 50 reached     │
+│                                          │
+│  📜 COMMUNITY RECORDS:                   │
+│  • Fastest lesson: 8m 23s (#12 all-time) │
+│  • Highest weekly XP: 2,450 (#5 Jan '26) │
+│                                          │
+│  🔗 SHARE PROFILE: [Copy Link] [Tweet]  │
+└──────────────────────────────────────────┘
+```
+
+**Features:**
+- **Permanent tracking:** Never resets (survives prestige)
+- **Leaderboard archives:** Historical rankings saved
+- **Milestone timestamps:** Exact dates of achievements
+- **Social sharing:** Generate image cards for Twitter/LinkedIn
+- **Community records:** Server-wide comparisons
+- **Anniversary notifications:** "1 year ago today you..."
+
+**Special Moments Detection:**
+- Perfect quiz scores
+- Record-breaking speeds
+- First-to-achieve (server-wide)
+- Milestone combos (50th engram, 100th lesson)
+- Social impact (most helpful peer reviews)
+
+---
+
+## 📊 Podsumowanie: Priority Matrix
+
+**Quick Wins (Low effort, High impact):**
+1. ⭐ **Quest Log** - strukturyzuje cele (refactor existing goals)
+2. ⭐ **Titles** - prestige + cosmetics (DB extension, UI modal)
+3. ⭐ **Loot Drops** - excitement factor (RNG on completion)
+
+**Medium Investment:**
+4. 🔶 **Attributes** - build diversity (new stats system)
+5. 🔶 **Random Events** - engagement spikes (cron jobs + notifications)
+6. 🔶 **Hall of Fame** - legacy tracking (lifetime stats table)
+
+**Long-term Projects:**
+7. 🔷 **Inventory** - complex but rewarding (full item system)
+8. 🔷 **Skill Tree** - beautiful but heavy (React Flow integration)
+9. 🔷 **Prestige** - endgame motivation (requires mature user base)
+
+---
+
+## 🎯 Następne Kroki
+
+**Dyskusja wymagana:**
+- Które z tych pomysłów najbardziej pasują do wizji BVA?
+- Priorytet: engagement vs. complexity?
+- MVP scope: które elementy dodać do formalnej specyfikacji?
+
+**Potencjalne decyzje:**
+1. **Phase 2 Addition:** Quest Log + Titles (łatwe, duży impact)
+2. **Phase 3 Consideration:** Attributes + Loot system
+3. **Future/Premium:** Skill Tree, Prestige, Inventory (zaawansowane)
+
+---
+
+## 📚 Lesson Card Types - Advanced Ideas
+
+> **Status:** 🧠 **BRAINSTORM** - Pomysły na rozszerzenie typów kart w lekcjach  
+> **Cel:** Zwiększenie interaktywności i engagement poprzez różnorodne formaty nauki
+
+---
+
+### **📊 Stan Obecny (Zaimplementowany/Zaplanowany)**
+
+**MVP Card Types (Week 1-4):**
+1. ✅ `intro` - Welcome screen
+2. ✅ `concept` - Learning content
+3. ✅ `quiz` - Knowledge check
+4. ✅ `practice` - Exercises
+5. ✅ `summary` - Recap
+
+**Zaplanowane (Month 2+):**
+6. 🔜 `video` - YouTube/Vimeo embeds
+7. 🔜 `podcast` - Audio content
+8. 🔜 `flashcard` - Spaced repetition
+9. 🔜 `case_study` - Real-world examples
+10. 🔜 `interactive_chart` - Data visualization
+11. 🔜 `reflection` - Journal prompts
+12. 🔜 `simulation` - Interactive scenarios
+
+**Źródła:** 
+- [v3_app_specification.md](#lesson-content-architecture) (linie 1036-1250)
+- Elastyczna architektura JSONB pozwala na łatwe dodawanie nowych typów
+
+---
+
+### **💡 1. Story Card** - Narracyjne wprowadzenie
+
+**Koncepcja:** Zbudowanie kontekstu przez storytelling przed główną lekcją
+
+**JSON Schema:**
+```typescript
+{
+  "type": "story",
+  "title": "Jak Maria straciła największego klienta",
+  "data": {
+    "protagonist": "Maria - Sales Manager",
+    "setting": "Negocjacje kontraktu na 2M PLN",
+    "conflict": "Klient nagle zrywa rozmowy. Dlaczego?",
+    "lesson_preview": "Nauczysz się BATNA framework",
+    "mood": "suspense", // visual theme: suspense, inspiring, dramatic
+    "image_url": "story-background.jpg",
+    "audio_narration_url": "narration.mp3" // (optional, Phase 2)
+  }
+}
+```
+
+**UI Features:**
+- Cinematic background image (full-screen or parallax)
+- Text reveals progressively (typewriter effect)
+- Optional audio narration (gTTS Polish voice)
+- "Continue to lesson" button leads to first `concept` card
+- Mobile: simplified layout, no animations
+
+**Use Cases:**
+- Lesson intros (set emotional context)
+- Case study setups
+- Problem-based learning scenarios
+
+**Implementation:**
+- Complexity: **LOW** (tylko tekst + obraz)
+- Impact: **HIGH** (emotional hook, retention boost)
+- Priority: **MVP+** (quick win)
+
+---
+
+### **💡 2. Interactive Scenario** - Wybory i konsekwencje
+
+**Koncepcja:** Decision-making practice z branching paths (choose-your-own-adventure)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "scenario",
+  "title": "Trudna rozmowa z szefem",
+  "data": {
+    "situation": "Twój szef odrzucił projekt, w który włożyłeś 3 miesiące pracy.",
+    "your_goal": "Zrozumieć powody i wynegocjować constructive feedback",
+    "choices": [
+      {
+        "id": "a",
+        "text": "Pytam spokojnie: 'Co mogę poprawić w następnej wersji?'",
+        "outcome": {
+          "result": "positive",
+          "feedback": "✅ Świetnie! Pokażesz gotowość do nauki.",
+          "xp_bonus": 50,
+          "next_card_id": 12 // branch to success path
+        }
+      },
+      {
+        "id": "b",
+        "text": "Reaguję emocjonalnie: 'Czy cokolwiek jest dla Ciebie dobre?'",
+        "outcome": {
+          "result": "negative",
+          "feedback": "❌ Szef zamyka się. Rozmowa kończy się napięciem.",
+          "xp_bonus": 10,
+          "lesson": "Emocje blokują komunikację. Zobacz jak to zrobić lepiej...",
+          "next_card_id": 13 // remedial path
+        }
+      },
+      {
+        "id": "c",
+        "text": "Milczę i wychodzę z pokoju.",
+        "outcome": {
+          "result": "neutral",
+          "feedback": "⚠️ Stracona okazja na feedback. Co dalej?",
+          "xp_bonus": 20,
+          "next_card_id": 14
+        }
+      }
+    ],
+    "timer": 30 // optional: seconds to decide (pressure!)
+  }
+}
+```
+
+**Features:**
+- **Branching logic:** Różne next_card_id based on choice
+- **Variable XP:** Reward quality of decision
+- **Immediate feedback:** Why choice was good/bad
+- **Optional timer:** Adds pressure (realistic scenarios)
+- **Multiple outcomes:** 2-4 choices per scenario
+
+**UI Implementation:**
+- Card layout with 2-4 buttons (choices)
+- Click → animation → outcome screen
+- Outcome shows: emoji feedback + explanation + XP earned
+- "Continue" → jumps to next_card_id
+
+**Use Cases:**
+- Communication skills (difficult conversations)
+- Sales objection handling
+- Leadership decision-making
+- Negotiation tactics
+
+**Gamification:**
+- "Perfect Path" achievement (all optimal choices in lesson)
+- "Explorer" badge (try all branches)
+- Replay lesson to try different paths
+
+**Implementation:**
+- Complexity: **MEDIUM** (branching logic + UI states)
+- Impact: **VERY HIGH** (engagement, realistic practice)
+- Priority: **Month 2** (after MVP stable)
+
+---
+
+### **💡 3. Challenge Card** - Immediate application task
+
+**Koncepcja:** Learn → Do cycle (apply knowledge immediately)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "challenge",
+  "title": "Stwórz swój BATNA w 2 minuty",
+  "data": {
+    "task": "Wyobraź sobie negocjacje zakupu samochodu. Zapisz swoją BATNA.",
+    "time_limit_seconds": 120,
+    "input_type": "textarea", // or "voice", "upload", "canvas"
+    "placeholder": "Moja BATNA: Jeśli nie kupię tego auta, to...",
+    "min_characters": 50,
+    "validation": {
+      "required_keywords": ["alternatywa", "opcja"], // soft check
+      "ai_feedback": true // (Phase 2) GPT review
+    },
+    "examples": [
+      "✅ Dobry przykład: 'Kupię inny model u dealera XYZ za 10% taniej'",
+      "❌ Zły przykład: 'Nie kupię nic' (to nie jest BATNA)"
+    ],
+    "save_to_portfolio": true // user's "Moje Projekty"
+  }
+}
+```
+
+**UI Features:**
+- **Timer countdown** (visual + sound at 10s remaining)
+- **Text area** with character counter
+- **Example toggle** (show/hide good vs bad examples)
+- **Submit button** (validates min_characters)
+- **AI feedback** (Phase 2): "Twoja BATNA jest konkretna! +bonus XP"
+- **Save confirmation** → auto-saved to user's portfolio
+
+**Input Types:**
+- `textarea` - written response (default)
+- `voice` - audio recording (Phase 2)
+- `upload` - file/photo (Phase 3)
+- `canvas` - drawing/diagram (Phase 3)
+
+**Validation Levels:**
+1. **Basic:** min_characters check
+2. **Keyword:** soft check for required terms
+3. **AI:** (Phase 2) GPT evaluates quality + gives feedback
+
+**Use Cases:**
+- Personal BATNA/SWOT creation
+- Pitch writing
+- Goal setting
+- Reflection prompts
+
+**Portfolio Integration:**
+- All challenge responses saved to "📋 Moje Projekty"
+- User can review/edit later
+- Export as PDF
+- Share with mentor (B2B feature)
+
+**Implementation:**
+- Complexity: **MEDIUM** (timer, validation, save logic)
+- Impact: **HIGH** (application = retention)
+- Priority: **Month 2**
+
+---
+
+### **💡 4. Poll/Survey Card** - Crowdsourced learning
+
+**Koncepcja:** Social learning through community wisdom + peer comparison
+
+**JSON Schema:**
+```typescript
+{
+  "type": "poll",
+  "title": "Jak postąpiłbyś w tej sytuacji?",
+  "data": {
+    "question": "Klient prosi o 30% rabat. Ty masz margines tylko 15%. Co robisz?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Odmawiam stanowczo",
+        "votes": 234 // real-time counter from DB
+      },
+      {
+        "id": "b",
+        "text": "Negocjuję volume deal (większa ilość = wyższy rabat)",
+        "votes": 892
+      },
+      {
+        "id": "c",
+        "text": "Proponuję dodatkowe usługi zamiast rabatu",
+        "votes": 567
+      },
+      {
+        "id": "d",
+        "text": "Proszę o czas na konsultację z zarządem",
+        "votes": 345
+      }
+    ],
+    "expert_answer": "b", // revealed after user votes
+    "expert_explanation": "Negocjacja volume deal to win-win: klient dostaje lepszą cenę przez większy zakup, ty zwiększasz całkowitą sprzedaż i utrzymujesz marżę.",
+    "show_results_immediately": true, // or false (reveal later)
+    "allow_multiple_votes": false // one vote per user
+  }
+}
+```
+
+**UI Flow:**
+1. **User sees question + options** (no votes visible yet)
+2. **User votes** → button click
+3. **Results reveal:**
+   - Animated bars showing % distribution
+   - "You voted: B (56% agree with you!)"
+   - Highlight expert answer in green
+4. **Expert commentary** appears below
+5. **+XP reward** (small, e.g., +10 XP for participation)
+
+**Features:**
+- **Real-time voting** (Supabase real-time subscriptions)
+- **Percentage bars** (visual comparison)
+- **Expert validation** (learning moment)
+- **Social proof** ("Most users chose B")
+- **Anonymous** (privacy)
+
+**DB Schema:**
+```sql
+CREATE TABLE poll_votes (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    card_id TEXT NOT NULL,
+    option_id TEXT NOT NULL,
+    voted_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(user_id, card_id) -- one vote per card
+);
+```
+
+**Analytics Value:**
+- Admin sees: "80% users struggle with negotiation scenario X"
+- Improve content based on data
+- A/B test different expert explanations
+
+**Gamification:**
+- "Wisdom of Crowd" badge (vote in 20 polls)
+- "Contrarian" badge (vote against majority 5 times, but correct)
+
+**Implementation:**
+- Complexity: **LOW-MEDIUM** (DB + real-time)
+- Impact: **HIGH** (social engagement)
+- Priority: **Month 2**
+
+---
+
+### **💡 5. Drag-and-Drop Exercise**
+
+**Koncepcja:** Kinesthetic learning (sorting, matching, sequencing)
+
+**Variant A: Sequencing**
+```typescript
+{
+  "type": "drag_drop",
+  "variant": "sequence",
+  "title": "Uporządkuj etapy negocjacji",
+  "data": {
+    "instruction": "Przeciągnij kroki w poprawnej kolejności (od góry)",
+    "items": [
+      {"id": "1", "text": "Przygotowanie i research"},
+      {"id": "2", "text": "Ustalenie własnej BATNA"},
+      {"id": "3", "text": "Opening offer"},
+      {"id": "4", "text": "Dyskusja interesów (interests, not positions)"},
+      {"id": "5", "text": "Zamknięcie i follow-up"}
+    ],
+    "correct_order": ["1", "2", "3", "4", "5"],
+    "shuffle": true, // randomize initial order
+    "partial_credit": true, // +XP for each correct position
+    "hint_after_attempts": 2, // show hint after 2 wrong tries
+    "hint": "Zawsze zacznij od research i BATNA!"
+  }
+}
+```
+
+**Variant B: Matching**
+```typescript
+{
+  "type": "drag_drop",
+  "variant": "matching",
+  "data": {
+    "instruction": "Dopasuj terminy do definicji",
+    "left_column": [
+      {"id": "a", "text": "BATNA"},
+      {"id": "b", "text": "ZOPA"},
+      {"id": "c", "text": "Anchor"}
+    ],
+    "right_column": [
+      {"id": "1", "text": "Pierwsza oferta w negocjacjach (wyznacza punkt odniesienia)"},
+      {"id": "2", "text": "Najlepsza alternatywa dla wynegocjowanej umowy"},
+      {"id": "3", "text": "Strefa możliwego porozumienia (Zone of Possible Agreement)"}
+    ],
+    "correct_pairs": [
+      {"left": "a", "right": "2"},
+      {"left": "b", "right": "3"},
+      {"left": "c", "right": "1"}
+    ]
+  }
+}
+```
+
+**UI Implementation:**
+- **React DnD** or **@dnd-kit** library
+- Touch-friendly (mobile drag support)
+- **Visual feedback:** 
+  - Dragging: item lifts + shadow
+  - Valid drop zone: green highlight
+  - Correct placement: checkmark animation
+  - Wrong placement: shake + red flash
+- **Submit button** → validate all positions
+- **Partial credit:** 
+  - 5 items, 3 correct = 60% XP
+  - Perfect order = 100% XP + bonus
+
+**Use Cases:**
+- Process sequencing (sales funnel, project stages)
+- Term matching (vocabulary, frameworks)
+- Priority sorting (Eisenhower Matrix)
+- Timeline ordering (historical events, project milestones)
+
+**Accessibility:**
+- Keyboard navigation (Tab + Space/Enter)
+- Screen reader support
+- Alternative: multiple choice fallback for assistive tech
+
+**Implementation:**
+- Complexity: **MEDIUM** (drag-drop library + validation)
+- Impact: **HIGH** (interactive, fun)
+- Priority: **Month 3**
+
+---
+
+### **💡 6. Audio Response Card**
+
+**Koncepcja:** Pitch practice / presentation rehearsal (voice recording)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "audio_response",
+  "title": "Nagraj swój 60-sekundowy elevator pitch",
+  "data": {
+    "prompt": "Wyobraź sobie, że jesteś w windzie z CEO Twojej wymarzonej firmy. Przedstaw swój pomysł biznesowy w 60 sekund.",
+    "time_limit_seconds": 60,
+    "recording_type": "browser_audio", // WebRTC getUserMedia
+    "playback": true, // user can listen to themselves
+    "retry_allowed": true, // re-record until happy
+    "ai_analysis": {
+      "enabled": false, // Phase 1: disabled, Phase 2: GPT Whisper
+      "metrics": ["pace", "filler_words", "clarity", "confidence", "word_count"]
+    },
+    "tips": [
+      "🎯 Mów wyraźnie i z przekonaniem",
+      "⚡ Unikaj 'eee', 'no', 'właśnie'",
+      "🎬 Zakończ call-to-action",
+      "⏱️ Trzymaj się 60 sekund!"
+    ],
+    "save_to_portfolio": true
+  }
+}
+```
+
+**UI Flow:**
+1. **Preparation screen:**
+   - Show prompt + tips
+   - "Test microphone" button
+   - Countdown: 3... 2... 1... Record!
+2. **Recording:**
+   - Big red button (recording indicator)
+   - Timer countdown (60s)
+   - Waveform visualization (live audio)
+   - "Stop" button (manual end)
+3. **Playback:**
+   - Audio player controls
+   - "Re-record" or "Submit" buttons
+4. **Feedback:** (Phase 2)
+   - AI analysis results
+   - Transcript (Whisper API)
+   - Metrics: pace, filler words count, total words
+
+**Features:**
+- **Browser recording:** WebRTC (no upload needed for preview)
+- **Waveform:** Visual feedback during recording
+- **Multiple attempts:** Re-record until satisfied
+- **Portfolio save:** All recordings saved with timestamps
+- **Progress tracking:** "You've improved! 30% fewer filler words than last week"
+
+**AI Analysis (Phase 2):**
+```typescript
+// Whisper API transcription
+const transcript = await openai.audio.transcriptions.create({
+  file: audioBlob,
+  model: "whisper-1"
+})
+
+// GPT analysis
+const analysis = await openai.chat.completions.create({
+  model: "gpt-4",
+  messages: [{
+    role: "system",
+    content: "Analyze this elevator pitch transcript. Rate: clarity, confidence, structure, call-to-action. Count filler words."
+  }, {
+    role: "user",
+    content: transcript.text
+  }]
+})
+```
+
+**Gamification:**
+- "Pitch Perfect" badge (5 pitches recorded)
+- "Filler-Free" badge (pitch with <3 filler words)
+- Leaderboard: best pitch scores (opt-in)
+
+**Use Cases:**
+- Elevator pitches
+- Sales call practice
+- Presentation rehearsal
+- Interview prep
+- Public speaking training
+
+**Implementation:**
+- Complexity: **HIGH** (audio handling, browser APIs, AI integration)
+- Impact: **VERY HIGH** (unique feature, practice-focused)
+- Priority: **Month 4** (after core stable)
+
+---
+
+### **💡 7. Image Annotation Card**
+
+**Koncepcja:** Visual learning (click hotspots, identify elements)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "image_annotation",
+  "title": "Zidentyfikuj pozytywne sygnały body language",
+  "data": {
+    "image_url": "negotiation-scene.jpg",
+    "task": "Kliknij 3 obszary pokazujące pozytywne sygnały rozmówcy",
+    "hotspots": [
+      {
+        "x": 45, "y": 30, // percentage coordinates
+        "radius": 10, // clickable radius (px)
+        "correct": true,
+        "label": "Otwarty gest rąk",
+        "feedback": "✅ Świetnie! Otwarte dłonie = gotowość do współpracy"
+      },
+      {
+        "x": 70, "y": 50,
+        "radius": 8,
+        "correct": false,
+        "label": "Skrzyżowane ramiona",
+        "feedback": "❌ To sygnał defensywny, nie pozytywny"
+      },
+      {
+        "x": 55, "y": 25,
+        "radius": 12,
+        "correct": true,
+        "label": "Bezpośredni kontakt wzrokowy",
+        "feedback": "✅ Tak! Pokazuje zaangażowanie"
+      },
+      {
+        "x": 60, "y": 70,
+        "radius": 10,
+        "correct": true,
+        "label": "Pochylenie w stronę rozmówcy",
+        "feedback": "✅ Doskonale! Sygnalizuje zainteresowanie"
+      }
+    ],
+    "min_correct": 3, // pass threshold
+    "max_attempts": 5 // limit clicks
+  }
+}
+```
+
+**UI Implementation:**
+- **Image container:** Responsive, maintains aspect ratio
+- **Click handler:** 
+  - Click → check proximity to hotspots (within radius)
+  - Correct: green circle + checkmark + feedback tooltip
+  - Wrong: red X + shake animation + feedback
+- **Progress indicator:** "2/3 correct spots found"
+- **Hint system:** After 3 wrong clicks → show semi-transparent circles
+
+**Use Cases:**
+- Body language identification
+- Chart/graph interpretation ("Click the outlier")
+- Process diagrams ("Click steps in order")
+- Product features ("Identify key components")
+- Safety training ("Spot hazards")
+
+**Alternative: Labeling Mode**
+```typescript
+{
+  "variant": "labeling",
+  "data": {
+    "image_url": "business-model-canvas.jpg",
+    "task": "Przeciągnij etykiety do właściwych pól",
+    "labels": [
+      {"id": "1", "text": "Value Proposition"},
+      {"id": "2", "text": "Customer Segments"},
+      {"id": "3", "text": "Revenue Streams"}
+    ],
+    "drop_zones": [
+      {"x": 50, "y": 30, "correct_label": "1"},
+      {"x": 75, "y": 30, "correct_label": "2"},
+      {"x": 75, "y": 70, "correct_label": "3"}
+    ]
+  }
+}
+```
+
+**Implementation:**
+- Complexity: **MEDIUM** (click detection, coordinate mapping)
+- Impact: **MEDIUM-HIGH** (visual learners)
+- Priority: **Month 4**
+
+---
+
+### **💡 8. Comparison Card**
+
+**Koncepcja:** Side-by-side analysis (Good vs Bad patterns)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "comparison",
+  "title": "Dobry vs. Zły feedback - czym się różnią?",
+  "data": {
+    "left": {
+      "label": "❌ Zły feedback",
+      "example": "'Twoja prezentacja była okropna. Popraw to.'",
+      "issues": [
+        "❌ Brak konkretów (co było złe?)",
+        "❌ Negatywny ton (demotywuje)",
+        "❌ Brak sugestii (jak poprawić?)"
+      ],
+      "highlight_color": "red"
+    },
+    "right": {
+      "label": "✅ Dobry feedback",
+      "example": "'Slajd 3 miał za dużo tekstu - trudno było śledzić. Spróbuj użyć bullet pointów zamiast akapitów.'",
+      "strengths": [
+        "✅ Konkretny przykład (slajd 3)",
+        "✅ Konstruktywny ton (pomaga, nie atakuje)",
+        "✅ Actionable sugestia (bullet points)"
+      ],
+      "highlight_color": "green"
+    },
+    "key_takeaway": "💡 Dobry feedback jest: konkretny, konstruktywny i actionable (SBI framework: Situation - Behavior - Impact).",
+    "interactive_elements": [
+      {
+        "type": "hover_highlight",
+        "text": "Slajd 3",
+        "tooltip": "Konkretny przykład - łatwo zidentyfikować problem"
+      }
+    ]
+  }
+}
+```
+
+**UI Layout:**
+```
+┌─────────────────────────────────────────────┐
+│         Dobry vs. Zły feedback              │
+├──────────────────┬──────────────────────────┤
+│  ❌ Zły feedback │  ✅ Dobry feedback       │
+│                  │                          │
+│  "Okropna..."    │  "Slajd 3 miał..."      │
+│                  │                          │
+│  Issues:         │  Strengths:              │
+│  • Brak...       │  • Konkretny...          │
+│  • Negatywny...  │  • Konstruktywny...      │
+│  • Brak...       │  • Actionable...         │
+└──────────────────┴──────────────────────────┘
+         💡 Key Takeaway (bottom)
+```
+
+**Interactive Features:**
+- **Hover highlights:** Mouse over keywords → tooltip explanation
+- **Animated reveal:** Left appears first → pause → right appears (contrast)
+- **Toggle view:** Mobile can switch between left/right (tabs)
+- **Color coding:** Red border (bad) vs Green border (good)
+
+**Use Cases:**
+- Good vs Bad examples (communication, code, design)
+- Before/After transformations
+- Myth vs Fact comparisons
+- Old way vs New way (process improvements)
+
+**Variants:**
+- **Multi-comparison:** 3-4 columns (Novice → Expert progression)
+- **Slider comparison:** Before/after image slider
+
+**Implementation:**
+- Complexity: **LOW** (just layout + styling)
+- Impact: **MEDIUM-HIGH** (clarity, memorable)
+- Priority: **Month 2** (easy win)
+
+---
+
+### **💡 9. Progress Tracker Card**
+
+**Koncepcja:** Mid-lesson checkpoint (motivation + recap)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "progress",
+  "title": "Jesteś w połowie drogi! 🎯",
+  "data": {
+    "cards_completed": 8,
+    "cards_total": 15,
+    "xp_earned_so_far": 180,
+    "estimated_time_remaining": "7 minut",
+    "achievements_unlocked": [
+      "🎯 5 kart bez pomyłek!",
+      "⚡ Tempo: +20% szybciej niż średnia"
+    ],
+    "motivational_message": "Świetna robota! Jeszcze chwila i opanujesz całość.",
+    "quick_recap": {
+      "enabled": true,
+      "question": "Szybki test: Co to jest BATNA?",
+      "options": [
+        "a) Best Alternative To Negotiated Agreement",
+        "b) Best Actual Terms Negotiated Annually",
+        "c) Business Alliance Trade Network Agreement"
+      ],
+      "correct": "a",
+      "xp_reward": 20
+    },
+    "visual_style": "celebration" // confetti animation
+  }
+}
+```
+
+**UI Components:**
+1. **Header:** "🎯 Checkpoint!" with icon
+2. **Progress ring:** Circular progress (53% complete)
+3. **Stats grid:**
+   - Cards: 8/15
+   - XP: 180 earned
+   - Time left: ~7 min
+4. **Achievements:** Badge cards (unlocked during lesson)
+5. **Motivational quote:** Rotating messages
+6. **Quick recap quiz:** Optional 1-question check
+7. **Continue button:** Proceed to next card
+
+**When to show:**
+- **Automatic triggers:**
+  - 50% completion (mid-point)
+  - After difficult section (5+ cards)
+  - Every 10 minutes (time-based)
+- **Manual:** User can request "Show Progress" anytime
+
+**Psychology:**
+- **Goal gradient effect:** Showing progress motivates completion
+- **Sunk cost:** "You're already 53% done!"
+- **Achievement unlock:** Dopamine hit from badges
+- **Recap quiz:** Reinforces retention (testing effect)
+
+**Implementation:**
+- Complexity: **LOW** (calculated from lesson state)
+- Impact: **HIGH** (retention, motivation)
+- Priority: **MVP+** (quick win)
+
+---
+
+### **💡 10. Creative Canvas Card**
+
+**Koncepcja:** Visual brainstorming / interactive diagramming
+
+**JSON Schema:**
+```typescript
+{
+  "type": "canvas",
+  "title": "Stwórz mind mapę swojego projektu",
+  "data": {
+    "canvas_type": "mind_map", // or "business_canvas", "swot", "eisenhower"
+    "template": {
+      "center_node": "Mój Projekt Sprzedażowy",
+      "branches": ["Cele", "Zasoby", "Ryzyko", "Timeline", "KPIs"]
+    },
+    "tools": ["text", "shapes", "connectors", "colors", "icons"],
+    "dimensions": {"width": 800, "height": 600},
+    "save_to_portfolio": true,
+    "export_formats": ["png", "pdf", "json"],
+    "collaborative": false // Phase 3: multi-user editing
+  }
+}
+```
+
+**Canvas Types:**
+
+**1. Mind Map:**
+- Central idea → branches → sub-branches
+- Tools: text nodes, connectors, colors
+
+**2. Business Model Canvas:**
+- 9 pre-defined boxes (Value Prop, Customer Segments, etc.)
+- User fills each box with text/sticky notes
+
+**3. SWOT Analysis:**
+- 2x2 grid: Strengths, Weaknesses, Opportunities, Threats
+- Drag-and-drop items into quadrants
+
+**4. Eisenhower Matrix:**
+- 2x2 grid: Urgent/Not Urgent × Important/Not Important
+- Add tasks to appropriate quadrant
+
+**UI Implementation:**
+- **Library options:**
+  - **Excalidraw** (open-source, whiteboard-like)
+  - **React Flow** (node-based diagrams)
+  - **Fabric.js** (canvas manipulation)
+  - **TldDraw** (modern, lightweight)
+- **Features:**
+  - Toolbar: shapes, text, connectors, colors
+  - Zoom/pan controls
+  - Undo/redo
+  - Auto-save every 30s
+  - Export: PNG, PDF, JSON
+
+**Portfolio Integration:**
+- All canvases auto-saved to "📋 Moje Projekty"
+- Version history (snapshots)
+- Share link (public/private)
+- Print-friendly PDF export
+
+**Use Cases:**
+- Strategic planning (SWOT, Business Canvas)
+- Task prioritization (Eisenhower)
+- Brainstorming (Mind Map)
+- Process mapping (Flowcharts)
+- Goal setting (OKRs)
+
+**Gamification:**
+- "Strategist" badge (create 5 canvases)
+- Template library expands with progress
+- Community templates (Phase 3)
+
+**Implementation:**
+- Complexity: **HIGH** (canvas library integration, save/export)
+- Impact: **HIGH** (unique feature, practical)
+- Priority: **Month 5** (advanced feature)
+
+---
+
+### **💡 11. Leaderboard Card**
+
+**Koncepcja:** Social proof snapshot w lekcji (competitive motivation)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "leaderboard",
+  "title": "⚡ Top Learners - Ta Lekcja",
+  "data": {
+    "scope": "this_lesson", // or "weekly", "monthly", "all_time"
+    "metric": "completion_time", // or "xp_earned", "perfect_score", "speed_run"
+    "top_count": 10,
+    "show_user_rank": true,
+    "privacy": "opt_in", // users can hide from leaderboards
+    "challenge_cta": "Możesz poprawić swój czas! Spróbuj 'Speed Run Mode'",
+    "rewards": {
+      "top_3": "+50 bonus XP",
+      "top_10": "+25 bonus XP"
+    }
+  }
+}
+```
+
+**UI Layout:**
+```
+┌────────────────────────────────────────┐
+│  ⚡ Najszybsi w tej lekcji             │
+├────────────────────────────────────────┤
+│  🥇 #1  Anna K.      12m 34s  ⭐      │
+│  🥈 #2  Marcin P.    13m 02s  ⭐      │
+│  🥉 #3  Kasia W.     13m 45s  ⭐      │
+│  4️⃣  #4  Piotr L.     14m 10s         │
+│  5️⃣  #5  YOU!         14m 23s  🎯     │
+│  ...                                   │
+│  🔟 #10 Tomasz K.    16m 50s          │
+├────────────────────────────────────────┤
+│  💡 Twój ranking: #5/127               │
+│  Top 4% users! Świetnie! 🎉            │
+│                                        │
+│  [🔄 Try Speed Run] [⚙️ Privacy]      │
+└────────────────────────────────────────┘
+```
+
+**Metrics (choose one per leaderboard):**
+- **Completion time:** Fastest learners
+- **XP earned:** Highest scores (quiz performance)
+- **Perfect score:** 100% accuracy on all quizzes
+- **Streak:** Consecutive days completing lessons
+- **Helpfulness:** Most peer reviews given
+
+**Privacy Controls:**
+- **Opt-in by default:** User must enable leaderboard
+- **Anonymous mode:** Show as "User #1234" instead of name
+- **Friends-only:** Compare with connections only
+- **Hide option:** Completely invisible on leaderboards
+
+**Gamification:**
+- **Crown icons:** 🥇🥈🥉 for top 3
+- **Bonus XP:** Rewards for top 10
+- **Badges:** "Speed Demon", "Perfectionist", "Consistent Learner"
+- **Challenge mode:** "Beat the #1 time!"
+
+**DB Schema:**
+```sql
+CREATE TABLE lesson_completions (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    lesson_id UUID REFERENCES lessons(id),
+    completion_time_seconds INTEGER,
+    xp_earned INTEGER,
+    perfect_score BOOLEAN,
+    completed_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_leaderboard 
+ON lesson_completions(lesson_id, completion_time_seconds);
+```
+
+**Implementation:**
+- Complexity: **LOW-MEDIUM** (DB queries + UI)
+- Impact: **MEDIUM-HIGH** (competitive users)
+- Priority: **Month 3**
+
+---
+
+### **💡 12. External Resource Card**
+
+**Koncepcja:** Curated links to deeper learning (monetization opportunity)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "external_resource",
+  "title": "📚 Chcesz zgłębić temat?",
+  "data": {
+    "intro": "Polecane zasoby do dalszej nauki:",
+    "resources": [
+      {
+        "type": "article",
+        "title": "Harvard Business Review: The Art of BATNA",
+        "url": "https://hbr.org/article/batna-negotiation",
+        "author": "Fisher & Ury",
+        "reading_time": "8 min",
+        "difficulty": "intermediate",
+        "icon": "📄",
+        "badge": "FREE"
+      },
+      {
+        "type": "video",
+        "title": "TED Talk: Never Split the Difference",
+        "url": "https://youtube.com/watch?v=xyz",
+        "speaker": "Chris Voss",
+        "duration": "18 min",
+        "views": "5.2M",
+        "icon": "🎥",
+        "badge": "POPULAR"
+      },
+      {
+        "type": "book",
+        "title": "Getting to Yes - Fisher & Ury",
+        "url": "https://amazon.com/dp/0143118757?tag=bva-affiliate",
+        "price": "49 PLN",
+        "rating": 4.7,
+        "icon": "📚",
+        "badge": "BESTSELLER",
+        "affiliate": true // monetization!
+      },
+      {
+        "type": "podcast",
+        "title": "The Negotiation Podcast - Ep 12",
+        "url": "https://spotify.com/episode/xyz",
+        "duration": "45 min",
+        "icon": "🎙️"
+      },
+      {
+        "type": "tool",
+        "title": "BATNA Worksheet (PDF)",
+        "url": "/resources/batna-worksheet.pdf",
+        "icon": "📋",
+        "unlocked": true, // from completing lesson
+        "badge": "UNLOCKED"
+      },
+      {
+        "type": "course",
+        "title": "Advanced Negotiation Masterclass",
+        "url": "/courses/negotiation-advanced",
+        "instructor": "Prof. Maria Kowalska",
+        "duration": "4h",
+        "price": "299 PLN",
+        "icon": "🎓",
+        "badge": "PREMIUM",
+        "internal": true // BVA product
+      }
+    ],
+    "optional": true, // doesn't block lesson progress
+    "save_for_later": true // bookmark feature
+  }
+}
+```
+
+**UI Layout:**
+```
+┌─────────────────────────────────────────┐
+│  📚 Chcesz zgłębić temat?              │
+├─────────────────────────────────────────┤
+│  Polecane zasoby do dalszej nauki:     │
+│                                         │
+│  📄 Harvard Business Review: BATNA     │
+│     Fisher & Ury • 8 min • FREE        │
+│     [Read →]  [Save]                   │
+│                                         │
+│  🎥 TED: Never Split the Difference    │
+│     Chris Voss • 18 min • 5.2M views   │
+│     [Watch →]  [Save]                  │
+│                                         │
+│  📚 Getting to Yes (Book)              │
+│     ⭐ 4.7/5 • 49 PLN • BESTSELLER    │
+│     [Buy on Amazon →]  [Save]          │
+│                                         │
+│  📋 BATNA Worksheet (PDF) 🔓          │
+│     Unlocked! Download ready           │
+│     [Download →]                       │
+│                                         │
+│  [Skip for now]  [Browse all →]        │
+└─────────────────────────────────────────┘
+```
+
+**Features:**
+- **Badge system:** FREE, POPULAR, BESTSELLER, PREMIUM, UNLOCKED
+- **Ratings:** Star ratings for books/courses
+- **Save for later:** Bookmark to "Moja Biblioteka"
+- **Track clicks:** Analytics (which resources most popular)
+- **Difficulty filter:** Beginner, Intermediate, Advanced
+- **Type filter:** Article, Video, Book, Podcast, Tool, Course
+
+**Monetization Strategies:**
+1. **Affiliate links:** Amazon, Audible (5-10% commission)
+2. **Internal upsells:** Premium BVA courses
+3. **Sponsored content:** Partner resources (paid placement)
+4. **Premium resources:** Gated content (subscription)
+
+**Analytics Value:**
+- Track: which resources clicked most
+- A/B test: positioning, descriptions
+- Recommend: personalized based on user's progress
+
+**Implementation:**
+- Complexity: **LOW** (just links + tracking)
+- Impact: **MEDIUM-HIGH** (value add + revenue)
+- Priority: **MVP+** (easy monetization)
+
+---
+
+## 📊 **Priority Matrix - Card Types**
+
+| Card Type | Engagement | Complexity | Dev Time | Priority | Phase |
+|-----------|-----------|------------|----------|----------|-------|
+| **Story** | ⭐⭐⭐⭐⭐ | Low | 1 week | **HIGH** | MVP+ |
+| **Progress** | ⭐⭐⭐⭐ | Low | 3 days | **HIGH** | MVP+ |
+| **External Resource** | ⭐⭐⭐ | Low | 1 week | **HIGH** | MVP+ |
+| **Comparison** | ⭐⭐⭐ | Low | 1 week | MEDIUM | Month 2 |
+| **Poll** | ⭐⭐⭐⭐ | Low-Med | 2 weeks | MEDIUM | Month 2 |
+| **Scenario** | ⭐⭐⭐⭐⭐ | Medium | 3 weeks | **HIGH** | Month 2 |
+| **Challenge** | ⭐⭐⭐⭐ | Medium | 2 weeks | **HIGH** | Month 2 |
+| **Drag-Drop** | ⭐⭐⭐⭐ | Medium | 2 weeks | MEDIUM | Month 3 |
+| **Leaderboard** | ⭐⭐⭐⭐ | Med | 2 weeks | MEDIUM | Month 3 |
+| **Image Annotation** | ⭐⭐⭐ | Medium | 2 weeks | LOW | Month 4 |
+| **Audio Response** | ⭐⭐⭐⭐⭐ | High | 4 weeks | MEDIUM | Month 4 |
+| **Canvas** | ⭐⭐⭐⭐ | High | 4 weeks | LOW | Month 5 |
+
+---
+
+## 🎯 **Rekomendowane Quick Wins (MVP+)**
+
+Jeśli chcesz rozszerzyć MVP o 3-4 typy kart **w pierwszym miesiącu**:
+
+### **Tier 1: Natychmiast (Week 5-6)**
+1. ✅ **Story Card** - emocjonalny hook, łatwe (tylko tekst + obraz)
+2. ✅ **Progress Card** - motywacja, proste (kalkulowane z state)
+3. ✅ **External Resource Card** - wartość dodana + monetization ready
+
+**Dlaczego:** Niski effort, wysoki impact, różnorodność (storytelling + tracking + resources)
+
+### **Tier 2: Miesiąc 2 (Week 7-10)**
+4. ⭐ **Scenario Card** - branching decisions (WOW factor)
+5. ⭐ **Challenge Card** - apply learning (portfolio building)
+6. ⭐ **Comparison Card** - good vs bad (crystal clear learning)
+
+**Dlaczego:** Medium complexity, bardzo wysokie engagement, praktyczne
+
+### **Tier 3: Miesiąc 3-4 (Advanced)**
+7. 🔶 **Poll Card** - social proof
+8. 🔶 **Drag-Drop** - kinesthetic learning
+9. 🔶 **Leaderboard** - gamification
+10. 🔶 **Audio Response** - unique differentiator
+
+---
+
+## 💡 **Content Creator Workflow**
+
+Jak będzie wyglądało tworzenie lekcji z nowymi typami kart:
+
+**Obecnie (MVP):**
+```json
+{
+  "cards": [
+    {"type": "intro", "title": "..."},
+    {"type": "concept", "title": "..."},
+    {"type": "quiz", "data": {...}}
+  ]
+}
+```
+
+**Z nowymi typami (Phase 2):**
+```json
+{
+  "cards": [
+    {"type": "story", "title": "Maria's Mistake", "data": {...}},
+    {"type": "concept", "title": "BATNA Framework"},
+    {"type": "comparison", "data": {"left": {...}, "right": {...}}},
+    {"type": "scenario", "data": {"choices": [...]}},
+    {"type": "progress", "data": {"cards_completed": 8}},
+    {"type": "challenge", "data": {"task": "Create your BATNA"}},
+    {"type": "quiz", "data": {...}},
+    {"type": "external_resource", "data": {"resources": [...]}}
+  ]
+}
+```
+
+**Admin UI (Month 4+):**
+- Visual lesson builder
+- Card type picker (dropdown)
+- Template library per type
+- Drag-and-drop ordering
+- Live preview
+- AI suggestions ("Add scenario card here?")
+
+---
+
+## 🚀 **Następne Kroki**
+
+**Dyskusja wymagana:**
+- Które typy kart najbardziej pasują do BVA content?
+- Priorytet: interaktywność vs. prostota?
+- Budget: ile czasu dev na Phase 1 vs Phase 2?
+
+**Sugestie implementacji:**
+1. **MVP+ (Week 5-6):** Story + Progress + External Resource
+2. **Month 2:** Scenario + Challenge + Comparison
+3. **Month 3-4:** Poll + Drag-Drop + Audio Response
+4. **Month 5+:** Canvas + Image Annotation + Leaderboard
+
+**Template library:**
+- Każdy card type → 3-5 gotowych szablonów
+- Copy-paste friendly JSON examples
+- Best practices guide
+
+---
+
+## 🎯 Practice Tab - Applied Learning Hub
+
+> **Status:** 💡 **CONCEPT** - Zakładka "Praktyka" w Profile  
+> **Cel:** Transform passive learning into active application through projects, challenges, and real-world practice
+
+---
+
+### **📊 Vision: Theory → Practice Pipeline**
+
+**Problem:** Users complete lessons but don't apply knowledge in real scenarios.
+
+**Solution:** Dedicated "Praktyka" tab = workspace for hands-on application.
+
+**Core Philosophy:** 
+- **Learn** (Lessons/Engrams) → **Apply** (Practice Tab) → **Master** (Real World)
+- Every engram unlocks practice opportunities
+- Portfolio of work demonstrates skill progression
+
+---
+
+### **🗂️ Tab Structure (4 Sub-Sections)**
+
+```
+Profile → Praktyka
+├── 📋 Projekty (Portfolio)
+├── 🎯 Wyzwania (Challenges)
+├── 📚 Case Studies
+└── 🔥 Skill Drills
+```
+
+---
+
+## **1. 📋 Projekty (Portfolio)**
+
+### **Concept:**
+Personal workspace for applied learning artifacts - SWOT analyses, business plans, pitches, frameworks filled out for real scenarios.
+
+### **Data Model:**
+```typescript
+interface UserProject {
+  id: UUID
+  user_id: UUID
+  title: string
+  type: 'swot' | 'batna' | 'business_canvas' | 'pitch' | 'plan' | 'custom'
+  created_from_engram_id?: UUID // which engram inspired this
+  content: JSONB // flexible structure per type
+  status: 'draft' | 'in_progress' | 'completed' | 'archived'
+  created_at: timestamp
+  last_edited_at: timestamp
+  attachments: string[] // file URLs
+  peer_reviewed: boolean
+  feedback_score?: number // 1-5 from peers
+  tags: string[]
+}
+```
+
+### **UI Features:**
+
+**Grid/List View:**
+```
+┌─────────────────────────────────────────────┐
+│  📋 Twoje Projekty (12 total)              │
+├─────────────────────────────────────────────┤
+│  [Grid] [List]  [Filter ▼] [Sort ▼]       │
+│                                             │
+│  ┌─────────────┐  ┌─────────────┐         │
+│  │ SWOT        │  │ BATNA       │         │
+│  │ Q1 Strategy │  │ Client XYZ  │         │
+│  │ ────────────│  │ ────────────│         │
+│  │ In Progress │  │ ✅ Complete │         │
+│  │ 2 days ago  │  │ Jan 10      │         │
+│  │             │  │ ⭐⭐⭐⭐⭐ │         │
+│  └─────────────┘  └─────────────┘         │
+│                                             │
+│  [+ New Project]                           │
+└─────────────────────────────────────────────┘
+```
+
+**Project Detail View:**
+- **Header:** Title, type badge, status
+- **Content area:** Form fields based on type (e.g., SWOT = 4 quadrants)
+- **Toolbar:** Save, Export PDF, Share, Request Review
+- **Metadata:** Created from [Engram Name], Last edited, Tags
+- **Attachments:** Upload images/PDFs
+- **Feedback section:** Peer reviews (if requested)
+
+**Project Templates:**
+
+1. **SWOT Analysis**
+   ```
+   Strengths:     │  Opportunities:
+   [textarea]     │  [textarea]
+   ────────────────┼──────────────────
+   Weaknesses:    │  Threats:
+   [textarea]     │  [textarea]
+   ```
+
+2. **BATNA Worksheet**
+   ```
+   Scenario: [text]
+   My BATNA: [textarea]
+   Their BATNA: [textarea]
+   ZOPA: [range slider]
+   Target outcome: [text]
+   ```
+
+3. **Business Model Canvas**
+   - 9 boxes pre-structured
+   - Drag-and-drop sticky notes
+   - Export as image
+
+4. **Elevator Pitch**
+   ```
+   Problem: [150 chars]
+   Solution: [150 chars]
+   Unique Value: [150 chars]
+   Call to Action: [150 chars]
+   
+   [🎤 Record Audio] [⏱️ 60s timer]
+   ```
+
+**Gamification:**
+- "Portfolio Builder" badge (5 projects completed)
+- "Peer Mentor" badge (10 reviews given)
+- XP rewards: +100 XP per completed project
+
+---
+
+## **2. 🎯 Wyzwania (Challenges)**
+
+### **Concept:**
+Daily/weekly prompts for immediate skill practice with XP rewards and streaks.
+
+### **Data Model:**
+```typescript
+interface Challenge {
+  id: UUID
+  type: 'daily' | 'weekly' | 'special'
+  title: string
+  description: string
+  task_prompt: string
+  input_type: 'text' | 'audio' | 'video' | 'file' | 'canvas'
+  time_limit_seconds?: number
+  xp_reward: number
+  badge_unlock?: string
+  difficulty: 'easy' | 'medium' | 'hard'
+  related_engrams: UUID[] // which engrams this tests
+  active_from: timestamp
+  active_until: timestamp
+}
+
+interface UserChallengeResponse {
+  id: UUID
+  user_id: UUID
+  challenge_id: UUID
+  response_content: JSONB
+  submitted_at: timestamp
+  ai_feedback?: string // Phase 2
+  xp_earned: number
+  completed: boolean
+}
+```
+
+### **Challenge Types:**
+
+**Daily Challenges (50-100 XP):**
+```
+🎯 Today's Challenge
+"Write a 3-minute elevator pitch for your current project"
+
+⏱️ Time limit: 3 minutes
+📝 Min length: 50 words
+🎁 Reward: 50 XP + Daily Streak
+
+[Start Challenge]
+```
+
+**Weekly Challenges (200-500 XP):**
+```
+🏆 Weekly Challenge
+"Conduct a SWOT analysis for a real business situation"
+
+Requirements:
+✅ All 4 quadrants filled
+✅ Minimum 3 items per quadrant
+✅ Submit by Sunday 23:59
+
+Reward: 200 XP + "Strategist" badge
+
+[Accept Challenge]
+```
+
+**Special Events:**
+```
+⚡ Flash Challenge (2h remaining!)
+"Negotiate with AI for the best deal"
+
+Scenario: Buy a car, starting price 100k
+Your budget: 85k max
+3 rounds of negotiation
+
+Top 10: +500 XP bonus
+Everyone: +100 XP
+
+[Join Now]
+```
+
+### **UI Flow:**
+
+1. **Challenge Card** (on Praktyka tab):
+   ```
+   ┌─────────────────────────────────┐
+   │ 🎯 DAILY CHALLENGE             │
+   │ "3-minute pitch practice"      │
+   │                                 │
+   │ ⏱️ 3:00 timer                  │
+   │ 🎁 50 XP                       │
+   │ 🔥 Streak: 5 days              │
+   │                                 │
+   │ [Start Now]                    │
+   └─────────────────────────────────┘
+   ```
+
+2. **Challenge Active Screen:**
+   - Big countdown timer
+   - Task instructions prominent
+   - Input area (text/audio/canvas based on type)
+   - [Submit] button (disabled until valid)
+
+3. **Completion Screen:**
+   ```
+   ✅ Challenge Complete!
+   
+   +50 XP earned
+   🔥 Streak: 6 days!
+   
+   Your response saved to Projects
+   
+   [View Feedback] [Next Challenge]
+   ```
+
+**Gamification:**
+- **Streak system:** 7-day = +100 bonus, 30-day = badge
+- **Leaderboard:** Weekly top performers
+- **Badges:** "Daily Warrior", "Challenge Master"
+
+---
+
+## **3. 📚 Case Studies**
+
+### **Concept:**
+Real-world business scenarios to analyze and solve using learned frameworks.
+
+### **Data Model:**
+```typescript
+interface CaseStudy {
+  id: UUID
+  title: string
+  difficulty: 'beginner' | 'intermediate' | 'advanced'
+  industry: string
+  situation: string // markdown description
+  characters: string[] // stakeholders
+  data_points: JSONB // financial data, charts, etc.
+  questions: Question[]
+  expert_solution: string // revealed after submission
+  frameworks_used: string[] // tags: SWOT, BATNA, BMC, etc.
+  estimated_time_minutes: number
+  xp_reward: number
+}
+
+interface Question {
+  id: string
+  type: 'short_answer' | 'multiple_choice' | 'ranking' | 'file_upload'
+  prompt: string
+  options?: string[] // for MC
+  validation?: object
+}
+```
+
+### **Example Case Study:**
+
+**Title:** "TechStart's Crossroads" 🚀
+
+**Situation:**
+```markdown
+TechStart (B2B SaaS, 50 employees) faces a critical decision:
+
+**Facts:**
+- Current MRR: 200k PLN
+- Runway: 3 months
+- Biggest client (40% revenue) just churned
+- Product has PMF but growth stalled
+
+**Options:**
+A) Pivot to new market segment (high risk, 6mo timeline)
+B) Aggressive fundraising (dilution, pressure)
+C) Cost-cutting + focus on retention (safe, slow)
+
+**CEO asks YOU:** Which path and why?
+```
+
+**Your Tasks:**
+1. **SWOT Analysis** (upload or fill template)
+2. **Rank options** (drag-and-drop 1-3 with justification)
+3. **Recommendation** (300 words minimum)
+
+**Frameworks to use:**
+- SWOT
+- Blue Ocean Strategy
+- Business Model Canvas
+
+**Time:** 45 minutes recommended
+
+**Reward:** 300 XP + compare with expert solution
+
+### **UI Flow:**
+
+1. **Case Library:**
+   ```
+   ┌────────────────────────────────────┐
+   │  📚 Case Studies (8 available)    │
+   ├────────────────────────────────────┤
+   │  [Filter: Industry ▼] [Diff ▼]   │
+   │                                    │
+   │  🚀 TechStart's Crossroads        │
+   │     Startup • Intermediate        │
+   │     45 min • 300 XP               │
+   │     Frameworks: SWOT, BMC         │
+   │     [Start Case]                  │
+   │                                    │
+   │  💼 Retail Chain Expansion        │
+   │     Retail • Advanced             │
+   │     ...                           │
+   └────────────────────────────────────┘
+   ```
+
+2. **Case Workspace:**
+   - Situation description (left panel, scrollable)
+   - Work area (right panel):
+     - Question 1: SWOT upload
+     - Question 2: Ranking widget
+     - Question 3: Essay box
+   - [Save Draft] [Submit Final]
+
+3. **Results Screen:**
+   ```
+   ✅ Case Study Complete!
+   
+   Your Analysis:
+   - SWOT: ⭐⭐⭐⭐ (comprehensive)
+   - Recommendation: Option B (Fundraising)
+   
+   Expert Solution:
+   - Recommended: Option A (Pivot)
+   - Rationale: [reveals expert thinking]
+   
+   Community Stats:
+   - 45% chose A
+   - 30% chose B (you)
+   - 25% chose C
+   
+   +300 XP earned
+   
+   [Discuss in Forum] [Next Case]
+   ```
+
+**Gamification:**
+- "Case Solver" badge (10 cases)
+- "Strategic Thinker" badge (5 advanced cases)
+- Leaderboard: fastest solvers
+
+---
+
+## **4. 🔥 Skill Drills**
+
+### **Concept:**
+Micro-practice sessions (2-5 minutes) for muscle memory building - like Duolingo for business skills.
+
+### **Data Model:**
+```typescript
+interface SkillDrill {
+  id: UUID
+  skill_category: 'sales' | 'leadership' | 'negotiation' | 'communication'
+  type: 'quick_decision' | 'terminology' | 'sequence' | 'best_practice'
+  question: string
+  options: string[]
+  correct_answer: number
+  explanation: string
+  difficulty: number // 1-10, adaptive
+  xp_reward: 10 // small but adds up
+}
+```
+
+### **Drill Example:**
+
+**Sales Drill:**
+```
+🔥 Objection Handling
+
+Customer: "Your price is too high."
+
+Best response?
+A) "Let me show you our competitors' pricing..."
+B) "I can offer you a 10% discount..."
+C) "What are you comparing our price to?"
+D) "This is our standard rate, take it or leave it."
+
+[Select answer]
+
+✅ Correct: C
+Explanation: SPIN selling - always clarify before responding. 
+"Too high" is vague. Compared to what? Their budget? 
+Competitors? Last year's pricing?
+
++10 XP
+
+[Next Drill]
+```
+
+### **UI Features:**
+
+**Drill Dashboard:**
+```
+┌─────────────────────────────────────┐
+│  🔥 Skill Drills                   │
+├─────────────────────────────────────┤
+│  Today's Progress: 5/10 drills     │
+│  Streak: 🔥🔥🔥🔥🔥🔥🔥 7 days  │
+│                                     │
+│  By Category:                      │
+│  Sales:        ████████░░ 80%      │
+│  Leadership:   ██████░░░░ 60%      │
+│  Negotiation:  ██████████ 100%     │
+│                                     │
+│  [Start Random Drill]              │
+│  [Practice Sales] [Practice...]    │
+└─────────────────────────────────────┘
+```
+
+**Drill Session:**
+- Question appears
+- 4 options (A-D)
+- Select → Immediate feedback (green/red)
+- Explanation shown
+- +10 XP
+- Auto-advance to next (or break)
+
+**Adaptive Difficulty:**
+```typescript
+// Algorithm sketch
+if (user accuracy > 90%) difficulty += 1
+if (user accuracy < 50%) difficulty -= 1
+
+// Serve drills at user's current difficulty level
+```
+
+**Notifications:**
+- Push: "Time for your daily drill! 🔥"
+- Email: Weekly drill summary + streak status
+
+**Gamification:**
+- **Streak tracking:** 7, 30, 100 day milestones
+- **Mastery levels:** Bronze → Silver → Gold → Platinum per category
+- **Leaderboard:** Drill champions (total drills completed)
+- **Badges:** "Sales Sharpshooter", "100-Day Warrior"
+
+---
+
+## **5. 🤝 Peer Review System**
+
+### **Concept:**
+Community-driven feedback on projects - learn by reviewing others + get expert-level feedback on your work.
+
+### **Data Model:**
+```typescript
+interface PeerReview {
+  id: UUID
+  project_id: UUID
+  reviewer_id: UUID
+  author_id: UUID
+  rating: number // 1-5
+  criteria_scores: {
+    clarity: number
+    depth: number
+    actionability: number
+    creativity: number
+  }
+  comment: string
+  helpful_tips: string
+  submitted_at: timestamp
+  helpful_votes: number // other users can upvote reviews
+}
+```
+
+### **How It Works:**
+
+**Author Side:**
+1. Complete a project (SWOT, pitch, etc.)
+2. Click "Request Peer Review"
+3. System assigns 2-3 reviewers (similar level)
+4. Wait 24-48h for feedback
+5. Receive aggregated scores + comments
+6. Optional: Revise based on feedback
+
+**Reviewer Side:**
+1. Notification: "You've been assigned a review"
+2. Read peer's project
+3. Fill structured feedback form:
+   ```
+   Rate (1-5 stars):
+   - Clarity of thinking    [★★★★☆]
+   - Depth of analysis      [★★★☆☆]
+   - Actionability          [★★★★★]
+   - Creativity/Originality [★★★★☆]
+   
+   Overall Comment (required):
+   [textarea - 100 chars min]
+   
+   Helpful Tips (optional):
+   [textarea]
+   
+   [Submit Review] → +25 XP
+   ```
+4. Earn XP for helpful reviews
+
+### **Quality Control:**
+
+**Reviewer Selection:**
+- Similar XP level (±500 XP)
+- Completed ≥3 projects in same category
+- Review helpfulness score > 3.5/5
+- Not your friend (avoid bias)
+
+**Review Quality:**
+- Must provide comment (min length)
+- Ratings can't all be 5 stars (prevents gaming)
+- Other users vote "helpful" or "not helpful"
+- Low-rated reviewers get less assignments
+
+### **UI:**
+
+**Request Review:**
+```
+┌─────────────────────────────────────┐
+│  Request Peer Review               │
+├─────────────────────────────────────┤
+│  Your project: "Q1 SWOT Analysis"  │
+│                                     │
+│  Reviewers needed: 3               │
+│  Estimated wait: 24-48 hours       │
+│                                     │
+│  What you get:                     │
+│  ✓ Structured feedback             │
+│  ✓ Rating scores (4 criteria)     │
+│  ✓ Improvement suggestions         │
+│  ✓ Community perspective           │
+│                                     │
+│  [Request Review] [Cancel]         │
+└─────────────────────────────────────┘
+```
+
+**Review Results:**
+```
+┌─────────────────────────────────────┐
+│  3 Reviews Received                │
+├─────────────────────────────────────┤
+│  Average Scores:                   │
+│  Clarity:        ★★★★☆ (4.0)      │
+│  Depth:          ★★★☆☆ (3.3)      │
+│  Actionability:  ★★★★★ (4.7)      │
+│  Creativity:     ★★★★☆ (4.0)      │
+│                                     │
+│  Top Comment:                      │
+│  "Strong SWOT, but Threats section │
+│   could be more specific. Consider │
+│   quantifying risks..."            │
+│   - Reviewer #2 (12 helpful votes) │
+│                                     │
+│  [View All Reviews] [Revise]      │
+└─────────────────────────────────────┘
+```
+
+**Gamification:**
+- "Helpful Reviewer" badge (20 reviews, avg 4★+)
+- "Peer Mentor" badge (50 reviews given)
+- XP: +25 per review, +10 bonus if voted "helpful"
+
+---
+
+## **6. 📊 Progress Tracking Dashboard**
+
+### **Concept:**
+Analytics view showing practice activity, streaks, and achievements.
+
+###**Dashboard Widgets:**
+
+**1. Activity Summary (30 days):**
+```
+┌─────────────────────────────────────┐
+│  🎯 Your Practice (Last 30 Days)   │
+├─────────────────────────────────────┤
+│  📋 Projects completed:       5    │
+│  🎯 Challenges done:        12/15  │
+│  📚 Case studies solved:      3    │
+│  🔥 Skill drills streak:    7 days │
+│  🤝 Peer reviews given:       8    │
+│                                     │
+│  📈 Practice Hours:         12.5h  │
+│  🏆 Badges earned:          3 new  │
+│  ⭐ XP from practice:      +1,450  │
+└─────────────────────────────────────┘
+```
+
+**2. Streak Calendar:**
+```
+┌─────────────────────────────────────┐
+│  🔥 30-Day Streak                  │
+├─────────────────────────────────────┤
+│  Mo Tu We Th Fr Sa Su              │
+│  ✅ ✅ ✅ ✅ ✅ ✅ ✅   Week 1    │
+│  ✅ ✅ ❌ ✅ ✅ ✅ ✅   Week 2    │
+│  ✅ ✅ ✅ ✅ ✅ ❌ ✅   Week 3    │
+│  ✅ ✅ ✅ ✅ ✅ 🔲 🔲   Week 4    │
+│                                     │
+│  Current Streak: 🔥 7 days         │
+│  Longest Streak: 🏆 12 days        │
+└─────────────────────────────────────┘
+```
+
+**3. Skills Heatmap:**
+```
+┌─────────────────────────────────────┐
+│  📊 Skill Practice Distribution    │
+├─────────────────────────────────────┤
+│  Sales         ████████████ 45%    │
+│  Leadership    ████████░░░░ 30%    │
+│  Strategy      ████░░░░░░░░ 15%    │
+│  Mindset       ██░░░░░░░░░░  8%    │
+│  Technical     ░░░░░░░░░░░░  2%    │
+│                                     │
+│  Recommendation:                   │
+│  💡 Diversify! Try a Technical    │
+│     challenge this week.           │
+└─────────────────────────────────────┘
+```
+
+**4. Recent Activity Feed:**
+```
+┌─────────────────────────────────────┐
+│  📝 Recent Activity                │
+├─────────────────────────────────────┤
+│  Today, 14:30                      │
+│  🎯 Completed daily challenge      │
+│     +50 XP                         │
+│                                     │
+│  Yesterday, 16:00                  │
+│  📋 Finished "Q2 Planning" SWOT    │
+│     +100 XP                        │
+│                                     │
+│  Jan 12, 10:00                     │
+│  🤝 Gave helpful peer review       │
+│     +35 XP (10 upvotes)            │
+└─────────────────────────────────────┘
+```
+
+**5. Achievements Showcase:**
+```
+┌─────────────────────────────────────┐
+│  🏆 Latest Badges                  │
+├─────────────────────────────────────┤
+│  🔥 Daily Warrior                  │
+│  7-day practice streak achieved    │
+│  Unlocked: Jan 13                  │
+│                                     │
+│  📚 Case Solver                    │
+│  Completed 10 case studies         │
+│  Unlocked: Jan 10                  │
+│                                     │
+│  [View All 23 Badges]              │
+└─────────────────────────────────────┘
+```
+
+---
+
+## **📐 Technical Implementation**
+
+### **Database Tables:**
+
+```sql
+-- Projects
+CREATE TABLE user_projects (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    title TEXT NOT NULL,
+    type TEXT NOT NULL,
+    content JSONB,
+    status TEXT DEFAULT 'draft',
+    created_from_engram_id UUID REFERENCES engrams(id),
+    created_at TIMESTAMP DEFAULT NOW(),
+    last_edited_at TIMESTAMP DEFAULT NOW(),
+    tags TEXT[],
+    peer_reviewed BOOLEAN DEFAULT FALSE,
+    feedback_score NUMERIC(2,1)
+);
+
+-- Challenges
+CREATE TABLE challenges (
+    id UUID PRIMARY KEY,
+    type TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    task_prompt TEXT,
+    input_type TEXT,
+    time_limit_seconds INTEGER,
+    xp_reward INTEGER,
+    difficulty TEXT,
+    active_from TIMESTAMP,
+    active_until TIMESTAMP
+);
+
+CREATE TABLE user_challenge_responses (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    challenge_id UUID REFERENCES challenges(id),
+    response_content JSONB,
+    submitted_at TIMESTAMP DEFAULT NOW(),
+    xp_earned INTEGER,
+    completed BOOLEAN DEFAULT TRUE
+);
+
+-- Case Studies
+CREATE TABLE case_studies (
+    id UUID PRIMARY KEY,
+    title TEXT NOT NULL,
+    difficulty TEXT,
+    industry TEXT,
+    situation TEXT,
+    questions JSONB,
+    expert_solution TEXT,
+    xp_reward INTEGER
+);
+
+CREATE TABLE user_case_responses (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    case_id UUID REFERENCES case_studies(id),
+    answers JSONB,
+    submitted_at TIMESTAMP DEFAULT NOW(),
+    xp_earned INTEGER
+);
+
+-- Skill Drills
+CREATE TABLE skill_drills (
+    id UUID PRIMARY KEY,
+    skill_category TEXT,
+    type TEXT,
+    question TEXT,
+    options JSONB,
+    correct_answer INTEGER,
+    explanation TEXT,
+    difficulty INTEGER,
+    xp_reward INTEGER DEFAULT 10
+);
+
+CREATE TABLE user_drill_history (
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    drill_id UUID REFERENCES skill_drills(id),
+    answered_correctly BOOLEAN,
+    answered_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Peer Reviews
+CREATE TABLE peer_reviews (
+    id UUID PRIMARY KEY,
+    project_id UUID REFERENCES user_projects(id),
+    reviewer_id UUID REFERENCES auth.users(id),
+    author_id UUID REFERENCES auth.users(id),
+    rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+    criteria_scores JSONB,
+    comment TEXT NOT NULL,
+    helpful_tips TEXT,
+    submitted_at TIMESTAMP DEFAULT NOW(),
+    helpful_votes INTEGER DEFAULT 0
+);
+```
+
+### **API Endpoints:**
+
+```typescript
+// Projects
+GET    /api/practice/projects
+POST   /api/practice/projects
+PUT    /api/practice/projects/:id
+DELETE /api/practice/projects/:id
+POST   /api/practice/projects/:id/request-review
+
+// Challenges
+GET    /api/practice/challenges/daily
+GET    /api/practice/challenges/weekly
+POST   /api/practice/challenges/:id/submit
+
+// Case Studies
+GET    /api/practice/cases
+GET    /api/practice/cases/:id
+POST   /api/practice/cases/:id/submit
+
+// Skill Drills
+GET    /api/practice/drills/random
+POST   /api/practice/drills/:id/answer
+GET    /api/practice/drills/stats
+
+// Peer Reviews
+GET    /api/practice/reviews/pending
+POST   /api/practice/reviews/:projectId
+POST   /api/practice/reviews/:id/vote-helpful
+```
+
+---
+
+## **🎯 MVP vs Advanced Features**
+
+### **MVP (Month 2):**
+- ✅ Projects: Basic templates (SWOT, BATNA, Pitch)
+- ✅ Daily challenges: Text-based only
+- ✅ Case studies: 5 pre-written scenarios
+- ✅ Skill drills: 50 questions pool, random selection
+- ✅ Progress dashboard: Basic stats
+
+### **Advanced (Month 3-4):**
+- AI feedback on projects (GPT-4 review)
+- Audio/video challenge responses
+- Peer review system (full implementation)
+- Adaptive skill drills (difficulty scaling)
+- Leaderboards and social features
+- Export portfolio as PDF resume
+
+### **Phase 2 (Month 5+):**
+- Live challenges (real-time competitions)
+- Collaborative projects (team work)
+- Mentor matching (1-on-1 feedback)
+- Integration with LinkedIn (showcase projects)
+- Mobile app (drills on-the-go)
+
+---
+
+## **📊 Success Metrics**
+
+**Engagement:**
+- % users who visit Practice tab (target: 60%)
+- Avg projects per user (target: 3/month)
+- Daily challenge completion rate (target: 40%)
+- Drill streak retention (target: 30% reach 7 days)
+
+**Learning Outcomes:**
+- Project quality scores (peer review avg)
+- Skill drill accuracy improvement over time
+- Case study completion rate
+- Application of frameworks in real projects
+
+**Monetization:**
+- Premium templates library
+- 1-on-1 mentor reviews (paid)
+- Advanced case study packs
+- Certification based on portfolio
+
+---
+
+## **🚀 Next Steps**
+
+**Immediate (Week 1-2):**
+1. Create DB schema for practice tables
+2. Design UI mockups for each sub-section
+3. Build project templates (3-5 types)
+4. Write 3 daily challenges + 1 weekly
+5. Create 2 case studies
+
+**Month 2:**
+1. Implement Projects system
+2. Launch Daily Challenges
+3. Add Case Studies
+4. Basic progress dashboard
+
+**Month 3:**
+1. Skill Drills system
+2. Peer Review MVP
+3. Advanced analytics
+
+---
+
 **Status:** ✅ **Complete Product Vision - Ready for Execution**  
-**Ostatnia aktualizacja:** 2026-01-11 (Complete: Tech + AI/ML + Business Strategy)
+**Ostatnia aktualizacja:** 2026-01-14 (Added: RPG Brainstorm + Lesson Card Types + Practice Tab)

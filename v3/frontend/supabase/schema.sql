@@ -1,0 +1,428 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 1. PROFILES (Extension of Supabase Auth)
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID REFERENCES auth.users(id) PRIMARY KEY,
+  full_name TEXT,
+  email TEXT,
+  avatar_url TEXT,
+  xp INTEGER DEFAULT 0,
+  level INTEGER DEFAULT 1,
+  role TEXT DEFAULT 'user',
+  organization_id UUID,
+  theme_preference TEXT DEFAULT 'system',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- 2. LESSONS
+CREATE TABLE IF NOT EXISTS lessons (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT,
+  category TEXT,
+  difficulty TEXT,
+  estimated_minutes INTEGER,
+  xp_reward INTEGER DEFAULT 100,
+  target_roles TEXT[],
+  is_public BOOLEAN DEFAULT true,
+  organization_id UUID,
+  content_json JSONB, -- Stores the cards array
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- 3. USER PROGRESS (Lessons)
+CREATE TABLE IF NOT EXISTS user_progress (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) NOT NULL,
+  lesson_id UUID REFERENCES lessons(id) NOT NULL,
+  current_card_index INTEGER DEFAULT 0,
+  completed_at TIMESTAMP WITH TIME ZONE,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+  UNIQUE(user_id, lesson_id)
+);
+
+-- 4. ENGRAMS
+CREATE TABLE IF NOT EXISTS engrams (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  title TEXT NOT NULL,
+  category TEXT,
+  description TEXT,
+  content_json JSONB NOT NULL, -- Slides, Quiz questions
+  source_lesson_id UUID REFERENCES lessons(id),
+  xp_reward INTEGER DEFAULT 50,
+  estimated_minutes INTEGER DEFAULT 5,
+  stat_category TEXT CHECK (stat_category IN ('Leadership', 'Sales', 'Strategy', 'Mindset', 'Technical', 'Communication')),
+  stat_points INTEGER DEFAULT 10 CHECK (stat_points >= 0 AND stat_points <= 50),
+  prerequisites JSONB DEFAULT '[]'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- 5. USER ENGRAMS (Implants)
+CREATE TABLE IF NOT EXISTS user_engrams (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) NOT NULL,
+  engram_id UUID REFERENCES engrams(id) NOT NULL,
+  installed_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+  last_refreshed_at TIMESTAMP WITH TIME ZONE,
+  strength INTEGER DEFAULT 100, -- 0 to 100%
+  times_refreshed INTEGER DEFAULT 0,
+  status TEXT DEFAULT 'active', -- active, archived
+  UNIQUE(user_id, engram_id)
+);
+
+-- 6. RESOURCES
+CREATE TABLE IF NOT EXISTS resources (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  title TEXT NOT NULL,
+  type TEXT NOT NULL, -- article, video, template, ebook
+  url TEXT,
+  description TEXT,
+  category TEXT,
+  image_url TEXT,
+  is_locked BOOLEAN DEFAULT false,
+  xp_cost INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- 7. USER STATS (RPG Mechanics)
+CREATE TABLE IF NOT EXISTS user_stats (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  category TEXT NOT NULL CHECK (category IN ('Leadership', 'Sales', 'Strategy', 'Mindset', 'Technical', 'Communication')),
+  points INTEGER DEFAULT 0 CHECK (points >= 0 AND points <= 100),
+  level INTEGER DEFAULT 1 CHECK (level >= 1 AND level <= 5),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+  UNIQUE(user_id, category)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_stats_user ON user_stats(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_stats_category ON user_stats(category);
+
+-- 8. USER CLASSES (RPG Character Classes)
+CREATE TABLE IF NOT EXISTS user_classes (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  class_name TEXT NOT NULL,
+  unlocked_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+  is_active BOOLEAN DEFAULT TRUE,
+  UNIQUE(user_id, class_name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_classes_user ON user_classes(user_id);
+
+-- 9. USER COMBOS (Synergy Bonuses)
+CREATE TABLE IF NOT EXISTS user_combos (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  combo_name TEXT NOT NULL,
+  unlocked_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+  bonus_active BOOLEAN DEFAULT TRUE,
+  UNIQUE(user_id, combo_name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_combos_user ON user_combos(user_id);
+
+-- 10. COMBO DEFINITIONS (Available Synergies)
+CREATE TABLE IF NOT EXISTS combo_definitions (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  required_engrams JSONB NOT NULL,
+  bonus_type TEXT NOT NULL CHECK (bonus_type IN ('xp_multiplier', 'resource_unlock', 'stat_boost')),
+  bonus_value JSONB NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- RLS POLICIES (Simplified for dev)
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE lessons ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_progress ENABLE ROW LEVEL SECURITY;
+ALTER TABLE engrams ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_engrams ENABLE ROW LEVEL SECURITY;
+ALTER TABLE resources ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_stats ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_classes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_combos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE combo_definitions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read lessons" ON lessons FOR SELECT USING (true);
+CREATE POLICY "Public read engrams" ON engrams FOR SELECT USING (true);
+CREATE POLICY "Public read resources" ON resources FOR SELECT USING (true);
+CREATE POLICY "Users can manage own progress" ON user_progress FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can manage own engrams" ON user_engrams FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can manage own profile" ON profiles FOR ALL USING (auth.uid() = id);
+
+CREATE POLICY "Users can read own stats" ON user_stats FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own stats" ON user_stats FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own stats" ON user_stats FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can read own classes" ON user_classes FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own classes" ON user_classes FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own classes" ON user_classes FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can read own combos" ON user_combos FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own combos" ON user_combos FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own combos" ON user_combos FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Public read combo definitions" ON combo_definitions FOR SELECT USING (true);
+
+-- SEED DATA: Milwaukee Canvas Lesson (V2 - Full 7-Step Framework)
+INSERT INTO lessons (id, title, description, category, difficulty, estimated_minutes, xp_reward, target_roles, is_public, content_json)
+VALUES (
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11',
+  'Milwaukee Application First Canvas - Mapa Rozmowy',
+  'Standardowa 7-krokowa mapa rozmowy JSS: od aplikacji do demo i domknięcia. Filozofia Application First w praktyce terenowej.',
+  'Milwaukee',
+  'advanced',
+  90,
+  200,
+  ARRAY['sales', 'jss', 'field'],
+  true,
+  $$ {
+    "cards": [
+      {
+        "id": 1,
+        "type": "intro",
+        "title": "Application First - Mapa Rozmowy",
+        "subtitle": "Standard rozmowy, demo i domknięcia w Milwaukee",
+        "description": "7-krokowa struktura prowadzenia wizyty w terenie - bez slajdów, tylko praktyka.\n\n> **💡 Filozofia**\n>\n> **Application First** = rozwiązujesz **PRACĘ**, nie prezentujesz **NARZĘDZIE**",
+        "icon": "Map"
+      },
+      {
+        "id": 2,
+        "type": "intro",
+        "title": "Dla kogo jest ta lekcja?",
+        "description": "> **🔧 JSS (Job-Site Solution Specialist)**\n>\n> **Rola terenowa, konsultacyjna:**\n> * Pracujesz w środowisku użytkownika\n> * Diagnozujesz realną pracę\n> * Demo aplikacyjne na miejscu\n> * Domykasz konkretnymi krokami",
+        "icon": "Users"
+      },
+      {
+        "id": 3,
+        "type": "concept",
+        "title": "Case Study: Dwie wizyty",
+        "content": "**Scenariusz:** Montaż instalacji wentylacyjnej - 200-300 śrub M8 dziennie, 2-osobowa ekipa\n\n### ❌ WIZYTA #1 - Klasyczna (Jak NIE robić)\n\n**JSS Marek:**\n\"Mam wiertarkę M18 FUEL. Promocja! 135 Nm, bezszczotkowy silnik...\"\n\n**Brygadzista:**\n\"Mamy Dewalt.\"\n\n**Rezultat:** \"Zostaw katalog.\"\n\n**Co poszło nie tak?**\n* ❌ Start od produktu\n* ❌ Brak diagnozy\n* ❌ Demo \"na ślepo\"\n* ❌ Język techniczny\n* ❌ Brak domknięcia"
+      },
+      {
+        "id": 4,
+        "type": "concept",
+        "title": "Case Study: Application First Success",
+        "content": "### ✅ WIZYTA #2 - Application First (Jak NALEŻY)\n\n**JSS Kasia:**\n\"Jak wygląda ta praca? Ile takich połączeń dziennie?\"\n\n**Brygadzista:**\n\"200-300 śrub. Wiertarka się przegrzewa po godzinie.\"\n\n**JSS Kasia (KROK 3):**\n\"Ile czasu tracisz na czekanie?\"\n\n**Brygadzista:**\n\"30-40 minut dziennie.\"\n\n**Rezultat po demo:**\nTest tygodniowy, spotkanie piątek 10:00, **80%+ szans na decyzję**!",
+        "xp": 20
+      },
+      {
+        "id": 5,
+        "type": "concept",
+        "title": "7 Kroków Mapy Canvas",
+        "content": "## 📋 Canvas = Mapa rozmowy JSS\n\n**Każdy krok ma cel, pytania i kryterium sukcesu:**\n\n1. **Aplikacja** - Zrozumieć realną pracę\n2. **Problem** - Wydobyć pain points\n3. **Konsekwencje** - Kwantyfikacja (czas/koszt)\n4. **Rozwiązanie** - System Milwaukee (3 elementy)\n5. **Demo** - Z celem i kryterium sukcesu\n6. **Wartość** - Język klienta (SAM kalkuluje)\n7. **Next Steps** - KTO-CO-KIEDY + follow-up 24h"
+      },
+      {
+        "id": 6,
+        "type": "question",
+        "question": "Która wizyta miała większą szansę na sukces?",
+        "options": [
+          "Wizyta #1 (Marek) - szybka prezentacja produktu",
+          "Wizyta #2 (Kasia) - Application First Canvas",
+          "Obie miały podobne szanse",
+          "Żadna - klient i tak nie chciał kupować"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Wizyta Kasi wykorzystała Application First Canvas: diagnoza pracy → pain point → konsekwencje → demo z celem → wartość językiem klienta → konkretne next steps.",
+        "xp": 15
+      },
+      {
+        "id": 7,
+        "type": "concept",
+        "title": "KROK 1: Aplikacja (Job to be Done)",
+        "content": "## 🎯 Cel KROKU 1\n\nZrozumieć **REALNĄ PRACĘ** klienta:\n* Środowisko (warunki)\n* Częstotliwość (jak często?)\n* Skala (ile osób? ile operacji?)\n* Wyzwania (co najtrudniejsze?)\n\n### Przykładowe pytania JSS:\n\n* \"Jak często robisz tę pracę?\"\n* \"W jakich warunkach?\"\n* \"Co najtrudniejsze w tej czynności?\"\n* \"Ile osób robi tę pracę?\"\n* \"Jak długo trwa jedna operacja?\"\n\n> **⚠️ UWAGA:** W KROKU 1 **NIE MOŻESZ** mówić o produkcie!\n>\n> Twoja rola: **słuchać, pytać, obserwować**"
+      },
+      {
+        "id": 8,
+        "type": "practice",
+        "title": "Ćwiczenie: Role Play - KROK 1",
+        "content": "**Scenariusz:** JSS odwiedza warsztat samochodowy. Mechanik robi pracę przy zawieszeniu (zardzewiałe śruby M12-M16).\n\n### 📋 Zasady:\n* ⏱️ Czas: 3 minuty\n* 🎯 Cel: Zdiagnozować aplikację\n* ❌ Zakaz: NIE możesz mówić o produkcie Milwaukee\n* ✅ Dozwolone: Pytania otwarte o pracę\n\n### Twoje zadanie:\n\nZadaj minimum **5 pytań**, które pomogą zrozumieć:\n1. Jak często odkręca zardzewiałe śruby?\n2. W jakich warunkach?\n3. Jakie narzędzia teraz używa?\n4. Co najtrudniejsze?\n5. Ile czasu to zabiera dziennie?",
+        "xp": 25
+      },
+      {
+        "id": 9,
+        "type": "question",
+        "question": "Co JSS robi w KROKU 1 (Aplikacja)?",
+        "options": [
+          "Pokazuje katalog produktów Milwaukee",
+          "Pyta o pracę i warunki, obserwuje środowisko",
+          "Robi demo narzędzi",
+          "Przedstawia ofertę cenową"
+        ],
+        "correctAnswer": 1,
+        "explanation": "W KROKU 1 JSS zadaje pytania o Job to be Done - realną pracę klienta. NIE mówi o produkcie, tylko słucha i obserwuje.",
+        "xp": 15
+      },
+      {
+        "id": 10,
+        "type": "concept",
+        "title": "KROK 2: Pain Points (Problem)",
+        "content": "## ⚠️ Złota zasada KROKU 2\n\n> **\"Jeśli klient nie nazwie problemu - nie ma decyzji\"**\n\n### 4 kategorie Pain Points:\n\n* 🤕 **Ergonomia** - \"Jak się czujesz po całym dniu?\"\n* ⏱️ **Czas** - \"Ile czasu to zabiera? Czy są przestoje?\"\n* 🛡️ **Bezpieczeństwo** - \"Czy zdarzają się wypadki?\"\n* 💰 **Koszt** - \"Ile kosztuje przestój?\"\n\n### ❌ ŹLE - JSS sugeruje:\n\n\"Widzę, że Pana narzędzie jest ciężkie. Na pewno boli nadgarstek?\"\n\n### ✅ DOBRZE - JSS pyta:\n\n\"Jak się Pan czuje po całym dniu takiej pracy?\"\n\n**Klient SAM mówi:** \"Nadgarstki mnie zabijają. Po 4-5h muszę robić przerwę.\""
+      },
+      {
+        "id": 11,
+        "type": "concept",
+        "title": "KROK 3: Konsekwencje (Impact)",
+        "content": "## 📊 Kwantyfikacja\n\n**Problem → Konsekwencje**\n\nKlient mówi: \"Nadgarstki bolą\"\n\n**JSS pyta:** \"Ile razy dziennie robisz przerwę?\"\n\n**Klient:** \"2-3 razy po 15 min\"\n\n**Kwantyfikacja:**\n* ⏱️ **30-45 min/dzień stracone**\n* 📅 3-4h/tydzień\n* 📊 12-16h/miesiąc\n\n> **💡 Kluczowa technika:**\n>\n> JSS **NIE kalkuluje sam**. Zadajesz pytania i klient **SAM przelicza** konsekwencje!"
+      },
+      {
+        "id": 12,
+        "type": "question",
+        "question": "Co JSS robi w KROKU 3 (Konsekwencje)?",
+        "options": [
+          "Kalkuluje ROI w Excelu i pokazuje klientowi",
+          "Pyta 'Ile to kosztuje?' - klient SAM kwantyfikuje",
+          "Przechodzi od razu do demo produktu",
+          "Mówi o konkurencji"
+        ],
+        "correctAnswer": 1,
+        "explanation": "JSS zadaje pytania typu 'Ile to kosztuje?' aby klient SAM przeliczył konsekwencje (czas/koszt). To buduje ownership decyzji!",
+        "xp": 15
+      },
+      {
+        "id": 13,
+        "type": "concept",
+        "title": "KROK 4: Rozwiązanie Systemowe",
+        "content": "## 🧩 System = 3 elementy\n\n### 1️⃣ Narzędzie bazowe (adresuje pain point)\n\nPrzykład: Problem \"przegrzewanie\" → wiertarka FUEL bezszczotkowa\n\n### 2️⃣ Baterie + ładowarka (wydajność)\n\nMinimum **2-4 baterie** (rotacja - zawsze jedna naładowana)\n\nPrzykład: 4 baterie 5.0 Ah + szybka ładowarka 6-port\n\n### 3️⃣ Akcesoria specjalistyczne\n\nPrzykład: Wiertła HSS-G Thunderweb (żywotność 2x dłuższa)\n\n---\n\n## ❌ PRODUKT vs ✅ SYSTEM\n\n**Produkt:**\n\"M18 FUEL. 135 Nm, bezszczotkowy...\"\n\n**System:**\n\"M18 FUEL + 4 baterie + ładowarka = rozwiązuje przegrzewanie i przestoje\""
+      },
+      {
+        "id": 14,
+        "type": "concept",
+        "title": "KROK 5: Demo Aplikacyjne",
+        "content": "## 🎬 3 elementy demo\n\n### 1. Co sprawdzamy? (Cel)\n\n\"Sprawdzimy, czy system Milwaukee pozwoli Ci pracować **bez przerw przez 2 godziny**\"\n\n### 2. Na co patrzymy? (Kryterium sukcesu)\n\n\"Zrobimy **100 otworów M12**. Jeśli nie przegrzeje się - wiemy, że działa\"\n\n### 3. Klient pracuje! (Nie JSS pokazuje)\n\n\"Proszę spróbować - niech Pan zrobi 10 otworów swoją metodą\"\n\n---\n\n## 🚫 3 błędy w demo:\n\n* ❌ #1: **Pokaz cyrkowy** - JSS robi, klient patrzy\n* ❌ #2: **Bez celu** - pokazuję bo mam\n* ❌ #3: **Na szybko** - 5 minut nie testuje realnej pracy"
+      },
+      {
+        "id": 15,
+        "type": "question",
+        "question": "Które stwierdzenie o demo jest PRAWDZIWE?",
+        "options": [
+          "JSS robi demo sam - klient patrzy i ocenia",
+          "Demo bez celu - 'pokazuję bo mam narzędzie'",
+          "Demo ma cel, kryterium sukcesu i klient SAM pracuje",
+          "Demo powinno być krótkie (5 min) żeby nie nudzić"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Demo aplikacyjne ma: CEL (co sprawdzamy?), KRYTERIUM SUKCESU (na co patrzymy?) i użytkownik w roli głównej (klient SAM pracuje).",
+        "xp": 20
+      },
+      {
+        "id": 16,
+        "type": "practice",
+        "title": "Ćwiczenie: Budowanie systemu",
+        "content": "**Scenariusz:** Klient (dekarz) montuje pokrycia dachowe. Pain point: \"Wkrętarka się przegrzewa po 2h intensywnej pracy.\"\n\n### Twoje zadanie:\n\n1. **Zbuduj rozwiązanie systemowe** (3 elementy)\n2. **Uzasadnij każdy element** - jak rozwiązuje przegrzewanie?\n3. **Zaproponuj demo** z celem i kryterium sukcesu\n\n### Szablon:\n\n**Narzędzie bazowe:** _______\n**Baterie + ładowarka:** _______\n**Akcesoria:** _______\n\n**Cel demo:** _______\n**Kryterium sukcesu:** _______",
+        "xp": 30
+      },
+      {
+        "id": 17,
+        "type": "concept",
+        "title": "KROK 6: Wartość (język klienta)",
+        "content": "## 💎 3 pytania wydobywające wartość\n\n### 1. \"Co się zmieniło?\"\n\n**Klient:** \"Naprawdę nie przegrzało się. Nie musiałem robić przerwy.\"\n\n### 2. \"Co jest teraz łatwiejsze?\"\n\n**Klient:** \"Nie boli ręka jak poprzednio. Mogę pracować dłużej.\"\n\n### 3. \"Jak to wpływa na Twoją pracę?\"\n\n**Klient:** \"Oszczędzam te 30-40 minut dziennie. Przy 15 dniach do deadline to **prawie cały dzień roboczy**. Zdążymy bez nadgodzin.\"\n\n---\n\n> **💡 Kluczowa zasada:**\n>\n> JSS **NIE kalkuluje wartości sam**. Klient **SAM** przelicza i **SAM** mówi o korzyściach!"
+      },
+      {
+        "id": 18,
+        "type": "concept",
+        "title": "KROK 7: Next Steps (Domknięcie)",
+        "content": "## ✅ KTO-CO-KIEDY\n\n### 1. KTO (Decydent)\n\n\"Rozumiem - Pan testuje, ale decyzję podejmuje kierownik budowy. Czy możemy umówić się razem na piątek?\"\n\n### 2. CO (Konkretne działanie)\n\n\"Zostawiam system na **tydzień testowy**. Pan testuje normalnie. W piątek porozmawiamy o wynikach.\"\n\n### 3. KIEDY (Data i godzina)\n\n\"Wrócę w **piątek 10:00**. Będzie Pan wtedy? Dobrze, to do piątku.\"\n\n---\n\n## 📧 Follow-up 24h\n\nPo wizycie JSS wysyła email/SMS podsumowujący **wszystkie 7 kroków Canvas**."
+      },
+      {
+        "id": 19,
+        "type": "practice",
+        "title": "Ćwiczenie: Follow-up email",
+        "content": "**Scenariusz:** Po wizycie na budowie (brygadzista - montaż instalacji). Ustaliliście:\n\n* Problem: Baterie kończą się po 40-50 połączeń\n* Demo: System M18 FPP + 6 baterii wytrzymał 200 połączeń\n* Wartość (słowa klienta): \"To oszczędność 20-30h miesięcznie!\"\n* Next Steps: Test 2-tygodniowy, spotkanie 22.12 o 9:00\n\n### Napisz follow-up email zawierający:\n\n1. Wszystkie 7 kroków Canvas\n2. Cytaty klienta z KROKU 6\n3. Konkretne Next Steps (22.12 o 9:00)",
+        "xp": 25
+      },
+      {
+        "id": 20,
+        "type": "question",
+        "question": "Czym jest KROK 7 (Next Steps)?",
+        "options": [
+          "Podpisanie umowy i zapłata",
+          "Ustalenie 'kto-co-kiedy' + konkretne zobowiązania",
+          "Pożegnanie 'proszę pomyśleć'",
+          "Wysłanie katalogu emailem"
+        ],
+        "correctAnswer": 1,
+        "explanation": "KROK 7 to domknięcie konkretne: KTO-CO-KIEDY. Przykład: 'Test tygodniowy, wrócę piątek o 10:00, wtedy oferta' + follow-up 24h!",
+        "xp": 15
+      },
+      {
+        "id": 21,
+        "type": "concept",
+        "title": "Produktowa vs Application First",
+        "content": "## Porównanie podejść\n\n### ❌ WIZYTA PRODUKTOWA\n\n* Start od produktu\n* Brak diagnozy\n* Demo \"na ślepo\"\n* Język techniczny\n* Brak domknięcia\n\n**Rezultat:** \"Zostaw katalog, pomyślimy\"\n\n---\n\n### ✅ WIZYTA APPLICATION FIRST\n\n* Start od aplikacji (Job to be Done)\n* Diagnoza pain points\n* Demo z celem i kryterium\n* Język klienta (wartość)\n* Domknięcie KTO-CO-KIEDY\n\n**Rezultat:** Test/oferta + konkretny follow-up"
+      },
+      {
+        "id": 22,
+        "type": "question",
+        "question": "Jakie jest największe ryzyko wizyt PRODUKTOWYCH?",
+        "options": [
+          "Zbyt długa wizyta (ponad 2 godziny)",
+          "Start od produktu - brak diagnozy = brak decyzji",
+          "Za dużo pytań do klienta",
+          "Demo za długie"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Wizyty produktowe tracą bo: brak diagnozy aplikacji, brak pain pointów, demo 'na ślepo', brak wartości w języku klienta. Rezultat: 'zostaw katalog' = koniec.",
+        "xp": 20
+      },
+      {
+        "id": 23,
+        "type": "practice",
+        "title": "Ćwiczenie: Przerobienie wizyty",
+        "content": "**Błędna wizyta Tomka:**\n\nTomek: \"Mam pilarki M18. Promocja - 1899 zł!\"\nStolarz: \"Mamy DeWalt.\"\nTomek: \"Ale Milwaukee ma lepsze parametry!\"\nStolarz: \"Zostaw katalog.\"\n\n### Twoje zadanie:\n\n**Przepisz wizytę** według Application First Canvas (7 kroków):\n\n1️⃣ Aplikacja: _______\n2️⃣ Pain Points: _______\n3️⃣ Konsekwencje: _______\n4️⃣ Rozwiązanie: _______\n5️⃣ Demo: _______\n6️⃣ Wartość: _______\n7️⃣ Next Steps: _______",
+        "xp": 30
+      },
+      {
+        "id": 24,
+        "type": "concept",
+        "title": "Kluczowe wnioski",
+        "content": "## 📚 Zapamiętaj:\n\n* ✓ **Start od aplikacji** (Job to be Done), nie od produktu\n* ✓ **Klient SAM nazywa problem** (nie sugerujesz)\n* ✓ **Klient SAM kwantyfikuje** konsekwencje\n* ✓ **System = 3 elementy** (narzędzie + baterie + akcesoria)\n* ✓ **Demo z celem** i kryterium sukcesu\n* ✓ **Klient SAM kalkuluje wartość** (nie JSS na siłę)\n* ✓ **Domknięcie: KTO-CO-KIEDY** + follow-up 24h\n\n---\n\n> **💡 Application First Canvas = sposób myślenia o wizycie**\n>\n> To nie \"technika sprzedaży\" - to **mapa rozmowy JSS**"
+      },
+      {
+        "id": 25,
+        "type": "practice",
+        "title": "Action Plan",
+        "content": "## 🎯 Co robisz TERAZ?\n\n### 📅 DZIŚ (15 minut po lekcji)\n\n_Wydrukuj checklist Canvas, zapisz w telefonie 3 kluczowe pytania z KROKU 1_\n\n### 🎯 JUTRO (Pierwsze zastosowanie)\n\n_Na wizycie u klienta X zacznę od KROKU 1 - pytania o aplikację zamiast prezentacji_\n\n### ⏰ ZA TYDZIEŃ (Review + powtórka)\n\n_Wrócę do quizu, przejrzę fiszki, porównam moje wizyty z checklistą_\n\n---\n\n> **💡 Implementation Intention:**\n>\n> Osoby wypełniające Action Plan mają **+60% szans** na zastosowanie wiedzy w praktyce!"
+      },
+      {
+        "id": 26,
+        "type": "summary",
+        "title": "Canvas ukończony!",
+        "recap": [
+          "Opanowałeś 7-krokową Mapę Application First",
+          "Znasz różnicę między wizytą produktową a Application First",
+          "Potrafisz prowadzić demo z celem i kryterium sukcesu",
+          "Wiesz jak domykać wizytę: KTO-CO-KIEDY + follow-up 24h",
+          "+200 XP zdobyte - jesteś gotowy na praktykę w terenie!"
+        ],
+        "nextSteps": "Pobierz Cheatsheet, wróć za 3 dni do powtórki, zagraj w Business Games",
+        "badge": {
+          "xp": 200,
+          "title": "Application First Specialist"
+        }
+      }
+    ]
+  } $$
+);
+
+-- SEED DATA: Mock Engrams
+INSERT INTO engrams (title, category, description, xp_reward, estimated_minutes, content_json) VALUES
+('Szybkie Decyzje (OODA Loop)', 'Leadership', 'Pętla decyzyjna pilotów myśliwców', 50, 5, $$ {"slides": []} $$),
+('Zasada Pareto 80/20', 'Strategy', 'Osiągaj więcej robiąc mniej', 50, 4, $$ {"slides": []} $$),
+('Macierz Eisenhowera', 'Productivity', 'Priorytetyzacja zadań', 50, 6, $$ {"slides": []} $$),
+('Aktywne Słuchanie', 'Communication', 'Jak słuchać, żeby zrozumieć', 50, 8, $$ {"slides": []} $$),
+('Storytelling w Sprzedaży', 'Sales', 'Jak opowiadać, żeby sprzedać', 100, 10, $$ {"slides": []} $$);
+
+-- SEED DATA: Mock Resources
+INSERT INTO resources (title, type, category, description, xp_cost) VALUES
+('Szablon Strategii Błękitnego Oceanu', 'template', 'Strategy', 'Gotowy szablon w Excelu', 100),
+('Raport: Przyszłość AI w Biznesie', 'article', 'Technology', 'Analiza trendów 2026', 0),
+('Checklista: Start Projektu IT', 'template', 'Management', '50 punktów kontrolnych', 0),
+('Video: Negocjacje Win-Win', 'video', 'Skills', 'Masterclass z ekspertem', 500),
+('E-book: Psychologia Sprzedaży', 'ebook', 'Sales', 'Kompletny przewodnik', 200),
+('Baza Wiedzy: CRM Setup', 'article', 'Tools', 'Tutorial krok po kroku', 0);
