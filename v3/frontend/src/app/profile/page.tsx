@@ -328,20 +328,51 @@ export default function ProfilePage() {
                                             <line x1="250" y1="250" x2="60" y2="345" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
                                             <line x1="250" y1="250" x2="60" y2="155" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
 
-                                            {/* Data Area - Mock values: Leadership:80, Sales:60, Strategy:80, Mindset:70, Tech:40, Comm:45 */}
-                                            <polygon points="250,90 390,175 390,315 250,390 110,315 130,175"
-                                                fill="url(#radarGradient)"
-                                                fillOpacity="0.5"
-                                                stroke="#b000ff"
-                                                strokeWidth="2" />
 
-                                            {/* Points */}
-                                            <circle cx="250" cy="90" r="5" fill="#00ff88" />
-                                            <circle cx="390" cy="175" r="5" fill="#00ff88" />
-                                            <circle cx="390" cy="315" r="5" fill="#00ff88" />
-                                            <circle cx="250" cy="390" r="5" fill="#00ff88" />
-                                            <circle cx="110" cy="315" r="5" fill="#00ff88" />
-                                            <circle cx="130" cy="175" r="5" fill="#00ff88" />
+                                            {/* Data Area - Dynamic from userStats */}
+                                            {(() => {
+                                                // Get stat values (0-100)
+                                                const leadership = userStats.find(s => s.category === 'Leadership')?.points || 0
+                                                const sales = userStats.find(s => s.category === 'Sales')?.points || 0
+                                                const strategy = userStats.find(s => s.category === 'Strategy')?.points || 0
+                                                const mindset = userStats.find(s => s.category === 'Mindset')?.points || 0
+                                                const tech = userStats.find(s => s.category === 'Technical')?.points || 0
+                                                const comm = userStats.find(s => s.category === 'Communication')?.points || 0
+
+                                                // Convert to coordinates (center: 250,250, max radius: 200)
+                                                const toCoord = (value: number, angle: number) => {
+                                                    const radius = (value / 100) * 200
+                                                    const x = 250 + radius * Math.sin((angle * Math.PI) / 180)
+                                                    const y = 250 - radius * Math.cos((angle * Math.PI) / 180)
+                                                    return { x, y }
+                                                }
+
+                                                const points = [
+                                                    toCoord(leadership, 0),      // Top
+                                                    toCoord(sales, 60),          // Top-right
+                                                    toCoord(strategy, 120),      // Bottom-right
+                                                    toCoord(mindset, 180),       // Bottom
+                                                    toCoord(tech, 240),          // Bottom-left
+                                                    toCoord(comm, 300)           // Top-left
+                                                ]
+
+                                                const pointsString = points.map(p => `${p.x},${p.y}`).join(' ')
+
+                                                return (
+                                                    <>
+                                                        <polygon points={pointsString}
+                                                            fill="url(#radarGradient)"
+                                                            fillOpacity="0.5"
+                                                            stroke="#b000ff"
+                                                            strokeWidth="2" />
+
+                                                        {/* Points */}
+                                                        {points.map((p, i) => (
+                                                            <circle key={i} cx={p.x} cy={p.y} r="5" fill="#00ff88" />
+                                                        ))}
+                                                    </>
+                                                )
+                                            })()}
 
                                             {/* Labels */}
                                             <text x="250" y="35" textAnchor="middle" fill="white" fontSize="14" fontWeight="600">Leadership</text>

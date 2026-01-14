@@ -21,7 +21,7 @@ export default function RootLayout({
   const isLessonPlayer = pathname?.match(/^\/lessons\/[^\/]+$/) // matches /lessons/[id] but not /lessons
 
   return (
-    <html lang="pl">
+    <html lang="pl" suppressHydrationWarning>
       <body className={outfit.className}>
         <div className="orb orb-1"></div>
         <div className="orb orb-2"></div>
