@@ -159,7 +159,7 @@ export default function PracticePage() {
                         textDecoration: 'none',
                         color: 'white'
                     }}>
-                        {profile?.username?.substring(0, 2).toUpperCase() || 'PA'}
+                        {profile?.full_name?.substring(0, 2).toUpperCase() || 'PA'}
                     </Link>
                 </div>
             </div>
