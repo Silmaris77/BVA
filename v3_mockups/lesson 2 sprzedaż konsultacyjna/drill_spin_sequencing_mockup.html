@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drill: SPIN Sequencing - BrainVenture V3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .drill-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .drill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(176, 0, 255, 0.2);
+            border: 1px solid rgba(176, 0, 255, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #b000ff;
+            margin-bottom: 16px;
+        }
+
+        .drill-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .drill-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .drill-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #b000ff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+
+        .timer {
+            color: #00ff88;
+        }
+
+        .timer.warning {
+            color: #ffd700;
+        }
+
+        .timer.danger {
+            color: #ff4444;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .question-card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .scenario-box {
+            background: rgba(176, 0, 255, 0.1);
+            border-left: 4px solid #b000ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(176, 0, 255, 0.5);
+        }
+
+        .option.selected {
+            background: rgba(176, 0, 255, 0.2);
+            border-color: #b000ff;
+        }
+
+        .option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .option.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .option.correct .option-letter {
+            background: #00ff88;
+            color: #0a0a1a;
+        }
+
+        .option.incorrect .option-letter {
+            background: #ff4444;
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .feedback {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback strong {
+            color: #00d4ff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(176, 0, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-screen {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            display: none;
+        }
+
+        .results-screen.show {
+            display: block;
+        }
+
+        .results-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+        }
+
+        .results-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .results-score {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 32px;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .result-stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .result-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #b000ff;
+        }
+
+        .result-stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+
+        .xp-reward {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .xp-reward-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="drill-header">
+            <div class="drill-badge">
+                <i data-lucide="target" size="14"></i>
+                DRILL - CONSULTATIVE SELLING
+            </div>
+            <h1>SPIN Sequencing</h1>
+            <div class="drill-meta">
+                <span><i data-lucide="clock" size="14"></i> 4 min</span>
+                <span><i data-lucide="layers" size="14"></i> 8 pytań</span>
+                <span><i data-lucide="zap" size="14"></i> +75 XP</span>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar">
+            <div class="stat">
+                <div class="stat-value timer" id="timer">4:00</div>
+                <div class="stat-label">Pozostały czas</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="currentQuestion">1</div>
+                <div class="stat-label">Pytanie</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" style="color: #00ff88;" id="score">0</div>
+                <div class="stat-label">Poprawne</div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="questionCard">
+            <div class="question-number">Pytanie <span id="qNum">1</span> z 8</div>
+            <div class="question-text" id="questionText"></div>
+            <div class="scenario-box" id="scenarioBox" style="display: none;"></div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="skipBtn">
+                <i data-lucide="skip-forward" size="16"></i>
+                Pomiń
+            </button>
+            <button class="btn btn-primary" id="nextBtn" disabled>
+                Następne
+                <i data-lucide="chevron-right" size="16"></i>
+            </button>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="results-icon">💬</div>
+            <div class="results-title">Drill Ukończony!</div>
+            <div class="results-score" id="finalScore">0/8</div>
+
+            <div class="results-stats">
+                <div class="result-stat">
+                    <div class="result-stat-value" id="correctCount">0</div>
+                    <div class="result-stat-label">Poprawne</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value" id="accuracy">0%</div>
+                    <div class="result-stat-label">Celność</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value" id="timeUsed">0:00</div>
+                    <div class="result-stat-label">Czas</div>
+                </div>
+            </div>
+
+            <div class="xp-reward">
+                <div style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-bottom: 8px;">ZDOBYTO</div>
+                <div class="xp-reward-value" id="xpEarned">+0 XP</div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="location.reload()">
+                    <i data-lucide="rotate-ccw" size="16"></i>
+                    Spróbuj ponownie
+                </button>
+                <button class="btn btn-primary" onclick="alert('Powrót do zakładki Drille')">
+                    <i data-lucide="home" size="16"></i>
+                    Zakończ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const questions = [
+            {
+                scenario: "Klient: 'Mamy klucze pneumatyczne od 5 lat.'",
+                question: "Jakie pytanie zadasz NAJPIERW (SPIN)?",
+                options: [
+                    { text: "Jak często się psują? (Problem)", correct: false },
+                    { text: "Czy rozważaliście akumulatorowe? (Pitch)", correct: false },
+                    { text: "Ilu mechaników z nich korzysta? (Situation)", correct: true },
+                    { text: "Ile tracicie na przestojach? (Implication)", correct: false }
+                ],
+                feedback: "Zaczynaj od SITUATION - odkryj kontekst PRZED kopaniem w problemy. Dopiero potem→ Problem → Implication → Need-Payoff."
+            },
+            {
+                scenario: "Klient: 'Kompresor czasem się wyłącza, muszą czekać 10 min.'",
+                question: "To już jest Problem. Co zadasz NASTĘPNIE?",
+                options: [
+                    { text: "Jak często to się zdarza? (Dig deeper - Problem)", correct: true },
+                    { text: "Ile Was to kosztuje? (Implication)", correct: false },
+                    { text: "Polecam M18 Milwaukee (Pitch)", correct: false },
+                    { text: "Jakiej wielkości kompresor? (Situation)", correct: false }
+                ],
+                feedback: "Klient podał problem SURFACE. Dig deeper (więcej Problem questions) zanim przejdziesz do Implication. Odkryj PEŁNĄ skalę."
+            },
+            {
+                scenario: "Klient: 'Kompresor wyłącza się 3-4 razy dziennie, po 10 min każdy.'",
+                question: "Masz już pełny obraz problemu. Co teraz?",
+                options: [
+                    { text: "Ile to 40 min przestoju kosztuje dziennie w zł? (Implication)", correct: true },
+                    { text: "Czy jest hałaśny? (Dig further - Problem)", correct: false },
+                    { text: "Polecam akumulatorowe (Pitch)", correct: false },
+                    { text: "Kto podejmuje decyzje o zakupie? (Situation)", correct: false }
+                ],
+                feedback: "Przejdź do IMPLICATION - przelicz problem na $$. 'Ile to kosztuje?' wzmacnia pilność. Dopiero potem Need-Payoff."
+            },
+            {
+                scenario: "Klient: 'To jakieś 600 zł dziennie straty (stawka roboczogodzina).'",
+                question: "Klient SAM wyliczył koszt. Co teraz?",
+                options: [
+                    { text: "600 zł × 250 dni = 150,000 zł rocznie. To dużo! (Amplify implication)", correct: false },
+                    { text: "Gdybyście wyeliminowali te przestoje, ile zaoszczędzilibyście? (Need-Payoff)", correct: true },
+                    { text: "Mamy M18 który to rozwiązuje (Pitch)", correct: false },
+                    { text: "Czy kompresor jest pod gwarancją? (Situation)", correct: false }
+                ],
+                feedback: "Czas na NEED-PAYOFF! Klient SAM opisuje wartość rozwiązania. 'Gdyby...' → klient wyobraża sobie korzyść."
+            },
+            {
+                scenario: "Pierwsze spotkanie z mechanikiem (nie właścicielem). Zaczynasz od:",
+                question: "Jakie pytanie SPIN na start?",
+                options: [
+                    { text: "Jakie narzędzia najczęściej używasz? (Situation)", correct: true },
+                    { text: "Co Cię najbardziej frustruje w pracy? (Problem)", correct: false },
+                    { text: "Czy właściciel planuje inwestycje? (Beyond scope)", correct: false }
+                ],
+                feedback: "ZAWSZE zaczynaj od Situation, nawet z mechanikiem (użytkownikiem końcowym). Buduj kontekst PRZED problemami."
+            },
+            {
+                question: "Klient: 'Pokazuj produkt, nie mam czasu na gadanie.' Twoja reakcja?",
+                options: [
+                    { text: "OK, oto M18... (Transaction mode)", correct: false },
+                    { text: "Rozumiem. 2 minuty - jakie główne wyzwanie w warsztacie? (Lite SPIN)", correct: true },
+                    { text: "Wyślę katalog mailem (Give up)", correct: false }
+                ],
+                feedback: "Nawet jeśli klient pospiesza, SPRÓBUJ odkryć potrzebę. 'Lite SPIN' = 1-2 pytania Problem/Implication before pitch. Lepsze niż zero."
+            },
+            {
+                scenario: "Klient: 'Narzędzia OK, ale mechanicy narzekają na zmęczenie.'",
+                question: "To Problem. Co odkryjesz NAJPIERW przed Implication?",
+                options: [
+                    { text: "Ile kosztują absencje chorobowe? (Implication - za wcześnie)", correct: false },
+                    { text: "Które prace są najbardziej męczące? (Dig deeper - Problem)", correct: true },
+                    { text: "M18 jest lżejsze! (Pitch - za wcześnie)", correct: false }
+                ],
+                feedback: "Odkryj PEŁNY problem (które prace, dlaczego męczące, jak często) ZANIM  liczysz koszty. Deep problem = stronger implication."
+            },
+            {
+                question: "Skończyłeś SPIN, klient zainteresowany. Co robisz PRZED prezentacją produktu?",
+                options: [
+                    { text: "Zaczynam prezentację (Standard)", correct: false },
+                    { text: "Podsumowuję: Rozumiem że... [potrzeba]. Zgadza się? (Confirm)", correct: true },
+                    { text: "Pytam o budżet (Premature)", correct: false }
+                ],
+                feedback: "ZAWSZE potwierdź zrozumienie potrzeby PRZED pitchem. 'Rozumiem że potrzebujecie..., zgadza się?' = alignment + buy-in."
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let timeLeft = 240; // 4 minutes
+        let timerInterval;
+        let answered = false;
+
+        const questionCard = document.getElementById('questionCard');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const questionText = document.getElementById('questionText');
+        const scenarioBox = document.getElementById('scenarioBox');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('nextBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        const timerEl = document.getElementById('timer');
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const mins = Math.floor(timeLeft / 60);
+                const secs = timeLeft % 60;
+                timerEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 30) {
+                    timerEl.classList.add('danger');
+                } else if (timeLeft <= 60) {
+                    timerEl.classList.add('warning');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            answered = false;
+            nextBtn.disabled = true;
+
+            document.getElementById('currentQuestion').textContent = currentQ + 1;
+            document.getElementById('qNum').textContent = currentQ + 1;
+            questionText.textContent = q.question;
+
+            if (q.scenario) {
+                scenarioBox.style.display = 'block';
+                scenarioBox.textContent = q.scenario;
+            } else {
+                scenarioBox.style.display = 'none';
+            }
+
+            optionsContainer.innerHTML = '';
+            feedback.classList.remove('show');
+
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, i) => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'option';
+                optDiv.innerHTML = `
+                    <div class="option-letter">${letters[i]}</div>
+                    <div class="option-text">${opt.text}</div>
+                `;
+                optDiv.onclick = () => selectOption(i, opt.correct);
+                optionsContainer.appendChild(optDiv);
+            });
+
+            lucide.createIcons();
+        }
+
+        function selectOption(index, isCorrect) {
+            if (answered) return;
+            answered = true;
+
+            const options = document.querySelectorAll('.option');
+            options[index].classList.add('selected');
+
+            if (isCorrect) {
+                options[index].classList.add('correct');
+                score++;
+                document.getElementById('score').textContent = score;
+            } else {
+                options[index].classList.add('incorrect');
+                questions[currentQ].options.forEach((opt, i) => {
+                    if (opt.correct) options[i].classList.add('correct');
+                });
+            }
+
+            feedback.innerHTML = `<strong>${isCorrect ? '✅ Prawidłowo!' : '❌ Nieprawidłowo.'}</strong> ${questions[currentQ].feedback}`;
+            feedback.classList.add('show');
+            nextBtn.disabled = false;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentQ++;
+            if (currentQ < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        skipBtn.addEventListener('click', () => {
+            currentQ++;
+            if (currentQ < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        function showResults() {
+            clearInterval(timerInterval);
+            questionCard.style.display = 'none';
+            document.getElementById('statsBar').style.display = 'none';
+            document.querySelector('.nav-buttons').style.display = 'none';
+            resultsScreen.classList.add('show');
+
+            const accuracy = Math.round((score / questions.length) * 100);
+            const timeUsed = 240 - timeLeft;
+            const mins = Math.floor(timeUsed / 60);
+            const secs = timeUsed % 60;
+
+            let xp = 0;
+            if (accuracy >= 90) xp = 75;
+            else if (accuracy >= 70) xp = 60;
+            else if (accuracy >= 50) xp = 40;
+            else xp = 20;
+
+            document.getElementById('finalScore').textContent = `${score}/${questions.length}`;
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('accuracy').textContent = `${accuracy}%`;
+            document.getElementById('timeUsed').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+            document.getElementById('xpEarned').textContent = `+${xp} XP`;
+
+            lucide.createIcons();
+        }
+
+        loadQuestion();
+        startTimer();
+    </script>
+</body>
+
+</html>

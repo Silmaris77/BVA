@@ -7,7 +7,7 @@ import WarningCard from './WarningCard'
 
 interface CardRendererProps {
     card: {
-        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning'
+        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive'
         title?: string
         subtitle?: string
         description?: string
@@ -31,6 +31,12 @@ interface CardRendererProps {
             type: 'image' | 'diagram'
             src: string
         }
+        quiz?: {
+            question: string
+            options: string[]
+            correct: number
+            explanation: string
+        }
         [key: string]: any
     }
     onAnswer?: (correct: boolean) => void
@@ -38,6 +44,31 @@ interface CardRendererProps {
 
 export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
     switch (card.type) {
+        case 'hero':
+            // Hero is like intro but more emphasis
+            return <IntroCard
+                title={card.title || 'Wstęp'}
+                description={card.content || card.description || ''}
+                subtitle={card.subtitle}
+                icon={card.icon || '🚀'}
+            />
+        case 'content':
+            // Content is like concept
+            return <ConceptCard
+                title={card.title || 'Koncepcja'}
+                content={card.content || ''}
+                keyPoints={card.keyPoints}
+                visual={card.visual}
+            />
+        case 'interactive':
+            // Interactive contains a quiz
+            return <QuestionCard
+                question={card.quiz?.question || card.title || 'Pytanie'}
+                options={card.quiz?.options || []}
+                correctAnswer={card.quiz?.correct || 0}
+                explanation={card.quiz?.explanation}
+                onAnswer={onAnswer}
+            />
         case 'intro':
             return <IntroCard
                 title={card.title || 'Wstęp'}

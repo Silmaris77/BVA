@@ -22,7 +22,7 @@ export default function RootLayout({
 
   return (
     <html lang="pl" suppressHydrationWarning>
-      <body className={outfit.className}>
+      <body className={outfit.className} suppressHydrationWarning>
         <div className="orb orb-1"></div>
         <div className="orb orb-2"></div>
         <div className="orb orb-3"></div>

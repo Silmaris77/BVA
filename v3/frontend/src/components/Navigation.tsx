@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import { Home, BookOpen, Gamepad2, User, Bot, Settings, LogOut } from 'lucide-react'
+import { Home, BookOpen, Gamepad2, User, LogOut } from 'lucide-react'
 
 export default function Sidebar() {
     const pathname = usePathname()
@@ -73,8 +73,6 @@ export default function Sidebar() {
 
             {/* Footer Nav */}
             <div style={{ marginTop: 'auto', paddingTop: '24px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                <NavItem href="/ai-assistant" icon={<Bot size={20} />} label="AI Assistant" active={false} />
-                <NavItem href="/settings" icon={<Settings size={20} />} label="Ustawienia" active={false} />
                 <button
                     onClick={handleSignOut}
                     style={{

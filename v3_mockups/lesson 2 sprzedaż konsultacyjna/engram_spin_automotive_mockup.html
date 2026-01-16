@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engram: SPIN dla Warsztatów - BrainVenture V3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Engram Header */
+        .engram-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .engram-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid rgba(0, 212, 255, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 16px;
+        }
+
+        .engram-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .engram-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 24px;
+        }
+
+        .engram-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Progress dots */
+        .slide-progress {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background: #00d4ff;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* Slide */
+        .slide {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 24px;
+            display: none;
+            min-height: 400px;
+        }
+
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-label {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 16px;
+        }
+
+        .slide h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #00d4ff;
+        }
+
+        .slide p {
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 16px;
+        }
+
+        .slide ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .slide li {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 8px;
+        }
+
+        /* Highlight boxes */
+        .problem-box {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 4px solid #ff4444;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .mechanism-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .application-box {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .spin-step {
+            background: rgba(176, 0, 255, 0.1);
+            border-left: 4px solid #b000ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .spin-step h4 {
+            color: #b000ff;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        /* Quiz (same as before) */
+        .quiz-container {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+        }
+
+        .quiz-question {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .quiz-explanation {
+            background: rgba(176, 0, 255, 0.1);
+            border-left: 4px solid #b000ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .quiz-explanation.show {
+            display: block;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Decay indicator */
+        .decay-indicator {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .decay-bar-container {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .decay-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #00d4ff);
+            border-radius: 4px;
+            width: 85%;
+        }
+
+        .decay-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        /* Stats panel */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Engram Header -->
+        <div class="engram-header">
+            <div class="engram-badge">
+                <i data-lucide="brain" size="14" style="display: inline; vertical-align: middle;"></i>
+                ENGRAM
+            </div>
+            <h1>SPIN dla Warsztatów</h1>
+            <div class="engram-meta">
+                <span><i data-lucide="clock" size="14"></i> 6 min</span>
+                <span><i data-lucide="zap" size="14"></i> +50 XP (install) / +25 XP (refresh)</span>
+            </div>
+        </div>
+
+        <!-- Decay Indicator -->
+        <div class="decay-indicator">
+            <i data-lucide="trending-down" size="20" style="color: #ffd700;"></i>
+            <div class="decay-bar-container">
+                <div class="decay-bar"></div>
+            </div>
+            <span class="decay-text">85%</span>
+        </div>
+
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <div class="stat-card">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Instalacje</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">24</div>
+                <div class="stat-label">Odświeżenia</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">3 dni</div>
+                <div class="stat-label">Od ostatniego</div>
+            </div>
+        </div>
+
+        <!-- Slide Progress -->
+        <div class="slide-progress">
+            <div class="progress-dot active"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot quiz-dot"></div>
+        </div>
+
+        <!-- Slide 1: Problem -->
+        <div class="slide active" data-slide="0">
+            <span class="slide-label">PROBLEM</span>
+            <h2>Sprzedaż Transakcyjna vs Doradcza</h2>
+
+            <div class="problem-box">
+                <p><strong>Scenariusz:</strong> Spotkanie z właścicielem warsztatu. Masz 30 minut.</p>
+                <p style="margin-top: 12px;"><strong>Słaba rozmowa (transakcyjna):</strong></p>
+                <p style="font-style: italic; color: rgba(255, 255, 255, 0.7); margin-left: 16px;">
+                    "Dzień dobry, jestem z Milwaukee. Potrzebujecie kluczy udarowych? Mamy promocję."
+                </p>
+            </div>
+
+            <p><strong>Problem:</strong></p>
+            <ul>
+                <li>❌ Pozycjonowanie jako sprzedawca, nie doradca</li>
+                <li>❌ Nie odkrywasz potrzeb – zaczynasz od pitchu</li>
+                <li>❌ Klient myśli tylko o cenie</li>
+                <li>❌ Brak różnicowania vs konkurencja</li>
+            </ul>
+
+            <p style="margin-top: 24px;"><strong>Skutek:</strong></p>
+            <ul>
+                <li>"Dzięki, mamy już. Ale wyślij ofertę."</li>
+                <li>Oferta trafia do kosza (lub do konkurencji jako porównanie cen)</li>
+                <li>Brak follow-up, brak transakcji</li>
+            </ul>
+
+            <div style="margin-top: 32px; padding: 20px; background: rgba(255, 68, 68, 0.05); border-radius: 12px;">
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px;">
+                    💡 <strong>Dlaczego to problem?</strong> Przeciętna skuteczność sprzedaży transakcyjnej w B2B
+                    automotive = 18%. Przeciętna wartość zamówienia = 1800 zł. = mało, rzadko, margin pressure.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Mechanism -->
+        <div class="slide" data-slide="1">
+            <span class="slide-label">MECHANIZM</span>
+            <h2>Framework SPIN</h2>
+
+            <p><strong>SPIN</strong> = złoty standard sprzedaży doradczej B2B (Neil Rackham, 1988)</p>
+
+            <div class="mechanism-box" style="margin-top: 24px;">
+                <p><strong>Sekwencja 4 typów pytań:</strong></p>
+            </div>
+
+            <div class="spin-step">
+                <h4>S - SITUATION (Sytuacja)</h4>
+                <p>Zrozum obecny stan klienta</p>
+                <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-top: 8px;">
+                    Pytania: "Jakie narzędzia teraz używacie?" • "Ilu mechaników pracuje?" • "Pneumatyka czy
+                    akumulatory?"
+                </p>
+            </div>
+
+            <div class="spin-step">
+                <h4>P - PROBLEM (Problem)</h4>
+                <p>Zidentyfikuj punkty bólu</p>
+                <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-top: 8px;">
+                    Pytania: "Jakie problemy z obecnymi narzędziami?" • "Jak często się psują?" • "Co mechanicy lubią
+                    najmniej?"
+                </p>
+            </div>
+
+            <div class="spin-step">
+                <h4>I - IMPLICATION (Implikacja)</h4>
+                <p>Wzmocnij koszt problemu</p>
+                <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-top: 8px;">
+                    Pytania: "Ile kosztuje przestój gdy kompresor się zepsuje?" • "Jak wpływa to na produktywność?" •
+                    "Ile tracicie na niepotrzebnych wymianach?"
+                </p>
+            </div>
+
+            <div class="spin-step">
+                <h4>N - NEED-PAYOFF (Korzyść)</h4>
+                <p>Klient sam opisuje wartość rozwiązania</p>
+                <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-top: 8px;">
+                    Pytania: "Gdybyście mogli pracować bez przewodów, jak wpłynęłoby to na wydajność?" • "Co by znaczyło
+                    zero przestojów?" • "Ile zaoszczędzilibyście na energii?"
+                </p>
+            </div>
+
+            <div class="mechanism-box" style="margin-top: 24px;">
+                <p><strong>Magia SPIN:</strong> Zanim zaprezentujesz produkt, klient już SAM SIEBIE przekonał że tego
+                    potrzebuje.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Application -->
+        <div class="slide" data-slide="2">
+            <span class="slide-label">ZASTOSOWANIE</span>
+            <h2>Real Example: SPIN w Akcji</h2>
+
+            <div class="application-box">
+                <p><strong>Przykładowa rozmowa z właścicielem warsztatu (15 min):</strong></p>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 12px; margin: 20px 0;">
+                <p><strong style="color: #00d4ff;">Ty (SITUATION):</strong> Jakie narzędzia teraz używacie do wymiany
+                    kół?</p>
+                <p style="margin-top: 12px;"><strong style="color: #ff8800;">Klient:</strong> Klucze pneumatyczne. Mamy
+                    kompresor 100L.</p>
+
+                <p style="margin-top: 16px;"><strong style="color: #00d4ff;">Ty (PROBLEM):</strong> Jakie problemy
+                    napotykaliście z pneumatyką?</p>
+                <p style="margin-top: 12px;"><strong style="color: #ff8800;">Klient:</strong> Hmm... węże wszędzie,
+                    czasem kompresor nie dostarczy – musi się naładować. Hałas też męczący.</p>
+
+                <p style="margin-top: 16px;"><strong style="color: #00d4ff;">Ty (IMPLICATION):</strong> Ile czasu
+                    dziennie mechanicy tracą na rozwijanie i zwijanie węży? A co się dzieje gdy kompresor zawiedzie w
+                    środku pracy?</p>
+                <p style="margin-top: 12px;"><strong style="color: #ff8800;">Klient:</strong> Hmm, może 15-20 min
+                    dziennie łącznie? Jak kompresor padnie to wszystko staje – ostatnio naprawialiśmy 2 dni, wynajęliśmy
+                    zastępczy za 800 zł.</p>
+
+                <p style="margin-top: 16px;"><strong style="color: #00d4ff;">Ty (NEED-PAYOFF):</strong> Gdybyście mogli
+                    pracować bez przewodów i bez zależności od kompresora, ile zaoszczędzilibyście czasu i pieniędzy
+                    rocznie?</p>
+                <p style="margin-top: 12px;"><strong style="color: #ff8800;">Klient:</strong> Sporo... może 100h
+                    roboczogodzin rocznie? To jakieś 15,000 zł. Plus zero ryzyka przestoju.</p>
+            </div>
+
+            <div class="application-box" style="margin-top: 24px;">
+                <p><strong>Result:</strong> Klient SAM wyliczył ROI (15,000 zł/rok). Teraz możesz zaprezentować
+                    rozwiązanie Milwaukee (M18) jako oczywisty wybór.</p>
+                <p style="margin-top: 12px; font-size: 14px; color: rgba(255, 255, 255, 0.7);">
+                    ✅ Pozycjonowanie jako doradca (nie sprzedawca)<br>
+                    ✅ Klient odkrył własny problem i koszt<br>
+                    ✅ Cena przestaje być głównym kryterium
+                </p>
+            </div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="quiz-container" id="quizContainer">
+            <div style="text-align: center; margin-bottom: 32px;">
+                <h2 style="color: #00d4ff;">Sprawdź Swoją Wiedzę</h2>
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px;">Losowe 3 pytania z puli 5</p>
+            </div>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">1. Który typ pytania SPIN odkrywa obecny stan klienta?
+                </p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="0" data-option="0">Situation</div>
+                    <div class="quiz-option" data-question="0" data-option="1">Problem</div>
+                    <div class="quiz-option" data-question="0" data-option="2">Implication</div>
+                    <div class="quiz-option" data-question="0" data-option="3">Need-Payoff</div>
+                </div>
+                <div class="quiz-explanation" data-explanation="0">
+                    <strong>✅ Prawidłowa:</strong> Situation<br>
+                    Pytania sytuacyjne odkrywają obecny stan (jakie narzędzia, ilu pracowników, jaki proces).
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">2. Klient: "Nasze klucze pneumatyczne zużywają się
+                    szybko." Jakie pytanie zadasz NASTĘPNE (SPIN)?</p>
+                <div class="quiz-options">
+                    <div class="quiroption" data-question="1" data-option="0">"Ile kosztuje Waszych pracowników
+                        przestój?" (Implication)</div>
+                    <div class="quiz-option" data-question="1" data-option="1">"Polecam Milwaukee M18" (Pitch)</div>
+                    <div class="quiz-option" data-question="1" data-option="2">"Jak często się psują?" (Problem)</div>
+                </div>
+                <div class="quiz-explanation" data-explanation="1">
+                    <strong>✅ Prawidłowa:</strong> Jak często się psują?<br>
+                    Klient już podał problem surface-level. Teraz dig deeper (Problem questions) przed Implication.
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">3. Jaki jest cel pytań implikacyjnych?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="2" data-option="0">Odkryć obecny stan</div>
+                    <div class="quiz-option" data-question="2" data-option="1">Wzmocnić koszt problemu</div>
+                    <div class="quiz-option" data-question="2" data-option="2">Klient sam opisuje korzyści rozwiązania
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="2">
+                    <strong>✅ Prawidłowa:</strong> Wzmocnić koszt problemu<br>
+                    Implication questions sprawiają że problem wydaje się większy (€, czas, ryzyko). To tworzy pilność.
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 32px;">
+                <button class="btn btn-primary" id="finishBtn" style="font-size: 16px; padding: 16px 32px;">
+                    <i data-lucide="check-circle" size="20"></i>
+                    Odśwież Engram (+25 XP)
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="prevBtn" disabled>
+                <i data-lucide="chevron-left" size="16"></i>
+                Wstecz
+            </button>
+            <span style="color: rgba(255, 255, 255, 0.6); font-size: 14px;" id="progressText">1 / 3</span>
+            <button class="btn btn-primary" id="nextBtn">
+                Dalej
+                <i data-lucide="chevron-right" size="16"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressDots = document.querySelectorAll('.progress-dot');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressText = document.getElementById('progressText');
+        const quizContainer = document.getElementById('quizContainer');
+        const finishBtn = document.getElementById('finishBtn');
+
+        const correctAnswers = [0, 2, 1];
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+
+            progressDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+
+            currentSlide = index;
+            prevBtn.disabled = index === 0;
+
+            if (index < totalSlides) {
+                nextBtn.style.display = 'flex';
+                quizContainer.classList.remove('active');
+                progressText.textContent = `${index + 1} / ${totalSlides}`;
+            } else {
+                nextBtn.style.display = 'none';
+                quizContainer.classList.add('active');
+                progressDots[3].classList.add('active');
+                progressText.textContent = 'Quiz';
+            }
+
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) showSlide(currentSlide - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        });
+
+        // Quiz logic
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const questionIndex = parseInt(this.dataset.question);
+                const optionIndex = parseInt(this.dataset.option);
+                const correctIndex = correctAnswers[questionIndex];
+
+                document.querySelectorAll(`.quiz-option[data-question="${questionIndex}"]`).forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                this.classList.add('selected');
+
+                if (optionIndex === correctIndex) {
+                    this.classList.add('correct');
+                } else {
+                    this.classList.add('incorrect');
+                    document.querySelector(`.quiz-option[data-question="${questionIndex}"][data-option="${correctIndex}"]`).classList.add('correct');
+                }
+
+                document.querySelector(`[data-explanation="${questionIndex}"]`).classList.add('show');
+            });
+        });
+
+        finishBtn.addEventListener('click', () => {
+            alert('🎉 Engram odświeżony!\n\n+25 XP\nRetencja: 100% → utrzymana przez kolejne 14 dni\n\nNastępne odświeżenie zalecane za: 2 tygodnie');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            } else if (e.key === 'ArrowRight' && currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        });
+    </script>
+</body>
+
+</html>

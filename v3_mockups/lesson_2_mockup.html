@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekcja 2: Sprzedaż Doradcza dla PPE - BrainVenture V3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Header */
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .lesson-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .lesson-header p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .lesson-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .card.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 24px 0 12px;
+        }
+
+        .card p {
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 16px;
+        }
+
+        .card ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card li {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .hero-image {
+            text-align: center;
+            font-size: 80px;
+            margin: 24px 0;
+        }
+
+        /* Framework box */
+        .framework-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .framework-box h4 {
+            color: #00d4ff;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Key insight box */
+        .key-insight {
+            background: rgba(176, 0, 255, 0.15);
+            border-left: 4px solid #b000ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .key-insight strong {
+            color: #b000ff;
+        }
+
+        /* Interactive input */
+        .interactive-input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            margin: 16px 0;
+        }
+
+        .interactive-input:focus {
+            outline: none;
+            border-color: #b000ff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Quiz */
+        .quiz-question {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(176, 0, 255, 0.5);
+        }
+
+        .quiz-option.selected {
+            background: rgba(176, 0, 255, 0.2);
+            border-color: #b000ff;
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .quiz-explanation {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .quiz-explanation.show {
+            display: block;
+        }
+
+        /* Summary */
+        .summary-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .summary-list li {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #b000ff;
+        }
+
+        .summary-list strong {
+            color: #00d4ff;
+        }
+
+        .next-steps-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+
+        .next-steps-box h3 {
+            color: #ffd700;
+            margin-bottom: 16px;
+        }
+
+        /* Navigation */
+        .card-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(176, 0, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .card-progress {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 32px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #b000ff, #00d4ff);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.xp {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .badge.difficulty {
+            background: rgba(255, 136, 0, 0.2);
+            color: #ff8800;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Lesson Header -->
+        <div class="lesson-header">
+            <h1>Sprzedaż Doradcza dla PPE</h1>
+            <p>Przekształć się z przyjmującego zamówienia w zaufanego doradcę BHP</p>
+            <div class="lesson-meta">
+                <span><i data-lucide="clock" size="16"></i> 35 min</span>
+                <span><i data-lucide="zap" size="16"></i> +150 XP</span>
+                <span class="badge difficulty">Średniozaawansowany</span>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 11%;"></div>
+        </div>
+
+        <!-- Card 1: Hero -->
+        <div class="card active" data-card="0">
+            <div class="hero-image">🎯</div>
+            <h2>Sprzedaż Doradcza dla PPE</h2>
+            <p style="font-size: 18px; text-align: center; color: rgba(255, 255, 255, 0.7);">
+                Przekształć się z przyjmującego zamówienia w zaufanego doradcę BHP
+            </p>
+            <p style="margin-top: 32px;">
+                Przeciętna sprzedaż PPE trwa 15 minut. Najlepsi sprzedawcy spędzają 45 minut - i zamykają <strong>3x
+                    więcej transakcji</strong>. Dlaczego? Bo doradzają, a nie tylko sprzedają.
+            </p>
+            <p>
+                W tej lekcji poznasz dokładny framework, który przekształca rozmowy skoncentrowane na cenie w
+                partnerstwa oparte na wartości.
+            </p>
+        </div>
+
+        <!-- Card 2: Why Consultative -->
+        <div class="card" data-card="1">
+            <h2>Dlaczego Doradztwo Wygrywa z Transakcjami</h2>
+
+            <h3>❌ Problem ze Sprzedażą Transakcyjną</h3>
+            <p style="font-style: italic; color: rgba(255, 255, 255, 0.6);">
+                'Dzień dobry, jestem z Milwaukee. Potrzebujecie rękawic?'
+            </p>
+            <ul>
+                <li>Pozycjonowanie jako towar</li>
+                <li>Cena staje się jedynym wyróżnikiem</li>
+                <li>Brak lojalności klienta</li>
+                <li>Łatwa wymiana na konkurencję</li>
+            </ul>
+
+            <h3>✅ Podejście Doradcze</h3>
+            <p style="font-style: italic; color: rgba(255, 255, 255, 0.6);">
+                'Proszę mi powiedzieć o największych wyzwaniach, jakie Wasz zespół napotyka obecnie z ochroną rąk.'
+            </p>
+            <ul>
+                <li>Pozycjonujesz się jako ekspert</li>
+                <li>Odkrywasz ukryte potrzeby</li>
+                <li>Budujesz zaufanie i partnerstwo</li>
+                <li>Uzasadniasz premium cenę</li>
+            </ul>
+
+            <div class="framework-box">
+                <h4>📊 Realne Dane</h4>
+                <p><strong>Sprzedawcy transakcyjni:</strong> 18% skuteczności, średnie zamówienie 1800 zł</p>
+                <p><strong>Sprzedawcy doradczy:</strong> 47% skuteczności, średnie zamówienie 5400 zł</p>
+            </div>
+
+            <div class="key-insight">
+                <strong>Kluczowy Insight:</strong> Ludzie kupują od konsultantów, którym ufają, a nie od sprzedawców,
+                którzy pitchują.
+            </div>
+        </div>
+
+        <!-- Card 3: SPIN Framework -->
+        <div class="card" data-card="2">
+            <h2>SPIN Selling dla PPE</h2>
+            <p>SPIN to złoty standard sprzedaży doradczej B2B. Oto jak dostosować go do PPE:</p>
+
+            <div class="framework-box">
+                <h4>S - Pytania Sytuacyjne (Zrozum aktualny stan)</h4>
+                <ul>
+                    <li>'Jakie PPE obecnie używacie?'</li>
+                    <li>'Ilu pracowników potrzebuje ochrony rąk?'</li>
+                    <li>'Kto decyduje o zakupach PPE?'</li>
+                </ul>
+            </div>
+
+            <div class="framework-box">
+                <h4>P - Pytania Problemowe (Zidentyfikuj punkty bólu)</h4>
+                <ul>
+                    <li>'Jakie problemy zgłaszają pracownicy z obecnymi rękawicami?'</li>
+                    <li>'Jak często rękawice zawodzą przed końcem zmiany?'</li>
+                    <li>'Czy były uwagi dotyczące zgodności z normami podczas ostatnich audytów?'</li>
+                </ul>
+            </div>
+
+            <div class="framework-box">
+                <h4>I - Pytania Implikacyjne (Wzmocnij wpływ)</h4>
+                <ul>
+                    <li>'Co się dzieje, gdy rękawice zawiodą w trakcie zmiany?'</li>
+                    <li>'Ile kosztuje uraz ręki w straconej produktywności?'</li>
+                    <li>'Jeśli inspektor znajdzie niezgodne PPE, jakie są kary?'</li>
+                </ul>
+            </div>
+
+            <div class="framework-box">
+                <h4>N - Pytania Need-Payoff (Korzyści z rozwiązania)</h4>
+                <ul>
+                    <li>'Gdyby pracownicy nosili rękawice przez cały dzień bez skarżenia się, jak wpłynęłoby to na
+                        produktywność?'</li>
+                    <li>'Co by znaczyło, gdybyście mogli zmniejszyć urazy rąk o 40%?'</li>
+                    <li>'Jak cenne byłoby posiadanie jednego zaufanego partnera PPE zamiast żonglowania 3 dostawcami?'
+                    </li>
+                </ul>
+            </div>
+
+            <div class="key-insight">
+                <strong>Magia:</strong> Zanim przedstawisz rozwiązanie Milwaukee, klient już sam siebie przekonał, że
+                tego potrzebuje.
+            </div>
+        </div>
+
+        <!-- Card 4: Interactive SPIN -->
+        <div class="card" data-card="3">
+            <h2>Ćwiczenie: SPIN w Akcji</h2>
+            <p>Spotykasz się z kierownikiem budowy. Wspomina:</p>
+            <p style="font-style: italic; background: rgba(255, 255, 255, 0.05); padding: 16px; border-radius: 8px;">
+                "Nasze rękawice zużywają się za szybko."
+            </p>
+            <p style="margin-top: 24px;">
+                <strong>Napisz JEDNO mocne pytanie Implikacyjne, żeby odkryć koszt tego problemu:</strong>
+            </p>
+            <textarea class="interactive-input" rows="3" placeholder="Twoje pytanie implikacyjne tutaj..."></textarea>
+
+            <div class="framework-box" style="margin-top: 24px;">
+                <h4>💡 Przykładowa odpowiedź:</h4>
+                <p>'Ile miesięcznie wydajecie na wymianę rękawic, które zużywają się przedwcześnie? A co z czasem
+                    straconym, gdy pracownicy muszą przerwać pracę i pójść po nowe?'</p>
+            </div>
+
+            <div class="key-insight" style="margin-top: 16px;">
+                <strong>Feedback:</strong> Świetne pytania implikacyjne łączą przedstawiony problem (szybkie zużycie) z
+                wpływem biznesowym (koszt + przestój). Twoim zadaniem jest sprawić, by problem wydawał się większy niż
+                początkowo myśleli.
+            </div>
+        </div>
+
+        <!-- Card 5: ROI Conversation -->
+        <div class="card" data-card="4">
+            <h2>Rozmowa o ROI</h2>
+
+            <div
+                style="background: rgba(255, 68, 68, 0.1); border-left: 4px solid #ff4444; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+                <strong>Obiekcja klienta:</strong> 'Milwaukee jest o 40% droższe niż to, czego teraz używamy.'
+            </div>
+
+            <p style="margin-bottom: 8px;"><strong>❌ Amatorska odpowiedź:</strong> 'Ale jesteśmy wyższej jakości!'</p>
+            <p style="margin-bottom: 24px;"><strong>✅ Profesjonalna odpowiedź:</strong> 'Zróbmy razem matematykę.'</p>
+
+            <h3>Framework ROI</h3>
+
+            <div class="framework-box">
+                <h4>Obecny Stan (Rękawice konkurencji)</h4>
+                <ul>
+                    <li>Koszt za parę: 32 zł</li>
+                    <li>Wytrzymałość: 2 dni</li>
+                    <li>Pracowników: 50</li>
+                    <li><strong>Koszt miesięczny: 32 zł × 15 par/m-c × 50 = 24 000 zł/miesiąc</strong></li>
+                </ul>
+            </div>
+
+            <div class="framework-box" style="background: rgba(0, 255, 136, 0.1); border-color: #00ff88;">
+                <h4>Przyszły Stan (Rękawice Milwaukee)</h4>
+                <ul>
+                    <li>Koszt za parę: 44 zł (+40%)</li>
+                    <li>Wytrzymałość: 5 dni (2,5x dłużej)</li>
+                    <li>Pracowników: 50</li>
+                    <li><strong>Koszt miesięczny: 44 zł × 6 par/m-c × 50 = 13 200 zł/miesiąc</strong></li>
+                </ul>
+            </div>
+
+            <div
+                style="background: rgba(255, 215, 0, 0.2); padding: 24px; border-radius: 16px; text-align: center; margin: 24px 0;">
+                <h3 style="color: #ffd700; margin-bottom: 8px;">💰 Oszczędności</h3>
+                <p style="font-size: 32px; font-weight: 700; color: #ffd700;">10 800 zł/miesiąc</p>
+                <p style="font-size: 24px; font-weight: 600; color: #ffd700;">129 600 zł/rok</p>
+            </div>
+
+            <h3>Plus ukryte koszty uniknięte:</h3>
+            <ul>
+                <li>Mniej skarg pracowników → wyższa produktywność</li>
+                <li>Lepsze dopasowanie → wyższa zgodność</li>
+                <li>Mniej urazów rąk → niższe składki ubezpieczeniowe</li>
+            </ul>
+
+            <div class="key-insight" style="margin-top: 24px;">
+                <strong>Kluczowy Insight:</strong> Produkty premium często mają NIŻSZY całkowity koszt posiadania. Twoim
+                zadaniem jest udowodnić to matematyką, nie twierdzeniami.
+            </div>
+        </div>
+
+        <!-- Card 6: Pain Points -->
+        <div class="card" data-card="5">
+            <h2>Odkrywanie Punktów Bólu</h2>
+            <p>Pracownicy nie noszą PPE, którego nienawidzą. Twoje zadanie: znajdź, które punkty bólu Milwaukee
+                rozwiązuje.</p>
+
+            <h3>7 Najczęstszych Punktów Bólu PPE:</h3>
+
+            <div class="quiz-question">
+                <strong>1. Komfort</strong>
+                <p>'Rękawice są zbyt sztywne/gorące/nieporęczne'</p>
+                <p style="color: #00d4ff;">→ Milwaukee: Oddychające materiały, ergonomiczny design</p>
+            </div>
+
+            <div class="quiz-question">
+                <strong>2. Wytrzymałość</strong>
+                <p>'Rozpadają się po jednej zmianie'</p>
+                <p style="color: #00d4ff;">→ Milwaukee: Wzmocniona dłoń, podwójne szwy</p>
+            </div>
+
+            <div class="quiz-question">
+                <strong>3. Precyzja</strong>
+                <p>'Nie czuję nic w tych rękawicach'</p>
+                <p style="color: #00d4ff;">→ Milwaukee: Technologia precision grip</p>
+            </div>
+
+            <div class="quiz-question">
+                <strong>4. Dopasowanie</strong>
+                <p>'Jeden rozmiar nie pasuje nikomu'</p>
+                <p style="color: #00d4ff;">→ Milwaukee: Szeroka gama rozmiarów, opcje damskie</p>
+            </div>
+
+            <div class="quiz-question">
+                <strong>5. Zgodność</strong>
+                <p>'Nie jestem pewien czy spełniają normy'</p>
+                <p style="color: #00d4ff;">→ Milwaukee: Jasne certyfikaty (EN 388, itp.)</p>
+            </div>
+
+            <div class="quiz-question">
+                <strong>6. Wygląd</strong>
+                <p>'Pracownicy odmawiają noszenia brzydkich PPE'</p>
+                <p style="color: #00d4ff;">→ Milwaukee: Profesjonalny wygląd, duma z marki</p>
+            </div>
+
+            <div class="quiz-question">
+                <strong>7. Koszt</strong>
+                <p>'Budżet jest napięty'</p>
+                <p style="color: #00d4ff;">→ Milwaukee: Analiza TCO pokazuje oszczędności</p>
+            </div>
+
+            <div class="framework-box" style="margin-top: 24px;">
+                <h4>Format Pytania Odkrywającego:</h4>
+                <p>'W skali 1-10, jak zadowoleni są Wasi pracownicy z [komfortu/wytrzymałości/dopasowania] obecnych
+                    rękawic?'</p>
+                <p style="margin-top: 12px;"><strong>Cokolwiek poniżej 8 = okazja do głębszego kopania.</strong></p>
+            </div>
+        </div>
+
+        <!-- Card 7: Value Stacking -->
+        <div class="card" data-card="6">
+            <h2>Sprawdź: Kumulacja Wartości</h2>
+
+            <div
+                style="background: rgba(255, 68, 68, 0.1); border-left: 4px solid #ff4444; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+                <strong>Klient mówi:</strong> 'Te rękawice Milwaukee kosztują 44 zł. Te, których używamy teraz kosztują
+                32 zł. Dlaczego mam płacić więcej?'
+            </div>
+
+            <p><strong>Twoja odpowiedź z kumulacją wartości (napisz 2-3 zdania):</strong></p>
+            <textarea class="interactive-input" rows="4" placeholder="Twoja kumulacja wartości tutaj..."></textarea>
+
+            <div class="framework-box" style="margin-top: 24px;">
+                <h4>💡 Przykładowa odpowiedź:</h4>
+                <p>
+                    Dobre pytanie. Te rękawice za 44 zł wytrzymują 5 dni zamiast 2 - to 13,20 zł/miesiąc vs 24
+                    zł/miesiąc na pracownika.
+                    Ale poza kosztem, Wasi pracownicy będą je nosić cały dzień, bo są wygodne, co oznacza lepszą ochronę
+                    i mniej roszczeń z tytułu urazów.
+                    Ile jest wart zapobieżony uraz ręki?
+                </p>
+            </div>
+
+            <div class="key-insight" style="margin-top: 16px;">
+                <strong>Feedback:</strong> Silna kumulacja wartości układa wiele korzyści: finansowe (TCO), funkcjonalne
+                (wytrzymałość), emocjonalne (komfort), mitygacja ryzyka (urazy). Ułóż 3-4 korzyści, żeby przeważyć
+                obiekcję cenową.
+            </div>
+        </div>
+
+        <!-- Card 8: Quiz -->
+        <div class="card" data-card="7">
+            <h2>Testuj Swoje Umiejętności Doradcze</h2>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">1. Który typ pytania SPIN wzmacnia koszt obecnego
+                    problemu klienta?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="0" data-option="0">
+                        Sytuacyjne - 'Jakich rękawic teraz używacie?'
+                    </div>
+                    <div class="quiz-option" data-question="0" data-option="1">
+                        Problemowe - 'Jakie problemy zgłaszają pracownicy?'
+                    </div>
+                    <div class="quiz-option" data-question="0" data-option="2">
+                        Implikacyjne - 'Ile kosztuje firmę uraz ręki?'
+                    </div>
+                    <div class="quiz-option" data-question="0" data-option="3">
+                        Need-Payoff - 'Jak cenne byłoby zmniejszenie urazów?'
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="0">
+                    <strong>✅ Prawidłowa odpowiedź:</strong> Implikacyjne<br>
+                    Pytania implikacyjne sprawiają, że problemy wydają się większe, łącząc je z wpływem na biznes
+                    (koszt, czas, ryzyko). To tworzy pilność.
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">2. Pracownik skarży się 'Te rękawice są zbyt
+                    nieporęczne, nie czuję nic.' Do jakiej kategorii punktu bólu to należy?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="1" data-option="0">
+                        Komfort
+                    </div>
+                    <div class="quiz-option" data-question="1" data-option="1">
+                        Wytrzymałość
+                    </div>
+                    <div class="quiz-option" data-question="1" data-option="2">
+                        Precyzja
+                    </div>
+                    <div class="quiz-option" data-question="1" data-option="3">
+                        Dopasowanie
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="1">
+                    <strong>✅ Prawidłowa odpowiedź:</strong> Precyzja<br>
+                    Precyzja = zdolność czucia i manipulowania obiektami. Technologia precision grip Milwaukee
+                    rozwiązuje ten konkretny punkt bólu.
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">3. Klient: 'Wasze rękawice są o 40% droższe.' Co
+                    powinieneś zrobić NAJPIERW?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="2" data-option="0">
+                        Natychmiast bronić ceny
+                    </div>
+                    <div class="quiz-option" data-question="2" data-option="1">
+                        Zaproponować rabat
+                    </div>
+                    <div class="quiz-option" data-question="2" data-option="2">
+                        Zapytać: 'Do czego dokładnie to porównujesz?'
+                    </div>
+                    <div class="quiz-option" data-question="2" data-option="3">
+                        Zmienić temat
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="2">
+                    <strong>✅ Prawidłowa odpowiedź:</strong> Zapytać o porównanie<br>
+                    Zawsze wyjaśnij porównanie przed obroną. Mogą porównywać do gorszych produktów. Gdy znasz ich obecny
+                    wybór, możesz przeprowadzić analizę TCO.
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 9: Summary -->
+        <div class="card" data-card="8">
+            <h2>Kluczowe Wnioski</h2>
+
+            <ul class="summary-list">
+                <li>
+                    <strong>Framework SPIN:</strong> Sytuacja → Problem → Implikacja → Need-Payoff. Opanuj tę sekwencję.
+                </li>
+                <li>
+                    <strong>ROI jest Królem:</strong> Premium ceny wymagają uzasadnienia matematycznego. Oblicz TCO, nie
+                    tylko cenę jednostkową.
+                </li>
+                <li>
+                    <strong>7 Punktów Bólu:</strong> Komfort, Wytrzymałość, Precyzja, Dopasowanie, Zgodność, Wygląd,
+                    Koszt. Odkryj, które są najważniejsze.
+                </li>
+                <li>
+                    <strong>Kumulacja Wartości:</strong> Układaj wiele korzyści (finansowe + funkcjonalne + emocjonalne
+                    + ryzyko), żeby przeważyć obiekcje cenowe.
+                </li>
+                <li>
+                    <strong>Trial Closes:</strong> Konkretne, niskiego ryzyka następne kroki przyspieszają transakcje
+                    bez wymuszania decyzji zakupowej.
+                </li>
+            </ul>
+
+            <div class="next-steps-box">
+                <h3>📝 Twoje Zadanie Praktyczne</h3>
+                <p>Przed następnym spotkaniem z klientem:</p>
+                <ol style="margin-left: 24px; margin-top: 12px;">
+                    <li>Przygotuj 5 pytań SPIN (jedno na kategorię, plus bonus)</li>
+                    <li>Oblicz TCO dla najczęstszego produktu vs konkurencja</li>
+                    <li>Zidentyfikuj, które z 7 punktów bólu prawdopodobnie dotyczy Twojego klienta</li>
+                </ol>
+                <p style="margin-top: 16px;"><strong>Poniżej odblokowasz narzędzia, które w tym pomogą.</strong></p>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn btn-primary" style="font-size: 16px; padding: 16px 32px;">
+                    <i data-lucide="check-circle" size="20"></i>
+                    Ukończ Lekcję (+150 XP)
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="card-nav">
+            <button class="btn btn-secondary" id="prevBtn" disabled>
+                <i data-lucide="chevron-left" size="16"></i>
+                Poprzedni
+            </button>
+            <span class="card-progress" id="cardProgress">1 / 9</span>
+            <button class="btn btn-primary" id="nextBtn">
+                Następny
+                <i data-lucide="chevron-right" size="16"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Card navigation
+        let currentCard = 0;
+        const cards = document.querySelectorAll('.card');
+        const totalCards = cards.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const cardProgress = document.getElementById('cardProgress');
+        const progressBar = document.getElementById('progressBar');
+
+        // Quiz state
+        const correctAnswers = [2, 2, 2]; // Correct option indices
+
+        function showCard(index) {
+            cards.forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+
+            currentCard = index;
+            prevBtn.disabled = index === 0;
+            nextBtn.textContent = index === totalCards - 1 ? 'Zakończ' : 'Następny';
+            cardProgress.textContent = `${index + 1} / ${totalCards}`;
+
+            // Update progress bar
+            const progress = ((index + 1) / totalCards) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Reinitialize icons
+            lucide.createIcons();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentCard > 0) showCard(currentCard - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentCard < totalCards - 1) {
+                showCard(currentCard + 1);
+            } else {
+                alert('🎉 Gratulacje! Ukończono lekcję.\nZdobyto: +150 XP\n\nOdblokowano:\n✅ Generator Pytań SPIN\n✅ Kalkulator ROI PPE\n✅ 5 Engramów do utrwalenia');
+            }
+        });
+
+        // Quiz logic
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const questionIndex = parseInt(this.dataset.question);
+                const optionIndex = parseInt(this.dataset.option);
+                const correctIndex = correctAnswers[questionIndex];
+
+                // Deselect all options in this question
+                document.querySelectorAll(`.quiz-option[data-question="${questionIndex}"]`).forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                // Mark selected
+                this.classList.add('selected');
+
+                // Check if correct
+                if (optionIndex === correctIndex) {
+                    this.classList.add('correct');
+                } else {
+                    this.classList.add('incorrect');
+                    // Show correct answer
+                    document.querySelector(`.quiz-option[data-question="${questionIndex}"][data-option="${correctIndex}"]`).classList.add('correct');
+                }
+
+                // Show explanation
+                document.querySelector(`[data-explanation="${questionIndex}"]`).classList.add('show');
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentCard > 0) {
+                showCard(currentCard - 1);
+            } else if (e.key === 'ArrowRight' && currentCard < totalCards - 1) {
+                showCard(currentCard + 1);
+            }
+        });
+    </script>
+</body>
+
+</html>

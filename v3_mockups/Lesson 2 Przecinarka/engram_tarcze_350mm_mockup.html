@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engram: Tarcze 350mm - Rodzaje i Zastosowania</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Engram Header */
+        .engram-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .engram-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 68, 68, 0.2);
+            border: 1px solid rgba(255, 68, 68, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff4444;
+            margin-bottom: 16px;
+        }
+
+        .engram-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ff4444, #ff8800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .engram-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 24px;
+        }
+
+        .engram-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Progress dots */
+        .slide-progress {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background: #ff4444;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* Slide */
+        .slide {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 24px;
+            display: none;
+            min-height: 400px;
+        }
+
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-label {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(255, 68, 68, 0.2);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff4444;
+            margin-bottom: 16px;
+        }
+
+        .slide h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #ff4444;
+        }
+
+        .slide p {
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .slide ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .slide li {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 8px;
+        }
+
+        /* Highlight boxes */
+        .blade-showcase {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .blade-showcase h3 {
+            color: #00d4ff;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .blade-showcase .code {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        .application-box {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .application-box strong {
+            color: #00ff88;
+        }
+
+        .warning-box {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid #ffd700;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .warning-box strong {
+            color: #ffd700;
+        }
+
+        /* Flashcard style */
+        .flashcard {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 136, 0, 0.2));
+            border: 2px solid rgba(255, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 24px 0;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.02);
+        }
+
+        .flashcard-front {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .flashcard-question {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        /* Quiz */
+        .quiz-option {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 68, 68, 0.5);
+        }
+
+        .quiz-option.selected {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(255, 68, 68, 0.3);
+            border-color: #ff4444;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff4444, #ff8800);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 68, 68, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .spec-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="engram-header">
+            <div class="engram-badge">💿 ENGRAM</div>
+            <h1>Tarcze 350mm - Rodzaje i Zastosowania</h1>
+            <div class="engram-meta">
+                <span><i data-lucide="brain" style="width: 16px; height: 16px;"></i> Zapamiętanie</span>
+                <span><i data-lucide="clock" style="width: 16px; height: 16px;"></i> 8 min</span>
+                <span><i data-lucide="layers" style="width: 16px; height: 16px;"></i> 6 kart</span>
+            </div>
+        </div>
+
+        <!-- Progress Dots -->
+        <div class="slide-progress">
+            <div class="progress-dot active"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+        </div>
+
+        <!-- Slide 1: Introduction -->
+        <div class="slide active" id="slide1">
+            <div class="slide-label">INTRO</div>
+            <h2>💿 Rodzaje Tarcz 350mm dla Milwaukee MX FUEL™</h2>
+            <p>W tym engramie nauczysz się rozpoznawać i dobierać odpowiednie tarcze do przecinarki 350mm.</p>
+
+            <div class="flashcard">
+                <div class="flashcard-front">🎯</div>
+                <div class="flashcard-question">6 rodzajów tarcz do zapamiętania</div>
+            </div>
+
+            <div class="application-box">
+                <strong>Dlaczego to ważne?</strong>
+                <ul>
+                    <li>Niewłaściwa tarcza = niebezpieczeństwo i uszkodzenie narzędzia</li>
+                    <li>Prawidłowy dobór = 3x dłuższa żywotność tarczy</li>
+                    <li>Znajomość kodów = szybkie zamawianie i identyfikacja</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: HUDD -->
+        <div class="slide" id="slide2">
+            <div class="slide-label">TARCZA #1</div>
+            <h2>HUDD 350 - Uniwersalna SPEEDCROSS™</h2>
+
+            <div class="blade-showcase">
+                <h3>💿 HUDD 350</h3>
+                <p><span class="code">Kod: 4932471985</span></p>
+                
+                <div class="spec-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">Wysokość segmentu</div>
+                        <div class="spec-value">8 mm</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Szerokość cięcia</div>
+                        <div class="spec-value">2.6 mm</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="application-box">
+                <strong>🎯 Zastosowanie:</strong>
+                <ul>
+                    <li>Kamień naturalny i sztuczny</li>
+                    <li>Materiały abrazyjne</li>
+                    <li>Rury z żeliwa</li>
+                    <li>Beton zwykły (nie zbrojony)</li>
+                </ul>
+            </div>
+
+            <div class="flashcard">
+                <div class="flashcard-front">🧠</div>
+                <div class="flashcard-question">HUDD = Universal Diamond Disc<br>"Uniwersalna do wszystkiego oprócz stali i asfaltu"</div>
+            </div>
+
+            <p style="margin-top: 24px; font-size: 14px; color: rgba(255,255,255,0.6);">💡 To najpopularniejsza tarcza - jak w zestawie podstawowym</p>
+        </div>
+
+        <!-- Slide 3: DUH -->
+        <div class="slide" id="slide3">
+            <div class="slide-label">TARCZA #2</div>
+            <h2>DUH 350 - Twardy Beton</h2>
+
+            <div class="blade-showcase">
+                <h3>💿 DUH 350</h3>
+                <p><span class="code">Kod: 4932471986</span></p>
+                
+                <div class="spec-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">Wysokość segmentu</div>
+                        <div class="spec-value">10 mm</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Szerokość cięcia</div>
+                        <div class="spec-value">2.8 mm</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="application-box">
+                <strong>🎯 Zastosowanie:</strong>
+                <ul>
+                    <li>Twardy beton (klasy C30/37 i wyżej)</li>
+                    <li>Klinkier drogowy</li>
+                    <li>Produkty murarskie (cegła klinkierowa)</li>
+                    <li>Nawierzchnie przemysłowe</li>
+                </ul>
+            </div>
+
+            <div class="flashcard">
+                <div class="flashcard-front">🧠</div>
+                <div class="flashcard-question">DUH = Diamond Ultra Hard<br>"Segment 10mm = ekstra żywotność w najtwardszych materiałach"</div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Kiedy użyć DUH zamiast HUDD?</strong><br>
+                Jeśli widzisz, że HUDD się szybko zużywa lub "szkli" (gładkie segmenty bez cięcia) = przejdź na DUH.
+            </div>
+        </div>
+
+        <!-- Slide 4: STEELHEAD -->
+        <div class="slide" id="slide4">
+            <div class="slide-label">TARCZA #3</div>
+            <h2>STEELHEAD™ 350 - Stal i Zbrojenie</h2>
+
+            <div class="blade-showcase">
+                <h3>💿 STEELHEAD™ 350</h3>
+                <p><span class="code">Kod: 4932471988</span></p>
+                
+                <div class="spec-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">Wysokość segmentu</div>
+                        <div class="spec-value">4 mm</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Szerokość cięcia</div>
+                        <div class="spec-value">2.8 mm</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="application-box">
+                <strong>🎯 Zastosowanie:</strong>
+                <ul>
+                    <li>Stal konstrukcyjna</li>
+                    <li>Stal nierdzewna</li>
+                    <li>Beton gęsto zbrojony</li>
+                    <li>Profile stalowe</li>
+                </ul>
+            </div>
+
+            <div class="flashcard">
+                <div class="flashcard-front">🧠</div>
+                <div class="flashcard-question">STEELHEAD = "Stalowa Głowa"<br>"Duża gęstość diamentów lutowanych = agresywne cięcie metalu"</div>
+            </div>
+
+            <div class="warning-box">
+                <strong>💡 Pro Tip:</strong><br>
+                Ta tarcza radzi sobie zarówno z betonem JAK I stalą. Idealna do betonu zbrojonego - nie musisz przełączać tarcz!
+            </div>
+        </div>
+
+        <!-- Slide 5: ADD -->
+        <div class="slide" id="slide5">
+            <div class="slide-label">TARCZA #4</div>
+            <h2>ADD 350 - Asfalt i Drogi</h2>
+
+            <div class="blade-showcase">
+                <h3>💿 ADD 350 (Asphalt Diamond Disc)</h3>
+                <p><span class="code">Kod: 4932478952</span></p>
+                
+                <div class="spec-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">Wysokość segmentu</div>
+                        <div class="spec-value">10 mm</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Szerokość cięcia</div>
+                        <div class="spec-value">2.8 mm</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="application-box">
+                <strong>🎯 Zastosowanie:</strong>
+                <ul>
+                    <li>Asfalt (nawierzchnie drogowe)</li>
+                    <li>Mieszanki bitumiczne</li>
+                    <li>Drogi, parkingi, chodniki asfaltowe</li>
+                </ul>
+            </div>
+
+            <div class="flashcard">
+                <div class="flashcard-front">🧠</div>
+                <div class="flashcard-question">ADD = Asphalt Diamond Disc<br>"Podwójnie naprężany rdzeń = stabilność przy cięciu lepkiego asfaltu"</div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Uwaga:</strong><br>
+                Asfalt w wysokiej temperaturze (lato, słońce) może się lepić do tarczy. Zawsze używaj wody!
+            </div>
+        </div>
+
+        <!-- Slide 6: CCS & SCS -->
+        <div class="slide" id="slide6">
+            <div class="slide-label">TARCZE #5 & #6</div>
+            <h2>CCS & SCS - Tarcze Ścierne (Cienkie)</h2>
+
+            <div class="blade-showcase">
+                <h3>💿 CCS 41 / 350 (Metal)</h3>
+                <p><span class="code">Kod: 4932472264</span></p>
+                
+                <div class="spec-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">Grubość tarczy</div>
+                        <div class="spec-value">4 mm</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Typ</div>
+                        <div class="spec-value">Ścierna PRO+</div>
+                    </div>
+                </div>
+
+                <div class="application-box" style="margin-top: 16px;">
+                    <strong>🎯 Zastosowanie:</strong>
+                    <ul>
+                        <li>Stal nierdzewna i kwasoodporna</li>
+                        <li>Hardox (blacha trudnościeralna)</li>
+                        <li>Stal sprężynowa i narzędziowa</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="blade-showcase" style="margin-top: 24px;">
+                <h3>💿 SCS 41 / 350 (Kamień)</h3>
+                <p><span class="code">Kod: 4932471989</span></p>
+                
+                <div class="spec-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">Grubość tarczy</div>
+                        <div class="spec-value">4 mm</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Typ</div>
+                        <div class="spec-value">Ścierna</div>
+                    </div>
+                </div>
+
+                <div class="application-box" style="margin-top: 16px;">
+                    <strong>🎯 Zastosowanie:</strong>
+                    <ul>
+                        <li>Beton</li>
+                        <li>Kamień</li>
+                        <li>Cegła</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box" style="margin-top: 24px;">
+                <strong>⚠️ WAŻNE:</strong><br>
+                Tarcze ścierne (CCS/SCS) to zupełnie inna technologia niż diamentowe (SPEEDCROSS™). Szybsze cięcie, krótsza żywotność. Bezwzględnie: CCS = metal na SUCHO, SCS = kamień na MOKRO.
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="prevBtn" onclick="navigate(-1)" disabled>
+                <i data-lucide="chevron-left" style="width: 20px; height: 20px;"></i>
+                Wstecz
+            </button>
+            <button class="btn btn-primary" id="nextBtn" onclick="navigate(1)">
+                Dalej
+                <i data-lucide="chevron-right" style="width: 20px; height: 20px;"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Navigation
+        let currentSlide = 1;
+        const totalSlides = 6;
+
+        function navigate(direction) {
+            const nextSlide = currentSlide + direction;
+            if (nextSlide < 1 || nextSlide > totalSlides) return;
+
+            // Hide current
+            document.getElementById(`slide${currentSlide}`).classList.remove('active');
+
+            // Update progress dots
+            document.querySelectorAll('.progress-dot')[currentSlide - 1].classList.remove('active');
+
+            // Show next
+            currentSlide = nextSlide;
+            document.getElementById(`slide${currentSlide}`).classList.add('active');
+            document.querySelectorAll('.progress-dot')[currentSlide - 1].classList.add('active');
+
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').innerHTML = currentSlide === totalSlides
+                ? 'Ukończ <i data-lucide="check" style="width: 20px; height: 20px;"></i>'
+                : 'Dalej <i data-lucide="chevron-right" style="width: 20px; height: 20px;"></i>';
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Reinit icons
+            lucide.createIcons();
+        }
+
+        // Handle completion
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentSlide === totalSlides) {
+                alert('🎉 Engram ukończony!\n\n✅ Zapamiętano 6 rodzajów tarcz 350mm\n+50 XP');
+            }
+        });
+    </script>
+</body>
+
+</html>

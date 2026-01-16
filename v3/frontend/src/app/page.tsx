@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { Zap, Trophy, Target, Flame, BookOpen, Brain, ChevronRight, GraduationCap, Search, Bell } from 'lucide-react'
+import { Zap, Trophy, Target, Flame, BookOpen, Brain, ChevronRight, GraduationCap, Bell } from 'lucide-react'
 
 export default function HomePage() {
   const { user, profile, loading } = useAuth()
@@ -66,37 +66,11 @@ export default function HomePage() {
         padding: '16px 32px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         position: 'sticky',
         top: 0,
         zIndex: 50
       }}>
-        {/* Search */}
-        <div style={{ flex: 1, maxWidth: '400px', position: 'relative' }}>
-          <input
-            type="text"
-            placeholder="Szukaj..."
-            style={{
-              width: '100%',
-              padding: '10px 16px 10px 40px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '12px',
-              color: 'white',
-              fontFamily: 'Outfit, sans-serif',
-              fontSize: '14px',
-              outline: 'none'
-            }}
-          />
-          <Search size={18} style={{
-            position: 'absolute',
-            left: '12px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            color: 'rgba(255, 255, 255, 0.6)'
-          }} />
-        </div>
-
         {/* Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           {/* Notifications */}

@@ -1,0 +1,3394 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaawansowane Typy Kart - Milwaukee MX FUEL</title>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Card Styling */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .card h2 {
+            font-size: 32px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+            font-size: 16px;
+        }
+
+        /* 1. DRAG & DROP CARD */
+        .drag-drop-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .drag-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drag-item {
+            background: rgba(255, 136, 0, 0.2);
+            border: 2px solid rgba(255, 136, 0, 0.4);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            opacity: 0.5;
+        }
+
+        .drag-item.dragging {
+            opacity: 0.3;
+        }
+
+        .drop-zones {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .drop-zone {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+        }
+
+        .drop-zone.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+            border-style: solid;
+        }
+
+        .drop-zone.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            border-style: solid;
+        }
+
+        .drop-zone-label {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 2. CALCULATOR CARD */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .input-group input[type="number"],
+        .input-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+        }
+
+        .input-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .range-value {
+            text-align: right;
+            color: #ff8800;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .calc-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            color: #0a0a1a;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .result-box {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: #00ff88;
+            margin: 16px 0;
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .recommendation {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(255, 136, 0, 0.1);
+            border-left: 4px solid #ff8800;
+            border-radius: 8px;
+        }
+
+        /* 3. COMPARISON CARD */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 32px;
+        }
+
+        .comparison-table th {
+            background: rgba(255, 136, 0, 0.2);
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(255, 136, 0, 0.4);
+        }
+
+        .comparison-table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .product-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 136, 0, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .feature-badge.premium {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        /* 4. VIDEO CARD */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 24px 0;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 136, 0, 0.2));
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+
+        .video-checkpoints {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .checkpoint {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid rgba(255, 136, 0, 0.5);
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkpoint:hover {
+            background: rgba(255, 136, 0, 0.1);
+            border-left-color: #ff8800;
+        }
+
+        .checkpoint.completed {
+            border-left-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .checkpoint-time {
+            font-weight: 600;
+            color: #ff8800;
+            font-size: 14px;
+        }
+
+        /* 5. ROLE-PLAY CARD */
+        .roleplay-container {
+            margin-top: 32px;
+        }
+
+        .dialog-message {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .dialog-message.client {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            margin-right: 60px;
+        }
+
+        .dialog-message.advisor {
+            background: rgba(255, 136, 0, 0.1);
+            border-left: 4px solid #ff8800;
+            margin-left: 60px;
+        }
+
+        .speaker-label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .response-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .response-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .response-option:hover {
+            background: rgba(255, 136, 0, 0.1);
+            border-color: #ff8800;
+        }
+
+        .response-option.selected {
+            background: rgba(255, 136, 0, 0.2);
+            border-color: #ff8800;
+        }
+
+        .response-badge {
+            background: rgba(255, 136, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .metric-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .metric-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff8800, #00ff88);
+            transition: width 0.5s ease;
+        }
+
+        /* 6. BRANCHING SCENARIO CARD */
+        .scenario-container {
+            margin-top: 32px;
+        }
+
+        .scenario-text {
+            background: rgba(255, 136, 0, 0.1);
+            border-left: 4px solid #ff8800;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .decision-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .decision-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .decision-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 136, 0, 0.5);
+            transform: translateY(-4px);
+        }
+
+        .decision-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 136, 0, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+
+        .decision-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .decision-consequence {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .outcome-box {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+            display: none;
+        }
+
+        .outcome-box.show {
+            display: block;
+        }
+
+        .outcome-score {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .score-badge {
+            padding: 8px 16px;
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        /* Utility classes */
+        .framework-box {
+            background: rgba(255, 136, 0, 0.1);
+            border-left: 4px solid #ff8800;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .key-insight {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid #ffd700;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            color: #0a0a1a;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255, 136, 0, 0.3);
+        }
+
+        .btn-secondary {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* 7. TIMELINE/PROCESS CARD */
+        .timeline-container {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #ff8800, #00ff88);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            background: rgba(255, 136, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        .timeline-number {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 24px;
+            color: #0a0a1a;
+            box-shadow: 0 4px 12px rgba(255, 136, 0, 0.4);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #ff8800;
+        }
+
+        /* 8. BEFORE/AFTER SLIDER CARD */
+        .comparison-slider {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 16px;
+            margin: 24px 0;
+        }
+
+        .comparison-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .comparison-before {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.3), rgba(139, 69, 19, 0.3));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+        }
+
+        .comparison-after {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.3), rgba(0, 212, 255, 0.3));
+            clip-path: inset(0 50% 0 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+        }
+
+        .comparison-slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: white;
+            cursor: ew-resize;
+            transform: translateX(-50%);
+        }
+
+        .comparison-slider-handle::before {
+            content: '⬌';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a0a1a;
+            font-weight: 700;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .comparison-label {
+            position: absolute;
+            top: 20px;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .comparison-label.before {
+            left: 20px;
+            color: #ff4444;
+        }
+
+        .comparison-label.after {
+            right: 20px;
+            color: #00ff88;
+        }
+
+        /* 9. HOTSPOT IMAGE CARD */
+        .hotspot-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(26, 26, 58, 0.8), rgba(10, 26, 42, 0.8));
+            border-radius: 16px;
+            margin: 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hotspot-image {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 200px;
+            position: relative;
+        }
+
+        .hotspot {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 136, 0, 0.8);
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+            transition: all 0.3s ease;
+        }
+
+        .hotspot:hover {
+            transform: scale(1.2);
+            background: rgba(255, 215, 0, 0.9);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 136, 0, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(255, 136, 0, 0); }
+        }
+
+        .hotspot-tooltip {
+            position: fixed;
+            background: rgba(10, 10, 26, 0.98);
+            border: 2px solid #ff8800;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 280px;
+            max-width: 350px;
+            display: none;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .hotspot-tooltip.show {
+            display: block;
+            pointer-events: auto;
+        }
+
+        .hotspot-tooltip h4 {
+            color: #ff8800;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .hotspot-tooltip p {
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* 10. CHECKLIST CARD */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .checklist-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .checklist-item.checked {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: #00ff88;
+        }
+
+        .checklist-checkbox {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item.checked .checklist-checkbox {
+            background: #00ff88;
+            border-color: #00ff88;
+        }
+
+        .checklist-checkbox i {
+            display: none;
+            color: #0a0a1a;
+        }
+
+        .checklist-item.checked .checklist-checkbox i {
+            display: block;
+        }
+
+        .checklist-progress {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(255, 136, 0, 0.1);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff8800, #00ff88);
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* 11. TRUE/FALSE CARD */
+        .true-false-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .statement-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .statement-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .tf-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .tf-button {
+            padding: 16px 32px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tf-button.true:hover {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .tf-button.false:hover {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .tf-button.correct {
+            background: rgba(0, 255, 136, 0.3);
+            border-color: #00ff88;
+        }
+
+        .tf-button.incorrect {
+            background: rgba(255, 68, 68, 0.3);
+            border-color: #ff4444;
+        }
+
+        .tf-feedback {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .tf-feedback.show {
+            display: block;
+        }
+
+        .tf-feedback.correct {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+        }
+
+        .tf-feedback.incorrect {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 4px solid #ff4444;
+        }
+
+        /* 12. RANKING/SORTING CARD */
+        .ranking-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .ranking-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ranking-item {
+            background: rgba(255, 136, 0, 0.2);
+            border: 2px solid rgba(255, 136, 0, 0.4);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .ranking-item:active {
+            cursor: grabbing;
+            opacity: 0.5;
+        }
+
+        .ranking-number {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #ffd700;
+            flex-shrink: 0;
+        }
+
+        .ranking-zone {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .ranking-zone h4 {
+            margin-bottom: 16px;
+            color: #ff8800;
+        }
+
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* 13. FILL IN THE BLANKS CARD */
+        .fill-blanks-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 24px;
+        }
+
+        .fill-text {
+            font-size: 18px;
+            line-height: 2;
+        }
+
+        .fill-blank {
+            display: inline-block;
+            min-width: 150px;
+            padding: 8px 16px;
+            background: rgba(255, 136, 0, 0.1);
+            border: 2px solid rgba(255, 136, 0, 0.3);
+            border-radius: 8px;
+            margin: 0 4px;
+            transition: all 0.3s ease;
+        }
+
+        .fill-blank input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            width: 100%;
+            outline: none;
+            text-align: center;
+        }
+
+        .fill-blank.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .fill-blank.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .fill-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .fill-option, .word-option {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fill-option:hover, .word-option:hover {
+            background: rgba(255, 136, 0, 0.2);
+            border-color: #ff8800;
+        }
+
+        .fill-option.used, .word-option.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* 14. MATCHING PAIRS CARD */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .matching-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .matching-item:hover {
+            background: rgba(255, 136, 0, 0.1);
+            transform: translateX(4px);
+        }
+
+        .matching-item.selected {
+            background: rgba(255, 136, 0, 0.3);
+            border-color: #ff8800;
+        }
+
+        .matching-item.matched {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+            cursor: default;
+        }
+
+        .matching-item.wrong {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .match-line {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        /* 15. RATING SCALE CARD */
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .rating-question {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .rating-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 24px 0;
+            gap: 8px;
+        }
+
+        .rating-point {
+            flex: 1;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .rating-point:hover {
+            background: rgba(255, 136, 0, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .rating-point.selected {
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            border-color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .rating-point.selected .rating-number {
+            color: #0a0a1a;
+            font-weight: 700;
+        }
+
+        .rating-number {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .rating-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .rating-endpoints {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 16. CODE SNIPPET CARD */
+        .code-container {
+            background: rgba(10, 10, 26, 0.8);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 24px;
+        }
+
+        .code-header {
+            background: rgba(255, 136, 0, 0.2);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 136, 0, 0.3);
+        }
+
+        .code-lang {
+            color: #ff8800;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .code-copy-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .code-copy-btn:hover {
+            background: rgba(255, 136, 0, 0.2);
+            border-color: #ff8800;
+        }
+
+        .code-content {
+            padding: 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .code-line {
+            display: flex;
+            gap: 16px;
+        }
+
+        .line-number {
+            color: rgba(255, 255, 255, 0.3);
+            user-select: none;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .code-text {
+            color: #e0e0e0;
+        }
+
+        .code-keyword {
+            color: #ff8800;
+            font-weight: 600;
+        }
+
+        .code-string {
+            color: #00ff88;
+        }
+
+        .code-number {
+            color: #ffd700;
+        }
+
+        .code-comment {
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .drag-drop-container,
+            .calculator-grid,
+            .decision-options {
+                grid-template-columns: 1fr;
+            }
+
+            .video-checkpoints {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                flex-direction: column;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-line {
+                left: 30px;
+            }
+
+            .timeline-number {
+                left: 30px;
+            }
+
+            .checklist-grid,
+            .tf-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .ranking-container,
+            .matching-container {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-scale {
+                flex-direction: column;
+            }
+
+            .rating-point {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Zaawansowane Typy Kart</h1>
+            <p>Przykłady interaktywnych komponentów edukacyjnych - Milwaukee MX FUEL</p>
+        </div>
+
+        <!-- CARD 1: DRAG & DROP -->
+        <div class="card">
+            <h2>
+                <i data-lucide="move" style="width: 32px; height: 32px;"></i>
+                1. Karta Drag & Drop
+            </h2>
+            <p class="card-description">
+                Przeciągnij narzędzia do właściwych kategorii zastosowań. Pozwala na praktyczne uczenie się przez działanie.
+            </p>
+
+            <div class="drag-drop-container">
+                <div>
+                    <h3 style="margin-bottom: 16px;">🛠️ Narzędzia do przypisania:</h3>
+                    <div class="drag-items" id="dragItems">
+                        <div class="drag-item" draggable="true" data-tool="cutoff" data-category="cutting">
+                            <i data-lucide="disc" style="width: 20px; height: 20px;"></i>
+                            <span>Przecinarka MXF COS350</span>
+                        </div>
+                        <div class="drag-item" draggable="true" data-tool="hammer" data-category="demolition">
+                            <i data-lucide="hammer" style="width: 20px; height: 20px;"></i>
+                            <span>Młot wyburzeniowy MXF DH</span>
+                        </div>
+                        <div class="drag-item" draggable="true" data-tool="saw" data-category="cutting">
+                            <i data-lucide="saw" style="width: 20px; height: 20px;"></i>
+                            <span>Piła stołowa MXF TS</span>
+                        </div>
+                        <div class="drag-item" draggable="true" data-tool="drill" data-category="drilling">
+                            <i data-lucide="drill" style="width: 20px; height: 20px;"></i>
+                            <span>Wiertarka MXF DD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 16px;">📦 Kategorie zastosowań:</h3>
+                    <div class="drop-zones">
+                        <div class="drop-zone" data-category="cutting">
+                            <div class="drop-zone-label">
+                                <i data-lucide="scissors" style="width: 16px; height: 16px;"></i>
+                                Cięcie materiałów
+                            </div>
+                        </div>
+                        <div class="drop-zone" data-category="drilling">
+                            <div class="drop-zone-label">
+                                <i data-lucide="circle-dot" style="width: 16px; height: 16px;"></i>
+                                Wiercenie otworów
+                            </div>
+                        </div>
+                        <div class="drop-zone" data-category="demolition">
+                            <div class="drop-zone-label">
+                                <i data-lucide="wrench" style="width: 16px; height: 16px;"></i>
+                                Prace wyburzeniowe
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="checkDragDrop()" style="margin-top: 24px;">
+                Sprawdź dopasowanie
+            </button>
+
+            <div class="key-insight">
+                <strong>💡 Wskazówka:</strong> Zastanów się nad głównym przeznaczeniem każdego narzędzia. Przecinarka i piła służą do cięcia, wiertarka do otworów, a młot do rozbiórek.
+            </div>
+        </div>
+
+        <!-- CARD 2: CALCULATOR -->
+        <div class="card">
+            <h2>
+                <i data-lucide="calculator" style="width: 32px; height: 32px;"></i>
+                2. Karta Kalkulator Momentu Obrotowego
+            </h2>
+            <p class="card-description">
+                Oblicz wymagany moment obrotowy dla swojego zastosowania. Interaktywny kalkulator z wizualizacją wyników.
+            </p>
+
+            <div class="calculator-grid">
+                <div>
+                    <div class="input-group">
+                        <label>
+                            <i data-lucide="wrench" style="width: 14px; height: 14px;"></i>
+                            Rodzaj materiału:
+                        </label>
+                        <select id="materialType">
+                            <option value="wood">Drewno miękkie</option>
+                            <option value="hardwood">Drewno twarde</option>
+                            <option value="metal">Metal (stal)</option>
+                            <option value="concrete">Beton</option>
+                            <option value="masonry">Mur/cegła</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>
+                            <i data-lucide="ruler" style="width: 14px; height: 14px;"></i>
+                            Średnica wiertła (mm):
+                        </label>
+                        <input type="range" id="drillDiameter" min="6" max="50" value="12" oninput="updateDiameterValue(this.value)">
+                        <div class="range-value" id="diameterValue">12 mm</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>
+                            <i data-lucide="arrow-down" style="width: 14px; height: 14px;"></i>
+                            Głębokość otworu (mm):
+                        </label>
+                        <input type="range" id="drillDepth" min="10" max="200" value="50" oninput="updateDepthValue(this.value)">
+                        <div class="range-value" id="depthValue">50 mm</div>
+                    </div>
+
+                    <button class="calc-button" onclick="calculateTorque()">
+                        <i data-lucide="zap" style="width: 16px; height: 16px; display: inline;"></i>
+                        Oblicz wymagany moment
+                    </button>
+                </div>
+
+                <div>
+                    <div class="result-box" id="resultBox" style="display: none;">
+                        <div class="result-label">Wymagany moment obrotowy:</div>
+                        <div class="result-value" id="torqueResult">0</div>
+                        <div class="result-label">Nm (Newton-metrów)</div>
+
+                        <div class="recommendation" id="recommendation"></div>
+                    </div>
+
+                    <div class="framework-box">
+                        <h4>📊 Jak to działa?</h4>
+                        <ul style="margin-left: 20px; margin-top: 12px; line-height: 1.8;">
+                            <li>Materiał wpływa na opór wiercenia</li>
+                            <li>Większa średnica = więcej mocy</li>
+                            <li>Głębokość określa czas pracy</li>
+                            <li>System dobiera optymalną wkrętarkę</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 3: COMPARISON TABLE -->
+        <div class="card">
+            <h2>
+                <i data-lucide="columns" style="width: 32px; height: 32px;"></i>
+                3. Karta Porównanie Produktów
+            </h2>
+            <p class="card-description">
+                Interaktywna tabela porównawcza narzędzi MX FUEL. Hover nad wierszem dla podświetlenia.
+            </p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Produkt</th>
+                        <th>Moc</th>
+                        <th>Moment obrotowy</th>
+                        <th>Waga</th>
+                        <th>Cena</th>
+                        <th>Zastosowanie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="product-header">
+                                <div class="product-image">🪚</div>
+                                <div>
+                                    <div>MXF COS350</div>
+                                    <div style="font-size: 12px; color: rgba(255,255,255,0.5);">Przecinarka 350mm</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>2400 W</td>
+                        <td>-</td>
+                        <td>13.4 kg</td>
+                        <td>4 999 PLN</td>
+                        <td><span class="feature-badge">Cięcie betonu</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-header">
+                                <div class="product-image">🔨</div>
+                                <div>
+                                    <div>MXF DH2528H</div>
+                                    <div style="font-size: 12px; color: rgba(255,255,255,0.5);">Młot wyburzeniowy</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>2500 W</td>
+                        <td>-</td>
+                        <td>14.8 kg</td>
+                        <td>6 499 PLN</td>
+                        <td><span class="feature-badge premium">Wyburzenia</span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-header">
+                                <div class="product-image">🔩</div>
+                                <div>
+                                    <div>MXF CID181</div>
+                                    <div style="font-size: 12px; color: rgba(255,255,255,0.5);">Wkrętarka udarowa</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>1800 W</td>
+                        <td>1627 Nm</td>
+                        <td>3.2 kg</td>
+                        <td>2 999 PLN</td>
+                        <td><span class="feature-badge">Wiercenie/wkręcanie</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="framework-box" style="margin-top: 32px;">
+                <h4>🎯 Jak wybrać?</h4>
+                <p style="margin-top: 12px; line-height: 1.6;">
+                    <strong>Do cięcia betonu:</strong> MXF COS350 z tarczą diamentową<br>
+                    <strong>Do rozbiórek:</strong> MXF DH2528H z dużą siłą udaru<br>
+                    <strong>Do montażu:</strong> MXF CID181 z kontrolą momentu
+                </p>
+            </div>
+        </div>
+
+        <!-- CARD 4: VIDEO -->
+        <div class="card">
+            <h2>
+                <i data-lucide="video" style="width: 32px; height: 32px;"></i>
+                4. Karta Video z Checkpointami
+            </h2>
+            <p class="card-description">
+                Instruktaż wideo z kluczowymi momentami. Kliknij checkpoint, aby przejść do sekcji.
+            </p>
+
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <div class="play-button">
+                        <i data-lucide="play" style="width: 32px; height: 32px; color: #0a0a1a;"></i>
+                    </div>
+                    <p style="margin-top: 16px; color: rgba(255,255,255,0.7);">Milwaukee MX FUEL - Instruktaż Przecinarki</p>
+                </div>
+            </div>
+
+            <div class="video-checkpoints">
+                <div class="checkpoint" onclick="seekToTime(0, this)">
+                    <div class="checkpoint-time">⏱️ 0:00 - 0:45</div>
+                    <div>Wprowadzenie i specyfikacja</div>
+                </div>
+                <div class="checkpoint" onclick="seekToTime(45, this)">
+                    <div class="checkpoint-time">⏱️ 0:45 - 2:15</div>
+                    <div>Instalacja tarczy 350mm</div>
+                </div>
+                <div class="checkpoint" onclick="seekToTime(135, this)">
+                    <div class="checkpoint-time">⏱️ 2:15 - 4:30</div>
+                    <div>Systemy bezpieczeństwa RAPIDSTOP™</div>
+                </div>
+                <div class="checkpoint" onclick="seekToTime(270, this)">
+                    <div class="checkpoint-time">⏱️ 4:30 - 6:00</div>
+                    <div>Praktyczne zastosowanie w terenie</div>
+                </div>
+            </div>
+
+            <div class="key-insight" style="margin-top: 24px;">
+                <strong>✅ Po obejrzeniu:</strong> Odpowiedz na 3 pytania kontrolne, aby odblokować następną lekcję.
+            </div>
+        </div>
+
+        <!-- CARD 5: ROLE-PLAY -->
+        <div class="card">
+            <h2>
+                <i data-lucide="users" style="width: 32px; height: 32px;"></i>
+                5. Karta Role-Play: Dialog z Klientem
+            </h2>
+            <p class="card-description">
+                Symulacja rozmowy sprzedażowej. Wybierz odpowiedź i zobacz ocenę Twojego podejścia.
+            </p>
+
+            <div class="roleplay-container">
+                <div class="dialog-message client">
+                    <div class="speaker-label">
+                        <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                        Klient
+                    </div>
+                    <p>"Potrzebuję czegoś do cięcia betonu na budowie. Myślałem o zwykłej szlifierce kątowej..."</p>
+                </div>
+
+                <div class="response-options">
+                    <div class="response-option" onclick="selectResponse(this, 'empathy', 60, 'assertiveness', 40, 'professionalism', 70)">
+                        <div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <span class="response-badge">😊 Empatyczna</span>
+                                <span class="response-badge" style="background: rgba(0,212,255,0.3);">⚡ Asertywna</span>
+                            </div>
+                            <div>"Rozumiem potrzebę oszczędności. Jednak do betonu polecam dedykowaną przecinarkę MX FUEL - będziesz bezpieczniejszy i szybszy."</div>
+                        </div>
+                    </div>
+
+                    <div class="response-option" onclick="selectResponse(this, 'empathy', 30, 'assertiveness', 80, 'professionalism', 60)">
+                        <div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <span class="response-badge" style="background: rgba(255,68,68,0.3);">💪 Bardzo asertywna</span>
+                            </div>
+                            <div>"Szlifierka to za słaby sprzęt. Musisz wziąć MX FUEL COS350 z tarczą diamentową - to jedyne profesjonalne rozwiązanie."</div>
+                        </div>
+                    </div>
+
+                    <div class="response-option" onclick="selectResponse(this, 'empathy', 90, 'assertiveness', 20, 'professionalism', 50)">
+                        <div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <span class="response-badge">😊 Bardzo empatyczna</span>
+                            </div>
+                            <div>"Pewnie, szlifierka też się nada. W zależności od Twojego budżetu mogę pokazać różne opcje..."</div>
+                        </div>
+                    </div>
+
+                    <div class="response-option" onclick="selectResponse(this, 'empathy', 70, 'assertiveness', 60, 'professionalism', 95)">
+                        <div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <span class="response-badge">😊 Empatyczna</span>
+                                <span class="response-badge" style="background: rgba(0,212,255,0.3);">⚡ Asertywna</span>
+                                <span class="response-badge" style="background: rgba(255,215,0,0.3);">👔 Profesjonalna</span>
+                            </div>
+                            <div>"Doceniam planowanie kosztów. Do betonu 350mm potrzebujesz specjalistycznego narzędzia - szlifierka może być niebezpieczna. Sprawdźmy MX FUEL COS350 z systemem RAPIDSTOP™, który zatrzyma tarczę w 3 sekundy. Masz pytania o bezpieczeństwo?"</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metrics-bar" id="metricsBar" style="display: none;">
+                    <div class="metric">
+                        <div class="metric-label">Empatia</div>
+                        <div class="metric-value" id="empathyScore">0</div>
+                        <div class="metric-bar">
+                            <div class="metric-bar-fill" id="empathyBar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Asertywność</div>
+                        <div class="metric-value" id="assertivenessScore">0</div>
+                        <div class="metric-bar">
+                            <div class="metric-bar-fill" id="assertivenessBar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Profesjonalizm</div>
+                        <div class="metric-value" id="professionalismScore">0</div>
+                        <div class="metric-bar">
+                            <div class="metric-bar-fill" id="professionalismBar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="framework-box">
+                <h4>💡 Wskazówka:</h4>
+                <p style="margin-top: 12px; line-height: 1.6;">
+                    Najlepsza odpowiedź łączy empatię (zrozumienie potrzeb klienta), asertywność (jasne wskazanie właściwego rozwiązania) i profesjonalizm (merytoryczna argumentacja bezpieczeństwa).
+                </p>
+            </div>
+        </div>
+
+        <!-- CARD 6: BRANCHING SCENARIO -->
+        <div class="card">
+            <h2>
+                <i data-lucide="git-branch" style="width: 32px; height: 32px;"></i>
+                6. Karta Scenariusz Rozgałęziony
+            </h2>
+            <p class="card-description">
+                Podejmij decyzję i zobacz konsekwencje. Twoje wybory wpływają na wynik projektu.
+            </p>
+
+            <div class="scenario-container">
+                <div class="scenario-text">
+                    <strong>📍 Sytuacja:</strong><br>
+                    Jesteś na budowie. Klient zamówił cięcie 50 otworów w ścianie betonowej (350mm grubości) w ciągu 2 dni. Masz do dyspozycji:
+                    <ul style="margin-left: 20px; margin-top: 12px;">
+                        <li>Przecinarkę MXF COS350</li>
+                        <li>3 baterie REDLITHIUM™ (12Ah każda)</li>
+                        <li>2 tarcze diamentowe HUDD</li>
+                    </ul>
+                    <br>
+                    <strong>❓ Problem:</strong> Przed pierwszym cięciem zauważasz, że nie masz dostępu do wody. Co robisz?
+                </div>
+
+                <div class="decision-options">
+                    <div class="decision-card" onclick="showOutcome('bad', 'Uszkodzenie tarczy i ryzyko przegrzania', 30, this)">
+                        <div class="decision-icon">⚠️</div>
+                        <div class="decision-title">Ciąć na sucho</div>
+                        <div class="decision-consequence">
+                            "Tarcza HUDD wytrzyma kilka cięć bez wody. Zacznę pracę, żeby dotrzymać terminu."
+                        </div>
+                    </div>
+
+                    <div class="decision-card" onclick="showOutcome('good', 'Profesjonalne podejście - czas dostawy: +3h, ale bezpieczne', 70, this)">
+                        <div class="decision-icon">📦</div>
+                        <div class="decision-title">Zamówić tarczę do cięcia na sucho</div>
+                        <div class="decision-consequence">
+                            "Poczekam 3h na dostawę tarczy CCS (Cold Cut System) przeznaczonej do cięcia na sucho."
+                        </div>
+                    </div>
+
+                    <div class="decision-card" onclick="showOutcome('perfect', 'Optymalne rozwiązanie - system SWITCH TANK działa', 90, this)">
+                        <div class="decision-icon">💧</div>
+                        <div class="decision-title">Użyć systemu SWITCH TANK</div>
+                        <div class="decision-consequence">
+                            "Podłączę zbiornik wodny SWITCH TANK (19L) do przecinarki - pozwoli na chłodzenie tarczy."
+                        </div>
+                    </div>
+
+                    <div class="decision-card" onclick="showOutcome('bad', 'Strata czasu i pieniędzy klienta', 20, this)">
+                        <div class="decision-icon">📞</div>
+                        <div class="decision-title">Odwołać zlecenie</div>
+                        <div class="decision-consequence">
+                            "Poinformuję klienta, że nie mogę wykonać pracy bez dostępu do wody."
+                        </div>
+                    </div>
+                </div>
+
+                <div class="outcome-box" id="outcomeBox">
+                    <h3 style="margin-bottom: 16px;">📊 Wynik Twojej decyzji:</h3>
+                    <p id="outcomeText" style="line-height: 1.6;"></p>
+                    <div class="outcome-score">
+                        <span>Twój wynik:</span>
+                        <span class="score-badge" id="scoreValue">0 punktów</span>
+                    </div>
+                    <button class="btn-secondary" onclick="resetScenario()" style="margin-top: 16px;">
+                        Spróbuj ponownie
+                    </button>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>🎯 Lekcja:</strong> Tarcze SPEEDCROSS (HUDD, DUH, STEELHEAD) wymagają wody. System SWITCH TANK (19L zbiornik) pozwala na mobilne chłodzenie. Alternatywnie: tarcze CCS/SCS do cięcia na sucho.
+            </div>
+        </div>
+
+        <!-- CARD 7: TIMELINE/PROCESS -->
+        <div class="card">
+            <h2>
+                <i data-lucide="git-commit" style="width: 32px; height: 32px;"></i>
+                7. Karta Timeline - Proces Przygotowania do Pracy
+            </h2>
+            <p class="card-description">
+                Wizualizacja procesu krok po kroku. Idealna do prezentacji procedur i workflow.
+            </p>
+
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title">Kontrola narzędzia</div>
+                        <p>Sprawdź stan przecinarki MXF COS350: osłony bezpieczeństwa, uchwyt, przełączniki. Upewnij się, że RAPIDSTOP™ działa poprawnie.</p>
+                    </div>
+                    <div class="timeline-number">1</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title">Dobór tarczy</div>
+                        <p>Wybierz właściwą tarczę 350mm dla materiału: HUDD (beton), STEELHEAD (cegła), CCS (suche cięcie). Sprawdź średnicę wewnętrzną 25.4mm.</p>
+                    </div>
+                    <div class="timeline-number">2</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title">Montaż tarczy</div>
+                        <p>Odłącz baterię! Zamontuj tarczę zgodnie ze strzałką kierunku obrotu. Dokręć nakrętkę z momentem 80-100 Nm.</p>
+                    </div>
+                    <div class="timeline-number">3</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title">System chłodzenia</div>
+                        <p>Podłącz SWITCH TANK (19L) jeśli używasz tarcz SPEEDCROSS. Sprawdź przepływ wody do tarczy.</p>
+                    </div>
+                    <div class="timeline-number">4</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title">Środki ochrony</div>
+                        <p>Załóż: okulary ochronne, rękawice, ochronniki słuchu, maskę przeciwpyłową FFP3. Zabezpiecz obszar roboczy.</p>
+                    </div>
+                    <div class="timeline-number">5</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title">Test próbny</div>
+                        <p>Uruchom przecinarkę bez obciążenia na 30 sekund. Sprawdź dźwięk, wibracje, brak luzu tarczy. Gotowe do pracy!</p>
+                    </div>
+                    <div class="timeline-number">6</div>
+                </div>
+            </div>
+
+            <div class="framework-box">
+                <h4>⏱️ Czas przygotowania:</h4>
+                <p style="margin-top: 12px;">
+                    Kompletna procedura: <strong>5-8 minut</strong><br>
+                    Doświadczony operator: <strong>3-4 minuty</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- CARD 8: BEFORE/AFTER SLIDER -->
+        <div class="card">
+            <h2>
+                <i data-lucide="sliders-horizontal" style="width: 32px; height: 32px;"></i>
+                8. Karta Before/After - Porównanie Wyników
+            </h2>
+            <p class="card-description">
+                Interaktywny slider porównujący efekty przed i po. Przeciągnij suwak, aby zobaczyć różnicę.
+            </p>
+
+            <div class="comparison-slider" id="comparisonSlider">
+                <div class="comparison-image comparison-before">
+                    ⚠️
+                </div>
+                <div class="comparison-image comparison-after" id="comparisonAfter">
+                    ✅
+                </div>
+                <div class="comparison-slider-handle" id="sliderHandle"></div>
+                <div class="comparison-label before">PRZED: Szlifierka kątowa</div>
+                <div class="comparison-label after">PO: MX FUEL COS350</div>
+            </div>
+
+            <div class="framework-box">
+                <h4>📊 Porównanie efektywności:</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                    <div>
+                        <strong style="color: #ff4444;">❌ Szlifierka kątowa 230mm:</strong>
+                        <ul style="margin-left: 20px; margin-top: 8px; line-height: 1.8;">
+                            <li>Głębokość cięcia: 70mm</li>
+                            <li>Czas 1 cięcia: 15 min</li>
+                            <li>Przegrzewanie co 3 cięcia</li>
+                            <li>Wymiana tarczy co 8-10 cięć</li>
+                            <li>Brak systemu hamowania</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong style="color: #00ff88;">✅ MX FUEL COS350:</strong>
+                        <ul style="margin-left: 20px; margin-top: 8px; line-height: 1.8;">
+                            <li>Głębokość cięcia: 125mm</li>
+                            <li>Czas 1 cięcia: 6 min</li>
+                            <li>Stabilna praca ciągła</li>
+                            <li>Wymiana tarczy co 25-30 cięć</li>
+                            <li>RAPIDSTOP™ <3s</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>💰 ROI:</strong> MX FUEL COS350 zwraca się w 3-4 miesiącach dzięki oszczędności czasu (60% szybciej) i tarcz (3x dłuższa żywotność).
+            </div>
+        </div>
+
+        <!-- CARD 9: HOTSPOT IMAGE -->
+        <div class="card">
+            <h2>
+                <i data-lucide="map-pin" style="width: 32px; height: 32px;"></i>
+                9. Karta Hotspot - Interaktywna Grafika
+            </h2>
+            <p class="card-description">
+                Kliknij pomarańczowe punkty, aby poznać funkcje przecinarki MX FUEL COS350.
+            </p>
+
+            <div class="hotspot-container" id="hotspotContainer">
+                <div class="hotspot-image">
+                    🪚
+                    
+                    <!-- Hotspot 1: RAPIDSTOP -->
+                    <div class="hotspot" style="top: 20%; left: 25%;" onclick="toggleHotspot(1, event)"></div>
+
+                    <!-- Hotspot 2: Battery -->
+                    <div class="hotspot" style="top: 60%; left: 20%;" onclick="toggleHotspot(2, event)"></div>
+
+                    <!-- Hotspot 3: Blade Guard -->
+                    <div class="hotspot" style="top: 30%; left: 70%;" onclick="toggleHotspot(3, event)"></div>
+
+                    <!-- Hotspot 4: Water Connection -->
+                    <div class="hotspot" style="top: 70%; left: 65%;" onclick="toggleHotspot(4, event)"></div>
+
+                    <!-- Hotspot 5: Handle -->
+                    <div class="hotspot" style="top: 45%; left: 85%;" onclick="toggleHotspot(5, event)"></div>
+                </div>
+            </div>
+
+            <!-- Tooltips outside container for proper positioning -->
+            <div class="hotspot-tooltip" id="hotspot1">
+                <h4>⚡ RAPIDSTOP™</h4>
+                <p>System awaryjnego hamowania tarczy. Zatrzymuje obrót w mniej niż 3 sekundy, chroniąc przed obrażeniami.</p>
+            </div>
+            <div class="hotspot-tooltip" id="hotspot2">
+                <h4>🔋 REDLITHIUM™ MX FUEL</h4>
+                <p>Bateria 12Ah zapewnia do 50 cięć w betonie na jednym ładowaniu. Monitoring poziomu w czasie rzeczywistym.</p>
+            </div>
+            <div class="hotspot-tooltip" id="hotspot3">
+                <h4>🛡️ Regulowana Osłona</h4>
+                <p>Regulacja głębokości cięcia 0-125mm. Zabezpieczenie przed odrzutem i iskrami. Szybkie mocowanie bez narzędzi.</p>
+            </div>
+            <div class="hotspot-tooltip" id="hotspot4">
+                <h4>💧 Złącze Wodne</h4>
+                <p>Podłączenie do systemu SWITCH TANK. Automatyczne chłodzenie tarczy wodą, redukcja pyłu o 95%.</p>
+            </div>
+            <div class="hotspot-tooltip" id="hotspot5">
+                <h4>🤝 Uchwyt Pomocniczy</h4>
+                <p>Regulowany uchwyt 360°. Amortyzacja drgań. Wyłącznik bezpieczeństwa - wymaga obu rąk do uruchomienia.</p>
+            </div>
+
+            <div class="framework-box">
+                <strong>💡 Wskazówka:</strong> Każda funkcja bezpieczeństwa jest wymagana normami EN 60745. Milwaukee dodaje RAPIDSTOP™ jako bonus ponad standard.
+            </div>
+        </div>
+
+        <!-- CARD 10: CHECKLIST -->
+        <div class="card">
+            <h2>
+                <i data-lucide="list-checks" style="width: 32px; height: 32px;"></i>
+                10. Karta Checklist - Procedura Bezpieczeństwa
+            </h2>
+            <p class="card-description">
+                Zaznacz wszystkie punkty przed rozpoczęciem pracy. Każdy element jest obowiązkowy!
+            </p>
+
+            <div class="checklist-grid">
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Okulary ochronne</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Klasa F, odporność na uderzenia</small>
+                    </div>
+                </div>
+
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Rękawice antyprzecięciowe</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Poziom ochrony C lub wyższy</small>
+                    </div>
+                </div>
+
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Maska FFP3</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Ochrona przed pyłem krzemionki</small>
+                    </div>
+                </div>
+
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Ochronniki słuchu</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">SNR min. 25dB (poziom 98dB)</small>
+                    </div>
+                </div>
+
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Buty ochronne</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">S3, podnosek stalowy</small>
+                    </div>
+                </div>
+
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Sprawdzenie tarczy</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Brak pęknięć, właściwa średnica</small>
+                    </div>
+                </div>
+
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Kontrola osłon</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Wszystkie zabezpieczenia na miejscu</small>
+                    </div>
+                </div>
+
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Test RAPIDSTOP™</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Sprawdzenie hamowania tarczy</small>
+                    </div>
+                </div>
+
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Zabezpieczenie obszaru</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Oznakowanie, bariery, ostrzeżenia</small>
+                    </div>
+                </div>
+
+                <div class="checklist-item" onclick="toggleChecklistItem(this)">
+                    <div class="checklist-checkbox">
+                        <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div>
+                        <strong>Bateria naładowana</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Min. 60% dla stabilnej pracy</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-progress">
+                <div style="font-weight: 600; margin-bottom: 8px;">Postęp: <span id="checklistCounter">0/10</span></div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="checklistProgress"></div>
+                </div>
+                <div id="checklistMessage" style="margin-top: 12px; font-weight: 600; color: #ff8800;"></div>
+            </div>
+        </div>
+
+        <!-- CARD 11: TRUE/FALSE -->
+        <div class="card">
+            <h2>
+                <i data-lucide="help-circle" style="width: 32px; height: 32px;"></i>
+                11. Karta True/False - Test Szybkiej Wiedzy
+            </h2>
+            <p class="card-description">
+                Odpowiedz Prawda lub Fałsz. Natychmiastowy feedback po każdej odpowiedzi.
+            </p>
+
+            <div class="true-false-container">
+                <div class="statement-card">
+                    <div class="statement-text">
+                        <strong>1.</strong> Przecinarka MXF COS350 może ciąć beton do głębokości 125mm w jednym przejściu.
+                    </div>
+                    <div class="tf-buttons">
+                        <button class="tf-button true" onclick="checkTrueFalse(1, true, this)">
+                            <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
+                            PRAWDA
+                        </button>
+                        <button class="tf-button false" onclick="checkTrueFalse(1, false, this)">
+                            <i data-lucide="x-circle" style="width: 20px; height: 20px;"></i>
+                            FAŁSZ
+                        </button>
+                    </div>
+                    <div class="tf-feedback" id="feedback1">
+                        <strong>✅ Prawidłowo!</strong> MXF COS350 z tarczą 350mm może ciąć do głębokości 125mm, co odpowiada ścianie o grubości 250mm (cięcie z obu stron).
+                    </div>
+                </div>
+
+                <div class="statement-card">
+                    <div class="statement-text">
+                        <strong>2.</strong> Wszystkie tarcze diamentowe 350mm można używać bez wody (na sucho).
+                    </div>
+                    <div class="tf-buttons">
+                        <button class="tf-button true" onclick="checkTrueFalse(2, true, this)">
+                            <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
+                            PRAWDA
+                        </button>
+                        <button class="tf-button false" onclick="checkTrueFalse(2, false, this)">
+                            <i data-lucide="x-circle" style="width: 20px; height: 20px;"></i>
+                            FAŁSZ
+                        </button>
+                    </div>
+                    <div class="tf-feedback" id="feedback2">
+                        <strong>✅ Prawidłowo!</strong> Fałsz! Tylko tarcze CCS (Cold Cut System) i SCS są przeznaczone do cięcia na sucho. Tarcze SPEEDCROSS (HUDD, DUH, STEELHEAD) wymagają chłodzenia wodą.
+                    </div>
+                </div>
+
+                <div class="statement-card">
+                    <div class="statement-text">
+                        <strong>3.</strong> System RAPIDSTOP™ zatrzymuje tarczę szybciej niż standardowe hamowanie mechaniczne.
+                    </div>
+                    <div class="tf-buttons">
+                        <button class="tf-button true" onclick="checkTrueFalse(3, true, this)">
+                            <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
+                            PRAWDA
+                        </button>
+                        <button class="tf-button false" onclick="checkTrueFalse(3, false, this)">
+                            <i data-lucide="x-circle" style="width: 20px; height: 20px;"></i>
+                            FAŁSZ
+                        </button>
+                    </div>
+                    <div class="tf-feedback" id="feedback3">
+                        <strong>✅ Prawidłowo!</strong> RAPIDSTOP™ zatrzymuje tarczę w <3 sekundy, podczas gdy standardowe wybiegi trwają 10-15 sekund. To 5x szybsze hamowanie!
+                    </div>
+                </div>
+
+                <div class="statement-card">
+                    <div class="statement-text">
+                        <strong>4.</strong> Bateria REDLITHIUM™ MX FUEL (12Ah) wystarcza na około 50 cięć w betonie.
+                    </div>
+                    <div class="tf-buttons">
+                        <button class="tf-button true" onclick="checkTrueFalse(4, true, this)">
+                            <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
+                            PRAWDA
+                        </button>
+                        <button class="tf-button false" onclick="checkTrueFalse(4, false, this)">
+                            <i data-lucide="x-circle" style="width: 20px; height: 20px;"></i>
+                            FAŁSZ
+                        </button>
+                    </div>
+                    <div class="tf-feedback" id="feedback4">
+                        <strong>✅ Prawidłowo!</strong> Przy typowych cięciach 100mm w betonie, jedna bateria 12Ah wystarcza na 45-50 cięć. To około 4-5 godzin pracy.
+                    </div>
+                </div>
+
+                <div class="statement-card">
+                    <div class="statement-text">
+                        <strong>5.</strong> System Anti-Kickback automatycznie wyłącza przecinarkę przy zablokowaniu tarczy.
+                    </div>
+                    <div class="tf-buttons">
+                        <button class="tf-button true" onclick="checkTrueFalse(5, true, this)">
+                            <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
+                            PRAWDA
+                        </button>
+                        <button class="tf-button false" onclick="checkTrueFalse(5, false, this)">
+                            <i data-lucide="x-circle" style="width: 20px; height: 20px;"></i>
+                            FAŁSZ
+                        </button>
+                    </div>
+                    <div class="tf-feedback" id="feedback5">
+                        <strong>✅ Prawidłowo!</strong> Akcelerometr wykrywa nagłe zatrzymanie i odcina zasilanie w 0.1s, zapobiegając odrzutowi narzędzia.
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>🎓 Wynik końcowy:</strong> <span id="tfScore">0/5</span> poprawnych odpowiedzi
+            </div>
+        </div>
+
+        <!-- CARD 12: RANKING/SORTING -->
+        <div class="card">
+            <h2>
+                <i data-lucide="list-ordered" style="width: 32px; height: 32px;"></i>
+                12. Karta Ranking - Sortowanie Priorytetów
+            </h2>
+            <p class="card-description">
+                Przeciągnij elementy w kolejności od najważniejszego (góra) do najmniej ważnego (dół).
+            </p>
+
+            <div class="ranking-container">
+                <div>
+                    <h3 style="margin-bottom: 16px;">📦 Elementy do posortowania:</h3>
+                    <div class="ranking-items" id="rankingItems">
+                        <div class="ranking-item" draggable="true" data-priority="1">
+                            <div class="ranking-number">?</div>
+                            <span>Sprawdzenie osłon i zabezpieczeń</span>
+                        </div>
+                        <div class="ranking-item" draggable="true" data-priority="4">
+                            <div class="ranking-number">?</div>
+                            <span>Czyszczenie narzędzia po pracy</span>
+                        </div>
+                        <div class="ranking-item" draggable="true" data-priority="2">
+                            <div class="ranking-number">?</div>
+                            <span>Dobór właściwej tarczy dla materiału</span>
+                        </div>
+                        <div class="ranking-item" draggable="true" data-priority="3">
+                            <div class="ranking-number">?</div>
+                            <span>Założenie pełnej odzieży ochronnej (PPE)</span>
+                        </div>
+                        <div class="ranking-item" draggable="true" data-priority="5">
+                            <div class="ranking-number">?</div>
+                            <span>Sprawdzenie poziomu naładowania baterii</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ranking-zone">
+                        <h4>🎯 Twoja kolejność priorytetów (przeciągnij tutaj):</h4>
+                        <div class="ranking-list" id="rankingList"></div>
+                    </div>
+                    <button class="btn-primary" onclick="checkRanking()" style="margin-top: 16px; width: 100%;">
+                        Sprawdź kolejność
+                    </button>
+                </div>
+            </div>
+
+            <div class="framework-box">
+                <h4>💡 Prawidłowa kolejność BHP:</h4>
+                <ol style="margin-left: 20px; margin-top: 12px; line-height: 2;">
+                    <li><strong>Sprawdzenie osłon</strong> - podstawa bezpieczeństwa</li>
+                    <li><strong>Dobór tarczy</strong> - właściwe narzędzie do materiału</li>
+                    <li><strong>Odzież ochronna</strong> - pełne PPE przed uruchomieniem</li>
+                    <li><strong>Czyszczenie</strong> - konserwacja po zakończeniu pracy</li>
+                    <li><strong>Bateria</strong> - sprawdzenie przed rozpoczęciem (ale nie najważniejsze)</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- CARD 13: FILL IN THE BLANKS -->
+        <div class="card">
+            <h2>
+                <i data-lucide="whole-word" style="width: 32px; height: 32px;"></i>
+                13. Karta Uzupełnij Luki - Test Wiedzy
+            </h2>
+            <p class="card-description">
+                Kliknij podpowiedzi poniżej lub wpisz bezpośrednio, aby uzupełnić zdania.
+            </p>
+
+            <div class="fill-blanks-container">
+                <div class="fill-text">
+                    Przecinarka MXF COS350 posiada unikalny system 
+                    <span class="fill-blank" data-answer="RAPIDSTOP">
+                        <input type="text" id="blank1" placeholder="..." onchange="checkBlank(1)">
+                    </span>, 
+                    który zatrzymuje tarczę w mniej niż 
+                    <span class="fill-blank" data-answer="3">
+                        <input type="text" id="blank2" placeholder="..." onchange="checkBlank(2)">
+                    </span> 
+                    sekundy. Maksymalna głębokość cięcia to 
+                    <span class="fill-blank" data-answer="125">
+                        <input type="text" id="blank3" placeholder="..." onchange="checkBlank(3)">
+                    </span> 
+                    mm. Do cięcia betonu z chłodzeniem używamy tarcz typu 
+                    <span class="fill-blank" data-answer="HUDD">
+                        <input type="text" id="blank4" placeholder="..." onchange="checkBlank(4)">
+                    </span>, 
+                    natomiast do cięcia na sucho polecane są tarcze 
+                    <span class="fill-blank" data-answer="CCS">
+                        <input type="text" id="blank5" placeholder="..." onchange="checkBlank(5)">
+                    </span>. 
+                    System zbiornika wodnego nazywa się 
+                    <span class="fill-blank" data-answer="SWITCH TANK">
+                        <input type="text" id="blank6" placeholder="..." onchange="checkBlank(6)">
+                    </span>.
+                </div>
+
+                <div class="fill-options">
+                    <div class="word-option" onclick="fillBlankFromOption(this, 'RAPIDSTOP')">RAPIDSTOP™</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, '3')">3</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, '125')">125</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, 'HUDD')">HUDD</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, 'CCS')">CCS</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, 'SWITCH TANK')">SWITCH TANK</div>
+                </div>
+
+                <button class="btn-primary" onclick="checkAllBlanks()" style="margin-top: 24px;">
+                    Sprawdź wszystkie odpowiedzi
+                </button>
+            </div>
+
+            <div class="key-insight">
+                <strong>📝 Wskazówka:</strong> Możesz kliknąć podpowiedzi poniżej lub wpisać odpowiedzi bezpośrednio w pola.
+            </div>
+        </div>
+
+        <!-- CARD 14: MATCHING PAIRS -->
+        <div class="card">
+            <h2>
+                <i data-lucide="link" style="width: 32px; height: 32px;"></i>
+                14. Karta Dopasowywanie Par
+            </h2>
+            <p class="card-description">
+                Dopasuj tarcze do materiałów. Kliknij tarczę, potem materiał, aby połączyć parę.
+            </p>
+
+            <div class="matching-container">
+                <div class="matching-column">
+                    <h4 style="margin-bottom: 16px;">🛠️ Tarcze diamentowe:</h4>
+                    <div class="matching-item" data-match="A" onclick="selectMatch('A', this)">
+                        <strong>HUDD (4932471985)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">High Performance Universal Diamond Disc</small>
+                    </div>
+                    <div class="matching-item" data-match="B" onclick="selectMatch('B', this)">
+                        <strong>STEELHEAD (4932471988)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Do materiałów z prętami stalowymi</small>
+                    </div>
+                    <div class="matching-item" data-match="C" onclick="selectMatch('C', this)">
+                        <strong>CCS (4932472264)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Cold Cut System - cięcie na sucho</small>
+                    </div>
+                    <div class="matching-item" data-match="D" onclick="selectMatch('D', this)">
+                        <strong>DUH (4932471986)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Diamond Universal Hard Materials</small>
+                    </div>
+                    <div class="matching-item" data-match="E" onclick="selectMatch('E', this)">
+                        <strong>SCS (4932471989)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Supreme Cut Speed - ekstremalna prędkość</small>
+                    </div>
+                </div>
+
+                <div class="matching-column">
+                    <h4 style="margin-bottom: 16px;">🧱 Zastosowania:</h4>
+                    <div class="matching-item" data-match="A" onclick="selectMatch('A', this)">
+                        <strong>Beton z armatură stalową</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Wymaga chłodzenia wodą</small>
+                    </div>
+                    <div class="matching-item" data-match="D" onclick="selectMatch('D', this)">
+                        <strong>Granit i kamień naturalny</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Twarde materiały mineralne</small>
+                    </div>
+                    <div class="matching-item" data-match="C" onclick="selectMatch('C', this)">
+                        <strong>Asfalt i materiały bitumiczne</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Bez dostępu do wody</small>
+                    </div>
+                    <div class="matching-item" data-match="B" onclick="selectMatch('B', this)">
+                        <strong>Żelbet (beton zbrojony)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Dużo stali konstrukcyjnej</small>
+                    </div>
+                    <div class="matching-item" data-match="E" onclick="selectMatch('E', this)">
+                        <strong>Cięcie awaryjne - rescue</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Szybkie cięcie bez wody</small>
+                    </div>
+                </div>
+            </div>
+
+            <div id="matchingFeedback" class="framework-box" style="display: none; margin-top: 24px;">
+                <strong id="matchingScore">Dopasowano: 0/5</strong>
+            </div>
+        </div>
+
+        <!-- CARD 15: RATING SCALE -->
+        <div class="card">
+            <h2>
+                <i data-lucide="star" style="width: 32px; height: 32px;"></i>
+                15. Karta Skala Oceny - Ewaluacja Wiedzy
+            </h2>
+            <p class="card-description">
+                Oceń swój poziom znajomości każdego zagadnienia w skali 1-5.
+            </p>
+
+            <div class="rating-container">
+                <div class="rating-question">
+                    <p style="font-weight: 600; margin-bottom: 16px;">Jak dobrze rozumiesz działanie systemu RAPIDSTOP™?</p>
+                    <div class="rating-scale">
+                        <div class="rating-point" onclick="selectRating(1, 1, this)">
+                            <div class="rating-number">1</div>
+                            <div class="rating-label">Słabo</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(1, 2, this)">
+                            <div class="rating-number">2</div>
+                            <div class="rating-label">Podstawy</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(1, 3, this)">
+                            <div class="rating-number">3</div>
+                            <div class="rating-label">Dobrze</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(1, 4, this)">
+                            <div class="rating-number">4</div>
+                            <div class="rating-label">Bardzo dobrze</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(1, 5, this)">
+                            <div class="rating-number">5</div>
+                            <div class="rating-label">Ekspert</div>
+                        </div>
+                    </div>
+                    <div class="rating-endpoints">
+                        <span>Nie znam tego systemu</span>
+                        <span>Mogę go wytłumaczyć innym</span>
+                    </div>
+                </div>
+
+                <div class="rating-question">
+                    <p style="font-weight: 600; margin-bottom: 16px;">Jak pewnie czujesz się w doborze tarcz diamentowych?</p>
+                    <div class="rating-scale">
+                        <div class="rating-point" onclick="selectRating(2, 1, this)">
+                            <div class="rating-number">1</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(2, 2, this)">
+                            <div class="rating-number">2</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(2, 3, this)">
+                            <div class="rating-number">3</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(2, 4, this)">
+                            <div class="rating-number">4</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(2, 5, this)">
+                            <div class="rating-number">5</div>
+                        </div>
+                    </div>
+                    <div class="rating-endpoints">
+                        <span>Potrzebuję pomocy</span>
+                        <span>Wiem którą tarczę wybrać</span>
+                    </div>
+                </div>
+
+                <div class="rating-question">
+                    <p style="font-weight: 600; margin-bottom: 16px;">Jak dobrze znasz procedury BHP przy pracy z przecinarką?</p>
+                    <div class="rating-scale">
+                        <div class="rating-point" onclick="selectRating(3, 1, this)">
+                            <div class="rating-number">1</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(3, 2, this)">
+                            <div class="rating-number">2</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(3, 3, this)">
+                            <div class="rating-number">3</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(3, 4, this)">
+                            <div class="rating-number">4</div>
+                        </div>
+                        <div class="rating-point" onclick="selectRating(3, 5, this)">
+                            <div class="rating-number">5</div>
+                        </div>
+                    </div>
+                    <div class="rating-endpoints">
+                        <span>Nie znam procedur</span>
+                        <span>Stosuję wszystkie zasady</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="framework-box">
+                <h4>📊 Twoje oceny:</h4>
+                <div id="ratingResults" style="margin-top: 12px; line-height: 2;">
+                    <div>RAPIDSTOP™: <span id="rating1">-</span>/5</div>
+                    <div>Dobór tarcz: <span id="rating2">-</span>/5</div>
+                    <div>Procedury BHP: <span id="rating3">-</span>/5</div>
+                    <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <strong>Średnia:</strong> <span id="ratingAverage">0.0</span>/5
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 16: CODE SNIPPET -->
+        <div class="card">
+            <h2>
+                <i data-lucide="code" style="width: 32px; height: 32px;"></i>
+                16. Karta Snippet - Specyfikacja Techniczna
+            </h2>
+            <p class="card-description">
+                Format JSON ze szczegółową specyfikacją produktu. Skopiuj do dokumentacji technicznej.
+            </p>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-lang">JSON - Specyfikacja MXF COS350</span>
+                    <button class="code-copy-btn" onclick="copyCode()">
+                        <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                        Kopiuj kod
+                    </button>
+                </div>
+                <div class="code-content" id="codeContent">
+                    <div class="code-line">
+                        <span class="line-number">1</span>
+                        <span class="code-text">{</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">2</span>
+                        <span class="code-text">  <span class="code-keyword">"productId"</span>: <span class="code-string">"MXF COS350-0"</span>,</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">3</span>
+                        <span class="code-text">  <span class="code-keyword">"name"</span>: <span class="code-string">"MX FUEL Cut-Off Saw 350mm"</span>,</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">4</span>
+                        <span class="code-text">  <span class="code-keyword">"specifications"</span>: {</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">5</span>
+                        <span class="code-text">    <span class="code-keyword">"bladeDiameter"</span>: <span class="code-number">350</span>, <span class="code-comment">// mm</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">6</span>
+                        <span class="code-text">    <span class="code-keyword">"maxCuttingDepth"</span>: <span class="code-number">125</span>, <span class="code-comment">// mm</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">7</span>
+                        <span class="code-text">    <span class="code-keyword">"motorSpeed"</span>: <span class="code-number">5370</span>, <span class="code-comment">// RPM</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">8</span>
+                        <span class="code-text">    <span class="code-keyword">"weight"</span>: <span class="code-number">13.4</span>, <span class="code-comment">// kg (with MX FUEL 12Ah battery)</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">9</span>
+                        <span class="code-text">    <span class="code-keyword">"rapidstopTime"</span>: <span class="code-number">3</span> <span class="code-comment">// seconds (max)</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">10</span>
+                        <span class="code-text">  },</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">11</span>
+                        <span class="code-text">  <span class="code-keyword">"safetyFeatures"</span>: [</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">12</span>
+                        <span class="code-text">    <span class="code-string">"RAPIDSTOP™ brake system"</span>,</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">13</span>
+                        <span class="code-text">    <span class="code-string">"Anti-Kickback protection"</span>,</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">14</span>
+                        <span class="code-text">    <span class="code-string">"Electronic brake"</span>,</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">15</span>
+                        <span class="code-text">    <span class="code-string">"Overload protection"</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">16</span>
+                        <span class="code-text">  ],</span>
+                    </div>
+                    <div class="code-line">
+
+        // 12. RANKING LOGIC
+        let rankingDraggedElement = null;
+
+        function initRanking() {
+            const rankingItems = document.querySelectorAll('.ranking-item[draggable="true"]');
+            const rankingList = document.getElementById('rankingList');
+            const rankingZone = document.getElementById('rankingItems');
+            
+            rankingItems.forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    rankingDraggedElement = this;
+                    setTimeout(() => {
+                        this.style.opacity = '0.4';
+                    }, 0);
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/html', this.innerHTML);
+                });
+
+                item.addEventListener('dragend', function() {
+                    this.style.opacity = '1';
+                    rankingDraggedElement = null;
+                });
+            });
+
+            // Handle drop on ranking list
+            if (rankingList) {
+                rankingList.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    
+                    if (rankingDraggedElement) {
+                        const afterElement = getDragAfterElement(this, e.clientY);
+                        if (afterElement == null) {
+                            this.appendChild(rankingDraggedElement);
+                        } else {
+                            this.insertBefore(rankingDraggedElement, afterElement);
+                        }
+                    }
+                });
+
+                rankingList.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    if (rankingDraggedElement && !this.contains(rankingDraggedElement)) {
+                        this.appendChild(rankingDraggedElement);
+                    }
+                    updateRankingNumbers();
+                });
+            }
+
+            // Handle drop back on items zone
+            if (rankingZone) {
+                rankingZone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                });
+
+                rankingZone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    if (rankingDraggedElement && !this.contains(rankingDraggedElement)) {
+                        this.appendChild(rankingDraggedElement);
+                    }
+                    updateRankingNumbers();
+                });
+            }
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.ranking-item:not([style*="opacity: 0.4"])')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function updateRankingNumbers() {
+            const items = document.querySelectorAll('#rankingList .ranking-item');
+            items.forEach((item, index) => {
+                const numberSpan = item.querySelector('.ranking-number');
+                if (numberSpan) {
+                    numberSpan.textContent = index + 1;
+                }
+            });
+        }
+
+        function checkRanking() {
+            const items = document.querySelectorAll('#rankingList .ranking-item');
+            
+            if (items.length === 0) {
+                alert('⚠️ Przeciągnij najpierw elementy do strefy rankingu!');
+                return;
+            }
+
+            let correct = 0;
+
+            items.forEach((item, index) => {
+                const expectedPriority = index + 1;
+                const actualPriority = parseInt(item.dataset.priority);
+                
+                // Reset styles
+                item.style.background = '';
+                
+                if (expectedPriority === actualPriority) {
+                    correct++;
+                    item.style.background = 'rgba(0, 255, 136, 0.2)';
+                    item.style.borderColor = '#00ff88';
+                } else {
+                    item.style.background = 'rgba(255, 68, 68, 0.2)';
+                    item.style.borderColor = '#ff4444';
+                }
+            });
+
+            if (correct === items.length) {
+                alert(`🎉 Doskonale! Wszystkie ${correct} priorytetów w prawidłowej kolejności!`);
+            } else {
+                alert(`Poprawnie: ${correct}/${items.length}. Spróbuj jeszcze raz!`);
+            }
+        }
+
+        // 13. FILL IN THE BLANKS LOGIC
+        const blankAnswers = ['RAPIDSTOP', '3', '125', 'HUDD', 'CCS', 'SWITCH TANK'];
+
+        function fillBlankFromOption(element, value) {
+            if (element.classList.contains('used')) return;
+            
+            // Find first empty blank
+            for (let i = 1; i <= 6; i++) {
+                const input = document.getElementById(`blank${i}`);
+                if (input && !input.value) {
+                    input.value = value;
+                    element.classList.add('used');
+                    
+                    // Auto-check this blank
+                    setTimeout(() => checkBlank(i), 100);
+                    break;
+                }
+            }
+        }
+
+        function checkBlank(blankNum) {
+            const input = document.getElementById(`blank${blankNum}`);
+            if (!input) return;
+            
+            const blank = input.closest('.fill-blank');
+            if (!blank) return;
+            
+            const correctAnswer = blank.dataset.answer;
+            const userAnswer = input.value.trim();
+
+            blank.classList.remove('correct', 'incorrect');
+
+            if (userAnswer && userAnswer.toUpperCase() === correctAnswer.toUpperCase()) {
+                blank.classList.add('correct');
+            } else if (userAnswer) {
+                blank.classList.add('incorrect');
+            }
+        }
+
+        function checkAllBlanks() {
+            let correct = 0;
+            let total = 0;
+            
+            for (let i = 1; i <= 6; i++) {
+                const input = document.getElementById(`blank${i}`);
+                if (!input) continue;
+                
+                total++;
+                const blank = input.closest('.fill-blank');
+                if (!blank) continue;
+                
+                const correctAnswer = blank.dataset.answer;
+                const userAnswer = input.value.trim();
+                
+                blank.classList.remove('correct', 'incorrect');
+                
+                if (userAnswer.toUpperCase() === correctAnswer.toUpperCase()) {
+                    blank.classList.add('correct');
+                    correct++;
+                } else if (userAnswer) {
+                    blank.classList.add('incorrect');
+                } else {
+                    blank.classList.add('incorrect');
+                }
+            }
+
+            if (correct === total) {
+                alert('🎉 Doskonale! Wszystkie odpowiedzi poprawne!');
+            } else {
+                alert(`Poprawnie wypełniono: ${correct}/${total} luk. Sprawdź zaznaczone na czerwono.`);
+            }
+        }
+
+        // Reset fill blanks
+        function resetFillBlanks() {
+            for (let i = 1; i <= 6; i++) {
+                const input = document.getElementById(`blank${i}`);
+                if (input) {
+                    input.value = '';
+                    const blank = input.closest('.fill-blank');
+                    if (blank) {
+                        blank.classList.remove('correct', 'incorrect');
+                    }
+                }
+            }
+            // Reset both class names for compatibility
+            document.querySelectorAll('.word-option, .fill-option').forEach(option => {
+                option.classList.remove('used');
+            });
+        }
+
+        // 14. MATCHING PAIRS LOGIC
+        let firstMatch = null;
+        let matchedPairs = 0;
+
+        function selectMatch(matchId, element) {
+            // Don't allow clicking already matched items
+            if (element.classList.contains('matched')) {
+                return;
+            }
+
+            if (!firstMatch) {
+                // First selection - clear all previous selections and highlight current
+                document.querySelectorAll('.matching-item.selected').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                firstMatch = { id: matchId, element: element };
+                element.classList.add('selected');
+            } else {
+                // Second selection
+                if (firstMatch.element === element) {
+                    // Clicked same element - deselect
+                    element.classList.remove('selected');
+                    firstMatch = null;
+                } else if (firstMatch.id === matchId) {
+                    // Correct match!
+                    firstMatch.element.classList.add('matched');
+                    firstMatch.element.classList.remove('selected');
+                    element.classList.add('matched');
+                    matchedPairs++;
+                    
+                    // Show feedback
+                    const feedback = document.getElementById('matchingFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                    }
+                    const scoreEl = document.getElementById('matchingScore');
+                    if (scoreEl) {
+                        scoreEl.textContent = `Dopasowano: ${matchedPairs}/5 ✅`;
+                    }
+                    
+                    if (matchedPairs === 5) {
+                        setTimeout(() => {
+                            alert('🎉 Świetnie! Wszystkie pary dopasowane poprawnie!');
+                        }, 300);
+                    }
+                    
+                    firstMatch = null;
+                } else {
+                    // Wrong match
+                    console.log('Wrong match!', firstMatch.id, '!=', matchId);
+                    element.classList.add('wrong');
+                    firstMatch.element.classList.add('wrong');
+                    
+                    setTimeout(() => {
+                        element.classList.remove('wrong');
+                        firstMatch.element.classList.remove('wrong');
+                        firstMatch.element.classList.remove('selected');
+                        firstMatch = null;
+                    }, 600);
+                }
+            }
+        }
+
+        // 15. RATING SCALE LOGIC
+        const ratings = [0, 0, 0];
+
+        function selectRating(questionId, rating, element) {
+            // Remove previous selection
+            const parent = element.parentElement;
+            parent.querySelectorAll('.rating-point').forEach(point => {
+                point.classList.remove('selected');
+            });
+
+            // Select current
+            element.classList.add('selected');
+            ratings[questionId - 1] = rating;
+
+            // Update display
+            document.getElementById(`rating${questionId}`).textContent = rating;
+
+            // Calculate average
+            const filledRatings = ratings.filter(r => r > 0);
+            if (filledRatings.length > 0) {
+                const average = filledRatings.reduce((a, b) => a + b, 0) / filledRatings.length;
+                document.getElementById('ratingAverage').textContent = average.toFixed(1);
+            }
+        }
+
+        // 16. CODE SNIPPET LOGIC
+        function copyCode() {
+            const codeText = `{
+  "productId": "MXF COS350-0",
+  "name": "MX FUEL Cut-Off Saw 350mm",
+  "specifications": {
+    "bladeDiameter": 350,
+    "maxCuttingDepth": 125,
+    "motorSpeed": 5370,
+    "weight": 13.4,
+    "rapidstopTime": 3
+  },
+  "safetyFeatures": [
+    "RAPIDSTOP™ brake system",
+    "Anti-Kickback protection",
+    "Electronic brake",
+    "Overload protection"
+  ],
+  "compatibleBlades": [
+    { "sku": "4932471985", "type": "HUDD", "water": true },
+    { "sku": "4932471986", "type": "DUH", "water": true },
+    { "sku": "4932472264", "type": "CCS", "water": false }
+  ]
+}`;
+
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.querySelector('.code-copy-btn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i> Skopiowano!';
+                btn.style.background = 'rgba(0, 255, 136, 0.2)';
+                btn.style.borderColor = '#00ff88';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    lucide.createIcons();
+                }, 2000);
+                
+                lucide.createIcons();
+            });
+        }
+                        <span class="line-number">17</span>
+                        <span class="code-text">  <span class="code-keyword">"compatibleBlades"</span>: [</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">18</span>
+                        <span class="code-text">    { <span class="code-keyword">"sku"</span>: <span class="code-string">"4932471985"</span>, <span class="code-keyword">"type"</span>: <span class="code-string">"HUDD"</span>, <span class="code-keyword">"water"</span>: <span class="code-keyword">true</span> },</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">19</span>
+                        <span class="code-text">    { <span class="code-keyword">"sku"</span>: <span class="code-string">"4932471986"</span>, <span class="code-keyword">"type"</span>: <span class="code-string">"DUH"</span>, <span class="code-keyword">"water"</span>: <span class="code-keyword">true</span> },</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">20</span>
+                        <span class="code-text">    { <span class="code-keyword">"sku"</span>: <span class="code-string">"4932472264"</span>, <span class="code-keyword">"type"</span>: <span class="code-string">"CCS"</span>, <span class="code-keyword">"water"</span>: <span class="code-keyword">false</span> }</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">21</span>
+                        <span class="code-text">  ]</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">22</span>
+                        <span class="code-text">}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>💻 Zastosowanie:</strong> Taka specyfikacja może być użyta w systemach ERP, katalogach online, lub jako input dla AI asystentów doboru narzędzi.
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // 1. DRAG & DROP LOGIC
+        let draggedElement = null;
+
+        document.querySelectorAll('.drag-item').forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                draggedElement = this;
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            item.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+            });
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+
+            zone.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                if (draggedElement) {
+                    this.appendChild(draggedElement);
+                    draggedElement = null;
+                }
+            });
+        });
+
+        function checkDragDrop() {
+            let correct = 0;
+            let total = 0;
+
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                const category = zone.dataset.category;
+                const items = zone.querySelectorAll('.drag-item');
+                
+                items.forEach(item => {
+                    total++;
+                    if (item.dataset.category === category) {
+                        correct++;
+                        zone.classList.add('correct');
+                        zone.classList.remove('incorrect');
+                    } else {
+                        zone.classList.add('incorrect');
+                        zone.classList.remove('correct');
+                    }
+                });
+            });
+
+            if (correct === total && total > 0) {
+                alert(`🎉 Świetnie! Wszystkie ${correct} narzędzia przypisane poprawnie!`);
+            } else {
+                alert(`Poprawnie: ${correct}/${total}. Spróbuj jeszcze raz!`);
+            }
+        }
+
+        // 2. CALCULATOR LOGIC
+        function updateDiameterValue(value) {
+            document.getElementById('diameterValue').textContent = value + ' mm';
+        }
+
+        function updateDepthValue(value) {
+            document.getElementById('depthValue').textContent = value + ' mm';
+        }
+
+        function calculateTorque() {
+            const material = document.getElementById('materialType').value;
+            const diameter = parseInt(document.getElementById('drillDiameter').value);
+            const depth = parseInt(document.getElementById('drillDepth').value);
+
+            // Simplified calculation (real formula is more complex)
+            const materialFactors = {
+                'wood': 0.5,
+                'hardwood': 0.8,
+                'metal': 1.5,
+                'concrete': 2.0,
+                'masonry': 1.8
+            };
+
+            const baseTorque = diameter * materialFactors[material] * (depth / 100);
+            const torque = Math.round(baseTorque * 10) / 10;
+
+            document.getElementById('resultBox').style.display = 'block';
+            document.getElementById('torqueResult').textContent = torque + ' Nm';
+
+            // Recommendation
+            let recommendation = '';
+            if (torque < 50) {
+                recommendation = '✅ <strong>Rekomendacja:</strong> MX FUEL Drill/Driver (do 135 Nm) - wystarczająca moc';
+            } else if (torque < 150) {
+                recommendation = '⚡ <strong>Rekomendacja:</strong> MX FUEL Impact Driver (do 400 Nm) - większa moc dla trudniejszych materiałów';
+            } else {
+                recommendation = '💪 <strong>Rekomendacja:</strong> MX FUEL High Torque Impact Wrench (ponad 1600 Nm) - do ekstremalnych zastosowań';
+            }
+
+            document.getElementById('recommendation').innerHTML = recommendation;
+        }
+
+        // 4. VIDEO LOGIC
+        function seekToTime(seconds, element) {
+            // Mark as completed
+            element.classList.add('completed');
+            
+            // In real implementation, this would seek to video time
+            alert(`⏩ Przejście do ${Math.floor(seconds/60)}:${(seconds%60).toString().padStart(2, '0')}`);
+        }
+
+        // 5. ROLE-PLAY LOGIC
+        function selectResponse(element, metric1, value1, metric2, value2, metric3, value3) {
+            // Remove previous selection
+            document.querySelectorAll('.response-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+
+            // Show metrics
+            document.getElementById('metricsBar').style.display = 'grid';
+            
+            // Update scores
+            document.getElementById('empathyScore').textContent = value1;
+            document.getElementById('assertivenessScore').textContent = value2;
+            document.getElementById('professionalismScore').textContent = value3;
+
+            document.getElementById('empathyBar').style.width = value1 + '%';
+            document.getElementById('assertivenessBar').style.width = value2 + '%';
+            document.getElementById('professionalismBar').style.width = value3 + '%';
+
+            // Calculate overall score
+            const overall = Math.round((value1 + value2 + value3) / 3);
+            
+            setTimeout(() => {
+                let feedback = '';
+                if (overall >= 80) {
+                    feedback = '🌟 Doskonała odpowiedź! Idealny balans empatii, asertywności i profesjonalizmu.';
+                } else if (overall >= 60) {
+                    feedback = '👍 Dobra odpowiedź, ale można popracować nad balansem komunikacji.';
+                } else {
+                    feedback = '⚠️ Spróbuj znaleźć lepszy balans - zbyt empatyczna lub zbyt agresywna odpowiedź może nie przekonać klienta.';
+                }
+                alert(feedback);
+            }, 500);
+        }
+
+        // 6. BRANCHING SCENARIO LOGIC
+        function showOutcome(type, text, score, element) {
+            // Highlight selected option
+            document.querySelectorAll('.decision-card').forEach(card => {
+                card.style.opacity = '0.4';
+            });
+            element.style.opacity = '1';
+            element.style.border = '2px solid #ff8800';
+
+            // Show outcome
+            const outcomeBox = document.getElementById('outcomeBox');
+            outcomeBox.classList.add('show');
+
+            let icon = '';
+            if (type === 'perfect') {
+                icon = '🎉';
+                outcomeBox.style.borderColor = '#00ff88';
+                outcomeBox.style.background = 'rgba(0, 255, 136, 0.1)';
+            } else if (type === 'good') {
+                icon = '✅';
+                outcomeBox.style.borderColor = '#00d4ff';
+                outcomeBox.style.background = 'rgba(0, 212, 255, 0.1)';
+            } else {
+                icon = '❌';
+                outcomeBox.style.borderColor = '#ff4444';
+                outcomeBox.style.background = 'rgba(255, 68, 68, 0.1)';
+            }
+
+            document.getElementById('outcomeText').textContent = icon + ' ' + text;
+            document.getElementById('scoreValue').textContent = score + ' punktów';
+        }
+
+        function resetScenario() {
+            document.querySelectorAll('.decision-card').forEach(card => {
+                card.style.opacity = '1';
+                card.style.border = '2px solid rgba(255, 255, 255, 0.1)';
+            });
+            document.getElementById('outcomeBox').classList.remove('show');
+        }
+
+        // 8. BEFORE/AFTER SLIDER LOGIC
+        const slider = document.getElementById('comparisonSlider');
+        const handle = document.getElementById('sliderHandle');
+        const afterImage = document.getElementById('comparisonAfter');
+        let isDragging = false;
+
+        handle.addEventListener('mousedown', () => isDragging = true);
+        document.addEventListener('mouseup', () => isDragging = false);
+        
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const rect = slider.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percentage = (x / rect.width) * 100;
+            
+            if (percentage >= 0 && percentage <= 100) {
+                handle.style.left = percentage + '%';
+                afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+            }
+        });
+
+        // Touch support for mobile
+        handle.addEventListener('touchstart', () => isDragging = true);
+        document.addEventListener('touchend', () => isDragging = false);
+        
+        slider.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            
+            const rect = slider.getBoundingClientRect();
+            const x = e.touches[0].clientX - rect.left;
+            const percentage = (x / rect.width) * 100;
+            
+            if (percentage >= 0 && percentage <= 100) {
+                handle.style.left = percentage + '%';
+                afterImage.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+            }
+        });
+
+        // 9. HOTSPOT LOGIC
+        let activeHotspot = null;
+
+        function toggleHotspot(id, event) {
+            event.stopPropagation();
+            const tooltip = document.getElementById(`hotspot${id}`);
+            
+            // Close previous hotspot
+            if (activeHotspot && activeHotspot !== tooltip) {
+                activeHotspot.classList.remove('show');
+            }
+            
+            // Toggle current hotspot
+            const isShowing = tooltip.classList.contains('show');
+            tooltip.classList.toggle('show');
+            activeHotspot = tooltip.classList.contains('show') ? tooltip : null;
+            
+            // Position tooltip next to hotspot
+            if (!isShowing) {
+                const hotspot = event.currentTarget;
+                const rect = hotspot.getBoundingClientRect();
+                
+                // Position to the right of hotspot
+                let left = rect.right + 20;
+                let top = rect.top;
+                
+                // Check if tooltip would go off screen to the right
+                if (left + 280 > window.innerWidth) {
+                    // Position to the left instead
+                    left = rect.left - 300;
+                }
+                
+                // Check if tooltip would go off screen at bottom
+                if (top + 200 > window.innerHeight) {
+                    top = window.innerHeight - 220;
+                }
+                
+                // Check if tooltip would go off screen at top
+                if (top < 20) {
+                    top = 20;
+                }
+                
+                tooltip.style.left = left + 'px';
+                tooltip.style.top = top + 'px';
+            }
+            
+            lucide.createIcons();
+        }
+
+        // Close hotspots when clicking outside
+        document.addEventListener('click', (e) => {
+            if (activeHotspot && !e.target.closest('.hotspot') && !e.target.closest('.hotspot-tooltip')) {
+                activeHotspot.classList.remove('show');
+                activeHotspot = null;
+            }
+        });
+
+        // 10. CHECKLIST LOGIC
+        let checkedCount = 0;
+        const totalItems = 10;
+
+        function toggleChecklistItem(element) {
+            element.classList.toggle('checked');
+            
+            // Update counter
+            checkedCount = document.querySelectorAll('.checklist-item.checked').length;
+            document.getElementById('checklistCounter').textContent = `${checkedCount}/${totalItems}`;
+            
+            // Update progress bar
+            const percentage = (checkedCount / totalItems) * 100;
+            document.getElementById('checklistProgress').style.width = percentage + '%';
+            
+            // Update message
+            const message = document.getElementById('checklistMessage');
+            if (checkedCount === 0) {
+                message.textContent = 'Rozpocznij kontrolę przed pracą';
+                message.style.color = '#ff8800';
+            } else if (checkedCount < totalItems) {
+                message.textContent = `Pozostało jeszcze ${totalItems - checkedCount} punktów`;
+                message.style.color = '#ff8800';
+            } else {
+                message.textContent = '✅ Gotowe do bezpiecznej pracy!';
+                message.style.color = '#00ff88';
+            }
+            
+            lucide.createIcons();
+        }
+
+        // 11. TRUE/FALSE LOGIC
+        const tfAnswers = [true, false, true, true, true]; // Correct answers
+        let tfCorrect = 0;
+        const answeredQuestions = new Set();
+
+        function checkTrueFalse(questionId, userAnswer, button) {
+            // Prevent multiple answers
+            if (answeredQuestions.has(questionId)) return;
+            
+            const correctAnswer = tfAnswers[questionId - 1];
+            const isCorrect = userAnswer === correctAnswer;
+            const parentCard = button.closest('.statement-card');
+            const buttons = parentCard.querySelectorAll('.tf-button');
+            const feedback = document.getElementById(`feedback${questionId}`);
+            
+            // Disable all buttons for this question
+            buttons.forEach(btn => btn.disabled = true);
+            answeredQuestions.add(questionId);
+            
+            // Mark correct/incorrect
+            if (isCorrect) {
+                button.classList.add('correct');
+                feedback.classList.add('correct');
+                tfCorrect++;
+            } else {
+                button.classList.add('incorrect');
+                feedback.classList.add('incorrect');
+                
+                // Show correct answer
+                buttons.forEach(btn => {
+                    const btnAnswer = btn.classList.contains('true');
+                    if (btnAnswer === correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+                
+                // Update feedback text for wrong answers
+                feedback.innerHTML = feedback.innerHTML.replace('✅ Prawidłowo!', '❌ Nieprawidłowo.');
+            }
+            
+            feedback.classList.add('show');
+            
+            // Update score
+            document.getElementById('tfScore').textContent = `${tfCorrect}/${answeredQuestions.size}`;
+            
+            lucide.createIcons();
+        }
+
+        // Initialize all interactive cards when page loads
+        window.addEventListener('load', function() {
+            initRanking();
+            lucide.createIcons();
+            console.log('All interactive cards initialized!');
+        });
+    </script>
+</body>
+</html>

@@ -15,6 +15,18 @@ export default function PracticePage() {
     const { user, profile, loading: authLoading } = useAuth()
     const router = useRouter()
     const [activeTab, setActiveTab] = useState('przeglad')
+    const [isMobile, setIsMobile] = useState(false)
+
+    // Detect mobile screen size
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768)
+        }
+
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+        return () => window.removeEventListener('resize', checkMobile)
+    }, [])
 
     useEffect(() => {
         if (!authLoading && !user) {
@@ -65,7 +77,7 @@ export default function PracticePage() {
                 {/* Main Tabs */}
                 <div style={{
                     display: 'flex',
-                    gap: '8px',
+                    gap: isMobile ? '4px' : '8px',
                     flex: 1
                 }}>
                     {tabs.map(tab => {
@@ -77,7 +89,7 @@ export default function PracticePage() {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 style={{
-                                    padding: '8px 16px',
+                                    padding: isMobile ? '10px' : '8px 16px',
                                     borderRadius: '8px',
                                     background: isActive ? 'rgba(176, 0, 255, 0.2)' : 'transparent',
                                     border: isActive ? '1px solid #b000ff' : '1px solid transparent',
@@ -88,12 +100,15 @@ export default function PracticePage() {
                                     fontFamily: 'Outfit, sans-serif',
                                     display: 'flex',
                                     alignItems: 'center',
+                                    justifyContent: 'center',
                                     gap: '6px',
-                                    transition: 'all 0.2s'
+                                    transition: 'all 0.2s',
+                                    minWidth: isMobile ? '44px' : 'auto', // Touch-friendly on mobile
+                                    minHeight: isMobile ? '44px' : 'auto'
                                 }}
                             >
-                                <Icon size={16} />
-                                {tab.name}
+                                <Icon size={isMobile ? 20 : 16} />
+                                {!isMobile && tab.name}
                             </div>
                         )
                     })}

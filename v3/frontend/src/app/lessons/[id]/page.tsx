@@ -3,7 +3,6 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
 import CardRenderer from '@/components/lesson/CardRenderer'
 import LessonSidebar from '@/components/LessonSidebar'
 import { X, ChevronLeft, ChevronRight, Menu } from 'lucide-react'
@@ -15,11 +14,10 @@ interface Card {
 }
 
 interface Lesson {
-    id: string
+    lesson_id: string
     title: string
     xp_reward: number
-    card_count: number
-    content_json: {
+    content: {
         cards: Card[]
     }
 }
@@ -52,85 +50,56 @@ export default function LessonPlayerPage() {
 
     useEffect(() => {
         async function loadLesson() {
-            if (!user) return
-
             try {
-                // Fetch lesson
-                const { data: lessonData, error: lessonError } = await supabase
-                    .from('lessons')
-                    .select('*')
-                    .eq('id', lessonId)
-                    .single()
+                // Fetch from API endpoint
+                const response = await fetch(`/api/lessons/${lessonId}`)
+                const data = await response.json()
 
-                if (lessonError) throw lessonError
+                if (data.lesson) {
+                    setLesson(data.lesson)
+                    setCards(data.lesson.content?.cards || [])
 
-                // Fetch progress
-                const { data: progressData } = await supabase
-                    .from('user_progress')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .eq('lesson_id', lessonId)
-                    .single()
-
-                setLesson(lessonData)
-                setCards(lessonData.content_json?.cards || [])
-
-                // Resume from saved progress
-                if (progressData && !progressData.completed_at) {
-                    setCurrentCardIndex(progressData.current_card_index || 0)
+                    // Resume from saved progress if exists
+                    if (data.progress && !data.progress.completed_at) {
+                        setCurrentCardIndex(data.progress.current_card_index || 0)
+                    }
                 }
             } catch (error) {
                 console.error('Error loading lesson:', error)
-                if (error && typeof error === 'object') {
-                    console.error('Error details:', {
-                        code: (error as any).code,
-                        message: (error as any).message,
-                        details: (error as any).details,
-                        hint: (error as any).hint
-                    })
-                }
             } finally {
                 setLoading(false)
             }
         }
 
         loadLesson()
-    }, [user, lessonId])
+    }, [lessonId])
+
 
     const saveProgress = async (cardIndex: number) => {
         if (!user) return
-
-        await supabase
-            .from('user_progress')
-            .upsert({
-                user_id: user.id,
-                lesson_id: lessonId,
-                current_card_index: cardIndex,
-                updated_at: new Date().toISOString()
-            })
+        // Progress is auto-saved by API when we complete the lesson
+        // We'll implement this later if needed for auto-save on navigation
     }
 
     const completeLesson = async () => {
         if (!user || !lesson) return
 
-        // Mark as complete
-        await supabase
-            .from('user_progress')
-            .upsert({
-                user_id: user.id,
-                lesson_id: lessonId,
-                current_card_index: cards.length,
-                completed_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
+        try {
+            // Complete lesson via API (awards XP automatically)
+            const response = await fetch(`/api/lessons/${lessonId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'complete' })
             })
 
-        // Award XP
-        await supabase
-            .from('profiles')
-            .update({
-                xp: (profile?.xp || 0) + lesson.xp_reward
-            })
-            .eq('id', user.id)
+            const data = await response.json()
+
+            if (data.success) {
+                setToast(`Ukończono lekcję! +${lesson.xp_reward} XP`)
+            }
+        } catch (error) {
+            console.error('Error completing lesson:', error)
+        }
     }
 
     const handleNext = async () => {

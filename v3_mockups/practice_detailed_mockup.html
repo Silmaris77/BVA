@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktyka - BrainVenture V3 Detailed Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(176, 0, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(176, 0, 255, 0.2);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 48px;
+        }
+
+        /* Header */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 15px;
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 16px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tab-btn.active {
+            background: rgba(176, 0, 255, 0.2);
+            border-color: #b000ff;
+            color: #b000ff;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(20, 20, 35, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.purple {
+            background: rgba(176, 0, 255, 0.2);
+            color: #b000ff;
+        }
+
+        .stat-icon.blue {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+
+        .stat-icon.gold {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .stat-icon.green {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .stat-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-content p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        /* Tool Card */
+        .tool-card {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .tool-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .tool-card.locked::after {
+            content: '🔒';
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 24px;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .tool-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .tool-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .tool-info p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tool-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tool-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Badge */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge.xp {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .badge.locked {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+
+        .badge.unlocked {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        /* Button */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(176, 0, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Section header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* Hide inactive tabs */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Drill card */
+        .drill-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .drill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .drill-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .drill-meta {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #b000ff);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 24px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>🎯 Praktyka</h1>
+            <p>Zastosuj wiedzę w praktyce - narzędzia, gry, projekty i trening</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" data-tab="przeglad">
+                <i data-lucide="layout-dashboard"></i>
+                Przegląd
+            </button>
+            <button class="tab-btn" data-tab="gry">
+                <i data-lucide="gamepad-2"></i>
+                Gry
+            </button>
+            <button class="tab-btn" data-tab="narzedzia">
+                <i data-lucide="wrench"></i>
+                Narzędzia
+            </button>
+            <button class="tab-btn" data-tab="projekty">
+                <i data-lucide="folder"></i>
+                Projekty
+            </button>
+            <button class="tab-btn" data-tab="trening">
+                <i data-lucide="flame"></i>
+                Trening
+            </button>
+        </div>
+
+        <!-- Tab 1: Przegląd (Overview) -->
+        <div class="tab-content active" id="przeglad">
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i data-lucide="flame" size="24"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>7 dni</h3>
+                        <p>Streak</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i data-lucide="folder" size="24"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>5</h3>
+                        <p>Aktywne projekty</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gold">
+                        <i data-lucide="trophy" size="24"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>#23</h3>
+                        <p>Hall of Fame</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i data-lucide="zap" size="24"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>450 XP</h3>
+                        <p>Ten tydzień</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Challenge -->
+            <div class="glass-card" style="margin-bottom: 24px;">
+                <div class="section-header">
+                    <h2>⚡ Dzisiejsze Wyzwanie</h2>
+                    <span class="badge xp">+50 XP</span>
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 16px;">
+                    "Napisz 60-sekundowy pitch dla Twojego produktu lub usługi"
+                </p>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="btn btn-primary">
+                        <i data-lucide="play" size="16"></i>
+                        Rozpocznij (5 min)
+                    </button>
+                    <span style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">
+                        ⏱️ Pozostało: 18h 32m
+                    </span>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-header">
+                <h2>⚡ Szybkie Akcje</h2>
+            </div>
+            <div class="grid-3" style="margin-bottom: 32px;">
+                <div class="glass-card" style="text-align: center; cursor: pointer;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">🛠️</div>
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">Użyj Narzędzia</h3>
+                    <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">15 dostępnych</p>
+                </div>
+                <div class="glass-card" style="text-align: center; cursor: pointer;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">🎮</div>
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">Otwórz Firmę</h3>
+                    <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Business Games</p>
+                </div>
+                <div class="glass-card" style="text-align: center; cursor: pointer;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">🔥</div>
+                    <h3 style="font-size: 16px; margin-bottom: 8px;">Skill Drill</h3>
+                    <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">2 min praktyka</p>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="glass-card">
+                <h2 style="margin-bottom: 16px;">📊 Ostatnia Aktywność</h2>
+                <div class="drill-card">
+                    <div class="drill-header">
+                        <span class="drill-title">✅ Ukończono "Sales Drill"</span>
+                        <span class="drill-meta">2h temu</span>
+                    </div>
+                    <span class="badge xp">+10 XP</span>
+                </div>
+                <div class="drill-card">
+                    <div class="drill-header">
+                        <span class="drill-title">🛠️ Użyto "SWOT Builder"</span>
+                        <span class="drill-meta">wczoraj</span>
+                    </div>
+                    <span class="badge unlocked">Zapisano do projektów</span>
+                </div>
+                <div class="drill-card">
+                    <div class="drill-header">
+                        <span class="drill-title">🤝 Zrecenzowano projekt</span>
+                        <span class="drill-meta">2 dni temu</span>
+                    </div>
+                    <span class="badge xp">+25 XP</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Gry (Business Games) -->
+        <div class="tab-content" id="gry">
+            <div class="glass-card" style="margin-bottom: 24px;">
+                <h2 style="margin-bottom: 16px;">🎮 Business Games - Symulacje Biznesowe</h2>
+                <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 24px;">
+                    Zarządzaj wirtualnymi firmami, realizuj kontrakty, buduj reputację
+                </p>
+
+                <!-- Active Firms -->
+                <div class="section-header">
+                    <h3 style="font-size: 16px;">Twoje Firmy</h3>
+                    <button class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">
+                        <i data-lucide="plus" size="14"></i>
+                        Nowa Firma
+                    </button>
+                </div>
+
+                <div style="display: grid; gap: 16px; margin-bottom: 32px;">
+                    <div class="glass-card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                            <div>
+                                <h3 style="font-size: 16px; margin-bottom: 4px;">Consulting Pro Sp. z o.o.</h3>
+                                <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Industry: Consulting</p>
+                            </div>
+                            <span class="badge unlocked">Active</span>
+                        </div>
+                        <div style="display: flex; gap: 24px; margin-bottom: 16px;">
+                            <div>
+                                <p style="font-size: 11px; color: rgba(255, 255, 255, 0.5);">Kapitał</p>
+                                <p style="font-size: 16px; font-weight: 600;">$125,000</p>
+                            </div>
+                            <div>
+                                <p style="font-size: 11px; color: rgba(255, 255, 255, 0.5);">Reputacja</p>
+                                <p style="font-size: 16px; font-weight: 600;">72/100</p>
+                            </div>
+                            <div>
+                                <p style="font-size: 11px; color: rgba(255, 255, 255, 0.5);">Poziom</p>
+                                <p style="font-size: 16px; font-weight: 600;">5</p>
+                            </div>
+                            <div>
+                                <p style="font-size: 11px; color: rgba(255, 255, 255, 0.5);">Kontrakty</p>
+                                <p style="font-size: 16px; font-weight: 600;">12 ukończonych</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="width: 100%; padding: 10px;">
+                            <i data-lucide="arrow-right" size="16"></i>
+                            Zarządzaj Firmą
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Types -->
+                <div class="section-header">
+                    <h3 style="font-size: 16px;">Typy Kontraktów</h3>
+                </div>
+                <div class="grid-2">
+                    <div class="glass-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(0, 212, 255, 0.2); color: #00d4ff;">
+                                ❓
+                            </div>
+                            <div class="tool-info">
+                                <h3>Quiz Contract</h3>
+                                <p>Auto-graded, instant rewards</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Series 5-10 pytań jednokrotnego wyboru. Szybkie, natychmiastowa weryfikacja.
+                        </p>
+                        <div class="tool-meta">
+                            <span class="badge xp">+50-70 XP</span>
+                            <span style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">⏱️ 5-10 min</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(176, 0, 255, 0.2); color: #b000ff;">
+                                🌳
+                            </div>
+                            <div class="tool-info">
+                                <h3>Decision Tree</h3>
+                                <p>Branching story scenarios</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Seria decyzji wpływających na wynik. Multiple endings, storytelling focus.
+                        </p>
+                        <div class="tool-meta">
+                            <span class="badge xp">+100-150 XP</span>
+                            <span style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">⏱️ 15-20 min</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2); color: #ffd700;">
+                                📝
+                            </div>
+                            <div class="tool-info">
+                                <h3>Text Response</h3>
+                                <p>Written or audio answer</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Klasyczne zadanie - napisz lub nagraj odpowiedź na problem klienta.
+                        </p>
+                        <div class="tool-meta">
+                            <span class="badge xp">+150-200 XP</span>
+                            <span style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">⏱️ 30-45 min</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(0, 255, 136, 0.2); color: #00ff88;">
+                                ⚡
+                            </div>
+                            <div class="tool-info">
+                                <h3>Speed Challenge</h3>
+                                <p>Under time pressure</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            5-10 szybkich pytań w 60-120 sekund. Leaderboard, adrenaline rush!
+                        </p>
+                        <div class="tool-meta">
+                            <span class="badge xp">+75 XP</span>
+                            <span style="font-size: 12px; color: rgba(255, 255, 255, 0.5);">⏱️ 2-3 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Narzędzia (Tools) -->
+        <div class="tab-content" id="narzedzia">
+            <div class="glass-card">
+                <h2 style="margin-bottom: 8px;">🛠️ Narzędzia Interaktywne</h2>
+                <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 24px;">
+                    Praktyczne frameworki i kalkulatory - każde narzędzie zapisuje output do Twoich projektów
+                </p>
+
+                <!-- Tools Grid -->
+                <div class="grid-3">
+                    <!-- UNLOCKED Tool -->
+                    <div class="tool-card glass-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(176, 0, 255, 0.2); color: #b000ff;">
+                                🎯
+                            </div>
+                            <div class="tool-info">
+                                <h3>SWOT Builder</h3>
+                                <p>4-quadrant analysis</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Analyze strengths, weaknesses, opportunities, threats for any business scenario.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 15 min</span>
+                                <span>📊 23 użycia</span>
+                            </div>
+                            <span class="badge xp">+50 XP</span>
+                        </div>
+                    </div>
+
+                    <!-- UNLOCKED Tool -->
+                    <div class="tool-card glass-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(0, 212, 255, 0.2); color: #00d4ff;">
+                                📊
+                            </div>
+                            <div class="tool-info">
+                                <h3>Eisenhower Matrix</h3>
+                                <p>Priority quadrant</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Classify tasks by urgency/importance. Drag-drop interface for quick prioritization.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 10 min</span>
+                                <span>📊 15 użycia</span>
+                            </div>
+                            <span class="badge xp">+50 XP</span>
+                        </div>
+                    </div>
+
+                    <!-- LOCKED Tool -->
+                    <div class="tool-card glass-card locked">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2); color: #ffd700;">
+                                💡
+                            </div>
+                            <div class="tool-info">
+                                <h3>BATNA Calculator</h3>
+                                <p>Negotiation planning</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Calculate Best Alternative To Negotiated Agreement for better deals.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 20 min</span>
+                            </div>
+                            <span class="badge locked">🔒 Wymaga: BATNA Engram</span>
+                        </div>
+                    </div>
+
+                    <!-- UNLOCKED Tool -->
+                    <div class="tool-card glass-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(0, 255, 136, 0.2); color: #00ff88;">
+                                📋
+                            </div>
+                            <div class="tool-info">
+                                <h3>OKR Planner</h3>
+                                <p>Goals & Key Results</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Set Objectives and Key Results aligned with company strategy. Track progress.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 25 min</span>
+                                <span>📊 8 użycia</span>
+                            </div>
+                            <span class="badge xp">+50 XP</span>
+                        </div>
+                    </div>
+
+                    <!-- LOCKED Tool -->
+                    <div class="tool-card glass-card locked">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(255, 136, 0, 0.2); color: #ff8800;">
+                                🎨
+                            </div>
+                            <div class="tool-info">
+                                <h3>Business Model Canvas</h3>
+                                <p>9-box framework</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Map your business model: key partners, activities, value propositions, customers.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 30 min</span>
+                            </div>
+                            <span class="badge locked">🔒 Wymaga: BMC Engram</span>
+                        </div>
+                    </div>
+
+                    <!-- LOCKED Tool -->
+                    <div class="tool-card glass-card locked">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(255, 0, 85, 0.2); color: #ff0055;">
+                                🔍
+                            </div>
+                            <div class="tool-info">
+                                <h3>Porter's Five Forces</h3>
+                                <p>Competitive analysis</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Analyze competitive rivalry, supplier/buyer power, substitutes, new entrants.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 25 min</span>
+                            </div>
+                            <span class="badge locked">🔒 Wymaga: Strategy Engram</span>
+                        </div>
+                    </div>
+
+                    <!-- MORE TOOLS -->
+
+                    <!-- UNLOCKED Tool -->
+                    <div class="tool-card glass-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(0, 255, 136, 0.2); color: #00ff88;">
+                                🎯
+                            </div>
+                            <div class="tool-info">
+                                <h3>SMART Goals Wizard</h3>
+                                <p>Goal-setting framework</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Interactive wizard for Specific, Measurable, Achievable, Relevant, Time-bound goals.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 10 min</span>
+                                <span>📊 12 użycia</span>
+                            </div>
+                            <span class="badge xp">+50 XP</span>
+                        </div>
+                    </div>
+
+                    <!-- UNLOCKED Tool -->
+                    <div class="tool-card glass-card">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(176, 0, 255, 0.2); color: #b000ff;">
+                                ⏰
+                            </div>
+                            <div class="tool-info">
+                                <h3>Time Blocker</h3>
+                                <p>Calendar optimization</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Block time for Deep Work, meetings, admin. Pareto 80/20 analysis included.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 15 min</span>
+                                <span>📊 19 użycia</span>
+                            </div>
+                            <span class="badge xp">+50 XP</span>
+                        </div>
+                    </div>
+
+                    <!-- LOCKED Tool -->
+                    <div class="tool-card glass-card locked">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(0, 212, 255, 0.2); color: #00d4ff;">
+                                💎
+                            </div>
+                            <div class="tool-info">
+                                <h3>Value Proposition Canvas</h3>
+                                <p>Customer-product fit</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Map customer pains/gains with your product's pain relievers and gain creators.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 20 min</span>
+                            </div>
+                            <span class="badge locked">🔒 Wymaga: Value Prop Engram</span>
+                        </div>
+                    </div>
+
+                    <!-- LOCKED Tool -->
+                    <div class="tool-card glass-card locked">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(255, 136, 0, 0.2); color: #ff8800;">
+                                🌊
+                            </div>
+                            <div class="tool-info">
+                                <h3>Blue Ocean Canvas</h3>
+                                <p>Strategy innovation</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Eliminate-Reduce-Raise-Create grid for finding uncontested market space.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 25 min</span>
+                            </div>
+                            <span class="badge locked">🔒 Wymaga: Blue Ocean Engram</span>
+                        </div>
+                    </div>
+
+                    <!-- LOCKED Tool -->
+                    <div class="tool-card glass-card locked">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(255, 0, 255, 0.2); color: #ff00ff;">
+                                👥
+                            </div>
+                            <div class="tool-info">
+                                <h3>Delegation Matrix</h3>
+                                <p>Task assignment tool</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Classify tasks: Do, Delegate, Defer, Delete. Assign to team members.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 15 min</span>
+                            </div>
+                            <span class="badge locked">🔒 Wymaga: Delegation Engram</span>
+                        </div>
+                    </div>
+
+                    <!-- LOCKED Tool -->
+                    <div class="tool-card glass-card locked">
+                        <div class="tool-header">
+                            <div class="tool-icon" style="background: rgba(0, 255, 200, 0.2); color: #00ffc8;">
+                                💬
+                            </div>
+                            <div class="tool-info">
+                                <h3>1-on-1 Meeting Template</h3>
+                                <p>Agenda builder</p>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 12px;">
+                            Structure for wins, challenges, feedback, goals. Action item tracker included.
+                        </p>
+                        <div class="tool-meta">
+                            <div class="tool-stats">
+                                <span>⏱️ 12 min</span>
+                            </div>
+                            <span class="badge locked">🔒 Wymaga: Leadership Engram</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Projekty (Projects) -->
+        <div class="tab-content" id="projekty">
+            <div class="glass-card">
+                <div class="section-header">
+                    <div>
+                        <h2>📋 Twoje Projekty</h2>
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-top: 4px;">
+                            Portfolio pracy - wyniki z narzędzi, wyzwania, case studies
+                        </p>
+                    </div>
+                    <button class="btn btn-primary">
+                        <i data-lucide="download" size="16"></i>
+                        Eksportuj Portfolio
+                    </button>
+                </div>
+
+                <!-- Filter tabs -->
+                <div
+                    style="display: flex; gap: 12px; margin: 24px 0; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                    <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px;">
+                        Wszystkie (12)
+                    </button>
+                    <button class="btn"
+                        style="padding: 8px 16px; font-size: 13px; background: transparent; color: rgba(255, 255, 255, 0.6);">
+                        Narzędzia (7)
+                    </button>
+                    <button class="btn"
+                        style="padding: 8px 16px; font-size: 13px; background: transparent; color: rgba(255, 255, 255, 0.6);">
+                        Wyzwania (3)
+                    </button>
+                    <button class="btn"
+                        style="padding: 8px 16px; font-size: 13px; background: transparent; color: rgba(255, 255, 255, 0.6);">
+                        Recenzje (2)
+                    </button>
+                </div>
+
+                <!-- Projects Grid -->
+                <div class="grid-2">
+                    <!-- Project Card -->
+                    <div class="glass-card">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <h3 style="font-size: 15px; font-weight: 600;">Q1 Market Strategy SWOT</h3>
+                            <span class="badge unlocked">Public</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-bottom: 12px;">
+                            From: SWOT Builder • Created: 2 days ago
+                        </p>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Peer Reviews:</span>
+                                <div style="display: flex; gap: 2px;">
+                                    <span style="color: #ffd700;">⭐</span>
+                                    <span style="color: #ffd700;">⭐</span>
+                                    <span style="color: #ffd700;">⭐</span>
+                                    <span style="color: #ffd700;">⭐</span>
+                                    <span style="color: rgba(255, 255, 255, 0.2);">⭐</span>
+                                </div>
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">4.0 (3 reviews)</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary" style="flex: 1; padding: 8px;">
+                                <i data-lucide="eye" size="14"></i>
+                                Zobacz
+                            </button>
+                            <button class="btn btn-secondary" style="flex: 1; padding: 8px;">
+                                <i data-lucide="share-2" size="14"></i>
+                                Udostępnij
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project Card - Pending Review -->
+                    <div class="glass-card" style="border-color: rgba(255, 215, 0, 0.3);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <h3 style="font-size: 15px; font-weight: 600;">Sales Pitch 60s Challenge</h3>
+                            <span class="badge"
+                                style="background: rgba(255, 215, 0, 0.2); color: #ffd700;">Pending</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-bottom: 12px;">
+                            From: Daily Challenge • Created: Today
+                        </p>
+                        <div style="margin-bottom: 16px;">
+                            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">
+                                ⏳ Awaiting peer reviews (2 assigned)
+                            </p>
+                        </div>
+                        <button class="btn btn-secondary" style="width: 100%; padding: 8px;">
+                            <i data-lucide="eye" size="14"></i>
+                            Podgląd
+                        </button>
+                    </div>
+
+                    <!-- Add more project cards -->
+                    <div class="glass-card">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <h3 style="font-size: 15px; font-weight: 600;">OKR Company Goals 2026</h3>
+                            <span class="badge unlocked">Public</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-bottom: 12px;">
+                            From: OKR Planner • Created: 5 days ago
+                        </p>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Peer Reviews:</span>
+                                <div style="display: flex; gap: 2px;">
+                                    <span style="color: #ffd700;">⭐</span>
+                                    <span style="color: #ffd700;">⭐</span>
+                                    <span style="color: #ffd700;">⭐</span>
+                                    <span style="color: #ffd700;">⭐</span>
+                                    <span style="color: #ffd700;">⭐</span>
+                                </div>
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">5.0 (2 reviews)</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary" style="flex: 1; padding: 8px;">
+                                <i data-lucide="eye" size="14"></i>
+                                Zobacz
+                            </button>
+                            <button class="btn btn-secondary" style="flex: 1; padding: 8px;">
+                                <i data-lucide="edit" size="14"></i>
+                                Edytuj
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass-card"
+                        style="border: 2px dashed rgba(255, 255, 255, 0.2); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px;">
+                        <i data-lucide="plus-circle" size="48"
+                            style="color: rgba(255, 255, 255, 0.3); margin-bottom: 12px;"></i>
+                        <p style="color: rgba(255, 255, 255, 0.6);">Stwórz nowy projekt</p>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.4); margin-top: 4px;">Lub użyj narzędzia
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 5: Trening (Skill Mastery) -->
+        <div class="tab-content" id="trening">
+            <div class="glass-card">
+                <h2 style="margin-bottom: 8px;">🔥 Centrum Treningu Umiejętności</h2>
+                <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 24px;">
+                    Mikro-praktyka inspirowana Duolingo - szybkie sesje, natychmiastowy feedback
+                </p>
+
+                <!-- Streak Calendar -->
+                <div class="glass-card" style="margin-bottom: 24px; background: rgba(255, 215, 0, 0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="font-size: 18px; margin-bottom: 4px;">🔥 Streak: 7 dni</h3>
+                            <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6);">Najdłuższy streak: 12 dni</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="font-size: 24px; font-weight: 700; color: #ffd700;">+15% XP</p>
+                            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Bonus za streak</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 16px; display: flex; gap: 4px;">
+                        <div style="width: 32px; height: 32px; background: #00ff88; border-radius: 6px;"></div>
+                        <div style="width: 32px; height: 32px; background: #00ff88; border-radius: 6px;"></div>
+                        <div style="width: 32px; height: 32px; background: #00ff88; border-radius: 6px;"></div>
+                        <div style="width: 32px; height: 32px; background: #00ff88; border-radius: 6px;"></div>
+                        <div style="width: 32px; height: 32px; background: #00ff88; border-radius: 6px;"></div>
+                        <div style="width: 32px; height: 32px; background: #00ff88; border-radius: 6px;"></div>
+                        <div style="width: 32px; height: 32px; background: #00ff88; border-radius: 6px;"></div>
+                        <div
+                            style="width: 32px; height: 32px; background: rgba(255, 255, 255, 0.1); border-radius: 6px;">
+                        </div>
+                        <div
+                            style="width: 32px; height: 32px; background: rgba(255, 255, 255, 0.1); border-radius: 6px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Training Types -->
+                <div class="grid-3">
+                    <!-- Skill Drills -->
+                    <div class="glass-card">
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">🎯</div>
+                            <h3 style="font-size: 16px; margin-bottom: 8px;">Skill Drills</h3>
+                            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Quick 2-5 min practice</p>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px;">Leadership</span>
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">25/50</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px;">Sales</span>
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">18/50</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 36%;"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 13px;">
+                            Rozpocznij Drill
+                        </button>
+                    </div>
+
+                    <!-- Daily Challenges -->
+                    <div class="glass-card">
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">📅</div>
+                            <h3 style="font-size: 16px; margin-bottom: 8px;">Daily Challenges</h3>
+                            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">One per day, streak tracking
+                            </p>
+                        </div>
+                        <div
+                            style="margin-bottom: 16px; padding: 12px; background: rgba(0, 212, 255, 0.1); border-radius: 8px; border: 1px solid rgba(0, 212, 255, 0.3);">
+                            <p style="font-size: 11px; color: rgba(0, 212, 255, 0.8); margin-bottom: 4px;">TODAY'S
+                                CHALLENGE</p>
+                            <p style="font-size: 13px; font-weight: 600;">Write 60s Pitch</p>
+                            <p style="font-size: 11px; color: rgba(255, 255, 255, 0.5); margin-top: 4px;">⏱️ Remaining:
+                                18h 32m</p>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <span class="badge xp">+50 XP</span>
+                            <span style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-left: 8px;">5
+                                min</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 13px;">
+                            Start Challenge
+                        </button>
+                    </div>
+
+                    <!-- Speed Challenges -->
+                    <div class="glass-card">
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">⚡</div>
+                            <h3 style="font-size: 16px; margin-bottom: 8px;">Speed Challenges</h3>
+                            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6);">Timed, leaderboard ranked</p>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px;">Your Best</span>
+                                <span style="font-size: 12px; font-weight: 600; color: #ffd700;">87 sec</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 12px;">Leaderboard</span>
+                                <span style="font-size: 12px; font-weight: 600; color: #00d4ff;">#12</span>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <span class="badge xp">+75 XP</span>
+                            <span style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-left: 8px;">2
+                                min</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 13px;">
+                            Try Speed Run
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Training Examples -->
+                <div class="section-header" style="margin-top: 32px;">
+                    <h3 style="font-size: 16px;">Przykładowe Ćwiczenia</h3>
+                </div>
+
+                <div class="grid-2">
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">💬 SPIN Questions Sequencing</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Drag-drop SPIN questions in optimal order for discovery call
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 3 min</span>
+                            <span>🎯 Sales</span>
+                            <span>✅ 127 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">🎯 Objection Handling Match</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Match objections with best responses - multiple choice
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 5 min</span>
+                            <span>🎯 Sales</span>
+                            <span>✅ 89 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">📊 Delegation Decision Tree</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Choose delegation approach for various scenarios
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 4 min</span>
+                            <span>🎯 Leadership</span>
+                            <span>✅ 156 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">⚡ Quick SWOT Brainstorm</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            60 seconds to list as many items as possible per quadrant
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 2 min</span>
+                            <span>🎯 Strategy</span>
+                            <span>✅ 203 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <!-- MORE DRILLS -->
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">🎯 Conflict Resolution Match</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Match conflict scenario with best resolution approach (compete, accommodate, compromise,
+                            etc.)
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 4 min</span>
+                            <span>🎯 Leadership</span>
+                            <span>✅ 145 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">💼 Value Prop Quick Build</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Given product description - write 1-sentence value proposition in 90 seconds
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 2 min</span>
+                            <span>🎯 Sales</span>
+                            <span>✅ 178 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">🧠 Cognitive Bias Detective</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Read scenario, identify which cognitive bias is at play (anchoring, confirmation, etc.)
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 3 min</span>
+                            <span>🎯 Mindset</span>
+                            <span>✅ 112 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">📈 Framework Selector</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Multiple choice: which framework best fits this business challenge?
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 4 min</span>
+                            <span>🎯 Strategy</span>
+                            <span>✅ 167 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">💬 Active Listening Check</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Which response shows best active listening? Choose from 4 options
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 3 min</span>
+                            <span>🎯 Communication</span>
+                            <span>✅ 98 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">🎤 Pitch Structure Order</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Drag-drop pitch elements into optimal order (problem → solution → traction → ask)
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 3 min</span>
+                            <span>🎯 Sales</span>
+                            <span>✅ 134 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">🏆 Motivation Matcher</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            Match employee personality type with best motivation technique
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 4 min</span>
+                            <span>🎯 Leadership</span>
+                            <span>✅ 189 ukończeń</span>
+                        </div>
+                    </div>
+
+                    <div class="drill-card">
+                        <div class="drill-header">
+                            <span class="drill-title">⚖️ Decision Matrix Speed</span>
+                            <span class="badge xp">+10 XP</span>
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin: 8px 0;">
+                            3 options, 4 criteria - calculate best choice using decision matrix in 120 sec
+                        </p>
+                        <div style="display: flex; gap: 12px; font-size: 11px; color: rgba(255, 255, 255, 0.5);">
+                            <span>⏱️ 3 min</span>
+                            <span>🎯 Strategy</span>
+                            <span>✅ 142 ukończeń</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Tab switching
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+
+                // Remove active class from all
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Add active to clicked
+                btn.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+
+                // Reinitialize icons for newly shown content
+                lucide.createIcons();
+            });
+        });
+    </script>
+</body>
+
+</html>

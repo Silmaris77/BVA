@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drill: Torque Matching - BrainVenture V3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .drill-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .drill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 68, 68, 0.2);
+            border: 1px solid rgba(255, 68, 68, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff4444;
+            margin-bottom: 16px;
+        }
+
+        .drill-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ff4444, #ff8800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .drill-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .drill-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Timer and score */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff8800;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+
+        .timer {
+            color: #00ff88;
+        }
+
+        .timer.warning {
+            color: #ffd700;
+        }
+
+        .timer.danger {
+            color: #ff4444;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Question card */
+        .question-card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .scenario-box {
+            background: rgba(255, 136, 0, 0.1);
+            border-left: 4px solid #ff8800;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 136, 0, 0.5);
+        }
+
+        .option.selected {
+            background: rgba(255, 136, 0, 0.2);
+            border-color: #ff8800;
+        }
+
+        .option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .option.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .option.correct .option-letter {
+            background: #00ff88;
+            color: #0a0a1a;
+        }
+
+        .option.incorrect .option-letter {
+            background: #ff4444;
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        /* Feedback */
+        .feedback {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback strong {
+            color: #00d4ff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff4444, #ff8800);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 68, 68, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Results screen */
+        .results-screen {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            display: none;
+        }
+
+        .results-screen.show {
+            display: block;
+        }
+
+        .results-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+        }
+
+        .results-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .results-score {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 32px;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .result-stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .result-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff8800;
+        }
+
+        .result-stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+
+        .xp-reward {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .xp-reward-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="drill-header">
+            <div class="drill-badge">
+                <i data-lucide="target" size="14"></i>
+                DRILL - PRODUCT KNOWLEDGE
+            </div>
+            <h1>Torque Matching</h1>
+            <div class="drill-meta">
+                <span><i data-lucide="clock" size="14"></i> 3 min</span>
+                <span><i data-lucide="layers" size="14"></i> 10 pytań</span>
+                <span><i data-lucide="zap" size="14"></i> +75 XP</span>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar">
+            <div class="stat">
+                <div class="stat-value timer" id="timer">3:00</div>
+                <div class="stat-label">Pozostały czas</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="currentQuestion">1</div>
+                <div class="stat-label">Pytanie</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" style="color: #00ff88;" id="score">0</div>
+                <div class="stat-label">Poprawne</div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="questionCard">
+            <div class="question-number">Pytanie <span id="qNum">1</span> z 10</div>
+            <div class="question-text" id="questionText"></div>
+            <div class="scenario-box" id="scenarioBox" style="display: none;"></div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="skipBtn">
+                <i data-lucide="skip-forward" size="16"></i>
+                Pomiń
+            </button>
+            <button class="btn btn-primary" id="nextBtn" disabled>
+                Następne
+                <i data-lucide="chevron-right" size="16"></i>
+            </button>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="results-icon">🎯</div>
+            <div class="results-title">Drill Ukończony!</div>
+            <div class="results-score" id="finalScore">0/10</div>
+
+            <div class="results-stats">
+                <div class="result-stat">
+                    <div class="result-stat-value" id="correctCount">0</div>
+                    <div class="result-stat-label">Poprawne</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value" id="accuracy">0%</div>
+                    <div class="result-stat-label">Celność</div>
+                </div>
+                <div class="result-stat">
+                    <div class="result-stat-value" id="timeUsed">0:00</div>
+                    <div class="result-stat-label">Czas</div>
+                </div>
+            </div>
+
+            <div class="xp-reward">
+                <div style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-bottom: 8px;">ZDOBYTO</div>
+                <div class="xp-reward-value" id="xpEarned">+0 XP</div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="location.reload()">
+                    <i data-lucide="rotate-ccw" size="16"></i>
+                    Spróbuj ponownie
+                </button>
+                <button class="btn btn-primary" onclick="alert('Powrót do zakładki Drille')">
+                    <i data-lucide="home" size="16"></i>
+                    Zakończ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const questions = [
+            {
+                question: "Nakrętki kół samochodu osobowego wymagają 120 Nm. Który klucz Milwaukee wystarczy?",
+                options: [
+                    { text: "M12 FSCIWF14 (1/4\", 95 Nm)", correct: false },
+                    { text: "M12 FSCIWF38 (3/8\", 271 Nm)", correct: true },
+                    { text: "M18 High-Torque (1356 Nm)", correct: false },
+                    { text: "Żaden nie wystarczy", correct: false }
+                ],
+                feedback: "M12 3/8\" (271 Nm) wystarczy na 120 Nm. M18 też OK ale overkill. M12 1/4\" za słaby."
+            },
+            {
+                question: "Śruby mocujące światła wymagają 15 Nm. Który klucz?",
+                options: [
+                    { text: "M12 FSCIWF14 (1/4\", 95 Nm)", correct: true },
+                    { text: "M18 Compact (450 Nm)", correct: false },
+                    { text: "M18 High-Torque (1356 Nm)", correct: false },
+                    { text: "Dowolny", correct: false }
+                ],
+                feedback: "M12 1/4\" = precision tool dla delikatnych aplikacji. Większe klucze mogą uszkodzić gwinty."
+            },
+            {
+                question: "Warsztat serwisuje ciężarówki. Nakrętki wymagają 900 Nm. Co polecisz?",
+                options: [
+                    { text: "M12 Subcompact", correct: false },
+                    { text: "M18 Compact (450 Nm)", correct: false },
+                    { text: "M18 High-Torque (1356 Nm)", correct: true },
+                    { text: "Dwa M18 Compact razem", correct: false }
+                ],
+                feedback: "900 Nm wymaga High-Torque. Compact za słaby. Nie używaj 2 kluczy naraz!"
+            },
+            {
+                question: "Co oznacza 'Nm'?",
+                options: [
+                    { text: "Nanometr", correct: false },
+                    { text: "Newton-metr (siła obrotowa)", correct: true },
+                    { text: "Numer modelu", correct: false },
+                    { text: "Natężenie mocy", correct: false }
+                ],
+                feedback: "Nm = Newton-metr, jednostka momentu obrotowego."
+            },
+            {
+                question: "Prace przy silniku osobowego wymagają 60-100 Nm. Który chwyt najlepszy?",
+                options: [
+                    { text: "1/4\" (precision)", correct: false },
+                    { text: "3/8\" (versatile)", correct: true },
+                    { text: "1/2\" (heavy duty)", correct: false },
+                    { text: "3/4\" (extreme)", correct: false }
+                ],
+                feedback: "3/8\" = sweet spot dla prac silnikowych. 1/4\" za słaby, 1/2\" za duży."
+            },
+            {
+                scenario: "Klient: 'Potrzebuję uniwersalnego klucza do wszystkiego.'",
+                question: "Jakie pytanie zadasz NAJPIERW?",
+                options: [
+                    { text: "'Jaki budżet?'", correct: false },
+                    { text: "'Jakie prace najczęściej wykonujecie?'", correct: true },
+                    { text: "'Polecam M18, zawsze dobry wybór'", correct: false },
+                    { text: "'Mamy promocję na M12'", correct: false }
+                ],
+                feedback: "Application first! Odkryj PRIMARY aplikację przed rekomendacją."
+            },
+            {
+                question: "Klucz ma 450 Nm dokręcania i 600 Nm odkręcania. Co to znaczy?",
+                options: [
+                    { text: "Błąd w specyfikacji", correct: false },
+                    { text: "Odkręcanie wymaga więcej siły niż dokręcanie", correct: true },
+                    { text: "Dokręcanie silniejsze niż odkręcanie", correct: false },
+                    { text: "To ten sam moment", correct: false }
+                ],
+                feedback: "Odkręcanie ZAWSZE wymaga więcej mocy (korozja, przywary). To normalne."
+            },
+            {
+                question: "Warsztat robi 80% koła, 20% silnik. Co polecisz jako PRIMARY tool?",
+                options: [
+                    { text: "M12 3/8\" (silnik)", correct: false },
+                    { text: "M18 1/2\" (koła)", correct: true },
+                    { text: "Oba równo", correct: false },
+                    { text: "Kompaktowa grzechotka", correct: false }
+                ],
+                feedback: "Dopasuj do PRIMARY aplikacji (80% = koła). M18 1/2\" = must-have. M12 jako dodatek."
+            },
+            {
+                question: "Klient ma już M18 B5 akumulatory. Co uwzględnisz w rekomendacji?",
+                options: [
+                    { text: "Polecam M12 (bardziej kompaktowy)", correct: false },
+                    { text: "Polecam M18 (wykorzysta akumulatory)", correct: true },
+                    { text: "Nie ma znaczenia", correct: false },
+                    { text: "Polecam pneumatyczny", correct: false }
+                ],
+                feedback: "Ecosystem lock-in! Już ma M18 bats = polecaj M18 tools (niższy koszt wejścia)."
+            },
+            {
+                scenario: "Klient: 'Milwaukee za drogie, mam taniej o 40%.'",
+                question: "Co odpowiesz?",
+                options: [
+                    { text: "'Ale nasze lepsza jakość!'", correct: false },
+                    { text: "'Zróbmy razem ROI. Ile wytrzymują Wasze obecne?'", correct: true },
+                    { text: "'OK, polecam konkurencję'", correct: false },
+                    { text: "'Dam rabat 20%'", correct: false }
+                ],
+                feedback: "ROI conversation! Oblicz TCO (total cost of ownership), nie porównuj ceny jednostkowej."
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let timeLeft = 180; // 3 minutes
+        let timerInterval;
+        let answered = false;
+
+        const questionCard = document.getElementById('questionCard');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const questionText = document.getElementById('questionText');
+        const scenarioBox = document.getElementById('scenarioBox');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('nextBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        const timerEl = document.getElementById('timer');
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const mins = Math.floor(timeLeft / 60);
+                const secs = timeLeft % 60;
+                timerEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 30) {
+                    timerEl.classList.add('danger');
+                } else if (timeLeft <= 60) {
+                    timerEl.classList.add('warning');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            answered = false;
+            nextBtn.disabled = true;
+
+            document.getElementById('currentQuestion').textContent = currentQ + 1;
+            document.getElementById('qNum').textContent = currentQ + 1;
+            questionText.textContent = q.question;
+
+            if (q.scenario) {
+                scenarioBox.style.display = 'block';
+                scenarioBox.textContent = q.scenario;
+            } else {
+                scenarioBox.style.display = 'none';
+            }
+
+            optionsContainer.innerHTML = '';
+            feedback.classList.remove('show');
+
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, i) => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'option';
+                optDiv.innerHTML = `
+                    <div class="option-letter">${letters[i]}</div>
+                    <div class="option-text">${opt.text}</div>
+                `;
+                optDiv.onclick = () => selectOption(i, opt.correct);
+                optionsContainer.appendChild(optDiv);
+            });
+
+            lucide.createIcons();
+        }
+
+        function selectOption(index, isCorrect) {
+            if (answered) return;
+            answered = true;
+
+            const options = document.querySelectorAll('.option');
+            options[index].classList.add('selected');
+
+            if (isCorrect) {
+                options[index].classList.add('correct');
+                score++;
+                document.getElementById('score').textContent = score;
+            } else {
+                options[index].classList.add('incorrect');
+                // Show correct answer
+                questions[currentQ].options.forEach((opt, i) => {
+                    if (opt.correct) options[i].classList.add('correct');
+                });
+            }
+
+            feedback.innerHTML = `<strong>${isCorrect ? '✅ Prawidłowo!' : '❌ Nieprawidłowo.'}</strong> ${questions[currentQ].feedback}`;
+            feedback.classList.add('show');
+            nextBtn.disabled = false;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentQ++;
+            if (currentQ < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        skipBtn.addEventListener('click', () => {
+            currentQ++;
+            if (currentQ < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        function showResults() {
+            clearInterval(timerInterval);
+            questionCard.style.display = 'none';
+            document.getElementById('statsBar').style.display = 'none';
+            document.querySelector('.nav-buttons').style.display = 'none';
+            resultsScreen.classList.add('show');
+
+            const accuracy = Math.round((score / questions.length) * 100);
+            const timeUsed = 180 - timeLeft;
+            const mins = Math.floor(timeUsed / 60);
+            const secs = timeUsed % 60;
+
+            let xp = 0;
+            if (accuracy >= 90) xp = 75;
+            else if (accuracy >= 70) xp = 60;
+            else if (accuracy >= 50) xp = 40;
+            else xp = 20;
+
+            document.getElementById('finalScore').textContent = `${score}/${questions.length}`;
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('accuracy').textContent = `${accuracy}%`;
+            document.getElementById('timeUsed').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+            document.getElementById('xpEarned').textContent = `+${xp} XP`;
+
+            lucide.createIcons();
+        }
+
+        // Start drill
+        loadQuestion();
+        startTimer();
+    </script>
+</body>
+
+</html>

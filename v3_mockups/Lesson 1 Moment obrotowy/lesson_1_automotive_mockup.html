@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekcja 1: Dobór Właściwego Momentu Obrotowego - Milwaukee Automotive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Header */
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .lesson-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .lesson-header p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .lesson-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .card.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #ffd700;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 24px 0 12px;
+            color: #ff8800;
+        }
+
+        .card p {
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 16px;
+        }
+
+        .card ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card li {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 8px;
+        }
+
+        .hero-image {
+            text-align: center;
+            font-size: 80px;
+            margin: 24px 0;
+        }
+
+        /* Framework box */
+        .framework-box {
+            background: rgba(255, 136, 0, 0.1);
+            border-left: 4px solid #ff8800;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .framework-box h4 {
+            color: #ff8800;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Key insight box */
+        .key-insight {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid #ffd700;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .key-insight strong {
+            color: #ffd700;
+        }
+
+        /* Torque ranges */
+        .torque-range {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            border-left: 4px solid #00ff88;
+        }
+
+        .torque-range h4 {
+            color: #00ff88;
+            margin-bottom: 8px;
+        }
+
+        /* Interactive input */
+        .interactive-input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            margin: 16px 0;
+        }
+
+        .interactive-input:focus {
+            outline: none;
+            border-color: #ff8800;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Product cards */
+        .product-card {
+            background: rgba(255, 136, 0, 0.1);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .product-card h4 {
+            color: #ff8800;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .product-card .spec {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-card .spec:last-child {
+            border-bottom: none;
+        }
+
+        /* Quiz */
+        .quiz-question {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 136, 0, 0.5);
+        }
+
+        .quiz-option.selected {
+            background: rgba(255, 136, 0, 0.2);
+            border-color: #ff8800;
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .quiz-explanation {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .quiz-explanation.show {
+            display: block;
+        }
+
+        /* Summary */
+        .summary-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .summary-list li {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #ff8800;
+        }
+
+        .summary-list strong {
+            color: #ffd700;
+        }
+
+        .next-steps-box {
+            background: rgba(255, 136, 0, 0.1);
+            border: 2px solid rgba(255, 136, 0, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+
+        .next-steps-box h3 {
+            color: #ff8800;
+            margin-bottom: 16px;
+        }
+
+        /* Navigation */
+        .card-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            color: #0a0a1a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 136, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .card-progress {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 32px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff8800, #ffd700);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.xp {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .badge.difficulty {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(255, 136, 0, 0.2);
+            color: #ff8800;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Lesson Header -->
+        <div class="lesson-header">
+            <h1>Dobór Właściwego Momentu Obrotowego</h1>
+            <p>Od aplikacji do wyboru klucza - warsztaty samochodowe</p>
+            <div class="lesson-meta">
+                <span><i data-lucide="clock" size="16"></i> 35 min</span>
+                <span><i data-lucide="zap" size="16"></i> +150 XP</span>
+                <span class="badge difficulty">Podstawowy</span>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 11%;"></div>
+        </div>
+
+        <!-- Card 1: Hero -->
+        <div class="card active" data-card="0">
+            <div class="hero-image">🔧</div>
+            <h2>Dobór Właściwego Momentu Obrotowego</h2>
+            <p style="font-size: 18px; text-align: center; color: rgba(255, 255, 255, 0.7); margin-bottom: 32px;">
+                Od aplikacji do wyboru klucza - warsztaty samochodowe
+            </p>
+
+            <div class="key-insight">
+                <strong>Najczęstszy błąd sprzedawców:</strong> Polecanie klucza na podstawie ceny, a nie aplikacji.
+            </div>
+
+            <p><strong>Skutek:</strong> Klient kupuje za słaby klucz (nie dokręci nakrętek kół) lub za mocny (uszkodzi
+                delikatne elementy silnika).</p>
+
+            <div class="framework-box">
+                <h4>✅ Rozwiązanie: Application-First Selling</h4>
+                <p>Zawsze pytaj NAJPIERW o zastosowanie, potem dopasuj narzędzie.</p>
+            </div>
+
+            <h3>W tej lekcji nauczysz się:</h3>
+            <ul>
+                <li>✅ Jak tłumaczyć Nm w języku zrozumiałym dla mechanika</li>
+                <li>✅ Które Milwaukee pasuje do jakiej aplikacji</li>
+                <li>✅ Jak nie pomylić się przy doborze</li>
+            </ul>
+        </div>
+
+        <!-- Card 2: Nm Basics -->
+        <div class="card" data-card="1">
+            <h2>Moment Obrotowy 101 - Co to jest Nm?</h2>
+
+            <p><strong>Nm (Newton-metr)</strong> = siła obrotowa narzędzia.</p>
+
+            <div class="framework-box">
+                <h4>💡 Analogia dla klienta:</h4>
+                <p style="font-style: italic;">'Nm to jak siła Twoich ramion, ale zmultiplikowana przez narzędzie.'</p>
+            </div>
+
+            <h3>Praktyczne zakresy:</h3>
+
+            <div class="torque-range" style="border-color: #00d4ff;">
+                <h4>🔧 1-50 Nm → Delikatne aplikacje</h4>
+                <ul>
+                    <li>Wnętrze samochodu (deski rozdzielcze, światła)</li>
+                    <li>Precyzyjne elementy silnika</li>
+                    <li><strong>Przykład:</strong> Dokręcanie śrub światła = 10-15 Nm</li>
+                </ul>
+            </div>
+
+            <div class="torque-range" style="border-color: #ffd700;">
+                <h4>🔧 50-150 Nm → Standardowe prace serwisowe</h4>
+                <ul>
+                    <li>Elementy silnika (obejmy, mocowania)</li>
+                    <li>Klimatyzacja, chłodnica</li>
+                    <li><strong>Przykład:</strong> Śruby mocujące akumulator = 80 Nm</li>
+                </ul>
+            </div>
+
+            <div class="torque-range" style="border-color: #ff8800;">
+                <h4>🔧 100-700 Nm → Heavy duty</h4>
+                <ul>
+                    <li>Nakrętki kół (100-150 Nm)</li>
+                    <li>Piasty, osie (200-400 Nm)</li>
+                    <li>Tłumiki (100-200 Nm)</li>
+                </ul>
+            </div>
+
+            <div class="torque-range" style="border-color: #ff4444;">
+                <h4>🔧 700-1500 Nm → Ekstremalnie heavy duty</h4>
+                <ul>
+                    <li>Ciężarówki</li>
+                    <li>Maszyny budowlane</li>
+                    <li>Przemysł</li>
+                </ul>
+            </div>
+
+            <div class="key-insight" style="margin-top: 32px;">
+                <strong>Kluczowe zasady:</strong><br>
+                1. <strong>Za niski moment</strong> = niedokręcone = niebezpieczeństwo<br>
+                2. <strong>Za wysoki moment</strong> = uszkodzenie gwintów = kosztowna naprawa<br>
+                3. <strong>Właściwy moment</strong> = bezpieczeństwo + długa żywotność
+            </div>
+        </div>
+
+        <!-- Card 3: Application Matrix -->
+        <div class="card" data-card="2">
+            <h2>Aplikacja → Moment: Quick Reference</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aplikacja</th>
+                        <th>Moment (Nm)</th>
+                        <th>Polecany Klucz Milwaukee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>WNĘTRZE I KAROSERIA</strong><br>Zderzaki, światła, deski</td>
+                        <td>5-30 Nm</td>
+                        <td>M12 subkompaktowy 1/4\"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SILNIK</strong><br>Obejmy, akumulator, mocowania</td>
+                        <td>40-120 Nm</td>
+                        <td>M12 subkompaktowy 3/8\"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>KOŁA</strong><br>Nakrętki kół osobowe</td>
+                        <td>100-150 Nm</td>
+                        <td>M18 kompaktowy 1/2\"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>OSIE I PIASTY</strong><br>Nakrętki piasty, osie</td>
+                        <td>150-400 Nm</td>
+                        <td>M18 kompaktowy lub mid-torque 1/2\"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PODWOZIE</strong><br>Tłumiki, wydech</td>
+                        <td>70-200 Nm</td>
+                        <td>M18 kompaktowy 1/2\"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CIĘŻARÓWKI</strong><br>Nakrętki ciężarówek</td>
+                        <td>700-1200 Nm</td>
+                        <td>M18 wysokomomentowy 3/4\"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="key-insight">
+                <strong>Pro Tip:</strong> Zawsze pytaj klienta NAJPIERW o typ pojazdu (osobowy/ciężarowy) i główną
+                aplikację (koła/silnik/podwozie), dopiero wtedy polecaj klucz.
+            </div>
+        </div>
+
+        <!-- Card 4: Interactive Exercise -->
+        <div class="card" data-card="3">
+            <h2>Ćwiczenie: Dobór Klucza</h2>
+
+            <div style="background: rgba(255, 136, 0, 0.1); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+                <p><strong>Scenariusz:</strong></p>
+                <p style="font-style: italic;">
+                    Klient prowadzi warsztat serwisujący samochody osobowe. Mówi: 'Potrzebuję klucza uniwersalnego do
+                    wszystkiego.'
+                </p>
+            </div>
+
+            <p><strong>Jakie pytanie zadasz, żeby zidentyfikować właściwą aplikację?</strong></p>
+            <textarea class="interactive-input" rows="3" placeholder="Twoje pytanie tutaj..."></textarea>
+
+            <div class="framework-box" style="margin-top: 24px;">
+                <h4>💡 Przykładowa odpowiedź:</h4>
+                <p>'Jakie prace najczęściej wykonujecie? Wymiana kół, prace przy silniku, czy może podwozie? To pomoże
+                    mi dobrać klucz z właściwym zakresem momentu.'</p>
+            </div>
+
+            <div class="key-insight" style="margin-top: 16px;">
+                <strong>Feedback:</strong> Świetne pytanie! Zawsze odkrywaj PRIMARY aplikację. 'Uniwersalny' nie
+                istnieje - każdy klucz ma optymalny zakres. Jeśli robią głównie koła → M18 kompaktowy 1/2\". Jeśli
+                silnik → M12 lub M18 subkompaktowy 3/8\".
+            </div>
+        </div>
+
+        <!-- Card 5: 3 Categories -->
+        <div class="card" data-card="4">
+            <h2>3 Kategorie Kluczy Milwaukee</h2>
+
+            <div class="product-card">
+                <h4>1. SUBKOMPAKTOWE (M12 i M18)</h4>
+
+                <p><strong>M12 FSCIWF14 (1/4\"):</strong></p>
+                <div class="spec">
+                    <span>Moment:</span>
+                    <span>95 Nm / 136 Nm odkręcanie</span>
+                </div>
+                <div class="spec">
+                    <span>Długość:</span>
+                    <span>112 mm</span>
+                </div>
+                <div class="spec">
+                    <span>✅ Idealne:</span>
+                    <span>Wnętrze, precyzyjne prace silnikowe</span>
+                </div>
+                <div class="spec">
+                    <span>❌ Za słabe:</span>
+                    <span>Koła</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <p><strong>M12 FSCIWF38 (3/8\"):</strong></p>
+                <div class="spec">
+                    <span>Moment:</span>
+                    <span>271 Nm / 305 Nm odkręcanie</span>
+                </div>
+                <div class="spec">
+                    <span>Długość:</span>
+                    <span>114 mm</span>
+                </div>
+                <div class="spec">
+                    <span>✅ Idealne:</span>
+                    <span>Silnik, mocowania, klimatyzacja</span>
+                </div>
+                <div class="spec">
+                    <span>❌ Za słabe:</span>
+                    <span>Nakrętki osi, ciężkie koła</span>
+                </div>
+            </div>
+
+            <div class="product-card" style="background: rgba(255, 215, 0, 0.1); border-color: rgba(255, 215, 0, 0.3);">
+                <h4>2. KOMPAKTOWE (M18) ⭐ BEST-SELLER</h4>
+
+                <p><strong>M18 FMTIW2F12 (1/2\"):</strong></p>
+                <div class="spec">
+                    <span>Moment:</span>
+                    <span>450 Nm / 600 Nm odkręcanie</span>
+                </div>
+                <div class="spec">
+                    <span>Długość:</span>
+                    <span>~130 mm</span>
+                </div>
+                <div class="spec">
+                    <span>✅ Idealne:</span>
+                    <span>Koła osobowe, podwozie, osie</span>
+                </div>
+                <div class="spec">
+                    <span>❌ Za słabe:</span>
+                    <span>Ciężarówki</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <h4>3. WYSOKOMOMENTOWE (M18)</h4>
+
+                <p><strong>M18 ONEFHIWF1D (1\"):</strong></p>
+                <div class="spec">
+                    <span>Moment:</span>
+                    <span>1356 Nm / 2034 Nm odkręcanie</span>
+                </div>
+                <div class="spec">
+                    <span>Długość:</span>
+                    <span>~230 mm</span>
+                </div>
+                <div class="spec">
+                    <span>Waga:</span>
+                    <span>~3.2 kg</span>
+                </div>
+                <div class="spec">
+                    <span>✅ Idealne:</span>
+                    <span>Ciężarówki, przemysł, maszyny</span>
+                </div>
+                <div class="spec">
+                    <span>❌ Overkill:</span>
+                    <span>Samochody osobowe</span>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>Kluczowa zasada:</strong> Długość i waga rosną z mocą. Kompromis: moc vs manewrowność. Wybierz
+                NAJMNIEJSZY klucz który BEZPIECZNIE wykona zadanie.
+            </div>
+        </div>
+
+        <!-- Card 6: Quiz -->
+        <div class="card" data-card="5">
+            <h2>Test Wiedzy: Moment Obrotowy</h2>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">1. Nakrętki kół samochodu osobowego wymagają 120 Nm.
+                    Który klucz wystarczy?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="0" data-option="0">
+                        M12 FSCIWF14 (1/4\", 95 Nm)
+                    </div>
+                    <div class="quiz-option" data-question="0" data-option="1">
+                        M12 FSCIWF38 (3/8\", 271 Nm)
+                    </div>
+                    <div class="quiz-option" data-question="0" data-option="2">
+                        M18 FMTIW2F12 (1/2\", 450 Nm)
+                    </div>
+                    <div class="quiz-option" data-question="0" data-option="3">
+                        Wszystkie wystarczą
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="0">
+                    <strong>✅ Prawidłowa odpowiedź:</strong> M12 3/8\" (opcja 2)<br>
+                    M12 3/8\" ma 271 Nm dokręcania, więc spokojnie wystarczy na 120 Nm. Ale M18 1/2\" byłby pewniejszy i
+                    szybszy. M12 1/4\" za słaby (tylko 95 Nm).
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">2. Warsztat serwisuje TYLKO samochody osobowe. Jaki
+                    zestaw kluczy polecisz (minimum)?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="1" data-option="0">
+                        Tylko M12 1/4\"
+                    </div>
+                    <div class="quiz-option" data-question="1" data-option="1">
+                        M12 3/8\" + M18 1/2\"
+                    </div>
+                    <div class="quiz-option" data-question="1" data-option="2">
+                        Tylko M18 high-torque
+                    </div>
+                    <div class="quiz-option" data-question="1" data-option="3">
+                        M12 1/4\" + M12 3/8\" + M18 1/2\"
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="1">
+                    <strong>✅ Prawidłowa odpowiedź:</strong> M12 3/8\" + M18 1/2\"<br>
+                    Minimum dla osobówek: M12 3/8\" (silnik, montaż) + M18 1/2\" (koła, podwozie). Opcja D też dobra ale
+                    1/4\" nie jest must-have.
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">3. Klient używa klucza 700 Nm do śrub światła (15 Nm).
+                    Co się może stać?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="2" data-option="0">
+                        Nic złego
+                    </div>
+                    <div class="quiz-option" data-question="2" data-option="1">
+                        Uszkodzenie gwintów plastiku
+                    </div>
+                    <div class="quiz-option" data-question="2" data-option="2">
+                        Klucz się zepsuje
+                    </div>
+                    <div class="quiz-option" data-question="2" data-option="3">
+                        Za wolno dokręci
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="2">
+                    <strong>✅ Prawidłowa odpowiedź:</strong> Uszkodzenie gwintów<br>
+                    Za mocny klucz = ryzyko uszkodzenia delikatnych gwintów. Światła często w plastiku - łatwo przerwać
+                    gwint. Do drobnych prac → M12 1/4\".
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 7: Summary -->
+        <div class="card" data-card="6">
+            <h2>Kluczowe Wnioski</h2>
+
+            <ul class="summary-list">
+                <li>
+                    <strong>Application First:</strong> Zawsze pytaj O CO będą używać klucza, dopiero potem polecaj
+                    model.
+                </li>
+                <li>
+                    <strong>3 Kategorie:</strong> Subkompaktowy (1-300 Nm), Kompaktowy (100-700 Nm), Wysokomomentowy
+                    (700-1500 Nm).
+                </li>
+                <li>
+                    <strong>Chwyty:</strong> 1/2\" najbardziej uniwersalny dla warsztatów osobowych. 3/8\" do silnika.
+                    1/4\" do precyzji.
+                </li>
+                <li>
+                    <strong>Upsell Nasadki:</strong> Klucz bez nasadek = bezużyteczny. Zawsze polecaj zestawy SHOCKWAVE
+                    Impact Duty.
+                </li>
+                <li>
+                    <strong>Za mało = niebezpieczeństwo, za dużo = uszkodzenia.</strong> Właściwy dobór = zadowolony
+                    klient + repeat business.
+                </li>
+            </ul>
+
+            <div class="next-steps-box">
+                <h3>📝 Twoje Zadanie Praktyczne</h3>
+                <p>Przed następnym spotkaniem z warsztatem:</p>
+                <ol style="margin-left: 24px; margin-top: 12px;">
+                    <li><strong>Odkryj aplikację:</strong> Jakie prace najczęściej? (koła, silnik, podwozie?)</li>
+                    <li><strong>Dopasuj moment:</strong> Użyj Quick Reference (karta 3) żeby zidentyfikować zakres Nm
+                    </li>
+                    <li><strong>Polec klucz Milwaukee:</strong> Subkompaktowy/Kompaktowy/Wysokomomentowy + właściwy
+                        chwyt</li>
+                    <li><strong>Upsell:</strong> Dodaj zestaw nasadek SHOCKWAVE</li>
+                </ol>
+                <p style="margin-top: 16px;"><strong>🛠️ Odblokowałeś narzędzie "Torque Selector Tool" - użyj go przy
+                        następnej rozmowie!</strong></p>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn btn-primary" style="font-size: 16px; padding: 16px 32px;">
+                    <i data-lucide="check-circle" size="20"></i>
+                    Ukończ Lekcję (+150 XP)
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="card-nav">
+            <button class="btn btn-secondary" id="prevBtn" disabled>
+                <i data-lucide="chevron-left" size="16"></i>
+                Poprzedni
+            </button>
+            <span class="card-progress" id="cardProgress">1 / 7</span>
+            <button class="btn btn-primary" id="nextBtn">
+                Następny
+                <i data-lucide="chevron-right" size="16"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Card navigation
+        let currentCard = 0;
+        const cards = document.querySelectorAll('.card');
+        const totalCards = cards.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const cardProgress = document.getElementById('cardProgress');
+        const progressBar = document.getElementById('progressBar');
+
+        // Quiz state
+        const correctAnswers = [1, 1, 1]; // Correct option indices
+
+        function showCard(index) {
+            cards.forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+
+            currentCard = index;
+            prevBtn.disabled = index === 0;
+            nextBtn.textContent = index === totalCards - 1 ? 'Zakończ' : 'Następny';
+            cardProgress.textContent = `${index + 1} / ${totalCards}`;
+
+            // Update progress bar
+            const progress = ((index + 1) / totalCards) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Reinitialize icons
+            lucide.createIcons();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentCard > 0) showCard(currentCard - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentCard < totalCards - 1) {
+                showCard(currentCard + 1);
+            } else {
+                alert('🎉 Gratulacje! Ukończono lekcję.\nZdobyto: +150 XP\n\nOdblokowano:\n✅ Torque Selector Tool\n✅ Tabela Momentów Obrotowych\n✅ Comparison Chart: Milwaukee Impact Wrenches\n✅ 2 Engramy do utrwalenia');
+            }
+        });
+
+        // Quiz logic
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const questionIndex = parseInt(this.dataset.question);
+                const optionIndex = parseInt(this.dataset.option);
+                const correctIndex = correctAnswers[questionIndex];
+
+                // Deselect all options in this question
+                document.querySelectorAll(`.quiz-option[data-question="${questionIndex}"]`).forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                // Mark selected
+                this.classList.add('selected');
+
+                // Check if correct
+                if (optionIndex === correctIndex) {
+                    this.classList.add('correct');
+                } else {
+                    this.classList.add('incorrect');
+                    // Show correct answer
+                    document.querySelector(`.quiz-option[data-question="${questionIndex}"][data-option="${correctIndex}"]`).classList.add('correct');
+                }
+
+                // Show explanation
+                document.querySelector(`[data-explanation="${questionIndex}"]`).classList.add('show');
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentCard > 0) {
+                showCard(currentCard - 1);
+            } else if (e.key === 'ArrowRight' && currentCard < totalCards - 1) {
+                showCard(currentCard + 1);
+            }
+        });
+    </script>
+</body>
+
+</html>

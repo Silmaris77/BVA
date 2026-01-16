@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIN Question Generator - Milwaukee BrainVenture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(176, 0, 255, 0.2);
+            border: 1px solid rgba(176, 0, 255, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #b000ff;
+            margin-bottom: 16px;
+        }
+
+        .tool-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tool-header p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Stats banner */
+        .stats-banner {
+            background: rgba(176, 0, 255, 0.1);
+            border: 1px solid rgba(176, 0, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .stat {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #b000ff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+
+        /* Main layout */
+        .tool-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .tool-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Panel */
+        .panel {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .panel h2 {
+            font-size: 20px;
+            color: #b000ff;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Input group */
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #b000ff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        select option {
+            background: #1a1a2a;
+            color: white;
+        }
+
+        /* Question cards */
+        .question-type-section {
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: rgba(176, 0, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        .section-title {
+            flex: 1;
+            font-size: 18px;
+            font-weight: 700;
+            color: #b000ff;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+
+        .question-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(176, 0, 255, 0.3);
+        }
+
+        .question-text {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .question-note {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Buttons */
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(176, 0, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="tool-header">
+            <div class="tool-badge">
+                <i data-lucide="message-circle" size="14"></i>
+                NARZĘDZIE TIER 1
+            </div>
+            <h1>SPIN Question Generator</h1>
+            <p>Generuj pytania SPIN dopasowane do profilu klienta - warsztat automotive</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-banner">
+            <div class="stat">
+                <div class="stat-value">89</div>
+                <div class="stat-label">Użyć w tym miesiącu</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">92%</div>
+                <div class="stat-label">Skuteczność konwersji</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">+50 XP</div>
+                <div class="stat-label">Za każde użycie</div>
+            </div>
+        </div>
+
+        <!-- Main layout -->
+        <div class="tool-layout">
+            <!-- Input Panel -->
+            <div class="panel">
+                <h2>
+                    <i data-lucide="sliders" size="20"></i>
+                    Profil Klienta
+                </h2>
+
+                <div class="input-group">
+                    <label class="input-label">Typ warsztatu</label>
+                    <select id="workshopType">
+                        <option value="">-- Wybierz typ --</option>
+                        <option value="independent">Niezależny (mały, 2-5 stanowisk)</option>
+                        <option value="medium">Średni sieciowy (10-20 stanowisk)</option>
+                        <option value="dealer">Autoryzowany dealer (ASO)</option>
+                        <option value="fleet">Fleet/Ciężarówki</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Obecne narzędzia</label>
+                    <select id="currentTools">
+                        <option value="">-- Wybierz --</option>
+                        <option value="pneumatic">Pneumatyczne (kompresor)</option>
+                        <option value="cordless-generic">Akumulatorowe (generic brands)</option>
+                        <option value="cordless-competitor">Akumulatorowe (konkurencja premium)</option>
+                        <option value="manual">Głównie ręczne</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Główny punkt bólu (jeśli znany)</label>
+                    <select id="painPoint">
+                        <option value="">-- Nieznany / Odkryj --</option>
+                        <option value="downtime">Przestoje (awarie narzędzi)</option>
+                        <option value="efficiency">Niska produktywność</option>
+                        <option value="cost">Wysokie koszty operacyjne</option>
+                        <option value="quality">Problemy z jakością pracy</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" id="generateBtn" style="width: 100%; margin-top: 24px;">
+                    <i data-lucide="sparkles" size="18"></i>
+                    Generuj Pytania SPIN
+                </button>
+            </div>
+
+            <!-- Output Panel -->
+            <div class="panel">
+                <h2>
+                    <i data-lucide="list-checks" size="20"></i>
+                    Twój SPIN Playbook
+                </h2>
+
+                <div id="outputContent" class="empty-state">
+                    <i data-lucide="arrow-left" size="48"></i>
+                    <p>Wybierz profil klienta,<br>następnie kliknij "Generuj Pytania SPIN"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const generateBtn = document.getElementById('generateBtn');
+        const outputContent = document.getElementById('outputContent');
+
+        const questionBank = {
+            situation: {
+                independent: [
+                    { q: "Jakich narzędzi używacie obecnie do wymiany kół?", note: "Odkryj baseline" },
+                    { q: "Ilu mechaników pracuje na hali?", note: "Sizing" },
+                    { q: "Jak często robicie wymianę opon sezonowych?", note: "Volume assessment" },
+                    { q: "Czy macie kompresor? Jakiej wielkości?", note: "Pneumatic dependency" }
+                ],
+                medium: [
+                    { q: "Jak wygląda Wasz proces serwisowy - od przyjęcia do wydania pojazdu?", note: "Process mapping" },
+                    { q: "Jakie narzędzia są standardem w waszej sieci?", note: "Standardization level" },
+                    { q: "Kto podejmuje decyzje o zakupie narzędzi - poziom warsztatu czy centrala?", note: "Decision maker" },
+                    { q: "Ile stanowisk pracuje równocześnie?", note: "Capacity assessment" }
+                ],
+                dealer: [
+                    { q: "Jakie są wymagania producenta odnośnie narzędzi?", note: "OEM requirements" },
+                    { q: "Jak często przechodzicie audyty producenta?", note: "Quality standards" },
+                    { q: "Jakie są KPI dla waszych mechaników (czas naprawy, jakość)?", note: "Performance metrics" }
+                ],
+                fleet: [
+                    { q: "Jak spędzanocą rozkład prac - ciężarówki vs dostawcze?", note: "Vehicle mix" },
+                    { q: "Czy pracujecie w systemie zmianowym?", note: "Uptime requirements" },
+                    { q: "Jakich momentów obrotowych najczęściej potrzebujecie?", note: "Torque requirements" }
+                ]
+            },
+            problem: {
+                pneumatic: [
+                    { q: "Jakie problemy napotykaliście z kompresorem?", note: "Reliability issues" },
+                    { q: "Jak często mechanicy tracą czas na rozwijanie węży?", note: "Productivity drain" },
+                    { q: "Co się dzieje gdy kompresor się zepsuje?", note: "Downtime cost" },
+                    { q: "Czy hałas kompresora jest problemem dla ekipy?", note: "Environment issues" }
+                ],
+                'cordless-generic': [
+                    { q: "Jak długo wytrzymują Wasze obecne akumulatory na jednym ładowaniu?", note: "Battery life" },
+                    { q: "Jak często się psują?", note: "Reliability" },
+                    { q: "Czy moment obrotowy wystarcza na wszystkie prace?", note: "Performance gaps" },
+                    { q: "Co mechanicy mówią o obecnych narzędziach?", note: "User feedback" }
+                ],
+                manual: [
+                    { q: "Ile czasu zajmuje wymiana kół ręcznie vs ile chcielibyście?", note: "Time gap" },
+                    { q: "Czy mechanicy skarżą się na zmęczenie / bóle po pracy ręcznej?", note: "Ergonomics" },
+                    { q: "Czy tracicie klientów dla szybszych konkurentów?", note: "Competitive pressure" }
+                ]
+            },
+            implication: {
+                downtime: [
+                    { q: "Ile kosztuje Was dzień przestoju gdy narzędzie się zepsuje?", note: "Cost quantification" },
+                    { q: "Jak często musieliście wynajmować zastępcze narzędzia?", note: "Emergency costs" },
+                    { q: "Czy straciliście już klientów z powodu opóźnień?", note: "Revenue impact" }
+                ],
+                efficiency: [
+                    { q: "Gdyby mechanicy zaoszczędzili 30 minut dziennie, ile więcej pojazdów moglibyście obsłużyć?", note: "Capacity gain" },
+                    { q: "Ile wynosi Wasza stawka roboczogodziny?", note: "Revenue per hour" },
+                    { q: "Jak wpływa to na kolejki i czasy oczekiwania klientów?", note: "Customer satisfaction" }
+                ],
+                cost: [
+                    { q: "Ile rocznie wydajecie na naprawy/wymianę narzędzi?", note: "TCO current" },
+                    { q: "Ile kosztuje Was energia dla kompresora miesięcznie?", note: "Operating costs" },
+                    { q: "Czy te koszty rosną czy spadają?", note: "Trend analysis" }
+                ]
+            },
+            needPayoff: {
+                general: [
+                    { q: "Gdybyście mogli wyeliminować przestoje narzędzi, jak wpłynęłoby to na rentowność?", note: "Reliability value" },
+                    { q: "Jeśli mechanicy pracowaliby 15-20% szybciej, ile dodatkowego przychodu generowałoby to rocznie?", note: "Productivity ROI" },
+                    { q: "Co by znaczyło dla Waszego biznesu zero zależności od kompresora?", note: "Freedom value" },
+                    { q: "Gdyby narzędzia miały 5-letnią gwarancję, jak zmieniłoby to Wasze planowanie budżetu?", note: "Certainty value" },
+                    { q: "Jak wpłynęłoby na satysfakcję zespołu jeśli mieliby najlepsze narzędzia na rynku?", note: "Team morale" }
+                ]
+            }
+        };
+
+        generateBtn.addEventListener('click', () => {
+            const workshopType = document.getElementById('workshopType').value;
+            const currentTools = document.getElementById('currentTools').value;
+            const painPoint = document.getElementById('painPoint').value;
+
+            if (!workshopType) {
+                alert('Proszę wybrać typ warsztatu');
+                return;
+            }
+
+            generateQuestions(workshopType, currentTools, painPoint);
+        });
+
+        function generateQuestions(workshop, tools, pain) {
+            let html = '';
+
+            // S - Situation
+            const sitQuestions = questionBank.situation[workshop] || questionBank.situation.independent;
+            html += createSection('S', 'SITUATION', sitQuestions, '#b000ff');
+
+            // P - Problem
+            const probQuestions = questionBank.problem[tools] || [
+                { q: "Jakie wyzwania napotykaliście z obecnymi narzędziami?", note: "General discovery" },
+                { q: "Co mechanicy lubią najmniej w obecnym wyposażeniu?", note: "User pain points" },
+                { q: "Czy są sytuacje gdzie narzędzia Was zawodzą?", note: "Failure scenarios" }
+            ];
+            html += createSection('P', 'PROBLEM', probQuestions, '#00d4ff');
+
+            // I - Implication
+            const implQuestions = pain ? questionBank.implication[pain] : [
+                { q: "Jak te problemy wpływają na Waszą wydajność?", note: "Impact on operations" },
+                { q: "Ile to kosztuje w wymiarze czasu i pieniędzy?", note: "Cost quantification" },
+                { q: "Czy problem się pogarsza czy stabilizuje?", note: "Trend" }
+            ];
+            html += createSection('I', 'IMPLICATION', implQuestions, '#ff8800');
+
+            // N - Need-Payoff
+            html += createSection('N', 'NEED-PAYOFF', questionBank.needPayoff.general, '#00ff88');
+
+            // Action buttons
+            html += `
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="window.print()">
+                    <i data-lucide="printer" size="16"></i>
+                    Drukuj
+                </button>
+                <button class="btn btn-primary" onclick="alert('Pytania skopiowane do schowka! 📋')">
+                    <i data-lucide="copy" size="16"></i>
+                    Kopiuj
+                </button>
+            </div>
+            `;
+
+            outputContent.innerHTML = html;
+            lucide.createIcons();
+
+            // Award XP
+            setTimeout(() => {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(0, 255, 136, 0.2);
+                    border: 1px solid #00ff88;
+                    padding: 16px 20px;
+                    border-radius: 12px;
+                    color: #00ff88;
+                    font-weight: 600;
+                    z-index: 1000;
+                `;
+                notification.innerHTML = '🎉 +50 XP - Narzędzie użyte!';
+                document.body.appendChild(notification);
+
+                setTimeout(() => notification.remove(), 3000);
+            }, 500);
+        }
+
+        function createSection(letter, title, questions, color) {
+            let html = `
+            <div class="question-type-section">
+                <div class="section-header">
+                    <div class="section-icon" style="background: ${color};">${letter}</div>
+                    <div class="section-title" style="color: ${color};">${title}</div>
+                </div>
+            `;
+
+            questions.forEach(q => {
+                html += `
+                <div class="question-card">
+                    <div class="question-text">"${q.q}"</div>
+                    <div class="question-note">💡 ${q.note}</div>
+                </div>
+                `;
+            });
+
+            html += '</div>';
+            return html;
+        }
+    </script>
+</body>
+
+</html>

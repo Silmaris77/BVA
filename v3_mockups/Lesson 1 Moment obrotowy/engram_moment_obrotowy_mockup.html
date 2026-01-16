@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engram: Moment Obrotowy 101 - BrainVenture V3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Engram Header */
+        .engram-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .engram-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 136, 0, 0.2);
+            border: 1px solid rgba(255, 136, 0, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 16px;
+        }
+
+        .engram-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .engram-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 24px;
+        }
+
+        .engram-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Progress dots */
+        .slide-progress {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .progress-dot.active {
+            background: #ff8800;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* Slide */
+        .slide {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 24px;
+            display: none;
+            min-height: 400px;
+        }
+
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-label {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(255, 136, 0, 0.2);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 16px;
+        }
+
+        .slide h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #ffd700;
+        }
+
+        .slide p {
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .slide ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .slide li {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 8px;
+        }
+
+        /* Highlight boxes */
+        .problem-box {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 4px solid #ff4444;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .problem-box strong {
+            color: #ff4444;
+        }
+
+        .mechanism-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .mechanism-box strong {
+            color: #00d4ff;
+        }
+
+        .application-box {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .application-box strong {
+            color: #00ff88;
+        }
+
+        /* Quiz */
+        .quiz-container {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .quiz-header h2 {
+            font-size: 24px;
+            color: #ffd700;
+            margin-bottom: 12px;
+        }
+
+        .quiz-question {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-question p {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 136, 0, 0.5);
+        }
+
+        .quiz-option.selected {
+            background: rgba(255, 136, 0, 0.2);
+            border-color: #ff8800;
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .quiz-explanation {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .quiz-explanation.show {
+            display: block;
+        }
+
+        /* Stats panel */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff8800;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            color: #0a0a1a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 136, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Decay indicator */
+        .decay-indicator {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .decay-bar-container {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .decay-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ff8800);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .decay-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffd700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Engram Header -->
+        <div class="engram-header">
+            <div class="engram-badge">
+                <i data-lucide="brain" size="14" style="display: inline; vertical-align: middle;"></i>
+                ENGRAM
+            </div>
+            <h1>Moment Obrotowy 101</h1>
+            <div class="engram-meta">
+                <span><i data-lucide="clock" size="14"></i> 5 min</span>
+                <span><i data-lucide="zap" size="14"></i> +50 XP (install) / +25 XP (refresh)</span>
+            </div>
+        </div>
+
+        <!-- Decay Indicator -->
+        <div class="decay-indicator">
+            <i data-lucide="trending-down" size="20" style="color: #ffd700;"></i>
+            <div class="decay-bar-container">
+                <div class="decay-bar" style="width: 78%;"></div>
+            </div>
+            <span class="decay-text">78%</span>
+        </div>
+
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Instalacje</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Odświeżenia</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5 dni</div>
+                <div class="stat-label">Od ostatniego</div>
+            </div>
+        </div>
+
+        <!-- Slide Progress -->
+        <div class="slide-progress">
+            <div class="progress-dot active"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot"></div>
+            <div class="progress-dot quiz-dot"></div>
+        </div>
+
+        <!-- Slide 1: Problem -->
+        <div class="slide active" data-slide="0">
+            <span class="slide-label">PROBLEM</span>
+            <h2>Klient Nie Rozumie Nm</h2>
+
+            <div class="problem-box">
+                <p><strong>Scenariusz:</strong> Klient pyta: 'Czym różni się klucz 100 Nm od 500 Nm?'</p>
+            </div>
+
+            <p><strong>Słaba odpowiedź:</strong> 'Tym że jeden ma 100, a drugi 500.'</p>
+
+            <p style="margin-top: 24px;"><strong>Problem:</strong> Klient nadal nie rozumie CO TO ZNACZY w praktyce.</p>
+
+            <p><strong>Skutek:</strong> Kupuje nie ten klucz, wraca z reklamacją:</p>
+            <ul>
+                <li>❌ 'Nie dokręca kół'</li>
+                <li>❌ 'Uszkodził gwinty w plastiku'</li>
+                <li>❌ 'Za ciężkie, mechanicy się męczą'</li>
+            </ul>
+
+            <div style="margin-top: 32px; padding: 20px; background: rgba(255, 68, 68, 0.05); border-radius: 12px;">
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px;">
+                    💡 <strong>Dlaczego to problem?</strong> Bez zrozumienia Nm, klient wybiera na chybił trafił (cena,
+                    wygląd) zamiast aplikacji. Rezultat = niezadowolenie i potencjalnie niebezpieczne sytuacje
+                    (niedokręcone koła).
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Mechanism -->
+        <div class="slide" data-slide="1">
+            <span class="slide-label">MECHANIZM</span>
+            <h2>Nm = Siła Obrotowa</h2>
+
+            <div class="mechanism-box">
+                <p><strong>Prosta analogia dla klienta:</strong></p>
+                <p style="font-style: italic; font-size: 18px; margin-top: 12px;">
+                    'Nm to jak siła Twoich ramion, ale pomnożona przez klucz.'
+                </p>
+            </div>
+
+            <h3 style="font-size: 18px; color: #00d4ff; margin: 24px 0 16px;">Praktyczne zakresy (samochody osobowe):
+            </h3>
+
+            <div
+                style="background: rgba(0, 212, 255, 0.05); border-left: 3px solid #00d4ff; padding: 16px; border-radius: 8px; margin: 12px 0;">
+                <p><strong>🔹 10-50 Nm</strong> → Drobne śruby</p>
+                <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-top: 8px;">Światła: 10-20 Nm • Deski
+                    rozdzielcze: 5-15 Nm</p>
+            </div>
+
+            <div
+                style="background: rgba(255, 215, 0, 0.05); border-left: 3px solid #ffd700; padding: 16px; border-radius: 8px; margin: 12px 0;">
+                <p><strong>🔹 50-150 Nm</strong> → Prace serwisowe</p>
+                <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-top: 8px;">Silnik: 60-120 Nm •
+                    Klimatyzacja: 60-100 Nm</p>
+            </div>
+
+            <div
+                style="background: rgba(255, 136, 0, 0.05); border-left: 3px solid #ff8800; padding: 16px; border-radius: 8px; margin: 12px 0;">
+                <p><strong>🔹 100-400 Nm</strong> → Koła i podwozie</p>
+                <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-top: 8px;">Nakrętki kół: 100-150 Nm •
+                    Piasty: 200-300 Nm</p>
+            </div>
+
+            <div class="mechanism-box" style="margin-top: 24px;">
+                <p><strong>Kluczowa zasada:</strong></p>
+                <ul style="margin-top: 12px;">
+                    <li><strong style="color: #ff4444;">Za mało</strong> = nie dokręci (niebezpieczeństwo)</li>
+                    <li><strong style="color: #ff8800;">Za dużo</strong> = uszkodzi gwinty (kosztowna naprawa)</li>
+                    <li><strong style="color: #00ff88;">Właściwie</strong> = безpieczeństwo + długa żywotność</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: Application -->
+        <div class="slide" data-slide="2">
+            <span class="slide-label">ZASTOSOWANIE</span>
+            <h2>Real Example: Wymiana Kół</h2>
+
+            <div class="application-box">
+                <p><strong>Przykładowa rozmowa sprzedażowa:</strong></p>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 12px; margin: 20px 0;">
+                <p><strong style="color: #ff8800;">Klient:</strong> Potrzebuję klucza do wymiany kół.</p>
+                <p style="margin-top: 12px;"><strong style="color: #00d4ff;">Ty:</strong> Jakie pojazdy serwisujecie?
+                </p>
+                <p style="margin-top: 12px;"><strong style="color: #ff8800;">Klient:</strong> Samochody osobowe, czasem
+                    dostawcze.</p>
+                <p style="margin-top: 12px;"><strong style="color: #00d4ff;">Ty:</strong> Nakrętki kół osobowych =
+                    100-150 Nm, dostawcze do 200 Nm. Polecam <strong style="color: #ffd700;">M18 FMTIW2F12</strong> - ma
+                    450 Nm dokręcania, więc z zapasem wystarczy. Plus 1/2" chwyt = standardowe nasadki 17, 19, 21 mm.
+                </p>
+                <p style="margin-top: 12px;"><strong style="color: #ff8800;">Klient:</strong> A ten tańszy M12?</p>
+                <p style="margin-top: 12px;"><strong style="color: #00d4ff;">Ty:</strong> M12 3/8" ma 271 Nm -
+                    teoretycznie wystarczy, ale jest na granicy dla dostawczych. Plus 3/8" to mniejsze nasadki,
+                    musielibyście dokupić adaptery. M18 1/2" pewniejszy i szybszy.</p>
+            </div>
+
+            <div class="application-box" style="margin-top: 24px;">
+                <p><strong>Result:</strong> Klient rozumie DLACZEGO M18, nie tylko że 'droższy = lepszy'.</p>
+                <p style="margin-top: 12px; font-size: 14px; color: rgba(255, 255, 255, 0.7);">
+                    ✅ Value selling zamiast feature dumping<br>
+                    ✅ Edukacja klienta = budowanie zaufania<br>
+                    ✅ Właściwy produkt = zadowolony klient = repeat business
+                </p>
+            </div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="quiz-container" id="quizContainer">
+            <div class="quiz-header">
+                <h2>Sprawdź Swoją Wiedzę</h2>
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px;">Losowe 3 pytania z puli 5</p>
+            </div>
+
+            <div class="quiz-question">
+                <p>1. Co oznacza Nm?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="0" data-option="0">Nanometr</div>
+                    <div class="quiz-option" data-question="0" data-option="1">Newton-metr (moment obrotowy)</div>
+                    <div class="quiz-option" data-question="0" data-option="2">Numer modelu</div>
+                    <div class="quiz-option" data-question="0" data-option="3">Natężenie mocy</div>
+                </div>
+                <div class="quiz-explanation" data-explanation="0">
+                    <strong>✅ Prawidłowa:</strong> Newton-metr<br>
+                    Nm = Newton-metr, jednostka momentu obrotowego. Określa siłę obrotową narzędzia.
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p>2. Nakrętki kół osobowych wymagają ~120 Nm. Klucz 95 Nm wystarczy?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="1" data-option="0">Tak, wystarczy</div>
+                    <div class="quiz-option" data-question="1" data-option="1">Nie, za słaby</div>
+                    <div class="quiz-option" data-question="1" data-option="2">Zależy od marki samochodu</div>
+                </div>
+                <div class="quiz-explanation" data-explanation="1">
+                    <strong>✅ Prawidłowa:</strong> Nie, za słaby<br>
+                    95 Nm za mało na 120 Nm. Klucz nie dokręci właściwie = niebezpieczeństwo.
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p>3. Który zakres Nm jest typowy dla prac przy silniku osobowego?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="2" data-option="0">1-20 Nm</div>
+                    <div class="quiz-option" data-question="2" data-option="1">50-150 Nm</div>
+                    <div class="quiz-option" data-question="2" data-option="2">200-400 Nm</div>
+                    <div class="quiz-option" data-question="2" data-option="3">700-1500 Nm</div>
+                </div>
+                <div class="quiz-explanation" data-explanation="2">
+                    <strong>✅ Prawidłowa:</strong> 50-150 Nm<br>
+                    Prace silnikowe = 50-150 Nm (obejmy, mocowania, akumulator, klimatyzacja).
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 32px;">
+                <button class="btn btn-primary" id="finishBtn" style="font-size: 16px; padding: 16px 32px;">
+                    <i data-lucide="check-circle" size="20"></i>
+                    Odśwież Engram (+25 XP)
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="prevBtn" disabled>
+                <i data-lucide="chevron-left" size="16"></i>
+                Wstecz
+            </button>
+            <span style="color: rgba(255, 255, 255, 0.6); font-size: 14px;" id="progressText">1 / 3</span>
+            <button class="btn btn-primary" id="nextBtn">
+                Dalej
+                <i data-lucide="chevron-right" size="16"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressDots = document.querySelectorAll('.progress-dot');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressText = document.getElementById('progressText');
+        const quizContainer = document.getElementById('quizContainer');
+        const finishBtn = document.getElementById('finishBtn');
+
+        const correctAnswers = [1, 1, 1];
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+
+            progressDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+
+            currentSlide = index;
+            prevBtn.disabled = index === 0;
+
+            if (index < totalSlides) {
+                nextBtn.style.display = 'flex';
+                quizContainer.classList.remove('active');
+                progressText.textContent = `${index + 1} / ${totalSlides}`;
+            } else {
+                nextBtn.style.display = 'none';
+                quizContainer.classList.add('active');
+                progressDots[3].classList.add('active');
+                progressText.textContent = 'Quiz';
+            }
+
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) showSlide(currentSlide - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        });
+
+        // Quiz logic
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const questionIndex = parseInt(this.dataset.question);
+                const optionIndex = parseInt(this.dataset.option);
+                const correctIndex = correctAnswers[questionIndex];
+
+                document.querySelectorAll(`.quiz-option[data-question="${questionIndex}"]`).forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                this.classList.add('selected');
+
+                if (optionIndex === correctIndex) {
+                    this.classList.add('correct');
+                } else {
+                    this.classList.add('incorrect');
+                    document.querySelector(`.quiz-option[data-question="${questionIndex}"][data-option="${correctIndex}"]`).classList.add('correct');
+                }
+
+                document.querySelector(`[data-explanation="${questionIndex}"]`).classList.add('show');
+            });
+        });
+
+        finishBtn.addEventListener('click', () => {
+            alert('🎉 Engram odświeżony!\n\n+25 XP\nWieża: 100% → utrzymana przez kolejne 14 dni\n\nNastępne odświeżenie zalecane za: 2 tygodnie');
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            } else if (e.key === 'ArrowRight' && currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        });
+    </script>
+</body>
+
+</html>

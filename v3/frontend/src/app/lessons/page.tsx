@@ -4,20 +4,20 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
 import LessonCard from '@/components/LessonCard'
 import { Search, Bell, Zap, Filter, Brain, Library, BookOpen } from 'lucide-react'
 
 interface Lesson {
-    id: string
+    lesson_id: string
     title: string
     description: string
-    category: string
-    difficulty: 'beginner' | 'intermediate' | 'advanced'
     duration_minutes: number
     xp_reward: number
-    card_count: number
-    created_at: string
+    difficulty: 'beginner' | 'intermediate' | 'advanced'
+    category?: string
+    content?: {
+        cards: any[]
+    }
 }
 
 interface UserProgress {
@@ -30,74 +30,27 @@ export default function LessonsPage() {
     const { user, profile, loading: authLoading } = useAuth()
     const router = useRouter()
     const [lessons, setLessons] = useState<Lesson[]>([])
-    const [progress, setProgress] = useState<Record<string, UserProgress>>({})
+    const [userProgress, setUserProgress] = useState<Record<string, UserProgress>>({})
     const [loading, setLoading] = useState(true)
-    const [selectedCategory, setSelectedCategory] = useState<string>('all')
+    const [searchTerm, setSearchTerm] = useState('')
+    const [sortBy, setSortBy] = useState<'newest' | 'duration' | 'xp' | 'difficulty'>('newest')
 
     useEffect(() => {
         if (!authLoading && !user) {
             router.push('/auth/login')
         }
     }, [user, authLoading, router])
-    const [searchTerm, setSearchTerm] = useState('')
-    const [sortBy, setSortBy] = useState<'newest' | 'duration' | 'xp' | 'difficulty'>('newest')
-
-    const categories = [
-        { id: 'all', name: 'Wszystkie', color: '#00d4ff' },
-        { id: 'Komunikacja', name: 'Komunikacja', color: '#00d4ff' },
-        { id: 'Leadership', name: 'Leadership', color: '#b000ff' },
-        { id: 'Strategy', name: 'Strategia', color: '#ffd700' },
-        { id: 'Sales', name: 'Sprzedaż', color: '#00ff88' }
-    ]
 
     useEffect(() => {
         async function fetchLessons() {
-            if (!user) return
-
             try {
-                console.log('Fetching lessons for user:', user.id)
+                // Fetch lessons from API endpoint
+                const response = await fetch('/api/lessons')
+                const data = await response.json()
 
-                // Fetch all lessons
-                const { data: lessonsData, error: lessonsError } = await supabase
-                    .from('lessons')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-
-                if (lessonsError) {
-                    console.error('Error fetching lessons:', lessonsError)
-                    throw lessonsError
+                if (data.lessons) {
+                    setLessons(data.lessons)
                 }
-
-                console.log('Fetched lessons:', lessonsData)
-
-                // Fetch user progress
-                const { data: progressData, error: progressError } = await supabase
-                    .from('user_progress')
-                    .select('*')
-                    .eq('user_id', user.id)
-
-                if (progressError) {
-                    console.error('Error fetching progress:', progressError)
-                    // Don't throw - progress is optional
-                }
-
-                console.log('Fetched progress:', progressData)
-
-                // Create progress map
-                const progressMap: Record<string, UserProgress> = {}
-                progressData?.forEach((p: any) => {
-                    progressMap[p.lesson_id] = {
-                        lesson_id: p.lesson_id,
-                        completed_at: p.completed_at,
-                        current_card_index: p.current_card_index
-                    }
-                })
-
-                setLessons(lessonsData || [])
-                setProgress(progressMap)
-
-                // Artificial delay to show skeleton loaders (REMOVE IN PRODUCTION)
-                await new Promise(resolve => setTimeout(resolve, 1500))
             } catch (error) {
                 console.error('Error fetching lessons:', error)
             } finally {
@@ -105,25 +58,49 @@ export default function LessonsPage() {
             }
         }
 
+        async function fetchUserProgress() {
+            if (!user) return
+
+            try {
+                // Fetch user progress for each lesson
+                const response = await fetch('/api/lessons')
+                const data = await response.json()
+
+                if (data.lessons) {
+                    // For each lesson, check if there's progress
+                    const progressMap: Record<string, UserProgress> = {}
+
+                    for (const lesson of data.lessons) {
+                        const progressRes = await fetch(`/api/lessons/${lesson.lesson_id}`)
+                        const progressData = await progressRes.json()
+
+                        if (progressData.progress) {
+                            progressMap[lesson.lesson_id] = progressData.progress
+                        }
+                    }
+
+                    setUserProgress(progressMap)
+                }
+            } catch (error) {
+                console.error('Error fetching user progress:', error)
+            }
+        }
+
         fetchLessons()
+        fetchUserProgress()
     }, [user])
 
     // Filter lessons
     const filteredLessons = lessons.filter(lesson => {
-        const matchesCategory = selectedCategory === 'all' || lesson.category === selectedCategory
         const matchesSearch = lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             lesson.description.toLowerCase().includes(searchTerm.toLowerCase())
-        return matchesCategory && matchesSearch
+        return matchesSearch
     })
 
     // Sort lessons
     const sortedLessons = useMemo(() => {
         const sorted = [...filteredLessons]
         switch (sortBy) {
-            case 'newest':
-                return sorted.sort((a, b) =>
-                    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-                )
             case 'duration':
                 return sorted.sort((a, b) => a.duration_minutes - b.duration_minutes)
             case 'xp':
@@ -170,7 +147,7 @@ export default function LessonsPage() {
                 top: 0,
                 zIndex: 50
             }}>
-                {/* Main Tabs (Lekcje / Engramy / Zasoby) */}
+                {/* Main Tabs */}
                 <div style={{
                     display: 'flex',
                     gap: '8px',
@@ -321,7 +298,7 @@ export default function LessonsPage() {
                         fontSize: '16px',
                         color: 'rgba(255, 255, 255, 0.6)'
                     }}>
-                        Rozwijaj swoje umiejętności z interaktywnymi lekcjami i mikro-szkoleniami
+                        Rozwijaj swoje umiejętności z interaktywnymi lekcjami
                     </p>
                 </div>
 
@@ -415,55 +392,8 @@ export default function LessonsPage() {
                                 <strong style={{ color: 'white' }}>{lessons.length}</strong> lekcji dostępnych
                             </span>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span>✅</span>
-                            <span style={{ color: '#00ff88' }}>
-                                <strong style={{ color: '#00ff88' }}>
-                                    {Object.values(progress).filter(p => p.completed_at).length}
-                                </strong> ukończone
-                            </span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span>🔥</span>
-                            <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                                <strong style={{ color: '#00d4ff' }}>
-                                    {Object.values(progress).filter(p => p.current_card_index > 0 && !p.completed_at).length}
-                                </strong> w trakcie
-                            </span>
-                        </div>
                     </div>
                 )}
-
-                {/* Category Tabs */}
-                <div style={{
-                    display: 'flex',
-                    gap: '12px',
-                    marginBottom: '32px',
-                    overflowX: 'auto',
-                    paddingBottom: '8px'
-                }}>
-                    {categories.map(cat => (
-                        <button
-                            key={cat.id}
-                            onClick={() => setSelectedCategory(cat.id)}
-                            style={{
-                                padding: '10px 20px',
-                                background: selectedCategory === cat.id ? `${cat.color}20` : 'rgba(255, 255, 255, 0.05)',
-                                border: selectedCategory === cat.id ? `1px solid ${cat.color}` : '1px solid rgba(255, 255, 255, 0.08)',
-                                borderRadius: '12px',
-                                color: selectedCategory === cat.id ? cat.color : 'rgba(255, 255, 255, 0.7)',
-                                fontSize: '14px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                whiteSpace: 'nowrap',
-                                fontFamily: 'Outfit, sans-serif'
-                            }}
-                        >
-                            {cat.name}
-                        </button>
-                    ))}
-                </div>
 
                 {/* Lessons Grid */}
                 {loading ? (
@@ -472,7 +402,7 @@ export default function LessonsPage() {
                         gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
                         gap: '24px'
                     }}>
-                        {[1, 2, 3, 4, 5, 6].map(i => (
+                        {[1, 2, 3].map(i => (
                             <SkeletonCard key={i} delay={i * 0.05} />
                         ))}
                     </div>
@@ -487,7 +417,7 @@ export default function LessonsPage() {
                     }}>
                         <Filter size={48} style={{ color: 'rgba(255, 255, 255, 0.3)' }} />
                         <p style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.6)' }}>
-                            Nie znaleziono lekcji spełniających kryteria
+                            Nie znaleziono lekcji
                         </p>
                     </div>
                 ) : (
@@ -498,10 +428,19 @@ export default function LessonsPage() {
                     }}>
                         {sortedLessons.map(lesson => (
                             <LessonCard
-                                key={lesson.id}
-                                lesson={lesson}
-                                progress={progress[lesson.id]}
-                                onClick={() => router.push(`/lessons/${lesson.id}`)}
+                                key={lesson.lesson_id}
+                                lesson={{
+                                    id: lesson.lesson_id,
+                                    title: lesson.title,
+                                    description: lesson.description,
+                                    category: lesson.category || 'Sprzedaż',
+                                    difficulty: lesson.difficulty,
+                                    duration_minutes: lesson.duration_minutes,
+                                    xp_reward: lesson.xp_reward,
+                                    card_count: lesson.content?.cards?.length || 0
+                                }}
+                                progress={userProgress[lesson.lesson_id]}
+                                onClick={() => router.push(`/lessons/${lesson.lesson_id}`)}
                             />
                         ))}
                     </div>
@@ -511,42 +450,29 @@ export default function LessonsPage() {
     )
 }
 
-// Skeleton loader for lesson cards
+// Skeleton loader
 function SkeletonCard({ delay }: { delay: number }) {
     return (
-        <div
-            style={{
-                background: 'rgba(20, 20, 35, 0.4)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '16px',
-                padding: '20px',
-                animation: `fadeIn 0.5s ease-in ${delay}s both`
-            }}
-        >
+        <div style={{
+            background: 'rgba(20, 20, 35, 0.4)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '16px',
+            padding: '20px',
+            animation: `fadeIn 0.5s ease-in ${delay}s both`
+        }}>
             <style>{`
         @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         @keyframes shimmer {
-          0% {
-            background-position: -1000px 0;
-          }
-          100% {
-            background-position: 1000px 0;
-          }
+          0% { background-position: -1000px 0; }
+          100% { background-position: 1000px 0; }
         }
       `}</style>
 
-            {/* Icon skeleton */}
             <div style={{
                 width: '56px',
                 height: '56px',
@@ -557,7 +483,6 @@ function SkeletonCard({ delay }: { delay: number }) {
                 marginBottom: '16px'
             }} />
 
-            {/* Title skeleton */}
             <div style={{
                 height: '20px',
                 width: '80%',
@@ -568,7 +493,6 @@ function SkeletonCard({ delay }: { delay: number }) {
                 marginBottom: '8px'
             }} />
 
-            {/* Description skeleton */}
             <div style={{
                 height: '14px',
                 width: '100%',
@@ -577,57 +501,6 @@ function SkeletonCard({ delay }: { delay: number }) {
                 backgroundSize: '1000px 100%',
                 animation: 'shimmer 2s infinite',
                 marginBottom: '6px'
-            }} />
-            <div style={{
-                height: '14px',
-                width: '70%',
-                borderRadius: '4px',
-                background: 'linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%)',
-                backgroundSize: '1000px 100%',
-                animation: 'shimmer 2s infinite',
-                marginBottom: '16px'
-            }} />
-
-            {/* Meta skeleton */}
-            <div style={{
-                display: 'flex',
-                gap: '16px',
-                marginBottom: '12px'
-            }}>
-                <div style={{
-                    height: '12px',
-                    width: '60px',
-                    borderRadius: '4px',
-                    background: 'linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%)',
-                    backgroundSize: '1000px 100%',
-                    animation: 'shimmer 2s infinite'
-                }} />
-                <div style={{
-                    height: '12px',
-                    width: '60px',
-                    borderRadius: '4px',
-                    background: 'linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%)',
-                    backgroundSize: '1000px 100%',
-                    animation: 'shimmer 2s infinite'
-                }} />
-                <div style={{
-                    height: '12px',
-                    width: '60px',
-                    borderRadius: '4px',
-                    background: 'linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%)',
-                    backgroundSize: '1000px 100%',
-                    animation: 'shimmer 2s infinite'
-                }} />
-            </div>
-
-            {/* Progress bar skeleton */}
-            <div style={{
-                height: '6px',
-                width: '100%',
-                borderRadius: '3px',
-                background: 'linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%)',
-                backgroundSize: '1000px 100%',
-                animation: 'shimmer 2s infinite'
             }} />
         </div>
     )

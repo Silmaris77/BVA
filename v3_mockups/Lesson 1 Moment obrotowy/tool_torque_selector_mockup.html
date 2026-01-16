@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torque Selector Tool - Milwaukee BrainVenture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 136, 0, 0.2);
+            border: 1px solid rgba(255, 136, 0, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 16px;
+        }
+
+        .tool-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tool-header p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main content grid */
+        .tool-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .tool-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Input panel */
+        .input-panel {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .input-panel h2 {
+            font-size: 20px;
+            color: #ff8800;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .input-sublabel {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+        }
+
+        select,
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        select:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #ff8800;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        select option {
+            background: #1a1a2a;
+            color: white;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* Output panel */
+        .output-panel {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .output-panel h2 {
+            font-size: 20px;
+            color: #ffd700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .recommendation-card {
+            background: rgba(255, 136, 0, 0.1);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .recommendation-card.primary {
+            border-width: 2px;
+            box-shadow: 0 8px 24px rgba(255, 136, 0, 0.2);
+        }
+
+        .rec-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+
+        .rec-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .rec-model {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 4px;
+        }
+
+        .rec-badge {
+            padding: 4px 12px;
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        .rec-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .spec-item {
+            font-size: 14px;
+        }
+
+        .spec-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+
+        .spec-value {
+            color: white;
+            font-weight: 600;
+        }
+
+        .rec-justification {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #00d4ff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 16px;
+        }
+
+        .rec-justification strong {
+            color: #00d4ff;
+        }
+
+        .upsell-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .upsell-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 12px;
+        }
+
+        .upsell-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .upsell-item strong {
+            color: #ffd700;
+        }
+
+        .upsell-price {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            color: #0a0a1a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 136, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .empty-state i {
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        /* Stats banner */
+        .stats-banner {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .stat {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="tool-header">
+            <div class="tool-badge">
+                <i data-lucide="wrench" size="14"></i>
+                NARZĘDZIE TIER 1
+            </div>
+            <h1>Torque Selector</h1>
+            <p>Szybki dobór właściwego klucza Milwaukee na podstawie typu pojazdu i aplikacji</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-banner">
+            <div class="stat">
+                <div class="stat-value">127</div>
+                <div class="stat-label">Użyć w tym miesiącu</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">94%</div>
+                <div class="stat-label">Trafność rekomendacji</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">+50 XP</div>
+                <div class="stat-label">Za każde użycie</div>
+            </div>
+        </div>
+
+        <!-- Main layout -->
+        <div class="tool-layout">
+            <!-- Input Panel -->
+            <div class="input-panel">
+                <h2>
+                    <i data-lucide="settings" size="20"></i>
+                    Konfiguracja
+                </h2>
+
+                <div class="input-group">
+                    <label class="input-label">Typ pojazdu</label>
+                    <select id="vehicleType">
+                        <option value="">-- Wybierz typ --</option>
+                        <option value="osobowy">Samochody osobowe</option>
+                        <option value="dostawczy">Pojazdy dostawcze</option>
+                        <option value="ciezarowy">Ciężarówki</option>
+                        <option value="mieszany">Mieszany (osobowe + dostawcze)</option>
+                    </select>
+                    <div class="input-sublabel">Jaki typ pojazdów serwisuje warsztat?</div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Główne aplikacje (zaznacz co najmniej jedną)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="app-interior" value="interior">
+                            <label for="app-interior">Wnętrze i karoseria (5-30 Nm)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="app-engine" value="engine">
+                            <label for="app-engine">Silnik (40-120 Nm)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="app-wheels" value="wheels">
+                            <label for="app-wheels">Koła (100-150 Nm)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="app-chassis" value="chassis">
+                            <label for="app-chassis">Podwozie (70-200 Nm)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="app-axles" value="axles">
+                            <label for="app-axles">Osie i piasty (150-400 Nm)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Budżet (opcjonalnie)</label>
+                    <select id="budget">
+                        <option value="">Bez ograniczeń</option>
+                        <option value="low">Ekonomiczny (~800-1200 zł)</option>
+                        <option value="medium">Średni (~1500-2000 zł)</option>
+                        <option value="high">Premium (~2500+ zł)</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" id="generateBtn" style="width: 100%; margin-top: 24px;">
+                    <i data-lucide="cpu" size="18"></i>
+                    Generuj Rekomendację
+                </button>
+            </div>
+
+            <!-- Output Panel -->
+            <div class="output-panel">
+                <h2>
+                    <i data-lucide="check-circle" size="20"></i>
+                    Rekomendacja
+                </h2>
+
+                <div id="outputContent" class="empty-state">
+                    <i data-lucide="arrow-left" size="48"></i>
+                    <p>Wybierz typ pojazdu i aplikacje,<br>następnie kliknij "Generuj Rekomendację"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const generateBtn = document.getElementById('generateBtn');
+        const outputContent = document.getElementById('outputContent');
+        const vehicleType = document.getElementById('vehicleType');
+
+        generateBtn.addEventListener('click', () => {
+            const vehicle = vehicleType.value;
+            const applications = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+            const budget = document.getElementById('budget').value;
+
+            if (!vehicle) {
+                alert('Proszę wybrać typ pojazdu');
+                return;
+            }
+
+            if (applications.length === 0) {
+                alert('Proszę wybrać co najmniej jedną aplikację');
+                return;
+            }
+
+            generateRecommendation(vehicle, applications, budget);
+        });
+
+        function generateRecommendation(vehicle, applications, budget) {
+            let html = '';
+
+            // Logic for recommendation
+            const needsWheels = applications.includes('wheels');
+            const needsEngine = applications.includes('engine');
+            const needsAxles = applications.includes('axles');
+            const needsInterior = applications.includes('interior');
+            const isTruck = vehicle === 'ciezarowy';
+
+            // Primary tool
+            if (isTruck || needsAxles) {
+                html += `
+                <div class="recommendation-card primary">
+                    <div class="rec-header">
+                        <div>
+                            <div class="rec-title">M18 High-Torque Impact Wrench</div>
+                            <div class="rec-model">M18 ONEFHIWF1D (3/4")</div>
+                        </div>
+                        <div class="rec-badge">PRIORYTET 1</div>
+                    </div>
+                    <div class="rec-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Moment</div>
+                            <div class="spec-value">1356 Nm / 2034 Nm</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Chwyt</div>
+                            <div class="spec-value">3/4"</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Długość</div>
+                            <div class="spec-value">~230 mm</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cena (orientacyjna)</div>
+                            <div class="spec-value">~2800 zł</div>
+                        </div>
+                    </div>
+                    <div class="rec-justification">
+                        <strong>Uzasadnienie:</strong> ${isTruck ? 'Ciężarówki wymagają momentu 700-1200 Nm' : 'Osie i piasty wymagają 150-400 Nm'}. High-torque jest must-have. 3/4" chwyt = standardowe nasadki dla ciężkich aplikacji.
+                    </div>
+                </div>
+                `;
+            } else if (needsWheels || vehicle === 'osobowy') {
+                html += `
+                <div class="recommendation-card primary">
+                    <div class="rec-header">
+                        <div>
+                            <div class="rec-title">M18 FUEL Impact Wrench</div>
+                            <div class="rec-model">M18 FMTIW2F12 (1/2")</div>
+                        </div>
+                        <div class="rec-badge">PRIORYTET 1</div>
+                    </div>
+                    <div class="rec-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Moment</div>
+                            <div class="spec-value">450 Nm / 600 Nm</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Chwyt</div>
+                            <div class="spec-value">1/2"</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Długość</div>
+                            <div class="spec-value">~130 mm</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cena (orientacyjna)</div>
+                            <div class="spec-value">~1700 zł</div>
+                        </div>
+                    </div>
+                    <div class="rec-justification">
+                        <strong>Uzasadnienie:</strong> Nakrętki kół osobowych = 100-150 Nm. M18 1/2" ma wystarczający moment (450 Nm) z zapasem. 1/2" = standardowe nasadki do kół (17, 19, 21 mm). Najbardziej uniwersalny dla warsztatów osobowych.
+                    </div>
+                </div>
+                `;
+            }
+
+            // Secondary tool
+            if (needsEngine || needsInterior) {
+                html += `
+                <div class="recommendation-card">
+                    <div class="rec-header">
+                        <div>
+                            <div class="rec-title">M12 Subcompact Impact Wrench</div>
+                            <div class="rec-model">M12 FSCIWF38 (3/8")</div>
+                        </div>
+                        <div class="rec-badge" style="background: rgba(0, 212, 255, 0.2); color: #00d4ff;">DODATKOWO</div>
+                    </div>
+                    <div class="rec-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Moment</div>
+                            <div class="spec-value">271 Nm / 305 Nm</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Chwyt</div>
+                            <div class="spec-value">3/8"</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Długość</div>
+                            <div class="spec-value">114 mm</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Cena (orientacyjna)</div>
+                            <div class="spec-value">~900 zł</div>
+                        </div>
+                    </div>
+                    <div class="rec-justification">
+                        <strong>Uzasadnienie:</strong> Kompaktowość (114 mm) = dostęp do ciasnych miejsc w komorze silnika. Wystarczy na prace serwisowe (40-120 Nm): obejmy, mocowania, klimatyzacja. 3/8" = versatile.
+                    </div>
+                </div>
+                `;
+            }
+
+            // Upsell section
+            html += `
+            <div class="upsell-section">
+                <div class="upsell-title">💡 Rekomendowane Akcesoria</div>
+                ${needsWheels || !isTruck ? `
+                <div class="upsell-item">
+                    <strong>Zestaw nasadek SHOCKWAVE 1/2"</strong> (19 szt.)<br>
+                    <span class="upsell-price">~450 zł</span><br>
+                    <span style="font-size: 13px; color: rgba(255, 255, 255, 0.7);">Deep sockets 10-32 mm. M18 bez nasadek = bezużyteczny. SHOCKWAVE 50x dłuższa żywotność.</span>
+                </div>
+                ` : ''}
+                ${needsEngine ? `
+                <div class="upsell-item">
+                    <strong>Zestaw nasadek SHOCKWAVE 3/8"</strong> (19 szt.)<br>
+                    <span class="upsell-price">~350 zł</span><br>
+                    <span style="font-size: 13px; color: rgba(255, 255, 255, 0.7);">Do M12. Deep sockets 8-22 mm.</span>
+                </div>
+                ` : ''}
+                <div class="upsell-item">
+                    <strong>Akumulator M18 B5 (2 szt.) + Ładowarka</strong><br>
+                    <span class="upsell-price">~800 zł</span><br>
+                    <span style="font-size: 13px; color: rgba(255, 255, 255, 0.7);">Jeden zawsze ładuje się, drugi w użyciu.</span>
+                </div>
+            </div>
+            `;
+
+            // PPE Section
+            html += `
+            <div class="upsell-section" style="border-top: 2px solid rgba(255, 136, 0, 0.2); padding-top: 24px;">
+                <div class="upsell-title" style="color: #00ff88;">
+                    🦺 Zalecane PPE dla Mechaników
+                </div>
+                <div style="background: rgba(0, 255, 136, 0.05); padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; color: rgba(255, 255, 255, 0.7);">
+                    <strong style="color: #00ff88;">Bezpieczeństwo eerst!</strong> Prace z kluczami udarowymi = ryzyko urazów rąk, oczu i uszu. Polecamy Milwaukee PPE.
+                </div>
+                <div class="upsell-item" style="border-left: 3px solid #00ff88;">
+                    <strong>Rękawice robocze Milwaukee</strong> (Demolition M/L/XL)<br>
+                    <span class="upsell-price">~45 zł/para</span><br>
+                    <span style="font-size: 13px; color: rgba(255, 255, 255, 0.7);">Wzmocniona dłoń, oddychające, precision grip. Ochrona przed uderzeniami i przecięciami.</span>
+                </div>
+                <div class="upsell-item" style="border-left: 3px solid #00ff88;">
+                    <strong>Okulary ochronne Milwaukee</strong> (Premium Safety)<br>
+                    <span class="upsell-price">~65 zł</span><br>
+                    <span style="font-size: 13px; color: rgba(255, 255, 255, 0.7);">Anti-fog, odporne na zarysowania. Ochrona przed odpryskami metalu.</span>
+                </div>
+                <div class="upsell-item" style="border-left: 3px solid #00ff88;">
+                    <strong>Ochraniacze słuchu Milwaukee</strong><br>
+                    <span class="upsell-price">~120 zł</span><br>
+                    <span style="font-size: 13px; color: rgba(255, 255, 255, 0.7);">NRR 27dB. Klucze udarowe = 85-95 dB. Długotrwałe narażenie = uszkodzenie słuchu.</span>
+                </div>
+                <div style="background: rgba(255, 215, 0, 0.05); padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px;">
+                    <strong style="color: #ffd700;">💰 Bundle PPE Mechanik:</strong> Rękawice + Okulary + Ochraniacze = <strong>~210 zł</strong> (oszczędność 20 zł vs osobno)
+                </div>
+            </div>
+            `;
+
+            // Action buttons
+            html += `
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="window.print()">
+                    <i data-lucide="printer" size="16"></i>
+                    Drukuj
+                </button>
+                <button class="btn btn-primary" onclick="alert('Rekomendacja dodana do oferty! 🎉')">
+                    <i data-lucide="file-text" size="16"></i>
+                    Dodaj do Oferty
+                </button>
+            </div>
+            `;
+
+            outputContent.innerHTML = html;
+            lucide.createIcons();
+
+            // Award XP
+            setTimeout(() => {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(0, 255, 136, 0.2);
+                    border: 1px solid #00ff88;
+                    padding: 16px 20px;
+                    border-radius: 12px;
+                    color: #00ff88;
+                    font-weight: 600;
+                    z-index: 1000;
+                    animation: slideIn 0.3s ease;
+                `;
+                notification.innerHTML = '🎉 +50 XP - Narzędzie użyte!';
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }, 500);
+        }
+    </script>
+</body>
+
+</html>

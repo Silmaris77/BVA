@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Pytań SPIN - Milwaukee Reference</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .resource-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .resource-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(176, 0, 255, 0.2);
+            border: 1px solid rgba(176, 0, 255, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #b000ff;
+            margin-bottom: 16px;
+        }
+
+        .resource-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .resource-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 24px;
+        }
+
+        .resource-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* PDF-style container */
+        .pdf-container {
+            background: white;
+            color: #1a1a2a;
+            border-radius: 8px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .pdf-header {
+            border-bottom: 3px solid #b000ff;
+            padding-bottom: 16px;
+            margin-bottom: 32px;
+        }
+
+        .pdf-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #b000ff;
+            margin-bottom: 8px;
+        }
+
+        .pdf-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+        }
+
+        .section-title {
+            flex: 1;
+            font-size: 22px;
+            font-weight: 700;
+            color: #b000ff;
+        }
+
+        .question-item {
+            background: #f8f8f8;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #b000ff;
+        }
+
+        .question-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a2a;
+            margin-bottom: 8px;
+        }
+
+        .question-note {
+            font-size: 13px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Note box */
+        .note-box {
+            background: #fff8e1;
+            border-left: 4px solid #ffd700;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 24px 0;
+        }
+
+        .note-box strong {
+            color: #ff8800;
+        }
+
+        .example-box {
+            background: #e3f2fd;
+            border-left: 4px solid #00d4ff;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+        }
+
+        /* Action buttons */
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(176, 0, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .resource-header,
+            .action-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="resource-header">
+            <div class="resource-badge">
+                <i data-lucide="book-open" size="14"></i>
+                ZASÓB REFERENCYJNY
+            </div>
+            <h1>Bank Pytań SPIN</h1>
+            <div class="resource-meta">
+                <span><i data-lucide="file-text" size="14"></i> 6 stron</span>
+                <span><i data-lucide="download" size="14"></i> 1.2 MB</span>
+                <span><i data-lucide="zap" size="14"></i> +10 XP</span>
+            </div>
+        </div>
+
+        <!-- PDF-style content -->
+        <div class="pdf-container">
+            <div class="pdf-header">
+                <div class="pdf-title">Bank Pytań SPIN dla Warsztatów Automotive</div>
+                <div class="pdf-subtitle">Milwaukee Tools | Sprzedaż Doradcza B2B | Wersja 2025.1</div>
+            </div>
+
+            <div class="note-box">
+                <strong>💡 JAK UŻYWAĆ:</strong> Wybierz pytania dopasowane do fazy rozmowy (S→P→I→N) i profilu klienta.
+                NIE zadawaj wszystkich pytań - wybierz 2-3 na każdą kategorię. SPIN to rozmowa, nie przesłuchanie!
+            </div>
+
+            <!-- SITUATION -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">S</div>
+                    <div class="section-title">SITUATION - Odkryj Obecny Stan</div>
+                </div>
+
+                <div
+                    style="background: #e8f5e9; padding: 12px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;">
+                    <strong>CEL:</strong> Zrozum kontekst klienta ZANIM zapytasz o problemy. Keep it short (2-3 pytania
+                    max).
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jakich narzędzi używacie obecnie do wymiany kół?"</div>
+                    <div class="question-note">→ Baseline discovery. Pneumatyka? Akumulatorowe? Ręczne?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Ilu mechaników pracuje na hali?"</div>
+                    <div class="question-note">→ Sizing. Małe (2-5), średnie (10-20), duże (20+).</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jak wygląda typowy dzień pracy - jakie usługi najczęściej?"</div>
+                    <div class="question-note">→ Volume & mix assessment. Koła? Silnik? Serwis pełny?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Czy macie kompresor? Jakiej wielkości?"</div>
+                    <div class="question-note">→ Pneumatic dependency check. 50L? 100L? 200L?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Kto podejmuje decyzje o zakupie narzędzi?"</div>
+                    <div class="question-note">→ Decision maker identification. Właściciel? Główny mechanik? Centrala
+                        (sieci)?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jak długo używacie obecnych narzędzi?"</div>
+                    <div class="question-note">→ Replacement cycle. 1 rok? 5 lat? 10+?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jakie marki narzędzi są teraz w użyciu?"</div>
+                    <div class="question-note">→ Competitive landscape. Generic? Premium (Snap-on, Makita)? Mix?</div>
+                </div>
+            </div>
+
+            <!-- PROBLEM -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">P</div>
+                    <div class="section-title">PROBLEM - Zidentyfikuj Punkty Bólu</div>
+                </div>
+
+                <div
+                    style="background: #fff3e0; padding: 12px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;">
+                    <strong>CEL:</strong> Odkryj problemy + dig deep (nie zatrzymuj się na surface level). 3-5 pytań.
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jakie problemy napotykaliście z obecnymi narzędziami?"</div>
+                    <div class="question-note">→ Generic opener. Klient często powie "żadnych" → dig deeper OTHER
+                        questions.</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jak często się psują / wymagają serwisu?"</div>
+                    <div class="question-note">→ Reliability issues. Co miesiąc? Co kwartał? Rzadko?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Co mechanicy mówią o obecnych narzędziach? Co lubią najmniej?"</div>
+                    <div class="question-note">→ End user feedback. Ciężkie? Słabe? Niewygodne? Hałaśliwe?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Czy są sytuacje gdzie narzędzia Was zawodzą?"</div>
+                    <div class="question-note">→ Failure scenarios. Nakrętki zardzewiałe? Duże momenty? Długie sesje?
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jak długo wytrzymują akumulatory na jednym ładowaniu?"</div>
+                    <div class="question-note">→ Battery life (jeśli cordless). Cały dzień? Pół? Trzeba wymieniać co
+                        godzinę?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Co się dzieje gdy kompresor się zepsuje?"</div>
+                    <div class="question-note">→ Downtime scenario (jeśli pneumatyka). Wszystko staje? Mają backup?
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Czy hałas jest problemem dla zespołu?"</div>
+                    <div class="question-note">→ Environment issues. Kompresor = 85-95 dB. Mechanicy narzekają?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Ile czasu mechanicy tracą na przygotowanie/sprzątanie narzędzi?"</div>
+                    <div class="question-note">→ Productivity drain. Rozwijanie węży? Szukanie narz? Ładowanie baterii?
+                    </div>
+                </div>
+            </div>
+
+            <!-- IMPLICATION -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">I</div>
+                    <div class="section-title">IMPLICATION - Wzmocnij Koszt Problemu</div>
+                </div>
+
+                <div
+                    style="background: #ffebee; padding: 12px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;">
+                    <strong>CEL:</strong> Przelicz problem na €€€ + $$$ + ⏱️. Sprawiają że problem wydaje się WIĘKSZY →
+                    pilność. 2-4 pytania.
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Ile kosztuje Was dzień przestoju gdy narzędzie/kompresor się zepsuje?"
+                    </div>
+                    <div class="question-note">→ Downtime cost quantification. Stawka roboczogodzina × 8h = ?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Gdyby mechanicy zaoszczędzili 30 minut dziennie, ile więcej pojazdów
+                        moglibyście obsłużyć?"</div>
+                    <div class="question-note">→ Capacity gain calculation. 30 min = 1 dodatkowe auto? 2? × stawka =
+                        dodatkowy revenue.</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Ile rocznie wydajecie na naprawy/wymianę narzędzi?"</div>
+                    <div class="question-note">→ TCO current. Often surprising when added up. "Hmm, nie liczyliśmy...
+                        może 5000 zł?"</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Ile kosztuje Was energia dla kompresora miesię cznie?"</div>
+                    <div class="question-note">→ Operating costs. 7.5kW kompresor × 8h × 22 dni × taryfa = ?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jak wpływa to na kolejki i czasy oczekiwania klientów?"</div>
+                    <div class="question-note">→ Customer satisfaction impact. Tracą klientów? Negatywne opinie?</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Czy straciliście już klientów z powodu opóźnień?"</div>
+                    <div class="question-note">→ Revenue loss from churn. "Poszli do konkurencji bo szybsi." = direct
+                        €€€ impact.</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jak często musieliście wynajmować zastępcze narzędzia?"</div>
+                    <div class="question-note">→ Emergency costs. Rental = 200-500 zł/dzień. Multiply by frequency.
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Ile wynosi Wasza stawka roboczogodziny?"</div>
+                    <div class="question-note">→ Revenue per hour baseline. Use to calculate opportunity cost later.
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEED-PAYOFF -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">N</div>
+                    <div class="section-title">NEED-PAYOFF - Klient Opisuje Korzyść</div>
+                </div>
+
+                <div
+                    style="background: #e8f5e9; padding: 12px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;">
+                    <strong>CEL:</strong> Klient SAM opisuje wartość rozwiązania. "Gdyby..." format. 2-3 pytania BEFORE
+                    presentation.
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Gdybyście mogli wyeliminować przestoje narzędzi, jak wpłynęłoby to na
+                        rentowność?"</div>
+                    <div class="question-note">→ Reliability value. Klient wyobraża sobie zero downtime.</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jeśli mechanicy pracowaliby 15-20% szybciej, ile dodatkowego przychodu
+                        generowałoby to rocznie?"</div>
+                    <div class="question-note">→ Productivity ROI. Klient sam liczy: więcej aut × stawka = X zł/rok.
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Co by znaczyło dla Waszego biznesu zero zależności od kompresora?"</div>
+                    <div class="question-note">→ Freedom value. Mobilność, brak single point of failure, oszczędność
+                        energii.</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Gdyby narzędzia miały 5-letnią gwarancję, jak zmieniłoby to Wasze
+                        planowanie budżetu?"</div>
+                    <div class="question-note">→ Certainty value. Predictable costs, no surprises, peace of mind.</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Jak wpłynęłoby na satysfakcję zespołu jeśli mieliby najlepsze narzędzia
+                        na rynku?"</div>
+                    <div class="question-note">→ Team morale + retention. Szczęśliwsi mechanicy = lepsze wyniki +
+                        mniejsza rotacja.</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Gdyby całość narzędzi działała w jednym ekosystemie (te same baterie),
+                        co by to ułatwiło?"</div>
+                    <div class="question-note">→ Ecosystem benefits. Mniej typów baterii, ładowarek. Simplified
+                        logistics.</div>
+                </div>
+
+                <div class="question-item">
+                    <div class="question-text">"Co by się zmieniło gdybyście mogli serwisować pojazdy 2x szybciej w
+                        szczycie sezonu (opony)?"</div>
+                    <div class="question-note">→ Seasonal impact. Peak capacity = dodatkowe $$$ w marcu/październiku.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Examples -->
+            <div class="section">
+                <div style="font-size: 20px; font-weight: 700; color: #b000ff; margin-bottom: 20px;">
+                    📝 Przykładowa Sekwencja SPIN
+                </div>
+
+                <div class="example-box">
+                    <strong style="color: #00d4ff; display: block; margin-bottom: 12px;">SITUATION (2 min):</strong>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>"Jakich kluczy używacie do wymiany kół?" → Pneumatyczne, 20L kompresor</li>
+                        <li>"Ilu mechaników?" → 4 mechaników</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <strong style="color: #00d4ff; display: block; margin-bottom: 12px;">PROBLEM (3 min):</strong>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>"Jakie problemy z kompresorem?" → Czasem się wyłącza, musi się naładować</li>
+                        <li>"Jak często?" → 3-4 razy dziennie, po 10 minut każdy</li>
+                        <li>"Co mechanicy mówią?" → Frustrująjące, tracą czas</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <strong style="color: #00d4ff; display: block; margin-bottom: 12px;">IMPLICATION (3 min):</strong>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>"Ile to 40 min przestoju kosztuje dziennie?" → Klient liczy: "Może 600 zł (stawka 90 zł/h)"
+                        </li>
+                        <li>"600 zł × 250 dni roboczych?" → Klient: "O, to 150,000 zł rocznie!"</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <strong style="color: #00d4ff; display: block; margin-bottom: 12px;">NEED-PAYOFF (2 min):</strong>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>"Gdybyście wyeliminowali te przestoje, co by to znaczyło?" → Klient: "Moglibyśmy obsłużyć
+                            10-15% więcej aut. To dodatkowe 100-150k przychodu."</li>
+                        <li>"Co by zmieniło zero zależności od kompresora?" → Klient: "Mobilność, oszczędność energii,
+                            brak ryzyka awarii."</li>
+                    </ul>
+                </div>
+
+                <div class="note-box" style="margin-top: 20px; background: #e8f5e9; border-color: #00ff88;">
+                    <strong style="color: #00ff88;">✅ TERAZ pitch:</strong> "Rozumiem że potrzebujecie narzędzi które
+                    wyeliminują przestoje i zależność od kompresora. Milwaukee M18 FUEL to dokładnie to..." →
+                    prezentacja dopasowana do DISCOVERED needs.
+                </div>
+            </div>
+
+            <div class="note-box">
+                <strong>⚠️ CZĘSTE BŁĘDY:</strong><br>
+                • Za dużo pytań Situation (max 2-3!)<br>
+                • Zatrzymanie się na surface Problem (dig deeper!)<br>
+                • Przeskoczenie Implication → Need-Payoff (musisz wzmocnić koszt PRZED korzyścią)<br>
+                • Pitch ZANIM Need-Payoff (klient jeszcze nie "bought in")
+            </div>
+        </div>
+
+        <!-- Action bar -->
+        <div class="action-bar">
+            <button class="btn btn-secondary" onclick="window.print()">
+                <i data-lucide="printer" size="16"></i>
+                Drukuj
+            </button>
+            <button class="btn btn-primary" onclick="alert('📥 Bank pytań pobrany! Znajdziesz go w Moje Zasoby.')">
+                <i data-lucide="download" size="16"></i>
+                Pobierz PDF
+            </button>
+            <button class="btn btn-secondary" onclick="alert('📧 Link wysłany na email!')">
+                <i data-lucide="share-2" size="16"></i>
+                Udostępnij
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Award XP on load
+        setTimeout(() => {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(0, 255, 136, 0.2);
+                border: 1px solid #00ff88;
+                padding: 16px 20px;
+                border-radius: 12px;
+                color: #00ff88;
+                font-weight: 600;
+                z-index: 1000;
+            `;
+            notification.innerHTML = '📖 +10 XP - Zasób odblokowany!';
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }, 500);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekcja 2: Sprzedaż Konsultacyjna - Milwaukee Automotive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Header */
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .lesson-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .lesson-header p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+        }
+
+        .lesson-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .lesson-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .card.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #b000ff;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 24px 0 12px;
+            color: #00d4ff;
+        }
+
+        .card p {
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 16px;
+        }
+
+        .card ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card li {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 8px;
+        }
+
+        .hero-image {
+            text-align: center;
+            font-size: 80px;
+            margin: 24px 0;
+        }
+
+        /* Framework box */
+        .framework-box {
+            background: rgba(176, 0, 255, 0.1);
+            border-left: 4px solid #b000ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .framework-box h4 {
+            color: #b000ff;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Key insight box */
+        .key-insight {
+            background: rgba(0, 212, 255, 0.15);
+            border-left: 4px solid #00d4ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .key-insight strong {
+            color: #00d4ff;
+        }
+
+        /* SPIN steps */
+        .spin-step {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            border-left: 4px solid #00ff88;
+        }
+
+        .spin-step h4 {
+            color: #00ff88;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .spin-step .example {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        /* Conversation box */
+        .conversation {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .conversation-line {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+        }
+
+        .you {
+            background: rgba(176, 0, 255, 0.1);
+            border-left: 3px solid #b000ff;
+        }
+
+        .client {
+            background: rgba(255, 136, 0, 0.1);
+            border-left: 3px solid #ff8800;
+        }
+
+        .conversation-line strong {
+            font-weight: 700;
+        }
+
+        /* Interactive input */
+        .interactive-input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            margin: 16px 0;
+        }
+
+        .interactive-input:focus {
+            outline: none;
+            border-color: #b000ff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Quiz */
+        .quiz-question {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(176, 0, 255, 0.5);
+        }
+
+        .quiz-option.selected {
+            background: rgba(176, 0, 255, 0.2);
+            border-color: #b000ff;
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .quiz-explanation {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .quiz-explanation.show {
+            display: block;
+        }
+
+        /* Summary */
+        .summary-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .summary-list li {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #b000ff;
+        }
+
+        .summary-list strong {
+            color: #00d4ff;
+        }
+
+        .next-steps-box {
+            background: rgba(176, 0, 255, 0.1);
+            border: 2px solid rgba(176, 0, 255, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+
+        .next-steps-box h3 {
+            color: #b000ff;
+            margin-bottom: 16px;
+        }
+
+        /* Navigation */
+        .card-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(176, 0, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .card-progress {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 32px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #b000ff, #00d4ff);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.xp {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .badge.difficulty {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Lesson Header -->
+        <div class="lesson-header">
+            <h1>Sprzedaż Konsultacyjna dla Automotive</h1>
+            <p>Od pytań do zamówienia - metodologia SPIN dla warsztatów</p>
+            <div class="lesson-meta">
+                <span><i data-lucide="clock" size="16"></i> 40 min</span>
+                <span><i data-lucide="zap" size="16"></i> +150 XP</span>
+                <span class="badge difficulty">Średniozaawansowany</span>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 11%;"></div>
+        </div>
+
+        <!-- Card 1: Hero -->
+        <div class="card active" data-card="0">
+            <div class="hero-image">💬</div>
+            <h2>Sprzedaż Konsultacyjna dla Automotive</h2>
+            <p style="font-size: 18px; text-align: center; color: rgba(255, 255, 255, 0.7); margin-bottom: 32px;">
+                Od pytań do zamówienia - metodologia SPIN dla warsztatów
+            </p>
+
+            <div class="key-insight">
+                <strong>Najczęstszy błąd:</strong> Zaczynamy od prezentacji produktu zamiast odkrywania potrzeb.
+            </div>
+
+            <p><strong>Skutek:</strong></p>
+            <ul>
+                <li>❌ "Dziękuję, nie jesteśmy zainteresowani"</li>
+                <li>❌ Klient myśli tylko o cenie</li>
+                <li>❌ Niska skuteczność (18% w transakcyjnej sprzedaży B2B)</li>
+                <li>❌ Brak różnicowania vs konkurencja</li>
+            </ul>
+
+            <div class="framework-box">
+                <h4>✅ Rozwiązanie: SPIN Selling</h4>
+                <p>Odkryj potrzeby ZANIM zaprezentujesz rozwiązanie. Klient SAM siebie przekonuje.</p>
+            </div>
+
+            <h3>W tej lekcji nauczysz się:</h3>
+            <ul>
+                <li>✅ Framework SPIN (Situation → Problem → Implication → Need-Payoff)</li>
+                <li>✅ Jak zadawać pytania które odkrywają prawdziwe potrzeby</li>
+                <li>✅ Kiedy przejść od discovery do prezentacji</li>
+                <li>✅ Jak obliczyć ROI wspólnie z klientem</li>
+            </ul>
+        </div>
+
+        <!-- Card 2: SPIN Framework -->
+        <div class="card" data-card="1">
+            <h2>Framework SPIN</h2>
+
+            <p><strong>SPIN = Situation, Problem, Implication, Need-Payoff</strong></p>
+            <p>Złoty standard sprzedaży doradczej B2B (Neil Rackham, 1988). Sekwencja 4 typów pytań:</p>
+
+            <div class="spin-step">
+                <h4>S - SITUATION (Sytuacja)</h4>
+                <p>Odkryj obecny stan klienta. Kontekst ZANIM problemy.</p>
+                <div class="example">
+                    Przykłady: "Jakich narzędzi teraz używacie?" • "Ilu mechaników pracuje?" • "Jak wygląda typowy dzień
+                    pracy?"
+                </div>
+            </div>
+
+            <div class="spin-step">
+                <h4>P - PROBLEM (Problem)</h4>
+                <p>Zidentyfikuj punkty bólu. Dig deep - nie zatrzymuj się na surface.</p>
+                <div class="example">
+                    Przykłady: "Jakie problemy z obecnymi narzędziami?" • "Jak często się psują?" • "Co mechanicy
+                    mówią?"
+                </div>
+            </div>
+
+            <div class="spin-step">
+                <h4>I - IMPLICATION (Implikacja)</h4>
+                <p>Wzmocnij koszt problemu. Przelicz na €€€, czas, ryzyko.</p>
+                <div class="example">
+                    Przykłady: "Ile kosztuje przestój gdy kompresor padnie?" • "Ile tracicie na naprawach?" • "Jak
+                    wpływa na produktywność?"
+                </div>
+            </div>
+
+            <div class="spin-step">
+                <h4>N - NEED-PAYOFF (Korzyść)</h4>
+                <p>Klient SAM opisuje wartość rozwiązania. "Gdyby..." format.</p>
+                <div class="example">
+                    Przykłady: "Gdyby zero przestojów, co by to znaczyło?" • "Ile zaoszczędzilibyście jeśli 20%
+                    szybciej?"
+                </div>
+            </div>
+
+            <div class="key-insight" style="margin-top: 32px;">
+                <strong>Magia SPIN:</strong> Zanim zaprezentujesz produkt, klient już SAM SIEBIE przekonał że tego
+                potrzebuje.
+            </div>
+        </div>
+
+        <!-- Card 3: SPIN in Action -->
+        <div class="card" data-card="2">
+            <h2>SPIN w Akcji - Przykład</h2>
+
+            <p><strong>Scenariusz:</strong> Spotkanie z właścicielem warsztatu (warsztat niezależny, 4 mechaników,
+                obecnie pneumatyka).</p>
+
+            <div class="conversation">
+                <div class="conversation-line you">
+                    <strong style="color: #b000ff;">Ty (SITUATION):</strong> Jakich kluczy używacie do wymiany kół?
+                </div>
+                <div class="conversation-line client">
+                    <strong style="color: #ff8800;">Klient:</strong> Pneumatycznych. Mamy kompresor 100L.
+                </div>
+
+                <div class="conversation-line you">
+                    <strong style="color: #b000ff;">Ty (PROBLEM):</strong> Jak pracują? Napotykaliście jakieś problemy?
+                </div>
+                <div class="conversation-line client">
+                    <strong style="color: #ff8800;">Klient:</strong> Hmm, czasem kompresor nie nadąża - wyłącza się,
+                    musi się naładować. Węże wszędzie.
+                </div>
+
+                <div class="conversation-line you">
+                    <strong style="color: #b000ff;">Ty (DIG DEEPER - Problem):</strong> Jak często się to zdarza?
+                </div>
+                <div class="conversation-line client">
+                    <strong style="color: #ff8800;">Klient:</strong> Może 3-4 razy dziennie, po 10 minut każdy.
+                </div>
+
+                <div class="conversation-line you">
+                    <strong style="color: #b000ff;">Ty (IMPLICATION):</strong> To jakieś 40 minut przestoju dziennie.
+                    Ile to kosztuje w zł?
+                </div>
+                <div class="conversation-line client">
+                    <strong style="color: #ff8800;">Klient:</strong> Hmm... nasza stawka to 90 zł/h, więc... jakieś 600
+                    zł dziennie?
+                </div>
+
+                <div class="conversation-line you">
+                    <strong style="color: #b000ff;">Ty (AMPLIFY Implication):</strong> 600 zł × 250 dni roboczych =
+                    150,000 zł rocznie...
+                </div>
+                <div class="conversation-line client">
+                    <strong style="color: #ff8800;">Klient:</strong> O! Nie myślałem o tym w ten sposób.
+                </div>
+
+                <div class="conversation-line you">
+                    <strong style="color: #b000ff;">Ty (NEED-PAYOFF):</strong> Gdybyście mogli wyeliminować te
+                    przestoje, co by to znaczyło dla Waszego biznesu?
+                </div>
+                <div class="conversation-line client">
+                    <strong style="color: #ff8800;">Klient:</strong> Moglibyśmy obsłużyć więcej aut... może 10-15%
+                    wzrost. To dodatkowe 100-150k przychodu rocznie. Plus mechanicy byliby szczęśliwsi.
+                </div>
+            </div>
+
+            <div class="framework-box" style="margin-top: 24px;">
+                <h4>💡 Co się stało?</h4>
+                <p>Klient SAM wyliczył:</p>
+                <ul style="margin-left: 20px; margin-top: 12px;">
+                    <li>Problem: 150,000 zł straty rocznie</li>
+                    <li>Opportunity: 100-150k dodatkowego przychodu</li>
+                    <li>Soft benefit: Szczęśliwsi mechanicy</li>
+                </ul>
+                <p style="margin-top: 16px;"><strong>Teraz możesz prezentować Milwaukee M18 jako oczywiste
+                        rozwiązanie.</strong></p>
+            </div>
+        </div>
+
+        <!-- Card 4: Interactive Exercise -->
+        <div class="card" data-card="3">
+            <h2>Ćwiczenie: Sekwencja SPIN</h2>
+
+            <div style="background: rgba(176, 0, 255, 0.1); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+                <p><strong>Scenariusz:</strong></p>
+                <p style="font-style: italic;">
+                    Klient mówi: "Nasze klucze pneumatyczne zużywają się szybko, co rok musimy kupować nowe."
+                </p>
+            </div>
+
+            <p><strong>To już jest Problem. Jakie pytanie zadasz NASTĘPNIE?</strong></p>
+            <textarea class="interactive-input" rows="3" placeholder="Twoje pytanie tutaj..."></textarea>
+
+            <div class="framework-box" style="margin-top: 24px;">
+                <h4>💡 Prawidłowa sekwencja:</h4>
+                <p><strong>1. DIG DEEPER (więcej Problem questions):</strong></p>
+                <p style="margin-left: 16px; margin-top: 8px;">"Ile rocznie wydajecie na wymianę narzędzi?" lub "Co
+                    powoduje że się zużywają?"</p>
+
+                <p style="margin-top: 16px;"><strong>2. Dopiero potem IMPLICATION:</strong></p>
+                <p style="margin-left: 16px; margin-top: 8px;">"Gdyby narzędzia wytrzymały 5 lat zamiast 1 roku, ile
+                    zaoszczędzilibyście?"</p>
+
+                <p style="margin-top: 16px;"><strong>❌ NIE przechodź od razu do prezentacji!</strong></p>
+            </div>
+        </div>
+
+        <!-- Card 5: ROI Calculation -->
+        <div class="card" data-card="4">
+            <h2>Obliczanie ROI z Klientem</h2>
+
+            <p>Nie TY mów "oszczędzicie X zł". Klient SAM wyliczy → większe buy-in.</p>
+
+            <h3>Framework ROI Conversation:</h3>
+
+            <div class="framework-box">
+                <h4>1. Koszt Obecnego Stanu</h4>
+                <ul style="margin-left: 20px; margin-top: 12px;">
+                    <li>"Ile wydajecie na narzędzia pneumatyczne rocznie (zakup + naprawa)?"</li>
+                    <li>"Ile kosztuje energia dla kompresora miesięcznie?"</li>
+                    <li>"Ile przestojów macie miesięcznie × koszt przestoju?"</li>
+                </ul>
+                <p style="margin-top: 12px; font-weight: 600;">→ SUMA = Total Cost of Ownership (TCO)</p>
+            </div>
+
+            <div class="framework-box">
+                <h4>2. Koszt Nowego Rozwiązania</h4>
+                <ul style="margin-left: 20px; margin-top: 12px;">
+                    <li>4× M18 klucze udarowe = ~6,800 zł</li>
+                    <li>8× Akumulatory M18 B5 = ~3,200 zł</li>
+                    <li>4× Ładowarki = ~800 zł</li>
+                    <li>Zestawy nasadek = ~1,600 zł</li>
+                </ul>
+                <p style="margin-top: 12px; font-weight: 600;">→ SUMA = ~12,400 zł początkowa inwestycja</p>
+            </div>
+
+            <div class="framework-box">
+                <h4>3. Oszczędności Rocznie</h4>
+                <ul style="margin-left: 20px; margin-top: 12px;">
+                    <li>Wyeliminowane przestoje: 150,000 zł</li>
+                    <li>Brak napraw/wymian narzędzi: 5,000 zł</li>
+                    <li>Oszczędność energii: 2,400 zł (kompresor 7.5kW × 8h × 22 dni × 12 mies)</li>
+                    <li>15% wzrost produktywności: 120,000 zł dodatkowego przychodu</li>
+                </ul>
+                <p style="margin-top: 12px; font-weight: 600;">→ SUMA = ~277,400 zł rocznie</p>
+            </div>
+
+            <div class="key-insight" style="margin-top: 24px;">
+                <strong>ROI = (277,400 - 12,400) / 12,400 = 2137%</strong><br>
+                <strong>Payback period = 12,400 / 277,400 × 12 = 0.5 miesiąca</strong>
+            </div>
+
+            <p style="margin-top: 24px;">Klient SAM widzi że inwestycja zwraca się w 2 tygodnie. Decision made.</p>
+        </div>
+
+        <!-- Card 6: Quiz -->
+        <div class="card" data-card="5">
+            <h2>Test Wiedzy: SPIN</h2>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">1. W jakiej kolejności zadajesz pytania SPIN?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="0" data-option="0">
+                        Problem → Situation → Implication → Need-Payoff
+                    </div>
+                    <div class="quiz-option" data-question="0" data-option="1">
+                        Situation → Problem → Implication → Need-Payoff
+                    </div>
+                    <div class="quiz-option" data-question="0" data-option="2">
+                        Implication → Problem → Situation → Need-Payoff
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="0">
+                    <strong>✅ Prawidłowa:</strong> Situation → Problem → Implication → Need-Payoff<br>
+                    ZAWSZE zaczynaj od kontekstu (Situation), dig into problems, amplify cost, THEN korzyści.
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">2. Klient: "Mamy klucze pneumatyczne." To jakie
+                    pytanie?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="1" data-option="0">
+                        Situation
+                    </div>
+                    <div class="quiz-option" data-question="1" data-option="1">
+                        Problem
+                    </div>
+                    <div class="quiz-option" data-question="1" data-option="2">
+                        Implication
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="1">
+                    <strong>✅ Prawidłowa:</strong> Situation<br>
+                    Odkrywasz obecny stan. Następne: Problem questions o wyzwania z pneumatyką.
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p style="font-weight: 600; margin-bottom: 16px;">3. "Ile kosztuje przestój gdy kompresor padnie?" - to
+                    pytanie...</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" data-question="2" data-option="0">
+                        Problem
+                    </div>
+                    <div class="quiz-option" data-question="2" data-option="1">
+                        Implication
+                    </div>
+                    <div class="quiz-option" data-question="2" data-option="2">
+                        Need-Payoff
+                    </div>
+                </div>
+                <div class="quiz-explanation" data-explanation="2">
+                    <strong>✅ Prawidłowa:</strong> Implication<br>
+                    Przeliczasz problem na €€€. Wzmacniasz koszt = creates urgency.
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 7: Summary -->
+        <div class="card" data-card="6">
+            <h2>Kluczowe Wnioski</h2>
+
+            <ul class="summary-list">
+                <li>
+                    <strong>SPIN Sequence:</strong> Situation → Problem → Implication → Need-Payoff. ZAWSZE w tej
+                    kolejności.
+                </li>
+                <li>
+                    <strong>Odkryj ZANIM prezentujesz:</strong> Najgorsza sprzedaż = pitch bez discovery. Klient musi
+                    SAM odkryć potrzebę.
+                </li>
+                <li>
+                    <strong>Dig Deep:</strong> Nie zatrzymuj się na surface problem. Pytaj "Jak często?", "Co
+                    powoduje?", "Co się dzieje gdy...?".
+                </li>
+                <li>
+                    <strong>Amplify Cost:</strong> Implication questions przeliczają problem na €€€. 40 min/dzień = 150k
+                    zł/rok.
+                </li>
+                <li>
+                    <strong>Klient Liczy ROI:</strong> Nie TY mów "zaoszczędzicie X". Klient SAM wyliczy → większe
+                    commitment.
+                </li>
+                <li>
+                    <strong>Confirm Before Pitch:</strong> "Rozumiem że potrzebujecie... Zgadza się?" → alignment ZANIM
+                    prezentacja.
+                </li>
+            </ul>
+
+            <div class="next-steps-box">
+                <h3>📝 Twoje Zadanie Praktyczne</h3>
+                <p>Przed następnym spotkaniem z warsztatem:</p>
+                <ol style="margin-left: 24px; margin-top: 12px;">
+                    <li><strong>Przygotuj 5-7 pytań SPIN:</strong> 2× Situation, 2× Problem, 2× Implication, 1×
+                        Need-Payoff</li>
+                    <li><strong>Role-play:</strong> Ćwicz sekwencję z kolegą (15 min)</li>
+                    <li><strong>Real meeting:</strong> Użyj SPIN, nagraj obserwacje</li>
+                    <li><strong>Debrief:</strong> Co zadziałało? Co poprawić?</li>
+                </ol>
+                <p style="margin-top: 16px;"><strong>🛠️ Odblokowałeś narzędzie "SPIN Question Generator" - użyj przed
+                        spotkaniem!</strong></p>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn btn-primary" style="font-size: 16px; padding: 16px 32px;">
+                    <i data-lucide="check-circle" size="20"></i>
+                    Ukończ Lekcję (+150 XP)
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="card-nav">
+            <button class="btn btn-secondary" id="prevBtn" disabled>
+                <i data-lucide="chevron-left" size="16"></i>
+                Poprzedni
+            </button>
+            <span class="card-progress" id="cardProgress">1 / 7</span>
+            <button class="btn btn-primary" id="nextBtn">
+                Następny
+                <i data-lucide="chevron-right" size="16"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentCard = 0;
+        const cards = document.querySelectorAll('.card');
+        const totalCards = cards.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const cardProgress = document.getElementById('cardProgress');
+        const progressBar = document.getElementById('progressBar');
+
+        const correctAnswers = [1, 0, 1];
+
+        function showCard(index) {
+            cards.forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+
+            currentCard = index;
+            prevBtn.disabled = index === 0;
+            nextBtn.textContent = index === totalCards - 1 ? 'Zakończ' : 'Następny';
+            cardProgress.textContent = `${index + 1} / ${totalCards}`;
+
+            const progress = ((index + 1) / totalCards) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentCard > 0) showCard(currentCard - 1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentCard < totalCards - 1) {
+                showCard(currentCard + 1);
+            } else {
+                alert('🎉 Gratulacje! Ukończono lekcję.\nZdobyto: +150 XP\n\nOdblokowano:\n✅ SPIN Question Generator\n✅ Bank Pytań SPIN\n✅ 1 Engram do utrwalenia');
+            }
+        });
+
+        // Quiz logic
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const questionIndex = parseInt(this.dataset.question);
+                const optionIndex = parseInt(this.dataset.option);
+                const correctIndex = correctAnswers[questionIndex];
+
+                document.querySelectorAll(`.quiz-option[data-question="${questionIndex}"]`).forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+
+                this.classList.add('selected');
+
+                if (optionIndex === correctIndex) {
+                    this.classList.add('correct');
+                } else {
+                    this.classList.add('incorrect');
+                    document.querySelector(`.quiz-option[data-question="${questionIndex}"][data-option="${correctIndex}"]`).classList.add('correct');
+                }
+
+                document.querySelector(`[data-explanation="${questionIndex}"]`).classList.add('show');
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentCard > 0) {
+                showCard(currentCard - 1);
+            } else if (e.key === 'ArrowRight' && currentCard < totalCards - 1) {
+                showCard(currentCard + 1);
+            }
+        });
+    </script>
+</body>
+
+</html>

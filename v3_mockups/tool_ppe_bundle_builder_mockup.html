@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPE Bundle Builder - Milwaukee Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00ff88;
+            margin-bottom: 16px;
+        }
+
+        .tool-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tool-header p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Stats banner */
+        .stats-banner {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 32px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
+        }
+
+        /* Layout */
+        .tool-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 968px) {
+            .tool-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Panel */
+        .panel {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .panel h2 {
+            font-size: 20px;
+            color: #00ff88;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Input group */
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        select,
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #00ff88;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        select option {
+            background: #1a1a2a;
+            color: white;
+        }
+
+        /* Hazard checkboxes */
+        .hazard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .hazard-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .hazard-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .hazard-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .hazard-item.selected {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: #00ff88;
+        }
+
+        /* Bundle output */
+        .bundle-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .bundle-category {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .category-name {
+            flex: 1;
+            font-size: 18px;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .category-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .product-name {
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .product-spec {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 4px;
+        }
+
+        .justification {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #00d4ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Total */
+        .bundle-total {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2));
+            border: 2px solid rgba(0, 255, 136, 0.4);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .total-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+        }
+
+        .total-value {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ff88, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .roi-note {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 12px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            color: #0a0a1a;
+            width: 100%;
+            margin-top: 24px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="tool-header">
+            <div class="tool-badge">
+                <i data-lucide="shield-check" size="14"></i>
+                NARZĘDZIE TIER 1
+            </div>
+            <h1>PPE Bundle Builder</h1>
+            <p>Dobierz kompletny pakiet środków ochrony indywidualnej dla Twojego warsztatu</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-banner">
+            <div>
+                <div class="stat-value">90%</div>
+                <div class="stat-label">Urazów oczu można zapobiec</div>
+            </div>
+            <div>
+                <div class="stat-value">70%</div>
+                <div class="stat-label">Urazów rąk bez rękawic</div>
+            </div>
+            <div>
+                <div class="stat-value">+50 XP</div>
+                <div class="stat-label">Za każde użycie</div>
+            </div>
+        </div>
+
+        <!-- Main layout -->
+        <div class="tool-layout">
+            <!-- Input Panel -->
+            <div class="panel">
+                <h2>
+                    <i data-lucide="settings" size="20"></i>
+                    Profil Warsztatu
+                </h2>
+
+                <div class="input-group">
+                    <label class="input-label">Typ warsztatu</label>
+                    <select id="workshopType">
+                        <option value="">-- Wybierz typ --</option>
+                        <option value="automotive">Automotive (mechanika, koła)</option>
+                        <option value="bodywork">Lakiernictwo / Blacharstwo</option>
+                        <option value="construction">Budowlanka ogólna</option>
+                        <option value="electrical">Instalacje elektryczne</option>
+                        <option value="metalwork">Obróbka metalu / Spawanie</option>
+                        <option value="woodwork">Stolarka / MDF</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Liczba pracowników</label>
+                    <input type="number" id="workerCount" min="1" max="50" value="4" placeholder="Ile osób?">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Główne zagrożenia (multi-select)</label>
+                    <div class="hazard-grid" id="hazardsGrid">
+                        <div class="hazard-item" data-hazard="impact">
+                            <input type="checkbox" id="h-impact">
+                            <label for="h-impact">Odłamki / uderzenia</label>
+                        </div>
+                        <div class="hazard-item" data-hazard="dust">
+                            <input type="checkbox" id="h-dust">
+                            <label for="hdust">Pył / azbest</label>
+                        </div>
+                        <div class="hazard-item" data-hazard="noise">
+                            <input type="checkbox" id="h-noise">
+                            <label for="h-noise">Hałas >85dB</label>
+                        </div>
+                        <div class="hazard-item" data-hazard="chemicals">
+                            <input type="checkbox" id="h-chemicals">
+                            <label for="h-chemicals">Chemikalia / farby</label>
+                        </div>
+                        <div class="hazard-item" data-hazard="cuts">
+                            <input type="checkbox" id="h-cuts">
+                            <label for="h-cuts">Przecięcia / ostrza</label>
+                        </div>
+                        <div class="hazard-item" data-hazard="falling">
+                            <input type="checkbox" id="h-falling">
+                            <label for="h-falling">Spadające przedmioty</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="generateBtn">
+                    <i data-lucide="sparkles" size="18"></i>
+                    Generuj Bundle PPE
+                </button>
+            </div>
+
+            <!-- Output Panel -->
+            <div class="panel">
+                <h2>
+                    <i data-lucide="package" size="20"></i>
+                    Rekomendowany Pakiet PPE
+                </h2>
+
+                <div id="outputContent" class="empty-state">
+                    <i data-lucide="arrow-left" size="48"></i>
+                    <p>Wybierz profil warsztatu,<br>następnie kliknij "Generuj Bundle PPE"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const generateBtn = document.getElementById('generateBtn');
+        const outputContent = document.getElementById('outputContent');
+
+        // Hazard selection
+        document.querySelectorAll('.hazard-item').forEach(item => {
+            item.addEventListener('click', function () {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+                this.classList.toggle('selected', checkbox.checked);
+            });
+        });
+
+        generateBtn.addEventListener('click', () => {
+            const workshopType = document.getElementById('workshopType').value;
+            const workerCount = parseInt(document.getElementById('workerCount').value) || 1;
+
+            const selectedHazards = Array.from(document.querySelectorAll('.hazard-item input:checked'))
+                .map(cb => cb.parentElement.dataset.hazard);
+
+            if (!workshopType) {
+                alert('Proszę wybrać typ warsztatu');
+                return;
+            }
+
+            generateBundle(workshopType, workerCount, selectedHazards);
+        });
+
+        function generateBundle(type, workers, hazards) {
+            let html = '';
+            let totalPrice = 0;
+
+            // Safety Glasses (always)
+            html += createBundleItem({
+                icon: '👓',
+                category: 'Okulary Ochronne',
+                product: 'Safety Glasses Clear Anti-Fog',
+                specs: ['EN166, EN170', 'UV Protection', 'Anti-fog coating'],
+                price: 65,
+                justification: '90% urazów oczu można zapobiec stosując ochronę. Anti-fog = zero przestojów na wycieranie.',
+                quantity: workers
+            });
+            totalPrice += 65 * workers;
+
+            // Hearing Protection (if noise hazard)
+            if (hazards.includes('noise') || type === 'automotive' || type === 'metalwork') {
+                html += createBundleItem({
+                    icon: '🎧',
+                    category: 'Ochrona Słuchu',
+                    product: 'REDLITHIUM USB™ Jobsite Earbuds',
+                    specs: ['EN352-2', 'SNR 32dB', '10h battery', 'Bluetooth'],
+                    price: 450,
+                    justification: 'Klucze udarowe/młoty = 85-95 dB. >85 dB = mandatory protection. Earbuds = workplace awareness mode.',
+                    quantity: workers
+                });
+                totalPrice += 450 * workers;
+            } else {
+                html += createBundleItem({
+                    icon: '🎧',
+                    category: 'Ochrona Słuchu',
+                    product: 'Zatyczki piankowe (box 10 par)',
+                    specs: ['EN352-2', 'SNR 28dB', 'Wielokrotnego użytku'],
+                    price: 80,
+                    justification: 'Podstawowa ochrona słuchu dla środowisk <95 dB.',
+                    quantity: Math.ceil(workers / 2) // 1 box na 2 pracowników
+                });
+                totalPrice += 80 * Math.ceil(workers / 2);
+            }
+
+            // Gloves
+            let gloveType = getGloveRecommendation(type, hazards);
+            html += createBundleItem({
+                icon: '🧤',
+                category: 'Rękawice',
+                product: gloveType.name,
+                specs: gloveType.specs,
+                price: gloveType.price,
+                justification: '70% urazów rąk = pracownicy BEZ rękawic. ' + gloveType.reason,
+                quantity: workers * 3 // 3 pairs per worker
+            });
+            totalPrice += gloveType.price * workers * 3;
+
+            // Respirator (if dust/chemicals)
+            if (hazards.includes('dust') || hazards.includes('chemicals') || type === 'bodywork' || type === 'woodwork') {
+                let maskLevel = getMaskLevel(type, hazards);
+                html += createBundleItem({
+                    icon: '😷',
+                    category: 'Maska Ochronna',
+                    product: maskLevel.name,
+                    specs: maskLevel.specs,
+                    price: maskLevel.price,
+                    justification: maskLevel.reason,
+                    quantity: workers
+                });
+                totalPrice += maskLevel.price * workers;
+            }
+
+            // Helmet (if falling objects)
+            if (hazards.includes('falling') || type === 'construction' || type === 'electrical') {
+                html += createBundleItem({
+                    icon: '⛑️',
+                    category: 'Hełm Ochronny',
+                    product: 'BOLT 100 (EN397 + EN50365)',
+                    specs: ['Impact 5,000N', 'Electrical 1000V AC', 'Wentylowany'],
+                    price: 180,
+                    justification: 'Spadające przedmioty = 3-cia przyczyna śmierci. BOLT 100 = electrical insulation (elektryka!)',
+                    quantity: workers
+                });
+                totalPrice += 180 * workers;
+            }
+
+            // Knee Pads (if automotive/floor work)
+            if (type === 'automotive' || type === 'construction') {
+                html += createBundleItem({
+                    icon: '🦵',
+                    category: 'Nakolenniki',
+                    product: 'Knee Pads EN14404 Level 2',
+                    specs: ['Uneven surfaces', 'Adjustable straps', 'Comfort padding'],
+                    price: 90,
+                    justification: 'Wymiana kół, prace przy podwoziu = długotrwałe klęczenie. Zapobiega urazom kolan.',
+                    quantity: workers
+                });
+                totalPrice += 90 * workers;
+            }
+
+            // Total
+            html += `
+            <div class="bundle-total">
+                <div class="total-label">TOTAL (${workers} pracowników)</div>
+                <div class="total-value">~${totalPrice.toLocaleString()} zł</div>
+                <div class="roi-note">💡 ROI: 1 injury avoided = savings 2,000-10,000 zł (medical + downtime)</div>
+            </div>
+            `;
+
+            // Action buttons
+            html += `
+            <div class="action-buttons">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="window.print()">
+                    <i data-lucide="printer" size="16"></i>
+                    Drukuj
+                </button>
+                <button class="btn btn-primary" style="flex: 1.5;" onclick="alert('Bundle dodany do oferty! 📦\\n\\nSkopiowano do schowka.')">
+                    <i data-lucide="plus-circle" size="16"></i>
+                    Dodaj do Oferty
+                </button>
+            </div>
+            `;
+
+            outputContent.innerHTML = html;
+            lucide.createIcons();
+
+            // Award XP
+            setTimeout(() => {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(0, 255, 136, 0.2);
+                    border: 1px solid #00ff88;
+                    padding: 16px 20px;
+                    border-radius: 12px;
+                    color: #00ff88;
+                    font-weight: 600;
+                    z-index: 1000;
+                `;
+                notification.innerHTML = '🎉 +50 XP - Bundle wygenerowany!';
+                document.body.appendChild(notification);
+
+                setTimeout(() => notification.remove(), 3000);
+            }, 500);
+        }
+
+        function createBundleItem(item) {
+            return `
+            <div class="bundle-item">
+                <div class="bundle-category">
+                    <div class="category-icon">${item.icon}</div>
+                    <div class="category-name">${item.category}</div>
+                    <div class="category-price">~${item.price} zł${item.quantity > 1 ? ' × ' + item.quantity : ''}</div>
+                </div>
+                <div class="product-name"><strong>${item.product}</strong></div>
+                ${item.specs.map(spec => `<div class="product-spec">• ${spec}</div>`).join('')}
+                <div class="justification">
+                    <strong>💡 Dlaczego?</strong> ${item.justification}
+                </div>
+            </div>
+            `;
+        }
+
+        function getGloveRecommendation(type, hazards) {
+            if (hazards.includes('chemicals') || type === 'bodywork') {
+                return {
+                    name: 'Rękawice chemoodporne Type B (EN ISO 374-1)',
+                    specs: ['Chemical resistant', '≥30 min breakthrough', '≥3 chemicals tested'],
+                    price: 85,
+                    reason: 'Farby/chemikalia wymagają chemical protection.'
+                };
+            } else if (hazards.includes('cuts') || type === 'metalwork') {
+                return {
+                    name: 'Rękawice mechaniczne 4-4-4-3-C (EN388)',
+                    specs: ['Cut level 4-5 (TDM-100: C)', 'Abrasion/tear resistant', 'Precision grip'],
+                    price: 65,
+                    reason: 'Metal/ostrza = high cut risk. Level 4-5 = maximum protection.'
+                };
+            } else {
+                return {
+                    name: 'Rękawice robocze Demolition M/L/XL',
+                    specs: ['EN388 3-3-3-2', 'Reinforced palm', 'Breathable'],
+                    price: 45,
+                    reason: 'Uniwersalne dla prac warsztatowych (koła, montaż).'
+                };
+            }
+        }
+
+        function getMaskLevel(type, hazards) {
+            if (hazards.includes('dust') || type === 'woodwork' || type === 'construction') {
+                return {
+                    name: 'Maska FFP3 (box 10 szt)',
+                    specs: ['99% filtration', 'Dolomit test (D)', 'For: azbest, MDF, cement, krzemionka'],
+                    price: 120,
+                    reason: 'Twarde drewno/MDF/beton = mandatory FFP3 (krzemionka risk).'
+                }
+            } else if (hazards.includes('chemicals') || type === 'bodywork') {
+                return {
+                    name: 'Maska FFP2 (box 10 szt)',
+                    specs: ['94% filtration', 'For: farba bez chromu, lakier, plastik'],
+                    price: 80,
+                    reason: 'Lakiernictwo = FFP2 sufficient (farba non-chrome).'
+                };
+            } else {
+                return {
+                    name: 'Maska FFP2 (box 10 szt)',
+                    specs: ['94% filtration', 'Metal, drewno miękkie, lutowanie'],
+                    price: 80,
+                    reason: 'FFP2 wystarczy na 90% prac warsztatowych.'
+                };
+            }
+        }
+    </script>
+</body>
+
+</html>
