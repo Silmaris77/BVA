@@ -98,7 +98,14 @@ export async function POST(
         }
 
         if (action === 'complete') {
-            const { quiz_score, xp_earned } = body;
+            // Get lesson to fetch XP reward
+            const { data: lesson } = await supabase
+                .from('lessons')
+                .select('xp_reward')
+                .eq('lesson_id', lessonId)
+                .single();
+
+            const xpAmount = lesson?.xp_reward || 100;
 
             // Mark lesson as completed
             const { data: progress, error: progressError } = await supabase
@@ -106,8 +113,7 @@ export async function POST(
                 .update({
                     status: 'completed',
                     completed_at: new Date().toISOString(),
-                    quiz_score: quiz_score || null,
-                    xp_earned: xp_earned || 0
+                    xp_earned: xpAmount
                 })
                 .eq('user_id', user.id)
                 .eq('lesson_id', lessonId)
@@ -126,11 +132,11 @@ export async function POST(
                     user_id: user.id,
                     source_type: 'lesson',
                     source_id: lessonId,
-                    xp_amount: xp_earned || 0,
+                    xp_amount: xpAmount,
                     description: `Completed lesson: ${lessonId}`
                 });
 
-            return NextResponse.json({ progress });
+            return NextResponse.json({ success: true, xpEarned: xpAmount, progress });
         }
 
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });

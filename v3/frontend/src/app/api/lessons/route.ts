@@ -8,7 +8,7 @@ export async function GET() {
         // Get all lessons (public endpoint - access control done on individual lesson view)
         const { data: lessons, error } = await supabase
             .from('lessons')
-            .select('lesson_id, title, description, duration_minutes, xp_reward, difficulty')
+            .select('lesson_id, title, description, duration_minutes, xp_reward, difficulty, content')
             .order('created_at', { ascending: true });
 
         if (error) {
@@ -16,7 +16,29 @@ export async function GET() {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
-        return NextResponse.json({ lessons });
+        // Get user progress if authenticated
+        const { data: { user } } = await supabase.auth.getUser();
+
+        let progressMap: Record<string, any> = {};
+
+        if (user) {
+            const { data: progressData } = await supabase
+                .from('user_lesson_progress')
+                .select('lesson_id, status, started_at, completed_at, current_card')
+                .eq('user_id', user.id);
+
+            if (progressData) {
+                progressMap = progressData.reduce((acc, p) => {
+                    acc[p.lesson_id] = {
+                        ...p,
+                        current_card_index: p.current_card // Map to expected frontend name
+                    };
+                    return acc;
+                }, {} as Record<string, any>);
+            }
+        }
+
+        return NextResponse.json({ lessons, progress: progressMap });
 
     } catch (error) {
         console.error('API error:', error);

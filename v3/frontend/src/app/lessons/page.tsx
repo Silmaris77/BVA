@@ -22,7 +22,9 @@ interface Lesson {
 
 interface UserProgress {
     lesson_id: string
-    completed_at: Date | null
+    status: 'not_started' | 'in_progress' | 'completed'
+    started_at: string | null
+    completed_at: string | null
     current_card_index: number
 }
 
@@ -42,14 +44,20 @@ export default function LessonsPage() {
     }, [user, authLoading, router])
 
     useEffect(() => {
-        async function fetchLessons() {
+        async function fetchLessonsAndProgress() {
+            if (!user) return
+
             try {
-                // Fetch lessons from API endpoint
+                // Fetch lessons and progress from single API endpoint
                 const response = await fetch('/api/lessons')
                 const data = await response.json()
 
                 if (data.lessons) {
                     setLessons(data.lessons)
+                }
+
+                if (data.progress) {
+                    setUserProgress(data.progress)
                 }
             } catch (error) {
                 console.error('Error fetching lessons:', error)
@@ -58,36 +66,7 @@ export default function LessonsPage() {
             }
         }
 
-        async function fetchUserProgress() {
-            if (!user) return
-
-            try {
-                // Fetch user progress for each lesson
-                const response = await fetch('/api/lessons')
-                const data = await response.json()
-
-                if (data.lessons) {
-                    // For each lesson, check if there's progress
-                    const progressMap: Record<string, UserProgress> = {}
-
-                    for (const lesson of data.lessons) {
-                        const progressRes = await fetch(`/api/lessons/${lesson.lesson_id}`)
-                        const progressData = await progressRes.json()
-
-                        if (progressData.progress) {
-                            progressMap[lesson.lesson_id] = progressData.progress
-                        }
-                    }
-
-                    setUserProgress(progressMap)
-                }
-            } catch (error) {
-                console.error('Error fetching user progress:', error)
-            }
-        }
-
-        fetchLessons()
-        fetchUserProgress()
+        fetchLessonsAndProgress()
     }, [user])
 
     // Filter lessons

@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wszystkie Typy Kart - Podział Funkcjonalny | Milwaukee Training</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #fff;
+        }
+
+        .nav-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 136, 0, 0.2);
+            padding: 30px 20px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .nav-category {
+            margin-bottom: 20px;
+        }
+
+        .nav-category-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 10px 15px;
+            color: #ccc;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 136, 0, 0.2);
+            color: #fff;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 40px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #999;
+        }
+
+        .category-section {
+            margin-bottom: 80px;
+            scroll-margin-top: 20px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 136, 0, 0.3);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+        }
+
+        .category-title h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .category-title p {
+            font-size: 1rem;
+            color: #999;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .card-mini {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 136, 0, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .card-mini:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 136, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(255, 136, 0, 0.2);
+        }
+
+        .card-mini-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card-mini-icon {
+            font-size: 1.8rem;
+        }
+
+        .card-mini-title {
+            flex: 1;
+        }
+
+        .card-mini-title h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+
+        .card-mini-title .complexity {
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .card-preview {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            min-height: 120px;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            padding: 5px 10px;
+            background: rgba(255, 136, 0, 0.15);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: #ffd700;
+        }
+
+        /* Specific card previews */
+        .preview-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .preview-hero .icon {
+            font-size: 2.5rem;
+        }
+
+        .preview-hero .title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ff8800;
+        }
+
+        .preview-theory {
+            font-size: 0.85rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .preview-quiz .option {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+        }
+
+        .preview-flashcard {
+            position: relative;
+            height: 100px;
+            perspective: 1000px;
+        }
+
+        .flashcard-inner {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 136, 0, 0.2) 0%, rgba(255, 215, 0, 0.2) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 1200px) {
+            .nav-sidebar {
+                width: 220px;
+            }
+            .main-content {
+                margin-left: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Sidebar -->
+    <nav class="nav-sidebar">
+        <div class="nav-logo">📚 Card Types</div>
+        
+        <div class="nav-category">
+            <div class="nav-category-title">📚 Prezentacja</div>
+            <a href="#cat1" class="nav-link">Hero, Teoria, Video...</a>
+        </div>
+        
+        <div class="nav-category">
+            <div class="nav-category-title">✅ Assessment</div>
+            <a href="#cat2" class="nav-link">Quiz, True/False...</a>
+        </div>
+        
+        <div class="nav-category">
+            <div class="nav-category-title">🏃 Praktyka</div>
+            <a href="#cat3" class="nav-link">Ćwiczenie, Role-Play...</a>
+        </div>
+        
+        <div class="nav-category">
+            <div class="nav-category-title">🎮 Gamifikacja</div>
+            <a href="#cat4" class="nav-link">Drag&Drop, Speed Drill...</a>
+        </div>
+        
+        <div class="nav-category">
+            <div class="nav-category-title">💭 Refleksja</div>
+            <a href="#cat5" class="nav-link">Refleksja, Lightbulb...</a>
+        </div>
+        
+        <div class="nav-category">
+            <div class="nav-category-title">🛠️ Narzędzia</div>
+            <a href="#cat6" class="nav-link">Calculator, Lab...</a>
+        </div>
+        
+        <div class="nav-category">
+            <div class="nav-category-title">🎴 Memoryzacja</div>
+            <a href="#cat7" class="nav-link">Fiszki, Roulette...</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Wszystkie Typy Kart (36)</h1>
+            <p>Podział według funkcji edukacyjnej - Milwaukee MX FUEL Training</p>
+        </div>
+
+        <!-- KATEGORIA 1: PREZENTACJA TREŚCI -->
+        <section id="cat1" class="category-section">
+            <div class="category-header">
+                <div class="category-icon">📚</div>
+                <div class="category-title">
+                    <h2>Prezentacja Treści</h2>
+                    <p>9 kart - Content delivery, passive learning, visual design</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Card 1: Hero -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🎯</div>
+                        <div class="card-mini-title">
+                            <h3>Hero</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview preview-hero">
+                        <div class="icon">🎯</div>
+                        <div class="title">Przecinarka MX FUEL COS350</div>
+                        <div style="font-size: 0.8rem; color: #999;">Cel: Poznaj najważniejsze cechy</div>
+                    </div>
+                    <div class="card-description">
+                        Wprowadzenie do lekcji - cel, motywacja, kluczowe info
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Pierwsza karta</span>
+                        <span class="meta-tag">Intro</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Teoria -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">📊</div>
+                        <div class="card-mini-title">
+                            <h3>Teoria / Podstawy</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview preview-theory">
+                        <strong>Specyfikacja COS350:</strong><br>
+                        • Moc: 5370 RPM<br>
+                        • Głębokość: 125mm<br>
+                        • Tarcza: Ø350mm<br>
+                        • System: RAPIDSTOP <3s
+                    </div>
+                    <div class="card-description">
+                        Wyjaśnienie koncepcji, specyfikacje techniczne, główna treść
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Content</span>
+                        <span class="meta-tag">Specs</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Code Snippet -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">💻</div>
+                        <div class="card-mini-title">
+                            <h3>Code Snippet</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview" style="background: #1e1e1e; color: #d4d4d4; font-family: monospace; font-size: 0.75rem; padding: 10px;">
+                        <span style="color: #569cd6;">const</span> specs = {<br>
+                        &nbsp;&nbsp;rpm: <span style="color: #b5cea8;">5370</span>,<br>
+                        &nbsp;&nbsp;depth: <span style="color: #b5cea8;">125</span>,<br>
+                        &nbsp;&nbsp;rapidstop: <span style="color: #ce9178;">"<3s"</span><br>
+                        };
+                    </div>
+                    <div class="card-description">
+                        Fragmenty kodu, JSON, API docs z syntax highlighting
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Technical</span>
+                        <span class="meta-tag">Copy-paste</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: Video -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🎥</div>
+                        <div class="card-mini-title">
+                            <h3>Video</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview" style="background: #000; display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem;">▶️</div>
+                            <div style="font-size: 0.8rem; color: #999; margin-top: 8px;">Demo COS350 - 3:45</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Embedded video player z kontrolkami
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Media</span>
+                        <span class="meta-tag">Demo</span>
+                    </div>
+                </div>
+
+                <!-- Card 5: Comparison Table -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">📋</div>
+                        <div class="card-mini-title">
+                            <h3>Comparison Table</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview" style="font-size: 0.75rem;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 5px;">Spalinowa</td>
+                                <td style="padding: 5px; color: #ff8800;">vs</td>
+                                <td style="padding: 5px; color: #00ff88;">MX FUEL</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; color: #999;">Emisja</td>
+                                <td></td>
+                                <td style="color: #00ff88;">✓ Zero</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card-description">
+                        Porównanie produktów, opcji, specyfikacji side-by-side
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Decision support</span>
+                    </div>
+                </div>
+
+                <!-- Card 6: Timeline -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">⏳</div>
+                        <div class="card-mini-title">
+                            <h3>Timeline / Process</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #ff8800;"></div>
+                            <div style="flex: 1; height: 2px; background: #ff8800;"></div>
+                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #ff8800;"></div>
+                            <div style="flex: 1; height: 2px; background: rgba(255,136,0,0.3);"></div>
+                            <div style="width: 20px; height: 20px; border-radius: 50%; background: rgba(255,136,0,0.3);"></div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #999; margin-top: 10px;">Krok 1 → Krok 2 → Krok 3</div>
+                    </div>
+                    <div class="card-description">
+                        Wizualizacja procesów sekwencyjnych, workflow
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Visual</span>
+                        <span class="meta-tag">Process</span>
+                    </div>
+                </div>
+
+                <!-- Card 7: Journey Map -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🗺️</div>
+                        <div class="card-mini-title">
+                            <h3>Journey Map</h3>
+                            <div class="complexity">MED-HIGH</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.75rem; color: #ccc; margin-bottom: 8px;">Customer Journey:</div>
+                        <div style="display: flex; gap: 8px; font-size: 1.5rem;">
+                            🔍 ➜ 😟 ➜ 🛒 ➜ 💳 ➜ ⭐
+                        </div>
+                        <div style="font-size: 0.7rem; color: #999; margin-top: 8px;">Research → Doubts → Visit → Buy → Happy</div>
+                    </div>
+                    <div class="card-description">
+                        Ścieżka klienta, touchpoints, pain points, emocje
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Empathy</span>
+                        <span class="meta-tag">Sales</span>
+                    </div>
+                </div>
+
+                <!-- Card 8: Lightbulb Moment -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">💡</div>
+                        <div class="card-mini-title">
+                            <h3>Lightbulb Moment</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview" style="text-align: center;">
+                        <div style="font-size: 3rem; animation: pulse 2s infinite;">💡</div>
+                        <div style="font-size: 1rem; font-weight: 600; color: #ffd700; margin-top: 10px;">73%</div>
+                        <div style="font-size: 0.75rem; color: #999;">szybsze zatrzymanie</div>
+                    </div>
+                    <div class="card-description">
+                        Single powerful insight, "Aha!" moment z wizualizacją
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Insight</span>
+                        <span class="meta-tag">Wow</span>
+                    </div>
+                </div>
+
+                <!-- Card 9: Moodboard -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🎨</div>
+                        <div class="card-mini-title">
+                            <h3>Moodboard</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;">
+                            <div style="aspect-ratio: 1; background: rgba(255,136,0,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center;">🛡️</div>
+                            <div style="aspect-ratio: 1; background: rgba(255,136,0,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center;">⚡</div>
+                            <div style="aspect-ratio: 1; background: rgba(255,136,0,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center;">🏗️</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Pinterest-style galeria inspiracji, lightbox preview
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Inspiration</span>
+                        <span class="meta-tag">Gallery</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORIA 2: SPRAWDZANIE WIEDZY -->
+        <section id="cat2" class="category-section">
+            <div class="category-header">
+                <div class="category-icon">✅</div>
+                <div class="category-title">
+                    <h2>Sprawdzanie Wiedzy</h2>
+                    <p>8 kart - Assessment, scoring, validation, feedback</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Card 10: Quiz -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">❓</div>
+                        <div class="card-mini-title">
+                            <h3>Quiz</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.85rem; margin-bottom: 10px;">Jaka głębokość cięcia COS350?</div>
+                        <div class="preview-quiz">
+                            <div class="option">□ 100mm</div>
+                            <div class="option" style="background: rgba(0,255,136,0.2); border-color: #00ff88;">☑ 125mm</div>
+                            <div class="option">□ 150mm</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Multiple choice z checkboxami, natychmiastowy feedback
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">3-5 pytań</span>
+                        <span class="meta-tag">XP</span>
+                    </div>
+                </div>
+
+                <!-- Card 11: True/False -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">❓</div>
+                        <div class="card-mini-title">
+                            <h3>True / False</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.85rem; margin-bottom: 12px;">RAPIDSTOP zatrzymuje tarczę w <3s</div>
+                        <div style="display: flex; gap: 10px;">
+                            <div style="flex: 1; padding: 10px; background: rgba(0,255,136,0.2); border: 1px solid #00ff88; border-radius: 8px; text-align: center; font-weight: 600;">✓ Prawda</div>
+                            <div style="flex: 1; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center;">✗ Fałsz</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Binary choice, bardzo szybki test wiedzy
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Fast</span>
+                        <span class="meta-tag">Immediate</span>
+                    </div>
+                </div>
+
+                <!-- Card 12: Fill Blanks -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">📝</div>
+                        <div class="card-mini-title">
+                            <h3>Fill Blanks</h3>
+                            <div class="complexity">LOW-MED</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.85rem; line-height: 1.6;">
+                            Przecinarka COS350 ma tarczę <span style="background: rgba(255,136,0,0.3); padding: 2px 8px; border-radius: 4px;">Ø350mm</span> i głębokość cięcia <span style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;">___</span>.
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 10px; font-size: 0.75rem;">
+                            <span style="padding: 5px 10px; background: rgba(255,255,255,0.05); border-radius: 6px;">100mm</span>
+                            <span style="padding: 5px 10px; background: rgba(255,255,255,0.05); border-radius: 6px;">125mm</span>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Uzupełnianie luk w tekście, word bank selection
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Active recall</span>
+                    </div>
+                </div>
+
+                <!-- Card 13: Matching Pairs -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🔗</div>
+                        <div class="card-mini-title">
+                            <h3>Matching Pairs</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.75rem;">
+                            <div style="padding: 8px; background: rgba(255,136,0,0.2); border-radius: 6px;">RAPIDSTOP</div>
+                            <div style="padding: 8px; background: rgba(255,136,0,0.2); border-radius: 6px;"><3s</div>
+                            <div style="padding: 8px; background: rgba(255,255,255,0.05); border-radius: 6px;">HD12.0</div>
+                            <div style="padding: 8px; background: rgba(255,255,255,0.05); border-radius: 6px;">125 cięć</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Kojarzenie par (click-based), concepts matching
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Association</span>
+                    </div>
+                </div>
+
+                <!-- Card 14: Ranking -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🔢</div>
+                        <div class="card-mini-title">
+                            <h3>Ranking</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.75rem; color: #999; margin-bottom: 8px;">Uporządkuj według priorytetu:</div>
+                        <div style="font-size: 0.75rem;">
+                            <div style="padding: 8px; background: rgba(255,255,255,0.05); border-left: 3px solid #ff8800; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                                <span>:::</span> Sprawdź baterie
+                            </div>
+                            <div style="padding: 8px; background: rgba(255,255,255,0.05); border-left: 3px solid #ff8800; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                                <span>:::</span> Załóż ochraniacze
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Drag & drop priorytetyzacja, sortowanie według ważności
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Drag&Drop</span>
+                        <span class="meta-tag">Order</span>
+                    </div>
+                </div>
+
+                <!-- Card 15: Speed Drill -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">⚡</div>
+                        <div class="card-mini-title">
+                            <h3>Speed Drill</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; font-weight: 700; color: #ff8800; margin-bottom: 8px;">60s</div>
+                            <div style="font-size: 0.75rem; color: #999; margin-bottom: 12px;">10 pytań blitzowych</div>
+                            <div style="font-size: 0.85rem;">7/10 poprawne - 85% 🔥</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Timed quiz (60s), rapid recall, competitive scoring
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Timer</span>
+                        <span class="meta-tag">Leaderboard</span>
+                    </div>
+                </div>
+
+                <!-- Card 16: Knowledge Roulette -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🎲</div>
+                        <div class="card-mini-title">
+                            <h3>Knowledge Roulette</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="text-align: center;">
+                            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: radial-gradient(circle, rgba(255,136,0,0.3) 0%, rgba(255,215,0,0.1) 100%); border: 3px solid #ff8800; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                                🎯
+                            </div>
+                            <div style="font-size: 0.75rem; color: #999;">Losuj pytanie</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Random quiz generator, shuffle animation, streak tracking
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Random</span>
+                        <span class="meta-tag">Daily</span>
+                    </div>
+                </div>
+
+                <!-- Card 17: Rating Scale -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">⭐</div>
+                        <div class="card-mini-title">
+                            <h3>Rating Scale</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.85rem; margin-bottom: 10px; text-align: center;">Jak oceniasz swoje umiejętności?</div>
+                        <div style="display: flex; justify-content: center; gap: 8px; font-size: 1.5rem;">
+                            <span style="color: #ffd700;">★</span>
+                            <span style="color: #ffd700;">★</span>
+                            <span style="color: #ffd700;">★</span>
+                            <span style="color: #ffd700;">★</span>
+                            <span style="color: rgba(255,215,0,0.3);">★</span>
+                        </div>
+                        <div style="font-size: 0.7rem; color: #999; text-align: center; margin-top: 8px;">4/5 - Dobry poziom</div>
+                    </div>
+                    <div class="card-description">
+                        Skala Likerta 1-5, self-assessment, confidence measurement
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Self-eval</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORIA 3: PRAKTYKA I ĆWICZENIA -->
+        <section id="cat3" class="category-section">
+            <div class="category-header">
+                <div class="category-icon">🏃</div>
+                <div class="category-title">
+                    <h2>Praktyka i Ćwiczenia</h2>
+                    <p>8 kart - Active learning, scenarios, skill building</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Card 18: Ćwiczenie -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">✍️</div>
+                        <div class="card-mini-title">
+                            <h3>Ćwiczenie</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.85rem; margin-bottom: 10px; font-weight: 600;">Scenariusz: Awaria na budowie</div>
+                        <textarea style="width: 100%; height: 60px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-family: inherit; padding: 8px; font-size: 0.75rem;" placeholder="Opisz swoje rozwiązanie..."></textarea>
+                    </div>
+                    <div class="card-description">
+                        Scenariusz + textarea, open-ended problem solving
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Practical</span>
+                        <span class="meta-tag">Open-ended</span>
+                    </div>
+                </div>
+
+                <!-- Card 19: Role-Play -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🎭</div>
+                        <div class="card-mini-title">
+                            <h3>Role-Play</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.75rem; margin-bottom: 8px;">
+                            <strong>Klient:</strong> "Dlaczego akumulatorowa?"<br>
+                            <strong>Ty:</strong>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.7rem;">
+                            <div style="padding: 6px; background: rgba(255,255,255,0.05); border-radius: 4px;">→ Zero emisji + mobilność</div>
+                            <div style="padding: 6px; background: rgba(255,255,255,0.05); border-radius: 4px;">→ To zależy od budżetu...</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Symulacja rozmowy z klientem, branching responses
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Sales</span>
+                        <span class="meta-tag">Conversation</span>
+                    </div>
+                </div>
+
+                <!-- Card 20: Czat/Dialog -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🗨️</div>
+                        <div class="card-mini-title">
+                            <h3>Czat / Dialog</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.7rem;">
+                            <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                                <div style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #ff8800, #ffd700);"></div>
+                                <div style="flex: 1; padding: 6px 10px; background: rgba(255,136,0,0.15); border-radius: 8px;">
+                                    Szukam przecinarki...
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                <div style="flex: 1; padding: 6px 10px; background: rgba(255,255,255,0.1); border-radius: 8px; text-align: right;">
+                                    Polecam COS350!
+                                </div>
+                                <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.2);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Real-time chat simulation, metrics (empathy, professionalism)
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">AI</span>
+                        <span class="meta-tag">Metrics</span>
+                    </div>
+                </div>
+
+                <!-- Card 21: Lab/Sandbox -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🔬</div>
+                        <div class="card-mini-title">
+                            <h3>Lab / Sandbox</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.75rem; margin-bottom: 8px;">Kalkulator czasu pracy:</div>
+                        <div style="margin-bottom: 6px;">
+                            <input type="range" style="width: 100%; height: 4px;" value="12" min="3" max="18">
+                            <div style="font-size: 0.7rem; color: #999;">Pojemność: 12 Ah</div>
+                        </div>
+                        <div style="text-align: center; font-size: 1.2rem; font-weight: 700; color: #ff8800;">45 min</div>
+                    </div>
+                    <div class="card-description">
+                        Interactive playground, what-if scenarios, real-time calc
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Interactive</span>
+                        <span class="meta-tag">Sliders</span>
+                    </div>
+                </div>
+
+                <!-- Card 22: Case Study -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🎯</div>
+                        <div class="card-mini-title">
+                            <h3>Case Study</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <div style="width: 20px; height: 20px; border-radius: 50%; background: #ff8800;"></div>
+                                <div>1. Wyzwanie</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <div style="width: 20px; height: 20px; border-radius: 50%; background: #ff8800;"></div>
+                                <div>2. Rozwiązanie</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 20px; height: 20px; border-radius: 50%; background: rgba(255,136,0,0.3);"></div>
+                                <div style="color: #999;">3. Wyniki</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Step-by-step breakdown, real-world examples, ROI analysis
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Real-world</span>
+                        <span class="meta-tag">Timeline</span>
+                    </div>
+                </div>
+
+                <!-- Card 23: Branching Scenario -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🔀</div>
+                        <div class="card-mini-title">
+                            <h3>Branching Scenario</h3>
+                            <div class="complexity">HIGH</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="text-align: center; font-size: 0.75rem;">
+                            <div style="margin-bottom: 8px;">Klient odmawia...</div>
+                            <div style="display: flex; justify-content: center; gap: 8px; font-size: 1.2rem;">
+                                <div>A</div>
+                                <div style="color: #ff8800;">→</div>
+                                <div>B</div>
+                            </div>
+                            <div style="margin-top: 8px; color: #999;">Wybór → Konsekwencje</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Complex decision tree, multiple outcomes, consequences
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Complex</span>
+                        <span class="meta-tag">Tree</span>
+                    </div>
+                </div>
+
+                <!-- Card 24: Peer Review -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🎤</div>
+                        <div class="card-mini-title">
+                            <h3>Peer Review</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.75rem; margin-bottom: 8px;">Oceń plan kolegi:</div>
+                        <div style="display: flex; justify-content: center; gap: 4px; font-size: 1.2rem; margin-bottom: 8px;">
+                            <span style="color: #ffd700;">★</span>
+                            <span style="color: #ffd700;">★</span>
+                            <span style="color: #ffd700;">★</span>
+                            <span style="color: #ffd700;">★</span>
+                            <span style="color: rgba(255,215,0,0.3);">★</span>
+                        </div>
+                        <textarea style="width: 100%; height: 40px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-family: inherit; padding: 6px; font-size: 0.7rem;" placeholder="Feedback..."></textarea>
+                    </div>
+                    <div class="card-description">
+                        Anonymous review, rating + feedback, community learning
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Social</span>
+                        <span class="meta-tag">Critical thinking</span>
+                    </div>
+                </div>
+
+                <!-- Card 25: Habit Builder -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🔄</div>
+                        <div class="card-mini-title">
+                            <h3>Habit Builder</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <div style="width: 16px; height: 16px; border: 2px solid #ff8800; border-radius: 4px;"></div>
+                                <div>Sprawdzaj baterie codziennie</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <div style="width: 16px; height: 16px; background: linear-gradient(135deg, #ff8800, #ffd700); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 0.7rem;">✓</div>
+                                <div>Czyść tarczę po użyciu</div>
+                            </div>
+                            <div style="margin-top: 10px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                                <div style="width: 40%; height: 100%; background: linear-gradient(90deg, #ff8800, #ffd700); border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Action commitment, deadline picker, reminder setup
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Behavior change</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORIA 4: GAMIFIKACJA -->
+        <section id="cat4" class="category-section">
+            <div class="category-header">
+                <div class="category-icon">🎮</div>
+                <div class="category-title">
+                    <h2>Gamifikacja i Engagement</h2>
+                    <p>8 kart - Fun, immediate feedback, competitive elements</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Card 26: Drag & Drop -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🔀</div>
+                        <div class="card-mini-title">
+                            <h3>Drag & Drop</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.7rem;">
+                            <div style="padding: 8px; background: rgba(255,136,0,0.2); border: 2px dashed rgba(255,136,0,0.5); border-radius: 6px; text-align: center;">Bezpieczeństwo</div>
+                            <div style="padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; text-align: center;">RAPIDSTOP</div>
+                            <div style="padding: 8px; background: rgba(255,136,0,0.2); border: 2px dashed rgba(255,136,0,0.5); border-radius: 6px; text-align: center;">Wydajność</div>
+                            <div style="padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; text-align: center;">HD12.0</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Kategoryzacja drag&drop, kinesthetic learning
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Interactive</span>
+                        <span class="meta-tag">Sorting</span>
+                    </div>
+                </div>
+
+                <!-- Card 27: Before/After Slider -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🖼️</div>
+                        <div class="card-mini-title">
+                            <h3>Before/After Slider</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="position: relative; height: 80px; background: linear-gradient(90deg, rgba(255,68,68,0.2) 0%, rgba(255,68,68,0.2) 50%, rgba(0,255,136,0.2) 50%, rgba(0,255,136,0.2) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <div style="position: absolute; left: 50%; width: 3px; height: 100%; background: #fff;"></div>
+                            <div style="display: flex; width: 100%; justify-content: space-around; font-size: 2rem;">
+                                <div>😓</div>
+                                <div>🚀</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Visual comparison slider, before/after transformation
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Visual</span>
+                        <span class="meta-tag">Slider</span>
+                    </div>
+                </div>
+
+                <!-- Card 28: Hotspot Image -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">📍</div>
+                        <div class="card-mini-title">
+                            <h3>Hotspot Image</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="position: relative; height: 100px; background: rgba(255,136,0,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <div style="font-size: 3rem;">🔧</div>
+                            <div style="position: absolute; top: 20%; left: 30%; width: 24px; height: 24px; background: rgba(255,136,0,0.5); border: 2px solid #ff8800; border-radius: 50%; animation: pulse 2s infinite;"></div>
+                            <div style="position: absolute; bottom: 30%; right: 25%; width: 24px; height: 24px; background: rgba(255,136,0,0.5); border: 2px solid #ff8800; border-radius: 50%; animation: pulse 2s infinite;"></div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Klikalne punkty na obrazie, discover interactions
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Discovery</span>
+                        <span class="meta-tag">Click</span>
+                    </div>
+                </div>
+
+                <!-- Card 29: Checklist -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">✅</div>
+                        <div class="card-mini-title">
+                            <h3>Checklist</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <div style="width: 16px; height: 16px; background: linear-gradient(135deg, #ff8800, #ffd700); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 0.7rem;">✓</div>
+                                <div>Sprawdź stan baterii</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <div style="width: 16px; height: 16px; background: linear-gradient(135deg, #ff8800, #ffd700); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 0.7rem;">✓</div>
+                                <div>Załóż okulary ochronne</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 16px; height: 16px; border: 2px solid #ff8800; border-radius: 4px;"></div>
+                                <div style="color: #999;">Sprawdź tarczę</div>
+                            </div>
+                            <div style="margin-top: 8px; font-size: 0.7rem; color: #ff8800;">2/3 gotowe (67%)</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Task list z progressem, satisfaction tracking
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Progress</span>
+                        <span class="meta-tag">Tasks</span>
+                    </div>
+                </div>
+
+                <!-- Card 30: Achievement Unlock -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🏆</div>
+                        <div class="card-mini-title">
+                            <h3>Achievement Unlock</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="text-align: center;">
+                            <div style="width: 60px; height: 60px; margin: 0 auto 10px; background: linear-gradient(135deg, #ff8800, #ffd700); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 0 20px rgba(255,136,0,0.5);">
+                                🏆
+                            </div>
+                            <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 5px;">Milwaukee Expert</div>
+                            <div style="font-size: 0.7rem; color: #ffd700;">+500 XP</div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Badge unlock celebration, stats, social share
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Celebration</span>
+                        <span class="meta-tag">Badge</span>
+                    </div>
+                </div>
+
+                <!-- Card 31: Progress Dashboard -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">📊</div>
+                        <div class="card-mini-title">
+                            <h3>Progress Dashboard</h3>
+                            <div class="complexity">MED-HIGH</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.7rem; text-align: center;">
+                            <div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #ff8800;">2,450</div>
+                                <div style="color: #999;">XP</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #ff8800;">87%</div>
+                                <div style="color: #999;">Celność</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #ff8800;">12</div>
+                                <div style="color: #999;">Lekcji</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.2rem; font-weight: 700; color: #ff8800;">4.5h</div>
+                                <div style="color: #999;">Czas</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Personal analytics, XP charts, milestones
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Stats</span>
+                        <span class="meta-tag">Charts</span>
+                    </div>
+                </div>
+
+                <!-- Card 32: Before/After Gallery -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">📸</div>
+                        <div class="card-mini-title">
+                            <h3>Before/After Gallery</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div style="aspect-ratio: 1; background: rgba(255,68,68,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">😓</div>
+                            <div style="aspect-ratio: 1; background: rgba(0,255,136,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🚀</div>
+                        </div>
+                        <div style="font-size: 0.7rem; text-align: center; margin-top: 8px;">
+                            <span style="color: #ff4444;">6h</span> → <span style="color: #00ff88;">8.5h</span>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        Transformation showcase, metrics comparison
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Results</span>
+                        <span class="meta-tag">ROI</span>
+                    </div>
+                </div>
+
+                <!-- Card 33: Calculator -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🧮</div>
+                        <div class="card-mini-title">
+                            <h3>Calculator</h3>
+                            <div class="complexity">MEDIUM</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.75rem; margin-bottom: 8px;">Moment obrotowy:</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.7rem; margin-bottom: 10px;">
+                            <input type="text" value="120" style="padding: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: #fff; text-align: center;">
+                            <input type="text" value="5370" style="padding: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: #fff; text-align: center;">
+                        </div>
+                        <div style="text-align: center; font-size: 1.2rem; font-weight: 700; color: #ff8800;">6,744 W</div>
+                    </div>
+                    <div class="card-description">
+                        Interactive computation, ROI calculator, specs
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Utility</span>
+                        <span class="meta-tag">Real-time</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORIA 5: REFLEKSJA I INSIGHT -->
+        <section id="cat5" class="category-section">
+            <div class="category-header">
+                <div class="category-icon">💭</div>
+                <div class="category-title">
+                    <h2>Refleksja i Insight</h2>
+                    <p>7 kart - Metacognition, deep learning, behavior change</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Card 34: Refleksja -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">💭</div>
+                        <div class="card-mini-title">
+                            <h3>Refleksja</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="font-size: 0.85rem; margin-bottom: 10px; font-weight: 600;">Co zastosujesz w swojej pracy?</div>
+                        <textarea style="width: 100%; height: 60px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-family: inherit; padding: 8px; font-size: 0.75rem;" placeholder="Twoja refleksja..."></textarea>
+                        <div style="font-size: 0.7rem; color: #999; margin-top: 6px;">Następne kroki: ___</div>
+                    </div>
+                    <div class="card-description">
+                        Guided questions, summary, next steps, last card
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Closing</span>
+                        <span class="meta-tag">Action plan</span>
+                    </div>
+                </div>
+
+                <!-- Lightbulb Moment already in Category 1 -->
+
+                <!-- Case Study already in Category 3 -->
+
+                <!-- Habit Builder already in Category 3 -->
+
+                <!-- Card 35: Bezpieczeństwo -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🛡️</div>
+                        <div class="card-mini-title">
+                            <h3>Bezpieczeństwo</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview">
+                        <div style="background: rgba(255,68,68,0.2); border: 1px solid rgba(255,68,68,0.5); border-radius: 8px; padding: 12px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <div style="font-size: 1.5rem;">⚠️</div>
+                                <div style="font-size: 0.9rem; font-weight: 600;">OSTRZEŻENIE</div>
+                            </div>
+                            <div style="font-size: 0.75rem; line-height: 1.4;">
+                                Zawsze używaj ochraniaczy słuchu i okularów ochronnych
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-description">
+                        BHP procedures, warnings, safety checklists
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Critical</span>
+                        <span class="meta-tag">BHP</span>
+                    </div>
+                </div>
+
+                <!-- Rating Scale already in Category 2 -->
+
+                <!-- Journey Map already in Category 1 -->
+            </div>
+        </section>
+
+        <!-- KATEGORIA 6: NARZĘDZIA WSPIERAJĄCE -->
+        <section id="cat6" class="category-section">
+            <div class="category-header">
+                <div class="category-icon">🛠️</div>
+                <div class="category-title">
+                    <h2>Narzędzia Wspierające</h2>
+                    <p>8 kart - Utility, calculation, decision support, reference</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Calculator already in Category 4 -->
+                <!-- Comparison Table already in Category 1 -->
+                <!-- Video already in Category 1 -->
+                <!-- Code Snippet already in Category 1 -->
+                <!-- Lab/Sandbox already in Category 3 -->
+                <!-- Timeline already in Category 1 -->
+                <!-- Journey Map already in Category 1 -->
+                <!-- Bezpieczeństwo already in Category 5 -->
+
+                <div class="card-mini" style="grid-column: 1 / -1; text-align: center; padding: 40px; background: rgba(255,215,0,0.1);">
+                    <div style="font-size: 1.2rem; color: #ffd700; margin-bottom: 10px;">ℹ️ Kategoria Narzędzia</div>
+                    <div style="font-size: 0.9rem; color: #999;">
+                        Karty narzędziowe znajdują się w innych kategoriach:<br>
+                        🧮 Calculator (Gamifikacja) • 📋 Comparison (Prezentacja) • 🎥 Video (Prezentacja)<br>
+                        💻 Code Snippet (Prezentacja) • 🔬 Lab/Sandbox (Praktyka) • ⏳ Timeline (Prezentacja)<br>
+                        🗺️ Journey Map (Prezentacja) • 🛡️ Bezpieczeństwo (Refleksja)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KATEGORIA 7: MEMORYZACJA -->
+        <section id="cat7" class="category-section">
+            <div class="category-header">
+                <div class="category-icon">🎴</div>
+                <div class="category-title">
+                    <h2>Memoryzacja</h2>
+                    <p>7 kart - Spaced repetition, active recall, review</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Card 36: Fiszki -->
+                <div class="card-mini">
+                    <div class="card-mini-header">
+                        <div class="card-mini-icon">🎴</div>
+                        <div class="card-mini-title">
+                            <h3>Fiszki / Flashcards</h3>
+                            <div class="complexity">LOW</div>
+                        </div>
+                    </div>
+                    <div class="card-preview preview-flashcard">
+                        <div class="flashcard-inner">
+                            <div style="font-size: 1.2rem; font-weight: 600; text-align: center;">
+                                RAPIDSTOP
+                            </div>
+                        </div>
+                        <div style="position: absolute; bottom: 5px; right: 5px; font-size: 0.7rem; color: #999;">Kliknij aby odwrócić</div>
+                    </div>
+                    <div class="card-description">
+                        10 flashcards z flip 3D, spaced repetition
+                    </div>
+                    <div class="card-meta">
+                        <span class="meta-tag">Memory</span>
+                        <span class="meta-tag">Flip</span>
+                    </div>
+                </div>
+
+                <!-- Fill Blanks already in Category 2 -->
+                <!-- True/False already in Category 2 -->
+                <!-- Matching Pairs already in Category 2 -->
+                <!-- Code Snippet already in Category 1 -->
+                <!-- Speed Drill already in Category 2 -->
+                <!-- Knowledge Roulette already in Category 2 -->
+
+                <div class="card-mini" style="grid-column: 1 / -1; text-align: center; padding: 40px; background: rgba(255,215,0,0.1);">
+                    <div style="font-size: 1.2rem; color: #ffd700; margin-bottom: 10px;">ℹ️ Kategoria Memoryzacja</div>
+                    <div style="font-size: 0.9rem; color: #999;">
+                        Karty do memoryzacji znajdują się w kategorii Assessment:<br>
+                        🎴 Fiszki (Memoryzacja) • 📝 Fill Blanks (Assessment) • ❓ True/False (Assessment)<br>
+                        🔗 Matching Pairs (Assessment) • 💻 Code Snippet (Prezentacja)<br>
+                        ⚡ Speed Drill (Assessment) • 🎲 Knowledge Roulette (Assessment)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 60px 20px; margin-top: 40px; border-top: 1px solid rgba(255, 136, 0, 0.2);">
+            <div style="font-size: 2rem; margin-bottom: 15px;">✅</div>
+            <h3 style="font-size: 1.8rem; margin-bottom: 10px;">Wszystkie 36 typów kart</h3>
+            <p style="color: #999; margin-bottom: 20px;">
+                7 kategorii funkcjonalnych • Milwaukee MX FUEL Training Platform
+            </p>
+            <div style="font-size: 0.85rem; color: #666;">
+                Created with ❤️ by GitHub Copilot • 17 stycznia 2026
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

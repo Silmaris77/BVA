@@ -12,16 +12,20 @@ interface LessonCardProps {
         card_count: number
     }
     progress?: {
-        completed_at: Date | null
+        status: 'not_started' | 'in_progress' | 'completed'
+        started_at: string | null
+        completed_at: string | null
         current_card_index: number
     }
     onClick: () => void
 }
 
 export default function LessonCard({ lesson, progress, onClick }: LessonCardProps) {
-    const isCompleted = progress?.completed_at !== null
-    const isInProgress = progress && progress.current_card_index > 0 && !isCompleted
-    const progressPercentage = progress ? Math.round((progress.current_card_index / lesson.card_count) * 100) : 0
+    const isCompleted = progress?.status === 'completed'
+    const isInProgress = progress?.status === 'in_progress'
+    const progressPercentage = progress && lesson.card_count > 0
+        ? Math.round(((progress.current_card_index || 0) / lesson.card_count) * 100)
+        : 0
 
     // Category colors
     const categoryColors: Record<string, string> = {

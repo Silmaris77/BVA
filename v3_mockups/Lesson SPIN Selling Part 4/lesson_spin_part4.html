@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIN Selling - Część 4: Finalizacja</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --situation-color: #2196F3;
+            --problem-color: #F44336;
+            --implication-color: #FF9800;
+            --need-payoff-color: #4CAF50;
+            --spin-gradient: linear-gradient(135deg, #2196F3 0%, #F44336 33%, #FF9800 66%, #4CAF50 100%);
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1f3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8da;
+            --accent: #00d4ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .lesson-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .lesson-header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--spin-gradient);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .lesson-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lesson-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-container {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--spin-gradient);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--text-secondary);
+        }
+
+        .lesson-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lesson-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+        }
+
+        .card-title-group {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .card-title-group h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .card-time {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* Card 12: Matching */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .matching-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-align: center;
+        }
+
+        .match-item {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: move;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .match-item:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .match-item.dragging {
+            opacity: 0.5;
+        }
+
+        .match-item.selected {
+            border-color: var(--accent);
+            background: rgba(0,212,255,0.15);
+        }
+
+        .match-item.correct {
+            border-color: var(--need-payoff-color);
+            background: rgba(76,175,80,0.2);
+        }
+
+        .match-item.incorrect {
+            border-color: var(--problem-color);
+            background: rgba(244,67,54,0.2);
+        }
+
+        .error-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .solution-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .match-dropzone {
+            min-height: 80px;
+            background: rgba(255,255,255,0.03);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .match-dropzone.drag-over {
+            border-color: var(--accent);
+            background: rgba(0,212,255,0.1);
+        }
+
+        .match-dropzone.filled {
+            border-style: solid;
+            border-color: var(--accent);
+        }
+
+        .match-feedback {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .match-feedback.show {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card 13: Exercise Template */
+        .template-container {
+            background: rgba(255,255,255,0.03);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .template-section {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .template-section.situation {
+            border-left-color: var(--situation-color);
+        }
+
+        .template-section.problem {
+            border-left-color: var(--problem-color);
+        }
+
+        .template-section.implication {
+            border-left-color: var(--implication-color);
+        }
+
+        .template-section.need-payoff {
+            border-left-color: var(--need-payoff-color);
+        }
+
+        .template-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .template-hint {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .template-input {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .template-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0,212,255,0.3);
+        }
+
+        .template-input.product-input {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .template-examples {
+            background: rgba(0,212,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 2px solid var(--accent);
+        }
+
+        .template-examples h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .template-examples ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .template-examples li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .template-examples li:last-child {
+            border-bottom: none;
+        }
+
+        .export-btn {
+            background: var(--spin-gradient);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.4);
+        }
+
+        /* Card 14: Reflection */
+        .reflection-container {
+            background: rgba(255,255,255,0.03);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .badge-display {
+            text-align: center;
+            padding: 50px;
+            background: var(--spin-gradient);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge-display::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .badge-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge-xp {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .key-takeaways {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .key-takeaways h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+        }
+
+        .takeaway-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .takeaway-number {
+            font-size: 2rem;
+            font-weight: bold;
+            background: var(--spin-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            min-width: 40px;
+        }
+
+        .takeaway-content h4 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .takeaway-content p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .next-steps {
+            background: var(--spin-gradient);
+            padding: 35px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .next-steps h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .step-item {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .step-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .completion-message {
+            text-align: center;
+            padding: 40px;
+            background: rgba(76,175,80,0.2);
+            border-radius: 15px;
+            margin-top: 40px;
+            border: 2px solid var(--need-payoff-color);
+        }
+
+        .completion-message h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--need-payoff-color);
+        }
+
+        .completion-message p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        /* Navigation */
+        .card-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            background: var(--spin-gradient);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,212,255,0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.finish {
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .matching-container {
+                grid-template-columns: 1fr;
+            }
+
+            .badge-icon {
+                font-size: 3.5rem;
+            }
+
+            .badge-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <!-- Header -->
+        <div class="lesson-header">
+            <h1>🎯 SPIN Selling - Część 4</h1>
+            <p>Finalizacja - Karty 12-14</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-text">
+                Karta <span id="currentCard">12</span> z <span id="totalCards">14</span>
+            </div>
+        </div>
+
+        <!-- Card 12: Matching -->
+        <div class="lesson-card active" data-card="12">
+            <div class="card-header">
+                <span class="card-icon">🔗</span>
+                <div class="card-title-group">
+                    <h2>Typowe błędy w SPIN - Dopasuj rozwiązanie</h2>
+                    <span class="card-subtitle">Karta 12 z 14 • Matching</span>
+                </div>
+                <span class="card-time">⏱️ 4 min</span>
+            </div>
+
+            <div class="matching-content">
+                <p style="font-size: 1.2rem; margin-bottom: 30px; line-height: 1.8; text-align: center;">
+                    <strong>Kliknij błąd, a następnie kliknij odpowiadające rozwiązanie.</strong><br>
+                    Dopasuj wszystkie 6 par.
+                </p>
+
+                <div class="matching-container">
+                    <!-- Errors Column -->
+                    <div class="matching-column">
+                        <h3>❌ Błędy</h3>
+                        <div class="match-item error" data-id="e1" onclick="selectError(this)">
+                            <span class="error-icon">🚫</span>
+                            <strong>Za dużo Situation Questions</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                20 minut pytań o firmę, budżet, procesy...
+                            </span>
+                        </div>
+
+                        <div class="match-item error" data-id="e2" onclick="selectError(this)">
+                            <span class="error-icon">🚫</span>
+                            <strong>Brak pytań Implication</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Problem zidentyfikowany, ale od razu skok do prezentacji
+                            </span>
+                        </div>
+
+                        <div class="match-item error" data-id="e3" onclick="selectError(this)">
+                            <span class="error-icon">🚫</span>
+                            <strong>Ty opisujesz korzyści (nie klient)</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                "Nasz produkt zwiększy Twoją produktywność o 30%"
+                            </span>
+                        </div>
+
+                        <div class="match-item error" data-id="e4" onclick="selectError(this)">
+                            <span class="error-icon">🚫</span>
+                            <strong>Zakładasz problem (nie pytasz)</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                "Pewnie macie problem z raportowaniem, prawda?"
+                            </span>
+                        </div>
+
+                        <div class="match-item error" data-id="e5" onclick="selectError(this)">
+                            <span class="error-icon">🚫</span>
+                            <strong>Implication bez Problem</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                "Ile to kosztuje?" - ale klient nie przyznał się do problemu
+                            </span>
+                        </div>
+
+                        <div class="match-item error" data-id="e6" onclick="selectError(this)">
+                            <span class="error-icon">🚫</span>
+                            <strong>Prezentacja produktu przed Need-Payoff</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Pokazujesz demo zanim klient sam przekona się o wartości
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Solutions Column -->
+                    <div class="matching-column">
+                        <h3>✅ Rozwiązania</h3>
+                        <div class="match-item solution" data-id="s1" data-correct="e1" onclick="selectSolution(this)">
+                            <span class="solution-icon">💡</span>
+                            <strong>Max 3-4 Situation, potem Problem</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Szybko do sedna: "Jakie wyzwania macie z...?"
+                            </span>
+                        </div>
+
+                        <div class="match-item solution" data-id="s2" data-correct="e2" onclick="selectSolution(this)">
+                            <span class="solution-icon">💡</span>
+                            <strong>Pogłębiaj konsekwencje: "Ile to kosztuje?"</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Buduj urgency przez koszty NIErozwiązania
+                            </span>
+                        </div>
+
+                        <div class="match-item solution" data-id="s3" data-correct="e3" onclick="selectSolution(this)">
+                            <span class="solution-icon">💡</span>
+                            <strong>Need-Payoff: "Gdyby... co by się zmieniło?"</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Niech klient SAM opowie o korzyściach
+                            </span>
+                        </div>
+
+                        <div class="match-item solution" data-id="s4" data-correct="e4" onclick="selectSolution(this)">
+                            <span class="solution-icon">💡</span>
+                            <strong>Pytaj otwarcie: "Jakie wyzwania macie?"</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Niech klient sam zidentyfikuje problem
+                            </span>
+                        </div>
+
+                        <div class="match-item solution" data-id="s5" data-correct="e5" onclick="selectSolution(this)">
+                            <span class="solution-icon">💡</span>
+                            <strong>Najpierw Problem, potem Implication</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Sekwencja: Problem → Implication → Need-Payoff
+                            </span>
+                        </div>
+
+                        <div class="match-item solution" data-id="s6" data-correct="e6" onclick="selectSolution(this)">
+                            <span class="solution-icon">💡</span>
+                            <strong>Prezentuj PO Need-Payoff</strong><br>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Gdy klient SAM mówi o wartości - wtedy show demo
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="nav-btn" onclick="checkMatching()" style="width: 100%; margin-top: 30px;">
+                    Sprawdź dopasowania
+                </button>
+
+                <div class="match-feedback" id="matchFeedback">
+                    <div id="matchFeedbackText"></div>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-btn prev" onclick="prevCard()" disabled>← Poprzednia</button>
+                <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 13: Exercise Template -->
+        <div class="lesson-card" data-card="13">
+            <div class="card-header">
+                <span class="card-icon">📋</span>
+                <div class="card-title-group">
+                    <h2>Twój własny SPIN Script</h2>
+                    <span class="card-subtitle">Karta 13 z 14 • Exercise</span>
+                </div>
+                <span class="card-time">⏱️ 5 min</span>
+            </div>
+
+            <div class="template-content">
+                <p style="font-size: 1.2rem; margin-bottom: 30px; line-height: 1.8; text-align: center;">
+                    Przygotuj <strong>10-12 pytań SPIN dla swojego produktu/usługi.</strong><br>
+                    Wypełnij szablon, a następnie przetestuj w prawdziwej rozmowie!
+                </p>
+
+                <div class="template-container">
+                    <!-- Product Input -->
+                    <div style="margin-bottom: 40px;">
+                        <label style="font-size: 1.3rem; font-weight: bold; display: block; margin-bottom: 15px;">
+                            🎯 Twój produkt/usługa:
+                        </label>
+                        <input type="text" class="template-input product-input" id="productName" 
+                               placeholder="np. System CRM dla firm budowlanych">
+                    </div>
+
+                    <!-- Situation Section -->
+                    <div class="template-section situation">
+                        <h3>
+                            <span style="color: var(--situation-color);">📊 Situation Questions (2-3)</span>
+                        </h3>
+                        <div class="template-hint">
+                            Cel: Poznać kontekst klienta (firma, procesy, narzędzia, budżet)
+                        </div>
+                        <input type="text" class="template-input" placeholder="1. np. Ile osób w dziale sprzedaży?">
+                        <input type="text" class="template-input" placeholder="2. np. Jaki system CRM używacie obecnie?">
+                        <input type="text" class="template-input" placeholder="3. np. Jaki budżet rocznie na IT?">
+                    </div>
+
+                    <!-- Problem Section -->
+                    <div class="template-section problem">
+                        <h3>
+                            <span style="color: var(--problem-color);">❓ Problem Questions (3-4)</span>
+                        </h3>
+                        <div class="template-hint">
+                            Cel: Odkryć trudności, frustracje, wyzwania
+                        </div>
+                        <input type="text" class="template-input" placeholder="1. np. Jakie wyzwania macie z raportowaniem?">
+                        <input type="text" class="template-input" placeholder="2. np. Jak często zdarzają się duplikaty w bazie?">
+                        <input type="text" class="template-input" placeholder="3. np. Co was najbardziej frustruje w obecnym systemie?">
+                        <input type="text" class="template-input" placeholder="4. np. Czy tracicie leady przez brak follow-up?">
+                    </div>
+
+                    <!-- Implication Section -->
+                    <div class="template-section implication">
+                        <h3>
+                            <span style="color: var(--implication-color);">💰 Implication Questions (2-3)</span>
+                        </h3>
+                        <div class="template-hint">
+                            Cel: Pogłębić konsekwencje problemu (koszt, czas, reputacja)
+                        </div>
+                        <input type="text" class="template-input" placeholder="1. np. Ile kosztuje was zgubiony lead (średnio)?">
+                        <input type="text" class="template-input" placeholder="2. np. Jak duplikaty wpływają na reputację firmy?">
+                        <input type="text" class="template-input" placeholder="3. np. Ile godzin miesięcznie tracicie na ręczne raporty?">
+                    </div>
+
+                    <!-- Need-Payoff Section -->
+                    <div class="template-section need-payoff">
+                        <h3>
+                            <span style="color: var(--need-payoff-color);">🌟 Need-Payoff Questions (2-3)</span>
+                        </h3>
+                        <div class="template-hint">
+                            Cel: Niech klient SAM opowie o wartości rozwiązania
+                        </div>
+                        <input type="text" class="template-input" placeholder="1. np. Gdyby automatyzacja raportów - ile czasu zaoszczędzilibyście?">
+                        <input type="text" class="template-input" placeholder="2. np. Jak by się zmieniła konwersja gdyby 0% leadów się nie gubiło?">
+                        <input type="text" class="template-input" placeholder="3. np. Co by oznaczało dla zespołu gdyby mieli wszystkie dane w 1 miejscu?">
+                    </div>
+
+                    <!-- Examples -->
+                    <div class="template-examples">
+                        <h4>💡 Tips:</h4>
+                        <ul>
+                            <li><strong>Situation:</strong> Max 3-4 pytania, potem przechodź do Problem</li>
+                            <li><strong>Problem:</strong> Pytaj otwarcie: "Jakie wyzwania...?", "Co was frustruje...?"</li>
+                            <li><strong>Implication:</strong> Zawsze w PLN/godzinach/liczbach: "Ile to kosztuje?"</li>
+                            <li><strong>Need-Payoff:</strong> Używaj "Gdyby...", "Co by się zmieniło...", "Jak wyglądałoby..."</li>
+                        </ul>
+                    </div>
+
+                    <button class="export-btn" onclick="exportTemplate()">
+                        📥 Pobierz szablon jako TXT
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 14: Reflection & Badge -->
+        <div class="lesson-card" data-card="14">
+            <div class="card-header">
+                <span class="card-icon">🏆</span>
+                <div class="card-title-group">
+                    <h2>Gratulacje! Ukończyłeś SPIN Selling</h2>
+                    <span class="card-subtitle">Karta 14 z 14 • Reflection</span>
+                </div>
+                <span class="card-time">⏱️ 3 min</span>
+            </div>
+
+            <div class="reflection-content">
+                <!-- Badge -->
+                <div class="badge-display">
+                    <div class="badge-icon">🎯</div>
+                    <div class="badge-title">SPIN Selling Master</div>
+                    <div class="badge-xp">+200 XP • Odznaka zdobyta!</div>
+                </div>
+
+                <!-- Key Takeaways -->
+                <div class="key-takeaways">
+                    <h3>🔑 Kluczowe wnioski z lekcji</h3>
+
+                    <div class="takeaway-item">
+                        <div class="takeaway-number">1</div>
+                        <div class="takeaway-content">
+                            <h4>SPIN = 4 typy pytań (S→P→I→N)</h4>
+                            <p>
+                                <strong style="color: var(--situation-color);">Situation</strong> (kontekst) → 
+                                <strong style="color: var(--problem-color);">Problem</strong> (odkryj ból) → 
+                                <strong style="color: var(--implication-color);">Implication</strong> (pogłęb koszt) → 
+                                <strong style="color: var(--need-payoff-color);">Need-Payoff</strong> (klient opisuje wartość)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="takeaway-item">
+                        <div class="takeaway-number">2</div>
+                        <div class="takeaway-content">
+                            <h4>60% pytań = 60% sukcesu</h4>
+                            <p>
+                                Badania 35,000 rozmów sprzedażowych pokazują: najlepsi handlowcy pytają 2x więcej niż mówią. 
+                                Tradycyjny pitch = 20% pytań, 80% prezentacji. SPIN odwraca to na głowę.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="takeaway-item">
+                        <div class="takeaway-number">3</div>
+                        <div class="takeaway-content">
+                            <h4>Klient SAM się przekonuje</h4>
+                            <p>
+                                Need-Payoff Questions sprawią, że klient SAM opowie Ci o korzyściach Twojego produktu. 
+                                To najsilniejsza forma perswazji - cognitive dissonance + self-discovery.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="takeaway-item">
+                        <div class="takeaway-number">4</div>
+                        <div class="takeaway-content">
+                            <h4>Implication = urgency + ROI</h4>
+                            <p>
+                                Pytania Implication przekładają problem na PLN/godziny/liczby. "Ile tracicie rocznie?" buduje pilność 
+                                i pokazuje ROI zanim jeszcze przedstawisz cenę.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="takeaway-item">
+                        <div class="takeaway-number">5</div>
+                        <div class="takeaway-content">
+                            <h4>Prezentuj PO Need-Payoff (nie przed)</h4>
+                            <p>
+                                Większość handlowców prezentuje za wcześnie. SPIN wymaga cierpliwości: najpierw Need-Payoff 
+                                (klient SAM chce rozwiązania), potem demo/prezentacja.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Steps -->
+                <div class="next-steps">
+                    <h3>🚀 Twoje następne kroki</h3>
+
+                    <div class="step-item">
+                        <div class="step-icon">1️⃣</div>
+                        <div class="step-text">
+                            <strong>Przygotuj 10-12 pytań SPIN</strong> dla swojego produktu (użyj szablonu z Karty 13)
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-icon">2️⃣</div>
+                        <div class="step-text">
+                            <strong>Przetestuj w 3 rozmowach</strong> sprzedażowych w tym tygodniu (zapisuj wyniki)
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-icon">3️⃣</div>
+                        <div class="step-text">
+                            <strong>Analizuj nagrania</strong> - ile % czasu pytałeś vs mówiłeś? (cel: 60/40)
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-icon">4️⃣</div>
+                        <div class="step-text">
+                            <strong>Przeczytaj "SPIN Selling" Neil Rackham</strong> - kompletna metodologia (180 stron)
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-icon">5️⃣</div>
+                        <div class="step-text">
+                            <strong>Wdroż do CRM</strong> - dodaj pole "SPIN Stage" do każdego leada (S/P/I/N)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completion Message -->
+                <div class="completion-message">
+                    <h2>🎉 Lekcja ukończona!</h2>
+                    <p>
+                        Przeszedłeś przez 14 kart, 4 części, ~50 minut materiału.<br>
+                        SPIN Selling to nie teoria - to <strong>35,000 rozmów sprzedażowych</strong> przetworzone w metodologię.<br><br>
+                        
+                        <strong>Teraz Twoja kolej:</strong> przetestuj SPIN w realnym świecie i zobacz rezultaty! 🚀
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-btn finish" onclick="finishLesson()">✓ Zakończ lekcję</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentCard = 12;
+        const totalCards = 14;
+
+        // Progress
+        function updateProgress() {
+            const progress = ((currentCard - 11) / 3) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentCard').textContent = currentCard;
+        }
+
+        function showCard(cardNumber) {
+            document.querySelectorAll('.lesson-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            const card = document.querySelector(`[data-card="${cardNumber}"]`);
+            if (card) {
+                card.classList.add('active');
+                currentCard = cardNumber;
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards) {
+                showCard(currentCard + 1);
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 12) {
+                showCard(currentCard - 1);
+            }
+        }
+
+        // Card 12: Matching
+        let selectedError = null;
+        let matches = {};
+
+        function selectError(element) {
+            // Deselect previous
+            document.querySelectorAll('.error').forEach(e => e.classList.remove('selected'));
+            
+            // Select current
+            element.classList.add('selected');
+            selectedError = element.dataset.id;
+        }
+
+        function selectSolution(element) {
+            if (!selectedError) {
+                alert('Najpierw wybierz błąd (lewa kolumna)');
+                return;
+            }
+
+            // Store match
+            matches[selectedError] = element.dataset.id;
+            
+            // Visual feedback
+            element.classList.add('selected');
+            document.querySelector(`[data-id="${selectedError}"]`).classList.add('selected');
+            
+            // Reset selection
+            selectedError = null;
+        }
+
+        function checkMatching() {
+            const correctPairs = {
+                'e1': 's1',
+                'e2': 's2',
+                'e3': 's3',
+                'e4': 's4',
+                'e5': 's5',
+                'e6': 's6'
+            };
+
+            let correctCount = 0;
+            
+            // Check each match
+            for (const [error, solution] of Object.entries(matches)) {
+                const errorEl = document.querySelector(`.error[data-id="${error}"]`);
+                const solutionEl = document.querySelector(`.solution[data-id="${solution}"]`);
+                
+                if (correctPairs[error] === solution) {
+                    errorEl.classList.add('correct');
+                    solutionEl.classList.add('correct');
+                    correctCount++;
+                } else {
+                    errorEl.classList.add('incorrect');
+                    solutionEl.classList.add('incorrect');
+                }
+            }
+
+            // Show feedback
+            const feedback = document.getElementById('matchFeedback');
+            const feedbackText = document.getElementById('matchFeedbackText');
+            
+            if (correctCount === 6) {
+                feedback.className = 'match-feedback show';
+                feedback.style.border = '2px solid var(--need-payoff-color)';
+                feedback.style.background = 'rgba(76,175,80,0.2)';
+                feedbackText.innerHTML = `
+                    <strong style="font-size: 1.5rem; color: var(--need-payoff-color);">🎯 Perfekcyjnie!</strong><br><br>
+                    <span style="font-size: 1.1rem;">
+                        Wszystkie 6 par dopasowane poprawnie!<br>
+                        Rozumiesz typowe pułapki SPIN i wiesz jak ich unikać. 💪
+                    </span>
+                `;
+            } else {
+                feedback.className = 'match-feedback show';
+                feedback.style.border = '2px solid var(--implication-color)';
+                feedback.style.background = 'rgba(255,152,0,0.2)';
+                feedbackText.innerHTML = `
+                    <strong style="font-size: 1.3rem;">Wynik: ${correctCount}/6</strong><br><br>
+                    <span style="font-size: 1.05rem;">
+                        Sprawdź poprawne pary (zielone) i spróbuj ponownie z błędnymi (czerwone).<br>
+                        Kliknij "Sprawdź dopasowania" jeszcze raz po poprawieniu.
+                    </span>
+                `;
+            }
+        }
+
+        // Card 13: Export Template
+        function exportTemplate() {
+            const productName = document.getElementById('productName').value || '[TWÓJ PRODUKT]';
+            const inputs = document.querySelectorAll('.template-section input');
+            
+            let content = `SPIN SELLING SCRIPT\n`;
+            content += `Produkt/Usługa: ${productName}\n`;
+            content += `Data: ${new Date().toLocaleDateString('pl-PL')}\n\n`;
+            content += `========================================\n\n`;
+            
+            content += `📊 SITUATION QUESTIONS (2-3 pytania)\n`;
+            content += `Cel: Poznać kontekst klienta\n\n`;
+            for (let i = 0; i < 3; i++) {
+                const val = inputs[i].value || `[Pytanie ${i+1}]`;
+                content += `${i+1}. ${val}\n`;
+            }
+            
+            content += `\n❓ PROBLEM QUESTIONS (3-4 pytania)\n`;
+            content += `Cel: Odkryć trudności, frustracje, wyzwania\n\n`;
+            for (let i = 3; i < 7; i++) {
+                const val = inputs[i].value || `[Pytanie ${i-2}]`;
+                content += `${i-2}. ${val}\n`;
+            }
+            
+            content += `\n💰 IMPLICATION QUESTIONS (2-3 pytania)\n`;
+            content += `Cel: Pogłębić konsekwencje problemu\n\n`;
+            for (let i = 7; i < 10; i++) {
+                const val = inputs[i].value || `[Pytanie ${i-6}]`;
+                content += `${i-6}. ${val}\n`;
+            }
+            
+            content += `\n🌟 NEED-PAYOFF QUESTIONS (2-3 pytania)\n`;
+            content += `Cel: Klient SAM opisuje wartość rozwiązania\n\n`;
+            for (let i = 10; i < 13; i++) {
+                const val = inputs[i].value || `[Pytanie ${i-9}]`;
+                content += `${i-9}. ${val}\n`;
+            }
+            
+            content += `\n========================================\n`;
+            content += `TIPS:\n`;
+            content += `- Max 3-4 Situation, potem przechodź do Problem\n`;
+            content += `- Implication zawsze w PLN/godzinach/liczbach\n`;
+            content += `- Need-Payoff używa "Gdyby...", "Co by się zmieniło..."\n`;
+            content += `- Prezentuj produkt PO Need-Payoff (nie przed!)\n`;
+            
+            // Create download
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `SPIN_Script_${productName.replace(/\s+/g, '_')}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            alert('✅ Szablon SPIN pobrany! Sprawdź folder Pobrane.');
+        }
+
+        // Card 14: Finish Lesson
+        function finishLesson() {
+            alert('🎉 Gratulacje!\n\nUkończyłeś kompletną lekcję SPIN Selling (14 kart, 4 części).\n\nTwoje następne kroki:\n1. Przygotuj 10-12 pytań SPIN dla swojego produktu\n2. Przetestuj w 3 rozmowach w tym tygodniu\n3. Analizuj wyniki i iteruj\n\nPowodzenia! 🚀');
+        }
+
+        // Initialize
+        updateProgress();
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') nextCard();
+            else if (event.key === 'ArrowLeft') prevCard();
+        });
+    </script>
+</body>
+</html>

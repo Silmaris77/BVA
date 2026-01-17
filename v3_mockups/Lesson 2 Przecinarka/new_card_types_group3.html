@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupa 3: Tools & Commitment - Milwaukee Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #999;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 136, 0, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 136, 0, 0.5);
+            box-shadow: 0 20px 60px rgba(255, 136, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .card-title p {
+            font-size: 0.95rem;
+            color: #999;
+        }
+
+        /* CARD 1: LAB/SANDBOX */
+        .lab-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .lab-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .formula-display {
+            background: rgba(255, 136, 0, 0.1);
+            border: 2px dashed rgba(255, 136, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .formula-display .formula {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #ffd700;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .formula-display .variables {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .slider-group {
+            margin-bottom: 25px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .slider-label span {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .slider-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ff8800;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.5);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            cursor: pointer;
+            border: none;
+        }
+
+        .result-display {
+            background: linear-gradient(135deg, rgba(255, 136, 0, 0.2) 0%, rgba(255, 215, 0, 0.2) 100%);
+            border: 2px solid rgba(255, 136, 0, 0.5);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .result-label {
+            font-size: 1rem;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .result-unit {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
+        .result-interpretation {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-interpretation .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .result-interpretation .status.optimal {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .result-interpretation .status.warning {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .result-interpretation .status.danger {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+
+        .lab-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .lab-btn {
+            flex: 1;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .lab-btn.reset {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lab-btn.reset:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lab-btn.save {
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            color: #000;
+        }
+
+        .lab-btn.save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 136, 0, 0.4);
+        }
+
+        /* CARD 2: HABIT BUILDER */
+        .habit-intro {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .habit-intro h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .habit-intro p {
+            font-size: 1rem;
+            color: #999;
+        }
+
+        .commitment-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .commitment-section h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 136, 0, 0.3);
+        }
+
+        .action-item.checked {
+            background: rgba(255, 136, 0, 0.1);
+            border-color: rgba(255, 136, 0, 0.5);
+        }
+
+        .action-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 136, 0, 0.5);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .action-item.checked .action-checkbox {
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+        }
+
+        .action-checkbox i {
+            display: none;
+            color: #000;
+        }
+
+        .action-item.checked .action-checkbox i {
+            display: block;
+        }
+
+        .action-text {
+            flex: 1;
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .action-item.checked .action-text {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .deadline-picker {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .date-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .date-input-group label {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .date-input-group input,
+        .date-input-group select {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .date-input-group input:focus,
+        .date-input-group select:focus {
+            outline: none;
+            border-color: rgba(255, 136, 0, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .commitment-strength {
+            background: rgba(255, 136, 0, 0.1);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .strength-label {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .strength-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff8800 0%, #ffd700 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 6px;
+        }
+
+        .strength-text {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        .habit-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .habit-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .habit-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .habit-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .habit-btn.primary {
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            color: #000;
+        }
+
+        .habit-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 136, 0, 0.5);
+        }
+
+        /* CARD 3: KNOWLEDGE ROULETTE */
+        .roulette-container {
+            text-align: center;
+        }
+
+        .roulette-wheel {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .wheel-circle {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 136, 0, 0.2) 0%, rgba(255, 215, 0, 0.1) 100%);
+            border: 4px solid rgba(255, 136, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        .wheel-circle.spinning {
+            animation: spin 3s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(1800deg);
+            }
+        }
+
+        .wheel-icon {
+            font-size: 4rem;
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 30px solid #ff8800;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+        }
+
+        .roulette-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff8800;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .question-container {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 136, 0, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.5s ease;
+        }
+
+        .question-container.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .question-number {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-option {
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .answer-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 136, 0, 0.3);
+        }
+
+        .answer-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.5);
+            color: #00ff88;
+        }
+
+        .answer-option.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: rgba(255, 68, 68, 0.5);
+            color: #ff4444;
+        }
+
+        .roulette-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .roulette-btn {
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .roulette-btn.spin {
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            color: #000;
+        }
+
+        .roulette-btn.spin:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 136, 0, 0.5);
+        }
+
+        .roulette-btn.spin:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .roulette-btn.next {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .roulette-btn.next:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .streak-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .streak-display i {
+            color: #ffd700;
+        }
+
+        .streak-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .roulette-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .deadline-picker {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ Grupa 3: Tools & Commitment</h1>
+            <p>Narzędzia wspierające i budowanie nawyków - Milwaukee MX FUEL Training</p>
+        </div>
+
+        <div class="cards-grid">
+            <!-- CARD 1: LAB/SANDBOX -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-lucide="flask-conical" stroke-width="2" size="32" color="#000"></i>
+                    </div>
+                    <div class="card-title">
+                        <h2>Lab / Sandbox</h2>
+                        <p>Interactive playground - what-if scenarios</p>
+                    </div>
+                </div>
+
+                <div class="lab-container">
+                    <div class="lab-title">
+                        <i data-lucide="calculator" size="20" color="#ff8800"></i>
+                        Kalkulator czasu pracy baterii
+                    </div>
+
+                    <div class="formula-display">
+                        <div class="formula">Czas pracy = (Pojemność × Napięcie × Wydajność) ÷ Moc</div>
+                        <div class="variables">gdzie: Pojemność [Ah], Napięcie [V], Wydajność [%], Moc [W]</div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Pojemność baterii (Ah)</span>
+                            <span class="slider-value" id="capacityValue">12 Ah</span>
+                        </div>
+                        <input type="range" class="slider" id="capacitySlider" min="3" max="18" value="12" step="0.5">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Napięcie (V)</span>
+                            <span class="slider-value" id="voltageValue">18 V</span>
+                        </div>
+                        <input type="range" class="slider" id="voltageSlider" min="12" max="80" value="18" step="6">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Wydajność (%)</span>
+                            <span class="slider-value" id="efficiencyValue">85%</span>
+                        </div>
+                        <input type="range" class="slider" id="efficiencySlider" min="50" max="100" value="85" step="5">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Moc narzędzia (W)</span>
+                            <span class="slider-value" id="powerValue">2500 W</span>
+                        </div>
+                        <input type="range" class="slider" id="powerSlider" min="500" max="5000" value="2500" step="100">
+                    </div>
+                </div>
+
+                <div class="result-display">
+                    <div class="result-label">Przewidywany czas pracy</div>
+                    <div class="result-value" id="resultTime">45</div>
+                    <div class="result-unit">minut</div>
+                    
+                    <div class="result-interpretation">
+                        <div class="status optimal" id="statusIndicator">
+                            <i data-lucide="check-circle" size="20"></i>
+                            <span id="statusText">Wydajność optymalna</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lab-actions">
+                    <button class="lab-btn reset" onclick="resetLab()">
+                        <i data-lucide="rotate-ccw" size="20"></i>
+                        Reset
+                    </button>
+                    <button class="lab-btn save" onclick="saveLab()">
+                        <i data-lucide="save" size="20"></i>
+                        Zapisz konfigurację
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARD 2: HABIT BUILDER -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-lucide="repeat" stroke-width="2" size="32" color="#000"></i>
+                    </div>
+                    <div class="card-title">
+                        <h2>Habit Builder</h2>
+                        <p>Zbuduj nawyk - commitment card</p>
+                    </div>
+                </div>
+
+                <div class="habit-intro">
+                    <h3>Co zaczniesz robić od jutra?</h3>
+                    <p>Wybierz akcje, wyznacz termin, śledź postępy</p>
+                </div>
+
+                <div class="commitment-section">
+                    <h4>
+                        <i data-lucide="list-checks" size="20"></i>
+                        Moje zobowiązania
+                    </h4>
+                    
+                    <div class="action-item" onclick="toggleAction(this)">
+                        <div class="action-checkbox">
+                            <i data-lucide="check" size="16"></i>
+                        </div>
+                        <div class="action-text">Sprawdzam stan baterii przed każdą zmianą</div>
+                    </div>
+
+                    <div class="action-item" onclick="toggleAction(this)">
+                        <div class="action-checkbox">
+                            <i data-lucide="check" size="16"></i>
+                        </div>
+                        <div class="action-text">Czyszczę tarczę po każdym użyciu</div>
+                    </div>
+
+                    <div class="action-item" onclick="toggleAction(this)">
+                        <div class="action-checkbox">
+                            <i data-lucide="check" size="16"></i>
+                        </div>
+                        <div class="action-text">Notuję godziny pracy sprzętu w arkuszu</div>
+                    </div>
+
+                    <div class="action-item" onclick="toggleAction(this)">
+                        <div class="action-checkbox">
+                            <i data-lucide="check" size="16"></i>
+                        </div>
+                        <div class="action-text">Przeprowadzam test RAPIDSTOP co tydzień</div>
+                    </div>
+
+                    <div class="action-item" onclick="toggleAction(this)">
+                        <div class="action-checkbox">
+                            <i data-lucide="check" size="16"></i>
+                        </div>
+                        <div class="action-text">Dzielę się najlepszymi praktykami z zespołem</div>
+                    </div>
+                </div>
+
+                <div class="deadline-picker">
+                    <div class="date-input-group">
+                        <label>Data rozpoczęcia</label>
+                        <input type="date" id="startDate" value="2026-01-18">
+                    </div>
+                    <div class="date-input-group">
+                        <label>Częstotliwość przypomnienia</label>
+                        <select id="reminderFreq">
+                            <option value="daily">Codziennie</option>
+                            <option value="weekly" selected>Co tydzień</option>
+                            <option value="monthly">Co miesiąc</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="commitment-strength">
+                    <div class="strength-label">Siła zobowiązania</div>
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strengthFill"></div>
+                    </div>
+                    <div class="strength-text" id="strengthText">0 / 5 akcji</div>
+                </div>
+
+                <div class="habit-actions">
+                    <button class="habit-btn secondary" onclick="skipHabit()">
+                        <i data-lucide="skip-forward" size="20"></i>
+                        Pomiń
+                    </button>
+                    <button class="habit-btn primary" onclick="commitHabit()">
+                        <i data-lucide="sparkles" size="20"></i>
+                        Zobowiązuję się!
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARD 3: KNOWLEDGE ROULETTE -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-lucide="dices" stroke-width="2" size="32" color="#000"></i>
+                    </div>
+                    <div class="card-title">
+                        <h2>Knowledge Roulette</h2>
+                        <p>Losowe pytanie - test wiedzy</p>
+                    </div>
+                </div>
+
+                <div class="roulette-container">
+                    <div class="roulette-wheel">
+                        <div class="wheel-pointer"></div>
+                        <div class="wheel-circle" id="wheelCircle">
+                            <div class="wheel-icon">🎯</div>
+                        </div>
+                    </div>
+
+                    <div class="roulette-stats">
+                        <div class="stat-box">
+                            <div class="stat-value" id="questionsAnswered">0</div>
+                            <div class="stat-label">Pytań</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="accuracy">0%</div>
+                            <div class="stat-label">Celność</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" id="currentStreak">0</div>
+                            <div class="stat-label">Seria</div>
+                        </div>
+                    </div>
+
+                    <div class="question-container" id="questionContainer">
+                        <div class="question-number" id="questionNumber">Pytanie #1</div>
+                        <div class="question-text" id="questionText">Kliknij "Losuj pytanie" aby rozpocząć</div>
+                        <div class="answer-options" id="answerOptions"></div>
+                    </div>
+
+                    <div class="roulette-actions">
+                        <button class="roulette-btn spin" id="spinBtn" onclick="spinRoulette()">
+                            <i data-lucide="shuffle" size="20"></i>
+                            Losuj pytanie
+                        </button>
+                        <button class="roulette-btn next" id="nextBtn" onclick="nextQuestion()" style="display: none;">
+                            <i data-lucide="arrow-right" size="20"></i>
+                            Następne
+                        </button>
+                    </div>
+
+                    <div class="streak-display" id="streakDisplay" style="display: none;">
+                        <i data-lucide="flame" size="24"></i>
+                        <span class="streak-text" id="streakText">Seria 3 poprawnych odpowiedzi! 🔥</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // CARD 1: LAB/SANDBOX
+        const capacitySlider = document.getElementById('capacitySlider');
+        const voltageSlider = document.getElementById('voltageSlider');
+        const efficiencySlider = document.getElementById('efficiencySlider');
+        const powerSlider = document.getElementById('powerSlider');
+
+        const capacityValue = document.getElementById('capacityValue');
+        const voltageValue = document.getElementById('voltageValue');
+        const efficiencyValue = document.getElementById('efficiencyValue');
+        const powerValue = document.getElementById('powerValue');
+
+        const resultTime = document.getElementById('resultTime');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+
+        function updateLabCalculation() {
+            const capacity = parseFloat(capacitySlider.value);
+            const voltage = parseFloat(voltageSlider.value);
+            const efficiency = parseFloat(efficiencySlider.value) / 100;
+            const power = parseFloat(powerSlider.value);
+
+            capacityValue.textContent = `${capacity} Ah`;
+            voltageValue.textContent = `${voltage} V`;
+            efficiencyValue.textContent = `${Math.round(efficiency * 100)}%`;
+            powerValue.textContent = `${power} W`;
+
+            // Calculate runtime in minutes
+            const runtime = (capacity * voltage * efficiency) / power * 60;
+            resultTime.textContent = Math.round(runtime);
+
+            // Update status
+            statusIndicator.classList.remove('optimal', 'warning', 'danger');
+            if (runtime >= 30) {
+                statusIndicator.classList.add('optimal');
+                statusText.innerHTML = '<i data-lucide="check-circle" size="20"></i> Wydajność optymalna';
+            } else if (runtime >= 15) {
+                statusIndicator.classList.add('warning');
+                statusText.innerHTML = '<i data-lucide="alert-triangle" size="20"></i> Czas pracy krótki';
+            } else {
+                statusIndicator.classList.add('danger');
+                statusText.innerHTML = '<i data-lucide="x-circle" size="20"></i> Za mało czasu pracy';
+            }
+
+            lucide.createIcons();
+        }
+
+        capacitySlider.addEventListener('input', updateLabCalculation);
+        voltageSlider.addEventListener('input', updateLabCalculation);
+        efficiencySlider.addEventListener('input', updateLabCalculation);
+        powerSlider.addEventListener('input', updateLabCalculation);
+
+        function resetLab() {
+            capacitySlider.value = 12;
+            voltageSlider.value = 18;
+            efficiencySlider.value = 85;
+            powerSlider.value = 2500;
+            updateLabCalculation();
+        }
+
+        function saveLab() {
+            const config = {
+                capacity: capacitySlider.value,
+                voltage: voltageSlider.value,
+                efficiency: efficiencySlider.value,
+                power: powerSlider.value,
+                runtime: resultTime.textContent
+            };
+            console.log('Saved configuration:', config);
+            alert('✅ Konfiguracja zapisana!\nCzas pracy: ' + config.runtime + ' minut');
+        }
+
+        // Initialize
+        updateLabCalculation();
+
+        // CARD 2: HABIT BUILDER
+        let checkedCount = 0;
+
+        function toggleAction(element) {
+            element.classList.toggle('checked');
+            updateCommitmentStrength();
+        }
+
+        function updateCommitmentStrength() {
+            const items = document.querySelectorAll('.action-item');
+            checkedCount = document.querySelectorAll('.action-item.checked').length;
+            const total = items.length;
+            const percentage = (checkedCount / total) * 100;
+
+            document.getElementById('strengthFill').style.width = percentage + '%';
+            document.getElementById('strengthText').textContent = `${checkedCount} / ${total} akcji`;
+        }
+
+        function skipHabit() {
+            alert('⏭️ Pominięto budowanie nawyku');
+        }
+
+        function commitHabit() {
+            if (checkedCount === 0) {
+                alert('⚠️ Zaznacz przynajmniej jedną akcję!');
+                return;
+            }
+
+            const startDate = document.getElementById('startDate').value;
+            const frequency = document.getElementById('reminderFreq').value;
+            
+            alert(`🎯 Zobowiązałeś się do ${checkedCount} akcji!\n\nStart: ${startDate}\nPrzypomnienia: ${frequency === 'daily' ? 'codziennie' : frequency === 'weekly' ? 'co tydzień' : 'co miesiąc'}\n\n+200 XP za commitment! 💪`);
+        }
+
+        // CARD 3: KNOWLEDGE ROULETTE
+        const questions = [
+            {
+                q: "Jaka jest maksymalna głębokość cięcia przecinarki MX FUEL COS350?",
+                answers: ["100mm", "125mm", "150mm", "175mm"],
+                correct: 1
+            },
+            {
+                q: "W jakim czasie system RAPIDSTOP zatrzymuje tarczę?",
+                answers: ["< 1 sekundy", "< 2 sekundy", "< 3 sekundy", "< 5 sekund"],
+                correct: 2
+            },
+            {
+                q: "Jaka jest maksymalna średnica tarczy dla COS350?",
+                answers: ["300mm", "350mm", "400mm", "450mm"],
+                correct: 1
+            },
+            {
+                q: "Ile waży przecinarka COS350 bez baterii?",
+                answers: ["11.4 kg", "12.4 kg", "13.4 kg", "14.4 kg"],
+                correct: 2
+            },
+            {
+                q: "Jaką prędkość obrotową osiąga tarcza w COS350?",
+                answers: ["4370 RPM", "5370 RPM", "6370 RPM", "7370 RPM"],
+                correct: 1
+            },
+            {
+                q: "Który system zapobiega odrzutowi przecinarki?",
+                answers: ["POWERSTATE", "REDLINK", "Anti-Kickback", "RAPIDSTOP"],
+                correct: 2
+            },
+            {
+                q: "Ile wynosi moment obrotowy silnika w COS350?",
+                answers: ["80 Nm", "100 Nm", "120 Nm", "140 Nm"],
+                correct: 2
+            },
+            {
+                q: "Jaka bateria jest zalecana do przecinarki COS350?",
+                answers: ["M18 5.0Ah", "MX FUEL 6.0Ah", "M12 3.0Ah", "M28 4.0Ah"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestionIndex = -1;
+        let questionsAnsweredCount = 0;
+        let correctAnswersCount = 0;
+        let currentStreakCount = 0;
+        let maxStreakCount = 0;
+        let answered = false;
+
+        function spinRoulette() {
+            const wheelCircle = document.getElementById('wheelCircle');
+            const spinBtn = document.getElementById('spinBtn');
+            const questionContainer = document.getElementById('questionContainer');
+
+            // Disable button during spin
+            spinBtn.disabled = true;
+
+            // Add spinning animation
+            wheelCircle.classList.add('spinning');
+
+            // Random question after 3 seconds
+            setTimeout(() => {
+                wheelCircle.classList.remove('spinning');
+                currentQuestionIndex = Math.floor(Math.random() * questions.length);
+                showQuestion();
+                spinBtn.disabled = false;
+            }, 3000);
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            const questionContainer = document.getElementById('questionContainer');
+            const questionNumber = document.getElementById('questionNumber');
+            const questionText = document.getElementById('questionText');
+            const answerOptions = document.getElementById('answerOptions');
+            const spinBtn = document.getElementById('spinBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            answered = false;
+
+            questionNumber.textContent = `Pytanie #${questionsAnsweredCount + 1}`;
+            questionText.textContent = question.q;
+
+            // Create answer buttons
+            answerOptions.innerHTML = '';
+            question.answers.forEach((answer, index) => {
+                const option = document.createElement('div');
+                option.className = 'answer-option';
+                option.textContent = answer;
+                option.onclick = () => checkAnswer(index);
+                answerOptions.appendChild(option);
+            });
+
+            questionContainer.classList.add('visible');
+            spinBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+
+            lucide.createIcons();
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (answered) return;
+
+            answered = true;
+            const question = questions[currentQuestionIndex];
+            const options = document.querySelectorAll('.answer-option');
+            const nextBtn = document.getElementById('nextBtn');
+            const streakDisplay = document.getElementById('streakDisplay');
+
+            questionsAnsweredCount++;
+
+            options.forEach((option, index) => {
+                option.style.pointerEvents = 'none';
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            // Update stats
+            if (selectedIndex === question.correct) {
+                correctAnswersCount++;
+                currentStreakCount++;
+                if (currentStreakCount > maxStreakCount) {
+                    maxStreakCount = currentStreakCount;
+                }
+                
+                // Show streak if 3+
+                if (currentStreakCount >= 3) {
+                    document.getElementById('streakText').textContent = `Seria ${currentStreakCount} poprawnych odpowiedzi! 🔥`;
+                    streakDisplay.style.display = 'flex';
+                }
+            } else {
+                currentStreakCount = 0;
+                streakDisplay.style.display = 'none';
+            }
+
+            updateRouletteStats();
+            nextBtn.style.display = 'flex';
+
+            lucide.createIcons();
+        }
+
+        function updateRouletteStats() {
+            document.getElementById('questionsAnswered').textContent = questionsAnsweredCount;
+            const accuracyPercent = questionsAnsweredCount > 0 
+                ? Math.round((correctAnswersCount / questionsAnsweredCount) * 100) 
+                : 0;
+            document.getElementById('accuracy').textContent = accuracyPercent + '%';
+            document.getElementById('currentStreak').textContent = currentStreakCount;
+        }
+
+        function nextQuestion() {
+            const questionContainer = document.getElementById('questionContainer');
+            const spinBtn = document.getElementById('spinBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            questionContainer.classList.remove('visible');
+            spinBtn.style.display = 'flex';
+            nextBtn.style.display = 'none';
+
+            setTimeout(() => {
+                document.getElementById('questionText').textContent = 'Kliknij "Losuj pytanie" aby kontynuować';
+                document.getElementById('answerOptions').innerHTML = '';
+            }, 500);
+        }
+
+        // Re-initialize icons after all dynamic content
+        setTimeout(() => {
+            lucide.createIcons();
+        }, 100);
+    </script>
+</body>
+</html>

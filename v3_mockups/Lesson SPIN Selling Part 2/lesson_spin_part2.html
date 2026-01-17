@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIN Selling - Część 2: Interaktywność</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --situation-color: #2196F3;
+            --problem-color: #F44336;
+            --implication-color: #FF9800;
+            --need-payoff-color: #4CAF50;
+            --spin-gradient: linear-gradient(135deg, #2196F3 0%, #F44336 33%, #FF9800 66%, #4CAF50 100%);
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1f3a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8da;
+            --accent: #00d4ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .lesson-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .lesson-header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--spin-gradient);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .lesson-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lesson-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-container {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--spin-gradient);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--text-secondary);
+        }
+
+        .lesson-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lesson-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+        }
+
+        .card-title-group {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .card-title-group h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .card-time {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* Card 5: Hotspot - Journey Map */
+        .journey-map {
+            position: relative;
+            padding: 40px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .journey-path {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .journey-path::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--situation-color) 0%, var(--problem-color) 33%, var(--implication-color) 66%, var(--need-payoff-color) 100%);
+            z-index: 0;
+        }
+
+        .journey-step {
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            border: 4px solid;
+        }
+
+        .journey-step.situation { border-color: var(--situation-color); color: var(--situation-color); }
+        .journey-step.problem { border-color: var(--problem-color); color: var(--problem-color); }
+        .journey-step.implication { border-color: var(--implication-color); color: var(--implication-color); }
+        .journey-step.need-payoff { border-color: var(--need-payoff-color); color: var(--need-payoff-color); }
+
+        .journey-step:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 30px currentColor;
+        }
+
+        .journey-step.active {
+            transform: scale(1.3);
+            box-shadow: 0 0 40px currentColor;
+        }
+
+        .journey-dialog {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 4px solid var(--accent);
+            min-height: 200px;
+        }
+
+        .dialog-line {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .dialog-label {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        /* Card 6: Drag & Drop */
+        .drag-drop-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .drag-items {
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .drag-item {
+            background: var(--bg-primary);
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--accent);
+        }
+
+        .drag-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,212,255,0.3);
+        }
+
+        .drag-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .drop-zones {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .drop-zone {
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-radius: 15px;
+            min-height: 150px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.situation { border-color: var(--situation-color); }
+        .drop-zone.problem { border-color: var(--problem-color); }
+        .drop-zone.implication { border-color: var(--implication-color); }
+        .drop-zone.need-payoff { border-color: var(--need-payoff-color); }
+
+        .drop-zone.drag-over {
+            background: rgba(255,255,255,0.1);
+            border-style: solid;
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .drop-zone-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .drop-zone.situation .drop-zone-title { color: var(--situation-color); }
+        .drop-zone.problem .drop-zone-title { color: var(--problem-color); }
+        .drop-zone.implication .drop-zone-title { color: var(--implication-color); }
+        .drop-zone.need-payoff .drop-zone-title { color: var(--need-payoff-color); }
+
+        .dropped-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .dropped-item.correct {
+            border-left: 4px solid var(--need-payoff-color);
+        }
+
+        .dropped-item.incorrect {
+            border-left: 4px solid var(--problem-color);
+        }
+
+        .drag-feedback {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .drag-feedback.show {
+            display: block;
+        }
+
+        .drag-feedback.success {
+            background: rgba(76,175,80,0.2);
+            border: 2px solid var(--need-payoff-color);
+            color: var(--need-payoff-color);
+        }
+
+        /* Card 7: Flashcards */
+        .flashcard-container {
+            perspective: 1000px;
+            margin: 30px 0;
+        }
+
+        .flashcard {
+            background: var(--bg-primary);
+            border-radius: 15px;
+            min-height: 300px;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--situation-color) 0%, var(--problem-color) 100%);
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, var(--implication-color) 0%, var(--need-payoff-color) 100%);
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-content {
+            text-align: center;
+            font-size: 1.3rem;
+            line-height: 1.8;
+        }
+
+        .flashcard-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .flashcard-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .flashcard-btn {
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .flashcard-btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Card 8: Role-Play */
+        .roleplay-scenario {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .roleplay-stage {
+            margin: 30px 0;
+        }
+
+        .stage-header {
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .stage-header.situation { background: var(--situation-color); }
+        .stage-header.problem { background: var(--problem-color); }
+        .stage-header.implication { background: var(--implication-color); }
+        .stage-header.need-payoff { background: var(--need-payoff-color); }
+
+        .stage-options {
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .option {
+            background: var(--bg-primary);
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .option:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .option.selected.correct {
+            border-left-color: var(--need-payoff-color);
+            background: rgba(76,175,80,0.2);
+        }
+
+        .option.selected.incorrect {
+            border-left-color: var(--problem-color);
+            background: rgba(244,67,54,0.2);
+        }
+
+        .option-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .roleplay-score {
+            background: var(--spin-gradient);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .roleplay-score.show {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-value {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .score-badge {
+            font-size: 2rem;
+            margin-top: 15px;
+        }
+
+        /* Navigation */
+        .card-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            background: var(--spin-gradient);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,212,255,0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .drag-drop-container {
+                grid-template-columns: 1fr;
+            }
+
+            .drop-zones {
+                grid-template-columns: 1fr;
+            }
+
+            .journey-path {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            .journey-step {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <!-- Header -->
+        <div class="lesson-header">
+            <h1>🎯 SPIN Selling - Część 2</h1>
+            <p>Interaktywność - Karty 5-8</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-text">
+                Karta <span id="currentCard">5</span> z <span id="totalCards">8</span>
+            </div>
+        </div>
+
+        <!-- Card 5: Hotspot - Journey Map -->
+        <div class="lesson-card active" data-card="5">
+            <div class="card-header">
+                <span class="card-icon">📍</span>
+                <div class="card-title-group">
+                    <h2>SPIN Journey Map</h2>
+                    <span class="card-subtitle">Karta 5 z 8 • Hotspot</span>
+                </div>
+                <span class="card-time">⏱️ 3 min</span>
+            </div>
+
+            <div class="hotspot-content">
+                <p style="font-size: 1.2rem; margin-bottom: 30px; line-height: 1.8;">
+                    Kliknij na każdy etap SPIN, aby zobaczyć <strong>przykładowy dialog</strong> z klientem.
+                </p>
+
+                <div class="journey-map">
+                    <div class="journey-path">
+                        <div class="journey-step situation active" onclick="showDialog('situation')">S</div>
+                        <div class="journey-step problem" onclick="showDialog('problem')">P</div>
+                        <div class="journey-step implication" onclick="showDialog('implication')">I</div>
+                        <div class="journey-step need-payoff" onclick="showDialog('need-payoff')">N</div>
+                    </div>
+
+                    <div class="journey-dialog" id="dialogBox">
+                        <div id="dialogContent">
+                            <!-- Situation dialog (default) -->
+                            <h3 style="color: var(--situation-color); margin-bottom: 20px; font-size: 1.5rem;">
+                                📊 Situation - Poznaj kontekst
+                            </h3>
+                            <div class="dialog-line">
+                                <span class="dialog-label">Sprzedawca:</span> "Cześć! Dziękuję za spotkanie. Żeby lepiej zrozumieć Waszą sytuację - ile osób pracuje w dziale sprzedaży?"
+                            </div>
+                            <div class="dialog-line">
+                                <span class="dialog-label">Klient:</span> "Mamy 12 osób - 10 handlowców i 2 support."
+                            </div>
+                            <div class="dialog-line">
+                                <span class="dialog-label">Sprzedawca:</span> "Rozumiem. A jaki system CRM obecnie używacie do śledzenia leadów?"
+                            </div>
+                            <div class="dialog-line">
+                                <span class="dialog-label">Klient:</span> "Głównie Excel. Każdy handlowiec ma swój plik."
+                            </div>
+                            <div class="dialog-line">
+                                <span class="dialog-label">Sprzedawca:</span> "OK, Excel. A jak często synchronizujecie dane między osobami?"
+                            </div>
+                            <div class="dialog-line">
+                                <span class="dialog-label">Klient:</span> "Hmm, właściwie rzadko... Każdy pracuje na swoim."
+                            </div>
+                            <p style="margin-top: 30px; padding: 20px; background: rgba(33,150,243,0.2); border-radius: 10px; border-left: 4px solid var(--situation-color);">
+                                <strong>💡 Cel Situation:</strong> Zebrać fakty. Nie osądzać, nie proponować. Tylko poznać sytuację.<br>
+                                <strong>✓ Masz kontekst:</strong> 12 osób, Excel bez synchronizacji → gotowy do Problem Questions.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-btn prev" onclick="prevCard()" disabled>← Poprzednia</button>
+                <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 6: Drag & Drop -->
+        <div class="lesson-card" data-card="6">
+            <div class="card-header">
+                <span class="card-icon">🔀</span>
+                <div class="card-title-group">
+                    <h2>Dopasuj pytanie do typu SPIN</h2>
+                    <span class="card-subtitle">Karta 6 z 8 • Drag & Drop</span>
+                </div>
+                <span class="card-time">⏱️ 3 min</span>
+            </div>
+
+            <div class="drag-content">
+                <p style="font-size: 1.2rem; margin-bottom: 30px; line-height: 1.8;">
+                    Przeciągnij 12 pytań do odpowiednich kategorii SPIN. <strong>Każda kategoria powinna mieć 3 pytania.</strong>
+                </p>
+
+                <div class="drag-drop-container">
+                    <div class="drag-items">
+                        <h3 style="margin-bottom: 20px; font-size: 1.3rem;">Pytania do przypisania:</h3>
+                        <div class="drag-item" draggable="true" data-type="situation">
+                            "Ile osób obsługuje zamówienia w waszej firmie?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="problem">
+                            "Jak często zdarzają się błędy w fakturowaniu?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="implication">
+                            "Jeśli błąd trafi do klienta, jaki to ma wpływ na waszą reputację?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="need-payoff">
+                            "Gdyby błędów było zero, ile czasu zaoszczędzilibyście?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="situation">
+                            "Jaki budżet macie na narzędzia IT rocznie?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="problem">
+                            "Jakie wyzwania macie z komunikacją między działami?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="implication">
+                            "Jeśli zespół traci 2h dziennie na ręczne zadania, ile to kosztuje miesięcznie?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="need-payoff">
+                            "Co by się zmieniło, gdyby proces był automatyczny?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="situation">
+                            "Jak długo używacie obecnego systemu?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="problem">
+                            "Co was najbardziej frustruje w obecnym rozwiązaniu?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="implication">
+                            "Jeśli konkurencja reaguje szybciej, jak wpływa to na wasze kontrakty?"
+                        </div>
+                        <div class="drag-item" draggable="true" data-type="need-payoff">
+                            "Gdybyście mieli pełną widoczność leadów, o ile wzrosłaby konwersja?"
+                        </div>
+                    </div>
+
+                    <div class="drop-zones">
+                        <div class="drop-zone situation" data-type="situation">
+                            <div class="drop-zone-title">📊 Situation</div>
+                            <div class="drop-count">0/3 pytań</div>
+                        </div>
+                        <div class="drop-zone problem" data-type="problem">
+                            <div class="drop-zone-title">⚠️ Problem</div>
+                            <div class="drop-count">0/3 pytań</div>
+                        </div>
+                        <div class="drop-zone implication" data-type="implication">
+                            <div class="drop-zone-title">🔥 Implication</div>
+                            <div class="drop-count">0/3 pytań</div>
+                        </div>
+                        <div class="drop-zone need-payoff" data-type="need-payoff">
+                            <div class="drop-zone-title">💰 Need-Payoff</div>
+                            <div class="drop-count">0/3 pytań</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drag-feedback" id="dragFeedback">
+                    <div id="feedbackText"></div>
+                </div>
+
+                <button class="nav-btn" onclick="checkDragAnswers()" style="margin-top: 30px; width: 100%;">
+                    Sprawdź odpowiedzi
+                </button>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 7: Flashcards -->
+        <div class="lesson-card" data-card="7">
+            <div class="card-header">
+                <span class="card-icon">🎴</span>
+                <div class="card-title-group">
+                    <h2>10 zasad SPIN</h2>
+                    <span class="card-subtitle">Karta 7 z 8 • Flashcards</span>
+                </div>
+                <span class="card-time">⏱️ 3 min</span>
+            </div>
+
+            <div class="flashcard-content-wrapper">
+                <p style="font-size: 1.2rem; margin-bottom: 30px; line-height: 1.8; text-align: center;">
+                    Kliknij kartę, aby obrócić i poznać <strong>kluczowe zasady SPIN Selling</strong>.
+                </p>
+
+                <div class="flashcard-container">
+                    <div class="flashcard" id="flashcard" onclick="flipCard()">
+                        <div class="flashcard-front">
+                            <div class="flashcard-number">
+                                <span id="flashcardNum">1</span>/10
+                            </div>
+                            <div class="flashcard-content" id="flashcardFront">
+                                <strong style="font-size: 1.5rem;">ZASADA #1</strong>
+                                <p style="margin-top: 20px;">Kliknij aby odkryć</p>
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-number">
+                                <span id="flashcardNumBack">1</span>/10
+                            </div>
+                            <div class="flashcard-content" id="flashcardBack">
+                                Zacznij od Situation, ale <strong>nie za długo</strong> (max 3-4 pytania)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard-nav">
+                    <button class="flashcard-btn" onclick="prevFlashcard()">← Poprzednia</button>
+                    <button class="flashcard-btn" onclick="nextFlashcard()">Następna →</button>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 8: Role-Play -->
+        <div class="lesson-card" data-card="8">
+            <div class="card-header">
+                <span class="card-icon">🎭</span>
+                <div class="card-title-group">
+                    <h2>Scenariusz: CRM dla firmy budowlanej</h2>
+                    <span class="card-subtitle">Karta 8 z 8 • Role-Play</span>
+                </div>
+                <span class="card-time">⏱️ 4 min</span>
+            </div>
+
+            <div class="roleplay-content">
+                <div class="roleplay-scenario">
+                    <h3 style="font-size: 1.4rem; margin-bottom: 15px;">📋 Sytuacja:</h3>
+                    <p style="font-size: 1.1rem; line-height: 1.8;">
+                        Sprzedajesz system CRM. Klient to <strong>firma budowlana BudPro</strong> (15 osób, 
+                        głównie realizacja projektów budowlanych).<br><br>
+                        
+                        Szef firmy zgodził się na spotkanie. <strong>Wybierz najlepsze pytanie na każdym etapie SPIN.</strong>
+                    </p>
+                </div>
+
+                <!-- Stage 1: Situation -->
+                <div class="roleplay-stage">
+                    <div class="stage-header situation">
+                        ETAP 1: Situation - Poznaj kontekst
+                    </div>
+                    <div class="stage-options">
+                        <div class="option" data-stage="1" data-correct="true" onclick="selectOption(this)">
+                            <span class="option-label">A)</span> "Ile projektów rocznie realizujecie?"
+                        </div>
+                        <div class="option" data-stage="1" data-correct="false" onclick="selectOption(this)">
+                            <span class="option-label">B)</span> "Nasze CRM obsługuje 1000 projektów jednocześnie!"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 2: Problem -->
+                <div class="roleplay-stage">
+                    <div class="stage-header problem">
+                        ETAP 2: Problem - Odkryj wyzwania
+                    </div>
+                    <div class="stage-options">
+                        <div class="option" data-stage="2" data-correct="true" onclick="selectOption(this)">
+                            <span class="option-label">A)</span> "Czy macie problem z śledzeniem kosztów projektów?"
+                        </div>
+                        <div class="option" data-stage="2" data-correct="false" onclick="selectOption(this)">
+                            <span class="option-label">B)</span> "Nasz system ma zaawansowany moduł kosztów!"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 3: Implication -->
+                <div class="roleplay-stage">
+                    <div class="stage-header implication">
+                        ETAP 3: Implication - Pogłęb konsekwencje
+                    </div>
+                    <div class="stage-options">
+                        <div class="option" data-stage="3" data-correct="true" onclick="selectOption(this)">
+                            <span class="option-label">A)</span> "Jeśli projekt przekroczy budżet o 10%, ile tracicie rocznie?"
+                        </div>
+                        <div class="option" data-stage="3" data-correct="false" onclick="selectOption(this)">
+                            <span class="option-label">B)</span> "Nasz system automatycznie zapobiega przekroczeniom budżetu!"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 4: Need-Payoff -->
+                <div class="roleplay-stage">
+                    <div class="stage-header need-payoff">
+                        ETAP 4: Need-Payoff - Klient wizualizuje wartość
+                    </div>
+                    <div class="stage-options">
+                        <div class="option" data-stage="4" data-correct="true" onclick="selectOption(this)">
+                            <span class="option-label">A)</span> "Gdyby każdy projekt był w budżecie, o ile wzrósłby zysk?"
+                        </div>
+                        <div class="option" data-stage="4" data-correct="false" onclick="selectOption(this)">
+                            <span class="option-label">B)</span> "Możemy zacząć już dziś! Podpiszmy umowę!"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roleplay-score" id="roleplayScore">
+                    <h2 style="font-size: 2rem; margin-bottom: 20px;">Twój wynik:</h2>
+                    <div class="score-value" id="scoreValue">0/4</div>
+                    <div class="score-badge" id="scoreBadge"></div>
+                    <p style="font-size: 1.2rem; margin-top: 20px;" id="scoreMessage"></p>
+                </div>
+
+                <button class="nav-btn" onclick="calculateRoleplayScore()" style="margin-top: 30px; width: 100%;">
+                    Pokaż wynik
+                </button>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-btn next" onclick="nextCard()" disabled>Koniec Części 2 ✓</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentCard = 5;
+        const totalCards = 8;
+
+        // Progress
+        function updateProgress() {
+            const progress = ((currentCard - 4) / 4) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentCard').textContent = currentCard;
+        }
+
+        function showCard(cardNumber) {
+            document.querySelectorAll('.lesson-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            const card = document.querySelector(`[data-card="${cardNumber}"]`);
+            if (card) {
+                card.classList.add('active');
+                currentCard = cardNumber;
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards) {
+                showCard(currentCard + 1);
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 5) {
+                showCard(currentCard - 1);
+            }
+        }
+
+        // Card 5: Journey Dialog
+        const dialogs = {
+            'situation': {
+                title: '📊 Situation - Poznaj kontekst',
+                color: 'var(--situation-color)',
+                content: `
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "Cześć! Dziękuję za spotkanie. Żeby lepiej zrozumieć Waszą sytuację - ile osób pracuje w dziale sprzedaży?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Mamy 12 osób - 10 handlowców i 2 support."</div>
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "Rozumiem. A jaki system CRM obecnie używacie do śledzenia leadów?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Głównie Excel. Każdy handlowiec ma swój plik."</div>
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "OK, Excel. A jak często synchronizujecie dane między osobami?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Hmm, właściwie rzadko... Każdy pracuje na swoim."</div>
+                    <p style="margin-top: 30px; padding: 20px; background: rgba(33,150,243,0.2); border-radius: 10px; border-left: 4px solid var(--situation-color);">
+                        <strong>💡 Cel Situation:</strong> Zebrać fakty. Nie osądzać, nie proponować. Tylko poznać sytuację.<br>
+                        <strong>✓ Masz kontekst:</strong> 12 osób, Excel bez synchronizacji → gotowy do Problem Questions.
+                    </p>
+                `
+            },
+            'problem': {
+                title: '⚠️ Problem - Odkryj wyzwania',
+                color: 'var(--problem-color)',
+                content: `
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "Skoro każdy handlowiec pracuje na swoim Excelu - jakie problemy się przez to pojawiają?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Czasem lead trafia do dwóch osób jednocześnie... i obaj dzwonią do tego samego klienta."</div>
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "Rozumiem. A jak często to się zdarza?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Może raz-dwa w tygodniu? To wygląda bardzo nieprofesjonalnie."</div>
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "Oprócz duplikatów - czy zdarzają się sytuacje, że lead ginie i nikt do niego nie dzwoni?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Tak... Czasem handlowiec zapisze lead w Excelu i zapomni. A potem klient kupuje u konkurencji."</div>
+                    <p style="margin-top: 30px; padding: 20px; background: rgba(244,67,54,0.2); border-radius: 10px; border-left: 4px solid var(--problem-color);">
+                        <strong>💡 Cel Problem:</strong> Odkryj ból. Nie rozwiązuj jeszcze - tylko pogłębiaj zrozumienie.<br>
+                        <strong>✓ Problem odkryty:</strong> Duplikaty + zgubione leady → gotowy do Implication.
+                    </p>
+                `
+            },
+            'implication': {
+                title: '🔥 Implication - Konsekwencje problemu',
+                color: 'var(--implication-color)',
+                content: `
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "Jeśli handlowcy dzwonią do tego samego klienta podwójnie - jaki to ma wpływ na waszą reputację?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Klient myśli, że jesteśmy niezorganizowani. Kilka razy słyszałem: 'To drugi telefon od was, nie możecie się dogadać?'"</div>
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "A jeśli lead ginie i nikt nie dzwoni - ile tracicie miesięcznie w utraconych dealach?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Hmm... Może 5-10 leadów miesięcznie? Średni deal to €2000, więc... €10,000-20,000?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "Czyli rocznie to może być €120,000-240,000 utraconej sprzedaży?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Wow... Nie patrzyłem na to w ten sposób. To sporo."</div>
+                    <p style="margin-top: 30px; padding: 20px; background: rgba(255,152,0,0.2); border-radius: 10px; border-left: 4px solid var(--implication-color);">
+                        <strong>💡 Cel Implication:</strong> Pokazać KOSZT nierozwiązania problemu. Buduj urgency.<br>
+                        <strong>✓ Urgency zbudowane:</strong> €240k rocznie stracone + reputacja → klient widzi wagę problemu.
+                    </p>
+                `
+            },
+            'need-payoff': {
+                title: '💰 Need-Payoff - Wartość rozwiązania',
+                color: 'var(--need-payoff-color)',
+                content: `
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "Gdyby system automatycznie rozdzielał leady i przypominał o follow-up - ile z tych 5-10 leadów miesięcznie odzyskalibyście?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Pewnie większość... Może 80%? To byłoby 8 leadów, czyli €16,000 miesięcznie."</div>
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "A co by się zmieniło w waszym zespole, gdyby każdy handlowiec widział, kto z kim rozmawia?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "Koniec z duplikatami. Koniec z zawstydzającymi sytuacjami przed klientem. Wyglądalibyśmy profesjonalnie."</div>
+                    <div class="dialog-line"><span class="dialog-label">Sprzedawca:</span> "Gdyby taka zmiana miała miejsce w ciągu 30 dni - ile by to znaczyło dla waszych rocznych celów sprzedażowych?"</div>
+                    <div class="dialog-line"><span class="dialog-label">Klient:</span> "€192,000 rocznie odzyskanej sprzedaży... Plus lepsza reputacja. To mogłoby nas wypchnąć ponad target."</div>
+                    <p style="margin-top: 30px; padding: 20px; background: rgba(76,175,80,0.2); border-radius: 10px; border-left: 4px solid var(--need-payoff-color);">
+                        <strong>💡 Cel Need-Payoff:</strong> Klient SAM opisuje wartość. Nie Ty!<br>
+                        <strong>✓ Klient chce rozwiązania:</strong> €192k + profesjonalizm → gotowy do prezentacji produktu.
+                    </p>
+                `
+            }
+        };
+
+        function showDialog(type) {
+            const dialog = dialogs[type];
+            const content = document.getElementById('dialogContent');
+            content.innerHTML = `
+                <h3 style="color: ${dialog.color}; margin-bottom: 20px; font-size: 1.5rem;">
+                    ${dialog.title}
+                </h3>
+                ${dialog.content}
+            `;
+
+            // Update active state
+            document.querySelectorAll('.journey-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.querySelector('.journey-step.' + type).classList.add('active');
+        }
+
+        // Card 6: Drag & Drop
+        let draggedElement = null;
+        const dropCounts = { situation: 0, problem: 0, implication: 0, 'need-payoff': 0 };
+
+        function initDragDrop() {
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    draggedElement = item;
+                    item.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                item.addEventListener('dragend', (e) => {
+                    item.classList.remove('dragging');
+                });
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    zone.classList.add('drag-over');
+                });
+
+                zone.addEventListener('dragleave', (e) => {
+                    zone.classList.remove('drag-over');
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+
+                    if (draggedElement) {
+                        const type = zone.dataset.type;
+                        const droppedItem = document.createElement('div');
+                        droppedItem.className = 'dropped-item';
+                        droppedItem.textContent = draggedElement.textContent;
+                        droppedItem.dataset.correctType = draggedElement.dataset.type;
+                        droppedItem.dataset.droppedType = type;
+
+                        zone.appendChild(droppedItem);
+                        draggedElement.remove();
+                        
+                        dropCounts[type]++;
+                        updateDropCount(zone, type);
+                    }
+                });
+            });
+        }
+
+        function updateDropCount(zone, type) {
+            const countEl = zone.querySelector('.drop-count');
+            countEl.textContent = `${dropCounts[type]}/3 pytań`;
+        }
+
+        function checkDragAnswers() {
+            let correct = 0;
+            let total = 0;
+
+            document.querySelectorAll('.dropped-item').forEach(item => {
+                total++;
+                if (item.dataset.correctType === item.dataset.droppedType) {
+                    item.classList.add('correct');
+                    correct++;
+                } else {
+                    item.classList.add('incorrect');
+                }
+            });
+
+            const feedback = document.getElementById('dragFeedback');
+            const feedbackText = document.getElementById('feedbackText');
+            
+            if (correct === total && total === 12) {
+                feedback.className = 'drag-feedback success show';
+                feedbackText.innerHTML = `
+                    <strong>🎯 Perfekcyjnie!</strong><br>
+                    Wszystkie 12 pytań przypisane poprawnie. Rozumiesz różnice między typami SPIN! 
+                `;
+            } else {
+                feedback.className = 'drag-feedback show';
+                feedbackText.innerHTML = `
+                    <strong>Wynik: ${correct}/${total}</strong><br>
+                    ${correct < total ? 'Sprawdź zaznaczone na czerwono - to niepoprawne przypisania.' : ''}
+                `;
+            }
+        }
+
+        // Card 7: Flashcards
+        const flashcards = [
+            { front: "ZASADA #1", back: "Zacznij od Situation, ale <strong>nie za długo</strong> (max 3-4 pytania)" },
+            { front: "ZASADA #2", back: "<strong>Problem Questions</strong> = serce SPIN. Tutaj odkrywasz prawdziwy ból." },
+            { front: "ZASADA #3", back: "Implication = pokaż <strong>koszt NIErozwiązania</strong> problemu" },
+            { front: "ZASADA #4", back: "Need-Payoff = <strong>klient opisuje rozwiązanie</strong> (nie ty!)" },
+            { front: "ZASADA #5", back: "Nie skacz do prezentacji bez Need-Payoff. <strong>Najpierw buduj commitment.</strong>" },
+            { front: "ZASADA #6", back: "Słuchaj <strong>2x więcej</strong> niż mówisz. SPIN to pytania, nie monolog." },
+            { front: "ZASADA #7", back: "Implication działa tylko jeśli <strong>Problem jest prawdziwy</strong>. Nie wymyślaj problemów." },
+            { front: "ZASADA #8", back: "Need-Payoff buduje <strong>commitment do działania</strong>. Klient SAM chce zmian." },
+            { front: "ZASADA #9", back: "Small sale = <strong>mniej Implication</strong>, więcej Problem (szybka decyzja)" },
+            { front: "ZASADA #10", back: "Large sale = <strong>więcej Implication</strong> (decyzja bardziej złożona, więcej stakeholderów)" }
+        ];
+
+        let currentFlashcard = 0;
+        let isFlipped = false;
+
+        function updateFlashcard() {
+            const card = flashcards[currentFlashcard];
+            document.getElementById('flashcardFront').innerHTML = `
+                <strong style="font-size: 1.5rem;">${card.front}</strong>
+                <p style="margin-top: 20px;">Kliknij aby odkryć</p>
+            `;
+            document.getElementById('flashcardBack').innerHTML = card.back;
+            document.getElementById('flashcardNum').textContent = currentFlashcard + 1;
+            document.getElementById('flashcardNumBack').textContent = currentFlashcard + 1;
+        }
+
+        function flipCard() {
+            const card = document.getElementById('flashcard');
+            card.classList.toggle('flipped');
+            isFlipped = !isFlipped;
+        }
+
+        function nextFlashcard() {
+            if (currentFlashcard < flashcards.length - 1) {
+                currentFlashcard++;
+                updateFlashcard();
+                if (isFlipped) flipCard();
+            }
+        }
+
+        function prevFlashcard() {
+            if (currentFlashcard > 0) {
+                currentFlashcard--;
+                updateFlashcard();
+                if (isFlipped) flipCard();
+            }
+        }
+
+        // Card 8: Role-Play
+        let selectedAnswers = { 1: null, 2: null, 3: null, 4: null };
+
+        function selectOption(element) {
+            const stage = element.dataset.stage;
+            const isCorrect = element.dataset.correct === 'true';
+
+            // Clear previous selection in this stage
+            const siblings = element.parentElement.querySelectorAll('.option');
+            siblings.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            // Mark selection
+            element.classList.add('selected');
+            element.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            selectedAnswers[stage] = isCorrect;
+        }
+
+        function calculateRoleplayScore() {
+            const score = Object.values(selectedAnswers).filter(v => v === true).length;
+            const scoreDiv = document.getElementById('roleplayScore');
+            const scoreValue = document.getElementById('scoreValue');
+            const scoreBadge = document.getElementById('scoreBadge');
+            const scoreMessage = document.getElementById('scoreMessage');
+
+            scoreValue.textContent = `${score}/4`;
+
+            if (score === 4) {
+                scoreBadge.textContent = '🏆 SPIN Master';
+                scoreMessage.textContent = 'Perfekcyjnie! Rozumiesz, jak prowadzić rozmowę SPIN od początku do końca.';
+            } else if (score === 3) {
+                scoreBadge.textContent = '✅ Bardzo dobrze';
+                scoreMessage.textContent = 'Świetnie! Jedna pomyłka - przejrzyj dialog jeszcze raz.';
+            } else if (score === 2) {
+                scoreBadge.textContent = '⚠️ Do poprawy';
+                scoreMessage.textContent = 'Zrozumiałeś część, ale wróć do teorii (Część 1).';
+            } else {
+                scoreBadge.textContent = '❌ Spróbuj ponownie';
+                scoreMessage.textContent = 'Przejrzyj karty 1-4 (Część 1) i spróbuj jeszcze raz.';
+            }
+
+            scoreDiv.classList.add('show');
+        }
+
+        // Initialize
+        updateProgress();
+        initDragDrop();
+        updateFlashcard();
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') nextCard();
+            else if (event.key === 'ArrowLeft') prevCard();
+        });
+    </script>
+</body>
+</html>

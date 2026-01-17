@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rękawice Milwaukee - Kompletny Przewodnik | BrainVenture Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --milwaukee-red: #DB0032;
+            --milwaukee-red-dark: #B8002A;
+            --milwaukee-black: #1A1A1A;
+            --bg-dark: #0a0a1a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-green: #00ff88;
+            --accent-blue: #00d4ff;
+            --accent-orange: #ff9500;
+            --accent-purple: #a855f7;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .lesson-header {
+            background: linear-gradient(135deg, var(--milwaukee-red) 0%, var(--milwaukee-red-dark) 100%);
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(219, 0, 50, 0.3);
+        }
+
+        .lesson-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .lesson-title h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 24px 16px;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            padding-left: 12px;
+        }
+
+        .card-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 4px;
+        }
+
+        .card-nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-nav-item.active {
+            background: rgba(219, 0, 50, 0.2);
+            border-left: 3px solid var(--milwaukee-red);
+        }
+
+        .card-nav-item.completed {
+            opacity: 0.7;
+        }
+
+        .card-nav-item.completed::after {
+            content: '✓';
+            margin-left: auto;
+            color: var(--accent-green);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+        }
+
+        .nav-text {
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        .nav-number {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        /* Card Styles */
+        .lesson-card {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lesson-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+        }
+
+        .card-title-group h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .card-time {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* Hero Card */
+        .hero-content {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .goals-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .goals-box h3 {
+            color: var(--accent-blue);
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+        .goal-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .goal-item::before {
+            content: '✅';
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--milwaukee-red);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Theory Card */
+        .theory-content {
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 24px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(219, 0, 50, 0.1) 0%, rgba(219, 0, 50, 0.05) 100%);
+            border-left: 4px solid var(--milwaukee-red);
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--milwaukee-red);
+        }
+
+        /* Lightbulb Card */
+        .lightbulb-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .lightbulb-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .lightbulb-insight {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .color-table {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 24px auto;
+            max-width: 600px;
+        }
+
+        .color-row {
+            display: grid;
+            grid-template-columns: 80px 120px 1fr;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .color-row:last-child {
+            border-bottom: none;
+        }
+
+        .color-row.header {
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .color-dot.white { background: #ffffff; }
+        .color-dot.blue { background: #3b82f6; }
+        .color-dot.black { background: #1f2937; }
+        .color-dot.gray { background: #6b7280; }
+        .color-dot.red { background: #ef4444; }
+        .color-dot.purple { background: #a855f7; }
+
+        /* Hotspot Card */
+        .hotspot-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hotspot-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(219, 0, 50, 0.2) 0%, rgba(0, 0, 0, 0.3) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glove-svg {
+            font-size: 12rem;
+            opacity: 0.8;
+        }
+
+        .hotspot {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background: var(--milwaukee-red);
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            animation: hotspotPulse 2s infinite;
+        }
+
+        @keyframes hotspotPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(219, 0, 50, 0.5); }
+            50% { box-shadow: 0 0 0 10px rgba(219, 0, 50, 0); }
+        }
+
+        .hotspot:hover {
+            transform: scale(1.2);
+        }
+
+        .hotspot.active {
+            background: var(--accent-green);
+        }
+
+        .hotspot-info {
+            margin-top: 24px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 100px;
+        }
+
+        .hotspot-info h4 {
+            color: var(--accent-blue);
+            margin-bottom: 8px;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table th {
+            background: rgba(219, 0, 50, 0.2);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .level-badge.level-a { background: rgba(255, 255, 255, 0.2); }
+        .level-badge.level-b { background: rgba(59, 130, 246, 0.3); }
+        .level-badge.level-c { background: rgba(31, 41, 55, 0.8); }
+        .level-badge.level-d { background: rgba(107, 114, 128, 0.5); }
+        .level-badge.level-e { background: rgba(239, 68, 68, 0.3); }
+        .level-badge.level-f { background: rgba(168, 85, 247, 0.3); }
+
+        /* Flashcards */
+        .flashcards-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .flashcard {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 120px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .flashcard:hover {
+            transform: translateY(-4px);
+            border-color: var(--milwaukee-red);
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            backface-visibility: hidden;
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+            color: var(--accent-green);
+        }
+
+        .flashcard-number {
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Drag & Drop */
+        .drag-drop-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .drag-column h4 {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .drag-item {
+            background: rgba(219, 0, 50, 0.2);
+            border: 2px dashed rgba(219, 0, 50, 0.5);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+
+        .drag-item:hover {
+            background: rgba(219, 0, 50, 0.3);
+            border-style: solid;
+        }
+
+        .drag-item.dragging {
+            opacity: 0.5;
+        }
+
+        .drop-zone {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .drop-zone.correct {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--accent-green);
+        }
+
+        .drop-zone.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+        }
+
+        .drop-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Calculator */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .calc-inputs {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .calc-input-group {
+            margin-bottom: 16px;
+        }
+
+        .calc-input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .calc-input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .calc-input-group input:focus {
+            outline: none;
+            border-color: var(--milwaukee-red);
+        }
+
+        .calc-results {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--text-secondary);
+        }
+
+        .result-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .result-value.positive {
+            color: var(--accent-green);
+        }
+
+        .result-value.negative {
+            color: #ef4444;
+        }
+
+        .calc-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--milwaukee-red) 0%, var(--milwaukee-red-dark) 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .calc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(219, 0, 50, 0.4);
+        }
+
+        /* Role-Play */
+        .roleplay-scenario {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .scenario-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .scenario-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .scenario-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .dialogue-bubble {
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .dialogue-bubble::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: -10px;
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent rgba(59, 130, 246, 0.2) transparent;
+        }
+
+        .response-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .response-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            gap: 12px;
+        }
+
+        .response-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--milwaukee-red);
+        }
+
+        .response-option.correct {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--accent-green);
+        }
+
+        .response-option.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+        }
+
+        .option-letter {
+            font-weight: 700;
+            color: var(--milwaukee-red);
+        }
+
+        /* Fill Blanks */
+        .fill-blanks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .blank-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .blank-text {
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .blank-input {
+            display: inline-block;
+            min-width: 120px;
+            padding: 4px 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--milwaukee-red);
+            border-radius: 4px;
+            color: var(--accent-blue);
+            text-align: center;
+        }
+
+        .blank-input.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--accent-green);
+            border-style: solid;
+        }
+
+        /* Speed Drill */
+        .speed-drill-container {
+            text-align: center;
+        }
+
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--milwaukee-red);
+            margin: 20px 0;
+        }
+
+        .timer-display.warning {
+            color: var(--accent-orange);
+            animation: timerPulse 0.5s infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .speed-question {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .speed-question h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .speed-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .speed-option {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .speed-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-blue);
+        }
+
+        .speed-score {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .score-value.correct-score {
+            color: var(--accent-green);
+        }
+
+        .score-value.wrong-score {
+            color: #ef4444;
+        }
+
+        /* Matching Pairs */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .match-column h4 {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .match-item {
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .match-item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .match-item.selected {
+            border-color: var(--milwaukee-red);
+            background: rgba(219, 0, 50, 0.2);
+        }
+
+        .match-item.matched {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        /* Exercise */
+        .exercise-scenario {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .department-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .department-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .department-card h5 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: var(--accent-blue);
+        }
+
+        .department-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .exercise-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .exercise-textarea:focus {
+            outline: none;
+            border-color: var(--milwaukee-red);
+        }
+
+        .exercise-hint {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Reflection Card */
+        .reflection-content {
+            text-align: center;
+        }
+
+        .reflection-questions {
+            text-align: left;
+            margin: 24px 0;
+        }
+
+        .reflection-question {
+            margin-bottom: 20px;
+        }
+
+        .reflection-question label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .reflection-question input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .achievement-box {
+            background: linear-gradient(135deg, rgba(219, 0, 50, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+            border: 2px solid var(--milwaukee-red);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 32px;
+        }
+
+        .achievement-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .achievement-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .achievement-details {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .achievement-stat {
+            text-align: center;
+        }
+
+        .achievement-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .achievement-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .next-steps {
+            margin-top: 24px;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .next-steps h4 {
+            margin-bottom: 12px;
+            color: var(--accent-blue);
+        }
+
+        .next-step-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        /* Navigation Buttons */
+        .card-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .nav-btn.prev {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .nav-btn.prev:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, var(--milwaukee-red) 0%, var(--milwaukee-red-dark) 100%);
+            border: none;
+            color: white;
+        }
+
+        .nav-btn.next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(219, 0, 50, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Quiz feedback */
+        .quiz-feedback {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-feedback.correct {
+            display: block;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--accent-green);
+        }
+
+        .quiz-feedback.incorrect {
+            display: block;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                display: none;
+            }
+
+            .flashcards-container {
+                grid-template-columns: 1fr;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .drag-drop-container {
+                grid-template-columns: 1fr;
+            }
+
+            .matching-container {
+                grid-template-columns: 1fr;
+            }
+
+            .department-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .lesson-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .content-area {
+                padding: 16px;
+            }
+
+            .lesson-card {
+                padding: 20px;
+            }
+
+            .stats-row {
+                flex-wrap: wrap;
+            }
+
+            .speed-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="lesson-header">
+        <div class="lesson-title">
+            <span style="font-size: 2rem;">🧤</span>
+            <h1>Rękawice Milwaukee - Kompletny Przewodnik</h1>
+        </div>
+        <div class="lesson-meta">
+            <div class="meta-item">
+                <span>⏱️</span>
+                <span>40 min</span>
+            </div>
+            <div class="meta-item">
+                <span>🎴</span>
+                <span>14 kart</span>
+            </div>
+            <div class="meta-item">
+                <span>📊</span>
+                <span>Intermediate</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 7.14%;"></div>
+        </div>
+        <div class="progress-text" id="progressText">1 / 14</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <h3>Nawigacja</h3>
+            <div id="cardNav">
+                <!-- Generated by JS -->
+            </div>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- Card 1: Hero -->
+            <div class="lesson-card active" data-card="1">
+                <div class="card-header">
+                    <span class="card-icon">🎯</span>
+                    <div class="card-title-group">
+                        <h2>Witaj w lekcji!</h2>
+                        <span class="card-subtitle">Karta 1 z 14 • Hero</span>
+                    </div>
+                    <span class="card-time">⏱️ 2 min</span>
+                </div>
+
+                <div class="hero-content">
+                    <div class="hero-icon">🧤</div>
+                    <h1 class="hero-title">Rękawice Milwaukee</h1>
+                    <p class="hero-subtitle">Ochrona, która nie przeszkadza w pracy</p>
+
+                    <div class="goals-box">
+                        <h3>🎯 Po tej lekcji będziesz potrafił:</h3>
+                        <div class="goal-item">Rozpoznać 6 poziomów odporności na przecięcia (A-F)</div>
+                        <div class="goal-item">Odczytać oznaczenia normy EN388</div>
+                        <div class="goal-item">Dobrać rękawice do branży klienta</div>
+                        <div class="goal-item">Argumentować przewagę Milwaukee nad konkurencją</div>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-value">70%</div>
+                            <div class="stat-label">urazów rąk = brak rękawic</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">20+</div>
+                            <div class="stat-label">modeli w ofercie</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">poziomów Cut Level</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" disabled>← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 2: Theory EN388 -->
+            <div class="lesson-card" data-card="2">
+                <div class="card-header">
+                    <span class="card-icon">📊</span>
+                    <div class="card-title-group">
+                        <h2>Norma EN388:2016</h2>
+                        <span class="card-subtitle">Karta 2 z 14 • Teoria</span>
+                    </div>
+                    <span class="card-time">⏱️ 4 min</span>
+                </div>
+
+                <div class="theory-content">
+                    <p>Norma EN 388:2016 to europejski standard określający odporność rękawic na zagrożenia mechaniczne. Każda certyfikowana rękawica ma oznaczenie, które musisz umieć odczytać.</p>
+
+                    <div class="code-block">
+                        <pre>
+📋 PRZYKŁAD: EN388: 4X43D P
+
+┌─────────────────────────────────────────────┐
+│  4   X   4   3   D   P                      │
+│  │   │   │   │   │   │                      │
+│  │   │   │   │   │   └── Odporność na       │
+│  │   │   │   │   │       uderzenia (Impact) │
+│  │   │   │   │   │                          │
+│  │   │   │   │   └───── Przecięcie TDM      │
+│  │   │   │   │          (poziom A-F)        │
+│  │   │   │   │                              │
+│  │   │   │   └───────── Przekłucie (1-4)    │
+│  │   │   │                                  │
+│  │   │   └───────────── Rozerwanie (1-4)    │
+│  │   │                                      │
+│  │   └───────────────── Przecięcie Coup     │
+│  │                      (X = nie badano)    │
+│  │                                          │
+│  └───────────────────── Ścieranie (1-4)     │
+└─────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>🔢 SKALA PRZECIĘCIA TDM (poziomy A-F):</strong><br><br>
+                        <strong>A</strong> = 2N (lekka ochrona) &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <strong>B</strong> = 5N &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <strong>C</strong> = 10N &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <strong>D</strong> = 15N &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <strong>E</strong> = 22N &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <strong>F</strong> = 30N (maksymalna ochrona)
+                    </div>
+
+                    <p style="margin-top: 20px;">💡 <strong>Zapamiętaj:</strong> Im wyższa litera w alfabecie, tym większa ochrona przed przecięciem!</p>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 3: Lightbulb -->
+            <div class="lesson-card" data-card="3">
+                <div class="card-header">
+                    <span class="card-icon">💡</span>
+                    <div class="card-title-group">
+                        <h2>Lightbulb Moment</h2>
+                        <span class="card-subtitle">Karta 3 z 14 • Insight</span>
+                    </div>
+                    <span class="card-time">⏱️ 1 min</span>
+                </div>
+
+                <div class="lightbulb-content">
+                    <div class="lightbulb-icon">💡</div>
+                    <h2 class="lightbulb-insight">Kolorowy system = zero pomyłek</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 32px;">
+                        Milwaukee stosuje intuicyjny system kolorów - każdy poziom ma swój kolor!
+                    </p>
+
+                    <div class="color-table">
+                        <div class="color-row header">
+                            <span>Poziom</span>
+                            <span>Kolor</span>
+                            <span>Zastosowanie</span>
+                        </div>
+                        <div class="color-row">
+                            <span>A</span>
+                            <div class="color-dot white"></div>
+                            <span>Lekkie prace, montaż</span>
+                        </div>
+                        <div class="color-row">
+                            <span>B</span>
+                            <div class="color-dot blue"></div>
+                            <span>Prace ogólne</span>
+                        </div>
+                        <div class="color-row">
+                            <span>C</span>
+                            <div class="color-dot black"></div>
+                            <span>Budownictwo, stolarka</span>
+                        </div>
+                        <div class="color-row">
+                            <span>D</span>
+                            <div class="color-dot gray"></div>
+                            <span>Przemysł ciężki</span>
+                        </div>
+                        <div class="color-row">
+                            <span>E</span>
+                            <div class="color-dot red"></div>
+                            <span>Metal, szkło, blacharstwo</span>
+                        </div>
+                        <div class="color-row">
+                            <span>F</span>
+                            <div class="color-dot purple"></div>
+                            <span>Ekstremalne zagrożenia</span>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box" style="text-align: center; margin-top: 24px;">
+                        <strong>🎨 ZAPAMIĘTAJ:</strong> "Od białego do fioletowego = od lekkiego do ekstremalnego"
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 4: Hotspot -->
+            <div class="lesson-card" data-card="4">
+                <div class="card-header">
+                    <span class="card-icon">📍</span>
+                    <div class="card-title-group">
+                        <h2>Anatomia rękawicy Cut Level E</h2>
+                        <span class="card-subtitle">Karta 4 z 14 • Hotspot</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Kliknij punkty na rękawicy, aby poznać szczegóły każdego elementu:</p>
+
+                <div class="hotspot-container">
+                    <div class="hotspot-image">
+                        <span class="glove-svg">🧤</span>
+                        <div class="hotspot" style="top: 10%; left: 50%;" onclick="showHotspot(1)">1</div>
+                        <div class="hotspot" style="top: 35%; left: 70%;" onclick="showHotspot(2)">2</div>
+                        <div class="hotspot" style="top: 55%; left: 45%;" onclick="showHotspot(3)">3</div>
+                        <div class="hotspot" style="top: 25%; left: 35%;" onclick="showHotspot(4)">4</div>
+                        <div class="hotspot" style="top: 40%; left: 25%;" onclick="showHotspot(5)">5</div>
+                        <div class="hotspot" style="top: 85%; left: 50%;" onclick="showHotspot(6)">6</div>
+                    </div>
+
+                    <div class="hotspot-info" id="hotspotInfo">
+                        <h4>👆 Kliknij punkt na rękawicy</h4>
+                        <p>Poznaj budowę i funkcje każdego elementu rękawicy ochronnej Milwaukee.</p>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 5: Comparison Table -->
+            <div class="lesson-card" data-card="5">
+                <div class="card-header">
+                    <span class="card-icon">📋</span>
+                    <div class="card-title-group">
+                        <h2>6 poziomów ochrony - porównanie</h2>
+                        <span class="card-subtitle">Karta 5 z 14 • Tabela porównawcza</span>
+                    </div>
+                    <span class="card-time">⏱️ 4 min</span>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Poziom</th>
+                            <th>EN388</th>
+                            <th>Zastosowanie</th>
+                            <th>Cena*</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="level-badge level-a"><div class="color-dot white" style="width:16px;height:16px;"></div> A</span></td>
+                            <td>1141A</td>
+                            <td>Montaż, pakowanie, lekkie prace</td>
+                            <td>~25 zł</td>
+                        </tr>
+                        <tr>
+                            <td><span class="level-badge level-b"><div class="color-dot blue" style="width:16px;height:16px;"></div> B</span></td>
+                            <td>2242B</td>
+                            <td>Prace ogólne, logistyka</td>
+                            <td>~35 zł</td>
+                        </tr>
+                        <tr>
+                            <td><span class="level-badge level-c"><div class="color-dot black" style="width:16px;height:16px;"></div> C</span></td>
+                            <td>2442C</td>
+                            <td>Budownictwo, stolarka, HVAC</td>
+                            <td>~40 zł</td>
+                        </tr>
+                        <tr>
+                            <td><span class="level-badge level-d"><div class="color-dot gray" style="width:16px;height:16px;"></div> D</span></td>
+                            <td>3X43D</td>
+                            <td>Przemysł ciężki, automotive</td>
+                            <td>~50 zł</td>
+                        </tr>
+                        <tr>
+                            <td><span class="level-badge level-e"><div class="color-dot red" style="width:16px;height:16px;"></div> E</span></td>
+                            <td>4X44E</td>
+                            <td>Metal, szkło, blacharstwo</td>
+                            <td>~55 zł</td>
+                        </tr>
+                        <tr>
+                            <td><span class="level-badge level-f"><div class="color-dot purple" style="width:16px;height:16px;"></div> F</span></td>
+                            <td>4X44F</td>
+                            <td>Ekstremalne zagrożenia</td>
+                            <td>~65 zł</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">*Ceny orientacyjne za parę</p>
+
+                <div class="highlight-box" style="margin-top: 24px;">
+                    <strong>💡 Kluczowy insight:</strong> Różnica 40 zł między poziomem A i F to nic wobec kosztu urazu ręki (średnio 15,000 zł + przestój)!
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 6: Flashcards -->
+            <div class="lesson-card" data-card="6">
+                <div class="card-header">
+                    <span class="card-icon">🎴</span>
+                    <div class="card-title-group">
+                        <h2>10 kluczowych faktów</h2>
+                        <span class="card-subtitle">Karta 6 z 14 • Fiszki</span>
+                    </div>
+                    <span class="card-time">⏱️ 4 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Kliknij fiszkę, aby zobaczyć odpowiedź:</p>
+
+                <div class="flashcards-container" id="flashcardsContainer">
+                    <!-- Generated by JS -->
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 7: Drag & Drop -->
+            <div class="lesson-card" data-card="7">
+                <div class="card-header">
+                    <span class="card-icon">🔀</span>
+                    <div class="card-title-group">
+                        <h2>Dopasuj poziom do branży</h2>
+                        <span class="card-subtitle">Karta 7 z 14 • Drag & Drop</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Przeciągnij odpowiedni poziom ochrony do właściwej branży:</p>
+
+                <div class="drag-drop-container">
+                    <div class="drag-column">
+                        <h4>Poziomy ochrony</h4>
+                        <div class="drag-item" draggable="true" data-level="A">⚪ Poziom A</div>
+                        <div class="drag-item" draggable="true" data-level="C">⚫ Poziom C</div>
+                        <div class="drag-item" draggable="true" data-level="E">🔴 Poziom E</div>
+                        <div class="drag-item" draggable="true" data-level="D">🔘 Poziom D</div>
+                        <div class="drag-item" draggable="true" data-level="B">🔵 Poziom B</div>
+                    </div>
+                    <div class="drag-column">
+                        <h4>Branże</h4>
+                        <div class="drop-zone" data-correct="A">
+                            <span class="drop-label">📦 Logistyka/magazyn</span>
+                        </div>
+                        <div class="drop-zone" data-correct="B">
+                            <span class="drop-label">⚡ Elektryk</span>
+                        </div>
+                        <div class="drop-zone" data-correct="C">
+                            <span class="drop-label">🏗️ Budownictwo ogólne</span>
+                        </div>
+                        <div class="drop-zone" data-correct="D">
+                            <span class="drop-label">🚗 Mechanika samochodowa</span>
+                        </div>
+                        <div class="drop-zone" data-correct="E">
+                            <span class="drop-label">🏭 Obróbka metalu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 8: Calculator -->
+            <div class="lesson-card" data-card="8">
+                <div class="card-header">
+                    <span class="card-icon">🧮</span>
+                    <div class="card-title-group">
+                        <h2>Kalkulator ROI rękawic</h2>
+                        <span class="card-subtitle">Karta 8 z 14 • Kalkulator</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px;">Oblicz, ile Twój klient może zaoszczędzić dzięki odpowiednim rękawicam:</p>
+
+                <div class="calculator-grid">
+                    <div class="calc-inputs">
+                        <div class="calc-input-group">
+                            <label>Liczba pracowników</label>
+                            <input type="number" id="calcWorkers" value="20" min="1">
+                        </div>
+                        <div class="calc-input-group">
+                            <label>Par rękawic / miesiąc / osobę</label>
+                            <input type="number" id="calcPairs" value="2" min="1">
+                        </div>
+                        <div class="calc-input-group">
+                            <label>Cena za parę (zł)</label>
+                            <input type="number" id="calcPrice" value="45" min="1">
+                        </div>
+                        <div class="calc-input-group">
+                            <label>Średni koszt urazu ręki (zł)</label>
+                            <input type="number" id="calcInjury" value="15000" min="0">
+                        </div>
+                        <div class="calc-input-group">
+                            <label>Szacowane urazy/rok bez rękawic</label>
+                            <input type="number" id="calcInjuries" value="2" min="0">
+                        </div>
+                        <button class="calc-btn" onclick="calculateROI()">📊 Oblicz ROI</button>
+                    </div>
+
+                    <div class="calc-results">
+                        <h4 style="margin-bottom: 16px; color: var(--accent-green);">📈 Wyniki</h4>
+                        <div class="result-row">
+                            <span class="result-label">Koszt rękawic / rok:</span>
+                            <span class="result-value" id="resultGloves">21,600 zł</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Potencjalny koszt urazów:</span>
+                            <span class="result-value negative" id="resultInjuries">30,000 zł</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Oszczędność / rok:</span>
+                            <span class="result-value positive" id="resultSavings">8,400 zł</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">ROI:</span>
+                            <span class="result-value positive" id="resultROI">39%</span>
+                        </div>
+
+                        <div class="highlight-box" style="margin-top: 16px;">
+                            <strong>💡 Plus:</strong> Zero przestojów, lepsza produktywność, zgodność z BHP!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 9: Role-Play -->
+            <div class="lesson-card" data-card="9">
+                <div class="card-header">
+                    <span class="card-icon">🎭</span>
+                    <div class="card-title-group">
+                        <h2>Rozmowa z klientem</h2>
+                        <span class="card-subtitle">Karta 9 z 14 • Role-Play</span>
+                    </div>
+                    <span class="card-time">⏱️ 5 min</span>
+                </div>
+
+                <div class="roleplay-scenario">
+                    <div class="scenario-header">
+                        <div class="scenario-avatar">👤</div>
+                        <div class="scenario-info">
+                            <h4>Adam - Właściciel warsztatu samochodowego</h4>
+                            <p>5 mechaników • Problem z rękawicami</p>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-bubble">
+                        <p><strong>Adam:</strong> "Kupujemy najtańsze rękawice z marketu, ale pracownicy narzekają że się rozpadają po 2 dniach. Milwaukee? Pewnie drogie..."</p>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 16px;">Wybierz najlepszą odpowiedź:</h4>
+
+                <div class="response-options" id="roleplayOptions">
+                    <div class="response-option" onclick="checkRoleplay(this, false)">
+                        <span class="option-letter">A</span>
+                        <span>"Tak, są droższe, ale jakość jest lepsza"</span>
+                    </div>
+                    <div class="response-option" onclick="checkRoleplay(this, true)">
+                        <span class="option-letter">B</span>
+                        <span>"Ile par tych tanich zużywacie miesięcznie? Policzmy razem..."</span>
+                    </div>
+                    <div class="response-option" onclick="checkRoleplay(this, false)">
+                        <span class="option-letter">C</span>
+                        <span>"Nasze rękawice mają certyfikat EN388"</span>
+                    </div>
+                    <div class="response-option" onclick="checkRoleplay(this, false)">
+                        <span class="option-letter">D</span>
+                        <span>"Mogę zostawić próbki do testów"</span>
+                    </div>
+                </div>
+
+                <div class="quiz-feedback" id="roleplayFeedback"></div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 10: Fill Blanks -->
+            <div class="lesson-card" data-card="10">
+                <div class="card-header">
+                    <span class="card-icon">📝</span>
+                    <div class="card-title-group">
+                        <h2>Uzupełnij argumenty</h2>
+                        <span class="card-subtitle">Karta 10 z 14 • Fill Blanks</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Kliknij puste pola, aby wybrać właściwą odpowiedź:</p>
+
+                <div class="fill-blanks-container">
+                    <div class="blank-item">
+                        <p class="blank-text">1. Rękawice Milwaukee poziom E mają ochronę <span class="blank-input" onclick="fillBlank(this, 'czerwoną')">________</span>, co oznacza siłę przecięcia <span class="blank-input" onclick="fillBlank(this, '22')">___</span> N.</p>
+                    </div>
+                    <div class="blank-item">
+                        <p class="blank-text">2. System kolorów pozwala na <span class="blank-input" onclick="fillBlank(this, 'natychmiastową')">____________</span> identyfikację poziomu ochrony.</p>
+                    </div>
+                    <div class="blank-item">
+                        <p class="blank-text">3. Norma <span class="blank-input" onclick="fillBlank(this, 'EN388')">_______</span> określa odporność rękawic na zagrożenia mechaniczne.</p>
+                    </div>
+                    <div class="blank-item">
+                        <p class="blank-text">4. Rękawice z literą "P" w oznaczeniu mają dodatkową ochronę przed <span class="blank-input" onclick="fillBlank(this, 'uderzeniami')">__________</span>.</p>
+                    </div>
+                    <div class="blank-item">
+                        <p class="blank-text">5. <span class="blank-input" onclick="fillBlank(this, '70')">___</span>% urazów rąk zdarza się pracownikom bez odpowiednich rękawic.</p>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 11: Speed Drill -->
+            <div class="lesson-card" data-card="11">
+                <div class="card-header">
+                    <span class="card-icon">⚡</span>
+                    <div class="card-title-group">
+                        <h2>Speed Quiz</h2>
+                        <span class="card-subtitle">Karta 11 z 14 • Speed Drill</span>
+                    </div>
+                    <span class="card-time">⏱️ 2 min</span>
+                </div>
+
+                <div class="speed-drill-container">
+                    <div class="timer-display" id="speedTimer">60</div>
+                    <p style="color: var(--text-secondary); margin-bottom: 16px;">8 pytań w 60 sekund!</p>
+
+                    <button class="calc-btn" id="startSpeedBtn" onclick="startSpeedDrill()" style="max-width: 300px; margin: 0 auto;">
+                        🚀 START
+                    </button>
+
+                    <div class="speed-question" id="speedQuestion" style="display: none;">
+                        <h3 id="speedQuestionText"></h3>
+                        <div class="speed-options" id="speedOptions">
+                            <!-- Generated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="speed-score" id="speedScore" style="display: none;">
+                        <div class="score-item">
+                            <div class="score-value correct-score" id="correctCount">0</div>
+                            <div class="score-label">Poprawne</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value wrong-score" id="wrongCount">0</div>
+                            <div class="score-label">Błędne</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 12: Matching Pairs -->
+            <div class="lesson-card" data-card="12">
+                <div class="card-header">
+                    <span class="card-icon">🔗</span>
+                    <div class="card-title-group">
+                        <h2>Połącz typ rękawicy z zastosowaniem</h2>
+                        <span class="card-subtitle">Karta 12 z 14 • Matching</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Kliknij element z lewej, potem odpowiadający z prawej strony:</p>
+
+                <div class="matching-container">
+                    <div class="match-column">
+                        <h4>Typ rękawicy</h4>
+                        <div class="match-item" data-match="cut" onclick="selectMatch(this, 'left')">Cut Level A-F</div>
+                        <div class="match-item" data-match="winter" onclick="selectMatch(this, 'left')">Zimowe (EN511)</div>
+                        <div class="match-item" data-match="impact" onclick="selectMatch(this, 'left')">Impact (P)</div>
+                        <div class="match-item" data-match="chemical" onclick="selectMatch(this, 'left')">Chemoodporne</div>
+                        <div class="match-item" data-match="leather" onclick="selectMatch(this, 'left')">Skórzane</div>
+                    </div>
+                    <div class="match-column">
+                        <h4>Zastosowanie</h4>
+                        <div class="match-item" data-match="leather" onclick="selectMatch(this, 'right')">Spawanie, wysokie temperatury</div>
+                        <div class="match-item" data-match="cut" onclick="selectMatch(this, 'right')">Ochrona przed przecięciem</div>
+                        <div class="match-item" data-match="chemical" onclick="selectMatch(this, 'right')">Kontakt z chemikaliami</div>
+                        <div class="match-item" data-match="impact" onclick="selectMatch(this, 'right')">Ochrona grzbietu dłoni</div>
+                        <div class="match-item" data-match="winter" onclick="selectMatch(this, 'right')">Praca w niskich temp.</div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 13: Exercise -->
+            <div class="lesson-card" data-card="13">
+                <div class="card-header">
+                    <span class="card-icon">✍️</span>
+                    <div class="card-title-group">
+                        <h2>Dobierz rękawice dla klienta</h2>
+                        <span class="card-subtitle">Karta 13 z 14 • Ćwiczenie</span>
+                    </div>
+                    <span class="card-time">⏱️ 4 min</span>
+                </div>
+
+                <div class="exercise-scenario">
+                    <h4 style="margin-bottom: 16px;">🏭 Scenariusz: Firma produkcyjna (40 pracowników)</h4>
+
+                    <div class="department-grid">
+                        <div class="department-card">
+                            <h5>📦 Magazyn (10 osób)</h5>
+                            <p>Pakowanie, przenoszenie paczek, skanowanie</p>
+                        </div>
+                        <div class="department-card">
+                            <h5>🏭 Produkcja (20 osób)</h5>
+                            <p>Obróbka metalu, cięcie, obsługa maszyn</p>
+                        </div>
+                        <div class="department-card">
+                            <h5>🔧 Utrzymanie ruchu (5 osób)</h5>
+                            <p>Naprawy, HVAC, konserwacja</p>
+                        </div>
+                        <div class="department-card">
+                            <h5>🔥 Spawalnia (5 osób)</h5>
+                            <p>Spawanie, szlifowanie metalu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 12px;">📝 Dla każdego działu dobierz: poziom ochrony, typ rękawicy, uzasadnienie</h4>
+
+                <textarea class="exercise-textarea" placeholder="Magazyn: Poziom A/B - Free Flex, bo potrzebują zręczności przy pakowaniu...
+
+Produkcja: Poziom E - Cut Level, bo pracują z metalem...
+
+Utrzymanie ruchu: ...
+
+Spawalnia: ..."></textarea>
+
+                <div class="exercise-hint">
+                    <strong>💡 Podpowiedź:</strong> Pamiętaj o różnych zagrożeniach w każdym dziale. Spawalnia wymaga ochrony termicznej (EN407), nie tylko przed przecięciem!
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 14: Reflection + Achievement -->
+            <div class="lesson-card" data-card="14">
+                <div class="card-header">
+                    <span class="card-icon">💭</span>
+                    <div class="card-title-group">
+                        <h2>Podsumowanie</h2>
+                        <span class="card-subtitle">Karta 14 z 14 • Refleksja</span>
+                    </div>
+                    <span class="card-time">⏱️ 2 min</span>
+                </div>
+
+                <div class="reflection-content">
+                    <div class="reflection-questions">
+                        <div class="reflection-question">
+                            <label>🤔 Który klient z Twojego portfolio mógłby skorzystać z lepszych rękawic?</label>
+                            <input type="text" placeholder="Np. Warsztat Kowalski - mają problem z urazami...">
+                        </div>
+                        <div class="reflection-question">
+                            <label>💡 Jaki argument użyjesz jako pierwszy?</label>
+                            <input type="text" placeholder="Np. System kolorów / ROI / Certyfikacja EN388...">
+                        </div>
+                        <div class="reflection-question">
+                            <label>📅 Co zrobisz w przyszłym tygodniu?</label>
+                            <input type="text" placeholder="Np. Zaproponuję test próbek u 2 klientów...">
+                        </div>
+                    </div>
+
+                    <div class="achievement-box">
+                        <div class="achievement-icon">🏆</div>
+                        <div class="achievement-title">🧤 EKSPERT RĘKAWIC 🧤</div>
+                        <p style="color: var(--text-secondary);">Gratulacje! Ukończyłeś lekcję.</p>
+
+                        <div class="achievement-details">
+                            <div class="achievement-stat">
+                                <div class="achievement-stat-value">14/14</div>
+                                <div class="achievement-stat-label">Karty ukończone</div>
+                            </div>
+                            <div class="achievement-stat">
+                                <div class="achievement-stat-value">+150</div>
+                                <div class="achievement-stat-label">XP zdobyte</div>
+                            </div>
+                            <div class="achievement-stat">
+                                <div class="achievement-stat-value">94%</div>
+                                <div class="achievement-stat-label">Wynik</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="next-steps">
+                        <h4>📋 Następne kroki:</h4>
+                        <div class="next-step-item">
+                            <span>📖</span>
+                            <span>Weź katalog rękawic na następną wizytę</span>
+                        </div>
+                        <div class="next-step-item">
+                            <span>🧪</span>
+                            <span>Zaproponuj test próbek u 2 klientów</span>
+                        </div>
+                        <div class="next-step-item">
+                            <span>🎓</span>
+                            <span>Przejdź lekcję: "System BOLT - Ochrona głowy"</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="finishLesson()" style="background: linear-gradient(135deg, var(--accent-green) 0%, #00b368 100%);">✅ Zakończ lekcję</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Card navigation
+        let currentCard = 1;
+        const totalCards = 14;
+
+        const cardData = [
+            { icon: '🎯', title: 'Hero', type: 'intro' },
+            { icon: '📊', title: 'Norma EN388', type: 'theory' },
+            { icon: '💡', title: 'System kolorów', type: 'insight' },
+            { icon: '📍', title: 'Anatomia rękawicy', type: 'hotspot' },
+            { icon: '📋', title: 'Porównanie poziomów', type: 'comparison' },
+            { icon: '🎴', title: 'Fiszki', type: 'flashcards' },
+            { icon: '🔀', title: 'Drag & Drop', type: 'dragdrop' },
+            { icon: '🧮', title: 'Kalkulator ROI', type: 'calculator' },
+            { icon: '🎭', title: 'Role-Play', type: 'roleplay' },
+            { icon: '📝', title: 'Fill Blanks', type: 'fillblanks' },
+            { icon: '⚡', title: 'Speed Quiz', type: 'speedquiz' },
+            { icon: '🔗', title: 'Matching', type: 'matching' },
+            { icon: '✍️', title: 'Ćwiczenie', type: 'exercise' },
+            { icon: '💭', title: 'Refleksja', type: 'reflection' }
+        ];
+
+        // Initialize navigation
+        function initNavigation() {
+            const nav = document.getElementById('cardNav');
+            nav.innerHTML = cardData.map((card, index) => `
+                <div class="card-nav-item ${index === 0 ? 'active' : ''}" onclick="goToCard(${index + 1})">
+                    <span class="nav-icon">${card.icon}</span>
+                    <div>
+                        <div class="nav-text">${card.title}</div>
+                        <div class="nav-number">Karta ${index + 1}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function goToCard(cardNum) {
+            document.querySelectorAll('.lesson-card').forEach(card => card.classList.remove('active'));
+            document.querySelector(`[data-card="${cardNum}"]`).classList.add('active');
+
+            document.querySelectorAll('.card-nav-item').forEach((item, index) => {
+                item.classList.remove('active');
+                if (index < cardNum - 1) item.classList.add('completed');
+                if (index === cardNum - 1) item.classList.add('active');
+            });
+
+            currentCard = cardNum;
+            updateProgress();
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards) {
+                goToCard(currentCard + 1);
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                goToCard(currentCard - 1);
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentCard / totalCards) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${currentCard} / ${totalCards}`;
+        }
+
+        // Hotspot functionality
+        const hotspotData = {
+            1: { title: '🔝 Palce', desc: 'Precyzyjne szycie każdego palca zachowuje pełną zręczność. Materiał odporny na przecięcie chroni przed ostrymi krawędziami.' },
+            2: { title: '👋 Grzbiet dłoni', desc: 'Oddychający materiał odprowadza wilgoć. W wersji Impact (P) dodatkowo wzmocniony TPR chroni przed uderzeniami.' },
+            3: { title: '✋ Wnętrze dłoni', desc: 'Powłoka nitrylowa lub lateksowa zapewnia pewny chwyt nawet na mokrych i zaolejonych powierzchniach.' },
+            4: { title: '👍 Kciuk', desc: 'Najczęściej uszkadzana część rękawicy - wzmocniona podwójną warstwą materiału.' },
+            5: { title: '🏷️ Etykieta EN388', desc: 'Pełne oznaczenie certyfikacji: poziom ścierania, przecięcia, rozerwania, przekłucia + poziom Cut Level (A-F).' },
+            6: { title: '🔗 Mankiet', desc: 'Elastyczny mankiet zapobiega zsuwaniu się i ułatwia szybkie zakładanie/zdejmowanie.' }
+        };
+
+        function showHotspot(num) {
+            const data = hotspotData[num];
+            document.getElementById('hotspotInfo').innerHTML = `
+                <h4>${data.title}</h4>
+                <p>${data.desc}</p>
+            `;
+            document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Flashcards
+        const flashcards = [
+            { q: 'Jaki kolor = poziom C?', a: '⚫ CZARNY - budownictwo, stolarka' },
+            { q: 'Co oznacza "X" w EN388?', a: 'X = nie badano tego parametru' },
+            { q: 'Która norma dotyczy rękawic?', a: 'EN 388:2016' },
+            { q: 'Jaki poziom dla pracy z metalem?', a: 'Poziom E (czerwony) lub F (fioletowy)' },
+            { q: 'Co oznacza "P" na końcu EN388?', a: 'P = odporność na uderzenia (Impact)' },
+            { q: 'Ile poziomów Cut Level?', a: '6 poziomów: A, B, C, D, E, F' },
+            { q: 'Materiał powłoki w rękawicach zimowych?', a: 'Lateks - lepsza przyczepność na mokro' },
+            { q: 'Czy rękawice Milwaukee można prać?', a: 'TAK - większość modeli' },
+            { q: 'Jaki % urazów = brak rękawic?', a: '70% urazów rąk' },
+            { q: 'Norma dla rękawic chemicznych?', a: 'EN ISO 374-1:2016' }
+        ];
+
+        function initFlashcards() {
+            const container = document.getElementById('flashcardsContainer');
+            container.innerHTML = flashcards.map((card, i) => `
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <span class="flashcard-number">${i + 1}/10</span>
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <p style="font-weight: 600;">${card.q}</p>
+                        </div>
+                        <div class="flashcard-back">
+                            <p>${card.a}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Calculator
+        function calculateROI() {
+            const workers = parseInt(document.getElementById('calcWorkers').value);
+            const pairs = parseInt(document.getElementById('calcPairs').value);
+            const price = parseInt(document.getElementById('calcPrice').value);
+            const injuryCost = parseInt(document.getElementById('calcInjury').value);
+            const injuries = parseInt(document.getElementById('calcInjuries').value);
+
+            const glovesCost = workers * pairs * 12 * price;
+            const injuriesCost = injuries * injuryCost;
+            const savings = injuriesCost - glovesCost;
+            const roi = ((injuriesCost - glovesCost) / glovesCost * 100).toFixed(0);
+
+            document.getElementById('resultGloves').textContent = glovesCost.toLocaleString('pl-PL') + ' zł';
+            document.getElementById('resultInjuries').textContent = injuriesCost.toLocaleString('pl-PL') + ' zł';
+            document.getElementById('resultSavings').textContent = savings.toLocaleString('pl-PL') + ' zł';
+            document.getElementById('resultSavings').className = 'result-value ' + (savings >= 0 ? 'positive' : 'negative');
+            document.getElementById('resultROI').textContent = roi + '%';
+            document.getElementById('resultROI').className = 'result-value ' + (roi >= 0 ? 'positive' : 'negative');
+        }
+
+        // Role-play
+        function checkRoleplay(element, isCorrect) {
+            document.querySelectorAll('.response-option').forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.style.pointerEvents = 'none';
+            });
+
+            element.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            const feedback = document.getElementById('roleplayFeedback');
+            if (isCorrect) {
+                feedback.className = 'quiz-feedback correct';
+                feedback.innerHTML = `<strong>✅ Świetnie!</strong> Pytanie o ilość zużywanych par odkrywa prawdziwy koszt (TCO). 
+                Klient sam policzy, że tanie rękawice wcale nie są tanie!`;
+            } else {
+                feedback.className = 'quiz-feedback incorrect';
+                feedback.innerHTML = `<strong>❌ Nie do końca.</strong> Lepsza odpowiedź to B - pytanie o ilość zużywanych par. 
+                To odkrywa TCO i pozwala klientowi samemu dojść do wniosku, że tanie = drogie.`;
+            }
+        }
+
+        // Fill blanks
+        function fillBlank(element, answer) {
+            element.textContent = answer;
+            element.classList.add('correct');
+        }
+
+        // Speed Drill
+        const speedQuestions = [
+            { q: 'Kolor poziomu C?', options: ['⚪ Biały', '⚫ Czarny', '🔴 Czerwony', '🔵 Niebieski'], correct: 1 },
+            { q: 'Norma dla rękawic?', options: ['EN166', 'EN388', 'EN397', 'EN352'], correct: 1 },
+            { q: 'Poziom dla szkła?', options: ['A lub B', 'C lub D', 'E lub F', 'Tylko F'], correct: 2 },
+            { q: 'Co oznacza X w EN388?', options: ['Maksymalny', 'Nie badano', 'Zerowy', 'Średni'], correct: 1 },
+            { q: 'Ile poziomów Cut?', options: ['4', '5', '6', '8'], correct: 2 },
+            { q: 'Kolor poziomu A?', options: ['⚫ Czarny', '🔵 Niebieski', '⚪ Biały', '🔘 Szary'], correct: 2 },
+            { q: 'Najwyższy poziom?', options: ['D', 'E', 'F', 'G'], correct: 2 },
+            { q: 'P = ?', options: ['Premium', 'Protection', 'Impact', 'Professional'], correct: 2 }
+        ];
+
+        let speedTimer = 60;
+        let speedInterval;
+        let speedQuestionIndex = 0;
+        let speedCorrect = 0;
+        let speedWrong = 0;
+
+        function startSpeedDrill() {
+            document.getElementById('startSpeedBtn').style.display = 'none';
+            document.getElementById('speedQuestion').style.display = 'block';
+            document.getElementById('speedScore').style.display = 'flex';
+            speedQuestionIndex = 0;
+            speedCorrect = 0;
+            speedWrong = 0;
+            speedTimer = 60;
+
+            speedInterval = setInterval(() => {
+                speedTimer--;
+                document.getElementById('speedTimer').textContent = speedTimer;
+                if (speedTimer <= 10) {
+                    document.getElementById('speedTimer').classList.add('warning');
+                }
+                if (speedTimer <= 0) {
+                    endSpeedDrill();
+                }
+            }, 1000);
+
+            showSpeedQuestion();
+        }
+
+        function showSpeedQuestion() {
+            if (speedQuestionIndex >= speedQuestions.length) {
+                endSpeedDrill();
+                return;
+            }
+
+            const q = speedQuestions[speedQuestionIndex];
+            document.getElementById('speedQuestionText').textContent = q.q;
+            document.getElementById('speedOptions').innerHTML = q.options.map((opt, i) => `
+                <div class="speed-option" onclick="answerSpeed(${i})">${opt}</div>
+            `).join('');
+        }
+
+        function answerSpeed(index) {
+            const q = speedQuestions[speedQuestionIndex];
+            if (index === q.correct) {
+                speedCorrect++;
+            } else {
+                speedWrong++;
+            }
+            document.getElementById('correctCount').textContent = speedCorrect;
+            document.getElementById('wrongCount').textContent = speedWrong;
+            speedQuestionIndex++;
+            showSpeedQuestion();
+        }
+
+        function endSpeedDrill() {
+            clearInterval(speedInterval);
+            document.getElementById('speedQuestion').innerHTML = `
+                <h3>🏁 Koniec!</h3>
+                <p style="font-size: 1.2rem; margin-top: 16px;">
+                    Wynik: <strong style="color: var(--accent-green);">${speedCorrect}/${speedQuestions.length}</strong>
+                </p>
+                <p style="color: var(--text-secondary); margin-top: 8px;">
+                    ${speedCorrect >= 7 ? '⭐⭐⭐ Świetnie!' : speedCorrect >= 5 ? '⭐⭐ Dobrze!' : '⭐ Poćwicz jeszcze!'}
+                </p>
+            `;
+        }
+
+        // Matching pairs
+        let selectedLeft = null;
+
+        function selectMatch(element, side) {
+            if (element.classList.contains('matched')) return;
+
+            if (side === 'left') {
+                document.querySelectorAll('.match-column:first-child .match-item').forEach(el => el.classList.remove('selected'));
+                element.classList.add('selected');
+                selectedLeft = element;
+            } else if (selectedLeft) {
+                if (selectedLeft.dataset.match === element.dataset.match) {
+                    selectedLeft.classList.remove('selected');
+                    selectedLeft.classList.add('matched');
+                    element.classList.add('matched');
+                } else {
+                    selectedLeft.classList.remove('selected');
+                }
+                selectedLeft = null;
+            }
+        }
+
+        // Drag & Drop
+        let draggedElement = null;
+
+        function initDragDrop() {
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    draggedElement = item;
+                    item.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', item.dataset.level);
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                    draggedElement = null;
+                });
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    zone.style.borderColor = 'var(--accent-blue)';
+                    zone.style.background = 'rgba(0, 212, 255, 0.1)';
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.style.borderColor = '';
+                    zone.style.background = '';
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.style.borderColor = '';
+                    zone.style.background = '';
+
+                    if (!draggedElement) return;
+
+                    const droppedLevel = e.dataTransfer.getData('text/plain');
+                    const correctLevel = zone.dataset.correct;
+
+                    if (droppedLevel === correctLevel) {
+                        zone.classList.add('correct');
+                        zone.innerHTML = `<span style="color: var(--accent-green);">✓</span> ${draggedElement.textContent} → ${zone.querySelector('.drop-label')?.textContent || zone.textContent}`;
+                        draggedElement.style.display = 'none';
+                    } else {
+                        zone.classList.add('incorrect');
+                        setTimeout(() => {
+                            zone.classList.remove('incorrect');
+                        }, 1000);
+                    }
+                });
+            });
+        }
+
+        // Finish lesson
+        function finishLesson() {
+            alert('🎉 Gratulacje! Ukończyłeś lekcję "Rękawice Milwaukee - Kompletny Przewodnik"!\n\n+150 XP\n🏆 Badge: Ekspert Rękawic');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavigation();
+            initFlashcards();
+            initDragDrop();
+            calculateROI();
+        });
+    </script>
+</body>
+
+</html>

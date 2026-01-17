@@ -1,0 +1,2462 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odzież M12™ - Ciepło pod kontrolą | BrainVenture Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --milwaukee-red: #DB0032;
+            --milwaukee-red-dark: #B8002A;
+            --milwaukee-black: #1A1A1A;
+            --bg-dark: #0a0a1a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --accent-green: #00ff88;
+            --accent-blue: #00d4ff;
+            --accent-orange: #ff9500;
+            --accent-purple: #a855f7;
+            --heat-gradient: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffcc00 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .lesson-header {
+            background: linear-gradient(135deg, var(--milwaukee-red) 0%, var(--milwaukee-red-dark) 100%);
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(219, 0, 50, 0.3);
+        }
+
+        .lesson-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .lesson-title h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--heat-gradient);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 24px 16px;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            padding-left: 12px;
+        }
+
+        .card-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 4px;
+        }
+
+        .card-nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-nav-item.active {
+            background: rgba(255, 107, 53, 0.2);
+            border-left: 3px solid #ff6b35;
+        }
+
+        .card-nav-item.completed {
+            opacity: 0.7;
+        }
+
+        .card-nav-item.completed::after {
+            content: '✓';
+            margin-left: auto;
+            color: var(--accent-green);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+        }
+
+        .nav-text {
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        .nav-number {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        /* Card Styles */
+        .lesson-card {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lesson-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+        }
+
+        .card-title-group h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .card-time {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* Hero Card */
+        .hero-content {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            margin-bottom: 24px;
+            animation: heatPulse 2s infinite;
+        }
+
+        @keyframes heatPulse {
+            0%, 100% { 
+                filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.5));
+            }
+            50% { 
+                filter: drop-shadow(0 0 30px rgba(255, 107, 53, 0.8));
+            }
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: var(--heat-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .goals-box {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .goals-box h3 {
+            color: #ff6b35;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+        .goal-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .goal-item::before {
+            content: '🔥';
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--heat-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Theory Card */
+        .theory-content {
+            line-height: 1.8;
+        }
+
+        .tech-diagram {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .tech-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tech-step {
+            background: rgba(255, 107, 53, 0.1);
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .tech-step-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .tech-step-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .tech-arrow {
+            font-size: 1.5rem;
+            color: #ff6b35;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%);
+            border-left: 4px solid #ff6b35;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            color: #ff6b35;
+        }
+
+        /* Heat Levels */
+        .heat-levels {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 24px 0;
+        }
+
+        .heat-level {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            min-width: 120px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .heat-level:hover {
+            transform: translateY(-4px);
+        }
+
+        .heat-level.high {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(239, 68, 68, 0.1) 100%);
+            border: 2px solid #ef4444;
+        }
+
+        .heat-level.medium {
+            background: linear-gradient(135deg, rgba(255, 149, 0, 0.3) 0%, rgba(255, 149, 0, 0.1) 100%);
+            border: 2px solid #ff9500;
+        }
+
+        .heat-level.low {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.3) 0%, rgba(34, 197, 94, 0.1) 100%);
+            border: 2px solid #22c55e;
+        }
+
+        .heat-level-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .heat-level-name {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .heat-level-time {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Lightbulb Card */
+        .lightbulb-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .lightbulb-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .lightbulb-insight {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .ecosystem-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin: 32px 0;
+        }
+
+        .ecosystem-item {
+            background: rgba(219, 0, 50, 0.1);
+            border: 2px solid rgba(219, 0, 50, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            text-align: center;
+        }
+
+        .ecosystem-item-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .ecosystem-item-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .ecosystem-plus {
+            font-size: 2rem;
+            color: var(--milwaukee-red);
+        }
+
+        /* Hotspot Card */
+        .hotspot-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hotspot-image {
+            width: 100%;
+            height: 450px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .jacket-svg {
+            font-size: 12rem;
+            opacity: 0.8;
+        }
+
+        .hotspot {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background: #ff6b35;
+            border: 3px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            animation: hotspotPulse 2s infinite;
+        }
+
+        @keyframes hotspotPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.5); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
+        }
+
+        .hotspot:hover {
+            transform: scale(1.2);
+        }
+
+        .hotspot.active {
+            background: var(--accent-green);
+        }
+
+        .hotspot-info {
+            margin-top: 24px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 100px;
+        }
+
+        .hotspot-info h4 {
+            color: #ff6b35;
+            margin-bottom: 8px;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table th {
+            background: rgba(255, 107, 53, 0.2);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .product-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .zones-badge {
+            background: rgba(255, 107, 53, 0.2);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #ff6b35;
+        }
+
+        /* Drag & Drop */
+        .drag-drop-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .drag-column h4 {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .drag-item {
+            background: rgba(255, 107, 53, 0.2);
+            border: 2px dashed rgba(255, 107, 53, 0.5);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+
+        .drag-item:hover {
+            background: rgba(255, 107, 53, 0.3);
+            border-style: solid;
+        }
+
+        .drag-item.dragging {
+            opacity: 0.5;
+        }
+
+        .drop-zone {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .drop-zone.correct {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--accent-green);
+        }
+
+        .drop-zone.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+        }
+
+        .drop-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Flashcards */
+        .flashcards-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .flashcard {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 120px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .flashcard:hover {
+            transform: translateY(-4px);
+            border-color: #ff6b35;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            backface-visibility: hidden;
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+            color: var(--accent-green);
+        }
+
+        .flashcard-number {
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Calculator */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .calc-inputs {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .calc-input-group {
+            margin-bottom: 16px;
+        }
+
+        .calc-input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .calc-input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .calc-input-group input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .calc-results {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 204, 0, 0.1) 100%);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--text-secondary);
+        }
+
+        .result-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .result-value.positive {
+            color: var(--accent-green);
+        }
+
+        .result-value.negative {
+            color: #ef4444;
+        }
+
+        .calc-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--heat-gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .calc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Role-Play */
+        .roleplay-scenario {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .scenario-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6b7280 0%, #374151 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .scenario-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .scenario-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .dialogue-bubble {
+            background: rgba(107, 114, 128, 0.2);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .dialogue-bubble::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: -10px;
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent rgba(107, 114, 128, 0.2) transparent;
+        }
+
+        .response-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .response-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            gap: 12px;
+        }
+
+        .response-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ff6b35;
+        }
+
+        .response-option.correct {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--accent-green);
+        }
+
+        .response-option.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+        }
+
+        .option-letter {
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
+        /* Fill Blanks */
+        .fill-blanks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .blank-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .blank-text {
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .blank-input {
+            display: inline-block;
+            min-width: 100px;
+            padding: 4px 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed #ff6b35;
+            border-radius: 4px;
+            color: var(--accent-blue);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .blank-input.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: var(--accent-green);
+            border-style: solid;
+        }
+
+        /* Speed Drill */
+        .speed-drill-container {
+            text-align: center;
+        }
+
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 800;
+            background: var(--heat-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+        }
+
+        .timer-display.warning {
+            animation: timerPulse 0.5s infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .speed-question {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .speed-question h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .speed-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .speed-option {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .speed-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-blue);
+        }
+
+        .speed-score {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .score-value.correct-score {
+            color: var(--accent-green);
+        }
+
+        .score-value.wrong-score {
+            color: #ef4444;
+        }
+
+        /* Matching Pairs */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .match-column h4 {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .match-item {
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .match-item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .match-item.selected {
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.2);
+        }
+
+        .match-item.matched {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        /* Exercise */
+        .exercise-scenario {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .worker-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .worker-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .worker-card h5 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #ff6b35;
+        }
+
+        .worker-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .exercise-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .exercise-textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .exercise-hint {
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Reflection Card */
+        .reflection-content {
+            text-align: center;
+        }
+
+        .reflection-questions {
+            text-align: left;
+            margin: 24px 0;
+        }
+
+        .reflection-question {
+            margin-bottom: 20px;
+        }
+
+        .reflection-question label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .reflection-question input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .achievement-box {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(255, 204, 0, 0.2) 100%);
+            border: 2px solid #ff6b35;
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 32px;
+        }
+
+        .achievement-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .achievement-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: var(--heat-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .achievement-details {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .achievement-stat {
+            text-align: center;
+        }
+
+        .achievement-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .achievement-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .next-steps {
+            margin-top: 24px;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .next-steps h4 {
+            margin-bottom: 12px;
+            color: #ff6b35;
+        }
+
+        .next-step-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        /* Navigation Buttons */
+        .card-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .nav-btn.prev {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .nav-btn.prev:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-btn.next {
+            background: var(--heat-gradient);
+            border: none;
+            color: white;
+        }
+
+        .nav-btn.next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Quiz feedback */
+        .quiz-feedback {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-feedback.correct {
+            display: block;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--accent-green);
+        }
+
+        .quiz-feedback.incorrect {
+            display: block;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                display: none;
+            }
+
+            .flashcards-container {
+                grid-template-columns: 1fr;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .drag-drop-container {
+                grid-template-columns: 1fr;
+            }
+
+            .matching-container {
+                grid-template-columns: 1fr;
+            }
+
+            .worker-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .lesson-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .content-area {
+                padding: 16px;
+            }
+
+            .lesson-card {
+                padding: 20px;
+            }
+
+            .stats-row {
+                flex-wrap: wrap;
+            }
+
+            .speed-options {
+                grid-template-columns: 1fr;
+            }
+
+            .heat-levels {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tech-flow {
+                flex-direction: column;
+            }
+
+            .tech-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="lesson-header">
+        <div class="lesson-title">
+            <span style="font-size: 2rem;">🔥</span>
+            <h1>Odzież M12™ - Ciepło pod kontrolą</h1>
+        </div>
+        <div class="lesson-meta">
+            <div class="meta-item">
+                <span>⏱️</span>
+                <span>40 min</span>
+            </div>
+            <div class="meta-item">
+                <span>🎴</span>
+                <span>14 kart</span>
+            </div>
+            <div class="meta-item">
+                <span>📊</span>
+                <span>Intermediate</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 7.14%;"></div>
+        </div>
+        <div class="progress-text" id="progressText">1 / 14</div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <h3>Nawigacja</h3>
+            <div id="cardNav">
+                <!-- Generated by JS -->
+            </div>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- Card 1: Hero -->
+            <div class="lesson-card active" data-card="1">
+                <div class="card-header">
+                    <span class="card-icon">🎯</span>
+                    <div class="card-title-group">
+                        <h2>Witaj w lekcji!</h2>
+                        <span class="card-subtitle">Karta 1 z 14 • Hero</span>
+                    </div>
+                    <span class="card-time">⏱️ 2 min</span>
+                </div>
+
+                <div class="hero-content">
+                    <div class="hero-icon">🔥</div>
+                    <h1 class="hero-title">Sprzedaj ciepło, nie kurtkę</h1>
+                    <p class="hero-subtitle">Odzież podgrzewana M12™ - technologia, która zmienia zimę w sezon produktywności</p>
+
+                    <div class="goals-box">
+                        <h3>🎯 Po tej lekcji będziesz potrafił:</h3>
+                        <div class="goal-item">Wyjaśnić technologię grzewczą z włókna węglowego</div>
+                        <div class="goal-item">Dobrać produkt do stylu pracy klienta</div>
+                        <div class="goal-item">Argumentować ROI odzieży podgrzewanej</div>
+                        <div class="goal-item">Odpowiedzieć na obiekcje "drogie" i "bateria się wyczerpie"</div>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-value">11h</div>
+                            <div class="stat-label">max. czas grzania</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">stref grzewczych</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">poziomy ciepła</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" disabled>← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 2: Theory - How it works -->
+            <div class="lesson-card" data-card="2">
+                <div class="card-header">
+                    <span class="card-icon">⚙️</span>
+                    <div class="card-title-group">
+                        <h2>Jak to działa?</h2>
+                        <span class="card-subtitle">Karta 2 z 14 • Teoria</span>
+                    </div>
+                    <span class="card-time">⏱️ 4 min</span>
+                </div>
+
+                <div class="theory-content">
+                    <p>Odzież podgrzewana Milwaukee® wykorzystuje zaawansowaną technologię elementów grzewczych z <strong>włókna węglowego</strong>, które są wszyte w kluczowych strefach ciała.</p>
+
+                    <div class="tech-diagram">
+                        <div class="tech-flow">
+                            <div class="tech-step">
+                                <div class="tech-step-icon">🔋</div>
+                                <div class="tech-step-title">Akumulator M12™</div>
+                            </div>
+                            <span class="tech-arrow">→</span>
+                            <div class="tech-step">
+                                <div class="tech-step-icon">⚡</div>
+                                <div class="tech-step-title">Kontroler</div>
+                            </div>
+                            <span class="tech-arrow">→</span>
+                            <div class="tech-step">
+                                <div class="tech-step-icon">🧵</div>
+                                <div class="tech-step-title">Włókno węglowe</div>
+                            </div>
+                            <span class="tech-arrow">→</span>
+                            <div class="tech-step">
+                                <div class="tech-step-icon">🔥</div>
+                                <div class="tech-step-title">Ciepło</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 24px 0 16px;">🎚️ 3 poziomy grzania:</h4>
+
+                    <div class="heat-levels">
+                        <div class="heat-level high">
+                            <div class="heat-level-icon">🔴</div>
+                            <div class="heat-level-name">WYSOKI</div>
+                            <div class="heat-level-time">~4-5h</div>
+                        </div>
+                        <div class="heat-level medium">
+                            <div class="heat-level-icon">🟠</div>
+                            <div class="heat-level-name">ŚREDNI</div>
+                            <div class="heat-level-time">~6-8h</div>
+                        </div>
+                        <div class="heat-level low">
+                            <div class="heat-level-icon">🟢</div>
+                            <div class="heat-level-name">NISKI</div>
+                            <div class="heat-level-time">~8-11h</div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <strong>🎯 Kluczowy fakt:</strong> Włókno węglowe jest <em>elastyczne</em> - nie ogranicza ruchów i nie łamie się przy zginaniu. Można prać w pralce i suszyć!
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 3: Lightbulb - Ecosystem -->
+            <div class="lesson-card" data-card="3">
+                <div class="card-header">
+                    <span class="card-icon">💡</span>
+                    <div class="card-title-group">
+                        <h2>Lightbulb Moment</h2>
+                        <span class="card-subtitle">Karta 3 z 14 • Insight</span>
+                    </div>
+                    <span class="card-time">⏱️ 1 min</span>
+                </div>
+
+                <div class="lightbulb-content">
+                    <div class="lightbulb-icon">💡</div>
+                    <h2 class="lightbulb-insight">1 akumulator M12™ = cały ekosystem!</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 32px;">
+                        Ten sam akumulator, który napędza wiertarkę, może ogrzewać kurtkę
+                    </p>
+
+                    <div class="ecosystem-visual">
+                        <div class="ecosystem-item">
+                            <div class="ecosystem-item-icon">🔧</div>
+                            <div class="ecosystem-item-name">Wiertarka M12</div>
+                        </div>
+                        <span class="ecosystem-plus">+</span>
+                        <div class="ecosystem-item">
+                            <div class="ecosystem-item-icon">🔦</div>
+                            <div class="ecosystem-item-name">Lampa M12</div>
+                        </div>
+                        <span class="ecosystem-plus">+</span>
+                        <div class="ecosystem-item">
+                            <div class="ecosystem-item-icon">🧥</div>
+                            <div class="ecosystem-item-name">Kurtka M12</div>
+                        </div>
+                        <span class="ecosystem-plus">=</span>
+                        <div class="ecosystem-item" style="background: rgba(0, 255, 136, 0.1); border-color: var(--accent-green);">
+                            <div class="ecosystem-item-icon">🔋</div>
+                            <div class="ecosystem-item-name" style="color: var(--accent-green);">1 bateria</div>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box" style="text-align: center; margin-top: 24px;">
+                        <strong>💰 ARGUMENT SPRZEDAŻOWY:</strong><br>
+                        "Czy masz już narzędzia M12? To kurtkę kupisz <em>taniej</em> - używasz tych samych baterii!"
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 4: Hotspot - Jacket Anatomy -->
+            <div class="lesson-card" data-card="4">
+                <div class="card-header">
+                    <span class="card-icon">📍</span>
+                    <div class="card-title-group">
+                        <h2>Anatomia kurtki TOUGHSHELL</h2>
+                        <span class="card-subtitle">Karta 4 z 14 • Hotspot</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Kliknij punkty na kurtce, aby poznać szczegóły:</p>
+
+                <div class="hotspot-container">
+                    <div class="hotspot-image">
+                        <img src="images/jacket.jpeg" alt="M12 TOUGHSHELL Kurtka" style="max-width: 400px; width: 100%; height: auto; border-radius: 8px;">
+                        <div class="hotspot" style="top: 25%; left: 40%;" onclick="showHotspot(1)">1</div>
+                        <div class="hotspot" style="top: 25%; left: 60%;" onclick="showHotspot(2)">2</div>
+                        <div class="hotspot" style="top: 45%; left: 50%;" onclick="showHotspot(3)">3</div>
+                        <div class="hotspot" style="top: 55%; left: 30%;" onclick="showHotspot(4)">4</div>
+                        <div class="hotspot" style="top: 55%; left: 70%;" onclick="showHotspot(5)">5</div>
+                        <div class="hotspot" style="top: 75%; left: 50%;" onclick="showHotspot(6)">6</div>
+                    </div>
+
+                    <div class="hotspot-info" id="hotspotInfo">
+                        <h4>👆 Kliknij punkt na kurtce</h4>
+                        <p>Poznaj budowę i funkcje każdego elementu kurtki podgrzewanej Milwaukee.</p>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 5: Comparison Table -->
+            <div class="lesson-card" data-card="5">
+                <div class="card-header">
+                    <span class="card-icon">📋</span>
+                    <div class="card-title-group">
+                        <h2>Portfolio produktów M12™</h2>
+                        <span class="card-subtitle">Karta 5 z 14 • Porównanie</span>
+                    </div>
+                    <span class="card-time">⏱️ 4 min</span>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Produkt</th>
+                            <th>Strefy</th>
+                            <th>Czas pracy</th>
+                            <th>Zastosowanie</th>
+                            <th>Cena*</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="product-badge">🧥 Kurtka TOUGHSHELL</span></td>
+                            <td><span class="zones-badge">5 stref</span></td>
+                            <td>8h</td>
+                            <td>Warstwa zewnętrzna, budowa</td>
+                            <td>~750 zł</td>
+                        </tr>
+                        <tr>
+                            <td><span class="product-badge">🧥 Kurtka pikowana</span></td>
+                            <td><span class="zones-badge">5 stref</span></td>
+                            <td>11h</td>
+                            <td>Lekka, pod płaszcz lub solo</td>
+                            <td>~650 zł</td>
+                        </tr>
+                        <tr>
+                            <td><span class="product-badge">🦺 Kamizelka</span></td>
+                            <td><span class="zones-badge">3 strefy</span></td>
+                            <td>11h</td>
+                            <td>Pod kurtkę, cały rok</td>
+                            <td>~500 zł</td>
+                        </tr>
+                        <tr>
+                            <td><span class="product-badge">👕 Bluza z kapturem</span></td>
+                            <td><span class="zones-badge">3 strefy</span></td>
+                            <td>11h</td>
+                            <td>Warstwa bazowa zimą</td>
+                            <td>~550 zł</td>
+                        </tr>
+                        <tr>
+                            <td><span class="product-badge">👔 Koszulka USB WORKSKIN</span></td>
+                            <td><span class="zones-badge">2 strefy</span></td>
+                            <td>3h</td>
+                            <td>Najlżejsza, pod wszystko</td>
+                            <td>~350 zł</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">*Ceny orientacyjne bez akumulatora</p>
+
+                <div class="highlight-box" style="margin-top: 24px;">
+                    <strong>💡 Sprzedaż łączona:</strong> Kamizelka + Kurtka = idealne combo na mróz! Kamizelka grzeje pod kurtką niegrzewczą, kurtka chroni przed wiatrem.
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 6: Drag & Drop - Layering -->
+            <div class="lesson-card" data-card="6">
+                <div class="card-header">
+                    <span class="card-icon">🔀</span>
+                    <div class="card-title-group">
+                        <h2>Dobierz warstwę do sezonu</h2>
+                        <span class="card-subtitle">Karta 6 z 14 • Drag & Drop</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Przeciągnij produkt do właściwego zastosowania:</p>
+
+                <div class="drag-drop-container">
+                    <div class="drag-column">
+                        <h4>Produkty M12™</h4>
+                        <div class="drag-item" draggable="true" data-product="hoodie">👕 Bluza z kapturem</div>
+                        <div class="drag-item" draggable="true" data-product="vest">🦺 Kamizelka</div>
+                        <div class="drag-item" draggable="true" data-product="jacket">🧥 Kurtka TOUGHSHELL</div>
+                        <div class="drag-item" draggable="true" data-product="shirt">👔 Koszulka USB</div>
+                        <div class="drag-item" draggable="true" data-product="puffer">🧥 Kurtka pikowana</div>
+                    </div>
+                    <div class="drag-column">
+                        <h4>Zastosowanie</h4>
+                        <div class="drop-zone" data-correct="shirt">
+                            <span class="drop-label">🌡️ Lekki mróz, biuro → pod koszulę</span>
+                        </div>
+                        <div class="drop-zone" data-correct="vest">
+                            <span class="drop-label">❄️ Cały rok → pod dowolną kurtkę</span>
+                        </div>
+                        <div class="drop-zone" data-correct="hoodie">
+                            <span class="drop-label">🧊 Zima → warstwa bazowa pod kurtkę</span>
+                        </div>
+                        <div class="drop-zone" data-correct="puffer">
+                            <span class="drop-label">☃️ Lekka zima → jako warstwa zewnętrzna</span>
+                        </div>
+                        <div class="drop-zone" data-correct="jacket">
+                            <span class="drop-label">🌨️ Ciężka zima, budowa → full outdoor</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 7: Flashcards -->
+            <div class="lesson-card" data-card="7">
+                <div class="card-header">
+                    <span class="card-icon">🎴</span>
+                    <div class="card-title-group">
+                        <h2>10 kluczowych faktów</h2>
+                        <span class="card-subtitle">Karta 7 z 14 • Fiszki</span>
+                    </div>
+                    <span class="card-time">⏱️ 4 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Kliknij fiszkę, aby zobaczyć odpowiedź:</p>
+
+                <div class="flashcards-container" id="flashcardsContainer">
+                    <!-- Generated by JS -->
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 8: Calculator -->
+            <div class="lesson-card" data-card="8">
+                <div class="card-header">
+                    <span class="card-icon">🧮</span>
+                    <div class="card-title-group">
+                        <h2>Kalkulator: Koszt przestoju zimowego</h2>
+                        <span class="card-subtitle">Karta 8 z 14 • Kalkulator</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px;">Oblicz, ile kosztuje brak odzieży podgrzewanej:</p>
+
+                <div class="calculator-grid">
+                    <div class="calc-inputs">
+                        <div class="calc-input-group">
+                            <label>Liczba pracowników outdoor</label>
+                            <input type="number" id="calcWorkers" value="10" min="1">
+                        </div>
+                        <div class="calc-input-group">
+                            <label>Stawka dzienna pracownika (zł)</label>
+                            <input type="number" id="calcRate" value="350" min="0">
+                        </div>
+                        <div class="calc-input-group">
+                            <label>Dni chorobowe zimą / osobę</label>
+                            <input type="number" id="calcSickDays" value="3" min="0">
+                        </div>
+                        <div class="calc-input-group">
+                            <label>Spadek produktywności w zimie (%)</label>
+                            <input type="number" id="calcProdDrop" value="15" min="0" max="100">
+                        </div>
+                        <div class="calc-input-group">
+                            <label>Koszt kurtki M12™ (zł)</label>
+                            <input type="number" id="calcJacketCost" value="750" min="0">
+                        </div>
+                        <button class="calc-btn" onclick="calculateROI()">🔥 Oblicz straty vs inwestycja</button>
+                    </div>
+
+                    <div class="calc-results">
+                        <h4 style="margin-bottom: 16px; color: #ff6b35;">📊 Wyniki</h4>
+                        <div class="result-row">
+                            <span class="result-label">Koszt dni chorobowych:</span>
+                            <span class="result-value negative" id="resultSick">10,500 zł</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Strata produktywności (90 dni zimy):</span>
+                            <span class="result-value negative" id="resultProd">47,250 zł</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">SUMA STRAT:</span>
+                            <span class="result-value negative" id="resultTotal">57,750 zł</span>
+                        </div>
+                        <div class="result-row" style="border-top: 2px solid rgba(255,255,255,0.2); margin-top: 8px; padding-top: 16px;">
+                            <span class="result-label">Inwestycja w M12™:</span>
+                            <span class="result-value" id="resultInvest">7,500 zł</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Oszczędność / sezon:</span>
+                            <span class="result-value positive" id="resultSavings">50,250 zł</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">ROI:</span>
+                            <span class="result-value positive" id="resultROI">670%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 9: Role-Play -->
+            <div class="lesson-card" data-card="9">
+                <div class="card-header">
+                    <span class="card-icon">🎭</span>
+                    <div class="card-title-group">
+                        <h2>"To za drogie!"</h2>
+                        <span class="card-subtitle">Karta 9 z 14 • Role-Play</span>
+                    </div>
+                    <span class="card-time">⏱️ 5 min</span>
+                </div>
+
+                <div class="roleplay-scenario">
+                    <div class="scenario-header">
+                        <div class="scenario-avatar">👷</div>
+                        <div class="scenario-info">
+                            <h4>Marek - Kierownik budowy</h4>
+                            <p>15 pracowników outdoor • Szuka rozwiązań na zimę</p>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-bubble">
+                        <p><strong>Marek:</strong> "500-700 zł za kurtkę?! Chyba żartujesz. W markecie kupię za 200 zł..."</p>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 16px;">Wybierz najlepszą odpowiedź:</h4>
+
+                <div class="response-options" id="roleplayOptions">
+                    <div class="response-option" onclick="checkRoleplay(this, false)">
+                        <span class="option-letter">A</span>
+                        <span>"Nasza jakość jest znacznie lepsza niż marketowa"</span>
+                    </div>
+                    <div class="response-option" onclick="checkRoleplay(this, true)">
+                        <span class="option-letter">B</span>
+                        <span>"Ile kosztuje Cię 1 dzień, gdy pracownik nie wychodzi z ciepłej budki?"</span>
+                    </div>
+                    <div class="response-option" onclick="checkRoleplay(this, false)">
+                        <span class="option-letter">C</span>
+                        <span>"Mamy raty i leasing na odzież roboczą"</span>
+                    </div>
+                    <div class="response-option" onclick="checkRoleplay(this, false)">
+                        <span class="option-letter">D</span>
+                        <span>"Mogę dać 10% rabatu przy zamówieniu na 15 sztuk"</span>
+                    </div>
+                </div>
+
+                <div class="quiz-feedback" id="roleplayFeedback"></div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 10: Fill Blanks -->
+            <div class="lesson-card" data-card="10">
+                <div class="card-header">
+                    <span class="card-icon">📝</span>
+                    <div class="card-title-group">
+                        <h2>Uzupełnij argumenty</h2>
+                        <span class="card-subtitle">Karta 10 z 14 • Fill Blanks</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Kliknij puste pola, aby wybrać właściwą odpowiedź:</p>
+
+                <div class="fill-blanks-container">
+                    <div class="blank-item">
+                        <p class="blank-text">1. Kurtka M12™ TOUGHSHELL działa do <span class="blank-input" onclick="fillBlank(this, '8')">___</span> godzin na akumulatorze 3.0 Ah.</p>
+                    </div>
+                    <div class="blank-item">
+                        <p class="blank-text">2. Odzież M12™ ma <span class="blank-input" onclick="fillBlank(this, '3')">___</span> poziomy grzania: Wysoki, Średni, Niski.</p>
+                    </div>
+                    <div class="blank-item">
+                        <p class="blank-text">3. Elementy grzewcze są wykonane z <span class="blank-input" onclick="fillBlank(this, 'włókna węglowego')">______________</span>.</p>
+                    </div>
+                    <div class="blank-item">
+                        <p class="blank-text">4. Odzież M12™ można <span class="blank-input" onclick="fillBlank(this, 'prać')">______</span> w pralce i suszyć.</p>
+                    </div>
+                    <div class="blank-item">
+                        <p class="blank-text">5. Port <span class="blank-input" onclick="fillBlank(this, 'USB')">___</span> w kontrolerze pozwala ładować telefon.</p>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 11: Speed Drill -->
+            <div class="lesson-card" data-card="11">
+                <div class="card-header">
+                    <span class="card-icon">⚡</span>
+                    <div class="card-title-group">
+                        <h2>Speed Quiz</h2>
+                        <span class="card-subtitle">Karta 11 z 14 • Speed Drill</span>
+                    </div>
+                    <span class="card-time">⏱️ 2 min</span>
+                </div>
+
+                <div class="speed-drill-container">
+                    <div class="timer-display" id="speedTimer">60</div>
+                    <p style="color: var(--text-secondary); margin-bottom: 16px;">8 pytań w 60 sekund!</p>
+
+                    <button class="calc-btn" id="startSpeedBtn" onclick="startSpeedDrill()" style="max-width: 300px; margin: 0 auto;">
+                        🔥 START
+                    </button>
+
+                    <div class="speed-question" id="speedQuestion" style="display: none;">
+                        <h3 id="speedQuestionText"></h3>
+                        <div class="speed-options" id="speedOptions">
+                            <!-- Generated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="speed-score" id="speedScore" style="display: none;">
+                        <div class="score-item">
+                            <div class="score-value correct-score" id="correctCount">0</div>
+                            <div class="score-label">Poprawne</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-value wrong-score" id="wrongCount">0</div>
+                            <div class="score-label">Błędne</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 12: Matching Pairs -->
+            <div class="lesson-card" data-card="12">
+                <div class="card-header">
+                    <span class="card-icon">🔗</span>
+                    <div class="card-title-group">
+                        <h2>Dopasuj produkt do klienta</h2>
+                        <span class="card-subtitle">Karta 12 z 14 • Matching</span>
+                    </div>
+                    <span class="card-time">⏱️ 3 min</span>
+                </div>
+
+                <p style="margin-bottom: 20px; color: var(--text-secondary);">Kliknij element z lewej, potem odpowiadający z prawej strony:</p>
+
+                <div class="matching-container">
+                    <div class="match-column">
+                        <h4>Klient</h4>
+                        <div class="match-item" data-match="welder" onclick="selectMatch(this, 'left')">👨‍🏭 Spawacz</div>
+                        <div class="match-item" data-match="roofer" onclick="selectMatch(this, 'left')">🏠 Dekarz</div>
+                        <div class="match-item" data-match="driver" onclick="selectMatch(this, 'left')">🚚 Kierowca dostawczy</div>
+                        <div class="match-item" data-match="office" onclick="selectMatch(this, 'left')">💼 Inspektor budowy</div>
+                        <div class="match-item" data-match="warehouse" onclick="selectMatch(this, 'left')">📦 Magazynier (chłodnia)</div>
+                    </div>
+                    <div class="match-column">
+                        <h4>Rekomendacja</h4>
+                        <div class="match-item" data-match="driver" onclick="selectMatch(this, 'right')">Koszulka USB - szybkie wsiadanie/wysiadanie</div>
+                        <div class="match-item" data-match="roofer" onclick="selectMatch(this, 'right')">Kurtka TOUGHSHELL - wiatr, deszcz</div>
+                        <div class="match-item" data-match="warehouse" onclick="selectMatch(this, 'right')">Bluza + Kamizelka - długie godziny w chłodni</div>
+                        <div class="match-item" data-match="welder" onclick="selectMatch(this, 'right')">Kamizelka pod bluzę - nie przeszkadza w spawaniu</div>
+                        <div class="match-item" data-match="office" onclick="selectMatch(this, 'right')">Kurtka pikowana - elegancka, ciepła</div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 13: Exercise -->
+            <div class="lesson-card" data-card="13">
+                <div class="card-header">
+                    <span class="card-icon">✍️</span>
+                    <div class="card-title-group">
+                        <h2>Dobierz odzież dla firmy budowlanej</h2>
+                        <span class="card-subtitle">Karta 13 z 14 • Ćwiczenie</span>
+                    </div>
+                    <span class="card-time">⏱️ 4 min</span>
+                </div>
+
+                <div class="exercise-scenario">
+                    <h4 style="margin-bottom: 16px;">🏗️ Scenariusz: Firma budowlana (15 pracowników)</h4>
+
+                    <div class="worker-grid">
+                        <div class="worker-card">
+                            <h5>👷 Murarze (6 osób)</h5>
+                            <p>Całodniowa praca outdoor, ciężka fizyczna robota, kontakt z wilgocią</p>
+                        </div>
+                        <div class="worker-card">
+                            <h5>⚡ Elektrycy (4 osoby)</h5>
+                            <p>Praca wewnątrz nieogrzewanych budynków, precyzyjne ruchy</p>
+                        </div>
+                        <div class="worker-card">
+                            <h5>🚜 Operatorzy koparek (3 osoby)</h5>
+                            <p>Siedzą w kabinie, ale wychodzą sprawdzać teren</p>
+                        </div>
+                        <div class="worker-card">
+                            <h5>📋 Kierownik + Inspektor (2 osoby)</h5>
+                            <p>Obchody budowy, spotkania z klientami</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 12px;">📝 Dla każdej grupy dobierz: produkt M12™, uzasadnienie, upsell</h4>
+
+                <textarea class="exercise-textarea" placeholder="Murarze (6 osób): 
+→ Kurtka TOUGHSHELL - odporna na wodę i wiatr, 5 stref grzewczych
+→ Upsell: Rękawice podgrzewane (jeśli mamy w ofercie)
+
+Elektrycy (4 osoby):
+→ Kamizelka pod kurtkę - nie ogranicza ruchów przy precyzyjnej pracy...
+
+Operatorzy koparek (3 osoby):
+→ ...
+
+Kierownik + Inspektor (2 osoby):
+→ ..."></textarea>
+
+                <div class="exercise-hint">
+                    <strong>💡 Podpowiedź:</strong> Kierownik spotyka się z klientami - czy kurtka kamuflażowa będzie odpowiednia? A może pikowana wygląda bardziej profesjonalnie?
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="nextCard()">Następna →</button>
+                </div>
+            </div>
+
+            <!-- Card 14: Reflection + Achievement -->
+            <div class="lesson-card" data-card="14">
+                <div class="card-header">
+                    <span class="card-icon">💭</span>
+                    <div class="card-title-group">
+                        <h2>Podsumowanie</h2>
+                        <span class="card-subtitle">Karta 14 z 14 • Refleksja</span>
+                    </div>
+                    <span class="card-time">⏱️ 2 min</span>
+                </div>
+
+                <div class="reflection-content">
+                    <div class="reflection-questions">
+                        <div class="reflection-question">
+                            <label>❄️ Który Twój klient zamrozi się tej zimy bez M12™?</label>
+                            <input type="text" placeholder="Np. Firma X - mają 20 osób na budowie, narzekają na zimno...">
+                        </div>
+                        <div class="reflection-question">
+                            <label>💬 Jakiego argumentu użyjesz przy obiekcji "za drogie"?</label>
+                            <input type="text" placeholder="Np. Policzę koszt przestoju / Masz już narzędzia M12...">
+                        </div>
+                        <div class="reflection-question">
+                            <label>📅 Jakie działanie podejmiesz w tym tygodniu?</label>
+                            <input type="text" placeholder="Np. Zadzwonię do 3 firm budowlanych przed sezonem...">
+                        </div>
+                    </div>
+
+                    <div class="achievement-box">
+                        <div class="achievement-icon">🔥</div>
+                        <div class="achievement-title">AMBASADOR CIEPŁA M12™</div>
+                        <p style="color: var(--text-secondary);">Gratulacje! Ukończyłeś lekcję o odzieży podgrzewanej.</p>
+
+                        <div class="achievement-details">
+                            <div class="achievement-stat">
+                                <div class="achievement-stat-value">14/14</div>
+                                <div class="achievement-stat-label">Karty ukończone</div>
+                            </div>
+                            <div class="achievement-stat">
+                                <div class="achievement-stat-value">+175</div>
+                                <div class="achievement-stat-label">XP zdobyte</div>
+                            </div>
+                            <div class="achievement-stat">
+                                <div class="achievement-stat-value">96%</div>
+                                <div class="achievement-stat-label">Wynik</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="next-steps">
+                        <h4>🔥 Następne kroki:</h4>
+                        <div class="next-step-item">
+                            <span>📞</span>
+                            <span>Zadzwoń do 3 klientów z branży budowlanej przed sezonem</span>
+                        </div>
+                        <div class="next-step-item">
+                            <span>🧥</span>
+                            <span>Poproś o kurtkę demo do prezentacji u klienta</span>
+                        </div>
+                        <div class="next-step-item">
+                            <span>🎓</span>
+                            <span>Przejdź lekcję: "Odzież chłodząca - lato z Milwaukee"</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-navigation">
+                    <button class="nav-btn prev" onclick="prevCard()">← Poprzednia</button>
+                    <button class="nav-btn next" onclick="finishLesson()" style="background: linear-gradient(135deg, var(--accent-green) 0%, #00b368 100%);">✅ Zakończ lekcję</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Card navigation
+        let currentCard = 1;
+        const totalCards = 14;
+
+        const cardData = [
+            { icon: '🎯', title: 'Hero', type: 'intro' },
+            { icon: '⚙️', title: 'Jak to działa?', type: 'theory' },
+            { icon: '💡', title: 'Ekosystem M12', type: 'insight' },
+            { icon: '📍', title: 'Anatomia kurtki', type: 'hotspot' },
+            { icon: '📋', title: 'Portfolio produktów', type: 'comparison' },
+            { icon: '🔀', title: 'Dobierz warstwę', type: 'dragdrop' },
+            { icon: '🎴', title: 'Fiszki', type: 'flashcards' },
+            { icon: '🧮', title: 'Kalkulator strat', type: 'calculator' },
+            { icon: '🎭', title: 'Za drogie!', type: 'roleplay' },
+            { icon: '📝', title: 'Fill Blanks', type: 'fillblanks' },
+            { icon: '⚡', title: 'Speed Quiz', type: 'speedquiz' },
+            { icon: '🔗', title: 'Matching', type: 'matching' },
+            { icon: '✍️', title: 'Ćwiczenie', type: 'exercise' },
+            { icon: '💭', title: 'Refleksja', type: 'reflection' }
+        ];
+
+        // Initialize navigation
+        function initNavigation() {
+            const nav = document.getElementById('cardNav');
+            nav.innerHTML = cardData.map((card, index) => `
+                <div class="card-nav-item ${index === 0 ? 'active' : ''}" onclick="goToCard(${index + 1})">
+                    <span class="nav-icon">${card.icon}</span>
+                    <div>
+                        <div class="nav-text">${card.title}</div>
+                        <div class="nav-number">Karta ${index + 1}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function goToCard(cardNum) {
+            document.querySelectorAll('.lesson-card').forEach(card => card.classList.remove('active'));
+            document.querySelector(`[data-card="${cardNum}"]`).classList.add('active');
+
+            document.querySelectorAll('.card-nav-item').forEach((item, index) => {
+                item.classList.remove('active');
+                if (index < cardNum - 1) item.classList.add('completed');
+                if (index === cardNum - 1) item.classList.add('active');
+            });
+
+            currentCard = cardNum;
+            updateProgress();
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards) {
+                goToCard(currentCard + 1);
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                goToCard(currentCard - 1);
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentCard / totalCards) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${currentCard} / ${totalCards}`;
+        }
+
+        // Hotspot functionality
+        const hotspotData = {
+            1: { title: '🔥 Strefa grzewcza - klatka piersiowa', desc: 'Element grzewczy z włókna węglowego ogrzewa klatkę piersiową, chroniąc serce i płuca przed zimnem.' },
+            2: { title: '🔥 Strefa grzewcza - plecy', desc: 'Duża strefa grzewcza na plecach rozprowadza ciepło na całą górną część ciała.' },
+            3: { title: '🎚️ Panel sterowania', desc: 'Prosty przycisk LED pozwala wybrać 1 z 3 poziomów grzania. Dioda pokazuje aktualny poziom: czerwony=wysoki, pomarańczowy=średni, zielony=niski.' },
+            4: { title: '🔌 Kieszeń na akumulator (lewa)', desc: 'Ukryta kieszeń na akumulator M12™. Można umieścić baterię z przodu lub z tyłu dla komfortu.' },
+            5: { title: '🔥 Strefa grzewcza - kieszenie', desc: 'Przednie kieszenie są podgrzewane - idealne do ogrzania dłoni bez rękawic.' },
+            6: { title: '👕 Materiał FREE FLEX', desc: 'Elastyczny materiał pod pachami zapewnia pełen zakres ruchu przy pracy nad głową. TOUGHSHELL = 90% poliester + 10% spandex.' }
+        };
+
+        function showHotspot(num) {
+            const data = hotspotData[num];
+            document.getElementById('hotspotInfo').innerHTML = `
+                <h4>${data.title}</h4>
+                <p>${data.desc}</p>
+            `;
+            document.querySelectorAll('.hotspot').forEach(h => h.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Flashcards
+        const flashcards = [
+            { q: 'Ile stref grzewczych ma kurtka pikowana?', a: '5 stref grzewczych' },
+            { q: 'Czy można prać odzież M12™ w pralce?', a: 'TAK - można prać i suszyć!' },
+            { q: 'Jaki akumulator napędza odzież M12?', a: 'Każdy akumulator M12™ REDLITHIUM' },
+            { q: 'Ile godzin działa kamizelka na niskim?', a: 'Do 11 godzin' },
+            { q: 'Co robi port USB w kontrolerze?', a: 'Ładuje telefon / urządzenia mobilne' },
+            { q: 'Z czego są elementy grzewcze?', a: 'Włókno węglowe' },
+            { q: 'Ile poziomów grzania?', a: '3 poziomy: Wysoki, Średni, Niski' },
+            { q: 'Co oznacza FREE FLEX?', a: 'Elastyczny materiał pod pachami' },
+            { q: 'Czy jest wersja damska?', a: 'TAK - kurtka pikowana i bluza damska' },
+            { q: 'Co to TOUGHSHELL?', a: 'Wytrzymały materiał 90% poliester + 10% spandex' }
+        ];
+
+        function initFlashcards() {
+            const container = document.getElementById('flashcardsContainer');
+            container.innerHTML = flashcards.map((card, i) => `
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <span class="flashcard-number">${i + 1}/10</span>
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <p style="font-weight: 600;">${card.q}</p>
+                        </div>
+                        <div class="flashcard-back">
+                            <p>${card.a}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Drag & Drop
+        let draggedElement = null;
+
+        function initDragDrop() {
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    draggedElement = item;
+                    item.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', item.dataset.product);
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                    draggedElement = null;
+                });
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    zone.style.borderColor = '#ff6b35';
+                    zone.style.background = 'rgba(255, 107, 53, 0.1)';
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.style.borderColor = '';
+                    zone.style.background = '';
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.style.borderColor = '';
+                    zone.style.background = '';
+
+                    if (!draggedElement) return;
+
+                    const droppedProduct = e.dataTransfer.getData('text/plain');
+                    const correctProduct = zone.dataset.correct;
+
+                    if (droppedProduct === correctProduct) {
+                        zone.classList.add('correct');
+                        zone.innerHTML = `<span style="color: var(--accent-green);">✓</span> ${draggedElement.textContent} → ${zone.querySelector('.drop-label')?.textContent || zone.textContent}`;
+                        draggedElement.style.display = 'none';
+                    } else {
+                        zone.classList.add('incorrect');
+                        setTimeout(() => {
+                            zone.classList.remove('incorrect');
+                        }, 1000);
+                    }
+                });
+            });
+        }
+
+        // Calculator
+        function calculateROI() {
+            const workers = parseInt(document.getElementById('calcWorkers').value);
+            const rate = parseInt(document.getElementById('calcRate').value);
+            const sickDays = parseInt(document.getElementById('calcSickDays').value);
+            const prodDrop = parseInt(document.getElementById('calcProdDrop').value);
+            const jacketCost = parseInt(document.getElementById('calcJacketCost').value);
+
+            const sickCost = workers * sickDays * rate;
+            const winterDays = 90; // 3 months
+            const prodCost = workers * rate * winterDays * (prodDrop / 100);
+            const totalLoss = sickCost + prodCost;
+            const investment = workers * jacketCost;
+            const savings = totalLoss - investment;
+            const roi = ((savings / investment) * 100).toFixed(0);
+
+            document.getElementById('resultSick').textContent = sickCost.toLocaleString('pl-PL') + ' zł';
+            document.getElementById('resultProd').textContent = prodCost.toLocaleString('pl-PL') + ' zł';
+            document.getElementById('resultTotal').textContent = totalLoss.toLocaleString('pl-PL') + ' zł';
+            document.getElementById('resultInvest').textContent = investment.toLocaleString('pl-PL') + ' zł';
+            document.getElementById('resultSavings').textContent = savings.toLocaleString('pl-PL') + ' zł';
+            document.getElementById('resultSavings').className = 'result-value ' + (savings >= 0 ? 'positive' : 'negative');
+            document.getElementById('resultROI').textContent = roi + '%';
+            document.getElementById('resultROI').className = 'result-value ' + (roi >= 0 ? 'positive' : 'negative');
+        }
+
+        // Role-play
+        function checkRoleplay(element, isCorrect) {
+            document.querySelectorAll('.response-option').forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.style.pointerEvents = 'none';
+            });
+
+            element.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            const feedback = document.getElementById('roleplayFeedback');
+            if (isCorrect) {
+                feedback.className = 'quiz-feedback correct';
+                feedback.innerHTML = `<strong>✅ Świetnie!</strong> Pytanie o koszt przestoju przenosi rozmowę z ceny na wartość. 
+                Klient sam liczy: 350 zł × kilka dni = znacznie więcej niż kurtka!`;
+            } else {
+                feedback.className = 'quiz-feedback incorrect';
+                feedback.innerHTML = `<strong>❌ Nie do końca.</strong> Lepsza odpowiedź to B - pytanie o koszt przestoju. 
+                Zamiast bronić ceny, przenosimy rozmowę na wartość i oszczędności.`;
+            }
+        }
+
+        // Fill blanks
+        function fillBlank(element, answer) {
+            element.textContent = answer;
+            element.classList.add('correct');
+        }
+
+        // Speed Drill
+        const speedQuestions = [
+            { q: 'Ile godzin działa kurtka na niskim?', options: ['4h', '6h', '8h', '11h'], correct: 2 },
+            { q: 'Ile stref ma kamizelka?', options: ['2', '3', '4', '5'], correct: 1 },
+            { q: 'Można prać w pralce?', options: ['NIE', 'TAK', 'Tylko ręcznie', 'Tylko suche'], correct: 1 },
+            { q: 'Materiał grzewczy?', options: ['Miedź', 'Nikiel', 'Włókno węglowe', 'Aluminium'], correct: 2 },
+            { q: 'Ile poziomów grzania?', options: ['2', '3', '4', '5'], correct: 1 },
+            { q: 'Co to FREE FLEX?', options: ['Bateria', 'Kurtka', 'Elastyczny materiał', 'Gwarancja'], correct: 2 },
+            { q: 'Port w kontrolerze?', options: ['HDMI', 'USB', 'Lightning', 'Ethernet'], correct: 1 },
+            { q: 'Czy jest wersja damska?', options: ['NIE', 'TAK', 'W planach', 'Tylko bluza'], correct: 1 }
+        ];
+
+        let speedTimer = 60;
+        let speedInterval;
+        let speedQuestionIndex = 0;
+        let speedCorrect = 0;
+        let speedWrong = 0;
+
+        function startSpeedDrill() {
+            document.getElementById('startSpeedBtn').style.display = 'none';
+            document.getElementById('speedQuestion').style.display = 'block';
+            document.getElementById('speedScore').style.display = 'flex';
+            speedQuestionIndex = 0;
+            speedCorrect = 0;
+            speedWrong = 0;
+            speedTimer = 60;
+
+            speedInterval = setInterval(() => {
+                speedTimer--;
+                document.getElementById('speedTimer').textContent = speedTimer;
+                if (speedTimer <= 10) {
+                    document.getElementById('speedTimer').classList.add('warning');
+                }
+                if (speedTimer <= 0) {
+                    endSpeedDrill();
+                }
+            }, 1000);
+
+            showSpeedQuestion();
+        }
+
+        function showSpeedQuestion() {
+            if (speedQuestionIndex >= speedQuestions.length) {
+                endSpeedDrill();
+                return;
+            }
+
+            const q = speedQuestions[speedQuestionIndex];
+            document.getElementById('speedQuestionText').textContent = q.q;
+            document.getElementById('speedOptions').innerHTML = q.options.map((opt, i) => `
+                <div class="speed-option" onclick="answerSpeed(${i})">${opt}</div>
+            `).join('');
+        }
+
+        function answerSpeed(index) {
+            const q = speedQuestions[speedQuestionIndex];
+            if (index === q.correct) {
+                speedCorrect++;
+            } else {
+                speedWrong++;
+            }
+            document.getElementById('correctCount').textContent = speedCorrect;
+            document.getElementById('wrongCount').textContent = speedWrong;
+            speedQuestionIndex++;
+            showSpeedQuestion();
+        }
+
+        function endSpeedDrill() {
+            clearInterval(speedInterval);
+            document.getElementById('speedQuestion').innerHTML = `
+                <h3>🏁 Koniec!</h3>
+                <p style="font-size: 1.2rem; margin-top: 16px;">
+                    Wynik: <strong style="color: var(--accent-green);">${speedCorrect}/${speedQuestions.length}</strong>
+                </p>
+                <p style="color: var(--text-secondary); margin-top: 8px;">
+                    ${speedCorrect >= 7 ? '🔥🔥🔥 Świetnie!' : speedCorrect >= 5 ? '🔥🔥 Dobrze!' : '🔥 Poćwicz jeszcze!'}
+                </p>
+            `;
+        }
+
+        // Matching pairs
+        let selectedLeft = null;
+
+        function selectMatch(element, side) {
+            if (element.classList.contains('matched')) return;
+
+            if (side === 'left') {
+                document.querySelectorAll('.match-column:first-child .match-item').forEach(el => el.classList.remove('selected'));
+                element.classList.add('selected');
+                selectedLeft = element;
+            } else if (selectedLeft) {
+                if (selectedLeft.dataset.match === element.dataset.match) {
+                    selectedLeft.classList.remove('selected');
+                    selectedLeft.classList.add('matched');
+                    element.classList.add('matched');
+                } else {
+                    selectedLeft.classList.remove('selected');
+                }
+                selectedLeft = null;
+            }
+        }
+
+        // Finish lesson
+        function finishLesson() {
+            alert('🔥 Gratulacje! Ukończyłeś lekcję "Odzież M12™ - Ciepło pod kontrolą"!\n\n+175 XP\n🏆 Badge: Ambasador Ciepła M12');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavigation();
+            initFlashcards();
+            initDragDrop();
+            calculateROI();
+        });
+    </script>
+</body>
+
+</html>

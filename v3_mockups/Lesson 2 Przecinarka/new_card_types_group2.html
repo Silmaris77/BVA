@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupa 2: Interactive Practice - Milwaukee Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #999;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 136, 0, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 136, 0, 0.5);
+            box-shadow: 0 20px 60px rgba(255, 136, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .card-title p {
+            font-size: 0.95rem;
+            color: #999;
+        }
+
+        /* CARD 1: CHAT/DIALOG */
+        .chat-scenario {
+            background: rgba(255, 136, 0, 0.1);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .chat-scenario h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-scenario p {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .chat-window {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            min-height: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message.npc {
+            flex-direction: row;
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chat-message.npc .message-avatar {
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+        }
+
+        .chat-message.user .message-avatar {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 15px 18px;
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .chat-message.npc .message-bubble {
+            background: rgba(255, 136, 0, 0.15);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+        }
+
+        .chat-message.user .message-bubble {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .message-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #fff;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 8px;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: rgba(255, 136, 0, 0.15);
+            border-radius: 16px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff8800;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .response-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .response-option {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .response-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 136, 0, 0.5);
+            transform: translateX(5px);
+        }
+
+        .response-option .icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .response-option .text {
+            flex: 1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .conversation-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .metric-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .metric-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .metric-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff8800 0%, #ffd700 100%);
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ff8800;
+        }
+
+        /* CARD 2: CASE STUDY */
+        .case-study-intro {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .case-study-intro h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .case-study-intro p {
+            font-size: 1rem;
+            color: #999;
+        }
+
+        .timeline-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #ff8800 0%, #ffd700 100%);
+        }
+
+        .timeline-step {
+            position: relative;
+            padding-left: 80px;
+            margin-bottom: 35px;
+            cursor: pointer;
+        }
+
+        .timeline-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 17px;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 136, 0, 0.2);
+            border: 3px solid #ff8800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-step.active .timeline-dot {
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.5);
+        }
+
+        .timeline-step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .step-number {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #ff8800;
+            background: rgba(255, 136, 0, 0.2);
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .step-content {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .timeline-step.active .step-content {
+            max-height: 500px;
+            padding: 20px;
+        }
+
+        .step-description {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .step-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .highlight-tag {
+            padding: 8px 16px;
+            background: rgba(255, 136, 0, 0.15);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #ffd700;
+        }
+
+        .key-takeaways {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .key-takeaways h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .takeaway-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .takeaway-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .takeaway-item i {
+            color: #ffd700;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .takeaway-text {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .application-section {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .application-section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .application-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+
+        .application-textarea:focus {
+            outline: none;
+            border-color: rgba(255, 136, 0, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* CARD 3: PEER REVIEW */
+        .review-header {
+            background: rgba(255, 136, 0, 0.1);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .review-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .review-header p {
+            font-size: 0.95rem;
+            color: #999;
+        }
+
+        .submission-display {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .submission-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submission-content {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .submission-meta {
+            display: flex;
+            gap: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .rating-section {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .rating-section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .star {
+            font-size: 2.5rem;
+            color: rgba(255, 215, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .rating-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #999;
+            padding: 0 20px;
+        }
+
+        .feedback-section {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .feedback-section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+
+        .feedback-textarea:focus {
+            outline: none;
+            border-color: rgba(255, 136, 0, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .consensus-view {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .consensus-view h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .consensus-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .consensus-stat {
+            text-align: center;
+        }
+
+        .consensus-stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        .consensus-stat-label {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, #ff8800 0%, #ffd700 100%);
+            color: #000;
+        }
+
+        .action-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 136, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .conversation-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .consensus-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Grupa 2: Interactive Practice</h1>
+            <p>Praktyczne scenariusze - Milwaukee MX FUEL Training</p>
+        </div>
+
+        <div class="cards-grid">
+            <!-- CARD 1: CHAT/DIALOG -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-lucide="message-circle" stroke-width="2" size="32" color="#000"></i>
+                    </div>
+                    <div class="card-title">
+                        <h2>Czat / Dialog</h2>
+                        <p>Symulacja rozmowy - sales training</p>
+                    </div>
+                </div>
+
+                <div class="chat-scenario">
+                    <h3>
+                        <i data-lucide="info" size="18"></i>
+                        Scenariusz
+                    </h3>
+                    <p>Klient ma wątpliwości co do zakupu przecinarki MX FUEL COS350. Twoim zadaniem jest rozwiać jego obawy i przedstawić korzyści w sposób przekonujący.</p>
+                </div>
+
+                <div class="chat-window" id="chatWindow">
+                    <div class="chat-message npc">
+                        <div class="message-avatar">
+                            <i data-lucide="user" size="20" color="#000"></i>
+                        </div>
+                        <div class="message-bubble">
+                            <div class="message-text">Dzień dobry! Szukam przecinarki, ale zastanawiam się czy warto zainwestować w model akumulatorowy...</div>
+                            <div class="message-time">Klient • 09:15</div>
+                        </div>
+                    </div>
+
+                    <div class="typing-indicator" id="typingIndicator">
+                        <div class="message-avatar">
+                            <i data-lucide="user" size="20" color="#000"></i>
+                        </div>
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="response-options" id="responseOptions">
+                    <div class="response-option" onclick="selectResponse(1, 'empathy')">
+                        <i data-lucide="heart" size="20" color="#ff8800" class="icon"></i>
+                        <div class="text">"Rozumiem Pana wahania! To normalne przy większej inwestycji. Proszę mi powiedzieć, do jakich zadań głównie potrzebuje Pan przecinarki?"</div>
+                    </div>
+
+                    <div class="response-option" onclick="selectResponse(1, 'aggressive')">
+                        <i data-lucide="zap" size="20" color="#ffd700" class="icon"></i>
+                        <div class="text">"MX FUEL to najlepsza seria na rynku! COS350 to absolutny top. Nie ma sensu rozważać innych opcji."</div>
+                    </div>
+
+                    <div class="response-option" onclick="selectResponse(1, 'professional')">
+                        <i data-lucide="briefcase" size="20" color="#00ff88" class="icon"></i>
+                        <div class="text">"Przecinarka akumulatorowa ma kluczowe zalety: mobilność, brak emisji spalin, niższe koszty eksploatacji. COS350 oferuje moc porównywalną z silnikiem spalinowym. Mogę przedstawić szczegóły?"</div>
+                    </div>
+                </div>
+
+                <div class="conversation-metrics">
+                    <div class="metric-box">
+                        <div class="metric-label">Empatia</div>
+                        <div class="metric-bar">
+                            <div class="metric-fill" id="empathyFill" style="width: 0%"></div>
+                        </div>
+                        <div class="metric-value" id="empathyValue">0%</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Profesjonalizm</div>
+                        <div class="metric-bar">
+                            <div class="metric-fill" id="professionalismFill" style="width: 0%"></div>
+                        </div>
+                        <div class="metric-value" id="professionalismValue">0%</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Perswazja</div>
+                        <div class="metric-bar">
+                            <div class="metric-fill" id="persuasionFill" style="width: 0%"></div>
+                        </div>
+                        <div class="metric-value" id="persuasionValue">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: CASE STUDY -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-lucide="file-text" stroke-width="2" size="32" color="#000"></i>
+                    </div>
+                    <div class="card-title">
+                        <h2>Case Study</h2>
+                        <p>Analiza rzeczywistego przypadku</p>
+                    </div>
+                </div>
+
+                <div class="case-study-intro">
+                    <h3>Budowa Centrum Logistycznego - Case Study</h3>
+                    <p>Jak Milwaukee MX FUEL zwiększył efektywność o 40%</p>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-step active" onclick="toggleStep(this)">
+                        <div class="timeline-dot">
+                            <i data-lucide="circle" size="12" color="#000"></i>
+                        </div>
+                        <div class="timeline-step-header">
+                            <span class="step-number">Krok 1</span>
+                            <span class="step-title">Wyzwanie początkowe</span>
+                        </div>
+                        <div class="step-content">
+                            <p class="step-description">
+                                Firma budowlana XYZ rozpoczęła projekt budowy centrum logistycznego o powierzchni 15,000 m². Głównym wyzwaniem było cięcie 2,500 m betonu zbrojeniowego w ciasnych warunkach przy ścisłych normach BHP.
+                            </p>
+                            <div class="step-highlights">
+                                <span class="highlight-tag">2,500 m betonu</span>
+                                <span class="highlight-tag">Ciasne przestrzenie</span>
+                                <span class="highlight-tag">Normy BHP</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step" onclick="toggleStep(this)">
+                        <div class="timeline-dot">
+                            <i data-lucide="circle" size="12" color="#000"></i>
+                        </div>
+                        <div class="timeline-step-header">
+                            <span class="step-number">Krok 2</span>
+                            <span class="step-title">Problemy z dotychczasowym sprzętem</span>
+                        </div>
+                        <div class="step-content">
+                            <p class="step-description">
+                                Tradycyjne przecinarki spalinowe generowały nadmierny hałas (>100 dB) i emisję spalin, co wymagało przerw technicznych co 45 minut. Koszty paliwa: 450 PLN/dzień dla 5 urządzeń.
+                            </p>
+                            <div class="step-highlights">
+                                <span class="highlight-tag">Hałas >100 dB</span>
+                                <span class="highlight-tag">Przerwy co 45 min</span>
+                                <span class="highlight-tag">450 PLN/dzień paliwo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step" onclick="toggleStep(this)">
+                        <div class="timeline-dot">
+                            <i data-lucide="circle" size="12" color="#000"></i>
+                        </div>
+                        <div class="timeline-step-header">
+                            <span class="step-number">Krok 3</span>
+                            <span class="step-title">Rozwiązanie: Milwaukee MX FUEL</span>
+                        </div>
+                        <div class="step-content">
+                            <p class="step-description">
+                                Wprowadzenie 5 przecinarek COS350 z systemem RAPIDSTOP. Baterie HD12.0 zapewniły 4h pracy bez ładowania. Zero emisji spalin, hałas zredukowany do 89 dB. REDLINK eliminował przestoje.
+                            </p>
+                            <div class="step-highlights">
+                                <span class="highlight-tag">5x COS350</span>
+                                <span class="highlight-tag">4h bateria</span>
+                                <span class="highlight-tag">Zero spalin</span>
+                                <span class="highlight-tag">89 dB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step" onclick="toggleStep(this)">
+                        <div class="timeline-dot">
+                            <i data-lucide="circle" size="12" color="#000"></i>
+                        </div>
+                        <div class="timeline-step-header">
+                            <span class="step-number">Krok 4</span>
+                            <span class="step-title">Wyniki po 3 miesiącach</span>
+                        </div>
+                        <div class="step-content">
+                            <p class="step-description">
+                                Projekt ukończono 2 tygodnie przed terminem. Wydajność wzrosła o 40% dzięki eliminacji przerw. Koszty operacyjne spadły o 65%. Zero wypadków związanych z odrzutem (RAPIDSTOP).
+                            </p>
+                            <div class="step-highlights">
+                                <span class="highlight-tag">+40% wydajność</span>
+                                <span class="highlight-tag">-65% koszty</span>
+                                <span class="highlight-tag">0 wypadków</span>
+                                <span class="highlight-tag">-2 tygodnie</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step" onclick="toggleStep(this)">
+                        <div class="timeline-dot">
+                            <i data-lucide="circle" size="12" color="#000"></i>
+                        </div>
+                        <div class="timeline-step-header">
+                            <span class="step-number">Krok 5</span>
+                            <span class="step-title">Kluczowe wnioski</span>
+                        </div>
+                        <div class="step-content">
+                            <p class="step-description">
+                                Inwestycja zwróciła się po 4 miesiącach. Firma zakupiła kolejne 10 urządzeń MX FUEL. Pracownicy zgłaszali wyższą satysfakcję z pracy (niższy hałas, lżejsze urządzenia).
+                            </p>
+                            <div class="step-highlights">
+                                <span class="highlight-tag">ROI: 4 miesiące</span>
+                                <span class="highlight-tag">+10 urządzeń</span>
+                                <span class="highlight-tag">Wyższa satysfakcja</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-takeaways">
+                    <h4>
+                        <i data-lucide="lightbulb" size="20"></i>
+                        Kluczowe wnioski
+                    </h4>
+                    <div class="takeaway-item">
+                        <i data-lucide="check-circle" size="20"></i>
+                        <div class="takeaway-text">Technologia akumulatorowa może konkurować z silnikami spalinowymi w zastosowaniach profesjonalnych</div>
+                    </div>
+                    <div class="takeaway-item">
+                        <i data-lucide="check-circle" size="20"></i>
+                        <div class="takeaway-text">Wyższa cena zakupu kompensowana przez niższe koszty eksploatacji i wyższą wydajność</div>
+                    </div>
+                    <div class="takeaway-item">
+                        <i data-lucide="check-circle" size="20"></i>
+                        <div class="takeaway-text">Systemy bezpieczeństwa (RAPIDSTOP) przekładają się na zero wypadków i mniejsze ubezpieczenia</div>
+                    </div>
+                </div>
+
+                <div class="application-section">
+                    <h4>
+                        <i data-lucide="pencil" size="20"></i>
+                        Jak zastosujesz te wnioski w swojej pracy?
+                    </h4>
+                    <textarea class="application-textarea" placeholder="Opisz, jak możesz wykorzystać te insights w swoich projektach..."></textarea>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn secondary" onclick="shareCase()">
+                        <i data-lucide="share-2" size="20"></i>
+                        Udostępnij
+                    </button>
+                    <button class="action-btn primary" onclick="saveCase()">
+                        <i data-lucide="bookmark" size="20"></i>
+                        Zapisz do notatek
+                    </button>
+                </div>
+            </div>
+
+            <!-- CARD 3: PEER REVIEW -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i data-lucide="users" stroke-width="2" size="32" color="#000"></i>
+                    </div>
+                    <div class="card-title">
+                        <h2>Peer Review</h2>
+                        <p>Oceń pracę kolegi - community learning</p>
+                    </div>
+                </div>
+
+                <div class="review-header">
+                    <h3>Oceń plan cięcia betonu</h3>
+                    <p>Anonimowa recenzja - bądź konstruktywny</p>
+                </div>
+
+                <div class="submission-display">
+                    <div class="submission-title">
+                        <i data-lucide="file-text" size="24"></i>
+                        Plan cięcia - Hala produkcyjna
+                    </div>
+                    <div class="submission-content">
+                        <strong>Zakres prac:</strong> Cięcie rowków dylatacyjnych w posadzce betonowej, powierzchnia 800 m², głębokość 80 mm.<br><br>
+                        
+                        <strong>Wybór sprzętu:</strong> Milwaukee COS350 z tarczą diamentową 350 mm, baterie HD12.0 (2 szt. na zmianę).<br><br>
+                        
+                        <strong>Harmonogram:</strong><br>
+                        - Dzień 1: Oznaczenie linii cięcia (50 metrów)<br>
+                        - Dzień 2-3: Cięcie rowków (tempo: 8 m/h)<br>
+                        - Dzień 4: Kontrola głębokości i wykończenie<br><br>
+                        
+                        <strong>BHP:</strong> Okulary, ochraniacze słuchu, maska przeciwpyłowa P3, system odpylania.<br><br>
+                        
+                        <strong>Przewidywane koszty:</strong> 3,200 PLN (robocizna + materiały)
+                    </div>
+                    <div class="submission-meta">
+                        <div class="meta-item">
+                            <i data-lucide="user" size="16"></i>
+                            <span>Anonimowy autor #2847</span>
+                        </div>
+                        <div class="meta-item">
+                            <i data-lucide="calendar" size="16"></i>
+                            <span>16 stycznia 2026</span>
+                        </div>
+                        <div class="meta-item">
+                            <i data-lucide="clock" size="16"></i>
+                            <span>Czas: 25 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rating-section">
+                    <h4>Oceń jakość planu</h4>
+                    <div class="rating-stars" id="ratingStars">
+                        <span class="star" onclick="setRating(1)">★</span>
+                        <span class="star" onclick="setRating(2)">★</span>
+                        <span class="star" onclick="setRating(3)">★</span>
+                        <span class="star" onclick="setRating(4)">★</span>
+                        <span class="star" onclick="setRating(5)">★</span>
+                    </div>
+                    <div class="rating-labels">
+                        <span>Słabo</span>
+                        <span>Świetnie</span>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <h4>
+                        <i data-lucide="message-square" size="20"></i>
+                        Twoja opinia
+                    </h4>
+                    <textarea class="feedback-textarea" id="feedbackText" placeholder="Co jest dobre w tym planie? Co można poprawić? Bądź konkretny i konstruktywny..."></textarea>
+                </div>
+
+                <div class="consensus-view">
+                    <h4>
+                        <i data-lucide="bar-chart-2" size="20"></i>
+                        Oceny innych recenzentów (12 osób)
+                    </h4>
+                    <div class="consensus-stats">
+                        <div class="consensus-stat">
+                            <div class="consensus-stat-value">4.2</div>
+                            <div class="consensus-stat-label">Średnia ocena</div>
+                        </div>
+                        <div class="consensus-stat">
+                            <div class="consensus-stat-value">92%</div>
+                            <div class="consensus-stat-label">Poleca</div>
+                        </div>
+                        <div class="consensus-stat">
+                            <div class="consensus-stat-value">8</div>
+                            <div class="consensus-stat-label">Komentarzy</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn secondary" onclick="skipReview()">
+                        <i data-lucide="skip-forward" size="20"></i>
+                        Pomiń
+                    </button>
+                    <button class="action-btn primary" onclick="submitReview()">
+                        <i data-lucide="send" size="20"></i>
+                        Wyślij recenzję
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // CARD 1: CHAT/DIALOG
+        const chatResponses = {
+            1: {
+                empathy: {
+                    text: "To profesjonalne podejście! Głównie będę ciąć beton w budynkach mieszkalnych - muszę uważać na hałas i spaliny.",
+                    metrics: { empathy: 30, professionalism: 20, persuasion: 10 }
+                },
+                aggressive: {
+                    text: "Hmm... to trochę za kategoryczne. Chciałbym poznać konkretne argumenty, nie tylko marketing.",
+                    metrics: { empathy: 0, professionalism: 10, persuasion: 5 }
+                },
+                professional: {
+                    text: "Dokładnie o to mi chodzi! Jak wygląda kwestia czasu pracy na baterii? I czy moc rzeczywiście wystarcza?",
+                    metrics: { empathy: 10, professionalism: 30, persuasion: 25 }
+                }
+            },
+            2: {
+                empathy: {
+                    text: "Bateria HD12.0 daje około 125 cięć na głębokość 80mm w betonie. Motor POWERSTATE generuje 120 Nm - to jak silnik spalinowy 2-suwowy. RAPIDSTOP zatrzymuje tarczę w <3s.",
+                    metrics: { empathy: 10, professionalism: 25, persuasion: 30 }
+                },
+                aggressive: {
+                    text: "Brzmi świetnie! A jaka jest gwarancja? I czy mają Państwo program finansowania?",
+                    metrics: { empathy: 5, professionalism: 15, persuasion: 20 }
+                },
+                professional: {
+                    text: "Świetnie! To przekonuje. Jeszcze jedno pytanie - jak wygląda serwis i dostępność części zamiennych?",
+                    metrics: { empathy: 5, professionalism: 20, persuasion: 25 }
+                }
+            }
+        };
+
+        let conversationStep = 0;
+        let empathyScore = 0;
+        let professionalismScore = 0;
+        let persuasionScore = 0;
+
+        function selectResponse(step, type) {
+            const response = chatResponses[step][type];
+            
+            // Add user message
+            const chatWindow = document.getElementById('chatWindow');
+            const responseOptions = document.getElementById('responseOptions');
+            
+            // Hide options
+            responseOptions.style.display = 'none';
+            
+            // Show typing indicator
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.classList.add('active');
+            
+            setTimeout(() => {
+                // Hide typing
+                typingIndicator.classList.remove('active');
+                
+                // Add NPC response
+                const npcMessage = document.createElement('div');
+                npcMessage.className = 'chat-message npc';
+                npcMessage.innerHTML = `
+                    <div class="message-avatar">
+                        <i data-lucide="user" size="20" color="#000"></i>
+                    </div>
+                    <div class="message-bubble">
+                        <div class="message-text">${response.text}</div>
+                        <div class="message-time">Klient • 09:${16 + step}</div>
+                    </div>
+                `;
+                chatWindow.appendChild(npcMessage);
+                
+                // Update metrics
+                empathyScore += response.metrics.empathy;
+                professionalismScore += response.metrics.professionalism;
+                persuasionScore += response.metrics.persuasion;
+                
+                updateMetrics();
+                
+                // Scroll to bottom
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+                
+                lucide.createIcons();
+                
+                conversationStep++;
+                if (conversationStep < 2) {
+                    // Show next options
+                    setTimeout(() => {
+                        showNextOptions(conversationStep + 1);
+                    }, 1000);
+                } else {
+                    // End conversation
+                    setTimeout(() => {
+                        endConversation();
+                    }, 2000);
+                }
+            }, 2000);
+        }
+
+        function showNextOptions(step) {
+            const responseOptions = document.getElementById('responseOptions');
+            responseOptions.style.display = 'flex';
+            
+            if (step === 2) {
+                responseOptions.innerHTML = `
+                    <div class="response-option" onclick="selectResponse(2, 'empathy')">
+                        <i data-lucide="heart" size="20" color="#ff8800" class="icon"></i>
+                        <div class="text">"Bateria HD12.0 daje około 125 cięć na głębokość 80mm w betonie. Motor POWERSTATE generuje 120 Nm - to jak silnik spalinowy 2-suwowy. RAPIDSTOP zatrzymuje tarczę w <3s."</div>
+                    </div>
+                    <div class="response-option" onclick="selectResponse(2, 'aggressive')">
+                        <i data-lucide="zap" size="20" color="#ffd700" class="icon"></i>
+                        <div class="text">"Bateria wystarcza na cały dzień, motor jest najpotężniejszy na rynku, a RAPIDSTOP to must-have. Nie ma o czym myśleć."</div>
+                    </div>
+                    <div class="response-option" onclick="selectResponse(2, 'professional')">
+                        <i data-lucide="briefcase" size="20" color="#00ff88" class="icon"></i>
+                        <div class="text">"Czas pracy: 125 cięć (80mm głębokość) na jednym ładowaniu HD12.0. Moment obrotowy 120 Nm dorównuje silnikom spalinowym. RAPIDSTOP <3s to branżowy standard bezpieczeństwa."</div>
+                    </div>
+                `;
+                lucide.createIcons();
+            }
+        }
+
+        function updateMetrics() {
+            const maxScore = 100;
+            
+            document.getElementById('empathyFill').style.width = Math.min(empathyScore, maxScore) + '%';
+            document.getElementById('empathyValue').textContent = Math.min(empathyScore, maxScore) + '%';
+            
+            document.getElementById('professionalismFill').style.width = Math.min(professionalismScore, maxScore) + '%';
+            document.getElementById('professionalismValue').textContent = Math.min(professionalismScore, maxScore) + '%';
+            
+            document.getElementById('persuasionFill').style.width = Math.min(persuasionScore, maxScore) + '%';
+            document.getElementById('persuasionValue').textContent = Math.min(persuasionScore, maxScore) + '%';
+        }
+
+        function endConversation() {
+            const chatWindow = document.getElementById('chatWindow');
+            const finalMessage = document.createElement('div');
+            finalMessage.className = 'chat-message npc';
+            
+            const totalScore = empathyScore + professionalismScore + persuasionScore;
+            let feedback = '';
+            
+            if (totalScore >= 120) {
+                feedback = "Świetnie! Przekonał mnie Pan. Chciałbym zamówić COS350 z dwoma bateriami HD12.0. Kiedy możemy sfinalizować zakup?";
+            } else if (totalScore >= 80) {
+                feedback = "Dziękuję za informacje. Muszę to jeszcze przemyśleć, ale COS350 wygląda obiecująco.";
+            } else {
+                feedback = "Dziękuję, ale chyba poszukam czegoś innego. Nie jestem przekonany.";
+            }
+            
+            finalMessage.innerHTML = `
+                <div class="message-avatar">
+                    <i data-lucide="user" size="20" color="#000"></i>
+                </div>
+                <div class="message-bubble">
+                    <div class="message-text">${feedback}</div>
+                    <div class="message-time">Klient • 09:18</div>
+                </div>
+            `;
+            chatWindow.appendChild(finalMessage);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            
+            lucide.createIcons();
+        }
+
+        // CARD 2: CASE STUDY
+        function toggleStep(element) {
+            const allSteps = document.querySelectorAll('.timeline-step');
+            allSteps.forEach(step => {
+                if (step !== element) {
+                    step.classList.remove('active');
+                }
+            });
+            element.classList.toggle('active');
+        }
+
+        function shareCase() {
+            alert('📤 Case study udostępniony zespołowi!');
+        }
+
+        function saveCase() {
+            const notes = document.querySelector('.application-textarea').value;
+            if (notes.trim()) {
+                alert('💾 Case study zapisany do notatek!\n\n+150 XP za refleksję!');
+            } else {
+                alert('⚠️ Najpierw opisz, jak zastosujesz te wnioski!');
+            }
+        }
+
+        // CARD 3: PEER REVIEW
+        let selectedRating = 0;
+
+        function setRating(rating) {
+            selectedRating = rating;
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function skipReview() {
+            alert('⏭️ Pominięto recenzję');
+        }
+
+        function submitReview() {
+            const feedback = document.getElementById('feedbackText').value;
+            
+            if (selectedRating === 0) {
+                alert('⚠️ Proszę wybrać ocenę (gwiazdki)!');
+                return;
+            }
+            
+            if (feedback.trim().length < 20) {
+                alert('⚠️ Napisz bardziej szczegółową opinię (min. 20 znaków)');
+                return;
+            }
+            
+            alert(`✅ Recenzja wysłana!\n\nTwoja ocena: ${selectedRating}/5 ⭐\nDługość feedbacku: ${feedback.length} znaków\n\n+100 XP za peer review!\n+50 XP bonus za konstruktywną opinię!`);
+        }
+
+        // Initialize
+        lucide.createIcons();
+    </script>
+</body>
+</html>

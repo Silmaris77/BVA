@@ -16,6 +16,8 @@ interface Card {
 interface Lesson {
     lesson_id: string
     title: string
+    subtitle?: string
+    estimated_duration?: number
     xp_reward: number
     content: {
         cards: Card[]
@@ -62,6 +64,16 @@ export default function LessonPlayerPage() {
                     // Resume from saved progress if exists
                     if (data.progress && !data.progress.completed_at) {
                         setCurrentCardIndex(data.progress.current_card_index || 0)
+                    } else if (!data.progress && user) {
+                        // Auto-start lesson if not started yet
+                        const startResponse = await fetch(`/api/lessons/${lessonId}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'start' })
+                        })
+                        if (startResponse.ok) {
+                            console.log('Lesson started automatically')
+                        }
                     }
                 }
             } catch (error) {
@@ -71,8 +83,10 @@ export default function LessonPlayerPage() {
             }
         }
 
-        loadLesson()
-    }, [lessonId])
+        if (user) {
+            loadLesson()
+        }
+    }, [lessonId, user])
 
 
     const saveProgress = async (cardIndex: number) => {

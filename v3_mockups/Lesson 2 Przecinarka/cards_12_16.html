@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karty 12-16 - Milwaukee MX FUEL</title>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .card h2 {
+            font-size: 32px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+            font-size: 16px;
+        }
+
+        /* 12. RANKING CARD */
+        .ranking-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .ranking-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ranking-item {
+            background: rgba(255, 136, 0, 0.2);
+            border: 2px solid rgba(255, 136, 0, 0.4);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .ranking-item:active {
+            cursor: grabbing;
+        }
+
+        .ranking-item.dragging {
+            opacity: 0.4;
+        }
+
+        .ranking-number {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #ffd700;
+            flex-shrink: 0;
+        }
+
+        .ranking-zone {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .ranking-zone h4 {
+            margin-bottom: 16px;
+            color: #ff8800;
+        }
+
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 300px;
+        }
+
+        /* 13. FILL IN THE BLANKS */
+        .fill-blanks-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 24px;
+        }
+
+        .fill-text {
+            font-size: 18px;
+            line-height: 2;
+        }
+
+        .fill-blank {
+            display: inline-block;
+            min-width: 150px;
+            padding: 8px 16px;
+            background: rgba(255, 136, 0, 0.1);
+            border: 2px solid rgba(255, 136, 0, 0.3);
+            border-radius: 8px;
+            margin: 0 4px;
+            transition: all 0.3s ease;
+        }
+
+        .fill-blank input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            width: 100%;
+            outline: none;
+            text-align: center;
+        }
+
+        .fill-blank.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .fill-blank.incorrect {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+
+        .fill-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .word-option {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .word-option:hover {
+            background: rgba(255, 136, 0, 0.2);
+            border-color: #ff8800;
+        }
+
+        .word-option.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* 14. MATCHING PAIRS */
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .matching-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .matching-item:hover {
+            background: rgba(255, 136, 0, 0.1);
+            transform: translateX(4px);
+        }
+
+        .matching-item.selected {
+            background: rgba(255, 136, 0, 0.3);
+            border-color: #ff8800;
+        }
+
+        .matching-item.matched {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+            cursor: default;
+        }
+
+        .matching-item.wrong {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            color: #0a0a1a;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255, 136, 0, 0.3);
+        }
+
+        .framework-box {
+            background: rgba(255, 136, 0, 0.1);
+            border-left: 4px solid #ff8800;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Karty 12-16 Test</h1>
+            <p>Ranking, Fill Blanks, Matching - Milwaukee MX FUEL</p>
+        </div>
+
+        <!-- CARD 12: RANKING -->
+        <div class="card">
+            <h2>
+                <i data-lucide="list-ordered" style="width: 32px; height: 32px;"></i>
+                12. Karta Ranking - Sortowanie Priorytetów
+            </h2>
+            <p class="card-description">
+                Przeciągnij elementy w kolejności od najważniejszego (góra) do najmniej ważnego (dół).
+            </p>
+
+            <div class="ranking-container">
+                <div>
+                    <h3 style="margin-bottom: 16px;">📦 Elementy do posortowania:</h3>
+                    <div class="ranking-items" id="rankingItems">
+                        <div class="ranking-item" draggable="true" data-priority="1">
+                            <div class="ranking-number">?</div>
+                            <span>Sprawdzenie osłon i zabezpieczeń</span>
+                        </div>
+                        <div class="ranking-item" draggable="true" data-priority="4">
+                            <div class="ranking-number">?</div>
+                            <span>Czyszczenie narzędzia po pracy</span>
+                        </div>
+                        <div class="ranking-item" draggable="true" data-priority="2">
+                            <div class="ranking-number">?</div>
+                            <span>Dobór właściwej tarczy dla materiału</span>
+                        </div>
+                        <div class="ranking-item" draggable="true" data-priority="3">
+                            <div class="ranking-number">?</div>
+                            <span>Założenie pełnej odzieży ochronnej (PPE)</span>
+                        </div>
+                        <div class="ranking-item" draggable="true" data-priority="5">
+                            <div class="ranking-number">?</div>
+                            <span>Sprawdzenie poziomu naładowania baterii</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ranking-zone">
+                        <h4>🎯 Twoja kolejność priorytetów (przeciągnij tutaj):</h4>
+                        <div class="ranking-list" id="rankingList"></div>
+                    </div>
+                    <button class="btn-primary" onclick="checkRanking()" style="margin-top: 16px; width: 100%;">
+                        Sprawdź kolejność
+                    </button>
+                </div>
+            </div>
+
+            <div class="framework-box">
+                <h4>💡 Prawidłowa kolejność BHP:</h4>
+                <ol style="margin-left: 20px; margin-top: 12px; line-height: 2;">
+                    <li><strong>Sprawdzenie osłon</strong> - podstawa bezpieczeństwa</li>
+                    <li><strong>Dobór tarczy</strong> - właściwe narzędzie do materiału</li>
+                    <li><strong>Odzież ochronna</strong> - pełne PPE przed uruchomieniem</li>
+                    <li><strong>Czyszczenie</strong> - konserwacja po zakończeniu pracy</li>
+                    <li><strong>Bateria</strong> - sprawdzenie przed rozpoczęciem (ale nie najważniejsze)</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- CARD 13: FILL IN THE BLANKS -->
+        <div class="card">
+            <h2>
+                <i data-lucide="whole-word" style="width: 32px; height: 32px;"></i>
+                13. Karta Uzupełnij Luki
+            </h2>
+            <p class="card-description">
+                Kliknij podpowiedzi poniżej, aby uzupełnić zdania.
+            </p>
+
+            <div class="fill-blanks-container">
+                <div class="fill-text">
+                    Przecinarka MXF COS350 posiada unikalny system 
+                    <span class="fill-blank" data-answer="RAPIDSTOP">
+                        <input type="text" id="blank1" placeholder="..." onchange="checkBlank(1)">
+                    </span>, 
+                    który zatrzymuje tarczę w mniej niż 
+                    <span class="fill-blank" data-answer="3">
+                        <input type="text" id="blank2" placeholder="..." onchange="checkBlank(2)">
+                    </span> 
+                    sekundy. Maksymalna głębokość cięcia to 
+                    <span class="fill-blank" data-answer="125">
+                        <input type="text" id="blank3" placeholder="..." onchange="checkBlank(3)">
+                    </span> 
+                    mm. Do cięcia betonu z chłodzeniem używamy tarcz typu 
+                    <span class="fill-blank" data-answer="HUDD">
+                        <input type="text" id="blank4" placeholder="..." onchange="checkBlank(4)">
+                    </span>, 
+                    natomiast do cięcia na sucho polecane są tarcze 
+                    <span class="fill-blank" data-answer="CCS">
+                        <input type="text" id="blank5" placeholder="..." onchange="checkBlank(5)">
+                    </span>. 
+                    System zbiornika wodnego nazywa się 
+                    <span class="fill-blank" data-answer="SWITCH TANK">
+                        <input type="text" id="blank6" placeholder="..." onchange="checkBlank(6)">
+                    </span>.
+                </div>
+
+                <div class="fill-options">
+                    <div class="word-option" onclick="fillBlankFromOption(this, 'RAPIDSTOP')">RAPIDSTOP™</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, '3')">3</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, '125')">125</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, 'HUDD')">HUDD</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, 'CCS')">CCS</div>
+                    <div class="word-option" onclick="fillBlankFromOption(this, 'SWITCH TANK')">SWITCH TANK</div>
+                </div>
+
+                <button class="btn-primary" onclick="checkAllBlanks()" style="margin-top: 24px;">
+                    Sprawdź wszystkie odpowiedzi
+                </button>
+            </div>
+        </div>
+
+        <!-- CARD 14: MATCHING PAIRS -->
+        <div class="card">
+            <h2>
+                <i data-lucide="link" style="width: 32px; height: 32px;"></i>
+                14. Karta Dopasowywanie Par
+            </h2>
+            <p class="card-description">
+                Dopasuj tarcze do materiałów. Kliknij tarczę, potem materiał.
+            </p>
+
+            <div class="matching-container">
+                <div class="matching-column">
+                    <h4 style="margin-bottom: 16px;">🛠️ Tarcze diamentowe:</h4>
+                    <div class="matching-item" data-match="A" onclick="selectMatch('A', this)">
+                        <strong>HUDD (4932471985)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">High Performance Universal Diamond Disc</small>
+                    </div>
+                    <div class="matching-item" data-match="B" onclick="selectMatch('B', this)">
+                        <strong>STEELHEAD (4932471988)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Do materiałów z prętami stalowymi</small>
+                    </div>
+                    <div class="matching-item" data-match="C" onclick="selectMatch('C', this)">
+                        <strong>CCS (4932472264)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Cold Cut System - cięcie na sucho</small>
+                    </div>
+                </div>
+
+                <div class="matching-column">
+                    <h4 style="margin-bottom: 16px;">🧱 Zastosowania:</h4>
+                    <div class="matching-item" data-match="A" onclick="selectMatch('A', this)">
+                        <strong>Beton z armatură stalową</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Wymaga chłodzenia wodą</small>
+                    </div>
+                    <div class="matching-item" data-match="B" onclick="selectMatch('B', this)">
+                        <strong>Żelbet (beton zbrojony)</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Dużo stali konstrukcyjnej</small>
+                    </div>
+                    <div class="matching-item" data-match="C" onclick="selectMatch('C', this)">
+                        <strong>Asfalt i materiały bitumiczne</strong><br>
+                        <small style="color: rgba(255,255,255,0.6);">Bez dostępu do wody</small>
+                    </div>
+                </div>
+            </div>
+
+            <div id="matchingFeedback" class="framework-box" style="display: none; margin-top: 24px;">
+                <strong id="matchingScore">Dopasowano: 0/3</strong>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('Script started');
+
+        // 12. RANKING LOGIC
+        let rankingDraggedElement = null;
+
+        function initRanking() {
+            console.log('=== initRanking called ===');
+            const rankingItemsContainer = document.getElementById('rankingItems');
+            const rankingList = document.getElementById('rankingList');
+            const allRankingItems = document.querySelectorAll('.ranking-item[draggable="true"]');
+            
+            console.log('Found items:', allRankingItems.length);
+            console.log('Ranking list:', rankingList);
+            console.log('Items container:', rankingItemsContainer);
+            
+            // Add drag event listeners to all ranking items
+            allRankingItems.forEach((item, index) => {
+                console.log(`Adding listeners to item ${index}:`, item.textContent.trim());
+                
+                item.addEventListener('dragstart', function(e) {
+                    console.log('🟢 Drag started:', this.textContent.trim());
+                    rankingDraggedElement = this;
+                    this.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                item.addEventListener('dragend', function() {
+                    console.log('🔴 Drag ended');
+                    this.classList.remove('dragging');
+                });
+            });
+
+            // Handle drop on RIGHT ranking list (destination)
+            if (rankingList) {
+                console.log('✅ Setting up ranking list drop zone');
+                
+                rankingList.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                });
+
+                rankingList.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    console.log('💧 Dropped on ranking list:', rankingDraggedElement);
+                    if (rankingDraggedElement) {
+                        this.appendChild(rankingDraggedElement);
+                        updateRankingNumbers();
+                        rankingDraggedElement = null;
+                    }
+                });
+            }
+
+            // Handle drop back on LEFT items zone (source)
+            if (rankingItemsContainer) {
+                console.log('✅ Setting up items container drop zone');
+                
+                rankingItemsContainer.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                });
+
+                rankingItemsContainer.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    console.log('🔙 Dropped back on items');
+                    if (rankingDraggedElement) {
+                        this.appendChild(rankingDraggedElement);
+                        const numberSpan = rankingDraggedElement.querySelector('.ranking-number');
+                        if (numberSpan) {
+                            numberSpan.textContent = '?';
+                        }
+                        updateRankingNumbers();
+                        rankingDraggedElement = null;
+                    }
+                });
+            }
+            
+            console.log('=== initRanking complete ===');
+        }
+
+        function updateRankingNumbers() {
+            const items = document.querySelectorAll('#rankingList .ranking-item');
+            console.log('Updating numbers for', items.length, 'items');
+            items.forEach((item, index) => {
+                const numberSpan = item.querySelector('.ranking-number');
+                if (numberSpan) {
+                    numberSpan.textContent = index + 1;
+                }
+            });
+        }
+
+        function checkRanking() {
+            const items = document.querySelectorAll('#rankingList .ranking-item');
+            
+            if (items.length === 0) {
+                alert('⚠️ Przeciągnij najpierw elementy do strefy rankingu!');
+                return;
+            }
+
+            let correct = 0;
+
+            items.forEach((item, index) => {
+                const expectedPriority = index + 1;
+                const actualPriority = parseInt(item.dataset.priority);
+                
+                item.style.background = '';
+                
+                if (expectedPriority === actualPriority) {
+                    correct++;
+                    item.style.background = 'rgba(0, 255, 136, 0.2)';
+                    item.style.borderColor = '#00ff88';
+                } else {
+                    item.style.background = 'rgba(255, 68, 68, 0.2)';
+                    item.style.borderColor = '#ff4444';
+                }
+            });
+
+            if (correct === items.length) {
+                alert(`🎉 Doskonale! Wszystkie ${correct} priorytetów w prawidłowej kolejności!`);
+            } else {
+                alert(`Poprawnie: ${correct}/${items.length}. Spróbuj jeszcze raz!`);
+            }
+        }
+
+        // 13. FILL IN THE BLANKS LOGIC
+        function fillBlankFromOption(element, value) {
+            console.log('Filling blank with:', value);
+            if (element.classList.contains('used')) return;
+            
+            for (let i = 1; i <= 6; i++) {
+                const input = document.getElementById(`blank${i}`);
+                if (input && !input.value) {
+                    input.value = value;
+                    element.classList.add('used');
+                    setTimeout(() => checkBlank(i), 100);
+                    break;
+                }
+            }
+        }
+
+        function checkBlank(blankNum) {
+            const input = document.getElementById(`blank${blankNum}`);
+            if (!input) return;
+            
+            const blank = input.closest('.fill-blank');
+            if (!blank) return;
+            
+            const correctAnswer = blank.dataset.answer;
+            const userAnswer = input.value.trim();
+
+            blank.classList.remove('correct', 'incorrect');
+
+            if (userAnswer && userAnswer.toUpperCase() === correctAnswer.toUpperCase()) {
+                blank.classList.add('correct');
+            } else if (userAnswer) {
+                blank.classList.add('incorrect');
+            }
+        }
+
+        function checkAllBlanks() {
+            let correct = 0;
+            let total = 0;
+            
+            for (let i = 1; i <= 6; i++) {
+                const input = document.getElementById(`blank${i}`);
+                if (!input) continue;
+                
+                total++;
+                const blank = input.closest('.fill-blank');
+                if (!blank) continue;
+                
+                const correctAnswer = blank.dataset.answer;
+                const userAnswer = input.value.trim();
+                
+                blank.classList.remove('correct', 'incorrect');
+                
+                if (userAnswer.toUpperCase() === correctAnswer.toUpperCase()) {
+                    blank.classList.add('correct');
+                    correct++;
+                } else {
+                    blank.classList.add('incorrect');
+                }
+            }
+
+            if (correct === total) {
+                alert('🎉 Doskonale! Wszystkie odpowiedzi poprawne!');
+            } else {
+                alert(`Poprawnie wypełniono: ${correct}/${total} luk.`);
+            }
+        }
+
+        // 14. MATCHING PAIRS LOGIC
+        let firstMatch = null;
+        let matchedPairs = 0;
+
+        function selectMatch(matchId, element) {
+            console.log('Selected match:', matchId);
+            
+            if (element.classList.contains('matched')) {
+                return;
+            }
+
+            if (!firstMatch) {
+                document.querySelectorAll('.matching-item.selected').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                firstMatch = { id: matchId, element: element };
+                element.classList.add('selected');
+                console.log('First match selected:', matchId);
+            } else {
+                if (firstMatch.element === element) {
+                    element.classList.remove('selected');
+                    firstMatch = null;
+                    console.log('Deselected');
+                } else if (firstMatch.id === matchId) {
+                    console.log('Correct match!');
+                    firstMatch.element.classList.add('matched');
+                    firstMatch.element.classList.remove('selected');
+                    element.classList.add('matched');
+                    matchedPairs++;
+                    
+                    const feedback = document.getElementById('matchingFeedback');
+                    if (feedback) {
+                        feedback.style.display = 'block';
+                    }
+                    const scoreEl = document.getElementById('matchingScore');
+                    if (scoreEl) {
+                        scoreEl.textContent = `Dopasowano: ${matchedPairs}/3 ✅`;
+                    }
+                    
+                    if (matchedPairs === 3) {
+                        setTimeout(() => {
+                            alert('🎉 Świetnie! Wszystkie pary dopasowane!');
+                        }, 300);
+                    }
+                    
+                    firstMatch = null;
+                } else {
+                    console.log('Wrong match!');
+                    element.classList.add('wrong');
+                    firstMatch.element.classList.add('wrong');
+                    
+                    setTimeout(() => {
+                        element.classList.remove('wrong');
+                        firstMatch.element.classList.remove('wrong');
+                        firstMatch.element.classList.remove('selected');
+                        firstMatch = null;
+                    }, 600);
+                }
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            console.log('Page loaded, initializing...');
+            initRanking();
+            lucide.createIcons();
+            console.log('All cards initialized!');
+        });
+    </script>
+</body>
+</html>

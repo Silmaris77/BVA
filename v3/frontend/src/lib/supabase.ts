@@ -1,9 +1,8 @@
-﻿import { createClient } from '@supabase/supabase-js'
+﻿import { createClient } from './supabase/client'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Use the cookie-based SSR client for browser authentication
+// This ensures server-side API routes can access the user session
+export const supabase = createClient()
 
 // Types for our database
 export type Profile = {

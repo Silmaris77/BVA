@@ -4148,6 +4148,323 @@ ON lesson_completions(lesson_id, completion_time_seconds);
 
 **Features:**
 - **Badge system:** FREE, POPULAR, BESTSELLER, PREMIUM, UNLOCKED
+- **Click tracking:** Analytics on which resources users prefer
+- **Affiliate links:** Revenue from book/tool recommendations
+- **Bookmark system:** "Save for later" → user's reading list
+- **Internal promotion:** Cross-sell BVA courses/workshops
+
+**Use Cases:**
+- Deep dives after concept cards
+- Monetization (affiliate + internal products)
+- Build credibility (curated expert sources)
+- Lead to B2B workshops
+
+**Implementation:**
+- Complexity: **LOW** (just links + UI cards)
+- Impact: **MEDIUM** (monetization, authority building)
+- Priority: **Month 3** (after content base solid)
+
+---
+
+### **💡 13. Ranking/Priority Card** - Drag & Drop Prioritization
+
+**Koncepcja:** Użytkownik porządkuje elementy w odpowiedniej kolejności (np. priorytety BHP, etapy procesu)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "ranking",
+  "title": "Ustaw priorytety BHP w kolejności ważności",
+  "data": {
+    "instruction": "Przeciągnij elementy z lewej strony na listę po prawej, ustawiając je od najważniejszego (góra) do najmniej ważnego (dół).",
+    "items": [
+      {
+        "id": "check_guards",
+        "text": "Sprawdzenie osłon przed włączeniem",
+        "correct_position": 1,
+        "icon": "shield-check"
+      },
+      {
+        "id": "ppe",
+        "text": "Założenie środków ochrony osobistej",
+        "correct_position": 2,
+        "icon": "hard-hat"
+      },
+      {
+        "id": "blade_check",
+        "text": "Sprawdzenie stanu tarczy tnącej",
+        "correct_position": 3,
+        "icon": "disc"
+      },
+      {
+        "id": "area_clear",
+        "text": "Upewnienie się, że obszar roboczy jest czysty",
+        "correct_position": 4,
+        "icon": "broom"
+      },
+      {
+        "id": "battery",
+        "text": "Sprawdzenie naładowania baterii",
+        "correct_position": 5,
+        "icon": "battery-charging"
+      }
+    ],
+    "allow_partial_credit": true, // punkty za częściowo poprawną kolejność
+    "scoring": {
+      "full_marks": 100,
+      "partial_formula": "100 - (15 * number_of_misplacements)"
+    },
+    "feedback": {
+      "perfect": "🎯 Doskonale! Znasz prawidłową kolejność działań BHP.",
+      "good": "✅ Dobrze! Niewielkie różnice nie zmienią bezpieczeństwa.",
+      "needs_work": "⚠️ Sprawdź jeszcze raz - bezpieczeństwo to podstawa!"
+    }
+  }
+}
+```
+
+**UI Implementation:**
+- **Dual-zone layout:** 
+  - **Lewa strona:** Pool elementów do przeciągnięcia
+  - **Prawa strona:** Ranking list (pusta na starcie)
+- **Drag & Drop API:** HTML5 native dragstart/dragend/drop events
+- **Visual feedback:** 
+  - Element .dragging z opacity: 0.5
+  - Drop zone highlight podczas przeciągania
+  - Numery pozycji auto-update (1, 2, 3...)
+- **Validation:** 
+  - Sprawdzenie correct_position dla każdego elementu
+  - Wyświetlenie wyniku: "4/5 poprawnych pozycji"
+  - Opcja "Spróbuj ponownie" lub "Zobacz prawidłową kolejność"
+
+**Use Cases:**
+- BHP priorities (jak w przykładzie Milwaukee)
+- Etapy procesu sprzedaży (Discovery → Pitch → Close)
+- Hierarchia potrzeb Maslowa
+- GTD inbox processing priorities
+- Time management (Eisenhower Matrix)
+
+**Gamification:**
+- Perfect ranking = bonus XP (+50)
+- "Logician" achievement (10 rankingów bez błędu)
+- Timer challenge: "Rank in 30 seconds"
+
+**Implementation:**
+- Complexity: **MEDIUM** (drag&drop logic, scoring algorithm)
+- Impact: **HIGH** (active learning, process understanding)
+- Priority: **✅ ZAIMPLEMENTOWANE** (mockup: cards_12_16.html)
+
+**Technical Notes:**
+- Test z Milwaukee MX FUEL (5 elementów BHP)
+- Działa na desktop (mobile wymaga touch handlers)
+- Responsive: dual-zone → single column na mobile
+
+---
+
+### **💡 14. Fill-in-the-Blanks Card** - Interactive Text Completion
+
+**Koncepcja:** Użytkownik uzupełnia luki w tekście, klikając odpowiednie słowa z listy opcji
+
+**JSON Schema:**
+```typescript
+{
+  "type": "fill_blanks",
+  "title": "Uzupełnij specyfikację przecinarki",
+  "data": {
+    "instruction": "Kliknij słowa poniżej, aby uzupełnić tekst. Każde słowo pasuje tylko do jednej luki.",
+    "text_template": "Milwaukee MX FUEL COS350G2 posiada zabezpieczenie RAPIDSTOP, które zatrzymuje tarczę w mniej niż ____ sekundy. Maksymalna głębokość cięcia to ____ mm, a tarcza ma średnicę ____ mm. Do cięcia betonu zalecana jest tarcza ____, natomiast do asfaltu tarcza ____. Przy długotrwałej pracy warto mieć opcję ____.",
+    "blanks": [
+      {
+        "id": "blank_1",
+        "position": 1, // pozycja w tekście
+        "correct_answer": "3",
+        "options_pool_id": "rapidstop" // grupa opcji
+      },
+      {
+        "id": "blank_2",
+        "position": 2,
+        "correct_answer": "125",
+        "options_pool_id": "depth"
+      },
+      {
+        "id": "blank_3",
+        "position": 3,
+        "correct_answer": "350",
+        "options_pool_id": "diameter"
+      },
+      {
+        "id": "blank_4",
+        "position": 4,
+        "correct_answer": "HUDD",
+        "options_pool_id": "blade_concrete"
+      },
+      {
+        "id": "blank_5",
+        "position": 5,
+        "correct_answer": "CCS",
+        "options_pool_id": "blade_asphalt"
+      },
+      {
+        "id": "blank_6",
+        "position": 6,
+        "correct_answer": "SWITCH TANK",
+        "options_pool_id": "accessory"
+      }
+    ],
+    "options": [
+      "RAPIDSTOP", "3", "125", "350", "HUDD", "CCS", "SWITCH TANK", "250", "5", "DUH"
+    ],
+    "show_used_options": false, // ukryj użyte słowa
+    "allow_mistakes": true,
+    "max_attempts": 3,
+    "feedback": {
+      "all_correct": "🎯 Perfekcyjnie! Znasz specyfikację na wylot!",
+      "partial": "✅ __X__/6 poprawnych. Sprawdź pozostałe.",
+      "incorrect": "❌ To nie jest prawidłowa odpowiedź. Spróbuj jeszcze raz."
+    }
+  }
+}
+```
+
+**UI Implementation:**
+- **Text display:** 
+  - Tekst z lukami wyświetlanymi jako `<input readonly>` lub `<span class="blank">`
+  - Puste luki: border: 2px dashed #ff8800
+  - Wypełnione: border: solid, background: rgba(255,136,0,0.2)
+- **Options bank:** 
+  - Wszystkie słowa jako klikalne buttony
+  - Kliknięcie → słowo trafia do aktywnej (focused) luki
+  - Użyte słowa: opacity: 0.3 lub ukryte (zależnie od show_used_options)
+- **Validation:**
+  - "Sprawdź odpowiedzi" button
+  - Correct: green border
+  - Incorrect: red border + shake animation
+  - Wyświetl wynik: "5/6 poprawnych"
+
+**Use Cases:**
+- Technical specifications (jak w przykładzie)
+- Vocabulary practice (language learning)
+- Process descriptions (fill in missing steps)
+- Formula completion (mathematical/scientific)
+
+**Gamification:**
+- First-try perfection = bonus XP
+- "Word Master" achievement (100 fill-blank cards without error)
+- Speed bonus: Complete in <60s
+
+**Implementation:**
+- Complexity: **LOW-MEDIUM** (event listeners, state management)
+- Impact: **MEDIUM** (good for memorization, less engaging than drag&drop)
+- Priority: **✅ ZAIMPLEMENTOWANE** (mockup: cards_12_16.html)
+
+**Technical Notes:**
+- Test z Milwaukee specs (6 blanks, 10 opcji)
+- Mobile-friendly (klikanie łatwiejsze niż drag&drop)
+- Można rozbudować o drag&drop opcji zamiast klikania
+
+---
+
+### **💡 15. Matching Pairs Card** - Connect Related Items
+
+**Koncepcja:** Użytkownik łączy pary powiązanych elementów (np. tarcza tnąca ↔ zastosowanie)
+
+**JSON Schema:**
+```typescript
+{
+  "type": "matching",
+  "title": "Dopasuj tarczę do zastosowania",
+  "data": {
+    "instruction": "Kliknij tarczę, a następnie jej prawidłowe zastosowanie, aby stworzyć parę.",
+    "pairs": [
+      {
+        "id": "pair_1",
+        "left": {
+          "id": "hudd",
+          "text": "HUDD",
+          "description": "High-performance Universal Diamond Disc",
+          "icon": "disc"
+        },
+        "right": {
+          "id": "concrete",
+          "text": "Beton / Granit",
+          "icon": "box"
+        }
+      },
+      {
+        "id": "pair_2",
+        "left": {
+          "id": "steelhead",
+          "text": "STEELHEAD",
+          "description": "Diamond disc for steel"
+        },
+        "right": {
+          "id": "steel",
+          "text": "Metal / Stal zbrojeniowa"
+        }
+      },
+      {
+        "id": "pair_3",
+        "left": {
+          "id": "ccs",
+          "text": "CCS",
+          "description": "Cutting & Coring System"
+        },
+        "right": {
+          "id": "asphalt",
+          "text": "Asfalt / Materiały miękkie"
+        }
+      }
+    ],
+    "layout": "two_columns", // or "scattered" (losowa pozycja)
+    "shuffle": true, // losuj kolejność przy każdym wyświetleniu
+    "allow_mistakes": true,
+    "feedback": {
+      "correct_pair": "✅ Świetnie! To prawidłowe połączenie.",
+      "incorrect_pair": "❌ To nie pasuje do siebie. Spróbuj ponownie.",
+      "all_matched": "🎯 Doskonale! Wszystkie pary poprawnie dopasowane!"
+    }
+  }
+}
+```
+
+**UI Implementation:**
+- **Two-column layout:**
+  - **Lewa kolumna:** Lista elementów do dopasowania (np. tarcze)
+  - **Prawa kolumna:** Lista celów (np. zastosowania)
+- **Interaction:**
+  - Kliknięcie na element z lewej → highlight (border: 2px solid #ff8800)
+  - Kliknięcie na element z prawej → sprawdzenie czy para poprawna
+  - Correct: obie karty zmieniają kolor na zielony + ikona ✅
+  - Incorrect: czerwony flash + reset selection
+- **State tracking:**
+  - matchedPairs: Set() z ID poprawnie dopasowanych
+  - firstMatch: przechowuje pierwszy wybrany element
+  - Wszystkie pary dopasowane → wyświetl gratulacje + XP
+
+**Use Cases:**
+- Product ↔ Application (jak w przykładzie Milwaukee)
+- Concept ↔ Definition (terminology learning)
+- Person ↔ Quote (history/philosophy)
+- Country ↔ Capital (geography)
+- Problem ↔ Solution (troubleshooting training)
+
+**Gamification:**
+- Perfect match without mistakes = bonus XP
+- "Match Master" achievement (50 matching cards with 100% accuracy)
+- Speed challenge: Match all in <30s
+
+**Implementation:**
+- Complexity: **LOW** (click handlers, state management)
+- Impact: **MEDIUM** (good for associations, less dynamic than drag&drop)
+- Priority: **✅ ZAIMPLEMENTOWANE** (mockup: cards_12_16.html)
+
+**Technical Notes:**
+- Test z 3 parami tarczy Milwaukee (HUDD, STEELHEAD, CCS)
+- Simplified version: 3 pary zamiast 5 (łatwiejsza walidacja)
+- Mobile-friendly (click-based, no drag required)
+- Można rozbudować o linie łączące pary wizualnie
+
+---
 - **Ratings:** Star ratings for books/courses
 - **Save for later:** Bookmark to "Moja Biblioteka"
 - **Track clicks:** Analytics (which resources most popular)
