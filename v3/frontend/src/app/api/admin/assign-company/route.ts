@@ -15,11 +15,14 @@ export async function POST(request: NextRequest) {
         // Check if user is admin
         const { data: profile } = await supabase
             .from('user_profiles')
-            .select('role:user_roles(role_slug)')
+            .select('role_id, role:user_roles(role_slug)')
             .eq('id', user.id)
             .single();
 
-        if (!profile || profile.role?.role_slug !== 'admin') {
+        // role from join can be array or object depending on Supabase version
+        const roleData = profile?.role;
+        const roleSlug = Array.isArray(roleData) ? roleData[0]?.role_slug : (roleData as any)?.role_slug;
+        if (!profile || roleSlug !== 'admin') {
             return NextResponse.json({ error: 'Forbidden - Admin only' }, { status: 403 });
         }
 

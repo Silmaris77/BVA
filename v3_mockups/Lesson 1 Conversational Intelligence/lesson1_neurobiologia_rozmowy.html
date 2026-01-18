@@ -3591,6 +3591,13 @@
                 updateProgress();
             }
             
+            // Change button to "Następna"
+            const nextButton = document.querySelector('.card[data-card="6"] .btn-next');
+            if (nextButton) {
+                nextButton.textContent = 'Następna →';
+                nextButton.onclick = function() { nextCard(); };
+            }
+            
             // Scroll to score
             scoreDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
             
