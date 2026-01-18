@@ -91,8 +91,19 @@ export default function LessonPlayerPage() {
 
     const saveProgress = async (cardIndex: number) => {
         if (!user) return
-        // Progress is auto-saved by API when we complete the lesson
-        // We'll implement this later if needed for auto-save on navigation
+        try {
+            // Save current card progress to API
+            await fetch(`/api/lessons/${lessonId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'progress',
+                    current_card: cardIndex
+                })
+            })
+        } catch (error) {
+            console.error('Error saving progress:', error)
+        }
     }
 
     const completeLesson = async () => {

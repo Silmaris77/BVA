@@ -5,7 +5,9 @@ import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import LessonCard from '@/components/LessonCard'
-import { Search, Bell, Zap, Filter, Brain, Library, BookOpen } from 'lucide-react'
+import PathCard from '@/components/PathCard'
+import { Search, Bell, Zap, Filter, Brain, Library, BookOpen, Trophy } from 'lucide-react'
+import { CONTENT_CATEGORIES } from '@/lib/categories'
 
 interface Lesson {
     lesson_id: string
@@ -36,6 +38,12 @@ export default function LessonsPage() {
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
     const [sortBy, setSortBy] = useState<'newest' | 'duration' | 'xp' | 'difficulty'>('newest')
+    const [selectedCategory, setSelectedCategory] = useState<string>('all')
+    const [paths, setPaths] = useState<any[]>([])
+    const [pathsLoading, setPathsLoading] = useState(true)
+    const [activeTab, setActiveTab] = useState<'lessons' | 'paths'>('lessons')
+
+    const categories = CONTENT_CATEGORIES
 
     useEffect(() => {
         if (!authLoading && !user) {
@@ -69,11 +77,31 @@ export default function LessonsPage() {
         fetchLessonsAndProgress()
     }, [user])
 
+    // Fetch learning paths
+    useEffect(() => {
+        async function fetchPaths() {
+            if (!user) return
+            try {
+                const response = await fetch('/api/paths')
+                const data = await response.json()
+                if (data.paths) {
+                    setPaths(data.paths)
+                }
+            } catch (error) {
+                console.error('Error fetching paths:', error)
+            } finally {
+                setPathsLoading(false)
+            }
+        }
+        fetchPaths()
+    }, [user])
+
     // Filter lessons
     const filteredLessons = lessons.filter(lesson => {
+        const matchesCategory = selectedCategory === 'all' || lesson.category === selectedCategory
         const matchesSearch = lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             lesson.description.toLowerCase().includes(searchTerm.toLowerCase())
-        return matchesSearch
+        return matchesCategory && matchesSearch
     })
 
     // Sort lessons
@@ -281,147 +309,305 @@ export default function LessonsPage() {
                     </p>
                 </div>
 
-                {/* Search and Sort */}
+                {/* Sub-tabs */}
                 <div style={{
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px',
-                    marginBottom: '32px'
+                    gap: '8px',
+                    marginBottom: '24px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    paddingBottom: '16px'
                 }}>
-                    {/* Search */}
-                    <div style={{ position: 'relative', width: '76%' }}>
-                        <input
-                            type="text"
-                            placeholder="Szukaj lekcji..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            style={{
-                                width: '100%',
-                                padding: '10px 16px 10px 40px',
-                                background: 'rgba(255, 255, 255, 0.05)',
-                                border: '1px solid rgba(255, 255, 255, 0.08)',
-                                borderRadius: '12px',
-                                color: 'white',
-                                fontFamily: 'Outfit, sans-serif',
-                                fontSize: '14px',
-                                outline: 'none'
-                            }}
-                        />
-                        <Search size={18} style={{
-                            position: 'absolute',
-                            left: '12px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            color: 'rgba(255, 255, 255, 0.6)'
-                        }} />
-                    </div>
-
-                    {/* Sort */}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px'
-                    }}>
-                        <span style={{
+                    <button
+                        onClick={() => setActiveTab('lessons')}
+                        style={{
+                            padding: '10px 20px',
+                            background: activeTab === 'lessons' ? 'rgba(0, 212, 255, 0.15)' : 'transparent',
+                            border: activeTab === 'lessons' ? '1px solid #00d4ff' : '1px solid transparent',
+                            borderRadius: '10px',
+                            color: activeTab === 'lessons' ? '#00d4ff' : 'rgba(255, 255, 255, 0.6)',
                             fontSize: '14px',
-                            color: 'rgba(255, 255, 255, 0.6)',
-                            fontWeight: 500
-                        }}>
-                            Sortuj:
-                        </span>
-                        <select
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value as any)}
-                            style={{
-                                padding: '10px 16px',
-                                background: 'rgba(255, 255, 255, 0.05)',
-                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            fontFamily: 'Outfit, sans-serif',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        <BookOpen size={16} />
+                        Pojedyncze lekcje
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('paths')}
+                        style={{
+                            padding: '10px 20px',
+                            background: activeTab === 'paths' ? 'rgba(176, 0, 255, 0.15)' : 'transparent',
+                            border: activeTab === 'paths' ? '1px solid #b000ff' : '1px solid transparent',
+                            borderRadius: '10px',
+                            color: activeTab === 'paths' ? '#b000ff' : 'rgba(255, 255, 255, 0.6)',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            fontFamily: 'Outfit, sans-serif',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        <Trophy size={16} />
+                        Ścieżki edukacyjne
+                        {!pathsLoading && paths.length > 0 && (
+                            <span style={{
+                                padding: '2px 8px',
+                                background: 'rgba(176, 0, 255, 0.3)',
                                 borderRadius: '10px',
-                                color: 'white',
-                                cursor: 'pointer',
-                                fontFamily: 'Outfit, sans-serif',
-                                fontSize: '14px',
-                                fontWeight: 500,
-                                outline: 'none'
-                            }}
-                        >
-                            <option value="newest" style={{ background: '#1a1a2e' }}>Najnowsze</option>
-                            <option value="duration" style={{ background: '#1a1a2e' }}>Czas trwania</option>
-                            <option value="xp" style={{ background: '#1a1a2e' }}>Nagroda XP</option>
-                            <option value="difficulty" style={{ background: '#1a1a2e' }}>Poziom trudności</option>
-                        </select>
-                    </div>
+                                fontSize: '11px'
+                            }}>
+                                {paths.length}
+                            </span>
+                        )}
+                    </button>
                 </div>
 
-                {/* Statistics Bar */}
-                {!loading && (
-                    <div style={{
-                        display: 'flex',
-                        gap: '24px',
-                        padding: '16px 24px',
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                        borderRadius: '12px',
-                        marginBottom: '24px',
-                        fontSize: '14px'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span>📊</span>
-                            <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                                <strong style={{ color: 'white' }}>{lessons.length}</strong> lekcji dostępnych
-                            </span>
+                {/* LESSONS TAB */}
+                {activeTab === 'lessons' && (
+                    <>
+                        {/* Search and Sort */}
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '16px',
+                            marginBottom: '24px'
+                        }}>
+                            {/* Search */}
+                            <div style={{ position: 'relative', width: '76%' }}>
+                                <input
+                                    type="text"
+                                    placeholder="Szukaj lekcji..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    style={{
+                                        width: '100%',
+                                        padding: '10px 16px 10px 40px',
+                                        background: 'rgba(255, 255, 255, 0.05)',
+                                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                                        borderRadius: '12px',
+                                        color: 'white',
+                                        fontFamily: 'Outfit, sans-serif',
+                                        fontSize: '14px',
+                                        outline: 'none'
+                                    }}
+                                />
+                                <Search size={18} style={{
+                                    position: 'absolute',
+                                    left: '12px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    color: 'rgba(255, 255, 255, 0.6)'
+                                }} />
+                            </div>
+
+                            {/* Sort */}
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px'
+                            }}>
+                                <span style={{
+                                    fontSize: '14px',
+                                    color: 'rgba(255, 255, 255, 0.6)',
+                                    fontWeight: 500
+                                }}>
+                                    Sortuj:
+                                </span>
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value as any)}
+                                    style={{
+                                        padding: '10px 16px',
+                                        background: 'rgba(255, 255, 255, 0.05)',
+                                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                                        borderRadius: '10px',
+                                        color: 'white',
+                                        cursor: 'pointer',
+                                        fontFamily: 'Outfit, sans-serif',
+                                        fontSize: '14px',
+                                        fontWeight: 500,
+                                        outline: 'none'
+                                    }}
+                                >
+                                    <option value="newest" style={{ background: '#1a1a2e' }}>Najnowsze</option>
+                                    <option value="duration" style={{ background: '#1a1a2e' }}>Czas trwania</option>
+                                    <option value="xp" style={{ background: '#1a1a2e' }}>Nagroda XP</option>
+                                    <option value="difficulty" style={{ background: '#1a1a2e' }}>Poziom trudności</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
+
+                        {/* Category Filters */}
+                        <div style={{
+                            display: 'flex',
+                            gap: '12px',
+                            marginBottom: '24px',
+                            overflowX: 'auto',
+                            paddingBottom: '8px'
+                        }}>
+                            {categories.map(cat => (
+                                <button
+                                    key={cat.id}
+                                    onClick={() => setSelectedCategory(cat.id)}
+                                    style={{
+                                        padding: '10px 20px',
+                                        background: selectedCategory === cat.id ? `${cat.color}20` : 'rgba(255, 255, 255, 0.05)',
+                                        border: selectedCategory === cat.id ? `1px solid ${cat.color}` : '1px solid rgba(255, 255, 255, 0.08)',
+                                        borderRadius: '12px',
+                                        color: selectedCategory === cat.id ? cat.color : 'rgba(255, 255, 255, 0.7)',
+                                        fontSize: '14px',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s',
+                                        whiteSpace: 'nowrap',
+                                        fontFamily: 'Outfit, sans-serif'
+                                    }}
+                                >
+                                    {cat.name}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Statistics Bar */}
+                        {!loading && (
+                            <div style={{
+                                display: 'flex',
+                                gap: '24px',
+                                padding: '16px 24px',
+                                background: 'rgba(255, 255, 255, 0.03)',
+                                border: '1px solid rgba(255, 255, 255, 0.08)',
+                                borderRadius: '12px',
+                                marginBottom: '24px',
+                                fontSize: '14px'
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span>📊</span>
+                                    <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                                        <strong style={{ color: 'white' }}>{lessons.length}</strong> lekcji dostępnych
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Lessons Grid */}
+                        {loading ? (
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                                gap: '24px'
+                            }}>
+                                {[1, 2, 3].map(i => (
+                                    <SkeletonCard key={i} delay={i * 0.05} />
+                                ))}
+                            </div>
+                        ) : sortedLessons.length === 0 ? (
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '400px',
+                                gap: '16px'
+                            }}>
+                                <Filter size={48} style={{ color: 'rgba(255, 255, 255, 0.3)' }} />
+                                <p style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.6)' }}>
+                                    Nie znaleziono lekcji
+                                </p>
+                            </div>
+                        ) : (
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                                gap: '24px'
+                            }}>
+                                {sortedLessons.map(lesson => (
+                                    <LessonCard
+                                        key={lesson.lesson_id}
+                                        lesson={{
+                                            id: lesson.lesson_id,
+                                            title: lesson.title,
+                                            description: lesson.description,
+                                            category: lesson.category || 'Sprzedaż',
+                                            difficulty: lesson.difficulty,
+                                            duration_minutes: lesson.duration_minutes,
+                                            xp_reward: lesson.xp_reward,
+                                            card_count: lesson.content?.cards?.length || 0
+                                        }}
+                                        progress={userProgress[lesson.lesson_id]}
+                                        onClick={() => router.push(`/lessons/${lesson.lesson_id}`)}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </>
                 )}
 
-                {/* Lessons Grid */}
-                {loading ? (
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-                        gap: '24px'
-                    }}>
-                        {[1, 2, 3].map(i => (
-                            <SkeletonCard key={i} delay={i * 0.05} />
-                        ))}
-                    </div>
-                ) : sortedLessons.length === 0 ? (
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '400px',
-                        gap: '16px'
-                    }}>
-                        <Filter size={48} style={{ color: 'rgba(255, 255, 255, 0.3)' }} />
-                        <p style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.6)' }}>
-                            Nie znaleziono lekcji
-                        </p>
-                    </div>
-                ) : (
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-                        gap: '24px'
-                    }}>
-                        {sortedLessons.map(lesson => (
-                            <LessonCard
-                                key={lesson.lesson_id}
-                                lesson={{
-                                    id: lesson.lesson_id,
-                                    title: lesson.title,
-                                    description: lesson.description,
-                                    category: lesson.category || 'Sprzedaż',
-                                    difficulty: lesson.difficulty,
-                                    duration_minutes: lesson.duration_minutes,
-                                    xp_reward: lesson.xp_reward,
-                                    card_count: lesson.content?.cards?.length || 0
-                                }}
-                                progress={userProgress[lesson.lesson_id]}
-                                onClick={() => router.push(`/lessons/${lesson.lesson_id}`)}
-                            />
-                        ))}
+                {/* PATHS TAB */}
+                {activeTab === 'paths' && (
+                    <div>
+                        {pathsLoading ? (
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '200px',
+                                color: 'rgba(255, 255, 255, 0.6)'
+                            }}>
+                                Ładowanie ścieżek...
+                            </div>
+                        ) : paths.length === 0 ? (
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '300px',
+                                gap: '16px'
+                            }}>
+                                <Trophy size={48} style={{ color: 'rgba(255, 255, 255, 0.3)' }} />
+                                <p style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.6)' }}>
+                                    Brak dostępnych ścieżek edukacyjnych
+                                </p>
+                            </div>
+                        ) : (
+                            <>
+                                <div style={{
+                                    display: 'flex',
+                                    gap: '24px',
+                                    padding: '16px 24px',
+                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                                    borderRadius: '12px',
+                                    marginBottom: '24px',
+                                    fontSize: '14px'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span>🎯</span>
+                                        <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                                            <strong style={{ color: 'white' }}>{paths.length}</strong> ścieżek dostępnych
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+                                    gap: '24px'
+                                }}>
+                                    {paths.map(path => (
+                                        <PathCard key={path.path_slug} path={path} />
+                                    ))}
+                                </div>
+                            </>
+                        )}
                     </div>
                 )}
             </div>

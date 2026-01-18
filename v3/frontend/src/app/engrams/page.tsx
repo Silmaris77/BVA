@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { Search, Bell, Zap, Brain, Library, BookOpen, Clock, RefreshCw, Download } from 'lucide-react'
+import { CONTENT_CATEGORIES, getCategoryColor } from '@/lib/categories'
 
 export default function EngramsPage() {
     const { user, profile, loading: authLoading } = useAuth()
@@ -19,12 +20,8 @@ export default function EngramsPage() {
         }
     }, [user, authLoading, router])
 
-    const categories = [
-        { id: 'all', name: 'Wszystkie', color: '#00d4ff' },
-        { id: 'Sales', name: 'Sprzedaż', color: '#00ff88' },
-        { id: 'Leadership', name: 'Leadership', color: '#b000ff' },
-        { id: 'Mindset', name: 'Mindset', color: '#ffd700' }
-    ]
+    // Use shared categories from config
+    const categories = CONTENT_CATEGORIES
 
     const [engrams, setEngrams] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
@@ -34,35 +31,20 @@ export default function EngramsPage() {
             if (!user) return
 
             try {
-                // Fetch all engrams
-                const { data: engramsData, error: engramsError } = await supabase
-                    .from('engrams')
-                    .select('*')
+                // Use API endpoint instead of direct Supabase query
+                const response = await fetch('/api/engrams')
+                const data = await response.json()
 
-                if (engramsError) throw engramsError
-
-                // Fetch user's installed engrams
-                const { data: userEngramsData, error: userEngramsError } = await supabase
-                    .from('user_engrams')
-                    .select('*')
-                    .eq('user_id', user.id)
-
-                if (userEngramsError) throw userEngramsError
-
-                // Merge data
-                const mergedEngrams = engramsData.map(engram => {
-                    const userEngram = userEngramsData.find(ue => ue.engram_id === engram.id)
-                    return {
+                if (data.engrams) {
+                    // Format data for display
+                    const formattedEngrams = data.engrams.map((engram: any) => ({
                         ...engram,
-                        installed: !!userEngram,
-                        strength: userEngram?.strength || 0,
-                        lastRefreshed: userEngram?.last_refreshed_at
-                            ? new Date(userEngram.last_refreshed_at).toLocaleDateString()
+                        lastRefreshed: engram.last_refreshed_at
+                            ? new Date(engram.last_refreshed_at).toLocaleDateString()
                             : null
-                    }
-                })
-
-                setEngrams(mergedEngrams)
+                    }))
+                    setEngrams(formattedEngrams)
+                }
             } catch (error) {
                 console.error('Error loading engrams:', error)
             } finally {
@@ -387,15 +369,7 @@ export default function EngramsPage() {
                     gap: '24px'
                 }}>
                     {filteredEngrams.map(engram => {
-                        const getCategoryColor = (category: string) => {
-                            const colors: Record<string, string> = {
-                                'Sales': '#00ff88',
-                                'Leadership': '#b000ff',
-                                'Mindset': '#ffd700'
-                            }
-                            return colors[category] || '#00d4ff'
-                        }
-
+                        // Use shared category color function
                         const categoryColor = getCategoryColor(engram.category)
                         const strengthColor = getStrengthColor(engram.strength)
 

@@ -2,9 +2,9 @@ import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface RouteParams {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 export async function GET(
@@ -43,7 +43,10 @@ export async function GET(
 
             return NextResponse.json({
                 lesson,
-                progress: progress || null
+                progress: progress ? {
+                    ...progress,
+                    current_card_index: progress.current_card // Map for frontend
+                } : null
             });
         }
 
@@ -137,6 +140,29 @@ export async function POST(
                 });
 
             return NextResponse.json({ success: true, xpEarned: xpAmount, progress });
+        }
+
+        if (action === 'progress') {
+            // Update current card progress
+            const { current_card } = body;
+
+            const { data: progress, error: progressError } = await supabase
+                .from('user_lesson_progress')
+                .update({
+                    current_card: current_card,
+                    status: 'in_progress'
+                })
+                .eq('user_id', user.id)
+                .eq('lesson_id', lessonId)
+                .select()
+                .single();
+
+            if (progressError) {
+                console.error('Progress update error:', progressError);
+                return NextResponse.json({ error: progressError.message }, { status: 500 });
+            }
+
+            return NextResponse.json({ success: true, progress });
         }
 
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });

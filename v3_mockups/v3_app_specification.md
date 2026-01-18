@@ -1,10 +1,30 @@
 # 🚀 BrainVenture V3 - Specyfikacja Aplikacji
 
-**Wersja:** 3.0  
-**Data:** 2026-01-11  
-**Status:** Bootstrap MVP Ready  
-**Architektura:** Next.js 16 + Supabase + PostgreSQL  
+**Wersja:** 3.1  
+**Data:** 2026-01-18  
+**Status:** MVP in Development  
+**Architektura:** Next.js 15 + Supabase + PostgreSQL  
 **Design System:** Glassmorphism / Cyberpunk (Dark Theme)
+
+---
+
+## 📝 Changelog
+
+### v3.1 (2026-01-18) - Session Update
+**Nowe koncepty i implementacje:**
+
+#### ✅ Zaimplementowane
+- **Sub-tabs nawigacja** (styl DataCamp) - zakładka "Nauka" podzielona na "Pojedyncze lekcje" i "Ścieżki edukacyjne"
+- **Ujednolicone kategorie** - wspólny plik `lib/categories.ts` z 7 kategoriami (Wiedza produktowa, Sprzedaż, Leadership, Negocjacje, Produktywność, Komunikacja)
+- **API Routes** - `/api/lessons`, `/api/paths`, `/api/engrams`, `/api/tools`
+- **PathCard component** - karta ścieżki z paskiem postępu i statusem
+- **Row Level Security** - polityki RLS na wszystkich user progress tables
+- **Progress tracking** - zapisywanie `current_card` przy nawigacji między kartami
+
+#### 🎯 Nowe decyzje projektowe
+- **Ścieżki edukacyjne** jako sekwencje lekcji ze wspólnym celem biznesowym
+- **Filtry kategorii** na stronach Lekcji i Engramów
+- **Progress bar** w kartach lekcji pokazuje % ukończonych kart
 
 ---
 

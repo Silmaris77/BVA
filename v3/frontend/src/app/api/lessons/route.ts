@@ -8,7 +8,7 @@ export async function GET() {
         // Get all lessons (public endpoint - access control done on individual lesson view)
         const { data: lessons, error } = await supabase
             .from('lessons')
-            .select('lesson_id, title, description, duration_minutes, xp_reward, difficulty, content')
+            .select('lesson_id, title, description, duration_minutes, xp_reward, difficulty, category, content')
             .order('created_at', { ascending: true });
 
         if (error) {

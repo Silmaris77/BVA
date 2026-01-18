@@ -23,9 +23,14 @@ interface LessonCardProps {
 export default function LessonCard({ lesson, progress, onClick }: LessonCardProps) {
     const isCompleted = progress?.status === 'completed'
     const isInProgress = progress?.status === 'in_progress'
-    const progressPercentage = progress && lesson.card_count > 0
-        ? Math.round(((progress.current_card_index || 0) / lesson.card_count) * 100)
-        : 0
+    const isNotStarted = !progress || progress?.status === 'not_started'
+
+    // Completed = 100%, In Progress = calculate, Not Started = 0
+    const progressPercentage = isCompleted
+        ? 100
+        : (progress && lesson.card_count > 0
+            ? Math.round(((progress.current_card_index || 0) / lesson.card_count) * 100)
+            : 0)
 
     // Category colors
     const categoryColors: Record<string, string> = {
@@ -178,7 +183,7 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
                 </span>
             </div>
 
-            {/* Progress bar */}
+            {/* Progress bar - only show if started */}
             <div style={{
                 height: '6px',
                 background: 'rgba(255, 255, 255, 0.1)',
@@ -190,7 +195,9 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
                 <div style={{
                     height: '100%',
                     width: `${progressPercentage}%`,
-                    background: `linear-gradient(90deg, ${categoryColor}, #b000ff)`,
+                    background: isCompleted
+                        ? 'linear-gradient(90deg, #00ff88, #00d4ff)' // Green for completed
+                        : `linear-gradient(90deg, ${categoryColor}, #b000ff)`, // Category color for in progress
                     borderRadius: '3px',
                     transition: 'width 0.4s ease'
                 }} />
