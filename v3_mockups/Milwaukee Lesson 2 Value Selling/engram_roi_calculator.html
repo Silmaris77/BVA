@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Engram: ROI Calculator Framework</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .engram-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .engram-header {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .engram-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .engram-icon {
+            font-size: 2.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .engram-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .meta-badge {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .strength-section {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .strength-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .strength-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #00ff87;
+        }
+
+        .strength-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ff87;
+        }
+
+        .strength-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .strength-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff87, #60efff);
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 135, 0.5);
+        }
+
+        .strength-status {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff87;
+            box-shadow: 0 0 10px rgba(0, 255, 135, 0.7);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .xp-tracker {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .xp-badge {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .xp-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .xp-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .slide-container {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            min-height: 500px;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(245, 158, 11, 0.2);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .slide-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #f59e0b;
+        }
+
+        .slide-content {
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .problem-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+            font-style: italic;
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+
+        /* ROI Framework Grid */
+        .roi-framework {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .roi-step {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .roi-step:hover {
+            background: rgba(245, 158, 11, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .step-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-bottom: 10px;
+        }
+
+        .step-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fbbf24;
+        }
+
+        .step-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .step-formula {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #60efff;
+        }
+
+        .calculator-demo {
+            background: rgba(245, 158, 11, 0.05);
+            border: 2px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .calc-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th {
+            background: rgba(245, 158, 11, 0.2);
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+            border-bottom: 2px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .product-column {
+            font-weight: 600;
+        }
+
+        .winner {
+            color: #00ff87;
+            font-weight: 700;
+        }
+
+        .loser {
+            color: #ef4444;
+            opacity: 0.7;
+        }
+
+        .insight-box {
+            background: rgba(96, 239, 255, 0.1);
+            border-left: 4px solid #60efff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .result-box {
+            background: rgba(0, 255, 135, 0.15);
+            border: 2px solid rgba(0, 255, 135, 0.4);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        .quiz-container {
+            margin-top: 20px;
+        }
+
+        .quiz-question {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .question-number {
+            color: #f59e0b;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quiz-option:hover {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.5);
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: #f59e0b;
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 135, 0.2);
+            border-color: #00ff87;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .quiz-feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .quiz-feedback.correct {
+            background: rgba(0, 255, 135, 0.1);
+            border: 2px solid rgba(0, 255, 135, 0.3);
+        }
+
+        .quiz-feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .submit-quiz-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .submit-quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(245, 158, 11, 0.5);
+        }
+
+        .submit-quiz-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: #f59e0b;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.prev:hover:not(:disabled) {
+            transform: translateX(-3px);
+        }
+
+        .nav-btn.next:hover:not(:disabled) {
+            transform: translateX(3px);
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #f59e0b;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
+            transform: scale(1.3);
+        }
+
+        .completion-screen {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .completion-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce-completion 1s ease infinite;
+        }
+
+        @keyframes bounce-completion {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .completion-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ff87;
+            margin-bottom: 15px;
+        }
+
+        .completion-message {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .xp-reward {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 146, 60, 0.2));
+            border: 2px solid rgba(245, 158, 11, 0.5);
+            padding: 25px;
+            border-radius: 16px;
+            margin: 30px 0;
+        }
+
+        .xp-reward-label {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .xp-reward-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(245, 158, 11, 0.5);
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .engram-container {
+                padding: 15px;
+            }
+
+            .slide-container {
+                padding: 25px 20px;
+            }
+
+            .engram-title {
+                font-size: 1.5rem;
+            }
+
+            .roi-framework {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 8px;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="engram-container">
+        <!-- Header -->
+        <div class="engram-header">
+            <h1 class="engram-title">
+                <span class="engram-icon">🧠</span>
+                ROI Calculator Framework
+            </h1>
+            <div class="engram-meta">
+                <div class="meta-badge">⏱️ 6 minut</div>
+                <div class="meta-badge">💰 Finance</div>
+                <div class="meta-badge">⭐⭐ Podstawowy</div>
+            </div>
+        </div>
+
+        <!-- Strength Indicator -->
+        <div class="strength-section">
+            <div class="strength-header">
+                <div class="strength-label">Neural Signal Strength</div>
+                <div class="strength-value" id="strengthValue">100%</div>
+            </div>
+            <div class="strength-bar">
+                <div class="strength-fill" id="strengthFill" style="width: 100%"></div>
+            </div>
+            <div class="strength-status">
+                <span class="status-dot"></span>
+                <span id="strengthStatus">🟢 Stable - Engram fully operational</span>
+            </div>
+            <div class="xp-tracker">
+                <div class="xp-badge">
+                    <div class="xp-label">Install XP</div>
+                    <div class="xp-value">+50</div>
+                </div>
+                <div class="xp-badge">
+                    <div class="xp-label">Refresh XP</div>
+                    <div class="xp-value">+25</div>
+                </div>
+                <div class="xp-badge">
+                    <div class="xp-label">Times Refreshed</div>
+                    <div class="xp-value" id="refreshCount">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Container -->
+        <div class="slide-container">
+            <div class="slide-number" id="slideNumber">Slajd 1/4</div>
+
+            <!-- Slide 1: Problem -->
+            <div class="slide active" id="slide1">
+                <h2 class="slide-title">1️⃣ PROBLEM</h2>
+                <div class="slide-content">
+                    <div class="problem-box">
+                        "Klient: 'Milwaukee za drogie. Bosch 40% taniej. Kupujemy Bosch.'"
+                    </div>
+                    <p style="margin-top: 25px; line-height: 1.8;">
+                        <strong>Najczęstszy błąd w Value Selling:</strong><br><br>
+                        KAM pokazuje <strong>cenę produktu</strong>, klient porównuje ceny - i wybiera tańszy. Prawda? <strong>Cena ≠ Koszt.</strong>
+                    </p>
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 20px; border-radius: 12px; margin: 25px 0; border-left: 4px solid #ef4444;">
+                        <strong>❌ Scenariusz porażki:</strong><br><br>
+                        1. Oferta Milwaukee: Wiertarko-wkrętarka M18 FUEL = <strong>3200 PLN</strong><br>
+                        2. Oferta Bosch: GSR 18V-60 = <strong>2000 PLN</strong><br>
+                        3. Procurement: "Bosch taniej o 1200 PLN = 37% oszczędności!"<br>
+                        4. <strong style="color: #ef4444;">KAM nie pokazał ROI → Klient kupuje Bosch</strong><br>
+                        5. Po 18 miesiącach: Bosch zepsute, przestoje 12 godzin, koszt naprawy 800 PLN
+                    </div>
+                    <div style="background: rgba(0, 255, 135, 0.1); padding: 20px; border-radius: 12px; margin-top: 15px; border-left: 4px solid #00ff87;">
+                        <strong>✅ Co się stało naprawdę?</strong><br><br>
+                        Klient oszczędził 1200 PLN przy zakupie, ale <strong>stracił 3400 PLN</strong> w 18 miesięcy:<br>
+                        • Przestój: 12h × 200 PLN/h = 2400 PLN<br>
+                        • Naprawa: 800 PLN<br>
+                        • Wymiana baterii (2x częściej): 200 PLN<br>
+                        <strong>Total Cost of Ownership (TCO) Bosch = 5400 PLN vs Milwaukee 3200 PLN</strong>
+                    </div>
+                    <p style="margin-top: 25px; padding: 15px; background: rgba(245, 158, 11, 0.1); border-radius: 12px;">
+                        <strong>💡 Lekcja:</strong> Nie sprzedawaj ceny produktu. Sprzedawaj <strong>Total Cost of Ownership</strong> (TCO) - to jedyna prawdziwa "cena".
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 2: Mechanism -->
+            <div class="slide" id="slide2">
+                <h2 class="slide-title">2️⃣ MECHANIZM - 5-Step ROI Framework</h2>
+                <div class="slide-content">
+                    <p style="margin-bottom: 25px;">
+                        <strong>Framework do kalkulacji ROI</strong> - 5 kroków które pokazują prawdziwy koszt (TCO) vs. cenę katalogową.
+                    </p>
+
+                    <div class="roi-framework">
+                        <div class="roi-step">
+                            <div class="step-number">1️⃣</div>
+                            <div class="step-title">Purchase Price</div>
+                            <div class="step-description">
+                                Cena zakupu - to co widzi Procurement
+                            </div>
+                            <div class="step-formula">
+                                P = Price × Quantity
+                            </div>
+                        </div>
+
+                        <div class="roi-step">
+                            <div class="step-number">2️⃣</div>
+                            <div class="step-title">Operating Costs</div>
+                            <div class="step-description">
+                                Koszty eksploatacji: energia, baterie, konserwacje
+                            </div>
+                            <div class="step-formula">
+                                O = (Battery Cost + Service) × Years
+                            </div>
+                        </div>
+
+                        <div class="roi-step">
+                            <div class="step-number">3️⃣</div>
+                            <div class="step-title">Downtime Cost</div>
+                            <div class="step-description">
+                                Przestoje gdy narzędzie nie działa
+                            </div>
+                            <div class="step-formula">
+                                D = Downtime Hours × Labor Rate
+                            </div>
+                        </div>
+
+                        <div class="roi-step">
+                            <div class="step-number">4️⃣</div>
+                            <div class="step-title">Productivity Gain</div>
+                            <div class="step-description">
+                                Wzrost wydajności (szybsze wykonanie pracy)
+                            </div>
+                            <div class="step-formula">
+                                G = Time Saved × Labor Rate
+                            </div>
+                        </div>
+
+                        <div class="roi-step">
+                            <div class="step-number">5️⃣</div>
+                            <div class="step-title">Total Cost of Ownership</div>
+                            <div class="step-description">
+                                Prawdziwy koszt 3-letniej eksploatacji
+                            </div>
+                            <div class="step-formula">
+                                TCO = P + O + D - G
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="insight-box">
+                        <strong>🎯 Kluczowa prawda:</strong><br>
+                        Purchase Price może być 40% wyższy, ale jeśli TCO jest niższy - premium produkt jest <strong>tańszy</strong>. To musisz pokazać klientowi!
+                    </div>
+
+                    <p style="margin-top: 25px; padding: 15px; background: rgba(245, 158, 11, 0.1); border-radius: 12px;">
+                        <strong>📊 Przykład:</strong><br>
+                        Milwaukee 3200 PLN + 600 PLN (3-year ops) + 0 downtime - 400 PLN (productivity) = <strong>3400 PLN TCO</strong><br>
+                        Bosch 2000 PLN + 900 PLN (3-year ops) + 2400 PLN (downtime) - 0 = <strong>5300 PLN TCO</strong><br><br>
+                        Milwaukee jest <strong>1900 PLN tańszy</strong> mimo że cena katalogowa wyższa o 1200 PLN!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 3: Application -->
+            <div class="slide" id="slide3">
+                <h2 class="slide-title">3️⃣ ZASTOSOWANIE - VW Case</h2>
+                <div class="slide-content">
+                    <div class="calculator-demo">
+                        <div class="calc-header">
+                            📍 Case: VW Poznań - Montownia (15 operatorów, 3-year horizon)
+                        </div>
+
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Cost Category</th>
+                                    <th class="product-column">Milwaukee M18 FUEL</th>
+                                    <th class="product-column">Bosch GSR 18V</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>1️⃣ Purchase Price</strong></td>
+                                    <td class="loser">3200 PLN × 15 = 48 000 PLN</td>
+                                    <td class="winner">2000 PLN × 15 = 30 000 PLN ✓</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>2️⃣ Operating Costs (3 years)</strong></td>
+                                    <td class="winner">9 000 PLN<br><small>(baterie 2x dłużej żyją)</small></td>
+                                    <td class="loser">13 500 PLN<br><small>(wymiana co 12 mies.)</small></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3️⃣ Downtime Cost</strong></td>
+                                    <td class="winner">0 PLN<br><small>(FUEL rzadko się psuje)</small></td>
+                                    <td class="loser">36 000 PLN<br><small>(12h × 15 narzędzi × 200 PLN/h)</small></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>4️⃣ Productivity Gain</strong></td>
+                                    <td class="winner">- 6 000 PLN<br><small>(40% szybsze = 2h/dzień oszczędności)</small></td>
+                                    <td class="loser">0 PLN<br><small>(standard, brak gainów)</small></td>
+                                </tr>
+                                <tr style="background: rgba(245, 158, 11, 0.15); font-weight: 700; font-size: 1.1rem;">
+                                    <td><strong>5️⃣ TOTAL TCO (3 years)</strong></td>
+                                    <td class="winner" style="font-size: 1.3rem;">51 000 PLN ✅</td>
+                                    <td class="loser" style="font-size: 1.3rem;">79 500 PLN ❌</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="result-box">
+                            <strong>💎 Wynik ROI:</strong><br><br>
+                            Milwaukee wydaje się droższy (+18 000 PLN przy zakupie), ale <strong>oszczędza 28 500 PLN w 3 lata</strong>!<br><br>
+                            <strong>ROI = 158%</strong> | <strong>Payback Period = 11 miesięcy</strong><br><br>
+                            Po 11 miesiącach Milwaukee zaczyna ZARABIAĆ dla VW.
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(96, 239, 255, 0.1); padding: 20px; border-radius: 12px; margin-top: 25px; border-left: 4px solid #60efff;">
+                        <strong>🎓 Co KAM zrobił dobrze?</strong><br><br>
+                        1. Discovery z operatorami (Tier 3): <strong>Pain point = baterie padają 20x/dzień</strong><br>
+                        2. Kalkulacja z PM (Tier 2): <strong>Downtime cost = 200 PLN/h</strong><br>
+                        3. Executive Brief dla CFO (Tier 1): <strong>1-page TCO comparison pokazujący 28k PLN savings</strong><br>
+                        4. CFO: "OK, kupujemy Milwaukee - to ma sens biznesowo"
+                    </div>
+
+                    <p style="margin-top: 25px; padding: 20px; background: rgba(245, 158, 11, 0.1); border-radius: 12px;">
+                        <strong>🔑 Praktyczna reguła:</strong><br>
+                        ZAWSZE pokazuj TCO (3 lata), nie Purchase Price. Klient musi zobaczyć <strong>całkowitą cenę posiadania</strong>, nie tylko cenę zakupu.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 4: Quiz -->
+            <div class="slide" id="slide4">
+                <h2 class="slide-title">4️⃣ WERYFIKACJA - Knowledge Check</h2>
+                <div class="slide-content">
+                    <p style="margin-bottom: 25px;">
+                        Sprawdź swoją wiedzę - odpowiedz na 3 losowe pytania z puli:
+                    </p>
+                    <div class="quiz-container" id="quizContainer"></div>
+                    <button class="submit-quiz-btn" id="submitQuiz" onclick="submitQuiz()" disabled>
+                        Sprawdź odpowiedzi
+                    </button>
+                    <div class="quiz-feedback" id="quizFeedback"></div>
+                </div>
+            </div>
+
+            <!-- Completion Screen -->
+            <div class="slide" id="slideCompletion">
+                <div class="completion-screen">
+                    <div class="completion-icon">🎉</div>
+                    <h2 class="completion-title">Engram zainstalowany!</h2>
+                    <p class="completion-message">
+                        Pomyślnie ukończyłeś engram <strong>ROI Calculator Framework</strong>.<br>
+                        Wiedza została zapisana w Twojej Neural Matrix.
+                    </p>
+                    <div class="xp-reward">
+                        <div class="xp-reward-label">XP Zdobyte</div>
+                        <div class="xp-reward-value" id="earnedXP">+50 XP</div>
+                    </div>
+                    <div style="background: rgba(245, 158, 11, 0.1); padding: 20px; border-radius: 12px; margin: 25px 0;">
+                        <strong>📊 Quiz Score:</strong> <span id="finalScore">0/3</span><br>
+                        <strong>⏱️ Czas:</strong> <span id="finalTime">6 min</span><br>
+                        <strong>🔄 Status:</strong> <span style="color: #00ff87;">Ready for Refresh in 7 days</span>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="restartEngram()">🔄 Odśwież Engram (+25 XP)</button>
+                        <button class="action-btn secondary" onclick="goToLibrary()">📚 Powrót do Biblioteki</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn prev" id="prevBtn" onclick="previousSlide()" disabled>
+                ← Poprzedni
+            </button>
+            <div class="progress-dots" id="progressDots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <button class="nav-btn next" id="nextBtn" onclick="nextSlide()">
+                Następny →
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
+        let quizAnswers = {};
+        let quizQuestions = [];
+        let startTime = Date.now();
+
+        const questionPool = [
+            {
+                id: 1,
+                question: "Co to jest TCO (Total Cost of Ownership)?",
+                options: [
+                    "Cena katalogowa produktu",
+                    "Purchase Price + Operating Costs + Downtime - Productivity Gains (3 lata)",
+                    "Tylko koszty eksploatacji (baterie + serwis)",
+                    "ROI minus koszty zakupu"
+                ],
+                correct: 1,
+                explanation: "TCO = pełny koszt posiadania produktu przez 3 lata (zakup + ops + downtime - gainsy)."
+            },
+            {
+                id: 2,
+                question: "Milwaukee 3200 PLN vs Bosch 2000 PLN. Klient: 'Bosch tańszy!' - co robisz?",
+                options: [
+                    "Oferujesz rabat na Milwaukee",
+                    "Pokazujesz TCO: Milwaukee 3400 PLN vs Bosch 5300 PLN (3 lata) - Milwaukee faktycznie tańszy!",
+                    "Rezygnujesz - klient chce tańszy produkt",
+                    "Mówisz: 'Milwaukee premium, warto przepłacić'"
+                ],
+                correct: 1,
+                explanation: "Nie walcz o cenę - pokaż TCO. Purchase Price to tylko 30% całkowitego kosztu!"
+            },
+            {
+                id: 3,
+                question: "Co to Downtime Cost?",
+                options: [
+                    "Koszt naprawy narzędzia",
+                    "Koszt przestoju: Downtime Hours × Labor Rate (ile tracisz gdy narzędzie nie działa)",
+                    "Koszt wymiany baterii",
+                    "Koszt transportu narzędzia do serwisu"
+                ],
+                correct: 1,
+                explanation: "Downtime = przestój. Jeśli operator zarabia 200 PLN/h i narzędzie stoi 12h = 2400 PLN straty!"
+            },
+            {
+                id: 4,
+                question: "Productivity Gain to...?",
+                options: [
+                    "Oszczędności bo narzędzie rzadziej się psuje",
+                    "Czas zaoszczędzony dzięki szybszemu narzędziu × Labor Rate (np. 40% szybsze wiercenie = mniej godzin pracy)",
+                    "Rabat na baterie",
+                    "Bonus za użycie premium narzędzia"
+                ],
+                correct: 1,
+                explanation: "Productivity Gain = ZYSK. Jeśli Milwaukee robi robotę 40% szybciej - oszczędzasz czas (= pieniądze)."
+            },
+            {
+                id: 5,
+                question: "Payback Period to...?",
+                options: [
+                    "Ile miesięcy trwa gwarancja",
+                    "Ile miesięcy potrzeba by oszczędności (TCO difference) zwróciły wyższą cenę zakupu",
+                    "Ile miesięcy działa bateria",
+                    "Ile miesięcy trwa dostawa"
+                ],
+                correct: 1,
+                explanation: "Payback = po ilu miesiącach Milwaukee zwraca się. Jeśli oszczędza 1900 PLN/rok, a kosztował 1200 PLN więcej = 7.6 mies."
+            },
+            {
+                id: 6,
+                question: "Case: Bosch 2000 PLN, TCO 5300. Milwaukee 3200, TCO 3400. Jaki ROI?",
+                options: [
+                    "ROI = -40% (strata bo Milwaukee droższy)",
+                    "ROI = 158% (savings 1900 PLN / investment 1200 PLN)",
+                    "ROI = 37% (różnica cen)",
+                    "ROI = 0% (break-even)"
+                ],
+                correct: 1,
+                explanation: "ROI = (TCO Savings - Investment) / Investment. (1900 - 1200) / 1200 = 58%. Total ROI = 158%."
+            },
+            {
+                id: 7,
+                question: "Klient: 'Ale Milwaukee i tak droższy o 1200 PLN!' - jak odpowiadasz?",
+                options: [
+                    "'Tak, ale premium jakość!'",
+                    "'Droższy o 1200 przy zakupie, ale oszczędza 1900 w 3 lata = net gain 700 PLN. To inwestycja, nie koszt.'",
+                    "'Możemy dać rabat 10%'",
+                    "'Bosch się szybciej zepsuje'"
+                ],
+                correct: 1,
+                explanation: "Reframe: Purchase Price to inwestycja, TCO Savings to zysk. Milwaukee to +700 PLN zysku, nie 1200 PLN kosztu!"
+            },
+            {
+                id: 8,
+                question: "Który argument NIE jest częścią ROI kalkulacji?",
+                options: [
+                    "Downtime Cost (przestoje)",
+                    "Productivity Gain (wzrost wydajności)",
+                    "Brand Prestige (prestiż marki)",
+                    "Operating Costs (eksploatacja)"
+                ],
+                correct: 2,
+                explanation: "ROI = liczby (TCO). Brand Prestige to emotional/strategic value (inny framework)."
+            }
+        ];
+
+        function initializeQuiz() {
+            const shuffled = questionPool.sort(() => 0.5 - Math.random());
+            quizQuestions = shuffled.slice(0, 3);
+
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.innerHTML = `
+                    <div class="question-number">Pytanie ${index + 1}/3</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="quiz-options">
+                        ${q.options.map((option, optIndex) => `
+                            <div class="quiz-option" onclick="selectOption(${index}, ${optIndex})" data-question="${index}" data-option="${optIndex}">
+                                <div class="option-letter">${String.fromCharCode(65 + optIndex)}</div>
+                                <div>${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            document.querySelectorAll(`[data-question="${questionIndex}"]`).forEach(opt => {
+                opt.classList.remove('selected');
+            });
+
+            const option = document.querySelector(`[data-question="${questionIndex}"][data-option="${optionIndex}"]`);
+            option.classList.add('selected');
+
+            quizAnswers[questionIndex] = optionIndex;
+
+            if (Object.keys(quizAnswers).length === 3) {
+                document.getElementById('submitQuiz').disabled = false;
+            }
+        }
+
+        function submitQuiz() {
+            let correctCount = 0;
+            
+            quizQuestions.forEach((q, index) => {
+                const userAnswer = quizAnswers[index];
+                const isCorrect = userAnswer === q.correct;
+                
+                if (isCorrect) correctCount++;
+
+                document.querySelectorAll(`[data-question="${index}"]`).forEach((opt, optIndex) => {
+                    if (optIndex === q.correct) {
+                        opt.classList.add('correct');
+                    } else if (optIndex === userAnswer && !isCorrect) {
+                        opt.classList.add('incorrect');
+                    }
+                    opt.style.pointerEvents = 'none';
+                });
+            });
+
+            const feedback = document.getElementById('quizFeedback');
+            const isPass = correctCount >= 2;
+            
+            feedback.className = `quiz-feedback show ${isPass ? 'correct' : 'incorrect'}`;
+            feedback.innerHTML = `
+                <h3 style="margin-bottom: 15px; font-size: 1.3rem;">
+                    ${isPass ? '✅ Świetnie!' : '⚠️ Prawie!'}
+                </h3>
+                <p style="font-size: 1.05rem; margin-bottom: 15px;">
+                    Wynik: <strong>${correctCount}/3</strong> poprawnych odpowiedzi
+                </p>
+                <p style="line-height: 1.6;">
+                    ${isPass 
+                        ? 'Engram został pomyślnie zainstalowany w Twojej Neural Matrix. Możesz go odświeżyć za 7 dni dla +25 XP.'
+                        : 'Zalecamy przejrzenie materiału ponownie przed instalacją engramu. Możesz spróbować jeszcze raz.'}
+                </p>
+            `;
+
+            document.getElementById('finalScore').textContent = `${correctCount}/3`;
+            
+            const timeSpent = Math.round((Date.now() - startTime) / 60000);
+            document.getElementById('finalTime').textContent = `${timeSpent} min`;
+
+            document.getElementById('submitQuiz').disabled = true;
+            document.getElementById('submitQuiz').textContent = 'Quiz ukończony';
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            if (n <= totalSlides) {
+                document.getElementById(`slide${n}`).classList.add('active');
+                if (dots[n - 1]) dots[n - 1].classList.add('active');
+                document.getElementById('slideNumber').textContent = `Slajd ${n}/${totalSlides}`;
+            } else {
+                document.getElementById('slideCompletion').classList.add('active');
+                document.getElementById('slideNumber').textContent = `Ukończono`;
+            }
+
+            document.getElementById('prevBtn').disabled = (n === 1);
+            
+            if (n === totalSlides) {
+                const submitBtn = document.getElementById('submitQuiz');
+                document.getElementById('nextBtn').disabled = submitBtn.textContent === 'Sprawdź odpowiedzi';
+            } else if (n > totalSlides) {
+                document.getElementById('nextBtn').style.display = 'none';
+            } else {
+                document.getElementById('nextBtn').disabled = false;
+                document.getElementById('nextBtn').style.display = 'flex';
+            }
+
+            currentSlide = n;
+
+            if (n === 4 && quizQuestions.length === 0) {
+                initializeQuiz();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides + 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function restartEngram() {
+            const currentCount = parseInt(document.getElementById('refreshCount').textContent);
+            document.getElementById('refreshCount').textContent = currentCount + 1;
+            document.getElementById('earnedXP').textContent = '+25 XP';
+            quizAnswers = {};
+            quizQuestions = [];
+            currentSlide = 1;
+            showSlide(1);
+            document.getElementById('submitQuiz').disabled = true;
+            document.getElementById('submitQuiz').textContent = 'Sprawdź odpowiedzi';
+            document.getElementById('quizFeedback').className = 'quiz-feedback';
+        }
+
+        function goToLibrary() {
+            alert('Powrót do biblioteki engramów...');
+        }
+
+        showSlide(1);
+    </script>
+</body>
+</html>

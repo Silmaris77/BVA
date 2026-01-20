@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narzędzia - BrainVenture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 48px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #ff8800, #cc6600);
+            border-color: #ff8800;
+            color: white;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 24px;
+        }
+
+        .tool-card {
+            background: rgba(20, 20, 35, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff8800, #ffaa00);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 136, 0, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .tool-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 136, 0, 0.2);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .tool-info {
+            flex: 1;
+        }
+
+        .tool-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .tool-tier {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .tool-tier.tier-1 {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .tool-tier.tier-2 {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .tool-tier.tier-3 {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+
+        .tool-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .tool-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tool-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .tool-stats span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .use-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ff8800, #cc6600);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .use-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255, 136, 0, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ Narzędzia</h1>
+            <p>Kalkulatory, generatory i inne przydatne narzędzia do pracy</p>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active">Wszystkie</button>
+            <button class="filter-btn">Kalkulatory</button>
+            <button class="filter-btn">Generatory</button>
+            <button class="filter-btn">Konwertery</button>
+            <button class="filter-btn">Tier 1</button>
+            <button class="filter-btn">Tier 2</button>
+            <button class="filter-btn">Tier 3</button>
+        </div>
+
+        <div class="tools-grid">
+            <!-- Tool 1 -->
+            <div class="tool-card" onclick="window.location.href='tool_detail.html'">
+                <div class="tool-header">
+                    <div class="tool-icon">🔧</div>
+                    <div class="tool-info">
+                        <div class="tool-title">Kalkulator Momentu Obrotowego</div>
+                        <span class="tool-tier tier-1">Tier 1 - Podstawowy</span>
+                    </div>
+                </div>
+                <div class="tool-desc">
+                    Oblicz moment obrotowy na podstawie siły i ramienia. Idealne narzędzie dla techników pracujących z
+                    narzędziami pneumatycznymi.
+                </div>
+                <div class="tool-footer">
+                    <div class="tool-stats">
+                        <span>⚡ +50 XP</span>
+                        <span>📊 1,234 użyć</span>
+                    </div>
+                    <button class="use-btn">Użyj</button>
+                </div>
+            </div>
+
+            <!-- Tool 2 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">📏</div>
+                    <div class="tool-info">
+                        <div class="tool-title">Generator Tabel Wartości</div>
+                        <span class="tool-tier tier-2">Tier 2 - Zaawansowany</span>
+                    </div>
+                </div>
+                <div class="tool-desc">
+                    Wygeneruj spersonalizowane tabele wartości momentów dla różnych typów śrub i materiałów. Eksportuj
+                    do PDF.
+                </div>
+                <div class="tool-footer">
+                    <div class="tool-stats">
+                        <span>⚡ +75 XP</span>
+                        <span>📊 856 użyć</span>
+                    </div>
+                    <button class="use-btn">Użyj</button>
+                </div>
+            </div>
+
+            <!-- Tool 3 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🔄</div>
+                    <div class="tool-info">
+                        <div class="tool-title">Konwerter Jednostek</div>
+                        <span class="tool-tier tier-1">Tier 1 - Podstawowy</span>
+                    </div>
+                </div>
+                <div class="tool-desc">
+                    Szybka konwersja między Nm, ft-lb, in-lb i innymi jednostkami momentu. Wsparcie dla systemów
+                    metrycznych i imperialnych.
+                </div>
+                <div class="tool-footer">
+                    <div class="tool-stats">
+                        <span>⚡ +30 XP</span>
+                        <span>📊 2,341 użyć</span>
+                    </div>
+                    <button class="use-btn">Użyj</button>
+                </div>
+            </div>
+
+            <!-- Tool 4 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">⚙️</div>
+                    <div class="tool-info">
+                        <div class="tool-title">Symulator Doboru Narzędzi</div>
+                        <span class="tool-tier tier-3">Tier 3 - Ekspert</span>
+                    </div>
+                </div>
+                <div class="tool-desc">
+                    Zaawansowany symulator pomagający dobrać odpowiednie narzędzie na podstawie parametrów zadania, typu
+                    materiału i warunków pracy.
+                </div>
+                <div class="tool-footer">
+                    <div class="tool-stats">
+                        <span>⚡ +150 XP</span>
+                        <span>📊 423 użyć</span>
+                    </div>
+                    <button class="use-btn">Użyj</button>
+                </div>
+            </div>
+
+            <!-- Tool 5 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">📋</div>
+                    <div class="tool-info">
+                        <div class="tool-title">Generator Raportów</div>
+                        <span class="tool-tier tier-2">Tier 2 - Zaawansowany</span>
+                    </div>
+                </div>
+                <div class="tool-desc">
+                    Twórz profesjonalne raporty z wykonanych prac, z automatycznym obliczaniem parametrów i generowaniem
+                    dokumentacji.
+                </div>
+                <div class="tool-footer">
+                    <div class="tool-stats">
+                        <span>⚡ +100 XP</span>
+                        <span>📊 657 użyć</span>
+                    </div>
+                    <button class="use-btn">Użyj</button>
+                </div>
+            </div>
+
+            <!-- Tool 6 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🎯</div>
+                    <div class="tool-info">
+                        <div class="tool-title">Kalkulator Dokładności</div>
+                        <span class="tool-tier tier-2">Tier 2 - Zaawansowany</span>
+                    </div>
+                </div>
+                <div class="tool-desc">
+                    Oblicz wymaganą dokładność momentu dla krytycznych połączeń. Uwzględnia tolerancje, współczynniki
+                    bezpieczeństwa i normy.
+                </div>
+                <div class="tool-footer">
+                    <div class="tool-stats">
+                        <span>⚡ +80 XP</span>
+                        <span>📊 512 użyć</span>
+                    </div>
+                    <button class="use-btn">Użyj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+# Milwaukee Product Catalog
+
+> **Format:** JSON dla łatwej integracji z aplikacją
+> **Last Updated:** [Data]
+
+```json
+{
+  "version": "1.0",
+  "last_updated": "2024-01-XX",
+  "categories": [
+    {
+      "id": "drills",
+      "name": "Wiertarko-Wkrętarki / Drills",
+      "description": "Compact and powerful drilling solutions",
+      "icon": "drill",
+      "products": [
+        {
+          "sku": "2804-20",
+          "name": "M18 FUEL™ 1/2\" Hammer Drill/Driver",
+          "category_id": "drills",
+          "system": "M18",
+          "fuel": true,
+          "price_msrp": 199.00,
+          "currency": "USD",
+          "specs": {
+            "max_torque": "1200 in-lbs",
+            "speed_settings": 2,
+            "speed_range": "0-550 / 0-2,000 RPM",
+            "chuck_size": "1/2 inch",
+            "length": "7.25 inches",
+            "weight": "4.6 lbs (with battery)",
+            "battery_compatible": ["M18 REDLITHIUM", "M18 HIGH OUTPUT"]
+          },
+          "features": [
+            "POWERSTATE™ Brushless Motor",
+            "REDLINK PLUS™ Intelligence",
+            "REDLITHIUM™ Battery Technology",
+            "All-metal ratcheting chuck"
+          ],
+          "use_cases": [
+            "Heavy-duty drilling wood, metal",
+            "Driving large fasteners",
+            "Concrete anchoring"
+          ],
+          "warranty_years": 5,
+          "in_stock": true,
+          "image_url": "/assets/images/products/2804-20_main.jpg",
+          "video_url": "https://youtube.com/watch?v=EXAMPLE",
+          "manual_url": "/assets/documents/2804-20_manual.pdf"
+        }
+      ]
+    },
+    {
+      "id": "impact_drivers",
+      "name": "Zakrętarki Udarowe / Impact Drivers",
+      "description": "High-torque fastening solutions",
+      "icon": "impact",
+      "products": []
+    },
+    {
+      "id": "grinders",
+      "name": "Szlifierki / Grinders",
+      "description": "Cutting and grinding power tools",
+      "icon": "grinder",
+      "products": []
+    },
+    {
+      "id": "saws",
+      "name": "Piły / Saws",
+      "description": "Cutting solutions for various materials",
+      "icon": "saw",
+      "products": []
+    },
+    {
+      "id": "batteries",
+      "name": "Baterie / Batteries",
+      "description": "Power system batteries",
+      "icon": "battery",
+      "subcategories": ["M12", "M18", "MX FUEL"],
+      "products": []
+    },
+    {
+      "id": "chargers",
+      "name": "Ładowarki / Chargers",
+      "description": "Battery charging solutions",
+      "icon": "charger",
+      "products": []
+    },
+    {
+      "id": "accessories",
+      "name": "Akcesoria / Accessories",
+      "description": "Bits, blades, and attachments",
+      "icon": "accessory",
+      "products": []
+    }
+  ],
+  
+  "power_systems": {
+    "M12": {
+      "voltage": "12V",
+      "description": "Compact tools for tight spaces",
+      "typical_users": ["Electricians", "HVAC technicians", "Automotive"],
+      "battery_platform": "M12 REDLITHIUM"
+    },
+    "M18": {
+      "voltage": "18V",
+      "description": "Majority platform, powerful versatile tools",
+      "typical_users": ["General contractors", "Woodworkers", "Plumbers"],
+      "battery_platform": "M18 REDLITHIUM"
+    },
+    "MX_FUEL": {
+      "voltage": "Variable",
+      "description": "Heavy equipment, replaces gas/pneumatic",
+      "typical_users": ["Heavy construction", "Infrastructure"],
+      "battery_platform": "MX FUEL REDLITHIUM"
+    }
+  }
+}
+```
+
+---
+
+## 📝 Instrukcje Użycia
+
+### Jak Dodać Nowy Produkt:
+1. Skopiuj template produktu powyżej
+2. Uzupełnij wszystkie pola
+3. Dodaj do odpowiedniej kategorii
+4. Zapisz plik
+5. Commit do git (jeśli używasz version control)
+
+### Pola Wymagane vs Opcjonalne:
+**Wymagane:**
+- `sku`, `name`, `category_id`, `price_msrp`
+
+**Opcjonalne ale zalecane:**
+- `specs`, `features`, `use_cases`, `image_url`
+
+**Opcjonalne:**
+- `video_url`, `manual_url`
+
+### Dodawanie Nowej Kategorii:
+Jeśli potrzebujesz nowej kategorii (np. "Lights"), dodaj ją do array `categories`.
+
+---
+
+## 🔗 Powiązane Pliki
+
+Szczegółowe informacje o poszczególnych kategoriach znajdziesz w:
+- `categories/drills.md`
+- `categories/impact_drivers.md`
+- `categories/grinders.md`
+- etc.
+
+---
+
+**Autor:** [Imię]  
+**Status:** [Draft / In Review / Approved]

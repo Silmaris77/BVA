@@ -1,0 +1,3907 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekcja 1: Discovery - Zrozumieć klienta przemysłowego | Milwaukee KAM Academy</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .lesson-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .lesson-header {
+            background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(211, 47, 47, 0.3);
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .lesson-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #FDD835 0%, #FBC02D 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .xp-badge {
+            background: linear-gradient(135deg, #FDD835 0%, #FBC02D 100%);
+            color: #212121;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-number {
+            color: #D32F2F;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            color: #212121;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        /* Video Container */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Key Points */
+        .key-points {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #FF9800;
+        }
+
+        .key-points h3 {
+            color: #E65100;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points ul li {
+            padding: 10px 0;
+            padding-left: 35px;
+            position: relative;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .key-points ul li::before {
+            content: "🎯";
+            position: absolute;
+            left: 0;
+            top: 10px;
+        }
+
+        /* Checkbox Section */
+        .checkbox-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-section:hover {
+            background: #e9ecef;
+        }
+
+        .checkbox-section input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .checkbox-section label {
+            font-size: 1.1rem;
+            cursor: pointer;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        /* Reflection Section */
+        .reflection-section {
+            margin: 25px 0;
+        }
+
+        .reflection-section label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        .reflection-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .reflection-textarea:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        /* Key Insight Box */
+        .key-insight {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #1976D2;
+        }
+
+        .key-insight strong {
+            color: #0D47A1;
+            font-size: 1.1rem;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #212121 0%, #424242 100%);
+            color: white;
+            padding: 18px 15px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 1.05rem;
+        }
+
+        .comparison-table th:first-child {
+            background: #D32F2F;
+            width: 25%;
+        }
+
+        .comparison-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+            line-height: 1.7;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 700;
+            color: #D32F2F;
+            background: #fff3f3;
+        }
+
+        .comparison-table .icon {
+            margin-right: 8px;
+        }
+
+        .tooltip-trigger {
+            border-bottom: 2px dotted #D32F2F;
+            cursor: help;
+            position: relative;
+        }
+
+        /* SWOT Matrix */
+        .swot-selector {
+            margin: 25px 0;
+        }
+
+        .swot-selector label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        .swot-selector select {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .swot-selector select:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .swot-quadrant {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #ddd;
+        }
+
+        .swot-quadrant.strengths { border-color: #4CAF50; }
+        .swot-quadrant.weaknesses { border-color: #FF9800; }
+        .swot-quadrant.opportunities { border-color: #2196F3; }
+        .swot-quadrant.threats { border-color: #F44336; }
+
+        .swot-quadrant h3 {
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .swot-quadrant.strengths h3 { color: #4CAF50; }
+        .swot-quadrant.weaknesses h3 { color: #FF9800; }
+        .swot-quadrant.opportunities h3 { color: #2196F3; }
+        .swot-quadrant.threats h3 { color: #F44336; }
+
+        .swot-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .swot-textarea:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        .swot-help {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .swot-actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-clear {
+            background: #757575;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-clear:hover {
+            background: #616161;
+        }
+
+        .validation-message {
+            background: #FFEBEE;
+            color: #C62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #F44336;
+            display: none;
+        }
+
+        .validation-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #4CAF50;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Stakeholder Matrix */
+        .stakeholder-intro {
+            background: #FFF3E0;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #FF9800;
+        }
+
+        .stakeholder-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stakeholder-table th {
+            background: #D32F2F;
+            color: white;
+            padding: 15px 12px;
+            font-weight: 700;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .stakeholder-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .stakeholder-table input[type="text"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .stakeholder-table input[type="text"]:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        .stakeholder-table select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .stakeholder-table select:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        .zone-cell {
+            font-weight: 700;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .zone-allies {
+            background: #C8E6C9;
+            color: #2E7D32;
+        }
+
+        .zone-ambassadors {
+            background: #A5D6A7;
+            color: #1B5E20;
+        }
+
+        .zone-hesitant {
+            background: #FFE082;
+            color: #F57F17;
+        }
+
+        .zone-opponents {
+            background: #FFCDD2;
+            color: #C62828;
+        }
+
+        .action-cell {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .visual-matrix {
+            margin: 30px 0;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .matrix-title {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #212121;
+            margin-bottom: 20px;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 80px repeat(3, 1fr);
+            grid-template-rows: 80px repeat(5, 1fr);
+            gap: 0;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .matrix-label-y {
+            grid-column: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #555;
+            font-size: 0.9rem;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+
+        .matrix-label-x {
+            grid-row: 7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .matrix-quadrant {
+            border: 1px solid #ddd;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 100px;
+        }
+
+        .matrix-quadrant h4 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .matrix-quadrant.allies {
+            background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+            color: #1B5E20;
+        }
+
+        .matrix-quadrant.ambassadors {
+            background: linear-gradient(135deg, #81C784 0%, #66BB6A 100%);
+            color: #1B5E20;
+        }
+
+        .matrix-quadrant.hesitant {
+            background: linear-gradient(135deg, #FFE082 0%, #FFD54F 100%);
+            color: #F57F17;
+        }
+
+        .matrix-quadrant.opponents {
+            background: linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%);
+            color: #C62828;
+        }
+
+        .stakeholder-count {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .add-row-btn {
+            background: #2196F3;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .add-row-btn:hover {
+            background: #1976D2;
+        }
+
+        /* Timeline (Case Study) */
+        .timeline {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .timeline-item {
+            margin-bottom: 30px;
+            padding-left: 60px;
+            position: relative;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 45px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: #ddd;
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #D32F2F;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .timeline-month {
+            font-weight: 700;
+            color: #D32F2F;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .timeline-text {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .reflection-questions {
+            margin: 30px 0;
+        }
+
+        .reflection-question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .reflection-question label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        .reflection-question textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .reflection-question textarea:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        /* Quiz */
+        .quiz-question {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid #D32F2F;
+        }
+
+        .question-number {
+            color: #D32F2F;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #212121;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .quiz-option:hover {
+            background: #e9ecef;
+            border-color: #D32F2F;
+        }
+
+        .quiz-option.selected {
+            background: #FFF3E0;
+            border-color: #FF9800;
+        }
+
+        .quiz-option.correct {
+            background: #C8E6C9;
+            border-color: #4CAF50;
+            cursor: default;
+        }
+
+        .quiz-option.incorrect {
+            background: #FFCDD2;
+            border-color: #F44336;
+            cursor: default;
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .quiz-option label {
+            cursor: pointer;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            line-height: 1.7;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .quiz-feedback.incorrect {
+            background: #FFEBEE;
+            color: #C62828;
+            border-left: 4px solid #F44336;
+        }
+
+        .quiz-score {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+            border-left: 5px solid #FF9800;
+            display: none;
+        }
+
+        .quiz-score.show {
+            display: block;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #E65100;
+            margin: 15px 0;
+        }
+
+        .score-interpretation {
+            font-size: 1.1rem;
+            color: #555;
+            margin-top: 15px;
+            line-height: 1.7;
+        }
+
+        /* Flashcards */
+        .flashcards-container {
+            margin: 30px 0;
+        }
+
+        .flashcards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .flashcard {
+            perspective: 1000px;
+            height: 220px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: white;
+            color: #333;
+            transform: rotateY(180deg);
+            border: 2px solid #D32F2F;
+        }
+
+        .flashcard-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .flashcard-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .flashcard-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .flashcard-content {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .flashcard-content strong {
+            color: #D32F2F;
+        }
+
+        .flashcard-hint {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .flashcard-progress {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .progress-text {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .flashcard-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-flashcard {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-know-all {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+        }
+
+        .btn-know-all:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-review {
+            background: #FF9800;
+            color: white;
+        }
+
+        .btn-review:hover {
+            background: #F57C00;
+        }
+
+        /* Template Download */
+        .template-section {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #2196F3;
+        }
+
+        .template-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .template-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0D47A1;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .template-description {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .template-features {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .template-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .template-features li {
+            padding: 10px 0;
+            padding-left: 35px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .template-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: block;
+            margin: 25px auto;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+        }
+
+        .commitment-checkbox {
+            background: #FFF3E0;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            border: 2px solid #FF9800;
+        }
+
+        .commitment-checkbox:hover {
+            background: #FFE0B2;
+        }
+
+        .commitment-checkbox input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .commitment-checkbox label {
+            flex: 1;
+            cursor: pointer;
+            line-height: 1.7;
+            font-weight: 600;
+            color: #E65100;
+        }
+
+        /* AI Interview */
+        .ai-intro {
+            background: linear-gradient(135deg, #E8EAF6 0%, #C5CAE9 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #3F51B5;
+        }
+
+        .conversation-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .conversation-round {
+            margin-bottom: 30px;
+        }
+
+        .round-title {
+            font-weight: 700;
+            color: #3F51B5;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .chat-bubble {
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            line-height: 1.7;
+            max-width: 85%;
+        }
+
+        .bubble-bob {
+            background: #E3F2FD;
+            color: #0D47A1;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .bubble-you {
+            background: #C8E6C9;
+            color: #1B5E20;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            line-height: 1.6;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #3F51B5;
+        }
+
+        .chat-hint {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .ai-score-display {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .ai-score-display.show {
+            display: block;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .score-row:last-child {
+            border-bottom: none;
+        }
+
+        .score-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .score-value {
+            font-weight: 700;
+            color: #E65100;
+            font-size: 1.1rem;
+        }
+
+        .ai-feedback {
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 4px solid #4CAF50;
+            line-height: 1.7;
+        }
+
+        /* Summary & Badge */
+        .summary-checklist {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .checklist-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .checklist-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .checklist-text {
+            flex: 1;
+            line-height: 1.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #3F51B5 0%, #303F9F 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #FDD835 0%, #FBC02D 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .cta-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #212121;
+            margin-bottom: 15px;
+        }
+
+        .cta-text {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            background: #D32F2F;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .badge-popup {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            animation: slideDown 0.5s ease;
+        }
+
+        .badge-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .badge-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #212121;
+            margin-bottom: 15px;
+        }
+
+        .badge-description {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .badge-close-btn {
+            background: #D32F2F;
+            color: white;
+            padding: 12px 35px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .badge-close-btn:hover {
+            background: #B71C1C;
+        }
+
+        /* Navigation Buttons */
+        .card-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .nav-button {
+            padding: 15px 35px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev {
+            background: #757575;
+            color: white;
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: #616161;
+            transform: translateY(-2px);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
+            color: white;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(211, 47, 47, 0.4);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Badge Overlay */
+        .badge-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .badge-overlay.show {
+            display: flex;
+        }
+
+        .badge-content {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+
+            .nav-button {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .lesson-meta {
+                gap: 15px;
+            }
+
+            .stakeholder-table {
+                font-size: 0.85rem;
+            }
+
+            .stakeholder-table th,
+            .stakeholder-table td {
+                padding: 8px 5px;
+            }
+
+            .flashcard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .visual-matrix {
+                font-size: 0.8rem;
+            }
+
+            .matrix-cell {
+                padding: 8px;
+            }
+
+            .conversation-round {
+                padding: 15px;
+            }
+
+            .user-response textarea {
+                min-height: 80px;
+                font-size: 0.95rem;
+            }
+
+            .ai-intro {
+                padding: 15px;
+                font-size: 0.95rem;
+            }
+
+            .score-display {
+                font-size: 2.5rem;
+            }
+
+            .checklist-item {
+                font-size: 0.95rem;
+            }
+
+            .badge-content {
+                width: 90%;
+                padding: 30px;
+            }
+
+            .badge-icon {
+                font-size: 4rem;
+            }
+
+            .badge-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <!-- Header -->
+        <div class="lesson-header">
+            <h1 class="lesson-title">🔍 Lekcja 1: Discovery - Zrozumieć klienta przemysłowego</h1>
+            <p class="lesson-subtitle">Jak analizować klientów B2B i mapować decydentów w procesie sprzedaży Milwaukee</p>
+            <div class="lesson-meta">
+                <div class="meta-item">⏱️ Czas: ~60 min</div>
+                <div class="meta-item">🎯 XP Total: 80</div>
+                <div class="meta-item">🏆 Badge: Discovery Expert</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-info">
+                <span id="progressText">Karta 0 z 10</span>
+                <span class="xp-badge" id="xpBadge">⭐ 0 XP</span>
+            </div>
+        </div>
+
+        <!-- KARTA 1: Video Introduction -->
+        <div class="card active" data-card="1">
+            <div class="card-number">Karta 1 z 10</div>
+            <span class="card-icon">🎥</span>
+            <h2 class="card-title">3 światy klientów Milwaukee</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Przed tobą 6-minutowe nagranie, w którym Senior KAM Milwaukee opowiada o trzech wizytach 
+                w tym samym tygodniu: <strong>kopalnia, zakład automotive (Mahle)</strong> i <strong>produkcja ogólna</strong>. 
+                Każdy klient żyje w innym świecie - poznaj ich wszystkich.
+            </p>
+
+            <!-- Video -->
+            <div class="video-container">
+                <iframe 
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                    title="Milwaukee KAM - 3 światy klientów" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <!-- Key Points -->
+            <div class="key-points">
+                <h3>🎯 Kluczowe wnioski z video:</h3>
+                <ul>
+                    <li>
+                        <strong>Każdy klient żyje w innym świecie</strong> - kopalnia (kurz, wilgoć, ATEX) 
+                        vs automotive (takt time, OEE) vs produkcja ogólna (cena, dostępność)
+                    </li>
+                    <li>
+                        <strong>Priorytet #1 się różni:</strong> Bezpieczeństwo (kopalnia) vs Efektywność (automotive) 
+                        vs Cena (produkcja ogólna)
+                    </li>
+                    <li>
+                        <strong>Język się różni:</strong> KGHM mówi o LTIFR i ATEX, Mahle o OEE i takt time, 
+                        zakład mebli o "ile kosztuje i kiedy dostawa"
+                    </li>
+                    <li>
+                        <strong>Twoja rola ≠ sprzedawca narzędzi</strong> - jesteś rozwiązującym problemy produkcyjne. 
+                        Mahle nie kupuje wiertarki, kupuje "0.5% wzrostu OEE"
+                    </li>
+                    <li>
+                        <strong>Dopasuj pitch do ich świata</strong> - w kopalni mów o certyfikacjach i bezpieczeństwie, 
+                        w automotive o ROI i ergonomii, w produkcji o TCO i uniwersalności
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Checkbox -->
+            <div class="checkbox-section" onclick="toggleVideoCheckbox()">
+                <input type="checkbox" id="videoWatched">
+                <label for="videoWatched">
+                    ✅ <strong>Obejrzałem całe video i rozumiem 3 profile klientów</strong> 
+                    (kliknij, aby zdobyć +5 XP)
+                </label>
+            </div>
+
+            <!-- Reflection -->
+            <div class="reflection-section">
+                <label for="clientTypeReflection">
+                    💭 Który typ klienta obsługujesz najczęściej? (opcjonalne)
+                </label>
+                <textarea 
+                    id="clientTypeReflection" 
+                    class="reflection-textarea" 
+                    placeholder="Np. 'Obsługuję głównie automotive (Mahle, VW) - ich świat to OEE, takt time i compliance. Czuję, że potrzebuję lepiej rozumieć język kopalń...'&#10;&#10;To pole jest opcjonalne, ale pomoże Ci uporządkować myśli."
+                    oninput="saveProgress()"></textarea>
+            </div>
+
+            <!-- Key Insight -->
+            <div class="key-insight">
+                <strong>💡 Dlaczego to ważne?</strong><br>
+                Większość KAM popełnia błąd: mają jeden uniwersalny pitch i próbują go wciskać każdemu klientowi. 
+                <strong>To nie działa.</strong> Kierownik w kopalni ma inne KPI niż Production Director w Mahle. 
+                Gdy mówisz ich językiem - stajesz się partnerem, nie sprzedawcą.
+            </div>
+
+            <!-- Navigation -->
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()" disabled>
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 2: Profile Comparison Table -->
+        <div class="card" data-card="2">
+            <div class="card-number">Karta 2 z 10</div>
+            <span class="card-icon">📊</span>
+            <h2 class="card-title">3 profile klientów - tabela porównawcza</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Każdy segment ma inne <strong>KPI, bolączki i decydentów</strong>. 
+                Poznaj różnice i naucz się mówić ich językiem.
+            </p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Wymiar</th>
+                        <th><span class="icon">🏭</span> Kopalnie</th>
+                        <th><span class="icon">🚗</span> Automotive (Mahle)</th>
+                        <th><span class="icon">🔧</span> Produkcja ogólna</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Główne KPI</td>
+                        <td>
+                            <span class="tooltip-trigger" title="Lost Time Injury Frequency Rate - liczba wypadków z utratą czasu pracy na milion przepracowanych godzin">LTIFR</span>, 
+                            Uptime maszyn, Compliance (ATEX, ISO)
+                        </td>
+                        <td>
+                            <span class="tooltip-trigger" title="Overall Equipment Effectiveness - efektywność całkowita maszyn (dostępność × wydajność × jakość)">OEE</span>, 
+                            Takt time, Zero defects, Ergonomia
+                        </td>
+                        <td>
+                            Koszt na jednostkę, Czas realizacji zamówienia, Elastyczność produkcji
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Bolączki</td>
+                        <td>
+                            Przestoje przez awarię narzędzi (10h = katastrofa), 
+                            Certyfikacje (ATEX = must-have), 
+                            Ryzyko wypadków
+                        </td>
+                        <td>
+                            Każda sekunda opóźnienia = $$$ straty, 
+                            Monotonne czynności = błędy operatora, 
+                            Audyty klienta (VW, Toyota)
+                        </td>
+                        <td>
+                            Marża pod presją, 
+                            Brak standaryzacji narzędzi, 
+                            „Nie mam czasu na szkolenia"
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Decydenci</td>
+                        <td>
+                            <strong>HSE Manager</strong> (veto power!), 
+                            Maintenance Manager, 
+                            Procurement (budżet)
+                        </td>
+                        <td>
+                            <strong>Production Director</strong>, 
+                            Quality Manager, 
+                            Industrial Engineer (oblicza ROI)
+                        </td>
+                        <td>
+                            <strong>Właściciel/CEO</strong>, 
+                            Kierownik produkcji, 
+                            Brygadzista (influencer!)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cykl zakupowy</td>
+                        <td>
+                            6-12 miesięcy (testy + certyfikacje), 
+                            Decyzja komitetowa
+                        </td>
+                        <td>
+                            3-6 miesięcy (PoC + ROI analysis), 
+                            Wymaga akceptacji klienta końcowego
+                        </td>
+                        <td>
+                            1-3 miesiące (szybkie decyzje), 
+                            Czasem impulsywne (awaria = natychmiastowy zakup)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Argumenty Milwaukee</td>
+                        <td>
+                            Certyfikat ATEX, 
+                            Durability (MTBF 5000h+), 
+                            Case study z KGHM
+                        </td>
+                        <td>
+                            ROI calculator (0.5% OEE = X PLN/rok), 
+                            Ergonomia = mniej błędów, 
+                            Compliance ISO/TS 16949
+                        </td>
+                        <td>
+                            TCO (nie cena!), 
+                            Uniwersalność (1 narzędzie = 3 zastosowania), 
+                            Szybka dostępność
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Obiekcje</td>
+                        <td>
+                            "Mamy już dostawcę od 10 lat", 
+                            "Nie mamy budżetu na testy"
+                        </td>
+                        <td>
+                            "Musimy to zgłosić klientowi (VW)", 
+                            "Jak udowodnisz ROI?"
+                        </td>
+                        <td>
+                            "To za drogie", 
+                            "Nie mam czasu na demo"
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="key-insight">
+                <strong>💡 Kluczowy wniosek:</strong><br>
+                <strong>HSE Manager w kopalni ≠ Production Director w Mahle.</strong> 
+                Pierwszy myśli "czy nikt się nie zabije?", drugi "czy to zwiększy OEE?". 
+                Ten sam pitch nie zadziała na obu. <strong>Dopasuj język do ich świata.</strong>
+            </div>
+
+            <!-- Navigation -->
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 3: SWOT Interactive -->
+        <div class="card" data-card="3">
+            <div class="card-number">Karta 3 z 10</div>
+            <span class="card-icon">🎯</span>
+            <h2 class="card-title">Analiza SWOT - Twój klient</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Zanim odwiedzisz klienta, zrób SWOT. <strong>Gdzie są jego słabości? Jakie zagrożenia widzisz? 
+                Jak Milwaukee może pomóc?</strong> Wypełnij poniższą matrycę (min. 3 punkty w każdym polu).
+            </p>
+
+            <!-- Customer Selector -->
+            <div class="swot-selector">
+                <label for="swotCustomer">🏢 Wybierz klienta do analizy:</label>
+                <select id="swotCustomer" onchange="loadSWOTExample()">
+                    <option value="mahle">Mahle Krotoszyn (automotive - przykład)</option>
+                    <option value="kghm">KGHM (kopalnia - przykład)</option>
+                    <option value="custom">Mój własny klient (puste pole)</option>
+                </select>
+            </div>
+
+            <!-- SWOT Grid -->
+            <div class="swot-grid">
+                <!-- Strengths -->
+                <div class="swot-quadrant strengths">
+                    <h3>💪 Strengths (Mocne strony)</h3>
+                    <textarea 
+                        id="swotStrengths" 
+                        class="swot-textarea" 
+                        placeholder="Np.&#10;• Stabilna pozycja rynkowa (11.7 mld EUR)&#10;• 3 lokalizacje w Polsce (Krotoszyn, Ostrów, Wrocław)&#10;• Know-how w automotive (OEE, takt time)&#10;• Doświadczeni inżynierowie produkcji&#10;• Długoterminowe kontrakty z VW, Toyota"
+                        oninput="autoSaveSWOT()"></textarea>
+                    <div class="swot-help">Min. 3 punkty (każdy w nowej linii lub z •)</div>
+                </div>
+
+                <!-- Weaknesses -->
+                <div class="swot-quadrant weaknesses">
+                    <h3>⚠️ Weaknesses (Słabe strony)</h3>
+                    <textarea 
+                        id="swotWeaknesses" 
+                        class="swot-textarea" 
+                        placeholder="Np.&#10;• Presja na koszty od klientów końcowych (VW)&#10;• Mało czasu na testy nowych rozwiązań&#10;• Konserwatywna kultura ('zawsze tak robiliśmy')&#10;• Brak budżetu na innowacje w Q1&#10;• Rotacja operatorów (3-shift, monotonność)"
+                        oninput="autoSaveSWOT()"></textarea>
+                    <div class="swot-help">Min. 3 punkty</div>
+                </div>
+
+                <!-- Opportunities -->
+                <div class="swot-quadrant opportunities">
+                    <h3>🚀 Opportunities (Szanse)</h3>
+                    <textarea 
+                        id="swotOpportunities" 
+                        class="swot-textarea" 
+                        placeholder="Np.&#10;• Nowa linia produkcyjna (Q2 2026) = fresh start&#10;• Tender na standaryzację narzędzi (budżet 500k PLN)&#10;• Bob (Production Manager) = internal champion&#10;• Audyt klienta wykazał problemy z ergonomią&#10;• Konkurent (Bosch) ma problemy z dostawami"
+                        oninput="autoSaveSWOT()"></textarea>
+                    <div class="swot-help">Min. 3 punkty</div>
+                </div>
+
+                <!-- Threats -->
+                <div class="swot-quadrant threats">
+                    <h3>⛔ Threats (Zagrożenia)</h3>
+                    <textarea 
+                        id="swotThreats" 
+                        class="swot-textarea" 
+                        placeholder="Np.&#10;• Incumbent supplier (Bosch) - relacja 7 lat&#10;• CFO blokuje wszystkie wydatki >50k PLN&#10;• Klient końcowy (VW) wymaga zatwierdzenia zmian&#10;• Ryzyko opóźnienia projektu = utrata kontraktu&#10;• Brak decyzji przed Q3 = przesunięcie na 2027"
+                        oninput="autoSaveSWOT()"></textarea>
+                    <div class="swot-help">Min. 3 punkty</div>
+                </div>
+            </div>
+
+            <!-- Validation Messages -->
+            <div class="validation-message" id="swotValidation"></div>
+            <div class="success-message" id="swotSuccess"></div>
+
+            <!-- Actions -->
+            <div class="swot-actions">
+                <button class="btn-save" onclick="saveSWOT()">💾 Zapisz analizę (+10 XP)</button>
+                <button class="btn-clear" onclick="clearSWOT()">🗑️ Wyczyść</button>
+            </div>
+
+            <div class="key-insight">
+                <strong>💡 Dlaczego SWOT?</strong><br>
+                Bo <strong>sprzedaż = dopasowanie rozwiązania do kontekstu</strong>. 
+                Mahle ma inne Threats niż KGHM. Gdy znasz SWOT klienta, nie sprzedajesz wiertarki - 
+                sprzedajesz rozwiązanie problemu (np. "Weakness: rotacja operatorów" + 
+                "Opportunity: nowa linia" = pitch o ergonomii Milwaukee).
+            </div>
+
+            <!-- Navigation -->
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 4: Stakeholder Matrix -->
+        <div class="card" data-card="4">
+            <div class="card-number">Karta 4 z 10</div>
+            <span class="card-icon">🗺️</span>
+            <h2 class="card-title">Krajobraz relacji - Mapowanie stakeholderów</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                <strong>Wpływ × Postawa</strong> - dwa wymiary, które decydują o strategii. 
+                Zmapuj kluczowe osoby u klienta i zobacz, kto jest sojusznikiem, 
+                kto ambasadorem, a kto przeciwnikiem.
+            </p>
+
+            <div class="stakeholder-intro">
+                <strong>📋 Jak wypełnić tabelę:</strong><br>
+                1. <strong>Wpływ na decyzje:</strong> 1 (Influencer) | 2 (Decision Maker) | 3 (Veto Power)<br>
+                2. <strong>Postawa wobec Milwaukee:</strong> -2 (Przeciwnik) | -1 (Sceptyczny) | 0 (Neutralny) | +1 (Pozytywny) | +2 (Ambasador)<br>
+                3. Strefa i akcja wygenerują się automatycznie po wyborze
+            </div>
+
+            <!-- Stakeholder Table -->
+            <table class="stakeholder-table" id="stakeholderTable">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Imię + Rola</th>
+                        <th style="width: 15%;">Wpływ (1-3)</th>
+                        <th style="width: 15%;">Postawa (-2 do +2)</th>
+                        <th style="width: 20%;">Strefa</th>
+                        <th style="width: 30%;">Akcja</th>
+                    </tr>
+                </thead>
+                <tbody id="stakeholderTableBody">
+                    <!-- Rows will be generated by JS -->
+                </tbody>
+            </table>
+
+            <button class="add-row-btn" onclick="addStakeholderRow()">➕ Dodaj osobę</button>
+
+            <!-- Visual Matrix -->
+            <div class="visual-matrix">
+                <div class="matrix-title">📊 Wizualizacja: Krajobraz relacji</div>
+                <div class="matrix-grid">
+                    <!-- Y-axis label -->
+                    <div class="matrix-label-y" style="grid-row: 2 / 7;">WPŁYW NA DECYZJE →</div>
+                    
+                    <!-- Empty corner -->
+                    <div style="grid-column: 1; grid-row: 1;"></div>
+                    
+                    <!-- X-axis labels (top) -->
+                    <div style="grid-column: 2; grid-row: 1; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #666;">Negatywna</div>
+                    <div style="grid-column: 3; grid-row: 1; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #666;">Neutralna</div>
+                    <div style="grid-column: 4; grid-row: 1; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #666;">Pozytywna</div>
+                    
+                    <!-- Row 1: Wpływ 3 (Veto Power) -->
+                    <div style="grid-column: 1; grid-row: 2; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #666; font-weight: 700;">Veto (3)</div>
+                    <div class="matrix-quadrant opponents" style="grid-column: 2; grid-row: 2;">
+                        <h4>⛔ Groźni przeciwnicy</h4>
+                        <div class="stakeholder-count" id="count-opponents-high">0</div>
+                    </div>
+                    <div class="matrix-quadrant hesitant" style="grid-column: 3; grid-row: 2;">
+                        <h4>⚠️ Niepewni (Veto)</h4>
+                        <div class="stakeholder-count" id="count-hesitant-high">0</div>
+                    </div>
+                    <div class="matrix-quadrant ambassadors" style="grid-column: 4; grid-row: 2;">
+                        <h4>🌟 Ambasadorzy</h4>
+                        <div class="stakeholder-count" id="count-ambassadors">0</div>
+                    </div>
+                    
+                    <!-- Row 2: Wpływ 2 (Decision Maker) -->
+                    <div style="grid-column: 1; grid-row: 3; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #666; font-weight: 700;">DM (2)</div>
+                    <div class="matrix-quadrant opponents" style="grid-column: 2; grid-row: 3;">
+                        <h4>⛔ Przeciwnicy</h4>
+                        <div class="stakeholder-count" id="count-opponents-mid">0</div>
+                    </div>
+                    <div class="matrix-quadrant hesitant" style="grid-column: 3; grid-row: 3;">
+                        <h4>🤔 Niepewni (DM)</h4>
+                        <div class="stakeholder-count" id="count-hesitant-mid">0</div>
+                    </div>
+                    <div class="matrix-quadrant allies" style="grid-column: 4; grid-row: 3;">
+                        <h4>🤝 Sojusznicy</h4>
+                        <div class="stakeholder-count" id="count-allies-mid">0</div>
+                    </div>
+                    
+                    <!-- Row 3: Wpływ 1 (Influencer) -->
+                    <div style="grid-column: 1; grid-row: 4; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #666; font-weight: 700;">Inf (1)</div>
+                    <div class="matrix-quadrant opponents" style="grid-column: 2; grid-row: 4;">
+                        <h4>⚠️ Sceptycy</h4>
+                        <div class="stakeholder-count" id="count-opponents-low">0</div>
+                    </div>
+                    <div class="matrix-quadrant hesitant" style="grid-column: 3; grid-row: 4;">
+                        <h4>😐 Neutralni</h4>
+                        <div class="stakeholder-count" id="count-hesitant-low">0</div>
+                    </div>
+                    <div class="matrix-quadrant allies" style="grid-column: 4; grid-row: 4;">
+                        <h4>👍 Wspierający</h4>
+                        <div class="stakeholder-count" id="count-allies-low">0</div>
+                    </div>
+                    
+                    <!-- X-axis label (bottom) -->
+                    <div class="matrix-label-x" style="grid-column: 2 / 5;">← POSTAWA WOBEC MILWAUKEE →</div>
+                </div>
+            </div>
+
+            <!-- Validation Messages -->
+            <div class="validation-message" id="stakeholderValidation"></div>
+            <div class="success-message" id="stakeholderSuccess"></div>
+
+            <!-- Actions -->
+            <div class="swot-actions">
+                <button class="btn-save" onclick="saveStakeholderMap()">💾 Zapisz mapę (+15 XP)</button>
+                <button class="btn-clear" onclick="clearStakeholderMap()">🗑️ Wyczyść wszystko</button>
+            </div>
+
+            <div class="key-insight">
+                <strong>💡 Dlaczego to ważne?</strong><br>
+                Bo <strong>Anna (CFO, wpływ=3, postawa=-1) ≠ Bob (Production Manager, wpływ=2, postawa=+2)</strong>. 
+                Anna to "Groźny przeciwnik" (focus: ROI proof!), Bob to "Sojusznik" (leverage: internal champion). 
+                <strong>Nie traktuj wszystkich tak samo</strong> - dostosuj strategię do każdej osoby.
+            </div>
+
+            <!-- Navigation -->
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 5: Case Study - Bob i sztuka internal championa -->
+        <div class="card" data-card="5">
+            <div class="card-number">Karta 5 z 10</div>
+            <span class="card-icon">📖</span>
+            <h2 class="card-title">Case Study: Bob i sztuka internal championa</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                <strong>Historia prawdziwa</strong>: Bob - Production Manager w Mahle Krotoszyn. 
+                Przez 7 miesięcy zmieniał się z "Niepewnego" w "Ambasadora". Oto jak to zrobić.
+            </p>
+
+            <!-- Timeline -->
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">M1</div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">🔍 Miesiąc 1 - Pierwsze spotkanie (Discovery)</div>
+                        <div class="timeline-text">
+                            Bob zgodził się na 30-min spotkanie. <strong>"Mamy już Bosch, nie szukamy zmian"</strong>. 
+                            Zamiast pitchować produkty, zadajesz pytania: "Jakie są największe wyzwania na linii produkcyjnej?" 
+                            Bob opowiada o rotacji operatorów (monotonność + brak ergonomii). <strong>Notujesz wszystko</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">M2</div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">🎯 Miesiąc 2 - Tailored follow-up</div>
+                        <div class="timeline-text">
+                            Wysyłasz Bobowi <strong>case study: VW Poznań + ergonomia = -15% błędów operatora</strong>. 
+                            Nie spam - 1 email, personalizowany ("Bob, pamiętasz, że wspomniałeś o rotacji? To może pomóc"). 
+                            Bob odpisuje: <em>"Ciekawe, ale nie mamy budżetu na testy"</em>. Proponujesz: 
+                            <strong>"Bezpłatne PoC - 2 tygodnie, bez zobowiązań"</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">M3</div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">🧪 Miesiąc 3 - Proof of Concept</div>
+                        <div class="timeline-text">
+                            Bob zgadza się na PoC. Dostarczasz 3 narzędzia Milwaukee na linię montażową. 
+                            <strong>Mierzysz konkretne metryki: czas montażu, liczba błędów, feedback operatorów (1-10)</strong>. 
+                            Po 2 tygodniach: <strong>-8% czas montażu, feedback 8.5/10</strong>. Bob jest pod wrażeniem.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">M4</div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">📊 Miesiąc 4 - ROI Presentation</div>
+                        <div class="timeline-text">
+                            Przygotowujesz <strong>ROI calculator dla Boba</strong>: "8% oszczędność czasu × 200 operatorów × 
+                            2000h/rok = 32,000h saved × 25 PLN/h = 800k PLN/rok". Bob pokazuje to Annie (CFO). 
+                            Anna mówi: <em>"Ale Bosch jest tańszy o 15%"</em>. Bob odpowiada (Twój coaching): 
+                            <strong>"TCO > cena zakupu. Milwaukee = -30% downtime = więcej oszczędności"</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">M5</div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">⚠️ Miesiąc 5 - Crisis (Marek blokuje)</div>
+                        <div class="timeline-text">
+                            Marek (Procurement) blokuje deal: "Bosch daje nam rebate 20% za wolumen". 
+                            Bob dzwoni do Ciebie: <em>"Nie wiem, czy dam radę"</em>. <strong>Nie panikujesz</strong>. 
+                            Proponujesz: "Bob, zorganizujmy demo dla Marka + Anna + Jan (Plant Director). 
+                            Pokaż im liczby z PoC". Bob zgadza się.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">M6</div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">🎤 Miesiąc 6 - Bob = Internal Champion</div>
+                        <div class="timeline-text">
+                            Demo dla 8 osób (Bob prowadzi 70% prezentacji, Ty wspierasz). 
+                            <strong>Bob mówi: "To nie jest upgrade narzędzi. To jest upgrade efektywności linii"</strong>. 
+                            Jan (Plant Director) pyta: "Jak szybko możemy wdrożyć na wszystkich 5 liniach?". 
+                            Anna (CFO) kiwa głową. <strong>Marek się wycofuje</strong> (veto power lost).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">M7</div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">✅ Miesiąc 7 - Deal + Testimonial</div>
+                        <div class="timeline-text">
+                            Kontrakt podpisany: 500k PLN (rollout na 5 linii). Bob pisze Ci: 
+                            <em>"Dzięki za cierpliwość. Nauczyłem się więcej o mojej własnej linii niż przez 3 lata"</em>. 
+                            Prosisz: "Bob, czy mogę użyć Twoją historię jako case study?". <strong>Bob zgadza się</strong> 
+                            (teraz jest Ambasadorem).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reflection Questions -->
+            <div class="reflection-questions">
+                <h3 style="color: #212121; margin-bottom: 20px;">💭 Refleksja: Czego się nauczyłeś?</h3>
+                
+                <div class="reflection-question">
+                    <label for="bobQ1">1. Który moment był kluczowy w zmianie Boba z "Niepewnego" na "Sojusznika"?</label>
+                    <textarea 
+                        id="bobQ1" 
+                        placeholder="Np. 'PoC w miesiącu 3 - bo Bob zobaczył konkretne liczby (8% oszczędność), nie tylko obietnice...'"
+                        oninput="updateCharCount(this, 'bobQ1Count'); autoSaveBobReflections()"></textarea>
+                    <div class="char-count" id="bobQ1Count">0 / min. 50 znaków</div>
+                </div>
+
+                <div class="reflection-question">
+                    <label for="bobQ2">2. Jak pomogłeś Bobowi poradzić sobie z oporem Marka (Procurement)?</label>
+                    <textarea 
+                        id="bobQ2" 
+                        placeholder="Np. 'Nie walczyłem z Markiem bezpośrednio. Wzmocniłem Boba (coaching) i zorganizowałem demo dla decydentów...'"
+                        oninput="updateCharCount(this, 'bobQ2Count'); autoSaveBobReflections()"></textarea>
+                    <div class="char-count" id="bobQ2Count">0 / min. 50 znaków</div>
+                </div>
+
+                <div class="reflection-question">
+                    <label for="bobQ3">3. Co zrobisz inaczej z Twoim internal championem?</label>
+                    <textarea 
+                        id="bobQ3" 
+                        placeholder="Np. 'Będę mierzył konkretne metryki w PoC (nie tylko 'działa lepiej'). Przygotuję ROI calculator wcześniej...'"
+                        oninput="updateCharCount(this, 'bobQ3Count'); autoSaveBobReflections()"></textarea>
+                    <div class="char-count" id="bobQ3Count">0 / min. 50 znaków</div>
+                </div>
+            </div>
+
+            <!-- Validation Messages -->
+            <div class="validation-message" id="bobValidation"></div>
+            <div class="success-message" id="bobSuccess"></div>
+
+            <!-- Actions -->
+            <div class="swot-actions">
+                <button class="btn-save" onclick="saveBobReflections()">💾 Zapisz refleksję (+10 XP)</button>
+            </div>
+
+            <div class="key-insight">
+                <strong>💡 Lekcja z case study:</strong><br>
+                <strong>7 miesięcy ≠ za długo</strong>. To normalne w B2B automotive. Bob potrzebował:
+                <br>1. <strong>Czasu</strong> (zaufanie nie rośnie w tydzień)
+                <br>2. <strong>Dowodów</strong> (PoC + ROI calculator)
+                <br>3. <strong>Coachingu</strong> (stałeś się jego doradcą, nie tylko sprzedawcą)
+                <br>Rezultat: <strong>Bob = Ambasador na następne 5 lat + referrals do innych zakładów Mahle</strong>.
+            </div>
+
+            <!-- Navigation -->
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 6: Quiz -->
+        <div class="card" data-card="6">
+            <div class="card-number">Karta 6 z 10</div>
+            <span class="card-icon">❓</span>
+            <h2 class="card-title">Quiz: Czy rozpoznasz decydentów i ich motywacje?</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                10 scenariuszy z prawdziwych spotkań. Wybierz najlepszą odpowiedź - feedback pojawi się natychmiast.
+            </p>
+
+            <!-- Quiz Questions -->
+            <div id="quizContainer"></div>
+
+            <!-- Quiz Score -->
+            <div class="quiz-score" id="quizScore">
+                <h3 style="color: #E65100; font-size: 1.5rem;">Twój wynik:</h3>
+                <div class="score-number" id="scoreNumber">0/10</div>
+                <div class="score-interpretation" id="scoreInterpretation"></div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" id="quizNextBtn" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 7: Flashcards - Typy decydentów -->
+        <div class="card" data-card="7">
+            <div class="card-number">Karta 7 z 10</div>
+            <span class="card-icon">🎴</span>
+            <h2 class="card-title">8 typów decydentów - Flashcards</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Każdy decydent ma inny <strong>język, KPI i obawy</strong>. 
+                Kliknij kartę, aby zobaczyć, jak z nim rozmawiać. Poznaj wszystkie 8!
+            </p>
+
+            <div class="flashcard-hint">💡 Kliknij kartę, aby ją obrócić</div>
+
+            <!-- Flashcards Grid -->
+            <div class="flashcards-grid" id="flashcardsGrid">
+                <!-- Card 1: Maintenance Manager -->
+                <div class="flashcard" onclick="flipCard(0)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-icon">🔧</div>
+                            <div class="flashcard-title">Maintenance Manager</div>
+                            <div class="flashcard-subtitle">Wpływ: 2 | Focus: Uptime</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-content">
+                                <strong>Język:</strong> MTBF, downtime, spare parts<br>
+                                <strong>Bolączka:</strong> "Narzędzia psują się w najgorszym momencie"<br>
+                                <strong>Argument:</strong> Durability (5000h MTBF), serwis 24/7, dostępność części<br>
+                                <strong>Obiekcja:</strong> "Nie mam budżetu na wymianę"<br>
+                                <strong>Counter:</strong> "Policzmy koszt 1 przestoju vs koszt upgrade"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Production Director -->
+                <div class="flashcard" onclick="flipCard(1)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-icon">🏭</div>
+                            <div class="flashcard-title">Production Director</div>
+                            <div class="flashcard-subtitle">Wpływ: 3 | Focus: OEE</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-content">
+                                <strong>Język:</strong> OEE, takt time, throughput<br>
+                                <strong>Bolączka:</strong> "Każda sekunda opóźnienia = strata"<br>
+                                <strong>Argument:</strong> ROI calculator (8% oszczędność czasu = X PLN/rok)<br>
+                                <strong>Obiekcja:</strong> "Nie mogę zatrzymać linii na testy"<br>
+                                <strong>Counter:</strong> "PoC w sobotę/niedzielę lub na 1 linii pilot"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Procurement Manager -->
+                <div class="flashcard" onclick="flipCard(2)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-icon">💰</div>
+                            <div class="flashcard-title">Procurement Manager</div>
+                            <div class="flashcard-subtitle">Wpływ: 2 | Focus: Cena</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-content">
+                                <strong>Język:</strong> Cost reduction, rebates, payment terms<br>
+                                <strong>Bolączka:</strong> "KPI: obniżka kosztów 5% YoY"<br>
+                                <strong>Argument:</strong> TCO > cena zakupu (downtime + serwis + training)<br>
+                                <strong>Obiekcja:</strong> "Bosch tańszy o 15%"<br>
+                                <strong>Counter:</strong> "Milwaukee: +15% cena, -30% TCO. Policzmy 3 lata"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: HSE Manager -->
+                <div class="flashcard" onclick="flipCard(3)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-icon">🛡️</div>
+                            <div class="flashcard-title">HSE Manager</div>
+                            <div class="flashcard-subtitle">Wpływ: 2-3 | Focus: Safety</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-content">
+                                <strong>Język:</strong> LTIFR, compliance, ergonomia<br>
+                                <strong>Bolączka:</strong> "Jeden wypadek = koniec mojej kariery"<br>
+                                <strong>Argument:</strong> Certyfikaty (ATEX, ISO), ergonomia = -X% injuries<br>
+                                <strong>Obiekcja:</strong> "Muszę to zgłosić do komitetu BHP"<br>
+                                <strong>Counter:</strong> "Dostarczę pełną dokumentację + case study z KGHM"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Quality Manager -->
+                <div class="flashcard" onclick="flipCard(4)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-icon">✅</div>
+                            <div class="flashcard-title">Quality Manager</div>
+                            <div class="flashcard-subtitle">Wpływ: 2 | Focus: Zero defects</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-content">
+                                <strong>Język:</strong> PPM, defect rate, Six Sigma<br>
+                                <strong>Bolączka:</strong> "Klient końcowy (VW) audytuje nas co kwartał"<br>
+                                <strong>Argument:</strong> Precision tools = -X% defects (PoC z pomiarem)<br>
+                                <strong>Obiekcja:</strong> "Jak udowodnisz, że nie zwiększy defektów?"<br>
+                                <strong>Counter:</strong> "2-tygodniowy PoC: mierzymy before/after. Jeśli wzrost = stop"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6: CFO -->
+                <div class="flashcard" onclick="flipCard(5)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-icon">📊</div>
+                            <div class="flashcard-title">CFO</div>
+                            <div class="flashcard-subtitle">Wpływ: 3 | Focus: ROI</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-content">
+                                <strong>Język:</strong> ROI, payback period, CAPEX vs OPEX<br>
+                                <strong>Bolączka:</strong> "Każdy wydatek >50k wymaga board approval"<br>
+                                <strong>Argument:</strong> ROI calculator + payback <12 miesięcy<br>
+                                <strong>Obiekcja:</strong> "To nie jest priorytet w tym kwartale"<br>
+                                <strong>Counter:</strong> "Rozumiem. Czy Q2 lepszy? Przygotujemy business case"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 7: Operator (Influencer) -->
+                <div class="flashcard" onclick="flipCard(6)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-icon">👷</div>
+                            <div class="flashcard-title">Operator</div>
+                            <div class="flashcard-subtitle">Wpływ: 1 | Focus: Ergonomia</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-content">
+                                <strong>Język:</strong> Waga, wibracje, "czy to wygodne?"<br>
+                                <strong>Bolączka:</strong> "Narzędzie ciężkie, po 8h bolą ręce"<br>
+                                <strong>Argument:</strong> Demo hands-on ("spróbuj sam"), feedback 1-10<br>
+                                <strong>Obiekcja:</strong> "Zawsze tak robiliśmy, po co zmieniać?"<br>
+                                <strong>Counter:</strong> "Rozumiem. Daj szansę na 1 tydzień - jeśli nie lepsze, wracamy"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 8: CEO/Plant Director -->
+                <div class="flashcard" onclick="flipCard(7)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-icon">🎩</div>
+                            <div class="flashcard-title">CEO / Plant Director</div>
+                            <div class="flashcard-subtitle">Wpływ: 3 | Focus: Strategy</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-content">
+                                <strong>Język:</strong> Competitive advantage, innovation, long-term partnership<br>
+                                <strong>Bolączka:</strong> "Muszę zwiększyć efektywność o 10% bez CAPEX"<br>
+                                <strong>Argument:</strong> Strategic vision (nie tylko narzędzia, ale productivity upgrade)<br>
+                                <strong>Obiekcja:</strong> "Nie mam czasu na szczegóły"<br>
+                                <strong>Counter:</strong> "30 min executive summary. Bob (Production) ma liczby"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Tracking -->
+            <div class="flashcard-progress">
+                <div class="progress-text" id="flashcardProgress">Poznane karty: 0/8</div>
+                <div class="flashcard-actions">
+                    <button class="btn-flashcard btn-know-all" onclick="markAllKnown()">✅ Znam wszystkie</button>
+                    <button class="btn-flashcard btn-review" onclick="resetFlashcards()">🔄 Przejrzyj ponownie</button>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>💡 Dlaczego to ważne?</strong><br>
+                Bo <strong>CFO ≠ Operator</strong>. CFO chce ROI calculator, Operator chce "czy to lżejsze?". 
+                <strong>Jeden pitch dla wszystkich = zero deals</strong>. Dopasuj język do roli:
+                <br>• CFO → liczby (ROI, payback)
+                <br>• Production → efektywność (OEE, takt time)
+                <br>• HSE → bezpieczeństwo (LTIFR, certyfikaty)
+                <br>• Operator → comfort (waga, wibracje)
+            </div>
+
+            <!-- Navigation -->
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 8: Implementation Task - Template -->
+        <div class="card" data-card="8">
+            <div class="card-number">Karta 8 z 10</div>
+            <span class="card-icon">📋</span>
+            <h2 class="card-title">Wdrożenie: Twój Discovery Template</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Teoria to jedno, <strong>praktyka to drugie</strong>. Pobierz gotowy szablon Excel do mapowania klientów. 
+                Użyj go przy następnej wizycie.
+            </p>
+
+            <!-- Template Section -->
+            <div class="template-section">
+                <div class="template-icon">📥</div>
+                <div class="template-title">Discovery Template Milwaukee KAM.xlsx</div>
+                <div class="template-description">
+                    Gotowy szablon do wypełnienia podczas/po spotkaniu z klientem. 
+                    Zawiera wszystkie narzędzia z tej lekcji.
+                </div>
+
+                <div class="template-features">
+                    <h4 style="color: #0D47A1; margin-bottom: 15px;">📦 Co znajdziesz w szablonie:</h4>
+                    <ul>
+                        <li><strong>Karta 1:</strong> Profil klienta (kopalnia/automotive/produkcja) - checkbox + notatki</li>
+                        <li><strong>Karta 2:</strong> SWOT matrix (4 pola z podpowiedziami) - edytowalne</li>
+                        <li><strong>Karta 3:</strong> Stakeholder mapping (tabela: Imię, Rola, Wpływ, Postawa, Strefa, Akcja)</li>
+                        <li><strong>Karta 4:</strong> Discovery questions (20 pytań gotowych do zadania)</li>
+                        <li><strong>Karta 5:</strong> Action plan (Next Steps: kto, co, kiedy)</li>
+                        <li><strong>Bonus:</strong> ROI calculator (automatyczne obliczenia PLN/rok)</li>
+                    </ul>
+                </div>
+
+                <button class="download-btn" onclick="downloadTemplate()">
+                    📥 Pobierz szablon (Excel)
+                </button>
+            </div>
+
+            <!-- Commitment Checkbox -->
+            <div class="commitment-checkbox" onclick="toggleCommitment()">
+                <input type="checkbox" id="commitmentCheck">
+                <label for="commitmentCheck">
+                    <strong>🎯 Zobowiązuję się użyć tego szablonu przy następnym kliencie (w ciągu 7 dni)</strong>
+                    <br><span style="font-weight: 400; font-size: 0.9rem;">
+                    Kliknij, aby potwierdzić commitment (+10 XP). Dostaniesz email reminder za 3 dni.
+                    </span>
+                </label>
+            </div>
+
+            <!-- Validation Messages -->
+            <div class="success-message" id="templateSuccess"></div>
+
+            <div class="key-insight">
+                <strong>💡 Dlaczego szablon?</strong><br>
+                Bo <strong>bez systemu = chaos</strong>. Po spotkaniu próbujesz sobie przypomnieć: 
+                "Kto był za? Kto przeciw? Co obiecałem?". Szablon = struktura. 
+                Wypełniasz podczas/po spotkaniu → masz plan działania. 
+                <strong>Bob (case study) był tylko pomysłem, dopóki nie zmapowałeś wszystkich stakeholderów</strong>.
+            </div>
+
+            <!-- Navigation -->
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 9: AI Interview Simulation -->
+        <div class="card" data-card="9">
+            <div class="card-number">Karta 9 z 10</div>
+            <span class="card-icon">🤖</span>
+            <h2 class="card-title">AI Interview: Bob z Mahle</h2>
+            
+            <div class="ai-intro">
+                <strong>Symulacja rozmowy z Bobem</strong> (Production Manager, Mahle Krotoszyn).<br><br>
+                Odpowiadaj naturalnie - AI oceni:
+                <ul style="margin: 10px 0 0 20px; text-align: left;">
+                    <li>Czy zadajesz właściwe pytania</li>
+                    <li>Czy słuchasz potrzeb</li>
+                    <li>Czy proponujesz konkretne rozwiązania</li>
+                </ul>
+            </div>
+            
+            <!-- Round 1: Discovery -->
+            <div class="conversation-round">
+                <h3>🔍 Runda 1: Discovery</h3>
+                <div class="bob-message">
+                    <strong>Bob:</strong> "Witam! Dziękuję za spotkanie. Mamy obecnie narzędzia Bosch, 
+                    ale operatorzy narzekają na wagę i wibracje po całym dniu pracy. 
+                    Jak Milwaukee może nam pomóc?"
+                </div>
+                <div class="user-response">
+                    <label><strong>Twoja odpowiedź:</strong></label>
+                    <textarea id="round1" oninput="autoSaveAIInterview()" 
+                        placeholder="Co odpowiesz? Jakie pytania zadasz?"></textarea>
+                    <div class="char-hint" id="round1Hint">Min. 80 znaków</div>
+                </div>
+            </div>
+            
+            <!-- Round 2: Value Proposition -->
+            <div class="conversation-round">
+                <h3>💡 Runda 2: Propozycja wartości</h3>
+                <div class="bob-message">
+                    <strong>Bob:</strong> "Ergonomia to jedno, ale CFO patrzy na liczby. 
+                    Czy macie jakieś ROI case study z podobnej fabryki automotive?"
+                </div>
+                <div class="user-response">
+                    <label><strong>Twoja odpowiedź:</strong></label>
+                    <textarea id="round2" oninput="autoSaveAIInterview()"
+                        placeholder="Jak zareagujesz na pytanie o ROI?"></textarea>
+                    <div class="char-hint" id="round2Hint">Min. 80 znaków</div>
+                </div>
+            </div>
+            
+            <!-- Round 3: Next Steps -->
+            <div class="conversation-round">
+                <h3>🚀 Runda 3: Dalsze kroki</h3>
+                <div class="bob-message">
+                    <strong>Bob:</strong> "Brzmi interesująco. Co proponujesz jako następny krok?"
+                </div>
+                <div class="user-response">
+                    <label><strong>Twoja odpowiedź:</strong></label>
+                    <textarea id="round3" oninput="autoSaveAIInterview()"
+                        placeholder="Jakie konkretne next steps zaproponujesz?"></textarea>
+                    <div class="char-hint" id="round3Hint">Min. 80 znaków</div>
+                </div>
+            </div>
+            
+            <button class="btn-save" onclick="evaluateAIInterview()">
+                🎯 Oceń moją rozmowę
+            </button>
+            
+            <!-- Score Display -->
+            <div class="ai-score" id="aiScoreDisplay">
+                <h3>Ocena AI:</h3>
+                <div class="score-display" id="aiScoreNumber">0/100</div>
+                <div class="mood-indicator" id="moodIndicator">😐</div>
+                <div class="ai-feedback" id="aiFeedback"></div>
+            </div>
+            
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- KARTA 10: Summary & Badge -->
+        <div class="card" data-card="10">
+            <div class="card-number">Karta 10 z 10</div>
+            <span class="card-icon">🎓</span>
+            <h2 class="card-title">Gratulacje! Ukończyłeś Discovery</h2>
+            
+            <div class="summary-intro">
+                <p style="font-size: 1.3rem; margin-bottom: 20px;">
+                    <strong>Zdobyłeś nowe umiejętności!</strong><br>
+                    Teraz rozumiesz jak skutecznie odkrywać potrzeby klientów przemysłowych.
+                </p>
+            </div>
+            
+            <!-- Learning Checklist -->
+            <div class="learning-checklist">
+                <h3 style="color: #2E7D32; margin-bottom: 20px;">✅ Czego się nauczyłeś:</h3>
+                
+                <div class="checklist-item">
+                    <span class="checklist-icon">🏭</span>
+                    <span>Rozumiem 3 profile klientów (kopalnie, automotive, produkcja ogólna)</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="checklist-icon">🎯</span>
+                    <span>Umiem przeprowadzić analizę SWOT przed spotkaniem</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="checklist-icon">🗺️</span>
+                    <span>Potrafię mapować stakeholderów (wpływ × postawa)</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="checklist-icon">🤝</span>
+                    <span>Wiem jak budować internal championa (strategia Bob)</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="checklist-icon">👂</span>
+                    <span>Rozpoznaję buying signals i hidden objections</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="checklist-icon">🎴</span>
+                    <span>Znam 8 typów decydentów i jak z nimi rozmawiać</span>
+                </div>
+                <div class="checklist-item">
+                    <span class="checklist-icon">📋</span>
+                    <span>Mam gotowy template do pracy z kolejnym klientem</span>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number" id="finalXP">0</div>
+                    <div class="stat-label">XP zdobyte</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">10/10</div>
+                    <div class="stat-label">Karty ukończone</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="timeSpent">~60 min</div>
+                    <div class="stat-label">Czas nauki</div>
+                </div>
+            </div>
+            
+            <!-- CTA -->
+            <div class="cta-section">
+                <h3 style="color: #C62828; margin-bottom: 15px;">Gotowy na kolejny krok?</h3>
+                <p>Lekcja 2: <strong>Value Selling - ROI & TCO</strong></p>
+                <button class="btn-cta" disabled>
+                    🔒 Przejdź do Lekcji 2 (wkrótce)
+                </button>
+                <p style="font-size: 0.9rem; color: #666; margin-top: 15px;">
+                    W pełnej wersji BVA automatycznie odblokuje kolejne lekcje
+                </p>
+            </div>
+            
+            <!-- Badge Trigger -->
+            <button class="btn-save" onclick="showBadge()" style="margin-top: 25px;">
+                🏆 Pokaż mój badge!
+            </button>
+            
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Badge Overlay -->
+    <div class="badge-overlay" id="badgeOverlay">
+        <div class="badge-content">
+            <!-- Dynamically generated -->
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let currentCard = 1;
+        const totalCards = 10;
+        let earnedXP = 0;
+        let completedCards = new Set();
+
+        // Progress tracking
+        const cardXPValues = {
+            1: 5,   // Video
+            2: 0,   // Presentation - Profile
+            3: 10,  // SWOT Interactive
+            4: 15,  // Stakeholder Matrix
+            5: 10,  // Case Study Bob
+            6: 15,  // Quiz
+            7: 20,  // Flashcards
+            8: 10,  // Implementation Task
+            9: 15,  // AI Interview
+            10: 10  // Summary
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            updateProgress();
+            updateNavigation();
+        });
+
+        // Navigation
+        function nextCard() {
+            if (currentCard < totalCards) {
+                // Award XP for current card if not already completed
+                if (!completedCards.has(currentCard) && cardXPValues[currentCard] > 0) {
+                    completedCards.add(currentCard);
+                    earnedXP += cardXPValues[currentCard];
+                }
+
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.remove('active');
+                currentCard++;
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.add('active');
+                
+                updateProgress();
+                updateNavigation();
+                saveProgress();
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // End of preview (Etap 1)
+                alert('🎉 Koniec podglądu Etapu 1!\n\nUkończyłeś Kartę 1: Video Introduction.\n\nW pełnej wersji czeka:\n• Karta 2-3: Profile klientów + SWOT (Etap 2)\n• Karta 4: Matryca stakeholderów (Etap 3)\n• Karta 5-6: Case Study + Quiz (Etap 4)\n• Karta 7-8: Flashcards + Template (Etap 5)\n• Karta 9-10: AI Interview + Summary (Etap 6)');
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.remove('active');
+                currentCard--;
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.add('active');
+                
+                updateProgress();
+                updateNavigation();
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentCard / totalCards) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Karta ${currentCard} z ${totalCards}`;
+            document.getElementById('xpBadge').textContent = `⭐ ${earnedXP} XP`;
+        }
+
+        function updateNavigation() {
+            const prevButton = document.querySelector('.btn-prev');
+            const nextButton = document.querySelector('.btn-next');
+            
+            prevButton.disabled = currentCard === 1;
+            
+            if (currentCard === totalCards) {
+                nextButton.textContent = 'Zakończ podgląd →';
+            } else {
+                nextButton.textContent = 'Następna →';
+            }
+        }
+
+        // Video checkbox
+        function toggleVideoCheckbox() {
+            const checkbox = document.getElementById('videoWatched');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked && !completedCards.has(1)) {
+                completedCards.add(1);
+                earnedXP += cardXPValues[1];
+                updateProgress();
+                
+                // Show feedback
+                const checkboxSection = document.querySelector('.checkbox-section');
+                checkboxSection.style.background = '#C8E6C9';
+                setTimeout(() => {
+                    checkboxSection.style.background = '#f8f9fa';
+                }, 1000);
+            }
+            
+            saveProgress();
+        }
+
+        // LocalStorage
+        function saveProgress() {
+            const state = {
+                currentCard,
+                earnedXP,
+                completedCards: Array.from(completedCards),
+                videoWatched: document.getElementById('videoWatched').checked,
+                clientTypeReflection: document.getElementById('clientTypeReflection').value
+            };
+            
+            localStorage.setItem('milwaukee_lesson1_progress', JSON.stringify(state));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('milwaukee_lesson1_progress');
+            if (saved) {
+                const state = JSON.parse(saved);
+                currentCard = state.currentCard || 1;
+                earnedXP = state.earnedXP || 0;
+                completedCards = new Set(state.completedCards || []);
+                
+                // Restore form values
+                if (state.videoWatched) {
+                    document.getElementById('videoWatched').checked = true;
+                }
+                if (state.clientTypeReflection) {
+                    document.getElementById('clientTypeReflection').value = state.clientTypeReflection;
+                }
+                
+                // Show correct card
+                document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+                const activeCard = document.querySelector(`.card[data-card="${currentCard}"]`);
+                if (activeCard) {
+                    activeCard.classList.add('active');
+                }
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextCard();
+            } else if (e.key === 'ArrowLeft') {
+                prevCard();
+            }
+        });
+
+        // SWOT Functions
+        const swotExamples = {
+            mahle: {
+                strengths: `• Stabilna pozycja rynkowa (11.7 mld EUR revenue, 135 plants globally)
+• 3 lokalizacje w Polsce (Krotoszyn - MAHLE Polska, Ostrów - Thermal/Fluid, Wrocław - Shared Services)
+• Silny know-how w automotive (thermal management, electrification, fuel cells)
+• Doświadczeni inżynierowie produkcji i quality managers
+• Długoterminowe kontrakty z VW, Toyota, BMW (stabilność biznesu)
+• Kultura continuous improvement (Kaizen, Lean)`,
+                weaknesses: `• Presja na koszty od klientów końcowych (automotive margin squeeze)
+• Mało czasu na testy nowych rozwiązań (takt time = priority)
+• Konserwatywna kultura zakupowa ('zawsze kupowaliśmy od Bosch')
+• Brak budżetu na innowacje w Q1 (frozen period po audytach)
+• Rotacja operatorów na liniach montażowych (3-shift, monotonność)
+• Biurokracja w procesie decyzyjnym (approval chain: Bob → Anna → CFO → VW)`,
+                opportunities: `• Nowa linia produkcyjna thermal management (Q2 2026) = fresh start bez legacy
+• Tender na standaryzację narzędzi elektrycznych (budżet 500k PLN)
+• Bob (Production Manager) = internal champion po Twoim demo
+• Audyt klienta (VW) wykazał problemy z ergonomią = leverage point
+• Konkurent (Bosch) ma problemy z dostawami od 6 miesięcy
+• Push na electrification = potrzeba nowych narzędzi precision assembly`,
+                threats: `• Incumbent supplier (Bosch) - relacja 7 lat, rabaty za wolumen
+• CFO (Anna) blokuje wszystkie wydatki >50k PLN bez ROI analysis
+• Klient końcowy (VW) wymaga zatwierdzenia każdej zmiany narzędzi (compliance)
+• Ryzyko opóźnienia projektu = utrata kontraktu z VW (penalty clause)
+• Brak decyzji przed Q3 = przesunięcie budżetu na 2027
+• Marek (Procurement) ma KPI: cost reduction 5% YoY (anty-premium pricing)`
+            },
+            kghm: {
+                strengths: `• Lider polski w wydobyciu miedzi (30+ kopalń)
+• Budżet na bezpieczeństwo (HSE = priorytet #1)
+• Doświadczeni maintenance managers (znają harsh environment)
+• Długoterminowe planowanie inwestycji (projekty 5-10 lat)
+• Własne centra szkoleniowe (chcą uczyć pracowników)`,
+                weaknesses: `• Długi proces decyzyjny (komitety, przetargi publiczne)
+• Konserwatywna kultura ('kopalnia = tradycja')
+• Brak budżetu na testy (wszystko przez przetarg)
+• Rotacja dostawców co 3 lata (przepisy)
+• Przestarzałe narzędzia (10+ lat użytkowania)`,
+                opportunities: `• Nowe wymagania ATEX (2026) = must replace old tools
+• Projekt modernizacji kopalni Lubin (budżet 200M PLN)
+• HSE Manager szuka case studies (po wypadku w 2025)
+• Tender Q3 2026 (window of opportunity)
+• Konkurencja (Hilti) nie ma certyfikatu ATEX dla nowego modelu`,
+                threats: `• Incumbent (Hilti) - relacja 10 lat, trusted partner
+• Procurement wymaga 3 ofert (commodity mindset)
+• Przetarg publiczny = lowest price wins (nie value)
+• Delay w projekcie = utrata budżetu na 2027
+• Zmiana regulacji EU (risk opóźnienia ATEX certification)`
+            }
+        };
+
+        function loadSWOTExample() {
+            const customer = document.getElementById('swotCustomer').value;
+            
+            if (customer === 'custom') {
+                // Clear all fields
+                document.getElementById('swotStrengths').value = '';
+                document.getElementById('swotWeaknesses').value = '';
+                document.getElementById('swotOpportunities').value = '';
+                document.getElementById('swotThreats').value = '';
+            } else {
+                // Load example
+                const example = swotExamples[customer];
+                document.getElementById('swotStrengths').value = example.strengths;
+                document.getElementById('swotWeaknesses').value = example.weaknesses;
+                document.getElementById('swotOpportunities').value = example.opportunities;
+                document.getElementById('swotThreats').value = example.threats;
+            }
+            
+            autoSaveSWOT();
+        }
+
+        function autoSaveSWOT() {
+            // Auto-save to localStorage
+            const swotData = {
+                customer: document.getElementById('swotCustomer').value,
+                strengths: document.getElementById('swotStrengths').value,
+                weaknesses: document.getElementById('swotWeaknesses').value,
+                opportunities: document.getElementById('swotOpportunities').value,
+                threats: document.getElementById('swotThreats').value
+            };
+            
+            localStorage.setItem('milwaukee_swot_data', JSON.stringify(swotData));
+        }
+
+        function validateSWOT() {
+            const strengths = document.getElementById('swotStrengths').value.trim();
+            const weaknesses = document.getElementById('swotWeaknesses').value.trim();
+            const opportunities = document.getElementById('swotOpportunities').value.trim();
+            const threats = document.getElementById('swotThreats').value.trim();
+            
+            const errors = [];
+            
+            // Count bullet points or newlines (min 3 per field)
+            const countPoints = (text) => {
+                const bullets = (text.match(/[•\-\*]/g) || []).length;
+                const lines = text.split('\n').filter(line => line.trim().length > 0).length;
+                return Math.max(bullets, lines);
+            };
+            
+            if (countPoints(strengths) < 3) {
+                errors.push('Strengths: min. 3 punkty');
+            }
+            if (countPoints(weaknesses) < 3) {
+                errors.push('Weaknesses: min. 3 punkty');
+            }
+            if (countPoints(opportunities) < 3) {
+                errors.push('Opportunities: min. 3 punkty');
+            }
+            if (countPoints(threats) < 3) {
+                errors.push('Threats: min. 3 punkty');
+            }
+            
+            return errors;
+        }
+
+        function saveSWOT() {
+            const validationMsg = document.getElementById('swotValidation');
+            const successMsg = document.getElementById('swotSuccess');
+            
+            // Hide previous messages
+            validationMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            
+            // Validate
+            const errors = validateSWOT();
+            
+            if (errors.length > 0) {
+                validationMsg.innerHTML = '<strong>⚠️ Brakuje punktów:</strong><br>' + errors.join('<br>');
+                validationMsg.classList.add('show');
+                return;
+            }
+            
+            // Save and award XP
+            autoSaveSWOT();
+            
+            if (!completedCards.has(3)) {
+                completedCards.add(3);
+                earnedXP += cardXPValues[3];
+                updateProgress();
+                
+                successMsg.innerHTML = '<strong>✅ Analiza SWOT zapisana!</strong> +10 XP. Świetna robota - rozumiesz kontekst klienta.';
+                successMsg.classList.add('show');
+                
+                // Visual feedback on button
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Zapisano!';
+                btn.style.background = '#4CAF50';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            } else {
+                successMsg.innerHTML = '💾 Zaktualizowano analizę SWOT.';
+                successMsg.classList.add('show');
+            }
+            
+            saveProgress();
+        }
+
+        function clearSWOT() {
+            if (confirm('Czy na pewno chcesz wyczyścić całą analizę SWOT?')) {
+                document.getElementById('swotCustomer').value = 'custom';
+                document.getElementById('swotStrengths').value = '';
+                document.getElementById('swotWeaknesses').value = '';
+                document.getElementById('swotOpportunities').value = '';
+                document.getElementById('swotThreats').value = '';
+                
+                document.getElementById('swotValidation').classList.remove('show');
+                document.getElementById('swotSuccess').classList.remove('show');
+                
+                autoSaveSWOT();
+            }
+        }
+
+        // Load SWOT on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedSWOT = localStorage.getItem('milwaukee_swot_data');
+            if (savedSWOT) {
+                const data = JSON.parse(savedSWOT);
+                document.getElementById('swotCustomer').value = data.customer || 'mahle';
+                document.getElementById('swotStrengths').value = data.strengths || '';
+                document.getElementById('swotWeaknesses').value = data.weaknesses || '';
+                document.getElementById('swotOpportunities').value = data.opportunities || '';
+                document.getElementById('swotThreats').value = data.threats || '';
+            } else {
+                // Load default example (Mahle)
+                loadSWOTExample();
+            }
+        });
+
+        // Stakeholder Matrix Functions
+        let stakeholderData = [];
+
+        function calculateZone(influence, attitude) {
+            if (!influence || !attitude) return { name: '-', action: '-', cssClass: '' };
+            
+            const inf = parseInt(influence);
+            const att = parseInt(attitude);
+            
+            // Zone logic based on matrix
+            if (att <= -1) { // Negatywna postawa
+                if (inf === 3) return { name: 'Groźny przeciwnik', action: 'Neutralizuj! ROI proof + risk mitigation', cssClass: 'zone-opponents' };
+                if (inf === 2) return { name: 'Przeciwnik', action: 'Understand objections + find common ground', cssClass: 'zone-opponents' };
+                return { name: 'Sceptyk', action: 'Monitor, nie inwestuj czasu', cssClass: 'zone-opponents' };
+            } else if (att === 0) { // Neutralna
+                if (inf === 3) return { name: 'Niepewny (Veto)', action: 'Edukuj! Case studies + PoC', cssClass: 'zone-hesitant' };
+                if (inf === 2) return { name: 'Niepewny (DM)', action: 'Build trust + quick wins', cssClass: 'zone-hesitant' };
+                return { name: 'Neutralny', action: 'Informuj, nie naciskaj', cssClass: 'zone-hesitant' };
+            } else { // Pozytywna (+1 lub +2)
+                if (inf === 3) return { name: 'Ambasador', action: 'Leverage! Internal champion + testimonial', cssClass: 'zone-ambassadors' };
+                if (inf === 2) return { name: 'Sojusznik', action: 'Arm with ammo (ROI calc, presentations)', cssClass: 'zone-allies' };
+                return { name: 'Wspierający', action: 'Keep engaged, może wzrosnąć wpływ', cssClass: 'zone-allies' };
+            }
+        }
+
+        function updateVisualMatrix() {
+            // Reset counts
+            const counts = {
+                'opponents-high': 0, 'opponents-mid': 0, 'opponents-low': 0,
+                'hesitant-high': 0, 'hesitant-mid': 0, 'hesitant-low': 0,
+                'ambassadors': 0, 'allies-mid': 0, 'allies-low': 0
+            };
+            
+            stakeholderData.forEach(person => {
+                if (!person.influence || !person.attitude) return;
+                
+                const inf = parseInt(person.influence);
+                const att = parseInt(person.attitude);
+                
+                // Map to matrix cells
+                if (att <= -1) { // Opponents column
+                    if (inf === 3) counts['opponents-high']++;
+                    else if (inf === 2) counts['opponents-mid']++;
+                    else counts['opponents-low']++;
+                } else if (att === 0) { // Hesitant column
+                    if (inf === 3) counts['hesitant-high']++;
+                    else if (inf === 2) counts['hesitant-mid']++;
+                    else counts['hesitant-low']++;
+                } else { // Allies/Ambassadors column
+                    if (inf === 3) counts['ambassadors']++;
+                    else if (inf === 2) counts['allies-mid']++;
+                    else counts['allies-low']++;
+                }
+            });
+            
+            // Update display
+            Object.keys(counts).forEach(key => {
+                const elem = document.getElementById(`count-${key}`);
+                if (elem) elem.textContent = counts[key];
+            });
+        }
+
+        function renderStakeholderTable() {
+            const tbody = document.getElementById('stakeholderTableBody');
+            tbody.innerHTML = '';
+            
+            stakeholderData.forEach((person, index) => {
+                const zone = calculateZone(person.influence, person.attitude);
+                
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>
+                        <input type="text" 
+                               value="${person.name}" 
+                               placeholder="Np. Bob - Production Manager"
+                               onchange="updateStakeholder(${index}, 'name', this.value)">
+                    </td>
+                    <td>
+                        <select onchange="updateStakeholder(${index}, 'influence', this.value)">
+                            <option value="">-</option>
+                            <option value="1" ${person.influence === '1' ? 'selected' : ''}>1 - Influencer</option>
+                            <option value="2" ${person.influence === '2' ? 'selected' : ''}>2 - Decision Maker</option>
+                            <option value="3" ${person.influence === '3' ? 'selected' : ''}>3 - Veto Power</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select onchange="updateStakeholder(${index}, 'attitude', this.value)">
+                            <option value="">-</option>
+                            <option value="-2" ${person.attitude === '-2' ? 'selected' : ''}>-2 Przeciwnik</option>
+                            <option value="-1" ${person.attitude === '-1' ? 'selected' : ''}>-1 Sceptyczny</option>
+                            <option value="0" ${person.attitude === '0' ? 'selected' : ''}>0 Neutralny</option>
+                            <option value="1" ${person.attitude === '1' ? 'selected' : ''}>+1 Pozytywny</option>
+                            <option value="2" ${person.attitude === '2' ? 'selected' : ''}>+2 Ambasador</option>
+                        </select>
+                    </td>
+                    <td class="zone-cell ${zone.cssClass}">${zone.name}</td>
+                    <td class="action-cell">${zone.action}</td>
+                `;
+            });
+            
+            updateVisualMatrix();
+            autoSaveStakeholders();
+        }
+
+        function updateStakeholder(index, field, value) {
+            stakeholderData[index][field] = value;
+            renderStakeholderTable();
+        }
+
+        function addStakeholderRow() {
+            stakeholderData.push({ name: '', influence: '', attitude: '' });
+            renderStakeholderTable();
+        }
+
+        function autoSaveStakeholders() {
+            localStorage.setItem('milwaukee_stakeholders', JSON.stringify(stakeholderData));
+        }
+
+        function loadStakeholders() {
+            const saved = localStorage.getItem('milwaukee_stakeholders');
+            if (saved) {
+                stakeholderData = JSON.parse(saved);
+            } else {
+                // Load default example (Mahle)
+                stakeholderData = [
+                    { name: 'Bob - Production Manager', influence: '2', attitude: '2' },
+                    { name: 'Anna - CFO', influence: '3', attitude: '-1' },
+                    { name: 'Marek - Procurement Manager', influence: '2', attitude: '-1' },
+                    { name: 'Ewa - Quality Director', influence: '2', attitude: '1' },
+                    { name: 'Tomasz - Operator (influencer)', influence: '1', attitude: '1' },
+                    { name: 'Karolina - HSE Manager', influence: '2', attitude: '0' },
+                    { name: 'Piotr - Maintenance Manager', influence: '1', attitude: '0' },
+                    { name: 'Jan - Plant Director (veto)', influence: '3', attitude: '0' }
+                ];
+            }
+            renderStakeholderTable();
+        }
+
+        function validateStakeholders() {
+            const filledRows = stakeholderData.filter(p => p.name.trim() && p.influence && p.attitude);
+            if (filledRows.length < 5) {
+                return 'Uzupełnij min. 5 osób (imię + wpływ + postawa)';
+            }
+            return null;
+        }
+
+        function saveStakeholderMap() {
+            const validationMsg = document.getElementById('stakeholderValidation');
+            const successMsg = document.getElementById('stakeholderSuccess');
+            
+            validationMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            
+            const error = validateStakeholders();
+            if (error) {
+                validationMsg.innerHTML = `<strong>⚠️ ${error}</strong>`;
+                validationMsg.classList.add('show');
+                return;
+            }
+            
+            autoSaveStakeholders();
+            
+            if (!completedCards.has(4)) {
+                completedCards.add(4);
+                earnedXP += cardXPValues[4];
+                updateProgress();
+                
+                successMsg.innerHTML = '<strong>✅ Mapa stakeholderów zapisana!</strong> +15 XP. Teraz wiesz, kto jest kim.';
+                successMsg.classList.add('show');
+                
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Zapisano!';
+                btn.style.background = '#4CAF50';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            } else {
+                successMsg.innerHTML = '💾 Zaktualizowano mapę stakeholderów.';
+                successMsg.classList.add('show');
+            }
+            
+            saveProgress();
+        }
+
+        function clearStakeholderMap() {
+            if (confirm('Czy na pewno chcesz wyczyścić całą mapę stakeholderów?')) {
+                stakeholderData = [];
+                renderStakeholderTable();
+                
+                document.getElementById('stakeholderValidation').classList.remove('show');
+                document.getElementById('stakeholderSuccess').classList.remove('show');
+            }
+        }
+
+        // Initialize stakeholder table on load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStakeholders();
+        });
+
+        // Bob Case Study Functions
+        function updateCharCount(textarea, counterId) {
+            const count = textarea.value.length;
+            const counter = document.getElementById(counterId);
+            counter.textContent = `${count} / min. 50 znaków`;
+            
+            if (count >= 50) {
+                counter.style.color = '#4CAF50';
+            } else {
+                counter.style.color = '#999';
+            }
+        }
+
+        function autoSaveBobReflections() {
+            const reflections = {
+                q1: document.getElementById('bobQ1').value,
+                q2: document.getElementById('bobQ2').value,
+                q3: document.getElementById('bobQ3').value
+            };
+            localStorage.setItem('milwaukee_bob_reflections', JSON.stringify(reflections));
+        }
+
+        function validateBobReflections() {
+            const q1 = document.getElementById('bobQ1').value.trim();
+            const q2 = document.getElementById('bobQ2').value.trim();
+            const q3 = document.getElementById('bobQ3').value.trim();
+            
+            if (q1.length < 50 || q2.length < 50 || q3.length < 50) {
+                return 'Każda odpowiedź musi mieć min. 50 znaków';
+            }
+            return null;
+        }
+
+        function saveBobReflections() {
+            const validationMsg = document.getElementById('bobValidation');
+            const successMsg = document.getElementById('bobSuccess');
+            
+            validationMsg.classList.remove('show');
+            successMsg.classList.remove('show');
+            
+            const error = validateBobReflections();
+            if (error) {
+                validationMsg.innerHTML = `<strong>⚠️ ${error}</strong>`;
+                validationMsg.classList.add('show');
+                return;
+            }
+            
+            autoSaveBobReflections();
+            
+            if (!completedCards.has(5)) {
+                completedCards.add(5);
+                earnedXP += cardXPValues[5];
+                updateProgress();
+                
+                successMsg.innerHTML = '<strong>✅ Refleksja zapisana!</strong> +10 XP. Świetnie - wyciągasz wnioski z case study.';
+                successMsg.classList.add('show');
+                
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Zapisano!';
+                btn.style.background = '#4CAF50';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            } else {
+                successMsg.innerHTML = '💾 Zaktualizowano refleksję.';
+                successMsg.classList.add('show');
+            }
+            
+            saveProgress();
+        }
+
+        // Load Bob reflections on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('milwaukee_bob_reflections');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('bobQ1').value = data.q1 || '';
+                document.getElementById('bobQ2').value = data.q2 || '';
+                document.getElementById('bobQ3').value = data.q3 || '';
+                
+                // Update char counts
+                updateCharCount(document.getElementById('bobQ1'), 'bobQ1Count');
+                updateCharCount(document.getElementById('bobQ2'), 'bobQ2Count');
+                updateCharCount(document.getElementById('bobQ3'), 'bobQ3Count');
+            }
+        });
+
+        // Quiz Functions
+        const quizQuestions = [
+            {
+                question: "Bob (Production Manager) mówi: 'Mamy problem z rotacją operatorów - monotonność zabija morale'. Co to oznacza?",
+                options: [
+                    "Bob szuka tańszych narzędzi",
+                    "Bob myśli o automatyzacji (zastąpienie ludzi robotami)",
+                    "Bob szuka rozwiązania problemu ergonomii/satysfakcji pracy",
+                    "Bob chce zwolnić operatorów"
+                ],
+                correct: 2,
+                feedback: {
+                    correct: "✅ Dokładnie! Rotacja = symptom problemu ergonomii. Milwaukee = lżejsze narzędzia + mniej wibracji = lepsza satysfakcja pracy. Bob myśli o ludziach, nie tylko o maszynach.",
+                    incorrect: "❌ Nie. Bob mówi o 'monotonności' i 'morale' - to sygnał, że myśli o warunkach pracy operatorów, nie o cenie czy automatyzacji. Ergonomiczne narzędzia = lepsza satysfakcja = mniejsza rotacja."
+                }
+            },
+            {
+                question: "Anna (CFO) pyta: 'Jaki jest ROI tej inwestycji?'. Co powinieneś zrobić?",
+                options: [
+                    "Powiedzieć: 'Milwaukee = jakość premium, ROI się nie liczy'",
+                    "Pokazać calculator: '8% oszczędność czasu × 200 operatorów × 2000h = 800k PLN/rok'",
+                    "Zmienić temat na case study z VW",
+                    "Zaproponować rabat 20%"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Perfekcyjnie! CFO myśli liczbami. ROI calculator = konkretne PLN/rok (nie 'jakość' ani 'innovation'). Anna chce widzieć: koszt zakupu vs oszczędności operacyjne. Bez tego = brak decyzji.",
+                    incorrect: "❌ Błąd. CFO nie kupuje 'jakości' ani 'case studies'. Anna chce liczb: 'Ile kosztuje? Ile zaoszczędzę? Kiedy zwrot?'. Bez ROI calculatora = rozmowa się kończy."
+                }
+            },
+            {
+                question: "Marek (Procurement) mówi: 'Bosch daje nam rebate 20% za wolumen'. Co odpowiesz?",
+                options: [
+                    "Milwaukee też może zrobić 20% rabat (price war)",
+                    "Bosch = gorsza jakość (attack competitor)",
+                    "Rozumiem. Ale TCO > cena zakupu. Policzmy downtime + koszty serwisu",
+                    "To decyzja Boba, nie Marka (undermine Marek)"
+                ],
+                correct: 2,
+                feedback: {
+                    correct: "✅ Świetnie! Nie walczysz ceną (price war = race to bottom). Nie atakujesz konkurencji (unprofessional). Pokazujesz TOTAL Cost of Ownership: cena zakupu + downtime + serwis + training. Milwaukee może być droższa o 15%, ale tańsza o 30% w TCO.",
+                    incorrect: "❌ Źle. Price war = utrata marży. Attack na Bosch = unprofessional. Undermining Marek = konfrontacja. Prawidłowo: 'Rozumiem rebate. Ale porównajmy TCO (Total Cost of Ownership), nie tylko cenę zakupu'."
+                }
+            },
+            {
+                question: "Jan (Plant Director, veto power) pyta na demo: 'Jak szybko możemy wdrożyć na 5 liniach?'. Co to oznacza?",
+                options: [
+                    "Jan chce tylko informacji (research phase)",
+                    "Jan testuje, czy jesteś przygotowany",
+                    "Jan jest gotowy kupić TERAZ (buying signal!)",
+                    "Jan próbuje wynegocjować lepszą cenę"
+                ],
+                correct: 2,
+                feedback: {
+                    correct: "✅ Bingo! 'Jak szybko wdrożyć?' = buying signal. Jan nie pyta 'czy?', tylko 'kiedy?'. To moment na: 'Mamy stock, rollout możemy zacząć za 2 tygodnie. Proponuję pilot na linii 1, potem skalowanie'. Nie wahaj się!",
+                    incorrect: "❌ Nie! Jan ma veto power i pyta o timeline wdrożenia (nie 'czy kupić?'). To BUYING SIGNAL. Odpowiedź: 'Stock mamy, rollout 2 tygodnie. Proponuję pilot → skalowanie'. Jeśli nie złapiesz sygnału = stracisz momentum."
+                }
+            },
+            {
+                question: "HSE Manager (kopalnia) mówi: 'Czy macie certyfikat ATEX?'. Co zrobisz?",
+                options: [
+                    "Powiesz: 'Wyślę Ci certyfikat mailem jutro'",
+                    "Zapytasz: 'Dlaczego ATEX jest ważny?'",
+                    "Przejdziesz do demo produktu (ATEX = detale)",
+                    "Powiesz: 'Tak, mamy ATEX Zone 1 i 2. Pokażę Ci numer certyfikatu i zakres'"
+                ],
+                correct: 3,
+                feedback: {
+                    correct: "✅ Perfekcyjnie! W kopalni ATEX ≠ nice-to-have, to MUST-HAVE (regulacje bezpieczeństwa w strefach zagrożonych wybuchem). HSE Manager ma veto power. Odpowiedź musi być: konkret (Zone 1/2) + dowód (numer cert) + follow-up (wysłać PDF). Bez tego = deal off.",
+                    incorrect: "❌ Błąd! ATEX w kopalni = deal breaker. HSE Manager ma veto power - bez certyfikatu = koniec rozmowy (regulacje bezpieczeństwa). Musisz pokazać: 'Tak, ATEX Zone 1 i 2, cert nr XYZ, wyślę PDF'. Nie pytaj 'dlaczego?' (amatorszczyzna) ani nie odkładaj (brak kredybilności)."
+                }
+            },
+            {
+                question: "Ewa (Quality Manager, automotive) pyta: 'Jak udowodnisz, że Milwaukee nie zwiększy liczby defektów?'. Najlepsza strategia?",
+                options: [
+                    "'Milwaukee = premium quality, nie ma defektów' (claim bez dowodu)",
+                    "'Zróbmy 2-tygodniowy PoC: zmierzymy defect rate przed/po' (data-driven)",
+                    "'Mamy ISO 9001' (show certificate)",
+                    "'VW używa Milwaukee = proof' (social proof)"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Doskonale! Quality Manager myśli metrykami (defect rate, PPM, Six Sigma). PoC z pomiarem = konkretne dane (nie obietnice). Propozycja: '2 tygodnie, linia 1, mierzymy defects dzień po dniu. Jeśli wzrost = kończymy test'. To eliminuje risk i buduje trust.",
+                    incorrect: "❌ Źle. Quality Manager nie wierzy w claims ('premium quality') ani certificates (każdy ma ISO). Social proof (VW) = pomocny, ale niewystarczający. Ewa chce DANYCH. PoC = 2 tygodnie, pomiar defect rate before/after. To jedyny sposób na proof."
+                }
+            },
+            {
+                question: "Spotkanie z 3 osobami: Bob (Production, wpływ=2, postawa=+2), Anna (CFO, wpływ=3, postawa=-1), Tomasz (Operator, wpływ=1, postawa=+1). Do kogo kierujesz 70% uwagi?",
+                options: [
+                    "Bob (najwyższa postawa pozytywna)",
+                    "Anna (veto power)",
+                    "Tomasz (end user = influencer)",
+                    "Równo po 33% do każdego"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Tak! Anna ma veto power (wpływ=3). Nawet jeśli Bob i Tomasz są za, Anna może zablokować. Strategia: 70% uwagi na Annę (address her concerns: ROI, risk mitigation), 20% Bob (leverage ally), 10% Tomasz (social proof). Nie ignoruj veto player!",
+                    incorrect: "❌ Nie. Anna ma veto power (wpływ=3) - jeśli ona powie 'nie', deal off (nawet jeśli Bob i Tomasz są za). 70% uwagi na Annę (ROI proof + risk mitigation), 20% Bob (ally leverage), 10% Tomasz (social proof). Równe 33% = strategia bez strategii."
+                }
+            },
+            {
+                question: "Bob pisze: 'Świetny PoC, ale Marek (Procurement) blokuje - Bosch tańszy'. Co zrobisz?",
+                options: [
+                    "Zadzwonisz do Marka i wynegocjujesz cenę (direct approach)",
+                    "Zaproponujesz Bobowi: 'Zorganizujmy demo dla Marka + Anna + Jan - pokaż im liczby z PoC' (arm Bob)",
+                    "Zaoferujesz rabat 25% (beat Bosch price)",
+                    "Zrezygnujesz (Marek ma veto)"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Perfekcyjnie! Nie walczysz z Markiem bezpośrednio (ego clash). Nie robisz price war (race to bottom). WZMACNIASZ BOBA (internal champion): dajesz mu ammo (liczby z PoC, ROI calculator) i organizujesz demo dla decision makers (Anna, Jan). Bob prowadzi, Ty wspierasz. To tworzy coalition.",
+                    incorrect: "❌ Źle. Direct call do Marka = ego clash. Rabat 25% = race to bottom (utrata marży). Rezygnacja = za wcześnie. Prawidłowo: ARM BOBA. Daj mu narzędzia (dane z PoC, ROI calc) i zorganizuj demo dla decydentów. Bob = internal champion, Ty = coach. To buduje coalition przeciw Markowi."
+                }
+            },
+            {
+                question: "Po 6 miesiącach Bob pisze: 'Deal signed! Mogę być Twoim referencyjnym klientem?'. Co odpowiesz?",
+                options: [
+                    "'Tak, wyślę Ci case study do akceptacji' (formalne podejście)",
+                    "'Dzięki! Czy mogę Cię prosić o testimonial video + LinkedIn post?' (leverage Bob maksymalnie)",
+                    "'Nie, wystarczy mi numer telefonu' (minimize burden)",
+                    "'Super! Jak mogę Ci się odwdzięczyć?' (reciprocity)"
+                ],
+                correct: 3,
+                feedback: {
+                    correct: "✅ Doskonale! Bob oferuje pomoc - to rzadkie (większość klientów milczy po podpisaniu). Reciprocity = 'Jak mogę Ci się odwdzięczyć?' buduje long-term relationship. Bob może powiedzieć: 'Chcę być first to test nowych produktów' lub 'Poleć mnie do Mahle Ostrów'. To win-win (ty masz ambasadora, Bob czuje się valued).",
+                    incorrect: "❌ Nie optymalnie. 'Wyślę case study' = OK, ale transakcyjne. 'Video + LinkedIn' = too much ask (Bob się wycofa). 'Numer telefonu' = wasted opportunity. Najlepiej: 'Jak mogę Ci się odwdzięczyć?' (reciprocity). Bob może chcieć: early access do nowych produktów, wsparcie w innych projektach, lub referral do Mahle Ostrów. To buduje partnership."
+                }
+            },
+            {
+                question: "Nowy klient (kopalnia): 'Potrzebujemy 50 narzędzi NA JUTRO, awaria na linii'. Co zrobisz?",
+                options: [
+                    "Powiesz: 'Niemożliwe, mamy 2 tygodnie lead time' (stick to process)",
+                    "Zadzwonisz do warehouse i dostarczysz dziś wieczorem (hero move)",
+                    "Zapytasz: 'Jaka awaria? Czy Milwaukee na pewno rozwiąże problem?' (qualify emergency)",
+                    "Zaproponujesz: 'Mogę dać 10 sztuk dziś, reszta za tydzień' (compromise)"
+                ],
+                correct: 2,
+                feedback: {
+                    correct: "✅ Świetnie! 'Emergency buy' często = panic without diagnosis. Pytasz: 'Jaka awaria? Czy Milwaukee rozwiąże to problem?' Bo jeśli klient potrzebuje wiertarki, a Ty dasz mu szlifierkę = wracają jutro i mówią 'nie działa'. Qualify first, potem deliver solution (nawet jeśli express). To profesjonalizm.",
+                    incorrect: "❌ Błąd. 'Niemożliwe' = stracona szansa. 'Hero move' bez pytań = ryzyko (jeśli dasz zły produkt, klient mówi 'Milwaukee nie działa'). Compromise bez kontekstu = random guess. Prawidłowo: QUALIFY EMERGENCY. Pytaj: 'Jaka awaria? Czego potrzebujecie?' Potem: express delivery właściwego produktu. To różnica między partner a vendor."
+                }
+            }
+        ];
+
+        let quizAnswers = {};
+        let quizScore = 0;
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+            
+            quizQuestions.forEach((q, qIndex) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.id = `question-${qIndex}`;
+                
+                let optionsHTML = '';
+                q.options.forEach((option, oIndex) => {
+                    optionsHTML += `
+                        <div class="quiz-option" id="option-${qIndex}-${oIndex}" onclick="selectQuizOption(${qIndex}, ${oIndex})">
+                            <input type="radio" name="q${qIndex}" id="radio-${qIndex}-${oIndex}">
+                            <label for="radio-${qIndex}-${oIndex}">${option}</label>
+                        </div>
+                    `;
+                });
+                
+                questionDiv.innerHTML = `
+                    <div class="question-number">Pytanie ${qIndex + 1}/10</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="quiz-options">
+                        ${optionsHTML}
+                    </div>
+                    <div class="quiz-feedback" id="feedback-${qIndex}"></div>
+                `;
+                
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectQuizOption(questionIndex, optionIndex) {
+            // Check if already answered
+            if (quizAnswers[questionIndex] !== undefined) return;
+            
+            const question = quizQuestions[questionIndex];
+            const isCorrect = optionIndex === question.correct;
+            
+            // Mark answer
+            quizAnswers[questionIndex] = optionIndex;
+            
+            // Update score
+            if (isCorrect) {
+                quizScore++;
+            }
+            
+            // Visual feedback on options
+            question.options.forEach((_, i) => {
+                const optionDiv = document.getElementById(`option-${questionIndex}-${i}`);
+                if (i === question.correct) {
+                    optionDiv.classList.add('correct');
+                } else if (i === optionIndex && !isCorrect) {
+                    optionDiv.classList.add('incorrect');
+                }
+                // Disable all options
+                optionDiv.style.cursor = 'default';
+            });
+            
+            // Check radio
+            document.getElementById(`radio-${questionIndex}-${optionIndex}`).checked = true;
+            
+            // Show feedback
+            const feedbackDiv = document.getElementById(`feedback-${questionIndex}`);
+            feedbackDiv.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+            feedbackDiv.innerHTML = isCorrect ? question.feedback.correct : question.feedback.incorrect;
+            
+            // Check if all answered
+            if (Object.keys(quizAnswers).length === quizQuestions.length) {
+                showQuizScore();
+            }
+            
+            saveProgress();
+        }
+
+        function showQuizScore() {
+            const scoreDiv = document.getElementById('quizScore');
+            const scoreNumber = document.getElementById('scoreNumber');
+            const scoreInterpretation = document.getElementById('scoreInterpretation');
+            
+            scoreNumber.textContent = `${quizScore}/10`;
+            
+            let interpretation = '';
+            if (quizScore <= 5) {
+                interpretation = "📚 <strong>Potrzebujesz więcej praktyki</strong><br>Discovery to sztuka czytania sygnałów. Wróć do kart 2-5 i przeanalizuj profile klientów + case study Boba. Focus: rozpoznawanie buying signals i stakeholder priorities.";
+            } else if (quizScore <= 8) {
+                interpretation = "👍 <strong>Dobra robota!</strong><br>Rozumiesz podstawy stakeholder mapping i buying signals. Do doskonałości brakuje Ci: głębszej analizy motywacji (CFO vs Production vs HSE) i umiejętności budowania internal champions. Praktykuj z prawdziwymi klientami.";
+            } else {
+                interpretation = "🌟 <strong>Ekspert Discovery!</strong><br>Rozpoznajesz buying signals, rozumiesz różnice między decydentami (veto power vs influencer) i wiesz, jak budować internal champions. Jesteś gotowy na Value Selling (Lekcja 2). Keep it up!";
+            }
+            
+            scoreInterpretation.innerHTML = interpretation;
+            scoreDiv.classList.add('show');
+            
+            // Award XP
+            if (!completedCards.has(6)) {
+                completedCards.add(6);
+                earnedXP += cardXPValues[6];
+                updateProgress();
+            }
+            
+            // Change button
+            const nextBtn = document.getElementById('quizNextBtn');
+            nextBtn.textContent = 'Zobacz wynik →';
+            setTimeout(() => {
+                nextBtn.textContent = 'Następna →';
+            }, 2000);
+            
+            saveProgress();
+        }
+
+        // Initialize quiz on load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+        });
+
+        // Flashcards Functions
+        let flippedCards = new Set();
+
+        function flipCard(index) {
+            const cards = document.querySelectorAll('.flashcard');
+            const card = cards[index];
+            
+            card.classList.toggle('flipped');
+            
+            // Track as "known"
+            if (!flippedCards.has(index)) {
+                flippedCards.add(index);
+                updateFlashcardProgress();
+            }
+        }
+
+        function updateFlashcardProgress() {
+            const progress = document.getElementById('flashcardProgress');
+            progress.textContent = `Poznane karty: ${flippedCards.size}/8`;
+            
+            // Award XP when all 8 are flipped
+            if (flippedCards.size === 8 && !completedCards.has(7)) {
+                completedCards.add(7);
+                earnedXP += cardXPValues[7];
+                updateProgress();
+                saveProgress();
+                
+                // Visual feedback
+                progress.style.color = '#4CAF50';
+                progress.textContent = '✅ Poznane karty: 8/8 - Świetna robota!';
+            }
+        }
+
+        function markAllKnown() {
+            const cards = document.querySelectorAll('.flashcard');
+            cards.forEach((card, index) => {
+                if (!card.classList.contains('flipped')) {
+                    card.classList.add('flipped');
+                }
+                flippedCards.add(index);
+            });
+            updateFlashcardProgress();
+        }
+
+        function resetFlashcards() {
+            const cards = document.querySelectorAll('.flashcard');
+            cards.forEach(card => {
+                card.classList.remove('flipped');
+            });
+            flippedCards.clear();
+            updateFlashcardProgress();
+        }
+
+        // Template Functions
+        function downloadTemplate() {
+            // Mock download (in production: actual file download)
+            alert('📥 Pobieranie szablonu...\n\n' +
+                  'Discovery Template Milwaukee KAM.xlsx\n' +
+                  'Rozmiar: 125 KB\n\n' +
+                  '✅ W pełnej wersji: automatyczne pobranie pliku Excel z wszystkimi kartami.');
+            
+            // Show success message
+            const successMsg = document.getElementById('templateSuccess');
+            successMsg.innerHTML = '✅ Szablon gotowy do pobrania! Otwórz plik i wypełnij podczas następnego spotkania.';
+            successMsg.classList.add('show');
+        }
+
+        function toggleCommitment() {
+            const checkbox = document.getElementById('commitmentCheck');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                // Award XP
+                if (!completedCards.has(8)) {
+                    completedCards.add(8);
+                    earnedXP += cardXPValues[8];
+                    updateProgress();
+                    saveProgress();
+                }
+                
+                // Visual feedback
+                const successMsg = document.getElementById('templateSuccess');
+                successMsg.innerHTML = '<strong>✅ Commitment potwierdzony!</strong> +10 XP. Dostaniesz email reminder za 3 dni: "Użyłeś już szablonu?"';
+                successMsg.classList.add('show');
+                
+                const commitmentBox = document.querySelector('.commitment-checkbox');
+                commitmentBox.style.background = '#C8E6C9';
+                commitmentBox.style.borderColor = '#4CAF50';
+                
+                setTimeout(() => {
+                    commitmentBox.style.background = '';
+                    commitmentBox.style.borderColor = '';
+                }, 2000);
+            }
+            
+            // Save state
+            localStorage.setItem('milwaukee_commitment', checkbox.checked);
+        }
+
+        // Load commitment state on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('milwaukee_commitment');
+            if (saved === 'true') {
+                document.getElementById('commitmentCheck').checked = true;
+            }
+        });
+
+        // ===== AI Interview Simulation (Card 9) =====
+        let aiResponses = {
+            round1: '',
+            round2: '',
+            round3: ''
+        };
+
+        function autoSaveAIInterview() {
+            aiResponses.round1 = document.getElementById('round1').value;
+            aiResponses.round2 = document.getElementById('round2').value;
+            aiResponses.round3 = document.getElementById('round3').value;
+            
+            // Update character hints
+            updateCharHint('round1', 80);
+            updateCharHint('round2', 80);
+            updateCharHint('round3', 80);
+            
+            localStorage.setItem('aiResponses', JSON.stringify(aiResponses));
+        }
+
+        function updateCharHint(id, minChars) {
+            const text = document.getElementById(id).value;
+            const hint = document.getElementById(id + 'Hint');
+            const count = text.length;
+            
+            if (count >= minChars) {
+                hint.textContent = `✅ ${count} znaków`;
+                hint.style.color = '#4CAF50';
+            } else {
+                hint.textContent = `Min. ${minChars} znaków (${count}/${minChars})`;
+                hint.style.color = '#F57C00';
+            }
+        }
+
+        function evaluateAIInterview() {
+            const r1 = aiResponses.round1.toLowerCase();
+            const r2 = aiResponses.round2.toLowerCase();
+            const r3 = aiResponses.round3.toLowerCase();
+            
+            // Validate min length
+            if (r1.length < 80 || r2.length < 80 || r3.length < 80) {
+                alert('⚠️ Uzupełnij wszystkie 3 odpowiedzi (min. 80 znaków każda)');
+                return;
+            }
+            
+            let score = 0;
+            let feedback = [];
+            
+            // Round 1 scoring (Discovery keywords)
+            const r1Keywords = ['rotacja', 'ergonomia', 'waga', 'wibracje', 'operatorzy', 
+                                'wydajność', 'pytanie', 'pytań', 'potrzeby', 'bolączki', 'problem'];
+            const r1Matches = r1Keywords.filter(kw => r1.includes(kw)).length;
+            score += Math.min(r1Matches * 4, 35); // Max 35 points
+            
+            if (r1Matches >= 4) {
+                feedback.push('✅ <strong>Runda 1:</strong> Doskonałe pytania discovery! Skupiłeś się na potrzebach.');
+            } else if (r1Matches >= 2) {
+                feedback.push('⚠️ <strong>Runda 1:</strong> Dobre pytania, ale mogłeś głębiej zbadać potrzeby.');
+            } else {
+                feedback.push('❌ <strong>Runda 1:</strong> Za mało pytań discovery. Pytaj o ergonomię, rotację, bolączki.');
+            }
+            
+            // Round 2 scoring (Value keywords)
+            const r2Keywords = ['roi', 'case study', 'case-study', 'oszczędność', 'oszczędności', 
+                                'przykład', 'dowód', 'dowody', 'liczby', 'kalkulator', 'vw', 'automotive'];
+            const r2Matches = r2Keywords.filter(kw => r2.includes(kw)).length;
+            score += Math.min(r2Matches * 5, 35); // Max 35 points
+            
+            if (r2Matches >= 4) {
+                feedback.push('✅ <strong>Runda 2:</strong> Świetnie! Użyłeś case study i ROI jako dowodu.');
+            } else if (r2Matches >= 2) {
+                feedback.push('⚠️ <strong>Runda 2:</strong> Dobrze, ale mogłeś podać konkretny case study (np. VW).');
+            } else {
+                feedback.push('❌ <strong>Runda 2:</strong> Za mało dowodów. CFO potrzebuje ROI, case study, liczb.');
+            }
+            
+            // Round 3 scoring (Next steps keywords)
+            const r3Keywords = ['poc', 'pilot', 'demo', 'test', 'próba', 'proof of concept',
+                                'linia', 'data', 'spotkanie', 'plan', 'weekend', 'tydzień'];
+            const r3Matches = r3Keywords.filter(kw => r3.includes(kw)).length;
+            score += Math.min(r3Matches * 6, 30); // Max 30 points
+            
+            if (r3Matches >= 3) {
+                feedback.push('✅ <strong>Runda 3:</strong> Doskonałe next steps! Konkretny PoC to klucz.');
+            } else if (r3Matches >= 1) {
+                feedback.push('⚠️ <strong>Runda 3:</strong> Dobre, ale mogłeś być bardziej konkretny (PoC, pilot, data).');
+            } else {
+                feedback.push('❌ <strong>Runda 3:</strong> Za ogólne. Zaproponuj konkretny PoC lub demo z datą.');
+            }
+            
+            // Display score
+            const scoreDisplay = document.getElementById('aiScoreNumber');
+            const moodIndicator = document.getElementById('moodIndicator');
+            const feedbackDiv = document.getElementById('aiFeedback');
+            const scoreContainer = document.getElementById('aiScoreDisplay');
+            
+            scoreDisplay.textContent = score + '/100';
+            feedbackDiv.innerHTML = feedback.join('<br><br>');
+            
+            // Mood based on score
+            if (score >= 80) {
+                moodIndicator.textContent = '😍 Bob jest pod wrażeniem!';
+                moodIndicator.style.color = '#4CAF50';
+            } else if (score >= 60) {
+                moodIndicator.textContent = '😊 Bob jest zainteresowany';
+                moodIndicator.style.color = '#8BC34A';
+            } else if (score >= 40) {
+                moodIndicator.textContent = '😐 Bob jest sceptyczny';
+                moodIndicator.style.color = '#FFC107';
+            } else {
+                moodIndicator.textContent = '😕 Bob jest rozczarowany';
+                moodIndicator.style.color = '#F44336';
+            }
+            
+            scoreContainer.classList.add('show');
+            
+            // Award XP if score >= 60
+            if (score >= 60 && !completedCards.has(9)) {
+                completedCards.add(9);
+                earnedXP += 15;
+                updateProgress();
+                saveProgress();
+            }
+        }
+
+        // Load AI responses on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('aiResponses');
+            if (saved) {
+                aiResponses = JSON.parse(saved);
+                if (document.getElementById('round1')) {
+                    document.getElementById('round1').value = aiResponses.round1 || '';
+                    document.getElementById('round2').value = aiResponses.round2 || '';
+                    document.getElementById('round3').value = aiResponses.round3 || '';
+                    autoSaveAIInterview(); // Update hints
+                }
+            }
+        });
+
+        // ===== Badge & Summary (Card 10) =====
+        function showBadge() {
+            const overlay = document.getElementById('badgeOverlay');
+            const content = overlay.querySelector('.badge-content');
+            
+            content.innerHTML = `
+                <div class="badge-icon">🔍</div>
+                <h2 class="badge-title">Discovery Expert</h2>
+                <p class="badge-subtitle">Milwaukee B2B Academy</p>
+                <div class="badge-stats">
+                    <div><strong>${earnedXP}</strong> XP</div>
+                    <div><strong>10/10</strong> Karty</div>
+                </div>
+                <p style="margin-top: 20px; font-size: 0.95rem; color: #666;">
+                    Ukończyłeś Lekcję 1: Discovery - Zrozumieć klienta przemysłowego.<br>
+                    Jesteś gotowy na <strong>Value Selling</strong>!
+                </p>
+                <button onclick="closeBadge()" style="margin-top: 25px; padding: 12px 30px; background: #D32F2F; color: white; border: none; border-radius: 25px; font-size: 1.1rem; cursor: pointer;">
+                    Zamknij 🎉
+                </button>
+            `;
+            
+            overlay.style.display = 'flex';
+            
+            // Award completion bonus XP
+            if (!completedCards.has(10)) {
+                completedCards.add(10);
+                earnedXP += 10;
+                updateProgress();
+                saveProgress();
+                
+                // Update final XP display
+                const finalXPDisplay = document.getElementById('finalXP');
+                if (finalXPDisplay) {
+                    finalXPDisplay.textContent = earnedXP;
+                }
+            }
+        }
+
+        function closeBadge() {
+            document.getElementById('badgeOverlay').style.display = 'none';
+        }
+
+        // Update final stats on Card 10
+        window.addEventListener('DOMContentLoaded', () => {
+            // Update final XP when reaching Card 10
+            const finalXPDisplay = document.getElementById('finalXP');
+            if (finalXPDisplay && currentCard === 10) {
+                finalXPDisplay.textContent = earnedXP;
+            }
+        });
+    </script>
+</body>
+</html>

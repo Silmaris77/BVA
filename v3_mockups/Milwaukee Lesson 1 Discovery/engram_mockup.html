@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekcja 1: Discovery - Propozycje Engramów</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #C62828 0%, #D32F2F 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(198, 40, 40, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .engrams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .engram-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engram-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #C62828, #D32F2F);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .engram-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(198, 40, 40, 0.2);
+        }
+
+        .engram-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .engram-card.recommended {
+            border: 3px solid #4CAF50;
+        }
+
+        .engram-card.recommended .recommended-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #4CAF50;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .engram-icon {
+            font-size: 5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .engram-option {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .engram-title {
+            font-size: 1.8rem;
+            color: #C62828;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .engram-narrative {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .engram-narrative h3 {
+            color: #E65100;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .engram-narrative p {
+            color: #424242;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .engram-association {
+            background: #F5F5F5;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #C62828;
+        }
+
+        .engram-association h3 {
+            color: #C62828;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .engram-association p {
+            color: #666;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .storytelling-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+
+        .storytelling-section h2 {
+            color: #C62828;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .progression-timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            border-radius: 12px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .timeline-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .timeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: #1976D2;
+            font-weight: bold;
+        }
+
+        .timeline-step:last-child::after {
+            content: '';
+        }
+
+        .timeline-icon {
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+        }
+
+        .timeline-label {
+            font-size: 1.1rem;
+            color: #1565C0;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .timeline-description {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .vote-section {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .vote-section h3 {
+            color: #2E7D32;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .vote-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .vote-btn {
+            background: white;
+            border: 3px solid #4CAF50;
+            color: #2E7D32;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+        }
+
+        .vote-btn:hover {
+            background: #4CAF50;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .vote-btn.selected {
+            background: #4CAF50;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .engrams-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progression-timeline {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .timeline-step::after {
+                content: '↓';
+                right: 50%;
+                top: auto;
+                bottom: -25px;
+                transform: translateX(50%);
+            }
+
+            .timeline-step:last-child::after {
+                content: '';
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Lekcja 1: Discovery - Zrozumieć klienta przemysłowego</h1>
+            <p>Wybierz engram, który najlepiej oddaje przesłanie lekcji</p>
+        </div>
+
+        <div class="engrams-grid">
+            <!-- Opcja A: Lupa -->
+            <div class="engram-card recommended" data-engram="🔍">
+                <div class="recommended-badge">⭐ POLECAM</div>
+                <div class="engram-icon">🔍</div>
+                <div class="engram-option">OPCJA A</div>
+                <h2 class="engram-title">LUPA</h2>
+                
+                <div class="engram-narrative">
+                    <h3>📖 Narracja</h3>
+                    <p><strong>"Badanie terenu"</strong> - odkrywanie potrzeb klienta przez precyzyjną diagnozę</p>
+                </div>
+
+                <div class="engram-association">
+                    <h3>🎯 Asocjacje</h3>
+                    <p>• Detektyw przemysłowy<br>
+                       • Precyzyjna diagnoza<br>
+                       • "Wejdź głęboko w temat"<br>
+                       • Najczytelniejsza metafora discovery</p>
+                </div>
+            </div>
+
+            <!-- Opcja B: Mapa -->
+            <div class="engram-card" data-engram="🗺️">
+                <div class="engram-icon">🗺️</div>
+                <div class="engram-option">OPCJA B</div>
+                <h2 class="engram-title">MAPA</h2>
+                
+                <div class="engram-narrative">
+                    <h3>📖 Narracja</h3>
+                    <p><strong>"Mapowanie klienta"</strong> - landscape organizacji, stakeholders, procesy biznesowe</p>
+                </div>
+
+                <div class="engram-association">
+                    <h3>🎯 Asocjacje</h3>
+                    <p>• Navigator w terenie B2B<br>
+                       • Strategiczne planowanie<br>
+                       • "Widzę cały obraz"<br>
+                       • Account mapping framework</p>
+                </div>
+            </div>
+
+            <!-- Opcja C: Tarcza -->
+            <div class="engram-card" data-engram="🎯">
+                <div class="engram-icon">🎯</div>
+                <div class="engram-option">OPCJA C</div>
+                <h2 class="engram-title">TARCZA</h2>
+                
+                <div class="engram-narrative">
+                    <h3>📖 Narracja</h3>
+                    <p><strong>"Celowanie w potrzeby"</strong> - precyzyjne targetowanie kluczowych pain pointów</p>
+                </div>
+
+                <div class="engram-association">
+                    <h3>🎯 Asocjacje</h3>
+                    <p>• Focus na tym co ważne<br>
+                       • Targeted discovery<br>
+                       • "Hit the bullseye"<br>
+                       • Priorytetyzacja potrzeb</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="storytelling-section">
+            <h2>📚 Storytelling: Progresja KAM Journey (Lekcje 1-4)</h2>
+            
+            <div class="progression-timeline">
+                <div class="timeline-step">
+                    <div class="timeline-icon">🔍</div>
+                    <div class="timeline-label">Lekcja 1</div>
+                    <div class="timeline-description">Odkrywam potrzeby klienta</div>
+                </div>
+
+                <div class="timeline-step">
+                    <div class="timeline-icon">💰</div>
+                    <div class="timeline-label">Lekcja 2</div>
+                    <div class="timeline-description">Kwantyfikuję wartość</div>
+                </div>
+
+                <div class="timeline-step">
+                    <div class="timeline-icon">🤝</div>
+                    <div class="timeline-label">Lekcja 3</div>
+                    <div class="timeline-description">Domykam partnerstwo</div>
+                </div>
+
+                <div class="timeline-step">
+                    <div class="timeline-icon">💎</div>
+                    <div class="timeline-label">Lekcja 4</div>
+                    <div class="timeline-description">Rozwijam premium accounts</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: #FFF8E1; border-radius: 10px; border-left: 4px solid #FFA000;">
+                <h3 style="color: #E65100; margin-bottom: 12px;">💡 Logika progresji</h3>
+                <p style="color: #424242; line-height: 1.7; font-size: 1.05rem;">
+                    <strong>🔍 Discovery</strong> (rozpoznanie) → 
+                    <strong>💰 Value Selling</strong> (budowanie wartości) → 
+                    <strong>🤝 Negotiations</strong> (zamknięcie) → 
+                    <strong>💎 Account Growth</strong> (rozwój strategiczny)
+                </p>
+            </div>
+        </div>
+
+        <div class="vote-section">
+            <h3>🗳️ Który engram wybierasz dla Lekcji 1?</h3>
+            <div class="vote-buttons">
+                <button class="vote-btn" onclick="selectEngram('🔍', this)">🔍 Opcja A</button>
+                <button class="vote-btn" onclick="selectEngram('🗺️', this)">🗺️ Opcja B</button>
+                <button class="vote-btn" onclick="selectEngram('🎯', this)">🎯 Opcja C</button>
+            </div>
+            <div id="selection-result" style="margin-top: 25px; font-size: 1.2rem; color: #2E7D32; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <script>
+        let selectedEngram = null;
+
+        function selectEngram(engram, button) {
+            // Remove selected class from all buttons
+            document.querySelectorAll('.vote-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Add selected class to clicked button
+            button.classList.add('selected');
+
+            // Store selection
+            selectedEngram = engram;
+
+            // Show result
+            const resultDiv = document.getElementById('selection-result');
+            let engramName = '';
+            if (engram === '🔍') engramName = 'Lupa (Discovery jako badanie)';
+            if (engram === '🗺️') engramName = 'Mapa (Discovery jako mapowanie)';
+            if (engram === '🎯') engramName = 'Tarcza (Discovery jako celowanie)';
+
+            resultDiv.innerHTML = `✅ Wybrałeś: <strong>${engram} ${engramName}</strong>`;
+
+            // Highlight selected card
+            document.querySelectorAll('.engram-card').forEach(card => {
+                card.style.opacity = '0.5';
+                card.style.transform = 'scale(0.95)';
+            });
+
+            const selectedCard = document.querySelector(`[data-engram="${engram}"]`);
+            selectedCard.style.opacity = '1';
+            selectedCard.style.transform = 'scale(1.05)';
+            selectedCard.style.boxShadow = '0 20px 60px rgba(198, 40, 40, 0.4)';
+        }
+
+        // Add click handlers to cards
+        document.querySelectorAll('.engram-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const engram = this.getAttribute('data-engram');
+                const buttons = document.querySelectorAll('.vote-btn');
+                let targetButton;
+                
+                if (engram === '🔍') targetButton = buttons[0];
+                if (engram === '🗺️') targetButton = buttons[1];
+                if (engram === '🎯') targetButton = buttons[2];
+
+                selectEngram(engram, targetButton);
+            });
+        });
+    </script>
+</body>
+</html>

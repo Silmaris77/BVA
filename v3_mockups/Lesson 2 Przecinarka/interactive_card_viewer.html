@@ -2108,6 +2108,292 @@
         .metric-after {
             color: #00ff88;
         }
+
+        /* ====================
+           HERO CARDS STYLES
+        ==================== */
+        .hero-card-demo {
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card-label {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(218, 41, 28, 0.2);
+            border: 1px solid rgba(218, 41, 28, 0.4);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Hero Variant 1: Emotional */
+        .hero-variant-1 {
+            border-top: 4px solid #DA291C;
+        }
+
+        .hero-variant-1 .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px rgba(218, 41, 28, 0.5));
+            }
+            50% { 
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 20px rgba(218, 41, 28, 0.8));
+            }
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-variant-1 .hero-title {
+            background: linear-gradient(135deg, #DA291C, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            font-weight: 600;
+            opacity: 0.9;
+            margin-bottom: 25px;
+            color: #60efff;
+        }
+
+        .hero-content {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .hero-content strong {
+            color: #DA291C;
+            font-weight: 700;
+        }
+
+        .hero-cta {
+            background: linear-gradient(135deg, #DA291C, #a01f15);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(218, 41, 28, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(218, 41, 28, 0.5);
+        }
+
+        /* Hero Variant 2: Problem */
+        .hero-variant-2 {
+            border-left: 4px solid #ef4444;
+        }
+
+        .hero-problem-badge {
+            background: rgba(239, 68, 68, 0.15);
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 1.15rem;
+            font-style: italic;
+            color: #fca5a5;
+        }
+
+        .hero-solution-marker {
+            display: inline-block;
+            background: rgba(0, 255, 135, 0.2);
+            border-left: 4px solid #00ff87;
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        /* Hero Variant 3: Story */
+        .hero-variant-3 {
+            background: linear-gradient(135deg, rgba(218, 41, 28, 0.1), rgba(20, 20, 35, 0.9));
+            border: 2px solid rgba(218, 41, 28, 0.3);
+        }
+
+        .hero-story-timestamp {
+            display: inline-block;
+            background: rgba(218, 41, 28, 0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-quote-box {
+            border-left: 4px solid #DA291C;
+            padding: 20px;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .hero-quote-author {
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-style: normal;
+        }
+
+        /* Hero Variant 4: Data */
+        .hero-variant-4 {
+            border: 2px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .hero-stat-showcase {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .hero-stat-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #f59e0b;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Hero Variant 5: Interactive */
+        .hero-variant-5 {
+            border: 2px solid rgba(96, 239, 255, 0.4);
+        }
+
+        .hero-interactive-prompt {
+            background: rgba(96, 239, 255, 0.1);
+            border: 2px solid rgba(96, 239, 255, 0.3);
+            padding: 25px;
+            border-radius: 16px;
+            margin: 25px 0;
+        }
+
+        .hero-choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .hero-choice-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .hero-choice-btn:hover {
+            background: rgba(96, 239, 255, 0.15);
+            border-color: #60efff;
+            transform: translateY(-2px);
+        }
+
+        .hero-choice-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Hero Variant 6: Challenge */
+        .hero-variant-6 {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(236, 72, 153, 0.15));
+            border: 2px solid rgba(168, 85, 247, 0.4);
+        }
+
+        .hero-challenge-rewards {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .hero-reward-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .hero-reward-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-card-demo {
+                padding: 30px 20px;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-stat-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-choice-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2171,6 +2457,14 @@
             <div class="category-info">
                 <div class="category-name">Memoryzacja</div>
                 <div class="category-count">2 karty</div>
+            </div>
+        </div>
+
+        <div class="category-nav-item" onclick="showCategoryView('hero')">
+            <div class="category-icon">🚀</div>
+            <div class="category-info">
+                <div class="category-name">Hero Cards</div>
+                <div class="category-count">6 stylów</div>
             </div>
         </div>
     </div>
@@ -2836,6 +3130,156 @@
             </div>
         </div>
 
+        <!-- CATEGORY VIEW: HERO CARDS -->
+        <div id="view-hero" class="view">
+            <div class="category-view-header">
+                <div class="category-view-icon">🚀</div>
+                <div class="category-view-title">
+                    <h2>Hero Cards - Karty Otwierające</h2>
+                    <div class="category-view-description">6 stylów kart startowych dla lekcji Milwaukee - różne podejścia pedagogiczne</div>
+                </div>
+            </div>
+            <div class="cards-list">
+                <div class="card-list-item" onclick="showCardDemo('hero-emotional')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">🔥</div>
+                        <div class="card-list-title">
+                            <h3>Emotional / Inspirational</h3>
+                            <span class="card-list-complexity">LOW</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Buduje emocjonalne połączenie z marką. "Milwaukee Family" - poczucie przynależności do ruchu.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Onboarding</span>
+                        <span class="card-tag">Culture</span>
+                        <span class="card-tag">Engagement</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('hero-problem')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">⚠️</div>
+                        <div class="card-list-title">
+                            <h3>Problem-Focused</h3>
+                            <span class="card-list-complexity">MEDIUM</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Zaczyna od bólu klienta. "40% wizyt bez celu" - pokazuje skalę problemu przed rozwiązaniem.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Pain Point</span>
+                        <span class="card-tag">Solution</span>
+                        <span class="card-tag">Motivation</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('hero-story')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">📖</div>
+                        <div class="card-list-title">
+                            <h3>Story-Driven</h3>
+                            <span class="card-list-complexity">HIGH</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Opowiada case study. "Jak Marcin zamknął deal za 180k PLN" - konkretny przykład sukcesu.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Narrative</span>
+                        <span class="card-tag">Case Study</span>
+                        <span class="card-tag">Social Proof</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('hero-data')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">📊</div>
+                        <div class="card-list-title">
+                            <h3>Data-Driven</h3>
+                            <span class="card-list-complexity">MEDIUM</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Pokazuje liczby i ROI. "37%, 89%, 1900 PLN" - wizualizacja statystyk w 3 bokach.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Statistics</span>
+                        <span class="card-tag">ROI</span>
+                        <span class="card-tag">Finance</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('hero-interactive')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">🎮</div>
+                        <div class="card-list-title">
+                            <h3>Interactive</h3>
+                            <span class="card-list-complexity">MEDIUM</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Zaczyna od pytania z 4 wyborami. Aktywuje myślenie przed podaniem treści.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Engagement</span>
+                        <span class="card-tag">Choices</span>
+                        <span class="card-tag">Active Learning</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('hero-challenge')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">🏆</div>
+                        <div class="card-list-title">
+                            <h3>Challenge-Based</h3>
+                            <span class="card-list-complexity">HIGH</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Proponuje 7-dniowe wyzwanie. Konkretne zadania z nagrodami - behavioral change.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Challenge</span>
+                        <span class="card-tag">Gamification</span>
+                        <span class="card-tag">Behavior Change</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: rgba(96, 239, 255, 0.05); border-left: 4px solid #60efff; border-radius: 12px;">
+                <h3 style="margin-bottom: 20px; color: #60efff;">📚 Kiedy użyć którego stylu?</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; line-height: 1.8;">
+                    <div>
+                        <strong style="color: #DA291C;">🔥 Emotional:</strong> Onboarding, wprowadzenie do kultury firmy, budowanie identyfikacji z marką.
+                    </div>
+                    <div>
+                        <strong style="color: #ef4444;">⚠️ Problem-Focused:</strong> Skill-based training, addressing pain points, pokazanie wartości rozwiązania.
+                    </div>
+                    <div>
+                        <strong style="color: #DA291C;">📖 Story-Driven:</strong> Case studies, social proof, inspiracja do działania przez przykład.
+                    </div>
+                    <div>
+                        <strong style="color: #f59e0b;">📊 Data-Driven:</strong> ROI training, finance-focused, argumentacja liczbami.
+                    </div>
+                    <div>
+                        <strong style="color: #60efff;">🎮 Interactive:</strong> Aktywne zaangażowanie, pre-assessment, quiz starting point.
+                    </div>
+                    <div>
+                        <strong style="color: #a855f7;">🏆 Challenge-Based:</strong> Behavioral change, habit formation, long-term commitment.
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- CARD DEMO VIEWS -->
         <div id="demo-lightbulb" class="view card-demo-view">
             <div class="demo-header">
@@ -3471,6 +3915,325 @@
                         <strong>Zwrot z inwestycji:</strong> ~9 miesięcy przy cenie 4 999 PLN<br>
                         <strong>Dodatkowe korzyści:</strong> Cisza, zero emisji, wygoda użytkowania
                     </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+           HERO CARDS DEMOS
+        ============================================ -->
+
+        <!-- DEMO: HERO EMOTIONAL -->
+        <div id="demo-hero-emotional" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="back-btn" onclick="showCategoryView('hero')">
+                    <i data-lucide="arrow-left"></i> Powrót
+                </button>
+                <div class="demo-title">
+                    <h2>🔥 Hero Card: Emotional/Inspirational</h2>
+                    <div class="demo-subtitle">Kategoria: Hero Cards • Use Case: Onboarding, Culture</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="hero-card-demo hero-variant-1">
+                    <div class="hero-card-label">Emotional</div>
+                    <div class="hero-icon">🔥</div>
+                    <h2 class="hero-title">Witaj w Milwaukee Family</h2>
+                    <p class="hero-subtitle">Nothing but HEAVY DUTY™ - Zero Kompromisów dla Profesjonalistów</p>
+                    <div class="hero-content">
+                        Nie jesteś tu, żeby sprzedawać pudełka. Jesteś tu, żeby <strong>zmieniać sposób pracy</strong> profesjonalistów na całym świecie.
+                        <br><br>
+                        Milwaukee to nie firma narzędziowa. To <strong>ruch</strong>. Ruch ludzi, którzy wierzą, że praca zasługuje na najlepsze narzędzia.
+                        <br><br>
+                        Ta lekcja to Twój start. Poznasz dlaczego Milwaukee jest wyjątkowe i dlaczego <strong>Ty jesteś częścią czegoś większego.</strong>
+                    </div>
+                    <button class="hero-cta">
+                        Zacznijmy 🚀
+                    </button>
+                </div>
+
+                <div style="margin-top: 40px; padding: 20px; background: rgba(218, 41, 28, 0.1); border-left: 4px solid #DA291C; border-radius: 8px;">
+                    <strong style="color: #DA291C;">💡 Kiedy użyć tego stylu?</strong>
+                    <ul style="margin-top: 12px; margin-left: 20px; line-height: 1.8;">
+                        <li>Onboarding nowych JSS/KAM/FME</li>
+                        <li>Wprowadzenie do kultury marki Milwaukee</li>
+                        <li>Budowanie identyfikacji z wartościami firmy</li>
+                        <li>Moment "Welcome to the team"</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO: HERO PROBLEM -->
+        <div id="demo-hero-problem" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="back-btn" onclick="showCategoryView('hero')">
+                    <i data-lucide="arrow-left"></i> Powrót
+                </button>
+                <div class="demo-title">
+                    <h2>⚠️ Hero Card: Problem-Focused</h2>
+                    <div class="demo-subtitle">Kategoria: Hero Cards • Use Case: Pain Point → Solution</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="hero-card-demo hero-variant-2">
+                    <div class="hero-card-label">Problem-Focused</div>
+                    <h2 class="hero-title">40% Wizyt Bez Celu</h2>
+                    <p class="hero-subtitle">Dlaczego tracisz sprzedaż zanim jeszcze otworzysz usta?</p>
+                    <div class="hero-problem-badge">
+                        "Wchodzę do klienta. Pytam: 'Co słychać?'. Pokazuję katalog. Klient: 'Dziękuję, pomyślimy'. Wychodzę z pustymi rękami."
+                    </div>
+                    <div class="hero-content">
+                        <strong>Audit 2024 wykazał:</strong> 4 na 10 wizyt kończy się bez żadnej konkretnej akcji. Brak celu = brak rezultatu.
+                        <br><br>
+                        To nie Twoja wina. Nikt Cię nie nauczył <strong>jak prowadzić wizytę</strong>.
+                        <br><br>
+                        Do teraz.
+                    </div>
+                    <div class="hero-solution-marker">
+                        <strong>✅ W tej lekcji:</strong> Nauczysz się 4-Step Visit Structure który zwiększy Twoją konwersję o 60%.
+                    </div>
+                    <button class="hero-cta">
+                        Naprawmy to →
+                    </button>
+                </div>
+
+                <div style="margin-top: 40px; padding: 20px; background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; border-radius: 8px;">
+                    <strong style="color: #ef4444;">💡 Kiedy użyć tego stylu?</strong>
+                    <ul style="margin-top: 12px; margin-left: 20px; line-height: 1.8;">
+                        <li>Skill-based training (Visit Structure, Discovery, Closing)</li>
+                        <li>Addressing konkretnego pain point</li>
+                        <li>Pokazanie wartości rozwiązania przez skalę problemu</li>
+                        <li>Motywacja do nauki przez świadomość luki kompetencyjnej</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO: HERO STORY -->
+        <div id="demo-hero-story" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="back-btn" onclick="showCategoryView('hero')">
+                    <i data-lucide="arrow-left"></i> Powrót
+                </button>
+                <div class="demo-title">
+                    <h2>📖 Hero Card: Story-Driven</h2>
+                    <div class="demo-subtitle">Kategoria: Hero Cards • Use Case: Case Study, Narrative</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="hero-card-demo hero-variant-3">
+                    <div class="hero-card-label">Story-Driven</div>
+                    <div class="hero-story-timestamp">📍 VW Poznań, Marzec 2023</div>
+                    <h2 class="hero-title">Jak Marcin Zamknął Deal za 180 000 PLN</h2>
+                    <p class="hero-subtitle">...zadając jedno pytanie</p>
+                    <div class="hero-content">
+                        Marcin K., JSS z Poznania, stoi przed Production Managerem VW. Ma 15 minut. Budżet: 180k PLN. Konkurencja: Bosch, 40% taniej.
+                        <br><br>
+                        <strong>Co robi większość JSS?</strong> Pokazuje prezentację: "Milwaukee M18 FUEL ma 1200 in-lbs momentu..."
+                        <br><br>
+                        <strong>Co zrobił Marcin?</strong>
+                    </div>
+                    <div class="hero-quote-box">
+                        "Ile razy dziennie Waszym operatorom padają baterie podczas pracy?"
+                        <span class="hero-quote-author">- Marcin K., pierwsze pytanie w spotkaniu</span>
+                    </div>
+                    <div class="hero-content">
+                        PM: <em>"20 razy, może więcej. Tracą po 2 minuty każdorazowo..."</em>
+                        <br><br>
+                        <strong>Marcin policzył:</strong> 20 × 2 min × 15 operatorów × 200 PLN/h = 2000 PLN dziennie strat.
+                        <br><br>
+                        18 miesięcy później VW ma Milwaukee. Baterie padają 2x/dzień, nie 20x.
+                    </div>
+                    <button class="hero-cta">
+                        Naucz się tego pytania ⚡
+                    </button>
+                </div>
+
+                <div style="margin-top: 40px; padding: 20px; background: rgba(218, 41, 28, 0.1); border-left: 4px solid #DA291C; border-radius: 8px;">
+                    <strong style="color: #DA291C;">💡 Kiedy użyć tego stylu?</strong>
+                    <ul style="margin-top: 12px; margin-left: 20px; line-height: 1.8;">
+                        <li>Case studies - referencje i success stories</li>
+                        <li>Social proof - pokazanie że inni osiągnęli sukces</li>
+                        <li>Inspiracja do działania przez konkretny przykład</li>
+                        <li>Storytelling jako narzędzie sprzedażowe (SPIN Framework)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO: HERO DATA -->
+        <div id="demo-hero-data" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="back-btn" onclick="showCategoryView('hero')">
+                    <i data-lucide="arrow-left"></i> Powrót
+                </button>
+                <div class="demo-title">
+                    <h2>📊 Hero Card: Data-Driven</h2>
+                    <div class="demo-subtitle">Kategoria: Hero Cards • Use Case: ROI, Finance, Statistics</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="hero-card-demo hero-variant-4">
+                    <div class="hero-card-label">Data-Driven</div>
+                    <h2 class="hero-title">ROI Calculator Framework</h2>
+                    <p class="hero-subtitle">Liczby nie kłamią. Klient: "Milwaukee za drogie." Ty: *pokazujesz Excel*</p>
+                    <div class="hero-stat-showcase">
+                        <div class="hero-stat-box">
+                            <span class="hero-stat-number">37%</span>
+                            <span class="hero-stat-label">klientów odrzuca Milwaukee przez cenę</span>
+                        </div>
+                        <div class="hero-stat-box">
+                            <span class="hero-stat-number">89%</span>
+                            <span class="hero-stat-label">zmienia zdanie po zobaczeniu TCO</span>
+                        </div>
+                        <div class="hero-stat-box">
+                            <span class="hero-stat-number">1900 PLN</span>
+                            <span class="hero-stat-label">oszczędności Milwaukee vs Bosch (3 lata)</span>
+                        </div>
+                    </div>
+                    <div class="hero-content">
+                        <strong>Fakt:</strong> Purchase Price to tylko 30% Total Cost of Ownership.
+                        <br><br>
+                        Klient widzi cenę na kartoniku. Ty musisz pokazać <strong>prawdziwy koszt</strong> - TCO przez 3 lata.
+                        <br><br>
+                        W tej lekcji dostaniesz <strong>5-Step ROI Framework</strong> który zamieni "za drogie" na "ile zamawiam?".
+                    </div>
+                    <button class="hero-cta">
+                        Pokaż mi liczby 📊
+                    </button>
+                </div>
+
+                <div style="margin-top: 40px; padding: 20px; background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; border-radius: 8px;">
+                    <strong style="color: #f59e0b;">💡 Kiedy użyć tego stylu?</strong>
+                    <ul style="margin-top: 12px; margin-left: 20px; line-height: 1.8;">
+                        <li>ROI training - nauczanie kalkulacji zwrotu z inwestycji</li>
+                        <li>Finance-focused topics (TCO, Payback Period, NPV)</li>
+                        <li>Argumentacja liczbami w sprzedaży B2B</li>
+                        <li>Justifying premium pricing przez hard data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO: HERO INTERACTIVE -->
+        <div id="demo-hero-interactive" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="back-btn" onclick="showCategoryView('hero')">
+                    <i data-lucide="arrow-left"></i> Powrót
+                </button>
+                <div class="demo-title">
+                    <h2>🎮 Hero Card: Interactive</h2>
+                    <div class="demo-subtitle">Kategoria: Hero Cards • Use Case: Engagement, Pre-Assessment</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="hero-card-demo hero-variant-5">
+                    <div class="hero-card-label">Interactive</div>
+                    <h2 class="hero-title">Pytanie na Start</h2>
+                    <p class="hero-subtitle">Zanim zaczniesz - co byś zrobił w tej sytuacji?</p>
+                    <div class="hero-interactive-prompt">
+                        <strong>Scenariusz:</strong>
+                        <br><br>
+                        Klient mówi: <em>"Widziałem to samo w DeWalt za pół ceny. Dlaczego mam przepłacać?"</em>
+                        <br><br>
+                        <strong>Wybierz swoją reakcję:</strong>
+                        <div class="hero-choice-grid">
+                            <div class="hero-choice-btn" onclick="alert('Reakcja Price-First: Bezpośrednia obrona ceny może brzmieć defensywnie. Spróbuj najpierw zrozumieć co klient rozumie przez \'to samo\'.')">
+                                <span class="hero-choice-icon">💰</span>
+                                "Nasz produkt jest premium - ma więcej funkcji!"
+                            </div>
+                            <div class="hero-choice-btn" onclick="alert('✅ DISCOVERY APPROACH! To najlepsze podejście - najpierw zbierz informacje zanim zaprezentujesz rozwiązanie.')">
+                                <span class="hero-choice-icon">🔍</span>
+                                "Co dla Pana oznacza \'to samo\'? Jakie parametry porównywał Pan?"
+                            </div>
+                            <div class="hero-choice-btn" onclick="alert('ROI Approach: Dobre kierunek, ale zaczynasz od danych zanim zrozumiesz potrzeby. Połącz z Discovery!')">
+                                <span class="hero-choice-icon">📊</span>
+                                "Policzmy TCO przez 3 lata - to zmieni perspektywę."
+                            </div>
+                            <div class="hero-choice-btn" onclick="alert('Competitor Bash: NIGDY nie atakuj konkurencji bezpośrednio - to nieprofesjonalne. Skup się na swoich wartościach.')">
+                                <span class="hero-choice-icon">⚔️</span>
+                                "DeWalt nie ma naszej jakości i żywotności baterii."
+                            </div>
+                        </div>
+                    </div>
+                    <button class="hero-cta">
+                        Naucz się prawidłowej odpowiedzi 🧠
+                    </button>
+                </div>
+
+                <div style="margin-top: 40px; padding: 20px; background: rgba(96, 239, 255, 0.1); border-left: 4px solid #60efff; border-radius: 8px;">
+                    <strong style="color: #60efff;">💡 Kiedy użyć tego stylu?</strong>
+                    <ul style="margin-top: 12px; margin-left: 20px; line-height: 1.8;">
+                        <li>Engagement od pierwszej sekundy - aktywne zaangażowanie</li>
+                        <li>Pre-assessment - sprawdź poziom wiedzy przed treningiem</li>
+                        <li>Quiz starting point - rozbudź myślenie krytyczne</li>
+                        <li>Reveal knowledge gaps - show learner what they don't know yet</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO: HERO CHALLENGE -->
+        <div id="demo-hero-challenge" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="back-btn" onclick="showCategoryView('hero')">
+                    <i data-lucide="arrow-left"></i> Powrót
+                </button>
+                <div class="demo-title">
+                    <h2>🏆 Hero Card: Challenge-Based</h2>
+                    <div class="demo-subtitle">Kategoria: Hero Cards • Use Case: Behavioral Change, Habit Formation</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="hero-card-demo hero-variant-6">
+                    <div class="hero-card-label">Challenge</div>
+                    <h2 class="hero-title">7-Day Discovery Challenge</h2>
+                    <p class="hero-subtitle">Zadaj 30 pytań SPIN przez tydzień. Zmień swój sposób sprzedaży na zawsze.</p>
+                    <div class="hero-content">
+                        <strong>Reguła gry:</strong> Przez 7 dni, każdy dzień zadasz minimum 5 pytań z frameworku SPIN klientom.
+                        <br><br>
+                        Nie musisz zamknąć dealu. Musisz <strong>ćwiczyć technikę</strong>.
+                        <br><br>
+                        30 pytań = automatyzacja nawyku. Discovery przestanie być sztuczne - stanie się naturalne.
+                    </div>
+                    <div class="hero-challenge-rewards">
+                        <h4 style="margin-bottom: 15px; color: #a855f7;">🎁 Nagrody za ukończenie:</h4>
+                        <div class="hero-reward-item">
+                            <span class="hero-reward-icon">🏅</span>
+                            <div>
+                                <strong>Badge: Discovery Master</strong><br>
+                                <span style="font-size: 0.9rem; opacity: 0.8;">Visible on your profile + leaderboard boost</span>
+                            </div>
+                        </div>
+                        <div class="hero-reward-item">
+                            <span class="hero-reward-icon">📊</span>
+                            <div>
+                                <strong>Personalized Report</strong><br>
+                                <span style="font-size: 0.9rem; opacity: 0.8;">Analiza Twoich pytań + rekomendacje AI</span>
+                            </div>
+                        </div>
+                        <div class="hero-reward-item">
+                            <span class="hero-reward-icon">⚡</span>
+                            <div>
+                                <strong>500 XP Bonus</strong><br>
+                                <span style="font-size: 0.9rem; opacity: 0.8;">Fast-track to next certification level</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="hero-cta">
+                        Przyjmuję wyzwanie! 🔥
+                    </button>
+                </div>
+
+                <div style="margin-top: 40px; padding: 20px; background: rgba(168, 85, 247, 0.1); border-left: 4px solid #a855f7; border-radius: 8px;">
+                    <strong style="color: #a855f7;">💡 Kiedy użyć tego stylu?</strong>
+                    <ul style="margin-top: 12px; margin-left: 20px; line-height: 1.8;">
+                        <li>Behavioral change - zmiana nawyków sprzedażowych</li>
+                        <li>Habit formation - budowanie codziennej praktyki</li>
+                        <li>Long-term commitment - motywacja do 7-30 dni action</li>
+                        <li>Gamification + Social Pressure - accountability przez rewards</li>
+                    </ul>
                 </div>
             </div>
         </div>

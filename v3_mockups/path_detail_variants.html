@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Detail - 3 Warianty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0f0f2f 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Variant Selector */
+        .variant-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .variant-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .variant-btn.active {
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            border-color: transparent;
+            color: white;
+        }
+
+        .variant-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Variant Containers */
+        .variant {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .variant.active {
+            display: block;
+        }
+
+        /* Path Header - Common */
+        .path-header {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .path-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(0, 212, 255, 0.15);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 16px;
+        }
+
+        .path-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .path-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .path-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .path-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            border-radius: 8px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .start-btn {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        /* ============================================ */
+        /* WARIANT A: Prosta lista z checkboxami */
+        /* ============================================ */
+        .lesson-list-simple {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .lesson-item-simple {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .lesson-item-simple:last-child {
+            border-bottom: none;
+        }
+
+        .lesson-item-simple:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .lesson-checkbox {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .lesson-checkbox.completed {
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            border-color: transparent;
+        }
+
+        .lesson-checkbox.current {
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .lesson-info-simple {
+            flex: 1;
+        }
+
+        .lesson-title-simple {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .lesson-meta-simple {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .lesson-arrow {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+        }
+
+        /* ============================================ */
+        /* WARIANT B: Karty w kolumnie */
+        /* ============================================ */
+        .lesson-cards-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .lesson-card-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateX(4px);
+        }
+
+        .lesson-card-item.completed {
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .lesson-card-item.current {
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+        }
+
+        .lesson-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(0, 212, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: #00d4ff;
+            flex-shrink: 0;
+        }
+
+        .lesson-number.completed {
+            background: rgba(0, 255, 136, 0.15);
+            color: #00ff88;
+        }
+
+        .lesson-card-content {
+            flex: 1;
+        }
+
+        .lesson-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .lesson-card-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .lesson-card-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .lesson-card-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+        }
+
+        .lesson-card-status.completed {
+            background: rgba(0, 255, 136, 0.15);
+            color: #00ff88;
+        }
+
+        .lesson-card-status.current {
+            background: rgba(0, 212, 255, 0.15);
+            color: #00d4ff;
+        }
+
+        /* ============================================ */
+        /* WARIANT C: Timeline/Stepper */
+        /* ============================================ */
+        .timeline {
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 23px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -37px;
+            top: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(20, 20, 40, 1);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 1;
+        }
+
+        .timeline-dot.completed {
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            border-color: transparent;
+        }
+
+        .timeline-dot.current {
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.8); }
+        }
+
+        .timeline-dot.locked {
+            opacity: 0.4;
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(4px);
+        }
+
+        .timeline-content.current {
+            border-color: #00d4ff;
+        }
+
+        .timeline-content.completed {
+            border-color: rgba(0, 255, 136, 0.2);
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .timeline-title .status-tag {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-tag.completed {
+            background: rgba(0, 255, 136, 0.15);
+            color: #00ff88;
+        }
+
+        .status-tag.current {
+            background: rgba(0, 212, 255, 0.15);
+            color: #00d4ff;
+        }
+
+        .timeline-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .timeline-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Variant Label */
+        .variant-label {
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Variant Selector -->
+    <div class="variant-selector">
+        <button class="variant-btn active" onclick="showVariant('a')">
+            📋 Wariant A: Lista
+        </button>
+        <button class="variant-btn" onclick="showVariant('b')">
+            🃏 Wariant B: Karty
+        </button>
+        <button class="variant-btn" onclick="showVariant('c')">
+            📍 Wariant C: Timeline
+        </button>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- WARIANT A: Prosta lista z checkboxami -->
+    <!-- ============================================ -->
+    <div id="variant-a" class="variant active">
+        <p class="variant-label">Prosty, czytelny spis treści z checkboxami</p>
+        
+        <div class="path-header">
+            <span class="path-badge">🎓 Ścieżka edukacyjna</span>
+            <h1 class="path-title">Milwaukee PPE Sales Mastery</h1>
+            <p class="path-description">
+                Kompletna ścieżka sprzedaży środków ochrony osobistej Milwaukee. 
+                Od podstaw produktowych po zaawansowane techniki zamykania transakcji.
+            </p>
+            <div class="path-meta">
+                <span>📚 3 lekcje</span>
+                <span>⏱️ ~45 min</span>
+                <span>⭐ +450 XP</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 33%"></div>
+            </div>
+            <span class="progress-text">1 z 3 lekcji ukończone (33%)</span>
+        </div>
+
+        <div class="lesson-list-simple">
+            <div class="lesson-item-simple">
+                <div class="lesson-checkbox completed">✓</div>
+                <div class="lesson-info-simple">
+                    <div class="lesson-title-simple">1. Wprowadzenie do PPE Milwaukee</div>
+                    <div class="lesson-meta-simple">15 min • +100 XP • ✅ Ukończone</div>
+                </div>
+                <span class="lesson-arrow">→</span>
+            </div>
+            <div class="lesson-item-simple">
+                <div class="lesson-checkbox current"></div>
+                <div class="lesson-info-simple">
+                    <div class="lesson-title-simple">2. Dobór Właściwego Momentu Obrotowego</div>
+                    <div class="lesson-meta-simple">20 min • +150 XP • 🔵 W trakcie</div>
+                </div>
+                <span class="lesson-arrow">→</span>
+            </div>
+            <div class="lesson-item-simple">
+                <div class="lesson-checkbox"></div>
+                <div class="lesson-info-simple">
+                    <div class="lesson-title-simple">3. Zamykanie Transakcji PPE</div>
+                    <div class="lesson-meta-simple">10 min • +200 XP</div>
+                </div>
+                <span class="lesson-arrow">→</span>
+            </div>
+        </div>
+
+        <button class="start-btn">▶️ Kontynuuj ścieżkę</button>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- WARIANT B: Karty w kolumnie -->
+    <!-- ============================================ -->
+    <div id="variant-b" class="variant">
+        <p class="variant-label">Rozbudowane karty z opisami i metadanymi</p>
+        
+        <div class="path-header">
+            <span class="path-badge">🎓 Ścieżka edukacyjna</span>
+            <h1 class="path-title">Milwaukee PPE Sales Mastery</h1>
+            <p class="path-description">
+                Kompletna ścieżka sprzedaży środków ochrony osobistej Milwaukee. 
+                Od podstaw produktowych po zaawansowane techniki zamykania transakcji.
+            </p>
+            <div class="path-meta">
+                <span>📚 3 lekcje</span>
+                <span>⏱️ ~45 min</span>
+                <span>⭐ +450 XP</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 33%"></div>
+            </div>
+            <span class="progress-text">1 z 3 lekcji ukończone (33%)</span>
+        </div>
+
+        <div class="lesson-cards-column">
+            <div class="lesson-card-item completed">
+                <div class="lesson-number completed">✓</div>
+                <div class="lesson-card-content">
+                    <h3 class="lesson-card-title">Wprowadzenie do PPE Milwaukee</h3>
+                    <p class="lesson-card-desc">Poznaj pełną gamę środków ochrony osobistej Milwaukee - od kasków po rękawice.</p>
+                    <div class="lesson-card-meta">
+                        <span>⏱️ 15 min</span>
+                        <span>📄 4 karty</span>
+                        <span>⭐ +100 XP</span>
+                    </div>
+                </div>
+                <span class="lesson-card-status completed">✅ Ukończone</span>
+            </div>
+
+            <div class="lesson-card-item current">
+                <div class="lesson-number">2</div>
+                <div class="lesson-card-content">
+                    <h3 class="lesson-card-title">Dobór Właściwego Momentu Obrotowego</h3>
+                    <p class="lesson-card-desc">Naucz się dopasowywać klucze Milwaukee do konkretnych zastosowań w warsztatach samochodowych.</p>
+                    <div class="lesson-card-meta">
+                        <span>⏱️ 20 min</span>
+                        <span>📄 6 kart</span>
+                        <span>⭐ +150 XP</span>
+                    </div>
+                </div>
+                <span class="lesson-card-status current">🔵 W trakcie</span>
+            </div>
+
+            <div class="lesson-card-item">
+                <div class="lesson-number">3</div>
+                <div class="lesson-card-content">
+                    <h3 class="lesson-card-title">Zamykanie Transakcji PPE</h3>
+                    <p class="lesson-card-desc">Techniki finalizacji sprzedaży produktów PPE, obiekcje klientów i negocjacje.</p>
+                    <div class="lesson-card-meta">
+                        <span>⏱️ 10 min</span>
+                        <span>📄 5 kart</span>
+                        <span>⭐ +200 XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="start-btn">▶️ Kontynuuj ścieżkę</button>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- WARIANT C: Timeline/Stepper -->
+    <!-- ============================================ -->
+    <div id="variant-c" class="variant">
+        <p class="variant-label">Wizualna oś czasu z krokami</p>
+        
+        <div class="path-header">
+            <span class="path-badge">🎓 Ścieżka edukacyjna</span>
+            <h1 class="path-title">Milwaukee PPE Sales Mastery</h1>
+            <p class="path-description">
+                Kompletna ścieżka sprzedaży środków ochrony osobistej Milwaukee. 
+                Od podstaw produktowych po zaawansowane techniki zamykania transakcji.
+            </p>
+            <div class="path-meta">
+                <span>📚 3 lekcje</span>
+                <span>⏱️ ~45 min</span>
+                <span>⭐ +450 XP</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 33%"></div>
+            </div>
+            <span class="progress-text">1 z 3 lekcji ukończone (33%)</span>
+            <button class="start-btn">▶️ Kontynuuj ścieżkę</button>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot completed">✓</div>
+                <div class="timeline-content completed">
+                    <h3 class="timeline-title">
+                        Wprowadzenie do PPE Milwaukee
+                        <span class="status-tag completed">✅ Ukończone</span>
+                    </h3>
+                    <p class="timeline-desc">Poznaj pełną gamę środków ochrony osobistej Milwaukee - od kasków po rękawice.</p>
+                    <div class="timeline-meta">
+                        <span>⏱️ 15 min</span>
+                        <span>📄 4 karty</span>
+                        <span>⭐ +100 XP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot current">2</div>
+                <div class="timeline-content current">
+                    <h3 class="timeline-title">
+                        Dobór Właściwego Momentu Obrotowego
+                        <span class="status-tag current">W trakcie</span>
+                    </h3>
+                    <p class="timeline-desc">Naucz się dopasowywać klucze Milwaukee do konkretnych zastosowań w warsztatach samochodowych.</p>
+                    <div class="timeline-meta">
+                        <span>⏱️ 20 min</span>
+                        <span>📄 6 kart</span>
+                        <span>⭐ +150 XP</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot">3</div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Zamykanie Transakcji PPE</h3>
+                    <p class="timeline-desc">Techniki finalizacji sprzedaży produktów PPE, obiekcje klientów i negocjacje.</p>
+                    <div class="timeline-meta">
+                        <span>⏱️ 10 min</span>
+                        <span>📄 5 kart</span>
+                        <span>⭐ +200 XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showVariant(variant) {
+            // Hide all variants
+            document.querySelectorAll('.variant').forEach(v => v.classList.remove('active'));
+            // Deactivate all buttons
+            document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+            
+            // Show selected variant
+            document.getElementById('variant-' + variant).classList.add('active');
+            // Activate button
+            event.target.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>

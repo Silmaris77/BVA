@@ -1,0 +1,4212 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milwaukee Lesson 2: Value Selling - ROI & TCO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            color: #212121;
+            line-height: 1.6;
+        }
+
+        .lesson-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Header */
+        .lesson-header {
+            background: linear-gradient(135deg, #D32F2F 0%, #C62828 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(211, 47, 47, 0.3);
+        }
+
+        .lesson-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .lesson-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 20px;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .meta-item {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #E0E0E0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #D32F2F 0%, #F44336 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .xp-badge {
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: 700;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .card.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-number {
+            color: #D32F2F;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #212121;
+            margin-bottom: 25px;
+        }
+
+        .card-content {
+            margin-bottom: 30px;
+        }
+
+        /* Video embed */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin-bottom: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Checkbox with label */
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: #F5F5F5;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .checkbox-item:hover {
+            background: #EEEEEE;
+            border-color: #D32F2F;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #D32F2F;
+        }
+
+        .checkbox-item label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .checkbox-success {
+            color: #4CAF50;
+            font-weight: 600;
+            margin-left: 10px;
+            display: none;
+        }
+
+        .checkbox-success.show {
+            display: inline;
+        }
+
+        /* Textarea */
+        .reflection-box {
+            margin-top: 25px;
+        }
+
+        .reflection-box label {
+            display: block;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .reflection-box textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #BDBDBD;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .reflection-box textarea:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        .reflection-hint {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* Insight box */
+        .insight-box {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid #1976D2;
+            margin-top: 25px;
+        }
+
+        .insight-box h4 {
+            color: #1565C0;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insight-box p {
+            color: #0D47A1;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .insight-box strong {
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        /* Key points list */
+        .key-points {
+            background: #FFF3E0;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 6px solid #FF9800;
+        }
+
+        .key-points h4 {
+            color: #E65100;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-points li {
+            padding: 10px 0;
+            padding-left: 35px;
+            position: relative;
+            color: #E65100;
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        .key-points li::before {
+            content: "💰";
+            position: absolute;
+            left: 0;
+            font-size: 1.3rem;
+        }
+
+        /* Navigation */
+        .card-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+        }
+
+        .nav-button {
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev {
+            background: #BDBDBD;
+            color: white;
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: #9E9E9E;
+            transform: translateX(-5px);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #D32F2F 0%, #C62828 100%);
+            color: white;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Save button */
+        .btn-save {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: block;
+            margin: 25px auto;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Success/Error messages */
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 600;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #C8E6C9;
+            color: #2E7D32;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .message.error {
+            background: #FFCDD2;
+            color: #C62828;
+            border-left: 4px solid #F44336;
+        }
+
+        /* Badge Overlay */
+        .badge-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .badge-overlay.show {
+            display: flex;
+        }
+
+        .badge-content {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .badge-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .badge-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #D32F2F;
+            margin-bottom: 10px;
+        }
+
+        .badge-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .badge-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            gap: 20px;
+        }
+
+        .badge-stats div {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .badge-stats strong {
+            color: #D32F2F;
+            font-size: 1.5rem;
+        }
+
+        /* TCO Comparison Table (Card 2) */
+        .tco-table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tco-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .tco-table thead {
+            background: linear-gradient(135deg, #D32F2F 0%, #C62828 100%);
+            color: white;
+        }
+
+        .tco-table th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .tco-table td {
+            padding: 15px;
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 1rem;
+        }
+
+        .tco-table tr:hover {
+            background: #F5F5F5;
+        }
+
+        .tco-table .category-cell {
+            font-weight: 700;
+            color: #212121;
+            background: #FAFAFA;
+        }
+
+        .tco-table .competitor-cell {
+            color: #666;
+        }
+
+        .tco-table .milwaukee-cell {
+            color: #D32F2F;
+            font-weight: 600;
+        }
+
+        .tco-table .total-row {
+            background: #FFF3E0;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .tco-table .winner-cell {
+            background: #C8E6C9;
+            color: #2E7D32;
+            font-weight: 700;
+        }
+
+        .tco-table .savings-row {
+            background: #E8F5E9;
+            font-weight: 700;
+            color: #2E7D32;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 2px dotted #D32F2F;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #212121;
+            color: white;
+            text-align: left;
+            border-radius: 8px;
+            padding: 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Iceberg diagram */
+        .iceberg-diagram {
+            background: linear-gradient(180deg, #E3F2FD 0%, #1976D2 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .iceberg-visible {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .iceberg-visible h4 {
+            color: #1976D2;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .iceberg-hidden {
+            padding: 20px;
+            color: white;
+        }
+
+        .iceberg-hidden h4 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .iceberg-hidden ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .iceberg-hidden li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .iceberg-hidden li::before {
+            content: "❄️";
+            position: absolute;
+            left: 0;
+        }
+
+        /* ROI Calculator (Card 3) */
+        .calculator-container {
+            background: #FAFAFA;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .calc-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calc-field label {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calc-field input {
+            padding: 12px 15px;
+            border: 2px solid #BDBDBD;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .calc-field input:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        .calc-field .field-hint {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .calc-results {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .calc-results.show {
+            display: block;
+        }
+
+        .calc-results h3 {
+            color: #2E7D32;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .result-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2E7D32;
+        }
+
+        .result-unit {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chart-placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Value Proposition Canvas (Card 4) */
+        .canvas-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .canvas-column {
+            background: #FAFAFA;
+            padding: 25px;
+            border-radius: 12px;
+            border: 3px solid #E0E0E0;
+        }
+
+        .canvas-column.pains {
+            border-color: #F44336;
+        }
+
+        .canvas-column.gains {
+            border-color: #4CAF50;
+        }
+
+        .canvas-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .canvas-column.pains h3 {
+            color: #D32F2F;
+        }
+
+        .canvas-column.gains h3 {
+            color: #2E7D32;
+        }
+
+        .canvas-field {
+            margin-bottom: 20px;
+        }
+
+        .canvas-field label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 1.05rem;
+        }
+
+        .canvas-field textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #BDBDBD;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .canvas-field textarea:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        .canvas-hint {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .canvas-examples {
+            background: #E3F2FD;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .canvas-examples h4 {
+            color: #1976D2;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .canvas-dropdown {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #BDBDBD;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            cursor: pointer;
+            background: white;
+        }
+
+        /* Case Study Timeline (Card 5) */
+        .timeline-container {
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-left: 4px solid #D32F2F;
+        }
+
+        .timeline-item:last-child {
+            border-left-color: transparent;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -15px;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #D32F2F 0%, #C62828 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+        }
+
+        .timeline-month {
+            font-size: 0.9rem;
+            color: #D32F2F;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-content {
+            background: #F5F5F5;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.7;
+        }
+
+        .timeline-content strong {
+            color: #D32F2F;
+        }
+
+        .timeline-quote {
+            background: #FFF3E0;
+            border-left: 4px solid #FF9800;
+            padding: 15px;
+            margin-top: 15px;
+            font-style: italic;
+            color: #E65100;
+        }
+
+        .reflection-questions {
+            background: #E8F5E9;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .reflection-questions h4 {
+            color: #2E7D32;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .reflection-question {
+            margin-bottom: 25px;
+        }
+
+        .reflection-question label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1B5E20;
+            font-size: 1.05rem;
+        }
+
+        .reflection-question textarea {
+            width: 100%;
+            min-height: 90px;
+            padding: 15px;
+            border: 2px solid #81C784;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .reflection-question textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            color: #F57C00;
+        }
+
+        .char-count.valid {
+            color: #4CAF50;
+        }
+
+        /* Quiz (Card 6) */
+        .quiz-container {
+            margin: 30px 0;
+        }
+
+        .quiz-question {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 2px solid #E0E0E0;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-question.answered {
+            border-color: #D32F2F;
+        }
+
+        .question-number {
+            color: #D32F2F;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .question-scenario {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.7;
+            background: #F5F5F5;
+            padding: 15px;
+            border-radius: 8px;
+            font-style: italic;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #212121;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            padding: 15px 20px;
+            border: 2px solid #BDBDBD;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .quiz-option:hover:not(.selected):not(.disabled) {
+            border-color: #D32F2F;
+            background: #FFEBEE;
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            border-color: #D32F2F;
+            background: #FFEBEE;
+        }
+
+        .quiz-option.correct {
+            border-color: #4CAF50;
+            background: #C8E6C9;
+            font-weight: 600;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #F44336;
+            background: #FFCDD2;
+        }
+
+        .quiz-option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-label {
+            font-weight: 700;
+            color: #D32F2F;
+            margin-right: 10px;
+        }
+
+        .option-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .option-feedback.show {
+            display: block;
+        }
+
+        .option-feedback.correct-feedback {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .option-feedback.incorrect-feedback {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .quiz-score {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .quiz-score.show {
+            display: block;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2E7D32;
+            margin: 15px 0;
+        }
+
+        .score-interpretation {
+            font-size: 1.2rem;
+            color: #1B5E20;
+            margin-top: 15px;
+        }
+
+        /* Flashcards (Card 7) */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .flashcard {
+            position: relative;
+            height: 350px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #D32F2F 0%, #C62828 100%);
+            color: white;
+            align-items: center;
+            text-align: center;
+        }
+
+        .flashcard-front .objection-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .flashcard-front .objection-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .flashcard-back {
+            background: white;
+            color: #212121;
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+
+        .flashcard-back h4 {
+            color: #D32F2F;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            margin-top: 15px;
+        }
+
+        .flashcard-back h4:first-child {
+            margin-top: 0;
+        }
+
+        .flashcard-back p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .flashcard-back strong {
+            color: #2E7D32;
+            font-weight: 700;
+        }
+
+        .flashcard-back .dont-say {
+            color: #F44336;
+            font-style: italic;
+        }
+
+        .flashcard-progress {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #D32F2F;
+            margin: 25px 0;
+        }
+
+        .flashcard-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-flashcard {
+            background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-flashcard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+        }
+
+        /* Competitive Matrix (Card 8) */
+        .matrix-container {
+            margin: 30px 0;
+        }
+
+        .matrix-example-selector {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .matrix-example-selector label {
+            font-weight: 600;
+            margin-right: 15px;
+            color: #212121;
+        }
+
+        .matrix-example-selector select {
+            padding: 8px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .competitive-matrix {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .competitive-matrix th {
+            background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .competitive-matrix th:first-child {
+            text-align: left;
+            width: 30%;
+        }
+
+        .competitive-matrix td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .competitive-matrix td:first-child {
+            text-align: left;
+            font-weight: 600;
+            background: #fafafa;
+        }
+
+        .competitive-matrix select {
+            width: 100%;
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .competitive-matrix input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .matrix-score-row {
+            background: #FFF3E0 !important;
+            font-weight: bold;
+        }
+
+        .matrix-score-row td {
+            font-size: 1.1rem;
+            color: #D32F2F;
+        }
+
+        .differentiation-output {
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-left: 4px solid #4CAF50;
+            border-radius: 8px;
+        }
+
+        .differentiation-output h4 {
+            margin-top: 0;
+            color: #2E7D32;
+            font-size: 1.2rem;
+        }
+
+        .differentiation-output p {
+            margin: 10px 0 0 0;
+            line-height: 1.6;
+            font-size: 1.05rem;
+            color: #1B5E20;
+        }
+
+        /* Elevator Pitch Builder (Card 9) */
+        .pitch-builder {
+            margin: 30px 0;
+        }
+
+        .pitch-field {
+            margin-bottom: 25px;
+        }
+
+        .pitch-field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #212121;
+        }
+
+        .pitch-field input,
+        .pitch-field select,
+        .pitch-field textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .pitch-field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .pitch-field input:focus,
+        .pitch-field select:focus,
+        .pitch-field textarea:focus {
+            outline: none;
+            border-color: #D32F2F;
+        }
+
+        .pitch-preview {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            border-left: 4px solid #FF9800;
+            border-radius: 8px;
+        }
+
+        .pitch-preview h4 {
+            margin-top: 0;
+            color: #E65100;
+            font-size: 1.2rem;
+        }
+
+        .pitch-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #212121;
+            margin: 15px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .pitch-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .pitch-stat {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .pitch-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #D32F2F;
+        }
+
+        .pitch-stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .pitch-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .pitch-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pitch-actions button:first-child {
+            background: #D32F2F;
+            color: white;
+        }
+
+        .pitch-actions button:not(:first-child) {
+            background: #2196F3;
+            color: white;
+        }
+
+        .pitch-actions button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .pitch-actions button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Summary Card (Card 10) */
+        .summary-container {
+            margin: 30px 0;
+        }
+
+        .learning-checklist {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .learning-checklist h3 {
+            color: #2E7D32;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .checklist-items {
+            display: grid;
+            gap: 15px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .checklist-item .check-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: #4CAF50;
+        }
+
+        .checklist-item .check-text {
+            font-size: 1.05rem;
+            color: #212121;
+            font-weight: 500;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #D32F2F;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .badge-reveal-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .badge-reveal-btn {
+            background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);
+            color: white;
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+            transition: all 0.3s;
+        }
+
+        .badge-reveal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(211, 47, 47, 0.6);
+        }
+
+        .next-lesson-cta {
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .next-lesson-cta h4 {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .next-lesson-cta button {
+            background: #ccc;
+            color: #666;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+
+            .nav-button {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+
+            .lesson-meta {
+                gap: 15px;
+            }
+
+            .badge-content {
+                width: 90%;
+                padding: 30px;
+            }
+
+            .badge-icon {
+                font-size: 4rem;
+            }
+
+            .badge-title {
+                font-size: 1.8rem;
+            }
+
+            .tco-table {
+                font-size: 0.85rem;
+            }
+
+            .tco-table th,
+            .tco-table td {
+                padding: 10px 8px;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-value {
+                font-size: 1.5rem;
+            }
+
+            .iceberg-diagram {
+                padding: 20px;
+            }
+
+            .canvas-container {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                padding-left: 35px;
+            }
+
+            .timeline-marker {
+                width: 25px;
+                height: 25px;
+                left: -12px;
+                font-size: 0.8rem;
+            }
+
+            .quiz-question {
+                padding: 20px;
+            }
+
+            .question-scenario {
+                font-size: 1rem;
+            }
+
+            .quiz-option {
+                padding: 12px 15px;
+                font-size: 0.95rem;
+            }
+
+            .score-display {
+                font-size: 2.5rem;
+            }
+
+            .flashcard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flashcard {
+                height: 300px;
+            }
+
+            .flashcard-front .objection-icon {
+                font-size: 2.5rem;
+            }
+
+            .flashcard-front .objection-title {
+                font-size: 1.2rem;
+            }
+
+            .flashcard-back {
+                padding: 20px;
+                font-size: 0.9rem;
+            }
+
+            .flashcard-buttons {
+                flex-direction: column;
+            }
+
+            .competitive-matrix {
+                font-size: 0.85rem;
+            }
+
+            .competitive-matrix th,
+            .competitive-matrix td {
+                padding: 8px 5px;
+            }
+
+            .pitch-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .pitch-actions {
+                flex-direction: column;
+            }
+
+            .summary-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .badge-reveal-btn {
+                padding: 15px 30px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <!-- Header -->
+        <div class="lesson-header">
+            <h1 class="lesson-title">💰 Lekcja 2: Value Selling - ROI & TCO</h1>
+            <p class="lesson-subtitle">Jak kwantyfikować wartość Milwaukee i sprzedawać ROI zamiast ceny</p>
+            <div class="lesson-meta">
+                <div class="meta-item">⏱️ Czas: ~70 min</div>
+                <div class="meta-item">🎯 XP Total: 95</div>
+                <div class="meta-item">🏆 Badge: Value Architect</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-info">
+                <span id="progressText">Karta 0 z 10</span>
+                <span class="xp-badge" id="xpBadge">⭐ 0 XP</span>
+            </div>
+        </div>
+
+        <!-- KARTA 1: Video - Value vs. Price -->
+        <div class="card active" data-card="1">
+            <div class="card-number">Karta 1 z 10</div>
+            <span class="card-icon">🎥</span>
+            <h2 class="card-title">Value vs. Price - Dlaczego przemysł nie kupuje najtaniej?</h2>
+            
+            <div class="card-content">
+                <div class="video-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+                <div class="key-points">
+                    <h4>📊 Kluczowe insights z video (8 min):</h4>
+                    <ul>
+                        <li><strong>Case VW Poznań</strong>: Wybrali Milwaukee mimo 40% wyższej ceny (+40 000 PLN)</li>
+                        <li><strong>TCO breakdown</strong>: Narzędzie 2000 PLN → oszczędności 50 000 PLN/rok</li>
+                        <li><strong>Psychologia CFO</strong>: Decyzje na podstawie 3-letniego TCO, nie ceny katalogowej</li>
+                        <li><strong>Downtime = hidden cost</strong>: 1h przestoju linii = 500-2000 PLN straty</li>
+                        <li><strong>Twoja rola KAM</strong>: Pomóż CFO policzyć ROI, nie sprzedawaj narzędzia</li>
+                    </ul>
+                </div>
+
+                <div class="checkbox-item" onclick="toggleVideoCheckbox()">
+                    <input type="checkbox" id="videoCheck">
+                    <label for="videoCheck">Obejrzałem całe video (8 min)</label>
+                    <span class="checkbox-success" id="videoSuccess">✅ +5 XP</span>
+                </div>
+
+                <div class="reflection-box">
+                    <label for="reflectionVideo">💭 Reflection (opcjonalne):</label>
+                    <textarea 
+                        id="reflectionVideo" 
+                        placeholder="Dlaczego Twój klient miałby zapłacić więcej za Milwaukee? Co go przekona: ergonomia, żywotność, downtime, ROI?"
+                        oninput="autoSaveReflection()"></textarea>
+                    <p class="reflection-hint">Nie ma dobrej lub złej odpowiedzi - to Twoje przemyślenia</p>
+                </div>
+
+                <div class="insight-box">
+                    <h4>💡 Key Insight</h4>
+                    <p>W przemyśle decyzje są podejmowane na podstawie <strong>Total Cost of Ownership</strong>, nie ceny zakupu. 
+                    Twoja rola: pomóc CFO policzyć ROI. <strong>Sprzedajesz oszczędności, nie narzędzia.</strong></p>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()" disabled>← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- KARTA 2: TCO Framework - Koszt ukryty -->
+        <div class="card" data-card="2">
+            <div class="card-number">Karta 2 z 10</div>
+            <span class="card-icon">📊</span>
+            <h2 class="card-title">TCO Framework - Koszt ukryty</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.1rem; margin-bottom: 25px; color: #555;">
+                    <strong>Total Cost of Ownership</strong> to całkowity koszt posiadania narzędzia przez 3-5 lat. 
+                    Cena zakupu to tylko wierzchołek góry lodowej.
+                </p>
+
+                <div class="iceberg-diagram">
+                    <div class="iceberg-visible">
+                        <h4>🔼 Cena zakupu: 5% TCO</h4>
+                        <p style="font-size: 1.2rem; color: #1976D2; font-weight: 700;">To widzisz w ofercie</p>
+                    </div>
+                    <div class="iceberg-hidden">
+                        <h4>❄️ Koszty ukryte: 95% TCO</h4>
+                        <ul>
+                            <li><strong>Downtime</strong> - przestój linii produkcyjnej</li>
+                            <li><strong>Serwis</strong> - naprawy, części zamienne</li>
+                            <li><strong>Szkolenia</strong> - onboarding nowych operatorów</li>
+                            <li><strong>Rotacja</strong> - frustracja → utrata pracowników</li>
+                            <li><strong>Utrata produktywności</strong> - wolniejsza praca</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="margin: 30px 0 20px 0; font-size: 1.5rem; color: #D32F2F;">
+                    Porównanie: Bosch (tani) vs. Milwaukee (wartość)
+                </h3>
+
+                <div class="tco-table-container">
+                    <table class="tco-table">
+                        <thead>
+                            <tr>
+                                <th>Kategoria</th>
+                                <th>Bosch (tani)</th>
+                                <th>Milwaukee (wartość)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="category-cell">Cena zakupu</td>
+                                <td class="competitor-cell">1 200 PLN</td>
+                                <td class="milwaukee-cell">2 000 PLN (+67%)</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Żywotność</td>
+                                <td class="competitor-cell">2 lata</td>
+                                <td class="milwaukee-cell">5 lat</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"><span class="tooltip">Downtime<span class="tooltiptext">Czas przestoju linii produkcyjnej. W automotive: 500-2000 PLN/h straty.</span></span></td>
+                                <td class="competitor-cell">8h/rok</td>
+                                <td class="milwaukee-cell">2h/rok (-75%)</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Koszt downtime</td>
+                                <td class="competitor-cell">8h × 500 PLN/h = <strong>4 000 PLN/rok</strong></td>
+                                <td class="milwaukee-cell">2h × 500 PLN/h = <strong>1 000 PLN/rok</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Serwis</td>
+                                <td class="competitor-cell">3× po 300 PLN = <strong>900 PLN/rok</strong></td>
+                                <td class="milwaukee-cell">1× po 200 PLN = <strong>200 PLN/rok</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell"><span class="tooltip">Rotacja<span class="tooltiptext">Koszt rekrutacji + szkolenia nowego operatora: 50 000-80 000 PLN</span></span> operatorów</td>
+                                <td class="competitor-cell">25% (frustracja)</td>
+                                <td class="milwaukee-cell">10% (ergonomia)</td>
+                            </tr>
+                            <tr>
+                                <td class="category-cell">Koszt rotacji</td>
+                                <td class="competitor-cell">15% × 60 000 PLN = <strong>9 000 PLN/rok</strong></td>
+                                <td class="milwaukee-cell">0% = <strong>0 PLN</strong></td>
+                            </tr>
+                            <tr class="total-row">
+                                <td class="category-cell">TCO 3 lata</td>
+                                <td class="competitor-cell"><strong>43 100 PLN</strong></td>
+                                <td class="winner-cell"><strong>23 600 PLN</strong> ✅</td>
+                            </tr>
+                            <tr class="savings-row">
+                                <td class="category-cell">Oszczędność</td>
+                                <td class="competitor-cell">-</td>
+                                <td class="milwaukee-cell"><strong>-45% (19 500 PLN)</strong> 💰</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="insight-box">
+                    <h4>💡 Kluczowy insight dla KAM</h4>
+                    <p>
+                        <strong>Nie sprzedajesz wkrętarki za 2000 PLN.</strong><br>
+                        Sprzedajesz <strong>oszczędność 19 500 PLN w ciągu 3 lat</strong>. 
+                        CFO nie myśli o cenie zakupu - myśli o <strong>Total Cost of Ownership</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- KARTA 3: ROI Calculator Interactive -->
+        <div class="card" data-card="3">
+            <div class="card-number">Karta 3 z 10</div>
+            <span class="card-icon">🧮</span>
+            <h2 class="card-title">ROI Calculator - Policz oszczędności dla swojego klienta</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.1rem; margin-bottom: 25px; color: #555;">
+                    Wypełnij dane Twojego klienta - kalkulator automatycznie obliczy <strong>ROI, payback period</strong> i <strong>3-letni TCO</strong>.
+                </p>
+
+                <div class="calculator-container">
+                    <div class="calculator-grid">
+                        <div class="calc-field">
+                            <label>
+                                🔢 Liczba narzędzi
+                                <span class="tooltip">ℹ️<span class="tooltiptext">Ile wkrętarek/narzędzi klient chce kupić?</span></span>
+                            </label>
+                            <input type="number" id="toolCount" placeholder="np. 50" min="1" oninput="calculateROI()">
+                        </div>
+
+                        <div class="calc-field">
+                            <label>💶 Cena konkurencji (PLN/szt)</label>
+                            <input type="number" id="competitorPrice" placeholder="np. 1200" min="0" oninput="calculateROI()">
+                        </div>
+
+                        <div class="calc-field">
+                            <label>💰 Cena Milwaukee (PLN/szt)</label>
+                            <input type="number" id="milwaukeePrice" placeholder="np. 2000" min="0" oninput="calculateROI()">
+                        </div>
+
+                        <div class="calc-field">
+                            <label>⏳ Żywotność konkurencji (lata)</label>
+                            <input type="number" id="competitorLifespan" placeholder="np. 2" min="1" max="10" oninput="calculateROI()">
+                        </div>
+
+                        <div class="calc-field">
+                            <label>⏳ Żywotność Milwaukee (lata)</label>
+                            <input type="number" id="milwaukeeLifespan" placeholder="np. 5" min="1" max="10" oninput="calculateROI()">
+                        </div>
+
+                        <div class="calc-field">
+                            <label>⚠️ Downtime konkurencji (h/rok)</label>
+                            <input type="number" id="competitorDowntime" placeholder="np. 8" min="0" oninput="calculateROI()">
+                        </div>
+
+                        <div class="calc-field">
+                            <label>✅ Downtime Milwaukee (h/rok)</label>
+                            <input type="number" id="milwaukeeDowntime" placeholder="np. 2" min="0" oninput="calculateROI()">
+                        </div>
+
+                        <div class="calc-field">
+                            <label>
+                                💸 Koszt downtime (PLN/h)
+                                <span class="tooltip">ℹ️<span class="tooltiptext">Automotive: 500-2000 | Mining: 2000-5000 | Produkcja: 300-800</span></span>
+                            </label>
+                            <input type="number" id="downtimeCost" placeholder="np. 500" min="0" oninput="calculateROI()">
+                        </div>
+
+                        <div class="calc-field">
+                            <label>🔧 Koszt serwisu konkurencji (PLN/rok)</label>
+                            <input type="number" id="competitorService" placeholder="np. 900" min="0" oninput="calculateROI()">
+                        </div>
+
+                        <div class="calc-field">
+                            <label>🔧 Koszt serwisu Milwaukee (PLN/rok)</label>
+                            <input type="number" id="milwaukeeService" placeholder="np. 200" min="0" oninput="calculateROI()">
+                        </div>
+                    </div>
+
+                    <button class="btn-save" onclick="saveCalculation()">
+                        💾 Zapisz kalkulację
+                    </button>
+
+                    <div class="message success" id="calcSuccess">
+                        ✅ Kalkulacja zapisana! +15 XP
+                    </div>
+
+                    <div class="message error" id="calcError">
+                        ❌ Wypełnij wszystkie 10 pól z liczbami > 0
+                    </div>
+                </div>
+
+                <div class="calc-results" id="calcResults">
+                    <h3>📊 Wyniki kalkulacji</h3>
+                    
+                    <div class="results-grid">
+                        <div class="result-box">
+                            <div class="result-label">Różnica inwestycji</div>
+                            <div class="result-value" id="investmentDiff">0</div>
+                            <div class="result-unit">PLN</div>
+                        </div>
+
+                        <div class="result-box">
+                            <div class="result-label">Oszczędności rocznie</div>
+                            <div class="result-value" id="annualSavings">0</div>
+                            <div class="result-unit">PLN/rok</div>
+                        </div>
+
+                        <div class="result-box">
+                            <div class="result-label">Payback Period</div>
+                            <div class="result-value" id="paybackPeriod">0</div>
+                            <div class="result-unit">miesięcy</div>
+                        </div>
+
+                        <div class="result-box">
+                            <div class="result-label">3-letni ROI</div>
+                            <div class="result-value" id="roi3year">0</div>
+                            <div class="result-unit">%</div>
+                        </div>
+
+                        <div class="result-box">
+                            <div class="result-label">5-letni NPV</div>
+                            <div class="result-value" id="npv5year">0</div>
+                            <div class="result-unit">PLN</div>
+                        </div>
+
+                        <div class="result-box">
+                            <div class="result-label">TCO 3 lata (savings)</div>
+                            <div class="result-value" id="tco3year">0</div>
+                            <div class="result-unit">PLN</div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; padding: 25px; border-radius: 10px; margin-top: 25px;">
+                        <h4 style="color: #2E7D32; font-size: 1.3rem; margin-bottom: 15px;">💡 Podsumowanie dla klienta:</h4>
+                        <p id="summaryText" style="font-size: 1.1rem; line-height: 1.8; color: #333;"></p>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-placeholder">
+                            📊 W pełnej wersji: wykres TCO Year 1-3 (Bosch vs Milwaukee)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <h4>💡 Jak użyć kalkulatora w rozmowie z klientem</h4>
+                    <p>
+                        1️⃣ <strong>Discovery</strong>: Zapytaj o downtime, koszty serwisu, rotację<br>
+                        2️⃣ <strong>Wypełnij razem</strong>: Otwórz kalkulator w spotkaniu, wpisuj dane klienta<br>
+                        3️⃣ <strong>Pokazuj live results</strong>: "Widzisz? Payback w 8 miesięcy!"<br>
+                        4️⃣ <strong>Zapisz PDF</strong>: Daj CFO konkretne liczby, nie ogólniki
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- KARTA 4: Value Proposition Canvas -->
+        <div class="card" data-card="4">
+            <div class="card-number">Karta 4 z 10</div>
+            <span class="card-icon">🎯</span>
+            <h2 class="card-title">Value Proposition Canvas - Pains → Gains</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.1rem; margin-bottom: 25px; color: #555;">
+                    Framework dla KAM: <strong>rozumiesz bolączki klienta → proponujesz wartość Milwaukee</strong>. 
+                    Nie sprzedajesz narzędzia, sprzedajesz rozwiązanie konkretnego problemu.
+                </p>
+
+                <div style="margin-bottom: 25px;">
+                    <label style="font-weight: 700; margin-bottom: 10px; display: block;">
+                        📋 Wybierz profil klienta (lub wpisz custom):
+                    </label>
+                    <select class="canvas-dropdown" id="canvasExample" onchange="loadCanvasExample()">
+                        <option value="">-- Custom (puste pola) --</option>
+                        <option value="mining">⛏️ Mining (KGHM)</option>
+                        <option value="automotive">🚗 Automotive (Mahle)</option>
+                    </select>
+                </div>
+
+                <div class="canvas-container">
+                    <!-- Left Column: Customer Pains -->
+                    <div class="canvas-column pains">
+                        <h3>❌ Bolączki klienta</h3>
+                        
+                        <div class="canvas-field">
+                            <label>1️⃣ Functional pains (problemy techniczne)</label>
+                            <textarea id="painFunctional" placeholder="np. Wibracje, waga, częste awarie, słaba bateria..."
+                                oninput="autoSaveCanvas()"></textarea>
+                            <div class="canvas-hint">Min. 50 znaków - konkretne problemy operacyjne</div>
+                        </div>
+
+                        <div class="canvas-field">
+                            <label>2️⃣ Financial pains (problemy finansowe)</label>
+                            <textarea id="painFinancial" placeholder="np. Wysokie koszty serwisu, downtime 12h/miesiąc, rotacja operatorów..."
+                                oninput="autoSaveCanvas()"></textarea>
+                            <div class="canvas-hint">Min. 50 znaków - co boli CFO?</div>
+                        </div>
+
+                        <div class="canvas-field">
+                            <label>3️⃣ Emotional pains (frustracje ludzi)</label>
+                            <textarea id="painEmotional" placeholder="np. Frustracja operatorów, presja CFO na koszty, brak wsparcia serwisu..."
+                                oninput="autoSaveCanvas()"></textarea>
+                            <div class="canvas-hint">Min. 50 znaków - emocje, nie tylko fakty</div>
+                        </div>
+
+                        <div class="canvas-examples">
+                            <h4>💡 Podpowiedź:</h4>
+                            Odkrywasz pains w <strong>Discovery</strong> (Lekcja 1). Pytaj: "Co Was najbardziej frustruje?", "Ile tracicie przez downtime?"
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Milwaukee Gains -->
+                    <div class="canvas-column gains">
+                        <h3>✅ Wartość Milwaukee</h3>
+                        
+                        <div class="canvas-field">
+                            <label>4️⃣ Pain relievers (jak rozwiązujesz problem)</label>
+                            <textarea id="gainRelievers" placeholder="np. Technologia REDLINK - 0 awarii, ergonomia ONE-KEY, 5-letnia gwarancja..."
+                                oninput="autoSaveCanvas()"></textarea>
+                            <div class="canvas-hint">Min. 50 znaków - konkretne rozwiązania</div>
+                        </div>
+
+                        <div class="canvas-field">
+                            <label>5️⃣ Gain creators (co zyskują)</label>
+                            <textarea id="gainCreators" placeholder="np. Oszczędność 50k PLN/rok, ROI 180%, tracking dashboard, 24/7 support..."
+                                oninput="autoSaveCanvas()"></textarea>
+                            <div class="canvas-hint">Min. 50 znaków - wymierne korzyści</div>
+                        </div>
+
+                        <div class="canvas-field">
+                            <label>6️⃣ Value metrics (liczby, które przekonują CFO)</label>
+                            <textarea id="gainMetrics" placeholder="np. -80% downtime, -60% koszty serwisu, +30% produktywność, payback 8 miesięcy..."
+                                oninput="autoSaveCanvas()"></textarea>
+                            <div class="canvas-hint">Min. 50 znaków - konkretne metryki ROI</div>
+                        </div>
+
+                        <div class="canvas-examples" style="background: #E8F5E9;">
+                            <h4 style="color: #2E7D32;">💡 Podpowiedź:</h4>
+                            Używasz gains w <strong>Value Selling</strong> (ta lekcja). Pokazuj ROI, case studies, pilot results.
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-save" onclick="saveValueCanvas()">
+                    💾 Zapisz Value Proposition
+                </button>
+
+                <div class="message success" id="canvasSuccess">
+                    ✅ Value Proposition zapisany! +10 XP
+                </div>
+
+                <div class="message error" id="canvasError">
+                    ❌ Wypełnij wszystkie 6 pól (min. 50 znaków każde)
+                </div>
+
+                <div class="insight-box">
+                    <h4>💡 Jak użyć Value Canvas w sprzedaży</h4>
+                    <p>
+                        <strong>Przed spotkaniem</strong>: Wypełnij pains (Discovery research)<br>
+                        <strong>W spotkaniu</strong>: Prezentuj gains (ROI calculator, case study)<br>
+                        <strong>Po spotkaniu</strong>: Wyślij email z podsumowaniem: "Rozumiemy problem X (pain) → proponujemy Y (gain) → oszczędność Z PLN"
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- KARTA 5: Case Study VW Poznań -->
+        <div class="card" data-card="5">
+            <div class="card-number">Karta 5 z 10</div>
+            <span class="card-icon">📖</span>
+            <h2 class="card-title">Case Study: Ania sprzedaje do VW Poznań</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.1rem; margin-bottom: 25px; color: #555;">
+                    Jak <strong>Ania (KAM Milwaukee)</strong> przekonała <strong>Marcina (Procurement Manager VW)</strong> 
+                    do zakupu pomimo <strong>40% wyższej ceny</strong>. Strategia: <strong>ROI beats price</strong>.
+                </p>
+
+                <div class="timeline-container">
+                    <!-- M1: Discovery -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker">M1</div>
+                        <div class="timeline-month">Miesiąc 1: Discovery</div>
+                        <div class="timeline-content">
+                            <strong>Ania odkrywa pain point:</strong> 12h downtime/miesiąc z wkrętarkami pneumatycznymi.<br>
+                            Koszt: <strong>12h × 1500 PLN/h = 18 000 PLN/miesiąc</strong> straty.
+                            
+                            <div class="timeline-quote">
+                                <strong>Marcin:</strong> "Bosch jest 40% tańszy. Dlaczego mam przepłacać?"
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- M2: ROI Presentation -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker">M2</div>
+                        <div class="timeline-month">Miesiąc 2: ROI Presentation</div>
+                        <div class="timeline-content">
+                            <strong>Ania przygotowuje kalkulator ROI:</strong><br>
+                            • Inwestycja: +40 000 PLN (Milwaukee droższe)<br>
+                            • Oszczędność downtime: -144h/rok × 1500 PLN = <strong>-216 000 PLN/rok</strong><br>
+                            • Oszczędność serwisu: <strong>-12 000 PLN/rok</strong><br>
+                            • <strong style="color: #4CAF50;">Payback: 2.1 miesiąca</strong>
+                            
+                            <div class="timeline-quote">
+                                <strong>Marcin:</strong> "Nie wierzę w te liczby. Skąd wiesz, że downtime spadnie o 80%?"
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- M3: Proof of Concept -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker">M3</div>
+                        <div class="timeline-month">Miesiąc 3: Proof of Concept</div>
+                        <div class="timeline-content">
+                            <strong>Ania proponuje 2-tygodniowy pilot</strong> na 1 linii (5 wkrętarek).<br>
+                            Tracking: downtime, produktywność, feedback operatorów.<br>
+                            Koszt pilotu: <strong>0 PLN</strong> (Milwaukee pokrywa).
+                        </div>
+                    </div>
+
+                    <!-- M4: Pilot Results -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker">M4</div>
+                        <div class="timeline-month">Miesiąc 4: Pilot Results</div>
+                        <div class="timeline-content">
+                            <strong>Wyniki pilotu przekraczają obietnice:</strong><br>
+                            • Downtime: <strong style="color: #4CAF50;">-70%</strong> (lepsze niż prognoza 80%!)<br>
+                            • Produktywność: <strong style="color: #4CAF50;">+15%</strong> (bonus!)<br>
+                            • NPS operatorów: <strong style="color: #4CAF50;">9/10</strong> ("najlepsze narzędzia ever")
+                            
+                            <div class="timeline-quote">
+                                <strong>Marcin:</strong> "Impressed. Ale CFO chce 3-letni ROI ≥ 150%."
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- M5: CFO Meeting -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker">M5</div>
+                        <div class="timeline-month">Miesiąc 5: CFO Meeting</div>
+                        <div class="timeline-content">
+                            <strong>Ania prezentuje 3-letni TCO do CFO:</strong><br>
+                            • Total savings: <strong>684 000 PLN</strong> (downtime + serwis + produktywność)<br>
+                            • Investment: 120 000 PLN<br>
+                            • <strong style="color: #4CAF50; font-size: 1.2rem;">ROI: 470%</strong><br>
+                            • NPV: 520 000 PLN (dyskont 8%)
+                            
+                            <div class="timeline-quote">
+                                <strong>CFO:</strong> "Approved. Ale potrzebuję tracking KPI post-implementacji."
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- M6: Deal + Long-term Partnership -->
+                    <div class="timeline-item">
+                        <div class="timeline-marker">M6</div>
+                        <div class="timeline-month">Miesiąc 6: Deal + Partnership</div>
+                        <div class="timeline-content">
+                            <strong>Kontrakt podpisany:</strong> 120 000 PLN (60 wkrętarek + akcesoria).<br>
+                            <strong>Ania dostarcza dashboard ONE-KEY:</strong> real-time tracking downtime, utilization.<br><br>
+                            
+                            <strong>Po 6 miesiącach:</strong><br>
+                            • Downtime: <strong style="color: #4CAF50;">-75%</strong><br>
+                            • Oszczędności: <strong style="color: #4CAF50;">350 000 PLN</strong> (on track!)<br>
+                            • VW rozszerza kontrakt na 3 inne zakłady → <strong style="color: #4CAF50;">500 000 PLN deal</strong> 🎉
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reflection-questions">
+                    <h4>🤔 Reflection Questions (3 pytania, min. 60 znaków każde):</h4>
+                    
+                    <div class="reflection-question">
+                        <label>1. W którym momencie Ania przekonała Marcina do pilotu? Dlaczego to był kluczowy moment?</label>
+                        <textarea id="vwQ1" oninput="updateCharCountVW('vwQ1', 60)"></textarea>
+                        <div class="char-count" id="vwQ1Count">0/60</div>
+                    </div>
+
+                    <div class="reflection-question">
+                        <label>2. Dlaczego CFO wymagał ROI ≥150%? Co to mówi o decision criteria w automotive?</label>
+                        <textarea id="vwQ2" oninput="updateCharCountVW('vwQ2', 60)"></textarea>
+                        <div class="char-count" id="vwQ2Count">0/60</div>
+                    </div>
+
+                    <div class="reflection-question">
+                        <label>3. Jak dashboard ONE-KEY pomógł zamknąć deal i zbudować long-term partnership?</label>
+                        <textarea id="vwQ3" oninput="updateCharCountVW('vwQ3', 60)"></textarea>
+                        <div class="char-count" id="vwQ3Count">0/60</div>
+                    </div>
+
+                    <button class="btn-save" onclick="saveVWReflections()">
+                        💾 Zapisz refleksje
+                    </button>
+
+                    <div class="message success" id="vwSuccess">
+                        ✅ Refleksje zapisane! +10 XP
+                    </div>
+
+                    <div class="message error" id="vwError">
+                        ❌ Wypełnij wszystkie 3 odpowiedzi (min. 60 znaków każda)
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <h4>💡 Key Insight: Bypass Procurement, Sell to CFO</h4>
+                    <p>
+                        <strong>Procurement patrzy na cenę.</strong> CFO patrzy na ROI.<br>
+                        Strategia Ani: Nie walczyła z Marcinem o rabat. <strong>Zaprosiła CFO do rozmowy</strong> i pokazała ROI 470%.<br>
+                        <strong>Dashboard ONE-KEY</strong> nie był "nice to have" - był dowodem commitment do success klienta.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- KARTA 6: Quiz - ROI Scenarios -->
+        <div class="card" data-card="6">
+            <div class="card-number">Karta 6 z 10</div>
+            <span class="card-icon">❓</span>
+            <h2 class="card-title">Quiz: ROI Scenarios - Sprawdź swoją wiedzę</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.1rem; margin-bottom: 25px; color: #555;">
+                    12 scenariuszy sprzedażowych. Wybierz <strong>najlepszą odpowiedź</strong> w każdej sytuacji.
+                    Feedback pojawi się od razu po wyborze.
+                </p>
+
+                <div class="quiz-container" id="quizContainer">
+                    <!-- Questions will be rendered by JavaScript -->
+                </div>
+
+                <div class="quiz-score" id="quizScore">
+                    <h3 style="color: #2E7D32; font-size: 1.5rem;">Twój wynik:</h3>
+                    <div class="score-display" id="scoreDisplay">0/12</div>
+                    <div class="score-interpretation" id="scoreInterpretation"></div>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- KARTA 7: Objection Handling Flashcards -->
+        <div class="card" data-card="7">
+            <div class="card-number">Karta 7 z 10</div>
+            <span class="card-icon">🛡️</span>
+            <h2 class="card-title">Objection Handling - 6 klasycznych obiekcji</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.1rem; margin-bottom: 25px; color: #555;">
+                    Każda karta pokazuje <strong>typową obiekcję</strong> (przód) i <strong>best practice odpowiedź</strong> (tył).
+                    Kliknij kartę żeby ją obrócić.
+                </p>
+
+                <div class="flashcard-progress" id="flashcardProgress">
+                    Poznane obiekcje: 0/6
+                </div>
+
+                <div class="flashcard-grid">
+                    <!-- Flashcard 1: Za drogo -->
+                    <div class="flashcard" onclick="flipFlashcard(0)">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="objection-icon">💸</div>
+                                <div class="objection-title">"Milwaukee jest 40% droższe niż konkurencja"</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <h4>❌ NIE mów:</h4>
+                                <p class="dont-say">"Jakość kosztuje" / "Damy rabat"</p>
+                                
+                                <h4>✅ Powiedz:</h4>
+                                <p><strong>"Policzmy TCO 3-letni. Ile kosztuje Was 1h downtime? Ile razy w roku narzędzie się psuje? Zmierzmy całkowity koszt posiadania."</strong></p>
+                                
+                                <h4>🎯 Akcja:</h4>
+                                <p>Otwórz kalkulator ROI, wypełnij z klientem</p>
+                                
+                                <h4>📊 Proof:</h4>
+                                <p>Case study VW Poznań: <strong>-45% TCO mimo +40% ceny</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 2: Nie mamy budżetu -->
+                    <div class="flashcard" onclick="flipFlashcard(1)">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="objection-icon">💰</div>
+                                <div class="objection-title">"Nie mamy budżetu w tym roku"</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <h4>❌ NIE mów:</h4>
+                                <p class="dont-say">"Poczekam do przyszłego roku"</p>
+                                
+                                <h4>✅ Powiedz:</h4>
+                                <p><strong>"Rozumiem. Ile tracicie miesięcznie przez downtime? (np. 18k PLN) × 12 = 216k PLN/rok straty. Czy nie lepiej wziąć leasing 1800 PLN/miesiąc i oszczędzić 18k od razu?"</strong></p>
+                                
+                                <h4>🎯 Akcja:</h4>
+                                <p>Zaproponuj OpEx leasing (36 miesięcy) zamiast CapEx</p>
+                                
+                                <h4>📊 Proof:</h4>
+                                <p><strong>70% dealów w automotive to leasing</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 3: Nie wierzymy w savings -->
+                    <div class="flashcard" onclick="flipFlashcard(2)">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="objection-icon">🤔</div>
+                                <div class="objection-title">"Wasze liczby ROI są zbyt optymistyczne"</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <h4>❌ NIE mów:</h4>
+                                <p class="dont-say">"Nasze dane są wiarygodne"</p>
+                                
+                                <h4>✅ Powiedz:</h4>
+                                <p><strong>"Zgadzam się - nie wierzcie na słowo. Zróbmy 2-tygodniowy pilot. Zmierzymy downtime before/after. Jeśli oszczędności będą <50%, wycofam ofertę."</strong></p>
+                                
+                                <h4>🎯 Akcja:</h4>
+                                <p>No-risk PoC (0 PLN koszt pilotu)</p>
+                                
+                                <h4>📊 Proof:</h4>
+                                <p><strong>85% pilotów kończy się dealem</strong> (bo dane nie kłamią)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 4: Mamy kontrakt -->
+                    <div class="flashcard" onclick="flipFlashcard(3)">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="objection-icon">🔒</div>
+                                <div class="objection-title">"Jesteśmy związani umową z Bosch przez 2 lata"</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <h4>❌ NIE mów:</h4>
+                                <p class="dont-say">"W takim razie wrócę za 2 lata"</p>
+                                
+                                <h4>✅ Powiedz:</h4>
+                                <p><strong>"Rozumiem. Ile kosztuje Was exit clause w kontrakcie? Porównajmy z oszczędnościami Milwaukee: jeśli oszczędzicie 200k/rok, warto zapłacić 50k penalty i zmienić dostawcę już teraz."</strong></p>
+                                
+                                <h4>🎯 Akcja:</h4>
+                                <p>Kalkulacja NPV (switching cost vs. savings)</p>
+                                
+                                <h4>📊 Proof:</h4>
+                                <p>KGHM przerwał kontrakt mid-term: <strong>ROI 300% > penalty cost</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 5: CFO nie zgodzi się -->
+                    <div class="flashcard" onclick="flipFlashcard(4)">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="objection-icon">👔</div>
+                                <div class="objection-title">"Production Manager chce, ale CFO blokuje"</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <h4>❌ NIE mów:</h4>
+                                <p class="dont-say">"Przekonajcie CFO"</p>
+                                
+                                <h4>✅ Powiedz:</h4>
+                                <p><strong>"Zaprośmy CFO na 30-minutową prezentację ROI. Pokażę: payback period, NPV, risk mitigation. Jeśli nie będzie przekonany, odpuszczam."</strong></p>
+                                
+                                <h4>🎯 Akcja:</h4>
+                                <p>Direct meeting z CFO (bypass middle managers)</p>
+                                
+                                <h4>📊 Proof:</h4>
+                                <p><strong>60% dealów wymaga CFO buy-in</strong> - nie unikaj, zaproś</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flashcard 6: Competitor ma lepszą ofertę -->
+                    <div class="flashcard" onclick="flipFlashcard(5)">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="objection-icon">⚔️</div>
+                                <div class="objection-title">"DeWalt oferuje 20% rabat + darmowe szkolenie"</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <h4>❌ NIE mów:</h4>
+                                <p class="dont-say">"Damy jeszcze większy rabat"</p>
+                                
+                                <h4>✅ Powiedz:</h4>
+                                <p><strong>"Świetnie! Porównajmy total package value: DeWalt 80k + szkolenie (2k) = 82k. Milwaukee 100k + dashboard (10k value) + 5-lat gwarancja (15k value) + ROI 200k/rok = -100k investment, +200k savings. Co wybierzesz?"</strong></p>
+                                
+                                <h4>🎯 Akcja:</h4>
+                                <p>Value comparison table (nie price comparison)</p>
+                                
+                                <h4>📊 Proof:</h4>
+                                <p>Mahle wybrał Milwaukee mimo <strong>+35% ceny</strong> (total value > price)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard-buttons">
+                    <button class="btn-flashcard" onclick="markAllFlashcardsKnown()">
+                        ✅ Znam wszystkie obiekcje
+                    </button>
+                    <button class="btn-flashcard" onclick="resetFlashcards()">
+                        🔄 Przejrzyj ponownie
+                    </button>
+                </div>
+
+                <div class="message success" id="flashcardSuccess" style="margin-top: 25px;">
+                    ✅ Poznałeś wszystkie 6 obiekcji! +20 XP
+                </div>
+
+                <div class="insight-box" style="margin-top: 30px;">
+                    <h4>💡 Strategia handling objections</h4>
+                    <p>
+                        <strong>1. Acknowledge</strong> - "Rozumiem Twój punkt widzenia"<br>
+                        <strong>2. Quantify</strong> - "Policzmy razem TCO/ROI"<br>
+                        <strong>3. Prove</strong> - Case study, pilot, dashboard<br>
+                        <strong>4. Action</strong> - Konkretny next step (nie "pomyślę")
+                    </p>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 8: Competitive Matrix -->
+        <div class="card" id="card8">
+            <div class="card-header">
+                <div class="card-number">8/10</div>
+                <h2 class="card-title">🔍 Competitive Matrix</h2>
+                <p>Porównaj Milwaukee z konkurencją w 12 kryteriach. Auto-generuj value proposition.</p>
+            </div>
+
+            <div class="matrix-container">
+                <div class="matrix-example-selector">
+                    <label for="matrixExample">📋 Wybierz przykład:</label>
+                    <select id="matrixExample" onchange="loadMatrixExample()">
+                        <option value="">-- Własna analiza --</option>
+                        <option value="automotive">Automotive (Mahle)</option>
+                        <option value="custom">Pusta matryca</option>
+                    </select>
+                </div>
+
+                <table class="competitive-matrix" id="compMatrix">
+                    <thead>
+                        <tr>
+                            <th>Kryterium</th>
+                            <th style="background: linear-gradient(135deg, #D32F2F 0%, #B71C1C 100%);">Milwaukee</th>
+                            <th style="background: #2196F3;">Bosch</th>
+                            <th style="background: #FFC107; color: #212121;">DeWalt</th>
+                            <th style="background: #E53935;">Hilti</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>💰 Cena zakupu</td>
+                            <td><select class="criterion" data-row="0" data-col="0"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="0" data-col="1"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="0" data-col="2"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="0" data-col="3"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                        </tr>
+                        <tr>
+                            <td>⏳ Żywotność (lata)</td>
+                            <td><select class="criterion" data-row="1" data-col="0"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="1" data-col="1"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="1" data-col="2"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="1" data-col="3"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                        </tr>
+                        <tr>
+                            <td>🔧 Serwis 24/7</td>
+                            <td><input type="checkbox" class="feature-check" data-row="2" data-col="0"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="2" data-col="1"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="2" data-col="2"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="2" data-col="3"></td>
+                        </tr>
+                        <tr>
+                            <td>📊 Track & Trace (IoT)</td>
+                            <td><input type="checkbox" class="feature-check" data-row="3" data-col="0"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="3" data-col="1"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="3" data-col="2"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="3" data-col="3"></td>
+                        </tr>
+                        <tr>
+                            <td>⚡ Ergonomia / Waga</td>
+                            <td><select class="criterion" data-row="4" data-col="0"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="4" data-col="1"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="4" data-col="2"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="4" data-col="3"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                        </tr>
+                        <tr>
+                            <td>🎓 Szkolenia techniczne</td>
+                            <td><input type="checkbox" class="feature-check" data-row="5" data-col="0"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="5" data-col="1"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="5" data-col="2"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="5" data-col="3"></td>
+                        </tr>
+                        <tr>
+                            <td>🔥 ATEX (Ex zones)</td>
+                            <td><input type="checkbox" class="feature-check" data-row="6" data-col="0"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="6" data-col="1"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="6" data-col="2"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="6" data-col="3"></td>
+                        </tr>
+                        <tr>
+                            <td>🔋 Ecosystem (baterie)</td>
+                            <td><select class="criterion" data-row="7" data-col="0"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="7" data-col="1"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="7" data-col="2"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="7" data-col="3"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                        </tr>
+                        <tr>
+                            <td>💼 Leasing OpEx</td>
+                            <td><input type="checkbox" class="feature-check" data-row="8" data-col="0"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="8" data-col="1"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="8" data-col="2"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="8" data-col="3"></td>
+                        </tr>
+                        <tr>
+                            <td>📈 ROI dokumentowany</td>
+                            <td><input type="checkbox" class="feature-check" data-row="9" data-col="0"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="9" data-col="1"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="9" data-col="2"></td>
+                            <td><input type="checkbox" class="feature-check" data-row="9" data-col="3"></td>
+                        </tr>
+                        <tr>
+                            <td>⚙️ Downtime średni (%)</td>
+                            <td><select class="criterion" data-row="10" data-col="0"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="10" data-col="1"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="10" data-col="2"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="10" data-col="3"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                        </tr>
+                        <tr>
+                            <td>🛡️ Gwarancja (lata)</td>
+                            <td><select class="criterion" data-row="11" data-col="0"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="11" data-col="1"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="11" data-col="2"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                            <td><select class="criterion" data-row="11" data-col="3"><option value="0">--</option><option value="1">++</option><option value="0.5">+</option><option value="-0.5">-</option><option value="-1">- -</option></select></td>
+                        </tr>
+                        <tr class="matrix-score-row">
+                            <td>⭐ TOTAL SCORE</td>
+                            <td id="score-0">0</td>
+                            <td id="score-1">0</td>
+                            <td id="score-2">0</td>
+                            <td id="score-3">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="differentiation-output" id="differentiationOutput">
+                    <h4>🎯 Auto-generated Value Proposition:</h4>
+                    <p id="diffStatement">Wypełnij matrycę aby zobaczyć auto-generowaną value proposition...</p>
+                </div>
+
+                <button class="save-btn" onclick="saveCompetitiveMatrix()">Zapisz analizę konkurencji (+10 XP)</button>
+                <div class="success-message" id="matrixSuccess">✅ Analiza konkurencji zapisana! +10 XP</div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 9: Elevator Pitch Builder -->
+        <div class="card" id="card9">
+            <div class="card-header">
+                <div class="card-number">9/10</div>
+                <h2 class="card-title">🎤 Elevator Pitch Builder</h2>
+                <p>Zbuduj ROI-focused pitch w 25 sekund. Mad Libs + live preview.</p>
+            </div>
+
+            <div class="pitch-builder">
+                <div class="pitch-field">
+                    <label for="pitchPain">1. Pain Point (konkretny problem):</label>
+                    <select id="pitchPain" oninput="updatePitchPreview()">
+                        <option value="">-- Wybierz --</option>
+                        <option value="downtime">Downtime production</option>
+                        <option value="rotacja">Rotacja pracowników (utrata narzędzi)</option>
+                        <option value="jakość">Jakość wykonania (precision)</option>
+                        <option value="bezpieczeństwo">Bezpieczeństwo (wypadki)</option>
+                        <option value="koszty-serwisu">Koszty serwisu</option>
+                    </select>
+                </div>
+
+                <div class="pitch-field">
+                    <label for="pitchCost">2. Kwota straty rocznie (PLN):</label>
+                    <input type="number" id="pitchCost" placeholder="np. 216000" oninput="updatePitchPreview()">
+                </div>
+
+                <div class="pitch-field">
+                    <label for="pitchRootCause">3. Root Cause (1 zdanie - dlaczego ten problem występuje?):</label>
+                    <textarea id="pitchRootCause" placeholder="np. Awarie narzędzi konkurencji powodują 12h przestoju miesięcznie..." oninput="updatePitchPreview()"></textarea>
+                </div>
+
+                <div class="pitch-field">
+                    <label for="pitchSolution">4. Rozwiązanie Milwaukee (feature/tech):</label>
+                    <select id="pitchSolution" oninput="updatePitchPreview()">
+                        <option value="">-- Wybierz --</option>
+                        <option value="REDLINK">REDLINK (elektroniczna ochrona)</option>
+                        <option value="ONE-KEY">ONE-KEY (tracking & diagnostics)</option>
+                        <option value="żywotność">5-letnia żywotność vs. 2 lata konkurencja</option>
+                        <option value="ergonomia">Ergonomia (-40% wibracji, -30% waga)</option>
+                        <option value="ATEX">Certyfikacja ATEX (Ex zones)</option>
+                    </select>
+                </div>
+
+                <div class="pitch-field">
+                    <label for="pitchOutcome">5. Measurable Outcome (co się zmieni? liczby!):</label>
+                    <input type="text" id="pitchOutcome" placeholder="np. -70% downtime, +15% produktywność" oninput="updatePitchPreview()">
+                </div>
+
+                <div class="pitch-field">
+                    <label for="pitchCase">6. Case Study (social proof):</label>
+                    <select id="pitchCase" oninput="updatePitchPreview()">
+                        <option value="">-- Wybierz --</option>
+                        <option value="VW Poznań osiągnął">VW Poznań</option>
+                        <option value="KGHM Lubin osiągnął">KGHM Lubin</option>
+                        <option value="Mahle Krotoszyn osiągnął">Mahle Krotoszyn</option>
+                        <option value="Podobny klient automotive osiągnął">Automotive (anonimowy)</option>
+                    </select>
+                </div>
+
+                <div class="pitch-field">
+                    <label for="pitchROI">7. ROI Number (% lub kwota oszczędności):</label>
+                    <input type="text" id="pitchROI" placeholder="np. 470% ROI lub 520k PLN oszczędności" oninput="updatePitchPreview()">
+                </div>
+
+                <div class="pitch-field">
+                    <label for="pitchTimeframe">8. Timeframe (jak szybko zwrot?):</label>
+                    <select id="pitchTimeframe" oninput="updatePitchPreview()">
+                        <option value="">-- Wybierz --</option>
+                        <option value="w 2.1 miesiąca">2-3 miesiące</option>
+                        <option value="w 6 miesięcy">6 miesięcy</option>
+                        <option value="w rok">1 rok</option>
+                        <option value="w 3 lata">3 lata</option>
+                    </select>
+                </div>
+
+                <div class="pitch-field">
+                    <label for="pitchAction">9. Proposed Action (next step - CTA):</label>
+                    <select id="pitchAction" oninput="updatePitchPreview()">
+                        <option value="">-- Wybierz --</option>
+                        <option value="Czy moglibyśmy zmierzyć przez 2-tygodniowy pilot?">2-week pilot</option>
+                        <option value="Czy mogę zaprezentować ROI calculation CFO przyszły tydzień?">CFO meeting</option>
+                        <option value="Przygotowałbym business case do board meeting w Q2?">Business case preparation</option>
+                        <option value="Czy moglibyśmy zacząć od 1 linii produkcyjnej jako PoC?">Single line PoC</option>
+                    </select>
+                </div>
+
+                <div class="pitch-preview">
+                    <h4>🎯 Twój Elevator Pitch (live preview):</h4>
+                    <div class="pitch-text" id="pitchText">
+                        Wypełnij pola powyżej aby zobaczyć live preview...
+                    </div>
+                    <div class="pitch-stats">
+                        <div class="pitch-stat">
+                            <div class="pitch-stat-value" id="pitchCharCount">0</div>
+                            <div class="pitch-stat-label">Znaków (max 600)</div>
+                        </div>
+                        <div class="pitch-stat">
+                            <div class="pitch-stat-value" id="pitchReadTime">0s</div>
+                            <div class="pitch-stat-label">Czas czytania (~25s cel)</div>
+                        </div>
+                        <div class="pitch-stat">
+                            <div class="pitch-stat-value" id="pitchCompleteness">0%</div>
+                            <div class="pitch-stat-label">Kompletność</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pitch-actions">
+                    <button onclick="savePitch()">Zapisz pitch (+15 XP)</button>
+                    <button disabled title="Coming soon">🎙️ Nagraj audio pitch</button>
+                    <button disabled title="Coming soon">📧 Wyślij emailem</button>
+                </div>
+
+                <div class="success-message" id="pitchSuccess">✅ Elevator pitch zapisany! +15 XP</div>
+
+                <div class="insight-box" style="margin-top: 25px;">
+                    <strong>💡 Insight:</strong> Elevator pitch ≠ sprzedawanie. To <strong>qualify + intrigue</strong>. 
+                    Cel: Dostać 30-min meeting z CFO. Structure: Pain (5s) → Solution (5s) → Proof (10s) → Action (5s) = 25s total.
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+                <button class="nav-button btn-next" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 10: Summary + Badge -->
+        <div class="card" id="card10">
+            <div class="card-header">
+                <div class="card-number">10/10</div>
+                <h2 class="card-title">🎓 Podsumowanie: Value Selling - ROI & TCO</h2>
+                <p>Ukończyłeś kompleksowe szkolenie z kwantyfikowania wartości i sprzedaży ROI-focused.</p>
+            </div>
+
+            <div class="summary-container">
+                <div class="learning-checklist">
+                    <h3>✅ Co opanowałeś w tej lekcji:</h3>
+                    <div class="checklist-items">
+                        <div class="checklist-item">
+                            <span class="check-icon">✅</span>
+                            <span class="check-text">Rozumiem różnicę między ceną a TCO (Total Cost of Ownership) - 3-letnia perspektywa</span>
+                        </div>
+                        <div class="checklist-item">
+                            <span class="check-icon">✅</span>
+                            <span class="check-text">Potrafię policzyć ROI, payback period i NPV (Net Present Value) z dyskontem</span>
+                        </div>
+                        <div class="checklist-item">
+                            <span class="check-icon">✅</span>
+                            <span class="check-text">Znam Value Proposition Canvas (Pains → Gains) dla Mining i Automotive</span>
+                        </div>
+                        <div class="checklist-item">
+                            <span class="check-icon">✅</span>
+                            <span class="check-text">Wiem jak przeprowadzić deal od Discovery do CFO meeting (VW case study 6 miesięcy)</span>
+                        </div>
+                        <div class="checklist-item">
+                            <span class="check-icon">✅</span>
+                            <span class="check-text">Umiem odpowiedzieć na 6 kluczowych obiekcji CFO i Procurement (flashcard framework)</span>
+                        </div>
+                        <div class="checklist-item">
+                            <span class="check-icon">✅</span>
+                            <span class="check-text">Potrafię zbudować Competitive Matrix i auto-generować Value Proposition</span>
+                        </div>
+                        <div class="checklist-item">
+                            <span class="check-icon">✅</span>
+                            <span class="check-text">Mam ROI-focused Elevator Pitch (25 sekund) do użycia w terenie</span>
+                        </div>
+                        <div class="checklist-item">
+                            <span class="check-icon">✅</span>
+                            <span class="check-text">Znam strategię: Bypass Procurement → sprzedawaj CFO przez liczby, nie features</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="finalXP">0</div>
+                        <div class="stat-label">XP Zdobyte</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">10/10</div>
+                        <div class="stat-label">Karty Ukończone</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">~70 min</div>
+                        <div class="stat-label">Czas Szkolenia</div>
+                    </div>
+                </div>
+
+                <div class="badge-reveal-section">
+                    <button class="badge-reveal-btn" onclick="revealBadge()">🏆 Pokaż mój badge Value Architect!</button>
+                </div>
+
+                <div class="next-lesson-cta">
+                    <h4>Następna lekcja:</h4>
+                    <button disabled title="Coming soon">🤝 Lekcja 3: Negotiations & Closing (wkrótce)</button>
+                </div>
+
+                <div class="insight-box" style="margin-top: 30px;">
+                    <strong>💡 Next Steps:</strong> Użyj ROI Calculator w następnej rozmowie z klientem. 
+                    Przećwicz Elevator Pitch przed lustrem (25 sekund timer). 
+                    Zbuduj Competitive Matrix dla Twojego top prospect. 
+                    <strong>Practice → Confidence → Closing deals!</strong>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">← Poprzednia</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Badge Overlay -->
+    <div class="badge-overlay" id="badgeOverlay">
+        <div class="badge-content">
+            <!-- Dynamically generated -->
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let currentCard = 1;
+        const totalCards = 10;
+        let earnedXP = 0;
+        let completedCards = new Set();
+
+        // Progress tracking
+        const cardXPValues = {
+            1: 5,   // Video
+            2: 0,   // TCO Framework - presentation only
+            3: 15,  // ROI Calculator
+            4: 10,  // Value Proposition Canvas
+            5: 10,  // Case Study VW
+            6: 15,  // Quiz ROI Scenarios
+            7: 20,  // Objection Handling Flashcards
+            8: 10,  // Competitive Matrix
+            9: 15,  // Elevator Pitch Builder
+            10: 10  // Summary + Badge
+        };
+
+        // Navigation
+        function nextCard() {
+            if (currentCard < totalCards) {
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.remove('active');
+                currentCard++;
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.add('active');
+                updateProgress();
+                updateNavigation();
+                saveProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.remove('active');
+                currentCard--;
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.add('active');
+                updateProgress();
+                updateNavigation();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function showCard(cardNumber) {
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+            document.querySelector(`.card[data-card="${cardNumber}"]`).classList.add('active');
+            currentCard = cardNumber;
+            updateProgress();
+            updateNavigation();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.querySelector('.btn-prev');
+            const nextBtn = document.querySelector('.btn-next');
+            
+            prevBtn.disabled = currentCard === 1;
+            nextBtn.disabled = currentCard === totalCards;
+        }
+
+        // Progress bar
+        function updateProgress() {
+            const percentage = (currentCard / totalCards) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `Karta ${currentCard} z ${totalCards}`;
+            document.getElementById('xpBadge').textContent = `⭐ ${earnedXP} XP`;
+        }
+
+        // Save/Load progress
+        function saveProgress() {
+            const progress = {
+                currentCard: currentCard,
+                earnedXP: earnedXP,
+                completedCards: Array.from(completedCards)
+            };
+            localStorage.setItem('lesson2Progress', JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('lesson2Progress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                currentCard = progress.currentCard || 1;
+                earnedXP = progress.earnedXP || 0;
+                completedCards = new Set(progress.completedCards || []);
+                
+                showCard(currentCard);
+                updateProgress();
+            }
+        }
+
+        // Card 1: Video checkbox
+        function toggleVideoCheckbox() {
+            const checkbox = document.getElementById('videoCheck');
+            const success = document.getElementById('videoSuccess');
+            
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked && !completedCards.has(1)) {
+                completedCards.add(1);
+                earnedXP += cardXPValues[1];
+                success.classList.add('show');
+                updateProgress();
+                saveProgress();
+                
+                setTimeout(() => {
+                    success.classList.remove('show');
+                }, 3000);
+            }
+            
+            localStorage.setItem('videoWatched', checkbox.checked);
+        }
+
+        // Card 1: Reflection auto-save
+        function autoSaveReflection() {
+            const reflection = document.getElementById('reflectionVideo').value;
+            localStorage.setItem('reflectionVideo', reflection);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentCard > 1) {
+                prevCard();
+            } else if (e.key === 'ArrowRight' && currentCard < totalCards) {
+                nextCard();
+            }
+        });
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            
+            // Restore video checkbox
+            const videoSaved = localStorage.getItem('videoWatched');
+            if (videoSaved === 'true') {
+                document.getElementById('videoCheck').checked = true;
+            }
+            
+            // Restore reflection
+            const reflectionSaved = localStorage.getItem('reflectionVideo');
+            if (reflectionSaved) {
+                document.getElementById('reflectionVideo').value = reflectionSaved;
+            }
+        });
+
+        // ===== ROI Calculator (Card 3) =====
+        let calculatorData = {
+            toolCount: 0,
+            competitorPrice: 0,
+            milwaukeePrice: 0,
+            competitorLifespan: 0,
+            milwaukeeLifespan: 0,
+            competitorDowntime: 0,
+            milwaukeeDowntime: 0,
+            downtimeCost: 0,
+            competitorService: 0,
+            milwaukeeService: 0
+        };
+
+        function calculateROI() {
+            // Get all inputs
+            calculatorData.toolCount = parseFloat(document.getElementById('toolCount').value) || 0;
+            calculatorData.competitorPrice = parseFloat(document.getElementById('competitorPrice').value) || 0;
+            calculatorData.milwaukeePrice = parseFloat(document.getElementById('milwaukeePrice').value) || 0;
+            calculatorData.competitorLifespan = parseFloat(document.getElementById('competitorLifespan').value) || 0;
+            calculatorData.milwaukeeLifespan = parseFloat(document.getElementById('milwaukeeLifespan').value) || 0;
+            calculatorData.competitorDowntime = parseFloat(document.getElementById('competitorDowntime').value) || 0;
+            calculatorData.milwaukeeDowntime = parseFloat(document.getElementById('milwaukeeDowntime').value) || 0;
+            calculatorData.downtimeCost = parseFloat(document.getElementById('downtimeCost').value) || 0;
+            calculatorData.competitorService = parseFloat(document.getElementById('competitorService').value) || 0;
+            calculatorData.milwaukeeService = parseFloat(document.getElementById('milwaukeeService').value) || 0;
+
+            // Save to localStorage
+            localStorage.setItem('calculatorData', JSON.stringify(calculatorData));
+
+            // Check if all fields are filled
+            const allFilled = Object.values(calculatorData).every(val => val > 0);
+            
+            if (allFilled) {
+                // Calculate results
+                const investmentDiff = (calculatorData.milwaukeePrice - calculatorData.competitorPrice) * calculatorData.toolCount;
+                
+                const downtimeSavings = (calculatorData.competitorDowntime - calculatorData.milwaukeeDowntime) * 
+                                       calculatorData.downtimeCost * calculatorData.toolCount;
+                
+                const serviceSavings = (calculatorData.competitorService - calculatorData.milwaukeeService) * 
+                                      calculatorData.toolCount;
+                
+                const annualSavings = downtimeSavings + serviceSavings;
+                
+                const paybackMonths = investmentDiff > 0 && annualSavings > 0 ? 
+                                     (investmentDiff / annualSavings * 12) : 0;
+                
+                const savings3year = (annualSavings * 3) - investmentDiff;
+                const roi3year = investmentDiff > 0 ? (savings3year / investmentDiff * 100) : 0;
+                
+                // NPV with 8% discount rate
+                const discountRate = 0.08;
+                let npv = -investmentDiff;
+                for (let year = 1; year <= 5; year++) {
+                    npv += annualSavings / Math.pow(1 + discountRate, year);
+                }
+
+                // Update display
+                document.getElementById('investmentDiff').textContent = Math.round(investmentDiff).toLocaleString('pl-PL');
+                document.getElementById('annualSavings').textContent = Math.round(annualSavings).toLocaleString('pl-PL');
+                document.getElementById('paybackPeriod').textContent = paybackMonths > 0 ? paybackMonths.toFixed(1) : '0';
+                document.getElementById('roi3year').textContent = Math.round(roi3year);
+                document.getElementById('npv5year').textContent = Math.round(npv).toLocaleString('pl-PL');
+                document.getElementById('tco3year').textContent = Math.round(savings3year).toLocaleString('pl-PL');
+
+                // Generate summary text
+                const summaryText = `Inwestycja w Milwaukee wyniesie <strong>+${Math.round(investmentDiff).toLocaleString('pl-PL')} PLN</strong> więcej niż konkurencja. 
+                Ale dzięki <strong>-${Math.round(downtimeSavings).toLocaleString('pl-PL')} PLN oszczędności downtime</strong> 
+                i <strong>-${Math.round(serviceSavings).toLocaleString('pl-PL')} PLN oszczędności serwisu</strong> rocznie, 
+                <strong style="color: #2E7D32;">inwestycja zwróci się w ${paybackMonths > 0 ? paybackMonths.toFixed(1) : 'N/A'} miesięcy</strong>. 
+                Po 3 latach: <strong style="color: #2E7D32;">ROI ${Math.round(roi3year)}%</strong>, 
+                całkowite oszczędności: <strong style="color: #2E7D32;">${Math.round(savings3year).toLocaleString('pl-PL')} PLN</strong>.`;
+                
+                document.getElementById('summaryText').innerHTML = summaryText;
+
+                // Show results
+                document.getElementById('calcResults').classList.add('show');
+            } else {
+                // Hide results if not all filled
+                document.getElementById('calcResults').classList.remove('show');
+            }
+        }
+
+        function validateCalculator() {
+            const allFilled = Object.values(calculatorData).every(val => val > 0);
+            
+            if (!allFilled) {
+                document.getElementById('calcError').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('calcError').classList.remove('show');
+                }, 3000);
+                return false;
+            }
+
+            // Check if Milwaukee is more expensive (realistic scenario)
+            if (calculatorData.milwaukeePrice <= calculatorData.competitorPrice) {
+                alert('⚠️ W tym kalkulatorze Milwaukee powinno być droższe niż konkurencja (realistyczny scenariusz value selling). Jeśli Milwaukee jest tańsze, to już nie musisz sprzedawać ROI! 😊');
+                return false;
+            }
+
+            return true;
+        }
+
+        function saveCalculation() {
+            if (!validateCalculator()) {
+                return;
+            }
+
+            // Award XP (only once)
+            if (!completedCards.has(3)) {
+                completedCards.add(3);
+                earnedXP += cardXPValues[3];
+                updateProgress();
+                saveProgress();
+
+                document.getElementById('calcSuccess').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('calcSuccess').classList.remove('show');
+                }, 3000);
+            }
+
+            // In production: generate PDF with results
+            console.log('ROI Calculation saved:', calculatorData);
+        }
+
+        // Load calculator data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedCalc = localStorage.getItem('calculatorData');
+            if (savedCalc) {
+                calculatorData = JSON.parse(savedCalc);
+                
+                // Restore values to inputs
+                if (document.getElementById('toolCount')) {
+                    document.getElementById('toolCount').value = calculatorData.toolCount || '';
+                    document.getElementById('competitorPrice').value = calculatorData.competitorPrice || '';
+                    document.getElementById('milwaukeePrice').value = calculatorData.milwaukeePrice || '';
+                    document.getElementById('competitorLifespan').value = calculatorData.competitorLifespan || '';
+                    document.getElementById('milwaukeeLifespan').value = calculatorData.milwaukeeLifespan || '';
+                    document.getElementById('competitorDowntime').value = calculatorData.competitorDowntime || '';
+                    document.getElementById('milwaukeeDowntime').value = calculatorData.milwaukeeDowntime || '';
+                    document.getElementById('downtimeCost').value = calculatorData.downtimeCost || '';
+                    document.getElementById('competitorService').value = calculatorData.competitorService || '';
+                    document.getElementById('milwaukeeService').value = calculatorData.milwaukeeService || '';
+                    
+                    // Recalculate to show results
+                    calculateROI();
+                }
+            }
+        });
+
+        // ===== Value Proposition Canvas (Card 4) =====
+        let canvasData = {
+            painFunctional: '',
+            painFinancial: '',
+            painEmotional: '',
+            gainRelievers: '',
+            gainCreators: '',
+            gainMetrics: ''
+        };
+
+        const canvasExamples = {
+            mining: {
+                painFunctional: "ATEX wymagania w strefach zagrożonych wybuchem, odległe lokalizacje kopalń (brak szybkiego serwisu), ekstremalne warunki pracy (wilgoć, kurz), ograniczona dostępność części zamiennych",
+                painFinancial: "Wysokie koszty downtime (2000-5000 PLN/h w kopalni KGHM), transport serwisu na kopalnię (500 km), rotacja pracowników przez trudne warunki pracy, koszty certyfikacji ATEX",
+                painEmotional: "Frustracja operatorów przez ciężkie narzędzia (12h zmiany), presja HSE na bezpieczeństwo (zero wypadków), izolacja od wsparcia technicznego (300 km do najbliższego serwisu)",
+                gainRelievers: "Pełna certyfikacja ATEX dla stref zagrożonych, 5-letnia gwarancja producenta (najdłuższa na rynku), 24/7 support hotline, walizka serwisowa z częściami zamiennymi na miejscu",
+                gainCreators: "Oszczędność 200k PLN/rok przez -80% downtime, tracking ONE-KEY (prevent failures before they happen), ergonomia -30% zmęczenia operatorów → -15% rotacji, ROI 300% w 3 lata",
+                gainMetrics: "-80% downtime (z 10h/miesiąc → 2h/miesiąc), -60% koszty serwisu (brak transportu 500 km), +5 lat żywotności vs. konkurencja (2 lata), payback period: 6 miesięcy"
+            },
+            automotive: {
+                painFunctional: "Częste awarie pneumatyki (8h downtime/miesiąc), wibracje powodujące błędy montażowe, waga narzędzi (2.5 kg) → zmęczenie operatorów, brak integracji z systemem MES",
+                painFinancial: "Downtime 12h/miesiąc × 1500 PLN/h = 18k PLN straty, rotacja operatorów 25% (50k PLN koszt rekrutacji), serwis 3×/rok po 300 PLN = 900 PLN, OEE spadek o 5%",
+                painEmotional: "Frustracja operatorów przez ergonomię (bolące nadgarstki), presja Production Manager na OEE 85%+, presja CFO na redukcję kosztów o 10%, brak wsparcia od dostawcy",
+                gainRelievers: "Technologia REDLINK - zero awarii (proven w VW Wolfsburg), ergonomia ONE-KEY (waga 1.8 kg, -30% wibracji), tracking & trace (integracja z MES), dashboard produktywności",
+                gainCreators: "Oszczędność 216k PLN/rok przez -70% downtime, ROI 470% w 3 lata, produktywność +15% (bonus!), NPS operatorów 9/10 (engagement boost), 5-letnia gwarancja vs. 2 lata Bosch",
+                gainMetrics: "-70% downtime (12h → 3.6h/miesiąc), -60% koszty serwisu (1×/rok zamiast 3×), OEE +5% (85% → 90%), payback: 2.1 miesiąca, NPV 5-letni: 520k PLN"
+            }
+        };
+
+        function loadCanvasExample() {
+            const selected = document.getElementById('canvasExample').value;
+            
+            if (selected && canvasExamples[selected]) {
+                const example = canvasExamples[selected];
+                document.getElementById('painFunctional').value = example.painFunctional;
+                document.getElementById('painFinancial').value = example.painFinancial;
+                document.getElementById('painEmotional').value = example.painEmotional;
+                document.getElementById('gainRelievers').value = example.gainRelievers;
+                document.getElementById('gainCreators').value = example.gainCreators;
+                document.getElementById('gainMetrics').value = example.gainMetrics;
+            } else {
+                // Clear all fields
+                document.getElementById('painFunctional').value = '';
+                document.getElementById('painFinancial').value = '';
+                document.getElementById('painEmotional').value = '';
+                document.getElementById('gainRelievers').value = '';
+                document.getElementById('gainCreators').value = '';
+                document.getElementById('gainMetrics').value = '';
+            }
+            
+            autoSaveCanvas();
+        }
+
+        function autoSaveCanvas() {
+            canvasData.painFunctional = document.getElementById('painFunctional').value;
+            canvasData.painFinancial = document.getElementById('painFinancial').value;
+            canvasData.painEmotional = document.getElementById('painEmotional').value;
+            canvasData.gainRelievers = document.getElementById('gainRelievers').value;
+            canvasData.gainCreators = document.getElementById('gainCreators').value;
+            canvasData.gainMetrics = document.getElementById('gainMetrics').value;
+            
+            localStorage.setItem('canvasData', JSON.stringify(canvasData));
+        }
+
+        function validateCanvas() {
+            const allValid = Object.values(canvasData).every(val => val.length >= 50);
+            
+            if (!allValid) {
+                document.getElementById('canvasError').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('canvasError').classList.remove('show');
+                }, 3000);
+                return false;
+            }
+            
+            return true;
+        }
+
+        function saveValueCanvas() {
+            if (!validateCanvas()) {
+                return;
+            }
+
+            // Award XP (only once)
+            if (!completedCards.has(4)) {
+                completedCards.add(4);
+                earnedXP += cardXPValues[4];
+                updateProgress();
+                saveProgress();
+
+                document.getElementById('canvasSuccess').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('canvasSuccess').classList.remove('show');
+                }, 3000);
+            }
+
+            console.log('Value Canvas saved:', canvasData);
+        }
+
+        // Load canvas data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedCanvas = localStorage.getItem('canvasData');
+            if (savedCanvas) {
+                canvasData = JSON.parse(savedCanvas);
+                
+                if (document.getElementById('painFunctional')) {
+                    document.getElementById('painFunctional').value = canvasData.painFunctional || '';
+                    document.getElementById('painFinancial').value = canvasData.painFinancial || '';
+                    document.getElementById('painEmotional').value = canvasData.painEmotional || '';
+                    document.getElementById('gainRelievers').value = canvasData.gainRelievers || '';
+                    document.getElementById('gainCreators').value = canvasData.gainCreators || '';
+                    document.getElementById('gainMetrics').value = canvasData.gainMetrics || '';
+                }
+            }
+        });
+
+        // ===== Case Study VW Reflections (Card 5) =====
+        let vwReflections = {
+            q1: '',
+            q2: '',
+            q3: ''
+        };
+
+        function updateCharCountVW(id, minChars) {
+            const text = document.getElementById(id).value;
+            const countElement = document.getElementById(id + 'Count');
+            const length = text.length;
+            
+            countElement.textContent = `${length}/${minChars}`;
+            
+            if (length >= minChars) {
+                countElement.classList.add('valid');
+            } else {
+                countElement.classList.remove('valid');
+            }
+            
+            // Auto-save
+            vwReflections.q1 = document.getElementById('vwQ1').value;
+            vwReflections.q2 = document.getElementById('vwQ2').value;
+            vwReflections.q3 = document.getElementById('vwQ3').value;
+            
+            localStorage.setItem('vwReflections', JSON.stringify(vwReflections));
+        }
+
+        function validateVWReflections() {
+            const q1Valid = vwReflections.q1.length >= 60;
+            const q2Valid = vwReflections.q2.length >= 60;
+            const q3Valid = vwReflections.q3.length >= 60;
+            
+            if (!q1Valid || !q2Valid || !q3Valid) {
+                document.getElementById('vwError').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('vwError').classList.remove('show');
+                }, 3000);
+                return false;
+            }
+            
+            return true;
+        }
+
+        function saveVWReflections() {
+            if (!validateVWReflections()) {
+                return;
+            }
+
+            // Award XP (only once)
+            if (!completedCards.has(5)) {
+                completedCards.add(5);
+                earnedXP += cardXPValues[5];
+                updateProgress();
+                saveProgress();
+
+                document.getElementById('vwSuccess').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('vwSuccess').classList.remove('show');
+                }, 3000);
+            }
+
+            console.log('VW Reflections saved:', vwReflections);
+        }
+
+        // Load VW reflections on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedVW = localStorage.getItem('vwReflections');
+            if (savedVW) {
+                vwReflections = JSON.parse(savedVW);
+                
+                if (document.getElementById('vwQ1')) {
+                    document.getElementById('vwQ1').value = vwReflections.q1 || '';
+                    document.getElementById('vwQ2').value = vwReflections.q2 || '';
+                    document.getElementById('vwQ3').value = vwReflections.q3 || '';
+                    
+                    // Update char counts
+                    updateCharCountVW('vwQ1', 60);
+                    updateCharCountVW('vwQ2', 60);
+                    updateCharCountVW('vwQ3', 60);
+                }
+            }
+        });
+
+        // ===== Quiz ROI Scenarios (Card 6) =====
+        const quizQuestions = [
+            {
+                scenario: "Klient mówi:",
+                question: "Bosch jest 30% tańszy. Dlaczego mam przepłacać?",
+                options: [
+                    "Milwaukee ma lepszą jakość",
+                    "Policzmy TCO 3-letni. Bosch może być droższy o 50% w długim terminie",
+                    "Damy 10% rabat",
+                    "Wszyscy liderzy rynku wybierają Milwaukee"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Perfekcyjnie! Kwantyfikujesz wartość (TCO), nie walczysz ceną ani nie używasz ogólników. CFO rozumie liczby.",
+                    incorrect: "❌ Nie. Odpowiedź A to ogólnik, C to price war, D to argument z autorytetu. Prawidłowo: pokazuj ROI calculation."
+                }
+            },
+            {
+                scenario: "CFO pyta:",
+                question: "Jaki jest payback period?",
+                options: [
+                    "Zwykle 12-18 miesięcy",
+                    "Zależy od utilization",
+                    "Na podstawie Waszego downtime 12h/miesiąc: 8.5 miesiąca",
+                    "Nie wiem, to pytanie do finansów"
+                ],
+                correct: 2,
+                feedback: {
+                    correct: "✅ Dokładnie! Konkretny ROI oparty na danych klienta. CFO docenia precision.",
+                    incorrect: "❌ Błąd. A to za ogólne, B to unikanie odpowiedzi, D to brak przygotowania. CFO chce konkretów."
+                }
+            },
+            {
+                scenario: "Procurement Manager mówi:",
+                question: "Potrzebujemy 3 ofert. Konkurencja daje 25% taniej.",
+                options: [
+                    "Obniżę cenę o 20% żeby wygrać",
+                    "Zaproponujmy pilot 2-tygodniowy - porównajcie downtime",
+                    "Nasz produkt jest premium, nie można porównywać",
+                    "Wycofuję się z dealu"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Świetnie! PoC beats price. Pokazujesz wartość przez measurement, nie obietnice.",
+                    incorrect: "❌ Nie. A = race to bottom, C = arogancja, D = rezygnacja. Prawidłowo: prove value przez pilot."
+                }
+            },
+            {
+                scenario: "Klient mówi:",
+                question: "ROI brzmi super, ale nie mamy budżetu w tym kwartale.",
+                options: [
+                    "Poczekam do Q2",
+                    "Zaproponuję leasing 36-miesięczny z OpEx",
+                    "Obniżę cenę o 30%",
+                    "W takim razie konkurencja wygra"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Doskonale! Leasing = enable sale. Przekształcasz CapEx na OpEx, rozwiązujesz problem budżetu.",
+                    incorrect: "❌ Źle. A = stracisz momentum, C = marnujesz wartość, D = presja nie działa. Leasing to rozwiązanie."
+                }
+            },
+            {
+                scenario: "Sytuacja:",
+                question: "Production Manager jest przekonany, ale CFO blokuje deal. Co robisz?",
+                options: [
+                    "Zwiększam presję na Production Managera",
+                    "Zapraszam CFO na prezentację ROI z dashboard",
+                    "Obniżam cenę o 15%",
+                    "Czekam aż CFO zmieni zdanie"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Perfekcyjnie! Sell to real decision maker. CFO ma veto power - bypass middle managers.",
+                    incorrect: "❌ Nie. A = internal politics, C = nie rozwiązuje problemu, D = pasywność. Direct to CFO!"
+                }
+            },
+            {
+                scenario: "Klient pyta:",
+                question: "Ile zaoszczędzimy w ciągu 5 lat?",
+                options: [
+                    "Około 500k PLN",
+                    "Nie mogę obiecać savings",
+                    "Na podstawie pilotu: 487 000 PLN (downtime -70%, serwis -60%)",
+                    "To zależy od wielu czynników"
+                ],
+                correct: 2,
+                feedback: {
+                    correct: "✅ Świetnie! Data-driven answer z pilot results. Precyzja buduje credibility.",
+                    incorrect: "❌ Błąd. A = za niedokładne, B = brak confidence, D = unikanie commitment. Podaj konkretne liczby."
+                }
+            },
+            {
+                scenario: "Klient mówi:",
+                question: "Wasze case study VW to automotive. Mamy mining - to inny sektor.",
+                options: [
+                    "Ale downtime to downtime, niezależnie od sektora",
+                    "Mamy też case study KGHM - mining. Chcesz zobaczyć?",
+                    "VW to lider, wszyscy kopiują ich best practices",
+                    "W takim razie zróbmy pilot w Waszej kopalni"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Doskonale! Sector-specific case study > generic argument. Zawsze miej 2-3 case studies z różnych sektorów.",
+                    incorrect: "❌ Nie. A = zbyt ogólne, C = słaby argument, D = OK ale nie najlepsze. Pokaż case study z mining!"
+                }
+            },
+            {
+                scenario: "CFO mówi:",
+                question: "Potrzebuję ROI ≥150% żeby zatwierdzić projekt.",
+                options: [
+                    "Obniżę cenę żeby ROI było 150%",
+                    "To niemożliwe z Waszymi danymi",
+                    "Policzmy razem: jeśli zwiększymy utilization z 60% do 80%, ROI wyniesie 180%",
+                    "Wtedy niech konkurencja wygra"
+                ],
+                correct: 2,
+                feedback: {
+                    correct: "✅ Perfekcyjnie! Pokazujesz jak osiągnąć target CFO przez optymalizację (utilization), nie rabat.",
+                    incorrect: "❌ Źle. A = marnujesz marżę, B = defeatism, D = arogancja. Work with CFO to hit their target!"
+                }
+            },
+            {
+                scenario: "Klient pyta:",
+                question: "Jak mam uzasadnić tę inwestycję mojemu zespołowi?",
+                options: [
+                    "Powiedz im, że Milwaukee jest najlepsze",
+                    "Dam Ci prezentację PowerPoint do użycia",
+                    "Przygotuję Ci business case: ROI calc + case study + pilot plan. Przeprowadzę prezentację razem z Tobą",
+                    "To Twoja robota, nie moja"
+                ],
+                correct: 2,
+                feedback: {
+                    correct: "✅ Doskonale! Arm your internal champion. Dajesz mu tools + support, robisz go bohaterem.",
+                    incorrect: "❌ Nie. A = zbyt słabe, B = passive, D = unprofessional. Wspieraj internal championa aktywnie!"
+                }
+            },
+            {
+                scenario: "Procurement mówi:",
+                question: "Bosch oferuje 2-letnią gwarancję, a Milwaukee 5 lat. Ale Bosch jest 40% tańszy. Jak to policzyć?",
+                options: [
+                    "5 lat > 2 lata, więc Milwaukee wygrywa",
+                    "Policzmy: Bosch 1200 PLN + replacement po 2 latach (1200) = 2400 PLN. Milwaukee 2000 PLN przez 5 lat. Milwaukee tańsze o 400 PLN",
+                    "Damy rabat 30% żeby wyrównać cenę",
+                    "To nie jest fair comparison"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Perfekcyjnie! Normalizujesz do tego samego timeframe (5 lat), pokazujesz replacement cost. TCO thinking.",
+                    incorrect: "❌ Błąd. A = zbyt proste, C = price war, D = defensywność. Policz konkretnie replacement cost!"
+                }
+            },
+            {
+                scenario: "Klient mówi:",
+                question: "Mamy już 200 narzędzi Bosch. Zmiana dostawcy to logistyczny koszmar (szkolenia, części, kompatybilność).",
+                options: [
+                    "Oferujemy darmowe szkolenia",
+                    "Policzmy switching cost vs. savings: szkolenia 10k + części 5k = 15k. Savings rok 1: 150k. ROI switching: 900%",
+                    "Bosch to zły wybór, warto się przestawić",
+                    "Rozumiem, może za 5 lat jak będziecie wymieniali"
+                ],
+                correct: 1,
+                feedback: {
+                    correct: "✅ Doskonale! Kwantyfikujesz switching cost i pokazujesz ROI zmiany. 15k penalty vs. 150k savings = no-brainer.",
+                    incorrect: "❌ Nie. A = nie adresuje obaw, C = attack na konkurencję, D = rezygnacja. Policz switching ROI!"
+                }
+            },
+            {
+                scenario: "CFO pyta:",
+                question: "Jakie są ryzyka tej inwestycji? Co jeśli oszczędności będą mniejsze?",
+                options: [
+                    "Nasze dane są pewne, nie ma ryzyka",
+                    "Oferujemy performance guarantee: jeśli oszczędności <50% prognoz w rok 1, zwracamy różnicę",
+                    "To ryzyko każdej inwestycji",
+                    "Dlatego proponuję pilot 2-tygodniowy - zero risk"
+                ],
+                correct: 3,
+                feedback: {
+                    correct: "✅ Świetnie! Pilot eliminuje risk perception. CFO docenia de-risking strategy.",
+                    incorrect: "❌ Nie. A = overconfidence (red flag dla CFO), B = trudne do wykonania, C = unikanie pytania. Pilot = best risk mitigation."
+                }
+            }
+        ];
+
+        let quizAnswers = {};
+        let quizScore = 0;
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizQuestions.forEach((q, qIndex) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.id = `question-${qIndex}`;
+
+                let optionsHTML = '';
+                q.options.forEach((option, oIndex) => {
+                    optionsHTML += `
+                        <div class="quiz-option" id="option-${qIndex}-${oIndex}" onclick="selectQuizAnswer(${qIndex}, ${oIndex})">
+                            <span class="option-label">${String.fromCharCode(65 + oIndex)})</span> ${option}
+                            <div class="option-feedback" id="feedback-${qIndex}-${oIndex}"></div>
+                        </div>
+                    `;
+                });
+
+                questionDiv.innerHTML = `
+                    <div class="question-number">Pytanie ${qIndex + 1}/12</div>
+                    <div class="question-scenario">${q.scenario}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="quiz-options">
+                        ${optionsHTML}
+                    </div>
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectQuizAnswer(qIndex, oIndex) {
+            // Check if already answered
+            if (quizAnswers[qIndex] !== undefined) return;
+
+            const question = quizQuestions[qIndex];
+            const isCorrect = oIndex === question.correct;
+
+            // Mark answer
+            quizAnswers[qIndex] = oIndex;
+
+            // Update score
+            if (isCorrect) {
+                quizScore++;
+            }
+
+            // Visual feedback
+            const selectedOption = document.getElementById(`option-${qIndex}-${oIndex}`);
+            const correctOption = document.getElementById(`option-${qIndex}-${question.correct}`);
+
+            // Mark correct answer
+            correctOption.classList.add('correct');
+
+            // Mark selected if wrong
+            if (!isCorrect) {
+                selectedOption.classList.add('incorrect');
+            }
+
+            // Disable all options for this question
+            question.options.forEach((_, i) => {
+                document.getElementById(`option-${qIndex}-${i}`).classList.add('disabled');
+            });
+
+            // Show feedback
+            const feedbackDiv = document.getElementById(`feedback-${qIndex}-${oIndex}`);
+            feedbackDiv.className = 'option-feedback show ' + (isCorrect ? 'correct-feedback' : 'incorrect-feedback');
+            feedbackDiv.textContent = isCorrect ? question.feedback.correct : question.feedback.incorrect;
+
+            // Mark question as answered
+            document.getElementById(`question-${qIndex}`).classList.add('answered');
+
+            // Check if all answered
+            if (Object.keys(quizAnswers).length === quizQuestions.length) {
+                showQuizResults();
+            }
+
+            // Save progress
+            localStorage.setItem('quizAnswers', JSON.stringify(quizAnswers));
+            localStorage.setItem('quizScore', quizScore);
+        }
+
+        function showQuizResults() {
+            const scoreDiv = document.getElementById('quizScore');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreInterpretation = document.getElementById('scoreInterpretation');
+
+            scoreDisplay.textContent = `${quizScore}/12`;
+
+            let interpretation = '';
+            if (quizScore <= 6) {
+                interpretation = "📚 Potrzebujesz więcej praktyki z ROI selling. Wróć do kart 2-5 i przećwicz kalkulacje TCO.";
+            } else if (quizScore <= 9) {
+                interpretation = "💰 Solid Value Seller! Rozumiesz podstawy ROI, ale możesz jeszcze poprawić handling obiekcji i CFO conversations.";
+            } else {
+                interpretation = "💎 ROI Master! Jesteś gotowy na każdą obiekcję CFO. Sprzedajesz wartość, nie cenę. Keep it up!";
+            }
+
+            scoreInterpretation.textContent = interpretation;
+            scoreDiv.classList.add('show');
+
+            // Award XP (only once)
+            if (!completedCards.has(6)) {
+                completedCards.add(6);
+                earnedXP += cardXPValues[6];
+                updateProgress();
+                saveProgress();
+            }
+
+            // Scroll to score
+            setTimeout(() => {
+                scoreDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+
+        // ===== Objection Flashcards (Card 7) =====
+        let flippedFlashcards = new Set();
+
+        function flipFlashcard(index) {
+            const flashcard = document.querySelectorAll('.flashcard')[index];
+            flashcard.classList.toggle('flipped');
+
+            // Track as viewed
+            if (!flippedFlashcards.has(index)) {
+                flippedFlashcards.add(index);
+                updateFlashcardProgress();
+            }
+        }
+
+        function updateFlashcardProgress() {
+            const progress = document.getElementById('flashcardProgress');
+            progress.textContent = `Poznane obiekcje: ${flippedFlashcards.size}/6`;
+
+            // Award XP when all 6 viewed
+            if (flippedFlashcards.size === 6 && !completedCards.has(7)) {
+                completedCards.add(7);
+                earnedXP += cardXPValues[7];
+                updateProgress();
+                saveProgress();
+
+                document.getElementById('flashcardSuccess').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('flashcardSuccess').classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        function markAllFlashcardsKnown() {
+            const flashcards = document.querySelectorAll('.flashcard');
+            flashcards.forEach((card, index) => {
+                if (!card.classList.contains('flipped')) {
+                    card.classList.add('flipped');
+                }
+                flippedFlashcards.add(index);
+            });
+            updateFlashcardProgress();
+        }
+
+        function resetFlashcards() {
+            const flashcards = document.querySelectorAll('.flashcard');
+            flashcards.forEach(card => {
+                card.classList.remove('flipped');
+            });
+            flippedFlashcards.clear();
+            updateFlashcardProgress();
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+
+            // Restore quiz state
+            const savedAnswers = localStorage.getItem('quizAnswers');
+            const savedScore = localStorage.getItem('quizScore');
+            if (savedAnswers) {
+                quizAnswers = JSON.parse(savedAnswers);
+                quizScore = parseInt(savedScore) || 0;
+
+                // Re-render answers
+                Object.entries(quizAnswers).forEach(([qIndex, oIndex]) => {
+                    const question = quizQuestions[qIndex];
+                    const selectedOption = document.getElementById(`option-${qIndex}-${oIndex}`);
+                    const correctOption = document.getElementById(`option-${qIndex}-${question.correct}`);
+
+                    correctOption.classList.add('correct');
+                    if (parseInt(oIndex) !== question.correct) {
+                        selectedOption.classList.add('incorrect');
+                    }
+
+                    question.options.forEach((_, i) => {
+                        document.getElementById(`option-${qIndex}-${i}`).classList.add('disabled');
+                    });
+
+                    document.getElementById(`question-${qIndex}`).classList.add('answered');
+                });
+
+                if (Object.keys(quizAnswers).length === quizQuestions.length) {
+                    showQuizResults();
+                }
+            }
+
+            // Restore flashcard progress
+            updateFlashcardProgress();
+        });
+
+        // ===== Competitive Matrix (Card 8) =====
+        const matrixExamples = {
+            automotive: {
+                // Row 0: Cena (Milwaukee -1, Bosch +1, DeWalt +0.5, Hilti -1)
+                ratings: [
+                    [-0.5, 1, 0.5, -1],     // Cena
+                    [1, 0.5, 0.5, 1],       // Żywotność
+                    [false, false, false, false], // Serwis 24/7 (checkboxes will be set separately)
+                    [false, false, false, false], // Track & Trace
+                    [1, 0.5, 0, 0.5],       // Ergonomia
+                    [false, false, false, false], // Szkolenia
+                    [false, false, false, false], // ATEX
+                    [1, 0.5, 0.5, 0.5],     // Ecosystem
+                    [false, false, false, false], // Leasing
+                    [false, false, false, false], // ROI dokumentowany
+                    [1, 0, 0.5, 0.5],       // Downtime
+                    [1, 0.5, 0.5, 1]        // Gwarancja
+                ],
+                checkboxes: [
+                    [false, false, false, true],  // Row 2: Serwis (only Hilti)
+                    [true, false, false, false],  // Row 3: Track (only Milwaukee)
+                    [true, true, false, true],    // Row 5: Szkolenia
+                    [true, true, false, true],    // Row 6: ATEX
+                    [true, true, true, true],     // Row 8: Leasing
+                    [true, false, false, true]    // Row 9: ROI
+                ]
+            }
+        };
+
+        function loadMatrixExample() {
+            const example = document.getElementById('matrixExample').value;
+            
+            if (example === 'custom') {
+                // Clear all
+                document.querySelectorAll('.criterion').forEach(select => select.value = '0');
+                document.querySelectorAll('.feature-check').forEach(check => check.checked = false);
+                calculateMatrixScores();
+                return;
+            }
+
+            if (!example) return;
+
+            const data = matrixExamples[example];
+            
+            // Set ratings (dropdowns)
+            const ratingRows = [0, 1, 4, 7, 10, 11]; // Rows with dropdowns
+            ratingRows.forEach((row, idx) => {
+                for (let col = 0; col < 4; col++) {
+                    const select = document.querySelector(`.criterion[data-row="${row}"][data-col="${col}"]`);
+                    if (select) select.value = data.ratings[idx][col];
+                }
+            });
+
+            // Set checkboxes
+            const checkboxRows = [2, 3, 5, 6, 8, 9];
+            checkboxRows.forEach((row, idx) => {
+                for (let col = 0; col < 4; col++) {
+                    const check = document.querySelector(`.feature-check[data-row="${row}"][data-col="${col}"]`);
+                    if (check) check.checked = data.checkboxes[idx][col];
+                }
+            });
+
+            calculateMatrixScores();
+        }
+
+        function calculateMatrixScores() {
+            const scores = [0, 0, 0, 0];
+
+            // Sum ratings
+            document.querySelectorAll('.criterion').forEach(select => {
+                const col = parseInt(select.dataset.col);
+                const value = parseFloat(select.value) || 0;
+                scores[col] += value;
+            });
+
+            // Count checkboxes
+            document.querySelectorAll('.feature-check').forEach(check => {
+                const col = parseInt(check.dataset.col);
+                if (check.checked) scores[col] += 1;
+            });
+
+            // Update display
+            scores.forEach((score, i) => {
+                document.getElementById(`score-${i}`).textContent = score.toFixed(1);
+            });
+
+            // Generate differentiation statement
+            generateDifferentiation(scores);
+
+            // Auto-save
+            saveMatrixData();
+        }
+
+        function generateDifferentiation(scores) {
+            const brands = ['Milwaukee', 'Bosch', 'DeWalt', 'Hilti'];
+            const maxScore = Math.max(...scores);
+            const winner = brands[scores.indexOf(maxScore)];
+
+            // Check Milwaukee advantages
+            const milwaukeeScore = scores[0];
+            const advantages = [];
+
+            // Check specific features
+            const trackTrace = document.querySelector('.feature-check[data-row="3"][data-col="0"]').checked;
+            const roi = document.querySelector('.feature-check[data-row="9"][data-col="0"]').checked;
+            const ecosystem = parseFloat(document.querySelector('.criterion[data-row="7"][data-col="0"]').value) || 0;
+            const downtime = parseFloat(document.querySelector('.criterion[data-row="10"][data-col="0"]').value) || 0;
+
+            if (trackTrace) advantages.push('Track & Trace ONE-KEY');
+            if (roi) advantages.push('dokumentowany ROI');
+            if (ecosystem > 0.5) advantages.push('najszerszy ekosystem baterii');
+            if (downtime > 0.5) advantages.push('najniższy downtime');
+
+            let statement = '';
+            
+            if (winner === 'Milwaukee' && milwaukeeScore > scores[1] + 2) {
+                statement = `Milwaukee wygrywa z przewagą ${(milwaukeeScore - Math.max(scores[1], scores[2], scores[3])).toFixed(1)} punktów. `;
+                if (advantages.length > 0) {
+                    statement += `Kluczowe przewagi: ${advantages.join(', ')}. `;
+                }
+                statement += `Value proposition: "Płacisz ${scores[1] > scores[0] ? 'mniej' : 'więcej'} za narzędzie, ale oszczędzasz wielokrotnie więcej przez niższy TCO (downtime, serwis, żywotność)."`;
+            } else if (winner === 'Milwaukee') {
+                statement = `Milwaukee ma przewagę ${(milwaukeeScore - Math.max(scores[1], scores[2], scores[3])).toFixed(1)} punktów, ale konkurencja jest blisko. `;
+                statement += `Argumentuj: ${advantages.length > 0 ? advantages.join(', ') + ' + ' : ''}unique value (ROI calculation, case studies, pilot PoC).`;
+            } else {
+                statement = `${winner} wygrywa w tej analizie. Milwaukee score: ${milwaukeeScore.toFixed(1)}. `;
+                statement += `Strategia: Nie walcz na wszystkich frontach. Focus na pain points gdzie Milwaukee dominuje (${advantages.join(', ') || 'TCO, ROI, tracking'}). Zaproponuj pilot PoC aby udowodnić wartość.`;
+            }
+
+            document.getElementById('diffStatement').textContent = statement;
+        }
+
+        function saveMatrixData() {
+            const data = {
+                ratings: [],
+                checkboxes: []
+            };
+
+            document.querySelectorAll('.criterion').forEach(select => {
+                data.ratings.push({
+                    row: select.dataset.row,
+                    col: select.dataset.col,
+                    value: select.value
+                });
+            });
+
+            document.querySelectorAll('.feature-check').forEach(check => {
+                data.checkboxes.push({
+                    row: check.dataset.row,
+                    col: check.dataset.col,
+                    checked: check.checked
+                });
+            });
+
+            localStorage.setItem('competitiveMatrix', JSON.stringify(data));
+        }
+
+        function loadMatrixData() {
+            const saved = localStorage.getItem('competitiveMatrix');
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+
+            data.ratings.forEach(item => {
+                const select = document.querySelector(`.criterion[data-row="${item.row}"][data-col="${item.col}"]`);
+                if (select) select.value = item.value;
+            });
+
+            data.checkboxes.forEach(item => {
+                const check = document.querySelector(`.feature-check[data-row="${item.row}"][data-col="${item.col}"]`);
+                if (check) check.checked = item.checked;
+            });
+
+            calculateMatrixScores();
+        }
+
+        function saveCompetitiveMatrix() {
+            if (!completedCards.has(8)) {
+                completedCards.add(8);
+                earnedXP += cardXPValues[8];
+                updateProgress();
+                saveProgress();
+                
+                document.getElementById('matrixSuccess').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('matrixSuccess').classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Add event listeners for matrix
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMatrixData();
+            
+            document.querySelectorAll('.criterion').forEach(select => {
+                select.addEventListener('change', calculateMatrixScores);
+            });
+
+            document.querySelectorAll('.feature-check').forEach(check => {
+                check.addEventListener('change', calculateMatrixScores);
+            });
+        });
+
+        // ===== Elevator Pitch Builder (Card 9) =====
+        const painLabels = {
+            downtime: 'downtime production',
+            rotacja: 'rotacja pracowników (utrata narzędzi)',
+            jakość: 'problemy z jakością wykonania',
+            bezpieczeństwo: 'wypadki przy pracy',
+            'koszty-serwisu': 'wysokie koszty serwisu'
+        };
+
+        const solutionLabels = {
+            REDLINK: 'technologię REDLINK (elektroniczna ochrona przed przeciążeniem)',
+            'ONE-KEY': 'system ONE-KEY (tracking, diagnostyka, zapobieganie kradzieżom)',
+            'żywotność': '5-letnią żywotność (vs. 2 lata konkurencja)',
+            ergonomia: 'ergonomię (-40% wibracji, -30% waga)',
+            ATEX: 'certyfikację ATEX (bezpieczna praca w strefach Ex)'
+        };
+
+        function updatePitchPreview() {
+            const pain = document.getElementById('pitchPain').value;
+            const cost = document.getElementById('pitchCost').value;
+            const rootCause = document.getElementById('pitchRootCause').value;
+            const solution = document.getElementById('pitchSolution').value;
+            const outcome = document.getElementById('pitchOutcome').value;
+            const caseStudy = document.getElementById('pitchCase').value;
+            const roi = document.getElementById('pitchROI').value;
+            const timeframe = document.getElementById('pitchTimeframe').value;
+            const action = document.getElementById('pitchAction').value;
+
+            let pitch = '';
+            let completeness = 0;
+
+            if (pain && cost && rootCause) {
+                const costFormatted = parseInt(cost).toLocaleString('pl-PL');
+                pitch += `Widzę że ${painLabels[pain] || pain} kosztuje Was ${costFormatted} PLN rocznie. ${rootCause} `;
+                completeness += 3;
+            }
+
+            if (solution && outcome) {
+                pitch += `Milwaukee rozwiązuje to przez ${solutionLabels[solution] || solution}, co daje ${outcome}. `;
+                completeness += 2;
+            }
+
+            if (caseStudy && roi && timeframe) {
+                pitch += `${caseStudy} ${roi} ${timeframe}. `;
+                completeness += 3;
+            }
+
+            if (action) {
+                pitch += `${action}`;
+                completeness += 1;
+            }
+
+            if (!pitch) {
+                pitch = 'Wypełnij pola powyżej aby zobaczyć live preview...';
+            }
+
+            document.getElementById('pitchText').textContent = pitch;
+
+            // Update stats
+            const charCount = pitch.length;
+            const readTime = Math.ceil(charCount / 4); // ~4 chars per second
+            const completenessPercent = Math.round((completeness / 9) * 100);
+
+            document.getElementById('pitchCharCount').textContent = charCount;
+            document.getElementById('pitchReadTime').textContent = readTime + 's';
+            document.getElementById('pitchCompleteness').textContent = completenessPercent + '%';
+
+            // Color coding
+            const charCountEl = document.getElementById('pitchCharCount');
+            if (charCount > 600) {
+                charCountEl.style.color = '#D32F2F';
+            } else if (charCount > 400) {
+                charCountEl.style.color = '#FF9800';
+            } else {
+                charCountEl.style.color = '#4CAF50';
+            }
+
+            const readTimeEl = document.getElementById('pitchReadTime');
+            if (readTime > 30) {
+                readTimeEl.style.color = '#D32F2F';
+            } else if (readTime >= 20 && readTime <= 30) {
+                readTimeEl.style.color = '#4CAF50';
+            } else {
+                readTimeEl.style.color = '#FF9800';
+            }
+
+            // Auto-save
+            savePitchData();
+        }
+
+        function savePitchData() {
+            const pitchData = {
+                pain: document.getElementById('pitchPain').value,
+                cost: document.getElementById('pitchCost').value,
+                rootCause: document.getElementById('pitchRootCause').value,
+                solution: document.getElementById('pitchSolution').value,
+                outcome: document.getElementById('pitchOutcome').value,
+                caseStudy: document.getElementById('pitchCase').value,
+                roi: document.getElementById('pitchROI').value,
+                timeframe: document.getElementById('pitchTimeframe').value,
+                action: document.getElementById('pitchAction').value
+            };
+
+            localStorage.setItem('elevatorPitch', JSON.stringify(pitchData));
+        }
+
+        function loadPitchData() {
+            const saved = localStorage.getItem('elevatorPitch');
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+
+            document.getElementById('pitchPain').value = data.pain || '';
+            document.getElementById('pitchCost').value = data.cost || '';
+            document.getElementById('pitchRootCause').value = data.rootCause || '';
+            document.getElementById('pitchSolution').value = data.solution || '';
+            document.getElementById('pitchOutcome').value = data.outcome || '';
+            document.getElementById('pitchCase').value = data.caseStudy || '';
+            document.getElementById('pitchROI').value = data.roi || '';
+            document.getElementById('pitchTimeframe').value = data.timeframe || '';
+            document.getElementById('pitchAction').value = data.action || '';
+
+            updatePitchPreview();
+        }
+
+        function savePitch() {
+            const completenessText = document.getElementById('pitchCompleteness').textContent;
+            const completeness = parseInt(completenessText);
+
+            if (completeness < 80) {
+                alert('Wypełnij przynajmniej 80% pól aby zapisać pitch (obecnie: ' + completeness + '%)');
+                return;
+            }
+
+            if (!completedCards.has(9)) {
+                completedCards.add(9);
+                earnedXP += cardXPValues[9];
+                updateProgress();
+                saveProgress();
+
+                document.getElementById('pitchSuccess').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('pitchSuccess').classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Load pitch data on init
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPitchData();
+        });
+
+        // ===== Summary & Badge (Card 10) =====
+        function revealBadge() {
+            // Award completion XP
+            if (!completedCards.has(10)) {
+                completedCards.add(10);
+                earnedXP += cardXPValues[10];
+                updateProgress();
+                saveProgress();
+            }
+
+            // Show badge overlay
+            const overlay = document.getElementById('badgeOverlay');
+            const badgeContent = overlay.querySelector('.badge-content');
+            
+            badgeContent.innerHTML = `
+                <span class="badge-close" onclick="closeBadge()">×</span>
+                <div class="badge-icon">💰</div>
+                <h2 class="badge-title">Value Architect</h2>
+                <div class="badge-subtitle">Milwaukee B2B Academy - Lesson 2</div>
+                <div class="badge-stats">
+                    <div class="badge-stat">
+                        <div class="badge-stat-value">${earnedXP}</div>
+                        <div class="badge-stat-label">XP Zdobyte</div>
+                    </div>
+                    <div class="badge-stat">
+                        <div class="badge-stat-value">10/10</div>
+                        <div class="badge-stat-label">Karty</div>
+                    </div>
+                </div>
+                <p class="badge-message">
+                    Ukończyłeś szkolenie <strong>Value Selling - ROI & TCO</strong>!<br><br>
+                    Potrafisz kwantyfikować wartość, liczyć ROI z NPV, budować business case dla CFO,
+                    i sprzedawać oszczędności zamiast narzędzi.<br><br>
+                    <strong>CFO Cię pokocha. Procurement nie ma już argumentów.</strong><br><br>
+                    💡 Next: Lekcja 3 - Negotiations & Closing
+                </p>
+                <button class="badge-btn" onclick="closeBadge()">Zamknij</button>
+            `;
+            
+            overlay.classList.add('show');
+        }
+
+        function closeBadge() {
+            document.getElementById('badgeOverlay').classList.remove('show');
+        }
+
+        // Update summary display when reaching card 10
+        function updateSummaryDisplay() {
+            if (currentCard === 10) {
+                document.getElementById('finalXP').textContent = earnedXP;
+            }
+        }
+
+        // Override showCard to update summary
+        const originalShowCard = showCard;
+        showCard = function(n) {
+            originalShowCard(n);
+            if (n === 10) {
+                updateSummaryDisplay();
+            }
+        };
+    </script>
+</body>
+</html>

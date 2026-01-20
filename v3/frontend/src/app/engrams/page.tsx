@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
-import { Search, Bell, Zap, Brain, Library, BookOpen, Clock, RefreshCw, Download } from 'lucide-react'
+import { Search, Bell, Zap, Brain, Library, BookOpen, Clock, RefreshCw, Download, AlertTriangle } from 'lucide-react'
 import { CONTENT_CATEGORIES, getCategoryColor } from '@/lib/categories'
+import { getStrengthColor, getStrengthLabel, formatTimeUntilRefresh, getRefreshUrgency } from '@/lib/spaced-repetition'
 
 export default function EngramsPage() {
     const { user, profile, loading: authLoading } = useAuth()
@@ -66,17 +67,7 @@ export default function EngramsPage() {
     const availableCount = engrams.filter(e => !e.installed).length
     const completedCount = engrams.filter(e => e.installed && e.strength === 100).length
 
-    const getStrengthColor = (strength: number) => {
-        if (strength >= 80) return '#00ff88' // Green - Stable
-        if (strength >= 40) return '#ffd700' // Yellow - Fading
-        return '#ff4757' // Red - Critical
-    }
-
-    const getStrengthLabel = (strength: number) => {
-        if (strength >= 80) return 'Stable'
-        if (strength >= 40) return 'Fading'
-        return 'Critical'
-    }
+    const needsRefreshCount = engrams.filter(e => e.installed && e.needs_refresh).length
 
     if (authLoading) {
         return (
@@ -329,6 +320,14 @@ export default function EngramsPage() {
                             <strong style={{ color: '#00ff88' }}>{completedCount}</strong> ukończonych
                         </span>
                     </div>
+                    {needsRefreshCount > 0 && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <AlertTriangle size={14} style={{ color: '#ff8800' }} />
+                            <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                                <strong style={{ color: '#ff8800' }}>{needsRefreshCount}</strong> do powtórki
+                            </span>
+                        </div>
+                    )}
                 </div>
 
                 {/* Category Filters */}
@@ -488,14 +487,25 @@ export default function EngramsPage() {
                                         color: 'rgba(255, 255, 255, 0.6)',
                                         marginBottom: '12px',
                                         position: 'relative',
-                                        zIndex: 2
+                                        zIndex: 2,
+                                        flexWrap: 'wrap'
                                     }}>
-                                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                            <Clock size={12} />
-                                            {engram.lastRefreshed}
-                                        </span>
                                         <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: strengthColor }}>
-                                            {engram.strength}%
+                                            💪 {engram.strength}%
+                                        </span>
+                                        {engram.next_refresh_due && (
+                                            <span style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '4px',
+                                                color: engram.needs_refresh ? '#ff8800' : 'rgba(255, 255, 255, 0.6)'
+                                            }}>
+                                                <RefreshCw size={12} />
+                                                {formatTimeUntilRefresh(engram.next_refresh_due)}
+                                            </span>
+                                        )}
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            🔄 {engram.refresh_count || 0}x
                                         </span>
                                     </div>
                                 )}

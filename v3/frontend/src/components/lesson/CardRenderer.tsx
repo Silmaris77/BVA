@@ -4,10 +4,13 @@ import QuestionCard from './QuestionCard'
 import SummaryCard from './SummaryCard'
 import PracticeCard from './PracticeCard'
 import WarningCard from './WarningCard'
+import TimelineCard from './TimelineCard'
+import LightbulbCard from './LightbulbCard'
+import FlashcardsCard from './FlashcardsCard'
 
 interface CardRendererProps {
     card: {
-        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive'
+        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards'
         title?: string
         subtitle?: string
         description?: string
@@ -104,6 +107,24 @@ export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
                 content={card.content || card.description || ''}
                 actionSteps={card.actionSteps}
                 keyPoints={card.keyPoints}
+            />
+
+        case 'timeline':
+            return <TimelineCard
+                title={card.title || 'Timeline'}
+                data={card.data || { items: [] }}
+            />
+        case 'lightbulb':
+            return <LightbulbCard
+                title={card.title || 'Insight'}
+                content={card.content || ''}
+                insight={card.insight || ''}
+                accent_color={card.accent_color}
+            />
+        case 'flashcards':
+            return <FlashcardsCard
+                title={card.title || 'Flashcards'}
+                cards={card.cards || []}
             />
         case 'warning':
             return <WarningCard

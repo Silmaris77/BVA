@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zasoby - BrainVenture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 48px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            border-color: #00ff88;
+            color: white;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 24px;
+        }
+
+        .resource-card {
+            background: rgba(20, 20, 35, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff88, #00cc66);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .resource-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(0, 255, 136, 0.2);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .resource-info {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .resource-type {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .resource-type.pdf {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+
+        .resource-type.guide {
+            background: rgba(176, 0, 255, 0.2);
+            color: #b000ff;
+        }
+
+        .resource-type.table {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+
+        .resource-type.template {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .resource-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .resource-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .resource-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .resource-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Zasoby</h1>
+            <p>Dokumenty, tabele, poradniki i szablony do pobrania</p>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active">Wszystkie</button>
+            <button class="filter-btn">PDF</button>
+            <button class="filter-btn">Poradniki</button>
+            <button class="filter-btn">Tabele</button>
+            <button class="filter-btn">Szablony</button>
+        </div>
+
+        <div class="resources-grid">
+            <!-- Resource 1 -->
+            <div class="resource-card" onclick="window.location.href='resource_detail.html'">
+                <div class="resource-header">
+                    <div class="resource-icon">📄</div>
+                    <div class="resource-info">
+                        <div class="resource-title">Tabela Momentów dla Śrub M6-M20</div>
+                        <span class="resource-type table">Tabela</span>
+                    </div>
+                </div>
+                <div class="resource-desc">
+                    Kompletna tabela wartości momentów dokręcania dla śrub metrycznych M6 do M20. Zawiera wartości dla
+                    różnych klas wytrzymałościowych i typów połączeń.
+                </div>
+                <div class="resource-footer">
+                    <div class="resource-meta">
+                        <span>📥 2,341 pobrań</span>
+                        <span>📊 3 strony</span>
+                    </div>
+                    <button class="view-btn">Zobacz</button>
+                </div>
+            </div>
+
+            <!-- Resource 2 -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">📖</div>
+                    <div class="resource-info">
+                        <div class="resource-title">Poradnik: Dociągi Dokładne</div>
+                        <span class="resource-type guide">Poradnik</span>
+                    </div>
+                </div>
+                <div class="resource-desc">
+                    Szczegółowy przewodnik po technikach precyzyjnego dokręcania śrub. Omawia wybór narzędzi, sekwencję
+                    dokręcania i typowe błędy.
+                </div>
+                <div class="resource-footer">
+                    <div class="resource-meta">
+                        <span>📥 1,856 pobrań</span>
+                        <span>📊 12 stron</span>
+                    </div>
+                    <button class="view-btn">Zobacz</button>
+                </div>
+            </div>
+
+            <!-- Resource 3 -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">📋</div>
+                    <div class="resource-info">
+                        <div class="resource-title">Szablon Raportu Kontroli</div>
+                        <span class="resource-type template">Szablon</span>
+                    </div>
+                </div>
+                <div class="resource-desc">
+                    Gotowy szablon do wypełnienia podczas kontroli poprawności dokręcania. Format XLSX do edycji w
+                    Excel/LibreOffice.
+                </div>
+                <div class="resource-footer">
+                    <div class="resource-meta">
+                        <span>📥 1,234 pobrań</span>
+                        <span>📊 Excel</span>
+                    </div>
+                    <button class="view-btn">Pobierz</button>
+                </div>
+            </div>
+
+            <!-- Resource 4 -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">📑</div>
+                    <div class="resource-info">
+                        <div class="resource-title">Normy EN i ISO dla Momentów</div>
+                        <span class="resource-type pdf">PDF</span>
+                    </div>
+                </div>
+                <div class="resource-desc">
+                    Zbiór aktualnych norm europejskich i międzynarodowych dotyczących momentów dokręcania. Zawiera
+                    wyciągi z EN 1993, ISO 898 i inne.
+                </div>
+                <div class="resource-footer">
+                    <div class="resource-meta">
+                        <span>📥 3,421 pobrań</span>
+                        <span>📊 45 stron</span>
+                    </div>
+                    <button class="view-btn">Zobacz</button>
+                </div>
+            </div>
+
+            <!-- Resource 5 -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">🔧</div>
+                    <div class="resource-info">
+                        <div class="resource-title">Karta Kalibracji Kluczy</div>
+                        <span class="resource-type template">Szablon</span>
+                    </div>
+                </div>
+                <div class="resource-desc">
+                    Wzór karty do dokumentowania kalibracji kluczy dynamometrycznych. Zgodny z wymaganiami ISO 6789.
+                </div>
+                <div class="resource-footer">
+                    <div class="resource-meta">
+                        <span>📥 892 pobrań</span>
+                        <span>📊 PDF</span>
+                    </div>
+                    <button class="view-btn">Pobierz</button>
+                </div>
+            </div>
+
+            <!-- Resource 6 -->
+            <div class="resource-card">
+                <div class="resource-header">
+                    <div class="resource-icon">📊</div>
+                    <div class="resource-info">
+                        <div class="resource-title">Współczynniki Tarcia dla Materiałów</div>
+                        <span class="resource-type table">Tabela</span>
+                    </div>
+                </div>
+                <div class="resource-desc">
+                    Tabela współczynników tarcia dla różnych kombinacji materiałów. Niezbędna przy obliczaniu
+                    rzeczywistych wartości momentów.
+                </div>
+                <div class="resource-footer">
+                    <div class="resource-meta">
+                        <span>📥 1,567 pobrań</span>
+                        <span>📊 2 strony</span>
+                    </div>
+                    <button class="view-btn">Zobacz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

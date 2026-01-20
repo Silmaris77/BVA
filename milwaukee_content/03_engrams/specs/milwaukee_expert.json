@@ -1,0 +1,43 @@
+{
+    "id": "milwaukee_expert",
+    "name": "Milwaukee Expert",
+    "description": "Deep knowledge of entire Milwaukee product line. Unlock advanced specs and gain bonus XP on product knowledge lessons.",
+    "category": "learning",
+    "costs": {
+        "xp": 500,
+        "level_required": 5,
+        "prerequisites": []
+    },
+    "effects": [
+        {
+            "type": "xp_multiplier",
+            "category_filter": "product_knowledge",
+            "value": 1.15,
+            "description": "+15% XP gain on Product Knowledge lessons"
+        },
+        {
+            "type": "unlock_content",
+            "value": "advanced_product_specs",
+            "description": "Access to advanced product specifications and technical documents"
+        },
+        {
+            "type": "feature_access",
+            "value": "spec_comparison_tool",
+            "description": "Unlock Product Comparison Tool"
+        }
+    ],
+    "ui": {
+        "icon": "graduation-cap",
+        "color": "#00ff88",
+        "tier": 2,
+        "badge_image": "/assets/images/badges/milwaukee_expert.png"
+    },
+    "meta": {
+        "created_by": "content_team",
+        "created_at": "2024-01-XX",
+        "last_updated": "2024-01-XX",
+        "status": "active",
+        "install_count": 0,
+        "avg_satisfaction": null
+    }
+}
