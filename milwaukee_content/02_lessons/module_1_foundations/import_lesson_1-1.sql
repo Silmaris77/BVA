@@ -198,6 +198,68 @@ INSERT INTO lessons (
       },
       {
         "id": "card-11",
+        "type": "quiz",
+        "title": "Sprawdź Wiedzę: Milwaukee DNA",
+        "questions": [
+          {
+            "question": "Dla kogo został stworzony pierwszy Hole-Shooter w 1918 roku?",
+            "options": [
+              "Dla górników w kopalniach węgla",
+              "Dla Henry'ego Forda na linie produkcyjne",
+              "Dla Marynarki Wojennej USA",
+              "Dla budowniczych wieżowców w Chicago"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Hole-Shooter, pierwsza lekka wiertarka 1/4 cala, powstała specjalnie dla pracowników Henry'ego Forda, którzy potrzebowali lżejszego narzędzia na liniach montażowych."
+          },
+          {
+            "question": "Dlaczego Milwaukee w latach 20. naprawiało narzędzia konkurencji?",
+            "options": [
+              "Bo nie mieli własnych produktów",
+              "Aby zarobić na częściach zamiennych",
+              "Aby zrozumieć, dlaczego narzędzia się psują i budować lepsze (Inżynieria Zwrotna)",
+              "To był błąd strategiczny"
+            ],
+            "correctAnswer": 2,
+            "explanation": "To była 'lekcja inżynierii'. Naprawiając narzędzia konkurencji, inżynierowie Milwaukee uczyli się o słabych punktach i potrzebach użytkowników, co pozwoliło im budować trwalszy sprzęt."
+          },
+          {
+            "question": "Jaka innowacja z 1951 roku stworzyła zupełnie nową kategorię narzędzi?",
+            "options": [
+              "Wiertarka udarowa",
+              "SAWZALL® (Piła szablasta)",
+              "Szlifierka kątowa",
+              "Wkrętarka akumulatorowa"
+            ],
+            "correctAnswer": 1,
+            "explanation": "SAWZALL® był pierwszą przenośną piłą szablastą. Zastąpił ręczne piłowanie i pozwolił na pracę 'Cokolwiek, Gdziekolwiek', tworząc nową kategorię."
+          },
+          {
+            "question": "Co oznacza filozofia 'Application First'?",
+            "options": [
+              "Najpierw sprzedajemy aplikację mobilną",
+              "Najpierw pytamy o pracę i problem użytkownika, dopiero potem dobieramy narzędzie",
+              "Najpierw pokazujemy najdroższe narzędzie",
+              "Najpierw wysyłamy katalog"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Application First oznacza odwrócenie procesu sprzedaży. Zamiast 'mam wiertarkę, kup ją', pytamy 'gdzie pracujesz i co Cię spowalnia?', by dobrać rozwiązanie systemowe."
+          },
+          {
+            "question": "Dlaczego Milwaukee wycofało się z rynku DIY (Hobby) w latach 90.?",
+            "options": [
+              "Bo rynek był za mały",
+              "Aby skupić się w 100% na użytkownikach PROFESJONALNYCH (Heavy Duty)",
+              "Bo konkurencja była za silna",
+              "Bo marketowi klienci nie lubili koloru czerwonego"
+            ],
+            "correctAnswer": 1,
+            "explanation": "To była kluczowa decyzja strategiczna. Milwaukee postanowiło być marką wyłącznie dla profesjonalistów, co pozwoliło na bezkompromisową jakość (Heavy Duty) bez walki cenowej w marketach."
+          }
+        ]
+      },
+      {
+        "id": "card-12",
         "type": "content",
         "title": "Jesteś Częścią Milwaukee Family",
         "content": "### 🎯 Co Zapamiętać:\n\n✅ **Historia:** Od Hole-Shootera (1918) → Sawzall (1951) → MX FUEL (2024)\n✅ **Pattern:** Milwaukee **tworzy kategorie**, nie tylko produkty\n✅ **DNA:** User Focus od lat 20. (naprawy!), US Navy quality (1930), Innovation (Sawzall)\n✅ **Wartości:**\n  - 🔍 **Obsessive Focus** → Jobsite walks, nie zgadujemy\n  - 💡 **Innovation** → Realna przewaga, nie gadżety\n  - 💪 **Heavy Duty** → Zero kompromisów (DNA od US Navy)\n✅ **Filozofia:** Application First – od lat 20., nie marketing\n\n---\n\n### 💪 Dlaczego To Ważne:\n\nJesteś ambasadorem marki, która **zmienia** sposób pracy milionów profesjonalistów.\n\n**Każda rzecz którą sprzedajesz** to nie \"pudełko\" – to:\n- ⏱️ Więcej czasu dla usera\n- 💰 Więcej zarobków\n- 🏠 Szybszy powrót do domu\n- 🔐 Większe bezpieczeństwo\n\nTwoja rola to nie \"handlowiec\" – to **doradca**, który pomaga ludziom pracować lepiej, szybciej, bezpieczniej.\n\n**Nothing but HEAVY DUTY™** to Twoja misja. Zero kompromisów.\n\n---\n\n### ➡️ Następny Krok:\n\n**Lesson 1.2:** Portfolio Overview - Ekosystem M12/M18/MX FUEL\n\n*(Poznasz SYSTEMY, nie pojedyncze produkty – bo Milwaukee sprzedaje ekosystemy)*"
@@ -237,4 +299,4 @@ SELECT
 FROM lessons
 WHERE lesson_id = 'lesson-1-1-milwaukee-story';
 
--- Expected result: 1 row showing 14 cards (Text + Interactive hybrids), Milwaukee Tools as company
+-- Expected result: 1 row showing 15 cards (Includes Final Quiz hybrid), Milwaukee Tools as company

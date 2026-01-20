@@ -2394,6 +2394,336 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ====================
+           ENDING CARDS STYLES
+        ==================== */
+        .ending-card-demo {
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ending Variant 1: Achievement Unlock */
+        .ending-variant-1 {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(218, 41, 28, 0.15));
+            border: 2px solid rgba(255, 215, 0, 0.4);
+        }
+
+        .ending-achievement-icon {
+            font-size: 6rem;
+            margin-bottom: 30px;
+            animation: achievement-bounce 1s ease-out;
+            text-align: center;
+        }
+
+        @keyframes achievement-bounce {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            60% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .ending-achievement-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .ending-achievement-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .ending-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .ending-stat-box {
+            text-align: center;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ending-stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffd700;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .ending-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Ending Variant 2: Summary Checklist */
+        .ending-variant-2 {
+            border-left: 4px solid #00ff87;
+        }
+
+        .ending-checklist {
+            margin: 30px 0;
+        }
+
+        .ending-checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: rgba(0, 255, 135, 0.05);
+            border: 1px solid rgba(0, 255, 135, 0.2);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .ending-checklist-item:hover {
+            background: rgba(0, 255, 135, 0.1);
+            transform: translateX(5px);
+        }
+
+        .ending-check-icon {
+            font-size: 1.8rem;
+            color: #00ff87;
+            flex-shrink: 0;
+        }
+
+        /* Ending Variant 3: Next Steps Path */
+        .ending-variant-3 {
+            border: 2px solid rgba(96, 239, 255, 0.4);
+        }
+
+        .ending-pathway {
+            margin: 30px 0;
+        }
+
+        .ending-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            background: rgba(96, 239, 255, 0.05);
+            border: 2px solid rgba(96, 239, 255, 0.2);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ending-step:hover {
+            background: rgba(96, 239, 255, 0.15);
+            border-color: #60efff;
+            transform: scale(1.02);
+        }
+
+        .ending-step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #60efff, #0ea5e9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #000;
+            flex-shrink: 0;
+        }
+
+        .ending-step-content h4 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: #60efff;
+        }
+
+        /* Ending Variant 4: Reflection */
+        .ending-variant-4 {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1));
+            border: 2px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .ending-reflection-prompt {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #a855f7;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .ending-reflection-question {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 15px;
+        }
+
+        .ending-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .ending-textarea:focus {
+            outline: none;
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.1);
+        }
+
+        /* Ending Variant 5: Social Share */
+        .ending-variant-5 {
+            border: 2px solid rgba(255, 136, 0, 0.4);
+        }
+
+        .ending-share-preview {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 136, 0, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .ending-share-badge {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .ending-share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .ending-share-btn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ending-share-btn.linkedin {
+            background: #0077b5;
+            color: white;
+        }
+
+        .ending-share-btn.twitter {
+            background: #1da1f2;
+            color: white;
+        }
+
+        .ending-share-btn.copy {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .ending-share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Ending Variant 6: Commitment */
+        .ending-variant-6 {
+            border: 2px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .ending-commitment-pledge {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .ending-commitment-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .ending-signature-line {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .ending-signature-input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
+            font-style: italic;
+        }
+
+        .ending-date-display {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ending-card-demo {
+                padding: 30px 20px;
+            }
+
+            .ending-stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ending-achievement-icon {
+                font-size: 4rem;
+            }
+
+            .ending-achievement-title {
+                font-size: 2rem;
+            }
+
+            .ending-share-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2464,6 +2794,14 @@
             <div class="category-icon">🚀</div>
             <div class="category-info">
                 <div class="category-name">Hero Cards</div>
+                <div class="category-count">6 stylów</div>
+            </div>
+        </div>
+
+        <div class="category-nav-item" onclick="showCategoryView('ending')">
+            <div class="category-icon">🏁</div>
+            <div class="category-info">
+                <div class="category-name">Ending Cards</div>
                 <div class="category-count">6 stylów</div>
             </div>
         </div>
@@ -3280,6 +3618,156 @@
             </div>
         </div>
 
+        <!-- CATEGORY VIEW: ENDING CARDS -->
+        <div id="view-ending" class="view">
+            <div class="category-view-header">
+                <div class="category-view-icon">🏁</div>
+                <div class="category-view-title">
+                    <h2>Ending Cards - Karty Zamykające</h2>
+                    <div class="category-view-description">6 stylów kart kończących lekcję - różne formy podsumowania i zamknięcia</div>
+                </div>
+            </div>
+            <div class="cards-list">
+                <div class="card-list-item" onclick="showCardDemo('ending-achievement')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">🏆</div>
+                        <div class="card-list-title">
+                            <h3>Achievement Unlock</h3>
+                            <span class="card-list-complexity">LOW</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Celebracja ukończenia. Badge + XP + statystyki. Instant gratification i poczucie osiągnięcia.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Gamification</span>
+                        <span class="card-tag">Reward</span>
+                        <span class="card-tag">Celebration</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('ending-summary')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">✅</div>
+                        <div class="card-list-title">
+                            <h3>Summary Checklist</h3>
+                            <span class="card-list-complexity">LOW</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Podsumowanie kluczowych punktów jako checklist. Szybki recap - co zapamiętać.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Recap</span>
+                        <span class="card-tag">Key Takeaways</span>
+                        <span class="card-tag">Checklist</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('ending-nextsteps')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">🗺️</div>
+                        <div class="card-list-title">
+                            <h3>Next Steps Path</h3>
+                            <span class="card-list-complexity">MEDIUM</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Konkretna ścieżka: co dalej? Następna lekcja, praktyka, wyzwanie. Clear path forward.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Navigation</span>
+                        <span class="card-tag">Action Items</span>
+                        <span class="card-tag">Progression</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('ending-reflection')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">💭</div>
+                        <div class="card-list-title">
+                            <h3>Reflection Journal</h3>
+                            <span class="card-list-complexity">MEDIUM</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        3 pytania refleksyjne. Metacognition - głębsze przetworzenie wiedzy przez writing.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Metacognition</span>
+                        <span class="card-tag">Writing</span>
+                        <span class="card-tag">Deep Learning</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('ending-share')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">📢</div>
+                        <div class="card-list-title">
+                            <h3>Social Share</h3>
+                            <span class="card-list-complexity">LOW</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Podziel się sukcesem na LinkedIn/social. Social proof + marketing + community building.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Social Proof</span>
+                        <span class="card-tag">Sharing</span>
+                        <span class="card-tag">Community</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('ending-commitment')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">✍️</div>
+                        <div class="card-list-title">
+                            <h3>Commitment Pledge</h3>
+                            <span class="card-list-complexity">HIGH</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Deklaracja action items z podpisem. Accountability + behavioral commitment technique.
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Commitment</span>
+                        <span class="card-tag">Accountability</span>
+                        <span class="card-tag">Behavior Change</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: rgba(255, 215, 0, 0.05); border-left: 4px solid #ffd700; border-radius: 12px;">
+                <h3 style="margin-bottom: 20px; color: #ffd700;">🎯 Kiedy użyć którego stylu?</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; line-height: 1.8;">
+                    <div>
+                        <strong style="color: #ffd700;">🏆 Achievement:</strong> Knowledge-based lessons, quizy, certyfikacje. Instant gratification.
+                    </div>
+                    <div>
+                        <strong style="color: #00ff87;">✅ Summary:</strong> Długie lekcje z dużą ilością informacji. Quick recap key points.
+                    </div>
+                    <div>
+                        <strong style="color: #60efff;">🗺️ Next Steps:</strong> Part of series. Guide user to kolejne moduły/praktyka.
+                    </div>
+                    <div>
+                        <strong style="color: #a855f7;">💭 Reflection:</strong> Deep learning topics. Metacognition dla long-term retention.
+                    </div>
+                    <div>
+                        <strong style="color: #ff8800;">📢 Social Share:</strong> Milestone achievements. Marketing + community engagement.
+                    </div>
+                    <div>
+                        <strong style="color: #ef4444;">✍️ Commitment:</strong> Behavioral change. Skill practice accountability (7-30 day challenges).
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- CARD DEMO VIEWS -->
         <div id="demo-lightbulb" class="view card-demo-view">
             <div class="demo-header">
@@ -3823,6 +4311,305 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- ENDING CARD DEMOS -->
+        <div id="demo-ending-achievement" class="view card-demo-view">
+            <button class="back-btn" onclick="showCategoryView('ending')">← Powrót do Ending Cards</button>
+            <div class="ending-card-demo ending-variant-1">
+                <div class="ending-achievement-icon">🏆</div>
+                <div class="ending-achievement-title">Milwaukee Story - Zaliczona!</div>
+                <div class="ending-achievement-subtitle">Gratulacje! Jesteś teraz częścią Milwaukee Family</div>
+                
+                <div class="ending-stats-grid">
+                    <div class="ending-stat-box">
+                        <span class="ending-stat-value">+50</span>
+                        <span class="ending-stat-label">XP zdobyte</span>
+                    </div>
+                    <div class="ending-stat-box">
+                        <span class="ending-stat-value">100%</span>
+                        <span class="ending-stat-label">Ukończenie</span>
+                    </div>
+                    <div class="ending-stat-box">
+                        <span class="ending-stat-value">15</span>
+                        <span class="ending-stat-label">Minut nauki</span>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <p style="font-size: 1.2rem; margin-bottom: 30px;">
+                        📚 Zdobyłeś badge: <strong style="color: #ffd700;">"Milwaukee Historian"</strong>
+                    </p>
+                    <button class="hero-cta" style="background: linear-gradient(135deg, #ffd700, #ff8800); color: #000;">
+                        Przejdź do następnej lekcji 🚀
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: rgba(255, 215, 0, 0.05); border-left: 4px solid #ffd700; border-radius: 12px;">
+                <h3 style="margin-bottom: 15px; color: #ffd700;">🎯 Kiedy użyć Achievement Unlock?</h3>
+                <ul style="line-height: 1.8; opacity: 0.9;">
+                    <li><strong>Knowledge-based lessons:</strong> Po quizach, testach, certyfikacjach - gdzie jest clear "pass/fail"</li>
+                    <li><strong>Milestone moments:</strong> Ukończenie modułu, zdobycie poziomu, unlock nowej funkcjonalności</li>
+                    <li><strong>Instant gratification:</strong> Dla learnerów motywowanych przez gamification i achievement unlock</li>
+                    <li><strong>Social proof:</strong> Badge jako dowód kompetencji do pokazania na profilu/LinkedIn</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="demo-ending-summary" class="view card-demo-view">
+            <button class="back-btn" onclick="showCategoryView('ending')">← Powrót do Ending Cards</button>
+            <div class="ending-card-demo ending-variant-2">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">✅</div>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 15px;">Kluczowe Wnioski</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.8;">Co zapamiętać z tej lekcji</p>
+                </div>
+
+                <div class="ending-checklist">
+                    <div class="ending-checklist-item">
+                        <div class="ending-check-icon">✓</div>
+                        <div>
+                            <strong style="color: #00ff87; font-size: 1.2rem;">Historia Milwaukee:</strong>
+                            <p style="margin-top: 8px; opacity: 0.9;">Od Hole-Shooter (1918) do MX FUEL (2024) - 106 lat innowacji dla profesjonalistów</p>
+                        </div>
+                    </div>
+
+                    <div class="ending-checklist-item">
+                        <div class="ending-check-icon">✓</div>
+                        <div>
+                            <strong style="color: #00ff87; font-size: 1.2rem;">3 Core Values:</strong>
+                            <p style="margin-top: 8px; opacity: 0.9;">User Focus → Innovation → Heavy Duty. To DNA Milwaukee - nie tylko slogany.</p>
+                        </div>
+                    </div>
+
+                    <div class="ending-checklist-item">
+                        <div class="ending-check-icon">✓</div>
+                        <div>
+                            <strong style="color: #00ff87; font-size: 1.2rem;">Application First Philosophy:</strong>
+                            <p style="margin-top: 8px; opacity: 0.9;">Nie sprzedajemy narzędzi - rozwiązujemy problemy na budowie. To podstawa każdej rozmowy.</p>
+                        </div>
+                    </div>
+
+                    <div class="ending-checklist-item">
+                        <div class="ending-check-icon">✓</div>
+                        <div>
+                            <strong style="color: #00ff87; font-size: 1.2rem;">Pattern Recognition:</strong>
+                            <p style="margin-top: 8px; opacity: 0.9;">Milwaukee tworzy nowe kategorie (Sawzall, ONE-KEY, MX FUEL) - nie kopiuje konkurencji.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="hero-cta" style="background: #00ff87; color: #000;">
+                        Dalej: Portfolio Overview 📦
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: rgba(0, 255, 135, 0.05); border-left: 4px solid #00ff87; border-radius: 12px;">
+                <h3 style="margin-bottom: 15px; color: #00ff87;">🎯 Kiedy użyć Summary Checklist?</h3>
+                <ul style="line-height: 1.8; opacity: 0.9;">
+                    <li><strong>Długie lekcje:</strong> 15+ minut z dużą ilością informacji - recap najważniejszych punktów</li>
+                    <li><strong>Multi-topic lessons:</strong> Kilka różnych tematów w jednej lekcji - zbierz key takeaways</li>
+                    <li><strong>Before quiz:</strong> Quick recap przed testem końcowym - przypomnienie materiału</li>
+                    <li><strong>Reference material:</strong> Learner może wrócić i szybko odświeżyć główne punkty</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="demo-ending-nextsteps" class="view card-demo-view">
+            <button class="back-btn" onclick="showCategoryView('ending')">← Powrót do Ending Cards</button>
+            <div class="ending-card-demo ending-variant-3">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">🗺️</div>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 15px;">Co Dalej?</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.8;">Twoja ścieżka rozwoju w Milwaukee Academy</p>
+                </div>
+
+                <div class="ending-pathway">
+                    <div class="ending-step" onclick="alert('Przejście do Lekcja 1.2')">
+                        <div class="ending-step-number">1</div>
+                        <div class="ending-step-content">
+                            <h4>Lekcja 1.2: Portfolio Overview</h4>
+                            <p style="opacity: 0.8; margin-top: 8px;">Poznaj 5 Power Tools categories + accessories. 15 minut</p>
+                        </div>
+                        <div style="font-size: 2rem;">→</div>
+                    </div>
+
+                    <div class="ending-step" onclick="alert('Przejście do Praktyka')">
+                        <div class="ending-step-number">2</div>
+                        <div class="ending-step-content">
+                            <h4>🎯 Praktyka: Elevator Pitch</h4>
+                            <p style="opacity: 0.8; margin-top: 8px;">Nagraj 60-sec pitch o Milwaukee dla nowego klienta. Audio recording.</p>
+                        </div>
+                        <div style="font-size: 2rem;">→</div>
+                    </div>
+
+                    <div class="ending-step" onclick="alert('7-Day Challenge')">
+                        <div class="ending-step-number">3</div>
+                        <div class="ending-step-content">
+                            <h4>🏆 Wyzwanie: Application First Week</h4>
+                            <p style="opacity: 0.8; margin-top: 8px;">7 dni - każdy dzień znajdź 3 problemy na budowie (bez mówienia o produktach)</p>
+                        </div>
+                        <div style="font-size: 2rem;">→</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="hero-cta" style="background: linear-gradient(135deg, #60efff, #0ea5e9); color: #000;">
+                        Zacznij Lekcję 1.2 🚀
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: rgba(96, 239, 255, 0.05); border-left: 4px solid #60efff; border-radius: 12px;">
+                <h3 style="margin-bottom: 15px; color: #60efff;">🎯 Kiedy użyć Next Steps Path?</h3>
+                <ul style="line-height: 1.8; opacity: 0.9;">
+                    <li><strong>Part of series:</strong> Lekcja należy do większego modułu/kursu - pokaż ścieżkę progresji</li>
+                    <li><strong>Multiple paths:</strong> Learner może wybrać różne ścieżki (praktyka vs teoria vs wyzwanie)</li>
+                    <li><strong>Skill progression:</strong> Clear roadmap od podstaw do expert level</li>
+                    <li><strong>Prevent dropout:</strong> Natychmiastowa akcja po ukończeniu - bez "dead end" moment</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="demo-ending-reflection" class="view card-demo-view">
+            <button class="back-btn" onclick="showCategoryView('ending')">← Powrót do Ending Cards</button>
+            <div class="ending-card-demo ending-variant-4">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">💭</div>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 15px;">Moment Refleksji</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.8;">Zapisz swoje przemyślenia - to pomaga w długoterminowym zapamiętaniu</p>
+                </div>
+
+                <div class="ending-reflection-prompt">
+                    <div class="ending-reflection-question">1. Który element historii Milwaukee najbardziej Cię zaskoczył? Dlaczego?</div>
+                    <textarea class="ending-textarea" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+
+                <div class="ending-reflection-prompt">
+                    <div class="ending-reflection-question">2. Która z 3 core values jest najbliżej Twoich własnych wartości?</div>
+                    <textarea class="ending-textarea" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+
+                <div class="ending-reflection-prompt">
+                    <div class="ending-reflection-question">3. Jak możesz zastosować "Application First" w następnej wizycie u klienta?</div>
+                    <textarea class="ending-textarea" placeholder="Konkretny przykład z Twojego terenu/klientów..."></textarea>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="hero-cta" style="background: linear-gradient(135deg, #a855f7, #ec4899); color: #fff;">
+                        Zapisz refleksję i kontynuuj 💾
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: rgba(168, 85, 247, 0.05); border-left: 4px solid #a855f7; border-radius: 12px;">
+                <h3 style="margin-bottom: 15px; color: #a855f7;">🎯 Kiedy użyć Reflection Journal?</h3>
+                <ul style="line-height: 1.8; opacity: 0.9;">
+                    <li><strong>Deep learning topics:</strong> Złożone koncepcje wymagające metacognition (thinking about thinking)</li>
+                    <li><strong>Behavioral change:</strong> Zmiana mindset (Product → Application First) - writing=commitment</li>
+                    <li><strong>Long-term retention:</strong> Writing zwiększa retention o 30-50% vs passive reading</li>
+                    <li><strong>Personal connection:</strong> Link teoria ↔ własne doświadczenie learner'a</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="demo-ending-share" class="view card-demo-view">
+            <button class="back-btn" onclick="showCategoryView('ending')">← Powrót do Ending Cards</button>
+            <div class="ending-card-demo ending-variant-5">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">📢</div>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 15px;">Świetna robota!</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.8;">Podziel się swoim sukcesem z zespołem</p>
+                </div>
+
+                <div class="ending-share-preview">
+                    <div class="ending-share-badge">🏆 Milwaukee Story - Zaliczona!</div>
+                    <p style="font-size: 1.1rem; margin: 20px 0; line-height: 1.8;">
+                        Właśnie ukończyłem pierwszą lekcję w <strong>Milwaukee Academy</strong>! 📚<br>
+                        Poznałem historię marki - od Hole-Shooter (1918) do MX FUEL (2024).<br>
+                        Application First to nie slogan - to DNA każdej rozmowy z klientem! 💪
+                    </p>
+                    <div style="color: #999; font-size: 0.9rem;">
+                        #MilwaukeeTools #SalesDevelopment #ContinuousLearning
+                    </div>
+
+                    <div class="ending-share-buttons">
+                        <button class="ending-share-btn linkedin" onclick="alert('Share to LinkedIn')">
+                            🔗 LinkedIn
+                        </button>
+                        <button class="ending-share-btn twitter" onclick="alert('Share to Twitter')">
+                            🐦 Twitter
+                        </button>
+                        <button class="ending-share-btn copy" onclick="alert('Skopiowano do schowka!')">
+                            📋 Kopiuj tekst
+                        </button>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="hero-cta" style="background: linear-gradient(135deg, #ff8800, #ffd700); color: #000;">
+                        Następna lekcja 🚀
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: rgba(255, 136, 0, 0.05); border-left: 4px solid #ff8800; border-radius: 12px;">
+                <h3 style="margin-bottom: 15px; color: #ff8800;">🎯 Kiedy użyć Social Share?</h3>
+                <ul style="line-height: 1.8; opacity: 0.9;">
+                    <li><strong>Milestone achievements:</strong> Ukończenie modułu, certyfikat, poziom expert - warte pokazania</li>
+                    <li><strong>Marketing/employer branding:</strong> Firma inwestuje w rozwój - social proof dla recruitment</li>
+                    <li><strong>Community building:</strong> Inne osoby z firmy widzą co robisz - peer motivation</li>
+                    <li><strong>Accountability:</strong> Publiczny commitment zwiększa completion rate</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="demo-ending-commitment" class="view card-demo-view">
+            <button class="back-btn" onclick="showCategoryView('ending')">← Powrót do Ending Cards</button>
+            <div class="ending-card-demo ending-variant-6">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">✍️</div>
+                    <h2 style="font-size: 2.5rem; margin-bottom: 15px;">Twoje Zobowiązanie</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.8;">Z wiedzą przychodzi odpowiedzialność - co zrobisz z tym co się nauczyłeś?</p>
+                </div>
+
+                <div class="ending-commitment-pledge">
+                    <div class="ending-commitment-text">
+                        "W ciągu następnych <strong style="color: #ef4444;">7 dni</strong> zobowiązuję się do:<br><br>
+                        
+                        ✅ Przeprowadzić minimum <strong>5 rozmów</strong> z klientami w stylu Application First<br>
+                        ✅ Rozpoczynać każdą wizytę od pytania o <strong>problemy na budowie</strong>, nie o narzędzia<br>
+                        ✅ Zapisać w CRM minimum <strong>3 case studies</strong> - jak problem klienta przekształciłem w rozwiązanie Milwaukee<br>
+                        ✅ Podzielić się jednym insightem z team'em podczas weekly meeting<br><br>
+                        
+                        Jeśli tego nie zrobię - wpłacę <strong>50 PLN</strong> na wspólny team lunch. 🍕"
+                    </div>
+
+                    <div class="ending-signature-line">
+                        <input type="text" class="ending-signature-input" placeholder="Twój podpis..." value="">
+                        <div class="ending-date-display">Data: 20.01.2026</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="hero-cta" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff;">
+                        Podpisuję zobowiązanie 🔥
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 30px; background: rgba(239, 68, 68, 0.05); border-left: 4px solid #ef4444; border-radius: 12px;">
+                <h3 style="margin-bottom: 15px; color: #ef4444;">🎯 Kiedy użyć Commitment Pledge?</h3>
+                <ul style="line-height: 1.8; opacity: 0.9;">
+                    <li><strong>Behavioral change:</strong> Zmiana nawyków wymaga commitment - podpis zwiększa follow-through o 40%</li>
+                    <li><strong>Skill practice:</strong> After learning nowej techniki - commit do praktyki przez X dni</li>
+                    <li><strong>Accountability partner:</strong> Commitment możesz share z menedżerem/buddy - social pressure</li>
+                    <li><strong>High-stakes training:</strong> Compliance, safety, critical skills - gdzie action jest obowiązkowy</li>
+                </ul>
             </div>
         </div>
 

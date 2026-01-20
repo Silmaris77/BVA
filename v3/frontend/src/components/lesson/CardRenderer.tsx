@@ -7,10 +7,12 @@ import WarningCard from './WarningCard'
 import TimelineCard from './TimelineCard'
 import LightbulbCard from './LightbulbCard'
 import FlashcardsCard from './FlashcardsCard'
+import HeroCard from './HeroCard'
+import QuizCard from './QuizCard'
 
 interface CardRendererProps {
     card: {
-        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards'
+        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz'
         title?: string
         subtitle?: string
         description?: string
@@ -40,6 +42,12 @@ interface CardRendererProps {
             correct: number
             explanation: string
         }
+        questions?: {
+            question: string
+            options: string[]
+            correctAnswer: number
+            explanation?: string
+        }[]
         [key: string]: any
     }
     onAnswer?: (correct: boolean) => void
@@ -48,12 +56,12 @@ interface CardRendererProps {
 export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
     switch (card.type) {
         case 'hero':
-            // Hero is like intro but more emphasis
-            return <IntroCard
+            // Hero is like intro but more emphasis - now using Emotional Variant
+            return <HeroCard
                 title={card.title || 'Wstęp'}
-                description={card.content || card.description || ''}
+                content={card.content || card.description || ''}
                 subtitle={card.subtitle}
-                icon={card.icon || '🚀'}
+                icon={card.icon}
             />
         case 'content':
             // Content is like concept
@@ -132,6 +140,11 @@ export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
                 content={card.content || card.description || ''}
                 warnings={card.warnings || []}
                 example={card.example}
+            />
+        case 'quiz':
+            return <QuizCard
+                title={card.title || 'Sprawdź Wiedzę'}
+                questions={card.questions || []}
             />
         default:
             return (
