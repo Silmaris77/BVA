@@ -10,6 +10,8 @@ export default function HomePage() {
   const { user, profile, loading } = useAuth()
   const router = useRouter()
   const [completedLessons, setCompletedLessons] = useState<number>(0)
+  const [leaderboard, setLeaderboard] = useState<any[]>([])
+  const [leaderboardLoading, setLeaderboardLoading] = useState(true)
 
   useEffect(() => {
     if (!loading && !user) {
@@ -31,6 +33,31 @@ export default function HomePage() {
     }
 
     fetchStats()
+  }, [user])
+
+  useEffect(() => {
+    async function fetchLeaderboard() {
+      if (!user) return
+
+      try {
+        setLeaderboardLoading(true)
+        const response = await fetch('/api/leaderboard?limit=10')
+
+        if (!response.ok) {
+          console.error('Leaderboard fetch failed:', response.statusText)
+          return
+        }
+
+        const data = await response.json()
+        setLeaderboard(data)
+      } catch (error) {
+        console.error('Leaderboard error:', error)
+      } finally {
+        setLeaderboardLoading(false)
+      }
+    }
+
+    fetchLeaderboard()
   }, [user])
 
   if (loading) {
@@ -221,17 +248,38 @@ export default function HomePage() {
           {/* Leaderboard */}
           <GlassCard>
             <CardHeader title="🏆 Leaderboard" action="Top 100" />
-            <LeaderboardItem rank={1} initials="AM" name="Anna Marek" level={12} title="Master" xp={5230} top />
-            <LeaderboardItem rank={2} initials="MP" name="Michał P." level={11} title="Expert" xp={4890} top />
-            <LeaderboardItem rank={3} initials="KW" name="Kasia W." level={10} title="Advanced" xp={4250} top />
-            <LeaderboardItem
-              rank={8}
-              initials={profile?.full_name?.substring(0, 2).toUpperCase() || 'PK'}
-              name={`${profile?.full_name || 'Piotr K.'} (Ty)`}
-              level={profile?.level || 8}
-              title={levelName(profile?.level || 8)}
-              xp={profile?.xp || 2450}
-            />
+            {leaderboardLoading ? (
+              <div style={{
+                padding: '20px',
+                textAlign: 'center',
+                color: 'rgba(255, 255, 255, 0.6)'
+              }}>
+                Ładowanie rankingu...
+              </div>
+            ) : leaderboard.length === 0 ? (
+              <div style={{
+                padding: '20px',
+                textAlign: 'center',
+                color: 'rgba(255, 255, 255, 0.6)'
+              }}>
+                Brak danych rankingu
+              </div>
+            ) : (
+              <>
+                {leaderboard.map((entry) => (
+                  <LeaderboardItem
+                    key={entry.user_id}
+                    rank={entry.rank}
+                    initials={entry.display_name?.substring(0, 2).toUpperCase() || 'U'}
+                    name={entry.user_id === user?.id ? `${entry.display_name || 'Ty'} (Ty)` : (entry.display_name || 'User')}
+                    level={entry.level}
+                    title={levelName(entry.level)}
+                    xp={entry.total_xp}
+                    top={entry.rank <= 3}
+                  />
+                ))}
+              </>
+            )}
           </GlassCard>
         </div>
 

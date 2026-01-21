@@ -9,10 +9,13 @@ import LightbulbCard from './LightbulbCard'
 import FlashcardsCard from './FlashcardsCard'
 import HeroCard from './HeroCard'
 import QuizCard from './QuizCard'
+import AchievementCard from './AchievementCard'
+import HabitBuilderCard from './HabitBuilderCard'
+import QuoteCard from './QuoteCard'
 
 interface CardRendererProps {
     card: {
-        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz'
+        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote'
         title?: string
         subtitle?: string
         description?: string
@@ -48,6 +51,12 @@ interface CardRendererProps {
             correctAnswer: number
             explanation?: string
         }[]
+        habits?: {
+            text: string
+            id: string
+        }[]
+        level?: string
+        xp?: number
         [key: string]: any
     }
     onAnswer?: (correct: boolean) => void
@@ -145,6 +154,26 @@ export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
             return <QuizCard
                 title={card.title || 'Sprawdź Wiedzę'}
                 questions={card.questions || []}
+            />
+        case 'achievement':
+            return <AchievementCard
+                title={card.title || 'Osiągnięcie'}
+                description={card.content || card.description || ''}
+                icon={card.icon as any || 'trophy'}
+                level={card.level}
+                xp={card.xp}
+            />
+        case 'habit':
+            return <HabitBuilderCard
+                title={card.title || 'Action Plan'}
+                description={card.content || card.description || ''}
+                habits={card.habits || []}
+            />
+        case 'quote':
+            return <QuoteCard
+                text={card.content || card.text || ''}
+                author={card.author || ''}
+                role={card.role}
             />
         default:
             return (

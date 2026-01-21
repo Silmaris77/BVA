@@ -46,6 +46,14 @@ INSERT INTO lessons (
         "content": "### 🏭 1918 – Geneza: narzędzie dla Henry'ego Forda\n\n**Hole-Shooter** – lekka wiertarka ¼\", zaprojektowana na potrzeby pracy na liniach montażowych Forda.\n\nTo właśnie od tego narzędzia zaczyna się historia Milwaukee.\n\n---\n\n### 🔥 1924 – Narodziny z popiołów\n\n**Albert F. Siebert** przejmuje majątek spółki po pożarze fabryki i zakłada **Milwaukee Electric Tool Corporation**.\n\nCel jest jasny: udoskonalić Hole-Shootera i dostosować go do realiów przemysłu.\n\n---\n\n### 🔧 Lata 20. i 30. – Źródło przewagi Milwaukee\n\nZnacząca część działalności Milwaukee opierała się na **naprawach narzędzi innych producentów**, a nie na własnej produkcji.\n\nDzięki temu firma zyskała coś bezcennego:\n- dogłębną wiedzę o typowych awariach,\n- zrozumienie rzeczywistych problemów użytkowników,\n- doświadczenie, którego konkurencja nie posiadała.\n\n**Efekt:** Hole-Shooter został wzmocniony i udoskonalony w oparciu o te obserwacje, stając się standardem w przemyśle motoryzacyjnym i obróbce metalu.\n\n---\n\n💡 **DNA Milwaukee:** Od samego początku firma uczyła się od użytkowników. Nie była to deklaracja marketingowa, lecz fundament sposobu działania."
       },
       {
+        "id": "card-3-lightbulb",
+        "type": "lightbulb",
+        "title": "Dlaczego Milwaukee rozumie użytkownika?",
+        "content": "W latach 20. Milwaukee zarabiało głównie na **naprawianiu narzędzi konkurencji**.",
+        "insight": "Dzięki temu inżynierowie widzieli dokładnie, co się psuje i dlaczego. To nie był marketing – to była twarda lekcja inżynierii zwrotnej, która zbudowała DNA firmy.",
+        "accent_color": "yellow"
+      },
+      {
         "id": "card-2-timeline",
         "type": "timeline",
         "title": "100 Lat Historii - Oś Czasu",
@@ -103,12 +111,29 @@ INSERT INTO lessons (
         "content": "### ⚓ Około 1930 r. – Współpraca z marynarką wojenną USA\n\nMilwaukee rozpoczyna współpracę z **US Navy**, produkując narzędzia spełniające **rygorystyczne normy wojskowe**.\n\n**Efekt:** ugruntowanie reputacji marki jako synonimu wyjątkowej trwałości w przemyśle ciężkim.\n\n---\n\n### 🔐 1949 – Bezpieczeństwo jako standard\n\nMilwaukee wprowadza rozwiązania, które realnie poprawiają bezpieczeństwo pracy:\n- **sprzęgło sprężynowe**, ograniczające ryzyko odrzutu narzędzia,\n- **wiertarkę kątową ½\"**, umożliwiającą pracę w ciasnych i trudno dostępnych przestrzeniach.\n\n---\n\n### 🏆 1951 – SAWZALL® i narodziny nowej kategorii\n\nMilwaukee wprowadza na rynek pierwszą **przenośną piłę szablastą**.\n\nHasło „cokolwiek i gdziekolwiek” nie było obietnicą marketingową, lecz opisem realnych możliwości narzędzia.\n\nMilwaukee nie ulepszyło istniejącego rozwiązania – **stworzyło zupełnie nową kategorię narzędzi**.\n\n---\n\n### 📈 Lata 60. i 70. – Ekspansja i specjalizacja\n\nFirma dynamicznie się rozwija, uruchamia nowe zakłady produkcyjne i poszerza ofertę.\n\nSymbolem tej epoki staje się **Hole Hawg** – specjalistyczna wiertarka do wykonywania dużych otworów w konstrukcjach drewnianych, zaprojektowana z myślą o konkretnych zastosowaniach.\n\n---\n\n### 🎯 Lata 90. – Decyzja: tylko profesjonaliści\n\nMilwaukee podejmuje świadomą decyzję o **rezygnacji z rynku hobbystycznego**.\n\nFirma koncentruje się wyłącznie na użytkownikach profesjonalnych, stawiając na trwałość, bezpieczeństwo i wydajność. Ten kierunek definiuje markę do dziś.\n\n---\n\n### 🔋 2005–2024 – Era platform systemowych\n\n- **2005 r.** – przejęcie przez **Techtronic Industries (TTI)**, które otwiera drogę do intensywnego rozwoju technologicznego.\n- **Lata 2010–2020** – rozwój platform M12™ i M18™: jedna bateria, setki kompatybilnych narzędzi.\n- **Od 2021 r.** – **MX FUEL™**, czyli wydajne systemy akumulatorowe zastępujące rozwiązania spalinowych.\n\n---\n\n🎯 **Wzorzec działania:** Milwaukee konsekwentnie tworzy i redefiniuje kategorie narzędzi, zamiast jedynie rozwijać pojedyncze produkty."
       },
       {
-        "id": "card-3-lightbulb",
-        "type": "lightbulb",
-        "title": "Dlaczego Milwaukee rozumie użytkownika?",
-        "content": "W latach 20. Milwaukee zarabiało głównie na **naprawianiu narzędzi konkurencji**.",
-        "insight": "Dzięki temu inżynierowie widzieli dokładnie, co się psuje i dlaczego. To nie był marketing – to była twarda lekcja inżynierii zwrotnej, która zbudowała DNA firmy.",
-        "accent_color": "yellow"
+        "id": "card-3-pivot",
+        "type": "content",
+        "title": "2005: Strategiczny Zwrot Akcji",
+        "content": "### 📉 Problem przełomu tysiącleci\n\nNa przełomie lat 90. i 2000. Milwaukee było znane z **kultowych produktów** (jak Sawzall®) i legendarej trwałości, ale firma **straciła ostrość widzenia**.\n\nPróba bycia marką „dla wszystkich” rozmyła tożsamość Heavy Duty. Rynek się zmieniał, a Milwaukee potrzebowało nowej energii.\n\n---\n\n### 🚀 Przełom 2005: Wejście TTI\n\nW 2005 roku Techtronic Industries (TTI) przejęło markę. Podjęto wtedy **radykalną decyzję**, która zdefiniowała sukces kolejnych dekad:\n\n# „Wracamy do Korzeni”\n\nŚwiadoma rezygnacja z walki o klienta masowego (DIY) na rzecz **100% koncentracji na profesjonalistach** z branż: mechanicznej, elektrycznej i hydraulicznej (MEP).\n\nAby to osiągnąć, musieliśmy zmienić wszystko:\n1.  **Podejście do technologii** (nie tylko mechanika, ale i elektronika)\n2.  **Proces projektowania** (Back to Jobsite)\n3.  **Tempo działania** (Szybkie prototypowanie)\n\nTo był moment, w którym Milwaukee przestało być tylko „producentem narzędzi”, a stało się **liderem rozwiązań dla jobsite'u**."
+      },
+      {
+        "id": "card-3-strategy",
+        "type": "flashcards",
+        "title": "Rewolucja Akumulatorowa 2005+",
+        "cards": [
+          {
+            "front": "🔌 Stary Świat (Przed 2005)",
+            "back": "Rynek wątpił w baterie. Uważano, że 'prawdziwa moc' jest tylko z kabla. Narzędzia akumulatorowe były słabe i krótko działały."
+          },
+          {
+            "front": "🔋 Wizja Milwaukee (Li-Ion)",
+            "back": "Decyzja: 'Akumulatorowy jobsite to nie moda. To przyszłość'. Inwestycja w litowo-jonową technologię, gdy inni się wahali."
+          },
+          {
+            "front": "🏗️ Ekosystem, nie gadżet",
+            "back": "Zamiast pojedynczych narzędzi, stworzono PLATFORMY (M12™, M18™). Jedna bateria pasuje do sieci setek rozwiązań."
+          }
+        ]
       },
       {
         "id": "card-4",
@@ -197,6 +222,13 @@ INSERT INTO lessons (
         }
       },
       {
+        "id": "card-10-quote",
+        "type": "quote",
+        "content": "Każda firma twierdzi, że ma najlepszych ludzi na świecie. Gdy jednak spojrzymy na naszą historię z ostatniej dekady, dowody na to są jednoznaczne. Naszą stałą wartością była i zawsze będzie pasja, determinacja oraz pełne zaangażowanie naszych pracowników.",
+        "author": "Steve Richman",
+        "role": "CEO, Milwaukee Tool"
+      },
+      {
         "id": "card-11",
         "type": "quiz",
         "title": "Sprawdź Wiedzę: Milwaukee DNA",
@@ -263,6 +295,35 @@ INSERT INTO lessons (
         "type": "content",
         "title": "Jesteś Częścią Milwaukee Family",
         "content": "### 🎯 Co Zapamiętać:\n\n✅ **Historia:** Od Hole-Shootera (1918) → Sawzall (1951) → MX FUEL (2024)\n✅ **Pattern:** Milwaukee **tworzy kategorie**, nie tylko produkty\n✅ **DNA:** User Focus od lat 20. (naprawy!), US Navy quality (1930), Innovation (Sawzall)\n✅ **Wartości:**\n  - 🔍 **Obsessive Focus** → Jobsite walks, nie zgadujemy\n  - 💡 **Innovation** → Realna przewaga, nie gadżety\n  - 💪 **Heavy Duty** → Zero kompromisów (DNA od US Navy)\n✅ **Filozofia:** Application First – od lat 20., nie marketing\n\n---\n\n### 💪 Dlaczego To Ważne:\n\nJesteś ambasadorem marki, która **zmienia** sposób pracy milionów profesjonalistów.\n\n**Każda rzecz którą sprzedajesz** to nie \"pudełko\" – to:\n- ⏱️ Więcej czasu dla usera\n- 💰 Więcej zarobków\n- 🏠 Szybszy powrót do domu\n- 🔐 Większe bezpieczeństwo\n\nTwoja rola to nie \"handlowiec\" – to **doradca**, który pomaga ludziom pracować lepiej, szybciej, bezpieczniej.\n\n**Nothing but HEAVY DUTY™** to Twoja misja. Zero kompromisów.\n\n---\n\n### ➡️ Następny Krok:\n\n**Lesson 1.2:** Portfolio Overview - Ekosystem M12/M18/MX FUEL\n\n*(Poznasz SYSTEMY, nie pojedyncze produkty – bo Milwaukee sprzedaje ekosystemy)*"
+      },
+      {
+        "id": "card-13",
+        "type": "habit",
+        "title": "Zadania na ten tydzień",
+        "content": "Wdrożenie filozofii Application First w Twojej codziennej pracy.",
+        "habits": [
+          {
+            "id": "h1",
+            "text": "Zapytaj 3 klientów: 'Gdzie będziesz tym pracować?' zanim zaproponujesz narzędzie"
+          },
+          {
+            "id": "h2",
+            "text": "Znajdź jedną innowację (np. ONE-KEY, FUEL) i wyjaśnij klientowi jaką korzyść mu da"
+          },
+          {
+            "id": "h3",
+            "text": "Opowiedz jednemu klientowi historię o Henrym Fordzie lub US Navy"
+          }
+        ]
+      },
+      {
+        "id": "card-14",
+        "type": "achievement",
+        "title": "Mistrz Fundamentów",
+        "content": "Gratulacje! Poznałeś historię i DNA marki Milwaukee. Jesteś gotowy, by budować zaufanie klientów na fundamencie Heavy Duty.",
+        "icon": "trophy",
+        "level": "Novice",
+        "xp": 150
       }
     ]
   }
@@ -299,4 +360,4 @@ SELECT
 FROM lessons
 WHERE lesson_id = 'lesson-1-1-milwaukee-story';
 
--- Expected result: 1 row showing 15 cards (Includes Final Quiz hybrid), Milwaukee Tools as company
+-- Expected result: 1 row showing 20 cards (Complete Flow included), Milwaukee Tools as company
