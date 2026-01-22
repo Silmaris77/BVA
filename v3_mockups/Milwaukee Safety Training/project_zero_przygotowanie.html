@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milwaukee Project Zero - Przygotowanie do Pracy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0f0f1e 100%);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .lesson-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Card - Safety Focus */
+        .hero-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(218, 41, 28, 0.15));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            border-radius: 24px;
+            padding: 50px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #DA291C, #ef4444, #f97316);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(218, 41, 28, 0.3);
+            border: 1px solid #DA291C;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #DA291C;
+            margin-bottom: 20px;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            animation: pulse-warning 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-warning {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.5)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.8)); }
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #DA291C, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .hero-tagline {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #DA291C;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .hero-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-section h4 {
+            font-size: 1.2rem;
+            color: #DA291C;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .hero-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .hero-section li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .hero-section li::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: #00ff87;
+        }
+
+        .hero-problem-badge {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Lightbulb Card - Methodology */
+        .lightbulb-card {
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 4px solid #f59e0b;
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .lightbulb-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .lightbulb-icon {
+            font-size: 4rem;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5)); }
+            50% { filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.8)); }
+        }
+
+        .lightbulb-header h3 {
+            font-size: 2rem;
+            color: #f59e0b;
+        }
+
+        .methodology-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .methodology-step {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .methodology-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #f59e0b, #fb923c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #000;
+            margin: 0 auto 15px;
+        }
+
+        .methodology-step h4 {
+            color: #f59e0b;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .content-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .content-icon {
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .content-title-group h3 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .content-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content-section {
+            margin: 25px 0;
+        }
+
+        .content-section h4 {
+            color: #60efff;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .content-section.warning h4 {
+            color: #ef4444;
+        }
+
+        .content-section.important h4 {
+            color: #f59e0b;
+        }
+
+        .content-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content-list li {
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #60efff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .content-list li:hover {
+            background: rgba(96, 239, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .error-list li {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .error-list li::before {
+            content: '❌ ';
+            margin-right: 8px;
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-box.critical {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .warning-box p {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .remember-box {
+            background: rgba(168, 85, 247, 0.1);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .remember-box h4 {
+            color: #a855f7;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .remember-box p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            font-weight: 600;
+        }
+
+        /* Story Card - Case Studies */
+        .story-card {
+            background: linear-gradient(135deg, rgba(218, 41, 28, 0.1), rgba(239, 68, 68, 0.05));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(218, 41, 28, 0.3);
+            border-radius: 24px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(218, 41, 28, 0.2);
+        }
+
+        .story-icon {
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .story-title {
+            font-size: 1.5rem;
+            color: #DA291C;
+            font-weight: 700;
+        }
+
+        .story-timestamp {
+            display: inline-block;
+            background: rgba(218, 41, 28, 0.2);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+
+        .story-scenario {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #DA291C;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .story-scenario h4 {
+            color: #DA291C;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .story-scenario p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .story-consequences {
+            margin: 25px 0;
+        }
+
+        .story-consequence-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+            border-radius: 8px;
+        }
+
+        .story-consequence-item::before {
+            content: '➡️';
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .story-lesson {
+            background: rgba(0, 255, 135, 0.1);
+            border: 2px solid rgba(0, 255, 135, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .story-lesson h4 {
+            color: #00ff87;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .story-lesson p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Data Card - Statistics */
+        .data-card {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 146, 60, 0.1));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(245, 158, 11, 0.4);
+            border-radius: 24px;
+            padding: 50px;
+            margin: 40px 0;
+        }
+
+        .data-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .data-header-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .data-header h3 {
+            font-size: 2.2rem;
+            color: #f59e0b;
+            margin-bottom: 15px;
+        }
+
+        .data-stats-showcase {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .data-stat-box {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .data-stat-box:hover {
+            transform: translateY(-5px);
+            border-color: #f59e0b;
+        }
+
+        .data-stat-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #f59e0b;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .data-stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .data-insight {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .data-insight h4 {
+            color: #f59e0b;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        .data-insight p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .data-comparison-table {
+            width: 100%;
+            margin: 30px 0;
+            border-collapse: collapse;
+        }
+
+        .data-comparison-table th {
+            background: rgba(245, 158, 11, 0.2);
+            padding: 15px;
+            text-align: left;
+            color: #f59e0b;
+            font-weight: 700;
+            border-bottom: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .data-comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-comparison-table tr:hover {
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        /* Interactive Quiz Card */
+        .quiz-card {
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(96, 239, 255, 0.4);
+            border-radius: 24px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-header h3 {
+            font-size: 2rem;
+            color: #60efff;
+            margin-bottom: 10px;
+        }
+
+        .quiz-question {
+            background: rgba(96, 239, 255, 0.05);
+            border: 1px solid rgba(96, 239, 255, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question h4 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #60efff;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: rgba(96, 239, 255, 0.1);
+            border-color: #60efff;
+            transform: translateX(5px);
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 135, 0.15);
+            border-color: #00ff87;
+        }
+
+        .quiz-option.wrong {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+        }
+
+        /* Ending Card - Summary */
+        .ending-card {
+            background: linear-gradient(135deg, rgba(0, 255, 135, 0.15), rgba(96, 239, 255, 0.15));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 255, 135, 0.4);
+            border-radius: 24px;
+            padding: 50px;
+            margin-top: 40px;
+        }
+
+        .ending-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .ending-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .ending-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #00ff87, #60efff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ending-checklist {
+            margin: 30px 0;
+        }
+
+        .ending-checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: rgba(0, 255, 135, 0.05);
+            border: 1px solid rgba(0, 255, 135, 0.2);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .ending-checklist-item:hover {
+            background: rgba(0, 255, 135, 0.1);
+            transform: translateX(5px);
+        }
+
+        .ending-check-icon {
+            font-size: 1.8rem;
+            color: #00ff87;
+            flex-shrink: 0;
+        }
+
+        .ending-tagline {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #DA291C;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(218, 41, 28, 0.1);
+            border: 2px solid rgba(218, 41, 28, 0.3);
+            border-radius: 12px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #DA291C, #ef4444);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .methodology-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-card,
+            .content-card,
+            .ending-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        
+        <!-- HERO CARD -->
+        <div class="hero-card">
+            <div class="hero-badge">🟥 MILWAUKEE | PROJECT ZERO</div>
+            <div class="hero-icon">⚠️</div>
+            <h1 class="hero-title">PRZYGOTOWANIE DO PRACY</h1>
+            <div class="hero-tagline">STAY SAFE. STAY PRODUCTIVE.</div>
+
+            <div class="hero-grid">
+                <div class="hero-section">
+                    <h4>Dla kogo jest ta lekcja</h4>
+                    <p style="margin-bottom: 15px; font-size: 1rem; opacity: 0.9;">Ta lekcja została stworzona dla osób, które pracują narzędziami każdego dnia:</p>
+                    <ul>
+                        <li>🏗️ Budowa</li>
+                        <li>🚗 Warsztat samochodowy</li>
+                        <li>⚡ Elektryka</li>
+                        <li>🚰 Hydraulika</li>
+                        <li>🪵 Stolarnia</li>
+                        <li>🛠️ Serwis / utrzymanie ruchu</li>
+                    </ul>
+                </div>
+
+                <div class="hero-section">
+                    <h4>Cel tej lekcji</h4>
+                    <p style="margin-bottom: 15px; font-size: 1rem; opacity: 0.9;">Po tej lekcji będziesz potrafił:</p>
+                    <ul>
+                        <li>pracować <strong>szybciej</strong>, bo bez chaosu i improwizacji</li>
+                        <li>pracować <strong>bezpieczniej</strong>, bez niepotrzebnego ryzyka</li>
+                        <li>unikać <strong>przestojów, kontuzji i uszkodzeń sprzętu</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h4 style="color: #DA291C; font-size: 1.3rem; margin-bottom: 15px; text-align: center;">Dlaczego to ważne</h4>
+                <div class="hero-problem-badge">
+                    "Najwięcej wypadków nie wydarza się przy trudnej robocie.<br>
+                    Wydarzają się przy tej, którą robimy „tylko na chwilę"."
+                </div>
+                <p style="text-align: center; font-size: 1.1rem; line-height: 1.8; margin-top: 20px; opacity: 0.95;">
+                    Ta lekcja pomoże Ci <strong style="color: #DA291C;">zadbać o bezpieczeństwo zanim uruchomisz narzędzie</strong> — bo to wtedy zapadają najważniejsze decyzje.
+                </p>
+            </div>
+        </div>
+
+        <!-- PROJECT ZERO INTRO CARD 1 -->
+        <div class="content-card" style="background: linear-gradient(135deg, rgba(218, 41, 28, 0.15), rgba(0, 0, 0, 0.7)); border: 2px solid rgba(218, 41, 28, 0.4);">
+            <div class="content-header">
+                <div class="content-icon">🟥</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MILWAUKEE | PROJECT ZERO</div>
+                    <h3>ZERO ACCIDENTS. ZERO EMISSIONS. ZERO COMPROMISES.</h3>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <p style="font-size: 1.5rem; line-height: 1.8; font-weight: 700; color: #DA291C;">
+                    Bezpieczeństwo jest naszym <strong>najsilniejszym narzędziem</strong>.
+                </p>
+            </div>
+
+            <div class="content-section important">
+                <h4 style="color: #DA291C;">Czym jest Project Zero</h4>
+                <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px;">
+                    <strong style="color: #DA291C;">Project Zero</strong> to globalna inicjatywa <strong>Milwaukee Tools</strong>, której celem jest <strong>eliminowanie zagrożeń w miejscu pracy</strong> — zanim doprowadzą do wypadku.
+                </p>
+                <p style="font-size: 1.05rem; line-height: 1.8; margin-bottom: 15px;">Projekt opiera się na:</p>
+                <ul class="content-list">
+                    <li>edukacji i budowaniu świadomości</li>
+                    <li>bezpieczniejszych, lepiej zaprojektowanych narzędziach</li>
+                    <li>kulturze codziennych, właściwych nawyków</li>
+                </ul>
+            </div>
+
+            <div style="background: rgba(218, 41, 28, 0.15); border: 2px solid rgba(218, 41, 28, 0.3); border-radius: 12px; padding: 25px; margin-top: 30px; text-align: center;">
+                <p style="font-size: 1.2rem; line-height: 1.8; font-weight: 600;">
+                    Bezpieczeństwo nie zaczyna się po wypadku.<br>
+                    <strong style="color: #DA291C; font-size: 1.3rem;">Zaczyna się przed uruchomieniem narzędzia.</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- PROJECT ZERO CARD 2 - CZY WIESZ ŻE -->
+        <div class="data-card">
+            <div class="data-header">
+                <div class="data-header-icon">🧠</div>
+                <h3>CZY WIESZ, ŻE…</h3>
+                <p style="font-size: 1.1rem; opacity: 0.9;">Fakty, które robią różnicę</p>
+            </div>
+
+            <div class="data-stats-showcase">
+                <div class="data-stat-box">
+                    <span class="data-stat-value">84%</span>
+                    <span class="data-stat-label">urazów na budowie ma miejsce, gdy pracownicy <strong>nie noszą kasku ochronnego</strong></span>
+                </div>
+
+                <div class="data-stat-box">
+                    <span class="data-stat-value">1/3</span>
+                    <span class="data-stat-label">wypadków śmiertelnych w budownictwie powodują <strong>spadające przedmioty</strong></span>
+                </div>
+
+                <div class="data-stat-box">
+                    <span class="data-stat-value">2,8 mln</span>
+                    <span class="data-stat-label">wypadków ma miejsce <strong>każdego roku</strong> w europejskim budownictwie</span>
+                </div>
+            </div>
+
+            <div style="background: rgba(239, 68, 68, 0.15); border: 2px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 30px; margin: 40px 0; text-align: center;">
+                <p style="font-size: 1.3rem; line-height: 1.8; font-weight: 600;">
+                    To nie są „ekstremalne sytuacje".<br>
+                    To <strong style="color: #ef4444;">codzienne warunki pracy</strong>.
+                </p>
+            </div>
+        </div>
+
+        <!-- PROJECT ZERO CARD 3 - DLACZEGO POWSTAŁ -->
+        <div class="content-card" style="background: linear-gradient(135deg, rgba(218, 41, 28, 0.1), rgba(0, 0, 0, 0.7)); border: 2px solid rgba(218, 41, 28, 0.3);">
+            <div class="content-header">
+                <div class="content-icon">❓</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">POWODY</div>
+                    <h3>DLACZEGO POWSTAŁ PROJECT ZERO</h3>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h4 style="color: #60efff;">Większości wypadków można uniknąć</h4>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Szacuje się, że <strong style="color: #f59e0b;">85–90% wypadków</strong> wynika z błędów ludzkich, rutyny i braku przygotowania — a nie z awarii sprzętu.
+                </p>
+            </div>
+
+            <div class="content-section">
+                <h4 style="color: #60efff;">Brak przygotowania kosztuje</h4>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Zdrowie. Czas. Pieniądze. Reputację.<br>
+                    Każdy wypadek oznacza realne straty.
+                </p>
+            </div>
+
+            <div class="content-section">
+                <h4 style="color: #60efff;">Bezpieczeństwo to kultura, nie pojedyncze zasady</h4>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    To codzienne decyzje i nawyki, zwłaszcza <strong style="color: #DA291C;">przed rozpoczęciem pracy</strong>.
+                </p>
+            </div>
+
+            <div class="content-section">
+                <h4 style="color: #60efff;">Każdy wypadek to jeden za dużo</h4>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Dlatego <strong style="color: #DA291C;">zero</strong> jest jedynym akceptowalnym celem.
+                </p>
+            </div>
+
+            <div style="background: rgba(168, 85, 247, 0.1); border: 2px solid rgba(168, 85, 247, 0.3); border-radius: 12px; padding: 30px; margin-top: 40px;">
+                <h4 style="color: #a855f7; text-align: center; font-size: 1.3rem; margin-bottom: 20px;">💡 Najważniejsza zasada</h4>
+                <p style="font-size: 1.3rem; line-height: 1.9; font-weight: 600; text-align: center;">
+                    "Każdy zasługuje na to, żeby wrócić zdrowy do domu.<br>
+                    Żadna robota nie jest warta kontuzji."
+                </p>
+            </div>
+        </div>
+
+        <!-- LIGHTBULB CARD - Methodology -->
+        <div class="lightbulb-card">
+            <div class="lightbulb-header">
+                <div class="lightbulb-icon">💡</div>
+                <h3>JAK DZIAŁA TA LEKCJA</h3>
+            </div>
+            <p style="margin-bottom: 30px; font-size: 1.1rem;">Każdy moduł odpowiada na 3 pytania:</p>
+            <div class="methodology-grid">
+                <div class="methodology-step">
+                    <div class="methodology-number">1</div>
+                    <h4>Co może pójść nie tak?</h4>
+                </div>
+                <div class="methodology-step">
+                    <div class="methodology-number">2</div>
+                    <h4>Jak to sprawdzić w 30 sekund?</h4>
+                </div>
+                <div class="methodology-step">
+                    <div class="methodology-number">3</div>
+                    <h4>Co zrobić, żeby robota była bezpieczna i szła sprawnie?</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 1 -->
+        <div class="content-card">
+            <div class="content-header">
+                <div class="content-icon">🔍</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MODUŁ 1/9</div>
+                    <h3>ZATRZYMAJ SIĘ PRZED ROBOTĄ (OCENA RYZYKA)</h3>
+                </div>
+            </div>
+
+            <div class="content-section important">
+                <h4>Dlaczego to ważne</h4>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Zanim odpalisz narzędzie, zatrzymaj się na chwilę.<br>
+                    Nie po to, żeby tracić czas – tylko żeby nie stracić palców, zdrowia albo sprzętu.
+                </p>
+            </div>
+
+            <div class="content-section">
+                <h4>Co sprawdzasz (30 sekund)</h4>
+                <p style="margin-bottom: 15px;">Zadaj sobie 4 pytania:</p>
+                <ul class="content-list">
+                    <li><strong>Co robię?</strong> (cięcie, wiercenie, szlifowanie, skręcanie)</li>
+                    <li><strong>Z czego?</strong> (beton, stal, drewno, instalacja, auto)</li>
+                    <li><strong>Co mnie może skrzywdzić?</strong> pył, hałas, odrzut, wirujące części, prąd</li>
+                    <li><strong>Kto jest obok mnie?</strong></li>
+                </ul>
+            </div>
+
+            <div class="content-section warning">
+                <h4>Typowe błędy</h4>
+                <ul class="content-list error-list">
+                    <li>„Zawsze tak robię"</li>
+                    <li>„To tylko jeden otwór"</li>
+                    <li>„Zaraz skończę"</li>
+                </ul>
+            </div>
+
+            <div class="remember-box">
+                <h4>💡 Zapamiętaj</h4>
+                <p>Jeśli się skaleczysz, robota i tak stanie.<br>
+                Lepiej stracić 30 sekund niż pół dnia albo zdrowie.</p>
+            </div>
+        </div>
+
+        <!-- CASE STUDY 1 -->
+        <div class="story-card">
+            <div class="story-header">
+                <div class="story-icon">⚠️</div>
+                <div>
+                    <div class="story-timestamp">📍 Przypadek z terenu</div>
+                    <h4 class="story-title">Cięcie betonu bez oceny ryzyka</h4>
+                </div>
+            </div>
+
+            <div class="story-scenario">
+                <h4>Co się stało:</h4>
+                <p>Na budowie operator zaczyna ciąć beton szlifierką kątową bez wcześniejszego sprawdzenia strefy odrzutu oraz ustawienia osłon.</p>
+            </div>
+
+            <div class="story-consequences">
+                <h4 style="color: #ef4444; margin-bottom: 15px;">Skutki:</h4>
+                <div class="story-consequence-item">
+                    <div>Pył trafia w oczy pomocnika stojącego obok</div>
+                </div>
+                <div class="story-consequence-item">
+                    <div>Przerwa w pracy, wizyta w szpitalu, potencjalne uszkodzenie wzroku</div>
+                </div>
+            </div>
+
+            <div class="story-lesson">
+                <h4>✅ Czego mogło zapobiec:</h4>
+                <p><strong>STOP–LOOK–ASSESS–ACT:</strong> Gdyby wykonano ocenę ryzyka, strefa odrzutu zostałaby ograniczona, a pomocnik wiedziałby gdzie stać. Okulary ochronne + maska przeciwpyłowa = zero urazu.</p>
+            </div>
+        </div>
+
+        <!-- MODULE 2 -->
+        <div class="content-card">
+            <div class="content-header">
+                <div class="content-icon">🛡️</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MODUŁ 2/9</div>
+                    <h3>OCHRONA OSOBISTA (PPE) – CO ZAKŁADAĆ I KIEDY</h3>
+                </div>
+            </div>
+
+            <div class="content-section important">
+                <h4>Dlaczego to ważne</h4>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Okulary, rękawice czy maska to nie wstyd, tylko narzędzie pracy, tak samo jak wkrętarka.
+                </p>
+            </div>
+
+            <div class="content-section">
+                <h4>Minimum, które musisz dobrać do roboty</h4>
+                <ul class="content-list">
+                    <li><strong>Oczy</strong> – przy cięciu, wierceniu, szlifowaniu</li>
+                    <li><strong>Słuch</strong> – przy młotach, szlifierkach, pilarkach</li>
+                    <li><strong>Ręce</strong> – przy ostrych krawędziach, chemii, ciężkich elementach</li>
+                    <li><strong>Oddech</strong> – przy pyle, betonie, drewnie, rdzy</li>
+                    <li><strong>Buty / kask</strong> – gdy coś może spaść lub przygnieść</li>
+                </ul>
+            </div>
+
+            <div class="content-section warning">
+                <h4>Typowe błędy</h4>
+                <ul class="content-list error-list">
+                    <li>Brak okularów „bo niewygodne"</li>
+                    <li>Jedne rękawice do wszystkiego</li>
+                    <li>Brak ochrony słuchu „bo chwilę głośno"</li>
+                </ul>
+            </div>
+
+            <div class="remember-box">
+                <h4>💡 Zapamiętaj</h4>
+                <p>PPE dobierasz do roboty, a nie do przyzwyczajeń.</p>
+            </div>
+        </div>
+
+        <!-- CASE STUDY 2 -->
+        <div class="story-card">
+            <div class="story-header">
+                <div class="story-icon">🔊</div>
+                <div>
+                    <div class="story-timestamp">📍 Przypadek z terenu</div>
+                    <h4 class="story-title">Brak ochrony słuchu przy młocie udarowym</h4>
+                </div>
+            </div>
+
+            <div class="story-scenario">
+                <h4>Co się stało:</h4>
+                <p>Mechanik używa młota udarowego bez ochrony słuchu „bo to tylko chwila".</p>
+            </div>
+
+            <div class="story-consequences">
+                <h4 style="color: #ef4444; margin-bottom: 15px;">Skutki:</h4>
+                <div class="story-consequence-item">
+                    <div>Po kilku dniach pojawia się ból i dzwonienie w uszach — wczesny objaw uszkodzenia słuchu</div>
+                </div>
+                <div class="story-consequence-item">
+                    <div>Trwałe uszkodzenie słuchu to nieodwracalny proces</div>
+                </div>
+            </div>
+
+            <div class="story-lesson">
+                <h4>✅ Dane pokazują:</h4>
+                <p>Przy właściwym użyciu PPE można zapobiec nawet do <strong style="color: #00ff87;">~38% urazów i chorób zawodowych</strong> związanych z ekspozycją na hałas i zagrożenia mechaniczne — jeśli PPE jest dopasowane i używane prawidłowo.</p>
+            </div>
+        </div>
+
+        <!-- MODULE 3 -->
+        <div class="content-card">
+            <div class="content-header">
+                <div class="content-icon">🧤</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MODUŁ 3/9</div>
+                    <h3>SPRAWDŹ PPE ZANIM ZACZNIESZ</h3>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h4>Co sprawdzić przed robotą</h4>
+                <ul class="content-list">
+                    <li><strong>okulary:</strong> czy nie porysowane, nie pęknięte</li>
+                    <li><strong>rękawice:</strong> czy nie przetarte</li>
+                    <li><strong>maska:</strong> czy filtr nie zapchany</li>
+                    <li><strong>nauszniki/zatyczki:</strong> czy czyste i sprawne</li>
+                </ul>
+            </div>
+
+            <div class="content-section warning">
+                <h4>Typowe błędy</h4>
+                <ul class="content-list error-list">
+                    <li>Pęknięte okulary = „jakoś widać"</li>
+                    <li>Brudna maska = „jeszcze da radę"</li>
+                    <li>PPE „na chwilę" bez sprawdzania</li>
+                </ul>
+            </div>
+
+            <div class="remember-box">
+                <h4>💡 Zapamiętaj</h4>
+                <p>Zużyta ochrona nie chroni.</p>
+            </div>
+        </div>
+
+        <!-- QUIZ 1 -->
+        <div class="quiz-card">
+            <div class="quiz-header">
+                <h3>🎯 Sprawdź się - Quiz (Moduły 1-3)</h3>
+                <p style="opacity: 0.8;">Zaznacz poprawne odpowiedzi</p>
+            </div>
+
+            <div class="quiz-question">
+                <h4>1. Co to znaczy "zatrzymać się przed robotą"?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Zrobić przerwę na kawę</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Zadać sobie 4 pytania: co robię, z czego, co może skrzywdzić, kto obok</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Przeczytać instrukcję narzędzia</div>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>2. Kiedy zakładasz ochronę słuchu?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Tylko przy pracy w hali produkcyjnej</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Przy młotach, szlifierkach, pilarkach - nawet "na chwilę"</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Gdy ktoś się skarży na hałas</div>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>3. Co to znaczy "zużyta ochrona nie chroni"?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) PPE można wyrzucić po jednym użyciu</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Pęknięte okulary, przetarte rękawice, zapchana maska nie dają ochrony</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) PPE trzeba wymieniać co miesiąc</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 4 -->
+        <div class="content-card">
+            <div class="content-header">
+                <div class="content-icon">🔧</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MODUŁ 4/9</div>
+                    <h3>DOBIERZ WŁAŚCIWE NARZĘDZIE DO ROBOTY</h3>
+                </div>
+            </div>
+
+            <div class="content-section important">
+                <h4>Dlaczego to ważne</h4>
+                <p style="margin-bottom: 15px;">Złe narzędzie:</p>
+                <ul class="content-list">
+                    <li>szybciej się psuje</li>
+                    <li>jest niebezpieczne</li>
+                    <li>robi robotę dłużej</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h4>Co sprawdzić</h4>
+                <ul class="content-list">
+                    <li>czy narzędzie ma wystarczającą moc</li>
+                    <li>czy nadaje się do tego materiału</li>
+                    <li>czy nie musisz go dociskać na siłę</li>
+                </ul>
+            </div>
+
+            <div class="content-section warning">
+                <h4>Sygnały ostrzegawcze</h4>
+                <div class="warning-box critical">
+                    <p>⚠️ narzędzie się grzeje</p>
+                </div>
+                <div class="warning-box critical">
+                    <p>⚠️ dławi się</p>
+                </div>
+                <div class="warning-box critical">
+                    <p>⚠️ „szarpie"</p>
+                </div>
+                <div class="warning-box critical">
+                    <p>⚠️ musisz mocno dociskać</p>
+                </div>
+            </div>
+
+            <div class="remember-box">
+                <h4>💡 Zapamiętaj</h4>
+                <p>Jeśli musisz walczyć z narzędziem –<br>
+                to nie jest dobre narzędzie do tej roboty.</p>
+            </div>
+        </div>
+
+        <!-- MODULE 5 -->
+        <div class="content-card">
+            <div class="content-header">
+                <div class="content-icon">🛠️</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MODUŁ 5/9</div>
+                    <h3>SPRAWDŹ STAN NARZĘDZIA</h3>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h4>Zanim włączysz</h4>
+                <ul class="content-list">
+                    <li><strong>obudowa</strong> – czy nie pęknięta</li>
+                    <li><strong>uchwyt</strong> – czy nie luźny</li>
+                    <li><strong>osłony</strong> – czy są na miejscu</li>
+                    <li><strong>włącznik</strong> – czy odbija normalnie</li>
+                    <li><strong>czystość</strong> – brak pyłu, opiłków</li>
+                </ul>
+            </div>
+
+            <div class="content-section warning">
+                <h4>Typowe błędy</h4>
+                <ul class="content-list error-list">
+                    <li>Praca z uszkodzoną osłoną</li>
+                    <li>Zablokowany włącznik</li>
+                    <li>Narzędzie „pożyczone", niesprawdzone</li>
+                </ul>
+            </div>
+
+            <div class="remember-box">
+                <h4>💡 Zapamiętaj</h4>
+                <p>Uszkodzone narzędzie nie ostrzega drugi raz.</p>
+            </div>
+        </div>
+
+        <!-- MODULE 6 -->
+        <div class="content-card">
+            <div class="content-header">
+                <div class="content-icon">⚙️</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MODUŁ 6/9</div>
+                    <h3>OSPRZĘT: TARCZE, WIERTŁA, BITY</h3>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h4>Co MUSISZ sprawdzić</h4>
+                <ul class="content-list">
+                    <li>czy tarcza / wiertło nie jest pęknięte</li>
+                    <li>czy nie jest zużyte</li>
+                    <li>czy pasuje do prędkości narzędzia</li>
+                    <li>czy jest dobrze zamocowane</li>
+                </ul>
+            </div>
+
+            <div class="content-section warning">
+                <h4>Bardzo groźne sytuacje</h4>
+                <ul class="content-list error-list">
+                    <li>mikropęknięta tarcza</li>
+                    <li>zjechany bit (ślizga się)</li>
+                    <li>za długie wiertło w ciasnym miejscu</li>
+                </ul>
+            </div>
+
+            <div class="remember-box">
+                <h4>💡 Zapamiętaj</h4>
+                <p>Najwięcej wypadków robi osprzęt, nie samo narzędzie.</p>
+            </div>
+        </div>
+
+        <!-- CASE STUDY 3 -->
+        <div class="story-card">
+            <div class="story-header">
+                <div class="story-icon">💥</div>
+                <div>
+                    <div class="story-timestamp">📍 Przypadek z terenu</div>
+                    <h4 class="story-title">Nieprawidłowe tarcze i bity</h4>
+                </div>
+            </div>
+
+            <div class="story-scenario">
+                <h4>Co się stało:</h4>
+                <p>Hydraulik używa tarcz do metalu przy cięciu stali nierdzewnej, mimo że oznaczenia tarczy nie dopuszczają takiej prędkości obrotowej ani materiału.</p>
+            </div>
+
+            <div class="story-consequences">
+                <h4 style="color: #ef4444; margin-bottom: 15px;">Skutki:</h4>
+                <div class="story-consequence-item">
+                    <div>Tarcza pęka podczas pracy i odrzut trafia w nogę</div>
+                </div>
+                <div class="story-consequence-item">
+                    <div>Rana wymagająca szwów, kilka tygodni bez pracy</div>
+                </div>
+            </div>
+
+            <div class="story-lesson">
+                <h4>✅ Prosta zasada:</h4>
+                <p>Zawsze sprawdzaj <strong style="color: #00ff87;">oznaczenia tarcz, bitów i dopuszczalną prędkość</strong>. Nie ma „podobnej" tarczy — albo pasuje, albo nie.</p>
+            </div>
+        </div>
+
+        <!-- QUIZ 2 -->
+        <div class="quiz-card">
+            <div class="quiz-header">
+                <h3>🎯 Sprawdź się - Quiz (Moduły 4-6)</h3>
+                <p style="opacity: 0.8;">Zaznacz poprawne odpowiedzi</p>
+            </div>
+
+            <div class="quiz-question">
+                <h4>1. Co to znaczy "właściwe narzędzie do roboty"?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Najdroższe na rynku</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Narzędzie z odpowiednią mocą, które nie grzeje się, nie dławi i nie szarpie</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) To które masz pod ręką</div>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>2. Dlaczego uszkodzona osłona to poważny problem?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Gwarancja przepada</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Brak ochrony przed odrzutem, iskrami, wirującymi częściami - nie ostrzeże drugi raz</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Narzędzie wygląda brzydko</div>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <h4>3. Co powoduje więcej wypadków?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Samo narzędzie (wiertarka, szlifierka)</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Osprzęt - pęknięte tarcze, zużyte wiertła, źle zamocowane bity</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Hałas w hali</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DATA CARD - STATYSTYKI -->
+        <div class="data-card">
+            <div class="data-header">
+                <div class="data-header-icon">📊</div>
+                <h3>LICZBY NIE KŁAMIĄ</h3>
+                <p style="font-size: 1.1rem; opacity: 0.9;">Dlaczego przygotowanie do pracy ma znaczenie</p>
+            </div>
+
+            <div class="data-stats-showcase">
+                <div class="data-stat-box">
+                    <span class="data-stat-value">67 000</span>
+                    <span class="data-stat-label">osób poszkodowanych w wypadkach przy pracy w Polsce (2024)</span>
+                    <div style="margin-top: 12px; font-size: 0.85rem; opacity: 0.7; font-style: italic;">
+                        Źródło: GUS – wstępne dane za 2024 r.
+                    </div>
+                </div>
+
+                <div class="data-stat-box">
+                    <span class="data-stat-value">50%</span>
+                    <span class="data-stat-label">spadek wypadków w firmach ze szkoleniami BHP vs bez szkoleń</span>
+                    <div style="margin-top: 12px; font-size: 0.85rem; opacity: 0.7; font-style: italic;">
+                        Źródło: OSHA Training Statistics
+                    </div>
+                </div>
+
+                <div class="data-stat-box">
+                    <span class="data-stat-value">60%</span>
+                    <span class="data-stat-label">mniej urazów przy prawidłowym używaniu PPE (branże wysokiego ryzyka)</span>
+                    <div style="margin-top: 12px; font-size: 0.85rem; opacity: 0.7; font-style: italic;">
+                        Źródło: OSHA / Canada Safety Training
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-insight">
+                <h4>🏗️ Branża budowlana</h4>
+                <p><strong>22,5%</strong> wszystkich wypadków śmiertelnych i <strong>12,9%</strong> pozostałych wypadków w UE to budownictwo.</p>
+                <p style="margin-top: 10px;">W Polsce historycznie: <strong>13 wypadków dziennie</strong> na budowach, z jedną osobą tracącą życie co tydzień.</p>
+                <div style="margin-top: 12px; font-size: 0.9rem; opacity: 0.7; font-style: italic;">
+                    Źródła: Eurostat (2023), Państwowa Inspekcja Pracy (2016-2020)
+                </div>
+            </div>
+
+            <div class="data-insight">
+                <h4>⚠️ Ryzyko urazu bez PPE</h4>
+                <p>Pracownicy bez PPE są <strong style="color: #f59e0b;">3 razy częściej</strong> narażeni na urazy niż ci, którzy używają PPE prawidłowo.</p>
+                <p style="margin-top: 10px; font-size: 0.95rem;">Statystyki pokazują, że około <strong>59,4%</strong> pracowników używa PPE na co dzień regularnie (~59-60%).</p>
+                <div style="margin-top: 12px; font-size: 0.9rem; opacity: 0.7; font-style: italic;">
+                    Źródło: OSHAGear (2024)
+                </div>
+            </div>
+
+            <div style="background: rgba(0, 255, 135, 0.1); border: 2px solid rgba(0, 255, 135, 0.3); border-radius: 12px; padding: 25px; margin-top: 30px; text-align: center;">
+                <p style="font-size: 1.3rem; line-height: 1.8; font-weight: 600;">
+                    "Choć PPE wygląda jak drobna rzecz,<br>
+                    to różnica między urazem a bezpiecznym dniem pracy."
+                </p>
+            </div>
+
+            <h4 style="color: #f59e0b; margin: 40px 0 20px; font-size: 1.5rem; text-align: center;">Typowe zdarzenia i ich skutki</h4>
+            <table class="data-comparison-table">
+                <thead>
+                    <tr>
+                        <th>Zdarzenie z terenu</th>
+                        <th>Skutek</th>
+                        <th>Co zrobiono źle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Operator szlifierki bez oceny strefy</td>
+                        <td>Odprysk trafił pomocnika</td>
+                        <td>Brak oceny ryzyka + oznakowania strefy</td>
+                    </tr>
+                    <tr>
+                        <td>Brak ochrony słuchu</td>
+                        <td>Uraz słuchu po kilku dniach</td>
+                        <td>PPE nie dopasowane do hałasu</td>
+                    </tr>
+                    <tr>
+                        <td>Tarcza niezgodna z materiałem</td>
+                        <td>Pęknięcie tarczy</td>
+                        <td>Niewłaściwy osprzęt</td>
+                    </tr>
+                    <tr>
+                        <td>Złe ułożenie ciała</td>
+                        <td>Przecięcie dłoni</td>
+                        <td>Brak ergonomii pozycji pracy</td>
+                    </tr>
+                    <tr>
+                        <td>Zapchany filtr maski</td>
+                        <td>Podrażnienie układu oddechowego</td>
+                        <td>Brak kontroli stanu PPE</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- MODULE 7 -->
+        <div class="content-card">
+            <div class="content-header">
+                <div class="content-icon">🌧️</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MODUŁ 7/9</div>
+                    <h3>WARUNKI PRACY I TWOJA POZYCJA</h3>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h4>Sprawdź miejsce</h4>
+                <ul class="content-list">
+                    <li>czy nie ma wody / wilgoci</li>
+                    <li>czy dobrze widzisz (światło)</li>
+                    <li>czy masz stabilne podłoże</li>
+                    <li>czy nic nie leży pod nogami</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h4>Sprawdź siebie</h4>
+                <ul class="content-list">
+                    <li>stoisz stabilnie</li>
+                    <li>masz kontrolę nad narzędziem</li>
+                    <li>nie pracujesz „na wyciągniętej ręce"</li>
+                </ul>
+            </div>
+
+            <div class="remember-box">
+                <h4>💡 Zapamiętaj</h4>
+                <p>Zła pozycja = brak kontroli = wypadek.</p>
+            </div>
+        </div>
+
+        <!-- CASE STUDY 4 -->
+        <div class="story-card">
+            <div class="story-header">
+                <div class="story-icon">🤕</div>
+                <div>
+                    <div class="story-timestamp">📍 Przypadek z terenu</div>
+                    <h4 class="story-title">Niewłaściwa pozycja ciała i upadek</h4>
+                </div>
+            </div>
+
+            <div class="story-scenario">
+                <h4>Co się stało:</h4>
+                <p>Stolarz szlifuje krawędź drewna na wyciągniętej ręce i w pozycji słabego oparcia stóp.</p>
+            </div>
+
+            <div class="story-consequences">
+                <h4 style="color: #ef4444; margin-bottom: 15px;">Skutki:</h4>
+                <div class="story-consequence-item">
+                    <div>Narzędzie „szarpie", traci pozycję</div>
+                </div>
+                <div class="story-consequence-item">
+                    <div>Przecięcie dłoni wymagające opatrunków i przerwy w pracy</div>
+                </div>
+            </div>
+
+            <div class="story-lesson">
+                <h4>✅ Poprawna pozycja ciała:</h4>
+                <p><strong style="color: #00ff87;">Stabilne oparcie stóp + balans ciała + kontrola nad narzędziem</strong> = większa kontrola i mniej kontuzji. Nigdy nie pracuj „na wyciągniętej ręce".</p>
+            </div>
+        </div>
+
+        <!-- MODULE 8 -->
+        <div class="content-card">
+            <div class="content-header">
+                <div class="content-icon">🚧</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MODUŁ 8/9</div>
+                    <h3>ZABEZPIECZ STREFĘ PRACY</h3>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h4>Co to znaczy w praktyce</h4>
+                <ul class="content-list">
+                    <li>nikt nie stoi w linii cięcia / odrzutu</li>
+                    <li>narzędzia nie leżą na ziemi</li>
+                    <li>kable są zabezpieczone</li>
+                    <li>osoby postronne są poza strefą</li>
+                </ul>
+            </div>
+
+            <div class="content-section warning">
+                <h4>Typowe błędy</h4>
+                <ul class="content-list error-list">
+                    <li>ktoś stoi „tylko popatrzeć"</li>
+                    <li>narzędzia pod nogami</li>
+                    <li>brak porządku</li>
+                </ul>
+            </div>
+
+            <div class="remember-box">
+                <h4>💡 Zapamiętaj</h4>
+                <p>Jeśli ktoś może wejść w twoją strefę –<br>
+                to też twoja odpowiedzialność.</p>
+            </div>
+        </div>
+
+        <!-- MODULE 9 -->
+        <div class="content-card">
+            <div class="content-header">
+                <div class="content-icon">🧠</div>
+                <div class="content-title-group">
+                    <div class="content-subtitle">MODUŁ 9/9</div>
+                    <h3>ODPOWIEDZIALNOŚĆ</h3>
+                </div>
+            </div>
+
+            <div class="content-section important">
+                <h4>Co to znaczy naprawdę</h4>
+                <ul class="content-list">
+                    <li>Ty odpowiadasz za siebie</li>
+                    <li>Jeśli ktoś pracuje z tobą – odpowiadasz też za niego</li>
+                    <li>Bezpieczeństwo to decyzje, nie gadanie</li>
+                </ul>
+            </div>
+
+            <div class="remember-box">
+                <h4>💡 Najważniejsza zasada</h4>
+                <p style="font-size: 1.3rem;">
+                    Nie ma „na chwilę".<br>
+                    Jest tylko „bezpiecznie" albo „niebezpiecznie".
+                </p>
+            </div>
+        </div>
+
+        <!-- CASE STUDY 5 -->
+        <div class="story-card">
+            <div class="story-header">
+                <div class="story-icon">😷</div>
+                <div>
+                    <div class="story-timestamp">📍 Przypadek z terenu</div>
+                    <h4 class="story-title">Zaniedbany PPE</h4>
+                </div>
+            </div>
+
+            <div class="story-scenario">
+                <h4>Co się stało:</h4>
+                <p>Elektryk pracuje z maską przeciwpyłową, ale filtr jest zapchany i nie dopasowany.</p>
+            </div>
+
+            <div class="story-consequences">
+                <h4 style="color: #ef4444; margin-bottom: 15px;">Skutki:</h4>
+                <div class="story-consequence-item">
+                    <div>Wdycha pył i ma podrażnienie dróg oddechowych</div>
+                </div>
+                <div class="story-consequence-item">
+                    <div>Potencjalne długoterminowe problemy z oddychaniem</div>
+                </div>
+            </div>
+
+            <div class="story-lesson">
+                <h4>✅ Kluczowa lekcja:</h4>
+                <p>Sam PPE to za mało — <strong style="color: #00ff87;">musi być sprawdzone, utrzymane i dopasowane</strong>. Zapchany filtr = brak ochrony. Sprawdzaj PPE przed każdą robotą.</p>
+            </div>
+        </div>
+
+        <!-- FINAL QUIZ - 10 PYTAŃ -->
+        <div class="quiz-card" style="border: 3px solid rgba(218, 41, 28, 0.5);">
+            <div class="quiz-header">
+                <h3 style="font-size: 2.5rem;">🎯 Test Końcowy - Project Zero</h3>
+                <p style="opacity: 0.8; font-size: 1.1rem;">10 pytań sprawdzających Twoją wiedzę z całej lekcji</p>
+                <div style="background: rgba(218, 41, 28, 0.2); padding: 15px; border-radius: 12px; margin-top: 20px;">
+                    <p style="font-size: 1rem;"><strong>Instrukcja:</strong> Kliknij na odpowiedź, aby zaznaczyć. Poprawne odpowiedzi podświetlą się na zielono.</p>
+                </div>
+            </div>
+
+            <!-- Pytanie 1 -->
+            <div class="quiz-question">
+                <h4>1. Co oznacza oficjalne hasło Milwaukee Project Zero?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Zero kosztów, Zero przestojów, Zero awarii</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Zero Accidents, Zero Emissions, Zero Compromises</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Zero kontuzji, Zero błędów, Zero strat</div>
+                </div>
+            </div>
+
+            <!-- Pytanie 2 -->
+            <div class="quiz-question">
+                <h4>2. Ile procent wypadków wynika z błędów ludzkich, a nie awarii sprzętu?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) 50-60%</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) 85-90%</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) 95-99%</div>
+                </div>
+            </div>
+
+            <!-- Pytanie 3 -->
+            <div class="quiz-question">
+                <h4>3. Co to jest STOP-LOOK-ASSESS-ACT?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Procedura wyłączania narzędzi w awaryjnych sytuacjach</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) 4-krokowa metodologia oceny ryzyka przed robotą (zatrzymaj się → rozejrzyj → oceń 4 pytaniami → działaj)</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Lista kontrolna do wyboru właściwego narzędzia</div>
+                </div>
+            </div>
+
+            <!-- Pytanie 4 -->
+            <div class="quiz-question">
+                <h4>4. Ile procent urazów na budowie ma miejsce, gdy pracownicy nie noszą kasku?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) 67%</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) 84%</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) 92%</div>
+                </div>
+            </div>
+
+            <!-- Pytanie 5 -->
+            <div class="quiz-question">
+                <h4>5. Co to znaczy "PPE dobierasz do roboty, a nie do przyzwyczajeń"?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Zawsze zakładaj wszystko co masz</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Wybierz ochronę pasującą do konkretnych zagrożeń zadania (hałas→słuch, pył→oddech, etc.)</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Użyj tego samego PPE co wczoraj</div>
+                </div>
+            </div>
+
+            <!-- Pytanie 6 -->
+            <div class="quiz-question">
+                <h4>6. Co sprawdzasz w stanie narzędzia przed włączeniem?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Tylko baterię i włącznik</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">B) Tylko osłony i obudowę</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">C) Obudowę, uchwyt, osłony, włącznik, czystość (pył/opiłki)</div>
+                </div>
+            </div>
+
+            <!-- Pytanie 7 -->
+            <div class="quiz-question">
+                <h4>7. Co powoduje najwięcej wypadków: samo narzędzie czy osprzęt?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Samo narzędzie (wiertarka, szlifierka)</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Osprzęt - pęknięte tarcze, zużyte wiertła, źle zamocowane bity</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Oba w równym stopniu</div>
+                </div>
+            </div>
+
+            <!-- Pytanie 8 -->
+            <div class="quiz-question">
+                <h4>8. Co to znaczy "zabezpiecz strefę pracy"?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Zamknąć drzwi na klucz</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Nikt w linii odrzutu, narzędzia nie na ziemi, kable zabezpieczone, osoby postronne poza strefą</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Ustawić znaki ostrzegawcze</div>
+                </div>
+            </div>
+
+            <!-- Pytanie 9 -->
+            <div class="quiz-question">
+                <h4>9. Jaka jest "najważniejsza zasada" z modułu odpowiedzialność?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) Zawsze noś wszystkie PPE</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">B) Nie ma "na chwilę" - jest tylko "bezpiecznie" albo "niebezpiecznie"</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">C) Zawsze dzwoń do managera przed robotą</div>
+                </div>
+            </div>
+
+            <!-- Pytanie 10 -->
+            <div class="quiz-question">
+                <h4>10. O ile procent można zmniejszyć liczbę urazów przy prawidłowym używaniu PPE?</h4>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">A) ~30%</div>
+                    <div class="quiz-option" onclick="this.classList.toggle('wrong')">B) ~45%</div>
+                    <div class="quiz-option correct" onclick="this.classList.toggle('correct')">C) ~60% (branże wysokiego ryzyka)</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(96, 239, 255, 0.1); border: 2px solid rgba(96, 239, 255, 0.3); border-radius: 12px; padding: 25px; margin-top: 40px; text-align: center;">
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    <strong style="color: #60efff;">Po zakończeniu testu</strong> sprawdź swoje odpowiedzi.<br>
+                    Każda poprawna odpowiedź to krok w stronę bezpieczniejszej pracy! 🎯
+                </p>
+            </div>
+        </div>
+
+        <!-- ENDING CARD 1: ACHIEVEMENT -->
+        <div class="ending-card" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(218, 41, 28, 0.15)); border: 2px solid rgba(255, 215, 0, 0.4);">
+            <div class="ending-achievement-icon" style="font-size: 6rem; margin-bottom: 30px; animation: achievement-bounce 1s ease-out; text-align: center;">🏆</div>
+            
+            <style>
+                @keyframes achievement-bounce {
+                    0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+                    60% { transform: scale(1.2) rotate(10deg); }
+                    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+                }
+            </style>
+
+            <div class="ending-achievement-title" style="font-size: 2.5rem; font-weight: 800; color: #ffd700; text-align: center; margin-bottom: 20px; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">
+                Project Zero - Przygotowanie do Pracy - ZALICZONA!
+            </div>
+            
+            <div class="ending-achievement-subtitle" style="text-align: center; font-size: 1.2rem; opacity: 0.9; margin-bottom: 40px;">
+                Gratulacje! Jesteś gotowy do bezpiecznej pracy z Milwaukee Tools
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0;">
+                <div style="text-align: center; padding: 25px; background: rgba(0, 0, 0, 0.3); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <span style="font-size: 3rem; font-weight: 800; color: #ffd700; display: block; margin-bottom: 8px;">+100</span>
+                    <span style="font-size: 0.9rem; opacity: 0.8;">XP zdobyte</span>
+                </div>
+                <div style="text-align: center; padding: 25px; background: rgba(0, 0, 0, 0.3); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <span style="font-size: 3rem; font-weight: 800; color: #ffd700; display: block; margin-bottom: 8px;">25</span>
+                    <span style="font-size: 0.9rem; opacity: 0.8;">Kart ukończonych</span>
+                </div>
+                <div style="text-align: center; padding: 25px; background: rgba(0, 0, 0, 0.3); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <span style="font-size: 3rem; font-weight: 800; color: #ffd700; display: block; margin-bottom: 8px;">30</span>
+                    <span style="font-size: 0.9rem; opacity: 0.8;">Minut nauki</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="font-size: 1.2rem; margin-bottom: 30px;">
+                    📚 Zdobyłeś badge: <strong style="color: #ffd700;">"Project Zero Safety Champion"</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- ENDING CARD 2: SUMMARY CHECKLIST -->
+        <div class="ending-card">
+            <div class="ending-header">
+                <div style="font-size: 4rem; margin-bottom: 20px; text-align: center;">✅</div>
+                <h2 style="font-size: 2.5rem; margin-bottom: 15px; text-align: center;">Kluczowe Wnioski</h2>
+                <p style="font-size: 1.1rem; opacity: 0.8; text-align: center;">Co zapamiętać z tej lekcji</p>
+            </div>
+
+            <div class="ending-checklist" style="margin-top: 40px;">
+                <div class="ending-checklist-item">
+                    <div class="ending-check-icon">✓</div>
+                    <div>
+                        <strong style="color: #00ff87; font-size: 1.2rem;">Project Zero = ZERO ACCIDENTS. ZERO EMISSIONS. ZERO COMPROMISES.</strong>
+                        <p style="margin-top: 8px; opacity: 0.9;">To globalna inicjatywa Milwaukee do eliminowania zagrożeń PRZED wypadkiem.</p>
+                    </div>
+                </div>
+
+                <div class="ending-checklist-item">
+                    <div class="ending-check-icon">✓</div>
+                    <div>
+                        <strong style="color: #00ff87; font-size: 1.2rem;">STOP-LOOK-ASSESS-ACT - 4-krokowa metodologia oceny ryzyka</strong>
+                        <p style="margin-top: 8px; opacity: 0.9;">Zatrzymaj się → Rozejrzyj → Oceń (4 pytania: co robię, z czego, co szkodzi, kto obok) → Działaj bezpiecznie</p>
+                    </div>
+                </div>
+
+                <div class="ending-checklist-item">
+                    <div class="ending-check-icon">✓</div>
+                    <div>
+                        <strong style="color: #00ff87; font-size: 1.2rem;">PPE dobierasz do roboty, nie do przyzwyczajeń</strong>
+                        <p style="margin-top: 8px; opacity: 0.9;">Oczy, słuch, ręce, oddech, kask - PRZED pracą sprawdź stan PPE</p>
+                    </div>
+                </div>
+
+                <div class="ending-checklist-item">
+                    <div class="ending-check-icon">✓</div>
+                    <div>
+                        <strong style="color: #00ff87; font-size: 1.2rem;">Sprawdź narzędzie + osprzęt PRZED włączeniem</strong>
+                        <p style="margin-top: 8px; opacity: 0.9;">Obudowa, osłony, włącznik, czystość + tarcze/wiertła/bity (najwięcej wypadków robi osprzęt!)</p>
+                    </div>
+                </div>
+
+                <div class="ending-checklist-item">
+                    <div class="ending-check-icon">✓</div>
+                    <div>
+                        <strong style="color: #00ff87; font-size: 1.2rem;">Zabezpiecz strefę pracy</strong>
+                        <p style="margin-top: 8px; opacity: 0.9;">Nikt w linii odrzutu, narzędzia nie pod nogami, kable OK, osoby postronne poza strefą</p>
+                    </div>
+                </div>
+
+                <div class="ending-checklist-item">
+                    <div class="ending-check-icon">✓</div>
+                    <div>
+                        <strong style="color: #00ff87; font-size: 1.2rem;">Nie ma "na chwilę" - jest "bezpiecznie" albo "niebezpiecznie"</strong>
+                        <p style="margin-top: 8px; opacity: 0.9;">Większość wypadków to "tylko jeden otwór", "zaraz skończę", "zawsze tak robię"</p>
+                    </div>
+                </div>
+
+                <div class="ending-checklist-item">
+                    <div class="ending-check-icon">✓</div>
+                    <div>
+                        <strong style="color: #00ff87; font-size: 1.2rem;">85-90% wypadków = błąd ludzki, nie awaria sprzętu</strong>
+                        <p style="margin-top: 8px; opacity: 0.9;">Każdy wypadek to jeden za dużo. Zero to jedyny akceptowalny cel.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ending-tagline">
+                STAY SAFE. STAY PRODUCTIVE.
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary">← Powrót do menu</button>
+                <button class="btn btn-primary">Następna lekcja: Narzędzia i osprzęt →</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

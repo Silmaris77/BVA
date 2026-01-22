@@ -7,11 +7,15 @@ import { Lightbulb } from 'lucide-react'
 interface LightbulbCardProps {
     title: string
     content: string
-    insight: string
+    insight?: string
     accent_color?: string
+    steps?: {
+        number: number
+        title: string
+    }[]
 }
 
-export default function LightbulbCard({ title, content, insight, accent_color = 'yellow' }: LightbulbCardProps) {
+export default function LightbulbCard({ title, content, insight, accent_color = 'yellow', steps }: LightbulbCardProps) {
     const accentColor = accent_color === 'yellow' ? '#ffd700' : '#00d4ff';
     const gradient = accent_color === 'yellow'
         ? 'linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 136, 0, 0.1))'
@@ -91,6 +95,56 @@ export default function LightbulbCard({ title, content, insight, accent_color = 
                         {content}
                     </ReactMarkdown>
                 </div>
+
+                {/* Steps */}
+                {steps && steps.length > 0 && (
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '16px',
+                        marginBottom: '40px',
+                        maxWidth: '700px',
+                        margin: '0 auto 40px auto'
+                    }}>
+                        {steps.map((step) => (
+                            <div
+                                key={step.number}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '16px',
+                                    padding: '16px 24px',
+                                    background: 'rgba(0, 0, 0, 0.2)',
+                                    borderRadius: '12px',
+                                    textAlign: 'left'
+                                }}
+                            >
+                                <div style={{
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '50%',
+                                    background: accentColor,
+                                    color: '#000',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '20px',
+                                    fontWeight: 700,
+                                    flexShrink: 0
+                                }}>
+                                    {step.number}
+                                </div>
+                                <div style={{
+                                    fontSize: '18px',
+                                    fontWeight: 600,
+                                    color: '#fff'
+                                }}>
+                                    {step.title}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {insight && (
                     <div style={{

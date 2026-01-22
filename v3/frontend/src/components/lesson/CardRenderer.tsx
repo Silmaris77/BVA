@@ -12,10 +12,13 @@ import QuizCard from './QuizCard'
 import AchievementCard from './AchievementCard'
 import HabitBuilderCard from './HabitBuilderCard'
 import QuoteCard from './QuoteCard'
+import DataCard from './DataCard'
+import StoryCard from './StoryCard'
+import EndingCard from './EndingCard'
 
 interface CardRendererProps {
     card: {
-        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote'
+        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending'
         title?: string
         subtitle?: string
         description?: string
@@ -27,10 +30,13 @@ interface CardRendererProps {
         keyPoints?: string[]
         recap?: string[]
         nextSteps?: string
-        badge?: {
+        badge?: string | {
             xp: number
             title: string
         }
+        stats?: { value: string; label: string }[]
+        infoBoxes?: { icon?: string, title: string, content: string, type?: 'warning' | 'info' }[]
+        table?: { title?: string, headers: string[], rows: string[][] }
         warnings?: string[]
         example?: string
         actionSteps?: string[]
@@ -64,22 +70,7 @@ interface CardRendererProps {
 
 export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
     switch (card.type) {
-        case 'hero':
-            // Hero is like intro but more emphasis - now using Emotional Variant
-            return <HeroCard
-                title={card.title || 'Wstęp'}
-                content={card.content || card.description || ''}
-                subtitle={card.subtitle}
-                icon={card.icon}
-            />
-        case 'content':
-            // Content is like concept
-            return <ConceptCard
-                title={card.title || 'Koncepcja'}
-                content={card.content || ''}
-                keyPoints={card.keyPoints}
-                visual={card.visual}
-            />
+
         case 'interactive':
             // Interactive contains a quiz
             return <QuestionCard
@@ -137,6 +128,7 @@ export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
                 content={card.content || ''}
                 insight={card.insight || ''}
                 accent_color={card.accent_color}
+                steps={card.steps}
             />
         case 'flashcards':
             return <FlashcardsCard
@@ -162,12 +154,63 @@ export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
                 icon={card.icon as any || 'trophy'}
                 level={card.level}
                 xp={card.xp}
+                stats={card.stats}
+                badge={typeof card.badge === 'string' ? card.badge : undefined}
             />
         case 'habit':
             return <HabitBuilderCard
                 title={card.title || 'Action Plan'}
                 description={card.content || card.description || ''}
                 habits={card.habits || []}
+            />
+        case 'data':
+            return <DataCard
+                icon={card.icon}
+                title={card.title || 'Statystyki'}
+                subtitle={card.subtitle}
+                stats={card.stats || []}
+                callout={card.callout}
+                infoBoxes={card.infoBoxes}
+                table={card.table}
+            />
+        case 'story':
+            return <StoryCard
+                icon={card.icon}
+                badge={card.badge}
+                title={card.title || 'Przypadek z terenu'}
+                scenario={card.scenario || { heading: '', text: '' }}
+                consequences={card.consequences || []}
+                lesson={card.lesson || { heading: '', text: '' }}
+            />
+        case 'ending':
+            return <EndingCard
+                icon={card.icon}
+                title={card.title || 'Podsumowanie'}
+                subtitle={card.subtitle}
+                checklist={card.checklist || []}
+                tagline={card.tagline}
+                next_steps={card.next_steps}
+            />
+        case 'hero':
+            return <HeroCard
+                title={card.title || 'Hero'}
+                subtitle={card.subtitle}
+                tagline={card.tagline}
+                content={card.content}
+                icon={card.icon}
+                theme={card.theme}
+                sections={card.sections}
+                callout={card.callout}
+            />
+        case 'content':
+            return <ConceptCard
+                title={card.title || 'Content'}
+                content={card.content}
+                sections={card.sections}
+                callout={card.callout}
+                remember={card.remember}
+                keyPoints={card.keyPoints}
+                visual={card.visual}
             />
         case 'quote':
             return <QuoteCard

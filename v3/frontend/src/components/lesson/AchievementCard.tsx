@@ -10,6 +10,8 @@ interface AchievementCardProps {
     icon: 'trophy' | 'star' | 'shield' | 'award'
     level?: string
     xp?: number
+    stats?: { value: string; label: string }[]
+    badge?: string
 }
 
 const getIcon = (iconName: string) => {
@@ -22,7 +24,15 @@ const getIcon = (iconName: string) => {
     }
 }
 
-export default function AchievementCard({ title, description, icon = 'trophy', level = 'Level 1', xp = 100 }: AchievementCardProps) {
+export default function AchievementCard({
+    title,
+    description,
+    icon = 'trophy',
+    level = 'Level 1',
+    xp = 100,
+    stats,
+    badge
+}: AchievementCardProps) {
 
     useEffect(() => {
         // Trigger confetti on mount
@@ -52,6 +62,114 @@ export default function AchievementCard({ title, description, icon = 'trophy', l
         frame()
     }, [])
 
+    // New Layout for Lesson Completion (if stats are present)
+    if (stats && stats.length > 0) {
+        return (
+            <div style={{
+                maxWidth: '800px',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '32px',
+                alignItems: 'center',
+                textAlign: 'center'
+            }}>
+                {/* Icon */}
+                <div style={{
+                    marginBottom: '10px',
+                    filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))',
+                    animation: 'float 3s ease-in-out infinite'
+                }}>
+                    <style jsx>{`
+                        @keyframes float {
+                            0%, 100% { transform: translateY(0); }
+                            50% { transform: translateY(-10px); }
+                        }
+                    `}</style>
+                    {getIcon(icon)}
+                </div>
+
+                {/* Title */}
+                <div>
+                    <h1 style={{
+                        fontSize: '42px',
+                        fontWeight: 900,
+                        color: '#ffd700',
+                        marginBottom: '16px',
+                        textShadow: '0 0 20px rgba(255, 215, 0, 0.5)',
+                        lineHeight: 1.2
+                    }}>
+                        {title}
+                    </h1>
+                    <p style={{
+                        fontSize: '18px',
+                        color: 'rgba(255, 255, 255, 0.9)',
+                        maxWidth: '600px',
+                        margin: '0 auto'
+                    }}>
+                        {description}
+                    </p>
+                </div>
+
+                {/* Stats Grid */}
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gap: '20px',
+                    width: '100%',
+                    marginTop: '20px'
+                }}>
+                    {stats.map((stat, index) => (
+                        <div key={index} style={{
+                            background: 'rgba(20, 20, 30, 0.6)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderRadius: '16px',
+                            padding: '30px 20px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '10px'
+                        }}>
+                            <span style={{
+                                fontSize: '48px',
+                                fontWeight: 800,
+                                color: '#ffd700',
+                                lineHeight: 1
+                            }}>
+                                {stat.value}
+                            </span>
+                            <span style={{
+                                fontSize: '14px',
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                fontWeight: 500
+                            }}>
+                                {stat.label}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Badge Footer */}
+                {badge && (
+                    <div style={{
+                        marginTop: '20px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        fontSize: '18px',
+                        fontWeight: 700,
+                        color: '#ffd700'
+                    }}>
+                        <Award size={24} />
+                        <span>{badge}</span>
+                    </div>
+                )}
+            </div>
+        )
+    }
+
+    // Default Layout (Backward Compatibility)
     return (
         <div style={{
             maxWidth: '600px',

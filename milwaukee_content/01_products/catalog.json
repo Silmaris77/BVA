@@ -1,158 +1,555 @@
-# Milwaukee Product Catalog
-
-> **Format:** JSON dla łatwej integracji z aplikacją
-> **Last Updated:** [Data]
-
-```json
 {
-  "version": "1.0",
-  "last_updated": "2024-01-XX",
+  "meta": {
+    "version": "1.0",
+    "last_updated": "2024-05-23"
+  },
   "categories": [
     {
-      "id": "drills",
-      "name": "Wiertarko-Wkrętarki / Drills",
-      "description": "Compact and powerful drilling solutions",
-      "icon": "drill",
-      "products": [
-        {
-          "sku": "2804-20",
-          "name": "M18 FUEL™ 1/2\" Hammer Drill/Driver",
-          "category_id": "drills",
-          "system": "M18",
-          "fuel": true,
-          "price_msrp": 199.00,
-          "currency": "USD",
-          "specs": {
-            "max_torque": "1200 in-lbs",
-            "speed_settings": 2,
-            "speed_range": "0-550 / 0-2,000 RPM",
-            "chuck_size": "1/2 inch",
-            "length": "7.25 inches",
-            "weight": "4.6 lbs (with battery)",
-            "battery_compatible": ["M18 REDLITHIUM", "M18 HIGH OUTPUT"]
-          },
-          "features": [
-            "POWERSTATE™ Brushless Motor",
-            "REDLINK PLUS™ Intelligence",
-            "REDLITHIUM™ Battery Technology",
-            "All-metal ratcheting chuck"
-          ],
-          "use_cases": [
-            "Heavy-duty drilling wood, metal",
-            "Driving large fasteners",
-            "Concrete anchoring"
-          ],
-          "warranty_years": 5,
-          "in_stock": true,
-          "image_url": "/assets/images/products/2804-20_main.jpg",
-          "video_url": "https://youtube.com/watch?v=EXAMPLE",
-          "manual_url": "/assets/documents/2804-20_manual.pdf"
-        }
-      ]
+      "id": "drilling_fastening",
+      "name": "Drilling & Fastening",
+      "description": "Drills, Drivers, Impacts, and Fastening Tools"
     },
     {
-      "id": "impact_drivers",
-      "name": "Zakrętarki Udarowe / Impact Drivers",
-      "description": "High-torque fastening solutions",
-      "icon": "impact",
-      "products": []
+      "id": "woodworking",
+      "name": "Woodworking",
+      "description": "Saws, Sanders, and Finish Tools"
     },
     {
-      "id": "grinders",
-      "name": "Szlifierki / Grinders",
-      "description": "Cutting and grinding power tools",
-      "icon": "grinder",
-      "products": []
+      "id": "metalworking",
+      "name": "Metalworking",
+      "description": "Grinders, Band Saws, and Metal Cutting"
     },
     {
-      "id": "saws",
-      "name": "Piły / Saws",
-      "description": "Cutting solutions for various materials",
-      "icon": "saw",
-      "products": []
+      "id": "concrete_masonry",
+      "name": "Concrete & Masonry",
+      "description": "Rotary Hammers and Concrete Tools"
     },
     {
-      "id": "batteries",
-      "name": "Baterie / Batteries",
-      "description": "Power system batteries",
-      "icon": "battery",
-      "subcategories": ["M12", "M18", "MX FUEL"],
-      "products": []
+      "id": "lighting",
+      "name": "Lighting",
+      "description": "Personal, Site, and Search Lighting"
     },
     {
-      "id": "chargers",
-      "name": "Ładowarki / Chargers",
-      "description": "Battery charging solutions",
-      "icon": "charger",
-      "products": []
+      "id": "hand_tools",
+      "name": "Hand Tools",
+      "description": "General purpose hand tools"
+    },
+    {
+      "id": "storage",
+      "name": "Storage",
+      "description": "PACKOUT and Tool Storage"
     },
     {
       "id": "accessories",
-      "name": "Akcesoria / Accessories",
-      "description": "Bits, blades, and attachments",
-      "icon": "accessory",
-      "products": []
+      "name": "Accessories",
+      "description": "Bits, Blades, and Consumables"
+    },
+    {
+      "id": "ppe",
+      "name": "Personal Protective Equipment (PPE)",
+      "description": "Safety Glasses, Gloves, Hard Hats, Hearing Protection"
     }
   ],
-  
+  "products": [
+    {
+      "id": "m18-fuel-hammer-drill",
+      "sku": "2904-20",
+      "name": "M18 FUEL™ 1/2\" Hammer Drill/Driver",
+      "category_id": "drilling_fastening",
+      "power_system": "M18",
+      "price_msrp": 199.00,
+      "specs": {
+        "torque": "1,400 in-lbs",
+        "rpm": "0-2,100 RPM",
+        "length": "6.9\""
+      },
+      "features": [
+        "POWERSTATE™ Brushless Motor",
+        "REDLINK PLUS™ Intelligence",
+        "AutoStop™ Control Mode"
+      ],
+      "use_cases": [
+        "Heavy-duty drilling in concrete",
+        "Driving large fasteners",
+        "Hole saw applications"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/2904-20_1.jpg"
+    },
+    {
+      "id": "m18-fuel-impact-driver",
+      "sku": "2953-20",
+      "name": "M18 FUEL™ 1/4\" Hex Impact Driver",
+      "category_id": "drilling_fastening",
+      "power_system": "M18",
+      "price_msrp": 149.00,
+      "specs": {
+        "torque": "2,000 in-lbs",
+        "rpm": "0-3,900 RPM",
+        "length": "4.47\""
+      },
+      "features": [
+        "Ultimate Trigger Control",
+        "Tri-LED Lighting",
+        "4-Mode Drive Control"
+      ],
+      "use_cases": [
+        "Driving deck screws",
+        "Self-tapping screws",
+        "Lag bolts"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/2953-20_1.jpg"
+    },
+    {
+      "id": "m18-fuel-sawzall",
+      "sku": "2821-20",
+      "name": "M18 FUEL™ SAWZALL® Reciprocating Saw",
+      "category_id": "metalworking",
+      "power_system": "M18",
+      "price_msrp": 199.00,
+      "specs": {
+        "spm": "0-3,000",
+        "stroke_length": "1-1/4\"",
+        "weight": "8.4 lbs"
+      },
+      "features": [
+        "Longest cutting life in class",
+        "Adjustable shoe",
+        "Integrated LED light"
+      ],
+      "use_cases": [
+        "Demolition",
+        "Cutting pipe",
+        "Rough construction"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/2821-20_1.jpg"
+    },
+    {
+      "id": "packout-rolling-toolbox",
+      "sku": "48-22-8426",
+      "name": "PACKOUT™ Rolling Tool Box",
+      "category_id": "storage",
+      "power_system": "none",
+      "price_msrp": 139.00,
+      "specs": {
+        "weight_capacity": "250 lbs",
+        "wheel_diameter": "9\"",
+        "material": "Impact Resistant Polymer"
+      },
+      "features": [
+        "IP65 Rated Weather Seal",
+        "Metal Reinforced Corners",
+        "Modular Connectivity with all PACKOUT™ components"
+      ],
+      "use_cases": [
+        "Jobsite mobility",
+        "Tool protection",
+        "System organization"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-22-8426_1.jpg"
+    },
+    {
+      "id": "safety-glasses-clear",
+      "sku": "48-73-2000",
+      "name": "Premium Safety Glasses - Clear",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 14.99,
+      "specs": {
+        "lens_material": "Polycarbonate",
+        "protection": "ANSI Z87.1+",
+        "anti_fog": "Yes",
+        "anti_scratch": "Yes"
+      },
+      "features": [
+        "99.9% UV Protection",
+        "Anti-Fog & Anti-Scratch Coating",
+        "Comfortable Rubber Nose Piece",
+        "Wrap-Around Design"
+      ],
+      "use_cases": [
+        "Drilling operations",
+        "Grinding and cutting",
+        "General jobsite protection"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-2000_1.jpg"
+    },
+    {
+      "id": "safety-glasses-tinted",
+      "sku": "48-73-2010",
+      "name": "Premium Safety Glasses - Tinted",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 16.99,
+      "specs": {
+        "lens_material": "Polycarbonate",
+        "protection": "ANSI Z87.1+",
+        "tint": "Smoke",
+        "anti_fog": "Yes"
+      },
+      "features": [
+        "Reduced Glare for Outdoor Use",
+        "99.9% UV Protection",
+        "Impact Resistant Lenses",
+        "Adjustable Temples"
+      ],
+      "use_cases": [
+        "Outdoor construction work",
+        "Metal cutting in bright conditions",
+        "Roofing and exterior work"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-2010_1.jpg"
+    },
+    {
+      "id": "performance-safety-glasses",
+      "sku": "48-73-2020",
+      "name": "Performance Safety Glasses with Gasket",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 19.99,
+      "specs": {
+        "lens_material": "Polycarbonate",
+        "protection": "ANSI Z87.1+",
+        "gasket": "Foam Seal",
+        "anti_fog": "Premium Coating"
+      },
+      "features": [
+        "Removable Foam Gasket for Dust Protection",
+        "Superior Anti-Fog Performance",
+        "Interchangeable Lens System",
+        "Adjustable Head Strap Included"
+      ],
+      "use_cases": [
+        "Concrete grinding (dust protection)",
+        "Demolition work",
+        "Overhead drilling"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-2020_1.jpg"
+    },
+    {
+      "id": "cut-resistant-gloves-level-3",
+      "sku": "48-22-8930",
+      "name": "Cut Resistant Level 3 Gloves - Large",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 12.99,
+      "specs": {
+        "cut_level": "ANSI A3",
+        "material": "HPPE Liner with Nitrile Coating",
+        "touchscreen": "Yes",
+        "grip": "Textured Palm"
+      },
+      "features": [
+        "Touchscreen Compatible Fingertips",
+        "High-Visibility Yellow Design",
+        "Reinforced Thumb Crotch",
+        "Machine Washable"
+      ],
+      "use_cases": [
+        "Handling sheet metal",
+        "Glass installation",
+        "Sharp material handling"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-22-8930_1.jpg"
+    },
+    {
+      "id": "cut-resistant-gloves-level-5",
+      "sku": "48-22-8950",
+      "name": "Cut Resistant Level 5 Gloves - Large",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 19.99,
+      "specs": {
+        "cut_level": "ANSI A5",
+        "material": "Engineered HPPE",
+        "touchscreen": "Yes",
+        "impact_protection": "TPR Knuckle Guards"
+      },
+      "features": [
+        "Maximum Cut Resistance",
+        "Impact-Resistant TPR on Back of Hand",
+        "Reinforced Fingertips",
+        "SmartSwipe Touchscreen Compatibility"
+      ],
+      "use_cases": [
+        "Metal fabrication",
+        "Demolition with sharp debris",
+        "Band saw operations"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-22-8950_1.jpg"
+    },
+    {
+      "id": "winter-work-gloves",
+      "sku": "48-22-8970",
+      "name": "Winter Performance Gloves - Large",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 24.99,
+      "specs": {
+        "insulation": "40g 3M Thinsulate",
+        "waterproof": "Yes",
+        "touchscreen": "Yes",
+        "temperature_rating": "-20°F"
+      },
+      "features": [
+        "FreeFlex Design for Dexterity",
+        "Reinforced Palm and Fingertips",
+        "Adjustable Wrist Strap",
+        "Reflective Elements for Visibility"
+      ],
+      "use_cases": [
+        "Cold weather construction",
+        "Winter roofing",
+        "Outdoor electrical work"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-22-8970_1.jpg"
+    },
+    {
+      "id": "hard-hat-type-1",
+      "sku": "48-73-1000",
+      "name": "BOLT Type 1 Hard Hat - Vented",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 24.99,
+      "specs": {
+        "type": "Type 1 Class E",
+        "protection": "ANSI Z89.1",
+        "electrical_rating": "20,000V",
+        "ventilation": "Yes"
+      },
+      "features": [
+        "Ratchet Suspension System",
+        "Ventilation Ports for Cooling",
+        "Accessory Slots for Lights/Ear Muffs",
+        "Reflective Stickers Included"
+      ],
+      "use_cases": [
+        "General construction",
+        "Electrical work (Class E rated)",
+        "Hot weather jobsites"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-1000_1.jpg"
+    },
+    {
+      "id": "hard-hat-full-brim",
+      "sku": "48-73-1010",
+      "name": "BOLT Full Brim Hard Hat - Type 1",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 29.99,
+      "specs": {
+        "type": "Type 1 Class E",
+        "protection": "ANSI Z89.1",
+        "brim": "Full 360° Brim",
+        "electrical_rating": "20,000V"
+      },
+      "features": [
+        "Rain and Sun Protection All Around",
+        "Integrated Chin Strap Anchor Points",
+        "Milwaukee Red Color Option",
+        "Compatible with Face Shields"
+      ],
+      "use_cases": [
+        "Outdoor construction in sun/rain",
+        "Roofing work",
+        "Concrete forming"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-1010_1.jpg"
+    },
+    {
+      "id": "hearing-protection-earmuffs",
+      "sku": "48-73-3000",
+      "name": "Noise Reduction Earmuffs - 27dB NRR",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 19.99,
+      "specs": {
+        "nrr": "27dB",
+        "weight": "7.8 oz",
+        "adjustment": "Adjustable Headband",
+        "hard_hat_compatible": "Yes"
+      },
+      "features": [
+        "Soft Cushioned Ear Cups",
+        "Hard Hat Attachment Slots",
+        "Adjustable Length Headband",
+        "Foldable for Storage"
+      ],
+      "use_cases": [
+        "Impact driver/hammer drill use",
+        "Grinder and saw operations",
+        "Concrete breaking"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-3000_1.jpg"
+    },
+    {
+      "id": "hearing-protection-plugs",
+      "sku": "48-73-3010",
+      "name": "Reusable Corded Ear Plugs - 27dB NRR",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 4.99,
+      "specs": {
+        "nrr": "27dB",
+        "material": "Soft TPE",
+        "cord": "Yes",
+        "reusable": "Yes"
+      },
+      "features": [
+        "Washable and Reusable",
+        "Corded to Prevent Loss",
+        "Carrying Case Included",
+        "Triple Flange Design for Comfort"
+      ],
+      "use_cases": [
+        "All-day wear on noisy jobsites",
+        "Grinding and demolition",
+        "Working near heavy equipment"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-3010_1.jpg"
+    },
+    {
+      "id": "dust-mask-n95",
+      "sku": "48-73-4000",
+      "name": "N95 Disposable Respirator - 10 Pack",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 19.99,
+      "specs": {
+        "rating": "NIOSH N95",
+        "valve": "Yes (Exhalation Valve)",
+        "quantity": "10 masks",
+        "adjustable": "Nose Clip"
+      },
+      "features": [
+        "95% Particle Filtration",
+        "Exhalation Valve Reduces Heat Buildup",
+        "Adjustable Nose Clip for Seal",
+        "Compatible with Safety Glasses"
+      ],
+      "use_cases": [
+        "Concrete cutting and grinding",
+        "Drywall sanding",
+        "Wood dust applications"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-4000_1.jpg"
+    },
+    {
+      "id": "half-mask-reusable-respirator",
+      "sku": "48-73-4010",
+      "name": "Reusable Half Mask Respirator with P100 Filters",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 34.99,
+      "specs": {
+        "rating": "P100 Filters Included",
+        "reusable": "Yes",
+        "filter_life": "~40 hours per filter",
+        "fit_test": "Recommended"
+      },
+      "features": [
+        "99.97% Particulate Filtration (P100)",
+        "Low Profile Design - Fits Under Face Shield",
+        "Soft Silicone Face Seal",
+        "Easy Filter Replacement System"
+      ],
+      "use_cases": [
+        "Heavy dust environments (concrete/metal)",
+        "Spray painting prep work",
+        "Demolition with asbestos concerns"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-4010_1.jpg"
+    },
+    {
+      "id": "work-gloves-general",
+      "sku": "48-22-8710",
+      "name": "Performance Work Gloves - Large",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 9.99,
+      "specs": {
+        "material": "Synthetic Leather Palm",
+        "breathability": "Mesh Back",
+        "touchscreen": "Yes",
+        "durability": "Reinforced High-Wear Areas"
+      },
+      "features": [
+        "SmartSwipe Touchscreen Fingertips",
+        "Breathable Mesh Backing",
+        "Hook and Loop Wrist Closure",
+        "Terry Cloth Sweat Wipe"
+      ],
+      "use_cases": [
+        "General construction work",
+        "Tool handling and fastening",
+        "Material handling"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-22-8710_1.jpg"
+    },
+    {
+      "id": "high-visibility-vest",
+      "sku": "48-73-5000",
+      "name": "High Visibility Safety Vest - Class 2",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 14.99,
+      "specs": {
+        "class": "ANSI Class 2",
+        "color": "Hi-Vis Yellow",
+        "size": "L/XL Universal Fit",
+        "pockets": "Multiple Tool Pockets"
+      },
+      "features": [
+        "360° Reflective Striping",
+        "Breathable Mesh Construction",
+        "Zippered Front Closure",
+        "ID Badge Holder"
+      ],
+      "use_cases": [
+        "Roadwork and highway construction",
+        "Warehouse and logistics",
+        "Low-light jobsite work"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-73-5000_1.jpg"
+    },
+    {
+      "id": "knee-pads-professional",
+      "sku": "48-22-8545",
+      "name": "Professional Knee Pads - Gel Insert",
+      "category_id": "ppe",
+      "power_system": "none",
+      "price_msrp": 29.99,
+      "specs": {
+        "padding": "Dual-Layer Gel",
+        "straps": "Adjustable Elastic",
+        "cap": "Hard Plastic Shell",
+        "size": "One Size Fits Most"
+      },
+      "features": [
+        "Heavy-Duty Gel Cushioning",
+        "Non-Slip Textured Cap",
+        "Moisture-Wicking Interior Lining",
+        "Easy-Adjust Buckle System"
+      ],
+      "use_cases": [
+        "Flooring installation",
+        "Tile and concrete work",
+        "Plumbing and HVAC"
+      ],
+      "image_url": "https://assets.milwaukeetool.com/48-22-8545_1.jpg"
+    }
+  ],
   "power_systems": {
     "M12": {
-      "voltage": "12V",
-      "description": "Compact tools for tight spaces",
-      "typical_users": ["Electricians", "HVAC technicians", "Automotive"],
-      "battery_platform": "M12 REDLITHIUM"
+      "name": "M12™ Cordless System",
+      "description": "Compact, portable power tools"
     },
     "M18": {
-      "voltage": "18V",
-      "description": "Majority platform, powerful versatile tools",
-      "typical_users": ["General contractors", "Woodworkers", "Plumbers"],
-      "battery_platform": "M18 REDLITHIUM"
+      "name": "M18™ Cordless System",
+      "description": "Performance driven, trade focused"
     },
     "MX_FUEL": {
-      "voltage": "Variable",
-      "description": "Heavy equipment, replaces gas/pneumatic",
-      "typical_users": ["Heavy construction", "Infrastructure"],
-      "battery_platform": "MX FUEL REDLITHIUM"
+      "name": "MX FUEL™ Equipment System",
+      "description": "Equipment redefined, zero emissions"
     }
   }
 }
-```
-
----
-
-## 📝 Instrukcje Użycia
-
-### Jak Dodać Nowy Produkt:
-1. Skopiuj template produktu powyżej
-2. Uzupełnij wszystkie pola
-3. Dodaj do odpowiedniej kategorii
-4. Zapisz plik
-5. Commit do git (jeśli używasz version control)
-
-### Pola Wymagane vs Opcjonalne:
-**Wymagane:**
-- `sku`, `name`, `category_id`, `price_msrp`
-
-**Opcjonalne ale zalecane:**
-- `specs`, `features`, `use_cases`, `image_url`
-
-**Opcjonalne:**
-- `video_url`, `manual_url`
-
-### Dodawanie Nowej Kategorii:
-Jeśli potrzebujesz nowej kategorii (np. "Lights"), dodaj ją do array `categories`.
-
----
-
-## 🔗 Powiązane Pliki
-
-Szczegółowe informacje o poszczególnych kategoriach znajdziesz w:
-- `categories/drills.md`
-- `categories/impact_drivers.md`
-- `categories/grinders.md`
-- etc.
-
----
-
-**Autor:** [Imię]  
-**Status:** [Draft / In Review / Approved]

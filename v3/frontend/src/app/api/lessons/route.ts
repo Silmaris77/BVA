@@ -5,11 +5,11 @@ export async function GET() {
     try {
         const supabase = await createClient();
 
-        // Get all lessons (public endpoint - access control done on individual lesson view)
+        // Get all lessons (RLS auto-filters by company)
         const { data: lessons, error } = await supabase
             .from('lessons')
-            .select('lesson_id, title, description, duration_minutes, xp_reward, difficulty, category, content')
-            .order('created_at', { ascending: true });
+            .select('lesson_id, title, description, duration_minutes, xp_reward, difficulty, category, content, status, release_date, display_order, module, track')
+            .order('display_order', { ascending: true });
 
         if (error) {
             console.error('Lessons fetch error:', error);

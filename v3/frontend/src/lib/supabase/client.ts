@@ -7,6 +7,7 @@ export function createClient() {
         {
             cookies: {
                 get(name: string) {
+                    if (typeof document === 'undefined') return undefined
                     // Get cookie using document.cookie
                     const value = `; ${document.cookie}`;
                     const parts = value.split(`; ${name}=`);
@@ -15,6 +16,7 @@ export function createClient() {
                     }
                 },
                 set(name: string, value: string, options: any) {
+                    if (typeof document === 'undefined') return
                     // Set cookie using document.cookie
                     let cookie = `${name}=${value}`;
 
@@ -37,6 +39,7 @@ export function createClient() {
                     document.cookie = cookie;
                 },
                 remove(name: string, options: any) {
+                    if (typeof document === 'undefined') return
                     // Remove cookie by setting it to expire
                     let cookie = `${name}=; max-age=0`;
 

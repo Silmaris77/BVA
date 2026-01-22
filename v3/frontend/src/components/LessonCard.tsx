@@ -1,4 +1,4 @@
-import { Clock, Trophy, BookOpen, Layers } from 'lucide-react'
+import { Clock, Trophy, BookOpen, Layers, Calendar, Lock } from 'lucide-react'
 
 interface LessonCardProps {
     lesson: {
@@ -10,6 +10,9 @@ interface LessonCardProps {
         duration_minutes: number
         xp_reward: number
         card_count: number
+        status?: 'published' | 'coming_soon' | 'draft' | 'archived'
+        release_date?: string
+        track?: string
     }
     progress?: {
         status: 'not_started' | 'in_progress' | 'completed'
@@ -23,7 +26,12 @@ interface LessonCardProps {
 export default function LessonCard({ lesson, progress, onClick }: LessonCardProps) {
     const isCompleted = progress?.status === 'completed'
     const isInProgress = progress?.status === 'in_progress'
-    const isNotStarted = !progress || progress?.status === 'not_started'
+    const isComingSoon = lesson.status === 'coming_soon'
+
+    // Format release date if present
+    const formattedDate = lesson.release_date
+        ? new Date(lesson.release_date).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })
+        : null
 
     // Completed = 100%, In Progress = calculate, Not Started = 0
     const progressPercentage = isCompleted
@@ -37,15 +45,23 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
         'Komunikacja': '#00d4ff',
         'Leadership': '#b000ff',
         'Strategy': '#ffd700',
-        'Sales': '#00ff88'
+        'Sales': '#00ff88',
+        'Sales Skills': '#00ff88',
+        'Sales Methodology': '#ff0055',
+        'Product Knowledge': '#ff8800',
+        'Account Management': '#b000ff'
     }
 
-    const categoryColor = categoryColors[lesson.category] || '#00d4ff'
+    const categoryColor = isComingSoon ? '#888888' : (categoryColors[lesson.category] || '#00d4ff')
 
     // Badge text
     let badgeText = ''
     let badgeColor = categoryColor
-    if (isCompleted) {
+
+    if (isComingSoon) {
+        badgeText = '🚧 W przygotowaniu'
+        badgeColor = '#888888'
+    } else if (isCompleted) {
         badgeText = '✓ Ukończone'
         badgeColor = '#ffd700'
     } else if (isInProgress) {
@@ -55,7 +71,7 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
 
     return (
         <div
-            onClick={onClick}
+            onClick={isComingSoon ? undefined : onClick}
             style={{
                 background: 'rgba(20, 20, 35, 0.4)',
                 backdropFilter: 'blur(20px)',
@@ -63,12 +79,14 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
                 border: '1px solid rgba(255, 255, 255, 0.08)',
                 borderRadius: '16px',
                 padding: '20px',
-                cursor: 'pointer',
+                cursor: isComingSoon ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s',
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                opacity: isComingSoon ? 0.7 : 1
             }}
             onMouseOver={(e) => {
+                if (isComingSoon) return
                 e.currentTarget.style.borderColor = categoryColor
                 e.currentTarget.style.transform = 'translateY(-4px)'
                 e.currentTarget.style.boxShadow = `0 12px 40px ${categoryColor}33`
@@ -76,6 +94,7 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
                 if (shine) shine.style.left = '100%'
             }}
             onMouseOut={(e) => {
+                if (isComingSoon) return
                 e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
                 e.currentTarget.style.transform = 'translateY(0)'
                 e.currentTarget.style.boxShadow = 'none'
@@ -112,9 +131,31 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
                     fontSize: '11px',
                     fontWeight: 600,
                     color: badgeColor,
-                    zIndex: 2
+                    zIndex: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
                 }}>
+                    {isComingSoon && <Lock size={10} />}
                     {badgeText}
+                </div>
+            )}
+
+            {/* Track Info (if belongs to track) */}
+            {lesson.track && !isComingSoon && (
+                <div style={{
+                    position: 'absolute',
+                    top: '16px',
+                    left: '16px', // Wait, icon is here? No icon is below relative
+                    padding: '2px 8px',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    borderRadius: '4px',
+                    fontSize: '10px',
+                    color: 'rgba(255, 255, 255, 0.6)',
+                    zIndex: 2,
+                    display: 'none' // Hidden for now to verify layout
+                }}>
+                    {lesson.track}
                 </div>
             )}
 
@@ -153,7 +194,11 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
                 marginBottom: '16px',
                 lineHeight: '1.5',
                 position: 'relative',
-                zIndex: 2
+                zIndex: 2,
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden'
             }}>
                 {lesson.description}
             </p>
@@ -162,46 +207,71 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '16px',
+                gap: '12px',
                 fontSize: '12px',
                 color: 'rgba(255, 255, 255, 0.6)',
                 marginBottom: '12px',
                 position: 'relative',
-                zIndex: 2
+                zIndex: 2,
+                flexWrap: 'wrap'
             }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Clock size={12} />
-                    {lesson.duration_minutes} min
-                </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Layers size={12} />
-                    {lesson.card_count} kart
-                </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Trophy size={12} />
-                    +{lesson.xp_reward} XP
-                </span>
+                {isComingSoon && formattedDate ? (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#ff8800' }}>
+                        <Calendar size={12} />
+                        Dostępne: {formattedDate}
+                    </span>
+                ) : (
+                    <>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Clock size={12} />
+                            {lesson.duration_minutes} min
+                        </span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Layers size={12} />
+                            {lesson.card_count} kart
+                        </span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Trophy size={12} />
+                            +{lesson.xp_reward} XP
+                        </span>
+                    </>
+                )}
             </div>
 
-            {/* Progress bar - only show if started */}
-            <div style={{
-                height: '6px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                borderRadius: '3px',
-                overflow: 'hidden',
-                position: 'relative',
-                zIndex: 2
-            }}>
+            {/* Track Label (Bottom) */}
+            {lesson.track && (
                 <div style={{
-                    height: '100%',
-                    width: `${progressPercentage}%`,
-                    background: isCompleted
-                        ? 'linear-gradient(90deg, #00ff88, #00d4ff)' // Green for completed
-                        : `linear-gradient(90deg, ${categoryColor}, #b000ff)`, // Category color for in progress
+                    fontSize: '11px',
+                    color: 'rgba(255, 255, 255, 0.4)',
+                    marginBottom: '12px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                }}>
+                    {lesson.track} Track
+                </div>
+            )}
+
+            {/* Progress bar - only show if started AND NOT coming soon */}
+            {!isComingSoon && (
+                <div style={{
+                    height: '6px',
+                    background: 'rgba(255, 255, 255, 0.1)',
                     borderRadius: '3px',
-                    transition: 'width 0.4s ease'
-                }} />
-            </div>
+                    overflow: 'hidden',
+                    position: 'relative',
+                    zIndex: 2
+                }}>
+                    <div style={{
+                        height: '100%',
+                        width: `${progressPercentage}%`,
+                        background: isCompleted
+                            ? 'linear-gradient(90deg, #00ff88, #00d4ff)' // Green for completed
+                            : `linear-gradient(90deg, ${categoryColor}, #b000ff)`, // Category color for in progress
+                        borderRadius: '3px',
+                        transition: 'width 0.4s ease'
+                    }} />
+                </div>
+            )}
         </div>
     )
 }

@@ -17,6 +17,9 @@ interface Lesson {
     xp_reward: number
     difficulty: 'beginner' | 'intermediate' | 'advanced'
     category?: string
+    status?: 'published' | 'coming_soon' | 'draft' | 'archived'
+    release_date?: string
+    track?: string
     content?: {
         cards: any[]
     }
@@ -540,7 +543,10 @@ export default function LessonsPage() {
                                             difficulty: lesson.difficulty,
                                             duration_minutes: lesson.duration_minutes,
                                             xp_reward: lesson.xp_reward,
-                                            card_count: lesson.content?.cards?.length || 0
+                                            card_count: lesson.content?.cards?.length || 0,
+                                            status: lesson.status,
+                                            release_date: lesson.release_date,
+                                            track: lesson.track
                                         }}
                                         progress={userProgress[lesson.lesson_id]}
                                         onClick={() => router.push(`/lessons/${lesson.lesson_id}`)}

@@ -2738,7 +2738,7 @@
             <div class="category-icon">📚</div>
             <div class="category-info">
                 <div class="category-name">Prezentacja</div>
-                <div class="category-count">9 kart</div>
+                <div class="category-count">11 kart</div>
             </div>
         </div>
 
@@ -2811,7 +2811,7 @@
     <div class="main-content">
         <div class="content-header">
             <h1>Interactive Card Viewer</h1>
-            <p>Wszystkie 46 typów kart • 7 kategorii funkcjonalnych • Milwaukee MX FUEL Training + AI</p>
+            <p>Wszystkie 48 typów kart • 7 kategorii funkcjonalnych • Milwaukee MX FUEL Training + AI</p>
         </div>
 
         <!-- WELCOME VIEW (domyślny widok) -->
@@ -2824,8 +2824,8 @@
                 <div class="welcome-features">
                     <div class="welcome-feature">
                         <div class="welcome-feature-icon">📚</div>
-                        <h3>9 Kart Prezentacji</h3>
-                        <p>Video, Timeline, Lightbulb, Journey Map, Moodboard i więcej</p>
+                        <h3>11 Kart Prezentacji</h3>
+                        <p>Video, Timeline, Lightbulb, Journey Map, Data Card, Story Card i więcej</p>
                     </div>
                     <div class="welcome-feature">
                         <div class="welcome-feature-icon">✅</div>
@@ -2847,7 +2847,7 @@
                 <div class="category-view-icon">📚</div>
                 <div class="category-view-title">
                     <h2>Prezentacja Treści</h2>
-                    <div class="category-view-description">9 kart - Wprowadzenie, storytelling, visual learning</div>
+                    <div class="category-view-description">11 kart - Wprowadzenie, storytelling, visual learning, data visualization</div>
                 </div>
             </div>
 
@@ -3011,6 +3011,44 @@
                     <div class="card-list-tags">
                         <span class="card-tag">ROI</span>
                         <span class="card-tag">Results</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('datacard')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">📊</div>
+                        <div class="card-list-title">
+                            <h3>Data Card</h3>
+                            <span class="card-list-complexity">MEDIUM</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Statystyki z 3-stat showcase, insights i tabelą porównawczą
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Statistics</span>
+                        <span class="card-tag">Data Visualization</span>
+                        <span class="card-tag">Comparison</span>
+                    </div>
+                    <button class="view-demo-btn">Pokaż demo</button>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('storycard')">
+                    <div class="card-list-header">
+                        <div class="card-list-icon">⚠️</div>
+                        <div class="card-list-title">
+                            <h3>Story Card / Safety Incident</h3>
+                            <span class="card-list-complexity">LOW</span>
+                        </div>
+                    </div>
+                    <div class="card-list-description">
+                        Przypadek z terenu: Co się stało → Skutki → Czego mogło zapobiec (format safety training)
+                    </div>
+                    <div class="card-list-tags">
+                        <span class="card-tag">Case Study</span>
+                        <span class="card-tag">Safety</span>
+                        <span class="card-tag">Real Example</span>
                     </div>
                     <button class="view-demo-btn">Pokaż demo</button>
                 </div>
@@ -4701,6 +4739,192 @@
                         <strong>Całkowita oszczędność roczna:</strong> 5 400 PLN (paliwo) + 1 200 PLN (serwis) = 6 600 PLN<br>
                         <strong>Zwrot z inwestycji:</strong> ~9 miesięcy przy cenie 4 999 PLN<br>
                         <strong>Dodatkowe korzyści:</strong> Cisza, zero emisji, wygoda użytkowania
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DATA CARD DEMO -->
+        <div id="demo-datacard" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="back-btn" onclick="showCategoryView('prezentacja')">
+                    <i data-lucide="arrow-left"></i> Powrót
+                </button>
+                <div class="demo-title">
+                    <h2>📊 Data Card</h2>
+                    <div class="demo-subtitle">Kategoria: Prezentacja • Complexity: MEDIUM • Use Case: Statistics, Safety Training</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div style="background: linear-gradient(135deg, rgba(10, 10, 26, 0.95), rgba(26, 26, 58, 0.95)); border: 2px solid rgba(96, 239, 255, 0.3); border-radius: 20px; padding: 40px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+                        <div style="font-size: 3rem;">📊</div>
+                        <div>
+                            <h3 style="font-size: 2rem; margin-bottom: 10px;">LICZBY NIE KŁAMIĄ</h3>
+                            <p style="font-size: 1.1rem; opacity: 0.9;">Dlaczego przygotowanie do pracy ma znaczenie</p>
+                        </div>
+                    </div>
+
+                    <!-- 3-STAT SHOWCASE -->
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 40px 0;">
+                        <div style="text-align: center; padding: 30px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 136, 0, 0.3); border-radius: 16px;">
+                            <div style="font-size: 3.5rem; font-weight: 800; color: #ff8800; margin-bottom: 15px;">67,000</div>
+                            <div style="font-size: 0.95rem; line-height: 1.6; opacity: 0.9;">osób poszkodowanych w wypadkach przy pracy w Polsce (2024)</div>
+                            <div style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7; font-style: italic;">Źródło: GUS</div>
+                        </div>
+
+                        <div style="text-align: center; padding: 30px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 136, 0, 0.3); border-radius: 16px;">
+                            <div style="font-size: 3.5rem; font-weight: 800; color: #ff8800; margin-bottom: 15px;">50%</div>
+                            <div style="font-size: 0.95rem; line-height: 1.6; opacity: 0.9;">spadek wypadków w firmach ze szkoleniami BHP vs bez szkoleń</div>
+                            <div style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7; font-style: italic;">Źródło: OSHA Training Statistics</div>
+                        </div>
+
+                        <div style="text-align: center; padding: 30px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 136, 0, 0.3); border-radius: 16px;">
+                            <div style="font-size: 3.5rem; font-weight: 800; color: #ff8800; margin-bottom: 15px;">60%</div>
+                            <div style="font-size: 0.95rem; line-height: 1.6; opacity: 0.9;">mniej urazów przy prawidłowym używaniu PPE (branże wysokiego ryzyka)</div>
+                            <div style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7; font-style: italic;">Źródło: OSHA / Canada Safety Training</div>
+                        </div>
+                    </div>
+
+                    <!-- INSIGHT BOX -->
+                    <div style="background: rgba(255, 136, 0, 0.1); border-left: 4px solid #ff8800; padding: 25px; border-radius: 12px; margin: 30px 0;">
+                        <h4 style="color: #ff8800; margin-bottom: 15px;">🏗️ Branża budowlana</h4>
+                        <p style="line-height: 1.8;"><strong>22,5%</strong> wszystkich wypadków śmiertelnych w UE to budownictwo. W Polsce: <strong>13 wypadków dziennie</strong> na budowach.</p>
+                        <div style="margin-top: 12px; font-size: 0.9rem; opacity: 0.7; font-style: italic;">Źródła: Eurostat (2023), PIP (2016-2020)</div>
+                    </div>
+
+                    <!-- COMPARISON TABLE -->
+                    <h4 style="color: #ffd700; margin: 40px 0 20px; font-size: 1.5rem; text-align: center;">Typowe zdarzenia i ich skutki</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="background: rgba(255, 136, 0, 0.2); padding: 16px; text-align: left; border-bottom: 2px solid rgba(255, 136, 0, 0.4);">Zdarzenie z terenu</th>
+                                <th style="background: rgba(255, 136, 0, 0.2); padding: 16px; text-align: left; border-bottom: 2px solid rgba(255, 136, 0, 0.4);">Skutek</th>
+                                <th style="background: rgba(255, 136, 0, 0.2); padding: 16px; text-align: left; border-bottom: 2px solid rgba(255, 136, 0, 0.4);">Co zrobiono źle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                <td style="padding: 16px;">Operator szlifierki bez oceny strefy</td>
+                                <td style="padding: 16px;">Odprysk trafił pomocnika</td>
+                                <td style="padding: 16px;">Brak oceny ryzyka + oznakowania strefy</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                <td style="padding: 16px;">Brak ochrony słuchu</td>
+                                <td style="padding: 16px;">Uraz słuchu po kilku dniach</td>
+                                <td style="padding: 16px;">PPE nie dopasowane do hałasu</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                <td style="padding: 16px;">Tarcza niezgodna z materiałem</td>
+                                <td style="padding: 16px;">Pęknięcie tarczy</td>
+                                <td style="padding: 16px;">Niewłaściwy osprzęt</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                                <td style="padding: 16px;">Złe ułożenie ciała</td>
+                                <td style="padding: 16px;">Przecięcie dłoni</td>
+                                <td style="padding: 16px;">Brak ergonomii pozycji pracy</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 16px;">Zapchany filtr maski</td>
+                                <td style="padding: 16px;">Podrażnienie układu oddechowego</td>
+                                <td style="padding: 16px;">Brak kontroli stanu PPE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="background: rgba(0, 255, 135, 0.1); border: 2px solid rgba(0, 255, 135, 0.3); border-radius: 12px; padding: 25px; margin-top: 40px; text-align: center;">
+                        <p style="font-size: 1.3rem; line-height: 1.8; font-weight: 600;">
+                            "Choć PPE wygląda jak drobna rzecz,<br>
+                            to różnica między urazem a bezpiecznym dniem pracy."
+                        </p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; padding: 25px; background: rgba(96, 239, 255, 0.05); border-left: 4px solid #60efff; border-radius: 12px;">
+                    <strong style="color: #60efff;">💡 Kiedy użyć Data Card?</strong>
+                    <ul style="margin-top: 15px; line-height: 1.8; padding-left: 20px;">
+                        <li>Safety training - pokazanie skali problemu (wypadki, kontuzje)</li>
+                        <li>Business case - ROI, metryki wydajności, oszczędności</li>
+                        <li>Industry insights - benchmarki, trendy rynkowe</li>
+                        <li>Social proof - ilość użytkowników, satisfaction scores</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 0.95rem;">
+                        <strong>Struktura:</strong> 3-stat showcase (big numbers) → Insights (kontekst) → Comparison table (szczegóły) → Quote/CTA
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- STORY CARD / SAFETY INCIDENT DEMO -->
+        <div id="demo-storycard" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="back-btn" onclick="showCategoryView('prezentacja')">
+                    <i data-lucide="arrow-left"></i> Powrót
+                </button>
+                <div class="demo-title">
+                    <h2>⚠️ Story Card / Safety Incident</h2>
+                    <div class="demo-subtitle">Kategoria: Prezentacja • Complexity: LOW • Use Case: Safety Training, Real Examples</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(10, 10, 26, 0.95)); border: 2px solid rgba(239, 68, 68, 0.3); border-radius: 20px; padding: 35px; max-width: 800px; margin: 0 auto;">
+                    <!-- Header -->
+                    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid rgba(239, 68, 68, 0.2);">
+                        <div style="font-size: 3.5rem;">⚠️</div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">📍 Przypadek z terenu</div>
+                            <h4 style="font-size: 1.8rem; font-weight: 700; color: #ef4444;">Cięcie betonu bez oceny ryzyka</h4>
+                        </div>
+                    </div>
+
+                    <!-- Scenario -->
+                    <div style="margin-bottom: 30px;">
+                        <h4 style="color: #60efff; font-size: 1.2rem; margin-bottom: 15px;">Co się stało:</h4>
+                        <p style="font-size: 1.05rem; line-height: 1.8; padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: 12px;">
+                            Na budowie operator zaczyna ciąć beton szlifierką kątową bez wcześniejszego sprawdzenia strefy odrzutu oraz ustawienia osłon. Pomocnik stoi obok bez ochrony oczu.
+                        </p>
+                    </div>
+
+                    <!-- Consequences -->
+                    <div style="margin-bottom: 30px;">
+                        <h4 style="color: #ef4444; font-size: 1.2rem; margin-bottom: 15px;">➡️ Skutki:</h4>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: start; gap: 15px; padding: 15px; background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; border-radius: 8px;">
+                                <div style="font-size: 1.5rem; flex-shrink: 0;">💥</div>
+                                <div style="line-height: 1.6;">Pył i drobne odłamki betonu trafiają w oczy pomocnika stojącego obok</div>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 15px; padding: 15px; background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; border-radius: 8px;">
+                                <div style="font-size: 1.5rem; flex-shrink: 0;">🚑</div>
+                                <div style="line-height: 1.6;">Przerwa w pracy, wizyta w szpitalu, potencjalne trwałe uszkodzenie wzroku</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lesson Learned -->
+                    <div style="background: rgba(0, 255, 135, 0.1); border: 2px solid rgba(0, 255, 135, 0.3); border-radius: 16px; padding: 25px;">
+                        <h4 style="color: #00ff87; font-size: 1.3rem; margin-bottom: 15px;">✅ Czego mogło zapobiec:</h4>
+                        <p style="font-size: 1.05rem; line-height: 1.8;"><strong>STOP-LOOK-ASSESS-ACT:</strong> Gdyby wykonano ocenę ryzyka (30 sekund), strefa odrzutu zostałaby ograniczona, a pomocnik wiedziałby gdzie stać. Okulary ochronne + maska przeciwpyłowa = <strong style="color: #00ff87;">zero urazu</strong>.</p>
+                    </div>
+
+                    <div style="margin-top: 30px; padding: 20px; background: rgba(255, 136, 0, 0.05); border-radius: 12px; text-align: center;">
+                        <p style="font-size: 0.95rem; opacity: 0.9; line-height: 1.7;">
+                            ⏱️ <strong>30 sekund oceny ryzyka</strong> zapobiegłoby całemu incydentowi.<br>
+                            Najwięcej wypadków nie wydarza się przy trudnej robocie — wydarzają się przy tej „tylko na chwilę".
+                        </p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; padding: 25px; background: rgba(168, 85, 247, 0.05); border-left: 4px solid #a855f7; border-radius: 12px;">
+                    <strong style="color: #a855f7;">💡 Kiedy użyć Story Card?</strong>
+                    <ul style="margin-top: 15px; line-height: 1.8; padding-left: 20px;">
+                        <li><strong>Safety training</strong> - real incidents z budów, fabryk (what went wrong → consequences → lesson)</li>
+                        <li><strong>Sales training</strong> - case studies: jak handlowiec zamknął deal (context → challenge → solution → result)</li>
+                        <li><strong>Customer success</strong> - transformation stories (before → journey → after)</li>
+                        <li><strong>Lessons learned</strong> - project post-mortems, mistake analysis</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 0.95rem;">
+                        <strong>Struktura:</strong> Timestamp/Location → What happened (scenario) → Consequences (➡️) → Lesson learned (✅)<br>
+                        <strong>Psychologia:</strong> Stories stick better than rules. Konkretny przypadek > abstrakcyjna zasada.
                     </p>
                 </div>
             </div>

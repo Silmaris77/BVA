@@ -1,0 +1,220 @@
+{
+    "version": "1.0",
+    "last_updated": "2026-01-21",
+    "categories": [
+        {
+            "id": "drills",
+            "name": "Wiertarko-Wkrętarki",
+            "description": "Compact and powerful drilling solutions",
+            "icon": "drill",
+            "products": [
+                {
+                    "sku": "2904-20",
+                    "name": "M18 FUEL™ ½\" Hammer Drill/Driver w/ ONE-KEY™",
+                    "category_id": "drills",
+                    "system": "M18",
+                    "fuel": true,
+                    "price_msrp": 299.00,
+                    "currency": "USD",
+                    "specs": {
+                        "max_torque": "1400 in-lbs",
+                        "speed_settings": 2,
+                        "speed_range": "0-500 / 0-2,100 RPM",
+                        "chuck_type": "½\" All-Metal Ratcheting",
+                        "length": "6.9 inches",
+                        "weight": "3.3 lbs (Tool Only)",
+                        "battery_compatible": [
+                            "M18 REDLITHIUM",
+                            "M18 HIGH OUTPUT"
+                        ]
+                    },
+                    "features": [
+                        "POWERSTATE™ Brushless Motor delivers up to 60% more power",
+                        "REDLINK PLUS™ Intelligence ensures optimal performance and overload protection",
+                        "ONE-KEY™ Compatible: Customize, Track, Manage",
+                        "Auto-Stop Control Mode for enhanced safety"
+                    ],
+                    "use_cases": [
+                        "Heavy-duty drilling in wood, metal, and masonry",
+                        "Driving large diameter fasteners",
+                        "Core drilling applications"
+                    ],
+                    "warranty_years": 5,
+                    "in_stock": true,
+                    "image_url": "/assets/images/products/2904-20.jpg",
+                    "manual_url": "https://documents.milwaukeetool.com/58-14-2904d1.pdf"
+                },
+                {
+                    "sku": "2504-20",
+                    "name": "M12 FUEL™ ½\" Hammer Drill/Driver",
+                    "category_id": "drills",
+                    "system": "M12",
+                    "fuel": true,
+                    "price_msrp": 149.00,
+                    "currency": "USD",
+                    "specs": {
+                        "max_torque": "400 in-lbs",
+                        "speed_settings": 2,
+                        "speed_range": "0-450 / 0-1,700 RPM",
+                        "chuck_type": "½\" Metal Ratcheting",
+                        "length": "6.6 inches",
+                        "weight": "2.3 lbs",
+                        "battery_compatible": [
+                            "M12 REDLITHIUM"
+                        ]
+                    },
+                    "features": [
+                        "Most Capable 12V Hammer Drill",
+                        "Most Compact in Class",
+                        "POWERSTATE™ Brushless Motor"
+                    ],
+                    "use_cases": [
+                        "Tight space drilling",
+                        "Overhead work",
+                        "Service electrical/HVAC fit-out"
+                    ],
+                    "warranty_years": 5,
+                    "in_stock": true
+                }
+            ]
+        },
+        {
+            "id": "impact_drivers",
+            "name": "Zakrętarki Udarowe",
+            "description": "High-torque fastening solutions",
+            "icon": "impact",
+            "products": [
+                {
+                    "sku": "2953-20",
+                    "name": "M18 FUEL™ ¼\" Hex Impact Driver",
+                    "category_id": "impact_drivers",
+                    "system": "M18",
+                    "fuel": true,
+                    "price_msrp": 149.00,
+                    "currency": "USD",
+                    "specs": {
+                        "max_torque": "2000 in-lbs",
+                        "speed_range": "0-3,900 RPM",
+                        "impact_rate": "0-4,400 IPM",
+                        "drive_control": "4-Mode DRIVE CONTROL™",
+                        "length": "4.47 inches",
+                        "weight": "2.24 lbs"
+                    },
+                    "features": [
+                        "Ultimate Trigger Control",
+                        "Tri-LED Lighting for maximum visibility",
+                        "Single Handed Bit Insertion"
+                    ],
+                    "use_cases": [
+                        "Fastening deck screws",
+                        "Self-tapping screws",
+                        "Lag bolts"
+                    ],
+                    "warranty_years": 5,
+                    "in_stock": true
+                }
+            ]
+        },
+        {
+            "id": "saws",
+            "name": "Piły i Pilarki",
+            "description": "Cutting solutions for various materials",
+            "icon": "saw",
+            "products": [
+                {
+                    "sku": "2821-20",
+                    "name": "M18 FUEL™ SAWZALL® Reciprocating Saw",
+                    "category_id": "saws",
+                    "system": "M18",
+                    "fuel": true,
+                    "price_msrp": 199.00,
+                    "currency": "USD",
+                    "specs": {
+                        "stroke_length": "1-¼ inch",
+                        "spm": "0-3,000",
+                        "length": "17.1 inches",
+                        "weight": "8.4 lbs",
+                        "shoe": "Adjustable"
+                    },
+                    "features": [
+                        "Cuts faster than corded",
+                        "QUIK-LOK™ Blade Clamp",
+                        "Integrated LED light"
+                    ],
+                    "use_cases": [
+                        "Demolition",
+                        "Cutting metal pipe",
+                        "Cutting nail-embedded wood"
+                    ],
+                    "warranty_years": 5,
+                    "in_stock": true
+                }
+            ]
+        },
+        {
+            "id": "accessories",
+            "name": "Akcesoria",
+            "description": "Bits, blades, and attachments",
+            "icon": "accessory",
+            "products": [
+                {
+                    "sku": "48-32-4006",
+                    "name": "SHOCKWAVE™ Impact Duty Driver Bit Set (40 PC)",
+                    "category_id": "accessories",
+                    "system": "Accessory",
+                    "fuel": false,
+                    "price_msrp": 29.97,
+                    "currency": "USD",
+                    "specs": {
+                        "pieces": 40,
+                        "material": "Custom Alloy76™ Steel",
+                        "tip_type": "Wear Guard Tip™"
+                    },
+                    "features": [
+                        "Optimized Shock Zone™ absorbs peak torque",
+                        "Precise Fit Custom Machined Tip™ prevents stripping",
+                        "Laser Hardened Tip"
+                    ],
+                    "use_cases": [
+                        "Impact driving applications",
+                        "Heavy duty fastening"
+                    ],
+                    "warranty_years": 0,
+                    "in_stock": true
+                }
+            ]
+        }
+    ],
+    "power_systems": {
+        "M12": {
+            "voltage": "12V",
+            "description": "Portable productivity. Replaces manual tools.",
+            "typical_users": [
+                "Service Techs",
+                "Electricians",
+                "MRO"
+            ],
+            "battery_platform": "M12 REDLITHIUM"
+        },
+        "M18": {
+            "voltage": "18V",
+            "description": "Performance driven. Replaces corded.",
+            "typical_users": [
+                "General Construction",
+                "Industrial",
+                "Heavy Duty"
+            ],
+            "battery_platform": "M18 REDLITHIUM"
+        },
+        "MX_FUEL": {
+            "voltage": "72V System",
+            "description": "Equipment Redefined. Zero Emissions.",
+            "typical_users": [
+                "Concrete",
+                "Demolition",
+                "Sewer Maintenance"
+            ],
+            "battery_platform": "MX FUEL REDLITHIUM"
+        }
+    }
+}
