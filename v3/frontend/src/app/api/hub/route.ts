@@ -119,7 +119,7 @@ export async function GET(request: Request) {
             lessonMission = {
                 id: 'lesson',
                 icon: 'GraduationCap',
-                title: `Kontynuuj: ${progressRes.data.lessons?.title || 'Lekcja'}`,
+                title: `Kontynuuj: ${((progressRes.data.lessons as any)?.title || (progressRes.data.lessons as any)?.[0]?.title) || 'Lekcja'}`,
                 meta: 'Dokończ rozpoczętą lekcję (+50 XP)',
                 progress: 50 // TODO: Calculate accurate progress percentage if possible
             }
@@ -162,7 +162,7 @@ export async function GET(request: Request) {
             daily_tip: randomTip,
             resume_lesson: progressRes.data ? {
                 lesson_id: progressRes.data.lesson_id,
-                title: progressRes.data.lessons?.title || 'Lekcja',
+                title: (progressRes.data.lessons as any)?.title || (progressRes.data.lessons as any)?.[0]?.title || 'Lekcja',
                 progress_index: progressRes.data.current_card_index
             } : null,
             messages: [], // messages removed? Wait, no messages here.
