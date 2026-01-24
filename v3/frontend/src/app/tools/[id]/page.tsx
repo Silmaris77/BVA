@@ -175,7 +175,7 @@ export default function ToolDetailPage() {
 
                     {/* Instructions */}
                     <div style={{ marginTop: '32px' }}>
-                        <h4 style={{ fontSize: '16px', font Weight: 600, marginBottom: '12px', color: '#ff8800' }}>
+                        <h4 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '12px', color: '#ff8800' }}>
                             💡 Wskazówki
                         </h4>
                         <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', lineHeight: 1.6 }}>
