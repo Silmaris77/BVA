@@ -6,6 +6,7 @@ import Sidebar from "@/components/Navigation"
 import BottomNav from "@/components/BottomNav"
 import GlobalTopBar from "@/components/layout/GlobalTopBar"
 import { usePathname } from "next/navigation"
+import { Suspense } from "react"
 import "./globals.css"
 
 const outfit = Outfit({ subsets: ["latin"] })
@@ -32,7 +33,11 @@ export default function RootLayout({
           {!isAuthPage && !isLessonPlayer && <Sidebar />}
           {/* Main content with responsive margins - skip for fullscreen pages */}
           <div className={!isAuthPage && !isLessonPlayer ? 'main-content' : ''}>
-            {!isAuthPage && !isLessonPlayer && <GlobalTopBar />}
+            {!isAuthPage && !isLessonPlayer && (
+              <Suspense fallback={<div style={{ height: '65px' }} />}>
+                <GlobalTopBar />
+              </Suspense>
+            )}
             {children}
           </div>
           {!isAuthPage && !isLessonPlayer && <BottomNav />}

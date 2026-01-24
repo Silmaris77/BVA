@@ -2,7 +2,7 @@ import { Folder, CheckCircle, Clock, Search } from 'lucide-react'
 
 export default function ProjektyView() {
     return (
-        <div style={{ padding: '32px 48px', maxWidth: '1200px' }}>
+        <div style={{ maxWidth: '1200px' }}>
             <div style={{ marginBottom: '32px' }}>
                 <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <Folder size={32} color="#ffd700" />

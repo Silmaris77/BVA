@@ -2,7 +2,7 @@ import { Gamepad2 } from 'lucide-react'
 
 export default function GryView() {
     return (
-        <div style={{ padding: '32px 48px', maxWidth: '1200px' }}>
+        <div style={{ maxWidth: '1200px' }}>
             <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <Gamepad2 size={32} color="#b000ff" />
                 Gry Biznesowe (Symulacje)

@@ -66,10 +66,10 @@ export default function Sidebar() {
 
             {/* Main Nav */}
             <nav style={{ marginBottom: '32px' }}>
-                <NavItem href="/" icon={<Home size={20} />} label="Hub" active={isActive('/')} />
-                <NavItem href="/lessons" icon={<BookOpen size={20} />} label="Nauka" active={isActive('/lessons')} />
-                <NavItem href="/practice" icon={<Gamepad2 size={20} />} label="Praktyka" active={isActive('/practice')} />
-                <NavItem href="/profile" icon={<User size={20} />} label="Profil" active={isActive('/profile')} />
+                <NavItem href="/" icon={<Home size={20} />} label="Hub" active={pathname === '/'} />
+                <NavItem href="/lessons" icon={<BookOpen size={20} />} label="Nauka" active={pathname?.startsWith('/lessons') || pathname?.startsWith('/engrams') || pathname?.startsWith('/resources')} />
+                <NavItem href="/practice" icon={<Gamepad2 size={20} />} label="Praktyka" active={pathname?.startsWith('/practice')} />
+                <NavItem href="/profile" icon={<User size={20} />} label="Profil" active={pathname?.startsWith('/profile')} />
             </nav>
 
             {/* Footer Nav */}

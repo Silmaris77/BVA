@@ -53,7 +53,7 @@ export default function PracticePage() {
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             {/* Content */}
-            <div style={{ padding: '32px' }}>
+            <div style={{ padding: '48px 32px 32px 48px' }}>
                 {activeTab === 'przeglad' && <PrzegladView />}
                 {activeTab === 'trening' && <TreningView />}
                 {activeTab === 'gry' && <GryView />}

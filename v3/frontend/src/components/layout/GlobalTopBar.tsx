@@ -14,6 +14,7 @@ export default function TopBar() {
     const searchParams = useSearchParams()
     const [status, setStatus] = useState<{ streak: number, pending_missions: number } | null>(null)
     const [isMobile, setIsMobile] = useState(false)
+    const [hoveredTab, setHoveredTab] = useState<string | null>(null)
 
     // Detect mobile screen size
     useEffect(() => {
@@ -82,30 +83,53 @@ export default function TopBar() {
         if (isScience) {
             return (
                 <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '0px' }}>
-                    {SCIENCE_TABS.map(tab => (
-                        <Link
-                            key={tab.id}
-                            href={tab.href}
-                            style={{
-                                padding: isMobile ? '8px' : '8px 16px',
-                                borderRadius: '8px',
-                                background: tab.active ? 'rgba(0, 212, 255, 0.15)' : 'transparent',
-                                border: tab.active ? '1px solid #00d4ff' : '1px solid transparent',
-                                color: tab.active ? '#00d4ff' : 'rgba(255, 255, 255, 0.6)',
-                                fontSize: '13px',
-                                fontWeight: 600,
-                                textDecoration: 'none',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                transition: 'all 0.2s',
-                                whiteSpace: 'nowrap'
-                            }}
-                        >
-                            <tab.icon size={16} />
-                            {!isMobile && tab.label}
-                        </Link>
-                    ))}
+                    {SCIENCE_TABS.map(tab => {
+                        const isHovered = hoveredTab === tab.id
+                        return (
+                            <Link
+                                key={tab.id}
+                                href={tab.href}
+                                onMouseEnter={() => setHoveredTab(tab.id)}
+                                onMouseLeave={() => setHoveredTab(null)}
+                                style={{
+                                    padding: isMobile ? '8px' : '8px 16px',
+                                    borderRadius: '8px',
+                                    background: tab.active ? 'rgba(0, 212, 255, 0.15)' : isHovered ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+                                    border: tab.active ? '1px solid #00d4ff' : isHovered ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
+                                    color: tab.active ? '#00d4ff' : isHovered ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.6)',
+                                    boxShadow: tab.active ? '0 0 20px rgba(0, 212, 255, 0.2)' : 'none',
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    textDecoration: 'none',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    transition: 'all 0.2s',
+                                    whiteSpace: 'nowrap',
+                                    position: 'relative',
+                                    overflow: 'hidden'
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: isHovered && !tab.active ? '100%' : '-100%',
+                                        width: '100%',
+                                        height: '100%',
+                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                                        transition: isHovered && !tab.active ? 'left 0.5s ease' : 'none',
+                                        pointerEvents: 'none',
+                                        zIndex: 1
+                                    }}
+                                />
+                                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <tab.icon size={16} />
+                                    {!isMobile && tab.label}
+                                </div>
+                            </Link>
+                        )
+                    })}
                 </div>
             )
         }
@@ -116,16 +140,20 @@ export default function TopBar() {
                 <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '0px' }}>
                     {PRACTICE_TABS.map(tab => {
                         const isActive = currentView === tab.value
+                        const isHovered = hoveredTab === tab.id
                         return (
                             <Link
                                 key={tab.id}
                                 href={`/practice?view=${tab.value}`}
+                                onMouseEnter={() => setHoveredTab(tab.id)}
+                                onMouseLeave={() => setHoveredTab(null)}
                                 style={{
                                     padding: isMobile ? '8px' : '8px 16px',
                                     borderRadius: '8px',
-                                    background: isActive ? 'rgba(176, 0, 255, 0.15)' : 'transparent',
-                                    border: isActive ? '1px solid #b000ff' : '1px solid transparent',
-                                    color: isActive ? '#b000ff' : 'rgba(255, 255, 255, 0.6)',
+                                    background: isActive ? 'rgba(176, 0, 255, 0.15)' : isHovered ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+                                    border: isActive ? '1px solid #b000ff' : isHovered ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
+                                    color: isActive ? '#b000ff' : isHovered ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.6)',
+                                    boxShadow: isActive ? '0 0 20px rgba(176, 0, 255, 0.2)' : 'none',
                                     fontSize: '13px',
                                     fontWeight: 600,
                                     textDecoration: 'none',
@@ -133,11 +161,28 @@ export default function TopBar() {
                                     alignItems: 'center',
                                     gap: '6px',
                                     transition: 'all 0.2s',
-                                    whiteSpace: 'nowrap'
+                                    whiteSpace: 'nowrap',
+                                    position: 'relative',
+                                    overflow: 'hidden'
                                 }}
                             >
-                                <tab.icon size={16} />
-                                {!isMobile && tab.label}
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: isHovered && !isActive ? '100%' : '-100%',
+                                        width: '100%',
+                                        height: '100%',
+                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                                        transition: isHovered && !isActive ? 'left 0.5s ease' : 'none',
+                                        pointerEvents: 'none',
+                                        zIndex: 1
+                                    }}
+                                />
+                                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <tab.icon size={16} />
+                                    {!isMobile && tab.label}
+                                </div>
                             </Link>
                         )
                     })}
@@ -151,16 +196,20 @@ export default function TopBar() {
                 <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '0px' }}>
                     {PROFILE_TABS.map(tab => {
                         const isActive = currentTab === tab.value
+                        const isHovered = hoveredTab === tab.id
                         return (
                             <Link
                                 key={tab.id}
                                 href={`/profile?tab=${tab.value}`}
+                                onMouseEnter={() => setHoveredTab(tab.id)}
+                                onMouseLeave={() => setHoveredTab(null)}
                                 style={{
                                     padding: isMobile ? '8px' : '8px 16px',
                                     borderRadius: '8px',
-                                    background: isActive ? 'rgba(176, 0, 255, 0.15)' : 'transparent',
-                                    border: isActive ? '1px solid #b000ff' : '1px solid transparent',
-                                    color: isActive ? '#b000ff' : 'rgba(255, 255, 255, 0.6)',
+                                    background: isActive ? 'rgba(176, 0, 255, 0.15)' : isHovered ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
+                                    border: isActive ? '1px solid #b000ff' : isHovered ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
+                                    color: isActive ? '#b000ff' : isHovered ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.6)',
+                                    boxShadow: isActive ? '0 0 20px rgba(176, 0, 255, 0.2)' : 'none',
                                     fontSize: '13px',
                                     fontWeight: 600,
                                     textDecoration: 'none',
@@ -168,11 +217,28 @@ export default function TopBar() {
                                     alignItems: 'center',
                                     gap: '6px',
                                     transition: 'all 0.2s',
-                                    whiteSpace: 'nowrap'
+                                    whiteSpace: 'nowrap',
+                                    position: 'relative',
+                                    overflow: 'hidden'
                                 }}
                             >
-                                <tab.icon size={16} />
-                                {!isMobile && tab.label}
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: isHovered && !isActive ? '100%' : '-100%',
+                                        width: '100%',
+                                        height: '100%',
+                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                                        transition: isHovered && !isActive ? 'left 0.5s ease' : 'none',
+                                        pointerEvents: 'none',
+                                        zIndex: 1
+                                    }}
+                                />
+                                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <tab.icon size={16} />
+                                    {!isMobile && tab.label}
+                                </div>
                             </Link>
                         )
                     })}
@@ -206,13 +272,14 @@ export default function TopBar() {
 
             {/* RIGHT SIDE: Stats & Profile (Conditional on Mobile) */}
             {showStats && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginLeft: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '16px' }}>
                     {/* Streak Widget */}
                     <div style={{
+                        height: '40px',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',
-                        padding: '6px 12px',
+                        padding: '0 16px',
                         background: 'rgba(255, 68, 68, 0.1)',
                         border: '1px solid rgba(255, 68, 68, 0.2)',
                         borderRadius: '20px',
@@ -223,6 +290,24 @@ export default function TopBar() {
                     }} title="Dni z rzędu">
                         <Flame size={16} fill="#ff4444" />
                         <span>{status?.streak || 0}</span>
+                    </div>
+
+                    {/* XP Badge */}
+                    <div style={{
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '0 16px',
+                        background: 'linear-gradient(135deg, #ffd700, #ff8800)',
+                        borderRadius: '20px',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        color: '#000',
+                        whiteSpace: 'nowrap'
+                    }}>
+                        <Zap size={16} />
+                        <span>{profile?.xp || 0} XP</span>
                     </div>
 
                     {/* Notifications (Pending Missions) */}
@@ -253,28 +338,12 @@ export default function TopBar() {
                                 fontWeight: 700,
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
+                                border: '2px solid #13131f'
                             }}>
                                 {status.pending_missions}
                             </div>
                         ) : null}
-                    </div>
-
-                    {/* XP Badge */}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '6px 12px',
-                        background: 'linear-gradient(135deg, #ffd700, #ff8800)',
-                        borderRadius: '20px',
-                        fontSize: '13px',
-                        fontWeight: 700,
-                        color: '#000',
-                        whiteSpace: 'nowrap'
-                    }}>
-                        <Zap size={16} />
-                        <span>{profile?.xp || 0} XP</span>
                     </div>
 
                     {/* Profile */}
