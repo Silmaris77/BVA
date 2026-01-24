@@ -116,7 +116,7 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 title={card.title}
                 recap={card.recap || []}
                 nextSteps={card.nextSteps}
-                badge={card.badge}
+                badge={typeof card.badge === 'string' ? { title: card.badge, xp: 0 } : card.badge}
             />
         case 'practice':
             return <PracticeCard
@@ -185,7 +185,7 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
         case 'story':
             return <StoryCard
                 icon={card.icon}
-                badge={card.badge}
+                badge={typeof card.badge === 'object' ? card.badge?.title : card.badge}
                 title={card.title || 'Przypadek z terenu'}
                 scenario={card.scenario || { heading: '', text: '' }}
                 consequences={card.consequences || []}
