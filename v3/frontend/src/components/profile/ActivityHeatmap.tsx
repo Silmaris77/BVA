@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Flame } from 'lucide-react'
 
 interface ActivityDay {
@@ -18,6 +18,8 @@ interface ActivityData {
 export default function ActivityHeatmap() {
     const [data, setData] = useState<ActivityData | null>(null)
     const [loading, setLoading] = useState(true)
+    const [hovered, setHovered] = useState<{ date: string; xp: number; x: number; y: number } | null>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         async function fetchData() {
@@ -72,9 +74,6 @@ export default function ActivityHeatmap() {
         return 'none'
     }
 
-    // Tooltip State
-    const [hovered, setHovered] = useState<{ date: string; xp: number; x: number; y: number } | null>(null)
-
     // Helper for formatting date: "24 sty 2024"
     const formatDate = (dateStr: string) => {
         const d = new Date(dateStr)
@@ -82,15 +81,17 @@ export default function ActivityHeatmap() {
     }
 
     return (
-        <div style={{
-            background: 'rgba(20, 20, 35, 0.4)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            borderRadius: '20px',
-            padding: '24px',
-            marginBottom: '32px',
-            position: 'relative' // For tooltip context if needed, though we use fixed/absolute from page
-        }}>
+        <div
+            ref={containerRef}
+            style={{
+                background: 'rgba(20, 20, 35, 0.4)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '20px',
+                padding: '24px',
+                marginBottom: '32px',
+                position: 'relative' // For tooltip context if needed, though we use fixed/absolute from page
+            }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                 <h3 style={{ fontSize: '18px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Flame size={20} color="#ff8800" />
@@ -104,8 +105,8 @@ export default function ActivityHeatmap() {
             {/* Custom Tooltip Portal/Overlay */}
             {hovered && (
                 <div style={{
-                    position: 'fixed',
-                    top: hovered.y - 45, // Above the cell
+                    position: 'absolute',
+                    top: hovered.y - 50, // Above the cell
                     left: hovered.x,
                     transform: 'translateX(-50%)',
                     background: 'rgba(0, 0, 0, 0.9)',
