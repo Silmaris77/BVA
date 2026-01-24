@@ -72,6 +72,15 @@ export default function ActivityHeatmap() {
         return 'none'
     }
 
+    // Tooltip State
+    const [hovered, setHovered] = useState<{ date: string; xp: number; x: number; y: number } | null>(null)
+
+    // Helper for formatting date: "24 sty 2024"
+    const formatDate = (dateStr: string) => {
+        const d = new Date(dateStr)
+        return d.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' })
+    }
+
     return (
         <div style={{
             background: 'rgba(20, 20, 35, 0.4)',
@@ -79,7 +88,8 @@ export default function ActivityHeatmap() {
             border: '1px solid rgba(255, 255, 255, 0.08)',
             borderRadius: '20px',
             padding: '24px',
-            marginBottom: '32px'
+            marginBottom: '32px',
+            position: 'relative' // For tooltip context if needed, though we use fixed/absolute from page
         }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                 <h3 style={{ fontSize: '18px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -91,13 +101,48 @@ export default function ActivityHeatmap() {
                 </div>
             </div>
 
+            {/* Custom Tooltip Portal/Overlay */}
+            {hovered && (
+                <div style={{
+                    position: 'fixed',
+                    top: hovered.y - 45, // Above the cell
+                    left: hovered.x,
+                    transform: 'translateX(-50%)',
+                    background: 'rgba(0, 0, 0, 0.9)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    fontSize: '12px',
+                    color: 'white',
+                    pointerEvents: 'none',
+                    zIndex: 100,
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                    backdropFilter: 'blur(4px)'
+                }}>
+                    <div style={{ fontWeight: 700, color: '#ff8800' }}>{hovered.xp} XP</div>
+                    <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '10px' }}>{formatDate(hovered.date)}</div>
+                    {/* Tiny arrow */}
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '-4px',
+                        left: '50%',
+                        transform: 'translateX(-50%) rotate(45deg)',
+                        width: '8px',
+                        height: '8px',
+                        background: 'rgba(0,0,0,0.9)',
+                        borderRight: '1px solid rgba(255, 255, 255, 0.2)',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
+                    }} />
+                </div>
+            )}
+
             {/* Heatmap Grid */}
             <div style={{
                 display: 'flex',
                 gap: '4px',
                 flexWrap: 'wrap',
                 maxWidth: '100%',
-                // Use a simple scroll for mobile safety
                 overflowX: 'auto',
                 paddingBottom: '8px'
             }}>
@@ -121,14 +166,25 @@ export default function ActivityHeatmap() {
                         return (
                             <div
                                 key={dateStr}
-                                title={`${dateStr}: ${count} XP`}
+                                onMouseEnter={(e) => {
+                                    const rect = e.currentTarget.getBoundingClientRect()
+                                    setHovered({
+                                        date: dateStr,
+                                        xp: count,
+                                        x: rect.left + rect.width / 2,
+                                        y: rect.top
+                                    })
+                                }}
+                                onMouseLeave={() => setHovered(null)}
                                 style={{
                                     width: '12px',
                                     height: '12px',
                                     borderRadius: '2px',
                                     background: getColor(level),
                                     boxShadow: getGlow(level),
-                                    border: level > 0 ? `1px solid ${getColor(level)}` : 'none'
+                                    border: level > 0 ? `1px solid ${getColor(level)}` : 'none',
+                                    cursor: 'pointer',
+                                    transition: 'transform 0.1s'
                                 }}
                             />
                         )
