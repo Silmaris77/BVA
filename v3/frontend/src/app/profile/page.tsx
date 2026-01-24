@@ -18,6 +18,7 @@ export default function ProfilePage() {
     const [userStats, setUserStats] = useState<any[]>([])
     const [userClasses, setUserClasses] = useState<any[]>([])
     const [userCombos, setUserCombos] = useState<any[]>([])
+    const [hoveredTab, setHoveredTab] = useState<string | null>(null)
 
     // Load RPG stats
     useEffect(() => {
@@ -61,35 +62,71 @@ export default function ProfilePage() {
             }}>
                 {/* Tabs on Left */}
                 <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
-                    {(['informacje', 'postepy', 'cele', 'ustawienia'] as const).map(tab => (
-                        <button
-                            key={tab}
-                            onClick={() => setActiveTab(tab)}
-                            style={{
-                                padding: '8px 16px',
-                                borderRadius: '8px',
-                                background: activeTab === tab ? 'rgba(176, 0, 255, 0.2)' : 'transparent',
-                                border: activeTab === tab ? '1px solid #b000ff' : '1px solid transparent',
-                                color: activeTab === tab ? '#b000ff' : 'rgba(255, 255, 255, 0.6)',
-                                fontSize: '13px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                fontFamily: 'Outfit, sans-serif',
-                                textTransform: 'capitalize',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                transition: 'all 0.2s',
-                                whiteSpace: 'nowrap'
-                            }}
-                        >
-                            {tab === 'informacje' && <User size={16} />}
-                            {tab === 'postepy' && <TrendingUp size={16} />}
-                            {tab === 'cele' && <Target size={16} />}
-                            {tab === 'ustawienia' && <LogOut size={16} />}
-                            {tab}
-                        </button>
-                    ))}
+                    {(['informacje', 'postepy', 'cele', 'ustawienia'] as const).map(tab => {
+                        const isHovered = hoveredTab === tab
+                        const isActive = activeTab === tab
+
+                        return (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                onMouseEnter={() => setHoveredTab(tab)}
+                                onMouseLeave={() => setHoveredTab(null)}
+                                style={{
+                                    padding: '8px 16px',
+                                    borderRadius: '8px',
+                                    background: isActive
+                                        ? 'rgba(176, 0, 255, 0.2)'
+                                        : isHovered
+                                            ? 'rgba(255, 255, 255, 0.05)'
+                                            : 'transparent',
+                                    border: isActive
+                                        ? '1px solid #b000ff'
+                                        : isHovered
+                                            ? '1px solid rgba(255, 255, 255, 0.2)'
+                                            : '1px solid transparent',
+                                    color: isActive
+                                        ? '#b000ff'
+                                        : isHovered
+                                            ? 'rgba(255, 255, 255, 0.9)'
+                                            : 'rgba(255, 255, 255, 0.6)',
+                                    fontSize: '13px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    fontFamily: 'Outfit, sans-serif',
+                                    textTransform: 'capitalize',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    transition: 'all 0.2s',
+                                    whiteSpace: 'nowrap',
+                                    position: 'relative',
+                                    overflow: 'hidden'
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: isHovered && !isActive ? '100%' : '-100%',
+                                        width: '100%',
+                                        height: '100%',
+                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                                        transition: isHovered && !isActive ? 'left 0.5s ease' : 'none',
+                                        pointerEvents: 'none',
+                                        zIndex: 1
+                                    }}
+                                />
+                                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    {tab === 'informacje' && <User size={16} />}
+                                    {tab === 'postepy' && <TrendingUp size={16} />}
+                                    {tab === 'cele' && <Target size={16} />}
+                                    {tab === 'ustawienia' && <LogOut size={16} />}
+                                    {tab}
+                                </div>
+                            </button>
+                        )
+                    })}
                 </div>
             </div>
 

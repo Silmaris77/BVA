@@ -14,6 +14,7 @@ export default function EngramsPage() {
     const router = useRouter()
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedCategory, setSelectedCategory] = useState<string>('all')
+    const [hoveredTab, setHoveredTab] = useState<string | null>(null)
 
     useEffect(() => {
         if (!authLoading && !user) {
@@ -96,25 +97,34 @@ export default function EngramsPage() {
                 padding: '16px 32px 16px 48px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'flex-start',
                 position: 'sticky',
-                top: 0,
+                top: '73px',
                 zIndex: 50
             }}>
                 {/* Main Tabs */}
                 <div style={{
                     display: 'flex',
                     gap: '8px',
-                    flex: 1
+                    overflowX: 'auto',
+                    paddingBottom: '4px'
                 }}>
                     <Link
                         href="/lessons"
+                        onMouseEnter={() => setHoveredTab('main-lessons')}
+                        onMouseLeave={() => setHoveredTab(null)}
                         style={{
                             padding: '8px 16px',
                             borderRadius: '8px',
-                            background: 'transparent',
-                            border: '1px solid transparent',
-                            color: 'rgba(255, 255, 255, 0.6)',
+                            background: hoveredTab === 'main-lessons'
+                                ? 'rgba(255, 255, 255, 0.05)'
+                                : 'transparent',
+                            border: hoveredTab === 'main-lessons'
+                                ? '1px solid rgba(255, 255, 255, 0.2)'
+                                : '1px solid transparent',
+                            color: hoveredTab === 'main-lessons'
+                                ? 'rgba(255, 255, 255, 0.9)'
+                                : 'rgba(255, 255, 255, 0.6)',
                             fontSize: '13px',
                             fontWeight: 600,
                             cursor: 'pointer',
@@ -123,11 +133,28 @@ export default function EngramsPage() {
                             alignItems: 'center',
                             gap: '6px',
                             transition: 'all 0.2s',
-                            textDecoration: 'none'
+                            textDecoration: 'none',
+                            position: 'relative',
+                            overflow: 'hidden'
                         }}
                     >
-                        <BookOpen size={16} />
-                        Lekcje
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: hoveredTab === 'main-lessons' ? '100%' : '-100%',
+                                width: '100%',
+                                height: '100%',
+                                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                                transition: hoveredTab === 'main-lessons' ? 'left 0.5s ease' : 'none',
+                                pointerEvents: 'none',
+                                zIndex: 1
+                            }}
+                        />
+                        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <BookOpen size={16} />
+                            Lekcje
+                        </div>
                     </Link>
                     <Link
                         href="/engrams"
@@ -145,20 +172,32 @@ export default function EngramsPage() {
                             alignItems: 'center',
                             gap: '6px',
                             transition: 'all 0.2s',
-                            textDecoration: 'none'
+                            textDecoration: 'none',
+                            position: 'relative',
+                            overflow: 'hidden'
                         }}
                     >
-                        <Brain size={16} />
-                        Engramy
+                        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <Brain size={16} />
+                            Engramy
+                        </div>
                     </Link>
                     <Link
                         href="/resources"
+                        onMouseEnter={() => setHoveredTab('main-resources')}
+                        onMouseLeave={() => setHoveredTab(null)}
                         style={{
                             padding: '8px 16px',
                             borderRadius: '8px',
-                            background: 'transparent',
-                            border: '1px solid transparent',
-                            color: 'rgba(255, 255, 255, 0.6)',
+                            background: hoveredTab === 'main-resources'
+                                ? 'rgba(255, 255, 255, 0.05)'
+                                : 'transparent',
+                            border: hoveredTab === 'main-resources'
+                                ? '1px solid rgba(255, 255, 255, 0.2)'
+                                : '1px solid transparent',
+                            color: hoveredTab === 'main-resources'
+                                ? 'rgba(255, 255, 255, 0.9)'
+                                : 'rgba(255, 255, 255, 0.6)',
                             fontSize: '13px',
                             fontWeight: 600,
                             cursor: 'pointer',
@@ -167,74 +206,31 @@ export default function EngramsPage() {
                             alignItems: 'center',
                             gap: '6px',
                             transition: 'all 0.2s',
-                            textDecoration: 'none'
+                            textDecoration: 'none',
+                            position: 'relative',
+                            overflow: 'hidden'
                         }}
                     >
-                        <Library size={16} />
-                        Zasoby
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: hoveredTab === 'main-resources' ? '100%' : '-100%',
+                                width: '100%',
+                                height: '100%',
+                                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                                transition: hoveredTab === 'main-resources' ? 'left 0.5s ease' : 'none',
+                                pointerEvents: 'none',
+                                zIndex: 1
+                            }}
+                        />
+                        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <Library size={16} />
+                            Zasoby
+                        </div>
                     </Link>
                 </div>
 
-                {/* Actions */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '12px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        position: 'relative'
-                    }}>
-                        <Bell size={20} />
-                        <div style={{
-                            position: 'absolute',
-                            top: '-4px',
-                            right: '-4px',
-                            width: '18px',
-                            height: '18px',
-                            background: '#ff0055',
-                            borderRadius: '50%',
-                            fontSize: '10px',
-                            fontWeight: 700,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>3</div>
-                    </div>
-
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '6px 12px',
-                        background: 'linear-gradient(135deg, #ffd700, #ff8800)',
-                        borderRadius: '20px',
-                        fontSize: '13px',
-                        fontWeight: 700,
-                        color: '#000'
-                    }}>
-                        <Zap size={16} />
-                        <span>{profile?.xp || 0} XP</span>
-                    </div>
-
-                    <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #b000ff, #00d4ff)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 700,
-                        cursor: 'pointer'
-                    }}>
-                        {profile?.full_name?.substring(0, 2).toUpperCase() || 'U'}
-                    </div>
-                </div>
             </div>
 
             {/* Content */}
@@ -574,6 +570,6 @@ export default function EngramsPage() {
                     })}
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

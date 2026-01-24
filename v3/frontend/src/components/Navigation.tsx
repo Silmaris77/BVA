@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { Home, BookOpen, Gamepad2, User, LogOut } from 'lucide-react'
 
 export default function Sidebar() {
@@ -109,9 +110,13 @@ export default function Sidebar() {
 }
 
 function NavItem({ href, icon, label, active }: { href: string; icon: React.ReactNode; label: string; active: boolean }) {
+    const [isHovered, setIsHovered] = useState(false)
+
     return (
         <Link
             href={href}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -122,16 +127,33 @@ function NavItem({ href, icon, label, active }: { href: string; icon: React.Reac
                 cursor: 'pointer',
                 fontSize: '14px',
                 fontWeight: 500,
-                color: active ? '#ffffff' : 'rgba(255, 255, 255, 0.6)',
-                border: active ? '1px solid #00d4ff' : '1px solid transparent',
-                background: active ? 'rgba(0, 212, 255, 0.15)' : 'transparent',
+                color: active ? '#ffffff' : isHovered ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.6)',
+                border: active ? '1px solid #00d4ff' : isHovered ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
+                background: active ? 'rgba(0, 212, 255, 0.15)' : isHovered ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
                 boxShadow: active ? '0 0 20px rgba(0, 212, 255, 0.2)' : 'none',
                 textDecoration: 'none',
-                transition: 'all 0.2s'
+                transition: 'all 0.2s',
+                position: 'relative',
+                overflow: 'hidden'
             }}
         >
-            {icon}
-            <span>{label}</span>
+            <div
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: isHovered && !active ? '100%' : '-100%',
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                    transition: isHovered && !active ? 'left 0.5s ease' : 'none',
+                    pointerEvents: 'none',
+                    zIndex: 1
+                }}
+            />
+            <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '12px' }}>
+                {icon}
+                <span>{label}</span>
+            </div>
         </Link>
     )
 }

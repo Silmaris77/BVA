@@ -45,6 +45,7 @@ export default function LessonsPage() {
     const [paths, setPaths] = useState<any[]>([])
     const [pathsLoading, setPathsLoading] = useState(true)
     const [activeTab, setActiveTab] = useState<'lessons' | 'paths'>('lessons')
+    const [hoveredTab, setHoveredTab] = useState<string | null>(null)
 
     const categories = CONTENT_CATEGORIES
 
@@ -181,20 +182,32 @@ export default function LessonsPage() {
                             gap: '6px',
                             transition: 'all 0.2s',
                             textDecoration: 'none',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
+                            position: 'relative',
+                            overflow: 'hidden'
                         }}
                     >
-                        <BookOpen size={16} />
-                        Lekcje
+                        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <BookOpen size={16} />
+                            Lekcje
+                        </div>
                     </Link>
                     <Link
                         href="/engrams"
+                        onMouseEnter={() => setHoveredTab('main-engrams')}
+                        onMouseLeave={() => setHoveredTab(null)}
                         style={{
                             padding: '8px 16px',
                             borderRadius: '8px',
-                            background: 'transparent',
-                            border: '1px solid transparent',
-                            color: 'rgba(255, 255, 255, 0.6)',
+                            background: hoveredTab === 'main-engrams'
+                                ? 'rgba(255, 255, 255, 0.05)'
+                                : 'transparent',
+                            border: hoveredTab === 'main-engrams'
+                                ? '1px solid rgba(255, 255, 255, 0.2)'
+                                : '1px solid transparent',
+                            color: hoveredTab === 'main-engrams'
+                                ? 'rgba(255, 255, 255, 0.9)'
+                                : 'rgba(255, 255, 255, 0.6)',
                             fontSize: '13px',
                             fontWeight: 600,
                             cursor: 'pointer',
@@ -204,20 +217,45 @@ export default function LessonsPage() {
                             gap: '6px',
                             transition: 'all 0.2s',
                             textDecoration: 'none',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
+                            position: 'relative',
+                            overflow: 'hidden'
                         }}
                     >
-                        <Brain size={16} />
-                        Engramy
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: hoveredTab === 'main-engrams' ? '100%' : '-100%',
+                                width: '100%',
+                                height: '100%',
+                                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                                transition: hoveredTab === 'main-engrams' ? 'left 0.5s ease' : 'none',
+                                pointerEvents: 'none',
+                                zIndex: 1
+                            }}
+                        />
+                        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <Brain size={16} />
+                            Engramy
+                        </div>
                     </Link>
                     <Link
                         href="/resources"
+                        onMouseEnter={() => setHoveredTab('main-resources')}
+                        onMouseLeave={() => setHoveredTab(null)}
                         style={{
                             padding: '8px 16px',
                             borderRadius: '8px',
-                            background: 'transparent',
-                            border: '1px solid transparent',
-                            color: 'rgba(255, 255, 255, 0.6)',
+                            background: hoveredTab === 'main-resources'
+                                ? 'rgba(255, 255, 255, 0.05)'
+                                : 'transparent',
+                            border: hoveredTab === 'main-resources'
+                                ? '1px solid rgba(255, 255, 255, 0.2)'
+                                : '1px solid transparent',
+                            color: hoveredTab === 'main-resources'
+                                ? 'rgba(255, 255, 255, 0.9)'
+                                : 'rgba(255, 255, 255, 0.6)',
                             fontSize: '13px',
                             fontWeight: 600,
                             cursor: 'pointer',
@@ -227,11 +265,28 @@ export default function LessonsPage() {
                             gap: '6px',
                             transition: 'all 0.2s',
                             textDecoration: 'none',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
+                            position: 'relative',
+                            overflow: 'hidden'
                         }}
                     >
-                        <Library size={16} />
-                        Zasoby
+                        <div
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: hoveredTab === 'main-resources' ? '100%' : '-100%',
+                                width: '100%',
+                                height: '100%',
+                                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                                transition: hoveredTab === 'main-resources' ? 'left 0.5s ease' : 'none',
+                                pointerEvents: 'none',
+                                zIndex: 1
+                            }}
+                        />
+                        <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <Library size={16} />
+                            Zasoby
+                        </div>
                     </Link>
                 </div>
             </div>
@@ -265,12 +320,26 @@ export default function LessonsPage() {
                 }}>
                     <button
                         onClick={() => setActiveTab('lessons')}
+                        onMouseEnter={() => setHoveredTab('lessons')}
+                        onMouseLeave={() => setHoveredTab(null)}
                         style={{
                             padding: '10px 20px',
-                            background: activeTab === 'lessons' ? 'rgba(0, 212, 255, 0.15)' : 'transparent',
-                            border: activeTab === 'lessons' ? '1px solid #00d4ff' : '1px solid transparent',
+                            background: activeTab === 'lessons'
+                                ? 'rgba(0, 212, 255, 0.15)'
+                                : hoveredTab === 'lessons'
+                                    ? 'rgba(255, 255, 255, 0.05)'
+                                    : 'transparent',
+                            border: activeTab === 'lessons'
+                                ? '1px solid #00d4ff'
+                                : hoveredTab === 'lessons'
+                                    ? '1px solid rgba(255, 255, 255, 0.2)'
+                                    : '1px solid transparent',
                             borderRadius: '10px',
-                            color: activeTab === 'lessons' ? '#00d4ff' : 'rgba(255, 255, 255, 0.6)',
+                            color: activeTab === 'lessons'
+                                ? '#00d4ff'
+                                : hoveredTab === 'lessons'
+                                    ? 'rgba(255, 255, 255, 0.9)'
+                                    : 'rgba(255, 255, 255, 0.6)',
                             fontSize: '14px',
                             fontWeight: 600,
                             cursor: 'pointer',
@@ -286,12 +355,26 @@ export default function LessonsPage() {
                     </button>
                     <button
                         onClick={() => setActiveTab('paths')}
+                        onMouseEnter={() => setHoveredTab('paths')}
+                        onMouseLeave={() => setHoveredTab(null)}
                         style={{
                             padding: '10px 20px',
-                            background: activeTab === 'paths' ? 'rgba(176, 0, 255, 0.15)' : 'transparent',
-                            border: activeTab === 'paths' ? '1px solid #b000ff' : '1px solid transparent',
+                            background: activeTab === 'paths'
+                                ? 'rgba(176, 0, 255, 0.15)'
+                                : hoveredTab === 'paths'
+                                    ? 'rgba(255, 255, 255, 0.05)'
+                                    : 'transparent',
+                            border: activeTab === 'paths'
+                                ? '1px solid #b000ff'
+                                : hoveredTab === 'paths'
+                                    ? '1px solid rgba(255, 255, 255, 0.2)'
+                                    : '1px solid transparent',
                             borderRadius: '10px',
-                            color: activeTab === 'paths' ? '#b000ff' : 'rgba(255, 255, 255, 0.6)',
+                            color: activeTab === 'paths'
+                                ? '#b000ff'
+                                : hoveredTab === 'paths'
+                                    ? 'rgba(255, 255, 255, 0.9)'
+                                    : 'rgba(255, 255, 255, 0.6)',
                             fontSize: '14px',
                             fontWeight: 600,
                             cursor: 'pointer',
