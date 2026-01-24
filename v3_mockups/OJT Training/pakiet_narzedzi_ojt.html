@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pakiet Narzędzi OJT Trenera</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1a0033 0%, #0d1117 50%, #001a33 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: rgba(255, 136, 0, 0.2);
+            border: 1px solid rgba(255, 136, 0, 0.4);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 16px;
+        }
+
+        .header-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .header-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* STATS BOX */
+        .stats-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            background: rgba(20, 20, 35, 0.6);
+            border: 1px solid rgba(255, 136, 0, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* TOOL GRID */
+        .tool-grid {
+            display: grid;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .tool-card {
+            background: rgba(20, 20, 35, 0.7);
+            border-radius: 24px;
+            padding: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 136, 0, 0.2);
+            border-color: rgba(255, 136, 0, 0.4);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-color-2));
+        }
+
+        .tool-card.orange {
+            --accent-color: #ff8800;
+            --accent-color-2: #ffaa00;
+        }
+
+        .tool-card.purple {
+            --accent-color: #b000ff;
+            --accent-color-2: #d000ff;
+        }
+
+        .tool-card.blue {
+            --accent-color: #00d4ff;
+            --accent-color-2: #00fff2;
+        }
+
+        .tool-card.green {
+            --accent-color: #00ff88;
+            --accent-color-2: #00ffcc;
+        }
+
+        .tool-card.gold {
+            --accent-color: #ffd700;
+            --accent-color-2: #ffed4e;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .tool-icon {
+            font-size: 3.5rem;
+            flex-shrink: 0;
+        }
+
+        .tool-title-section {
+            flex: 1;
+        }
+
+        .tool-number {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+
+        .tool-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .tool-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tool-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .meta-badge {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tool-description {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        .tool-content {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .content-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-text {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        .content-list {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+
+        .content-list li {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding-left: 24px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .content-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .benefit-box {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+
+        .benefit-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #00ff88;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .benefit-text {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        .tool-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-color-2));
+            color: white;
+        }
+
+        .btn-download:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(255, 136, 0, 0.4);
+        }
+
+        .btn-preview {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-preview:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* PACKAGE BOX */
+        .package-box {
+            background: rgba(20, 20, 35, 0.6);
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            border-radius: 20px;
+            padding: 32px;
+            margin-top: 48px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .package-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 16px;
+        }
+
+        .package-description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-package {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #1a0033;
+            padding: 16px 48px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-package:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.5);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+
+            .tool-title {
+                font-size: 1.5rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-badge">🛠️ Pakiet Narzędzi OJT</div>
+            <h1 class="header-title">Pakiet Narzędzi dla Trenera OJT</h1>
+            <p class="header-subtitle">
+                5 gotowych narzędzi do natychmiastowego użycia w programie treningu on-the-job. 
+                Od karty feedbacku po ROI dashboard - wszystko czego potrzebujesz do prowadzenia profesjonalnych sesji OJT.
+            </p>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-box">
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Narzędzi</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Formaty (PDF, Excel, Word, Canva)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">30</div>
+                <div class="stat-label">Minut oszczędności dziennie</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Wielokrotne użycie</div>
+            </div>
+        </div>
+
+        <!-- TOOL 1: KARTA FEEDBACKU -->
+        <div class="tool-grid">
+            <div class="tool-card orange">
+                <div class="tool-header">
+                    <div class="tool-icon">📱</div>
+                    <div class="tool-title-section">
+                        <div class="tool-number">NARZĘDZIE #1</div>
+                        <h2 class="tool-title">Karta Feedbacku (Pocket Card)</h2>
+                        <p class="tool-subtitle">Wizytówka z 5 pytaniami coachingowymi</p>
+                    </div>
+                </div>
+
+                <div class="tool-meta">
+                    <span class="meta-badge">📄 PDF do wydruku</span>
+                    <span class="meta-badge">💳 Format wizytówki (85×54mm)</span>
+                    <span class="meta-badge">🖨️ Do laminowania</span>
+                    <span class="meta-badge">⏱️ Użycie: Podczas każdej sesji</span>
+                </div>
+
+                <p class="tool-description">
+                    Kompaktowa karta do noszenia w portfelu lub kieszeni. Z jednej strony: 5 pytań coachingowych w skrócie. 
+                    Z drugiej strony: zasady NOTED (obserwacja bez interpretacji). Laminowana wizytówka, którą menedżer ma zawsze przy sobie.
+                </p>
+
+                <div class="tool-content">
+                    <div class="content-title">📋 Zawartość karty:</div>
+                    
+                    <div class="content-grid">
+                        <div class="content-section">
+                            <div class="section-label">STRONA A: 5 Pytań Coachingowych</div>
+                            <div class="section-text">
+                                1️⃣ Jak się czujesz?<br>
+                                2️⃣ Co chciałeś osiągnąć?<br>
+                                3️⃣ Co poszło dobrze/trudne?<br>
+                                4️⃣ Co mógłbyś zrobić inaczej?<br>
+                                5️⃣ Co zastosujesz następnym razem?
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <div class="section-label">STRONA B: NOTED (Fakty)</div>
+                            <div class="section-text">
+                                <strong>N</strong>o judgment - Bez osądzania<br>
+                                <strong>O</strong>bserve - Obserwuj zachowania<br>
+                                <strong>T</strong>ime stamps - Zapisuj momenty<br>
+                                <strong>E</strong>xact quotes - Dokładne cytaty<br>
+                                <strong>D</strong>ata driven - Opieraj się na danych
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-label">💡 Korzyść:</div>
+                    <div class="benefit-text">
+                        Menedżer ma zawsze przy sobie strukturę analizy OJT. Nie trzeba pamiętać kolejności pytań - 
+                        wystarczy wyjąć kartę z portfela. Oszczędza 5-10 minut na każdej sesji (brak improwizacji).
+                    </div>
+                </div>
+
+                <div class="tool-actions">
+                    <button class="btn btn-download">Pobierz PDF</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- TOOL 2: TRACKER ROZWOJU -->
+            <div class="tool-card purple">
+                <div class="tool-header">
+                    <div class="tool-icon">📊</div>
+                    <div class="tool-title-section">
+                        <div class="tool-number">NARZĘDZIE #2</div>
+                        <h2 class="tool-title">Tracker Rozwoju 30 dni</h2>
+                        <p class="tool-subtitle">Excel do śledzenia postępów pracownika</p>
+                    </div>
+                </div>
+
+                <div class="tool-meta">
+                    <span class="meta-badge">📊 Excel + Google Sheets</span>
+                    <span class="meta-badge">📈 30 dni trackingu</span>
+                    <span class="meta-badge">🎯 5 metryk</span>
+                    <span class="meta-badge">⏱️ Użycie: Po każdej sesji (5 min)</span>
+                </div>
+
+                <p class="tool-description">
+                    Gotowy arkusz Excel do śledzenia rozwoju pracownika przez 30 dni programu OJT. 
+                    5 kluczowych metryk: liczba sesji, postęp w kompetencjach, samoocena pracownika, KPI biznesowe, status planu wdrożenia. 
+                    Automatyczne wykresy i dashboard.
+                </p>
+
+                <div class="tool-content">
+                    <div class="content-title">📊 Struktura trackera:</div>
+                    
+                    <ul class="content-list">
+                        <li><strong>Zakładka 1: Daily Log</strong> - 30 wierszy (dni) × 10 kolumn (data, sesja (tak/nie), czas trwania, temat, 3 kompetencje (1-5), samoocena pracownika, KPI dnia, notatki)</li>
+                        <li><strong>Zakładka 2: Dashboard</strong> - Automatyczne wykresy: linia postępu kompetencji, słupki liczby sesji, wykres samooceny vs oceny trenera, trend KPI</li>
+                        <li><strong>Zakładka 3: Plany Wdrożeniowe</strong> - Historia wszystkich planów SMART z sesji (co, kiedy, status wykonania)</li>
+                        <li><strong>Zakładka 4: Podsumowanie 30 dni</strong> - Raport końcowy: liczba sesji, średni postęp, ROI (zmiana KPI), rekomendacje na kolejne 30 dni</li>
+                        <li><strong>Zakładka 5: Template Rozmowy</strong> - Gotowy szablon na rozmowę podsumowującą 30 dni (co osiągnęliśmy, co dalej)</li>
+                    </ul>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-label">💡 Korzyść:</div>
+                    <div class="benefit-text">
+                        Wizualizacja postępów buduje motywację pracownika ("Zobacz jak urosłeś w kompetencji X!"). 
+                        Dane do rozmowy oceniającej. Tracking planów wdrożeniowych = accountability. 
+                        Menedżer widzi ROI swojego czasu (30 dni × 30 min sesji = 15h inwestycji → jaki efekt?).
+                    </div>
+                </div>
+
+                <div class="tool-actions">
+                    <button class="btn btn-download">Pobierz Excel</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- TOOL 3: SZABLON KONTRAKTU -->
+            <div class="tool-card blue">
+                <div class="tool-header">
+                    <div class="tool-icon">📄</div>
+                    <div class="tool-title-section">
+                        <div class="tool-number">NARZĘDZIE #3</div>
+                        <h2 class="tool-title">Szablon Kontraktu OJT (Script)</h2>
+                        <p class="tool-subtitle">Gotowy skrypt rozmowy na początek dnia</p>
+                    </div>
+                </div>
+
+                <div class="tool-meta">
+                    <span class="meta-badge">📄 PDF + Word (edytowalny)</span>
+                    <span class="meta-badge">🎭 Skrypt word-for-word</span>
+                    <span class="meta-badge">⏱️ 5-7 minut rozmowy</span>
+                    <span class="meta-badge">⏱️ Użycie: Początek każdej sesji OJT</span>
+                </div>
+
+                <p class="tool-description">
+                    Word-for-word skrypt rozmowy kontraktowej na początku dnia OJT. 4 elementy kontraktu + przykładowe sformułowania. 
+                    Menedżer nie musi improwizować - czyta/adaptuje gotowy tekst. Zapewnia jakość i spójność każdej sesji.
+                </p>
+
+                <div class="tool-content">
+                    <div class="content-title">📜 Struktura skryptu:</div>
+                    
+                    <div class="content-grid">
+                        <div class="content-section">
+                            <div class="section-label">ELEMENT 1: CEL SESJI</div>
+                            <div class="section-text">
+                                <strong>Skrypt:</strong> "Dzisiaj pracujemy nad [kompetencja]. Mój cel to obserwować Cię podczas [sytuacja] i dać Ci feedback, który pomoże Ci [rezultat]. Czy to brzmi OK?"
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <div class="section-label">ELEMENT 2: RAMY CZASOWE</div>
+                            <div class="section-text">
+                                <strong>Skrypt:</strong> "Zrobimy to tak: Odprawa 5 min → Obserwacja 10-15 min → Analiza 15 min → Podsumowanie 5 min. Łącznie ~35 minut. Pasuje Ci taki plan?"
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <div class="section-label">ELEMENT 3: ZASADY BEZPIECZEŃSTWA</div>
+                            <div class="section-text">
+                                <strong>Skrypt:</strong> "Będę notować fakty, nie oceny. Opowiesz mi jak widziałeś sytuację. Razem poszukamy co można poprawić. Nie ma dobrych/złych odpowiedzi - to Twoja przestrzeń do nauki. OK?"
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <div class="section-label">ELEMENT 4: PYTANIE O GOTOWOŚĆ</div>
+                            <div class="section-text">
+                                <strong>Skrypt:</strong> "Jak się czujesz z tym planem? Masz jakieś pytania zanim zaczniemy? [Pauza na odpowiedź]. Super, to zaczynamy od odprawy..."
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="content-list" style="margin-top: 20px;">
+                        <li><strong>Załącznik A:</strong> 5 przykładów dobrych kontraktów (sprzedaż, obsługa, reklamacje, prezentacja, negocjacje)</li>
+                        <li><strong>Załącznik B:</strong> 3 przykłady złych kontraktów (co nie robić + dlaczego)</li>
+                        <li><strong>Załącznik C:</strong> Tabela "Co pracownik myśli vs Co chcesz osiągnąć" (15 sytuacji)</li>
+                    </ul>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-label">💡 Korzyść:</div>
+                    <div class="benefit-text">
+                        Oszczędność 10-15 minut na przygotowanie do sesji (nie trzeba wymyślać jak rozpocząć). 
+                        Jakość: każda sesja zaczyna się profesjonalnie. Budowanie bezpieczeństwa psychologicznego = 
+                        większa otwartość pracownika na feedback. Łatwiejsze wdrożenie nowych trenerów.
+                    </div>
+                </div>
+
+                <div class="tool-actions">
+                    <button class="btn btn-download">Pobierz Word</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- TOOL 4: ROI DASHBOARD -->
+            <div class="tool-card green">
+                <div class="tool-header">
+                    <div class="tool-icon">💰</div>
+                    <div class="tool-title-section">
+                        <div class="tool-number">NARZĘDZIE #4</div>
+                        <h2 class="tool-title">ROI Dashboard OJT</h2>
+                        <p class="tool-subtitle">Kalkulator zwrotu z inwestycji w trening</p>
+                    </div>
+                </div>
+
+                <div class="tool-meta">
+                    <span class="meta-badge">📊 Excel z formułami</span>
+                    <span class="meta-badge">💰 5 modeli ROI</span>
+                    <span class="meta-badge">📈 Automatyczne wykresy</span>
+                    <span class="meta-badge">⏱️ Użycie: Raport miesięczny/kwartalny</span>
+                </div>
+
+                <p class="tool-description">
+                    Excel z gotowymi formułami do wyliczenia ROI programu OJT. 5 metod kalkulacji: oszczędność czasu onboardingu, 
+                    redukcja błędów, wzrost retencji, wzrost sprzedaży, redukcja kosztów zewnętrznych szkoleń. 
+                    Automatyczne wykresy + raport dla zarządu.
+                </p>
+
+                <div class="tool-content">
+                    <div class="content-title">💰 5 Modeli ROI:</div>
+                    
+                    <ul class="content-list">
+                        <li>
+                            <strong>Model 1: Oszczędność czasu onboardingu</strong><br>
+                            Input: Średni czas wdrożenia przed OJT (np. 90 dni), po OJT (np. 60 dni), koszt dnia pracownika (np. 500 zł)<br>
+                            Output: Oszczędność = 30 dni × 500 zł = 15,000 zł na pracownika<br>
+                            ROI = (15,000 - koszt trenera 5,000) / 5,000 × 100% = <strong>200% ROI</strong>
+                        </li>
+                        <li>
+                            <strong>Model 2: Redukcja błędów</strong><br>
+                            Input: Liczba błędów/miesiąc przed OJT, po OJT, koszt 1 błędu<br>
+                            Output: Oszczędność roczna = redukcja błędów × koszt błędu<br>
+                            Przykład: 10 błędów → 3 błędy, koszt błędu 1,000 zł = 7,000 zł/miesiąc = <strong>84,000 zł/rok</strong>
+                        </li>
+                        <li>
+                            <strong>Model 3: Wzrost retencji</strong><br>
+                            Input: Rotacja przed OJT (%), po OJT (%), koszt rekrutacji + onboardingu nowego pracownika<br>
+                            Output: Oszczędność na niewypełnionych etatach<br>
+                            Przykład: Rotacja 30% → 15%, zespół 20 osób = 3 osoby zostają = 3 × 20,000 zł = <strong>60,000 zł oszczędności</strong>
+                        </li>
+                        <li>
+                            <strong>Model 4: Wzrost sprzedaży/produktywności</strong><br>
+                            Input: Średnia sprzedaż przed OJT, po OJT, marża<br>
+                            Output: Przyrost zysku = delta sprzedaży × marża<br>
+                            Przykład: 50,000 zł → 65,000 zł, marża 20% = 15,000 × 20% = <strong>3,000 zł/miesiąc/osoba</strong>
+                        </li>
+                        <li>
+                            <strong>Model 5: Redukcja szkoleń zewnętrznych</strong><br>
+                            Input: Koszt szkoleń zewnętrznych rocznie, % zastąpiony przez OJT<br>
+                            Output: Oszczędność bezpośrednia<br>
+                            Przykład: 50,000 zł/rok szkoleń, 60% zastąpione OJT = <strong>30,000 zł oszczędności</strong>
+                        </li>
+                    </ul>
+
+                    <div class="content-section" style="margin-top: 20px; background: rgba(255, 215, 0, 0.1);">
+                        <div class="section-label" style="color: #ffd700;">DASHBOARD - AUTOMATYCZNE WYKRESY:</div>
+                        <div class="section-text">
+                            📊 Wykres 1: ROI agregowany (suma 5 modeli)<br>
+                            📈 Wykres 2: Trend w czasie (3, 6, 12 miesięcy)<br>
+                            🎯 Wykres 3: Koszt OJT vs Oszczędności (waterfall chart)<br>
+                            📉 Wykres 4: Breakdown oszczędności (pie chart - 5 kategorii)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-label">💡 Korzyść:</div>
+                    <div class="benefit-text">
+                        Uzasadnienie programu OJT przed zarządem ("Inwestujemy 10h/miesiąc trenera = 5,000 zł → 
+                        zwrot 25,000 zł = 400% ROI"). Tracking efektywności programu (czy działa?). 
+                        Motywacja dla trenerów (widzą wymierny wpływ swojej pracy). 
+                        Dane do budżetu na rozwój zespołu (ile warto zainwestować w OJT?).
+                    </div>
+                </div>
+
+                <div class="tool-actions">
+                    <button class="btn btn-download">Pobierz Excel</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- TOOL 5: EMAIL TEMPLATES -->
+            <div class="tool-card gold">
+                <div class="tool-header">
+                    <div class="tool-icon">📧</div>
+                    <div class="tool-title-section">
+                        <div class="tool-number">NARZĘDZIE #5</div>
+                        <h2 class="tool-title">Email Templates (5 szablonów)</h2>
+                        <p class="tool-subtitle">Gotowe maile do komunikacji OJT</p>
+                    </div>
+                </div>
+
+                <div class="tool-meta">
+                    <span class="meta-badge">📧 Word + TXT</span>
+                    <span class="meta-badge">✉️ 5 szablonów</span>
+                    <span class="meta-badge">🎯 Gotowe do wysłania</span>
+                    <span class="meta-badge">⏱️ Oszczędność: 15 min na email</span>
+                </div>
+
+                <p class="tool-description">
+                    5 gotowych szablonów emaili do komunikacji w programie OJT: follow-up po sesji, przypomnienie przed sesją, 
+                    gratulacje po postępie, zaproszenie do programu, raport miesięczny dla managera. 
+                    Copy-paste i wyślij w 2 minuty.
+                </p>
+
+                <div class="tool-content">
+                    <div class="content-title">📧 5 Szablonów emaili:</div>
+                    
+                    <div class="content-grid">
+                        <div class="content-section">
+                            <div class="section-label">SZABLON 1: Follow-up po sesji</div>
+                            <div class="section-text">
+                                <strong>Temat:</strong> "Dzięki za dzisiejszą sesję OJT - plan wdrożenia"<br><br>
+                                <strong>Treść:</strong> Podsumowanie sesji (3 zdania), główny wniosek, plan wdrożenia SMART, 
+                                kiedy następna sesja, zachęta.<br><br>
+                                <strong>Długość:</strong> 150 słów, ~1 min czytania
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <div class="section-label">SZABLON 2: Przypomnienie przed sesją</div>
+                            <div class="section-text">
+                                <strong>Temat:</strong> "Jutro sesja OJT - przygotowanie"<br><br>
+                                <strong>Treść:</strong> Przypomnienie celu sesji, nad czym pracujecie, co przygotować (karta obserwacji?), 
+                                plan czasowy (35 min), pytanie czy są pytania.<br><br>
+                                <strong>Długość:</strong> 100 słów
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <div class="section-label">SZABLON 3: Gratulacje po postępie</div>
+                            <div class="section-text">
+                                <strong>Temat:</strong> "Super postęp w [kompetencja]!"<br><br>
+                                <strong>Treść:</strong> Konkretny postęp (z danych trackera, np. "3.2 → 4.1 w 2 tygodnie"), 
+                                co konkretnie zrobiłeś lepiej (przykład), zachęta do kontynuacji, co dalej.<br><br>
+                                <strong>Długość:</strong> 120 słów
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <div class="section-label">SZABLON 4: Zaproszenie do programu</div>
+                            <div class="section-text">
+                                <strong>Temat:</strong> "Zapraszam Cię do programu OJT"<br><br>
+                                <strong>Treść:</strong> Co to OJT, dlaczego Ciebie zapraszam (potencjał), jak wygląda proces (30 dni, 
+                                sesje 2x/tydzień), co zyskujesz, pierwsze kroki, pytanie o zgodę.<br><br>
+                                <strong>Długość:</strong> 200 słów
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <div class="section-label">SZABLON 5: Raport miesięczny dla managera</div>
+                            <div class="section-text">
+                                <strong>Temat:</strong> "Raport OJT - [miesiąc] - [imię pracownika]"<br><br>
+                                <strong>Treść:</strong> Podsumowanie miesiąca (liczba sesji, czas), postęp w kompetencjach (konkretne cyfry), 
+                                kluczowe wnioski, plany wdrożeniowe (status), ROI (jeśli mierzalne), rekomendacje na kolejny miesiąc.<br><br>
+                                <strong>Długość:</strong> 250 słów + załącznik (tracker Excel)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="benefit-box">
+                    <div class="benefit-label">💡 Korzyść:</div>
+                    <div class="benefit-text">
+                        Oszczędność 15 minut na każdy email (brak pisania od zera). Profesjonalna komunikacja = większa powaga programu OJT. 
+                        Dokumentacja procesu (emaile jako ślad postępów). Follow-up zwiększa accountability pracownika 
+                        (plan wdrożenia na piśmie = większa szansa wykonania). Raport dla managera = widoczność Twojej pracy.
+                    </div>
+                </div>
+
+                <div class="tool-actions">
+                    <button class="btn btn-download">Pobierz pakiet</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PACKAGE DOWNLOAD -->
+        <div class="package-box">
+            <h2 class="package-title">⬇️ Pobierz cały pakiet za jednym kliknięciem</h2>
+            <p class="package-description">
+                Wszystkie 5 narzędzi w jednym ZIP (PDF, Excel, Word). Gotowe do użycia dzisiaj. 
+                Wartość: 2,500 zł (konsultacja + przygotowanie) → Dla Ciebie: <strong>darmowe</strong> po ukończeniu Lekcji 2 OJT.
+            </p>
+            <button class="btn-package">Pobierz pełny pakiet (ZIP, 15 MB)</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Obsługa przycisków pobierania
+        document.querySelectorAll('.btn-download, .btn-package').forEach(button => {
+            button.addEventListener('click', function() {
+                alert('W pełnej wersji nastąpi automatyczne pobranie pliku.');
+            });
+        });
+
+        // Obsługa przycisków podglądu
+        document.querySelectorAll('.btn-preview').forEach(button => {
+            button.addEventListener('click', function() {
+                alert('W pełnej wersji otworzy się modal z podglądem pliku.');
+            });
+        });
+    </script>
+</body>
+</html>

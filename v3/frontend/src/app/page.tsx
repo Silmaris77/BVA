@@ -8,6 +8,7 @@ import { Zap, Trophy, Target, Flame, BookOpen, Brain, ChevronRight, GraduationCa
 import ResumeLessonCard from '@/components/hub/ResumeLessonCard'
 import NewsFeed from '@/components/hub/NewsFeed'
 import DailyTip from '@/components/hub/DailyTip'
+import { ARCHETYPES } from '@/components/profile/EditProfileModal'
 
 export default function HomePage() {
   const { user, profile, loading } = useAuth()
@@ -90,7 +91,7 @@ export default function HomePage() {
             fontWeight: 700,
             marginBottom: ' 8px'
           }}>
-            Witaj z powrotem, {profile?.full_name?.split(' ')[0] || 'User'}! 👋
+            Witaj z powrotem, {profile?.display_name || profile?.full_name?.split(' ')[0] || 'User'}! 👋
           </h1>
           <p style={{
             fontSize: '15px',

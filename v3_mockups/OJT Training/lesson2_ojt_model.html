@@ -1,0 +1,2331 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Treningu On-the-Job: 5 Kroków do Skutecznego Rozwoju</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #2a1a3a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* CONTAINER */
+        .lesson-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* CARD STYLES */
+        .card {
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* HERO CARD */
+        .hero-card {
+            background: linear-gradient(135deg, rgba(176, 0, 255, 0.15), rgba(0, 212, 255, 0.15));
+            border: 1px solid rgba(176, 0, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(176, 0, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-sections {
+            display: grid;
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .hero-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #b000ff;
+        }
+
+        .hero-section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #00d4ff;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .hero-section-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* DATA CARD */
+        .data-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(176, 0, 255, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .data-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
+        }
+
+        .data-insight {
+            background: rgba(176, 0, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #b000ff;
+            margin-top: 24px;
+        }
+
+        .data-insight strong {
+            color: #00d4ff;
+        }
+
+        .data-sources {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        /* CONTENT CARD */
+        .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        .card-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .card-content ul, .card-content ol {
+            margin: 20px 0;
+            padding-left: 24px;
+        }
+
+        .card-content li {
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+
+        /* REMEMBER BOX */
+        .remember-box, .warning-box {
+            margin: 24px 0;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+
+        .remember-box {
+            background: rgba(0, 255, 136, 0.1);
+            border-left-color: #00ff88;
+        }
+
+        .warning-box {
+            background: rgba(255, 68, 68, 0.1);
+            border-left-color: #ff4444;
+        }
+
+        .remember-box p, .warning-box p {
+            margin: 8px 0;
+            font-size: 1rem;
+        }
+
+        /* TIMELINE CARD */
+        .timeline {
+            margin: 32px 0;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 32px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .timeline-connector {
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            width: 2px;
+            height: calc(100% + 32px);
+            background: linear-gradient(180deg, rgba(176, 0, 255, 0.5), rgba(0, 212, 255, 0.5));
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .timeline-subtitle {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 12px;
+        }
+
+        .timeline-cycle-note {
+            background: rgba(255, 136, 0, 0.1);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 3px solid #ff8800;
+            margin: 24px 0;
+            font-size: 1rem;
+            color: #ffd700;
+        }
+
+        /* STORY CARD */
+        .story-card {
+            background: linear-gradient(135deg, rgba(255, 136, 0, 0.1), rgba(255, 215, 0, 0.1));
+            border: 1px solid rgba(255, 136, 0, 0.3);
+        }
+
+        .story-example {
+            margin: 24px 0;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid;
+        }
+
+        .story-bad {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+        }
+
+        .story-good {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: #00ff88;
+        }
+
+        .story-label {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .story-bad .story-label {
+            color: #ef4444;
+        }
+
+        .story-good .story-label {
+            color: #00ff88;
+        }
+
+        .story-dialogue {
+            margin: 12px 0;
+            padding-left: 16px;
+            border-left: 3px solid rgba(255, 255, 255, 0.2);
+            font-style: italic;
+        }
+
+        .story-effect {
+            margin-top: 16px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .story-lesson {
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(176, 0, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #b000ff;
+        }
+
+        .story-lesson strong {
+            color: #00d4ff;
+        }
+
+        /* LIGHTBULB CARD */
+        .lightbulb-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 136, 0, 0.15));
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            position: relative;
+        }
+
+        .lightbulb-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .lightbulb-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        .comparison-table {
+            margin: 24px 0;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: rgba(176, 0, 255, 0.2);
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #b000ff;
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* PRACTICE CARD */
+        .practice-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .practice-scenario {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #00ff88;
+        }
+
+        .practice-input {
+            margin: 16px 0;
+        }
+
+        .practice-input label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .practice-input input[type="text"],
+        .practice-input textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+        }
+
+        .practice-input textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .practice-answers {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(176, 0, 255, 0.1);
+            border-radius: 12px;
+            display: none;
+        }
+
+        .practice-answers.visible {
+            display: block;
+        }
+
+        .btn-reveal {
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 16px;
+            transition: transform 0.2s;
+        }
+
+        .btn-reveal:hover {
+            transform: scale(1.05);
+        }
+
+        /* QUIZ CARD */
+        .quiz-question {
+            margin: 32px 0;
+        }
+
+        .quiz-question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(176, 0, 255, 0.5);
+        }
+
+        .quiz-option.selected-correct {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: #00ff88;
+        }
+
+        .quiz-option.selected-wrong {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+        }
+
+        .quiz-option-letter {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .quiz-explanation {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #00d4ff;
+            display: none;
+        }
+
+        .quiz-explanation.visible {
+            display: block;
+        }
+
+        /* HABIT BUILDER CARD */
+        .habit-list {
+            margin: 24px 0;
+        }
+
+        .habit-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border-left: 4px solid #b000ff;
+        }
+
+        .habit-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .habit-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .habit-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .habit-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .habit-goal {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #00ff88;
+            font-style: italic;
+        }
+
+        /* TEST CARD */
+        .test-start, .test-result {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .test-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .test-requirements {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin: 32px 0;
+        }
+
+        .test-req-item {
+            text-align: center;
+        }
+
+        .test-req-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+
+        .test-req-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ACHIEVEMENT CARD */
+        .achievement-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 136, 0, 0.2));
+            border: 2px solid #ffd700;
+            text-align: center;
+        }
+
+        .achievement-badge {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .achievement-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffd700;
+            margin-bottom: 16px;
+        }
+
+        .achievement-skills {
+            display: grid;
+            gap: 12px;
+            margin: 32px 0;
+            text-align: left;
+        }
+
+        .achievement-skill {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 3px solid #00ff88;
+        }
+
+        .achievement-xp {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin: 24px 0;
+        }
+
+        /* ENDING CARD */
+        .ending-checklist {
+            margin: 24px 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .resources-list {
+            margin: 24px 0;
+        }
+
+        .resource-item {
+            background: rgba(176, 0, 255, 0.1);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 3px solid #b000ff;
+        }
+
+        .final-quote {
+            margin: 32px 0;
+            padding: 24px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #ffd700;
+            font-size: 1.2rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .lesson-container {
+                padding: 20px 16px;
+            }
+
+            .card {
+                padding: 32px 24px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .data-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                padding-left: 50px;
+            }
+
+            .test-requirements {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        
+        <!-- KARTA 1: HERO CARD -->
+        <div class="card hero-card">
+            <div class="hero-content">
+                <h1 class="hero-title">Jak rozwijać pracowników w praktyce?</h1>
+                
+                <div class="hero-sections">
+                    <div class="hero-section">
+                        <div class="hero-section-title">👥 Dla kogo</div>
+                        <div class="hero-section-content">
+                            Menedżerowie i liderzy, którzy chcą skutecznie rozwijać kompetencje swoich zespołów bez odrywania się od codziennej pracy
+                        </div>
+                    </div>
+                    
+                    <div class="hero-section">
+                        <div class="hero-section-title">🎯 Cel</div>
+                        <div class="hero-section-content">
+                            Opanować 5-etapowy model treningu on-the-job, który pozwoli Ci systematycznie podnosić umiejętności pracowników i budować kulturę ciągłego rozwoju
+                        </div>
+                    </div>
+                    
+                    <div class="hero-section">
+                        <div class="hero-section-title">💡 Dlaczego</div>
+                        <div class="hero-section-content">
+                            70% wiedzy zawodowej zdobywamy przez praktykę (model 70-20-10). Trening OJT to najbardziej efektywna metoda rozwijania kompetencji, bo łączy naukę z rzeczywistymi wyzwaniami biznesowymi
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 2: DATA CARD -->
+        <div class="card data-card">
+            <h2 class="card-title">Dlaczego On-the-Job Training działa?</h2>
+            
+            <div class="data-stats">
+                <div class="stat-item">
+                    <div class="stat-number">70%</div>
+                    <div class="stat-label">Procent wiedzy zawodowej zdobywanej przez praktyczne doświadczenie</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">4x</div>
+                    <div class="stat-label">Szybciej rozwijają się pracownicy w treningu OJT vs tradycyjne szkolenia</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">Wskaźnik retencji wiedzy przy nauce przez działanie vs 20% przy wykładach</div>
+                </div>
+            </div>
+            
+            <div class="data-insight">
+                <strong>Kluczowy wniosek:</strong> Najskuteczniejsze uczenie się odbywa się w kontekście rzeczywistych zadań, z natychmiastowym feedbackiem od doświadczonego mentora. To nie teoria z sali szkoleniowej, a praktyka w terenie.
+            </div>
+            
+            <div class="data-sources">
+                Źródła: Deloitte 70-20-10 Model, Association for Talent Development (ATD) 2023, Edgar Dale Learning Pyramid
+            </div>
+        </div>
+
+        <!-- KARTA 3: CONTENT CARD -->
+        <div class="card">
+            <h2 class="card-title">Czym jest Model Treningu On-the-Job?</h2>
+            
+            <div class="card-content">
+                <p>Model OJT to <strong>cykl powtarzających się działań</strong>, który pozwala pracownikowi rozwinąć umiejętności przez:</p>
+                
+                <ul>
+                    <li><strong>Praktyczne wykonywanie zadań</strong> w rzeczywistym środowisku pracy</li>
+                    <li><strong>Obserwację przez doświadczonego mentora/menedżera</strong> podczas wykonywania zadań</li>
+                    <li><strong>Konstruktywny feedback</strong> oparty na faktach, nie opiniach</li>
+                    <li><strong>Systematyczną analizę</strong> i wyciąganie wniosków na przyszłość</li>
+                </ul>
+                
+                <p style="margin-top: 24px; font-size: 1.2rem; font-weight: 600; color: #00d4ff;">
+                    Kluczowa różnica vs tradycyjne szkolenia: <strong>uczysz SIĘ pracując, nie przerywasz pracy, by się uczyć</strong>
+                </p>
+            </div>
+            
+            <div class="remember-box">
+                <p>💡 <strong>Pamiętaj:</strong></p>
+                <p>• Trening OJT ≠ "rzucenie na głęboką wodę"</p>
+                <p>• To systematyczny proces, nie przypadkowa obserwacja</p>
+                <p>• Wymaga przygotowania i struktury od menedżera</p>
+            </div>
+        </div>
+
+        <!-- KARTA 4: TIMELINE CARD -->
+        <div class="card">
+            <h2 class="card-title">5 Etapów Cyklu Treningu OJT</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">ROZMOWA NA POCZĄTKU DNIA</div>
+                        <div class="timeline-subtitle">⏱️ 10-15 minut</div>
+                        <p>Kontrakt na wspólną pracę, ustalenie celów rozwojowych i planu dnia</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-cycle-note">
+                    🔄 <strong>CYKL POWTARZALNY</strong> (dla każdej rozmowy/zadania - 3-5 razy dziennie)
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">ODPRAWA PRZED ROZMOWĄ</div>
+                        <div class="timeline-subtitle">⏱️ 5-10 minut</div>
+                        <p>Przypomnienie celów, analiza sytuacji, plan działania, demonstracja</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">OBSERWACJA ROZMOWY</div>
+                        <div class="timeline-subtitle">⏱️ 30-60 minut</div>
+                        <p>Zbieranie faktów, notowanie zachowań pracownika i reakcji klienta</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">ANALIZA PO ROZMOWIE</div>
+                        <div class="timeline-subtitle">⏱️ 10-15 minut</div>
+                        <p>Feedback, rozliczenie celów, wyciągnięcie wniosków, plan poprawy</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 32px 0; color: #ff8800; font-size: 1.1rem;">
+                    ↻ Powrót do etapu 2 dla kolejnej rozmowy/zadania
+                </div>
+                
+                <div class="timeline-item" style="margin-bottom: 0;">
+                    <div class="timeline-marker">5</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">PODSUMOWANIE DNIA</div>
+                        <div class="timeline-subtitle">⏱️ 15-20 minut</div>
+                        <p>Rozliczenie celów dnia, wnioski, plan działań wdrożeniowych</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 5: ROZMOWA NA POCZĄTKU DNIA -->
+        <div class="card">
+            <h2 class="card-title">Etap 1: Rozmowa na początku dnia</h2>
+            
+            <div class="card-content">
+                <p><strong>Czas:</strong> 10-15 minut na początku wspólnego dnia</p>
+                <p><strong>Cel:</strong> Stworzyć fundament współpracy i uzgodnić zasady gry</p>
+                
+                <h3 style="margin-top: 32px; margin-bottom: 16px; color: #00d4ff;">4 kluczowe elementy:</h3>
+                
+                <ol>
+                    <li style="margin-bottom: 16px;">
+                        <strong>Sprzedanie idei treningu</strong><br>
+                        <span style="color: rgba(255,255,255,0.7);">Dlaczego warto wspólnie pracować? Jaki jest cel tej sesji?</span>
+                    </li>
+                    
+                    <li style="margin-bottom: 16px;">
+                        <strong>Kontrakt na wspólną pracę</strong><br>
+                        <span style="color: rgba(255,255,255,0.7);">Jak będziemy pracować? (role, zasady komunikacji, co robisz gdy potrzebuję pomocy)</span>
+                    </li>
+                    
+                    <li style="margin-bottom: 16px;">
+                        <strong>Ustalenie celów rozwojowych</strong><br>
+                        <span style="color: rgba(255,255,255,0.7);">Nad czym będziemy pracować? (1-2 konkretne umiejętności)</span>
+                    </li>
+                    
+                    <li>
+                        <strong>Plan dnia</strong><br>
+                        <span style="color: rgba(255,255,255,0.7);">Co konkretnie zrobimy? (lista klientów/zadań, harmonogram)</span>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="warning-box">
+                <p>⚠️ <strong>Częsty błąd:</strong></p>
+                <p>Pomijanie kontraktowania i wskakiwanie od razu w obserwację. Bez wyraźnej zgody pracownika i wspólnych celów, trening zamienia się w stresującą kontrolę!</p>
+            </div>
+            
+            <div class="remember-box">
+                <p>💡 <strong>Pamiętaj:</strong></p>
+                <p>Cele rozwojowe powinny być powiązane z celami biznesowymi (np. "poprawić zamykanie sprzedaży" → zwiększenie konwersji)</p>
+            </div>
+        </div>
+
+        <!-- KARTA 6: STORY CARD - Dobry vs Zły Kontrakt -->
+        <div class="card story-card">
+            <h2 class="card-title">Przykład: Dobry vs Zły Kontrakt</h2>
+            
+            <div class="story-example story-bad">
+                <div class="story-label">❌ ŹLE (Brak kontraktu)</div>
+                <div class="story-dialogue">
+                    <p><strong>Menedżer Tomasz:</strong> "Dzisiaj jedziemy razem do klientów. Ja będę słuchał."</p>
+                    <p><strong>Handlowiec Ania:</strong> <em>(myśli: "Ocenianie? Stres... będę sztywna w rozmowach")</em></p>
+                </div>
+                <div class="story-effect">
+                    <strong>Efekt:</strong> Ania unika trudnych tematów, nie pokazuje prawdziwych umiejętności, zero rozwoju. Po dniu pracy Tomasz mówi "było ok", ale oboje wiedzą, że to była stracona szansa.
+                </div>
+            </div>
+            
+            <div class="story-example story-good">
+                <div class="story-label">✅ DOBRZE (Pełny kontrakt)</div>
+                <div class="story-dialogue">
+                    <p><strong>Tomasz:</strong> "Dzisiaj jedziemy razem, żeby popracować nad Twoim zamykaniem sprzedaży. Chcę, żebyś widziała, jak radzisz sobie z obiekcjami i co możesz poprawić. Ja będę obserwatorem – nie wejdę do rozmowy, chyba że Ty mnie poprosisz. Po każdej wizycie przejdziemy co się udało i co możesz zrobić lepiej. Okej?"</p>
+                    <p><strong>Ania:</strong> "Super, od dawna chciałam nad tym popracować. Jak będziemy komunikować się przy kliencie?"</p>
+                    <p><strong>Tomasz:</strong> "Jeśli będziesz potrzebować pomocy, po prostu spojrzyj na mnie. Wtedy mogę wejść."</p>
+                </div>
+                <div class="story-effect">
+                    <strong>Efekt:</strong> Ania czuje się bezpiecznie, wie czego się spodziewać, jest otwarta na feedback. W rozmowach eksperymentuje z nowymi technikami, bo wie, że to trening, nie egzamin.
+                </div>
+            </div>
+            
+            <div class="story-lesson">
+                <strong>Kluczowa lekcja:</strong> Dobry kontrakt = psychologiczne bezpieczeństwo = prawdziwy rozwój
+            </div>
+        </div>
+
+        <!-- KARTA 7: LIGHTBULB CARD -->
+        <div class="card lightbulb-card">
+            <div class="lightbulb-icon">💡</div>
+            <h2 class="lightbulb-title">Kontrakt = Psychologiczne Bezpieczeństwo</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.2rem; margin-bottom: 24px;">
+                    Bez wyraźnej umowy pracownik <strong>domyśla się</strong> Twoich intencji i często myli:
+                </p>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Co pracownik myśli</th>
+                            <th>Co naprawdę chcesz</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>❌ Ocena / Kontrola</td>
+                            <td>✅ Rozwój / Wsparcie</td>
+                        </tr>
+                        <tr>
+                            <td>❌ Krytyka</td>
+                            <td>✅ Konstruktywny feedback</td>
+                        </tr>
+                        <tr>
+                            <td>❌ Test kompetencji</td>
+                            <td>✅ Eksperyment / Nauka</td>
+                        </tr>
+                        <tr>
+                            <td>❌ "Szukanie błędów"</td>
+                            <td>✅ Identyfikacja obszarów rozwoju</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 32px; padding: 20px; background: rgba(0, 255, 136, 0.1); border-radius: 12px; text-align: center; font-size: 1.3rem; font-weight: 600; border: 2px solid #00ff88;">
+                    "Pracujemy NAD tobą, nie PRZECIWKO tobie"
+                </div>
+                
+                <p style="margin-top: 24px; font-style: italic; color: rgba(255,255,255,0.7);">
+                    Dobry kontrakt eliminuje lęk i otwiera pracownika na feedback. To fundament całego procesu OJT.
+                </p>
+            </div>
+        </div>
+
+        <!-- KARTA 8: ODPRAWA PRZED ROZMOWĄ -->
+        <div class="card">
+            <h2 class="card-title">Etap 2: Odprawa przed rozmową z klientem</h2>
+            
+            <div class="card-content">
+                <p><strong>Czas:</strong> 5-10 minut przed każdą rozmową/zadaniem</p>
+                <p><strong>Cel:</strong> Przygotować pracownika do świadomego działania</p>
+                
+                <h3 style="margin-top: 32px; margin-bottom: 16px; color: #00d4ff;">4 kluczowe elementy:</h3>
+                
+                <ol>
+                    <li style="margin-bottom: 16px;">
+                        <strong>Przypomnienie celów</strong><br>
+                        <span style="color: rgba(255,255,255,0.7);">Na czym się dziś koncentrujemy? (np. "Pracujemy nad techniką pytań otwartych")</span>
+                    </li>
+                    
+                    <li style="margin-bottom: 16px;">
+                        <strong>Analiza sytuacji</strong><br>
+                        <span style="color: rgba(255,255,255,0.7);">Co wiemy o kliencie/zadaniu? Jakie mamy narzędzia? Jaki jest kontekst?</span>
+                    </li>
+                    
+                    <li style="margin-bottom: 16px;">
+                        <strong>Plan działania</strong><br>
+                        <span style="color: rgba(255,255,255,0.7);">Jak zamierzasz to przeprowadzić? Jaki masz pomysł? Co chcesz osiągnąć?</span>
+                    </li>
+                    
+                    <li>
+                        <strong>Demonstracja (opcjonalnie)</strong><br>
+                        <span style="color: rgba(255,255,255,0.7);">Pokażę Ci, jak to wygląda w praktyce (krótki roleplay/przykład)</span>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="remember-box">
+                <p>💡 <strong>Pamiętaj:</strong></p>
+                <p>• To NIE jest przesłuchanie – pytaj, nie odpytuj</p>
+                <p>• Pozwól pracownikowi samodzielnie opracować plan (Ty tylko koryguj/sugeruj)</p>
+                <p>• Demonstracja ≠ robienie za pracownika (pokazujesz technikę, nie rozwiązujesz problem)</p>
+            </div>
+        </div>
+
+        <!-- KARTA 9: PRACTICE CARD - Pytania na odprawę -->
+        <div class="card practice-card">
+            <h2 class="card-title">Ćwiczenie: Przygotuj pytania na odprawę</h2>
+            
+            <div class="practice-scenario">
+                <p><strong>Scenariusz:</strong></p>
+                <p>Pracujesz z handlowcem Markiem nad umiejętnością <strong>wykrywania potrzeb klienta</strong>. Za 10 minut jedziecie do klienta "XYZ Sp. z o.o." (średnia firma budowlana, 2 lata współpracy, ostatnio spadek zamówień).</p>
+            </div>
+            
+            <p style="margin-bottom: 24px; font-weight: 600; color: #00d4ff;">Napisz 3 pytania, które zadasz Markowi na odprawie PRZED rozmową:</p>
+            
+            <div class="practice-input">
+                <label>1. Pytanie o cel rozwojowy:</label>
+                <input type="text" placeholder="Wpisz swoje pytanie...">
+            </div>
+            
+            <div class="practice-input">
+                <label>2. Pytanie o sytuację klienta:</label>
+                <input type="text" placeholder="Wpisz swoje pytanie...">
+            </div>
+            
+            <div class="practice-input">
+                <label>3. Pytanie o plan działania:</label>
+                <input type="text" placeholder="Wpisz swoje pytanie...">
+            </div>
+            
+            <button class="btn-reveal" onclick="document.getElementById('practice1-answers').classList.toggle('visible')">
+                Pokaż przykładowe odpowiedzi
+            </button>
+            
+            <div id="practice1-answers" class="practice-answers">
+                <h3 style="color: #00d4ff; margin-bottom: 16px;">Przykładowe pytania:</h3>
+                <ol>
+                    <li style="margin-bottom: 12px;">
+                        <strong>O cel:</strong> "Na jakich pytaniach się dzisiaj skupiamy, żeby wykryć realne potrzeby klienta XYZ?"
+                    </li>
+                    <li style="margin-bottom: 12px;">
+                        <strong>O sytuację:</strong> "Co wiesz o sytuacji XYZ? Dlaczego ich zamówienia spadły?"
+                    </li>
+                    <li>
+                        <strong>O plan:</strong> "Jak planujesz rozpocząć rozmowę, żeby klient otworzył się na temat swoich wyzwań?"
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- KARTA 10: STORY CARD - Siła Demonstracji -->
+        <div class="card story-card">
+            <h2 class="card-title">Przykład: Siła Demonstracji</h2>
+            
+            <div class="card-content">
+                <h3 style="color: #ff8800; margin-bottom: 12px;">Sytuacja:</h3>
+                <p>Menedżer Anna pracuje z młodym handlowcem Piotrem nad <strong>radzeniem sobie z obiekcją cenową</strong>. Piotr teoretycznie zna techniki, ale w praktyce się wycofuje.</p>
+                
+                <h3 style="color: #ff8800; margin-top: 24px; margin-bottom: 12px;">Przed wizytą (odprawa):</h3>
+                <div class="story-dialogue">
+                    <p><strong>Anna:</strong> "Pokaż mi, jak odpowiesz, gdy klient powie: 'To za drogie'?"</p>
+                    <p><strong>Piotr:</strong> <em>(niepewnie)</em> "No... powiem że mamy najlepszą jakość..."</p>
+                    <p><strong>Anna:</strong> "Okej, zobacz jak ja bym to zrobiła. Ty jesteś klientem."</p>
+                </div>
+                
+                <h3 style="color: #00ff88; margin-top: 24px; margin-bottom: 12px;">Demonstracja (roleplay 2 min):</h3>
+                <div class="story-dialogue">
+                    <p><strong>Piotr (jako klient):</strong> "To za drogie."</p>
+                    <p><strong>Anna:</strong> <em>(spokojnie)</em> "Rozumiem. A z czym Pan porównuje? <em>(pauza)</em> Bo widzę, że korzysta Pan teraz z X, prawda? Jakie ma Pan z tym doświadczenia?"</p>
+                </div>
+                
+                <div style="background: rgba(0, 255, 136, 0.1); padding: 20px; border-radius: 12px; margin-top: 24px; border-left: 4px solid #00ff88;">
+                    <h3 style="color: #00ff88; margin-bottom: 12px;">Efekt:</h3>
+                    <p>Piotr WIDZI, jak spokojnie zadać pytanie zamiast bronić się. W prawdziwej rozmowie użył tej techniki i zdobył informację, że klient porównuje cenę z najtańszą ofertą (bez serwisu). Dzięki temu wygrał kontrakt podkreślając wartość wsparcia.</p>
+                </div>
+            </div>
+            
+            <div class="story-lesson">
+                <strong>Kluczowa lekcja:</strong> Demonstracja buduje pewność siebie i pokazuje "jak to się robi naprawdę". Warto 2 minuty roleplayu niż 20 minut teorii.
+            </div>
+        </div>
+
+        <!-- KARTA 11: OBSERWACJA ROZMOWY -->
+        <div class="card">
+            <h2 class="card-title">Etap 3: Obserwacja rozmowy z klientem</h2>
+            
+            <div class="card-content">
+                <p><strong>Czas:</strong> 30-60 minut (czas trwania zadania/rozmowy)</p>
+                <p><strong>Twoja rola:</strong> OBSERWATOR (nie uczestnik!)</p>
+                
+                <h3 style="margin-top: 32px; margin-bottom: 16px; color: #00d4ff;">Główne zasady:</h3>
+                
+                <ol>
+                    <li style="margin-bottom: 12px;">
+                        <strong>Minimalizuj swoją aktywność</strong> – Im mniej mówisz, tym lepiej
+                    </li>
+                    <li style="margin-bottom: 12px;">
+                        <strong>Zbieraj FAKTY, nie interpretacje</strong> – Notuj co się dzieje, nie co myślisz
+                    </li>
+                    <li style="margin-bottom: 12px;">
+                        <strong>Zachowaj kontrakt</strong> – Wchodź tylko gdy umówiliście się na to
+                    </li>
+                    <li>
+                        <strong>Notuj kluczowe momenty</strong> – Cytaty, reakcje klienta, sekwencja zdarzeń
+                    </li>
+                </ol>
+                
+                <h3 style="margin-top: 32px; margin-bottom: 16px; color: #00d4ff;">Różnica: Fakty vs Interpretacje</h3>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th style="color: #00ff88;">✅ FAKTY (notuj to)</th>
+                            <th style="color: #ef4444;">❌ INTERPRETACJE (unikaj)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>"Klient zapytał: 'Ile to kosztuje?'"</td>
+                            <td>"Klient był zainteresowany ceną"</td>
+                        </tr>
+                        <tr>
+                            <td>"Ania odpowiedziała po 3 sekundach"</td>
+                            <td>"Ania była niepewna"</td>
+                        </tr>
+                        <tr>
+                            <td>"Klient przerwał i zmienił temat na..."</td>
+                            <td>"Klient nie był przekonany"</td>
+                        </tr>
+                        <tr>
+                            <td>"Żadnego zamknięcia sprzedaży nie było"</td>
+                            <td>"Brakuje jej asertywności"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="warning-box">
+                <p>⚠️ <strong>Częsty błąd:</strong></p>
+                <p>Wskakiwanie do rozmowy i "ratowanie" pracownika. To niszczy jego autorytet i odbiera szansę na naukę przez błędy!</p>
+            </div>
+        </div>
+
+        <!-- KARTA 12: LIGHTBULB CARD - Fakty > Interpretacje -->
+        <div class="card lightbulb-card">
+            <div class="lightbulb-icon">💡</div>
+            <h2 class="lightbulb-title">Dlaczego Fakty > Interpretacje?</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.2rem; margin-bottom: 24px;">
+                    <strong style="color: #ef4444;">Interpretacje są subiektywne</strong> - Twoja ocena "był niepewny" może być błędna.<br>
+                    <strong style="color: #00ff88;">Fakty są obiektywne</strong> - "Odpowiedział po 3 sekundach" - nie do podważenia.
+                </p>
+                
+                <h3 style="color: #00d4ff; margin: 32px 0 16px;">W analizie po rozmowie:</h3>
+                
+                <div style="display: grid; gap: 16px;">
+                    <div style="background: rgba(0, 255, 136, 0.1); padding: 16px; border-radius: 8px; border-left: 4px solid #00ff88;">
+                        <strong style="color: #00ff88;">✅ Fakty</strong> pozwalają pracownikowi samemu dojść do wniosków
+                    </div>
+                    
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 16px; border-radius: 8px; border-left: 4px solid #ef4444;">
+                        <strong style="color: #ef4444;">❌ Interpretacje</strong> wywołują obronę i sprzeciw
+                    </div>
+                </div>
+                
+                <h3 style="color: #00d4ff; margin: 32px 0 16px;">Przykład w praktyce:</h3>
+                
+                <div style="background: rgba(239, 68, 68, 0.1); padding: 20px; border-radius: 12px; margin-bottom: 16px; border: 2px solid #ef4444;">
+                    <strong style="color: #ef4444;">❌ Interpretacja:</strong><br>
+                    "Byłeś niepewny i dlatego klient się wycofał"<br><br>
+                    <strong>Reakcja pracownika:</strong> "Wcale nie byłem niepewny!" → Obrona, zaprzeczanie
+                </div>
+                
+                <div style="background: rgba(0, 255, 136, 0.1); padding: 20px; border-radius: 12px; border: 2px solid #00ff88;">
+                    <strong style="color: #00ff88;">✅ Fakt + Pytanie:</strong><br>
+                    "Zauważyłem, że po pytaniu klienta o cenę odpowiedziałeś po 3 sekundach. Co się wtedy działo?"<br><br>
+                    <strong>Reakcja pracownika:</strong> "Tak... faktycznie się zawahałem, bo nie byłem pewien marży..." → Refleksja, uczenie się
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 13: QUIZ CARD - Checkpoint Obserwacja -->
+        <div class="card">
+            <h2 class="card-title">Sprawdź swoją wiedzę: Obserwacja</h2>
+            
+            <div class="quiz-question">
+                <div class="quiz-question-text">1. Która notatka jest FAKTEM, nie interpretacją?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q13-1')">
+                        <div class="quiz-option-letter">A</div>
+                        <div>Klient był niezadowolony z oferty</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q13-1')">
+                        <div class="quiz-option-letter">B</div>
+                        <div>Pracownik nie miał pewności siebie</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 'q13-1')">
+                        <div class="quiz-option-letter">C</div>
+                        <div>Klient zapytał 3 razy o cenę konkurencji</div>
+                    </div>
+                </div>
+                <div id="q13-1" class="quiz-explanation">
+                    ✅ <strong>Poprawnie!</strong> Opcja C to czysty fakt - obiektywna obserwacja bez oceny. A i B to interpretacje, które mogą być błędne.
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <div class="quiz-question-text">2. Kiedy powinieneś wejść do rozmowy jako obserwator?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q13-2')">
+                        <div class="quiz-option-letter">A</div>
+                        <div>Gdy widzę, że pracownik popełnia błąd</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 'q13-2')">
+                        <div class="quiz-option-letter">B</div>
+                        <div>Gdy pracownik poprosi o pomoc (zgodnie z kontraktem)</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q13-2')">
+                        <div class="quiz-option-letter">C</div>
+                        <div>Gdy rozmowa się przeciąga</div>
+                    </div>
+                </div>
+                <div id="q13-2" class="quiz-explanation">
+                    ✅ <strong>Dokładnie!</strong> Wchodzisz TYLKO gdy umówiliście się na to w kontrakcie lub gdy pracownik wyraźnie prosi. Inaczej odbierasz mu szansę na naukę.
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <div class="quiz-question-text">3. Co robisz, gdy klient zaczyna zadawać Tobie pytania (pomimo że jesteś obserwatorem)?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q13-3')">
+                        <div class="quiz-option-letter">A</div>
+                        <div>Odpowiadam szczegółowo - nie mogę ignorować klienta</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 'q13-3')">
+                        <div class="quiz-option-letter">B</div>
+                        <div>Przekierowuję do pracownika: "To świetne pytanie - Ania najlepiej odpowie"</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q13-3')">
+                        <div class="quiz-option-letter">C</div>
+                        <div>Przejmuję rozmowę - to wyjątkowa sytuacja</div>
+                    </div>
+                </div>
+                <div id="q13-3" class="quiz-explanation">
+                    ✅ <strong>Świetnie!</strong> Przekierowujesz do pracownika i wzmacniasz jego autorytet. Jeśli odpowiesz sam, klient będzie kierować kolejne pytania do Ciebie, niszcząc pozycję pracownika.
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 14: PRACTICE CARD - Przekształć interpretacje -->
+        <div class="card practice-card">
+            <h2 class="card-title">Ćwiczenie: Przekształć interpretacje w fakty</h2>
+            
+            <p style="margin-bottom: 24px; font-weight: 600; color: #00d4ff;">Masz notatki z obserwacji. Przekształć interpretacje w obiektywne fakty:</p>
+            
+            <div class="practice-scenario">
+                <p><strong>Twoje notatki (INTERPRETACJE):</strong></p>
+                <ol style="margin-top: 12px;">
+                    <li>"Pracownik nie słuchał klienta"</li>
+                    <li>"Klient był zdezorientowany"</li>
+                    <li>"Brak profesjonalizmu w zamknięciu"</li>
+                </ol>
+            </div>
+            
+            <div class="practice-input">
+                <label>1. Fakty zamiast "nie słuchał klienta":</label>
+                <textarea placeholder="Np. Co konkretnie zaobserwowałeś?"></textarea>
+            </div>
+            
+            <div class="practice-input">
+                <label>2. Fakty zamiast "klient był zdezorientowany":</label>
+                <textarea placeholder="Np. Co powiedział/zrobił klient?"></textarea>
+            </div>
+            
+            <div class="practice-input">
+                <label>3. Fakty zamiast "brak profesjonalizmu":</label>
+                <textarea placeholder="Np. Co konkretnie się wydarzyło (lub NIE wydarzyło)?"></textarea>
+            </div>
+            
+            <button class="btn-reveal" onclick="document.getElementById('practice2-answers').classList.toggle('visible')">
+                Pokaż przykładowe odpowiedzi
+            </button>
+            
+            <div id="practice2-answers" class="practice-answers">
+                <h3 style="color: #00d4ff; margin-bottom: 16px;">Przykładowe przekształcenia:</h3>
+                <ol>
+                    <li style="margin-bottom: 16px;">
+                        <strong>"Nie słuchał klienta" →</strong><br>
+                        <span style="color: #00ff88;">"Klient 2 razy wspomniał o budżecie, ale pracownik kontynuował prezentację produktu premium bez odniesienia się do tej informacji"</span>
+                    </li>
+                    <li style="margin-bottom: 16px;">
+                        <strong>"Klient był zdezorientowany" →</strong><br>
+                        <span style="color: #00ff88;">"Klient zapytał: 'Czyli jak to dokładnie działa?' i 'Przepraszam, nie rozumiem różnicy między X a Y'"</span>
+                    </li>
+                    <li>
+                        <strong>"Brak profesjonalizmu" →</strong><br>
+                        <span style="color: #00ff88;">"Rozmowa zakończyła się bez pytania o następne kroki. Pracownik powiedział: 'To tyle z mojej strony' i wstał"</span>
+                    </li>
+                </ol>
+                
+                <p style="margin-top: 20px; padding: 16px; background: rgba(176, 0, 255, 0.1); border-radius: 8px; border-left: 4px solid #b000ff;">
+                    💡 <strong>Kluczowa różnica:</strong> Fakty pozwalają pracownikowi samemu dojść do wniosku. Gdy powiesz "Klient 2 razy wspomniał o budżecie..." pracownik powie: "Racja, powinienem był się do tego odnieść!". Gdy powiesz "Nie słuchałeś" - włączy obronę.
+                </p>
+            </div>
+        </div>
+
+        <!-- KARTA 15: ANALIZA PO ROZMOWIE -->
+        <div class="card">
+            <h2 class="card-title">Etap 4: Analiza po rozmowie z klientem</h2>
+            
+            <div class="card-content">
+                <p><strong>Czas:</strong> 10-15 minut po każdej rozmowie/zadaniu</p>
+                <p><strong>Cel:</strong> Przekształcić doświadczenie w wiedzę i plan rozwoju</p>
+                
+                <h3 style="margin-top: 32px; margin-bottom: 16px; color: #00d4ff;">5-stopniowa struktura analizy:</h3>
+                
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 24px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="font-size: 1.3rem; font-weight: 700; color: #00d4ff; margin-bottom: 12px;">1️⃣ ODCZUCIA</div>
+                    <p style="color: rgba(255,255,255,0.8);">
+                        <strong>Pytanie:</strong> "Jak się czujesz po tej rozmowie?"<br>
+                        <strong>Cel:</strong> Rozładowanie emocji, budowanie zaufania<br>
+                        <strong>Czas:</strong> 1-2 minuty
+                    </p>
+                </div>
+                
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 24px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="font-size: 1.3rem; font-weight: 700; color: #00d4ff; margin-bottom: 12px;">2️⃣ CELE</div>
+                    <p style="color: rgba(255,255,255,0.8);">
+                        <strong>Pytanie:</strong> "Jakie były Twoje cele? Co chciałeś osiągnąć?"<br>
+                        <strong>Cel:</strong> Przypomnienie punktu odniesienia<br>
+                        <strong>Czas:</strong> 1 minuta
+                    </p>
+                </div>
+                
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 24px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="font-size: 1.3rem; font-weight: 700; color: #00d4ff; margin-bottom: 12px;">3️⃣ PRZEBIEG</div>
+                    <p style="color: rgba(255,255,255,0.8);">
+                        <strong>Pytania:</strong> "Co poszło dobrze? Co było trudne? Co cię zaskoczyło?"<br>
+                        <strong>Cel:</strong> Analiza faktów, samoocena pracownika<br>
+                        <strong>Czas:</strong> 3-5 minut
+                    </p>
+                </div>
+                
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 24px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="font-size: 1.3rem; font-weight: 700; color: #00d4ff; margin-bottom: 12px;">4️⃣ ALTERNATYWY</div>
+                    <p style="color: rgba(255,255,255,0.8);">
+                        <strong>Pytania:</strong> "Co mógłbyś zrobić inaczej? Jakie inne opcje miałeś?"<br>
+                        <strong>Cel:</strong> Rozwijanie myślenia strategicznego<br>
+                        <strong>Czas:</strong> 2-3 minuty
+                    </p>
+                </div>
+                
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 24px; border-radius: 12px;">
+                    <div style="font-size: 1.3rem; font-weight: 700; color: #00d4ff; margin-bottom: 12px;">5️⃣ WNIOSKI</div>
+                    <p style="color: rgba(255,255,255,0.8);">
+                        <strong>Pytania:</strong> "Co wynosisz z tej rozmowy? Co zastosujesz następnym razem?"<br>
+                        <strong>Cel:</strong> Konkretny plan rozwoju<br>
+                        <strong>Czas:</strong> 2-3 minuty
+                    </p>
+                </div>
+            </div>
+            
+            <div class="remember-box">
+                <p>💡 <strong>Złota zasada:</strong></p>
+                <p>80% czasu - PRACOWNIK mówi i analizuje<br>20% czasu - TY dajesz feedback i sugestujesz</p>
+                <p style="margin-top: 8px; font-style: italic;">Im więcej pracownik sam odkryje, tym szybciej się rozwinie!</p>
+            </div>
+        </div>
+
+        <!-- KARTA 16: STORY CARD - Analiza która zmieniła wszystko -->
+        <div class="card story-card">
+            <h2 class="card-title">Przykład: Analiza, która zmieniła wszystko</h2>
+            
+            <div class="card-content">
+                <h3 style="color: #ff8800; margin-bottom: 12px;">Sytuacja:</h3>
+                <p>Karol (handlowiec) wraca z nieudanej rozmowy. Klient powiedział "pomyślimy". Karol jest sfrustrowany. Menedżer Michał stosuje 5-stopniową analizę:</p>
+                
+                <h3 style="color: #00d4ff; margin-top: 24px; margin-bottom: 12px;">1️⃣ ODCZUCIA</h3>
+                <div class="story-dialogue">
+                    <p><strong>Michał:</strong> "Jak się czujesz po tej rozmowie?"</p>
+                    <p><strong>Karol:</strong> "Źle. Znowu 'pomyślimy'. Strata czasu."</p>
+                    <p><strong>Michał:</strong> "Rozumiem frustrację. Daj sobie chwilę, a potem przeanalizujmy co się wydarzyło."</p>
+                </div>
+                
+                <h3 style="color: #00d4ff; margin-top: 24px; margin-bottom: 12px;">2️⃣ CELE</h3>
+                <div class="story-dialogue">
+                    <p><strong>Michał:</strong> "Jaki był Twój cel na tę rozmowę?"</p>
+                    <p><strong>Karol:</strong> "Chciałem zamknąć ofertę na 50k."</p>
+                </div>
+                
+                <h3 style="color: #00d4ff; margin-top: 24px; margin-bottom: 12px;">3️⃣ PRZEBIEG</h3>
+                <div class="story-dialogue">
+                    <p><strong>Michał:</strong> "Co poszło dobrze?"</p>
+                    <p><strong>Karol:</strong> "Dobra prezentacja produktu, klient słuchał."</p>
+                    <p><strong>Michał:</strong> "A co było trudne?"</p>
+                    <p><strong>Karol:</strong> "Gdy zapytałem o decyzję, klient zmienił temat..."</p>
+                </div>
+                
+                <h3 style="color: #00d4ff; margin-top: 24px; margin-bottom: 12px;">4️⃣ ALTERNATYWY</h3>
+                <div class="story-dialogue">
+                    <p><strong>Michał:</strong> "Co mógłbyś zrobić inaczej w tym momencie?"</p>
+                    <p><strong>Karol:</strong> <em>(myśli)</em> "Hmm... może zamiast 'Czy podpisujemy?' zapytać 'Co musi się wydarzyć, żebyśmy mogli ruszyć do przodu?'"</p>
+                    <p><strong>Michał:</strong> "Dokładnie! A zauważyłeś, że gdy klient zaczął mówić o budżecie, przeskoczyłeś do ceny zamiast dowiedzieć się więcej?"</p>
+                </div>
+                
+                <h3 style="color: #00d4ff; margin-top: 24px; margin-bottom: 12px;">5️⃣ WNIOSKI</h3>
+                <div class="story-dialogue">
+                    <p><strong>Michał:</strong> "Co wynosisz na przyszłość?"</p>
+                    <p><strong>Karol:</strong> "Następnym razem zamiast 'czy podpisujemy' zapytam o konkretne obawy. I będę słuchał sygnałów o budżecie."</p>
+                </div>
+                
+                <div style="background: rgba(0, 255, 136, 0.1); padding: 20px; border-radius: 12px; margin-top: 24px; border-left: 4px solid #00ff88;">
+                    <h3 style="color: #00ff88; margin-bottom: 12px;">Efekt:</h3>
+                    <p>W kolejnej rozmowie Karol zastosował nową technikę pytań. Zamiast "pomyślimy" dowiedział się, że klient potrzebuje akceptacji szefa. Umówił rozmowę z decydentem i zamknął deal 65k. <strong>Analiza zamieniła porażkę w lekcję.</strong></p>
+                </div>
+            </div>
+            
+            <div class="story-lesson">
+                <strong>Kluczowa lekcja:</strong> Dobra analiza to nie krytyka, a odkrywanie razem. Karol SAM doszedł do wniosków - dzięki temu faktycznie je zapamiętał i zastosował.
+            </div>
+        </div>
+
+        <!-- KARTA 17: LIGHTBULB CARD - Pytaj, nie mów -->
+        <div class="card lightbulb-card">
+            <div class="lightbulb-icon">💡</div>
+            <h2 class="lightbulb-title">Pytaj, nie mów - dlaczego to działa?</h2>
+            
+            <div class="card-content">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th style="color: #ef4444;">❌ GDY MÓWISZ (Dajesz gotowe odpowiedzi)</th>
+                            <th style="color: #00ff88;">✅ GDY PYTASZ (Pomagasz odkryć)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>"Powinieneś był zapytać o budżet"</td>
+                            <td>"Co mogłeś zapytać, żeby dowiedzieć się więcej?"</td>
+                        </tr>
+                        <tr>
+                            <td>Pracownik słucha pasywnie</td>
+                            <td>Pracownik aktywnie myśli</td>
+                        </tr>
+                        <tr>
+                            <td>Zależność od Twojej wiedzy</td>
+                            <td>Budowanie samodzielności</td>
+                        </tr>
+                        <tr>
+                            <td>"Spróbuję to zapamiętać"</td>
+                            <td>"Sam na to wpadłem - zostanie ze mną"</td>
+                        </tr>
+                        <tr>
+                            <td>Możliwa obrona / "Ale ja..."</td>
+                            <td>Refleksja / "Faktycznie, racja..."</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3 style="margin-top: 32px; margin-bottom: 16px; color: #00d4ff;">Kiedy MÓWIĆ (dawać feedback bezpośrednio)?</h3>
+                
+                <div style="display: grid; gap: 12px;">
+                    <div style="background: rgba(0, 255, 136, 0.1); padding: 16px; border-radius: 8px; border-left: 4px solid #00ff88;">
+                        ✅ Gdy pracownik nie widzi błędu mimo pytań
+                    </div>
+                    <div style="background: rgba(0, 255, 136, 0.1); padding: 16px; border-radius: 8px; border-left: 4px solid #00ff88;">
+                        ✅ Gdy brakuje mu wiedzy technicznej
+                    </div>
+                    <div style="background: rgba(0, 255, 136, 0.1); padding: 16px; border-radius: 8px; border-left: 4px solid #00ff88;">
+                        ✅ Gdy zauważasz wzorzec, którego on nie dostrzega
+                    </div>
+                    <div style="background: rgba(0, 255, 136, 0.1); padding: 16px; border-radius: 8px; border-left: 4px solid #00ff88;">
+                        ✅ Po tym jak SAM przeanalizował - wtedy dodajesz swoją perspektywę
+                    </div>
+                </div>
+                
+                <div style="margin-top: 32px; padding: 24px; background: rgba(176, 0, 255, 0.15); border-radius: 12px; text-align: center; font-size: 1.3rem; font-weight: 600; border: 2px solid #b000ff;">
+                    "Ludzie wspierają świat, który sami stworzyli"
+                </div>
+                
+                <p style="margin-top: 16px; font-style: italic; color: rgba(255,255,255,0.7); text-align: center;">
+                    Gdy pracownik SAM odkrywa rozwiązanie, czuje się autorem - i dlatego je wdraża.
+                </p>
+            </div>
+        </div>
+
+        <!-- KARTA 18: QUIZ CARD - Checkpoint Analiza -->
+        <div class="card">
+            <h2 class="card-title">Sprawdź swoją wiedzę: Analiza</h2>
+            
+            <div class="quiz-question">
+                <div class="quiz-question-text">1. Jak powinieneś zacząć analizę po rozmowie?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q18-1')">
+                        <div class="quiz-option-letter">A</div>
+                        <div>"Zrobiłeś 3 błędy - omówmy je po kolei"</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 'q18-1')">
+                        <div class="quiz-option-letter">B</div>
+                        <div>"Jak się czujesz po tej rozmowie?"</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q18-1')">
+                        <div class="quiz-option-letter">C</div>
+                        <div>"Jakie były cele tej rozmowy?"</div>
+                    </div>
+                </div>
+                <div id="q18-1" class="quiz-explanation">
+                    ✅ <strong>Dokładnie!</strong> Zaczynasz od ODCZUĆ - to rozładowuje emocje i buduje bezpieczną atmosferę. Dopiero potem przecodzisz do analizy merytorycznej.
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <div class="quiz-question-text">2. Co robisz, gdy pracownik neguje swój błąd mimo faktów?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q18-2')">
+                        <div class="quiz-option-letter">A</div>
+                        <div>Daję mu rację - nie warto się kłócić</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q18-2')">
+                        <div class="quiz-option-letter">B</div>
+                        <div>Upieramy się - przecież mam notatki!</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 'q18-2')">
+                        <div class="quiz-option-letter">C</div>
+                        <div>Przedstawiam fakty i pytam o alternatywną interpretację</div>
+                    </div>
+                </div>
+                <div id="q18-2" class="quiz-explanation">
+                    ✅ <strong>Świetnie!</strong> "Zauważyłem, że klient 2 razy wspomniał o budżecie, a Ty kontynuowałeś prezentację premium. Jak Ty to widziałeś?". Fakty + otwarte pytanie = przestrzeń na dialog.
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <div class="quiz-question-text">3. Jak powinny brzmieć dobre WNIOSKI z analizy?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q18-3')">
+                        <div class="quiz-option-letter">A</div>
+                        <div>"Ogólnie było ok, następnym razem lepiej"</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 'q18-3')">
+                        <div class="quiz-option-letter">B</div>
+                        <div>"Następnym razem zamiast 'czy podpisujemy' zapytam 'co musi się wydarzyć, żeby ruszyć do przodu'"</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q18-3')">
+                        <div class="quiz-option-letter">C</div>
+                        <div>"Muszę popracować nad zamykaniem sprzedaży"</div>
+                    </div>
+                </div>
+                <div id="q18-3" class="quiz-explanation">
+                    ✅ <strong>Dokładnie!</strong> Dobre wnioski są KONKRETNE i WYKONALNE. "Następnym razem zrobię X zamiast Y" to plan działania, nie ogólnikowa deklaracja.
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 19: PRACTICE CARD - Przekształć krytykę w pytania -->
+        <div class="card practice-card">
+            <h2 class="card-title">Ćwiczenie: Przekształć krytykę w pytania coachingowe</h2>
+            
+            <p style="margin-bottom: 24px; font-weight: 600; color: #00d4ff;">Masz notatkę z obserwacji i chcesz dać feedback. Zamień dyrektywną krytykę na pytania, które pomogą pracownikowi samemu dojść do wniosków:</p>
+            
+            <div class="practice-scenario">
+                <p><strong>Scenariusz:</strong></p>
+                <p>Handlowiec Ania prezentowała produkt klientowi, który wspomniał "mamy ograniczony budżet w tym kwartale". Ania zignorowała to i dalej prezentowała drogie opcje. Klient się wycofał.</p>
+            </div>
+            
+            <div style="background: rgba(239, 68, 68, 0.1); padding: 20px; border-radius: 12px; margin: 24px 0; border-left: 4px solid #ef4444;">
+                <h3 style="color: #ef4444; margin-bottom: 12px;">❌ Twój impuls (krytyka):</h3>
+                <ol>
+                    <li>"Nie słuchałaś klienta"</li>
+                    <li>"Powinnnaś była przejść na tańsze opcje"</li>
+                    <li>"Straciłaś szansę na deal"</li>
+                </ol>
+            </div>
+            
+            <div class="practice-input">
+                <label>Przekształć 1: "Nie słuchałaś klienta" → Pytanie coachingowe:</label>
+                <textarea placeholder="Jak możesz to przeformułować jako pytanie?"></textarea>
+            </div>
+            
+            <div class="practice-input">
+                <label>Przekształć 2: "Powinnaś była przejść na tańsze opcje" → Pytanie:</label>
+                <textarea placeholder="Jak możesz pomóc jej samej dojść do tego wniosku?"></textarea>
+            </div>
+            
+            <div class="practice-input">
+                <label>Przekształć 3: "Straciłaś szansę" → Pytanie o wnioski:</label>
+                <textarea placeholder="Jak zapytać o plan na przyszłość?"></textarea>
+            </div>
+            
+            <button class="btn-reveal" onclick="document.getElementById('practice3-answers').classList.toggle('visible')">
+                Pokaż przykładowe pytania
+            </button>
+            
+            <div id="practice3-answers" class="practice-answers">
+                <h3 style="color: #00d4ff; margin-bottom: 16px;">Przykładowe pytania coachingowe:</h3>
+                <ol>
+                    <li style="margin-bottom: 16px;">
+                        <strong>"Nie słuchałaś" →</strong><br>
+                        <span style="color: #00ff88;">"Zauważyłam, że klient wspomniał o ograniczonym budżecie, a Ty kontynuowałaś prezentację opcji premium. Co się wtedy działo?"</span><br>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">→ Fakty + otwarte pytanie, bez osądu</em>
+                    </li>
+                    <li style="margin-bottom: 16px;">
+                        <strong>"Powinnaś była przejść na tańsze opcje" →</strong><br>
+                        <span style="color: #00ff88;">"Co mogłaś zrobić w momencie, gdy usłyszałaś 'ograniczony budżet'? Jakie alternatywy miałaś?"</span><br>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">→ Pomoż jej samej znaleźć rozwiązanie</em>
+                    </li>
+                    <li>
+                        <strong>"Straciłaś szansę" →</strong><br>
+                        <span style="color: #00ff88;">"Co wynosisz z tej sytuacji na przyszłość? Jak zareagujesz, gdy kolejny klient wspomni o budżecie?"</span><br>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">→ Konkretny plan działania, nie poczucie winy</em>
+                    </li>
+                </ol>
+                
+                <div style="margin-top: 24px; padding: 20px; background: rgba(0, 255, 136, 0.1); border-radius: 12px; border-left: 4px solid #00ff88;">
+                    <strong style="color: #00ff88;">Efekt pytań vs krytyki:</strong><br><br>
+                    <strong>Krytyka:</strong> Ania czuje się oceniona, wchodzi w obronę: "Ale ja chciałam pokazać najlepsze produkty!"<br><br>
+                    <strong>Pytania:</strong> Ania analizuje: "Faktycznie, powinienem była zapytać o konkretny budżet i dostosować ofertę... następnym razem zacznę od tego pytania"
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 20: PODSUMOWANIE DNIA -->
+        <div class="card">
+            <h2 class="card-title">Etap 5: Podsumowanie całego dnia</h2>
+            
+            <div class="card-content">
+                <p><strong>Czas:</strong> 15-20 minut na koniec wspólnego dnia pracy</p>
+                <p><strong>Cel:</strong> Rozliczyć cele dnia i stworzyć plan wdrożeniowy</p>
+                
+                <h3 style="margin-top: 32px; margin-bottom: 16px; color: #00d4ff;">3 kluczowe elementy:</h3>
+                
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 24px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="font-size: 1.3rem; font-weight: 700; color: #00d4ff; margin-bottom: 12px;">1️⃣ ROZLICZENIE CELÓW DNIA</div>
+                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 12px;">
+                        <strong>Pytania:</strong>
+                    </p>
+                    <ul style="color: rgba(255,255,255,0.7);">
+                        <li>"Nad czym pracowaliśmy dziś?" (przypomnienie celów z rana)</li>
+                        <li>"Co udało Ci się poprawić w stosunku do poprzedniego dnia?"</li>
+                        <li>"Gdzie widzisz największy postęp?"</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 24px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="font-size: 1.3rem; font-weight: 700; color: #00d4ff; margin-bottom: 12px;">2️⃣ PLAN DZIAŁAŃ WDROŻENIOWYCH</div>
+                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 12px;">
+                        <strong>Konkrety na przyszłość:</strong>
+                    </p>
+                    <ul style="color: rgba(255,255,255,0.7);">
+                        <li>1-3 konkretne zachowania do zastosowania w najbliższym tygodniu</li>
+                        <li>Mierzalne cele (np. "Zadać min. 3 pytania otwarte w każdej rozmowie")</li>
+                        <li>Umówienie kolejnej sesji OJT (jeśli proces trwa dalej)</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 24px; border-radius: 12px;">
+                    <div style="font-size: 1.3rem; font-weight: 700; color: #00d4ff; margin-bottom: 12px;">3️⃣ RAPORT / POTWIERDZENIE</div>
+                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 12px;">
+                        <strong>Dokumentacja:</strong>
+                    </p>
+                    <ul style="color: rgba(255,255,255,0.7);">
+                        <li>Pracownik zapisuje swoje wnioski (własność procesu)</li>
+                        <li>Ty zapisujesz obserwacje i plan na następną sesję</li>
+                        <li>Wspólne potwierdzenie planu wdrożeniowego</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="remember-box">
+                <p>💡 <strong>Pamiętaj:</strong></p>
+                <p>• Podsumowanie ≠ podsumowanie TYLKO Twoich obserwacji</p>
+                <p>• To przede wszystkim refleksja PRACOWNIKA nad całym dniem</p>
+                <p>• Dokumentuj plan wdrożeniowy - to commitment, nie deklaracja</p>
+            </div>
+            
+            <div class="warning-box">
+                <p>⚠️ <strong>Częsty błąd:</strong></p>
+                <p>Kończenie dnia "ogólnie było dobrze, dzięki za czas". Bez konkretnego planu wdrożenia wnioski się rozplywają w ciągu tygodnia!</p>
+            </div>
+        </div>
+
+        <!-- KARTA 21: DATA CARD - Jak często OJT -->
+        <div class="card data-card">
+            <h2 class="card-title">Jak często robić trening OJT?</h2>
+            
+            <div class="data-stats">
+                <div class="stat-item">
+                    <div class="stat-number">1x/tydzień</div>
+                    <div class="stat-label">Minimalną częstotliwość dla efektywnego rozwoju</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">2-3x/miesiąc</div>
+                    <div class="stat-label">Optymalną intensywność dla utrwalenia umiejętności</div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-number">1x/kwartał</div>
+                    <div class="stat-label">To za rzadko - efekt rozwoju jest znikomy</div>
+                </div>
+            </div>
+            
+            <div class="data-insight">
+                <strong>Kluczowy wniosek:</strong> Trening OJT wymaga REGULARNOŚCI. Lepiej 1 dzień co 2 tygodnie przez 3 miesiące niż 3 dni z rzędu raz na pół roku. Mózg potrzebuje czasu na przetworzenie feedbacku i wypróbowanie nowych zachowań.
+            </div>
+            
+            <h3 style="margin-top: 32px; margin-bottom: 16px; color: #00d4ff; font-size: 1.5rem;">Typowy harmonogram rozwoju:</h3>
+            
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; margin-bottom: 12px;">
+                <strong style="color: #00ff88;">✅ Nowy pracownik (0-3 miesiące):</strong><br>
+                <span style="color: rgba(255,255,255,0.7);">2-3 razy w tygodniu - intensywny trening podstawowych umiejętności</span>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px; margin-bottom: 12px;">
+                <strong style="color: #00d4ff;">✅ Rozwijający się pracownik (3-12 miesięcy):</strong><br>
+                <span style="color: rgba(255,255,255,0.7);">1 raz w tygodniu - praca nad konkretnymi kompetencjami (np. zamykanie, obsługa obiekcji)</span>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 12px;">
+                <strong style="color: #ffd700;">✅ Doświadczony pracownik (1+ rok):</strong><br>
+                <span style="color: rgba(255,255,255,0.7);">2-3 razy w miesiącu - doskonalenie zaawansowanych technik, rozwijanie nowych obszarów</span>
+            </div>
+            
+            <div class="data-sources">
+                Źródła: ATD Coaching Best Practices 2024, Harvard Business Review "Frequency of Coaching"
+            </div>
+        </div>
+
+        <!-- KARTA 22: STORY CARD - Plan wdrożeniowy -->
+        <div class="card story-card">
+            <h2 class="card-title">Przykład: Dobry vs Zły Plan Wdrożeniowy</h2>
+            
+            <div class="story-example story-bad">
+                <div class="story-label">❌ ŹLE (Ogólnikowe deklaracje)</div>
+                <div class="story-dialogue">
+                    <p><strong>Menedżer:</strong> "Co wynosisz z dzisiejszego treningu?"</p>
+                    <p><strong>Handlowiec:</strong> "Muszę popracować nad zadawaniem pytań i lepiej słuchać klienta."</p>
+                    <p><strong>Menedżer:</strong> "Super, to się tym zajmij. Powodzenia!"</p>
+                </div>
+                <div class="story-effect">
+                    <strong>Efekt:</strong> Tydzień później nic się nie zmieniło. "Popracować nad pytaniami" to nie plan, to deklaracja. Brak konkretów = brak zmian.
+                </div>
+            </div>
+            
+            <div class="story-example story-good">
+                <div class="story-label">✅ DOBRZE (SMART plan wdrożeniowy)</div>
+                <div class="story-dialogue">
+                    <p><strong>Menedżer:</strong> "Co KONKRETNIE zastosujesz w najbliższym tygodniu?"</p>
+                    <p><strong>Handlowiec:</strong> "W każdej rozmowie z klientem zadam min. 3 pytania otwarte zanim przejdę do prezentacji produktu."</p>
+                    <p><strong>Menedżer:</strong> "Świetnie! Możesz to zapisać? A jak będziesz mierzył postęp?"</p>
+                    <p><strong>Handlowiec:</strong> <em>(pisze)</em> "Po każdej rozmowie zaznaczę w CRM czy zadałem 3+ pytania. W piątek wyślę Ci raport."</p>
+                    <p><strong>Menedżer:</strong> "Okej. A co zrobisz, gdy zapomnisz i przeskoczysz od razu do oferty?"</p>
+                    <p><strong>Handlowiec:</strong> "Zatrzymam się i powiem: 'Zanim przejdę dalej, chciałbym zrozumieć Państwa sytuację - jak teraz rozwiązujecie X?'"</p>
+                    <p><strong>Menedżer:</strong> "Doskonale. Umówmy się na feedback za tydzień - zajrzymy do CRM i omówimy jak poszło."</p>
+                </div>
+                <div class="story-effect">
+                    <strong>Efekt:</strong> Tydzień później: 12/15 rozmów z min. 3 pytaniami otwarymi. W 3 rozmowach zapomniał, ale użył techniki "cofnięcia się". Konwersja wzrosła o 18%. <strong>Konkretny plan = mierzalny efekt.</strong>
+                </div>
+            </div>
+            
+            <div class="story-lesson">
+                <strong>Kluczowa lekcja:</strong> Dobry plan wdrożeniowy to: 1-3 konkretne zachowania + sposób mierzenia + plan na wypadek zapomnienia + termin sprawdzenia postępu. Bez tego feedback = strata czasu.
+            </div>
+        </div>
+
+        <!-- KARTA 23: QUIZ CARD - Recap całego modelu -->
+        <div class="card">
+            <h2 class="card-title">Sprawdź swoją wiedzę: Podsumowanie Modelu OJT</h2>
+            
+            <div class="quiz-question">
+                <div class="quiz-question-text">1. Jaka jest GŁÓWNA różnica między treningiem OJT a tradycyjnym szkoleniem?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q23-1')">
+                        <div class="quiz-option-letter">A</div>
+                        <div>OJT jest tańszy i szybszy</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 'q23-1')">
+                        <div class="quiz-option-letter">B</div>
+                        <div>Uczysz się PRACUJĄC, nie przerywasz pracy by się uczyć</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q23-1')">
+                        <div class="quiz-option-letter">C</div>
+                        <div>OJT wymaga mniej przygotowania</div>
+                    </div>
+                </div>
+                <div id="q23-1" class="quiz-explanation">
+                    ✅ <strong>Dokładnie!</strong> W OJT nauka jest integralną częścią pracy - nie odrywasz pracownika od zadań, tylko przekształcasz zadania w okazję do rozwoju. To zasadnicza zmiana paradygmatu.
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <div class="quiz-question-text">2. Który etap OJT powtarza się 3-5 razy dziennie w cyklu?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q23-2')">
+                        <div class="quiz-option-letter">A</div>
+                        <div>Rozmowa na początku dnia + Podsumowanie dnia</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 'q23-2')">
+                        <div class="quiz-option-letter">B</div>
+                        <div>Odprawa → Obserwacja → Analiza (dla każdego zadania)</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q23-2')">
+                        <div class="quiz-option-letter">C</div>
+                        <div>Wszystkie 5 etapów powtarzamy w kółko</div>
+                    </div>
+                </div>
+                <div id="q23-2" class="quiz-explanation">
+                    ✅ <strong>Świetnie!</strong> Etapy 2-3-4 (Odprawa-Obserwacja-Analiza) tworzą cykl powtarzalny dla każdej rozmowy/zadania. Etap 1 (Start) i 5 (Podsumowanie) ramują cały dzień.
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <div class="quiz-question-text">3. Jaka jest ZŁOTA ZASADA feedbacku w treningu OJT?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q23-3')">
+                        <div class="quiz-option-letter">A</div>
+                        <div>Zawsze zacznij od pozytywów (metoda kanapki)</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true, 'q23-3')">
+                        <div class="quiz-option-letter">B</div>
+                        <div>Pytaj, nie mów - pomóż pracownikowi samemu odkryć wnioski</div>
+                    </div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false, 'q23-3')">
+                        <div class="quiz-option-letter">C</div>
+                        <div>Dawaj feedback natychmiast po każdym błędzie</div>
+                    </div>
+                </div>
+                <div id="q23-3" class="quiz-explanation">
+                    ✅ <strong>Doskonale!</strong> "Pytaj, nie mów" to fundament OJT. 80% czasu pracownik analizuje sam, 20% Ty uzupełniasz perspektywą. Ludzie wspierają świat, który sami stworzyli.
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 24: HABIT BUILDER CARD -->
+        <div class="card">
+            <h2 class="card-title">Zbuduj swoje nawyki trenera OJT</h2>
+            
+            <p style="margin-bottom: 24px; font-size: 1.1rem; color: rgba(255,255,255,0.8);">
+                Wybierz <strong>1-2 nawyki</strong>, które chcesz wdrożyć w ciągu najbliższych 30 dni. Zaznacz te, które są dla Ciebie priorytetem:
+            </p>
+            
+            <div class="habit-list">
+                <div class="habit-item">
+                    <div class="habit-checkbox">
+                        <input type="checkbox" id="habit1">
+                        <label for="habit1">
+                            <div class="habit-title">🗓️ Regularny harmonogram OJT</div>
+                            <div class="habit-description">
+                                Zaplanować minimum 1 dzień OJT tygodniowo z każdym kluczowym pracownikiem przez najbliższe 3 miesiące
+                            </div>
+                            <div class="habit-goal">→ Cel: Systematyczność, nie jednorazowe akcje</div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="habit-item">
+                    <div class="habit-checkbox">
+                        <input type="checkbox" id="habit2">
+                        <label for="habit2">
+                            <div class="habit-title">📝 Notowanie faktów, nie interpretacji</div>
+                            <div class="habit-description">
+                                Podczas obserwacji zapisywać TYLKO to co widzę i słyszę - cytaty, zachowania, reakcje. Zero ocen.
+                            </div>
+                            <div class="habit-goal">→ Cel: Obiektywny feedback oparty na faktach</div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="habit-item">
+                    <div class="habit-checkbox">
+                        <input type="checkbox" id="habit3">
+                        <label for="habit3">
+                            <div class="habit-title">❓ 5 pytań zanim dam radę</div>
+                            <div class="habit-description">
+                                W każdej analizie zadać minimum 5 pytań coachingowych ZANIM powiem co pracownik powinien zrobić
+                            </div>
+                            <div class="habit-goal">→ Cel: Rozwijać samodzielność zamiast zależność ode mnie</div>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="habit-item">
+                    <div class="habit-checkbox">
+                        <input type="checkbox" id="habit4">
+                        <label for="habit4">
+                            <div class="habit-title">✅ Konkretny plan wdrożeniowy</div>
+                            <div class="habit-description">
+                                Kończyć każdą sesję OJT spisanym planem: 1-3 zachowania + sposób mierzenia + termin sprawdzenia
+                            </div>
+                            <div class="habit-goal">→ Cel: Przekształcić feedback w realne zmiany</div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 32px; padding: 24px; background: rgba(176, 0, 255, 0.1); border-radius: 12px; border-left: 4px solid #b000ff;">
+                <strong style="color: #00d4ff; font-size: 1.1rem;">💡 Wskazówka:</strong><br>
+                <p style="margin-top: 8px; color: rgba(255,255,255,0.8);">
+                    Wybierz maksymalnie 2 nawyki. Lepiej wdrożyć 2 w 100% niż 4 w 25%. Po 30 dniach oceń postęp i rozważ dodanie kolejnego.
+                </p>
+            </div>
+        </div>
+
+        <!-- KARTA 25: CHECKLIST -->
+        <div class="card">
+            <h2 class="card-title">Twoja Checklista Trenera OJT</h2>
+            
+            <p style="margin-bottom: 24px; font-size: 1.1rem; color: rgba(255,255,255,0.8);">
+                Użyj tej checklisty przed, w trakcie i po każdej sesji OJT:
+            </p>
+            
+            <h3 style="color: #00d4ff; margin: 32px 0 16px; font-size: 1.3rem;">📋 Przed wspólnym dniem pracy:</h3>
+            <div class="ending-checklist">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check1">
+                    <label for="check1">Ustalony cel rozwojowy na dzisiejszą sesję (1-2 umiejętności)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check2">
+                    <label for="check2">Przygotowany plan dnia (lista klientów/zadań)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check3">
+                    <label for="check3">Notatnik gotowy do zbierania faktów</label>
+                </div>
+            </div>
+            
+            <h3 style="color: #00d4ff; margin: 32px 0 16px; font-size: 1.3rem;">🤝 Na początku dnia (Etap 1):</h3>
+            <div class="ending-checklist">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check4">
+                    <label for="check4">Sprzedałem ideę treningu (dlaczego to się opłaca)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check5">
+                    <label for="check5">Zawarliśmy kontrakt (role, zasady, sygnały pomocy)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check6">
+                    <label for="check6">Wspólnie ustaliliśmy cele rozwojowe</label>
+                </div>
+            </div>
+            
+            <h3 style="color: #00d4ff; margin: 32px 0 16px; font-size: 1.3rem;">🔄 Przed każdą rozmową/zadaniem (Etap 2):</h3>
+            <div class="ending-checklist">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check7">
+                    <label for="check7">Przypomnieliśmy cele rozwojowe</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check8">
+                    <label for="check8">Przeanalizowaliśmy sytuację/kontekst</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check9">
+                    <label for="check9">Pracownik ma plan działania</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check10">
+                    <label for="check10">Jeśli potrzeba - pokazałem demonstrację</label>
+                </div>
+            </div>
+            
+            <h3 style="color: #00d4ff; margin: 32px 0 16px; font-size: 1.3rem;">👀 Podczas obserwacji (Etap 3):</h3>
+            <div class="ending-checklist">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check11">
+                    <label for="check11">Zachowuję rolę obserwatora (minimalna aktywność)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check12">
+                    <label for="check12">Notuję FAKTY (cytaty, zachowania), nie interpretacje</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check13">
+                    <label for="check13">Wchodzę TYLKO zgodnie z kontraktem</label>
+                </div>
+            </div>
+            
+            <h3 style="color: #00d4ff; margin: 32px 0 16px; font-size: 1.3rem;">💬 Po każdej rozmowie/zadaniu (Etap 4):</h3>
+            <div class="ending-checklist">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check14">
+                    <label for="check14">Zacząłem od ODCZUĆ pracownika</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check15">
+                    <label for="check15">Przypomniałem CELE tej rozmowy</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check16">
+                    <label for="check16">Przeanalizowaliśmy PRZEBIEG (co dobrze, co trudne)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check17">
+                    <label for="check17">Zadałem pytania o ALTERNATYWY (co inaczej)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check18">
+                    <label for="check18">Pracownik sformułował konkretne WNIOSKI</label>
+                </div>
+            </div>
+            
+            <h3 style="color: #00d4ff; margin: 32px 0 16px; font-size: 1.3rem;">🏁 Na koniec dnia (Etap 5):</h3>
+            <div class="ending-checklist">
+                <div class="checklist-item">
+                    <input type="checkbox" id="check19">
+                    <label for="check19">Rozliczyliśmy cele całego dnia</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check20">
+                    <label for="check20">Ustaliliśmy 1-3 konkretne zachowania do wdrożenia</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check21">
+                    <label for="check21">Zapisaliśmy plan wdrożeniowy (co, jak mierzyć, kiedy sprawdzić)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check22">
+                    <label for="check22">Umówiliśmy kolejną sesję OJT</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTA 26: LIGHTBULB CARD - Final Insight -->
+        <div class="card lightbulb-card">
+            <div class="lightbulb-icon">💡</div>
+            <h2 class="lightbulb-title">Ostatnie Zrozumienie: OJT to Inwestycja, nie Koszt</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.2rem; margin-bottom: 24px;">
+                    Słyszysz czasem: <strong style="color: #ef4444;">"Nie mam czasu na OJT - mam cele do zrealizowania"</strong>?
+                </p>
+                
+                <p style="font-size: 1.1rem; margin-bottom: 32px; color: rgba(255,255,255,0.8);">
+                    To jak powiedzieć: "Nie mam czasu ostrzyć piły - mam drzewo do ścięcia". Oto liczby, które zmienią Twoją perspektywę:
+                </p>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th style="color: #ef4444;">❌ BEZ OJT (praca tradycyjna)</th>
+                            <th style="color: #00ff88;">✅ Z OJT (systematyczny rozwój)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Czas onboardingu:</strong> 6-9 miesięcy do pełnej produktywności</td>
+                            <td><strong>Czas onboardingu:</strong> 3-4 miesiące do pełnej produktywności</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Błędy:</strong> Pracownik uczy się na własnych błędach (kosztownych)</td>
+                            <td><strong>Błędy:</strong> Minimalizowane przez feedback w czasie rzeczywistym</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rozwój:</strong> Losowy, zależny od doświadczeń</td>
+                            <td><strong>Rozwój:</strong> Kierunkowy, 4x szybszy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Twój czas:</strong> Ratowanie sytuacji, gaszenie pożarów</td>
+                            <td><strong>Twój czas:</strong> Inwestycja w kompetencje = mniej pożarów</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Wynik:</strong> Zespół zależny od Ciebie</td>
+                            <td><strong>Wynik:</strong> Zespół samodzielny i rosnący</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3 style="margin: 32px 0 16px; color: #00d4ff; font-size: 1.4rem;">📊 ROI treningu OJT (przykład rzeczywisty):</h3>
+                
+                <div style="background: rgba(0, 255, 136, 0.1); padding: 24px; border-radius: 12px; border: 2px solid #00ff88; margin-bottom: 16px;">
+                    <strong style="font-size: 1.2rem; color: #00ff88;">Zespół sprzedażowy 10 osób, menedżer Tomasz:</strong><br><br>
+                    
+                    <strong>Inwestycja:</strong><br>
+                    • 1 dzień/tydzień OJT z każdym handlowcem (rotacja)<br>
+                    • 52 dni OJT rocznie = ~10% czasu Tomasza<br><br>
+                    
+                    <strong>Efekt po 6 miesiącach:</strong><br>
+                    • Średnia konwersja wzrosła z 18% do 27% (+50%)<br>
+                    • Średni deal size wzrósł o 15% (lepsza kvalifikacja)<br>
+                    • Rotacja zespołu spadła z 25% do 8% rocznie<br>
+                    • Tomasz przestał gasić pożary - zespół rozwiązuje problemy sam<br><br>
+                    
+                    <strong style="color: #ffd700; font-size: 1.3rem;">ROI: 450% - każda złotówka zainwestowana w OJT wróciła jako 4.5 zł zysku</strong>
+                </div>
+                
+                <div style="margin-top: 32px; padding: 24px; background: rgba(255, 215, 0, 0.1); border-radius: 12px; text-align: center; font-size: 1.4rem; font-weight: 700; border: 2px solid #ffd700;">
+                    "Jeśli myślisz, że szkolenie jest drogie - spróbuj ignorancji"
+                </div>
+                
+                <p style="margin-top: 16px; font-style: italic; color: rgba(255,255,255,0.6); text-align: center;">
+                    - Derek Bok, były rektor Uniwersytetu Harvarda
+                </p>
+            </div>
+        </div>
+
+        <!-- KARTA 27: TEST CARD -->
+        <div class="card">
+            <div class="test-start">
+                <div class="test-icon">🏆</div>
+                <h2 class="card-title">Test Końcowy: Model Treningu OJT</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 32px; color: rgba(255,255,255,0.8);">
+                    Sprawdź swoją wiedzę z całej lekcji. Musisz uzyskać minimum <strong style="color: #00d4ff;">80%</strong> aby odblokować certyfikat.
+                </p>
+                
+                <div class="test-requirements">
+                    <div class="test-req-item">
+                        <div class="test-req-value">10</div>
+                        <div class="test-req-label">Pytań</div>
+                    </div>
+                    <div class="test-req-item">
+                        <div class="test-req-value">2:30</div>
+                        <div class="test-req-label">Minut</div>
+                    </div>
+                    <div class="test-req-item">
+                        <div class="test-req-value">80%</div>
+                        <div class="test-req-label">Próg zaliczenia</div>
+                    </div>
+                </div>
+                
+                <button class="btn-reveal" style="padding: 16px 48px; font-size: 1.2rem; margin-top: 24px;">
+                    Rozpocznij Test
+                </button>
+                
+                <p style="margin-top: 24px; font-size: 0.9rem; color: rgba(255,255,255,0.5);">
+                    💡 Test obejmuje wszystkie 5 etapów modelu OJT, fakty vs interpretacje, pytania coachingowe i plany wdrożeniowe
+                </p>
+            </div>
+        </div>
+
+        <!-- KARTA 28: ACHIEVEMENT CARD -->
+        <div class="card achievement-card">
+            <div class="achievement-badge">🏆</div>
+            <h1 class="achievement-title">Certyfikowany Trener OJT!</h1>
+            
+            <p style="font-size: 1.2rem; margin-bottom: 32px; color: rgba(255,255,255,0.9);">
+                Gratulacje! Opanowałeś 5-etapowy model treningu On-the-Job. Teraz możesz skutecznie rozwijać kompetencje swojego zespołu bez odrywania się od codziennej pracy.
+            </p>
+            
+            <h3 style="color: #ffd700; margin-bottom: 16px; font-size: 1.4rem;">🎯 Odblokowane umiejętności:</h3>
+            <div class="achievement-skills">
+                <div class="achievement-skill">
+                    ✅ Prowadzenie kontraktu na wspólną pracę z psychologicznym bezpieczeństwem
+                </div>
+                <div class="achievement-skill">
+                    ✅ Zbieranie faktów podczas obserwacji (bez interpretacji i osądów)
+                </div>
+                <div class="achievement-skill">
+                    ✅ Prowadzenie 5-etapowej analizy feedbackowej (Odczucia-Cele-Przebieg-Alternatywy-Wnioski)
+                </div>
+                <div class="achievement-skill">
+                    ✅ Zadawanie pytań coachingowych zamiast dawania gotowych rad
+                </div>
+                <div class="achievement-skill">
+                    ✅ Tworzenie konkretnych planów wdrożeniowych (SMART)
+                </div>
+                <div class="achievement-skill">
+                    ✅ Systematyczne rozwijanie zespołu przez cykl powtarzalnych sesji OJT
+                </div>
+            </div>
+            
+            <div class="achievement-xp">+ 300 XP</div>
+            
+            <p style="font-size: 1rem; color: rgba(255,255,255,0.7); margin-top: 24px;">
+                🎖️ Odznaka <strong>"OJT Master"</strong> została dodana do Twojego profilu
+            </p>
+        </div>
+
+        <!-- KARTA 29: ENDING CARD -->
+        <div class="card">
+            <h2 class="card-title">Twoje Następne Kroki</h2>
+            
+            <div class="card-content">
+                <p style="font-size: 1.2rem; margin-bottom: 32px; color: rgba(255,255,255,0.9);">
+                    Ukończyłeś lekcję, ale to dopiero początek! Wiedza teoretyczna nic nie da bez wdrożenia. Oto Twój plan na najbliższe 30 dni:
+                </p>
+                
+                <h3 style="color: #00d4ff; margin-bottom: 16px; font-size: 1.3rem;">📋 Checklist 30 dni wdrożenia:</h3>
+                
+                <div class="ending-checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label><strong>Dzień 1-3:</strong> Wybierz 1-2 pracowników do pierwszej sesji OJT</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label><strong>Dzień 4-7:</strong> Zaplanuj pierwszą sesję OJT (data, cele rozwojowe, lista klientów/zadań)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label><strong>Dzień 8:</strong> Przeprowadź pierwszą sesję OJT stosując wszystkie 5 etapów</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label><strong>Dzień 9:</strong> Oceń co poszło dobrze, co trudne - zapisz wnioski</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label><strong>Dzień 15:</strong> Druga sesja OJT (zastosuj wnioski z pierwszej)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label><strong>Dzień 22:</strong> Trzecia sesja OJT (budowanie rutyny)</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox">
+                        <label><strong>Dzień 30:</strong> Ocena postępu - czy widzisz rozwój pracownika? Dostosuj harmonogram</label>
+                    </div>
+                </div>
+                
+                <h3 style="color: #00d4ff; margin: 32px 0 16px; font-size: 1.3rem;">📚 Dodatkowe materiały:</h3>
+                
+                <div class="resources-list">
+                    <div class="resource-item">
+                        <strong>📄 Szablon kontraktu OJT</strong><br>
+                        <span style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Gotowy formularz do uzgodnienia zasad współpracy z pracownikiem</span>
+                    </div>
+                    <div class="resource-item">
+                        <strong>📝 Karta obserwacji OJT</strong><br>
+                        <span style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Szablon do notowania faktów podczas obserwacji rozmów</span>
+                    </div>
+                    <div class="resource-item">
+                        <strong>✅ Checklist analizy (5 kroków)</strong><br>
+                        <span style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Struktura rozmowy feedbackowej do wydruku</span>
+                    </div>
+                    <div class="resource-item">
+                        <strong>📊 Tracker postępów OJT</strong><br>
+                        <span style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Excel do śledzenia rozwoju pracowników (cele → sesje → wnioski)</span>
+                    </div>
+                </div>
+                
+                <div class="final-quote">
+                    <p style="font-size: 1.3rem; font-weight: 600; margin-bottom: 12px;">
+                        "Najlepsi liderzy nie rozwijają ludzi <em>zamiast</em> osiągać cele.<br>
+                        Oni osiągają cele <em>poprzez</em> rozwijanie ludzi."
+                    </p>
+                    <p style="font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.6);">
+                        - Simon Sinek
+                    </p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="font-size: 1.1rem; color: rgba(255,255,255,0.7); margin-bottom: 16px;">
+                        Powodzenia w rozwijaniu Twojego zespołu! 🚀
+                    </p>
+                    <p style="font-size: 0.9rem; color: rgba(255,255,255,0.5);">
+                        Masz pytania? Dołącz do społeczności trenerów OJT w zakładce Forum
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Quiz functionality
+        function selectQuizOption(element, isCorrect, explanationId) {
+            // Prevent re-selection
+            const parent = element.parentElement;
+            if (parent.querySelector('.selected-correct') || parent.querySelector('.selected-wrong')) {
+                return;
+            }
+            
+            // Mark selected
+            if (isCorrect) {
+                element.classList.add('selected-correct');
+            } else {
+                element.classList.add('selected-wrong');
+                // Also show correct answer
+                const options = parent.querySelectorAll('.quiz-option');
+                options.forEach(opt => {
+                    if (opt !== element && opt.onclick.toString().includes('true')) {
+                        opt.classList.add('selected-correct');
+                    }
+                });
+            }
+            
+            // Show explanation
+            document.getElementById(explanationId).classList.add('visible');
+        }
+    </script>
+</body>
+</html>

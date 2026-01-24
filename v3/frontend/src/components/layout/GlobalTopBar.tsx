@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { Zap, Bell, Flame } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { ARCHETYPES } from '@/components/profile/EditProfileModal'
 
 export default function TopBar() {
     const { user, profile } = useAuth()
@@ -123,9 +124,18 @@ export default function TopBar() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontWeight: 700,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    border: '2px solid rgba(255,255,255,0.2)',
+                    overflow: 'hidden'
                 }}>
-                    {profile?.full_name?.substring(0, 2).toUpperCase() || 'U'}
+                    {(() => {
+                        const archetype = ARCHETYPES.find(a => a.id === profile?.avatar_url)
+                        if (archetype) {
+                            const Icon = archetype.icon
+                            return <Icon size={24} color="white" />
+                        }
+                        return profile?.full_name?.substring(0, 2).toUpperCase() || 'U'
+                    })()}
                 </div>
             </div>
         </div>

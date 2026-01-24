@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Engramów: Trening On-the-Job</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #2a1a3a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: rgba(176, 0, 255, 0.15);
+            border: 1px solid rgba(176, 0, 255, 0.4);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #b000ff;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .header-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* INFO BOX */
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 40px;
+        }
+
+        .info-box h3 {
+            color: #00d4ff;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .info-box li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        /* ENGRAM GRID */
+        .engram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .engram-card {
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engram-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-color-2));
+        }
+
+        .engram-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(176, 0, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Color variants */
+        .engram-card.purple {
+            --accent-color: #b000ff;
+            --accent-color-2: #8000cc;
+        }
+
+        .engram-card.blue {
+            --accent-color: #00d4ff;
+            --accent-color-2: #0099cc;
+        }
+
+        .engram-card.green {
+            --accent-color: #00ff88;
+            --accent-color-2: #00cc66;
+        }
+
+        .engram-card.orange {
+            --accent-color: #ff8800;
+            --accent-color-2: #cc6600;
+        }
+
+        .engram-card.gold {
+            --accent-color: #ffd700;
+            --accent-color-2: #ffaa00;
+        }
+
+        .engram-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .engram-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .engram-description {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .engram-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .slides-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .slides-preview-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 12px;
+        }
+
+        .slides-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .slides-list li {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 6px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .slides-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+
+        .engram-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-install {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-color-2));
+            color: white;
+        }
+
+        .btn-install:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(176, 0, 255, 0.4);
+        }
+
+        .btn-preview {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-preview:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* SECTION HEADERS */
+        .section-header {
+            margin: 60px 0 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .section-header p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* QUIZ BADGE */
+        .quiz-badge {
+            display: inline-block;
+            background: rgba(255, 136, 0, 0.15);
+            border: 1px solid rgba(255, 136, 0, 0.4);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #ff8800;
+            margin-top: 12px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+
+            .engram-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-badge">🧠 Engramy OJT</div>
+            <h1 class="header-title">Katalog Engramów: Trening On-the-Job</h1>
+            <p class="header-subtitle">
+                Mikro-szkolenia (3-7 min) do szybkiego przypomnienia kluczowych koncepcji z lekcji OJT. 
+                Instaluj, odświeżaj i buduj trwałą pamięć dzięki spaced repetition.
+            </p>
+        </div>
+
+        <!-- INFO BOX -->
+        <div class="info-box">
+            <h3>💡 Jak działają engramy?</h3>
+            <ul>
+                <li><strong>Instalacja:</strong> Przejdź slajdy + quiz (70% wymagane) - <strong>całkowicie darmowe!</strong></li>
+                <li><strong>Decay:</strong> Siła engramu spada z czasem (100% → 80% → 40%...)</li>
+                <li><strong>Refresh:</strong> Gdy siła spada poniżej 70%, odśwież engram i zdobądź XP (+20 do +30)</li>
+                <li><strong>Spaced Repetition:</strong> Każdy refresh wydłuża odstęp (1 dzień → 3 dni → 7 dni → 14 dni...)</li>
+            </ul>
+        </div>
+
+        <!-- SEKCJA 1: PODSTAWOWE ENGRAMY (po lekcji) -->
+        <div class="section-header">
+            <h2>📚 Podstawowe Engramy (Po ukończeniu Lekcji 2)</h2>
+            <p>5 kluczowych engramów dostępnych po ukończeniu lekcji "Model Treningu On-the-Job"</p>
+        </div>
+
+        <div class="engram-grid">
+            
+            <!-- ENGRAM 1: 5 Etapów OJT -->
+            <div class="engram-card purple">
+                <span class="engram-icon">🔄</span>
+                <h3 class="engram-title">5 Etapów Cyklu OJT</h3>
+                <p class="engram-description">
+                    Szybkie przypomnienie wszystkich 5 etapów treningu on-the-job: od kontraktu na początku dnia do podsumowania i planu wdrożenia.
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 4 min</div>
+                    <div class="meta-item">📊 5 slajdów</div>
+                    <div class="meta-item">⚡ -40 XP / +20 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>Etap 1: Rozmowa na początku dnia (kontrakt + cele)</li>
+                        <li>Etapy 2-4: Cykl powtarzalny (odprawa → obserwacja → analiza)</li>
+                        <li>Etap 5: Podsumowanie dnia (rozliczenie + plan wdrożenia)</li>
+                        <li>Wizualizacja cyklu z timingami</li>
+                        <li>Quiz: 5 pytań o kolejność i cele etapów</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 5 pytań, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-40 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- ENGRAM 2: Fakty vs Interpretacje -->
+            <div class="engram-card blue">
+                <span class="engram-icon">🔍</span>
+                <h3 class="engram-title">Fakty vs Interpretacje</h3>
+                <p class="engram-description">
+                    Naucz się rozróżniać obiektywne fakty od subiektywnych interpretacji podczas obserwacji. Kluczowa umiejętność dla konstruktywnego feedbacku.
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 5 min</div>
+                    <div class="meta-item">📊 6 slajdów</div>
+                    <div class="meta-item">⚡ -45 XP / +25 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>Definicja: Czym są fakty vs interpretacje?</li>
+                        <li>Przykłady: 10 porównań (fakt ↔ interpretacja)</li>
+                        <li>Dlaczego fakty > interpretacje w feedbacku?</li>
+                        <li>Technika NOTED: Obserwuj bez oceny</li>
+                        <li>Ćwiczenie: Przekształć 3 interpretacje w fakty</li>
+                        <li>Quiz: Rozpoznaj fakty vs interpretacje (8 pytań)</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 8 pytań, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-45 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- ENGRAM 3: 5 Pytań Coachingowych -->
+            <div class="engram-card green">
+                <span class="engram-icon">❓</span>
+                <h3 class="engram-title">5 Pytań Coachingowych</h3>
+                <p class="engram-description">
+                    Opanuj 5-stopniową strukturę analizy feedbackowej: Odczucia → Cele → Przebieg → Alternatywy → Wnioski. Pytaj, nie mów!
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 6 min</div>
+                    <div class="meta-item">📊 6 slajdów</div>
+                    <div class="meta-item">⚡ -50 XP / +25 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>1️⃣ ODCZUCIA: "Jak się czujesz?" - rozładowanie emocji</li>
+                        <li>2️⃣ CELE: "Co chciałeś osiągnąć?" - punkt odniesienia</li>
+                        <li>3️⃣ PRZEBIEG: "Co poszło dobrze/trudne?" - analiza faktów</li>
+                        <li>4️⃣ ALTERNATYWY: "Co mógłbyś zrobić inaczej?" - myślenie strategiczne</li>
+                        <li>5️⃣ WNIOSKI: "Co zastosujesz następnym razem?" - konkretny plan</li>
+                        <li>Quiz: Dopasuj pytania do etapów, rozpoznaj błędy</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 6 pytań, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-50 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- ENGRAM 4: Kontrakt Psychologiczny -->
+            <div class="engram-card orange">
+                <span class="engram-icon">🤝</span>
+                <h3 class="engram-title">Kontrakt = Bezpieczeństwo</h3>
+                <p class="engram-description">
+                    Zrozum dlaczego dobry kontrakt na początku dnia to fundament skutecznego OJT. Bez kontraktu - stres zamiast rozwoju.
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 4 min</div>
+                    <div class="meta-item">📊 5 slajdów</div>
+                    <div class="meta-item">⚡ -40 XP / +20 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>4 elementy dobrego kontraktu OJT</li>
+                        <li>Przykład: Dobry vs Zły kontrakt (porównanie)</li>
+                        <li>Tabela: Co pracownik myśli vs co naprawdę chcesz</li>
+                        <li>Wzór kontraktu do użycia jutro</li>
+                        <li>Quiz: Rozpoznaj elementy dobrego kontraktu (5 pytań)</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 5 pytań, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-40 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- ENGRAM 5: Plan Wdrożeniowy SMART -->
+            <div class="engram-card gold">
+                <span class="engram-icon">✅</span>
+                <h3 class="engram-title">Plan Wdrożeniowy SMART</h3>
+                <p class="engram-description">
+                    Przekształć feedback w konkretne zmiany. Nauczysz się tworzyć plany wdrożeniowe, które faktycznie działają (nie ogólnikowe deklaracje).
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 5 min</div>
+                    <div class="meta-item">📊 5 slajdów</div>
+                    <div class="meta-item">⚡ -45 XP / +25 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>Czym różni się plan od deklaracji? (Porównanie)</li>
+                        <li>Formuła SMART dla planów wdrożeniowych</li>
+                        <li>Przykład: "Popracować nad pytaniami" → konkretny plan</li>
+                        <li>Szablon planu wdrożeniowego (do wydruku)</li>
+                        <li>Quiz: Oceń jakość planów wdrożeniowych (6 pytań)</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 6 pytań, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-45 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SEKCJA 2: ZAAWANSOWANE ENGRAMY (dla praktykujących) -->
+        <div class="section-header">
+            <h2>🎯 Zaawansowane Engramy (Dla praktykujących OJT)</h2>
+            <p>3 engramy dla menedżerów, którzy już prowadzą sesje OJT i chcą pogłębić umiejętności</p>
+        </div>
+
+        <div class="engram-grid">
+            
+            <!-- ENGRAM 6: Pytania Coachingowe - Biblioteka -->
+            <div class="engram-card purple">
+                <span class="engram-icon">📚</span>
+                <h3 class="engram-title">Biblioteka Pytań Coachingowych</h3>
+                <p class="engram-description">
+                    30 gotowych pytań coachingowych do użycia w analizie OJT. Podzielone na kategorie: Odczucia, Cele, Przebieg, Alternatywy, Wnioski.
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 7 min</div>
+                    <div class="meta-item">📊 7 slajdów</div>
+                    <div class="meta-item">⚡ -60 XP / +30 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>6 pytań o ODCZUCIA (rozładowanie emocji)</li>
+                        <li>5 pytań o CELE (przypomnienie punktu odniesienia)</li>
+                        <li>8 pytań o PRZEBIEG (analiza co dobrze/trudne)</li>
+                        <li>6 pytań o ALTERNATYWY (myślenie strategiczne)</li>
+                        <li>5 pytań o WNIOSKI (konkretny plan)</li>
+                        <li>Kiedy użyć każdego typu pytania?</li>
+                        <li>Quiz: Dopasuj pytania do sytuacji (8 pytań)</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 8 pytań, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-60 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- ENGRAM 7: Radzenie z Oporem -->
+            <div class="engram-card blue">
+                <span class="engram-icon">🛡️</span>
+                <h3 class="engram-title">Radzenie z Oporem w OJT</h3>
+                <p class="engram-description">
+                    Co robić gdy pracownik neguje feedback, wchodzi w obronę lub nie widzi problemu? 5 technik radzenia sobie z oporem.
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 6 min</div>
+                    <div class="meta-item">📊 6 slajdów</div>
+                    <div class="meta-item">⚡ -55 XP / +30 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>5 typów oporu: Negacja, Atak, Ucieczka, Racjonalizacja, Milczenie</li>
+                        <li>Technika 1: Przedstaw fakty + pytaj o alternatywną interpretację</li>
+                        <li>Technika 2: "Zauważyłem... Jak Ty to widziałeś?"</li>
+                        <li>Technika 3: Uznaj emocje zanim przejdziesz do faktów</li>
+                        <li>Technika 4: Cofnij się do celów ("Nad czym pracujemy?")</li>
+                        <li>Przykłady dialogów: Jak radzić z każdym typem oporu</li>
+                        <li>Quiz: Rozpoznaj typ oporu i wybierz reakcję (7 pytań)</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 7 pytań, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-55 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- ENGRAM 8: ROI Treningu OJT -->
+            <div class="engram-card green">
+                <span class="engram-icon">📊</span>
+                <h3 class="engram-title">Mierzenie ROI Treningu OJT</h3>
+                <p class="engram-description">
+                    Jak zmierzyć efektywność treningu on-the-job? Wskaźniki, narzędzia i przykłady wyliczenia zwrotu z inwestycji w rozwój zespołu.
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 6 min</div>
+                    <div class="meta-item">📊 6 slajdów</div>
+                    <div class="meta-item">⚡ -50 XP / +25 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>5 kluczowych wskaźników OJT (czas onboardingu, błędy, retencja...)</li>
+                        <li>Kalkulator ROI: Jak wyliczyć zwrot z inwestycji?</li>
+                        <li>Case study: Zespół 10 osób, 450% ROI po 6 miesiącach</li>
+                        <li>Tracker postępów: Szablon Excel do śledzenia rozwoju</li>
+                        <li>Jak prezentować wyniki zarządowi?</li>
+                        <li>Quiz: Wylicz ROI dla różnych scenariuszy (5 pytań)</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 5 pytań, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-50 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SEKCJA 3: BONUS ENGRAMY (opcjonalne) -->
+        <div class="section-header">
+            <h2>🎁 Bonus Engramy (Dodatkowe narzędzia)</h2>
+            <p>2 engramy z gotowymi narzędziami do natychmiastowego użycia w sesjach OJT</p>
+        </div>
+
+        <div class="engram-grid">
+            
+            <!-- ENGRAM 9: Karta Obserwacji OJT -->
+            <div class="engram-card orange">
+                <span class="engram-icon">📝</span>
+                <h3 class="engram-title">Karta Obserwacji OJT</h3>
+                <p class="engram-description">
+                    Gotowy szablon do notowania faktów podczas obserwacji rozmów. Zawiera kategorie: Zachowania, Reakcje klienta, Kluczowe momenty, Wnioski.
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 3 min</div>
+                    <div class="meta-item">📊 4 slajdy</div>
+                    <div class="meta-item">⚡ -30 XP / +15 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>Struktura karty obserwacji (4 sekcje)</li>
+                        <li>Przykład wypełnionej karty (rozmowa handlowa)</li>
+                        <li>Szablon do wydruku (PDF + Excel)</li>
+                        <li>Quiz: Zakwalifikuj obserwacje do właściwych sekcji (4 pytania)</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 4 pytania, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-30 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+            <!-- ENGRAM 10: Checklist OJT Master -->
+            <div class="engram-card gold">
+                <span class="engram-icon">✅</span>
+                <h3 class="engram-title">Checklist OJT Master</h3>
+                <p class="engram-description">
+                    Kompleksowa checklista na każdy etap sesji OJT. Od przygotowania (dzień przed) do follow-up (tydzień po). 30 punktów kontrolnych.
+                </p>
+                
+                <div class="engram-meta">
+                    <div class="meta-item">⏱️ 4 min</div>
+                    <div class="meta-item">📊 5 slajdów</div>
+                    <div class="meta-item">⚡ -35 XP / +20 XP</div>
+                </div>
+                
+                <div class="slides-preview">
+                    <div class="slides-preview-title">📋 Zawartość:</div>
+                    <ul class="slides-list">
+                        <li>Przed sesją (5 punktów): Cel, plan, narzędzia</li>
+                        <li>Etap 1: Rozmowa na początku (4 punkty)</li>
+                        <li>Etapy 2-4: Cykl powtarzalny (12 punktów)</li>
+                        <li>Etap 5: Podsumowanie (5 punktów)</li>
+                        <li>Follow-up po sesji (4 punkty)</li>
+                        <li>Szablon checklisty (do wydruku)</li>
+                        <li>Quiz: Dopasuj punkty do etapów (5 pytań)</li>
+                    </ul>
+                </div>
+                <div class="quiz-badge">📝 Quiz: 5 pytań, 70% próg</div>
+                
+                <div class="engram-actions">
+                    <button class="btn btn-install">Instaluj (-35 XP)</button>
+                    <button class="btn btn-preview">Podgląd</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SUMMARY BOX -->
+        <div style="background: rgba(176, 0, 255, 0.1); border: 1px solid rgba(176, 0, 255, 0.3); border-radius: 16px; padding: 32px; margin-top: 60px; text-align: center;">
+            <h3 style="font-size: 1.5rem; margin-bottom: 16px; color: #b000ff;">📊 Podsumowanie katalogu</h3>
+            <div style="display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; margin: 24px 0;">
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #00d4ff;">10</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Engramów</div>
+                </div>
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #00ff88;">48 min</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Łączny czas</div>
+                </div>
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #ffd700;">-455 XP</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Koszt instalacji wszystkich</div>
+                </div>
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: 700; color: #ff8800;">+235 XP</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Potencjał z refreshów</div>
+                </div>
+            </div>
+            <p style="margin-top: 24px; font-size: 1rem; color: rgba(255,255,255,0.8); max-width: 700px; margin-left: auto; margin-right: auto;">
+                💡 <strong>Strategia:</strong> Zainstaluj engramy 1-5 po ukończeniu Lekcji 2. Po 2 tygodniach praktyki OJT zainstaluj engramy zaawansowane (6-8). Engramy bonusowe (9-10) to narzędzia do użycia w sesjach.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // Simple interaction - można rozbudować
+        document.querySelectorAll('.btn-preview').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Podgląd engramu - w pełnej wersji otworzy się modal z slajdami');
+            });
+        });
+
+        document.querySelectorAll('.btn-install').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.engram-card');
+                const title = card.querySelector('.engram-title').textContent;
+                if (confirm(`Czy na pewno chcesz zainstalować engram "${title}"? Koszt będzie pobrany z Twojego XP.`)) {
+                    alert('W pełnej wersji przekieruje do engram player z quizem i instalacją.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

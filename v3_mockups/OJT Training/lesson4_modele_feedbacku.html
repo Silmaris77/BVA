@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modele Feedbacku w Praktyce: AID, FISH, FUKO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #2a1a3a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .lesson-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: fadeInUp 0.6s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid #00d4ff;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+
+        /* HERO CARD */
+        .hero-card {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.15), rgba(255, 140, 0, 0.15));
+            border: 1px solid rgba(255, 69, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 69, 0, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content { position: relative; z-index: 1; }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* DATA CARD */
+        .data-card {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.1), rgba(255, 140, 0, 0.1));
+            border: 1px solid rgba(255, 69, 0, 0.3);
+        }
+
+        .stat-hero {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 69, 0, 0.1);
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        .stat-number {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .stat-label {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .data-insight {
+            background: rgba(255, 140, 0, 0.1);
+            padding: 24px;
+            border-radius: 16px;
+            border-left: 4px solid #ff8c00;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* CONTENT CARD */
+        .card-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        .card-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 32px;
+        }
+
+        .card-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .model-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            border-left: 4px solid;
+        }
+
+        .model-box.aid { border-color: #ff4500; }
+        .model-box.fish { border-color: #00d4ff; }
+        .model-box.fuko { border-color: #ff69b4; }
+
+        .model-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .model-box.aid .model-name { color: #ff4500; }
+        .model-box.fish .model-name { color: #00d4ff; }
+        .model-box.fuko .model-name { color: #ff69b4; }
+
+        .model-when {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .model-steps {
+            margin-top: 16px;
+        }
+
+        .model-step {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .model-step:last-child {
+            border-bottom: none;
+        }
+
+        .step-letter {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+
+        .model-box.aid .step-letter { background: rgba(255, 69, 0, 0.2); color: #ff4500; }
+        .model-box.fish .step-letter { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        .model-box.fuko .step-letter { background: rgba(255, 105, 180, 0.2); color: #ff69b4; }
+
+        /* DECISION MATRIX */
+        .matrix-card {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(176, 0, 255, 0.1));
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.95rem;
+        }
+
+        .matrix-table th {
+            background: rgba(138, 43, 226, 0.2);
+            padding: 16px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            font-weight: 600;
+            color: #8a2be2;
+        }
+
+        .matrix-table td {
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .matrix-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .model-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .model-tag.aid {
+            background: rgba(255, 69, 0, 0.2);
+            color: #ff4500;
+        }
+
+        .model-tag.fish {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+
+        .model-tag.fuko {
+            background: rgba(255, 105, 180, 0.2);
+            color: #ff69b4;
+        }
+
+        /* SCENARIO CARD */
+        .scenario-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .scenario-situation {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            border-left: 4px solid #ffd700;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .scenario-question {
+            font-weight: 600;
+            color: #ffd700;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .scenario-options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .scenario-option {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .scenario-option::before {
+            content: attr(data-model);
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .scenario-option[data-model="AID"]::before {
+            background: rgba(255, 69, 0, 0.3);
+            color: #ff4500;
+        }
+
+        .scenario-option[data-model="FISH"]::before {
+            background: rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+        }
+
+        .scenario-option[data-model="FUKO"]::before {
+            background: rgba(255, 105, 180, 0.3);
+            color: #ff69b4;
+        }
+
+        .scenario-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        .scenario-option.selected {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.15);
+        }
+
+        .scenario-option.correct {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.15);
+        }
+
+        .scenario-option.incorrect {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.15);
+        }
+
+        .scenario-answer {
+            display: none;
+            background: rgba(0, 212, 255, 0.1);
+            padding: 24px;
+            border-radius: 16px;
+            border-left: 4px solid #00d4ff;
+            margin-top: 20px;
+            line-height: 1.7;
+        }
+
+        .scenario-answer.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* PRACTICE CARD */
+        .practice-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .practice-instruction {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .practice-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        .practice-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .practice-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            border: none;
+            border-radius: 12px;
+            color: #0a0a1a;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.3s;
+        }
+
+        .practice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .practice-example {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 24px;
+            border-radius: 16px;
+            border-left: 4px solid #00d4ff;
+            margin-top: 20px;
+            display: none;
+            line-height: 1.7;
+        }
+
+        .practice-example.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        /* STORY CARD */
+        .story-card {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 165, 0, 0.1));
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .story-icon {
+            font-size: 2rem;
+        }
+
+        .story-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ff6b6b;
+        }
+
+        .story-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 20px;
+        }
+
+        .story-dialogue {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-style: italic;
+            line-height: 1.7;
+        }
+
+        .story-outcome {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #00ff88;
+            margin-top: 20px;
+            line-height: 1.7;
+        }
+
+        .story-outcome.negative {
+            background: rgba(255, 107, 107, 0.1);
+            border-left-color: #ff6b6b;
+        }
+
+        /* QUIZ CARD */
+        .quiz-card {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(176, 0, 255, 0.1));
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .quiz-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #8a2be2;
+        }
+
+        .quiz-question {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .quiz-option {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .quiz-option.selected {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: #8a2be2;
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+        }
+
+        /* TEST CARD */
+        .test-card {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.1), rgba(255, 140, 0, 0.1));
+            border: 1px solid rgba(255, 69, 0, 0.3);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .test-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff4500;
+        }
+
+        .test-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 12px;
+        }
+
+        .test-progress {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .test-question-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .test-question-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ff8c00;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .test-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .test-option {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .test-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .test-option.selected {
+            background: rgba(255, 140, 0, 0.2);
+            border-color: #ff8c00;
+        }
+
+        .test-option.correct-answer {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .test-option.wrong-answer {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+        }
+
+        .test-submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: all 0.3s;
+        }
+
+        .test-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.3);
+        }
+
+        .test-submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .test-result {
+            display: none;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 32px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .test-result.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .test-score {
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        .test-score.pass {
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .test-score.fail {
+            background: linear-gradient(135deg, #ff6b6b, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .test-feedback {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 20px 0;
+            line-height: 1.7;
+        }
+
+        .test-retry-btn {
+            padding: 14px 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 12px;
+            transition: all 0.3s;
+        }
+
+        .test-retry-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* HABIT BUILDER CARD */
+        .habit-card {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(138, 43, 226, 0.1));
+            border: 1px solid rgba(255, 105, 180, 0.3);
+        }
+
+        .habit-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff69b4;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .habit-options {
+            display: grid;
+            gap: 16px;
+        }
+
+        .habit-option {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .habit-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .habit-option.selected {
+            background: rgba(255, 105, 180, 0.15);
+            border-color: #ff69b4;
+        }
+
+        .habit-option-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .habit-option-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ACHIEVEMENT CARD */
+        .achievement-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.15));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            text-align: center;
+        }
+
+        .achievement-icon {
+            font-size: 5rem;
+            margin-bottom: 24px;
+        }
+
+        .achievement-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd700, #ffa500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .achievement-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .achievement-checklist {
+            text-align: left;
+            margin: 32px 0;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .rewards-box {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 24px;
+            border-radius: 16px;
+            margin: 24px 0;
+        }
+
+        .rewards-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 16px;
+        }
+
+        .reward-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            margin: 12px 0;
+        }
+
+        /* BOXES */
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #00d4ff;
+            margin: 20px 0;
+            line-height: 1.7;
+        }
+
+        .success-box {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #00ff88;
+            margin: 20px 0;
+            line-height: 1.7;
+        }
+
+        .warning-box {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #ff6b6b;
+            margin: 20px 0;
+            line-height: 1.7;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .card { padding: 32px 24px; }
+            .stat-number { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        
+        <!-- CARD 1: HERO -->
+        <div class="card hero-card">
+            <div class="hero-content">
+                <h1 class="hero-title">Modele Feedbacku<br/>w Praktyce</h1>
+                <p class="hero-subtitle">Opanuj 3 modele feedbacku i naucz się wybierać właściwy model dla każdej sytuacji</p>
+                
+                <div class="hero-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">⏱️</span>
+                        <span>18 minut</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">📝</span>
+                        <span>22 karty</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🎯</span>
+                        <span>Zaawansowane</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🏆</span>
+                        <span>250 XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 2: DATA -->
+        <div class="card data-card">
+            <span class="card-badge">Data</span>
+            
+            <div class="stat-hero">
+                <div class="stat-number">85%</div>
+                <div class="stat-label">pracowników akceptuje feedback gdy jest<br/><strong>konkretny i dostosowany do sytuacji</strong></div>
+            </div>
+
+            <div class="data-insight">
+                <strong>Dlaczego model ma znaczenie?</strong> Ten sam feedback („Mógłbyś być bardziej asertywny") może być skuteczny lub destrukcyjny - w zależności od poziomu kompetencji pracownika i kontekstu. Prawidłowy dobór modelu zwiększa akceptację o 3x.
+            </div>
+        </div>
+
+        <!-- CARD 3: Model AID/DROP -->
+        <div class="card">
+            <span class="card-badge">Content</span>
+            <h2 class="card-title">Model 1: AID/DROP</h2>
+            <p class="card-subtitle">Szybka korekta dla początkujących</p>
+
+            <div class="model-box aid">
+                <div class="model-name">🎯 AID (Action → Impact → Desired)</div>
+                
+                <div class="model-when">
+                    <strong>Kiedy stosować:</strong><br/>
+                    • Pracownik początkujący (niewielkie doświadczenie)<br/>
+                    • Błąd wyraźny, jasny do zidentyfikowania<br/>
+                    • Potrzebna szybka korekta<br/>
+                    • Pracownik ma ograniczony wgląd w swoje działania
+                </div>
+
+                <div class="model-steps">
+                    <div class="model-step">
+                        <span class="step-letter">A</span>
+                        <strong>Action:</strong> Opisz podjęte działanie/zaobserwowane zachowanie<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Pamiętasz jak klient zapytał o rabat? Odpowiedziałeś że to niemożliwe..."</em>
+                    </div>
+                    <div class="model-step">
+                        <span class="step-letter">I</span>
+                        <strong>Impact:</strong> Opisz niekorzystne konsekwencje<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Klient natychmiast zakończył rozmowę. Straciłeś szansę na zamknięcie transakcji..."</em>
+                    </div>
+                    <div class="model-step">
+                        <span class="step-letter">D</span>
+                        <strong>Desired outcome:</strong> Określ jakich zachowań oczekujesz<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Następnym razem zapytaj najpierw o budżet, potem zaproponuj alternatywę..."</em>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Kluczowa zaleta AID:</strong> Jasność i szybkość. Pracownik dokładnie wie CO zrobił źle i JAK ma to poprawić. Brak analizy = oszczędność czasu.
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Pułapka AID:</strong> NIE stosuj z doświadczonymi pracownikami! Poczują się pouczani jak dzieci. Model AID nie angażuje w refleksję, więc nie rozwija samodzielnego myślenia.
+            </div>
+        </div>
+
+        <!-- CARD 4: Model FISH -->
+        <div class="card">
+            <span class="card-badge">Content</span>
+            <h2 class="card-title">Model 2: FISH</h2>
+            <p class="card-subtitle">Analiza problemu dla doświadczonych</p>
+
+            <div class="model-box fish">
+                <div class="model-name">🐟 FISH (Focus → Identify → Solve → How)</div>
+                
+                <div class="model-when">
+                    <strong>Kiedy stosować:</strong><br/>
+                    • Pracownik doświadczony (potrafi myśleć analitycznie)<br/>
+                    • Problem złożony, wielowątkowy<br/>
+                    • Chcesz zaangażować w poszukiwanie rozwiązania<br/>
+                    • Zależy Ci na rozwoju samodzielności
+                </div>
+
+                <div class="model-steps">
+                    <div class="model-step">
+                        <span class="step-letter">F</span>
+                        <strong>Focus on the area:</strong> Skieruj uwagę na wybrany problem<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Co sądzisz o swoich wynikach sprzedaży w ostatnim miesiącu?"</em>
+                    </div>
+                    <div class="model-step">
+                        <span class="step-letter">I</span>
+                        <strong>Identify the cause:</strong> Spraw by przeanalizował przyczyny<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Jak myślisz, co jest przyczyną spadku o 20%?"</em>
+                    </div>
+                    <div class="model-step">
+                        <span class="step-letter">S</span>
+                        <strong>Solve the problem:</strong> Nakłoń do zaproponowania rozwiązania<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Co mógłbyś zrobić inaczej? Jakie masz pomysły?"</em>
+                    </div>
+                    <div class="model-step">
+                        <span class="step-letter">H</span>
+                        <strong>How to do it next time:</strong> Zapytaj o konkretne działania<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Jak to mogłoby wyglądać w praktyce, gdy spotkasz się z klientem jutro?"</em>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Kluczowa zaleta FISH:</strong> Pracownik SAM dochodzi do wniosków = większa akceptacja zmian. Rozwijasz jego umiejętność analizy problemów. Budowanie ownership.
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Pułapka FISH:</strong> NIE stosuj gdy brakuje czasu lub pracownik nie potrafi myśleć analitycznie. FISH wymaga 15-20 minut. Jeśli pracownik jest zablokowany emocjonalnie - FISH nie zadziała.
+            </div>
+        </div>
+
+        <!-- CARD 5: Model FUKO -->
+        <div class="card">
+            <span class="card-badge">Content</span>
+            <h2 class="card-title">Model 3: FUKO</h2>
+            <p class="card-subtitle">Wyrażenie oczekiwań i emocji</p>
+
+            <div class="model-box fuko">
+                <div class="model-name">💬 FUKO (Fakty → Ustosunkowanie → Konsekwencje → Oczekiwania)</div>
+                
+                <div class="model-when">
+                    <strong>Kiedy stosować:</strong><br/>
+                    • Chcesz wyrazić swoją ocenę/emocje<br/>
+                    • Pracownik naruszył ustalenia/zasady<br/>
+                    • Potrzeba wzmocnić właściwe zachowania<br/>
+                    • Feedback korygujący z elementem osobistego ustosunkowania
+                </div>
+
+                <div class="model-steps">
+                    <div class="model-step">
+                        <span class="step-letter">F</span>
+                        <strong>Fakty:</strong> Opisz sytuację i zaobserwowane zachowania<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Umówiliśmy się że przed naszym spotkaniem przeanalizujesz dane. Tymczasem tego nie zrobiłeś."</em>
+                    </div>
+                    <div class="model-step">
+                        <span class="step-letter">U</span>
+                        <strong>Ustosunkowanie:</strong> Wyraź swoją ocenę/emocje<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Przykro mi że nie dotrzymujesz naszych ustaleń. Czuję się zlekceważony."</em>
+                    </div>
+                    <div class="model-step">
+                        <span class="step-letter">K</span>
+                        <strong>Konsekwencje:</strong> Opisz konsekwencje zachowań<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Przez to tracimy cenny czas. Trudno nam zrobić postęp w Twoim rozwoju."</em>
+                    </div>
+                    <div class="model-step">
+                        <span class="step-letter">O</span>
+                        <strong>Oczekiwania:</strong> Określ jakich zachowań oczekujesz<br/>
+                        <em style="font-size: 0.9rem; color: rgba(255,255,255,0.6);">„Następnym razem poinformuj mnie z wyprzedzeniem jeśli będziesz miał trudności."</em>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>✅ Kluczowa zaleta FUKO:</strong> Jasne wyrażenie oczekiwań + pokazanie wpływu zachowań na relację. Pracownik rozumie nie tylko CO ma zmienić, ale DLACZEGO to dla Ciebie ważne.
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Różnica FUKO vs AID:</strong> AID = obiektywny (konsekwencje biznesowe). FUKO = subiektywny (Twoje emocje i oczekiwania). FUKO bardziej osobiste, buduje relację.
+            </div>
+        </div>
+
+        <!-- CARD 6: DECISION MATRIX -->
+        <div class="card matrix-card">
+            <span class="card-badge">Decision Matrix</span>
+            <h2 class="card-title">📊 Macierz Decyzyjna: Który Model Wybrać?</h2>
+            <p class="card-subtitle">Poziom kompetencji × Typ sytuacji → Model feedbacku</p>
+
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>Sytuacja / Pracownik</th>
+                        <th>Junior<br/>(0-6 m-cy)</th>
+                        <th>Mid<br/>(6-24 m-ce)</th>
+                        <th>Senior<br/>(24+ m-cy)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Błąd prosty</strong><br/>(np. pominięcie kroku)</td>
+                        <td><span class="model-tag aid">AID</span></td>
+                        <td><span class="model-tag aid">AID</span></td>
+                        <td><span class="model-tag fish">FISH</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Błąd powtarzający się</strong><br/>(3+ razy ten sam)</td>
+                        <td><span class="model-tag fuko">FUKO</span></td>
+                        <td><span class="model-tag fish">FISH</span></td>
+                        <td><span class="model-tag fish">FISH</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Problem złożony</strong><br/>(wielowątkowy)</td>
+                        <td><span class="model-tag aid">AID</span></td>
+                        <td><span class="model-tag fish">FISH</span></td>
+                        <td><span class="model-tag fish">FISH</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Naruszenie zasad</strong><br/>(umowy, ustalenia)</td>
+                        <td><span class="model-tag fuko">FUKO</span></td>
+                        <td><span class="model-tag fuko">FUKO</span></td>
+                        <td><span class="model-tag fuko">FUKO</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Wzmocnienie</strong><br/>(pochwała zachowania)</td>
+                        <td><span class="model-tag fuko">FUKO</span></td>
+                        <td><span class="model-tag fuko">FUKO</span></td>
+                        <td><span class="model-tag fuko">FUKO</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rozwój nowej umiejętności</strong></td>
+                        <td><span class="model-tag aid">AID</span></td>
+                        <td><span class="model-tag fish">FISH</span></td>
+                        <td><span class="model-tag fish">FISH</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box" style="margin-top: 24px;">
+                <strong>💡 Zasada 80/20:</strong><br/>
+                • Junior: 70% AID, 20% FUKO, 10% FISH<br/>
+                • Mid: 40% AID, 30% FISH, 30% FUKO<br/>
+                • Senior: 60% FISH, 30% FUKO, 10% AID
+            </div>
+        </div>
+
+        <!-- CARD 7: STORY - Źle dobrany model -->
+        <div class="card story-card">
+            <span class="card-badge">Story</span>
+            
+            <div class="story-header">
+                <span class="story-icon">📖</span>
+                <h2 class="story-title">Kiedy dobry feedback staje się destrukcyjny</h2>
+            </div>
+
+            <p class="story-content">
+                <strong>Tomasz</strong>, manager zespołu IT, przeprowadził sesję OJT z <strong>Anią</strong> - seniorką programistką (3 lata doświadczenia, samodzielna, analityczna).
+            </p>
+
+            <div class="story-dialogue">
+                <strong>Tomasz (stosuje AID):</strong><br/>
+                „Ania, widziałem że podczas code review z Pawłem powiedziałaś 'To rozwiązanie jest OK'. To sprawiło że Paweł nie wiedział co poprawić. Następnym razem wskaż konkretnie co można zmienić - np. 'Funkcja działa, ale extract metodę do oddzielnego pliku'."
+            </div>
+
+            <div class="story-outcome negative">
+                <div style="font-weight: 600; margin-bottom: 8px;">❌ Reakcja Ani:</div>
+                <p>Ania poczuła się urażona. „Wiem jak robić code review. Nie potrzebuję instrukcji krok po kroku jak junior." Następnego dnia złożyła wypowiedzenie.</p>
+            </div>
+
+            <div class="story-content" style="margin-top: 20px;">
+                <strong>Co poszło nie tak?</strong> Tomasz zastosował AID (model dla juniorów) do seniorki. Ania oczekiwała pytania: „Co sądzisz o Twoim ostatnim code review?" (FISH), nie instrukcji.
+            </div>
+
+            <div class="story-dialogue" style="background: rgba(0, 255, 136, 0.1); border-left: 4px solid #00ff88;">
+                <strong>Alternatywna wersja (FISH):</strong><br/>
+                „Ania, jak oceniasz swój ostatni code review z Pawłem? [F]<br/>
+                Myślałaś o tym dlaczego powiedziałaś 'OK' zamiast dać konkretny feedback? [I]<br/>
+                Jak mógłbyś to wyglądać inaczej? [S]<br/>
+                Co zrobisz następnym razem? [H]"
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <strong>💡 Kluczowy wniosek:</strong> Seniorzy mają ego i potrzebują autonomii. AID = infantylizacja. FISH = partnering. Zły dobór modelu = utrata najlepszych ludzi.
+            </div>
+        </div>
+
+        <!-- CARD 8: SCENARIO 1 - Junior handlowiec -->
+        <div class="card scenario-card">
+            <span class="card-badge" style="background: rgba(255, 215, 0, 0.2); border-color: #ffd700; color: #ffd700;">Scenario</span>
+            <h2 class="card-title">🎯 Scenariusz 1: Junior Handlowiec</h2>
+
+            <div class="scenario-situation">
+                <strong>Kontekst:</strong> Michał (2 miesiące w firmie) podczas rozmowy z klientem nie zadał ani jednego pytania odkrywającego. Tylko prezentował produkt. Klient powiedział „dam znać" i zakończył rozmowę.
+            </div>
+
+            <div class="scenario-question">Który model feedbacku zastosujesz?</div>
+
+            <div class="scenario-options">
+                <div class="scenario-option" data-model="AID" onclick="selectScenario(this, 'scenario1', true)">
+                    <div style="font-weight: 600; margin-bottom: 4px;">AID - Szybka korekta</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        „Michał, zauważyłem że nie zadałeś pytań o potrzeby klienta [A]. To sprawiło że klient nie widział wartości [I]. Następnym razem zacznij od 3 pytań odkrywających [D]."
+                    </div>
+                </div>
+
+                <div class="scenario-option" data-model="FISH" onclick="selectScenario(this, 'scenario1', false)">
+                    <div style="font-weight: 600; margin-bottom: 4px;">FISH - Analiza problemu</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        „Co sądzisz o rozmowie? [F] Dlaczego klient powiedział 'dam znać'? [I] Co mógłbyś zrobić inaczej? [S]"
+                    </div>
+                </div>
+
+                <div class="scenario-option" data-model="FUKO" onclick="selectScenario(this, 'scenario1', false)">
+                    <div style="font-weight: 600; margin-bottom: 4px;">FUKO - Wyrażenie oczekiwań</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        „Nie zadałeś pytań [F]. Jestem rozczarowany bo to podstawa sprzedaży [U]. Klient odszedł [K]. Oczekuję 5 pytań w każdej rozmowie [O]."
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-answer" id="scenario1Answer">
+                <strong>✅ Prawidłowa odpowiedź: AID</strong><br/><br/>
+                <strong>Dlaczego?</strong> Michał to junior (2 miesiące). Błąd prosty (brak pytań). Nie ma jeszcze wglądu w proces sprzedaży. Potrzebuje jasnej instrukcji CO i JAK poprawić.<br/><br/>
+                FISH by nie zadziałał - Michał nie potrafi jeszcze samodzielnie analizować. FUKO za ostre na początkującego.
+            </div>
+        </div>
+
+        <!-- CARD 9: SCENARIO 2 - Senior ignorujący feedback -->
+        <div class="card scenario-card">
+            <span class="card-badge" style="background: rgba(255, 215, 0, 0.2); border-color: #ffd700; color: #ffd700;">Scenario</span>
+            <h2 class="card-title">🎯 Scenariusz 2: Senior Ignorujący Feedback</h2>
+
+            <div class="scenario-situation">
+                <strong>Kontekst:</strong> Kasia (3 lata doświadczenia) po raz 4. spóźnia się na spotkania 1-1 z Tobą. Za każdym razem mówiła „przepraszam, zapomniałam". To naruszenie waszych ustaleń.
+            </div>
+
+            <div class="scenario-question">Który model feedbacku zastosujesz?</div>
+
+            <div class="scenario-options">
+                <div class="scenario-option" data-model="AID" onclick="selectScenario(this, 'scenario2', false)">
+                    <div style="font-weight: 600; margin-bottom: 4px;">AID - Szybka korekta</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        „Spóźniłaś się 4 razy [A]. Tracimy 30 minut miesięcznie [I]. Ustawiaj przypomnienia w kalendarzu [D]."
+                    </div>
+                </div>
+
+                <div class="scenario-option" data-model="FISH" onclick="selectScenario(this, 'scenario2', false)">
+                    <div style="font-weight: 600; margin-bottom: 4px;">FISH - Analiza problemu</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        „Co sądzisz o naszych ostatnich spotkaniach? [F] Dlaczego trudno Ci przychodzić na czas? [I]"
+                    </div>
+                </div>
+
+                <div class="scenario-option" data-model="FUKO" onclick="selectScenario(this, 'scenario2', true)">
+                    <div style="font-weight: 600; margin-bottom: 4px;">FUKO - Wyrażenie oczekiwań</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        „4 razy spóźniłaś się [F]. Czuję się zlekceważony, to brak szacunku dla mojego czasu [U]. Tracimy efektywność [K]. Oczekuję punktualności lub informacji z wyprzedzeniem [O]."
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-answer" id="scenario2Answer">
+                <strong>✅ Prawidłowa odpowiedź: FUKO</strong><br/><br/>
+                <strong>Dlaczego?</strong> Naruszenie ustaleń (4 razy!) wymaga wyrażenia emocji i oczekiwań. AID za suche - nie pokazuje wagi sytuacji. FISH za miękkie - Kasia może to zignorować.<br/><br/>
+                FUKO daje jasny sygnał: „To NIE jest OK. Wpływa to na naszą relację. Musisz to zmienić."
+            </div>
+        </div>
+
+        <!-- CARD 10: SCENARIO 3 - Mid z problemem złożonym -->
+        <div class="card scenario-card">
+            <span class="card-badge" style="background: rgba(255, 215, 0, 0.2); border-color: #ffd700; color: #ffd700;">Scenario</span>
+            <h2 class="card-title">🎯 Scenariusz 3: Mid z Problemem Złożonym</h2>
+
+            <div class="scenario-situation">
+                <strong>Kontekst:</strong> Paweł (1 rok doświadczenia) ma spadek conversion rate o 30%. Nie wiesz dlaczego - to może być wiele rzeczy: słabe pytania, brak asertywności, zła jakość leadów, timing rozmów.
+            </div>
+
+            <div class="scenario-question">Który model feedbacku zastosujesz?</div>
+
+            <div class="scenario-options">
+                <div class="scenario-option" data-model="AID" onclick="selectScenario(this, 'scenario3', false)">
+                    <div style="font-weight: 600; margin-bottom: 4px;">AID - Szybka korekta</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        „Conversion spadł o 30% [A]. Klienci rezygnują [I]. Zadawaj więcej pytań odkrywających [D]."
+                    </div>
+                </div>
+
+                <div class="scenario-option" data-model="FISH" onclick="selectScenario(this, 'scenario3', true)">
+                    <div style="font-weight: 600; margin-bottom: 4px;">FISH - Analiza problemu</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        „Co sądzisz o swoich wynikach? [F] Jak myślisz co jest przyczyną spadku? [I] Jakie masz pomysły na poprawę? [S] Co zrobisz jutro inaczej? [H]"
+                    </div>
+                </div>
+
+                <div class="scenario-option" data-model="FUKO" onclick="selectScenario(this, 'scenario3', false)">
+                    <div style="font-weight: 600; margin-bottom: 4px;">FUKO - Wyrażenie oczekiwań</div>
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        „Wyniki spadły [F]. Martwi mnie to [U]. Tracisz bonus [K]. Oczekuję powrotu do 40% conversion [O]."
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-answer" id="scenario3Answer">
+                <strong>✅ Prawidłowa odpowiedź: FISH</strong><br/><br/>
+                <strong>Dlaczego?</strong> Problem złożony (wiele możliwych przyczyn). Paweł ma 1 rok doświadczenia - potrafi myśleć. Potrzebujesz jego analizy żeby zdiagnozować przyczynę.<br/><br/>
+                AID by nie zadziałał - nie wiesz CO konkretnie poprawić. FUKO za ostre - nie jest to naruszenie zasad, tylko spadek wyników.
+            </div>
+        </div>
+
+        <!-- CARD 11: PRACTICE 1 - Napisz feedback AID -->
+        <div class="card practice-card">
+            <span class="card-badge">Practice</span>
+            <h2 class="card-title">✍️ Ćwiczenie 1: Napisz Feedback AID</h2>
+
+            <div class="practice-instruction">
+                <strong>Sytuacja:</strong> Junior konsultant (1 miesiąc) podczas prezentacji dla klienta czytał ze slajdów słowo w słowo. Nie patrząc na klienta. Klient ziewał i sprawdzał telefon.<br/><br/>
+                <strong>Zadanie:</strong> Napisz feedback stosując model AID (Action → Impact → Desired outcome)
+            </div>
+
+            <textarea class="practice-input" id="practice1Input" placeholder="A (Action): Zauważyłem że...&#10;I (Impact): To sprawiło że...&#10;D (Desired): Następnym razem..."></textarea>
+
+            <button class="practice-btn" onclick="showPracticeExample('practice1Example')">Pokaż przykład</button>
+
+            <div class="practice-example" id="practice1Example">
+                <strong>Przykładowy feedback AID:</strong><br/><br/>
+                <strong>A:</strong> „Widziałem że podczas prezentacji czytałeś tekst ze slajdów słowo w słowo, nie patrząc na klienta."<br/><br/>
+                <strong>I:</strong> „To sprawiło że klient się nudził - ziewał i sprawdzał telefon. Prezentacja nie była angażująca."<br/><br/>
+                <strong>D:</strong> „Następnym razem używaj slajdów jako punktów odniesienia, a główną treść opowiadaj własnymi słowami, patrząc na klienta. Możesz też dodać 1-2 pytania do klienta żeby go zaangażować."
+            </div>
+        </div>
+
+        <!-- CARD 12: PRACTICE 2 - Napisz feedback FISH -->
+        <div class="card practice-card">
+            <span class="card-badge">Practice</span>
+            <h2 class="card-title">✍️ Ćwiczenie 2: Napisz Feedback FISH</h2>
+
+            <div class="practice-instruction">
+                <strong>Sytuacja:</strong> Senior developer (2 lata) ma problem z komunikacją w zespole. Członkowie zespołu skarżą się że „mówi zbyt technicznie", „trudno go zrozumieć". Sam nie dostrzega problemu.<br/><br/>
+                <strong>Zadanie:</strong> Napisz feedback stosując model FISH (Focus → Identify → Solve → How)
+            </div>
+
+            <textarea class="practice-input" id="practice2Input" placeholder="F (Focus): Co sądzisz o...&#10;I (Identify): Jak myślisz dlaczego...&#10;S (Solve): Co mógłbyś...&#10;H (How): Jak to wyglądałoby..."></textarea>
+
+            <button class="practice-btn" onclick="showPracticeExample('practice2Example')">Pokaż przykład</button>
+
+            <div class="practice-example" id="practice2Example">
+                <strong>Przykładowy feedback FISH:</strong><br/><br/>
+                <strong>F:</strong> „Co sądzisz o komunikacji z zespołem? Jak oceniasz ostatnie daily standupy?"<br/><br/>
+                <strong>I:</strong> „Słyszałem opinie że trudno zrozumieć Twoje wypowiedzi. Jak myślisz dlaczego tak jest? Co może być przyczyną?"<br/><br/>
+                <strong>S:</strong> „Jakieś pomysły jak mógłbyś komunikować się bardziej zrozumiale? Co mógłbyś zmienić?"<br/><br/>
+                <strong>H:</strong> „Jak to mogłoby wyglądać na jutrzejszym standupie? Dasz przykład jak byś to przekazał prościej?"
+            </div>
+        </div>
+
+        <!-- CARD 13: PRACTICE 3 - Napisz feedback FUKO -->
+        <div class="card practice-card">
+            <span class="card-badge">Practice</span>
+            <h2 class="card-title">✍️ Ćwiczenie 3: Napisz Feedback FUKO</h2>
+
+            <div class="practice-instruction">
+                <strong>Sytuacja:</strong> Mid-level manager (1.5 roku) obiecał wysłać raport do 17:00. Nie wysłał. Nie poinformował o opóźnieniu. Ty czekałeś do 20:00 bo potrzebowałeś danych na spotkanie następnego dnia. To już 2. raz w miesiącu.<br/><br/>
+                <strong>Zadanie:</strong> Napisz feedback stosując model FUKO (Fakty → Ustosunkowanie → Konsekwencje → Oczekiwania)
+            </div>
+
+            <textarea class="practice-input" id="practice3Input" placeholder="F (Fakty): Umówiliśmy się że...&#10;U (Ustosunkowanie): Jestem...&#10;K (Konsekwencje): To sprawiło że...&#10;O (Oczekiwania): Następnym razem oczekuję..."></textarea>
+
+            <button class="practice-btn" onclick="showPracticeExample('practice3Example')">Pokaż przykład</button>
+
+            <div class="practice-example" id="practice3Example">
+                <strong>Przykładowy feedback FUKO:</strong><br/><br/>
+                <strong>F:</strong> „Umówiliśmy się że wyślesz raport do 17:00. Nie wysłałeś go i nie poinformowałeś o opóżnieniu. To już 2. raz w tym miesiącu."<br/><br/>
+                <strong>U:</strong> „Jestem rozczarowany. Czuję się zlekceważony bo liczyłem na Twoje słowo."<br/><br/>
+                <strong>K:</strong> „Czekałem do 20:00 bo potrzebowałem danych na jutrzejsze spotkanie. Przez to pracowałem do późna. To wpływa na moją efektywność i zaufanie do Ciebie."<br/><br/>
+                <strong>O:</strong> „Następnym razem oczekuję że jeśli nie możesz dotrzymać terminu, poinformujesz mnie z wyprzedzeniem - minimum 2 godziny wcześniej. Wtedy znajdziemy rozwiązanie."
+            </div>
+        </div>
+
+        <!-- CARD 14: QUIZ - Checkpoint -->
+        <div class="card quiz-card">
+            <span class="card-badge">Quiz</span>
+            
+            <div class="quiz-header">
+                <h2 class="quiz-title">✅ Checkpoint: Modele Feedbacku</h2>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">1. Model AID stosujemy gdy:</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">a) Pracownik początkujący + błąd prosty + potrzeba szybkiej korekty ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">b) Pracownik doświadczony + problem złożony</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">c) Naruszenie ustaleń + wyrażenie emocji</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) Zawsze, niezależnie od sytuacji</div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">2. Kluczowa zaleta FISH to:</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">a) Oszczędność czasu - 2 minuty</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">b) Pracownik sam dochodzi do wniosków = większa akceptacja ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">c) Wyrażenie swoich emocji</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) Działa z każdym pracownikiem</div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">3. FUKO różni się od AID tym, że:</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">a) Jest szybszy</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">b) Zawiera element osobistego ustosunkowania i emocji ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">c) Stosujemy tylko do seniorów</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) Nie opisuje konsekwencji</div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">4. Według macierzy, dla Seniora z błędem powtarzającym się stosujesz:</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">a) AID - szybka korekta</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">b) FISH - analiza przyczyn ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">c) FUKO - wyrażenie emocji</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) Żaden - senior sam powinien wiedzieć</div>
+            </div>
+        </div>
+
+        <!-- CARD 15: TEST -->
+        <div class="card test-card" id="testCard">
+            <span class="card-badge" style="background: rgba(255, 69, 0, 0.2); border-color: #ff4500; color: #ff4500;">Test Końcowy</span>
+            
+            <div class="test-header">
+                <h2 class="test-title">📝 Egzamin Końcowy</h2>
+                <p class="test-subtitle">10 pytań sytuacyjnych | Min. 70% do zaliczenia</p>
+            </div>
+
+            <div class="test-progress" id="testProgress">
+                <div class="test-progress-text">Pytanie <span id="currentQuestion">0</span> / 10</div>
+            </div>
+
+            <div id="testQuestions">
+                <!-- Q1 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 1/10 - Model AID</div>
+                    <div class="test-question-text">Który element NIE należy do modelu AID?</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q1', false)">a) Action (opisz zachowanie)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q1', false)">b) Impact (opisz konsekwencje)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q1', true)">c) Analysis (przeanalizuj przyczyny)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q1', false)">d) Desired outcome (określ oczekiwania)</div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 2/10 - Kiedy AID</div>
+                    <div class="test-question-text">AID jest NAJLEPSZY dla:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q2', true)">a) Junior + błąd prosty + szybka korekta</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q2', false)">b) Senior + problem złożony</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q2', false)">c) Naruszenie ustaleń zespołowych</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q2', false)">d) Wyrażenie swoich emocji</div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 3/10 - Model FISH</div>
+                    <div class="test-question-text">Pierwsza litera w FISH oznacza:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q3', false)">a) Feedback (daj feedback)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q3', true)">b) Focus (skieruj uwagę na problem)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q3', false)">c) Facts (opisz fakty)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q3', false)">d) Follow-up (ustal dalsze kroki)</div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 4/10 - Zaleta FISH</div>
+                    <div class="test-question-text">Główna przewaga FISH nad AID to:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q4', false)">a) Jest szybszy (2 min vs 5 min)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q4', true)">b) Pracownik sam dochodzi do wniosków = większe ownership</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q4', false)">c) Można wyrazić emocje</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q4', false)">d) Działa z juniorami bez doświadczenia</div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 5/10 - Pułapka FISH</div>
+                    <div class="test-question-text">FISH NIE zadziała gdy:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q5', false)">a) Pracownik ma 3 lata doświadczenia</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q5', true)">b) Pracownik jest początkujący i nie potrafi analizować</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q5', false)">c) Problem jest złożony</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q5', false)">d) Masz 15 minut na rozmowę</div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 6/10 - Model FUKO</div>
+                    <div class="test-question-text">FUKO różni się od AID elementem:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q6', true)">a) Ustosunkowanie (wyrażenie swojej oceny i emocji)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q6', false)">b) Opisu zachowań</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q6', false)">c) Konsekwencji</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q6', false)">d) Oczekiwań</div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 7/10 - Kiedy FUKO</div>
+                    <div class="test-question-text">FUKO stosujemy gdy:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q7', false)">a) Pracownik potrzebuje szybkiej korekty błędu</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q7', false)">b) Chcesz zaangażować w analizę problemu</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q7', true)">c) Naruszenie ustaleń + chcesz wyrazić emocje i oczekiwania</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q7', false)">d) Pracownik jest juniorem bez doświadczenia</div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 8/10 - Macierz decyzyjna</div>
+                    <div class="test-question-text">Senior + błąd prosty → który model?</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q8', false)">a) AID (szybka korekta)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q8', true)">b) FISH (analiza - szanuje jego doświadczenie)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q8', false)">c) FUKO (wyrażenie emocji)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q8', false)">d) Żaden - senior sam powinien wiedzieć</div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 9/10 - Zasada 80/20</div>
+                    <div class="test-question-text">Dla Mid-level (6-24 m-ce) rekomendowana dystrybucja modeli to:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q9', false)">a) 70% AID, 20% FUKO, 10% FISH</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q9', true)">b) 40% AID, 30% FISH, 30% FUKO</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q9', false)">c) 60% FISH, 30% FUKO, 10% AID</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q9', false)">d) 100% FISH</div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 10/10 - Case study</div>
+                    <div class="test-question-text">Junior (2 m-ce) po raz 3. nie przygotował się do sesji OJT. Jaki model?</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q10', false)">a) AID - szybka korekta błędu</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q10', false)">b) FISH - analiza przyczyn</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q10', true)">c) FUKO - naruszenie ustaleń + wyrażenie emocji</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q10', false)">d) Żaden - po prostu przerwij sesję</div>
+                </div>
+            </div>
+
+            <button class="test-submit-btn" id="submitTestBtn" onclick="submitTest()" disabled>
+                Sprawdź wynik testu
+            </button>
+
+            <div class="test-result" id="testResult">
+                <div style="font-size: 1.3rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 12px;">Twój wynik:</div>
+                <div class="test-score" id="testScore">0%</div>
+                <div class="test-feedback" id="testFeedback"></div>
+                <div style="margin-top: 24px;">
+                    <button class="test-retry-btn" onclick="retryTest()" id="retryBtn">🔄 Spróbuj ponownie</button>
+                    <button class="test-retry-btn" onclick="showAchievement()" id="continueBtn" style="display: none; background: linear-gradient(135deg, #00ff88, #00d4ff); border: none;">✅ Przejdź dalej</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 16: HABIT BUILDER -->
+        <div class="card habit-card" id="habitCard" style="display: none;">
+            <span class="card-badge">Habit Builder</span>
+            
+            <h2 class="habit-title">🎯 Twój Plan: Która sytuacja jutro?</h2>
+
+            <div class="habit-options">
+                <div class="habit-option" onclick="selectHabit(this)">
+                    <div class="habit-option-title">💬 Zastosuj AID z 1 juniorem</div>
+                    <div class="habit-option-desc">Następna sytuacja błędu - użyj AID. Zapisz reakcję pracownika.</div>
+                </div>
+                <div class="habit-option" onclick="selectHabit(this)">
+                    <div class="habit-option-title">🐟 Zastosuj FISH z 1 seniorem</div>
+                    <div class="habit-option-desc">Problem złożony - zadaj 4 pytania FISH. Obserwuj jak sam dochodzi do wniosku.</div>
+                </div>
+                <div class="habit-option" onclick="selectHabit(this)">
+                    <div class="habit-option-title">💬 Zastosuj FUKO gdy ktoś naruszy ustalenia</div>
+                    <div class="habit-option-desc">Spóźnienie/brak przygotowania - wyraź emocje używając FUKO.</div>
+                </div>
+                <div class="habit-option" onclick="selectHabit(this)">
+                    <div class="habit-option-title">📊 Przeanalizuj 3 ostatnie feedback'i</div>
+                    <div class="habit-option-desc">Które modele stosowałeś? Czy były dopasowane do sytuacji?</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 17: ACHIEVEMENT -->
+        <div class="card achievement-card" id="achievementCard" style="display: none;">
+            <div class="achievement-icon">🏆</div>
+            <h1 class="achievement-title">Feedback Master!</h1>
+            <p class="achievement-subtitle">Opanowałeś 3 modele feedbacku i umiesz je stosować sytuacyjnie</p>
+
+            <div class="achievement-checklist">
+                <div class="achievement-item">
+                    <span style="font-size: 1.5rem; color: #00ff88;">✅</span>
+                    <span>Model AID - szybka korekta dla juniorów</span>
+                </div>
+                <div class="achievement-item">
+                    <span style="font-size: 1.5rem; color: #00ff88;">✅</span>
+                    <span>Model FISH - analiza problemów z seniorami</span>
+                </div>
+                <div class="achievement-item">
+                    <span style="font-size: 1.5rem; color: #00ff88;">✅</span>
+                    <span>Model FUKO - wyrażenie emocji i oczekiwań</span>
+                </div>
+                <div class="achievement-item">
+                    <span style="font-size: 1.5rem; color: #00ff88;">✅</span>
+                    <span>Macierz decyzyjna - dobór modelu do sytuacji</span>
+                </div>
+                <div class="achievement-item">
+                    <span style="font-size: 1.5rem; color: #00ff88;">✅</span>
+                    <span>Praktyczne scenariusze i case studies</span>
+                </div>
+            </div>
+
+            <div class="rewards-box">
+                <div class="rewards-title">Zdobyłeś:</div>
+                <div class="reward-item">🌟 <strong>250 XP</strong></div>
+                <div class="reward-item">🏅 Odznakę <strong>"Feedback Master"</strong></div>
+                <div class="reward-item">📦 Dostęp do <strong>Pakietu Narzędzi OJT</strong> (5 szablonów)</div>
+                <div class="reward-item">🎓 Certyfikat <strong>"OJT Complete"</strong> (ukończono wszystkie 4 lekcje)</div>
+            </div>
+
+            <div style="background: rgba(0, 212, 255, 0.1); padding: 24px; border-radius: 16px; margin-top: 32px; border-left: 4px solid #00d4ff;">
+                <div style="font-size: 1.1rem; line-height: 1.7; font-style: italic;">
+                    "Feedback nie jest o byciu miłym.<br/>
+                    Feedback jest o pomaganiu ludziom rosnąć."
+                </div>
+                <div style="font-size: 0.95rem; color: rgba(255, 255, 255, 0.5); text-align: right; margin-top: 12px;">
+                    — Kim Scott, Radical Candor
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 32px;">
+                <button onclick="finishLesson()" style="padding: 18px 40px; background: linear-gradient(135deg, #ff4500, #ff8c00); border: none; border-radius: 12px; color: #ffffff; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: all 0.3s;">
+                    🎉 Ukończ Kurs OJT Training
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let testAnswers = {};
+        let answeredQuestions = 0;
+
+        function selectOption(element, isCorrect) {
+            const siblings = element.parentElement.querySelectorAll('.quiz-option');
+            siblings.forEach(opt => opt.style.pointerEvents = 'none');
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                siblings.forEach(opt => {
+                    if (opt.textContent.includes('✅')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function selectScenario(element, scenarioId, isCorrect) {
+            const siblings = element.parentElement.querySelectorAll('.scenario-option');
+            siblings.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.style.pointerEvents = 'none';
+            });
+            
+            element.classList.add('selected');
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                siblings.forEach(opt => {
+                    const optText = opt.textContent.toLowerCase();
+                    if ((scenarioId === 'scenario1' && optText.includes('aid')) ||
+                        (scenarioId === 'scenario2' && optText.includes('fuko')) ||
+                        (scenarioId === 'scenario3' && optText.includes('fish'))) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            setTimeout(() => {
+                document.getElementById(scenarioId + 'Answer').classList.add('visible');
+                document.getElementById(scenarioId + 'Answer').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 500);
+        }
+
+        function showPracticeExample(exampleId) {
+            document.getElementById(exampleId).classList.add('visible');
+            document.getElementById(exampleId).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function selectTestOption(element, questionId, isCorrect) {
+            const siblings = element.parentElement.querySelectorAll('.test-option');
+            siblings.forEach(opt => opt.classList.remove('selected'));
+            
+            element.classList.add('selected');
+            
+            if (!testAnswers[questionId]) {
+                answeredQuestions++;
+            }
+            testAnswers[questionId] = isCorrect;
+            
+            document.getElementById('currentQuestion').textContent = answeredQuestions;
+            
+            if (answeredQuestions === 10) {
+                document.getElementById('submitTestBtn').disabled = false;
+            }
+        }
+
+        function submitTest() {
+            let correctAnswers = 0;
+            for (let key in testAnswers) {
+                if (testAnswers[key]) correctAnswers++;
+            }
+            
+            const score = (correctAnswers / 10) * 100;
+            const passed = score >= 70;
+            
+            const allOptions = document.querySelectorAll('.test-option');
+            allOptions.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.getAttribute('onclick').includes('true')) {
+                    opt.classList.add('correct-answer');
+                }
+                if (opt.classList.contains('selected')) {
+                    const correctOption = Array.from(opt.parentElement.querySelectorAll('.test-option')).find(o => {
+                        return o.getAttribute('onclick').includes('true');
+                    });
+                    if (opt !== correctOption) {
+                        opt.classList.add('wrong-answer');
+                    }
+                }
+            });
+            
+            const resultDiv = document.getElementById('testResult');
+            const scoreDiv = document.getElementById('testScore');
+            const feedbackDiv = document.getElementById('testFeedback');
+            const retryBtn = document.getElementById('retryBtn');
+            const continueBtn = document.getElementById('continueBtn');
+            const submitBtn = document.getElementById('submitTestBtn');
+            
+            scoreDiv.textContent = score + '%';
+            scoreDiv.className = 'test-score ' + (passed ? 'pass' : 'fail');
+            
+            if (passed) {
+                feedbackDiv.innerHTML = `
+                    <div style="font-size: 2rem; margin-bottom: 16px;">🎉 Gratulacje!</div>
+                    <div>Zaliczyłeś test z wynikiem <strong>${correctAnswers}/10</strong>.<br/>
+                    Jesteś Feedback Master - umiesz dopasować model do sytuacji!</div>
+                `;
+                retryBtn.style.display = 'none';
+                continueBtn.style.display = 'inline-block';
+            } else {
+                feedbackDiv.innerHTML = `
+                    <div style="font-size: 2rem; margin-bottom: 16px;">📚 Jeszcze trochę nauki</div>
+                    <div>Wynik: <strong>${correctAnswers}/10</strong> (potrzebne: 7/10).<br/>
+                    Przejrzyj modele AID, FISH, FUKO i spróbuj ponownie.</div>
+                `;
+                retryBtn.style.display = 'inline-block';
+                continueBtn.style.display = 'none';
+            }
+            
+            resultDiv.classList.add('visible');
+            submitBtn.style.display = 'none';
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function retryTest() {
+            testAnswers = {};
+            answeredQuestions = 0;
+            
+            document.getElementById('currentQuestion').textContent = '0';
+            document.getElementById('submitTestBtn').disabled = true;
+            document.getElementById('submitTestBtn').style.display = 'block';
+            document.getElementById('testResult').classList.remove('visible');
+            
+            const allOptions = document.querySelectorAll('.test-option');
+            allOptions.forEach(opt => {
+                opt.classList.remove('selected', 'correct-answer', 'wrong-answer');
+                opt.style.pointerEvents = 'auto';
+            });
+            
+            document.getElementById('testCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showAchievement() {
+            document.getElementById('testCard').style.display = 'none';
+            document.getElementById('habitCard').style.display = 'block';
+            document.getElementById('achievementCard').style.display = 'block';
+            document.getElementById('habitCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectHabit(element) {
+            const siblings = element.parentElement.querySelectorAll('.habit-option');
+            siblings.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function finishLesson() {
+            alert('🎉 GRATULACJE!\n\nUkończyłeś kompletny kurs On-the-Job Training!\n\n✅ Lekcja 1: Wprowadzenie do OJT (+200 XP)\n✅ Lekcja 2: Model 5 Kroków (+300 XP)\n✅ Lekcja 3: 4 Narzędzia Trenera (+200 XP)\n✅ Lekcja 4: Modele Feedbacku (+250 XP)\n\n🏆 ŁĄCZNIE: 950 XP\n🎓 Certyfikat: OJT Complete\n📦 Odblokowano: Pakiet Narzędzi OJT (14 szablonów)\n\nJesteś gotowy do prowadzenia profesjonalnych sesji OJT!\n\nPowodzenia w budowaniu kultury rozwoju! 💪');
+        }
+    </script>
+</body>
+</html>

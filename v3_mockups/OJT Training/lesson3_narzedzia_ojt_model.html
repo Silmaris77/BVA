@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekcja 3: Narzędzia Trenera OJT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lesson-container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            min-height: 500px;
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .card-subtitle {
+            font-size: 18px;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            color: #a0aec0;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .tool-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+        }
+
+        .tool-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .tool-name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .data-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .data-stat {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .data-label {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .data-source {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .content-section {
+            margin: 25px 0;
+        }
+
+        .content-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .content-text {
+            font-size: 16px;
+            color: #4a5568;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .list-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .list-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .list-description {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .flashcard {
+            perspective: 1000px;
+            height: 300px;
+            margin: 30px 0;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-hint {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+
+        .story-box {
+            background: #fef5e7;
+            border-left: 5px solid #f39c12;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .story-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #d68910;
+            margin-bottom: 15px;
+        }
+
+        .story-text {
+            color: #5d4037;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .story-highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        .practice-box {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .practice-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+
+        .practice-scenario {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .practice-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
+            resize: vertical;
+        }
+
+        .practice-answer {
+            background: #c8e6c9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .practice-answer.visible {
+            display: block;
+        }
+
+        .lightbulb-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .lightbulb-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .lightbulb-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-box {
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .comparison-bad {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+
+        .comparison-good {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .quiz-box {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .quiz-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1565c0;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .quiz-question-text {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .quiz-option {
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: #e2e8f0;
+        }
+
+        .quiz-option.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .quiz-option.correct {
+            background: #48bb78;
+            color: white;
+        }
+
+        .quiz-option.incorrect {
+            background: #f56565;
+            color: white;
+        }
+
+        .test-box {
+            background: #f3e5f5;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .test-scenario {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .test-scenario-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .test-scenario-text {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .test-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .test-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .habit-builder {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .habit-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .habit-options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .habit-option {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .habit-option:hover {
+            border-color: #667eea;
+        }
+
+        .habit-option.selected {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .habit-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .achievement-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .achievement-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .achievement-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .achievement-rewards {
+            background: rgba(255,255,255,0.5);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .reward-item {
+            font-size: 16px;
+            color: #2d3748;
+            margin: 10px 0;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: white;
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .card-counter {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        .badge-purple { background: #e9d5ff; color: #6b21a8; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-green { background: #d1fae5; color: #065f46; }
+        .badge-orange { background: #fed7aa; color: #92400e; }
+        .badge-red { background: #fecaca; color: #991b1b; }
+
+        .reveal-section {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .reveal-section.visible {
+            display: block;
+        }
+
+        .model-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .model-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .model-when {
+            background: #fef5e7;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #d68910;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .model-steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .model-step {
+            padding: 10px 0;
+            border-bottom: 1px solid #f7fafc;
+        }
+
+        .model-step:last-child {
+            border-bottom: none;
+        }
+
+        .step-label {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .step-example {
+            color: #718096;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .icon-item {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .icon-emoji {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .icon-label {
+            font-size: 13px;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .tools-grid, .comparison-grid, .icon-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <!-- Card 1: HERO -->
+        <div class="card active" data-card="1">
+            <div class="card-header">
+                <div class="card-badge">LEKCJA 3</div>
+                <h1 class="card-title">4 Narzędzia<br/>Mistrza Rozwoju</h1>
+                <p class="card-subtitle">Opanuj kluczowe techniki komunikacji w procesie OJT</p>
+                <div class="card-meta">
+                    <span>⏱️ 22 minuty</span>
+                    <span>📝 27 kart</span>
+                    <span>🎯 4 narzędzia</span>
+                </div>
+            </div>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">📋</div>
+                    <div class="tool-name">Kontraktowanie</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">👂</div>
+                    <div class="tool-name">Aktywne Słuchanie</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">❓</div>
+                    <div class="tool-name">Pytania Coachingowe</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">💬</div>
+                    <div class="tool-name">Informacja Zwrotna</div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" disabled>← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 2: DATA -->
+        <div class="card" data-card="2">
+            <div class="card-counter">Karta 2 z 27</div>
+            
+            <div class="data-box">
+                <div class="data-stat">87%</div>
+                <div class="data-label">menedżerów uważa, że umiejętność<br/>feedbacku to ich <strong>biggest gap</strong></div>
+                <div class="data-source">Źródło: Badanie Gallup 2024</div>
+            </div>
+
+            <div class="content-text" style="text-align: center;">
+                3 z 4 pracowników nie otrzymuje wystarczająco konkretnego feedbacku.<br/>
+                Większość menedżerów wie CO powiedzieć, ale nie wie JAK to powiedzieć.
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 3: CONTENT - Mapa lekcji -->
+        <div class="card" data-card="3">
+            <div class="card-counter">Karta 3 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">Mapa Lekcji</h2>
+                <p class="card-subtitle">4 narzędzia w procesie OJT</p>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">1️⃣ Kontraktowanie - Ustal zasady gry</div>
+                <div class="list-description">Umowa przed rozpoczęciem pracy: oczekiwania, sposób pracy, relacje, cele</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">2️⃣ Aktywne Słuchanie - Zrozum drugą stronę</div>
+                <div class="list-description">7 cech dobrego słuchacza + 5 technik w praktyce</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">3️⃣ Pytania Coachingowe - Odkryj rozwiązania</div>
+                <div class="list-description">Dlaczego pytania > instrukcje + 4 kategorie pytań funkcyjnych</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">4️⃣ Informacja Zwrotna - Przekaż ocenę</div>
+                <div class="list-description">7 zasad konstruktywnego feedbacku + 3 modele (AID, FISH, FUKO)</div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 4: CONTENT - Czym jest kontraktowanie -->
+        <div class="card" data-card="4">
+            <div class="card-counter">Karta 4 z 27</div>
+            
+            <div class="card-header">
+                <div class="card-badge">NARZĘDZIE 1</div>
+                <h2 class="card-title">Kontraktowanie</h2>
+                <p class="card-subtitle">Fundament każdej sesji OJT</p>
+            </div>
+
+            <div class="content-section">
+                <p class="content-text"><strong>Definicja:</strong> Umowa między trenerem a pracownikiem <strong>PRZED</strong> rozpoczęciem pracy.</p>
+                
+                <div class="icon-grid">
+                    <div class="icon-item">
+                        <div class="icon-emoji">🎯</div>
+                        <div class="icon-label">Oczekiwania</div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-emoji">🛠️</div>
+                        <div class="icon-label">Sposób pracy</div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-emoji">🤝</div>
+                        <div class="icon-label">Relacje</div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-emoji">📊</div>
+                        <div class="icon-label">Metody</div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-emoji">✅</div>
+                        <div class="icon-label">Standardy</div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-emoji">🚀</div>
+                        <div class="icon-label">Cele</div>
+                    </div>
+                </div>
+
+                <p class="content-text">Kontrakt buduje <strong>porozumienie</strong>, daje <strong>wytyczne</strong> i <strong>krystalizuje oczekiwania</strong>.</p>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 5: CONTENT - 2 rodzaje kontraktowania -->
+        <div class="card" data-card="5">
+            <div class="card-counter">Karta 5 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">2 Rodzaje Kontraktowania</h2>
+            </div>
+
+            <div class="model-card">
+                <div class="model-title">📋 Regulujące</div>
+                <div class="model-when">PRZED podjęciem działań (etap planowania)</div>
+                <p class="content-text">Ustalasz plan, oczekiwania i zasady współpracy PRZED rozpoczęciem sesji.</p>
+                <div class="story-highlight">
+                    <strong>Przykład:</strong> "Dzisiaj skupimy się na Twoich pytaniach otwierających. Obserwuję 3 rozmowy, notując fakty. Potem przeanalizujemy co zadziałało."
+                </div>
+            </div>
+
+            <div class="model-card">
+                <div class="model-title">🔧 Korygujące</div>
+                <div class="model-when">W TRAKCIE realizacji (środek naprawczy)</div>
+                <p class="content-text">Zmieniasz plan lub zasady gdy widzisz, że obecny sposób nie działa.</p>
+                <div class="story-highlight">
+                    <strong>Przykład:</strong> "Widzę, że masz problem z zamykaniem. Zmieńmy plan - następną rozmowę przeprowadzę ja jako demo, a Ty obserwujesz."
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 6: FLASHCARD - 3 warunki skutecznego kontraktu -->
+        <div class="card" data-card="6">
+            <div class="card-counter">Karta 6 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">3 Warunki Skutecznego Kontraktu</h2>
+                <p class="card-subtitle">Kliknij kartę aby odkryć</p>
+            </div>
+
+            <div class="flashcard" onclick="flipCard(this)">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3 style="font-size: 28px; margin-bottom: 20px;">🎴</h3>
+                        <h3 style="font-size: 22px;">Jakie 3 warunki musi spełniać<br/>skuteczny kontrakt?</h3>
+                        <p class="flashcard-hint">Kliknij aby odkryć →</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <h3 style="font-size: 18px; margin-bottom: 20px;">3 Warunki:</h3>
+                        <div style="text-align: left; font-size: 15px; line-height: 2;">
+                            <div>✅ <strong>Przejrzystość</strong> - Zrozumiały dla obu stron</div>
+                            <div>✅ <strong>Dobrowolność</strong> - Możliwość akceptacji lub odrzucenia</div>
+                            <div>✅ <strong>Otwartość</strong> - Możliwość renegocjacji każdego punktu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 7: STORY - Kontrakt który uratował sesję -->
+        <div class="card" data-card="7">
+            <div class="card-counter">Karta 7 z 27</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 Historia: Kontrakt który uratował sesję</div>
+                
+                <p class="story-text">
+                    <strong>Karolina</strong>, menedżer zespołu sprzedaży, zaczęła sesję OJT bez kontraktu. Po 10 minutach pracownik Marcin stwierdził:
+                </p>
+                
+                <div class="story-highlight">
+                    "Myślałem, że tylko obserwujesz, a Ty wskakujesz do rozmów z klientem. Czuję się skonfundowany."
+                </div>
+
+                <p class="story-text">
+                    Karolina przerwała, przeprosiła i zaproponowała:
+                </p>
+
+                <div class="story-highlight">
+                    "Masz rację. Ustalmy zasady. Chcę, żebyś prowadził rozmowy sam, a ja tylko notuję. Przerywam tylko gdy widzę zagrożenie (np. obietnica niemożliwa do dotrzymania). Po każdej rozmowie 5 min debriefing. Brzmi OK?"
+                </div>
+
+                <p class="story-text">
+                    Marcin zgodził się. Reszta sesji przebiegła sprawnie, a Marcin powiedział:
+                </p>
+
+                <div class="story-highlight" style="background: #c8e6c9;">
+                    ✅ "Wreszcie wiedziałem czego oczekujesz."
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 8: PRACTICE - Napisz kontrakt -->
+        <div class="card" data-card="8">
+            <div class="card-counter">Karta 8 z 27</div>
+            
+            <div class="practice-box">
+                <div class="practice-title">✍️ Ćwiczenie: Napisz kontrakt na sesję OJT</div>
+                
+                <div class="practice-scenario">
+                    <p><strong>Sytuacja:</strong> Jutro masz sesję OJT z Anią (2 lata doświadczenia, problem z radzeniem sobie z obiekcjami). Plan: obserwacja 3 rozmów + analiza.</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Napisz kontrakt (4 elementy):</strong></p>
+                    
+                    <p style="margin-top: 10px;"><strong>1. Cel sesji:</strong></p>
+                    <textarea class="practice-input" placeholder="Np. 'Dzisiaj pracujemy nad...'"></textarea>
+                    
+                    <p style="margin-top: 10px;"><strong>2. Plan dnia (harmonogram):</strong></p>
+                    <textarea class="practice-input" placeholder="Np. 'Zrobimy to tak: ...'"></textarea>
+                    
+                    <p style="margin-top: 10px;"><strong>3. Twoja rola vs rola Ani:</strong></p>
+                    <textarea class="practice-input" placeholder="Np. 'Będę notować..., a Ty...'"></textarea>
+                    
+                    <p style="margin-top: 10px;"><strong>4. Jak będziecie komunikować się w trakcie:</strong></p>
+                    <textarea class="practice-input" placeholder="Np. 'Przerywam tylko gdy...'"></textarea>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="showAnswer('answer1')">Pokaż przykładową odpowiedź</button>
+                
+                <div class="practice-answer" id="answer1">
+                    <p><strong>Przykładowy kontrakt:</strong></p>
+                    <p><strong>1. Cel:</strong> "Dzisiaj pracujemy nad radzeniem sobie z obiekcjami. Obserwuję Cię w 3 rozmowach i pomogę Ci znaleźć techniki, które działają."</p>
+                    <p><strong>2. Plan:</strong> "Odprawa 5 min → Obserwacja 3 rozmów (~30 min) → Analiza po każdej rozmowie (5 min) → Podsumowanie (10 min). Łącznie ~60 min."</p>
+                    <p><strong>3. Role:</strong> "Prowadzisz rozmowy sama, ja siedzę obok i notuję fakty. Nie wtrącam się, nie oceniam w trakcie. Po rozmowie pytam o Twoje spostrzeżenia."</p>
+                    <p><strong>4. Komunikacja:</strong> "Przerywam tylko gdy widzę zagrożenie (np. obietnica niemożliwa). Możesz przerwać rozmowę jeśli czujesz się niepewnie. OK?"</p>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 9: CONTENT - Dlaczego słuchanie jest kluczowe -->
+        <div class="card" data-card="9">
+            <div class="card-counter">Karta 9 z 27</div>
+            
+            <div class="card-header">
+                <div class="card-badge">NARZĘDZIE 2</div>
+                <h2 class="card-title">Aktywne Słuchanie</h2>
+                <p class="card-subtitle">Fundament więzi i otwartego środowiska rozwoju</p>
+            </div>
+
+            <div class="content-section">
+                <p class="content-text">
+                    Słuchanie = fundament więzi i otwartego środowiska rozwoju.
+                </p>
+
+                <div class="comparison-grid">
+                    <div class="comparison-box comparison-bad">
+                        <h4>❌ Nie słuchając:</h4>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>Tracisz intencje rozmówcy</li>
+                            <li>Selekcjonujesz info (tylko dla CIEBIE)</li>
+                            <li>Interpretujesz wg własnych poglądów</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-box comparison-good">
+                        <h4>✅ Słuchając aktywnie:</h4>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>Rozumiesz pełną perspektywę</li>
+                            <li>Budujesz zaufanie</li>
+                            <li>Odkrywasz prawdziwe przyczyny</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lightbulb-box" style="margin-top: 20px;">
+                    <div class="lightbulb-icon">⚠️</div>
+                    <p style="font-size: 16px; color: #2d3748;">
+                        Jeśli rozmówca czuje się <strong>niezrozumiany</strong> → zamyka się → <strong>brak postępu</strong>
+                    </p>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 10: FLASHCARD - 7 cech dobrego słuchacza -->
+        <div class="card" data-card="10">
+            <div class="card-counter">Karta 10 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">7 Cech Dobrego Słuchacza</h2>
+                <p class="card-subtitle">Kliknij kartę aby odkryć</p>
+            </div>
+
+            <div class="flashcard" onclick="flipCard(this)">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3 style="font-size: 28px; margin-bottom: 20px;">👂</h3>
+                        <h3 style="font-size: 22px;">Jakie 7 cech charakteryzuje<br/>dobrego słuchacza?</h3>
+                        <p class="flashcard-hint">Kliknij aby odkryć →</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <div style="text-align: left; font-size: 14px; line-height: 1.8;">
+                            <div>🎯 <strong>Motywacja</strong> - Pozytywne nastawienie i ciekawość</div>
+                            <div>🧘 <strong>Obiektywizm</strong> - Szacunek dla sposobu myślenia, nawet jeśli obcy</div>
+                            <div>⏸️ <strong>Cierpliwość</strong> - Słuchanie bez przerywania, dokańczania zdań</div>
+                            <div>🔍 <strong>Wnikliwość</strong> - Chęć odczytania sensu całej wypowiedzi</div>
+                            <div>✂️ <strong>Dokładność</strong> - Oddzielanie własnych interpretacji od intencji</div>
+                            <div>🚪 <strong>Otwartość</strong> - Pełne przedstawienie bez napastliwości</div>
+                            <div>🤝 <strong>Wsparcie</strong> - Okazywanie aprobaty i zainteresowania</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 11: CONTENT - 5 technik aktywnego słuchania -->
+        <div class="card" data-card="11">
+            <div class="card-counter">Karta 11 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">5 Technik Aktywnego Słuchania</h2>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">1️⃣ Niewerbalne sygnały akceptacji</div>
+                <div class="list-description">Zwrócony w kierunku mówiącego, brak barier (laptop, papiery), potakiwanie głową, kontakt wzrokowy, ~1 metr dystansu</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">2️⃣ Zachęty</div>
+                <div class="list-description">Mikrowypowiedzi: "uhmm", "aha", "yhm" | Zwroty: "Tak rozumiem", "To interesujące", "Opowiedz więcej"</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">3️⃣ Pytania doprecyzowujące + Parafraza</div>
+                <div class="list-description">Doprecyzowanie: "Kiedy dokładnie?", "Jak zareagowałeś?" | Parafraza: "Z tego co mówisz, rozumiem że...", "Zatem chciałbyś..."</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">4️⃣ Odzwierciedlanie emocji</div>
+                <div class="list-description">Nazwij emocje: "Mam wrażenie, że to dla ciebie ważne" | Empatia: "Widzę, że cię to niepokoi"</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">5️⃣ Podsumowania</div>
+                <div class="list-description">Podsumuj kluczowe info i ustalenia. Podkreśl osiągnięte porozumienie.</div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 12: LIGHTBULB - Parafraza vs Interpretacja -->
+        <div class="card" data-card="12">
+            <div class="card-counter">Karta 12 z 27</div>
+            
+            <div class="lightbulb-box">
+                <div class="lightbulb-icon">💡</div>
+                <div class="lightbulb-title">Parafraza vs Interpretacja</div>
+                
+                <div class="comparison-grid" style="margin-top: 20px;">
+                    <div class="comparison-box comparison-bad">
+                        <h4>❌ Interpretacja (ŹLE)</h4>
+                        <p style="margin-top: 10px; font-style: italic;">
+                            "Rozumiem, że jesteś sfrustrowany i nie chce ci się starać."
+                        </p>
+                        <p style="margin-top: 10px; font-size: 13px;">
+                            = Twoja ocena + założenia
+                        </p>
+                    </div>
+                    <div class="comparison-box comparison-good">
+                        <h4>✅ Parafraza (DOBRZE)</h4>
+                        <p style="margin-top: 10px; font-style: italic;">
+                            "Z tego co mówisz rozumiem, że ostatnie 3 rozmowy nie poszły zgodnie z planem i czujesz się zniechęcony. Dobrze to zrozumiałem?"
+                        </p>
+                        <p style="margin-top: 10px; font-size: 13px;">
+                            = Powtórzenie słów pracownika + pytanie o potwierdzenie
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 13: STORY - Słuchanie które odmieniło feedback -->
+        <div class="card" data-card="13">
+            <div class="card-counter">Karta 13 z 27</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 Historia: Słuchanie które odmieniło feedback</div>
+                
+                <p class="story-text">
+                    <strong>Tomasz</strong>, trener OJT, miał problem z Martą - doświadczoną handlowczynią, która nie przyjmowała feedbacku.
+                </p>
+                
+                <h4 style="color: #d68910; margin: 20px 0 10px;">❌ Podejście 1 (niepowodzenie):</h4>
+                <div class="story-highlight">
+                    <strong>Tomasz:</strong> "Widziałem Twoją rozmowę. Byłaś zbyt agresywna w zamykaniu. Klient się wycofał."<br/>
+                    <strong>Marta:</strong> "Nie byłam agresywna! Po prostu jestem asertywna. Rozumiesz różnicę?"<br/>
+                    <span style="color: #c0392b;">[Konflikt]</span>
+                </div>
+
+                <h4 style="color: #27ae60; margin: 20px 0 10px;">✅ Podejście 2 (sukces):</h4>
+                <div class="story-highlight" style="background: #c8e6c9;">
+                    <strong>Tomasz:</strong> "Jak oceniasz tę rozmowę?"<br/>
+                    <strong>Marta:</strong> "Nie poszło idealnie. Czuję, że klient się wycofał gdy zaproponowałam zamknięcie."<br/>
+                    <strong>Tomasz:</strong> "Co dokładnie powiedziałaś?"<br/>
+                    <strong>Marta:</strong> "«Podpisujemy?» - może to zabrzmiało za ostro..."<br/>
+                    <strong>Tomasz:</strong> "Jak mógłbyś to przeformułować następnym razem?"<br/>
+                    <strong>Marta:</strong> "Może: «Widzę, że temat Pana zainteresował. Co Pan sądzi o próbie przez miesiąc?»"
+                </div>
+
+                <p class="story-text" style="font-weight: 600; text-align: center; margin-top: 20px; color: #27ae60;">
+                    Różnica: Pytania + słuchanie > Mówienie + ocenianie
+                </p>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 14: QUIZ - Checkpoint -->
+        <div class="card" data-card="14">
+            <div class="card-counter">Karta 14 z 27</div>
+            
+            <div class="quiz-box">
+                <div class="quiz-title">✅ Checkpoint: Kontraktowanie + Słuchanie</div>
+                
+                <div class="quiz-question">
+                    <p class="quiz-question-text">1. Który rodzaj kontraktowania stosujesz PRZED rozpoczęciem sesji OJT?</p>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true)">a) Regulujący ✅</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">b) Korygujący</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">c) Otwierający</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">d) Zamykający</div>
+                </div>
+
+                <div class="quiz-question">
+                    <p class="quiz-question-text">2. Co to jest parafraza?</p>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">a) Powtórzenie dosłownych słów pracownika</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true)">b) Powiedzenie własnymi słowami tego co najistotniejsze w wypowiedzi ✅</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">c) Ocena wypowiedzi pracownika</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">d) Zadanie pytania doprecyzowującego</div>
+                </div>
+
+                <div class="quiz-question">
+                    <p class="quiz-question-text">3. Która technika aktywnego słuchania: "Mam wrażenie, że to dla ciebie ważne"?</p>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">a) Parafraza</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">b) Zachęta</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true)">c) Odzwierciedlanie emocji ✅</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">d) Podsumowanie</div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 15: CONTENT - Dlaczego pytania > Tłumaczenia -->
+        <div class="card" data-card="15">
+            <div class="card-counter">Karta 15 z 27</div>
+            
+            <div class="card-header">
+                <div class="card-badge">NARZĘDZIE 3</div>
+                <h2 class="card-title">Pytania w Procesie Rozwoju</h2>
+                <p class="card-subtitle">Dlaczego pytania > Tłumaczenia</p>
+            </div>
+
+            <div class="content-section">
+                <div class="lightbulb-box" style="background: #ffebee;">
+                    <div class="lightbulb-icon">⚠️</div>
+                    <div class="lightbulb-title">Pułapka Gadulstwa</div>
+                    <p class="content-text">Trenerzy często popadają w pułapkę: chcą za wszelką cenę przekazać wiedzę → koncentrują się na tłumaczeniu i podawaniu rozwiązań.</p>
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="comparison-box comparison-good">
+                        <h4>✅ Co działa:</h4>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>Pod wrażeniem wiedzy trenera</li>
+                            <li>Chętnie słuchają wskazówek</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-box comparison-bad">
+                        <h4>❌ Problem:</h4>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>Niewiele pamiętają po powrocie</li>
+                            <li>Jeszcze mniej umieją samodzielnie wykonać</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lightbulb-box" style="margin-top: 20px;">
+                    <div class="lightbulb-icon">💡</div>
+                    <p style="font-size: 20px; font-weight: 600; color: #2d3748;">
+                        Rozwiązanie = PYTANIA
+                    </p>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 16: CONTENT - 6 ról pytań -->
+        <div class="card" data-card="16">
+            <div class="card-counter">Karta 16 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">6 Ról Pytań w Procesie Rozwoju</h2>
+            </div>
+
+            <div class="icon-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="icon-item">
+                    <div class="icon-emoji">📊</div>
+                    <div class="icon-label">Zebranie informacji</div>
+                    <p style="font-size: 12px; color: #718096; margin-top: 8px;">Wiedza, doświadczenia, opinie</p>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-emoji">🎯</div>
+                    <div class="icon-label">Kierowanie procesem</div>
+                    <p style="font-size: 12px; color: #718096; margin-top: 8px;">Prowadzenie w kierunku celu</p>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-emoji">🔥</div>
+                    <div class="icon-label">Angażowanie</div>
+                    <p style="font-size: 12px; color: #718096; margin-top: 8px;">Koncentracja na problemie</p>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-emoji">💡</div>
+                    <div class="icon-label">Uświadamianie</div>
+                    <p style="font-size: 12px; color: #718096; margin-top: 8px;">Zrozumienie kluczowych kwestii</p>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-emoji">📏</div>
+                    <div class="icon-label">Ocena zrozumienia</div>
+                    <p style="font-size: 12px; color: #718096; margin-top: 8px;">Sprawdzenie uwagi i poziomu</p>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-emoji">✅</div>
+                    <div class="icon-label">Ewaluacja efektów</div>
+                    <p style="font-size: 12px; color: #718096; margin-top: 8px;">Ocena rezultatów treningu</p>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 17: FLASHCARD - Pytania otwarte vs zamknięte -->
+        <div class="card" data-card="17">
+            <div class="card-counter">Karta 17 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">Pytania Otwarte vs Zamknięte</h2>
+                <p class="card-subtitle">Kliknij kartę aby odkryć</p>
+            </div>
+
+            <div class="flashcard" onclick="flipCard(this)">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3 style="font-size: 28px; margin-bottom: 20px;">❓</h3>
+                        <h3 style="font-size: 22px;">Jaka jest różnica między<br/>pytaniami otwartymi a zamkniętymi?</h3>
+                        <p class="flashcard-hint">Kliknij aby odkryć →</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <div style="text-align: left; font-size: 13px; line-height: 1.6;">
+                            <h4 style="color: white; margin-bottom: 10px;">✅ PYTANIA OTWARTE (Używaj częściej!)</h4>
+                            <div>• Stymulują do szerszej wypowiedzi</div>
+                            <div>• Angażują w rozmowę, budują dialog</div>
+                            <div>• "Co sądzisz na temat...?"</div>
+                            <div>• "Jak doszło do tej sytuacji?"</div>
+                            <hr style="margin: 15px 0; opacity: 0.3;">
+                            <h4 style="color: white; margin-bottom: 10px;">⚠️ PYTANIA ZAMKNIĘTE (Użyj oszczędnie!)</h4>
+                            <div>• Odpowiedź: TAK/NIE (jedno słowo)</div>
+                            <div>• Zbyt dużo = przesłuchanie, nie dialog!</div>
+                            <div>• "Czy podoba Ci się to rozwiązanie?"</div>
+                            <div>• "Czy wszystko jasne?"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 18: CONTENT - 4 kategorie pytań -->
+        <div class="card" data-card="18">
+            <div class="card-counter">Karta 18 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">4 Kategorie Pytań Funkcyjnych</h2>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">1️⃣ Pytania pogłębiające/doprecyzowujące</div>
+                <div class="list-description">Zachęcają do dogłębnego omówienia tematu. Sygnał: jesteś zainteresowany i słuchasz.</div>
+                <div class="story-highlight" style="margin-top: 10px;">
+                    "Czy możesz powiedzieć coś więcej o...?" | "Proszę wyjaśnij mi szerzej jak rozumiesz «digitalizację»?"
+                </div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">2️⃣ Pytania naprowadzające/retoryczne</div>
+                <div class="list-description">Pozwalają dać tylko jedną sensowną odpowiedź (taką na której Ci zależy). ⚠️ Nadmiar irytuje!</div>
+                <div class="story-highlight" style="margin-top: 10px;">
+                    "Czy zawsze długość oczekiwania to najważniejsza obiekcja?" | "Jak się czujesz, gdy inni nie patrzą Ci w oczy?"
+                </div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">3️⃣ Podsumowania</div>
+                <div class="list-description">Wskazanie kluczowych kwestii. Potwierdzenie ustaleń. Kamienie milowe w dyskusji.</div>
+                <div class="story-highlight" style="margin-top: 10px;">
+                    "Popraw mnie jeśli się mylę, ale z tego wynika, że..." | "Podsumowując to co powiedziano..."
+                </div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">4️⃣ Pytania 5 etapów analizy OJT (już znasz!)</div>
+                <div class="list-description">Odczucia → Cele → Przebieg → Alternatywy → Wnioski</div>
+                <div class="story-highlight" style="margin-top: 10px;">
+                    "Jak się czujesz?" | "Co chciałeś osiągnąć?" | "Co mógłbyś zrobić inaczej?"
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 19: LIGHTBULB - Pytaj zamiast mówić -->
+        <div class="card" data-card="19">
+            <div class="card-counter">Karta 19 z 27</div>
+            
+            <div class="lightbulb-box">
+                <div class="lightbulb-icon">💡</div>
+                <div class="lightbulb-title">Pytaj zamiast mówić</div>
+                
+                <div class="comparison-grid" style="margin-top: 20px;">
+                    <div class="comparison-box comparison-bad">
+                        <h4>❌ Trener gadula (niska efektywność)</h4>
+                        <p style="margin-top: 10px; font-style: italic; font-size: 13px;">
+                            "Widziałem, że nie zadałeś pytania o budżet. To krytyczny błąd. Zawsze musisz kwalifikować budżet na początku. Bez tego tracisz czas. Ja zawsze pytam: «Jaki budżet Pan zakładał?» i to działa. Następnym razem zrób tak samo."
+                        </p>
+                    </div>
+                    <div class="comparison-box comparison-good">
+                        <h4>✅ Trener coach (wysoka efektywność)</h4>
+                        <div style="margin-top: 10px; font-size: 13px;">
+                            <p><strong>T:</strong> "Jak oceniasz tę rozmowę?"</p>
+                            <p><strong>P:</strong> "Dobrze, ale «przedyskutuje z zarządem»"</p>
+                            <p><strong>T:</strong> "Czego dowiedziałeś się o budżecie?"</p>
+                            <p><strong>P:</strong> "Hmm... nic. Nie pytałem."</p>
+                            <p><strong>T:</strong> "Co by się zmieniło gdybyś wiedział?"</p>
+                            <p><strong>P:</strong> "Mógłbym dopasować ofertę."</p>
+                            <p><strong>T:</strong> "Co zrobisz następnym razem?"</p>
+                            <p><strong>P:</strong> "Zapytam w pierwszych 5 minutach."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p style="text-align: center; margin-top: 20px; font-weight: 600; color: #2d3748;">
+                    Pracownik SAM dochodzi do wniosku → większa szansa na wdrożenie
+                </p>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 20: PRACTICE - Przekształć instrukcje w pytania -->
+        <div class="card" data-card="20">
+            <div class="card-counter">Karta 20 z 27</div>
+            
+            <div class="practice-box">
+                <div class="practice-title">✍️ Ćwiczenie: Przekształć instrukcje w pytania</div>
+                
+                <div class="practice-scenario">
+                    <p><strong>Sytuacja 1:</strong></p>
+                    <p style="color: #c0392b;">❌ Instrukcja: "Musisz robić lepsze notatki podczas rozmowy. Bez tego nie pamiętasz szczegółów."</p>
+                    <p style="margin-top: 10px;"><strong>✅ Pytanie coachingowe:</strong></p>
+                    <textarea class="practice-input" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+
+                <div class="practice-scenario">
+                    <p><strong>Sytuacja 2:</strong></p>
+                    <p style="color: #c0392b;">❌ Instrukcja: "Twój problem to brak asertywności. Musisz nauczyć się mówić «nie» klientom."</p>
+                    <p style="margin-top: 10px;"><strong>✅ Pytanie coachingowe:</strong></p>
+                    <textarea class="practice-input" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+
+                <div class="practice-scenario">
+                    <p><strong>Sytuacja 3:</strong></p>
+                    <p style="color: #c0392b;">❌ Instrukcja: "Powinieneś więcej praktykować zamykanie oferty. To kluczowa umiejętność."</p>
+                    <p style="margin-top: 10px;"><strong>✅ Pytanie coachingowe:</strong></p>
+                    <textarea class="practice-input" placeholder="Twoja odpowiedź..."></textarea>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="showAnswer('answer2')">Pokaż przykładowe odpowiedzi</button>
+                
+                <div class="practice-answer" id="answer2">
+                    <p><strong>Przykładowe odpowiedzi:</strong></p>
+                    <p><strong>1.</strong> "Co pomogłoby Ci lepiej zapamiętać szczegóły z rozmowy?"</p>
+                    <p><strong>2.</strong> "Jak się czujesz gdy klient prosi o coś niemożliwego do spełnienia?"</p>
+                    <p><strong>3.</strong> "Który element rozmowy jest dla Ciebie najtrudniejszy?"</p>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 21: CONTENT - Dlaczego feedback jest trudny -->
+        <div class="card" data-card="21">
+            <div class="card-counter">Karta 21 z 27</div>
+            
+            <div class="card-header">
+                <div class="card-badge">NARZĘDZIE 4</div>
+                <h2 class="card-title">Informacja Zwrotna</h2>
+                <p class="card-subtitle">Dlaczego feedback jest trudny?</p>
+            </div>
+
+            <div class="content-section">
+                <p class="content-text">
+                    Jedna z <strong>najważniejszych umiejętności</strong> trenera. Ludzie uczą się dzięki feedbackowi: co robią dobrze + co poprawić.
+                </p>
+
+                <div class="lightbulb-box" style="background: #ffebee;">
+                    <div class="lightbulb-icon">⚠️</div>
+                    <div class="lightbulb-title">Problem</div>
+                    <div style="font-size: 16px; color: #2d3748; line-height: 1.8;">
+                        <p>Nigdy nie wiesz jak pracownik przyjmie feedback.</p>
+                        <p>Większość ludzi <strong>źle znosi sytuację oceny</strong>.</p>
+                        <p>Od jakości feedbacku zależy: akceptacja → motywacja → zmiana</p>
+                    </div>
+                </div>
+
+                <div class="data-box" style="margin-top: 25px;">
+                    <p style="font-size: 18px; line-height: 1.8;">
+                        <strong>63%</strong> pracowników uważa feedback od menedżera za <strong>niewystarczająco konkretny</strong><br/>
+                        <span style="font-size: 14px; opacity: 0.8;">(Harvard Business Review, 2024)</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 22: CONTENT - 7 zasad feedbacku -->
+        <div class="card" data-card="22">
+            <div class="card-counter">Karta 22 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">7 Zasad Konstruktywnego Feedbacku</h2>
+            </div>
+
+            <div style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                <div class="list-item">
+                    <div class="list-title">1. Zbuduj atmosferę bezpieczeństwa PRZED feedbackiem</div>
+                    <div class="list-description">Zakontraktuj sposób przekazywania oceny. Omów cel ćwiczeń.</div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-title">2. Opisuj FAKTY, nie interpretacje</div>
+                    <div class="list-description">✅ "Nie patrzyłeś w oczy" | ❌ "Sprawiałeś wrażenie onieśmielonego"</div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-title">3. Opisuj ZACHOWANIA, nie oceniaj osoby</div>
+                    <div class="list-description">✅ "Żadnego klienta nie poprosiłeś o zobowiązanie" | ❌ "Brakuje Ci determinacji"</div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-title">4. Formułuj z pozycji JA</div>
+                    <div class="list-description">✅ "Moim zdaniem..." | ❌ "Źle zadałeś to pytanie"</div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-title">5. Przekazuj tylko to co pracownik może ZMIENIĆ</div>
+                    <div class="list-description">Nie mów o rzeczach poza jego kontrolą</div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-title">6. Wskazujesz błąd → zaproponuj rozwiązanie</div>
+                    <div class="list-description">Lub uzyskaj propozycję od pracownika</div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-title">7. Balansuj opinie</div>
+                    <div class="list-description">Nie tylko błędy → także mocne strony</div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 23: CONTENT - 3 modele feedbacku -->
+        <div class="card" data-card="23">
+            <div class="card-counter">Karta 23 z 27</div>
+            
+            <div class="card-header">
+                <h2 class="card-title">3 Modele Feedbacku</h2>
+            </div>
+
+            <div style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                <div class="model-card">
+                    <div class="model-title">MODEL 1: AID (Action-Impact-Desired)</div>
+                    <div class="model-when">STOSUJ: Początkujący pracownicy, szybka korekta</div>
+                    <ul class="model-steps">
+                        <li class="model-step">
+                            <span class="step-label">A - Action</span> - Opisz podjęte działania
+                            <div class="step-example">"Pamiętasz jak klient zapytał o... Odpowiedziałeś wtedy..."</div>
+                        </li>
+                        <li class="model-step">
+                            <span class="step-label">I - Impact</span> - Opisz konsekwencje
+                            <div class="step-example">"Klient nie uzyskał pełnej informacji i zgłosił zastrzeżenia..."</div>
+                        </li>
+                        <li class="model-step">
+                            <span class="step-label">D - Desired outcome</span> - Określ oczekiwania
+                            <div class="step-example">"Następnym razem powiedz dodatkowo o..."</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="model-card">
+                    <div class="model-title">MODEL 2: FISH (Focus-Identify-Solve-How)</div>
+                    <div class="model-when">STOSUJ: Doświadczeni, analiza problemu, samodzielne rozwiązania</div>
+                    <ul class="model-steps">
+                        <li class="model-step">
+                            <span class="step-label">F - Focus on the area</span> - Skieruj uwagę
+                            <div class="step-example">"Co sądzisz o Twoich wynikach sprzedaży?"</div>
+                        </li>
+                        <li class="model-step">
+                            <span class="step-label">I - Identify the cause</span> - Określ przyczyny
+                            <div class="step-example">"Co jest przyczyną spadku?"</div>
+                        </li>
+                        <li class="model-step">
+                            <span class="step-label">S - Solve the problem</span> - Zaproponuj rozwiązanie
+                            <div class="step-example">"Co mógłbyś zrobić inaczej?"</div>
+                        </li>
+                        <li class="model-step">
+                            <span class="step-label">H - How to do it</span> - Konkretny plan
+                            <div class="step-example">"Jak mogłoby to wyglądać w sytuacji gdy...?"</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="model-card">
+                    <div class="model-title">MODEL 3: FUKO (Fakty-Ustosunkowanie-Konsekwencje-Oczekiwania)</div>
+                    <div class="model-when">STOSUJ: Wyrażenie oczekiwań, korygowanie + wzmacnianie, emocje</div>
+                    <ul class="model-steps">
+                        <li class="model-step">
+                            <span class="step-label">F - Fakty</span> - Opisz sytuację i zachowania
+                            <div class="step-example">"Umówiliśmy się, że przygotujesz... Tymczasem tego nie zrobiłeś."</div>
+                        </li>
+                        <li class="model-step">
+                            <span class="step-label">U - Ustosunkowanie</span> - Wyraź swoją ocenę
+                            <div class="step-example">"Przykro mi, że nie dotrzymujesz ustaleń."</div>
+                        </li>
+                        <li class="model-step">
+                            <span class="step-label">K - Konsekwencje</span> - Opisz konsekwencje
+                            <div class="step-example">"Trudno nam zrobić krok do przodu, tracimy czas."</div>
+                        </li>
+                        <li class="model-step">
+                            <span class="step-label">O - Oczekiwania</span> - Określ pożądane zachowania
+                            <div class="step-example">"Następnym razem poinformuj mnie jeśli będziesz miał trudności..."</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 24: STORY - Zły vs Dobry feedback -->
+        <div class="card" data-card="24">
+            <div class="card-counter">Karta 24 z 27</div>
+            
+            <div class="story-box">
+                <div class="story-title">📖 Historia: Zły feedback vs Dobry feedback</div>
+                
+                <p class="story-text">
+                    <strong>Sytuacja:</strong> Doświadczony handlowiec Paweł (5 lat doświadczenia) źle przeprowadził discovery.
+                </p>
+                
+                <h4 style="color: #d68910; margin: 20px 0 10px;">❌ Feedback 1: AID (ŹLE ZASTOSOWANY)</h4>
+                <div class="story-highlight">
+                    <strong>Trener:</strong> "Widziałem, że nie zadałeś pytań SPIN. Przez to nie odkryłeś prawdziwych potrzeb klienta. Następnym razem zadaj najpierw pytania sytuacyjne, potem problemowe."<br/><br/>
+                    <strong>Paweł:</strong> [milczy, wyraźnie zirytowany]
+                </div>
+                <p style="color: #c0392b; font-weight: 600; margin-top: 10px;">
+                    Dlaczego źle? AID dla doświadczonego = infantylizowanie. Brak zaangażowania. Narzucanie rozwiązania.
+                </p>
+
+                <h4 style="color: #27ae60; margin: 20px 0 10px;">✅ Feedback 2: FISH (DOBRZE ZASTOSOWANY)</h4>
+                <div class="story-highlight" style="background: #c8e6c9;">
+                    <strong>Trener:</strong> "Jak oceniasz tę rozmowę?"<br/>
+                    <strong>Paweł:</strong> "Klient zgodził się na demo, ale czuję że czegoś mi brakuje."<br/>
+                    <strong>Trener:</strong> "Co konkretnie?"<br/>
+                    <strong>Paweł:</strong> "Nie wiem czy demo odpowiada na jego prawdziwe problemy. Za mało pytałem."<br/>
+                    <strong>Trener:</strong> "Jakich pytań Ci brakowało?"<br/>
+                    <strong>Paweł:</strong> "Powinienem zapytać o obecny proces i gdzie widzi wąskie gardła."<br/>
+                    <strong>Trener:</strong> "Co zrobisz przed demo?"<br/>
+                    <strong>Paweł:</strong> "Wyślę mu email z 3 pytaniami, żeby przygotować demo na miarę."
+                </div>
+                <p style="color: #27ae60; font-weight: 600; margin-top: 10px;">
+                    Efekt: Paweł SAM doszedł do wniosku + ma konkretny plan!
+                </p>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 25: PRACTICE - Wybierz model feedbacku -->
+        <div class="card" data-card="25">
+            <div class="card-counter">Karta 25 z 27</div>
+            
+            <div class="practice-box">
+                <div class="practice-title">✍️ Ćwiczenie: Wybierz model feedbacku</div>
+                
+                <div class="practice-scenario">
+                    <p><strong>Scenariusz 1:</strong></p>
+                    <p>Anna (2 miesiące w firmie) nie zastosowała techniki SPIN w rozmowie. Nie wie co zrobiła źle.</p>
+                    <p style="margin-top: 10px;"><strong>Model:</strong> 
+                        <select class="practice-input" style="min-height: auto;">
+                            <option value="">Wybierz...</option>
+                            <option value="AID">AID</option>
+                            <option value="FISH">FISH</option>
+                            <option value="FUKO">FUKO</option>
+                        </select>
+                    </p>
+                </div>
+
+                <div class="practice-scenario">
+                    <p><strong>Scenariusz 2:</strong></p>
+                    <p>Tomasz (4 lata doświadczenia) ma problem z conversion rate. Sam podejrzewa, że to kwestia follow-up.</p>
+                    <p style="margin-top: 10px;"><strong>Model:</strong> 
+                        <select class="practice-input" style="min-height: auto;">
+                            <option value="">Wybierz...</option>
+                            <option value="AID">AID</option>
+                            <option value="FISH">FISH</option>
+                            <option value="FUKO">FUKO</option>
+                        </select>
+                    </p>
+                </div>
+
+                <div class="practice-scenario">
+                    <p><strong>Scenariusz 3:</strong></p>
+                    <p>Kasia po raz 3 z rzędu spóźniła się na sesję OJT. Obiecywała poprawę, ale nic się nie zmienia. Chcesz wyrazić swoje oczekiwania i emocje.</p>
+                    <p style="margin-top: 10px;"><strong>Model:</strong> 
+                        <select class="practice-input" style="min-height: auto;">
+                            <option value="">Wybierz...</option>
+                            <option value="AID">AID</option>
+                            <option value="FISH">FISH</option>
+                            <option value="FUKO">FUKO</option>
+                        </select>
+                    </p>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="showAnswer('answer3')">Pokaż odpowiedzi</button>
+                
+                <div class="practice-answer" id="answer3">
+                    <p><strong>Odpowiedzi:</strong></p>
+                    <p><strong>1. AID</strong> ✅ - Początkująca, potrzebuje konkretnych wskazówek</p>
+                    <p><strong>2. FISH</strong> ✅ - Doświadczony, ma hipotezę, samodzielne rozwiązanie</p>
+                    <p><strong>3. FUKO</strong> ✅ - Wyrażenie oczekiwań + emocji, powtarzający się problem</p>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 26: QUIZ - Checkpoint -->
+        <div class="card" data-card="26">
+            <div class="card-counter">Karta 26 z 27</div>
+            
+            <div class="quiz-box">
+                <div class="quiz-title">✅ Checkpoint: Pytania + Feedback</div>
+                
+                <div class="quiz-question">
+                    <p class="quiz-question-text">1. Dlaczego pytania są lepsze niż instrukcje w procesie rozwoju?</p>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">a) Są szybsze</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true)">b) Pracownik sam dochodzi do wniosku → większe wdrożenie ✅</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">c) Brzmią mniej autorytatywnie</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">d) Są łatwiejsze do zapamiętania</div>
+                </div>
+
+                <div class="quiz-question">
+                    <p class="quiz-question-text">2. Który model feedbacku stosujesz dla początkujących?</p>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">a) FISH</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true)">b) AID ✅</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">c) FUKO</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">d) DROP</div>
+                </div>
+
+                <div class="quiz-question">
+                    <p class="quiz-question-text">3. Co to znaczy "opisuj fakty, nie interpretacje"?</p>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">a) Używaj liczb zamiast słów</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true)">b) Mów o zachowaniach, nie o swoich ocenach ✅</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">c) Cytuj dokładnie słowa pracownika</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">d) Nagrywaj sesje video</div>
+                </div>
+
+                <div class="quiz-question">
+                    <p class="quiz-question-text">4. Który model feedbacku angażuje pracownika w analizę problemu?</p>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">a) AID</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, true)">b) FISH ✅</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">c) FUKO</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, false)">d) Wszystkie powyższe</div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Następna →</button>
+            </div>
+        </div>
+
+        <!-- Card 27: HABIT BUILDER -->
+        <div class="card" data-card="27">
+            <div class="card-counter">Karta 27 z 27</div>
+            
+            <div class="habit-builder">
+                <div class="habit-title">🎯 Twój Plan na Jutro</div>
+                <p style="text-align: center; margin-bottom: 20px; color: #4a5568;">
+                    Wybierz 1 narzędzie do wdrożenia w ciągu 7 dni:
+                </p>
+                
+                <div class="habit-options">
+                    <div class="habit-option" onclick="selectHabit(this)">
+                        <h4>📋 Kontraktowanie</h4>
+                        <p style="font-size: 14px; color: #718096; margin-top: 8px;">
+                            Przed następną sesją OJT napiszę 4-punktowy kontrakt
+                        </p>
+                    </div>
+                    <div class="habit-option" onclick="selectHabit(this)">
+                        <h4>👂 Aktywne Słuchanie</h4>
+                        <p style="font-size: 14px; color: #718096; margin-top: 8px;">
+                            W następnej rozmowie zastosuję 3 techniki (parafraza, emocje, podsumowanie)
+                        </p>
+                    </div>
+                    <div class="habit-option" onclick="selectHabit(this)">
+                        <h4>❓ Pytania</h4>
+                        <p style="font-size: 14px; color: #718096; margin-top: 8px;">
+                            Zamiast instrukcji, zadam 5 pytań coachingowych
+                        </p>
+                    </div>
+                    <div class="habit-option" onclick="selectHabit(this)">
+                        <h4>💬 Feedback</h4>
+                        <p style="font-size: 14px; color: #718096; margin-top: 8px;">
+                            Wybiorę odpowiedni model (AID/FISH/FUKO) dla konkretnego pracownika
+                        </p>
+                    </div>
+                </div>
+
+                <input type="date" class="habit-input" placeholder="Data wdrożenia">
+                <input type="text" class="habit-input" placeholder="Z kim: (imię pracownika)">
+
+                <p style="text-align: center; font-size: 13px; color: #718096; margin-top: 15px;">
+                    📱 Przypomnienie w aplikacji za 7 dni: "Czy udało Ci się wdrożyć wybrane narzędzie?"
+                </p>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevCard()">← Poprzednia</button>
+                <button class="btn btn-primary" onclick="nextCard()">Zakończ lekcję →</button>
+            </div>
+        </div>
+
+        <!-- Card 28 (hidden): ENDING -->
+        <div class="card" data-card="28">
+            <div class="achievement-box">
+                <div class="achievement-icon">🏆</div>
+                <div class="achievement-title">Narzędzia = Umiejętności Mistrza</div>
+                
+                <p class="content-text" style="text-align: center; margin: 20px 0;">
+                    Gratulacje! Opanowałeś 4 kluczowe narzędzia trenera OJT:
+                </p>
+
+                <div class="achievement-rewards">
+                    <div class="reward-item">✅ Kontraktowanie - Jasne zasady gry</div>
+                    <div class="reward-item">✅ Aktywne słuchanie - Zrozumienie drugiej strony</div>
+                    <div class="reward-item">✅ Pytania coachingowe - Odkrywanie rozwiązań</div>
+                    <div class="reward-item">✅ Informacja zwrotna - Konstruktywna ocena</div>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.7); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h3 style="font-size: 18px; color: #2d3748; margin-bottom: 15px;">Zdobyłeś:</h3>
+                    <div class="reward-item">🌟 250 XP</div>
+                    <div class="reward-item">🏅 Odznakę "Coach Master"</div>
+                    <div class="reward-item">📦 Dostęp do szablonów narzędzi</div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <p style="font-size: 16px; color: #2d3748; margin-bottom: 15px;"><strong>Następny krok:</strong></p>
+                    <p style="font-size: 14px; color: #4a5568; line-height: 1.8;">
+                        • Wdróż 1 narzędzie w ciągu 7 dni<br/>
+                        • Przejdź do Lekcji 4: Modele Feedbacku w Praktyce (opcjonalna)<br/>
+                        • LUB: Rozpocznij program OJT z prawdziwym pracownikiem
+                    </p>
+                </div>
+
+                <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin-top: 25px; font-style: italic; text-align: center;">
+                    <p style="color: #2d3748; font-size: 15px;">
+                        "Najlepsi trenerzy nie mówią co robić.<br/>
+                        Pytają pytania, które prowadzą do odkrycia."
+                    </p>
+                    <p style="color: #718096; font-size: 13px; margin-top: 10px;">
+                        — John Whitmore, Coaching for Performance
+                    </p>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 30px; padding: 15px; font-size: 18px;" onclick="finishLesson()">
+                    Zakończ Lekcję 3 🎉
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentCard = 1;
+        const totalCards = 28;
+
+        function updateProgress() {
+            const progress = (currentCard / totalCards) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards) {
+                document.querySelector(`[data-card="${currentCard}"]`).classList.remove('active');
+                currentCard++;
+                document.querySelector(`[data-card="${currentCard}"]`).classList.add('active');
+                updateProgress();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                document.querySelector(`[data-card="${currentCard}"]`).classList.remove('active');
+                currentCard--;
+                document.querySelector(`[data-card="${currentCard}"]`).classList.add('active');
+                updateProgress();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function flipCard(element) {
+            element.classList.toggle('flipped');
+        }
+
+        function showAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            answer.classList.add('visible');
+        }
+
+        function selectQuizOption(element, isCorrect) {
+            const siblings = element.parentElement.querySelectorAll('.quiz-option');
+            siblings.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                siblings.forEach(opt => {
+                    if (opt.textContent.includes('✅')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function selectHabit(element) {
+            const siblings = element.parentElement.querySelectorAll('.habit-option');
+            siblings.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function finishLesson() {
+            alert('🎉 Gratulacje! Ukończyłeś Lekcję 3: Narzędzia Trenera OJT\n\n✅ +250 XP\n🏅 Odznaka: Coach Master\n📦 Dostęp do szablonów narzędzi\n\nPowodzenia we wdrażaniu!');
+        }
+
+        // Initialize progress
+        updateProgress();
+    </script>
+</body>
+</html>

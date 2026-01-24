@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wprowadzenie do On-the-Job Training: Fundament Rozwoju Pracowników</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #2a1a3a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* CONTAINER */
+        .lesson-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* CARD BASE */
+        .card {
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: fadeInUp 0.6s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid #00d4ff;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+
+        /* HERO CARD */
+        .hero-card {
+            background: linear-gradient(135deg, rgba(176, 0, 255, 0.15), rgba(0, 212, 255, 0.15));
+            border: 1px solid rgba(176, 0, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(176, 0, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-content { position: relative; z-index: 1; }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #b000ff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .meta-icon {
+            font-size: 1.3rem;
+        }
+
+        /* DATA CARD */
+        .data-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(176, 0, 255, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .stat-hero {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        .stat-number {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00d4ff, #b000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .stat-label {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .stat-source {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 12px;
+            font-style: italic;
+        }
+
+        .data-insight {
+            background: rgba(176, 0, 255, 0.1);
+            padding: 24px;
+            border-radius: 16px;
+            border-left: 4px solid #b000ff;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* CONTENT CARD */
+        .card-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        .card-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 32px;
+        }
+
+        .card-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .list-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border-left: 4px solid #00d4ff;
+        }
+
+        .list-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .list-description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .icon-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .icon-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .icon-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* STORY CARD */
+        .story-card {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 165, 0, 0.1));
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .story-icon {
+            font-size: 2rem;
+        }
+
+        .story-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ff6b6b;
+        }
+
+        .story-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 20px;
+        }
+
+        .story-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .story-section-title {
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .story-outcome {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #00ff88;
+            margin-top: 20px;
+        }
+
+        .story-outcome.negative {
+            background: rgba(255, 107, 107, 0.1);
+            border-left-color: #ff6b6b;
+        }
+
+        /* FLASHCARD */
+        .flashcard-container {
+            perspective: 1000px;
+            height: 400px;
+            margin: 32px 0;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard-container.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(176, 0, 255, 0.2));
+            border: 2px solid rgba(0, 212, 255, 0.4);
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, rgba(176, 0, 255, 0.2), rgba(255, 107, 107, 0.2));
+            border: 2px solid rgba(176, 0, 255, 0.4);
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-question {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .flashcard-hint {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 20px;
+        }
+
+        .flashcard-answer {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            text-align: left;
+            width: 100%;
+        }
+
+        .flashcard-answer div {
+            margin: 10px 0;
+        }
+
+        /* COMPARISON CARD */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .comparison-box {
+            padding: 24px;
+            border-radius: 16px;
+            border: 2px solid;
+        }
+
+        .comparison-box.bad {
+            background: rgba(255, 107, 107, 0.1);
+            border-color: #ff6b6b;
+        }
+
+        .comparison-box.good {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: #00ff88;
+        }
+
+        .comparison-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .comparison-box.bad .comparison-title { color: #ff6b6b; }
+        .comparison-box.good .comparison-title { color: #00ff88; }
+
+        .comparison-content {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .comparison-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .comparison-content li {
+            margin: 10px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .comparison-content li::before {
+            content: '•';
+            position: absolute;
+            left: 8px;
+        }
+
+        /* PRACTICE/CHALLENGE CARD */
+        .practice-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1));
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .practice-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .practice-icon {
+            font-size: 2rem;
+        }
+
+        .practice-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .practice-scenario {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .practice-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 12px;
+        }
+
+        .practice-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .practice-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .practice-input:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+
+        .practice-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            border: none;
+            border-radius: 12px;
+            color: #0a0a1a;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .practice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .practice-answer {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 24px;
+            border-radius: 16px;
+            border-left: 4px solid #00d4ff;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .practice-answer.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .answer-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00d4ff;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        /* SCENARIO CARD */
+        .scenario-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .scenario-situation {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            border-left: 4px solid #ffd700;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .scenario-option {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .scenario-option::before {
+            content: attr(data-letter);
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #ffd700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        .scenario-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        .scenario-option.selected {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+        }
+
+        .scenario-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .scenario-option.incorrect {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+        }
+
+        /* QUIZ CARD */
+        .quiz-card {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(176, 0, 255, 0.1));
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .quiz-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #8a2be2;
+        }
+
+        .quiz-question {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .quiz-option {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .quiz-option.selected {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: #8a2be2;
+        }
+
+        .quiz-option.correct {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+        }
+
+        /* POLL CARD */
+        .poll-card {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(176, 0, 255, 0.1));
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .poll-option {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .poll-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .poll-option.selected {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: #8a2be2;
+        }
+
+        .poll-option-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .poll-option-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* TEST CARD */
+        .test-card {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.1), rgba(255, 140, 0, 0.1));
+            border: 1px solid rgba(255, 69, 0, 0.3);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .test-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff4500;
+        }
+
+        .test-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 12px;
+        }
+
+        .test-progress {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .test-progress-text {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .test-question-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .test-question-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ff8c00;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .test-question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .test-option {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .test-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .test-option.selected {
+            background: rgba(255, 140, 0, 0.2);
+            border-color: #ff8c00;
+        }
+
+        .test-option.correct-answer {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+        }
+
+        .test-option.wrong-answer {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+        }
+
+        .test-submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: all 0.3s;
+        }
+
+        .test-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.3);
+        }
+
+        .test-submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .test-result {
+            display: none;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 32px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .test-result.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .test-score {
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        .test-score.pass {
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .test-score.fail {
+            background: linear-gradient(135deg, #ff6b6b, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .test-feedback {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 20px 0;
+            line-height: 1.7;
+        }
+
+        .test-retry-btn {
+            padding: 14px 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 12px;
+            transition: all 0.3s;
+        }
+
+        .test-retry-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* HABIT BUILDER CARD */
+        .habit-card {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(138, 43, 226, 0.1));
+            border: 1px solid rgba(255, 105, 180, 0.3);
+        }
+
+        .habit-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .habit-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff69b4;
+        }
+
+        .habit-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 12px;
+        }
+
+        .habit-options {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .habit-option {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .habit-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .habit-option.selected {
+            background: rgba(255, 105, 180, 0.15);
+            border-color: #ff69b4;
+        }
+
+        .habit-option-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .habit-option-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .habit-input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+
+        /* ACHIEVEMENT CARD */
+        .achievement-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.15));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            text-align: center;
+        }
+
+        .achievement-icon {
+            font-size: 5rem;
+            margin-bottom: 24px;
+        }
+
+        .achievement-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd700, #ffa500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .achievement-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .achievement-checklist {
+            text-align: left;
+            margin: 32px 0;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .achievement-check {
+            font-size: 1.5rem;
+            color: #00ff88;
+        }
+
+        .rewards-box {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 24px;
+            border-radius: 16px;
+            margin: 24px 0;
+        }
+
+        .rewards-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 16px;
+        }
+
+        .reward-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            margin: 12px 0;
+        }
+
+        .next-steps {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 24px;
+            border-radius: 16px;
+            margin-top: 24px;
+        }
+
+        .next-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 16px;
+        }
+
+        /* BOXES */
+        .warning-box {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #ff6b6b;
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #00d4ff;
+            margin: 20px 0;
+        }
+
+        .success-box {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #00ff88;
+            margin: 20px 0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .card { padding: 32px 24px; }
+            .comparison-grid, .icon-grid {
+                grid-template-columns: 1fr;
+            }
+            .stat-number { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        
+        <!-- CARD 1: HERO -->
+        <div class="card hero-card">
+            <div class="hero-content">
+                <h1 class="hero-title">Wprowadzenie do<br/>On-the-Job Training</h1>
+                <p class="hero-subtitle">Odkryj najskuteczniejszą metodę rozwoju pracowników i zbuduj kulturę ciągłego uczenia się</p>
+                
+                <div class="hero-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">⏱️</span>
+                        <span>18 minut</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">📝</span>
+                        <span>21 kart</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🎯</span>
+                        <span>Fundament OJT</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🏆</span>
+                        <span>200 XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 2: DATA -->
+        <div class="card data-card">
+            <span class="card-badge">Data</span>
+            
+            <div class="stat-hero">
+                <div class="stat-number">70%</div>
+                <div class="stat-label">wiedzy zawodowej zdobywamy przez<br/><strong>praktykę w miejscu pracy</strong></div>
+                <div class="stat-source">Źródło: Model 70-20-10, Deloitte 2024</div>
+            </div>
+
+            <div class="data-insight">
+                <strong>Model 70-20-10:</strong> 70% wiedzy z praktyki, 20% od innych ludzi, 10% z formalnych szkoleń. On-the-Job Training to wykorzystanie tych 70% dla celowego rozwoju kompetencji.
+            </div>
+        </div>
+
+        <!-- CARD 3: STORY - Różnica klasyczne vs OJT -->
+        <div class="card story-card">
+            <span class="card-badge">Story</span>
+            
+            <div class="story-header">
+                <span class="story-icon">📖</span>
+                <h2 class="story-title">Szkolenie które nic nie zmieniło</h2>
+            </div>
+
+            <p class="story-content">
+                <strong>Marcin</strong>, dyrektor sprzedaży w firmie tech, wysłał 12 handlowców na 2-dniowe szkolenie z technik sprzedaży (koszt: 18 000 PLN).
+            </p>
+
+            <div class="story-section">
+                <div class="story-section-title">❌ Co się stało 2 tygodnie później:</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin: 8px 0;">• Tylko 3 osoby stosują nowe techniki</li>
+                    <li style="margin: 8px 0;">• Reszta wróciła do starych nawyków</li>
+                    <li style="margin: 8px 0;">• Wyniki sprzedaży bez zmian</li>
+                    <li style="margin: 8px 0;">• ROI szkolenia ≈ 0%</li>
+                </ul>
+            </div>
+
+            <p class="story-content">
+                <strong>Co Marcin zrobił inaczej 3 miesiące później:</strong> Zamiast szkolenia wprowadził program OJT - 2 godziny tygodniowo z każdym handlowcem.
+            </p>
+
+            <div class="story-outcome">
+                <div style="font-weight: 600; margin-bottom: 8px;">✅ Rezultat po 6 tygodniach:</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin: 8px 0;">• 11/12 osób stosuje nowe techniki konsekwentnie</li>
+                    <li style="margin: 8px 0;">• Conversion rate +23%</li>
+                    <li style="margin: 8px 0;">• Wartość średniej transakcji +18%</li>
+                    <li style="margin: 8px 0;">• ROI: 340% (mierzalny wzrost sprzedaży)</li>
+                </ul>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <strong>💡 Kluczowa różnica:</strong> Nauka w kontekście + natychmiastowy feedback + praktyka w rzeczywistych sytuacjach = trwała zmiana zachowań
+            </div>
+        </div>
+
+        <!-- CARD 4: CONTENT - 5 powodów dlaczego OJT działa -->
+        <div class="card">
+            <span class="card-badge">Content</span>
+            <h2 class="card-title">5 Powodów Dlaczego OJT Działa</h2>
+            <p class="card-subtitle">Dlaczego to najskuteczniejsza metoda rozwoju pracowników?</p>
+
+            <div class="list-item">
+                <div class="list-title">1️⃣ Nauka w kontekście</div>
+                <div class="list-description">Pracownik uczy się w RZECZYWISTYCH sytuacjach, nie symulacjach. Przeniesienie wiedzy do praktyki = 0 wysiłku.</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">2️⃣ Natychmiastowy feedback</div>
+                <div class="list-description">Błędy korygowane od razu, sukcesy wzmacniane na gorąco. Nie czekasz 2 tygodnie na "debrief".</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">3️⃣ Spersonalizowane tempo</div>
+                <div class="list-description">Dostosowane do poziomu pracownika. Nie za wolno (nuda), nie za szybko (frustracja).</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">4️⃣ Budowanie relacji</div>
+                <div class="list-description">Trening 1-na-1 lub w małych grupach buduje zaufanie, które przekłada się na otwartość na rozwój.</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">5️⃣ ROI mierzalny w tygodniach</div>
+                <div class="list-description">Wyniki widoczne szybko: lepsze metody pracy → lepsze rezultaty biznesowe. Nie czekasz 6 miesięcy.</div>
+            </div>
+        </div>
+
+        <!-- CARD 5: FLASHCARD - Mity o OJT -->
+        <div class="card">
+            <span class="card-badge">Flashcard</span>
+            <h2 class="card-title">5 Mitów o On-the-Job Training</h2>
+            <p class="card-subtitle">Kliknij kartę aby odkryć prawdę</p>
+
+            <div class="flashcard-container" onclick="flipCard(this)">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <div style="font-size: 4rem; margin-bottom: 24px;">🎴</div>
+                        <div class="flashcard-question">
+                            Jakie są najpopularniejsze<br/>MITY o OJT?<br/><br/>
+                            (i dlaczego są fałszywe)
+                        </div>
+                        <div class="flashcard-hint">Kliknij aby odkryć →</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-answer">
+                            <div><strong>❌ Mit 1:</strong> "To tylko pokazywanie jak się robi"<br/>✅ Prawda: OJT = obserwacja + demo + praktyka + feedback + analiza</div>
+                            <div><strong>❌ Mit 2:</strong> "Nie mam czasu na OJT"<br/>✅ Prawda: 2h OJT = 20h oszczędności w przyszłości (mniej błędów)</div>
+                            <div><strong>❌ Mit 3:</strong> "Tylko dla juniorów"<br/>✅ Prawda: Seniorzy rozwijają się najszybciej przez OJT (feedback w kontekście)</div>
+                            <div><strong>❌ Mit 4:</strong> "Potrzebuję certyfikatu trenera"<br/>✅ Prawda: Potrzebujesz struktury i umiejętności feedbacku (nauczysz się tutaj)</div>
+                            <div><strong>❌ Mit 5:</strong> "To strata czasu - mogą się nauczyć sami"<br/>✅ Prawda: Samodzielna nauka = 3x dłużej + nawyki błędne utrwalają się</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 6: COMPARISON - Słabe vs Silne OJT -->
+        <div class="card">
+            <span class="card-badge">Comparison</span>
+            <h2 class="card-title">Słabe OJT vs Silne OJT</h2>
+            <p class="card-subtitle">Jaka jest różnica między "pokazywaniem" a prawdziwym treningiem?</p>
+
+            <div class="comparison-grid">
+                <div class="comparison-box bad">
+                    <div class="comparison-title">❌ Słabe OJT (nieskuteczne)</div>
+                    <div class="comparison-content">
+                        <ul>
+                            <li><strong>Brak struktury</strong> - "Zobacz jak ja to robię"</li>
+                            <li><strong>Monolog trenera</strong> - Zero pytań do pracownika</li>
+                            <li><strong>Brak feedbacku</strong> - Lub feedback ogólnikowy</li>
+                            <li><strong>Brak planu</strong> - Randomowe sesje bez ciągłości</li>
+                            <li><strong>Brak pomiaru</strong> - Nie wiesz czy zadziałało</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="comparison-box good">
+                    <div class="comparison-title">✅ Silne OJT (skuteczne)</div>
+                    <div class="comparison-content">
+                        <ul>
+                            <li><strong>5-stopniowy model</strong> - Odczucia → Cele → Przebieg → Alternatywy → Wnioski</li>
+                            <li><strong>Pytania coachingowe</strong> - Pracownik SAM dochodzi do wniosków</li>
+                            <li><strong>Konkretny feedback</strong> - Opisujesz zachowania, nie oceniasz osoby</li>
+                            <li><strong>Plan rozwoju</strong> - 1-3 cele na każdą sesję</li>
+                            <li><strong>Mierzalne efekty</strong> - Wiesz co się zmieniło</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 7: CONTENT - 3 filary skutecznego OJT -->
+        <div class="card">
+            <span class="card-badge">Content</span>
+            <h2 class="card-title">3 Filary Skutecznego OJT</h2>
+
+            <div class="icon-grid">
+                <div class="icon-box">
+                    <div class="icon-emoji">📋</div>
+                    <div class="icon-label">STRUKTURA</div>
+                    <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 8px;">Model 5 kroków, jasny plan sesji</p>
+                </div>
+                <div class="icon-box">
+                    <div class="icon-emoji">🛠️</div>
+                    <div class="icon-label">NARZĘDZIA</div>
+                    <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 8px;">Kontraktowanie, słuchanie, pytania, feedback</p>
+                </div>
+                <div class="icon-box">
+                    <div class="icon-emoji">🧠</div>
+                    <div class="icon-label">MINDSET</div>
+                    <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 8px;">Trener = Coach, nie wykładowca</p>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 24px;">
+                <strong>📚 W tym kursie nauczysz się:</strong>
+                <ul style="margin-top: 12px; padding-left: 20px;">
+                    <li>Lekcja 1: Fundamenty OJT (tutaj jesteś)</li>
+                    <li>Lekcja 2: Model 5 Kroków (struktura sesji)</li>
+                    <li>Lekcja 3: 4 Narzędzia Trenera (kontraktowanie, słuchanie, pytania, feedback)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- CARD 8: PRACTICE - Diagnoza stylu trenera -->
+        <div class="card practice-card">
+            <span class="card-badge">Challenge</span>
+            
+            <div class="practice-header">
+                <span class="practice-icon">🔍</span>
+                <h2 class="practice-title">Zdiagnozuj swój styl trenera</h2>
+            </div>
+
+            <p class="card-content" style="margin-bottom: 24px;">
+                Przypomnij sobie ostatnią sytuację, gdy uczyłeś kogoś nowej umiejętności. Odpowiedz szczerze:
+            </p>
+
+            <div class="practice-scenario">
+                <div class="practice-label">1. Czy ustaliłeś cel sesji PRZED rozpoczęciem?</div>
+                <textarea class="practice-input" placeholder="Np. 'Nie, po prostu pokazałem jak robię' lub 'Tak, ustaliliśmy że pracujemy nad...'"></textarea>
+            </div>
+
+            <div class="practice-scenario">
+                <div class="practice-label">2. Czy zadawałeś pytania czy głównie tłumaczyłeś?</div>
+                <textarea class="practice-input" placeholder="Np. 'Głównie mówiłem co i jak' lub 'Pytałem co sądzi, co by zmienił...'"></textarea>
+            </div>
+
+            <div class="practice-scenario">
+                <div class="practice-label">3. Czy dałeś konkretny feedback czy ogólną opinię?</div>
+                <textarea class="practice-input" placeholder="Np. 'Powiedziałem że było OK' lub 'Wskazałem 3 konkretne zachowania...'"></textarea>
+            </div>
+
+            <button class="practice-btn" onclick="showAnswer('diagnosisAnswer')">Pokaż interpretację</button>
+
+            <div class="practice-answer" id="diagnosisAnswer">
+                <div class="answer-label">Interpretacja:</div>
+                <p><strong>0-1 TAK:</strong> Styl "pokazywania" - działa na krótką metę, ale brak struktury. Po tym kursie będziesz trenować systematycznie.</p>
+                <p><strong>2 TAK:</strong> Styl "częściowo coachingowy" - masz intuicję, brakuje Ci narzędzi. Kurs da Ci konkretne techniki.</p>
+                <p><strong>3 TAK:</strong> Styl "coachingowy" - robisz to dobrze! Kurs uporządkuje wiedzę i doda zaawansowane techniki.</p>
+            </div>
+        </div>
+
+        <!-- CARD 9: QUIZ - Checkpoint 1 -->
+        <div class="card quiz-card">
+            <span class="card-badge">Quiz</span>
+            
+            <div class="quiz-header">
+                <h2 class="quiz-title">✅ Checkpoint 1: Fundamenty OJT</h2>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">1. Model 70-20-10 mówi, że 70% wiedzy zdobywamy przez:</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">a) Szkolenia formalne</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">b) Praktykę w miejscu pracy ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">c) Czytanie książek</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) Obserwację innych</div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">2. Główna przewaga OJT nad klasycznym szkoleniem to:</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">a) Niższy koszt</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">b) Nauka w rzeczywistym kontekście + natychmiastowy feedback ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">c) Certyfikat ukończenia</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) Krótszy czas trwania</div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">3. Który element NIE należy do silnego OJT?</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">a) 5-stopniowy model</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">b) Pytania coachingowe</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">c) Monolog trenera bez interakcji ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) Konkretny feedback</div>
+            </div>
+        </div>
+
+        <!-- CARD 10: CONTENT - Kiedy stosować OJT -->
+        <div class="card">
+            <span class="card-badge">Content</span>
+            <h2 class="card-title">Kiedy Stosować OJT?</h2>
+            <p class="card-subtitle">Najlepsze scenariusze zastosowania</p>
+
+            <div class="comparison-grid">
+                <div class="comparison-box good">
+                    <div class="comparison-title">✅ OJT IDEALNE dla:</div>
+                    <div class="comparison-content">
+                        <ul>
+                            <li>Onboarding nowych pracowników</li>
+                            <li>Rozwój umiejętności "miękkich" (sprzedaż, negocjacje, prezentacje)</li>
+                            <li>Zmiana nawyków (np. nowa metodologia pracy)</li>
+                            <li>Korekta błędów w czasie rzeczywistym</li>
+                            <li>Przygotowanie do awansu</li>
+                            <li>Przekazanie wiedzy eksperckiej (shadowing)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="comparison-box bad">
+                    <div class="comparison-title">❌ OJT NIE dla:</div>
+                    <div class="comparison-content">
+                        <ul>
+                            <li>Wiedza teoretyczna (lepiej: e-learning, książki)</li>
+                            <li>Certyfikacje formalne (wymagana sala egzaminacyjna)</li>
+                            <li>Szkolenia BHP (regulacje prawne)</li>
+                            <li>Duże grupy 20+ osób (za mało czasu na każdego)</li>
+                            <li>Wiedza ogólna "nice to have" (ROI zbyt niskie)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box" style="margin-top: 24px;">
+                <strong>💡 Zasada:</strong> OJT = umiejętności praktyczne w kontekście. Teoria + masa = inne metody.
+            </div>
+        </div>
+
+        <!-- CARD 11: SCENARIO - Wybierz sytuację do OJT -->
+        <div class="card scenario-card">
+            <span class="card-badge" style="background: rgba(255, 215, 0, 0.2); border-color: #ffd700; color: #ffd700;">Scenario</span>
+            <h2 class="card-title">Scenariusz: Wybierz właściwą metodę</h2>
+
+            <div class="scenario-situation">
+                <strong>Masz 5 pracowników i różne potrzeby rozwojowe. Zdecyduj: OJT czy inna metoda?</strong>
+            </div>
+
+            <div class="scenario-option" data-letter="A" onclick="selectScenario(this, true)">
+                <div style="font-weight: 600; margin-bottom: 4px;">Anna - Junior handlowiec, problem z zamykaniem transakcji</div>
+                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Potrzebuje: Obserwacja rozmów + feedback w czasie rzeczywistym</div>
+            </div>
+
+            <div class="scenario-option" data-letter="B" onclick="selectScenario(this, false)">
+                <div style="font-weight: 600; margin-bottom: 4px;">Tomasz - Programista, chce nauczyć się nowego języka</div>
+                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Potrzebuje: Kurs online + dokumentacja + projekty własne</div>
+            </div>
+
+            <div class="scenario-option" data-letter="C" onclick="selectScenario(this, true)">
+                <div style="font-weight: 600; margin-bottom: 4px;">Kasia - Manager, za dużo mówi, za mało słucha w 1-1</div>
+                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Potrzebuje: Shadowing podczas jej rozmów + coaching pytaniami</div>
+            </div>
+
+            <div class="scenario-option" data-letter="D" onclick="selectScenario(this, false)">
+                <div style="font-weight: 600; margin-bottom: 4px;">Paweł - Cały zespół 15 osób, aktualizacja procedury ISO</div>
+                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Potrzebuje: Webinar grupowy + test wiedzy + materiały do pobrania</div>
+            </div>
+
+            <div class="scenario-option" data-letter="E" onclick="selectScenario(this, true)">
+                <div style="font-weight: 600; margin-bottom: 4px;">Marcin - Senior, plateau kariery, chce zostać team leadem</div>
+                <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Potrzebuje: OJT z obecnym liderem (shadowing + delegowanie zadań + feedback)</div>
+            </div>
+
+            <p style="margin-top: 24px; font-size: 0.9rem; color: rgba(255,255,255,0.6);">
+                <strong>Odpowiedzi:</strong> A, C, E = OJT ✅ | B, D = inne metody ❌
+            </p>
+        </div>
+
+        <!-- CARD 12: STORY - Sukces dzięki OJT -->
+        <div class="card story-card">
+            <span class="card-badge">Story</span>
+            
+            <div class="story-header">
+                <span class="story-icon">📖</span>
+                <h2 class="story-title">Od "problemu" do gwiazdora w 8 tygodni</h2>
+            </div>
+
+            <p class="story-content">
+                <strong>Katarzyna</strong>, manager zespołu customer success, miała problem z Michałem - doświadczonym CSM, który miał najgorsze wyniki zadowolenia klientów (CSAT 6.2/10).
+            </p>
+
+            <div class="story-section">
+                <div class="story-section-title">🔍 Diagnoza (tydzień 1):</div>
+                <p>Katarzyna obserwowała 3 rozmowy Michała. Odkryła: Michał doskonale zna produkt, ale NIE słucha klienta. Przerywa, narzuca rozwiązania, nie pyta o kontekst.</p>
+            </div>
+
+            <div class="story-section">
+                <div class="story-section-title">🎯 Plan OJT (8 tygodni, 1.5h/tydzień):</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin: 8px 0;"><strong>Tydzień 1-2:</strong> Aktywne słuchanie (parafraza, odzwierciedlanie emocji)</li>
+                    <li style="margin: 8px 0;"><strong>Tydzień 3-4:</strong> Pytania odkrywające (zamiast "masz problem X" → "opowiedz mi o...")</li>
+                    <li style="margin: 8px 0;"><strong>Tydzień 5-6:</strong> Budowanie rozwiązań RAZEM z klientem</li>
+                    <li style="margin: 8px 0;"><strong>Tydzień 7-8:</strong> Konsolidacja i samodzielność</li>
+                </ul>
+            </div>
+
+            <div class="story-outcome">
+                <div style="font-weight: 600; margin-bottom: 8px;">✅ Rezultat po 8 tygodniach:</div>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin: 8px 0;">• CSAT wzrósł z 6.2 do 9.1/10</li>
+                    <li style="margin: 8px 0;">• Retention rate klientów Michała: +34%</li>
+                    <li style="margin: 8px 0;">• Michał otrzymał awans na Senior CSM</li>
+                    <li style="margin: 8px 0;">• Teraz SAM szkoli nowych CSM-ów!</li>
+                </ul>
+            </div>
+
+            <div class="success-box" style="margin-top: 20px;">
+                <strong>💡 Kluczowy wniosek:</strong> Michał nie był "słabym pracownikiem". Miał 1 konkretny gap (słuchanie), który OJT wyeliminowało w 8 tygodni.
+            </div>
+        </div>
+
+        <!-- CARD 13: CONTENT - Role w procesie OJT -->
+        <div class="card">
+            <span class="card-badge">Content</span>
+            <h2 class="card-title">3 Role w Procesie OJT</h2>
+
+            <div class="icon-grid">
+                <div class="icon-box" style="grid-column: span 3; text-align: left; padding: 24px;">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                        <div class="icon-emoji" style="margin: 0;">👨‍🏫</div>
+                        <div>
+                            <div class="icon-label" style="font-size: 1.2rem; text-align: left;">TRENER (Ty)</div>
+                            <p style="font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-top: 4px;">Prowadzi sesję, zadaje pytania, daje feedback, monitoruje postęp</p>
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; font-size: 0.9rem;">
+                        <strong>Twoje zadania:</strong> Obserwacja → Demo → Wspieranie praktyki → Analiza → Plan wdrożenia
+                    </div>
+                </div>
+
+                <div class="icon-box" style="grid-column: span 3; text-align: left; padding: 24px;">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                        <div class="icon-emoji" style="margin: 0;">🎯</div>
+                        <div>
+                            <div class="icon-label" style="font-size: 1.2rem; text-align: left;">PRACOWNIK (Trainee)</div>
+                            <p style="font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-top: 4px;">Uczy się, praktykuje, zadaje pytania, dostaje feedback</p>
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; font-size: 0.9rem;">
+                        <strong>Jego zadania:</strong> Próbowanie → Refleksja → Zadawanie pytań → Wdrażanie zmian
+                    </div>
+                </div>
+
+                <div class="icon-box" style="grid-column: span 3; text-align: left; padding: 24px;">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                        <div class="icon-emoji" style="margin: 0;">🏢</div>
+                        <div>
+                            <div class="icon-label" style="font-size: 1.2rem; text-align: left;">ORGANIZACJA</div>
+                            <p style="font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-top: 4px;">Zapewnia czas, narzędzia, kulturę wspierającą rozwój</p>
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; font-size: 0.9rem;">
+                        <strong>Odpowiedzialność:</strong> Czas na OJT w kalendarzu + Uznanie dla trenerów + Pomiar efektów
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 14: COMPARISON - Mentor vs Coach vs Trener -->
+        <div class="card">
+            <span class="card-badge">Comparison</span>
+            <h2 class="card-title">Mentor vs Coach vs Trener OJT</h2>
+            <p class="card-subtitle">Jaka jest różnica?</p>
+
+            <div class="icon-grid">
+                <div class="icon-box" style="text-align: left; padding: 20px;">
+                    <div class="icon-emoji" style="text-align: center;">🧙</div>
+                    <div class="icon-label" style="text-align: center; margin-bottom: 12px;">MENTOR</div>
+                    <div style="font-size: 0.85rem; line-height: 1.6;">
+                        <strong>Rola:</strong> Doradca z doświadczeniem<br/>
+                        <strong>Fokus:</strong> Rozwój kariery długoterminowy<br/>
+                        <strong>Metoda:</strong> Dzielenie się historią, radami<br/>
+                        <strong>Czas:</strong> Miesięcy/lata
+                    </div>
+                </div>
+
+                <div class="icon-box" style="text-align: left; padding: 20px;">
+                    <div class="icon-emoji" style="text-align: center;">🎓</div>
+                    <div class="icon-label" style="text-align: center; margin-bottom: 12px;">COACH</div>
+                    <div style="font-size: 0.85rem; line-height: 1.6;">
+                        <strong>Rola:</strong> Facylitator rozwoju<br/>
+                        <strong>Fokus:</strong> Cel konkretny (1-3 obszary)<br/>
+                        <strong>Metoda:</strong> Pytania, nie odpowiedzi<br/>
+                        <strong>Czas:</strong> Tygodni/miesięcy
+                    </div>
+                </div>
+
+                <div class="icon-box" style="text-align: left; padding: 20px;">
+                    <div class="icon-emoji" style="text-align: center;">👨‍🏫</div>
+                    <div class="icon-label" style="text-align: center; margin-bottom: 12px;">TRENER OJT</div>
+                    <div style="font-size: 0.85rem; line-height: 1.6;">
+                        <strong>Rola:</strong> Nauczyciel + Coach<br/>
+                        <strong>Fokus:</strong> Umiejętności praktyczne<br/>
+                        <strong>Metoda:</strong> Demo + praktyka + feedback<br/>
+                        <strong>Czas:</strong> Dni/tygodni
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top: 24px;">
+                <strong>💡 Trener OJT = Hybrid:</strong> Pokazujesz JAK (jak nauczyciel) + Pytasz DLACZEGO (jak coach) + Dzielisz się doświadczeniem (jak mentor)
+            </div>
+        </div>
+
+        <!-- CARD 15: CONTENT - Mindset trenera OJT -->
+        <div class="card">
+            <span class="card-badge">Content</span>
+            <h2 class="card-title">Mindset Trenera OJT</h2>
+            <p class="card-subtitle">7 przekonań skutecznego trenera</p>
+
+            <div class="list-item">
+                <div class="list-title">1. "Moja rola to odkrywać, nie tłumaczyć"</div>
+                <div class="list-description">Więcej pytań niż odpowiedzi. Pracownik SAM dochodzi do wniosków.</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">2. "Feedback to dar, nie ocena"</div>
+                <div class="list-description">Opisuję zachowania (fakty), nie oceniam osoby. "Nie patrzyłeś w oczy" ≠ "Jesteś nieśmiały".</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">3. "Błędy to materiał do nauki"</div>
+                <div class="list-description">Nie unikam błędów - analizuję je. "Co mógłbyś zrobić inaczej?" zamiast "Źle to zrobiłeś".</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">4. "Tempo pracownika > mój harmonogram"</div>
+                <div class="list-description">Dostosowuję tempo. Jeden potrzebuje 3 sesji, drugi 10. Obie sytuacje OK.</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">5. "Mierzę rezultaty, nie czas"</div>
+                <div class="list-description">Sukces = zmiana zachowań + lepsze wyniki. Nie: "Przeszliśmy 20 slajdów".</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">6. "Trening to inwestycja, nie koszt"</div>
+                <div class="list-description">2h OJT teraz = 20h oszczędności w przyszłości + lepsze wyniki.</div>
+            </div>
+
+            <div class="list-item">
+                <div class="list-title">7. "Każdy może się rozwinąć"</div>
+                <div class="list-description">Nie ma "beznadziejnych przypadków". Są tylko niewłaściwe metody lub brak czasu.</div>
+            </div>
+        </div>
+
+        <!-- CARD 16: POLL - Twoje największe obawy -->
+        <div class="card poll-card">
+            <span class="card-badge" style="background: rgba(138, 43, 226, 0.2); border-color: #8a2be2; color: #8a2be2;">Poll</span>
+            <h2 class="card-title">Co Cię najbardziej martwi w roli trenera?</h2>
+            <p class="card-subtitle">Wybierz 1-2 obawy (anonimowe)</p>
+
+            <div class="poll-option" onclick="selectPoll(this)">
+                <div class="poll-option-title">⏰ "Nie mam czasu na OJT"</div>
+                <div class="poll-option-desc">Odpowiedź: Zacznij od 1h/tydzień. ROI widoczne po 2-3 tygodniach.</div>
+            </div>
+
+            <div class="poll-option" onclick="selectPoll(this)">
+                <div class="poll-option-title">🎓 "Nie mam certyfikatu/przeszkolenia"</div>
+                <div class="poll-option-desc">Odpowiedź: Ten kurs + praktyka = wystarczy. Certyfikat nie gwarantuje umiejętności.</div>
+            </div>
+
+            <div class="poll-option" onclick="selectPoll(this)">
+                <div class="poll-option-title">😰 "Boję się dawać krytyczny feedback"</div>
+                <div class="poll-option-desc">Odpowiedź: Lekcja 3 nauczy Cię technik (AID, FISH, FUKO) - feedback bez konfliktów.</div>
+            </div>
+
+            <div class="poll-option" onclick="selectPoll(this)">
+                <div class="poll-option-title">❓ "Co jeśli nie znam odpowiedzi?"</div>
+                <div class="poll-option-desc">Odpowiedź: Trener OJT zadaje pytania, nie musi znać wszystkich odpowiedzi. "Nie wiem, sprawdźmy razem" = OK.</div>
+            </div>
+
+            <div class="poll-option" onclick="selectPoll(this)">
+                <div class="poll-option-title">📊 "Nie wiem jak mierzyć efekty"</div>
+                <div class="poll-option-desc">Odpowiedź: Lekcja 2 (krok 5) + gotowe szablony do śledzenia postępów.</div>
+            </div>
+
+            <div class="poll-option" onclick="selectPoll(this)">
+                <div class="poll-option-title">🙅 "Pracownik nie chce się uczyć"</div>
+                <div class="poll-option-desc">Odpowiedź: Kontraktowanie (Lekcja 3) rozwiązuje opór. Pokazujesz WIIFM (What's In It For Me).</div>
+            </div>
+        </div>
+
+        <!-- CARD 17: QUIZ - Checkpoint 2 -->
+        <div class="card quiz-card">
+            <span class="card-badge">Quiz</span>
+            
+            <div class="quiz-header">
+                <h2 class="quiz-title">✅ Checkpoint 2: Role i Mindset</h2>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">1. Główna różnica między trenerem OJT a coachem to:</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">a) Trener ma certyfikat, coach nie</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">b) Trener pokazuje JAK + pyta DLACZEGO, coach tylko pyta ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">c) Coach pracuje tylko z managerami</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) Trener pracuje grupowo, coach 1-na-1</div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">2. Które przekonanie NIE należy do mindset trenera OJT?</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">a) "Moja rola to odkrywać, nie tłumaczyć"</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">b) "Błędy to materiał do nauki"</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">c) "Muszę znać odpowiedzi na wszystkie pytania" ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) "Każdy może się rozwinąć"</div>
+            </div>
+
+            <div class="quiz-question">
+                <div class="question-text">3. OJT NIE nadaje się do:</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">a) Onboardingu nowych pracowników</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">b) Rozwoju umiejętności sprzedażowych</div>
+                <div class="quiz-option" onclick="selectOption(this, true)">c) Szkoleń BHP dla 50 osób jednocześnie ✅</div>
+                <div class="quiz-option" onclick="selectOption(this, false)">d) Zmiany nawyków w pracy</div>
+            </div>
+        </div>
+
+        <!-- CARD 18: TEST -->
+        <div class="card test-card" id="testCard">
+            <span class="card-badge" style="background: rgba(255, 69, 0, 0.2); border-color: #ff4500; color: #ff4500;">Test Końcowy</span>
+            
+            <div class="test-header">
+                <h2 class="test-title">📝 Egzamin Końcowy</h2>
+                <p class="test-subtitle">10 pytań | Min. 70% do zaliczenia | Pojedyncza próba</p>
+            </div>
+
+            <div class="test-progress" id="testProgress">
+                <div class="test-progress-text">Pytanie <span id="currentQuestion">0</span> / 10</div>
+            </div>
+
+            <div id="testQuestions">
+                <!-- Q1 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 1/10 - Model 70-20-10</div>
+                    <div class="test-question-text">Model 70-20-10 mówi, że ile % wiedzy zawodowej zdobywamy przez praktykę?</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q1', false)">a) 20%</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q1', false)">b) 50%</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q1', true)">c) 70%</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q1', false)">d) 90%</div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 2/10 - Przewaga OJT</div>
+                    <div class="test-question-text">Jaka jest główna przewaga OJT nad klasycznym szkoleniem?</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q2', false)">a) Niższy koszt</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q2', true)">b) Nauka w rzeczywistym kontekście + natychmiastowy feedback</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q2', false)">c) Certyfikat ukończenia</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q2', false)">d) Krótszy czas trwania</div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 3/10 - Mit o OJT</div>
+                    <div class="test-question-text">Które stwierdzenie to MIT o OJT?</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q3', true)">a) "OJT to tylko pokazywanie jak się robi"</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q3', false)">b) "OJT łączy obserwację, demo, praktykę i feedback"</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q3', false)">c) "OJT działa dla juniorów i seniorów"</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q3', false)">d) "OJT wymaga struktury i narzędzi"</div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 4/10 - Słabe vs Silne OJT</div>
+                    <div class="test-question-text">Co charakteryzuje SILNE OJT (nie słabe)?</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q4', false)">a) Brak struktury - "Zobacz jak ja to robię"</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q4', false)">b) Monolog trenera bez pytań</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q4', true)">c) 5-stopniowy model + pytania coachingowe + konkretny feedback</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q4', false)">d) Randomowe sesje bez planu</div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 5/10 - 3 Filary OJT</div>
+                    <div class="test-question-text">Które NIE należy do 3 filarów skutecznego OJT?</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q5', false)">a) Struktura (Model 5 kroków)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q5', false)">b) Narzędzia (kontraktowanie, pytania, feedback)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q5', false)">c) Mindset (trener = coach)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q5', true)">d) Certyfikat trenera</div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 6/10 - Kiedy stosować OJT</div>
+                    <div class="test-question-text">OJT IDEALNE dla:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q6', false)">a) Wiedzy teoretycznej (lepiej e-learning)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q6', true)">b) Onboardingu i rozwoju umiejętności miękkich</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q6', false)">c) Certyfikacji formalnych</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q6', false)">d) Szkoleń BHP dla dużych grup</div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 7/10 - Role w OJT</div>
+                    <div class="test-question-text">Zadanie TRENERA OJT to:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q7', true)">a) Obserwacja → Demo → Praktyka → Analiza → Plan wdrożenia</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q7', false)">b) Tylko wykładanie teorii</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q7', false)">c) Zapewnienie czasu i narzędzi (to rola organizacji)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q7', false)">d) Tylko obserwowanie bez ingerencji</div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 8/10 - Mentor vs Coach vs Trener</div>
+                    <div class="test-question-text">Trener OJT różni się od coacha tym, że:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q8', false)">a) Pracuje tylko z juniorami</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q8', true)">b) Pokazuje JAK (demo) + pyta DLACZEGO (coaching)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q8', false)">c) Nie zadaje pytań, tylko tłumaczy</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q8', false)">d) Pracuje tylko grupowo</div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 9/10 - Mindset trenera</div>
+                    <div class="test-question-text">Które przekonanie NALEŻY do mindset trenera OJT?</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q9', false)">a) "Muszę znać odpowiedzi na wszystkie pytania"</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q9', true)">b) "Błędy to materiał do nauki, nie porażka"</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q9', false)">c) "Trening to koszt, nie inwestycja"</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q9', false)">d) "Są pracownicy beznadziejni do rozwoju"</div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="test-question-card">
+                    <div class="test-question-number">Pytanie 10/10 - Feedback</div>
+                    <div class="test-question-text">Feedback skuteczny to:</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q10', false)">a) "Jesteś nieśmiały" (ocena osoby)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q10', true)">b) "Nie patrzyłeś w oczy klienta" (opis zachowania)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q10', false)">c) "Brakuje Ci determinacji" (interpretacja)</div>
+                    <div class="test-option" onclick="selectTestOption(this, 'q10', false)">d) "Ogólnie było OK" (brak konkretów)</div>
+                </div>
+            </div>
+
+            <button class="test-submit-btn" id="submitTestBtn" onclick="submitTest()" disabled>
+                Sprawdź wynik testu
+            </button>
+
+            <div class="test-result" id="testResult">
+                <div style="font-size: 1.3rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 12px;">Twój wynik:</div>
+                <div class="test-score" id="testScore">0%</div>
+                <div class="test-feedback" id="testFeedback"></div>
+                <div style="margin-top: 24px;">
+                    <button class="test-retry-btn" onclick="retryTest()" id="retryBtn">🔄 Spróbuj ponownie</button>
+                    <button class="test-retry-btn" onclick="showAchievement()" id="continueBtn" style="display: none; background: linear-gradient(135deg, #00ff88, #00d4ff); border: none;">✅ Przejdź dalej</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 19: HABIT BUILDER -->
+        <div class="card habit-card" id="habitCard" style="display: none;">
+            <span class="card-badge">Habit Builder</span>
+            
+            <div class="habit-header">
+                <h2 class="habit-title">🎯 Twój Plan na Najbliższe 7 Dni</h2>
+                <p class="habit-subtitle">Wybierz 1 działanie do wdrożenia:</p>
+            </div>
+
+            <div class="habit-options">
+                <div class="habit-option" onclick="selectHabit(this)">
+                    <div class="habit-option-title">🔍 Zaobserwuj 1 pracownika w pracy</div>
+                    <div class="habit-option-desc">Obserwuj 30 min bez ingerencji. Notuj co działa, co można poprawić.</div>
+                </div>
+                <div class="habit-option" onclick="selectHabit(this)">
+                    <div class="habit-option-title">💬 Daj 1 konkretny feedback</div>
+                    <div class="habit-option-desc">Opisz zachowanie (fakty), nie oceniaj osoby. "Nie patrzyłeś w oczy" zamiast "Byłeś nieśmiały".</div>
+                </div>
+                <div class="habit-option" onclick="selectHabit(this)">
+                    <div class="habit-option-title">❓ Zadaj 5 pytań zamiast 5 instrukcji</div>
+                    <div class="habit-option-desc">W następnej sytuacji "szkoleniowej" pytaj "Co sądzisz?" zamiast "Zrób tak..."</div>
+                </div>
+                <div class="habit-option" onclick="selectHabit(this)">
+                    <div class="habit-option-title">📅 Zaplanuj 1. sesję OJT (1h)</div>
+                    <div class="habit-option-desc">Wybierz pracownika + umów sesję + przygotuj 1 cel do pracy</div>
+                </div>
+            </div>
+
+            <input type="date" class="habit-input" placeholder="Data wdrożenia">
+            <input type="text" class="habit-input" placeholder="Z kim: (imię pracownika)">
+        </div>
+
+        <!-- CARD 20: ACHIEVEMENT -->
+        <div class="card achievement-card" id="achievementCard" style="display: none;">
+            <div class="achievement-icon">🎓</div>
+            <h1 class="achievement-title">Fundamenty Opanowane!</h1>
+            <p class="achievement-subtitle">Gratulacje! Znasz już podstawy On-the-Job Training</p>
+
+            <div class="achievement-checklist">
+                <div class="achievement-item">
+                    <span class="achievement-check">✅</span>
+                    <span>Model 70-20-10 i dlaczego OJT działa</span>
+                </div>
+                <div class="achievement-item">
+                    <span class="achievement-check">✅</span>
+                    <span>Różnica między słabym a silnym OJT</span>
+                </div>
+                <div class="achievement-item">
+                    <span class="achievement-check">✅</span>
+                    <span>3 Filary skutecznego OJT (Struktura, Narzędzia, Mindset)</span>
+                </div>
+                <div class="achievement-item">
+                    <span class="achievement-check">✅</span>
+                    <span>Kiedy stosować OJT (i kiedy nie)</span>
+                </div>
+                <div class="achievement-item">
+                    <span class="achievement-check">✅</span>
+                    <span>Role w procesie + Mindset trenera</span>
+                </div>
+            </div>
+
+            <div class="rewards-box">
+                <div class="rewards-title">Zdobyłeś:</div>
+                <div class="reward-item">🌟 <strong>200 XP</strong></div>
+                <div class="reward-item">🏅 Odznakę <strong>"OJT Starter"</strong></div>
+                <div class="reward-item">📦 Dostęp do <strong>Lekcji 2: Model 5 Kroków</strong></div>
+            </div>
+
+            <div class="next-steps">
+                <div class="next-title">Następny krok:</div>
+                <p style="line-height: 1.8;">
+                    • Wdróż 1 nawyk z Habit Builder w ciągu 7 dni<br/>
+                    • Przejdź do Lekcji 2: Model Treningu On-the-Job (5 Kroków)<br/>
+                    • LUB: Eksploruj narzędzia (Lekcja 3: Kontraktowanie, Słuchanie, Pytania, Feedback)
+                </p>
+            </div>
+
+            <div style="background: rgba(0, 212, 255, 0.1); padding: 24px; border-radius: 16px; margin-top: 32px; border-left: 4px solid #00d4ff;">
+                <div style="font-size: 1.1rem; line-height: 1.7; font-style: italic;">
+                    "Najlepsi menedżerowie nie budują biznesu.<br/>
+                    Budują ludzi, a ludzie budują biznes."
+                </div>
+                <div style="font-size: 0.95rem; color: rgba(255, 255, 255, 0.5); text-align: right; margin-top: 12px;">
+                    — Marcus Buckingham
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 32px;">
+                <button onclick="finishLesson()" style="padding: 18px 40px; background: linear-gradient(135deg, #b000ff, #00d4ff); border: none; border-radius: 12px; color: #ffffff; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: all 0.3s;">
+                    Zakończ Lekcję 1 🎉
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tracking test answers
+        let testAnswers = {};
+        let answeredQuestions = 0;
+
+        function flipCard(element) {
+            element.classList.toggle('flipped');
+        }
+
+        function showAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            answer.classList.add('visible');
+        }
+
+        function selectOption(element, isCorrect) {
+            const siblings = element.parentElement.querySelectorAll('.quiz-option');
+            siblings.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                siblings.forEach(opt => {
+                    if (opt.textContent.includes('✅')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function selectScenario(element, isCorrect) {
+            element.classList.add('selected');
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+            }
+            element.style.pointerEvents = 'none';
+        }
+
+        function selectPoll(element) {
+            element.classList.toggle('selected');
+        }
+
+        function selectTestOption(element, questionId, isCorrect) {
+            const siblings = element.parentElement.querySelectorAll('.test-option');
+            siblings.forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            
+            if (!testAnswers[questionId]) {
+                answeredQuestions++;
+            }
+            testAnswers[questionId] = isCorrect;
+            
+            document.getElementById('currentQuestion').textContent = answeredQuestions;
+            
+            if (answeredQuestions === 10) {
+                document.getElementById('submitTestBtn').disabled = false;
+            }
+        }
+
+        function submitTest() {
+            let correctAnswers = 0;
+            for (let key in testAnswers) {
+                if (testAnswers[key]) correctAnswers++;
+            }
+            
+            const score = (correctAnswers / 10) * 100;
+            const passed = score >= 70;
+            
+            const allOptions = document.querySelectorAll('.test-option');
+            allOptions.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.getAttribute('onclick').includes('true')) {
+                    opt.classList.add('correct-answer');
+                }
+                if (opt.classList.contains('selected')) {
+                    const correctOption = Array.from(opt.parentElement.querySelectorAll('.test-option')).find(o => {
+                        return o.getAttribute('onclick').includes('true');
+                    });
+                    
+                    if (opt !== correctOption) {
+                        opt.classList.add('wrong-answer');
+                    }
+                }
+            });
+            
+            const resultDiv = document.getElementById('testResult');
+            const scoreDiv = document.getElementById('testScore');
+            const feedbackDiv = document.getElementById('testFeedback');
+            const retryBtn = document.getElementById('retryBtn');
+            const continueBtn = document.getElementById('continueBtn');
+            const submitBtn = document.getElementById('submitTestBtn');
+            
+            scoreDiv.textContent = score + '%';
+            scoreDiv.className = 'test-score ' + (passed ? 'pass' : 'fail');
+            
+            if (passed) {
+                feedbackDiv.innerHTML = `
+                    <div style="font-size: 2rem; margin-bottom: 16px;">🎉 Gratulacje!</div>
+                    <div>Zaliczyłeś test z wynikiem <strong>${correctAnswers}/10</strong>.<br/>
+                    Opanowałeś fundamenty On-the-Job Training!</div>
+                `;
+                retryBtn.style.display = 'none';
+                continueBtn.style.display = 'inline-block';
+            } else {
+                feedbackDiv.innerHTML = `
+                    <div style="font-size: 2rem; margin-bottom: 16px;">📚 Jeszcze trochę nauki</div>
+                    <div>Wynik: <strong>${correctAnswers}/10</strong> (potrzebne: 7/10).<br/>
+                    Przejrzyj materiał i spróbuj ponownie.</div>
+                `;
+                retryBtn.style.display = 'inline-block';
+                continueBtn.style.display = 'none';
+            }
+            
+            resultDiv.classList.add('visible');
+            submitBtn.style.display = 'none';
+            
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function retryTest() {
+            testAnswers = {};
+            answeredQuestions = 0;
+            
+            document.getElementById('currentQuestion').textContent = '0';
+            document.getElementById('submitTestBtn').disabled = true;
+            document.getElementById('submitTestBtn').style.display = 'block';
+            document.getElementById('testResult').classList.remove('visible');
+            
+            const allOptions = document.querySelectorAll('.test-option');
+            allOptions.forEach(opt => {
+                opt.classList.remove('selected', 'correct-answer', 'wrong-answer');
+                opt.style.pointerEvents = 'auto';
+            });
+            
+            document.getElementById('testCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showAchievement() {
+            document.getElementById('testCard').style.display = 'none';
+            document.getElementById('habitCard').style.display = 'block';
+            document.getElementById('achievementCard').style.display = 'block';
+            
+            document.getElementById('habitCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectHabit(element) {
+            const siblings = element.parentElement.querySelectorAll('.habit-option');
+            siblings.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function finishLesson() {
+            alert('🎉 Gratulacje! Ukończyłeś Lekcję 1: Wprowadzenie do OJT\n\n✅ +200 XP\n🏅 Odznaka: OJT Starter\n📦 Dostęp do Lekcji 2: Model 5 Kroków\n\nPowodzenia w budowaniu kultury rozwoju!');
+        }
+    </script>
+</body>
+</html>
