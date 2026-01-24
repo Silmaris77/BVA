@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { User, Bell, Zap, Trophy, Flame, Target, LogOut, TrendingUp, Award, Rocket, BookOpen, Sparkles, Star, Settings } from 'lucide-react'
 import { getUserStatsSummary } from '@/lib/rpg-stats'
 import ActivityHeatmap from '@/components/profile/ActivityHeatmap'
@@ -10,7 +10,7 @@ import AchievementsGrid from '@/components/profile/AchievementsGrid'
 import CompetencyRadar from '@/components/profile/CompetencyRadar'
 import EditProfileModal, { ARCHETYPES } from '@/components/profile/EditProfileModal'
 
-export default function ProfilePage() {
+function ProfileContent() {
     const { user, profile, signOut } = useAuth()
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -444,6 +444,24 @@ export default function ProfilePage() {
                 )}
             </div>
         </div>
+    )
+}
+
+export default function ProfilePage() {
+    return (
+        <Suspense fallback={
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255, 255, 255, 0.6)'
+            }}>
+                Ładowanie...
+            </div>
+        }>
+            <ProfileContent />
+        </Suspense>
     )
 }
 

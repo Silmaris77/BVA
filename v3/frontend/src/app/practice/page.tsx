@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation' // Add useSearchParams
 import Link from 'next/link'
 import { Bell, Zap, LayoutDashboard, Gamepad2, Folder, Flame } from 'lucide-react'
@@ -10,7 +10,7 @@ import GryView from './components/GryView'
 import ProjektyView from './components/ProjektyView'
 import TreningView from './components/TreningView'
 
-export default function PracticePage() {
+function PracticeContent() {
     const { user, profile, loading: authLoading } = useAuth()
     const router = useRouter()
     const searchParams = useSearchParams() // Hook
@@ -60,5 +60,23 @@ export default function PracticePage() {
                 {activeTab === 'projekty' && <ProjektyView />}
             </div>
         </div>
+    )
+}
+
+export default function PracticePage() {
+    return (
+        <Suspense fallback={
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'rgba(255, 255, 255, 0.6)'
+            }}>
+                Ładowanie...
+            </div>
+        }>
+            <PracticeContent />
+        </Suspense>
     )
 }
