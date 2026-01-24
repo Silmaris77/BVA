@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { User, Bell, Zap, Trophy, Flame, Target, LogOut, TrendingUp, Award, Rocket, BookOpen, Sparkles, Star, Settings } from 'lucide-react'
 import { getUserStatsSummary } from '@/lib/rpg-stats'
@@ -13,12 +13,12 @@ import EditProfileModal, { ARCHETYPES } from '@/components/profile/EditProfileMo
 export default function ProfilePage() {
     const { user, profile, signOut } = useAuth()
     const router = useRouter()
-    const [activeTab, setActiveTab] = useState<'informacje' | 'postepy' | 'cele' | 'ustawienia'>('informacje')
+    const searchParams = useSearchParams()
+    const activeTab = (searchParams.get('tab') as 'informacje' | 'postepy' | 'cele' | 'ustawienia') || 'informacje'
     const [isEditing, setIsEditing] = useState(false)
     const [userStats, setUserStats] = useState<any[]>([])
     const [userClasses, setUserClasses] = useState<any[]>([])
     const [userCombos, setUserCombos] = useState<any[]>([])
-    const [hoveredTab, setHoveredTab] = useState<string | null>(null)
 
     // Load RPG stats
     useEffect(() => {
@@ -46,89 +46,7 @@ export default function ProfilePage() {
 
     return (
         <div style={{ minHeight: '100vh' }}>
-            {/* Top Bar with Tabs */}
-            <div style={{
-                background: 'rgba(0, 0, 0, 0.2)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                padding: '16px 32px 16px 48px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                position: 'sticky',
-                top: '73px', // Below GlobalTopBar
-                zIndex: 49
-            }}>
-                {/* Tabs on Left */}
-                <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
-                    {(['informacje', 'postepy', 'cele', 'ustawienia'] as const).map(tab => {
-                        const isHovered = hoveredTab === tab
-                        const isActive = activeTab === tab
 
-                        return (
-                            <button
-                                key={tab}
-                                onClick={() => setActiveTab(tab)}
-                                onMouseEnter={() => setHoveredTab(tab)}
-                                onMouseLeave={() => setHoveredTab(null)}
-                                style={{
-                                    padding: '8px 16px',
-                                    borderRadius: '8px',
-                                    background: isActive
-                                        ? 'rgba(176, 0, 255, 0.2)'
-                                        : isHovered
-                                            ? 'rgba(255, 255, 255, 0.05)'
-                                            : 'transparent',
-                                    border: isActive
-                                        ? '1px solid #b000ff'
-                                        : isHovered
-                                            ? '1px solid rgba(255, 255, 255, 0.2)'
-                                            : '1px solid transparent',
-                                    color: isActive
-                                        ? '#b000ff'
-                                        : isHovered
-                                            ? 'rgba(255, 255, 255, 0.9)'
-                                            : 'rgba(255, 255, 255, 0.6)',
-                                    fontSize: '13px',
-                                    fontWeight: 600,
-                                    cursor: 'pointer',
-                                    fontFamily: 'Outfit, sans-serif',
-                                    textTransform: 'capitalize',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '6px',
-                                    transition: 'all 0.2s',
-                                    whiteSpace: 'nowrap',
-                                    position: 'relative',
-                                    overflow: 'hidden'
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: isHovered && !isActive ? '100%' : '-100%',
-                                        width: '100%',
-                                        height: '100%',
-                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
-                                        transition: isHovered && !isActive ? 'left 0.5s ease' : 'none',
-                                        pointerEvents: 'none',
-                                        zIndex: 1
-                                    }}
-                                />
-                                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    {tab === 'informacje' && <User size={16} />}
-                                    {tab === 'postepy' && <TrendingUp size={16} />}
-                                    {tab === 'cele' && <Target size={16} />}
-                                    {tab === 'ustawienia' && <LogOut size={16} />}
-                                    {tab}
-                                </div>
-                            </button>
-                        )
-                    })}
-                </div>
-            </div>
 
             {/* Content */}
             <div style={{ padding: '48px 32px 32px 48px' }}>
