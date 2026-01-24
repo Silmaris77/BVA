@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { User, Bell, Zap, Trophy, Flame, Target, LogOut, TrendingUp, Award, Rocket, BookOpen, Sparkles, Star } from 'lucide-react'
 import { getUserStatsSummary } from '@/lib/rpg-stats'
+import ActivityHeatmap from '@/components/profile/ActivityHeatmap'
 
 export default function ProfilePage() {
     const { user, profile, signOut } = useAuth()
@@ -147,6 +148,9 @@ export default function ProfilePage() {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Activity Heatmap */}
+                        <ActivityHeatmap />
 
                         {/* 4 Mini Stats Cards */}
                         <div style={{
