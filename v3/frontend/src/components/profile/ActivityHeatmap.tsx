@@ -169,12 +169,16 @@ export default function ActivityHeatmap() {
                                 key={dateStr}
                                 onMouseEnter={(e) => {
                                     const rect = e.currentTarget.getBoundingClientRect()
-                                    setHovered({
-                                        date: dateStr,
-                                        xp: count,
-                                        x: rect.left + rect.width / 2,
-                                        y: rect.top
-                                    })
+                                    const containerRect = containerRef.current?.getBoundingClientRect()
+
+                                    if (containerRect) {
+                                        setHovered({
+                                            date: dateStr,
+                                            xp: count,
+                                            x: rect.left - containerRect.left + (rect.width / 2),
+                                            y: rect.top - containerRect.top
+                                        })
+                                    }
                                 }}
                                 onMouseLeave={() => setHovered(null)}
                                 style={{
