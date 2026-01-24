@@ -85,8 +85,11 @@ async function checkClassUnlocks(userId: string): Promise<void> {
 
         // Count engrams per category
         const engramsByCategory: Record<string, number> = {}
-        userEngrams.forEach(ue => {
-            const category = (ue.engrams as any)?.stat_category
+        userEngrams.forEach((ue: { engrams: { stat_category: string } | { stat_category: string }[] | null }) => {
+            // Handle array or single object from Supabase join
+            const engramData = Array.isArray(ue.engrams) ? ue.engrams[0] : ue.engrams
+            const category = engramData?.stat_category
+
             if (category) {
                 engramsByCategory[category] = (engramsByCategory[category] || 0) + 1
             }
@@ -166,7 +169,7 @@ async function checkComboUnlocks(userId: string): Promise<void> {
 
         if (!userEngrams) return
 
-        const userEngramIds = userEngrams.map(ue => ue.engram_id)
+        const userEngramIds = userEngrams.map((ue: { engram_id: string }) => ue.engram_id)
 
         // Get all combo definitions
         const { data: combos } = await supabase
@@ -177,7 +180,7 @@ async function checkComboUnlocks(userId: string): Promise<void> {
 
         // Check each combo
         for (const combo of combos) {
-            const requiredEngrams = combo.required_engrams as string[]
+            const requiredEngrams: string[] = combo.required_engrams as string[] || []
 
             // Check if user has ALL required engrams
             const hasAll = requiredEngrams.every(reqId => userEngramIds.includes(reqId))
