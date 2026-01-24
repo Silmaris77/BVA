@@ -535,7 +535,7 @@ export default function EngramsPage() {
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation()
-                                        router.push(`/engrams/${engram.id}`)
+                                        router.push(`/engrams/${engram.engram_id}`)
                                     }}
                                     style={{
                                         width: '100%',

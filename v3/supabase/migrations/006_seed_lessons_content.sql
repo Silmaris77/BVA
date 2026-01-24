@@ -59,11 +59,35 @@ INSERT INTO lessons (
           "correct": 1,
           "explanation": "M18 Kompaktowy 300 Nm to sweet spot dla warsztatów osobowych. Wystarczający moment na koła i podwozie, a nie przepłaca za nadmiarową moc."
         }
+      },
+      {
+        "id": "card-5",
+        "type": "test",
+        "title": "Egzamin Końcowy",
+        "questions": [
+          {
+            "question": "Klient serwisuje osobówki. Jaki klucz wybierzesz?",
+            "options": ["M12 (135 Nm)", "M18 (300 Nm)", "M18 FHIWF (1000 Nm)"],
+            "correctAnswer": 1
+          },
+          {
+            "question": "Do czego służą klucze wysokomomentowe?",
+            "options": ["Do mebli", "Do kół ciężarówek", "Do elektroniki"],
+            "correctAnswer": 1
+          }
+        ]
       }
     ]
   }'::jsonb
 )
-ON CONFLICT (lesson_id) DO NOTHING;
+ON CONFLICT (lesson_id) 
+DO UPDATE SET 
+    title = EXCLUDED.title,
+    description = EXCLUDED.description,
+    content = EXCLUDED.content,
+    duration_minutes = EXCLUDED.duration_minutes,
+    xp_reward = EXCLUDED.xp_reward,
+    difficulty = EXCLUDED.difficulty;
 
 -- Lesson 2: Sprzedaż Konsultacyjna - SPIN (Automotive/PPE)
 INSERT INTO lessons (
@@ -120,7 +144,14 @@ INSERT INTO lessons (
     ]
   }'::jsonb
 )
-ON CONFLICT (lesson_id) DO NOTHING;
+ON CONFLICT (lesson_id) 
+DO UPDATE SET 
+    title = EXCLUDED.title,
+    description = EXCLUDED.description,
+    content = EXCLUDED.content,
+    duration_minutes = EXCLUDED.duration_minutes,
+    xp_reward = EXCLUDED.xp_reward,
+    difficulty = EXCLUDED.difficulty;
 
 -- ============================================
 -- VERIFICATION

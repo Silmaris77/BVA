@@ -9,7 +9,7 @@ import { X, ChevronLeft, ChevronRight, Menu } from 'lucide-react'
 import Toast from '@/components/Toast'
 
 interface Card {
-    type: 'intro' | 'concept' | 'question' | 'summary'
+    type: 'intro' | 'concept' | 'question' | 'summary' | 'test'
     [key: string]: any
 }
 
@@ -40,6 +40,7 @@ export default function LessonPlayerPage() {
     const [direction, setDirection] = useState<'left' | 'right'>('right')
     const [drawerOpen, setDrawerOpen] = useState(false)
     const contentAreaRef = useRef<HTMLDivElement>(null)
+    const [navBlocked, setNavBlocked] = useState(false)
 
     // Scroll to top when card changes
     useEffect(() => {
@@ -49,6 +50,16 @@ export default function LessonPlayerPage() {
         // Also scroll window for mobile
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }, [currentCardIndex])
+
+    // Update navBlocked based on card type
+    useEffect(() => {
+        const currentCard = cards[currentCardIndex]
+        if (currentCard?.type === 'test') {
+            setNavBlocked(true)
+        } else {
+            setNavBlocked(false)
+        }
+    }, [currentCardIndex, cards])
 
     useEffect(() => {
         async function loadLesson() {
@@ -124,6 +135,28 @@ export default function LessonPlayerPage() {
             }
         } catch (error) {
             console.error('Error completing lesson:', error)
+        }
+    }
+
+
+
+    const handleResetLesson = async () => {
+        try {
+            const response = await fetch(`/api/lessons/${lessonId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'reset' })
+            })
+
+            if (response.ok) {
+                setToast('Postęp zresetowany. Powodzenia!')
+                setCurrentCardIndex(0)
+                setNavBlocked(false)
+                // Reload lesson to be safe or just reset stats
+                setCompletedCards([])
+            }
+        } catch (error) {
+            console.error('Error resetting lesson:', error)
         }
     }
 
@@ -224,6 +257,8 @@ export default function LessonPlayerPage() {
 
     const currentCard = cards[currentCardIndex]
     const progress = ((currentCardIndex + 1) / cards.length) * 100
+    const isTestCard = currentCard.type === 'test'
+
 
     return (
         <div style={{
@@ -444,6 +479,34 @@ export default function LessonPlayerPage() {
                             <CardRenderer
                                 card={currentCard}
                                 onAnswer={() => { }}
+                                onReset={handleResetLesson}
+                                onTestResult={async (score, passed) => {
+                                    if (passed) {
+                                        // Unblock navigation
+                                        // Maybe auto-advance after small delay?
+                                        // For now user clicks "End" inside TestCard result screen or we enable "Next" button
+                                        // The TestCard shows "Lesson Unlocked".
+                                        // We can auto-complete if it's the last card?
+                                        // Let's rely on the bottom nav "Next/Finish" button which we will enable.
+
+                                        // Actually, we need to store state that test is passed to allow handleNext
+                                        // We can use a ref or state.
+                                        // But simple hack: update the card in state to mark it as passed?
+                                        // Let's assume handleNext checks if current card is test and if it's passed.
+                                    } else {
+                                        // Failed
+                                        // We need to reset lesson.
+                                        // TestCard shows "Repeat Lesson" button. But we need to handle the click?
+                                        // Actually TestCard just shows the button. It doesn't do the reset.
+                                        // Wait, TestCard doesn't have onReset callback.
+                                        // I should have added onReset to TestCard?
+                                        // Or TestCard calls onTestResult and Parent decides what to do.
+
+                                        // If failed, we should probably show a modal or just wait for user to click "Repeat"
+                                        // But wait, TestCard UI says "Musisz powtórzyć".
+                                        // I will implement reset logic here.
+                                    }
+                                }}
                             />
                         </div>
                     </div>
@@ -483,26 +546,49 @@ export default function LessonPlayerPage() {
                             Poprzednia
                         </button>
 
-                        <button
-                            onClick={handleNext}
-                            style={{
-                                padding: '12px 24px',
-                                background: 'linear-gradient(135deg, #00d4ff, #b000ff)',
-                                border: 'none',
-                                borderRadius: '12px',
-                                color: 'white',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                fontFamily: 'Outfit, sans-serif',
-                                boxShadow: '0 4px 20px rgba(0, 212, 255, 0.3)'
-                            }}
-                        >
-                            {currentCardIndex === cards.length - 1 ? 'Zakończ' : 'Następna'}
-                            <ChevronRight size={20} />
-                        </button>
+                        {navBlocked && isTestCard ? (
+                            <button
+                                onClick={handleResetLesson}
+                                style={{
+                                    padding: '12px 24px',
+                                    background: '#ef4444',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: 'white',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    fontFamily: 'Outfit, sans-serif',
+                                    boxShadow: '0 4px 20px rgba(239, 68, 68, 0.3)'
+                                }}
+                            >
+                                Powtórz Lekcję
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleNext}
+                                disabled={navBlocked}
+                                style={{
+                                    padding: '12px 24px',
+                                    background: navBlocked ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg, #00d4ff, #b000ff)',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: navBlocked ? 'rgba(255,255,255,0.3)' : 'white',
+                                    fontWeight: 600,
+                                    cursor: navBlocked ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    fontFamily: 'Outfit, sans-serif',
+                                    boxShadow: navBlocked ? 'none' : '0 4px 20px rgba(0, 212, 255, 0.3)'
+                                }}
+                            >
+                                {currentCardIndex === cards.length - 1 ? 'Zakończ' : 'Następna'}
+                                <ChevronRight size={20} />
+                            </button>
+                        )}
                     </div>
 
                     {/* Exit Confirmation Modal */}

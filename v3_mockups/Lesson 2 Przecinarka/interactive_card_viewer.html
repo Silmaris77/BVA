@@ -3061,7 +3061,7 @@
                 <div class="category-view-icon">📝</div>
                 <div class="category-view-title">
                     <h2>Assessment - Testy i ewaluacja</h2>
-                    <div class="category-view-description">10 kart - Sprawdzanie wiedzy i ocenianie postępów (w tym 2 🤖 AI)</div>
+                    <div class="category-view-description">11 kart - Sprawdzanie wiedzy i ocenianie postępów (w tym 2 🤖 AI)</div>
                 </div>
             </div>
             <div class="cards-list">
@@ -3167,6 +3167,20 @@
                         </div>
                     </div>
                     <div class="card-complexity low">LOW</div>
+                </div>
+
+                <div class="card-list-item" onclick="showCardDemo('test')">
+                    <div class="card-list-icon">🏆</div>
+                    <div class="card-list-content">
+                        <h3>Test (Lesson Gate)</h3>
+                        <p>Końcowy test zaliczający - 80% wymagane, limit czasowy</p>
+                        <div class="card-tags">
+                            <span class="card-tag">Gate Keeper</span>
+                            <span class="card-tag">Timed</span>
+                            <span class="card-tag">Pass/Fail</span>
+                        </div>
+                    </div>
+                    <div class="card-complexity high">HIGH</div>
                 </div>
 
                 <!-- AI CARDS -->
@@ -5586,6 +5600,332 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- DEMO: TEST CARD -->
+        <div id="demo-test" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="back-btn" onclick="showCategoryView('assessment')">
+                    <i data-lucide="arrow-left"></i> Powrót
+                </button>
+                <div class="demo-title">
+                    <h2>🏆 Test (Lesson Gate)</h2>
+                    <div class="demo-subtitle">Kategoria: Assessment • Complexity: HIGH</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div id="testCard" style="max-width: 700px; margin: 0 auto;">
+                    <!-- START SCREEN -->
+                    <div id="testStart" style="background: rgba(20, 20, 35, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 50px; text-align: center;">
+                        <div style="width: 80px; height: 80px; margin: 0 auto 24px; background: rgba(176, 0, 255, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(176, 0, 255, 0.2);">
+                            <i data-lucide="trophy" style="width: 40px; height: 40px; color: #b000ff;"></i>
+                        </div>
+                        <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 12px;">Sprawdź Wiedzę: Project Zero</h3>
+                        <p style="color: rgba(255, 255, 255, 0.6); font-size: 16px; margin-bottom: 32px; line-height: 1.6;">
+                            To jest test zaliczający lekcję. Musisz uzyskać minimum <strong style="color: #00ff88;">80%</strong> poprawnych odpowiedzi, aby kontynuować.<br>
+                            Masz ograniczony czas!
+                        </p>
+                        <div style="display: flex; justify-content: center; gap: 24px; margin-bottom: 32px;">
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.4); text-transform: uppercase;">Pytania</span>
+                                <span style="font-size: 20px; font-weight: 700;">5</span>
+                            </div>
+                            <div style="width: 1px; background: rgba(255, 255, 255, 0.1);"></div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.4); text-transform: uppercase;">Czas</span>
+                                <span style="font-size: 20px; font-weight: 700;">1:15</span>
+                            </div>
+                            <div style="width: 1px; background: rgba(255, 255, 255, 0.1);"></div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <span style="font-size: 12px; color: rgba(255, 255, 255, 0.4); text-transform: uppercase;">Próg</span>
+                                <span style="font-size: 20px; font-weight: 700; color: #00ff88;">80%</span>
+                            </div>
+                        </div>
+                        <button onclick="startTest()" style="padding: 16px 32px; background: linear-gradient(135deg, #b000ff, #00d4ff); border: none; border-radius: 12px; color: white; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%;">
+                            Rozpocznij Test
+                        </button>
+                    </div>
+
+                    <!-- TEST SCREEN -->
+                    <div id="testQuiz" class="hidden">
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(20, 20, 35, 0.4); padding: 12px 20px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 24px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="font-size: 12px; font-weight: 700; color: #b000ff; text-transform: uppercase; background: rgba(176, 0, 255, 0.1); padding: 4px 8px; border-radius: 6px;">
+                                    PYTANIE <span id="testCurrentQ">1</span> / 5
+                                </div>
+                                <div style="width: 100px; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden;">
+                                    <div id="testProgress" style="width: 20%; height: 100%; background: #b000ff; transition: width 0.3s;"></div>
+                                </div>
+                            </div>
+                            <div id="testTimer" style="display: flex; align-items: center; gap: 8px; color: white; font-weight: 700; font-variant-numeric: tabular-nums;">
+                                <i data-lucide="timer" style="width: 18px; height: 18px;"></i>
+                                <span id="testTimeLeft">1:15</span>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(20, 20, 35, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 40px;">
+                            <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 30px; line-height: 1.4;" id="testQuestion">
+                                Jakie są trzy filary Project Zero?
+                            </h3>
+                            <div style="display: flex; flex-direction: column; gap: 12px;" id="testOptions">
+                                <button class="test-option" onclick="selectTestAnswer(0)">
+                                    <div class="option-letter">A</div>
+                                    <span>Edukacja, Bezpieczniejsze narzędzia, Kultura nawyków</span>
+                                </button>
+                                <button class="test-option" onclick="selectTestAnswer(1)">
+                                    <div class="option-letter">B</div>
+                                    <span>Safety, Quality, Productivity</span>
+                                </button>
+                                <button class="test-option" onclick="selectTestAnswer(2)">
+                                    <div class="option-letter">C</div>
+                                    <span>People, Process, Technology</span>
+                                </button>
+                                <button class="test-option" onclick="selectTestAnswer(3)">
+                                    <div class="option-letter">D</div>
+                                    <span>Zero accidents, Zero emissions, Zero space</span>
+                                </button>
+                            </div>
+                            <div id="testNextBtn" class="hidden" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                <button onclick="nextTestQuestion()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #b000ff, #00d4ff); border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    Następne Pytanie
+                                    <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RESULT SCREEN -->
+                    <div id="testResult" class="hidden" style="background: rgba(20, 20, 35, 0.8); backdrop-filter: blur(20px); border-radius: 24px; padding: 50px; text-align: center;">
+                        <div id="testResultIcon" style="width: 100px; height: 100px; margin: 0 auto 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <!-- Icon will be added dynamically -->
+                        </div>
+                        <h2 id="testResultTitle" style="font-size: 32px; font-weight: 700; margin-bottom: 10px;"></h2>
+                        <div style="font-size: 18px; color: rgba(255, 255, 255, 0.6); margin-bottom: 40px;">
+                            Twój wynik: <span id="testResultScore" style="font-weight: 700; font-size: 24px;"></span>
+                            <div style="font-size: 14px; margin-top: 8px;">Wymagane: 80%</div>
+                        </div>
+                        <div id="testResultMessage" style="font-weight: 600;"></div>
+                    </div>
+                </div>
+
+                <style>
+                    .test-option {
+                        padding: 16px 20px;
+                        background: rgba(255, 255, 255, 0.05);
+                        border: 2px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 12px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        font-size: 16px;
+                        color: white;
+                        width: 100%;
+                        text-align: left;
+                        transition: all 0.2s;
+                    }
+                    .test-option:hover {
+                        background: rgba(255, 255, 255, 0.1);
+                        border-color: rgba(176, 0, 255, 0.5);
+                    }
+                    .test-option.selected-correct {
+                        background: rgba(0, 255, 136, 0.15);
+                        border-color: #00ff88;
+                    }
+                    .test-option.selected-wrong {
+                        background: rgba(239, 68, 68, 0.15);
+                        border-color: #ef4444;
+                    }
+                    .test-option.disabled {
+                        opacity: 0.6;
+                        cursor: default;
+                    }
+                    .option-letter {
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 8px;
+                        background: rgba(255, 255, 255, 0.1);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: 700;
+                        font-size: 14px;
+                        flex-shrink: 0;
+                    }
+                </style>
+
+                <script>
+                    let testState = {
+                        currentQuestion: 0,
+                        score: 0,
+                        totalQuestions: 5,
+                        timeLeft: 75, // 1:15
+                        timer: null,
+                        questions: [
+                            {
+                                q: "Jakie są trzy filary Project Zero?",
+                                options: [
+                                    "Edukacja, Bezpieczniejsze narzędzia, Kultura nawyków",
+                                    "Safety, Quality, Productivity",
+                                    "People, Process, Technology",
+                                    "Zero accidents, Zero emissions, Zero space"
+                                ],
+                                correct: 0
+                            },
+                            {
+                                q: "Co oznacza STOP w metodologii STOP-LOOK-ASSESS-ACT?",
+                                options: [
+                                    "Stop working immediately",
+                                    "Zatrzymaj się przed rozpoczęciem pracy",
+                                    "Stop and think about tools",
+                                    "Safety training on priority"
+                                ],
+                                correct: 1
+                            },
+                            {
+                                q: "Ile procent wypadków budowlanych jest wynikiem braku kasku?",
+                                options: ["50%", "65%", "84%", "92%"],
+                                correct: 2
+                            },
+                            {
+                                q: "Kiedy należy sprawdzić stan PPE?",
+                                options: [
+                                    "Raz w miesiącu",
+                                    "Po każdym użyciu",
+                                    "Przed każdym użyciem",
+                                    "Tylko gdy jest uszkodzone"
+                                ],
+                                correct: 2
+                            },
+                            {
+                                q: "Co to jest główny cel Project Zero?",
+                                options: [
+                                    "Zwiększenie sprzedaży",
+                                    "Zero accidents, zero emissions, zero compromises",
+                                    "Redukcja kosztów",
+                                    "Szybsza produkcja"
+                                ],
+                                correct: 1
+                            }
+                        ]
+                    };
+
+                    function startTest() {
+                        document.getElementById('testStart').classList.add('hidden');
+                        document.getElementById('testQuiz').classList.remove('hidden');
+                        testState.currentQuestion = 0;
+                        testState.score = 0;
+                        testState.timeLeft = 75;
+                        loadTestQuestion();
+                        startTestTimer();
+                    }
+
+                    function startTestTimer() {
+                        testState.timer = setInterval(() => {
+                            testState.timeLeft--;
+                            updateTestTimer();
+                            if (testState.timeLeft <= 0) {
+                                finishTest();
+                            }
+                        }, 1000);
+                    }
+
+                    function updateTestTimer() {
+                        const mins = Math.floor(testState.timeLeft / 60);
+                        const secs = testState.timeLeft % 60;
+                        const timerEl = document.getElementById('testTimeLeft');
+                        timerEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+                        if (testState.timeLeft < 30) {
+                            timerEl.style.color = '#ef4444';
+                        }
+                    }
+
+                    function loadTestQuestion() {
+                        const q = testState.questions[testState.currentQuestion];
+                        document.getElementById('testQuestion').textContent = q.q;
+                        document.getElementById('testCurrentQ').textContent = testState.currentQuestion + 1;
+                        const progress = ((testState.currentQuestion) / testState.totalQuestions) * 100;
+                        document.getElementById('testProgress').style.width = progress + '%';
+
+                        const optionsContainer = document.getElementById('testOptions');
+                        optionsContainer.innerHTML = '';
+                        const letters = ['A', 'B', 'C', 'D'];
+                        q.options.forEach((opt, i) => {
+                            const btn = document.createElement('button');
+                            btn.className = 'test-option';
+                            btn.onclick = () => selectTestAnswer(i);
+                            btn.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt}</span>`;
+                            optionsContainer.appendChild(btn);
+                        });
+
+                        document.getElementById('testNextBtn').classList.add('hidden');
+                    }
+
+                    function selectTestAnswer(index) {
+                        const q = testState.questions[testState.currentQuestion];
+                        const buttons = document.querySelectorAll('.test-option');
+                        buttons.forEach(btn => btn.classList.add('disabled'));
+
+                        if (index === q.correct) {
+                            buttons[index].classList.add('selected-correct');
+                            testState.score++;
+                        } else {
+                            buttons[index].classList.add('selected-wrong');
+                        }
+
+                        document.getElementById('testNextBtn').classList.remove('hidden');
+                    }
+
+                    function nextTestQuestion() {
+                        testState.currentQuestion++;
+                        if (testState.currentQuestion < testState.totalQuestions) {
+                            loadTestQuestion();
+                        } else {
+                            finishTest();
+                        }
+                    }
+
+                    function finishTest() {
+                        clearInterval(testState.timer);
+                        const percentage = Math.round((testState.score / testState.totalQuestions) * 100);
+                        const passed = percentage >= 80;
+
+                        document.getElementById('testQuiz').classList.add('hidden');
+                        document.getElementById('testResult').classList.remove('hidden');
+
+                        const iconDiv = document.getElementById('testResultIcon');
+                        const titleEl = document.getElementById('testResultTitle');
+                        const scoreEl = document.getElementById('testResultScore');
+                        const messageEl = document.getElementById('testResultMessage');
+
+                        if (passed) {
+                            iconDiv.style.background = 'rgba(0, 255, 136, 0.1)';
+                            iconDiv.style.boxShadow = '0 0 40px rgba(0, 255, 136, 0.2)';
+                            iconDiv.innerHTML = '<i data-lucide="trophy" style="width: 48px; height: 48px; color: #00ff88;"></i>';
+                            titleEl.textContent = 'Gratulacje!';
+                            titleEl.style.color = 'white';
+                            scoreEl.textContent = percentage + '%';
+                            scoreEl.style.color = '#00ff88';
+                            messageEl.style.color = '#00ff88';
+                            messageEl.textContent = 'Lekcja odblokowana. Kliknij "Zakończ" na dole ekranu.';
+                            document.getElementById('testResult').style.border = '1px solid #00ff88';
+                        } else {
+                            iconDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+                            iconDiv.style.boxShadow = '0 0 40px rgba(239, 68, 68, 0.2)';
+                            iconDiv.innerHTML = '<i data-lucide="alert-circle" style="width: 48px; height: 48px; color: #ef4444;"></i>';
+                            titleEl.textContent = 'Test Niezaliczony';
+                            titleEl.style.color = 'white';
+                            scoreEl.textContent = percentage + '%';
+                            scoreEl.style.color = '#ef4444';
+                            messageEl.style.color = '#ef4444';
+                            messageEl.textContent = 'Musisz powtórzyć lekcję';
+                            document.getElementById('testResult').style.border = '1px solid #ef4444';
+                        }
+
+                        lucide.createIcons();
+                    }
+                </script>
             </div>
         </div>
 

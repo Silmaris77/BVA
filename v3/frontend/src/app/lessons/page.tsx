@@ -152,16 +152,17 @@ export default function LessonsPage() {
                 padding: '16px 32px 16px 48px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'flex-start',
                 position: 'sticky',
-                top: 0,
+                top: '73px', // Below GlobalTopBar
                 zIndex: 50
             }}>
                 {/* Main Tabs */}
                 <div style={{
                     display: 'flex',
                     gap: '8px',
-                    flex: 1
+                    overflowX: 'auto',
+                    paddingBottom: '4px'
                 }}>
                     <Link
                         href="/lessons"
@@ -179,7 +180,8 @@ export default function LessonsPage() {
                             alignItems: 'center',
                             gap: '6px',
                             transition: 'all 0.2s',
-                            textDecoration: 'none'
+                            textDecoration: 'none',
+                            whiteSpace: 'nowrap'
                         }}
                     >
                         <BookOpen size={16} />
@@ -201,7 +203,8 @@ export default function LessonsPage() {
                             alignItems: 'center',
                             gap: '6px',
                             transition: 'all 0.2s',
-                            textDecoration: 'none'
+                            textDecoration: 'none',
+                            whiteSpace: 'nowrap'
                         }}
                     >
                         <Brain size={16} />
@@ -223,73 +226,13 @@ export default function LessonsPage() {
                             alignItems: 'center',
                             gap: '6px',
                             transition: 'all 0.2s',
-                            textDecoration: 'none'
+                            textDecoration: 'none',
+                            whiteSpace: 'nowrap'
                         }}
                     >
                         <Library size={16} />
                         Zasoby
                     </Link>
-                </div>
-
-                {/* Actions */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '12px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        position: 'relative'
-                    }}>
-                        <Bell size={20} />
-                        <div style={{
-                            position: 'absolute',
-                            top: '-4px',
-                            right: '-4px',
-                            width: '18px',
-                            height: '18px',
-                            background: '#ff0055',
-                            borderRadius: '50%',
-                            fontSize: '10px',
-                            fontWeight: 700,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>3</div>
-                    </div>
-
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '6px 12px',
-                        background: 'linear-gradient(135deg, #ffd700, #ff8800)',
-                        borderRadius: '20px',
-                        fontSize: '13px',
-                        fontWeight: 700,
-                        color: '#000'
-                    }}>
-                        <Zap size={16} />
-                        <span>{profile?.xp || 0} XP</span>
-                    </div>
-
-                    <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #b000ff, #00d4ff)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 700,
-                        cursor: 'pointer'
-                    }}>
-                        {profile?.full_name?.substring(0, 2).toUpperCase() || 'U'}
-                    </div>
                 </div>
             </div>
 

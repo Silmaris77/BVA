@@ -5,13 +5,17 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Zap, Trophy, Target, Flame, BookOpen, Brain, ChevronRight, GraduationCap, Bell } from 'lucide-react'
+import ResumeLessonCard from '@/components/hub/ResumeLessonCard'
+import NewsFeed from '@/components/hub/NewsFeed'
+import DailyTip from '@/components/hub/DailyTip'
 
 export default function HomePage() {
   const { user, profile, loading } = useAuth()
   const router = useRouter()
   const [completedLessons, setCompletedLessons] = useState<number>(0)
   const [leaderboard, setLeaderboard] = useState<any[]>([])
-  const [leaderboardLoading, setLeaderboardLoading] = useState(true)
+  const [hubData, setHubData] = useState<any>(null)
+  const [loadingHub, setLoadingHub] = useState(true)
 
   useEffect(() => {
     if (!loading && !user) {
@@ -20,9 +24,10 @@ export default function HomePage() {
   }, [user, loading, router])
 
   useEffect(() => {
-    async function fetchStats() {
+    async function fetchData() {
       if (!user) return
 
+      // 1. Fetch Stats
       const { count } = await supabase
         .from('user_progress')
         .select('*', { count: 'exact', head: true })
@@ -30,37 +35,26 @@ export default function HomePage() {
         .not('completed_at', 'is', null)
 
       setCompletedLessons(count || 0)
-    }
 
-    fetchStats()
-  }, [user])
+      // 2. Fetch Leaderboard
+      const lbRes = await fetch('/api/leaderboard?limit=5') // Limit 5 for widget
+      if (lbRes.ok) setLeaderboard(await lbRes.json())
 
-  useEffect(() => {
-    async function fetchLeaderboard() {
-      if (!user) return
-
+      // 3. Fetch Hub Data (News, Tips, Resume, Streak)
       try {
-        setLeaderboardLoading(true)
-        const response = await fetch('/api/leaderboard?limit=10')
-
-        if (!response.ok) {
-          console.error('Leaderboard fetch failed:', response.statusText)
-          return
-        }
-
-        const data = await response.json()
-        setLeaderboard(data)
-      } catch (error) {
-        console.error('Leaderboard error:', error)
+        const hubRes = await fetch('/api/hub')
+        if (hubRes.ok) setHubData(await hubRes.json())
+      } catch (e) {
+        console.error('Hub fetch error', e)
       } finally {
-        setLeaderboardLoading(false)
+        setLoadingHub(false)
       }
     }
 
-    fetchLeaderboard()
+    if (user) fetchData()
   }, [user])
 
-  if (loading) {
+  if (loading || loadingHub) {
     return (
       <div style={{
         minHeight: '100vh',
@@ -81,87 +75,11 @@ export default function HomePage() {
     return names[Math.min(level - 1, names.length - 1)] || 'Recruit'
   }
 
-  // Main content area matching mockup structure
+  // Derived Streak
+  const streak = hubData?.streak?.current || 0
+
   return (
     <div style={{ minHeight: '100vh' }}>
-      {/* Top Bar */}
-      <div style={{
-        background: 'rgba(0, 0, 0, 0.2)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-        padding: '16px 32px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        position: 'sticky',
-        top: 0,
-        zIndex: 50
-      }}>
-        {/* Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          {/* Notifications */}
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '12px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            position: 'relative'
-          }}>
-            <Bell size={20} />
-            <div style={{
-              position: 'absolute',
-              top: '-4px',
-              right: '-4px',
-              width: '18px',
-              height: '18px',
-              background: '#ff0055',
-              borderRadius: '50%',
-              fontSize: '10px',
-              fontWeight: 700,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>3</div>
-          </div>
-
-          {/* XP Badge */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '6px 12px',
-            background: 'linear-gradient(135deg, #ffd700, #ff8800)',
-            borderRadius: '20px',
-            fontSize: '13px',
-            fontWeight: 700,
-            color: '#000'
-          }}>
-            <Zap size={16} />
-            <span>{profile?.xp || 0} XP</span>
-          </div>
-
-          {/* Profile */}
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #b000ff, #00d4ff)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 700,
-            cursor: 'pointer'
-          }}>
-            {profile?.full_name?.substring(0, 2).toUpperCase() || 'U'}
-          </div>
-        </div>
-      </div>
 
       {/* Content with padding matching mockup */}
       <div style={{ padding: '48px 32px 32px 48px' }}>
@@ -172,15 +90,20 @@ export default function HomePage() {
             fontWeight: 700,
             marginBottom: ' 8px'
           }}>
-            Witaj z powrotem, {profile?.full_name?.split(' ')[0] || 'Piotr'}! 👋
+            Witaj z powrotem, {profile?.full_name?.split(' ')[0] || 'User'}! 👋
           </h1>
           <p style={{
             fontSize: '15px',
             color: 'rgba(255, 255, 255, 0.6)'
           }}>
-            Kontynuuj swoją podróż. Dziś masz 3 aktywne misje do ukończenia.
+            Kontynuuj swoją podróż. Dziś masz {hubData?.missions?.filter((m: any) => m.progress < 100).length || 0} aktywne misje do ukończenia.
           </p>
         </div>
+
+        {/* Dynamic Resume Lesson Card */}
+        {hubData?.resume_lesson && (
+          <ResumeLessonCard lesson={hubData.resume_lesson} />
+        )}
 
         {/* Stats Grid */}
         <div style={{
@@ -192,7 +115,7 @@ export default function HomePage() {
           <StatCard
             icon={<Trophy size={24} />}
             iconColor="purple"
-            value="#8"
+            value={`#${hubData?.leaderboard_rank || '-'}`} // TODO: Get rank from API
             label="Ranking"
           />
           <StatCard
@@ -204,14 +127,14 @@ export default function HomePage() {
           <StatCard
             icon={<Target size={24} />}
             iconColor="gold"
-            value={`${completedLessons}/15`}
+            value={`${completedLessons}`}
             label="Ukończone lekcje"
           />
           <StatCard
-            icon={<Flame size={24} />}
+            icon={<Brain size={24} />}
             iconColor="green"
-            value="7 dni"
-            label="Streak"
+            value={`${hubData?.total_engrams || 0}`}
+            label="Opanowane pojęcia"
           />
         </div>
 
@@ -222,81 +145,77 @@ export default function HomePage() {
           gap: '24px',
           marginBottom: '32px'
         }}>
-          {/* Missions */}
-          <GlassCard>
-            <CardHeader title="🎯 Aktywne Misje" action="Zobacz wszystkie" />
-            <MissionItem
-              icon={<GraduationCap size={18} />}
-              title="Milwaukee Canvas - Krok 4/7"
-              meta="🔥 3 karty do końca | ~12 min | +50 XP"
-              progress={57}
-            />
-            <MissionItem
-              icon={<Brain size={18} />}
-              title="Neural Engram: Leadership Basics"
-              meta="⏳ Pobrano | Aktywacja: 24h"
-              progress={0}
-            />
-            <MissionItem
-              icon={<Trophy size={18} />}
-              title="Tygodniowe Wyzwanie: 5 lekcji"
-              meta="🎯 Pozostało 3 dni | 3/5 ukończone"
-              progress={60}
-            />
-          </GlassCard>
+          {/* Left Column: News & Missions */}
+          <div>
+            <NewsFeed news={hubData?.news || []} />
 
-          {/* Leaderboard */}
-          <GlassCard>
-            <CardHeader title="🏆 Leaderboard" action="Top 100" />
-            {leaderboardLoading ? (
-              <div style={{
-                padding: '20px',
-                textAlign: 'center',
-                color: 'rgba(255, 255, 255, 0.6)'
-              }}>
-                Ładowanie rankingu...
-              </div>
-            ) : leaderboard.length === 0 ? (
-              <div style={{
-                padding: '20px',
-                textAlign: 'center',
-                color: 'rgba(255, 255, 255, 0.6)'
-              }}>
-                Brak danych rankingu
-              </div>
-            ) : (
-              <>
-                {leaderboard.map((entry) => (
-                  <LeaderboardItem
-                    key={entry.user_id}
-                    rank={entry.rank}
-                    initials={entry.display_name?.substring(0, 2).toUpperCase() || 'U'}
-                    name={entry.user_id === user?.id ? `${entry.display_name || 'Ty'} (Ty)` : (entry.display_name || 'User')}
-                    level={entry.level}
-                    title={levelName(entry.level)}
-                    xp={entry.total_xp}
-                    top={entry.rank <= 3}
+            {/* Missions */}
+            <GlassCard>
+              <CardHeader title="🎯 Aktywne Misje" action="Zobacz wszystkie" />
+
+              {hubData?.missions?.map((mission: any, index: number) => {
+                const getIcon = (name: string) => {
+                  switch (name) {
+                    case 'GraduationCap': return <GraduationCap size={18} />
+                    case 'Trophy': return <Trophy size={18} />
+                    case 'Brain': return <Brain size={18} />
+                    default: return <Target size={18} />
+                  }
+                }
+
+                return (
+                  <MissionItem
+                    key={mission.id || index}
+                    icon={getIcon(mission.icon)}
+                    title={mission.title}
+                    meta={mission.meta}
+                    progress={mission.progress}
                   />
-                ))}
-              </>
-            )}
-          </GlassCard>
-        </div>
+                )
+              })}
 
-        {/* Radar Chart */}
-        <GlassCard>
-          <CardHeader title="📊 Mapa Kompetencji" action="Szczegóły" />
-          <div style={{
-            height: '300px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'rgba(255, 255, 255, 0.4)',
-            fontSize: '14px'
-          }}>
-            <p>📊 Radar chart kompetencji (wymaga Chart.js - dodamy w następnym kroku)</p>
+              {!hubData?.missions && (
+                <div style={{ textAlign: 'center', padding: '20px', color: 'rgba(255,255,255,0.5)' }}>
+                  Ładowanie misji...
+                </div>
+              )}
+            </GlassCard>
           </div>
-        </GlassCard>
+
+          {/* Right Column: Tips & Leaderboard */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <DailyTip tip={hubData?.daily_tip} />
+
+            {/* Leaderboard */}
+            <GlassCard>
+              <CardHeader title="🏆 Leaderboard Top 5" action="Pełny Ranking" />
+              {leaderboard.length === 0 ? (
+                <div style={{
+                  padding: '20px',
+                  textAlign: 'center',
+                  color: 'rgba(255, 255, 255, 0.6)'
+                }}>
+                  Brak danych rankingu
+                </div>
+              ) : (
+                <>
+                  {leaderboard.map((entry) => (
+                    <LeaderboardItem
+                      key={entry.user_id}
+                      rank={entry.rank}
+                      initials={entry.display_name?.substring(0, 2).toUpperCase() || 'U'}
+                      name={entry.user_id === user?.id ? `${entry.display_name || 'Ty'} (Ty)` : (entry.display_name || 'User')}
+                      level={entry.level}
+                      title={levelName(entry.level)}
+                      xp={entry.total_xp}
+                      top={entry.rank <= 3}
+                    />
+                  ))}
+                </>
+              )}
+            </GlassCard>
+          </div>
+        </div>
       </div>
     </div>
   )

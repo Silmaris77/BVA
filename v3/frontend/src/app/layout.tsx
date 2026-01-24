@@ -4,6 +4,7 @@ import { Outfit } from "next/font/google"
 import { AuthProvider } from "@/contexts/AuthContext"
 import Sidebar from "@/components/Navigation"
 import BottomNav from "@/components/BottomNav"
+import GlobalTopBar from "@/components/layout/GlobalTopBar"
 import { usePathname } from "next/navigation"
 import "./globals.css"
 
@@ -31,6 +32,7 @@ export default function RootLayout({
           {!isAuthPage && !isLessonPlayer && <Sidebar />}
           {/* Main content with responsive margins - skip for fullscreen pages */}
           <div className={!isAuthPage && !isLessonPlayer ? 'main-content' : ''}>
+            {!isAuthPage && !isLessonPlayer && <GlobalTopBar />}
             {children}
           </div>
           {!isAuthPage && !isLessonPlayer && <BottomNav />}

@@ -15,10 +15,11 @@ import QuoteCard from './QuoteCard'
 import DataCard from './DataCard'
 import StoryCard from './StoryCard'
 import EndingCard from './EndingCard'
+import TestCard from './TestCard'
 
 interface CardRendererProps {
     card: {
-        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending'
+        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test'
         title?: string
         subtitle?: string
         description?: string
@@ -66,12 +67,20 @@ interface CardRendererProps {
         [key: string]: any
     }
     onAnswer?: (correct: boolean) => void
+    onTestResult?: (score: number, passed: boolean) => void
+    onReset?: () => void
 }
 
-export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
+export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: CardRendererProps) {
     switch (card.type) {
-
-        case 'interactive':
+        // ... previous cases ...
+        case 'test':
+            return <TestCard
+                title={card.title || 'Końcowy Test'}
+                questions={card.questions || []}
+                onTestResult={onTestResult || (() => { })}
+                onReset={onReset}
+            />
             // Interactive contains a quiz
             return <QuestionCard
                 question={card.quiz?.question || card.title || 'Pytanie'}
@@ -217,6 +226,12 @@ export default function CardRenderer({ card, onAnswer }: CardRendererProps) {
                 text={card.content || card.text || ''}
                 author={card.author || ''}
                 role={card.role}
+            />
+        case 'test':
+            return <TestCard
+                title={card.title || 'Końcowy Test'}
+                questions={card.questions || []}
+                onTestResult={onTestResult || (() => { })}
             />
         default:
             return (

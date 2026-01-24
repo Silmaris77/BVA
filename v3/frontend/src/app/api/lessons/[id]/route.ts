@@ -165,6 +165,29 @@ export async function POST(
             return NextResponse.json({ success: true, progress });
         }
 
+        if (action === 'reset') {
+            // Reset lesson progress to not_started (or just in_progress with card 0)
+            const { data: progress, error: progressError } = await supabase
+                .from('user_lesson_progress')
+                .update({
+                    status: 'in_progress',
+                    current_card: 0,
+                    completed_at: null,
+                    xp_earned: 0
+                })
+                .eq('user_id', user.id)
+                .eq('lesson_id', lessonId)
+                .select()
+                .single();
+
+            if (progressError) {
+                console.error('Progress reset error:', progressError);
+                return NextResponse.json({ error: progressError.message }, { status: 500 });
+            }
+
+            return NextResponse.json({ success: true, progress });
+        }
+
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
 
     } catch (error) {

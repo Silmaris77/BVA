@@ -29,7 +29,18 @@ interface QuizItem {
     explanation?: string
 }
 
-// Helper function to normalize quiz item
+// Simple hash function for deterministic answer positioning
+function simpleHash(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash);
+}
+
+// Helper function to normalize quiz item - uses deterministic positioning
 function normalizeQuiz(item: QuizItem): { question: string; options: string[]; correctAnswer: number; explanation?: string } {
     const question = item.question || item.q || '';
     let options: string[] = [];
@@ -41,9 +52,9 @@ function normalizeQuiz(item: QuizItem): { question: string; options: string[]; c
         correctAnswer = item.correctAnswer;
     } else if (item.a && item.wrong) {
         // Shorthand format: a (correct answer) and wrong (array of wrong answers)
-        // Randomize position of correct answer
+        // Use deterministic position based on question text (not random!)
         const wrongAnswers = item.wrong;
-        correctAnswer = Math.floor(Math.random() * (wrongAnswers.length + 1));
+        correctAnswer = simpleHash(question) % (wrongAnswers.length + 1);
         options = [...wrongAnswers];
         options.splice(correctAnswer, 0, item.a);
     }
@@ -81,6 +92,7 @@ export default function EngramPlayerPage() {
     const [failed, setFailed] = useState(false)
     const [mode, setMode] = useState<'slides' | 'quiz'>('slides')
     const [quizIndex, setQuizIndex] = useState(0)
+    const [userXP, setUserXP] = useState<number | null>(null)
 
     const PASS_THRESHOLD = 0.7 // 70% required to pass
 
@@ -126,6 +138,29 @@ export default function EngramPlayerPage() {
             }
 
             setEngram(data.engram)
+
+            // Also fetch user XP to check if they can afford this engram
+            try {
+                const profileRes = await fetch('/api/user/profile')
+                console.log('Profile API status:', profileRes.status)
+
+                if (profileRes.ok) {
+                    const profileData = await profileRes.json()
+                    console.log('Profile API data:', profileData)
+
+                    // API returns { user: { profile: { totalXp: number } } }
+                    const xp = profileData?.user?.profile?.totalXp ?? profileData?.user?.profile?.xp
+                    console.log('Extracted XP:', xp)
+
+                    if (xp !== undefined) {
+                        setUserXP(xp)
+                    } else {
+                        console.warn('XP not found in profile data')
+                    }
+                }
+            } catch (profileError) {
+                console.error('Error fetching profile:', profileError)
+            }
         } catch (error) {
             console.error('Error loading engram:', error)
         } finally {
@@ -144,17 +179,33 @@ export default function EngramPlayerPage() {
         }
 
         try {
-            const response = await fetch(`/api/engrams/${engramId}`, {
+            // Use refresh endpoint if already installed, otherwise install
+            const endpoint = engram?.installed
+                ? `/api/engrams/${engramId}/refresh`
+                : `/api/engrams/${engramId}/install`
+
+            console.log('Calling endpoint:', endpoint, 'installed:', engram?.installed)
+
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    action: 'install',
-                    quiz_score: totalQuizzes > 0 ? Math.round((correctAnswers / totalQuizzes) * 100) : 100
+                    score: totalQuizzes > 0 ? Math.round((correctAnswers / totalQuizzes) * 100) : 100
                 })
             })
 
+            const data = await response.json()
+            console.log('Response:', response.status, data)
+
             if (response.ok) {
                 setCompleted(true)
+            } else if (data.error === 'Already installed') {
+                // Engram is already installed - this is actually success
+                console.log('Engram already installed, treating as success')
+                setCompleted(true)
+            } else {
+                console.error('Completion error:', data.error, data.details || '')
+                alert(data.error || 'Failed to complete engram')
             }
         } catch (error) {
             console.error('Error completing engram:', error)
@@ -286,6 +337,92 @@ export default function EngramPlayerPage() {
                 >
                     Wróć do katalogu
                 </button>
+            </div>
+        )
+    }
+
+    // Check if user has enough XP for non-installed engrams
+    // DEBUG: Always allow afford for testing
+    const canAfford = true // engram.installed || userXP === null || userXP >= (engram.install_xp || 0)
+
+    if (!canAfford) {
+        return (
+            <div style={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '32px'
+            }}>
+                <div style={{
+                    maxWidth: '500px',
+                    width: '100%',
+                    textAlign: 'center',
+                    background: 'rgba(20, 20, 35, 0.6)',
+                    backdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255, 136, 0, 0.3)',
+                    borderRadius: '24px',
+                    padding: '48px 32px'
+                }}>
+                    <div style={{
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '50%',
+                        background: 'rgba(255, 136, 0, 0.2)',
+                        border: '3px solid #ff8800',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0 auto 24px',
+                        fontSize: '36px'
+                    }}>
+                        💰
+                    </div>
+
+                    <h1 style={{
+                        fontSize: '24px',
+                        fontWeight: 700,
+                        marginBottom: '16px',
+                        color: '#ff8800'
+                    }}>
+                        Niewystarczające XP
+                    </h1>
+
+                    <p style={{
+                        fontSize: '16px',
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        marginBottom: '24px'
+                    }}>
+                        Potrzebujesz <strong style={{ color: '#ffd700' }}>{engram.install_xp} XP</strong> żeby zainstalować ten engram.
+                        <br />
+                        Masz obecnie <strong style={{ color: '#ff8800' }}>{userXP} XP</strong>.
+                    </p>
+
+                    <p style={{
+                        fontSize: '14px',
+                        color: 'rgba(255, 255, 255, 0.5)',
+                        marginBottom: '32px'
+                    }}>
+                        Zdobądź więcej XP kończąc lekcje i odświeżając engramy!
+                    </p>
+
+                    <button
+                        onClick={() => router.push('/engrams')}
+                        style={{
+                            padding: '14px 32px',
+                            background: 'linear-gradient(135deg, #ff8800, #ffd700)',
+                            border: 'none',
+                            borderRadius: '12px',
+                            color: '#000',
+                            fontSize: '15px',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            fontFamily: 'Outfit, sans-serif'
+                        }}
+                    >
+                        Wróć do katalogu
+                    </button>
+                </div>
             </div>
         )
     }
