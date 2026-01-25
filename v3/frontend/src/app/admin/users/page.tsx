@@ -157,7 +157,7 @@ export default function AdminUsersPage() {
                                 <td style={{ padding: '16px' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                         <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #b000ff, #00d4ff)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px' }}>
-                                            {u.display_name?.substring(0, 2).toUpperCase() || u.email.substring(0, 2).toUpperCase()}
+                                            {u.display_name?.substring(0, 2).toUpperCase() || (u.email ? u.email.substring(0, 2).toUpperCase() : '??')}
                                         </div>
                                         <div>
                                             <div style={{ fontSize: '14px', fontWeight: 600 }}>{u.display_name || 'Bez nazwy'}</div>

@@ -38,38 +38,69 @@ export async function GET() {
             }
         }
 
+        let isAuthorizedForMath = false;
+
         // INJECT LOCAL MATH LESSON
-        try {
-            const fs = await import('fs');
-            const path = await import('path');
-            const filePath = path.join(process.cwd(), 'src/data/math/grade7/lesson1.json');
+        // Check access control: Admin OR (Company="Szkoła" AND Role="Uczeń")
+        if (user) {
+            try {
+                const { data: profile } = await supabase
+                    .from('user_profiles')
+                    .select(`
+                        *,
+                        company:companies(name),
+                        role:user_roles(role_slug, display_name)
+                    `)
+                    .eq('id', user.id)
+                    .single();
 
-            if (fs.existsSync(filePath)) {
-                const fileContent = fs.readFileSync(filePath, 'utf-8');
-                const localLesson = JSON.parse(fileContent);
+                if (profile) {
+                    const isAdmin = profile.role?.role_slug === 'admin';
+                    const isStudent = profile.company?.name === 'Szkoła' && profile.role?.display_name === 'Uczeń';
 
-                // Add metadata required for list view
-                const mathLesson = {
-                    lesson_id: localLesson.lesson_id,
-                    title: localLesson.title,
-                    description: localLesson.subtitle || "Lekcja matematyki",
-                    duration_minutes: 15,
-                    xp_reward: localLesson.xp_reward || 50,
-                    difficulty: 'beginner',
-                    category: 'Matematyka',
-                    status: 'published',
-                    display_order: 0,
-                    release_date: null,
-                    module: 'math-grade7',
-                    track: 'math',
-                    content: localLesson.content // Include content or not depending on payload size
-                };
+                    // Allow simple 'student' slug check too just in case
+                    const isStudentSlug = profile.role?.role_slug === 'student';
 
-                // Add to beginning or end
-                lessons?.unshift(mathLesson);
+                    isAuthorizedForMath = isAdmin || isStudent || (profile.company?.name === 'Szkoła' && isStudentSlug);
+                }
+            } catch (err) {
+                console.error('Profile check error:', err);
             }
-        } catch (err) {
-            console.error('Failed to inject local lesson:', err);
+        }
+
+        if (isAuthorizedForMath) {
+            try {
+                const fs = await import('fs');
+                const path = await import('path');
+                const filePath = path.join(process.cwd(), 'src/data/math/grade7/lesson1.json');
+
+                if (fs.existsSync(filePath)) {
+                    const fileContent = fs.readFileSync(filePath, 'utf-8');
+                    const localLesson = JSON.parse(fileContent);
+
+                    // Add metadata required for list view
+                    const mathLesson = {
+                        lesson_id: localLesson.lesson_id,
+                        title: localLesson.title,
+                        description: localLesson.subtitle || "Lekcja matematyki",
+                        duration_minutes: 15,
+                        xp_reward: localLesson.xp_reward || 50,
+                        difficulty: 'beginner',
+                        category: 'Matematyka',
+                        status: 'published',
+                        display_order: 0,
+                        release_date: null,
+                        module: 'math-grade7',
+                        track: 'math',
+                        content: localLesson.content // Include content or not depending on payload size
+                    };
+
+                    // Add to beginning or end
+                    lessons?.unshift(mathLesson);
+                }
+            } catch (err) {
+                console.error('Failed to inject local lesson:', err);
+            }
         }
 
         return NextResponse.json({ lessons, progress: progressMap });

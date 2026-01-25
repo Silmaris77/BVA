@@ -53,7 +53,20 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
-        const supabase = await createClient()
+        // Use Service Role to bypass RLS for updating other users
+        const { createClient: createSupabaseClient } = await import('@supabase/supabase-js');
+        const supabaseAdmin = createSupabaseClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY!,
+            {
+                auth: {
+                    persistSession: false,
+                    autoRefreshToken: false,
+                    detectSessionInUrl: false
+                }
+            }
+        );
+
         const body = await request.json()
         const { user_id, role_slug, company_slug } = body
 
@@ -63,8 +76,11 @@ export async function PUT(request: NextRequest) {
 
         const updates: any = {}
 
-        if (role_slug) {
-            const { data: role } = await supabase
+        // Handle Role
+        if (role_slug === "") {
+            updates.role_id = null;
+        } else if (role_slug) {
+            const { data: role } = await supabaseAdmin
                 .from('user_roles')
                 .select('id')
                 .eq('role_slug', role_slug)
@@ -73,8 +89,11 @@ export async function PUT(request: NextRequest) {
             if (role) updates.role_id = role.id
         }
 
-        if (company_slug) {
-            const { data: company } = await supabase
+        // Handle Company
+        if (company_slug === "") {
+            updates.company_id = null;
+        } else if (company_slug) {
+            const { data: company } = await supabaseAdmin
                 .from('companies')
                 .select('id')
                 .eq('company_slug', company_slug)
@@ -83,7 +102,7 @@ export async function PUT(request: NextRequest) {
             if (company) updates.company_id = company.id
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('user_profiles')
             .update(updates)
             .eq('id', user_id)
@@ -91,6 +110,7 @@ export async function PUT(request: NextRequest) {
             .single()
 
         if (error) {
+            console.error('Update error:', error);
             return NextResponse.json({ error: error.message }, { status: 500 })
         }
 
