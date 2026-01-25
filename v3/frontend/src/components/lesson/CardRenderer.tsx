@@ -161,7 +161,7 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 content={card.content || card.description || ''}
                 actionSteps={card.actionSteps}
                 keyPoints={card.keyPoints}
-                scenario={card.scenario}
+                scenario={typeof card.scenario === 'string' ? card.scenario : undefined}
                 instruction={card.instruction}
                 inputs={card.inputs}
                 sampleAnswers={card.sampleAnswers}
