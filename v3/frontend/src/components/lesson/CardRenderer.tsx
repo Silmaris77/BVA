@@ -230,7 +230,7 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 icon={card.icon}
                 badge={typeof card.badge === 'object' ? card.badge?.title : card.badge}
                 title={card.title || 'Przypadek z terenu'}
-                scenario={card.scenario || { heading: '', text: '' }}
+                scenario={typeof card.scenario === 'object' ? card.scenario : undefined}
                 consequences={card.consequences || []}
                 lesson={card.lesson}
                 situation={card.situation}
