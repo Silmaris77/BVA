@@ -473,6 +473,7 @@ export default function StoryCard({ icon = '⚠️', badge, title, scenario, con
             )}
 
             {/* Lesson */}
+            {lesson && (
             <div style={{
                 background: 'rgba(0, 255, 135, 0.1)',
                 border: '2px solid rgba(0, 255, 135, 0.3)',
@@ -496,6 +497,7 @@ export default function StoryCard({ icon = '⚠️', badge, title, scenario, con
                     dangerouslySetInnerHTML={{ __html: (typeof lesson === 'string' ? lesson : lesson.text).replace(/\*\*(.*?)\*\*/g, '<strong style="color: #00ff87">$1</strong>') }}
                 />
             </div>
+            )}
         </div>
     )
 }
