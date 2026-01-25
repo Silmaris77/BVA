@@ -59,6 +59,9 @@ export async function GET() {
                     category: 'Matematyka',
                     status: 'published',
                     display_order: 0,
+                    release_date: null,
+                    module: 'math-grade7',
+                    track: 'math',
                     content: localLesson.content // Include content or not depending on payload size
                 };
 
