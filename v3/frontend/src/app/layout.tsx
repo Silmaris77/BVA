@@ -21,6 +21,9 @@ export default function RootLayout({
   // Don't show sidebar on auth pages or lesson player
   const isAuthPage = pathname?.startsWith('/auth')
   const isLessonPlayer = pathname?.match(/^\/lessons\/[^\/]+$/) // matches /lessons/[id] but not /lessons
+  const isLessonEditor = pathname?.startsWith('/admin/lessons/create')
+
+  const isFullscreen = isAuthPage || isLessonPlayer || isLessonEditor
 
   return (
     <html lang="pl" suppressHydrationWarning>
@@ -30,17 +33,17 @@ export default function RootLayout({
         <div className="orb orb-3"></div>
 
         <AuthProvider>
-          {!isAuthPage && !isLessonPlayer && <Sidebar />}
+          {!isFullscreen && <Sidebar />}
           {/* Main content with responsive margins - skip for fullscreen pages */}
-          <div className={!isAuthPage && !isLessonPlayer ? 'main-content' : ''}>
-            {!isAuthPage && !isLessonPlayer && (
+          <div className={!isFullscreen ? 'main-content' : ''}>
+            {!isFullscreen && (
               <Suspense fallback={<div style={{ height: '65px' }} />}>
                 <GlobalTopBar />
               </Suspense>
             )}
             {children}
           </div>
-          {!isAuthPage && !isLessonPlayer && <BottomNav />}
+          {!isFullscreen && <BottomNav />}
         </AuthProvider>
       </body>
     </html>

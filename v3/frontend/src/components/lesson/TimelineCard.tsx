@@ -27,25 +27,6 @@ export default function TimelineCard({ title, data }: TimelineCardProps) {
             gap: '24px',
             boxSizing: 'border-box'
         }}>
-            {/* Type Badge */}
-            <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontSize: '11px',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                color: '#ff8800',
-                fontWeight: 600,
-                padding: '6px 12px',
-                background: 'rgba(255, 136, 0, 0.1)',
-                border: '1px solid rgba(255, 136, 0, 0.2)',
-                borderRadius: '20px',
-                width: 'fit-content'
-            }}>
-                TIMELINE
-            </div>
-
             {/* Main Card */}
             <div style={{
                 background: 'rgba(20, 20, 35, 0.6)',
@@ -55,8 +36,29 @@ export default function TimelineCard({ title, data }: TimelineCardProps) {
                 borderRadius: '20px',
                 padding: '40px',
                 boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                position: 'relative'
             }}>
+                {/* Type Badge - Top Left Corner */}
+                <div style={{
+                    position: 'absolute',
+                    top: '20px',
+                    left: '20px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    color: '#ff8800',
+                    fontWeight: 600,
+                    padding: '6px 12px',
+                    background: 'rgba(255, 136, 0, 0.1)',
+                    border: '1px solid rgba(255, 136, 0, 0.2)',
+                    borderRadius: '20px'
+                }}>
+                    TIMELINE
+                </div>
                 <h2 style={{
                     fontSize: '28px',
                     fontWeight: 700,

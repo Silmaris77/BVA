@@ -226,22 +226,9 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
             {/* Header */}
             <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
+                justifyContent: 'flex-end',
                 alignItems: 'center'
             }}>
-                <div style={{
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    color: '#b000ff',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    background: 'rgba(176, 0, 255, 0.1)',
-                    padding: '6px 12px',
-                    borderRadius: '20px',
-                    border: '1px solid rgba(176, 0, 255, 0.2)'
-                }}>
-                    QUIZ • PYTANIE {currentIndex + 1} / {questions.length}
-                </div>
                 <div style={{
                     fontSize: '14px',
                     color: 'rgba(255, 255, 255, 0.5)'
@@ -258,8 +245,29 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '20px',
                 padding: '40px',
-                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
+                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+                position: 'relative'
             }}>
+                {/* Type Badge - Top Left Corner */}
+                <div style={{
+                    position: 'absolute',
+                    top: '20px',
+                    left: '20px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    color: '#b000ff',
+                    fontWeight: 600,
+                    padding: '6px 12px',
+                    background: 'rgba(176, 0, 255, 0.1)',
+                    border: '1px solid rgba(176, 0, 255, 0.2)',
+                    borderRadius: '20px'
+                }}>
+                    QUIZ
+                </div>
                 <h3 style={{
                     fontSize: '22px',
                     fontWeight: 600,

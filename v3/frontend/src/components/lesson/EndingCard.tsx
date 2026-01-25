@@ -26,8 +26,29 @@ export default function EndingCard({ icon = '✅', title, subtitle, checklist, t
             border: '2px solid rgba(0, 255, 135, 0.4)',
             borderRadius: '24px',
             padding: '50px',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+            position: 'relative'
         }}>
+            {/* Type Badge - Top Left Corner */}
+            <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                color: '#00ff87',
+                fontWeight: 600,
+                padding: '6px 12px',
+                background: 'rgba(0, 255, 135, 0.1)',
+                border: '1px solid rgba(0, 255, 135, 0.2)',
+                borderRadius: '20px'
+            }}>
+                PODSUMOWANIE
+            </div>
             {/* Header */}
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
                 <div style={{ fontSize: '5rem', marginBottom: '20px' }}>{icon}</div>

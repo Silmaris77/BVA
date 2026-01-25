@@ -43,32 +43,11 @@ export default function ConceptCard({
     return (
         <div style={{
             maxWidth: '900px',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px'
+            width: '100%'
         }}>
-            {/* Type Badge */}
-            <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontSize: '11px',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                color: '#00d4ff',
-                fontWeight: 600,
-                padding: '6px 12px',
-                background: 'rgba(0, 212, 255, 0.1)',
-                border: '1px solid rgba(0, 212, 255, 0.2)',
-                borderRadius: '20px',
-                width: 'fit-content'
-            }}>
-                CONCEPT
-            </div>
-
             {/* Glass Card Container */}
             <div style={{
+                position: 'relative',
                 background: 'rgba(20, 20, 35, 0.6)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
@@ -77,11 +56,33 @@ export default function ConceptCard({
                 padding: '40px',
                 boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
             }}>
+                {/* Type Badge - Top Left Corner */}
+                <div style={{
+                    position: 'absolute',
+                    top: '20px',
+                    left: '20px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    color: '#00d4ff',
+                    fontWeight: 600,
+                    padding: '6px 12px',
+                    background: 'rgba(0, 212, 255, 0.1)',
+                    border: '1px solid rgba(0, 212, 255, 0.2)',
+                    borderRadius: '20px'
+                }}>
+                    CONCEPT
+                </div>
+
                 {/* Title */}
                 <h2 style={{
                     fontSize: '28px',
                     fontWeight: 700,
                     marginBottom: '24px',
+                    marginTop: '20px',
                     background: 'linear-gradient(135deg, #00d4ff, #b000ff)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent'
@@ -98,7 +99,7 @@ export default function ConceptCard({
                         marginBottom: visual ? '32px' : '0'
                     }}>
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {content}
+                            {content.replace(/\\n/g, '\n')}
                         </ReactMarkdown>
                     </div>
                 )}

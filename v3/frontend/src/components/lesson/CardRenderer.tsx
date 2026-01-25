@@ -16,56 +16,92 @@ import DataCard from './DataCard'
 import StoryCard from './StoryCard'
 import EndingCard from './EndingCard'
 import TestCard from './TestCard'
+import ChecklistCard from './ChecklistCard'
+
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist'
+
+export interface LessonCardData {
+    type: CardType
+    title?: string
+    subtitle?: string
+    description?: string
+    content?: string
+    question?: string
+    options?: string[]
+    correctAnswer?: number
+    explanation?: string
+    keyPoints?: string[]
+    recap?: string[]
+    nextSteps?: string
+    badge?: string | {
+        xp: number
+        title: string
+    }
+    stats?: { value: string; label: string }[]
+    infoBoxes?: { icon?: string, title: string, content: string, type?: 'warning' | 'info' }[]
+    table?: { title?: string, headers: string[], rows: string[][] }
+    warnings?: string[]
+    example?: string
+    actionSteps?: string[]
+    icon?: string
+    visual?: {
+        type: 'image' | 'diagram'
+        src: string
+    }
+    quiz?: {
+        question: string
+        options: string[]
+        correct: number
+        explanation: string
+    }
+    questions?: {
+        question: string
+        options: string[]
+        correctAnswer: number
+        explanation?: string
+    }[]
+    habits?: {
+        text: string
+        id: string
+    }[]
+    items?: { // For ChecklistCard
+        id: string
+        text: string
+    }[]
+    cards?: { // For FlashcardsCard
+        front: string
+        back: string
+    }[]
+    level?: string
+    xp?: number
+    // Lightbulb properties
+    insight?: string
+    accent_color?: string
+    steps?: { number: number; title: string }[]
+    // Story properties
+    scenario?: { heading: string, text: string }
+    consequences?: string[]
+    lesson?: { heading: string, text: string }
+    // Ending properties
+    checklist?: { icon: string; text: string }[]
+    tagline?: string
+    next_steps?: { text: string; available: boolean }
+    // Hero/Content specific
+    sections?: any[]
+    callout?: any
+    remember?: any
+    theme?: string
+    // Quote specific
+    text?: string
+    author?: string
+    role?: string
+    // Data specific
+    sources?: string[]
+    [key: string]: any
+}
 
 interface CardRendererProps {
-    card: {
-        type: 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test'
-        title?: string
-        subtitle?: string
-        description?: string
-        content?: string
-        question?: string
-        options?: string[]
-        correctAnswer?: number
-        explanation?: string
-        keyPoints?: string[]
-        recap?: string[]
-        nextSteps?: string
-        badge?: string | {
-            xp: number
-            title: string
-        }
-        stats?: { value: string; label: string }[]
-        infoBoxes?: { icon?: string, title: string, content: string, type?: 'warning' | 'info' }[]
-        table?: { title?: string, headers: string[], rows: string[][] }
-        warnings?: string[]
-        example?: string
-        actionSteps?: string[]
-        icon?: string
-        visual?: {
-            type: 'image' | 'diagram'
-            src: string
-        }
-        quiz?: {
-            question: string
-            options: string[]
-            correct: number
-            explanation: string
-        }
-        questions?: {
-            question: string
-            options: string[]
-            correctAnswer: number
-            explanation?: string
-        }[]
-        habits?: {
-            text: string
-            id: string
-        }[]
-        level?: string
-        xp?: number
-        [key: string]: any
-    }
+    card: LessonCardData
     onAnswer?: (correct: boolean) => void
     onTestResult?: (score: number, passed: boolean) => void
     onReset?: () => void
@@ -81,6 +117,7 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 onTestResult={onTestResult || (() => { })}
                 onReset={onReset}
             />
+        case 'interactive':
             // Interactive contains a quiz
             return <QuestionCard
                 question={card.quiz?.question || card.title || 'Pytanie'}
@@ -124,6 +161,10 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 content={card.content || card.description || ''}
                 actionSteps={card.actionSteps}
                 keyPoints={card.keyPoints}
+                scenario={card.scenario}
+                instruction={card.instruction}
+                inputs={card.inputs}
+                sampleAnswers={card.sampleAnswers}
             />
 
         case 'timeline':
@@ -177,10 +218,12 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 icon={card.icon}
                 title={card.title || 'Statystyki'}
                 subtitle={card.subtitle}
+                content={card.content}
                 stats={card.stats || []}
                 callout={card.callout}
                 infoBoxes={card.infoBoxes}
                 table={card.table}
+                sources={card.sources?.join('; ')}
             />
         case 'story':
             return <StoryCard
@@ -189,7 +232,11 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 title={card.title || 'Przypadek z terenu'}
                 scenario={card.scenario || { heading: '', text: '' }}
                 consequences={card.consequences || []}
-                lesson={card.lesson || { heading: '', text: '' }}
+                lesson={card.lesson}
+                situation={card.situation}
+                scenarios={card.scenarios}
+                phases={card.phases}
+                outcome={card.outcome}
             />
         case 'ending':
             return <EndingCard
@@ -226,6 +273,12 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 text={card.content || card.text || ''}
                 author={card.author || ''}
                 role={card.role}
+            />
+        case 'checklist':
+            return <ChecklistCard
+                title={card.title || 'Lista Kontrolna'}
+                description={card.description || ''}
+                items={card.items || []}
             />
         case 'test':
             return <TestCard

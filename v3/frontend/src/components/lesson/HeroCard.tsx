@@ -60,6 +60,27 @@ export default function HeroCard({ title, subtitle, tagline, content, icon = 'ro
                 position: 'relative',
                 overflow: 'hidden'
             }}>
+                {/* Type Badge - Top Left Corner */}
+                <div style={{
+                    position: 'absolute',
+                    top: '20px',
+                    left: '20px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    color: '#DA291C',
+                    fontWeight: 600,
+                    padding: '6px 12px',
+                    background: 'rgba(218, 41, 28, 0.1)',
+                    border: '1px solid rgba(218, 41, 28, 0.2)',
+                    borderRadius: '20px',
+                    zIndex: 10
+                }}>
+                    WSTĘP
+                </div>
                 {/* Badge */}
                 {subtitle && (
                     <div style={{

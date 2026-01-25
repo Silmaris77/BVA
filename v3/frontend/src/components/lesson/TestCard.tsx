@@ -158,8 +158,29 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                 borderRadius: '24px',
                 padding: '40px',
                 textAlign: 'center',
-                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
+                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+                position: 'relative'
             }}>
+                {/* Type Badge - Top Left Corner */}
+                <div style={{
+                    position: 'absolute',
+                    top: '20px',
+                    left: '20px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    color: '#b000ff',
+                    fontWeight: 600,
+                    padding: '6px 12px',
+                    background: 'rgba(176, 0, 255, 0.1)',
+                    border: '1px solid rgba(176, 0, 255, 0.2)',
+                    borderRadius: '20px'
+                }}>
+                    TEST KOŃCOWY
+                </div>
                 <div style={{
                     width: '80px',
                     height: '80px',
@@ -301,8 +322,29 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '20px',
                     padding: '40px',
-                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+                    position: 'relative'
                 }}>
+                    {/* Type Badge - Top Left Corner */}
+                    <div style={{
+                        position: 'absolute',
+                        top: '20px',
+                        left: '20px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontSize: '11px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px',
+                        color: '#b000ff',
+                        fontWeight: 600,
+                        padding: '6px 12px',
+                        background: 'rgba(176, 0, 255, 0.1)',
+                        border: '1px solid rgba(176, 0, 255, 0.2)',
+                        borderRadius: '20px'
+                    }}>
+                        TEST KOŃCOWY
+                    </div>
                     <h3 style={{
                         fontSize: '22px',
                         fontWeight: 600,

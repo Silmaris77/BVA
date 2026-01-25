@@ -190,6 +190,27 @@ export default function AchievementCard({
                 position: 'relative',
                 overflow: 'hidden'
             }}>
+                {/* Type Badge - Top Left Corner */}
+                <div style={{
+                    position: 'absolute',
+                    top: '20px',
+                    left: '20px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    color: '#ffd700',
+                    fontWeight: 600,
+                    padding: '6px 12px',
+                    background: 'rgba(255, 215, 0, 0.1)',
+                    border: '1px solid rgba(255, 215, 0, 0.3)',
+                    borderRadius: '20px',
+                    zIndex: 10
+                }}>
+                    OSIĄGNIĘCIE
+                </div>
                 <style jsx>{`
                     @keyframes pulseGlow { 
                         0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); } 

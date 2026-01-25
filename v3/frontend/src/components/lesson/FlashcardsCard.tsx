@@ -27,31 +27,10 @@ export default function FlashcardsCard({ title, cards }: FlashcardsCardProps) {
     return (
         <div style={{
             maxWidth: '900px',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px'
+            width: '100%'
         }}>
-            {/* Type Badge */}
             <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontSize: '11px',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-                color: '#b000ff',
-                fontWeight: 600,
-                padding: '6px 12px',
-                background: 'rgba(176, 0, 255, 0.1)',
-                border: '1px solid rgba(176, 0, 255, 0.2)',
-                borderRadius: '20px',
-                width: 'fit-content'
-            }}>
-                FLASHCARDS
-            </div>
-
-            <div style={{
+                position: 'relative',
                 background: 'rgba(20, 20, 35, 0.6)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
@@ -60,10 +39,32 @@ export default function FlashcardsCard({ title, cards }: FlashcardsCardProps) {
                 padding: '40px',
                 boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
             }}>
+                {/* Type Badge - Top Left Corner */}
+                <div style={{
+                    position: 'absolute',
+                    top: '20px',
+                    left: '20px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    color: '#b000ff',
+                    fontWeight: 600,
+                    padding: '6px 12px',
+                    background: 'rgba(176, 0, 255, 0.1)',
+                    border: '1px solid rgba(176, 0, 255, 0.2)',
+                    borderRadius: '20px'
+                }}>
+                    FLASHCARDS
+                </div>
+
                 <h2 style={{
                     fontSize: '28px',
                     fontWeight: 700,
                     marginBottom: '40px',
+                    marginTop: '20px',
                     textAlign: 'center',
                     background: 'linear-gradient(135deg, #b000ff, #00d4ff)',
                     WebkitBackgroundClip: 'text',

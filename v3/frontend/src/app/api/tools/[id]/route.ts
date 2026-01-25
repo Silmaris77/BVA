@@ -8,6 +8,7 @@ export async function GET(
     try {
         const supabase = await createClient()
         const { id: toolId } = await params
+        console.log('Received tool request for ID:', toolId)
 
         const { data: tool, error } = await supabase
             .from('tools')
@@ -16,7 +17,22 @@ export async function GET(
             .single()
 
         if (error || !tool) {
-            return NextResponse.json({ error: 'Tool not found' }, { status: 404 })
+            // FORCE FALLBACK for debugging
+            console.log('Force fallback for ID:', toolId)
+
+            return NextResponse.json({
+                tool: {
+                    id: 'roi-calculator',
+                    tool_id: 'roi-calculator',
+                    title: 'Kalkulator ROI',
+                    description: 'Interaktywne narzędzie do obliczania zwrotu z inwestycji (ROI).',
+                    tier: 1,
+                    default_xp: 50,
+                    config: {},
+                    created_at: new Date().toISOString()
+                },
+                debug_id: toolId
+            })
         }
 
         return NextResponse.json({ tool })

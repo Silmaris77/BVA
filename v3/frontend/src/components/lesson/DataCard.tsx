@@ -1,9 +1,13 @@
 'use client'
 
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+
 interface DataCardProps {
     icon?: string
     title: string
     subtitle?: string
+    content?: string
     stats: {
         value: string
         label: string
@@ -21,11 +25,13 @@ interface DataCardProps {
     }
     callout?: {
         type: 'warning' | 'success' | 'info'
+        title?: string
         text: string
     }
+    sources?: string
 }
 
-export default function DataCard({ icon = '📊', title, subtitle, stats, callout, infoBoxes, table }: DataCardProps) {
+export default function DataCard({ icon = '📊', title, subtitle, content, stats, callout, infoBoxes, table, sources }: DataCardProps) {
     const calloutColors = {
         warning: { bg: 'rgba(245, 158, 11, 0.1)', border: 'rgba(245, 158, 11, 0.3)', text: '#f59e0b' },
         success: { bg: 'rgba(0, 255, 135, 0.1)', border: 'rgba(0, 255, 135, 0.3)', text: '#00ff87' },
@@ -42,8 +48,29 @@ export default function DataCard({ icon = '📊', title, subtitle, stats, callou
             border: '2px solid rgba(245, 158, 11, 0.4)',
             borderRadius: '24px',
             padding: '50px',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+            position: 'relative'
         }}>
+            {/* Type Badge - Top Left Corner */}
+            <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                color: '#f59e0b',
+                fontWeight: 600,
+                padding: '6px 12px',
+                background: 'rgba(245, 158, 11, 0.1)',
+                border: '1px solid rgba(245, 158, 11, 0.2)',
+                borderRadius: '20px'
+            }}>
+                DANE
+            </div>
             {/* Header */}
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
                 <div style={{ fontSize: '4rem', marginBottom: '20px' }}>{icon}</div>
@@ -61,6 +88,20 @@ export default function DataCard({ icon = '📊', title, subtitle, stats, callou
                     </p>
                 )}
             </div>
+
+            {/* Content */}
+            {content && (
+                <div style={{
+                    fontSize: '1.1rem',
+                    lineHeight: 1.8,
+                    opacity: 0.9,
+                    marginBottom: '40px',
+                    textAlign: 'left',
+                    whiteSpace: 'pre-line'
+                }}>
+                    {content}
+                </div>
+            )}
 
             {/* Stats Grid */}
             <div style={{
@@ -123,10 +164,15 @@ export default function DataCard({ icon = '📊', title, subtitle, stats, callou
                         <span style={{ fontSize: '1.5rem' }}>{box.icon || (box.type === 'warning' ? '⚠️' : '🧱')}</span>
                         <h4 style={{ color: '#f59e0b', fontSize: '1.2rem', margin: 0 }}>{box.title}</h4>
                     </div>
-                    <div
-                        style={{ fontSize: '1rem', lineHeight: '1.6', opacity: 0.9, whiteSpace: 'pre-line' }}
-                        dangerouslySetInnerHTML={{ __html: box.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}
-                    />
+                    <div style={{ 
+                        fontSize: '1rem', 
+                        lineHeight: '1.6', 
+                        opacity: 0.9,
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word'
+                    }}>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{box.content}</ReactMarkdown>
+                    </div>
                 </div>
             ))}
 
@@ -179,6 +225,16 @@ export default function DataCard({ icon = '📊', title, subtitle, stats, callou
                     textAlign: 'center',
                     marginTop: '30px'
                 }}>
+                    {callout.title && (
+                        <strong style={{
+                            fontSize: '1.1rem',
+                            color: calloutColors[callout.type].text,
+                            display: 'block',
+                            marginBottom: '10px'
+                        }}>
+                            {callout.title}
+                        </strong>
+                    )}
                     <p style={{
                         fontSize: '1.3rem',
                         lineHeight: 1.8,
@@ -188,6 +244,21 @@ export default function DataCard({ icon = '📊', title, subtitle, stats, callou
                     }}
                         dangerouslySetInnerHTML={{ __html: callout.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}
                     />
+                </div>
+            )}
+
+            {/* Sources */}
+            {sources && (
+                <div style={{
+                    marginTop: '30px',
+                    padding: '15px 0',
+                    borderTop: '1px solid rgba(245, 158, 11, 0.2)',
+                    fontSize: '0.9rem',
+                    opacity: 0.7,
+                    textAlign: 'center',
+                    fontStyle: 'italic'
+                }}>
+                    {sources}
                 </div>
             )}
         </div>

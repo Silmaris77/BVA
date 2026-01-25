@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import { Zap, Bell, Flame, BookOpen, Brain, Library, LayoutDashboard, Gamepad2, Folder, User, TrendingUp, Target, LogOut, Menu } from 'lucide-react'
+import { Zap, Bell, Flame, BookOpen, Brain, Library, LayoutDashboard, Gamepad2, Folder, User, TrendingUp, Target, LogOut, Menu, Wrench } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { ARCHETYPES } from '@/components/profile/EditProfileModal'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -12,9 +12,20 @@ export default function TopBar() {
     const pathname = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams()
+
+    // State
     const [status, setStatus] = useState<{ streak: number, pending_missions: number } | null>(null)
     const [isMobile, setIsMobile] = useState(false)
     const [hoveredTab, setHoveredTab] = useState<string | null>(null)
+
+    // Determine Context
+    const isHub = pathname === '/'
+    const isScience = pathname?.startsWith('/lessons') || pathname?.startsWith('/engrams') || pathname?.startsWith('/resources') || pathname?.startsWith('/tools')
+    const isPractice = pathname?.startsWith('/practice')
+    const isProfile = pathname?.startsWith('/profile')
+
+    // On mobile, we hide the right-side stats (XP, Bell, Profile) UNLESS we are on the Hub
+    const showStats = !isMobile || isHub
 
     // Detect mobile screen size
     useEffect(() => {
@@ -48,20 +59,12 @@ export default function TopBar() {
 
     if (!user) return null
 
-    // Determine Context
-    const isHub = pathname === '/'
-    const isScience = pathname?.startsWith('/lessons') || pathname?.startsWith('/engrams') || pathname?.startsWith('/resources')
-    const isPractice = pathname?.startsWith('/practice')
-    const isProfile = pathname?.startsWith('/profile')
-
-    // On mobile, we hide the right-side stats (XP, Bell, Profile) UNLESS we are on the Hub
-    const showStats = !isMobile || isHub
-
     // Tab Configurations
     const SCIENCE_TABS = [
         { id: 'lessons', label: 'Lekcje', href: '/lessons', icon: BookOpen, active: pathname?.startsWith('/lessons') },
         { id: 'engrams', label: 'Engramy', href: '/engrams', icon: Brain, active: pathname?.startsWith('/engrams') },
-        { id: 'resources', label: 'Zasoby', href: '/resources', icon: Library, active: pathname?.startsWith('/resources') }
+        { id: 'resources', label: 'Zasoby', href: '/resources', icon: Library, active: pathname?.startsWith('/resources') },
+        { id: 'tools', label: 'Narzędzia', href: '/tools', icon: Wrench, active: pathname?.startsWith('/tools') }
     ]
 
     const PRACTICE_TABS = [
