@@ -79,7 +79,7 @@ export interface LessonCardData {
     accent_color?: string
     steps?: { number: number; title: string }[]
     // Story properties
-    scenario?: { heading: string, text: string }
+    scenario?: { heading: string, text: string } | string
     consequences?: string[]
     lesson?: { heading: string, text: string }
     // Ending properties
