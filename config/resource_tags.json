@@ -144,8 +144,33 @@
     "fmcg_heinz_scenario": [
       "Heinz"
     ],
-    "consulting_basic": [
-      "General"
+    "lifetime": [
+      "General",
+      "Warta",
+      "Heinz",
+      "Milwaukee",
+      "Degen"
+    ],
+    "standard": [
+      "General",
+      "Warta",
+      "Heinz",
+      "Milwaukee",
+      "Degen"
+    ],
+    "startup_mode": [
+      "General",
+      "Warta",
+      "Heinz",
+      "Milwaukee",
+      "Degen"
+    ],
+    "corporate_rescue": [
+      "General",
+      "Warta",
+      "Heinz",
+      "Milwaukee",
+      "Degen"
     ],
     "insurance_client_meeting": [
       "Warta"
@@ -159,7 +184,11 @@
   },
   "business_games_types": {
     "Consulting": [
-      "General"
+      "General",
+      "Warta",
+      "Heinz",
+      "Milwaukee",
+      "Degen"
     ],
     "FMCG": [
       "Heinz"

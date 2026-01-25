@@ -51,7 +51,7 @@ export default function GryView() {
             </div>
 
             <div style={{ textAlign: 'center', padding: '40px', color: 'rgba(255,255,255,0.4)' }}>
-                Więcej scenariuszy wkrótce...
+                More simulations coming soon: FMCG Career & Sales.
             </div>
         </div>
     )

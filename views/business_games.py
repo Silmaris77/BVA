@@ -11,7 +11,15 @@ import plotly.graph_objects as go
 
 from data.business_data import FIRM_LEVELS, EMPLOYEE_TYPES, GAME_CONFIG, FIRM_LOGOS, OFFICE_TYPES, OFFICE_UPGRADE_PATH
 from data.scenarios import get_available_scenarios, get_scenario
-from data.users_sql import save_single_user as save_user_data
+from data.users_new import get_current_user_data
+from data.repositories.user_repository import UserRepository
+
+# Helper do zapisu pojedynczego użytkownika do JSON
+def save_user_data(username, user_data):
+    """Zapisuje dane użytkownika do JSON (nie SQL!)"""
+    repo = UserRepository()
+    return repo.save(username, user_data)
+
 from utils.business_game import (
     initialize_business_game, initialize_business_game_with_scenario, refresh_contract_pool, accept_contract,
     submit_contract_solution, submit_contract_conversation, hire_employee, fire_employee,
@@ -46,6 +54,22 @@ from views.business_games_refactored.industries import fmcg
 
 def show_business_games(username, user_data):
     """Główna funkcja obsługująca Business Games"""
+    
+    # CRITICAL: Jeśli inicjalizujemy grę, MUSIMY przeładować dane
+    # (bo mogły zostać zapisane przez initialize_business_game_with_scenario)
+    if st.session_state.get("initializing_game", False):
+        print(f"DEBUG show_business_games: Przeładowuję user_data (initializing_game=True)")
+        import json
+        try:
+            with open('users_data.json', 'r', encoding='utf-8') as f:
+                all_users = json.load(f)
+            user_data = all_users.get(username, {})
+            print(f"DEBUG: Załadowano świeże user_data, ma business_games: {'business_games' in user_data}")
+            if 'business_games' in user_data:
+                print(f"DEBUG: business_games.keys() = {list(user_data['business_games'].keys())}")
+        except Exception as e:
+            print(f"ERROR ładowania danych: {e}")
+            st.session_state["initializing_game"] = False
     
     # Przewiń na górę strony
     scroll_to_top()
@@ -108,27 +132,13 @@ def show_business_games(username, user_data):
     elif st.session_state["bg_view"] == "game":
         industry_id = st.session_state["selected_industry"]
         
-        # SPECJALNE ZABEZPIECZENIE: Jeśli initializing_game=True i gra nie istnieje,
-        # przeładuj user_data z dysku (może być opóźniony zapis)
-        if (st.session_state.get("initializing_game", False) and 
-            industry_id not in user_data.get("business_games", {})):
-            from data.users_new import get_current_user_data
-            user_data = get_current_user_data(username)
-            if not user_data:
-                st.error("❌ Błąd ładowania danych użytkownika!")
-                st.session_state["bg_view"] = "home"
-                st.rerun()
-        
         # ZABEZPIECZENIE: Sprawdź czy gra dla tej branży istnieje
-        # ALE pomiń to sprawdzenie jeśli jesteśmy w trakcie inicjalizacji
-        # ORAZ pomiń dla FMCG (które ma własną inicjalizację w UI)
+        # (user_data mogło być przeładowane w linii 52-65, więc zawiera świeże dane)
         if (industry_id not in user_data.get("business_games", {}) and 
-            not st.session_state.get("initializing_game", False) and
             industry_id != "fmcg"):
             st.error(f"❌ Błąd: Gra dla branży '{industry_id}' nie została zainicjalizowana!")
             st.warning("Zostaniesz przekierowany do wyboru scenariusza...")
             st.session_state["bg_view"] = "scenario_selector"
-            st.rerun()
             st.rerun()
         
         show_industry_game(username, user_data, industry_id)
@@ -616,26 +626,28 @@ def show_scenario_selector(username, user_data, industry_id):
         st.warning("Brak dostępnych scenariuszy dla tej branży.")
         return
     
-    # Filtruj scenariusze według uprawnień użytkownika
-    from utils.permissions import has_access_to_business_game_scenario
-    from data.repositories.user_repository import UserRepository
-    from database.connection import session_scope
+    # Filtruj scenariusze według uprawnień użytkownika (NOWY SYSTEM TAGÓW)
+    from utils.resource_access import has_access_to_resource
+    
+    # DEBUG: Sprawdź co jest w user_data
+    print(f"DEBUG: user_data.get('company') = {user_data.get('company')}")
+    print(f"DEBUG: Wszystkie scenariusze: {list(scenarios.keys())}")
     
     try:
-        from database.models import User
-        with session_scope() as session:
-            user_repo = UserRepository(session)
-            user_obj = session.query(User).filter_by(username=username).first()
-            user_dict = user_obj.to_dict() if user_obj else {}
-            
-            # Filtruj scenariusze - zostawiamy tylko te, do których użytkownik ma dostęp
-            accessible_scenarios = {
-                s_id: s_data for s_id, s_data in scenarios.items()
-                if has_access_to_business_game_scenario(s_id, user_dict)
-            }
-            scenarios = accessible_scenarios
+        # Filtruj scenariusze - zostawiamy tylko te, do których użytkownik ma dostęp
+        accessible_scenarios = {}
+        for s_id, s_data in scenarios.items():
+            has_access = has_access_to_resource('business_games_scenarios', s_id, user_data)
+            print(f"DEBUG: Scenariusz '{s_id}' - dostęp: {has_access}")
+            if has_access:
+                accessible_scenarios[s_id] = s_data
+        
+        scenarios = accessible_scenarios
+        print(f"DEBUG: Dostępne scenariusze po filtrowaniu: {list(scenarios.keys())}")
     except Exception as e:
         print(f"Error filtering scenarios: {e}")
+        import traceback
+        traceback.print_exc()
         # W przypadku błędu, pozostawiamy wszystkie scenariusze
     
     if not scenarios:
@@ -852,28 +864,35 @@ def render_scenario_card(scenario_id, scenario_data, industry_id, username, user
                  type="primary", 
                  use_container_width=True):
         # Inicjalizuj grę z tym scenariuszem
+        print(f"DEBUG BUTTON: Kliknięto 'Rozpocznij' dla {industry_id}/{scenario_id}")
         try:
             # WAŻNE: Ustaw flagę PRZED zapisem - ochroni przed resetem podczas st.rerun()
             st.session_state["initializing_game"] = True
+            print(f"DEBUG: initializing_game = True")
             
             # KLUCZOWE: Załaduj świeże user_data z dysku przed modyfikacją
             from data.users_new import get_current_user_data
             fresh_user_data = get_current_user_data(username)
+            print(f"DEBUG: Załadowano user_data, ma business_games: {'business_games' in fresh_user_data}")
             
             if not fresh_user_data:
                 st.error("❌ Błąd ładowania danych użytkownika!")
                 st.session_state["initializing_game"] = False
                 return False
             
-            # Inicjalizuj FMCG game
+            # Inicjalizuj game
+            print(f"DEBUG: Wywołuję initialize_business_game_with_scenario({username}, {industry_id}, {scenario_id})")
             bg_data = initialize_business_game_with_scenario(username, industry_id, scenario_id)
+            print(f"DEBUG: Zainicjalizowano grę, bg_data ma {len(bg_data)} kluczy")
             
             # Upewnij się, że business_games istnieje
             if "business_games" not in fresh_user_data:
                 fresh_user_data["business_games"] = {}
+                print(f"DEBUG: Utworzono business_games w user_data")
             
-            # Zapisz dane FMCG
+            # Zapisz dane
             fresh_user_data["business_games"][industry_id] = bg_data
+            print(f"DEBUG: Przypisano bg_data do user_data['business_games']['{industry_id}']")
             
             # KLUCZOWE: Zapisz bezpośrednio do JSON (omiń repository z wadliwą migracją)
             import json
@@ -2105,10 +2124,24 @@ def show_industry_game(username, user_data, industry_id):
     """Widok gry dla wybranej branży"""
     
     try:
-        # KLUCZOWE: Jeśli initializing_game=True, przeładuj user_data z dysku
+        # KLUCZOWE: Jeśli initializing_game=True, przeładuj user_data BEZPOŚREDNIO z JSON
         if st.session_state.get("initializing_game", False):
-            from data.users_new import get_current_user_data
-            user_data = get_current_user_data(username)
+            print(f"DEBUG show_industry_game: Przeładowuję user_data z users_data.json")
+            import json
+            try:
+                with open('users_data.json', 'r', encoding='utf-8') as f:
+                    all_users = json.load(f)
+                user_data = all_users.get(username, {})
+                print(f"DEBUG: Załadowano user_data, ma business_games: {'business_games' in user_data}")
+                if 'business_games' in user_data:
+                    print(f"DEBUG: business_games.keys() = {list(user_data['business_games'].keys())}")
+                    print(f"DEBUG: Czy ma {industry_id}: {industry_id in user_data['business_games']}")
+            except Exception as e:
+                print(f"ERROR ładowania z JSON: {e}")
+                st.error(f"❌ Błąd ładowania danych użytkownika: {e}")
+                st.session_state["bg_view"] = "home"
+                st.session_state["initializing_game"] = False
+                st.rerun()
             
             if not user_data:
                 st.error("❌ Błąd ładowania danych użytkownika!")
@@ -2117,6 +2150,7 @@ def show_industry_game(username, user_data, industry_id):
                 st.rerun()
             # Reset flagi po przeładowaniu
             st.session_state["initializing_game"] = False
+            print(f"DEBUG: Zresetowano initializing_game=False")
         
         # Pokaż wiadomość o przełączeniu (jeśli istnieje)
         if "switch_message" in st.session_state:
@@ -2159,6 +2193,17 @@ def show_industry_game(username, user_data, industry_id):
             save_user_data(username, user_data)
             st.success("✅ Gra została zainicjalizowana! Zapisano do bazy.")
             
+            # CRITICAL: Przeładuj user_data z JSON
+            import json
+            with open('users_data.json', 'r', encoding='utf-8') as f:
+                all_users = json.load(f)
+            user_data = all_users.get(username, {})
+            if not user_data or "business_games" not in user_data:
+                st.error("❌ Błąd ładowania danych użytkownika po zapisie!")
+                st.error(f"DEBUG: user_data = {user_data}")
+                st.session_state["bg_view"] = "home"
+                st.rerun()
+            
             # IMPORTANT: Set bg_view to "game" so it stays on game view
             st.session_state["bg_view"] = "game"
             st.session_state["selected_industry"] = industry_id
@@ -2189,16 +2234,37 @@ def show_industry_game(username, user_data, industry_id):
             bg_data = user_data["business_games"][industry_id]
         
         # Odśwież pulę kontraktów
+        print(f"DEBUG: Przed refresh_contract_pool - available_pool ma {len(bg_data['contracts']['available_pool'])} kontraktów")
         bg_data = refresh_contract_pool(bg_data)
+        print(f"DEBUG: Po refresh_contract_pool - available_pool ma {len(bg_data['contracts']['available_pool'])} kontraktów")
         user_data["business_games"][industry_id] = bg_data
         
-        # SAVE after refresh!
-        save_user_data(username, user_data)
+        # SAVE BEZPOŚREDNIO do JSON (omiń wadliwy repository)
+        print(f"DEBUG: Zapisuję BEZPOŚREDNIO do users_data.json")
+        import json
+        try:
+            with open('users_data.json', 'r', encoding='utf-8') as f:
+                all_users = json.load(f)
+            all_users[username] = user_data
+            with open('users_data.json', 'w', encoding='utf-8') as f:
+                json.dump(all_users, f, indent=2, ensure_ascii=False)
+            print(f"DEBUG: Zapisano do JSON - available_pool powinien mieć {len(user_data['business_games'][industry_id]['contracts']['available_pool'])} kontraktów")
+        except Exception as e:
+            print(f"ERROR zapisu do JSON: {e}")
+            import traceback
+            traceback.print_exc()
         
-        # CRITICAL: Reload user_data from disk to ensure consistency
-        from data.users_new import get_current_user_data
-        user_data = get_current_user_data(username)
+        # CRITICAL: Reload user_data from JSON to ensure consistency
+        import json
+        with open('users_data.json', 'r', encoding='utf-8') as f:
+            all_users = json.load(f)
+        user_data = all_users.get(username, {})
+        if "business_games" not in user_data or industry_id not in user_data["business_games"]:
+            st.error("❌ Błąd: Dane zniknęły po reloadzie!")
+            st.session_state["bg_view"] = "home"
+            st.rerun()
         bg_data = user_data["business_games"][industry_id]
+        print(f"DEBUG: Po reload z JSON - available_pool ma {len(bg_data['contracts']['available_pool'])} kontraktów")
         
         # Nagłówek z podsumowaniem firmy
         render_header(user_data, industry_id)
@@ -2936,33 +3002,9 @@ def show_contracts_tab(username, user_data, industry_id="consulting"):
     # Lista kontraktów
     available_contracts = bg_data["contracts"]["available_pool"]
     
-    # Filtruj kontrakty według uprawnień użytkownika do typów gier
-    from utils.permissions import has_access_to_business_game_type
-    from data.repositories.user_repository import UserRepository
-    from database.connection import session_scope
-    
-    try:
-        from database.models import User
-        with session_scope() as session:
-            user_repo = UserRepository(session)
-            user_obj = session.query(User).filter_by(username=username).first()
-            user_dict = user_obj.to_dict() if user_obj else {}
-            
-            # Filtruj kontrakty - zostawiamy tylko te typy, do których użytkownik ma dostęp
-            accessible_contracts = []
-            for contract in available_contracts:
-                contract_type = contract.get("contract_type", "standard")
-                # Obsługa starych nazw
-                if contract_type == "ai_conversation":
-                    contract_type = "conversation"
-                
-                if has_access_to_business_game_type(contract_type, user_dict):
-                    accessible_contracts.append(contract)
-            
-            available_contracts = accessible_contracts
-    except Exception as e:
-        print(f"Error filtering contract types: {e}")
-        # W przypadku błędu, pozostawiamy wszystkie kontrakty
+    # WYŁĄCZONE: Filtrowanie przez SQL permissions - nie działa dla JSON-only users
+    # Kontrakty są już filtrowane przez resource_access.py w show_scenario_selector
+    # Wszystkie kontrakty w available_pool są dostępne dla tego użytkownika
     
     # Filtrowanie po kategorii
     if category_filter != "Wszystkie":

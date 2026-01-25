@@ -132,12 +132,12 @@ def has_access_to_resource(resource_type: str, resource_id: str, user_data: Opti
     company_info = get_company_info(user_company)
     exclude_general = company_info.get('exclude_general', False) if company_info else False
     
-    # Jeśli grupa wyklucza General:
-    # 1. Zasób NIE MOŻE mieć tagu "General"
-    # 2. Zasób MUSI mieć tag użytkownika
+    # POPRAWIONA LOGIKA:
+    # Jeśli exclude_general = True (np. Milwaukee):
+    # - Zasób z TYLKO tagiem "General" (bez innych) - BRAK DOSTĘPU
+    # - Zasób z tagiem użytkownika (z lub bez General) - DOSTĘP
     if exclude_general:
-        if "General" in resource_tags:
-            return False  # Zawiera General - BRAK DOSTĘPU
+        # Musi mieć tag użytkownika (General sam w sobie nie wystarczy)
         return user_company in resource_tags
     
     # Standardowo: zasób ma tag "General" lub tag użytkownika - dostęp

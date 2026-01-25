@@ -22,8 +22,9 @@ export default function RootLayout({
   const isAuthPage = pathname?.startsWith('/auth')
   const isLessonPlayer = pathname?.match(/^\/lessons\/[^\/]+$/) // matches /lessons/[id] but not /lessons
   const isLessonEditor = pathname?.startsWith('/admin/lessons/create')
+  const isConsultingGame = pathname?.startsWith('/practice/games/consulting')
 
-  const isFullscreen = isAuthPage || isLessonPlayer || isLessonEditor
+  const isFullscreen = isAuthPage || isLessonPlayer || isLessonEditor || isConsultingGame
 
   return (
     <html lang="pl" suppressHydrationWarning>

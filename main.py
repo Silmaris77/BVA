@@ -135,10 +135,12 @@ def main():
         elif st.session_state.page == 'tools':
             show_tools_page()
         elif st.session_state.page == 'business_games':
-            # Pobierz dane użytkownika
-            from data.users_sql import load_user_data
-            users_data = load_user_data()
-            user_data = users_data.get(st.session_state.username, {})
+            # Pobierz dane użytkownika z JSON (business_games używa users_data.json)
+            from data.users_new import get_current_user_data
+            user_data = get_current_user_data(st.session_state.username)
+            if not user_data:
+                st.error("❌ Błąd ładowania danych użytkownika!")
+                user_data = {}
             show_business_games(st.session_state.username, user_data)
         elif st.session_state.page == 'inspirations':
             show_inspirations_page()
