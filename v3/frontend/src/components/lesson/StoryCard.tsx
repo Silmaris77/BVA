@@ -28,7 +28,8 @@ interface StoryCardProps {
     phases?: Array<{
         title: string
         type?: string
-        dialogue: Array<{ speaker: string; text: string }>
+        dialogue?: Array<{ speaker: string; text: string; isThought?: boolean }>
+        content?: string
     }>
     outcome?: string
 }
