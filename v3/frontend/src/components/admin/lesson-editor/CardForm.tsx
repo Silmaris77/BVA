@@ -86,14 +86,14 @@ export default function CardForm({ card, onChange }: CardFormProps) {
                             <h4 className="text-[#00ff88] font-bold mb-4 uppercase text-xs">Scenario</h4>
                             <input
                                 placeholder="Heading (e.g. The Situation)"
-                                value={card.scenario?.heading || ''}
-                                onChange={e => handleChange('scenario', { ...card.scenario, heading: e.target.value })}
+                                value={typeof card.scenario === 'object' && card.scenario?.heading ? card.scenario.heading : ''}
+                                onChange={e => handleChange('scenario', { ...(typeof card.scenario === 'object' ? card.scenario : {}), heading: e.target.value })}
                                 className="w-full bg-black/20 border border-white/10 rounded p-2 text-white mb-2"
                             />
                             <textarea
                                 placeholder="Scenario text..."
-                                value={card.scenario?.text || ''}
-                                onChange={e => handleChange('scenario', { ...card.scenario, text: e.target.value })}
+                                value={typeof card.scenario === 'object' && card.scenario?.text ? card.scenario.text : ''}
+                                onChange={e => handleChange('scenario', { ...(typeof card.scenario === 'object' ? card.scenario : {}), text: e.target.value })}
                                 className="w-full bg-black/20 border border-white/10 rounded p-2 text-white min-h-[100px]"
                             />
                         </div>
