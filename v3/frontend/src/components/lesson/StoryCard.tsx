@@ -413,6 +413,7 @@ export default function StoryCard({ icon = '⚠️', badge, title, scenario, con
             </div>
 
             {/* Consequences */}
+            {consequences && consequences.length > 0 && (
             <div style={{ marginBottom: '25px' }}>
                 <h4 style={{
                     color: '#ef4444',
@@ -469,6 +470,7 @@ export default function StoryCard({ icon = '⚠️', badge, title, scenario, con
                     </div>
                 ))}
             </div>
+            )}
 
             {/* Lesson */}
             <div style={{
