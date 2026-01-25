@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import { Check, X, HelpCircle } from 'lucide-react';
 import MathRenderer from './MathRenderer';
-import { cn } from '@/lib/utils'; // Assuming utils exist or I will use simple class strings if not
 
-// Fallback for cn if not exists (I'll implement it inline to be safe)
+// Helper function for conditional classnames
 function classNames(...classes: (string | undefined | null | false)[]) {
     return classes.filter(Boolean).join(' ');
 }
