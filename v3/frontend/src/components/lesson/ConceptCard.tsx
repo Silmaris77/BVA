@@ -2,6 +2,9 @@
 
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
+import 'katex/dist/katex.min.css'
 import { CheckCircle2, Lightbulb, AlertTriangle } from 'lucide-react'
 
 interface ConceptCardProps {
@@ -98,7 +101,10 @@ export default function ConceptCard({
                         color: 'rgba(255, 255, 255, 0.9)',
                         marginBottom: visual ? '32px' : '0'
                     }}>
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        <ReactMarkdown 
+                            remarkPlugins={[remarkGfm, remarkMath]}
+                            rehypePlugins={[rehypeKatex]}
+                        >
                             {content.replace(/\\n/g, '\n')}
                         </ReactMarkdown>
                     </div>

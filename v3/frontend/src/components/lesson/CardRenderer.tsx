@@ -1,5 +1,8 @@
 import IntroCard from './IntroCard'
 import ConceptCard from './ConceptCard'
+import InputCard from './math/InputCard'
+import NumberLineCard from './math/NumberLineCard'
+
 import QuestionCard from './QuestionCard'
 import SummaryCard from './SummaryCard'
 import PracticeCard from './PracticeCard'
@@ -18,7 +21,7 @@ import EndingCard from './EndingCard'
 import TestCard from './TestCard'
 import ChecklistCard from './ChecklistCard'
 
-export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist'
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line'
 
 export interface LessonCardData {
     type: CardType
@@ -28,7 +31,7 @@ export interface LessonCardData {
     content?: string
     question?: string
     options?: string[]
-    correctAnswer?: number
+    correctAnswer?: number | string
     explanation?: string
     keyPoints?: string[]
     recap?: string[]
@@ -97,6 +100,16 @@ export interface LessonCardData {
     role?: string
     // Data specific
     sources?: string[]
+
+    // Math specific
+    min?: number
+    max?: number
+    step?: number
+    tolerance?: number
+    initialValue?: number
+    unit?: string
+    hint?: string
+
     [key: string]: any
 }
 
@@ -144,7 +157,7 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
             return <QuestionCard
                 question={card.question || 'Pytanie'}
                 options={card.options || []}
-                correctAnswer={card.correctAnswer || 0}
+                correctAnswer={(card.correctAnswer as number) || 0}
                 explanation={card.explanation}
                 onAnswer={onAnswer}
             />
@@ -285,6 +298,26 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 title={card.title || 'Końcowy Test'}
                 questions={card.questions || []}
                 onTestResult={onTestResult || (() => { })}
+            />
+        case 'input':
+            return <InputCard
+                question={card.question || 'Oblicz...'}
+                correctAnswer={card.correctAnswer || ''}
+                placeholder={card.placeholder}
+                unit={card.unit}
+                hint={card.hint}
+                explanation={card.explanation}
+            />
+        case 'number-line':
+            return <NumberLineCard
+                question={card.question || 'Zaznacz na osi'}
+                min={card.min || 0}
+                max={card.max || 10}
+                step={card.step || 1}
+                correctValue={card.correctValue !== undefined ? Number(card.correctValue) : Number(card.correctAnswer) || 0}
+                tolerance={card.tolerance}
+                initialValue={card.initialValue}
+                explanation={card.explanation}
             />
         default:
             return (

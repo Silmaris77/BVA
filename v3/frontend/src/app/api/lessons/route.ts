@@ -38,6 +38,37 @@ export async function GET() {
             }
         }
 
+        // INJECT LOCAL MATH LESSON
+        try {
+            const fs = await import('fs');
+            const path = await import('path');
+            const filePath = path.join(process.cwd(), 'src/data/math/grade7/lesson1.json');
+
+            if (fs.existsSync(filePath)) {
+                const fileContent = fs.readFileSync(filePath, 'utf-8');
+                const localLesson = JSON.parse(fileContent);
+
+                // Add metadata required for list view
+                const mathLesson = {
+                    lesson_id: localLesson.lesson_id,
+                    title: localLesson.title,
+                    description: localLesson.subtitle || "Lekcja matematyki",
+                    duration_minutes: 15,
+                    xp_reward: localLesson.xp_reward || 50,
+                    difficulty: 'beginner',
+                    category: 'Matematyka',
+                    status: 'published',
+                    display_order: 0,
+                    content: localLesson.content // Include content or not depending on payload size
+                };
+
+                // Add to beginning or end
+                lessons?.unshift(mathLesson);
+            }
+        } catch (err) {
+            console.error('Failed to inject local lesson:', err);
+        }
+
         return NextResponse.json({ lessons, progress: progressMap });
 
     } catch (error) {

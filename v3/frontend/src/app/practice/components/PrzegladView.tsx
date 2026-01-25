@@ -93,6 +93,37 @@ export default function PrzegladView() {
                                 border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer'
                             }}>Start</button>
                         </div>
+                        {/* MATH LESSON ITEM */}
+                        <div
+                            onClick={() => window.location.href = '/lessons/math-g7-l1'}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '16px',
+                                background: 'rgba(59, 130, 246, 0.1)',
+                                border: '1px solid rgba(59, 130, 246, 0.2)',
+                                borderRadius: '12px',
+                                marginBottom: '12px',
+                                cursor: 'pointer'
+                            }}>
+                            <div style={{
+                                width: '40px', height: '40px', borderRadius: '8px',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                marginRight: '16px', fontSize: '20px', flexShrink: 0,
+                                background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa'
+                            }}>
+                                📐
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontSize: '15px', fontWeight: 600, marginBottom: '4px' }}>Matematyka: Liczby i Działania</div>
+                                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)' }}>⏱️ 15 min • ⭐ +50 XP • Klasa 7</div>
+                            </div>
+                            <button style={{
+                                padding: '6px 16px', borderRadius: '20px',
+                                fontSize: '12px', fontWeight: 700,
+                                background: '#3b82f6', color: 'white', border: 'none', cursor: 'pointer'
+                            }}>Start</button>
+                        </div>
                     </div>
 
                     {/* Active Projects Section */}

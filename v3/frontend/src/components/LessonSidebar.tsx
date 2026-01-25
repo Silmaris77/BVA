@@ -1,6 +1,19 @@
 'use client'
 
 import { Check, Lock } from 'lucide-react'
+import 'katex/dist/katex.min.css'
+import { InlineMath } from 'react-katex'
+
+// Helper function to render text with inline LaTeX
+function renderMathText(text: string) {
+    // Split by $ signs for inline math
+    const parts = text.split(/\$([^$]+)\$/g)
+    return parts.map((part, i) => 
+        i % 2 === 1 
+            ? <InlineMath key={i} math={part} />
+            : <span key={i}>{part}</span>
+    )
+}
 
 interface LessonSidebarProps {
     cards: Array<{
@@ -134,7 +147,7 @@ export default function LessonSidebar({
                                         lineHeight: '1.4',
                                         wordBreak: 'break-word'
                                     }}>
-                                        {getCardTitle(card, index)}
+                                        {renderMathText(getCardTitle(card, index))}
                                     </div>
                                     <div style={{
                                         fontSize: '12px',

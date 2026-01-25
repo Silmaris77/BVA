@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
     --bg-deep: #0f0c29;
@@ -12,6 +10,26 @@
     --neon-red: #ff0055;
     --text-main: #ffffff;
     --text-muted: rgba(255, 255, 255, 0.6);
+
+    /* V3 Consulting Game Variables */
+    --accent-purple: var(--neon-purple);
+    --accent-blue: var(--neon-blue);
+    --accent-gold: var(--neon-gold);
+    --accent-red: var(--neon-red);
+    --accent-green: #00ff9d;
+    --bg-deep: #0f0c29;
+}
+
+/* Custom Components */
+.dept-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.dept-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 html {

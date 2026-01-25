@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { CheckCircle2, XCircle, Trophy, ArrowRight, RotateCcw } from 'lucide-react'
 import confetti from 'canvas-confetti'
+import MathRenderer from './math/MathRenderer'
 
 interface QuizQuestion {
     question: string
@@ -275,7 +276,7 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                     color: '#fff',
                     lineHeight: '1.4'
                 }}>
-                    {currentQuestion.question}
+                    <MathRenderer content={currentQuestion.question} inline={true} />
                 </h3>
 
                 <div style={{
@@ -308,7 +309,9 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                             }}>
                                 {letters[index]}
                             </div>
-                            <span style={{ flex: 1 }}>{option}</span>
+                            <span style={{ flex: 1, textAlign: 'left' }}>
+                                <MathRenderer content={option} inline={true} />
+                            </span>
                             {isAnswered && index === currentQuestion.correctAnswer && (
                                 <CheckCircle2 size={20} color="#00ff88" />
                             )}

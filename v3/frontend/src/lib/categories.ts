@@ -15,7 +15,8 @@ export const CONTENT_CATEGORIES: Category[] = [
     { id: 'Leadership', name: 'Leadership', color: '#ffd700' },
     { id: 'Negocjacje', name: 'Negocjacje', color: '#ff6b6b' },
     { id: 'Produktywność', name: 'Produktywność', color: '#4ecdc4' },
-    { id: 'Komunikacja', name: 'Komunikacja', color: '#ff8800' }
+    { id: 'Komunikacja', name: 'Komunikacja', color: '#ff8800' },
+    { id: 'Matematyka', name: 'Matematyka', color: '#3b82f6' }
 ]
 
 // Get category color by id (for cards, badges, etc.)
