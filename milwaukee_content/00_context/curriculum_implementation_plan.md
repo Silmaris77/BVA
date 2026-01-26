@@ -77,44 +77,44 @@ Based on analysis of:
 
 ---
 
-## 📚 TRACK 1: FOUNDATION (Wszystkie Role)
+## 📚 TRACK 1: ASSOCIATE (Wszystkie Role)
 
-### Module 1: Milwaukee Foundations
+### Module 1: FUNDAMENTY MILWAUKEE
 **Czas:** 2-3 godziny | **Lekcje:** 6
 
-#### Lesson 1.1: Milwaukee Story - Nothing but HEAVY DUTY™
-- **Cel:** Zrozumienie misji, wartości, history
+#### Lesson 1.1: Historia i DNA marki Milwaukee – Nothing but HEAVY DUTY™
+- **Cel:** Zrozumienie misji, wartości, historii
 - **Kontent:** Historia 1924-2024, core values, USPs
 - **Typ kart:** Hero → Story → Timeline → Values → Quiz
 - **XP:** 50
 
-#### Lesson 1.2: Portfolio Overview - Ekosystem, Nie Pudełka
+#### Lesson 1.2: Portfolio Milwaukee – myślenie systemowe, nie produktowe
 - **Cel:** Zrozumienie M12/M18/MX FUEL jako systemów
 - **Kontent:** System overview, One Battery Platform
 - **Typ kart:** Hero → Diagram → Comparison → Interactive → Quiz
 - **XP:** 50
 
-#### Lesson 1.3: Application First - Filozofia Pracy
+#### Lesson 1.3: Application First – jak myślimy o pracy klienta
 - **Cel:** Zrozumienie Application First mindset
 - **Kontent:** Lekarz vs Aptekarz metafora, 7-step canvas intro
 - **Typ kart:** Hero → Concept → Examples → Scenario → Quiz
 - **XP:** 75
 
-#### Lesson 1.4: SYSTEM Milwaukee - 4 Elementy
+#### Lesson 1.4: System Milwaukee – cztery elementy rozwiązania
 - **Cel:** Narzędzie + Platforma + Osprzęt + Ochrona
 - **Kontent:** Dlaczego system, nie produkt
 - **Typ kart:** Hero → 4-Part Breakdown → Case Study → Quiz
 - **XP:** 75
 
-#### Lesson 1.5: Competition Landscape
-- **Cel:** Znać głównych konkurentów objektywnie
+#### Lesson 1.5: Rynek i konkurencja – obiektywne porównanie
+- **Cel:** Znać głównych konkurentów obiektywnie
 - **Kontent:** Milwaukee vs DeWalt vs Makita vs Bosch
 - **Typ kart:** Hero → Battle Cards → TCO Comparison → Quiz
 - **XP:** 50
 
-#### Lesson 1.6: Branding & Communication
+#### Lesson 1.6: Język i komunikacja Milwaukee
 - **Cel:** Tone of voice, terminology, messaging
-- **Kontent:** Jak komunikow ać się "Milwaukee way"
+- **Kontent:** Jak komunikować się "Milwaukee way"
 - **Typ kart:** Hero → Guidelines → Good/Bad Examples → Quiz
 - **XP:** 50
 
@@ -122,107 +122,107 @@ Based on analysis of:
 
 ---
 
-### Module 2: Standard Wizyty "One Milwaukee"
+### Module 3: STANDARD WIZYTY JSS – RAMY ROZMOWY
 **Czas:** 4-5 godzin | **Lekcje:** 8 (PRIORITY 1 - Critical)
 
-#### Lesson 2.1: Przygotowanie do Wizyty
+#### Lesson 3.1: Przygotowanie do wizyty – cel, kontekst, plan
 - **Cel:** Jak się przygotować (CRM, research, cele)
 - **Kontent:** Pre-visit checklist, SMART goals
 - **Typ kart:** Hero → Framework → Tools (CRM) → Roleplay Setup → Quiz
 - **XP:** 75
 
-#### Lesson 2.2: Otwarcie Wizyty & Building Rapport
+#### Lesson 3.2: Otwarcie wizyty i budowanie relacji
 - **Cel:** Pierwsze 2 minuty wizyty
 - **Kontent:** Intro, komunikacja celu, nawiązanie relacji
 - **Typ kart:** Hero → Script Examples → Video Demo → Practice → Quiz
 - **XP:** 75
 
-#### Lesson 2.3: Discovery & Diagnoza - Zadawanie Pytań
+#### Lesson 3.3: Rozpoznanie potrzeb – zadawanie pytań i słuchanie
 - **Cel:** Pytania otwarte, aktywne słuchanie
 - **Kontent:** 80/20 rule, question bank, parafrazowanie
 - **Typ kart:** Hero → Question Types → Video Examples → Interactive Drill → Quiz
 - **XP:** 100 (kluczowa umiejętność)
 
-#### Lesson 2.4: Prowadzenie Rozmowy - Struktura
+#### Lesson 3.4: Prowadzenie rozmowy – logika i struktura wizyty
 - **Cel:** Cel → Diagnoza → Rekomendacja → Domknięcie
 - **Kontent:** Full conversation flow
 - **Typ kart:** Hero → Structure → Flow Diagram → Case Study → Quiz
 - **XP:** 100
 
-#### Lesson 2.5: Presentation Skills - Jak Prezentować
+#### Lesson 3.5: Prezentowanie rozwiązań w sposób przekonujący
 - **Cel:** Features → Benefits, storytelling
 - **Kontent:** FAB technique, case studies, visuals
 - **Typ kart:** Hero → Framework → Examples → Video → Quiz
 - **XP:** 75
 
-#### Lesson 2.6: Handling Objections
+#### Lesson 3.6: Praca z obiekcjami klienta
 - **Cel:** Feel-Felt-Found, overcoming resistance
 - **Kontent:** Top 10 obiekcji + responses
 - **Typ kart:** Hero → Types → Scripts → Roleplay → Quiz
 - **XP:** 100
 
-#### Lesson 2.7: Closing & Next Steps
+#### Lesson 3.7: Ustalenie decyzji i kolejnych kroków
 - **Cel:** KTO-CO-KIEDY, follow-up
 - **Kontent:** Closing techniques bez agresji
 - **Typ kart:** Hero → Formula → Examples → Template → Quiz
 - **XP:** 100
 
-#### Lesson 2.8: Follow-Up & CRM Documentation
+#### Lesson 3.8: Podsumowanie wizyty i praca w CRM
 - **Cel:** ≤24h rule, co zapisać w CRM
 - **Kontent:** Follow-up best practices
 - **Typ kart:** Hero → Template Email → CRM Fields → Checklist → Quiz
 - **XP:** 75
 
-**Total Module 2:** ~5h | 700 XP
+**Total Module 3:** ~5h | 700 XP
 
 ---
 
-### Module 3: Application First Canvas (7 Kroków)
+### Module 2: APPLICATION FIRST – METODA DIAGNOZY APLIKACJI
 **Czas:** 6-7 godzin | **Lekcje:** 7 (po jednej na krok)
 
-#### Lesson 3.1: KROK 1 - Aplikacja (Job to be Done)
+#### Lesson 2.1: Krok 1: Aplikacja – co klient naprawdę robi
 - **Cel:** Obserwacja, mapowanie pracy klienta
 - **Kontent:** Jak zbierać parametry aplikacji
 - **Interactive:** Jobsite walk simulation
 - **XP:** 100
 
-#### Lesson 3.2: KROK 2 - Problem (Pain Points)
+#### Lesson 2.2: Krok 2: Problem – co dziś nie działa
 - **Cel:** Klient sam nazywa ból
 - **Kontent:** Pytania pogłębiające, parafrazowanie
 - **Interactive:** Problem identification drill
 - **XP:** 100
 
-#### Lesson 3.3: KROK 3 - Konsekwencje (Impact)
+#### Lesson 2.3: Krok 3: Konsekwencje – jakie są straty i ryzyka
 - **Cel:** Klient liczy straty sam
 - **Kontent:** Kwantyfikacja problemu
 - **Interactive:** ROI calculator sim
 - **XP:** 100
 
-#### Lesson 3.4: KROK 4 - Rozwiązanie (SYSTEM)
+#### Lesson 2.4: Krok 4: Rozwiązanie – system dopasowany do aplikacji
 - **Cel:** 4 elementy: Narzędzie + Platforma + Osprzęt + Ochrona
 - **Kontent:** Dopasowanie systemu do bólu
 - **Interactive:** System builder
 - **XP:** 100
 
-#### Lesson 3.5: KROK 5 - Demo Aplikacyjne (Proof)
+#### Lesson 2.5: KROK 5 - Demo Aplikacyjne (Proof)
 - **Cel:** Klient pracuje, JSS przewodzi
 - **Kontent:** Demo checklist, kryterium sukcesu
 - **Interactive:** Demo planning tool
 - **XP:** 100
 
-#### Lesson 3.6: KROK 6 - Wartość (Value)
+#### Lesson 2.6: KROK 6 - Wartość (Value)
 - **Cel:** Klient sam opisuje wartość
 - **Kontent:** Value articulation techniques
 - **Interactive:** Value conversation sim
 - **XP:** 100
 
-#### Lesson 3.7: KROK 7 - Next Steps (Domknięcie)
+#### Lesson 2.7: KROK 7 - Next Steps (Domknięcie)
 - **Cel:** KTO-CO-KIEDY + follow-up ≤24h
 - **Kontent:** Kontraktowanie, follow-up template
 - **Interactive:** Closing simulation
 - **XP:** 100
 
-**Total Module 3:** ~7h | 700 XP
+**Total Module 2:** ~7h | 700 XP
 
 ---
 
@@ -259,7 +259,7 @@ Based on analysis of:
 ---
 
 **TRACK 1 TOTAL:** ~20h contentu | 2100 XP  
-**Certyfikat:** Milwaukee Team Player 🎖️
+**Certyfikat:** Milwaukee Associate 🎖️
 
 ---
 
