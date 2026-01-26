@@ -251,6 +251,11 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
     }
 
     const currentQuestion = questions[currentIndex]
+
+    // Safety check
+    if (!currentQuestion && mode === 'test') {
+        return <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>Błąd: Brak pytań w teście.</div>
+    }
     const letters = ['A', 'B', 'C', 'D']
 
     if (mode === 'test') {

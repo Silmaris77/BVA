@@ -20,8 +20,9 @@ import StoryCard from './StoryCard'
 import EndingCard from './EndingCard'
 import TestCard from './TestCard'
 import ChecklistCard from './ChecklistCard'
+import CoverCard from './CoverCard'
 
-export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line'
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'cover'
 
 export interface LessonCardData {
     type: CardType
@@ -318,6 +319,16 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 tolerance={card.tolerance}
                 initialValue={card.initialValue}
                 explanation={card.explanation}
+            />
+        case 'cover':
+            return <CoverCard
+                title={card.title || 'Lesson Title'}
+                subtitle={card.subtitle}
+                description={card.description}
+                category={card.category}
+                durationMinutes={card.durationMinutes}
+                xpReward={card.xpReward}
+                image={card.image}
             />
         default:
             return (

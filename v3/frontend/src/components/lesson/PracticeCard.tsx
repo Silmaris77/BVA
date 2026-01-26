@@ -2,8 +2,8 @@
 
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { ChevronDown, ChevronUp, Mic, Loader2 } from 'lucide-react'
 
 interface PracticeCardProps {
     title: string
@@ -31,6 +31,102 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
 
     const handleInputChange = (index: number, value: string) => {
         setInputValues(prev => ({ ...prev, [index]: value }))
+    }
+
+    const [listeningIndex, setListeningIndex] = useState<number | null>(null)
+    const [processingIndex, setProcessingIndex] = useState<number | null>(null)
+    const recognitionRef = useRef<any>(null)
+
+    const processWithAI = async (index: number, text: string) => {
+        if (!text || text.trim().length < 5) return // Skip short texts
+
+        setProcessingIndex(index)
+        try {
+            const response = await fetch('/api/ai/punctuate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            })
+
+            const data = await response.json()
+            if (data.text) {
+                handleInputChange(index, data.text)
+            }
+        } catch (error) {
+            console.error('AI Punctuation error:', error)
+        } finally {
+            setProcessingIndex(null)
+        }
+    }
+
+    const toggleListening = (index: number) => {
+        // If already listening on this index, stop.
+        if (listeningIndex === index) {
+            if (recognitionRef.current) {
+                recognitionRef.current.stop()
+            }
+            return
+        }
+
+        // If listening elsewhere, stop that first.
+        if (listeningIndex !== null) {
+            if (recognitionRef.current) {
+                recognitionRef.current.stop()
+            }
+        }
+
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert('Twoja przeglądarka nie obsługuje rozpoznawania mowy.')
+            return
+        }
+
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+        const recognition = new SpeechRecognition()
+        recognitionRef.current = recognition
+
+        recognition.lang = 'pl-PL'
+        recognition.interimResults = false
+        recognition.maxAlternatives = 1
+
+        // Capture starting state to check for changes changes
+        const startValue = inputValues[index] || ''
+        let finalValue = startValue
+
+        recognition.onstart = () => {
+            setListeningIndex(index)
+        }
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript
+            // Append
+            finalValue = startValue ? `${startValue} ${transcript}` : transcript
+            handleInputChange(index, finalValue)
+        }
+
+        recognition.onend = () => {
+            setListeningIndex(null)
+            recognitionRef.current = null
+
+            // Only process if something was added
+            if (finalValue !== startValue) {
+                processWithAI(index, finalValue)
+            }
+        }
+
+        recognition.onerror = (event: any) => {
+            console.error('Speech recognition error', event.error)
+            setListeningIndex(null)
+            recognitionRef.current = null
+        }
+
+        recognition.start()
+    }
+
+    const addPunctuation = (index: number, mark: string) => {
+        const currentValue = inputValues[index] || ''
+        const trimmed = currentValue.trimEnd()
+        const newValue = `${trimmed}${mark} `
+        handleInputChange(index, newValue)
     }
 
     return (
@@ -127,52 +223,131 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
 
                 {/* Interactive Inputs (if present) */}
                 {inputs && inputs.length > 0 && (
-                    <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         {inputs.map((input, index) => (
                             <div key={index}>
-                                <label style={{
-                                    display: 'block',
-                                    marginBottom: '8px',
-                                    fontSize: '14px',
-                                    fontWeight: 600,
-                                    color: '#00ff88'
-                                }}>
-                                    {input.label}
-                                </label>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                                    <label style={{
+                                        display: 'block',
+                                        fontSize: '14px',
+                                        fontWeight: 600,
+                                        color: '#00ff88'
+                                    }}>
+                                        {input.label}
+                                    </label>
+
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        {/* Punctuation Buttons */}
+                                        <div style={{ display: 'flex', gap: '4px', marginRight: '8px' }}>
+                                            {['.', ',', '?', '!'].map(mark => (
+                                                <button
+                                                    key={mark}
+                                                    onClick={() => addPunctuation(index, mark)}
+                                                    style={{
+                                                        width: '28px',
+                                                        height: '28px',
+                                                        background: 'rgba(255, 255, 255, 0.05)',
+                                                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                        borderRadius: '6px',
+                                                        color: '#fff',
+                                                        fontSize: '14px',
+                                                        fontWeight: 600,
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        transition: 'all 0.1s'
+                                                    }}
+                                                    title={`Wstaw ${mark}`}
+                                                >
+                                                    {mark}
+                                                </button>
+                                            ))}
+                                        </div>
+
+                                        {/* Speech Button */}
+                                        <button
+                                            onClick={() => toggleListening(index)}
+                                            style={{
+                                                background: listeningIndex === index ? 'rgba(239, 68, 68, 0.2)' : processingIndex === index ? 'rgba(176, 0, 255, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+                                                border: listeningIndex === index ? '1px solid #ef4444' : processingIndex === index ? '1px solid #b000ff' : '1px solid rgba(255, 255, 255, 0.1)',
+                                                borderRadius: '50%',
+                                                width: '32px',
+                                                height: '32px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: processingIndex === index ? 'wait' : 'pointer',
+                                                color: listeningIndex === index ? '#ef4444' : processingIndex === index ? '#b000ff' : 'rgba(255, 255, 255, 0.7)',
+                                                transition: 'all 0.2s',
+                                                animation: listeningIndex === index ? 'pulse-red 1.5s infinite' : processingIndex === index ? 'pulse-purple 1.5s infinite' : 'none'
+                                            }}
+                                            title={listeningIndex === index ? 'Zatrzymaj nagrywanie' : 'Nagraj odpowiedź'}
+                                            disabled={processingIndex === index}
+                                        >
+                                            {listeningIndex === index ? (
+                                                <div style={{ width: '10px', height: '10px', background: 'currentColor', borderRadius: '2px' }} />
+                                            ) : processingIndex === index ? (
+                                                <Loader2 size={16} className="animate-spin" />
+                                            ) : (
+                                                <Mic size={16} />
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+                                <style>{`
+                                    @keyframes pulse-red {
+                                        0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+                                        70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+                                        100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+                                    }
+                                    @keyframes pulse-purple {
+                                        0% { box-shadow: 0 0 0 0 rgba(176, 0, 255, 0.4); }
+                                        70% { box-shadow: 0 0 0 10px rgba(176, 0, 255, 0); }
+                                        100% { box-shadow: 0 0 0 0 rgba(176, 0, 255, 0); }
+                                    }
+                                `}</style>
+
                                 {input.type === 'textarea' ? (
                                     <textarea
                                         value={inputValues[index] || ''}
                                         onChange={(e) => handleInputChange(index, e.target.value)}
-                                        placeholder={input.placeholder}
+                                        placeholder={listeningIndex === index ? 'Słucham...' : processingIndex === index ? 'AI poprawia tekst...' : input.placeholder}
                                         style={{
                                             width: '100%',
                                             padding: '12px',
                                             background: 'rgba(0, 0, 0, 0.3)',
-                                            border: '1px solid rgba(0, 255, 136, 0.3)',
+                                            border: listeningIndex === index ? '1px solid #ef4444' : processingIndex === index ? '1px solid #b000ff' : '1px solid rgba(0, 255, 136, 0.3)',
                                             borderRadius: '8px',
                                             color: '#fff',
                                             fontSize: '15px',
                                             fontFamily: 'inherit',
                                             resize: 'vertical',
-                                            minHeight: '80px'
+                                            minHeight: '80px',
+                                            transition: 'border 0.3s ease',
+                                            opacity: processingIndex === index ? 0.7 : 1
                                         }}
+                                        disabled={processingIndex === index}
                                     />
                                 ) : (
                                     <input
                                         type="text"
                                         value={inputValues[index] || ''}
                                         onChange={(e) => handleInputChange(index, e.target.value)}
-                                        placeholder={input.placeholder}
+                                        placeholder={listeningIndex === index ? 'Słucham...' : processingIndex === index ? 'AI poprawia tekst...' : input.placeholder}
                                         style={{
                                             width: '100%',
                                             padding: '12px',
                                             background: 'rgba(0, 0, 0, 0.3)',
-                                            border: '1px solid rgba(0, 255, 136, 0.3)',
+                                            border: listeningIndex === index ? '1px solid #ef4444' : processingIndex === index ? '1px solid #b000ff' : '1px solid rgba(0, 255, 136, 0.3)',
                                             borderRadius: '8px',
                                             color: '#fff',
                                             fontSize: '15px',
-                                            fontFamily: 'inherit'
+                                            fontFamily: 'inherit',
+                                            transition: 'border 0.3s ease',
+                                            opacity: processingIndex === index ? 0.7 : 1
                                         }}
+                                        disabled={processingIndex === index}
                                     />
                                 )}
                             </div>

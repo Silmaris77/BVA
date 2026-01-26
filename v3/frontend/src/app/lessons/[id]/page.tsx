@@ -9,7 +9,7 @@ import { X, ChevronLeft, ChevronRight, Menu } from 'lucide-react'
 import Toast from '@/components/Toast'
 
 interface Card {
-    type: 'intro' | 'concept' | 'question' | 'summary' | 'test'
+    type: 'intro' | 'concept' | 'question' | 'summary' | 'test' | 'cover'
     [key: string]: any
 }
 
@@ -70,7 +70,21 @@ export default function LessonPlayerPage() {
 
                 if (data.lesson) {
                     setLesson(data.lesson)
-                    setCards(data.lesson.content?.cards || [])
+
+                    const originalCards = data.lesson.content?.cards || []
+
+                    // Create Cover Card automatically
+                    const coverCard: Card = {
+                        type: 'cover',
+                        title: data.lesson.title,
+                        description: data.lesson.description,
+                        category: data.lesson.category || 'Moduł Edukacyjny',
+                        durationMinutes: data.lesson.duration_minutes,
+                        xpReward: data.lesson.xp_reward
+                    }
+
+                    // Prepend cover card
+                    setCards([coverCard, ...originalCards])
 
                     // Resume from saved progress if exists
                     if (data.progress && !data.progress.completed_at) {
@@ -425,10 +439,129 @@ export default function LessonPlayerPage() {
 
                 {/* Main Content Column */}
                 <div style={{
-                    display: 'flex',
                     flexDirection: 'column',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    position: 'relative' // Needed for absolute positioning of nav
                 }}>
+                    {/* Navigation Buttons - Floating Side Chevrons (Desktop) / Bottom Corners (Mobile) */}
+                    <style>{`
+                        .nav-btn {
+                            position: absolute;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            z-index: 50;
+                            transition: all 0.2s ease;
+                        }
+                        .nav-btn-prev {
+                            left: 32px;
+                        }
+                        .nav-btn-next {
+                            right: 32px;
+                        }
+
+                        @media (max-width: 768px) {
+                            .nav-btn {
+                                position: fixed; /* Fixed on mobile to stay visible */
+                                top: auto !important;
+                                bottom: 24px !important; /* Move to bottom */
+                                transform: none !important;
+                            }
+                            .nav-btn-prev {
+                                left: 24px;
+                            }
+                            .nav-btn-next {
+                                right: 24px;
+                            }
+                        }
+                    `}</style>
+
+                    {/* Previous Button */}
+                    <button
+                        onClick={handlePrevious}
+                        className="nav-btn nav-btn-prev"
+                        disabled={currentCardIndex === 0}
+                        style={{
+                            width: '56px',
+                            height: '56px',
+                            borderRadius: '50%',
+                            background: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            backdropFilter: 'blur(10px)',
+                            color: 'white',
+                            display: currentCardIndex === 0 ? 'none' : 'flex', // Hide if disabled
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+                        }}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                            e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
+                            e.currentTarget.style.transform = 'translateY(-50%) scale(1)'
+                        }}
+                    >
+                        <ChevronLeft size={28} />
+                    </button>
+
+                    {/* Next Button */}
+                    {navBlocked && isTestCard ? (
+                        <button
+                            onClick={handleResetLesson}
+                            className="nav-btn nav-btn-next"
+                            style={{
+                                padding: '0 24px',
+                                height: '56px',
+                                borderRadius: '28px',
+                                background: '#ef4444',
+                                border: 'none',
+                                color: 'white',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                boxShadow: '0 4px 20px rgba(239, 68, 68, 0.3)'
+                            }}
+                        >
+                            Powtórz Lekcję
+                        </button>
+                    ) : (
+                        <button
+                            onClick={handleNext}
+                            disabled={navBlocked}
+                            className="nav-btn nav-btn-next"
+                            style={{
+                                width: currentCardIndex === cards.length - 1 ? 'auto' : '56px',
+                                padding: currentCardIndex === cards.length - 1 ? '0 32px' : '0',
+                                height: '56px',
+                                borderRadius: '50px', // Capsule or Circle
+                                background: navBlocked ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg, #00d4ff, #b000ff)',
+                                border: 'none',
+                                color: navBlocked ? 'rgba(255,255,255,0.3)' : 'white',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: navBlocked ? 'not-allowed' : 'pointer',
+                                boxShadow: navBlocked ? 'none' : '0 4px 20px rgba(0, 212, 255, 0.3)'
+                            }}
+                            onMouseOver={(e) => {
+                                if (!navBlocked) e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'
+                            }}
+                            onMouseOut={(e) => {
+                                if (!navBlocked) e.currentTarget.style.transform = 'translateY(-50%) scale(1)'
+                            }}
+                        >
+                            {currentCardIndex === cards.length - 1 ? (
+                                <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 600, fontSize: '16px' }}>Zakończ</span>
+                            ) : (
+                                <ChevronRight size={28} />
+                            )}
+                        </button>
+                    )}
+
                     {/* Card Content Area */}
                     <div
                         ref={contentAreaRef}
@@ -482,113 +615,13 @@ export default function LessonPlayerPage() {
                                 onReset={handleResetLesson}
                                 onTestResult={async (score, passed) => {
                                     if (passed) {
-                                        // Unblock navigation
-                                        // Maybe auto-advance after small delay?
-                                        // For now user clicks "End" inside TestCard result screen or we enable "Next" button
-                                        // The TestCard shows "Lesson Unlocked".
-                                        // We can auto-complete if it's the last card?
-                                        // Let's rely on the bottom nav "Next/Finish" button which we will enable.
-
-                                        // Actually, we need to store state that test is passed to allow handleNext
-                                        // We can use a ref or state.
-                                        // But simple hack: update the card in state to mark it as passed?
-                                        // Let's assume handleNext checks if current card is test and if it's passed.
+                                        // Passed
                                     } else {
                                         // Failed
-                                        // We need to reset lesson.
-                                        // TestCard shows "Repeat Lesson" button. But we need to handle the click?
-                                        // Actually TestCard just shows the button. It doesn't do the reset.
-                                        // Wait, TestCard doesn't have onReset callback.
-                                        // I should have added onReset to TestCard?
-                                        // Or TestCard calls onTestResult and Parent decides what to do.
-
-                                        // If failed, we should probably show a modal or just wait for user to click "Repeat"
-                                        // But wait, TestCard UI says "Musisz powtórzyć".
-                                        // I will implement reset logic here.
                                     }
                                 }}
                             />
                         </div>
-                    </div>
-
-                    {/* Bottom Navigation - Fixed at bottom */}
-                    <div style={{
-                        position: 'fixed',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        background: 'transparent',
-                        borderTop: 'none',
-                        padding: '16px 32px',
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        gap: '12px',
-                        zIndex: 100
-                    }}>
-                        <button
-                            onClick={handlePrevious}
-                            disabled={currentCardIndex === 0}
-                            style={{
-                                padding: '12px 24px',
-                                background: currentCardIndex === 0 ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.1)',
-                                border: '1px solid rgba(255, 255, 255, 0.1)',
-                                borderRadius: '12px',
-                                color: currentCardIndex === 0 ? 'rgba(255, 255, 255, 0.3)' : 'white',
-                                fontWeight: 600,
-                                cursor: currentCardIndex === 0 ? 'not-allowed' : 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                fontFamily: 'Outfit, sans-serif'
-                            }}
-                        >
-                            <ChevronLeft size={20} />
-                            Poprzednia
-                        </button>
-
-                        {navBlocked && isTestCard ? (
-                            <button
-                                onClick={handleResetLesson}
-                                style={{
-                                    padding: '12px 24px',
-                                    background: '#ef4444',
-                                    border: 'none',
-                                    borderRadius: '12px',
-                                    color: 'white',
-                                    fontWeight: 600,
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    fontFamily: 'Outfit, sans-serif',
-                                    boxShadow: '0 4px 20px rgba(239, 68, 68, 0.3)'
-                                }}
-                            >
-                                Powtórz Lekcję
-                            </button>
-                        ) : (
-                            <button
-                                onClick={handleNext}
-                                disabled={navBlocked}
-                                style={{
-                                    padding: '12px 24px',
-                                    background: navBlocked ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg, #00d4ff, #b000ff)',
-                                    border: 'none',
-                                    borderRadius: '12px',
-                                    color: navBlocked ? 'rgba(255,255,255,0.3)' : 'white',
-                                    fontWeight: 600,
-                                    cursor: navBlocked ? 'not-allowed' : 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    fontFamily: 'Outfit, sans-serif',
-                                    boxShadow: navBlocked ? 'none' : '0 4px 20px rgba(0, 212, 255, 0.3)'
-                                }}
-                            >
-                                {currentCardIndex === cards.length - 1 ? 'Zakończ' : 'Następna'}
-                                <ChevronRight size={20} />
-                            </button>
-                        )}
                     </div>
 
                     {/* Exit Confirmation Modal */}

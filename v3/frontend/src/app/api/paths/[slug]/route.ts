@@ -32,7 +32,22 @@ export async function GET(
         // Fetch all lessons in the path
         const { data: lessons, error: lessonsError } = await supabase
             .from('lessons')
-            .select('lesson_id, title, description, duration_minutes, xp_reward, difficulty, category, content')
+            .select(`
+                lesson_id, 
+                title, 
+                description, 
+                duration_minutes, 
+                xp_reward, 
+                difficulty, 
+                category, 
+                content,
+                module_id,
+                modules (
+                    id,
+                    title,
+                    display_order
+                )
+            `)
             .in('lesson_id', lessonIds);
 
         if (lessonsError) {

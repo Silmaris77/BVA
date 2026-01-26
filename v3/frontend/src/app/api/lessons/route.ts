@@ -5,15 +5,21 @@ export async function GET() {
     try {
         const supabase = await createClient();
 
+        // Get all modules
+        const { data: modules, error: modulesError } = await supabase
+            .from('modules')
+            .select('id, title, description, track, display_order')
+            .order('display_order');
+
         // Get all lessons (RLS auto-filters by company)
         const { data: lessons, error } = await supabase
             .from('lessons')
-            .select('lesson_id, title, description, duration_minutes, xp_reward, difficulty, category, content, status, release_date, display_order, module, track')
+            .select('lesson_id, title, description, duration_minutes, xp_reward, difficulty, category, content, status, release_date, display_order, module, track, module_id')
             .order('display_order', { ascending: true });
 
-        if (error) {
-            console.error('Lessons fetch error:', error);
-            return NextResponse.json({ error: error.message }, { status: 500 });
+        if (error || modulesError) {
+            console.error('Data fetch error:', error || modulesError);
+            return NextResponse.json({ error: (error || modulesError)?.message }, { status: 500 });
         }
 
         // Get user progress if authenticated
@@ -39,6 +45,11 @@ export async function GET() {
         }
 
         let isAuthorizedForMath = false;
+        let mathModuleId: string | null = null;
+
+        // Find Math module ID
+        const mathModule = modules?.find(m => m.title.includes('Matematyka'));
+        if (mathModule) mathModuleId = mathModule.id;
 
         // INJECT LOCAL MATH LESSON
         // Check access control: Admin OR (Company="Szkoła" AND Role="Uczeń")
@@ -92,7 +103,8 @@ export async function GET() {
                         release_date: null,
                         module: 'math-grade7',
                         track: 'math',
-                        content: localLesson.content // Include content or not depending on payload size
+                        content: localLesson.content, // Include content or not depending on payload size
+                        module_id: mathModuleId
                     };
 
                     // Add to beginning or end
@@ -103,7 +115,7 @@ export async function GET() {
             }
         }
 
-        return NextResponse.json({ lessons, progress: progressMap });
+        return NextResponse.json({ lessons, modules, progress: progressMap });
 
     } catch (error) {
         console.error('API error:', error);

@@ -15,6 +15,12 @@ interface Lesson {
     difficulty: string
     category: string
     content?: { cards?: any[] }
+    module_id?: string
+    modules?: {
+        id: string
+        title: string
+        display_order: number
+    }
 }
 
 interface PathData {
@@ -297,109 +303,141 @@ export default function PathDetailPage() {
                     const isCurrent = status === 'current'
                     const categoryColor = getCategoryColor(lesson.category)
 
+                    // Logic to check if we should show a module header
+                    const prevLesson = index > 0 ? path.lessons[index - 1] : null;
+                    const isNewModule = lesson.modules && (!prevLesson || prevLesson.modules?.id !== lesson.modules.id);
+
                     return (
-                        <div
-                            key={lesson.lesson_id}
-                            onClick={() => handleLessonClick(lesson.lesson_id)}
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.03)',
-                                border: `1px solid ${isCompleted ? 'rgba(0, 255, 136, 0.3)' :
-                                    isCurrent ? '#00d4ff' :
-                                        'rgba(255, 255, 255, 0.08)'
-                                    }`,
-                                borderRadius: '16px',
-                                padding: '24px',
-                                display: 'flex',
-                                gap: '20px',
-                                cursor: 'pointer',
-                                transition: 'all 0.3s',
-                                position: 'relative',
-                                boxShadow: isCurrent ? '0 0 20px rgba(0, 212, 255, 0.15)' : 'none'
-                            }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
-                                e.currentTarget.style.transform = 'translateX(4px)'
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'
-                                e.currentTarget.style.transform = 'translateX(0)'
-                            }}
-                        >
-                            {/* Lesson Number */}
-                            <div style={{
-                                width: '48px',
-                                height: '48px',
-                                borderRadius: '12px',
-                                background: isCompleted
-                                    ? 'rgba(0, 255, 136, 0.15)'
-                                    : `${categoryColor}20`,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '20px',
-                                fontWeight: 700,
-                                color: isCompleted ? '#00ff88' : categoryColor,
-                                flexShrink: 0
-                            }}>
-                                {isCompleted ? <CheckCircle size={24} /> : index + 1}
-                            </div>
-
-                            {/* Lesson Content */}
-                            <div style={{ flex: 1 }}>
-                                <h3 style={{
-                                    fontSize: '18px',
-                                    fontWeight: 600,
-                                    marginBottom: '8px'
-                                }}>
-                                    {lesson.title}
-                                </h3>
-                                <p style={{
-                                    fontSize: '14px',
-                                    color: 'rgba(255, 255, 255, 0.5)',
-                                    lineHeight: 1.5,
-                                    marginBottom: '12px'
-                                }}>
-                                    {lesson.description}
-                                </p>
+                        <div key={lesson.lesson_id}>
+                            {/* Module Header */}
+                            {isNewModule && (
                                 <div style={{
-                                    display: 'flex',
-                                    gap: '16px',
-                                    fontSize: '13px',
-                                    color: 'rgba(255, 255, 255, 0.4)'
-                                }}>
-                                    <span>⏱️ {lesson.duration_minutes} min</span>
-                                    <span>📄 {lesson.content?.cards?.length || 0} kart</span>
-                                    <span>⭐ +{lesson.xp_reward} XP</span>
-                                </div>
-                            </div>
-
-                            {/* Status Badge */}
-                            {(isCompleted || isCurrent) && (
-                                <span style={{
-                                    position: 'absolute',
-                                    top: '16px',
-                                    right: '16px',
-                                    padding: '6px 12px',
-                                    borderRadius: '20px',
-                                    fontSize: '12px',
+                                    margin: '32px 0 16px',
+                                    paddingBottom: '8px',
+                                    borderBottom: '1px solid rgba(255,255,255,0.1)',
+                                    color: 'rgba(255,255,255,0.8)',
                                     fontWeight: 600,
-                                    background: isCompleted
-                                        ? 'rgba(0, 255, 136, 0.15)'
-                                        : 'rgba(0, 212, 255, 0.15)',
-                                    color: isCompleted ? '#00ff88' : '#00d4ff'
+                                    fontSize: '18px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px'
                                 }}>
-                                    {isCompleted ? '✅ Ukończone' : '🔵 W trakcie'}
-                                </span>
+                                    <span style={{
+                                        color: '#00d4ff',
+                                        fontSize: '14px',
+                                        fontWeight: 800,
+                                        opacity: 0.8,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '1px'
+                                    }}>
+                                        Moduł
+                                    </span>
+                                    {lesson.modules?.title}
+                                </div>
                             )}
 
-                            {/* Arrow */}
-                            <ChevronRight
-                                size={24}
+                            <div
+                                onClick={() => handleLessonClick(lesson.lesson_id)}
                                 style={{
-                                    color: 'rgba(255, 255, 255, 0.3)',
-                                    alignSelf: 'center'
+                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    border: `1px solid ${isCompleted ? 'rgba(0, 255, 136, 0.3)' :
+                                        isCurrent ? '#00d4ff' :
+                                            'rgba(255, 255, 255, 0.08)'
+                                        }`,
+                                    borderRadius: '16px',
+                                    padding: '24px',
+                                    display: 'flex',
+                                    gap: '20px',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s',
+                                    position: 'relative',
+                                    boxShadow: isCurrent ? '0 0 20px rgba(0, 212, 255, 0.15)' : 'none'
                                 }}
-                            />
+                                onMouseOver={(e) => {
+                                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
+                                    e.currentTarget.style.transform = 'translateX(4px)'
+                                }}
+                                onMouseOut={(e) => {
+                                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'
+                                    e.currentTarget.style.transform = 'translateX(0)'
+                                }}
+                            >
+                                {/* Lesson Number */}
+                                <div style={{
+                                    width: '48px',
+                                    height: '48px',
+                                    borderRadius: '12px',
+                                    background: isCompleted
+                                        ? 'rgba(0, 255, 136, 0.15)'
+                                        : `${categoryColor}20`,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '20px',
+                                    fontWeight: 700,
+                                    color: isCompleted ? '#00ff88' : categoryColor,
+                                    flexShrink: 0
+                                }}>
+                                    {isCompleted ? <CheckCircle size={24} /> : index + 1}
+                                </div>
+
+                                {/* Lesson Content */}
+                                <div style={{ flex: 1 }}>
+                                    <h3 style={{
+                                        fontSize: '18px',
+                                        fontWeight: 600,
+                                        marginBottom: '8px'
+                                    }}>
+                                        {lesson.title}
+                                    </h3>
+                                    <p style={{
+                                        fontSize: '14px',
+                                        color: 'rgba(255, 255, 255, 0.5)',
+                                        lineHeight: 1.5,
+                                        marginBottom: '12px'
+                                    }}>
+                                        {lesson.description}
+                                    </p>
+                                    <div style={{
+                                        display: 'flex',
+                                        gap: '16px',
+                                        fontSize: '13px',
+                                        color: 'rgba(255, 255, 255, 0.4)'
+                                    }}>
+                                        <span>⏱️ {lesson.duration_minutes} min</span>
+                                        <span>📄 {lesson.content?.cards?.length || 0} kart</span>
+                                        <span>⭐ +{lesson.xp_reward} XP</span>
+                                    </div>
+                                </div>
+
+                                {/* Status Badge */}
+                                {(isCompleted || isCurrent) && (
+                                    <span style={{
+                                        position: 'absolute',
+                                        top: '16px',
+                                        right: '16px',
+                                        padding: '6px 12px',
+                                        borderRadius: '20px',
+                                        fontSize: '12px',
+                                        fontWeight: 600,
+                                        background: isCompleted
+                                            ? 'rgba(0, 255, 136, 0.15)'
+                                            : 'rgba(0, 212, 255, 0.15)',
+                                        color: isCompleted ? '#00ff88' : '#00d4ff'
+                                    }}>
+                                        {isCompleted ? '✅ Ukończone' : '🔵 W trakcie'}
+                                    </span>
+                                )}
+
+                                {/* Arrow */}
+                                <ChevronRight
+                                    size={24}
+                                    style={{
+                                        color: 'rgba(255, 255, 255, 0.3)',
+                                        alignSelf: 'center'
+                                    }}
+                                />
+                            </div>
                         </div>
                     )
                 })}

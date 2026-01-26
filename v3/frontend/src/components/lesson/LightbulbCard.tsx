@@ -39,11 +39,11 @@ interface LightbulbCardProps {
     icon?: string
 }
 
-export default function LightbulbCard({ 
-    title, 
-    content, 
-    insight, 
-    accent_color = 'yellow', 
+export default function LightbulbCard({
+    title,
+    content,
+    insight,
+    accent_color = 'yellow',
     steps,
     comparison,
     whenToTell,
@@ -125,12 +125,14 @@ export default function LightbulbCard({
                 </h2>
 
                 <div style={{
-                    fontSize: '28px',
-                    fontWeight: 700,
+                    fontSize: '18px',
+                    fontWeight: 400,
+                    lineHeight: '1.7',
                     marginBottom: '40px',
-                    color: '#fff',
+                    color: 'rgba(255, 255, 255, 0.9)',
                     maxWidth: '800px',
-                    margin: '0 auto 40px auto'
+                    margin: '0 auto 40px auto',
+                    textAlign: 'left' // usually better for reading longer text
                 }}>
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                         {content}
