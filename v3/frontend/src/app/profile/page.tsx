@@ -49,7 +49,7 @@ function ProfileContent() {
 
 
             {/* Content */}
-            <div style={{ padding: '48px 32px 32px 48px' }}>
+            <div className="page-content-wrapper">
                 {activeTab === 'informacje' && (
                     <>
                         {/* Enhanced Profile Header */}

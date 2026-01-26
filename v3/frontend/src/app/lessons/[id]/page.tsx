@@ -339,6 +339,16 @@ export default function LessonPlayerPage() {
                 zIndex: 100
             }}>
                 {/* Hamburger Button (Mobile Only) */}
+                <style>{`
+                    .hamburger-btn { display: flex; }
+                    .desktop-header-spacer { display: none; }
+                    
+                    @media (min-width: 769px) {
+                        .hamburger-btn { display: none; }
+                        .desktop-header-spacer { display: block; width: 360px; flex-shrink: 0; }
+                    }
+                `}</style>
+                <div className="desktop-header-spacer" />
                 <button
                     className="hamburger-btn"
                     onClick={() => setDrawerOpen(true)}
@@ -505,7 +515,11 @@ export default function LessonPlayerPage() {
                             transform: translateY(-50%);
                             z-index: 50;
                             transition: all 0.2s ease;
-                            opacity: 1; /* Normal visibility on desktop */
+                            opacity: 0.3; /* Ghost style on desktop by default */
+                        }
+                        .nav-btn:hover {
+                            opacity: 1; /* Fully visible on hover */
+                            transform: translateY(-50%) scale(1.1);
                         }
                         .nav-btn-prev {
                             left: 32px;
@@ -520,13 +534,18 @@ export default function LessonPlayerPage() {
                                 top: auto !important;
                                 bottom: 24px !important;
                                 transform: none !important;
-                                opacity: 0.15 !important; /* Barely visible on mobile per user request */
-                                background: rgba(255, 255, 255, 0.1) !important; /* Softer background */
+                                opacity: 0.15 !important; /* Even more subtle on mobile */
+                                background: rgba(255, 255, 255, 0.1) !important;
                             }
                             /* Make it slightly more visible when actually touching/using it */
                             .nav-btn:active {
                                 opacity: 0.8 !important;
                                 transform: scale(0.95) !important;
+                            }
+                            /* Remove hover effect on mobile to prevent sticky states */
+                            .nav-btn:hover {
+                                opacity: 0.15; 
+                                transform: none;
                             }
                             .nav-btn-prev {
                                 left: 24px;

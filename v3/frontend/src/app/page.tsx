@@ -83,7 +83,7 @@ export default function HomePage() {
     <div style={{ minHeight: '100vh' }}>
 
       {/* Content with padding matching mockup */}
-      <div style={{ padding: '48px 32px 32px 48px' }}>
+      <div className="page-content-wrapper">
         {/* Page Header */}
         <div style={{ marginBottom: '32px' }}>
           <h1 style={{
@@ -107,12 +107,32 @@ export default function HomePage() {
         )}
 
         {/* Stats Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '16px',
-          marginBottom: '32px'
-        }}>
+        <div className="stats-grid">
+          <style>{`
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 16px;
+                    margin-bottom: 32px;
+                }
+                @media (max-width: 768px) {
+                    .stats-grid {
+                        grid-template-columns: 1fr 1fr; /* Force 2 columns Grid 2x2 */
+                    }
+                    /* Reduce padding in cards to fit */
+                    .stats-grid > div {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 8px;
+                        padding: 12px !important;
+                    }
+                    /* Adjust Icon Size */
+                    .stats-grid .stat-icon {
+                        width: 36px;
+                        height: 36px;
+                    }
+                }
+            `}</style>
           <StatCard
             icon={<Trophy size={24} />}
             iconColor="purple"
@@ -338,7 +358,7 @@ function StatCard({ icon, iconColor, value, label }: {
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0
-      }}>
+      }} className="stat-icon">
         {icon}
       </div>
       <div>

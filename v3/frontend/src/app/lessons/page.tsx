@@ -163,7 +163,67 @@ export default function LessonsPage() {
 
 
             {/* Content */}
-            <div style={{ padding: '48px 32px 32px 48px' }}>
+            <div className="page-content-wrapper">
+                <style>{`
+                    .tabs-container {
+                        display: flex;
+                        gap: 8px;
+                        margin-bottom: 24px;
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                        padding-bottom: 16px;
+                        overflow-x: auto;
+                    }
+                    .tab-btn {
+                        white-space: nowrap;
+                    }
+                    .filter-bar {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                        margin-bottom: 24px;
+                    }
+                    
+                    /* ... other styles ... */
+
+                    @media (max-width: 768px) {
+                        /* .lessons-content padding handled by global class now */
+                        
+                        .tabs-container {
+                            display: flex; /* Ensure flex container */
+                            justify-content: stretch; /* Stretch to fill */
+                            gap: 8px;
+                        }
+                        .tab-btn {
+                            flex: 1; /* Equal width */
+                            display: flex;
+                            align-items: center;
+                            justify-content: center; /* Center content horizontally */
+                            padding: 10px 4px !important;
+                            font-size: 13px !important;
+                        }
+                        /* Adjust icon margins if necessary - though flex gap usually handles it */
+                        .tab-btn svg {
+                            margin: 0; /* Reset margins */
+                        }
+                        
+                        /* ... rest ... */
+                        .tab-text {
+                            display: none; 
+                        }
+                        .filter-bar {
+                            flex-direction: column;
+                            align-items: stretch;
+                            gap: 12px;
+                        }
+                        .search-container {
+                            width: 100%;
+                        }
+                        .sort-container {
+                            justify-content: space-between;
+                        }
+                    }
+                `}</style>
+
                 {selectedModuleId ? (
                     // Module Detail View (Drill Down)
                     <div>
@@ -248,17 +308,12 @@ export default function LessonsPage() {
                         </div>
 
                         {/* Sub-tabs */}
-                        <div style={{
-                            display: 'flex',
-                            gap: '8px',
-                            marginBottom: '24px',
-                            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                            paddingBottom: '16px'
-                        }}>
+                        <div className="tabs-container">
                             <button
                                 onClick={() => setActiveTab('lessons')}
                                 onMouseEnter={() => setHoveredTab('lessons')}
                                 onMouseLeave={() => setHoveredTab(null)}
+                                className="tab-btn"
                                 style={{
                                     padding: '10px 20px',
                                     background: activeTab === 'lessons'
@@ -288,13 +343,14 @@ export default function LessonsPage() {
                                 }}
                             >
                                 <BookOpen size={16} />
-                                Pojedyncze lekcje
+                                <span className="tab-text">Pojedyncze lekcje</span>
                             </button>
 
                             <button
                                 onClick={() => setActiveTab('modules')}
                                 onMouseEnter={() => setHoveredTab('modules')}
                                 onMouseLeave={() => setHoveredTab(null)}
+                                className="tab-btn"
                                 style={{
                                     padding: '10px 20px',
                                     background: activeTab === 'modules'
@@ -324,13 +380,14 @@ export default function LessonsPage() {
                                 }}
                             >
                                 <Folder size={16} />
-                                Moduły
+                                <span className="tab-text">Moduły</span>
                             </button>
 
                             <button
                                 onClick={() => setActiveTab('paths')}
                                 onMouseEnter={() => setHoveredTab('paths')}
                                 onMouseLeave={() => setHoveredTab(null)}
+                                className="tab-btn"
                                 style={{
                                     padding: '10px 20px',
                                     background: activeTab === 'paths'
@@ -360,7 +417,7 @@ export default function LessonsPage() {
                                 }}
                             >
                                 <Trophy size={16} />
-                                Ścieżki edukacyjne
+                                <span className="tab-text">Ścieżki</span>
                                 {!pathsLoading && paths.length > 0 && (
                                     <span style={{
                                         padding: '2px 8px',
@@ -378,14 +435,9 @@ export default function LessonsPage() {
                         {activeTab === 'lessons' && (
                             <>
                                 {/* Search and Sort */}
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '16px',
-                                    marginBottom: '24px'
-                                }}>
+                                <div className="filter-bar">
                                     {/* Search */}
-                                    <div style={{ position: 'relative', width: '76%' }}>
+                                    <div className="search-container">
                                         <input
                                             type="text"
                                             placeholder="Szukaj lekcji..."
@@ -413,11 +465,7 @@ export default function LessonsPage() {
                                     </div>
 
                                     {/* Sort */}
-                                    <div style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '12px'
-                                    }}>
+                                    <div className="sort-container">
                                         <span style={{
                                             fontSize: '14px',
                                             color: 'rgba(255, 255, 255, 0.6)',
@@ -450,13 +498,7 @@ export default function LessonsPage() {
                                 </div>
 
                                 {/* Category Filters */}
-                                <div style={{
-                                    display: 'flex',
-                                    gap: '12px',
-                                    marginBottom: '24px',
-                                    overflowX: 'auto',
-                                    paddingBottom: '8px'
-                                }}>
+                                <div className="category-scroll">
                                     {categories.map(cat => (
                                         <button
                                             key={cat.id}

@@ -53,7 +53,7 @@ function PracticeContent() {
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             {/* Content */}
-            <div style={{ padding: '48px 32px 32px 48px' }}>
+            <div className="page-content-wrapper">
                 {activeTab === 'przeglad' && <PrzegladView />}
                 {activeTab === 'trening' && <TreningView />}
                 {activeTab === 'gry' && <GryView />}

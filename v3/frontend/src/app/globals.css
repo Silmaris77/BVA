@@ -779,3 +779,17 @@ body {
     background-color: rgba(255, 255, 255, 0.08) !important;
     border-color: rgba(255, 255, 255, 0.2) !important;
 }
+
+/* GLOBAL SPACING UTILITIES - V3 Mobile Standardization */
+
+/* Standard Page Padding Wrapper */
+.page-content-wrapper {
+    padding: 48px 32px 32px 48px;
+}
+
+@media (max-width: 768px) {
+    .page-content-wrapper {
+        padding: 24px 16px 80px 16px !important;
+        /* Mobile safe area + Nav clearance */
+    }
+}
