@@ -57,8 +57,76 @@
                 "explanation": "$0.75$ to trzy czwarte ($3/4$), czyli trzecia kreska podziału."
             },
             {
+                "type": "concept",
+                "title": "Liczby dodatnie i ujemne",
+                "content": "### Działania na liczbach ze znakiem\n\n**Dodawanie:**\n- Liczby tego samego znaku: dodajemy wartości i zachowujemy znak\n  - $(-3) + (-5) = -8$\n- Liczby różnych znaków: odejmujemy mniejszą od większej i znak większej\n  - $7 + (-3) = 4$\n\n**Odejmowanie:**\n- Zamieniamy na dodawanie liczby przeciwnej\n  - $5 - (-2) = 5 + 2 = 7$"
+            },
+            {
+                "type": "number-sort",
+                "title": "Ćwiczenie: Porządkowanie",
+                "question": "Uporządkuj liczby od najmniejszej do największej",
+                "numbers": [
+                    -5,
+                    2,
+                    -1,
+                    0,
+                    3
+                ],
+                "order": "asc"
+            },
+            {
+                "type": "input",
+                "title": "Działania na liczbach ujemnych",
+                "question": "Oblicz: $-8 + 5$",
+                "correctAnswer": "-3",
+                "explanation": "Różne znaki: odejmujemy mniejszą od większej: $8 - 5 = 3$. Znak liczby o większej wartości bezwzględnej: $-3$"
+            },
+            {
+                "type": "number-line",
+                "title": "Odległość na osi liczbowej",
+                "question": "Zaznacz liczbę $3$ na osi.",
+                "min": -5,
+                "max": 5,
+                "step": 1,
+                "correctValue": 3,
+                "tolerance": 0.2,
+                "explanation": "Liczba $3$ znajduje się trzy jednostki na prawo od zera."
+            },
+            {
+                "type": "concept",
+                "title": "Rozwinięcia dziesiętne",
+                "content": "### Zapis dziesiętny liczb\n\nLiczby wymierne można zapisać w postaci **ułamka dziesiętnego**:\n\n- **Skończone:** $\\frac{1}{4} = 0.25$, $\\frac{3}{8} = 0.375$\n- **Nieskończone okresowe:** $\\frac{1}{3} = 0.333...$ (oznaczamy: $0.(3)$)\n- **Nieskończone okresowe:** $\\frac{2}{11} = 0.181818...$ (oznaczamy: $0.(18)$)"
+            },
+            {
+                "type": "fraction-visual",
+                "title": "Wizualizacja",
+                "question": "Zaznacz 3/4 koła",
+                "numerator": 3,
+                "denominator": 4,
+                "visualType": "pie"
+            },
+            {
+                "type": "input",
+                "title": "Ułamki dziesiętne",
+                "question": "Zamień na ułamek zwykły: $0.5$",
+                "correctAnswer": "1/2",
+                "explanation": "$0.5 = \\frac{5}{10} = \\frac{1}{2}$ (po skróceniu przez 5)"
+            },
+            {
+                "type": "concept",
+                "title": "Zaokrąglanie liczb",
+                "content": "### Zasady zaokrąglania\n\n**Do liczb całkowitych:**\n- Jeśli część dziesiętna $< 0.5$ → zaokrąglamy w dół\n- Jeśli część dziesiętna $\\geq 0.5$ → zaokrąglamy w górę\n\n**Przykłady:**\n- $3.4 \\approx 3$\n- $3.7 \\approx 4$\n- $3.5 \\approx 4$"
+            },
+            {
+                "type": "input",
+                "title": "Zaokrąglanie",
+                "question": "Zaokrąglij do liczby całkowitej: $7.8$",
+                "correctAnswer": "8",
+                "explanation": "$7.8$ ma część dziesiętną $0.8 > 0.5$, więc zaokrąglamy w górę: $8$"
+            },
+            {
                 "type": "quiz",
-                "title": "Sprawdź się",
+                "title": "Sprawdź się: Zbiory liczbowe",
                 "questions": [
                     {
                         "question": "Które działanie wykonujemy jako pierwsze w wyrażeniu: $5 + 2 \\cdot (3 - 1)^2$?",
@@ -70,6 +138,162 @@
                         ],
                         "correctAnswer": 2,
                         "explanation": "Zawsze zaczynamy od działań w nawiasach."
+                    },
+                    {
+                        "question": "Do jakiego zbioru należy liczba $-5$?",
+                        "options": [
+                            "Tylko do liczb naturalnych ($N$)",
+                            "Tylko do liczb całkowitych ($C$)",
+                            "Do liczb całkowitych ($C$) i wymiernych ($W$)",
+                            "Nie należy do żadnego zbioru"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "Liczba $-5$ jest liczbą całkowitą, a wszystkie liczby całkowite są również liczbami wymiernymi."
+                    }
+                ]
+            },
+            {
+                "type": "input",
+                "title": "Działania złożone",
+                "question": "Oblicz: $15 : 3 + 2 \\cdot 4$",
+                "correctAnswer": "13",
+                "explanation": "1. Dzielenie: $15:3=5$\n2. Mnożenie: $2 \\cdot 4=8$\n3. Dodawanie: $5+8=13$"
+            },
+            {
+                "type": "number-line",
+                "title": "Liczby ujemne",
+                "question": "Zaznacz liczbę $-3.5$ na osi.",
+                "min": -5,
+                "max": 0,
+                "step": 0.5,
+                "correctValue": -3.5,
+                "tolerance": 0.1,
+                "explanation": "Liczba $-3.5$ znajduje się między $-4$ a $-3$, dokładnie w połowie."
+            },
+            {
+                "type": "summary",
+                "title": "Podsumowanie",
+                "content": "Gratulacje! Poznałeś podstawy liczb i działań.",
+                "keyPoints": [
+                    "Liczby naturalne, całkowite i wymierne tworzą hierarchię zbiorów",
+                    "Kolejność działań: nawiasy → potęgi → mnożenie/dzielenie → dodawanie/odejmowanie",
+                    "Liczby ujemne znajdują się po lewej stronie osi liczbowej",
+                    "Ułamki dziesiętne mogą być skończone lub okresowe"
+                ]
+            },
+            {
+                "type": "test",
+                "title": "Test końcowy: Liczby i Działania",
+                "questions": [
+                    {
+                        "question": "Oblicz: $12 - 8 : 2$",
+                        "options": [
+                            "2",
+                            "4",
+                            "8",
+                            "10"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "Najpierw dzielenie: $8:2=4$, potem odejmowanie: $12-4=8$"
+                    },
+                    {
+                        "question": "Która liczba NIE jest liczbą wymierną?",
+                        "options": [
+                            "$-5$",
+                            "$\\frac{3}{7}$",
+                            "$0.25$",
+                            "$\\sqrt{2}$"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "$\\sqrt{2}$ jest liczbą niewymierną, pozostałe to liczby wymierne."
+                    },
+                    {
+                        "question": "Oblicz: $(-3) + (-7)$",
+                        "options": [
+                            "-10",
+                            "-4",
+                            "4",
+                            "10"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Liczby tego samego znaku: dodajemy wartości i zachowujemy znak: $3+7=10$, więc $-10$"
+                    },
+                    {
+                        "question": "Zaokrąglij do jedności: $4.49$",
+                        "options": [
+                            "3",
+                            "4",
+                            "5",
+                            "4.5"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Część dziesiętna $0.49 < 0.5$, więc zaokrąglamy w dół: $4$"
+                    },
+                    {
+                        "question": "Oblicz: $(5 + 3) \\cdot 2$",
+                        "options": [
+                            "10",
+                            "11",
+                            "16",
+                            "13"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "Najpierw nawias: $5+3=8$, potem mnożenie: $8 \\cdot 2=16$"
+                    },
+                    {
+                        "question": "Która liczba jest największa?",
+                        "options": [
+                            "$-2$",
+                            "$0$",
+                            "$-5$",
+                            "$-1$"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Zero jest większe od wszystkich liczb ujemnych."
+                    },
+                    {
+                        "question": "Oblicz: $7 - (-3)$",
+                        "options": [
+                            "4",
+                            "10",
+                            "-10",
+                            "-4"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Odejmowanie liczby ujemnej to dodawanie: $7-(-3)=7+3=10$"
+                    },
+                    {
+                        "question": "Zamień na ułamek zwykły: $0.25$",
+                        "options": [
+                            "$\\frac{1}{2}$",
+                            "$\\frac{1}{3}$",
+                            "$\\frac{1}{4}$",
+                            "$\\frac{1}{5}$"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "$0.25 = \\frac{25}{100} = \\frac{1}{4}$ (po skróceniu)"
+                    },
+                    {
+                        "question": "Oblicz: $18 : 3 : 2$",
+                        "options": [
+                            "12",
+                            "6",
+                            "3",
+                            "9"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "Dzielimy od lewej: $18:3=6$, potem $6:2=3$"
+                    },
+                    {
+                        "question": "Jaka jest odległość między $-2$ a $3$ na osi liczbowej?",
+                        "options": [
+                            "1",
+                            "5",
+                            "6",
+                            "-5"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Odległość: $|3-(-2)| = |3+2| = 5$ jednostek"
                     }
                 ]
             }

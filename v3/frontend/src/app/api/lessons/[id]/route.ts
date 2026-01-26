@@ -31,10 +31,8 @@ export async function GET(
                 try {
                     const fs = await import('fs');
                     const path = await import('path');
-                    // Look in src/data/math/grade7 (hardcoded for now or search)
-                    // We assume ID matches filename roughly or we map it.
                     // math-g7-l1 -> lesson1.json
-                    const filePath = path.join(process.cwd(), 'src/data/math/grade7/lesson1.json'); // Direct map for test
+                    const filePath = path.join(process.cwd(), 'src/data/math/grade7/lesson1.json');
 
                     if (fs.existsSync(filePath)) {
                         const fileContent = fs.readFileSync(filePath, 'utf-8');
@@ -43,6 +41,31 @@ export async function GET(
                         return NextResponse.json({
                             lesson: localLesson,
                             // Dummy progress for local file
+                            progress: currentUser ? {
+                                status: 'not_started',
+                                current_card: 0,
+                                current_card_index: 0
+                            } : null
+                        });
+                    }
+                } catch (err) {
+                    console.error('Local file load error:', err);
+                }
+            }
+
+            // FALLBACK FILE SYSTEM LOADING FOR FUNDAMENTALS LESSON
+            if (lessonId === 'sales-fundamentals-1') {
+                try {
+                    const fs = await import('fs');
+                    const path = await import('path');
+                    const filePath = path.join(process.cwd(), 'src/data/sales/lesson_fundamentals.json');
+
+                    if (fs.existsSync(filePath)) {
+                        const fileContent = fs.readFileSync(filePath, 'utf-8');
+                        const localLesson = JSON.parse(fileContent);
+
+                        return NextResponse.json({
+                            lesson: localLesson,
                             progress: currentUser ? {
                                 status: 'not_started',
                                 current_card: 0,

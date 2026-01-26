@@ -24,19 +24,27 @@ export default function CoverCard({
     onStart
 }: CoverCardProps) {
 
-    // Logic to determine image: Title Match > Prop > Category Fallback
+    // Logic to determine image: Prop > Title Match > Category Fallback
     const getFallbackImage = () => {
+        // 1. Explicit Prop (Highest Priority)
+        if (image) return image
+
         const t = title.toLowerCase()
         const c = category ? category.toLowerCase() : ''
 
-        // 1. SPECIFIC TITLE OVERRIDES (Highest Priority)
+        // 2. SPECIFIC TITLE OVERRIDES
+        if (t.includes('historia') && t.includes('milwaukee')) {
+            return '/lessons/milwaukee/history/oldtimesnewtimes.png'
+        }
+
+        if (t.includes('ojt') || t.includes('on the job') || t.includes('on-the-job')) {
+            return '/lessons/ojt/cover.png'
+        }
+
         if (t.includes('fundamenty') || t.includes('historia') || t.includes('dna')) {
             // User Choice: Specific Unsplash Image
             return 'https://images.unsplash.com/photo-1649908787172-7945c00fafa2?auto=format&fit=crop&w=1600&q=80'
         }
-
-        // 2. Prop from Database (if exists and not overridden above)
-        if (image) return image
 
         // 3. Category Fallbacks
         if (t.includes('sprzedaż') || c.includes('sprzedaż') || t.includes('wizyta')) {
@@ -209,7 +217,20 @@ export default function CoverCard({
                     )}
 
                     {/* Start Prompt (Visual only, as the whole card usually flows to next) */}
-                    <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                    <div
+                        onClick={onStart}
+                        role="button"
+                        tabIndex={0}
+                        style={{
+                            marginLeft: 'auto',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            color: 'rgba(255,255,255,0.8)', // Increased visibility
+                            cursor: 'pointer', // Interactive cursor
+                            pointerEvents: 'auto'
+                        }}
+                    >
                         <span style={{ fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>Rozpocznij</span>
                         <div style={{
                             width: '48px',
@@ -220,8 +241,12 @@ export default function CoverCard({
                             alignItems: 'center',
                             justifyContent: 'center',
                             boxShadow: '0 0 20px rgba(218, 41, 28, 0.4)',
-                            animation: 'pulse 2s infinite'
-                        }}>
+                            animation: 'pulse 2s infinite',
+                            transition: 'transform 0.2s'
+                        }}
+                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                        >
                             <Play fill="white" size={20} style={{ marginLeft: '2px' }} />
                         </div>
                     </div>

@@ -12,11 +12,20 @@ export default function PrzegladView() {
                 </p>
             </div>
 
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: '2fr 1fr',
-                gap: '24px'
-            }}>
+            <div className="przeglad-grid">
+                <style>{`
+                    .przeglad-grid {
+                        display: grid;
+                        grid-template-columns: 2fr 1fr;
+                        gap: 24px;
+                    }
+                    @media (max-width: 900px) {
+                        .przeglad-grid {
+                            display: flex;
+                            flex-direction: column;
+                        }
+                    }
+                `}</style>
                 {/* --- LEFT COLUMN --- */}
                 <div>
                     {/* Daily Drills Section */}

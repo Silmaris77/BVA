@@ -189,27 +189,26 @@ export default function LessonsPage() {
                         /* .lessons-content padding handled by global class now */
                         
                         .tabs-container {
-                            display: flex; /* Ensure flex container */
-                            justify-content: stretch; /* Stretch to fill */
-                            gap: 8px;
+                            display: flex;
+                            justify-content: space-between;
+                            gap: 12px;
                         }
                         .tab-btn {
-                            flex: 1; /* Equal width */
+                            flex: 1;
                             display: flex;
                             align-items: center;
-                            justify-content: center; /* Center content horizontally */
-                            padding: 10px 4px !important;
-                            font-size: 13px !important;
+                            justify-content: center;
+                            padding: 12px !important;
                         }
-                        /* Adjust icon margins if necessary - though flex gap usually handles it */
                         .tab-btn svg {
-                            margin: 0; /* Reset margins */
+                            margin: 0;
+                            display: block;
                         }
                         
-                        /* ... rest ... */
                         .tab-text {
                             display: none; 
                         }
+                        /* ... rest ... */
                         .filter-bar {
                             flex-direction: column;
                             align-items: stretch;

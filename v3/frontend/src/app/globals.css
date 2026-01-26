@@ -45,6 +45,11 @@ body {
     color: var(--text-main);
     min-height: 100vh;
     overflow-x: hidden;
+    width: 100%;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 /* Input styles are handled by React components */

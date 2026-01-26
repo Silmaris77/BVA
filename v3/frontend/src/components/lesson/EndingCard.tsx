@@ -15,7 +15,7 @@ interface EndingCardProps {
     }
 }
 
-export default function EndingCard({ icon = '✅', title, subtitle, checklist, tagline, next_steps }: EndingCardProps) {
+export default function EndingCard({ icon = '✅', title, subtitle, checklist = [], tagline, next_steps }: EndingCardProps) {
     return (
         <div style={{
             maxWidth: '900px',
@@ -76,7 +76,7 @@ export default function EndingCard({ icon = '✅', title, subtitle, checklist, t
 
             {/* Checklist */}
             <div style={{ marginBottom: tagline ? '40px' : '0' }}>
-                {checklist.map((item, index) => (
+                {(Array.isArray(checklist) ? checklist : []).map((item, index) => (
                     <div
                         key={index}
                         style={{

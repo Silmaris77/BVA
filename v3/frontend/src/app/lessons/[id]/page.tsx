@@ -116,18 +116,23 @@ export default function LessonPlayerPage() {
 
                     const originalCards = data.lesson.content?.cards || []
 
-                    // Create Cover Card automatically
-                    const coverCard: Card = {
-                        type: 'cover',
-                        title: data.lesson.title,
-                        description: data.lesson.description,
-                        category: data.lesson.category || 'Moduł Edukacyjny',
-                        durationMinutes: data.lesson.duration_minutes,
-                        xpReward: data.lesson.xp_reward
-                    }
+                    // Check if content already starts with a cover card (e.g. from custom JSON)
+                    if (originalCards.length > 0 && originalCards[0].type === 'cover') {
+                        setCards(originalCards)
+                    } else {
+                        // Create Cover Card automatically
+                        const coverCard: Card = {
+                            type: 'cover',
+                            title: data.lesson.title,
+                            description: data.lesson.description,
+                            category: data.lesson.category || 'Moduł Edukacyjny',
+                            durationMinutes: data.lesson.duration_minutes,
+                            xpReward: data.lesson.xp_reward
+                        }
 
-                    // Prepend cover card
-                    setCards([coverCard, ...originalCards])
+                        // Prepend cover card
+                        setCards([coverCard, ...originalCards])
+                    }
 
                     // Resume from saved progress if exists
                     if (data.progress && !data.progress.completed_at) {
@@ -683,6 +688,7 @@ export default function LessonPlayerPage() {
                                 card={currentCard}
                                 onAnswer={() => { }}
                                 onReset={handleResetLesson}
+                                onNext={handleNext}
                                 onTestResult={async (score, passed) => {
                                     if (passed) {
                                         // Passed

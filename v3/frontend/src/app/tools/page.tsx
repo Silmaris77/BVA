@@ -59,7 +59,7 @@ export default function ToolsPage() {
     }
 
     return (
-        <div style={{ minHeight: '100vh', padding: '40px 48px' }}>
+        <div className="page-content-wrapper" style={{ minHeight: '100vh' }}>
             {/* Header */}
             <div style={{ marginBottom: '48px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px' }}>

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Check, X, HelpCircle } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Check, X, HelpCircle, Mic, Loader2 } from 'lucide-react';
 import MathRenderer from './MathRenderer';
 
 // Helper function for conditional classnames
@@ -22,6 +22,101 @@ export default function InputCard({ question, correctAnswer, placeholder, unit, 
     const [value, setValue] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
+
+    // Speech Recognition State
+    const [listening, setListening] = useState(false);
+    const recognitionRef = useRef<any>(null);
+
+    const toggleListening = () => {
+        if (listening) {
+            if (recognitionRef.current) recognitionRef.current.stop();
+            return;
+        }
+
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert('Twoja przeglądarka nie obsługuje rozpoznawania mowy.');
+            return;
+        }
+
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognitionRef.current = recognition;
+
+        recognition.lang = 'pl-PL';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = () => setListening(true);
+
+        recognition.onresult = (event: any) => {
+            const raw = event.results[0][0].transcript.toLowerCase().trim();
+
+            // 1. Remove common conversation fillers
+            let processed = raw.replace(/^(wynik|to|jest|odpowiedź|równa się)\s+/g, '');
+
+            // 2. Map Polish math terms to symbols/numbers
+            const replacements: [RegExp, string][] = [
+                [/minus /g, '-'],
+                [/przecinek/g, '.'],
+                [/kropka/g, '.'],
+                // Common fractions
+                [/jedna druga/g, '1/2'],
+                [/pół/g, '0.5'], // Context dependent, but 0.5 is safe for inputs usually
+                [/jedna trzecia/g, '1/3'],
+                [/dwie trzecie/g, '2/3'],
+                [/jedna czwarta/g, '1/4'],
+                [/trzy czwarte/g, '3/4'],
+                [/jedna piąta/g, '1/5'],
+                [/dwie piąte/g, '2/5'],
+                [/trzy piąte/g, '3/5'],
+                [/cztery piąte/g, '4/5'],
+                // Handle "cała/całe" for mixed numbers if needed: "jedna cała i jedna druga" -> "1 1/2"
+                // STT might give "1 cała i 1/2" -> map "cała i" to space
+                [/(\d+)\s+(cała|całe|całych)\s+i\s+/g, '$1 '],
+            ];
+
+            replacements.forEach(([pattern, replacement]) => {
+                processed = processed.replace(pattern, replacement);
+            });
+
+            // 3. Cleanup whitespace
+            processed = processed.replace(/\s*\/\s*/g, '/').trim();
+
+            // 4. Extract the mathematical part
+            // Matches:
+            // - Negative numbers (-5)
+            // - Decimals (5.2)
+            // - Mixed numbers (1 1/2) - requires space
+            // - Simple fractions (3/4)
+            const mathRegex = /^-?(\d+([.,]\d+)?(\s+\d+\/\d+)?|\d+\/\d+)$/;
+
+            // If the whole string matches a math expression, use it. 
+            // Otherwise, try to find a match inside.
+            const match = processed.match(/-?(\d+([.,]\d+)?(\s+\d+\/\d+)?|\d+\/\d+)/);
+
+            if (match) {
+                // Formatting: ensure dot for decimals
+                setValue(match[0].replace(',', '.'));
+            } else {
+                // Fallback: set whatever we have, user can correct
+                setValue(processed);
+            }
+        };
+
+        recognition.onerror = (event: any) => {
+            // Ignore 'no-speech' error
+            if (event.error !== 'no-speech') {
+                console.error('Speech recognition error', event.error);
+            }
+            setListening(false);
+        };
+
+        recognition.onend = () => {
+            setListening(false);
+        };
+
+        recognition.start();
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -55,26 +150,43 @@ export default function InputCard({ question, correctAnswer, placeholder, unit, 
 
             {/* Input Area */}
             <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
-                <div className="relative w-full max-w-xs group">
-                    <input
-                        type="text"
-                        value={value}
-                        onChange={(e) => setValue(e.target.value)}
-                        disabled={isSubmitted && isCorrect}
-                        placeholder={placeholder || 'Wpisz wynik...'}
-                        className={classNames(
-                            "w-full bg-black/30 border-2 rounded-xl px-4 py-3 text-center text-xl font-mono text-white outline-none transition-all placeholder:text-white/20",
-                            isSubmitted
-                                ? (isCorrect ? "border-green-500 bg-green-500/10" : "border-red-500 bg-red-500/10")
-                                : "border-white/10 focus:border-[var(--accent-blue)] focus:bg-black/50"
+                <div className="flex gap-2 w-full max-w-xs justify-center items-center">
+                    <div className="relative w-full group">
+                        <input
+                            type="text"
+                            value={value}
+                            onChange={(e) => setValue(e.target.value)}
+                            disabled={isSubmitted && isCorrect}
+                            placeholder={listening ? 'Słucham...' : (placeholder || 'Wpisz wynik...')}
+                            className={classNames(
+                                "w-full bg-black/30 border-2 rounded-xl px-4 py-3 text-center text-xl font-mono text-white outline-none transition-all placeholder:text-white/20",
+                                isSubmitted
+                                    ? (isCorrect ? "border-green-500 bg-green-500/10" : "border-red-500 bg-red-500/10")
+                                    : (listening ? "border-[var(--accent-purple)] bg-black/50" : "border-white/10 focus:border-[var(--accent-blue)] focus:bg-black/50")
+                            )}
+                            autoComplete="off"
+                        />
+                        {unit && (
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-mono">
+                                <MathRenderer content={`$${unit}$`} inline />
+                            </span>
                         )}
-                        autoComplete="off"
-                    />
-                    {unit && (
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-mono">
-                            <MathRenderer content={`$${unit}$`} inline />
-                        </span>
-                    )}
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={toggleListening}
+                        disabled={isSubmitted && isCorrect}
+                        className={classNames(
+                            "w-12 h-[52px] flex items-center justify-center rounded-xl border-2 transition-all shrink-0",
+                            listening
+                                ? "bg-red-500/20 border-red-500 text-red-500 animate-pulse"
+                                : "bg-white/5 border-white/10 text-white/50 hover:bg-white/10 hover:text-white hover:border-white/30"
+                        )}
+                        title="Wprowadź głosowo"
+                    >
+                        {listening ? <Loader2 size={20} className="animate-spin" /> : <Mic size={20} />}
+                    </button>
                 </div>
 
                 {/* Submit / Feedback */}

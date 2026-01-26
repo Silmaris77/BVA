@@ -160,12 +160,21 @@ export default function HomePage() {
         </div>
 
         {/* Content Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 1fr',
-          gap: '24px',
-          marginBottom: '32px'
-        }}>
+        <div className="dashboard-content-grid">
+          <style>{`
+                .dashboard-content-grid {
+                    display: grid;
+                    grid-template-columns: 2fr 1fr;
+                    gap: 24px;
+                    margin-bottom: 32px;
+                }
+                @media (max-width: 900px) {
+                    .dashboard-content-grid {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                }
+            `}</style>
           {/* Left Column: News & Missions */}
           <div>
             <NewsFeed news={hubData?.news || []} />

@@ -116,7 +116,7 @@ export default function ResourcesPage() {
 
 
             {/* Content */}
-            <div style={{ padding: '48px 32px 32px 48px' }}>
+            <div className="page-content-wrapper">
                 {/* Page Header */}
                 <div style={{ marginBottom: '32px' }}>
                     <h1 style={{

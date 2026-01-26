@@ -114,7 +114,10 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
         }
 
         recognition.onerror = (event: any) => {
-            console.error('Speech recognition error', event.error)
+            // Ignore 'no-speech' error as it just means timeout or silence
+            if (event.error !== 'no-speech') {
+                console.error('Speech recognition error', event.error)
+            }
             setListeningIndex(null)
             recognitionRef.current = null
         }
@@ -122,12 +125,7 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
         recognition.start()
     }
 
-    const addPunctuation = (index: number, mark: string) => {
-        const currentValue = inputValues[index] || ''
-        const trimmed = currentValue.trimEnd()
-        const newValue = `${trimmed}${mark} `
-        handleInputChange(index, newValue)
-    }
+
 
     return (
         <div style={{
@@ -237,33 +235,7 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
                                     </label>
 
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        {/* Punctuation Buttons */}
-                                        <div style={{ display: 'flex', gap: '4px', marginRight: '8px' }}>
-                                            {['.', ',', '?', '!'].map(mark => (
-                                                <button
-                                                    key={mark}
-                                                    onClick={() => addPunctuation(index, mark)}
-                                                    style={{
-                                                        width: '28px',
-                                                        height: '28px',
-                                                        background: 'rgba(255, 255, 255, 0.05)',
-                                                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                                                        borderRadius: '6px',
-                                                        color: '#fff',
-                                                        fontSize: '14px',
-                                                        fontWeight: 600,
-                                                        cursor: 'pointer',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        transition: 'all 0.1s'
-                                                    }}
-                                                    title={`Wstaw ${mark}`}
-                                                >
-                                                    {mark}
-                                                </button>
-                                            ))}
-                                        </div>
+
 
                                         {/* Speech Button */}
                                         <button

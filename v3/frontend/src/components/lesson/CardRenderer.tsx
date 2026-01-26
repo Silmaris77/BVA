@@ -2,6 +2,8 @@ import IntroCard from './IntroCard'
 import ConceptCard from './ConceptCard'
 import InputCard from './math/InputCard'
 import NumberLineCard from './math/NumberLineCard'
+import FractionVisualCard from './math/FractionVisualCard'
+import NumberSortCard from './math/NumberSortCard'
 
 import QuestionCard from './QuestionCard'
 import SummaryCard from './SummaryCard'
@@ -21,8 +23,12 @@ import EndingCard from './EndingCard'
 import TestCard from './TestCard'
 import ChecklistCard from './ChecklistCard'
 import CoverCard from './CoverCard'
+import LearningPathCard from './LearningPathCard'
+import CycleCard from './CycleCard'
+import CycleCardVariantB from './CycleCardVariantB'
+import DunningKrugerCard from './DunningKrugerCard'
 
-export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'cover'
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger'
 
 export interface LessonCardData {
     type: CardType
@@ -81,7 +87,7 @@ export interface LessonCardData {
     // Lightbulb properties
     insight?: string
     accent_color?: string
-    steps?: { number: number; title: string }[]
+    steps?: any[]
     // Story properties
     scenario?: { heading: string, text: string } | string
     consequences?: string[]
@@ -119,10 +125,23 @@ interface CardRendererProps {
     onAnswer?: (correct: boolean) => void
     onTestResult?: (score: number, passed: boolean) => void
     onReset?: () => void
+    onNext?: () => void
 }
 
-export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: CardRendererProps) {
+export default function CardRenderer({ card, onAnswer, onTestResult, onReset, onNext }: CardRendererProps) {
     switch (card.type) {
+        // ... previous cases ...
+        case 'cover':
+            return <CoverCard
+                title={card.title || 'Lesson Title'}
+                subtitle={card.subtitle}
+                description={card.description}
+                category={card.category}
+                durationMinutes={card.durationMinutes}
+                xpReward={card.xpReward}
+                image={card.image}
+                onStart={onNext}
+            />
         // ... previous cases ...
         case 'test':
             return <TestCard
@@ -320,6 +339,22 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 initialValue={card.initialValue}
                 explanation={card.explanation}
             />
+        case 'fraction-visual':
+            return <FractionVisualCard
+                title={card.title}
+                question={card.question || 'Zaznacz odpowiednią część'}
+                numerator={card.numerator || 1}
+                denominator={card.denominator || 4}
+                visualType={card.visualType || 'pie'}
+                interactive={card.interactive !== false}
+            />
+        case 'number-sort':
+            return <NumberSortCard
+                title={card.title}
+                question={card.question || 'Uporządkuj liczby'}
+                numbers={card.numbers || [1, 2, 3]}
+                order={card.order || 'asc'}
+            />
         case 'cover':
             return <CoverCard
                 title={card.title || 'Lesson Title'}
@@ -329,6 +364,32 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset }: 
                 durationMinutes={card.durationMinutes}
                 xpReward={card.xpReward}
                 image={card.image}
+            />
+        case 'learning-path':
+            return <LearningPathCard
+                title={card.title}
+                description={card.description}
+                levels={card.levels}
+            />
+        case 'cycle':
+            return <CycleCard
+                title={card.title}
+                description={card.description}
+                steps={card.steps}
+                cycleType={card.cycleType}
+            />
+        case 'cycle-b':
+            return <CycleCardVariantB
+                title={card.title}
+                description={card.description}
+                steps={card.steps}
+                cycleType={card.cycleType}
+            />
+        case 'dunning-kruger':
+            return <DunningKrugerCard
+                title={card.title}
+                description={card.description}
+                points={card.points}
             />
         default:
             return (
