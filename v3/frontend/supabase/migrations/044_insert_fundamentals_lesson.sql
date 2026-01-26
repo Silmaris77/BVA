@@ -1,0 +1,307 @@
+-- 1. Create or Get 'Przywództwo' Module
+DO $$
+DECLARE
+    module_id_leadership UUID;
+    lesson_id_uuid UUID := '85834863-8991-4560-9189-913380486241'; -- Fixed ID for consistency
+BEGIN
+    -- Check if module exists
+    SELECT id INTO module_id_leadership FROM modules WHERE title ILIKE '%Przywództwo%';
+    
+    -- If not, create it
+    IF module_id_leadership IS NULL THEN
+        INSERT INTO modules (title, description, track, display_order)
+        VALUES ('Przywództwo', 'Warsztat nowoczesnego lidera', 'sales', 10) -- Adjust order as needed
+        RETURNING id INTO module_id_leadership;
+    END IF;
+
+    -- 2. Insert or Update Lesson
+    -- Delete existing if any to avoid duplicates with different IDs
+    DELETE FROM lessons WHERE title = 'Fundamenty Rozwoju Pracowników';
+
+    INSERT INTO lessons (
+        lesson_id, 
+        title, 
+        description, 
+        category, 
+        difficulty, 
+        duration_minutes, 
+        xp_reward, 
+        track, 
+        module_id, 
+        display_order, 
+        status,
+        content
+    )
+    VALUES (
+        lesson_id_uuid,
+        'Fundamenty Rozwoju Pracowników',
+        'Zrozum psychologię uczenia się, 4 poziomy kompetencji i rolę nowoczesnego lidera w rozwoju zespołu.',
+        'Przywództwo',
+        'beginner',
+        20,
+        250,
+        'sales',
+        module_id_leadership,
+        1,
+        'published',
+        '{
+    "cards": [
+        {
+            "type": "cover",
+            "title": "Fundamenty Rozwoju Pracowników",
+            "subtitle": "Lekcja 1",
+            "description": "Poznaj kluczowe modele psychologiczne (Kolb, Kruger-Dunning) i naucz się diagnozować poziom kompetencji swoich ludzi.",
+            "durationMinutes": 20,
+            "xpReward": 250,
+            "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80"
+        },
+        {
+            "type": "hero",
+            "title": "Nowa Rola Menedżera",
+            "subtitle": "To więcej niż zarządzanie",
+            "content": "W nowoczesnych organizacjach menedżer nie tylko wydaje polecenia. Staje się trenerem, który aktywnie wspiera rozwój swojego zespołu.",
+            "icon": "Users"
+        },
+        {
+            "type": "concept",
+            "title": "Menedżer jako Trener",
+            "content": "Rola menedżera ewoluuje. Oprócz celów biznesowych, Twoim zadaniem jest:",
+            "keyPoints": [
+                "Odkrywaniem pasji i mocnych stron pracowników",
+                "Współtworzeniem planów rozwoju",
+                "Dostarczaniem narzędzi i wiedzy",
+                "Budowaniem bezpiecznego środowiska do nauki",
+                "Narzucaniem tempa rozwoju (akceleracja)"
+            ],
+            "visual": {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80"
+            }
+        },
+        {
+            "type": "learning-path",
+            "title": "4 Poziomy Kompetencji",
+            "description": "Zrozum proces, przez który przechodzi każdy uczący się człowiek. Kliknij w etapy, aby poznać szczegóły.",
+            "levels": [
+                {
+                    "stage": 0,
+                    "title": "START",
+                    "subtitle": "Nieświadoma niekompetencja",
+                    "details": "„Nie wiem, że nie wiem”. Stan, w którym pracownik nie jest świadom popełnianych błędów. Potrzeba rozwoju jest tutaj niska, bo nie widać problemu.",
+                    "status": "completed",
+                    "color": "#9ca3af"
+                },
+                {
+                    "stage": 1,
+                    "title": "UŚWIADOMIENIE",
+                    "subtitle": "Świadoma niekompetencja",
+                    "details": "„Wiem, czego nie wiem”. Moment zderzenia z rzeczywistością. Pracownik widzi swoje braki. To budzi motywację, ale może też rodzić frustrację.",
+                    "status": "current",
+                    "color": "#fbbf24"
+                },
+                {
+                    "stage": 2,
+                    "title": "PRAKTYKA",
+                    "subtitle": "Świadoma kompetencja",
+                    "details": "„Wiem, co wiem”. Pojawiają się pierwsze rezultaty, ale wymagają one dużego skupienia i wysiłku. Działanie nie jest jeszcze płynne.",
+                    "status": "locked",
+                    "color": "#34d399"
+                },
+                {
+                    "stage": 3,
+                    "title": "MISTRZOSTWO",
+                    "subtitle": "Nieświadoma kompetencja",
+                    "details": "„Nie wiem, co wiem”. Pełny automatyzm. Pracownik działa intuicyjnie, szybko i bezbłędnie. Wiedza stała się nawykiem.",
+                    "status": "locked",
+                    "color": "#00d4ff"
+                }
+            ]
+        },
+        {
+            "type": "dunning-kruger",
+            "title": "Efekt Krugera-Dunninga",
+            "description": "Dlaczego niekompetentni są tak pewni siebie?",
+            "points": [
+                {
+                    "stage": 0,
+                    "title": "Szczyt Głupoty",
+                    "label": "Terytorium Ignoranta",
+                    "description": "Wysoka pewność, znikoma wiedza",
+                    "details": "„Zarządzanie? To proste!” Nowy menedżer często nie widzi pułapek. Przecenia swoje siły, bo nie wie, czego nie wie.",
+                    "color": "#ef4444"
+                },
+                {
+                    "stage": 1,
+                    "title": "Dolina Rozpaczy",
+                    "label": "Szok Rzeczywistości",
+                    "description": "Upadek pewności",
+                    "details": "Pierwsze porażki. Uświadamiasz sobie, jak trudne jest zarządzanie ludźmi. Twoja pewność siebie szoruje o dno.",
+                    "color": "#f59e0b"
+                },
+                {
+                    "stage": 2,
+                    "title": "Droga Oświecenia",
+                    "label": "Nauka i Praktyka",
+                    "description": "Odbudowa pewności",
+                    "details": "Zaczynasz rozumieć mechanizmy. Uczysz się na błędach. Twoja pewność rośnie, ale tym razem ma solidne podstawy.",
+                    "color": "#10b981"
+                },
+                {
+                    "stage": 3,
+                    "title": "Płaskowyż Stabilności",
+                    "label": "Ekspert",
+                    "description": "Kompetencja i pokora",
+                    "details": "Wiesz, co robisz. Działasz intuicyjnie. Rozumiesz też, że zawsze można się czegoś jeszcze nauczyć.",
+                    "color": "#3b82f6"
+                }
+            ]
+        },
+        {
+            "type": "cycle",
+            "cycleType": "kolb",
+            "title": "Cykl Uczenia się Kolba",
+            "description": "Dorośli uczą się najskuteczniej przechodząc przez 4 etapy. Pominiecie któregoś z nich hamuje rozwój.",
+            "steps": [
+                {
+                    "id": 1,
+                    "title": "Doświadczenie",
+                    "description": "Konkretne zdarzenie, np. rozmowa z klientem. ''Co się stało?'' - to punkt wyjścia.",
+                    "icon": "target",
+                    "color": "#00d4ff"
+                },
+                {
+                    "id": 2,
+                    "title": "Refleksja",
+                    "description": "Analiza tego zdarzenia. ''Dlaczego tak poszło? Co czułem?'' Obserwacja z dystansu.",
+                    "icon": "brain",
+                    "color": "#7dd956"
+                },
+                {
+                    "id": 3,
+                    "title": "Teoria (Wiedza)",
+                    "description": "Szukanie reguł i modeli. ''Jak to powinno działać?'' Łączenie praktyki z teorią.",
+                    "icon": "lightbulb",
+                    "color": "#ffd700"
+                },
+                {
+                    "id": 4,
+                    "title": "Eksperyment",
+                    "description": "Planowanie i testowanie nowego podejścia w praktyce. ''Spróbuję inaczej następnym razem''.",
+                    "icon": "check",
+                    "color": "#ff0055"
+                }
+            ]
+        },
+        {
+            "type": "cycle-b",
+            "cycleType": "kolb",
+            "title": "Cykl Kolba (Wariant B)",
+            "description": "Alternatywne przedstawienie cyklu uczenia się (Reactor View).",
+            "steps": [
+                {
+                    "id": 1,
+                    "title": "Doświadczenie",
+                    "description": "Konkretne zdarzenie, np. rozmowa z klientem. ''Co się stało?'' - to punkt wyjścia.",
+                    "icon": "target",
+                    "color": "#00d4ff"
+                },
+                {
+                    "id": 2,
+                    "title": "Refleksja",
+                    "description": "Analiza tego zdarzenia. ''Dlaczego tak poszło? Co czułem?'' Obserwacja z dystansu.",
+                    "icon": "brain",
+                    "color": "#7dd956"
+                },
+                {
+                    "id": 3,
+                    "title": "Teoria (Wiedza)",
+                    "description": "Szukanie reguł i modeli. ''Jak to powinno działać?'' Łączenie praktyki z teorią.",
+                    "icon": "lightbulb",
+                    "color": "#ffd700"
+                },
+                {
+                    "id": 4,
+                    "title": "Eksperyment",
+                    "description": "Planowanie i testowanie nowego podejścia w praktyce. ''Spróbuję inaczej następnym razem''.",
+                    "icon": "check",
+                    "color": "#ff0055"
+                }
+            ]
+        },
+        {
+            "type": "story",
+            "title": "Błąd Młodego Menedżera",
+            "scenario": "Tomek, świeżo upieczony lider, próbował uczyć doświadczonego handlowca (Jana) metodą „mikrozarządzania” – mówił mu dokładnie, co ma robić w każdej minucie.",
+            "consequences": [
+                "Jan poczuł się niedoceniony (utrata motywacji).",
+                "Wyniki Jana spadły, mimo dobrych intencji Tomka.",
+                "Relacja uległa pogorszeniu."
+            ],
+            "lesson": {
+                "heading": "Wniosek",
+                "text": "Tomek użył stylu dyrektywnego wobec pracownika na poziomie ''Świadomej Kompetencji''. To błąd w dopasowaniu stylu do poziomu gotowości."
+            }
+        },
+        {
+            "type": "quiz",
+            "title": "Sprawdź wiedzę",
+            "questions": [
+                {
+                    "question": "Na którym etapie pracownik wie, że czegoś nie potrafi i to go motywuje?",
+                    "options": [
+                        "Nieświadoma niekompetencja",
+                        "Świadoma niekompetencja",
+                        "Nieświadoma kompetencja"
+                    ],
+                    "correct": 1,
+                    "explanation": "Świadoma niekompetencja to moment, w którym uświadamiamy sobie braki, co jest impulsem do nauki."
+                },
+                {
+                    "question": "Co charakteryzuje efekt Krugera-Dunninga?",
+                    "options": [
+                        "Eksperci przeceniają się",
+                        "Nowicjusze przeceniają swoje umiejętności",
+                        "Wszyscy oceniają się obiektywnie"
+                    ],
+                    "correct": 1,
+                    "explanation": "Efekt ten polega na tym, że osoby o niskich kompetencjach nie dostrzegają swoich błędów i przeceniają swoją wiedzę."
+                }
+            ]
+        },
+        {
+            "type": "ending",
+            "title": "Fundamenty Zbudowane",
+            "subtitle": "Masz teraz wiedzę, by zacząć pracę jako trener.",
+            "checklist": [
+                {
+                    "icon": "🧠",
+                    "text": "Zrozumiałeś **4 etapy kompetencji**"
+                },
+                {
+                    "icon": "⚠️",
+                    "text": "Poznałeś pułapkę **efektu Krugera-Dunninga**"
+                },
+                {
+                    "icon": "🔄",
+                    "text": "Wiesz jak działa **cykl Kolba**"
+                }
+            ],
+            "next_steps": {
+                "text": "W kolejnej lekcji poznasz praktyczny **Model OJT**.",
+                "available": true
+            }
+        }
+    ]
+}'::jsonb
+    );
+
+    -- 3. Update Learning Path (Sales Track)
+    -- Assuming we are adding this to the 'sales' or 'leadership' track
+    -- Let's update the 'sales' track sequence if it exists, or 'leadership'
+    
+    -- NOTE: In BVA v3, we seem to rely heavily on 'sales' track. I'll add it there.
+    -- Or create a new track for Leadership. Given it's "Fundamentals", maybe it belongs at the start.
+    
+    -- For now, let's just ensure it's in the database. The app logic might fetch by module.
+    
+END $$;

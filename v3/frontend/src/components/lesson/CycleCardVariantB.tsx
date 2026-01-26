@@ -53,7 +53,7 @@ export default function CycleCardVariantB({
     };
 
     return (
-        <div className="w-full max-w-5xl mx-auto glass-card p-6 md:p-10 rounded-2xl border border-white/10 flex flex-col items-center relative overflow-hidden">
+        <div className="w-full max-w-5xl mx-auto glass-card p-4 md:p-10 rounded-2xl border border-white/10 flex flex-col items-center relative overflow-hidden">
             {/* Dynamic Background Mesh */}
             <div className="absolute inset-0 opacity-20 pointer-events-none">
                 <div
@@ -63,21 +63,21 @@ export default function CycleCardVariantB({
             </div>
 
             {/* Header */}
-            <div className="text-center mb-10 z-10 w-full max-w-2xl">
+            <div className="text-center mb-6 md:mb-10 z-10 w-full max-w-2xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-gray-400 mb-3 uppercase tracking-widest">
                     <span>Variant B: Reactor Core</span>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-black bg-gradient-to-br from-white via-gray-200 to-gray-500 bg-clip-text text-transparent mb-3">
+                <h2 className="text-2xl md:text-4xl font-black bg-gradient-to-br from-white via-gray-200 to-gray-500 bg-clip-text text-transparent mb-3">
                     {title}
                 </h2>
-                <p className="text-gray-400 font-light">{description}</p>
+                <p className="text-gray-400 font-light text-sm md:text-base">{description}</p>
             </div>
 
             {/* Main Content Layout */}
-            <div className="flex flex-col md:flex-row items-center gap-12 w-full z-10">
+            <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 w-full z-10">
 
                 {/* Visual Side (Left/Top) */}
-                <div className="relative w-[320px] h-[320px] flex-shrink-0">
+                <div className="relative w-[280px] h-[280px] md:w-[320px] md:h-[320px] flex-shrink-0">
                     <svg viewBox="0 0 300 300" className="w-full h-full drop-shadow-2xl overflow-visible">
                         <defs>
                             <filter id="glow-b">

@@ -78,7 +78,7 @@ export default function CycleCard({
     const activeStepData = steps[activeStep];
 
     return (
-        <div className="w-full max-w-4xl mx-auto glass-card p-8 md:p-12 rounded-2xl border border-white/10 relative overflow-hidden">
+        <div className="w-full max-w-4xl mx-auto glass-card p-4 md:p-12 rounded-2xl border border-white/10 relative overflow-hidden">
             {/* Ambient Background */}
             <div
                 className="absolute w-96 h-96 rounded-full blur-[100px] opacity-10 transition-all duration-1000 pointer-events-none"
@@ -148,11 +148,11 @@ export default function CycleCard({
                     {steps.map((_, index) => {
                         const start = getStepPosition(index);
                         const end = getStepPosition((index + 1) % stepCount);
-                        
+
                         // Calculate control points for curved arrow
                         const midX = 50;
                         const midY = 50;
-                        
+
                         // Use quadratic bezier curve towards center
                         const pathD = `M ${start.x} ${start.y} Q ${midX} ${midY}, ${end.x} ${end.y}`;
 
@@ -205,13 +205,12 @@ export default function CycleCard({
 
                             {/* Main node */}
                             <div
-                                className={`relative w-16 h-16 rounded-full flex items-center justify-center border-[3px] transition-all duration-500 backdrop-blur-md ${
-                                    isActive
+                                className={`relative w-16 h-16 rounded-full flex items-center justify-center border-[3px] transition-all duration-500 backdrop-blur-md ${isActive
                                         ? 'scale-125 bg-black/40 border-white shadow-2xl'
                                         : isPast
-                                        ? 'scale-100 bg-black/60 border-transparent'
-                                        : 'scale-90 bg-black/80 border-white/10 hover:scale-105'
-                                }`}
+                                            ? 'scale-100 bg-black/60 border-transparent'
+                                            : 'scale-90 bg-black/80 border-white/10 hover:scale-105'
+                                    }`}
                                 style={{
                                     boxShadow: isActive
                                         ? `0 0 30px ${step.color}70, inset 0 0 20px ${step.color}30`
@@ -235,11 +234,10 @@ export default function CycleCard({
 
                             {/* Step label */}
                             <div
-                                className={`absolute top-20 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase whitespace-nowrap transition-all duration-300 ${
-                                    isActive
+                                className={`absolute top-20 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase whitespace-nowrap transition-all duration-300 ${isActive
                                         ? 'bg-white text-black scale-105'
                                         : 'bg-black/60 text-gray-500 backdrop-blur-md border border-white/5 group-hover:text-white'
-                                }`}
+                                    }`}
                             >
                                 {step.title.length > 20 ? step.title.substring(0, 18) + '...' : step.title}
                             </div>
@@ -309,11 +307,10 @@ export default function CycleCard({
                         <button
                             key={index}
                             onClick={() => setActiveStep(index)}
-                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                activeStep === index
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${activeStep === index
                                     ? 'w-8 bg-white'
                                     : 'bg-white/20 hover:bg-white/40'
-                            }`}
+                                }`}
                         />
                     ))}
                 </div>

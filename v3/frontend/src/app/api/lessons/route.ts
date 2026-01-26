@@ -115,59 +115,6 @@ export async function GET() {
             }
         }
 
-        // INJECT LOCAL OJT LESSON (for all users - demo/public access)
-        try {
-            const fs = await import('fs');
-            const path = await import('path');
-            const filePath = path.join(process.cwd(), 'src/data/sales/lesson_ojt.json');
-
-            if (fs.existsSync(filePath)) {
-                const fileContent = fs.readFileSync(filePath, 'utf-8');
-                const localLesson = JSON.parse(fileContent);
-
-                const ojtLesson = {
-                    lesson_id: localLesson.lesson_id,
-                    title: localLesson.title,
-                    description: localLesson.subtitle || "On-the-Job Training",
-                    duration_minutes: 25,
-                    xp_reward: localLesson.xp_reward || 300,
-                    difficulty: 'intermediate',
-                    category: 'Sprzedaż',
-                    status: 'published',
-                    display_order: 1,
-                    release_date: null,
-                    module: 'sales-training',
-                    track: 'sales',
-                    content: localLesson.content,
-                    module_id: null // Will be assigned when sales module exists
-                };
-
-                lessons?.unshift(ojtLesson);
-            }
-        } catch (err) {
-            console.error('Failed to inject OJT lesson:', err);
-        }
-
-        // INJECT FUNDAMENTALS LESSON
-        try {
-            const fs = await import('fs');
-            const path = await import('path');
-            const filePath = path.join(process.cwd(), 'src/data/sales/lesson_fundamentals.json');
-
-            if (fs.existsSync(filePath)) {
-                const fileContent = fs.readFileSync(filePath, 'utf-8');
-                const localLesson = JSON.parse(fileContent);
-
-                // Use the status from the file or default to published
-                localLesson.status = 'published';
-                localLesson.category = 'Przywództwo'; // Override category if needed
-
-                lessons?.unshift(localLesson);
-            }
-        } catch (err) {
-            console.error('Failed to inject Fundamentals lesson:', err);
-        }
-
         return NextResponse.json({ lessons, modules, progress: progressMap });
 
     } catch (error) {
