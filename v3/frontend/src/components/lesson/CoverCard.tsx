@@ -86,7 +86,6 @@ export default function CoverCard({
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        objectFit: 'cover',
                         opacity: 0.6 // Visible but allows text contrast
                     }}
                 />
