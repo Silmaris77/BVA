@@ -42,6 +42,49 @@ export default function LessonPlayerPage() {
     const contentAreaRef = useRef<HTMLDivElement>(null)
     const [navBlocked, setNavBlocked] = useState(false)
 
+    // Swipe State
+    const touchStart = useRef<{ x: number, y: number } | null>(null)
+    const touchEnd = useRef<{ x: number, y: number } | null>(null)
+
+    // Touch Handlers for Swipe
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchEnd.current = null
+        touchStart.current = {
+            x: e.targetTouches[0].clientX,
+            y: e.targetTouches[0].clientY
+        }
+    }
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        touchEnd.current = {
+            x: e.targetTouches[0].clientX,
+            y: e.targetTouches[0].clientY
+        }
+    }
+
+    const handleTouchEnd = () => {
+        if (!touchStart.current || !touchEnd.current) return
+
+        const xDiff = touchStart.current.x - touchEnd.current.x
+        const yDiff = touchStart.current.y - touchEnd.current.y
+        const absX = Math.abs(xDiff)
+        const absY = Math.abs(yDiff)
+
+        // Minimum swipe distance (px)
+        const minSwipeDistance = 50
+
+        // Check if it's horizontal swipe (X diff significantly larger than Y diff)
+        if (absX > absY && absX > minSwipeDistance) {
+            if (xDiff > 0) {
+                // Swiped Left -> Next Card
+                if (!navBlocked) handleNext()
+            } else {
+                // Swiped Right -> Previous Card
+                handlePrevious()
+            }
+        }
+    }
+
     // Scroll to top when card changes
     useEffect(() => {
         if (contentAreaRef.current) {
@@ -304,25 +347,33 @@ export default function LessonPlayerPage() {
                     <span></span>
                     <span></span>
                 </button>
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 0, padding: '0 12px' }}>
                     <div style={{
                         fontSize: '14px',
                         color: 'rgba(255, 255, 255, 0.6)',
-                        marginBottom: '8px'
+                        marginBottom: '8px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        maxWidth: '100%'
                     }}>
                         {lesson.title}
                     </div>
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '12px'
+                        gap: '12px',
+                        width: '100%',
+                        justifyContent: 'center'
                     }}>
                         <div style={{
-                            width: '400px',
+                            width: '100%',
+                            maxWidth: '400px',
                             height: '8px',
                             background: 'rgba(255, 255, 255, 0.1)',
                             borderRadius: '4px',
-                            overflow: 'hidden'
+                            overflow: 'hidden',
+                            flexShrink: 1
                         }}>
                             <div style={{
                                 height: '100%',
@@ -334,7 +385,8 @@ export default function LessonPlayerPage() {
                         <span style={{
                             fontSize: '13px',
                             fontWeight: 600,
-                            color: 'rgba(255, 255, 255, 0.8)'
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            flexShrink: 0
                         }}>
                             {currentCardIndex + 1}/{cards.length}
                         </span>
@@ -441,7 +493,9 @@ export default function LessonPlayerPage() {
                 <div style={{
                     flexDirection: 'column',
                     overflow: 'hidden',
-                    position: 'relative' // Needed for absolute positioning of nav
+                    position: 'relative', // Needed for absolute positioning of nav
+                    height: '100%',     // Ensure full height
+                    display: 'flex'
                 }}>
                     {/* Navigation Buttons - Floating Side Chevrons (Desktop) / Bottom Corners (Mobile) */}
                     <style>{`
@@ -451,6 +505,7 @@ export default function LessonPlayerPage() {
                             transform: translateY(-50%);
                             z-index: 50;
                             transition: all 0.2s ease;
+                            opacity: 1; /* Normal visibility on desktop */
                         }
                         .nav-btn-prev {
                             left: 32px;
@@ -461,10 +516,17 @@ export default function LessonPlayerPage() {
 
                         @media (max-width: 768px) {
                             .nav-btn {
-                                position: fixed; /* Fixed on mobile to stay visible */
+                                position: fixed;
                                 top: auto !important;
-                                bottom: 24px !important; /* Move to bottom */
+                                bottom: 24px !important;
                                 transform: none !important;
+                                opacity: 0.15 !important; /* Barely visible on mobile per user request */
+                                background: rgba(255, 255, 255, 0.1) !important; /* Softer background */
+                            }
+                            /* Make it slightly more visible when actually touching/using it */
+                            .nav-btn:active {
+                                opacity: 0.8 !important;
+                                transform: scale(0.95) !important;
                             }
                             .nav-btn-prev {
                                 left: 24px;
@@ -493,14 +555,6 @@ export default function LessonPlayerPage() {
                             justifyContent: 'center',
                             cursor: 'pointer',
                             boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
-                        }}
-                        onMouseOver={(e) => {
-                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
-                            e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'
-                        }}
-                        onMouseOut={(e) => {
-                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'
-                            e.currentTarget.style.transform = 'translateY(-50%) scale(1)'
                         }}
                     >
                         <ChevronLeft size={28} />
@@ -547,12 +601,6 @@ export default function LessonPlayerPage() {
                                 cursor: navBlocked ? 'not-allowed' : 'pointer',
                                 boxShadow: navBlocked ? 'none' : '0 4px 20px rgba(0, 212, 255, 0.3)'
                             }}
-                            onMouseOver={(e) => {
-                                if (!navBlocked) e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'
-                            }}
-                            onMouseOut={(e) => {
-                                if (!navBlocked) e.currentTarget.style.transform = 'translateY(-50%) scale(1)'
-                            }}
                         >
                             {currentCardIndex === cards.length - 1 ? (
                                 <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 600, fontSize: '16px' }}>Zakończ</span>
@@ -562,10 +610,13 @@ export default function LessonPlayerPage() {
                         </button>
                     )}
 
-                    {/* Card Content Area */}
+                    {/* Card Content Area - With Swipe Handlers */}
                     <div
                         ref={contentAreaRef}
                         className="lesson-content-area"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
                         style={{
                             flex: 1,
                             padding: '24px 32px 100px 32px',
