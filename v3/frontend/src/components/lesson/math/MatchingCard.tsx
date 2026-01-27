@@ -35,10 +35,17 @@ export default function MatchingCard({ title, question, pairs, explanations }: M
     const [completed, setCompleted] = useState(false);
     const [wrongAttempt, setWrongAttempt] = useState<string | null>(null);
 
+    const formatMath = (text: string) => {
+        // Simple fraction detection: 1/2 -> $\frac{1}{2}$
+        // Only if it doesn't look like LaTeX already
+        if (text.includes('$') || text.includes('\\')) return text;
+        return text.replace(/\b(\d+)\/(\d+)\b/g, '$\\frac{$1}{$2}$');
+    };
+
     useEffect(() => {
         // Initialize and shuffle items
-        const left = pairs.map(p => ({ id: p.id, content: p.left }));
-        const right = pairs.map(p => ({ id: p.id, content: p.right })); // Keep ID same for checking
+        const left = pairs.map(p => ({ id: p.id, content: formatMath(p.left) }));
+        const right = pairs.map(p => ({ id: p.id, content: p.right })); // User asked for left, keeping right as is for now
 
         setLeftItems(shuffleArray(left));
         setRightItems(shuffleArray(right));
@@ -157,7 +164,7 @@ export default function MatchingCard({ title, question, pairs, explanations }: M
                                     }
                                 `}
                             >
-                                <div className="w-full flex justify-center"><MathRenderer content={item.content} /></div>
+                                <div className="w-full flex justify-center"><MathRenderer content={item.content} className="text-2xl" /></div>
                                 {isMatched && <Check size={16} className="absolute right-4" />}
                             </button>
                         );
@@ -187,7 +194,7 @@ export default function MatchingCard({ title, question, pairs, explanations }: M
                                     }
                                 `}
                             >
-                                <div className="w-full flex justify-center"><MathRenderer content={item.content} /></div>
+                                <div className="w-full flex justify-center"><MathRenderer content={item.content} className="text-2xl" /></div>
                                 {isMatched && <Check size={16} className="absolute right-4" />}
                             </button>
                         );

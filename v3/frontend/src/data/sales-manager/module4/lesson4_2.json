@@ -1,0 +1,99 @@
+{
+    "lesson_id": "sm-m4-l2-definicja-ojt",
+    "title": "Czym naprawdę jest trening on-the-job?",
+    "subtitle": "Moduł 4: Rozwijanie ludzi",
+    "duration_minutes": 20,
+    "xp_reward": 300,
+    "difficulty": "intermediate",
+    "description": "Dowiedz się, czym różni się OJT od zwykłej wizyty handlowej i poznaj strukturę procesu.",
+    "module_id": "d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44",
+    "cards": [
+        {
+            "type": "intro",
+            "title": "Wizyta vs Trening",
+            "description": "Wielu menedżerów jeździ z handlowcami w te-ren, ale rzadko kto prowadzi prawdziwy trening. Czy wiesz, jaka jest różnica?"
+        },
+        {
+            "type": "comparison",
+            "title": "Wspólna wizyta vs OJT",
+            "description": "Zobacz różnicę w intencji i przebiegu:",
+            "leftTitle": "Zwykła wspólna wizyta",
+            "rightTitle": "Trening On-the-Job (OJT)",
+            "items": [
+                {
+                    "left": "Cel: Dowieźć sprzedaż za wszelką cenę.",
+                    "right": "Cel: Rozwinąć konkretną umiejętność (sprzedaż jest skutkiem)."
+                },
+                {
+                    "left": "Menedżer przejmuje stery, gdy robi się trudno.",
+                    "right": "Menedżer pozwala pracownikowi działać (nawet z błędami), o ile nie psuje to relacji."
+                },
+                {
+                    "left": "Feedback jest chaotyczny, 'w windzie'.",
+                    "right": "Feedback jest zaplanowany, po wizycie, oparty na faktach."
+                }
+            ]
+        },
+        {
+            "type": "concept",
+            "title": "Definicja OJT",
+            "content": "**Trening On-the-Job (OJT)** to zaplanowany proces rozwojowy, który odbywa się w rzeczywistym środowisku pracy (u klienta, na słuchawce), gdzie menedżer pełni rolę obserwatora i trenera, a nie 'nad-handlowca'."
+        },
+        {
+            "type": "quiz",
+            "title": "Czy to jest OJT?",
+            "questions": [
+                {
+                    "question": "Jedziesz z handlowcem, on prowadzi rozmowę. Wtrącasz się, gdy klient zadaje trudne pytanie, i zamykasz sprzedaż. Po wyjściu mówisz: 'Widziałeś? Tak to się robi'.",
+                    "options": [
+                        "To świetne modelowanie (pokazanie mistrzostwa).",
+                        "To OJT, bo byłeś przy tym.",
+                        "To wizyta wspierająca (sprzedażowa), ale NIE trening."
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "To była wizyta sprzedażowa. Przejąłeś odpowiedzialność (Stage Hogging). Pracownik nauczył się tylko, że jak jest trudno, to szef go uratuje."
+                }
+            ]
+        },
+        {
+            "type": "concept",
+            "title": "Struktura Cyklu OJT",
+            "content": "Prawdziwy trening składa się z 3 etapów:\n\n1.  🕐 **PRZED (Odprawa):** Ustalenie JEDNEGO celu rozwojowego. ('Nad czym dziś pracujemy?')\n2.  🕑 **W TRAKCIE (Obserwacja):** Menedżer milczy i notuje fakty. Pracownik gra pierwsze skrzypce.\n3.  🕒 **PO (Analiza):** Rozmowa rozwojowa (Refleksja + Wnioski)."
+        },
+        {
+            "type": "fill-gap",
+            "title": "Najważniejsza zasada",
+            "parts": [
+                "Podczas OJT Twoim głównym zadaniem jest ",
+                {
+                    "id": "gap1",
+                    "correctExact": "obserwacja",
+                    "placeholder": "..."
+                },
+                ". Jeśli zaczniesz sprzedawać za pracownika, zamieniasz trening w ",
+                {
+                    "id": "gap2",
+                    "correctExact": "wyręczanie",
+                    "placeholder": "..."
+                },
+                "."
+            ],
+            "explanation": "Musisz powstrzymać swój instynkt 'ratowania sprzedaży' (chyba że grozi katastrofą), aby pracownik mógł doświadczyć procesu."
+        },
+        {
+            "type": "summary",
+            "title": "Podsumowanie",
+            "recap": [
+                "OJT to proces rozwojowy, a nie tylko 'wspólna jazda'.",
+                "Cel OJT to rozwój kompetencji, a nie tylko wynik tu i teraz.",
+                "Struktura: Odprawa -> Obserwacja -> Analiza.",
+                "Jako trener musisz gryźć się w język i pozwolić pracownikowi działać."
+            ],
+            "badge": {
+                "title": "Definicja OJT",
+                "xp": 300
+            },
+            "nextSteps": "W kolejnej lekcji nauczysz się, jak wybrać ten JEDEN cel rozwojowy, żeby nie przytłoczyć pracownika."
+        }
+    ]
+}

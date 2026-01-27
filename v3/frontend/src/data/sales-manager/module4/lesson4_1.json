@@ -1,0 +1,206 @@
+{
+    "lesson_id": "sm-m4-l1-psychologia",
+    "title": "Jak ludzie się uczą i jaka jest rola menedżera",
+    "subtitle": "Moduł 4: Rozwijanie ludzi",
+    "duration_minutes": 20,
+    "xp_reward": 300,
+    "difficulty": "intermediate",
+    "description": "Zrozum psychologię uczenia się dorosłych, 4 poziomy kompetencji i zmień swoje nastawienie z 'naprawiania' na 'rozwijanie'.",
+    "module_id": "d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44",
+    "cards": [
+        {
+            "type": "intro",
+            "title": "Mindset: Ogrodnik, nie Mechanik",
+            "description": "Wielu menedżerów myśli, że pracownik to maszyna, którą trzeba 'naprawić' szybkim feedbackiem. To błąd. Rozwój to proces organiczny, który wymaga warunków, a nie tylko instrukcji."
+        },
+        {
+            "type": "concept",
+            "title": "Menedżer jako Trener",
+            "content": "Rola menedżera ewoluuje. Oprócz celów biznesowych, Twoim zadaniem jest:",
+            "keyPoints": [
+                "Odkrywaniem pasji i mocnych stron pracowników",
+                "Współtworzeniem planów rozwoju",
+                "Dostarczaniem narzędzi i wiedzy",
+                "Budowaniem bezpiecznego środowiska do nauki",
+                "Narzucaniem tempa rozwoju (akceleracja)"
+            ],
+            "visual": {
+                "type": "image",
+                "src": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80"
+            }
+        },
+        {
+            "type": "learning-path",
+            "title": "4 Poziomy Kompetencji",
+            "description": "Zanim zaczniesz kogoś uczyć, musisz wiedzieć, gdzie on jest. Kliknij, aby zobaczyć etapy.",
+            "levels": [
+                {
+                    "stage": 0,
+                    "title": "START",
+                    "subtitle": "Nieświadoma niekompetencja",
+                    "details": "„Nie wiem, że nie wiem”. Stan, w którym pracownik nie jest świadom popełnianych błędów. Potrzeba rozwoju jest tutaj niska, bo nie widać problemu.",
+                    "status": "completed",
+                    "color": "#9ca3af"
+                },
+                {
+                    "stage": 1,
+                    "title": "UŚWIADOMIENIE",
+                    "subtitle": "Świadoma niekompetencja",
+                    "details": "„Wiem, czego nie wiem”. Moment zderzenia z rzeczywistością. Pracownik widzi swoje braki. To budzi motywację, ale może też rodzić frustrację.",
+                    "status": "current",
+                    "color": "#fbbf24"
+                },
+                {
+                    "stage": 2,
+                    "title": "PRAKTYKA",
+                    "subtitle": "Świadoma kompetencja",
+                    "details": "„Wiem, co wiem”. Pojawiają się pierwsze rezultaty, ale wymagają one dużego skupienia i wysiłku. Działanie nie jest jeszcze płynne.",
+                    "status": "locked",
+                    "color": "#34d399"
+                },
+                {
+                    "stage": 3,
+                    "title": "MISTRZOSTWO",
+                    "subtitle": "Nieświadoma kompetencja",
+                    "details": "„Nie wiem, co wiem”. Pełny automatyzm. Pracownik działa intuicyjnie, szybko i bezbłędnie. Wiedza stała się nawykiem.",
+                    "status": "locked",
+                    "color": "#00d4ff"
+                }
+            ]
+        },
+        {
+            "type": "readiness",
+            "title": "Poziomy Gotowości (R1-R4)",
+            "description": "Każdy pracownik może być na innym poziomie gotowości w zależności od zadania. Poznaj model Przywództwa Sytuacyjnego."
+        },
+        {
+            "type": "dunning-kruger",
+            "title": "Pułapka: Efekt Krugera-Dunninga",
+            "description": "Dlaczego najsłabsi handlowcy są często najbardziej pewni siebie?",
+            "points": [
+                {
+                    "stage": 0,
+                    "title": "Szczyt Głupoty",
+                    "label": "Terytorium Ignoranta",
+                    "description": "Wysoka pewność, znikoma wiedza",
+                    "details": "„Sprzedaż? To proste!” Nowy handlowiec często przecenia swoje siły, bo nie wie, czego nie wie.",
+                    "color": "#ef4444"
+                },
+                {
+                    "stage": 1,
+                    "title": "Dolina Rozpaczy",
+                    "label": "Szok Rzeczywistości",
+                    "description": "Upadek pewności",
+                    "details": "Pierwsze porażki. Uświadamia sobie, jak trudna jest ta praca. Pewność siebie szoruje o dno.",
+                    "color": "#f59e0b"
+                },
+                {
+                    "stage": 2,
+                    "title": "Droga Oświecenia",
+                    "label": "Nauka i Praktyka",
+                    "description": "Odbudowa pewności",
+                    "details": "Zaczyna rozumieć mechanizmy. Uczy się na błędach. Pewność rośnie, ale tym razem ma solidne podstawy.",
+                    "color": "#10b981"
+                },
+                {
+                    "stage": 3,
+                    "title": "Płaskowyż Stabilności",
+                    "label": "Ekspert",
+                    "description": "Kompetencja i pokora",
+                    "details": "Wie, co robi. Działa intuicyjnie. Rozumie też, że zawsze można się czegoś jeszcze nauczyć.",
+                    "color": "#3b82f6"
+                }
+            ]
+        },
+        {
+            "type": "cycle-b",
+            "cycleType": "kolb",
+            "title": "Cykl Kolba: Jak uczy się mózg?",
+            "description": "Dorośli uczą się najskuteczniej przechodząc przez 4 etapy. Zobacz interaktywny model.",
+            "steps": [
+                {
+                    "id": 1,
+                    "title": "Doświadczenie",
+                    "description": "Konkretne zdarzenie, np. rozmowa z klientem. 'Co się stało?' - to punkt wyjścia.",
+                    "icon": "target",
+                    "color": "#00d4ff"
+                },
+                {
+                    "id": 2,
+                    "title": "Refleksja",
+                    "description": "Analiza tego zdarzenia. 'Dlaczego tak poszło? Co czułem?' Dystans do emocji.",
+                    "icon": "brain",
+                    "color": "#7dd956"
+                },
+                {
+                    "id": 3,
+                    "title": "Teoria (Wniosek)",
+                    "description": "Szukanie reguł. 'Co zrobię inaczej?' Łączenie praktyki z modelem działania.",
+                    "icon": "lightbulb",
+                    "color": "#ffd700"
+                },
+                {
+                    "id": 4,
+                    "title": "Eksperyment",
+                    "description": "Testowanie nowego podejścia w praktyce. 'Sprawdzam!' Cykl się zamyka.",
+                    "icon": "check",
+                    "color": "#ff0055"
+                }
+            ]
+        },
+        {
+            "type": "story",
+            "title": "Błąd Młodego Menedżera",
+            "scenario": "Tomek, świeżo upieczony lider, próbował uczyć doświadczonego handlowca (Jana) metodą „mikrozarządzania” – mówił mu dokładnie, co ma robić w każdej minucie.",
+            "consequences": [
+                "Jan poczuł się niedoceniony (utrata motywacji).",
+                "Wyniki Jana spadły, mimo dobrych intencji Tomka.",
+                "Relacja uległa pogorszeniu."
+            ],
+            "lesson": {
+                "heading": "Wniosek",
+                "text": "Tomek użył stylu dyrektywnego wobec pracownika na poziomie 'Świadomej Kompetencji'. To błąd w dopasowaniu stylu do poziomu gotowości."
+            }
+        },
+        {
+            "type": "quiz",
+            "title": "Sprawdź wiedzę",
+            "questions": [
+                {
+                    "question": "Na którym etapie pracownik wie, że czegoś nie potrafi i to go motywuje?",
+                    "options": [
+                        "Nieświadoma niekompetencja",
+                        "Świadoma niekompetencja",
+                        "Nieświadoma kompetencja"
+                    ],
+                    "correct": 1,
+                    "explanation": "Świadoma niekompetencja to moment, w którym uświadamiamy sobie braki, co jest impulsem do nauki."
+                },
+                {
+                    "question": "Co charakteryzuje efekt Krugera-Dunninga?",
+                    "options": [
+                        "Eksperci przeceniają się",
+                        "Nowicjusze przeceniają swoje umiejętności",
+                        "Wszyscy oceniają się obiektywnie"
+                    ],
+                    "correct": 1,
+                    "explanation": "Efekt ten polega na tym, że osoby o niskich kompetencjach nie dostrzegają swoich błędów i przeceniają swoją wiedzę."
+                }
+            ]
+        },
+        {
+            "type": "summary",
+            "title": "Fundamenty Zbudowane",
+            "recap": [
+                "Przestajesz być 'Mechanikiem' od naprawiania, stajesz się 'Ogrodnikiem' tworzącym warunki.",
+                "Rozumiesz mechanizm 4 Poziomów Kompetencji i Efekt Krugera-Dunninga.",
+                "Wiesz, że bez Refleksji (Cykl Kolba) nie ma trwałej nauki."
+            ],
+            "badge": {
+                "title": "Psychologia Rozwoju",
+                "xp": 300
+            },
+            "nextSteps": "W następnej lekcji przełożymy tę teorię na konkretne narzędzie: Trening On-the-Job."
+        }
+    ]
+}
