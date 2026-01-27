@@ -2790,6 +2790,14 @@
             </div>
         </div>
 
+        <div class="category-nav-item" onclick="showCategoryView('matematyka')">
+            <div class="category-icon">🔢</div>
+            <div class="category-info">
+                <div class="category-name">Matematyka</div>
+                <div class="category-count">10 kart</div>
+            </div>
+        </div>
+
         <div class="category-nav-item" onclick="showCategoryView('hero')">
             <div class="category-icon">🚀</div>
             <div class="category-info">
@@ -2811,7 +2819,7 @@
     <div class="main-content">
         <div class="content-header">
             <h1>Interactive Card Viewer</h1>
-            <p>Wszystkie 48 typów kart • 7 kategorii funkcjonalnych • Milwaukee MX FUEL Training + AI</p>
+            <p>Wszystkie 58 typów kart • 8 kategorii funkcjonalnych • Milwaukee MX FUEL Training + AI + Math</p>
         </div>
 
         <!-- WELCOME VIEW (domyślny widok) -->
@@ -2836,6 +2844,11 @@
                         <div class="welcome-feature-icon">🏃</div>
                         <h3>8 Kart Praktyka</h3>
                         <p>Drag&Drop, Chat, Case Study, Role-Play, Checklist</p>
+                    </div>
+                    <div class="welcome-feature">
+                        <div class="welcome-feature-icon">🔢</div>
+                        <h3>10 Kart Matematyka</h3>
+                        <p>Number Line, Fill Gap, Comparison, Sorting, Matching, Fractions</p>
                     </div>
                 </div>
             </div>
@@ -3516,6 +3529,109 @@
                         <div class="card-item-tags"><span class="tag">Rapid Fire</span><span class="tag">Recall</span></div>
                     </div>
                     <div class="card-item-badge complexity-low">LOW</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CATEGORY VIEW: MATEMATYKA -->
+        <div id="view-matematyka" class="view">
+            <div class="category-view-header">
+                <div class="category-view-icon">🔢</div>
+                <div class="category-view-title">
+                    <h2>Matematyka</h2>
+                    <div class="category-view-description">10 kart - Interactive math exercises, KaTeX rendering, visual learning</div>
+                </div>
+            </div>
+            <div class="cards-list">
+                <div class="card-list-item" onclick="showCardDemo('curiosity')">
+                    <div class="card-item-icon"><i data-lucide="lightbulb" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">Curiosity Card</div>
+                        <div class="card-item-description">Ciekawostki historyczne lub kulturowe związane z matematyką</div>
+                        <div class="card-item-tags"><span class="tag">History</span><span class="tag">Context</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-low">LOW</div>
+                </div>
+                <div class="card-list-item" onclick="showCardDemo('input')">
+                    <div class="card-item-icon"><i data-lucide="edit-3" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">Input Card</div>
+                        <div class="card-item-description">Pole tekstowe do wpisania odpowiedzi liczbowej z walidacją</div>
+                        <div class="card-item-tags"><span class="tag">Text Input</span><span class="tag">Validation</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-medium">MEDIUM</div>
+                </div>
+                <div class="card-list-item" onclick="showCardDemo('fill-gap')">
+                    <div class="card-item-icon"><i data-lucide="square-pen" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">Fill Gap Card</div>
+                        <div class="card-item-description">Uzupełnianie luk w równaniach lub zdaniach matematycznych</div>
+                        <div class="card-item-tags"><span class="tag">Fill Blanks</span><span class="tag">Math</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-medium">MEDIUM</div>
+                </div>
+                <div class="card-list-item" onclick="showCardDemo('number-line')">
+                    <div class="card-item-icon"><i data-lucide="minus" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">Number Line Card</div>
+                        <div class="card-item-description">Oś liczbowa z interaktywnym zaznaczaniem punktów</div>
+                        <div class="card-item-tags"><span class="tag">Visualization</span><span class="tag">Interactive</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-high">HIGH</div>
+                </div>
+                <div class="card-list-item" onclick="showCardDemo('comparison')">
+                    <div class="card-item-icon"><i data-lucide="arrow-left-right" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">Comparison Card</div>
+                        <div class="card-item-description">Porównywanie liczb z wyborem relacji (<, >, =)</div>
+                        <div class="card-item-tags"><span class="tag">Logic</span><span class="tag">Comparison</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-low">LOW</div>
+                </div>
+                <div class="card-list-item" onclick="showCardDemo('number-sort')">
+                    <div class="card-item-icon"><i data-lucide="arrow-up-down" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">Number Sort Card</div>
+                        <div class="card-item-description">Drag & drop sortowanie liczb rosnąco/malejąco</div>
+                        <div class="card-item-tags"><span class="tag">Drag & Drop</span><span class="tag">Sorting</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-medium">MEDIUM</div>
+                </div>
+                <div class="card-list-item" onclick="showCardDemo('true-false')">
+                    <div class="card-item-icon"><i data-lucide="check-x" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">True/False Card</div>
+                        <div class="card-item-description">Ocena prawdziwości stwierdzeń matematycznych z wyjaśnieniami</div>
+                        <div class="card-item-tags"><span class="tag">Assessment</span><span class="tag">Logic</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-low">LOW</div>
+                </div>
+                <div class="card-list-item" onclick="showCardDemo('matching')">
+                    <div class="card-item-icon"><i data-lucide="link-2" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">Matching Card</div>
+                        <div class="card-item-description">Dopasowywanie par (np. liczby przeciwne, ułamki = dziesiętne)</div>
+                        <div class="card-item-tags"><span class="tag">Pairs</span><span class="tag">Interactive</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-medium">MEDIUM</div>
+                </div>
+                <div class="card-list-item" onclick="showCardDemo('practice')">
+                    <div class="card-item-icon"><i data-lucide="clipboard-list" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">Practice Card</div>
+                        <div class="card-item-description">Zadanie z życia z instrukcjami krok po kroku</div>
+                        <div class="card-item-tags"><span class="tag">Real World</span><span class="tag">Step-by-Step</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-high">HIGH</div>
+                </div>
+                <div class="card-list-item" onclick="showCardDemo('fraction-visual')">
+                    <div class="card-item-icon"><i data-lucide="pizza" stroke-width="2"></i></div>
+                    <div class="card-item-content">
+                        <div class="card-item-title">Fraction Visual Card</div>
+                        <div class="card-item-description">Wizualizacja ułamków (koło, prostokąt, zbiór)</div>
+                        <div class="card-item-tags"><span class="tag">Fractions</span><span class="tag">Visual</span></div>
+                    </div>
+                    <div class="card-item-badge complexity-high">HIGH</div>
                 </div>
             </div>
         </div>
@@ -7927,6 +8043,315 @@ To nieprawda że SPIN to za dużo pytań. Neil Rackham przebadał 35,000 rozmów
             </div>
         </div>
 
+        <!-- MATH CARD DEMOS -->
+        <!-- Curiosity Card Demo -->
+        <div id="demo-curiosity" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>💡 Curiosity Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Ciekawostka</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 136, 0, 0.15)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 16px; padding: 40px;">
+                    <div style="text-align: center; font-size: 64px; margin-bottom: 20px;">📜</div>
+                    <h3 style="color: #ffd700; text-align: center; margin-bottom: 20px; font-size: 24px;">Z historii: Skąd mamy cyfry?</h3>
+                    <p style="line-height: 1.8; font-size: 16px; margin-bottom: 20px;">
+                        Dziesiątkowy system pozycyjny, którym się posługujemy, stworzyli <strong style="color: #ff8800;">Hindusi</strong> około 1500 lat temu.
+                    </p>
+                    <ul style="line-height: 2; font-size: 16px; margin-bottom: 20px;">
+                        <li>Hindusi używali słowa <strong style="color: #ffd700;">"sunya"</strong> (znaczącego "pusty" lub "nic") na określenie zera.</li>
+                        <li>W języku arabskim to słowo przetłumaczono na <strong style="color: #ffd700;">"sifr"</strong>.</li>
+                        <li>Gdy system ten dotarł do Europy, słowa "sifr" (czyli cyfra) początkowo używano właśnie dla zera!</li>
+                    </ul>
+                    <div style="background: rgba(0, 212, 255, 0.1); border-left: 4px solid #00d4ff; padding: 20px; border-radius: 8px;">
+                        <strong style="color: #00d4ff;">Ciekawostka:</strong> W niektórych językach (np. francuskim) słowa oznaczające "szyfr" i "cyfrę" brzmią i pisze się prawie tak samo.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Card Demo -->
+        <div id="demo-input" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>📝 Input Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Text Input</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="glass-card" style="padding: 40px;">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 22px;">Sprawdź się: Zamiana</h3>
+                    <p style="font-size: 18px; margin-bottom: 30px; line-height: 1.6;">
+                        Zamień ułamek <span style="color: #ffd700; font-weight: 600;">3/4</span> na postać dziesiętną.
+                    </p>
+                    <div style="margin-bottom: 25px;">
+                        <input type="text" placeholder="np. 0.5" style="width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(0, 212, 255, 0.3); border-radius: 8px; color: white; font-size: 18px;" id="inputMathAnswer">
+                    </div>
+                    <button onclick="alert('Prawidłowa odpowiedź: 0.75')" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #00d4ff, #b000ff); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">
+                        Sprawdź odpowiedź
+                    </button>
+                    <div style="margin-top: 25px; padding: 20px; background: rgba(0, 255, 136, 0.1); border-left: 4px solid #00ff88; border-radius: 8px; display: none;" id="inputExplanation">
+                        <strong style="color: #00ff88;">Wyjaśnienie:</strong><br>
+                        (3 × 25) / (4 × 25) = 75/100 = 0.75
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fill Gap Card Demo -->
+        <div id="demo-fill-gap" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>✏️ Fill Gap Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Fill Blanks</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="glass-card" style="padding: 40px;">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 22px;">Uzupełnij lukę</h3>
+                    <p style="font-size: 18px; line-height: 1.8;">
+                        Wiem, że 0.5 to inaczej 
+                        <input type="number" placeholder="?" style="width: 60px; padding: 8px; background: rgba(255, 215, 0, 0.2); border: 2px solid #ffd700; border-radius: 4px; color: white; text-align: center; margin: 0 5px; font-size: 18px;">
+                        /2.
+                    </p>
+                    <div style="margin-top: 25px; padding: 20px; background: rgba(0, 212, 255, 0.1); border-left: 4px solid #00d4ff; border-radius: 8px;">
+                        <strong style="color: #00d4ff;">Wskazówka:</strong> Połowa to 1/2, czyli 0.5.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Number Line Card Demo -->
+        <div id="demo-number-line" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>📏 Number Line Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Interactive Axis</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="glass-card" style="padding: 40px;">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 22px;">Liczby na osi</h3>
+                    <p style="font-size: 18px; margin-bottom: 30px;">
+                        Zaznacz liczbę <span style="color: #ffd700; font-weight: 600;">-2</span> na osi liczbowej.
+                    </p>
+                    <div style="position: relative; height: 80px; background: rgba(255, 255, 255, 0.03); border-radius: 12px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center;">
+                        <div style="position: relative; width: 90%; height: 4px; background: linear-gradient(90deg, #b000ff, #00d4ff); border-radius: 2px;">
+                            <div style="position: absolute; top: -8px; left: 0; width: 2px; height: 20px; background: white;"></div>
+                            <div style="position: absolute; top: -8px; left: 25%; width: 2px; height: 20px; background: white;"></div>
+                            <div style="position: absolute; top: -8px; left: 50%; width: 2px; height: 20px; background: white;"></div>
+                            <div style="position: absolute; top: -8px; left: 75%; width: 2px; height: 20px; background: white;"></div>
+                            <div style="position: absolute; top: -8px; left: 100%; width: 2px; height: 20px; background: white;"></div>
+                            <div style="position: absolute; top: 25px; left: 0; color: rgba(255,255,255,0.6); font-size: 14px; transform: translateX(-50%);">-5</div>
+                            <div style="position: absolute; top: 25px; left: 50%; color: rgba(255,255,255,0.6); font-size: 14px; transform: translateX(-50%);">0</div>
+                            <div style="position: absolute; top: 25px; left: 100%; color: rgba(255,255,255,0.6); font-size: 14px; transform: translateX(-50%);">5</div>
+                        </div>
+                    </div>
+                    <input type="range" min="-5" max="5" value="0" step="0.5" style="width: 100%; margin-bottom: 20px;" id="numberLineSlider">
+                    <div style="text-align: center; font-size: 24px; color: #ffd700; font-weight: 700;">
+                        Wybrana wartość: <span id="numberLineValue">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Card Demo -->
+        <div id="demo-comparison" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>⚖️ Comparison Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Relacje</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="glass-card" style="padding: 40px;">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 22px;">Porównywanie liczb</h3>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 30px; margin: 40px 0;">
+                        <div style="font-size: 48px; font-weight: 700; color: #ffd700; padding: 20px; background: rgba(255, 215, 0, 0.1); border-radius: 12px;">-5</div>
+                        <div style="display: flex; gap: 15px;">
+                            <button style="padding: 15px 25px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: white; font-size: 24px; cursor: pointer;">&lt;</button>
+                            <button style="padding: 15px 25px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: white; font-size: 24px; cursor: pointer;">&gt;</button>
+                            <button style="padding: 15px 25px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: white; font-size: 24px; cursor: pointer;">=</button>
+                        </div>
+                        <div style="font-size: 48px; font-weight: 700; color: #00d4ff; padding: 20px; background: rgba(0, 212, 255, 0.1); border-radius: 12px;">-2</div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(0, 212, 255, 0.1); border-left: 4px solid #00d4ff; border-radius: 8px;">
+                        <strong style="color: #00d4ff;">Wyjaśnienie:</strong> Wśród liczb ujemnych, większa jest ta, która leży bliżej zera. -2 jest 'cieplejsze' niż -5.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Number Sort Card Demo -->
+        <div id="demo-number-sort" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>🔢 Number Sort Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Drag & Drop</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="glass-card" style="padding: 40px;">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 22px;">Uporządkuj liczby</h3>
+                    <p style="font-size: 16px; margin-bottom: 30px;">Ustaw liczby od najmniejszej do największej (przeciągnij):</p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                        <div style="padding: 20px 30px; background: rgba(255, 136, 0, 0.2); border: 2px solid rgba(255, 136, 0, 0.4); border-radius: 12px; color: white; font-size: 24px; font-weight: 700; cursor: grab;">1.25</div>
+                        <div style="padding: 20px 30px; background: rgba(255, 136, 0, 0.2); border: 2px solid rgba(255, 136, 0, 0.4); border-radius: 12px; color: white; font-size: 24px; font-weight: 700; cursor: grab;">-3.1</div>
+                        <div style="padding: 20px 30px; background: rgba(255, 136, 0, 0.2); border: 2px solid rgba(255, 136, 0, 0.4); border-radius: 12px; color: white; font-size: 24px; font-weight: 700; cursor: grab;">0</div>
+                        <div style="padding: 20px 30px; background: rgba(255, 136, 0, 0.2); border: 2px solid rgba(255, 136, 0, 0.4); border-radius: 12px; color: white; font-size: 24px; font-weight: 700; cursor: grab;">0.12</div>
+                        <div style="padding: 20px 30px; background: rgba(255, 136, 0, 0.2); border: 2px solid rgba(255, 136, 0, 0.4); border-radius: 12px; color: white; font-size: 24px; font-weight: 700; cursor: grab;">-3</div>
+                    </div>
+                    <div style="margin-top: 30px; text-align: center;">
+                        <button style="padding: 15px 40px; background: linear-gradient(135deg, #00d4ff, #b000ff); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Sprawdź kolejność</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- True/False Card Demo -->
+        <div id="demo-true-false" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>✓✗ True/False Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Assessment</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="glass-card" style="padding: 40px;">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 22px;">Prawda czy Fałsz?</h3>
+                    <p style="font-size: 16px; margin-bottom: 30px;">Oceń prawdziwość zdań:</p>
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <div style="padding: 20px; background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 12px;">
+                            <p style="margin-bottom: 15px; line-height: 1.6;">Każda liczba całkowita jest liczbą naturalną.</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button style="padding: 10px 25px; background: rgba(0, 255, 136, 0.2); border: 2px solid rgba(0, 255, 136, 0.4); border-radius: 8px; color: #00ff88; font-weight: 600; cursor: pointer;">Prawda</button>
+                                <button style="padding: 10px 25px; background: rgba(255, 68, 68, 0.2); border: 2px solid rgba(255, 68, 68, 0.4); border-radius: 8px; color: #ff4444; font-weight: 600; cursor: pointer;">Fałsz</button>
+                            </div>
+                            <div style="margin-top: 15px; padding: 15px; background: rgba(255, 68, 68, 0.1); border-left: 4px solid #ff4444; border-radius: 8px; display: none;">
+                                <strong style="color: #ff4444;">Wyjaśnienie:</strong> Nie, np. -5 jest całkowita, ale nie jest naturalna.
+                            </div>
+                        </div>
+                        <div style="padding: 20px; background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 12px;">
+                            <p style="margin-bottom: 15px; line-height: 1.6;">Każda liczba naturalna jest liczbą całkowitą.</p>
+                            <div style="display: flex; gap: 10px;">
+                                <button style="padding: 10px 25px; background: rgba(0, 255, 136, 0.2); border: 2px solid rgba(0, 255, 136, 0.4); border-radius: 8px; color: #00ff88; font-weight: 600; cursor: pointer;">Prawda</button>
+                                <button style="padding: 10px 25px; background: rgba(255, 68, 68, 0.2); border: 2px solid rgba(255, 68, 68, 0.4); border-radius: 8px; color: #ff4444; font-weight: 600; cursor: pointer;">Fałsz</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matching Card Demo -->
+        <div id="demo-matching" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>🔗 Matching Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Pairs</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="glass-card" style="padding: 40px;">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 22px;">Liczby przeciwne</h3>
+                    <p style="font-size: 16px; margin-bottom: 30px;">Połącz w pary liczby przeciwne:</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="padding: 15px 25px; background: rgba(0, 212, 255, 0.2); border: 2px solid rgba(0, 212, 255, 0.4); border-radius: 8px; text-align: center; cursor: pointer; font-size: 20px;">5</div>
+                            <div style="padding: 15px 25px; background: rgba(0, 212, 255, 0.2); border: 2px solid rgba(0, 212, 255, 0.4); border-radius: 8px; text-align: center; cursor: pointer; font-size: 20px;">-2.5</div>
+                            <div style="padding: 15px 25px; background: rgba(0, 212, 255, 0.2); border: 2px solid rgba(0, 212, 255, 0.4); border-radius: 8px; text-align: center; cursor: pointer; font-size: 20px;">1/4</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="padding: 15px 25px; background: rgba(176, 0, 255, 0.2); border: 2px solid rgba(176, 0, 255, 0.4); border-radius: 8px; text-align: center; cursor: pointer; font-size: 20px;">-5</div>
+                            <div style="padding: 15px 25px; background: rgba(176, 0, 255, 0.2); border: 2px solid rgba(176, 0, 255, 0.4); border-radius: 8px; text-align: center; cursor: pointer; font-size: 20px;">2.5</div>
+                            <div style="padding: 15px 25px; background: rgba(176, 0, 255, 0.2); border: 2px solid rgba(176, 0, 255, 0.4); border-radius: 8px; text-align: center; cursor: pointer; font-size: 20px;">-1/4</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 30px; text-align: center; color: #ffd700; font-size: 18px; font-weight: 600;">
+                        Dopasowano: <span>0/3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Card Demo -->
+        <div id="demo-practice" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>📚 Practice Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Real World</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="glass-card" style="padding: 40px;">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 22px;">Zadanie z życia: Pizza</h3>
+                    <div style="padding: 25px; background: rgba(255, 136, 0, 0.1); border: 2px solid rgba(255, 136, 0, 0.3); border-radius: 12px; margin-bottom: 30px;">
+                        <p style="line-height: 1.8; font-size: 16px;">
+                            Pięcioosobowa rodzina (rodzice i troje dzieci) zamówiła dwie takie same pizze.
+                        </p>
+                        <ul style="margin: 15px 0; padding-left: 25px; line-height: 2;">
+                            <li><strong>Rodzice</strong> podzielili swoją pizzę na <strong>6 kawałków</strong> i zjedli 5 z nich.</li>
+                            <li><strong>Dzieci</strong> podzieliły swoją na <strong>12 kawałków</strong>.</li>
+                        </ul>
+                        <p style="line-height: 1.8; font-size: 16px; margin-top: 15px; color: #ffd700; font-weight: 600;">
+                            Kto zjadł więcej pizzy – dzieci czy rodzice?
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 10px; color: rgba(255, 255, 255, 0.8);">Jaką część pizzy zjedli rodzice?</label>
+                        <input type="text" placeholder="np. 5/6" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: white; font-size: 16px;">
+                    </div>
+                    <div style="margin-bottom: 30px;">
+                        <label style="display: block; margin-bottom: 10px; color: rgba(255, 255, 255, 0.8);">Jeśli dzieci zjadły tyle samo, ile kawałków zjadły?</label>
+                        <input type="text" placeholder="Liczba kawałków" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: white; font-size: 16px;">
+                    </div>
+                    <button style="width: 100%; padding: 15px; background: linear-gradient(135deg, #00d4ff, #b000ff); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Pokaż rozwiązanie</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fraction Visual Card Demo -->
+        <div id="demo-fraction-visual" class="view card-demo-view">
+            <div class="demo-header">
+                <button class="btn-back" onclick="showCategoryView('matematyka')"><i data-lucide="arrow-left"></i> Powrót</button>
+                <div class="demo-title">
+                    <h2>🍕 Fraction Visual Card</h2>
+                    <div class="demo-subtitle">Kategoria: Matematyka • Type: Visualization</div>
+                </div>
+            </div>
+            <div class="demo-container">
+                <div class="glass-card" style="padding: 40px;">
+                    <h3 style="color: #00d4ff; margin-bottom: 25px; font-size: 22px;">Wizualizacja ułamków</h3>
+                    <p style="font-size: 16px; margin-bottom: 30px;">
+                        Ułamek: <span style="color: #ffd700; font-size: 32px; font-weight: 700;">3/4</span>
+                    </p>
+                    <div style="display: flex; justify-content: center; align-items: center; margin: 40px 0;">
+                        <div style="position: relative; width: 200px; height: 200px;">
+                            <!-- Pie chart simulation -->
+                            <svg width="200" height="200" style="transform: rotate(-90deg);">
+                                <circle cx="100" cy="100" r="80" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 255, 255, 0.3)" stroke-width="2"/>
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="#ffd700" stroke-width="40" stroke-dasharray="376.8 125.6" stroke-dashoffset="0"/>
+                            </svg>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: 700; color: #ffd700;">75%</div>
+                        </div>
+                    </div>
+                    <div style="padding: 20px; background: rgba(0, 212, 255, 0.1); border-left: 4px solid #00d4ff; border-radius: 8px;">
+                        <strong style="color: #00d4ff;">Wyjaśnienie:</strong> 3/4 = 0.75 = 75% - trzy czwarte koła jest zaznaczone.
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -9726,6 +10151,14 @@ Klient: Tak, moglibyśmy brać więcej zleceń. Teraz czasem odmawiam, bo boję 
             
             // Inicjalizacja drag&drop dla rankingu
             initRankingDragDrop();
+            
+            // Number Line Slider
+            const slider = document.getElementById('numberLineSlider');
+            if (slider) {
+                slider.addEventListener('input', function() {
+                    document.getElementById('numberLineValue').textContent = this.value;
+                });
+            }
         });
     </script>
 </body>

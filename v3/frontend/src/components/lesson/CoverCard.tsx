@@ -46,6 +46,11 @@ export default function CoverCard({
             return 'https://images.unsplash.com/photo-1649908787172-7945c00fafa2?auto=format&fit=crop&w=1600&q=80'
         }
 
+        // New Math Module Background
+        if ((t.includes('liczby') || (subtitle && subtitle.toLowerCase().includes('liczby'))) || (subtitle && subtitle.toLowerCase().includes('moduł 1'))) {
+            return '/lessons/math/modul1_cover.jpg'
+        }
+
         // 3. Category Fallbacks
         if (t.includes('sprzedaż') || c.includes('sprzedaż') || t.includes('wizyta')) {
             // Dark Meeting Handshake

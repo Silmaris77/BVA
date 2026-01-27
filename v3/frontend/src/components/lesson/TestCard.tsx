@@ -1,5 +1,6 @@
 'use client'
 
+import MathRenderer from './math/MathRenderer'
 import { useState, useEffect, useRef } from 'react'
 import { CheckCircle2, XCircle, Trophy, ArrowRight, RotateCcw, Timer, AlertCircle } from 'lucide-react'
 import confetti from 'canvas-confetti'
@@ -156,10 +157,11 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                 backdropFilter: 'blur(20px)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '24px',
-                padding: '40px',
+                padding: '80px 40px 40px',
                 textAlign: 'center',
                 boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
-                position: 'relative'
+                position: 'relative',
+                borderLeft: '4px solid #b000ff'
             }}>
                 {/* Type Badge - Top Left Corner */}
                 <div style={{
@@ -259,7 +261,7 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
     const letters = ['A', 'B', 'C', 'D']
 
     if (mode === 'test') {
-        const progress = ((currentIndex) / questions.length) * 100
+        const progress = ((currentIndex + (isAnswered ? 1 : 0)) / questions.length) * 100
 
         return (
             <div style={{
@@ -277,9 +279,10 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                     background: 'rgba(20, 20, 35, 0.4)',
                     padding: '12px 20px',
                     borderRadius: '16px',
-                    border: '1px solid rgba(255, 255, 255, 0.05)'
+                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                    gap: '20px'
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
                         <div style={{
                             fontSize: '12px',
                             fontWeight: 700,
@@ -287,12 +290,13 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                             textTransform: 'uppercase',
                             background: 'rgba(176, 0, 255, 0.1)',
                             padding: '4px 8px',
-                            borderRadius: '6px'
+                            borderRadius: '6px',
+                            whiteSpace: 'nowrap'
                         }}>
                             PYTANIE {currentIndex + 1} / {questions.length}
                         </div>
                         <div style={{
-                            width: '100px',
+                            flex: 1,
                             height: '6px',
                             background: 'rgba(255, 255, 255, 0.1)',
                             borderRadius: '3px',
@@ -313,7 +317,8 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                         gap: '8px',
                         color: timeLeft < 30 ? '#ef4444' : 'white',
                         fontWeight: 700,
-                        fontVariantNumeric: 'tabular-nums'
+                        fontVariantNumeric: 'tabular-nums',
+                        whiteSpace: 'nowrap'
                     }}>
                         <Timer size={18} />
                         {formatTime(timeLeft)}
@@ -326,7 +331,7 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                     backdropFilter: 'blur(20px)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '20px',
-                    padding: '40px',
+                    padding: '80px 40px 40px',
                     boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
                     position: 'relative'
                 }}>
@@ -357,52 +362,60 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                         color: '#fff',
                         lineHeight: '1.4'
                     }}>
-                        {currentQuestion.question}
+                        <MathRenderer content={currentQuestion.question} inline={true} />
                     </h3>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        {currentQuestion.options.map((option, index) => (
-                            <button
-                                key={index}
-                                onClick={() => handleAnswer(index)}
-                                disabled={isAnswered}
-                                style={{
-                                    padding: '16px 20px',
-                                    background: isAnswered && index === selectedOption
-                                        ? (index === currentQuestion.correctAnswer ? 'rgba(0, 255, 136, 0.15)' : 'rgba(239, 68, 68, 0.15)')
-                                        : 'rgba(255, 255, 255, 0.05)',
-                                    border: isAnswered && index === selectedOption
-                                        ? (index === currentQuestion.correctAnswer ? '2px solid #00ff88' : '2px solid #ef4444')
-                                        : '2px solid rgba(255, 255, 255, 0.1)',
-                                    borderRadius: '12px',
-                                    cursor: isAnswered ? 'default' : 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '12px',
-                                    fontSize: '16px',
-                                    color: isAnswered && index !== selectedOption ? 'rgba(255,255,255,0.4)' : 'white',
-                                    opacity: isAnswered && index !== selectedOption ? 0.6 : 1,
-                                    width: '100%',
-                                    textAlign: 'left',
-                                    transition: 'all 0.2s'
-                                }}
-                            >
-                                <div style={{
-                                    width: '32px', height: '32px', borderRadius: '8px',
-                                    background: 'rgba(255, 255, 255, 0.1)',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    fontWeight: 700, fontSize: '14px', flexShrink: 0
-                                }}>
-                                    {letters[index]}
-                                </div>
-                                <span style={{ flex: 1 }}>{option}</span>
-                                {isAnswered && index === selectedOption && (
-                                    index === currentQuestion.correctAnswer
-                                        ? <CheckCircle2 size={20} color="#00ff88" />
-                                        : <XCircle size={20} color="#ef4444" />
-                                )}
-                            </button>
-                        ))}
+                        {currentQuestion.options ? (
+                            currentQuestion.options.map((option, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleAnswer(index)}
+                                    disabled={isAnswered}
+                                    style={{
+                                        padding: '16px 20px',
+                                        background: isAnswered && index === selectedOption
+                                            ? (index === currentQuestion.correctAnswer ? 'rgba(0, 255, 136, 0.15)' : 'rgba(239, 68, 68, 0.15)')
+                                            : 'rgba(255, 255, 255, 0.05)',
+                                        border: isAnswered && index === selectedOption
+                                            ? (index === currentQuestion.correctAnswer ? '2px solid #00ff88' : '2px solid #ef4444')
+                                            : '2px solid rgba(255, 255, 255, 0.1)',
+                                        borderRadius: '12px',
+                                        cursor: isAnswered ? 'default' : 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '12px',
+                                        fontSize: '16px',
+                                        color: isAnswered && index !== selectedOption ? 'rgba(255,255,255,0.4)' : 'white',
+                                        opacity: isAnswered && index !== selectedOption ? 0.6 : 1,
+                                        width: '100%',
+                                        textAlign: 'left',
+                                        transition: 'all 0.2s'
+                                    }}
+                                >
+                                    <div style={{
+                                        width: '32px', height: '32px', borderRadius: '8px',
+                                        background: 'rgba(255, 255, 255, 0.1)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        fontWeight: 700, fontSize: '14px', flexShrink: 0
+                                    }}>
+                                        {letters[index]}
+                                    </div>
+                                    <span style={{ flex: 1 }}>
+                                        <MathRenderer content={option} inline={true} />
+                                    </span>
+                                    {isAnswered && index === selectedOption && (
+                                        index === currentQuestion.correctAnswer
+                                            ? <CheckCircle2 size={20} color="#00ff88" />
+                                            : <XCircle size={20} color="#ef4444" />
+                                    )}
+                                </button>
+                            ))
+                        ) : (
+                            <div style={{ color: 'white', textAlign: 'center', padding: '20px', background: 'rgba(239, 68, 68, 0.2)', borderRadius: '12px' }}>
+                                Nieobsługiwany typ pytania w teście.
+                            </div>
+                        )}
                     </div>
 
                     {isAnswered && (

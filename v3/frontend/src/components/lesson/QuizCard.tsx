@@ -247,7 +247,8 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                 borderRadius: '20px',
                 padding: '40px',
                 boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
-                position: 'relative'
+                position: 'relative',
+                borderLeft: '4px solid #b000ff'
             }}>
                 {/* Type Badge - Top Left Corner */}
                 <div style={{
@@ -273,6 +274,7 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                     fontSize: '22px',
                     fontWeight: 600,
                     marginBottom: '30px',
+                    marginTop: '20px', // Added top margin
                     color: '#fff',
                     lineHeight: '1.4'
                 }}>
@@ -342,7 +344,7 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                                 borderRadius: '12px'
                             }}>
                                 <strong style={{ color: '#00d4ff', display: 'block', marginBottom: '5px' }}>Wyjaśnienie:</strong>
-                                {currentQuestion.explanation}
+                                <MathRenderer content={currentQuestion.explanation} />
                             </div>
                         )}
 

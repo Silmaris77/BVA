@@ -26,8 +26,28 @@ export async function GET(
             return NextResponse.json({ error: 'Path not found' }, { status: 404 });
         }
 
-        // Get lesson IDs from the path
-        const lessonIds = path.lesson_sequence || [];
+        // Parse lesson sequence to get IDs (handle both flat strings and module objects)
+        const sequence = path.lesson_sequence || [];
+        let lessonIds: string[] = [];
+        const moduleMap = new Map<string, any>(); // Map lesson_id -> module info from JSON
+
+        if (Array.isArray(sequence)) {
+            sequence.forEach((item: any) => {
+                if (typeof item === 'string') {
+                    lessonIds.push(item);
+                } else if (item.type === 'module' && Array.isArray(item.lessons)) {
+                    item.lessons.forEach((lId: string) => {
+                        lessonIds.push(lId);
+                        // Store module info to attach to lesson later
+                        moduleMap.set(lId, {
+                            id: item.id,
+                            title: item.title,
+                            display_order: 0 // Default or from JSON if available
+                        });
+                    });
+                }
+            });
+        }
 
         // Fetch all lessons in the path
         const { data: lessons, error: lessonsError } = await supabase
@@ -56,9 +76,19 @@ export async function GET(
         }
 
         // Sort lessons by the order in lesson_sequence
-        const sortedLessons = lessonIds.map((id: string) =>
-            lessons?.find(l => l.lesson_id === id)
-        ).filter(Boolean);
+        const sortedLessons = lessonIds.map((id: string) => {
+            const lesson = lessons?.find(l => l.lesson_id === id);
+            if (!lesson) return null;
+
+            // If lesson doesn't have a module from DB relation, but we have it in JSON structure, attach it
+            if (!lesson.modules && moduleMap.has(id)) {
+                return {
+                    ...lesson,
+                    modules: moduleMap.get(id)
+                };
+            }
+            return lesson;
+        }).filter(Boolean);
 
         // Get user progress if authenticated
         const { data: { user } } = await supabase.auth.getUser();

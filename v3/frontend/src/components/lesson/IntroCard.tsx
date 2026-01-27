@@ -15,7 +15,15 @@ export default function IntroCard({ title, subtitle, description, icon = '🎯' 
         <div style={{
             maxWidth: '800px',
             width: '100%',
-            textAlign: 'center',
+            position: 'relative',
+            background: 'rgba(20, 20, 35, 0.6)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(176, 0, 255, 0.2)', // Purple
+            borderRadius: '20px',
+            padding: '40px',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+            borderLeft: '4px solid #b000ff',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -23,6 +31,9 @@ export default function IntroCard({ title, subtitle, description, icon = '🎯' 
         }}>
             {/* Type Badge */}
             <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
@@ -43,6 +54,7 @@ export default function IntroCard({ title, subtitle, description, icon = '🎯' 
             <div style={{
                 fontSize: '80px',
                 marginBottom: '8px',
+                marginTop: '16px',
                 animation: 'float 3s ease-in-out infinite'
             }}>
                 {icon}
@@ -60,7 +72,8 @@ export default function IntroCard({ title, subtitle, description, icon = '🎯' 
                 fontSize: '36px',
                 fontWeight: 700,
                 lineHeight: '1.2',
-                marginBottom: '8px'
+                marginBottom: '8px',
+                textAlign: 'center'
             }}>
                 {title}
             </h1>
@@ -70,7 +83,8 @@ export default function IntroCard({ title, subtitle, description, icon = '🎯' 
                 <p style={{
                     fontSize: '18px',
                     color: '#00d4ff',
-                    fontWeight: 600
+                    fontWeight: 600,
+                    textAlign: 'center'
                 }}>
                     {subtitle}
                 </p>
@@ -81,7 +95,8 @@ export default function IntroCard({ title, subtitle, description, icon = '🎯' 
                 fontSize: '16px',
                 color: 'rgba(255, 255, 255, 0.7)',
                 lineHeight: '1.7',
-                maxWidth: '600px'
+                maxWidth: '600px',
+                textAlign: 'center'
             }}>
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {description}

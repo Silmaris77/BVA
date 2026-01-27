@@ -107,8 +107,10 @@ export async function GET() {
                         module_id: mathModuleId
                     };
 
-                    // Add to beginning or end
-                    lessons?.unshift(mathLesson);
+                    // Add to beginning or end ONLY if not already present
+                    if (!lessons?.some(l => l.lesson_id === mathLesson.lesson_id)) {
+                        lessons?.unshift(mathLesson);
+                    }
                 }
             } catch (err) {
                 console.error('Failed to inject local lesson:', err);

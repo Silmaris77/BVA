@@ -54,30 +54,49 @@ export default function InputCard({ question, correctAnswer, placeholder, unit, 
             // 1. Remove common conversation fillers
             let processed = raw.replace(/^(wynik|to|jest|odpowiedź|równa się)\s+/g, '');
 
-            // 2. Map Polish math terms to symbols/numbers
-            const replacements: [RegExp, string][] = [
-                [/minus /g, '-'],
-                [/przecinek/g, '.'],
-                [/kropka/g, '.'],
-                // Common fractions
-                [/jedna druga/g, '1/2'],
-                [/pół/g, '0.5'], // Context dependent, but 0.5 is safe for inputs usually
-                [/jedna trzecia/g, '1/3'],
-                [/dwie trzecie/g, '2/3'],
-                [/jedna czwarta/g, '1/4'],
-                [/trzy czwarte/g, '3/4'],
-                [/jedna piąta/g, '1/5'],
-                [/dwie piąte/g, '2/5'],
-                [/trzy piąte/g, '3/5'],
-                [/cztery piąte/g, '4/5'],
-                // Handle "cała/całe" for mixed numbers if needed: "jedna cała i jedna druga" -> "1 1/2"
-                // STT might give "1 cała i 1/2" -> map "cała i" to space
-                [/(\d+)\s+(cała|całe|całych)\s+i\s+/g, '$1 '],
-            ];
+            // 2. Improved Polish math mapping
+            // 2. Improved Polish math mapping
 
-            replacements.forEach(([pattern, replacement]) => {
-                processed = processed.replace(pattern, replacement);
-            });
+            const fractionMap: Record<string, string> = {
+                'pół': '0.5', 'połowa': '0.5', 'ćwierć': '1/4',
+                'drugich': '/2', 'druga': '/2', 'drugie': '/2',
+                'trzecich': '/3', 'trzecia': '/3', 'trzecie': '/3',
+                'czwartych': '/4', 'czwarta': '/4', 'czwarte': '/4',
+                'piątych': '/5', 'piąta': '/5', 'piąte': '/5',
+                'szóstych': '/6', 'szósta': '/6', 'szóste': '/6',
+                'siódmych': '/7', 'siódma': '/7', 'siódme': '/7',
+                'ósmych': '/8', 'ósma': '/8', 'ósme': '/8',
+                'dziewiątych': '/9', 'dziewiąta': '/9', 'dziewiąte': '/9',
+                'dziesiątych': '/10', 'dziesiąta': '/10', 'dziesiąte': '/10',
+                'dwunastych': '/12', 'dwunasta': '/12', 'dwunaste': '/12',
+                'setnych': '/100', 'setna': '/100', 'setne': '/100',
+            };
+
+            const wordToDigit: Record<string, string> = {
+                'zero': '0', 'jeden': '1', 'jedna': '1', 'jedno': '1',
+                'dwa': '2', 'dwie': '2', 'trzy': '3', 'cztery': '4',
+                'pięć': '5', 'sześć': '6', 'siedem': '7', 'osiem': '8', 'dziewięć': '9', 'dziesięć': '10'
+            };
+
+            // Replace number words first
+            for (const [word, digit] of Object.entries(wordToDigit)) {
+                processed = processed.replace(new RegExp(`\\b${word}\\b`, 'gi'), digit);
+            }
+
+            // Replace denominators
+            for (const [word, replacement] of Object.entries(fractionMap)) {
+                processed = processed.replace(new RegExp(`\\b${word}\\b`, 'gi'), replacement);
+            }
+
+            // Basic operators
+            processed = processed
+                .replace(/\s+plus\s+/g, '+')
+                .replace(/\s+minus\s+/g, '-')
+                .replace(/\s+razy\s+/g, '*')
+                .replace(/\s+podzielić\s+(przez\s+)?/g, '/')
+                .replace(/\s+przez\s+/g, '/')
+                .replace(/przecinek/g, '.')
+                .replace(/kropka/g, '.');
 
             // 3. Cleanup whitespace
             processed = processed.replace(/\s*\/\s*/g, '/').trim();
@@ -135,16 +154,43 @@ export default function InputCard({ question, correctAnswer, placeholder, unit, 
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto glass-card p-8 rounded-2xl border border-white/10 relative overflow-hidden">
+        <div style={{
+            maxWidth: '900px',
+            width: '100%',
+            position: 'relative',
+            background: 'rgba(20, 20, 35, 0.6)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(6, 182, 212, 0.2)', // Cyan
+            borderRadius: '20px',
+            padding: '40px',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+            borderLeft: '4px solid #06b6d4',
+            margin: '0 auto'
+        }}>
             {/* Badge */}
-            <div className="absolute top-4 left-4 flex items-center gap-2">
-                <span className="bg-purple-500/10 text-purple-300 px-2 py-0.5 rounded text-[10px] font-bold uppercase border border-purple-500/20 tracking-wider">
-                    Zadanie
-                </span>
+            <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                color: '#06b6d4',
+                fontWeight: 600,
+                padding: '6px 12px',
+                background: 'rgba(6, 182, 212, 0.1)',
+                border: '1px solid rgba(6, 182, 212, 0.2)',
+                borderRadius: '20px'
+            }}>
+                ZADANIE
             </div>
 
             {/* Question */}
-            <div className="mt-6 mb-8 text-xl md:text-2xl font-medium text-white text-center">
+            <div className="mt-8 mb-8 text-xl md:text-2xl font-medium text-white text-center">
                 <MathRenderer content={question} />
             </div>
 

@@ -1,5 +1,6 @@
 'use client'
 
+import MathRenderer from './math/MathRenderer'
 import { Trophy, CheckCircle2, Sparkles } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import confetti from 'canvas-confetti'
@@ -78,25 +79,56 @@ export default function SummaryCard({
 
     return (
         <div style={{
-            maxWidth: '700px',
+            maxWidth: '800px',
             width: '100%',
+            position: 'relative',
+            background: 'rgba(20, 20, 35, 0.6)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 215, 0, 0.2)', // Gold
+            borderRadius: '20px',
+            padding: '24px',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+            borderLeft: '4px solid #ffd700',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '32px',
+            gap: '16px',
             textAlign: 'center'
         }}>
+            {/* Badge */}
+            <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                color: '#ffd700',
+                fontWeight: 600,
+                padding: '6px 12px',
+                background: 'rgba(255, 215, 0, 0.1)',
+                border: '1px solid rgba(255, 215, 0, 0.2)',
+                borderRadius: '20px'
+            }}>
+                PODSUMOWANIE
+            </div>
+
             {/* Success Icon */}
             <div style={{
-                width: '120px',
-                height: '120px',
+                width: '80px',
+                height: '80px',
                 borderRadius: '50%',
                 background: 'linear-gradient(135deg, #00ff88, #00d4ff)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 boxShadow: '0 0 40px rgba(0, 255, 136, 0.4)',
-                animation: 'pulse 2s ease-in-out infinite'
+                animation: 'pulse 2s ease-in-out infinite',
+                marginTop: '10px'
             }}>
                 <style>{`
           @keyframes pulse {
@@ -118,12 +150,12 @@ export default function SummaryCard({
             }
           }
         `}</style>
-                <Trophy size={60} style={{ color: '#000' }} />
+                <Trophy size={40} style={{ color: '#000' }} />
             </div>
 
             {/* Title */}
             <h1 style={{
-                fontSize: '36px',
+                fontSize: '28px',
                 fontWeight: 700,
                 background: 'linear-gradient(135deg, #00ff88, #00d4ff)',
                 WebkitBackgroundClip: 'text',
@@ -140,17 +172,17 @@ export default function SummaryCard({
                     backdropFilter: 'blur(20px)',
                     border: '2px solid #ffd700',
                     borderRadius: '20px',
-                    padding: '24px 40px',
+                    padding: '16px 32px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '4px',
                     boxShadow: '0 0 30px rgba(255, 215, 0, 0.3)',
                     animation: 'fadeInUp 0.6s ease 0.4s both'
                 }}>
                     <Sparkles size={24} style={{ color: '#ffd700' }} />
                     <div style={{
-                        fontSize: '48px',
+                        fontSize: '40px',
                         fontWeight: 800,
                         color: '#ffd700',
                         lineHeight: '1'
@@ -171,26 +203,27 @@ export default function SummaryCard({
 
             {/* Recap */}
             <div style={{
-                background: 'rgba(20, 20, 35, 0.6)',
+                background: 'rgba(255, 255, 255, 0.03)',
                 backdropFilter: 'blur(20px)',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '20px',
-                padding: '32px',
+                padding: '20px',
                 width: '100%',
                 animation: 'fadeInUp 0.6s ease 0.6s both'
             }}>
                 <h3 style={{
-                    fontSize: '20px',
+                    fontSize: '18px',
                     fontWeight: 600,
-                    marginBottom: '20px',
-                    color: '#00d4ff'
+                    marginBottom: '12px',
+                    color: '#00d4ff',
+                    textAlign: 'left'
                 }}>
                     Czego się nauczyłeś:
                 </h3>
                 <div style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '16px',
+                    gap: '10px',
                     textAlign: 'left'
                 }}>
                     {recap?.map((item, index) => (
@@ -216,7 +249,7 @@ export default function SummaryCard({
                                 lineHeight: '1.6',
                                 color: 'rgba(255, 255, 255, 0.9)'
                             }}>
-                                {item}
+                                <MathRenderer content={item} inline={true} />
                             </span>
                         </div>
                     ))}
@@ -233,7 +266,9 @@ export default function SummaryCard({
                     fontSize: '15px',
                     lineHeight: '1.6',
                     color: 'rgba(255, 255, 255, 0.8)',
-                    animation: 'fadeInUp 0.6s ease 1.2s both'
+                    animation: 'fadeInUp 0.6s ease 1.2s both',
+                    width: '100%',
+                    textAlign: 'left'
                 }}>
                     💡 <strong>Dalsze kroki:</strong> {nextSteps}
                 </div>

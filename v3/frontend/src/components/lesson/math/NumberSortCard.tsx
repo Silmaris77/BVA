@@ -76,12 +76,41 @@ export default function NumberSortCard({
     }
 
     return (
-        <div className="w-full max-w-2xl mx-auto glass-card p-8 rounded-2xl border border-white/10 relative overflow-hidden flex flex-col min-h-[400px]">
+        <div style={{
+            maxWidth: '900px',
+            width: '100%',
+            position: 'relative',
+            background: 'rgba(20, 20, 35, 0.6)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(59, 130, 246, 0.2)', // Blue
+            borderRadius: '20px',
+            padding: '40px',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+            borderLeft: '4px solid #3b82f6',
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '400px'
+        }}>
             {/* Header Badge */}
-            <div className="absolute top-4 left-4">
-                <span className="bg-blue-500/10 text-blue-300 px-2 py-0.5 rounded text-[10px] font-bold uppercase border border-blue-500/20 tracking-wider">
-                    Sortowanie
-                </span>
+            <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                color: '#3b82f6',
+                fontWeight: 600,
+                padding: '6px 12px',
+                background: 'rgba(59, 130, 246, 0.1)',
+                border: '1px solid rgba(59, 130, 246, 0.2)',
+                borderRadius: '20px'
+            }}>
+                SORTOWANIE
             </div>
 
             <div className="mt-6 mb-8 text-center">

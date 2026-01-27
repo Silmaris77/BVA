@@ -13,10 +13,14 @@ interface NumberLineCardProps {
     tolerance?: number;       // how close to accept? default 0.1
     initialValue?: number;    // default: (min+max)/2
     explanation?: string;
+    showTooltip?: boolean; // Default true
+    labelFrequency?: number; // 1 = show all integers, 2 = show every 2nd integer, etc. (Or based on step index)
 }
 
 export default function NumberLineCard({
-    question, min, max, step = 1, correctValue, tolerance = 0.25, initialValue, explanation
+    question, min, max, step = 1, correctValue, tolerance = 0.25, initialValue, explanation,
+    showTooltip = true,
+    labelFrequency = 1
 }: NumberLineCardProps) {
     const [value, setValue] = useState(initialValue ?? (min + max) / 2);
     const [isDragging, setIsDragging] = useState(false);
@@ -133,12 +137,38 @@ export default function NumberLineCard({
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto glass-card p-8 rounded-2xl border border-white/10 relative">
+        <div style={{
+            maxWidth: '900px',
+            width: '100%',
+            position: 'relative',
+            background: 'rgba(20, 20, 35, 0.6)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(6, 182, 212, 0.2)', // Cyan
+            borderRadius: '20px',
+            padding: '40px',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)',
+            borderLeft: '4px solid #06b6d4'
+        }}>
             {/* Badge */}
-            <div className="absolute top-4 left-4 flex items-center gap-2">
-                <span className="bg-cyan-500/10 text-cyan-300 px-2 py-0.5 rounded text-[10px] font-bold uppercase border border-cyan-500/20 tracking-wider">
-                    Oś Liczbowa
-                </span>
+            <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: '20px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                color: '#06b6d4',
+                fontWeight: 600,
+                padding: '6px 12px',
+                background: 'rgba(6, 182, 212, 0.1)',
+                border: '1px solid rgba(6, 182, 212, 0.2)',
+                borderRadius: '20px'
+            }}>
+                OŚ LICZBOWA
             </div>
 
             {/* Question */}
@@ -159,12 +189,13 @@ export default function NumberLineCard({
                 {ticks.map((tickVal) => {
                     const pct = valueToPercent(tickVal);
                     // Determine if major or minor tick (integers are major)
-                    const isMajor = Number.isInteger(tickVal);
+                    // If labelFrequency > 1, skip some labels
+                    const isMajor = Number.isInteger(tickVal) && (Math.abs(tickVal) % labelFrequency === 0);
 
                     return (
                         <div
                             key={tickVal.toFixed(2)}
-                            className="absolute top-1/2 -translate-y-1/2 flex flex-col items-center gap-3 transition-all"
+                            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-center gap-3 transition-all"
                             style={{ left: `${pct}%` }}
                         >
                             {/* Tick mark */}
@@ -184,7 +215,7 @@ export default function NumberLineCard({
                 {/* Let's show it only if user is correct or maybe after fail? For now, keep it hidden until correct. */}
                 {isSubmitted && isCorrect && (
                     <div
-                        className="absolute top-1/2 -translate-y-1/2 z-10 flex flex-col items-center animate-in fade-in zoom-in"
+                        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 flex flex-col items-center animate-in fade-in zoom-in"
                         style={{ left: `${valueToPercent(correctValue)}%` }}
                     >
                         <div className="w-4 h-4 rounded-full bg-green-500 shadow-[0_0_15px_rgba(0,255,100,0.5)] border-2 border-white" />
@@ -198,11 +229,13 @@ export default function NumberLineCard({
                     onMouseDown={handleMouseDown}
                     onTouchStart={handleTouchStart}
                 >
-                    {/* Tooltip Value Bubble */}
-                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[var(--accent-blue)] text-black font-bold text-xs px-2 py-1 rounded opacity-100 shadow-lg pointer-events-none whitespace-nowrap">
-                        {value.toFixed(displayPrecision)}
-                        <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-[var(--accent-blue)] rotate-45" />
-                    </div>
+                    {/* Tooltip Value Bubble - conditionally shown */}
+                    {showTooltip && (
+                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[var(--accent-blue)] text-black font-bold text-xs px-2 py-1 rounded opacity-100 shadow-lg pointer-events-none whitespace-nowrap">
+                            {value.toFixed(displayPrecision)}
+                            <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-[var(--accent-blue)] rotate-45" />
+                        </div>
+                    )}
 
                     <div className={`w-6 h-6 rounded-full border-2 shadow-lg transition-transform hover:scale-110 ${isDragging ? 'bg-white border-[var(--accent-blue)] scale-110'
                         : isSubmitted

@@ -25,7 +25,7 @@ interface Lesson {
 }
 
 export default function LessonPlayerPage() {
-    const { user, profile } = useAuth()
+    const { user, profile, refreshProfile } = useAuth()
     const params = useParams()
     const router = useRouter()
     const lessonId = params.id as string
@@ -124,6 +124,7 @@ export default function LessonPlayerPage() {
                         const coverCard: Card = {
                             type: 'cover',
                             title: data.lesson.title,
+                            subtitle: data.lesson.subtitle,
                             description: data.lesson.description,
                             category: data.lesson.category || 'Moduł Edukacyjny',
                             durationMinutes: data.lesson.duration_minutes,
@@ -194,6 +195,7 @@ export default function LessonPlayerPage() {
 
             if (data.success) {
                 setToast(`Ukończono lekcję! +${lesson.xp_reward} XP`)
+                await refreshProfile()
             }
         } catch (error) {
             console.error('Error completing lesson:', error)
@@ -223,6 +225,7 @@ export default function LessonPlayerPage() {
     }
 
     const handleNext = async () => {
+        if (navBlocked) return
         if (currentCardIndex < cards.length - 1) {
             setDirection('right')
             const newIndex = currentCardIndex + 1
@@ -260,7 +263,7 @@ export default function LessonPlayerPage() {
                     break
                 case 'ArrowRight':
                     e.preventDefault()
-                    handleNext()
+                    if (!navBlocked) handleNext()
                     break
                 case 'Escape':
                     e.preventDefault()
@@ -271,7 +274,7 @@ export default function LessonPlayerPage() {
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [currentCardIndex, cards.length])
+    }, [currentCardIndex, cards.length, navBlocked])
 
     if (!user) return null
 
@@ -318,6 +321,22 @@ export default function LessonPlayerPage() {
     }
 
     const currentCard = cards[currentCardIndex]
+
+    // Safety check if card is missing (e.g. index out of bounds or empty cards)
+    if (!currentCard) {
+        return (
+            <div style={{
+                height: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white'
+            }}>
+                Wczytywanie karty...
+            </div>
+        )
+    }
+
     const progress = ((currentCardIndex + 1) / cards.length) * 100
     const isTestCard = currentCard.type === 'test'
 
@@ -585,54 +604,31 @@ export default function LessonPlayerPage() {
                     </button>
 
                     {/* Next Button */}
-                    {navBlocked && isTestCard ? (
-                        <button
-                            onClick={handleResetLesson}
-                            className="nav-btn nav-btn-next"
-                            style={{
-                                padding: '0 24px',
-                                height: '56px',
-                                borderRadius: '28px',
-                                background: '#ef4444',
-                                border: 'none',
-                                color: 'white',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                boxShadow: '0 4px 20px rgba(239, 68, 68, 0.3)'
-                            }}
-                        >
-                            Powtórz Lekcję
-                        </button>
-                    ) : (
-                        <button
-                            onClick={handleNext}
-                            disabled={navBlocked}
-                            className="nav-btn nav-btn-next"
-                            style={{
-                                width: currentCardIndex === cards.length - 1 ? 'auto' : '56px',
-                                padding: currentCardIndex === cards.length - 1 ? '0 32px' : '0',
-                                height: '56px',
-                                borderRadius: '50px', // Capsule or Circle
-                                background: navBlocked ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg, #00d4ff, #b000ff)',
-                                border: 'none',
-                                color: navBlocked ? 'rgba(255,255,255,0.3)' : 'white',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: navBlocked ? 'not-allowed' : 'pointer',
-                                boxShadow: navBlocked ? 'none' : '0 4px 20px rgba(0, 212, 255, 0.3)'
-                            }}
-                        >
-                            {currentCardIndex === cards.length - 1 ? (
-                                <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 600, fontSize: '16px' }}>Zakończ</span>
-                            ) : (
-                                <ChevronRight size={28} />
-                            )}
-                        </button>
-                    )}
+                    <button
+                        onClick={handleNext}
+                        disabled={navBlocked}
+                        className="nav-btn nav-btn-next"
+                        style={{
+                            width: currentCardIndex === cards.length - 1 ? 'auto' : '56px',
+                            padding: currentCardIndex === cards.length - 1 ? '0 32px' : '0',
+                            height: '56px',
+                            borderRadius: '50px', // Capsule or Circle
+                            background: navBlocked ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg, #00d4ff, #b000ff)',
+                            border: 'none',
+                            color: navBlocked ? 'rgba(255,255,255,0.3)' : 'white',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: navBlocked ? 'not-allowed' : 'pointer',
+                            boxShadow: navBlocked ? 'none' : '0 4px 20px rgba(0, 212, 255, 0.3)'
+                        }}
+                    >
+                        {currentCardIndex === cards.length - 1 ? (
+                            <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 600, fontSize: '16px' }}>Zakończ</span>
+                        ) : (
+                            <ChevronRight size={28} />
+                        )}
+                    </button>
 
                     {/* Card Content Area - With Swipe Handlers */}
                     <div
@@ -691,9 +687,10 @@ export default function LessonPlayerPage() {
                                 onNext={handleNext}
                                 onTestResult={async (score, passed) => {
                                     if (passed) {
-                                        // Passed
+                                        setNavBlocked(false)
+                                        // Optional: Save score or status via API if needed
                                     } else {
-                                        // Failed
+                                        setNavBlocked(true)
                                     }
                                 }}
                             />

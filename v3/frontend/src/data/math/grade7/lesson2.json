@@ -1,0 +1,201 @@
+{
+    "lesson_id": "math-g7-l2",
+    "title": "Rozwinięcia dziesiętne",
+    "subtitle": "Moduł 1: Liczby i Działania",
+    "category": "Matematyka - 7 klasa",
+    "xp_reward": 100,
+    "difficulty": "beginner",
+    "duration_minutes": 20,
+    "content": {
+        "cards": [
+            {
+                "type": "intro",
+                "title": "Czy dzielenie zawsze się kończy?",
+                "description": "Wiesz już, że każdy ułamek zwykły to tak naprawdę dzielenie. Ale co się stanie, gdy reszta z dzielenia nigdy nie będzie zerem? W tej lekcji odkryjesz tajemnice rozwinięć dziesiętnych!"
+            },
+            {
+                "type": "concept",
+                "title": "Ułamek jako dzielenie",
+                "content": "Pamiętasz? Kreska ułamkowa zastępuje znak dzielenia.\n\n$$\\frac{3}{4} = 3 : 4 = 0,75$$\n\nW tym przypadku dzielenie się skończyło (reszta wyszła 0). Otrzymaliśmy **rozwinięcie dziesiętne skończone**."
+            },
+            {
+                "type": "matching",
+                "title": "Dopasuj rozwinięcia skończone",
+                "question": "Połącz ułamki zwykłe z ich postaciami dziesiętnymi.",
+                "pairs": [
+                    {
+                        "id": "p1",
+                        "left": "1/2",
+                        "right": "0,5"
+                    },
+                    {
+                        "id": "p2",
+                        "left": "3/4",
+                        "right": "0,75"
+                    },
+                    {
+                        "id": "p3",
+                        "left": "1/5",
+                        "right": "0,2"
+                    },
+                    {
+                        "id": "p4",
+                        "left": "1/8",
+                        "right": "0,125"
+                    }
+                ],
+                "explanations": {
+                    "p1": "1 podzielić przez 2 to pół, czyli 0,5",
+                    "p2": "Trzy czwarte to 0,75",
+                    "p3": "1 podzielić przez 5 to 0,2",
+                    "p4": "1 podzielić przez 8 to 0,125"
+                }
+            },
+            {
+                "type": "concept",
+                "title": "Gdy dzielenie nie ma końca...",
+                "content": "Spróbujmy zamienić $\\frac{1}{3}$ na ułamek dziesiętny.\n\n$$1 : 3 = 0,33333...$$\n\nDzielenie nigdy się nie skończy! Trójki będą się powtarzać w nieskończoność.\nTaką liczbę nazywamy **ułamkiem okresowym**.\n\nZapisujemy to w skrócie, biorąc powtarzającą się część w nawias:\n$$0,333... = 0,(3)$$\nTo co w nawiasie, nazywamy **okresem**."
+            },
+            {
+                "type": "fill-gap",
+                "title": "Zapisz okres",
+                "parts": [
+                    "Ułamek $\\frac{4}{9} = 0,444...$ zapiszemy jako $0,($",
+                    {
+                        "id": "g1",
+                        "placeholder": "?",
+                        "correctExact": 4
+                    },
+                    ")$",
+                    "\n\nUłamek $\\frac{5}{33} = 0,151515...$ zapiszemy jako $0,($",
+                    {
+                        "id": "g2",
+                        "placeholder": "?",
+                        "correctExact": 15
+                    },
+                    ")$"
+                ],
+                "explanation": "W nawias wpisujemy cyfry, które się powtarzają. Dla 4/9 jest to 4, a dla 5/33 jest to 15."
+            },
+            {
+                "type": "curiosity",
+                "title": "Sekret mianowników",
+                "content": "Czy wiesz, że możesz przewidzieć, czy ułamek będzie miał rozwinięcie skończone, nie wykonując dzielenia?\n\n**ZASADA:** Jeśli mianownik ułamka nieskracalnego rozłożysz na czynniki pierwsze i otrzymasz **tylko dwójki i piątki**, to rozwinięcie będzie **skończone**.\n\nJeśli pojawi się jakakolwiek inna liczba (np. 3, 7, 11) - rozwinięcie będzie nieskończone okresowe!\n\nPrzykłady:\n* $\\frac{1}{20}$ (20 = 2·2·5) -> Skończone\n* $\\frac{1}{6}$ (6 = 2·3) -> Nieskończone (bo jest 3)"
+            },
+            {
+                "type": "true-false",
+                "title": "Skończone czy nieskończone?",
+                "question": "Oceń prawdziwość zdań, korzystając z 'Sekretu mianowników'.",
+                "statements": [
+                    {
+                        "id": "s1",
+                        "text": "Ułamek 1/7 ma rozwinięcie skończone.",
+                        "isTrue": false,
+                        "explanation": "Mianownik to 7 (liczba inna niż 2 i 5), więc rozwinięcie jest nieskończone."
+                    },
+                    {
+                        "id": "s2",
+                        "text": "Ułamek 1/25 ma rozwinięcie skończone.",
+                        "isTrue": true,
+                        "explanation": "25 to 5·5. Są same piątki, więc rozwinięcie jest skończone (0,04)."
+                    },
+                    {
+                        "id": "s3",
+                        "text": "Ułamek 1/30 ma rozwinięcie skończone.",
+                        "isTrue": false,
+                        "explanation": "30 = 2·3·5. Pojawia się trójka, więc rozwinięcie jest nieskończone."
+                    }
+                ]
+            },
+            {
+                "type": "quiz",
+                "title": "Sprawdź, czy umiesz",
+                "questions": [
+                    {
+                        "question": "Ułamek $0,015$ jest równy:",
+                        "options": [
+                            "$\\frac{3}{20}$",
+                            "$\\frac{3}{200}$",
+                            "$\\frac{1}{15}$",
+                            "$\\frac{3}{250}$"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "$0,015 = \\frac{15}{1000}$. Skracamy przez 5: $\\frac{15:5}{1000:5} = \\frac{3}{200}$."
+                    },
+                    {
+                        "question": "Która liczba jest większa: $0,(3)$ czy $0,33$?",
+                        "options": [
+                            "$0,(3)$",
+                            "$0,33$",
+                            "Są równe"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "$0,(3) = 0,3333...$ co jest większe od $0,3300$."
+                    },
+                    {
+                        "question": "Jaka jest czwarta cyfra po przecinku liczby $1,2(34)$?",
+                        "options": [
+                            "2",
+                            "3",
+                            "4",
+                            "Nie ma czwartej cyfry"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Rozpiszmy: $1,2343434...$. Kolejne cyfry po przecinku: 2, 3, 4, 3, 4... Czwarta cyfra to 3."
+                    }
+                ]
+            },
+            {
+                "type": "test",
+                "title": "Test końcowy",
+                "questions": [
+                    {
+                        "id": "q1",
+                        "type": "choice",
+                        "question": "Zamień $\\frac{1}{8}$ na ułamek dziesiętny.",
+                        "options": [
+                            "0,25",
+                            "0,125",
+                            "0,15",
+                            "0,8"
+                        ],
+                        "correctAnswer": 1
+                    },
+                    {
+                        "id": "q2",
+                        "type": "choice",
+                        "question": "Który zapis jest poprawny dla $2,727272...$?",
+                        "options": [
+                            "$2,7(2)$",
+                            "$2,(72)$",
+                            "$2,72(7)$",
+                            "$2,(7)$"
+                        ],
+                        "correctAnswer": 1
+                    },
+                    {
+                        "id": "q3",
+                        "type": "choice",
+                        "question": "Które uporządkowanie liczb jest poprawne?",
+                        "options": [
+                            "$0,3 < 0,33 < 0,(3)$",
+                            "$0,(3) < 0,33 < 0,3$",
+                            "$0,33 < 0,(3) < 0,3$",
+                            "$0,3 < 0,(3) < 0,33$"
+                        ],
+                        "correctAnswer": 0
+                    }
+                ]
+            },
+            {
+                "type": "summary",
+                "title": "Podsumowanie",
+                "recap": [
+                    "Ułamek zwykły to dzielenie (licznik przez mianownik).",
+                    "Rozwinięcie dziesiętne może być **skończone** (np. 0,5) lub **nieskończone okresowe** (np. 0,333...).",
+                    "Okres to powtarzająca się cyfra lub grupa cyfr, którą zapisujemy w nawiasie: $0,(3)$."
+                ]
+            }
+        ]
+    }
+}

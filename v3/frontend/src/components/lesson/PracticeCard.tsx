@@ -1,7 +1,6 @@
 'use client'
 
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import MathRenderer from './math/MathRenderer'
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, ChevronUp, Mic, Loader2 } from 'lucide-react'
 
@@ -98,8 +97,86 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
 
         recognition.onresult = (event: any) => {
             const transcript = event.results[0][0].transcript
-            // Append
-            finalValue = startValue ? `${startValue} ${transcript}` : transcript
+
+            // Normalize the transcript (Polish Math -> Symbols)
+            let normalized = transcript.toLowerCase().trim()
+
+            // 1. Remove fillers
+            normalized = normalized.replace(/^(wynik|to|jest|odpowiedź|równa się)\s+/g, '')
+
+            // 2. Map specific fraction words to denominators (mostly generic approach)
+            // "5 szóstych" -> "5/6"
+            const fractionMap: Record<string, string> = {
+                'pół': '0.5',
+                'połowa': '0.5',
+                'ćwierć': '1/4',
+                'drugich': '/2', 'druga': '/2', 'drugie': '/2',
+                'trzecich': '/3', 'trzecia': '/3', 'trzecie': '/3',
+                'czwartych': '/4', 'czwarta': '/4', 'czwarte': '/4',
+                'piątych': '/5', 'piąta': '/5', 'piąte': '/5',
+                'szóstych': '/6', 'szósta': '/6', 'szóste': '/6',
+                'siódmych': '/7', 'siódma': '/7', 'siódme': '/7',
+                'ósmych': '/8', 'ósma': '/8', 'ósme': '/8',
+                'dziewiątych': '/9', 'dziewiąta': '/9', 'dziewiąte': '/9',
+                'dziesiątych': '/10', 'dziesiąta': '/10', 'dziesiąte': '/10',
+                'dwunastych': '/12', 'dwunasta': '/12', 'dwunaste': '/12',
+                'setnych': '/100', 'setna': '/100', 'setne': '/100',
+            }
+
+            // Word-to-digit map for small numbers often spoken as words before fractions
+            // e.g. "pięć szóstych" (STT might output "pięć" instead of "5")
+            const wordToDigit: Record<string, string> = {
+                'zero': '0', 'jeden': '1', 'jedna': '1', 'jedno': '1',
+                'dwa': '2', 'dwie': '2',
+                'trzy': '3',
+                'cztery': '4',
+                'pięć': '5',
+                'sześć': '6',
+                'siedem': '7',
+                'osiem': '8',
+                'dziewięć': '9',
+                'dziesięć': '10'
+            }
+
+            // Replace number words followed by fractions FIRST
+            // e.g. "pięć szóstych" -> "5 szóstych"
+            for (const [word, digit] of Object.entries(wordToDigit)) {
+                const regex = new RegExp(`\\b${word}\\b`, 'gi')
+                normalized = normalized.replace(regex, digit)
+            }
+
+            // Replace denominators
+            for (const [word, replacement] of Object.entries(fractionMap)) {
+                // Look for word boundary or typical endings
+                // e.g. "szóstych"
+                const regex = new RegExp(`\\b${word}\\b`, 'gi')
+                normalized = normalized.replace(regex, replacement)
+            }
+
+            // 3. Basic operators
+            normalized = normalized
+                .replace(/\s+plus\s+/g, '+')
+                .replace(/\s+minus\s+/g, '-')
+                .replace(/\s+razy\s+/g, '*')
+                .replace(/\s+podzielić\s+(przez\s+)?/g, '/')
+                .replace(/\s+przez\s+/g, '/') // "5 przez 6" -> "5/6"
+                .replace(/przecinek/g, '.')
+                .replace(/kropka/g, '.')
+
+            // 4. Cleanup spaces around slashes
+            // "5 / 6" -> "5/6"
+            // "5 /6" -> "5/6"
+            normalized = normalized.replace(/\s*\/\s*/g, '/')
+
+            // 5. Append or set
+            // If the field was empty, just set. If not, append.
+            // Check if normalized is just a math expression, if so, maybe replace?
+            // For now, let's just append carefully.
+
+            // If the user said ONLY a fraction "5/6", and the input is empty, set it.
+            // If input has text, append with space.
+
+            finalValue = startValue ? `${startValue} ${normalized}` : normalized
             handleInputChange(index, finalValue)
         }
 
@@ -107,14 +184,12 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
             setListeningIndex(null)
             recognitionRef.current = null
 
-            // Only process if something was added
-            if (finalValue !== startValue) {
-                processWithAI(index, finalValue)
-            }
+            // logic to optional auto-punctuate if it's long text text explanation? 
+            // For math inputs simpler is better.
+            // Let's NOT call processWithAI for short math-like inputs.
         }
 
         recognition.onerror = (event: any) => {
-            // Ignore 'no-speech' error as it just means timeout or silence
             if (event.error !== 'no-speech') {
                 console.error('Speech recognition error', event.error)
             }
@@ -187,7 +262,7 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
                     }}>
                         <h4 style={{ color: '#ff8800', marginBottom: '10px', fontSize: '1rem', fontWeight: 600 }}>Scenariusz:</h4>
                         <div style={{ fontSize: '15px', lineHeight: '1.7', color: 'rgba(255, 255, 255, 0.9)' }}>
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{scenario}</ReactMarkdown>
+                            <MathRenderer content={scenario} />
                         </div>
                     </div>
                 )}
@@ -214,9 +289,7 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
                     color: 'rgba(255, 255, 255, 0.9)',
                     marginBottom: keyPoints || actionSteps || inputs ? '24px' : '0'
                 }}>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {content}
-                    </ReactMarkdown>
+                    <MathRenderer content={content} />
                 </div>
 
                 {/* Interactive Inputs (if present) */}
@@ -375,7 +448,7 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
                                             lineHeight: '1.7',
                                             color: 'rgba(255, 255, 255, 0.9)'
                                         }}>
-                                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{answer}</ReactMarkdown>
+                                            <MathRenderer content={answer} />
                                         </li>
                                     ))}
                                 </ol>
@@ -387,7 +460,7 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
                                         borderRadius: '8px',
                                         borderLeft: '4px solid #00ff88'
                                     }}>
-                                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{sampleAnswers.tip}</ReactMarkdown>
+                                        <MathRenderer content={sampleAnswers.tip} />
                                     </div>
                                 )}
                             </div>

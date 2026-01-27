@@ -191,6 +191,20 @@ export async function POST(
                     description: `Completed lesson: ${lessonId}`
                 });
 
+            // Update User Profile XP Cache
+            const { data: profile } = await supabase
+                .from('user_profiles')
+                .select('xp')
+                .eq('id', user.id)
+                .single();
+
+            const currentXp = profile?.xp || 0;
+
+            await supabase
+                .from('user_profiles')
+                .update({ xp: currentXp + xpAmount })
+                .eq('id', user.id);
+
             return NextResponse.json({ success: true, xpEarned: xpAmount, progress });
         }
 

@@ -4,6 +4,10 @@ import InputCard from './math/InputCard'
 import NumberLineCard from './math/NumberLineCard'
 import FractionVisualCard from './math/FractionVisualCard'
 import NumberSortCard from './math/NumberSortCard'
+import MatchingCard from './math/MatchingCard'
+import TrueFalseCard from './math/TrueFalseCard'
+import ComparisonCard from './math/ComparisonCard'
+import FillGapCard from './math/FillGapCard'
 
 import QuestionCard from './QuestionCard'
 import SummaryCard from './SummaryCard'
@@ -28,8 +32,9 @@ import CycleCard from './CycleCard'
 import CycleCardVariantB from './CycleCardVariantB'
 import DunningKrugerCard from './DunningKrugerCard'
 import ReadinessCard from './ReadinessCard'
+import CuriosityCard from './CuriosityCard'
 
-export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness'
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'matching' | 'true-false' | 'comparison' | 'fill-gap' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness' | 'curiosity'
 
 export interface LessonCardData {
     type: CardType
@@ -118,6 +123,12 @@ export interface LessonCardData {
     unit?: string
     hint?: string
 
+    // Math New Cards
+    pairs?: { id: string, left: string, right: string }[]
+    statements?: { id: string, text: string, isTrue: boolean, explanation?: string }[]
+    expression?: { left: string, right: string, relationship: '>' | '<' | '=' }
+    parts?: (string | { id: string, correctRange?: { min: number, max: number }, correctExact?: number, placeholder?: string })[]
+
     [key: string]: any
 }
 
@@ -131,35 +142,6 @@ interface CardRendererProps {
 
 export default function CardRenderer({ card, onAnswer, onTestResult, onReset, onNext }: CardRendererProps) {
     switch (card.type) {
-        // ... previous cases ...
-        case 'cover':
-            return <CoverCard
-                title={card.title || 'Lesson Title'}
-                subtitle={card.subtitle}
-                description={card.description}
-                category={card.category}
-                durationMinutes={card.durationMinutes}
-                xpReward={card.xpReward}
-                image={card.image}
-                onStart={onNext}
-            />
-        // ... previous cases ...
-        case 'test':
-            return <TestCard
-                title={card.title || 'Końcowy Test'}
-                questions={card.questions || []}
-                onTestResult={onTestResult || (() => { })}
-                onReset={onReset}
-            />
-        case 'interactive':
-            // Interactive contains a quiz
-            return <QuestionCard
-                question={card.quiz?.question || card.title || 'Pytanie'}
-                options={card.quiz?.options || []}
-                correctAnswer={card.quiz?.correct || 0}
-                explanation={card.quiz?.explanation}
-                onAnswer={onAnswer}
-            />
         case 'intro':
             return <IntroCard
                 title={card.title || 'Wstęp'}
@@ -200,7 +182,43 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 inputs={card.inputs}
                 sampleAnswers={card.sampleAnswers}
             />
-
+        case 'warning':
+            return <WarningCard
+                title={card.title || 'Uwaga'}
+                content={card.content || card.description || ''}
+                warnings={card.warnings || []}
+                example={card.example}
+            />
+        case 'hero':
+            return <HeroCard
+                title={card.title || 'Hero'}
+                subtitle={card.subtitle}
+                tagline={card.tagline}
+                content={card.content}
+                icon={card.icon}
+                theme={card.theme}
+                sections={card.sections}
+                callout={card.callout}
+            />
+        case 'content':
+            return <ConceptCard
+                title={card.title || 'Content'}
+                content={card.content}
+                sections={card.sections}
+                callout={card.callout}
+                remember={card.remember}
+                keyPoints={card.keyPoints}
+                visual={card.visual}
+            />
+        case 'interactive':
+            // Interactive contains a quiz
+            return <QuestionCard
+                question={card.quiz?.question || card.title || 'Pytanie'}
+                options={card.quiz?.options || []}
+                correctAnswer={card.quiz?.correct || 0}
+                explanation={card.quiz?.explanation}
+                onAnswer={onAnswer}
+            />
         case 'timeline':
             return <TimelineCard
                 title={card.title || 'Timeline'}
@@ -218,13 +236,6 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
             return <FlashcardsCard
                 title={card.title || 'Flashcards'}
                 cards={card.cards || []}
-            />
-        case 'warning':
-            return <WarningCard
-                title={card.title || 'Uwaga'}
-                content={card.content || card.description || ''}
-                warnings={card.warnings || []}
-                example={card.example}
             />
         case 'quiz':
             return <QuizCard
@@ -319,7 +330,21 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 title={card.title || 'Końcowy Test'}
                 questions={card.questions || []}
                 onTestResult={onTestResult || (() => { })}
+                onReset={onReset}
             />
+        case 'cover':
+            return <CoverCard
+                title={card.title || 'Lesson Title'}
+                subtitle={card.subtitle}
+                description={card.description}
+                category={card.category}
+                durationMinutes={card.durationMinutes}
+                xpReward={card.xpReward}
+                image={card.image}
+                onStart={onNext}
+            />
+        
+        {/* Math Cards */}
         case 'input':
             return <InputCard
                 question={card.question || 'Oblicz...'}
@@ -339,6 +364,8 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 tolerance={card.tolerance}
                 initialValue={card.initialValue}
                 explanation={card.explanation}
+                showTooltip={card.showTooltip}
+                labelFrequency={card.labelFrequency}
             />
         case 'fraction-visual':
             return <FractionVisualCard
@@ -356,15 +383,30 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 numbers={card.numbers || [1, 2, 3]}
                 order={card.order || 'asc'}
             />
-        case 'cover':
-            return <CoverCard
-                title={card.title || 'Lesson Title'}
-                subtitle={card.subtitle}
-                description={card.description}
-                category={card.category}
-                durationMinutes={card.durationMinutes}
-                xpReward={card.xpReward}
-                image={card.image}
+        case 'matching':
+            return <MatchingCard
+                title={card.title || 'Dopasuj pary'}
+                question={card.question}
+                pairs={card.pairs || []}
+                explanations={card.explanations}
+            />
+        case 'true-false':
+            return <TrueFalseCard
+                title={card.title || 'Prawda czy Fałsz'}
+                question={card.question}
+                statements={card.statements || []}
+            />
+        case 'comparison':
+            return <ComparisonCard
+                title={card.title || 'Porównaj'}
+                expression={card.expression || { left: '0', right: '0', relationship: '=' }}
+                explanation={card.explanation}
+            />
+        case 'fill-gap':
+            return <FillGapCard
+                title={card.title || 'Uzupełnij luki'}
+                parts={card.parts || []}
+                explanation={card.explanation}
             />
         case 'learning-path':
             return <LearningPathCard
@@ -397,6 +439,11 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 title={card.title}
                 description={card.description}
                 imageSrc={card.image}
+            />
+        case 'curiosity':
+            return <CuriosityCard
+                title={card.title || 'Ciekawostka'}
+                content={card.content || ''}
             />
         default:
             return (

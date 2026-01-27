@@ -1,301 +1,305 @@
 {
     "lesson_id": "math-g7-l1",
-    "title": "Liczby i Działania",
-    "subtitle": "Matematyka Klasa 7",
-    "xp_reward": 50,
+    "title": "Liczby",
+    "category": "Matematyka - 7 klasa",
+    "subtitle": "Moduł 1: Liczby i Działania",
+    "xp_reward": 100,
     "content": {
         "cards": [
             {
                 "type": "intro",
-                "title": "Liczby wokół nas",
-                "description": "Matematyka zaczyna się od liczb. W tej lekcji przypomnimy sobie podstawowe zbiory liczbowe oraz zasady wykonywania działań."
+                "title": "Witaj w świecie liczb!",
+                "description": "W tej lekcji uporządkujemy Twoją wiedzę o liczbach. Przypomnisz sobie, czym są liczby naturalne, całkowite i wymierne, oraz poznasz ich historię."
             },
             {
                 "type": "concept",
-                "title": "Zbiory liczbowe",
-                "content": "### Podział liczb\n\n*   **Liczby naturalne ($N$)**: $0, 1, 2, 3, ...$\n*   **Liczby całkowite ($C$)**: $... -2, -1, 0, 1, 2, ...$ (czyli naturalne i ich przeciwności).\n*   **Liczby wymierne ($W$)**: Te, które można zapisać jako ułamek $\\frac{p}{q}$."
+                "title": "Rodzaje liczb",
+                "content": "Do tej pory używałeś różnych liczb. Czas je uporządkować w **zbiory**:\n\n*   **Liczby naturalne ($\\mathbb{N}$)**: $0, 1, 2, 3, 4, ...$. Są to liczby, którymi liczymy przedmioty.\n*   **Liczby całkowite ($\\mathbb{Z}$)**: $... -3, -2, -1, 0, 1, 2, 3, ...$. Są to liczby naturalne oraz ich **przeciwności**.\n*   **Liczby wymierne ($\\mathbb{Q}$)**: Wszystkie liczby, które można zapisać w postaci ułamka $\\frac{p}{q}$ (gdzie $p$ i $q$ są całkowite i $q \\neq 0$)."
+            },
+            {
+                "type": "curiosity",
+                "title": "Z historii: Skąd mamy cyfry?",
+                "content": "Dziesiątkowy system pozycyjny, którym się posługujemy, stworzyli **Hindusi** około 1500 lat temu.\n\n*   Hindusi używali słowa **\\\"sunya\\\"** (znaczącego \\\"pusty\\\" lub \\\"nic\\\") na określenie zera.\n*   W języku arabskim to słowo przetłumaczono na **\\\"sifr\\\"**.\n*   Gdy system ten dotarł do Europy, słowa \\\"sifr\\\" (czyli cyfra) początkowo używano właśnie dla zera!\n\nCiekawostka: W niektórych językach (np. francuskim) słowa oznaczające \\\"szyfr\\\" i \\\"cyfrę\\\" brzmią i pisze się prawie tak samo."
+            },
+            {
+                "type": "concept",
+                "title": "Ułamki zwykłe i dziesiętne",
+                "content": "Każdą liczbę wymierną możemy zapisać na różne sposoby. Zobacz przykłady:\n\n| Ułamek zwykły | Metoda zamiany | Ułamek dziesiętny |\n| :--- | :--- | :--- |\n| $\\frac{17}{20}$ | $\\frac{17 \\cdot 5}{20 \\cdot 5} = \\frac{85}{100}$ | $0.85$ |\n| $\\frac{1}{4}$ | $\\frac{1 \\cdot 25}{4 \\cdot 25} = \\frac{25}{100}$ | $0.25$ |\n| $5\\frac{2}{7}$ | (dzielenie $2:7$) | $5.285...$ |\n| $14\\frac{9}{20}$ | $14\\frac{9 \\cdot 5}{20 \\cdot 5} = 14\\frac{45}{100}$ | $14.45$ |"
+            },
+            {
+                "type": "input",
+                "title": "Sprawdź się: Zamiana",
+                "question": "Zamień ułamek $\\frac{3}{4}$ na postać dziesiętną.",
+                "correctAnswer": "0.75",
+                "placeholder": "np. 0.5",
+                "explanation": "$\\frac{3 \\cdot 25}{4 \\cdot 25} = \\frac{75}{100} = 0.75$"
+            },
+            {
+                "type": "fill-gap",
+                "title": "Uzupełnij lukę",
+                "parts": [
+                    "Wiem, że $0.5$ to inaczej ",
+                    {
+                        "id": "gap1",
+                        "correctExact": 1,
+                        "placeholder": "?"
+                    },
+                    "/2."
+                ],
+                "explanation": "Połowa to $1/2$, czyli $0.5$."
             },
             {
                 "type": "number-line",
-                "title": "Oś liczbowa: Liczby całkowite",
-                "question": "Zaznacz liczbę $-2$ na osi.",
+                "title": "Liczby na osi",
+                "question": "Zaznacz liczbę $-2$ na osi liczbowej.",
                 "min": -5,
                 "max": 5,
                 "step": 1,
                 "correctValue": -2,
                 "tolerance": 0.2,
-                "explanation": "Liczba $-2$ znajduje się dwie jednostki na lewo od zera."
-            },
-            {
-                "type": "concept",
-                "title": "Kolejność wykonywania działań",
-                "content": "Aby poprawnie obliczać wartości wyrażeń, musimy przestrzegać ściśle określonej kolejności:\n\n1.  **Nawiasy**\n2.  **Potęgowanie i pierwiastkowanie**\n3.  **Mnożenie i dzielenie** (wykonywane od lewej do prawej)\n4.  **Dodawanie i odejmowanie** (od lewej do prawej)"
-            },
-            {
-                "type": "input",
-                "title": "Kolejność działań: Mnożenie",
-                "question": "Oblicz: $20 - 3 \\cdot 4$",
-                "correctAnswer": "8",
-                "explanation": "Najpierw wykonujemy mnożenie: $3 \\cdot 4 = 12$. Następnie odejmowanie: $20 - 12 = 8$."
-            },
-            {
-                "type": "input",
-                "title": "Kolejność działań: Nawiasy i Potęgi",
-                "question": "Oblicz: $(2 + 6) : 2^2$",
-                "correctAnswer": "2",
-                "explanation": "1. Nawias: $2+6=8$. \n2. Potęgowanie: $2^2=4$. \n3. Dzielenie: $8:4=2$."
+                "explanation": "Liczby ujemne leżą na lewo od zera.",
+                "showTooltip": false,
+                "labelFrequency": 5
             },
             {
                 "type": "number-line",
-                "title": "Oś liczbowa: Ułamki",
-                "question": "Zaznacz liczbę $0.75$ na osi.",
+                "title": "Ułamki na osi",
+                "question": "Zaznacz liczbę $1\\frac{1}{4}$ (czyli $1.25$).",
                 "min": 0,
-                "max": 1,
+                "max": 3,
                 "step": 0.25,
-                "correctValue": 0.75,
-                "tolerance": 0.05,
-                "explanation": "$0.75$ to trzy czwarte ($3/4$), czyli trzecia kreska podziału."
+                "correctValue": 1.25,
+                "tolerance": 0.1,
+                "explanation": "$1.25$ to jeden i jedna czwarta kratki.",
+                "showTooltip": false,
+                "labelFrequency": 1
             },
             {
-                "type": "concept",
-                "title": "Liczby dodatnie i ujemne",
-                "content": "### Działania na liczbach ze znakiem\n\n**Dodawanie:**\n- Liczby tego samego znaku: dodajemy wartości i zachowujemy znak\n  - $(-3) + (-5) = -8$\n- Liczby różnych znaków: odejmujemy mniejszą od większej i znak większej\n  - $7 + (-3) = 4$\n\n**Odejmowanie:**\n- Zamieniamy na dodawanie liczby przeciwnej\n  - $5 - (-2) = 5 + 2 = 7$"
+                "type": "comparison",
+                "title": "Porównywanie liczb",
+                "expression": {
+                    "left": "$-5$",
+                    "right": "$-2$",
+                    "relationship": "<"
+                },
+                "explanation": "Wśród liczb ujemnych, większa jest ta, która leży bliżej zera. $-2$ jest 'cieplejsze' niż $-5$."
             },
             {
                 "type": "number-sort",
-                "title": "Ćwiczenie: Porządkowanie",
-                "question": "Uporządkuj liczby od najmniejszej do największej",
+                "title": "Uporządkuj liczby",
+                "question": "Ustaw liczby od najmniejszej do największej:",
                 "numbers": [
-                    -5,
-                    2,
-                    -1,
+                    -3.1,
+                    -3,
                     0,
-                    3
+                    0.12,
+                    1.25
                 ],
                 "order": "asc"
             },
             {
-                "type": "input",
-                "title": "Działania na liczbach ujemnych",
-                "question": "Oblicz: $-8 + 5$",
-                "correctAnswer": "-3",
-                "explanation": "Różne znaki: odejmujemy mniejszą od większej: $8 - 5 = 3$. Znak liczby o większej wartości bezwzględnej: $-3$"
-            },
-            {
-                "type": "number-line",
-                "title": "Odległość na osi liczbowej",
-                "question": "Zaznacz liczbę $3$ na osi.",
-                "min": -5,
-                "max": 5,
-                "step": 1,
-                "correctValue": 3,
-                "tolerance": 0.2,
-                "explanation": "Liczba $3$ znajduje się trzy jednostki na prawo od zera."
-            },
-            {
-                "type": "concept",
-                "title": "Rozwinięcia dziesiętne",
-                "content": "### Zapis dziesiętny liczb\n\nLiczby wymierne można zapisać w postaci **ułamka dziesiętnego**:\n\n- **Skończone:** $\\frac{1}{4} = 0.25$, $\\frac{3}{8} = 0.375$\n- **Nieskończone okresowe:** $\\frac{1}{3} = 0.333...$ (oznaczamy: $0.(3)$)\n- **Nieskończone okresowe:** $\\frac{2}{11} = 0.181818...$ (oznaczamy: $0.(18)$)"
-            },
-            {
-                "type": "fraction-visual",
-                "title": "Wizualizacja",
-                "question": "Zaznacz 3/4 koła",
-                "numerator": 3,
-                "denominator": 4,
-                "visualType": "pie"
-            },
-            {
-                "type": "input",
-                "title": "Ułamki dziesiętne",
-                "question": "Zamień na ułamek zwykły: $0.5$",
-                "correctAnswer": "1/2",
-                "explanation": "$0.5 = \\frac{5}{10} = \\frac{1}{2}$ (po skróceniu przez 5)"
-            },
-            {
-                "type": "concept",
-                "title": "Zaokrąglanie liczb",
-                "content": "### Zasady zaokrąglania\n\n**Do liczb całkowitych:**\n- Jeśli część dziesiętna $< 0.5$ → zaokrąglamy w dół\n- Jeśli część dziesiętna $\\geq 0.5$ → zaokrąglamy w górę\n\n**Przykłady:**\n- $3.4 \\approx 3$\n- $3.7 \\approx 4$\n- $3.5 \\approx 4$"
-            },
-            {
-                "type": "input",
-                "title": "Zaokrąglanie",
-                "question": "Zaokrąglij do liczby całkowitej: $7.8$",
-                "correctAnswer": "8",
-                "explanation": "$7.8$ ma część dziesiętną $0.8 > 0.5$, więc zaokrąglamy w górę: $8$"
-            },
-            {
-                "type": "quiz",
-                "title": "Sprawdź się: Zbiory liczbowe",
-                "questions": [
+                "type": "true-false",
+                "title": "Prawda czy Fałsz?",
+                "question": "Oceń prawdziwość zdań:",
+                "statements": [
                     {
-                        "question": "Które działanie wykonujemy jako pierwsze w wyrażeniu: $5 + 2 \\cdot (3 - 1)^2$?",
-                        "options": [
-                            "Dodawanie ($5+2$)",
-                            "Mnożenie ($2 \\cdot ...$)",
-                            "Odejmowanie w nawiasie ($3-1$)",
-                            "Potęgowanie ($...^2$)"
-                        ],
-                        "correctAnswer": 2,
-                        "explanation": "Zawsze zaczynamy od działań w nawiasach."
+                        "id": "s1",
+                        "text": "Każda liczba całkowita jest liczbą naturalną.",
+                        "isTrue": false,
+                        "explanation": "Nie, np. $-5$ jest całkowita, ale nie jest naturalna."
                     },
                     {
-                        "question": "Do jakiego zbioru należy liczba $-5$?",
-                        "options": [
-                            "Tylko do liczb naturalnych ($N$)",
-                            "Tylko do liczb całkowitych ($C$)",
-                            "Do liczb całkowitych ($C$) i wymiernych ($W$)",
-                            "Nie należy do żadnego zbioru"
-                        ],
-                        "correctAnswer": 2,
-                        "explanation": "Liczba $-5$ jest liczbą całkowitą, a wszystkie liczby całkowite są również liczbami wymiernymi."
+                        "id": "s2",
+                        "text": "Każda liczba naturalna jest liczbą całkowitą.",
+                        "isTrue": true,
+                        "explanation": "Tak, zbiór liczb naturalnych zawiera się w całkowitych."
+                    },
+                    {
+                        "id": "s3",
+                        "text": "Każda liczba wymierna jest całkowita.",
+                        "isTrue": false,
+                        "explanation": "Nie, np. $\\frac{1}{2}$ jest wymierna, ale nie całkowita."
                     }
                 ]
             },
             {
-                "type": "input",
-                "title": "Działania złożone",
-                "question": "Oblicz: $15 : 3 + 2 \\cdot 4$",
-                "correctAnswer": "13",
-                "explanation": "1. Dzielenie: $15:3=5$\n2. Mnożenie: $2 \\cdot 4=8$\n3. Dodawanie: $5+8=13$"
+                "type": "matching",
+                "title": "Liczby przeciwne",
+                "question": "Połącz w pary liczby przeciwne:",
+                "pairs": [
+                    {
+                        "id": "p1",
+                        "left": "$5$",
+                        "right": "$-5$"
+                    },
+                    {
+                        "id": "p2",
+                        "left": "$-2.5$",
+                        "right": "$2.5$"
+                    },
+                    {
+                        "id": "p3",
+                        "left": "$\\frac{1}{4}$",
+                        "right": "$-\\frac{1}{4}$"
+                    },
+                    {
+                        "id": "p4",
+                        "left": "$1$",
+                        "right": "$-1$"
+                    }
+                ],
+                "explanations": {
+                    "p1": "Liczby przeciwne leżą symetrycznie względem zera."
+                }
             },
             {
-                "type": "number-line",
-                "title": "Liczby ujemne",
-                "question": "Zaznacz liczbę $-3.5$ na osi.",
-                "min": -5,
-                "max": 0,
-                "step": 0.5,
-                "correctValue": -3.5,
-                "tolerance": 0.1,
-                "explanation": "Liczba $-3.5$ znajduje się między $-4$ a $-3$, dokładnie w połowie."
+                "type": "practice",
+                "title": "Zadanie z życia: Pizza",
+                "instruction": "Rozwiąż zadanie krok po kroku.",
+                "scenario": "Pięcioosobowa rodzina (rodzice i troje dzieci) zamówiła dwie takie same pizze. \n*   **Rodzice** podzielili swoją pizzę na **6 kawałków** i zjedli 5 z nich.\n*   **Dzieci** podzieliły swoją na **12 kawałków**.\n\nKto zjadł więcej pizzy – dzieci czy rodzice?",
+                "inputs": [
+                    {
+                        "label": "Jaką część pizzy zjedli rodzice?",
+                        "placeholder": "np. 5/6",
+                        "type": "text"
+                    },
+                    {
+                        "label": "Jeśli dzieci zjadły tyle samo pizzy co rodzice (co do wielkości), ile kawałków zjadły?",
+                        "placeholder": "Liczba kawałków",
+                        "type": "text"
+                    }
+                ],
+                "sampleAnswers": {
+                    "title": "Rozwiązanie",
+                    "answers": [
+                        "Rodzice zjedli 5 z 6 kawałków, czyli ułamek $\\frac{5}{6}$.",
+                        "Dzieci miały podział na 12 kawałków. $\\frac{5}{6} = \\frac{10}{12}$.",
+                        "Zatem jeśli dzieci zjadły tyle samo, musiały zjeść **10 kawałków**."
+                    ]
+                }
             },
             {
-                "type": "summary",
-                "title": "Podsumowanie",
-                "content": "Gratulacje! Poznałeś podstawy liczb i działań.",
-                "keyPoints": [
-                    "Liczby naturalne, całkowite i wymierne tworzą hierarchię zbiorów",
-                    "Kolejność działań: nawiasy → potęgi → mnożenie/dzielenie → dodawanie/odejmowanie",
-                    "Liczby ujemne znajdują się po lewej stronie osi liczbowej",
-                    "Ułamki dziesiętne mogą być skończone lub okresowe"
+                "type": "quiz",
+                "title": "Sprawdź, czy umiesz",
+                "questions": [
+                    {
+                        "question": "Ułamek $0.015$ jest równy:",
+                        "options": [
+                            "$\\frac{3}{20}$",
+                            "$\\frac{3}{200}$",
+                            "$\\frac{1}{15}$",
+                            "$\\frac{3}{250}$"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "$0.015 = \\frac{15}{1000} = \\frac{3}{200}$ (po skróceniu przez 5)"
+                    },
+                    {
+                        "question": "Która liczba jest liczbą całkowitą?",
+                        "options": [
+                            "$-5.5$",
+                            "$\\frac{6}{3}$",
+                            "$0.7$",
+                            "$-1\\frac{1}{5}$"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "$\\frac{6}{3} = 2$, a 2 jest liczbą całkowitą."
+                    },
+                    {
+                        "question": "Liczba przeciwna do $-1.5$ to:",
+                        "options": [
+                            "$-1.5$",
+                            "$1.5$",
+                            "$\\frac{1}{1.5}$",
+                            "Zero"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Liczba przeciwna ma przeciwny znak."
+                    },
+                    {
+                        "question": "Które zdanie jest prawdziwe?",
+                        "options": [
+                            "Każda liczba naturalna jest całkowita.",
+                            "Każda liczba wymierna jest naturalna.",
+                            "Zero jest liczbą dodatnią.",
+                            "Liczby ujemne są większe od zera."
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Zbiór liczb naturalnych zawiera się w zbiorze liczb całkowitych."
+                    }
                 ]
             },
             {
                 "type": "test",
-                "title": "Test końcowy: Liczby i Działania",
+                "title": "Końcowy Test: Liczby",
                 "questions": [
                     {
-                        "question": "Oblicz: $12 - 8 : 2$",
+                        "question": "Liczba -3 należy do zbioru liczb:",
                         "options": [
-                            "2",
-                            "4",
-                            "8",
-                            "10"
+                            "Naturalnych",
+                            "Całkowitych",
+                            "Żadnego z powyższych"
                         ],
-                        "correctAnswer": 2,
-                        "explanation": "Najpierw dzielenie: $8:2=4$, potem odejmowanie: $12-4=8$"
+                        "correctAnswer": 1,
+                        "explanation": "-3 jest liczbą całkowitą ujemną."
                     },
                     {
-                        "question": "Która liczba NIE jest liczbą wymierną?",
+                        "question": "Która para to liczby przeciwne?",
                         "options": [
-                            "$-5$",
-                            "$\\frac{3}{7}$",
-                            "$0.25$",
-                            "$\\sqrt{2}$"
+                            "1 i 0.1",
+                            "-5 i 5",
+                            "2 i 1/2"
                         ],
-                        "correctAnswer": 3,
-                        "explanation": "$\\sqrt{2}$ jest liczbą niewymierną, pozostałe to liczby wymierne."
+                        "correctAnswer": 1,
+                        "explanation": "Liczby przeciwne różnią się tylko znakiem."
                     },
                     {
-                        "question": "Oblicz: $(-3) + (-7)$",
+                        "question": "Ułamek 3/4 to w postaci dziesiętnej:",
                         "options": [
-                            "-10",
-                            "-4",
-                            "4",
-                            "10"
+                            "0.34",
+                            "0.75",
+                            "3.4",
+                            "0.43"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "3 podzielić na 4 to 0.75."
+                    },
+                    {
+                        "question": "Co jest prawdą?",
+                        "options": [
+                            "Zbiór liczb naturalnych zawiera się w całkowitych",
+                            "Liczby wymierne to tylko ułamki zwykłe",
+                            "Zero jest liczbą dodatnią"
                         ],
                         "correctAnswer": 0,
-                        "explanation": "Liczby tego samego znaku: dodajemy wartości i zachowujemy znak: $3+7=10$, więc $-10$"
+                        "explanation": "Prawda. Każda liczba naturalna jest też całkowita."
                     },
                     {
-                        "question": "Zaokrąglij do jedności: $4.49$",
+                        "question": "Jeśli zjesz 2 z 8 kawałków pizzy, jaka część została?",
                         "options": [
-                            "3",
-                            "4",
-                            "5",
-                            "4.5"
+                            "2/8",
+                            "3/4",
+                            "1/4",
+                            "1/8"
                         ],
                         "correctAnswer": 1,
-                        "explanation": "Część dziesiętna $0.49 < 0.5$, więc zaokrąglamy w dół: $4$"
-                    },
-                    {
-                        "question": "Oblicz: $(5 + 3) \\cdot 2$",
-                        "options": [
-                            "10",
-                            "11",
-                            "16",
-                            "13"
-                        ],
-                        "correctAnswer": 2,
-                        "explanation": "Najpierw nawias: $5+3=8$, potem mnożenie: $8 \\cdot 2=16$"
-                    },
-                    {
-                        "question": "Która liczba jest największa?",
-                        "options": [
-                            "$-2$",
-                            "$0$",
-                            "$-5$",
-                            "$-1$"
-                        ],
-                        "correctAnswer": 1,
-                        "explanation": "Zero jest większe od wszystkich liczb ujemnych."
-                    },
-                    {
-                        "question": "Oblicz: $7 - (-3)$",
-                        "options": [
-                            "4",
-                            "10",
-                            "-10",
-                            "-4"
-                        ],
-                        "correctAnswer": 1,
-                        "explanation": "Odejmowanie liczby ujemnej to dodawanie: $7-(-3)=7+3=10$"
-                    },
-                    {
-                        "question": "Zamień na ułamek zwykły: $0.25$",
-                        "options": [
-                            "$\\frac{1}{2}$",
-                            "$\\frac{1}{3}$",
-                            "$\\frac{1}{4}$",
-                            "$\\frac{1}{5}$"
-                        ],
-                        "correctAnswer": 2,
-                        "explanation": "$0.25 = \\frac{25}{100} = \\frac{1}{4}$ (po skróceniu)"
-                    },
-                    {
-                        "question": "Oblicz: $18 : 3 : 2$",
-                        "options": [
-                            "12",
-                            "6",
-                            "3",
-                            "9"
-                        ],
-                        "correctAnswer": 2,
-                        "explanation": "Dzielimy od lewej: $18:3=6$, potem $6:2=3$"
-                    },
-                    {
-                        "question": "Jaka jest odległość między $-2$ a $3$ na osi liczbowej?",
-                        "options": [
-                            "1",
-                            "5",
-                            "6",
-                            "-5"
-                        ],
-                        "correctAnswer": 1,
-                        "explanation": "Odległość: $|3-(-2)| = |3+2| = 5$ jednostek"
+                        "explanation": "Zostało 8 - 2 = 6 kawałków. 6/8 to po skróceniu 3/4."
                     }
                 ]
+            },
+            {
+                "type": "summary",
+                "title": "Podsumowanie",
+                "recap": [
+                    "Liczby naturalne (N), całkowite (Z) i wymierne (Q) tworzą coraz szersze zbiory.",
+                    "Liczby wymierne można zapisać jako ułamek zwykły lub dziesiętny.",
+                    "Każda liczba ma swoją liczbę przeciwną (leżącą symetrycznie po drugiej stronie zera).",
+                    "Wartość liczby rośnie na osi liczbowej w prawą stronę (dlatego -2 > -5)."
+                ],
+                "badge": {
+                    "title": "Mistrz Liczb",
+                    "xp": 100
+                },
+                "nextSteps": "W następnej lekcji zajmiemy się rozwinięciami dziesiętnymi i okresami."
             }
         ]
     }
