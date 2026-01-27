@@ -27,8 +27,9 @@ import LearningPathCard from './LearningPathCard'
 import CycleCard from './CycleCard'
 import CycleCardVariantB from './CycleCardVariantB'
 import DunningKrugerCard from './DunningKrugerCard'
+import ReadinessCard from './ReadinessCard'
 
-export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger'
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness'
 
 export interface LessonCardData {
     type: CardType
@@ -390,6 +391,12 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 title={card.title}
                 description={card.description}
                 points={card.points}
+            />
+        case 'readiness':
+            return <ReadinessCard
+                title={card.title}
+                description={card.description}
+                imageSrc={card.image}
             />
         default:
             return (

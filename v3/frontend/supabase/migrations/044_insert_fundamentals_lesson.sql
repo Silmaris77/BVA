@@ -79,43 +79,10 @@ BEGIN
             }
         },
         {
-            "type": "learning-path",
-            "title": "4 Poziomy Kompetencji",
-            "description": "Zrozum proces, przez który przechodzi każdy uczący się człowiek. Kliknij w etapy, aby poznać szczegóły.",
-            "levels": [
-                {
-                    "stage": 0,
-                    "title": "START",
-                    "subtitle": "Nieświadoma niekompetencja",
-                    "details": "„Nie wiem, że nie wiem”. Stan, w którym pracownik nie jest świadom popełnianych błędów. Potrzeba rozwoju jest tutaj niska, bo nie widać problemu.",
-                    "status": "completed",
-                    "color": "#9ca3af"
-                },
-                {
-                    "stage": 1,
-                    "title": "UŚWIADOMIENIE",
-                    "subtitle": "Świadoma niekompetencja",
-                    "details": "„Wiem, czego nie wiem”. Moment zderzenia z rzeczywistością. Pracownik widzi swoje braki. To budzi motywację, ale może też rodzić frustrację.",
-                    "status": "current",
-                    "color": "#fbbf24"
-                },
-                {
-                    "stage": 2,
-                    "title": "PRAKTYKA",
-                    "subtitle": "Świadoma kompetencja",
-                    "details": "„Wiem, co wiem”. Pojawiają się pierwsze rezultaty, ale wymagają one dużego skupienia i wysiłku. Działanie nie jest jeszcze płynne.",
-                    "status": "locked",
-                    "color": "#34d399"
-                },
-                {
-                    "stage": 3,
-                    "title": "MISTRZOSTWO",
-                    "subtitle": "Nieświadoma kompetencja",
-                    "details": "„Nie wiem, co wiem”. Pełny automatyzm. Pracownik działa intuicyjnie, szybko i bezbłędnie. Wiedza stała się nawykiem.",
-                    "status": "locked",
-                    "color": "#00d4ff"
-                }
-            ]
+            "type": "readiness",
+            "title": "Poziomy Gotowości (R1-R4)",
+            "description": "Dopasuj styl zarządzania do poziomu pracownika. Kliknij kartę, aby zobaczyć szczegóły.",
+            "image": "/lessons/ojt/Poziomy Gotowości.png"
         },
         {
             "type": "dunning-kruger",

@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPP System - Theory Practice Performance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-deep: #0f0c29;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --neon-purple: #b000ff;
+            --neon-blue: #00d4ff;
+            --neon-gold: #ffd700;
+            --neon-red: #ff0055;
+            --accent-green: #00ff9d;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+        }
+
+        html {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            background: transparent;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            opacity: 0.5;
+            animation: floatOrb 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--neon-purple);
+            top: -150px;
+            left: -100px;
+            opacity: 0.3;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--neon-blue);
+            bottom: -100px;
+            right: -100px;
+            opacity: 0.3;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--neon-red);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.2;
+            animation: floatOrb 15s ease-in-out infinite reverse;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(176, 0, 255, 0.15);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(176, 0, 255, 0.5);
+        }
+
+        .stat-high {
+            background: linear-gradient(135deg, var(--accent-green) 0%, #059669 100%);
+        }
+
+        .stat-medium {
+            background: linear-gradient(135deg, var(--neon-gold) 0%, #d97706 100%);
+        }
+
+        .stat-low {
+            background: linear-gradient(135deg, var(--neon-red) 0%, #dc2626 100%);
+        }
+
+        .tab-active {
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-blue) 100%);
+            box-shadow: 0 0 20px rgba(176, 0, 255, 0.4);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--accent-green) 0%, var(--neon-blue) 100%);
+            transition: width 1s ease;
+        }
+
+        .intervention-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .badge-theory { 
+            background: rgba(0, 212, 255, 0.15); 
+            color: var(--neon-blue);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        .badge-practice { 
+            background: rgba(176, 0, 255, 0.15); 
+            color: var(--neon-purple);
+            border-color: rgba(176, 0, 255, 0.3);
+        }
+        
+        .badge-performance { 
+            background: rgba(0, 255, 157, 0.15); 
+            color: var(--accent-green);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            box-shadow: 0 0 20px rgba(176, 0, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(176, 0, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .pattern-card {
+            border-left: 3px solid;
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .status-message {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.6;
+            color: white;
+            padding: 1.5rem;
+            border-left: 4px solid var(--neon-purple);
+            background: var(--glass-bg);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .trend-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .simple-triangle {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .triangle-item {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            cursor: help;
+            transition: all 0.3s ease;
+        }
+
+        .triangle-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(176, 0, 255, 0.2);
+        }
+
+        .status-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .next-action-card {
+            background: linear-gradient(135deg, rgba(176, 0, 255, 0.15), rgba(0, 212, 255, 0.15));
+            border: 2px solid var(--neon-purple);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 0 30px rgba(176, 0, 255, 0.3);
+        }
+
+        .action-cta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-cta button {
+            flex: 1;
+            min-width: 140px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-map {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .pattern-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid;
+        }
+
+        .pattern-orange { border-left-color: #ff9500; }
+        .pattern-blue { border-left-color: var(--neon-blue); }
+        .pattern-green { border-left-color: var(--accent-green); }
+        .pattern-red { border-left-color: var(--neon-red); }
+
+        .heatmap-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .heatmap-table th,
+        .heatmap-table td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+        }
+
+        .heatmap-table th {
+            background: var(--glass-bg);
+            font-weight: 600;
+            color: white;
+        }
+
+        .heat-high { background: rgba(0, 255, 157, 0.3); color: var(--accent-green); }
+        .heat-medium { background: rgba(255, 215, 0, 0.3); color: var(--neon-gold); }
+        .heat-low { background: rgba(255, 0, 85, 0.3); color: var(--neon-red); }
+
+        .coaching-question {
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-left: 3px solid var(--neon-blue);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            font-style: italic;
+        }
+
+        .intervention-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .intervention-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--glass-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--glass-bg);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--neon-purple);
+            border: 2px solid var(--bg-deep);
+        }
+
+        .progress-narrative {
+            background: var(--glass-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            margin-top: 1rem;
+        }
+
+        .progress-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .alert-decision {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 149, 0, 0.1);
+            border-left: 4px solid #ff9500;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-6">
+    <!-- Header -->
+    <div class="max-w-7xl mx-auto mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-4xl font-bold text-white mb-2">
+                    <span class="gradient-text">TPP System</span>
+                </h1>
+                <p class="text-slate-400">Theory → Practice → Performance</p>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="showView('jss')" id="tab-jss" class="tab-active px-6 py-3 rounded-lg text-white font-semibold transition-all">
+                    👤 Widok JSS
+                </button>
+                <button onclick="showView('manager')" id="tab-manager" class="bg-slate-700/50 px-6 py-3 rounded-lg text-white font-semibold hover:bg-slate-700 transition-all">
+                    👔 Widok Menedżera
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JSS VIEW -->
+    <div id="view-jss" class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Status na dziś -->
+        <!-- Header Section -->
+        <div class="card rounded-2xl p-6">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-1">Witaj, Marcin! 👋</h2>
+                    <p class="text-slate-400">Job Site Solutions Specialist</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-slate-400 mb-1">Ostatnia wizyta</div>
+                    <div class="text-white font-semibold">24 stycznia 2026</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Pattern - Triangle -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">📊 Twój aktualny wzorzec</h3>
+                <div class="triangle-container">
+                    <svg width="300" height="260" class="absolute inset-0">
+                        <!-- Triangle -->
+                        <polygon points="150,20 50,240 250,240" 
+                                 fill="rgba(59, 130, 246, 0.1)" 
+                                 stroke="rgba(148, 163, 184, 0.3)" 
+                                 stroke-width="2"/>
+                        
+                        <!-- Grid lines -->
+                        <line x1="150" y1="20" x2="150" y2="240" stroke="rgba(148, 163, 184, 0.1)" stroke-width="1" stroke-dasharray="4"/>
+                        <line x1="50" y1="240" x2="250" y2="240" stroke="rgba(148, 163, 184, 0.1)" stroke-width="1"/>
+                        <line x1="50" y1="240" x2="150" y2="20" stroke="rgba(148, 163, 184, 0.1)" stroke-width="1"/>
+                        <line x1="250" y1="240" x2="150" y2="20" stroke="rgba(148, 163, 184, 0.1)" stroke-width="1"/>
+                        
+                        <!-- Labels -->
+                        <text x="150" y="10" fill="#94a3b8" font-size="12" text-anchor="middle" font-weight="600">THEORY</text>
+                        <text x="30" y="255" fill="#94a3b8" font-size="12" text-anchor="middle" font-weight="600">PRACTICE</text>
+                        <text x="270" y="255" fill="#94a3b8" font-size="12" text-anchor="middle" font-weight="600">PERFORMANCE</text>
+                        
+                        <!-- User position (high theory, medium practice, medium performance) -->
+                        <circle cx="150" cy="100" r="8" fill="#3b82f6" opacity="0.6"/>
+                        <circle cx="150" cy="100" r="12" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-300">Rozumienie standardu</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-32 h-2 bg-slate-700 rounded-full overflow-hidden">
+                                <div class="progress-bar h-full" style="width: 85%"></div>
+                            </div>
+                            <span class="text-emerald-400 font-semibold">8.5/10</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-300">Realne zachowania</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-32 h-2 bg-slate-700 rounded-full overflow-hidden">
+                                <div class="progress-bar h-full" style="width: 65%"></div>
+                            </div>
+                            <span class="text-amber-400 font-semibold">6.5/10</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-300">Efekt w terenie</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-32 h-2 bg-slate-700 rounded-full overflow-hidden">
+                                <div class="progress-bar h-full" style="width: 70%"></div>
+                            </div>
+                            <span class="text-emerald-400 font-semibold">7.0/10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Focus Areas -->
+            <div class="card rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">🎯 Kluczowe obszary fokusowe</h3>
+                <div class="space-y-4">
+                    <div class="bg-slate-700/30 rounded-xl p-4 border-l-4 border-amber-500">
+                        <div class="flex items-start justify-between mb-2">
+                            <h4 class="font-semibold text-white">Diagnoza aplikacji</h4>
+                            <span class="intervention-badge badge-practice">PRACTICE</span>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-3">
+                            Wiesz jak diagnozować (8/10), ale w terenie często skracasz proces pod presją czasu.
+                        </p>
+                        <div class="flex items-center gap-2 text-xs text-slate-500">
+                            <span>📊 Ostatnie 5 wizyt:</span>
+                            <span class="text-amber-400">3/5 niepełnych diagnoz</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-700/30 rounded-xl p-4 border-l-4 border-blue-500">
+                        <div class="flex items-start justify-between mb-2">
+                            <h4 class="font-semibold text-white">Komunikacja ryzyka</h4>
+                            <span class="intervention-badge badge-practice">PRACTICE</span>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-3">
+                            Standard wymaga jasnego komunikowania zagrożeń - to zwiększa zaufanie klienta.
+                        </p>
+                        <div class="flex items-center gap-2 text-xs text-slate-500">
+                            <span>📊 Trend:</span>
+                            <span class="text-emerald-400">↗ Poprawa o 15% w ostatnim miesiącu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Action -->
+        <div class="card rounded-2xl p-6 border-2 border-blue-500/50">
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl">
+                        🎯
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-xl font-bold text-white mb-2">Następna akcja: Mikro-zadanie OJT</h3>
+                    <p class="text-slate-300 mb-4">
+                        Podczas <strong>następnej wizyty</strong> użyj checklisty diagnozy aplikacyjnej. 
+                        Menedżer będzie obserwował <strong>pierwszy etap rozmowy</strong>.
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <button class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all">
+                            Zobacz checklistę
+                        </button>
+                        <button class="px-6 py-2 bg-slate-700 text-white rounded-lg font-semibold hover:bg-slate-600 transition-all">
+                            Zaplanuj wizytę
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Timeline -->
+        <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-bold text-white mb-4">📈 Twój progres - ostatnie 8 tygodni</h3>
+            <canvas id="progressChart" class="w-full" height="80"></canvas>
+        </div>
+    </div>
+
+    <!-- MANAGER VIEW -->
+    <div id="view-manager" class="max-w-7xl mx-auto space-y-6 hidden">
+        <!-- Header -->
+        <div class="card rounded-2xl p-6">
+            <h2 class="text-2xl font-bold text-white mb-1">Panel Menedżera 👔</h2>
+            <p class="text-slate-400">Zespół JSS - Coaching oparty o dane</p>
+        </div>
+
+        <!-- Team Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="card rounded-2xl p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-full stat-high flex items-center justify-center text-white text-xl">
+                        ✓
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-white">4</div>
+                        <div class="text-sm text-slate-400">Stabilny wzorzec</div>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500">Wysoka spójność Theory-Practice-Performance</p>
+            </div>
+
+            <div class="card rounded-2xl p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-full stat-medium flex items-center justify-center text-white text-xl">
+                        ⚡
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-white">2</div>
+                        <div class="text-sm text-slate-400">Luka egzekucji</div>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500">Wiedzą jak, ale nie robią konsekwentnie</p>
+            </div>
+
+            <div class="card rounded-2xl p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-full stat-low flex items-center justify-center text-white text-xl">
+                        🎓
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-white">1</div>
+                        <div class="text-sm text-slate-400">Luka kompetencyjna</div>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500">Wymaga szkolenia i wsparcia OJT</p>
+            </div>
+        </div>
+
+        <!-- Team Members -->
+        <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Zespół (7 osób)</h3>
+            <div class="space-y-3">
+                <!-- Person 1 - Selected -->
+                <div class="bg-blue-500/20 border-2 border-blue-500 rounded-xl p-4 cursor-pointer" onclick="showPersonDetail()">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                                M
+                            </div>
+                            <div>
+                                <div class="font-semibold text-white">Marcin Kowalski</div>
+                                <div class="text-sm text-slate-400">JSS - Region Warszawa</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <div class="text-xs text-slate-400">Wzorzec</div>
+                                <div class="font-semibold text-amber-400">Luka egzekucji</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="text-center">
+                                    <div class="text-xs text-slate-400">T</div>
+                                    <div class="font-bold text-emerald-400">8.5</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-slate-400">P</div>
+                                    <div class="font-bold text-amber-400">6.5</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-slate-400">Pf</div>
+                                    <div class="font-bold text-emerald-400">7.0</div>
+                                </div>
+                            </div>
+                            <button class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-semibold">
+                                Coaching View
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other team members (collapsed) -->
+                <div class="bg-slate-700/30 rounded-xl p-4 cursor-pointer hover:bg-slate-700/50 transition-all">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold">
+                                A
+                            </div>
+                            <div>
+                                <div class="font-semibold text-white">Anna Nowak</div>
+                                <div class="text-sm text-slate-400">JSS - Region Kraków</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <div class="text-xs text-slate-400">Wzorzec</div>
+                                <div class="font-semibold text-emerald-400">Stabilny</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="text-center">
+                                    <div class="text-xs text-slate-400">T</div>
+                                    <div class="font-bold text-emerald-400">9.0</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-slate-400">P</div>
+                                    <div class="font-bold text-emerald-400">8.5</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-slate-400">Pf</div>
+                                    <div class="font-bold text-emerald-400">8.8</div>
+                                </div>
+                            </div>
+                            <button class="px-4 py-2 bg-slate-600 text-white rounded-lg text-sm font-semibold hover:bg-slate-500">
+                                Zobacz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center py-2">
+                    <button class="text-blue-400 hover:text-blue-300 text-sm font-semibold">
+                        Zobacz wszystkich (5 więcej) →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coaching View - Person Detail -->
+        <div id="person-detail" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left: Triangle + Pattern -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">Wzorzec: Marcin Kowalski</h3>
+                    <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 mb-6">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl">⚡</span>
+                            <div>
+                                <h4 class="font-semibold text-amber-400 mb-1">Luka egzekucji (Practice Gap)</h4>
+                                <p class="text-sm text-slate-300">
+                                    Rozumie standard (T: 8.5), ale pod presją czasu skraca kluczowe elementy. 
+                                    Performance stabilny (7.0), ale niższy niż potencjalny.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mini Triangle -->
+                    <div class="mb-6">
+                        <svg width="200" height="180" class="mx-auto">
+                            <polygon points="100,10 20,160 180,160" 
+                                     fill="rgba(59, 130, 246, 0.1)" 
+                                     stroke="rgba(148, 163, 184, 0.3)" 
+                                     stroke-width="2"/>
+                            <text x="100" y="8" fill="#94a3b8" font-size="10" text-anchor="middle">T</text>
+                            <text x="15" y="175" fill="#94a3b8" font-size="10" text-anchor="middle">P</text>
+                            <text x="185" y="175" fill="#94a3b8" font-size="10" text-anchor="middle">Pf</text>
+                            <circle cx="100" cy="60" r="6" fill="#f59e0b"/>
+                            <circle cx="100" cy="60" r="9" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                        </svg>
+                    </div>
+
+                    <!-- History -->
+                    <div>
+                        <h4 class="font-semibold text-white mb-3">Historia wzorców (6 miesięcy)</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center justify-between p-2 bg-slate-700/30 rounded">
+                                <span class="text-slate-400">Grudzień 2025</span>
+                                <span class="text-amber-400">Luka egzekucji</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-slate-700/30 rounded">
+                                <span class="text-slate-400">Listopad 2025</span>
+                                <span class="text-amber-400">Luka egzekucji</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-slate-700/30 rounded">
+                                <span class="text-slate-400">Październik 2025</span>
+                                <span class="text-red-400">Luka kompetencyjna</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-3">
+                            ↗ Progres widoczny - Theory wzrosło z 6.2 do 8.5. Teraz fokus na Practice.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right: Gap-to-Action Recommendations -->
+                <div class="card rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4">🎯 Rekomendacje Gap-to-Action</h3>
+                    
+                    <!-- Recommended Actions -->
+                    <div class="space-y-4 mb-6">
+                        <div class="bg-blue-500/10 border-2 border-blue-500 rounded-xl p-4">
+                            <div class="flex items-start gap-3 mb-3">
+                                <span class="text-2xl">📋</span>
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-white mb-1">Zadanie OJT: Diagnoza z checklistą</h4>
+                                    <p class="text-sm text-slate-300 mb-2">
+                                        Pierwsza wizyta w tym tygodniu - obserwacja pierwszych 15 minut rozmowy z klientem.
+                                    </p>
+                                    <div class="flex gap-2">
+                                        <span class="intervention-badge badge-practice">PRACTICE GAP</span>
+                                        <span class="intervention-badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">
+                                            Priorytet 1
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-all">
+                                Zaplanuj shadowing
+                            </button>
+                        </div>
+
+                        <div class="bg-slate-700/30 border border-slate-600 rounded-xl p-4">
+                            <div class="flex items-start gap-3 mb-3">
+                                <span class="text-2xl">💬</span>
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-white mb-1">Rozmowa 1:1: Presja czasu</h4>
+                                    <p class="text-sm text-slate-300 mb-2">
+                                        Pytanie coachingowe: "Co powoduje, że skracasz diagnozę mimo znajomości standardu?"
+                                    </p>
+                                    <div class="flex gap-2">
+                                        <span class="intervention-badge badge-practice">PRACTICE GAP</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="w-full px-4 py-2 bg-slate-600 text-white rounded-lg font-semibold hover:bg-slate-500 transition-all">
+                                Zobacz ramę rozmowy
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Coaching Framework -->
+                    <div class="bg-slate-700/50 rounded-xl p-4 border border-slate-600">
+                        <h4 class="font-semibold text-white mb-3 flex items-center gap-2">
+                            <span>📝</span>
+                            Rama rozmowy coachingowej
+                        </h4>
+                        <div class="space-y-3 text-sm">
+                            <div>
+                                <div class="text-slate-400 mb-1">1. Fokus:</div>
+                                <div class="text-slate-200">Diagnoza aplikacji - skracanie procesu</div>
+                            </div>
+                            <div>
+                                <div class="text-slate-400 mb-1">2. Pytania otwierające:</div>
+                                <ul class="text-slate-200 space-y-1 ml-4">
+                                    <li>• "Co dokładnie dzieje się, gdy czujesz presję czasu?"</li>
+                                    <li>• "Które elementy diagnozy pomijasz najczęściej?"</li>
+                                    <li>• "Co by się stało, gdybyś zrobił pełną diagnozę?"</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="text-slate-400 mb-1">3. Dane wspierające:</div>
+                                <div class="text-slate-200">Ostatnie 5 wizyt: 3/5 niepełnych diagnoz</div>
+                            </div>
+                            <div>
+                                <div class="text-slate-400 mb-1">4. Sugerowane działanie:</div>
+                                <div class="text-slate-200">Mikro-zadanie OJT + checklist</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shadowing Mode Preview -->
+        <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-bold text-white mb-4">📱 Shadowing Mode - Mobile Preview</h3>
+            <div class="max-w-md mx-auto">
+                <div class="bg-slate-800 rounded-2xl p-4 border-4 border-slate-700 shadow-2xl">
+                    <div class="bg-slate-900 rounded-xl p-4">
+                        <div class="text-center mb-4">
+                            <div class="text-lg font-semibold text-white">Obserwacja: Marcin Kowalski</div>
+                            <div class="text-sm text-slate-400">Wizyta - 26.01.2026, 14:30</div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <div class="text-sm text-slate-300 mb-2 font-semibold">Diagnoza aplikacji</div>
+                                <div class="flex gap-2">
+                                    <button class="flex-1 py-3 bg-red-500/20 border-2 border-red-500 rounded-lg text-white text-xs font-semibold">
+                                        1 - Pominięta
+                                    </button>
+                                    <button class="flex-1 py-3 bg-slate-700 border-2 border-slate-600 rounded-lg text-white text-xs font-semibold hover:border-amber-500">
+                                        3 - Powierzchowna
+                                    </button>
+                                    <button class="flex-1 py-3 bg-slate-700 border-2 border-slate-600 rounded-lg text-white text-xs font-semibold hover:border-emerald-500">
+                                        5 - Pełna
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-sm text-slate-300 mb-2 font-semibold">Komunikacja bezpieczeństwa</div>
+                                <div class="flex gap-2">
+                                    <button class="flex-1 py-3 bg-slate-700 border-2 border-slate-600 rounded-lg text-white text-xs font-semibold">
+                                        1
+                                    </button>
+                                    <button class="flex-1 py-3 bg-slate-700 border-2 border-slate-600 rounded-lg text-white text-xs font-semibold">
+                                        3
+                                    </button>
+                                    <button class="flex-1 py-3 bg-emerald-500/20 border-2 border-emerald-500 rounded-lg text-white text-xs font-semibold">
+                                        5 - Jasna
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <textarea class="w-full bg-slate-800 border border-slate-600 rounded-lg p-3 text-white text-sm" rows="3" placeholder="Notatki (opcjonalnie)..."></textarea>
+                            </div>
+
+                            <button class="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold">
+                                Zapisz obserwację
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // View switching
+        function showView(view) {
+            document.getElementById('view-jss').classList.add('hidden');
+            document.getElementById('view-manager').classList.add('hidden');
+            document.getElementById('tab-jss').classList.remove('tab-active');
+            document.getElementById('tab-jss').classList.add('bg-slate-700/50');
+            document.getElementById('tab-manager').classList.remove('tab-active');
+            document.getElementById('tab-manager').classList.add('bg-slate-700/50');
+
+            if (view === 'jss') {
+                document.getElementById('view-jss').classList.remove('hidden');
+                document.getElementById('tab-jss').classList.add('tab-active');
+                document.getElementById('tab-jss').classList.remove('bg-slate-700/50');
+            } else {
+                document.getElementById('view-manager').classList.remove('hidden');
+                document.getElementById('tab-manager').classList.add('tab-active');
+                document.getElementById('tab-manager').classList.remove('bg-slate-700/50');
+            }
+        }
+
+        function showPersonDetail() {
+            document.getElementById('person-detail').classList.remove('hidden');
+            document.getElementById('person-detail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Progress Chart
+        const ctx = document.getElementById('progressChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Tyg 1', 'Tyg 2', 'Tyg 3', 'Tyg 4', 'Tyg 5', 'Tyg 6', 'Tyg 7', 'Tyg 8'],
+                    datasets: [
+                        {
+                            label: 'Theory',
+                            data: [6.2, 6.8, 7.2, 7.5, 7.8, 8.1, 8.3, 8.5],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Practice',
+                            data: [5.5, 5.8, 6.0, 6.2, 6.3, 6.4, 6.5, 6.5],
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Performance',
+                            data: [6.0, 6.2, 6.5, 6.7, 6.8, 6.9, 7.0, 7.0],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#cbd5e1'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 5,
+                            max: 10,
+                            ticks: {
+                                color: '#94a3b8'
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#94a3b8'
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

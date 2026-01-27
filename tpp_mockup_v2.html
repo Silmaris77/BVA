@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPP System - Panel JSS & Menedżer</title>
+    
+    <!-- Google Fonts - Outfit (v3 font) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            /* V3 Design System Colors */
+            --bg-deep: #0f0c29;
+            --bg-mid: #302b63;
+            --bg-light: #24243e;
+            --neon-purple: #b000ff;
+            --neon-blue: #00d4ff;
+            --neon-gold: #ffd700;
+            --neon-red: #ff0055;
+            --accent-green: #00ff9d;
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background-attachment: fixed;
+            color: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Orbs (v3 style) */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: floatOrb 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--neon-purple) 0%, transparent 70%);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--neon-blue) 0%, transparent 70%);
+            top: 50%;
+            right: -5%;
+            animation-delay: 7s;
+        }
+
+        .orb-3 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--neon-red) 0%, transparent 70%);
+            bottom: -15%;
+            left: 30%;
+            animation-delay: 14s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(30px, 50px) scale(1.05); }
+        }
+
+        /* Glass card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status-message {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.6;
+            color: white;
+            padding: 1.5rem;
+            border-left: 4px solid var(--neon-purple);
+            background: var(--glass-bg);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .trend-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .simple-triangle {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .triangle-item {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            cursor: help;
+            transition: all 0.3s ease;
+        }
+
+        .triangle-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(176, 0, 255, 0.2);
+        }
+
+        .status-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .next-action-card {
+            background: linear-gradient(135deg, rgba(176, 0, 255, 0.15), rgba(0, 212, 255, 0.15));
+            border: 2px solid var(--neon-purple);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 0 30px rgba(176, 0, 255, 0.3);
+        }
+
+        .action-cta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-cta button {
+            flex: 1;
+            min-width: 140px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-blue));
+            box-shadow: 0 0 20px rgba(176, 0, 255, 0.3);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(176, 0, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .tab-active {
+            background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-blue) 100%);
+            box-shadow: 0 0 20px rgba(176, 0, 255, 0.4);
+        }
+
+        .intervention-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .badge-theory { 
+            background: rgba(0, 212, 255, 0.15); 
+            color: var(--neon-blue);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        .badge-practice { 
+            background: rgba(176, 0, 255, 0.15); 
+            color: var(--neon-purple);
+            border-color: rgba(176, 0, 255, 0.3);
+        }
+        
+        .badge-performance { 
+            background: rgba(0, 255, 157, 0.15); 
+            color: var(--accent-green);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .progress-narrative {
+            background: var(--glass-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            margin-top: 1rem;
+        }
+
+        .progress-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .pattern-map {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .pattern-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid;
+        }
+
+        .pattern-orange { border-left-color: #ff9500; }
+        .pattern-blue { border-left-color: var(--neon-blue); }
+        .pattern-green { border-left-color: var(--accent-green); }
+        .pattern-red { border-left-color: var(--neon-red); }
+
+        .heatmap-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .heatmap-table th,
+        .heatmap-table td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+        }
+
+        .heatmap-table th {
+            background: var(--glass-bg);
+            font-weight: 600;
+            color: white;
+        }
+
+        .heat-high { background: rgba(0, 255, 157, 0.3); color: var(--accent-green); }
+        .heat-medium { background: rgba(255, 215, 0, 0.3); color: var(--neon-gold); }
+        .heat-low { background: rgba(255, 0, 85, 0.3); color: var(--neon-red); }
+
+        .coaching-question {
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-left: 3px solid var(--neon-blue);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            font-style: italic;
+        }
+
+        .intervention-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .intervention-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--glass-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--glass-bg);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--neon-purple);
+            border: 2px solid var(--bg-deep);
+        }
+
+        .alert-decision {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 149, 0, 0.1);
+            border-left: 4px solid #ff9500;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Content -->
+    <div style="position: relative; z-index: 1;">
+        <!-- Header -->
+        <div class="max-w-7xl mx-auto mb-8 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-4xl font-bold text-white mb-2">
+                        <span class="gradient-text">TPP System</span>
+                    </h1>
+                    <p class="text-white/60">Theory → Practice → Performance</p>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="showView('jss')" id="tab-jss" class="tab-active px-6 py-3 rounded-lg text-white font-semibold transition-all">
+                        👤 JSS
+                    </button>
+                    <button onclick="showView('manager')" id="tab-manager" class="glass-card px-6 py-3 rounded-lg text-white font-semibold hover:bg-white/10 transition-all">
+                        👔 Menedżer
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSS VIEW -->
+        <div id="view-jss" class="max-w-7xl mx-auto space-y-6 px-6">
+            
+            <!-- Status na dziś -->
+            <div class="status-message">
+                <div>Twoim największym lewarem jest dziś: <strong>Diagnoza aplikacji</strong></div>
+                <div class="trend-indicator">
+                    <span style="color: var(--accent-green); font-size: 1.25rem;">⬆</span>
+                    <span>Trend wzrostowy — kontynuuj!</span>
+                </div>
+            </div>
+
+            <!-- Uproszczony Trójkąt Kompetencji -->
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-semibold mb-4 text-white">Mój Trójkąt Kompetencji</h3>
+                <div class="simple-triangle">
+                    <div class="triangle-item" title="Masz dobrą wiedzę teoretyczną o procesie sprzedaży">
+                        <div class="status-icon">🟢</div>
+                        <div class="font-semibold" style="color: var(--neon-blue);">THEORY</div>
+                        <div class="text-sm text-white/60 mt-1">Dobra</div>
+                    </div>
+                    <div class="triangle-item" title="W praktyce skracasz diagnozę — to Twój główny obszar rozwoju">
+                        <div class="status-icon">🟡</div>
+                        <div class="font-semibold" style="color: var(--neon-purple);">PRACTICE</div>
+                        <div class="text-sm text-white/60 mt-1">Średnia</div>
+                    </div>
+                    <div class="triangle-item" title="Skuteczność niższa niż oczekiwana — wynika z luki praktycznej">
+                        <div class="status-icon">🔴</div>
+                        <div class="font-semibold" style="color: var(--accent-green);">PERFORMANCE</div>
+                        <div class="text-sm text-white/60 mt-1">Wymaga pracy</div>
+                    </div>
+                </div>
+                <p class="text-sm text-center mt-4 text-white/70">💡 Masz dobrą wiedzę, ale w praktyce skracasz diagnozę</p>
+            </div>
+
+            <!-- JEDNA Najlepsza Kolejna Akcja -->
+            <div class="next-action-card">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                    <span style="font-size: 2rem;">🎯</span>
+                    <h3 class="text-xl font-bold text-white">Kolejna akcja</h3>
+                </div>
+                <div style="font-size: 1.1rem; line-height: 1.8; color: white; margin-bottom: 1rem;">
+                    Przy następnej wizycie:
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 1.5rem 0; color: white;">
+                    <li style="padding: 0.5rem 0; display: flex; align-items: flex-start; gap: 0.5rem;">
+                        <span style="color: var(--accent-green); font-weight: bold;">✓</span>
+                        <span>zadaj min. 3 pytania odkrywające aplikację</span>
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: flex-start; gap: 0.5rem;">
+                        <span style="color: var(--accent-green); font-weight: bold;">✓</span>
+                        <span>nie przechodź do demo przed potwierdzeniem problemu</span>
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: flex-start; gap: 0.5rem;">
+                        <span style="color: var(--accent-green); font-weight: bold;">✓</span>
+                        <span>zapisz w notatce: jakie 3 problemy klient potwierdził</span>
+                    </li>
+                </ul>
+                <div class="action-cta">
+                    <button class="btn-primary">▶️ Przećwicz (2 min)</button>
+                    <button style="background: var(--glass-bg); color: white; border: 1px solid var(--glass-border);">📋 Checklist na wizytę</button>
+                </div>
+            </div>
+
+            <!-- Feedback od menedżera -->
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-semibold mb-4 text-white">💬 Feedback od menedżera</h3>
+                <div style="padding: 1.5rem; background: var(--glass-bg); border-left: 4px solid var(--neon-gold); border-radius: 12px; backdrop-filter: blur(10px);">
+                    <p style="font-size: 1.05rem; line-height: 1.7; color: white; margin-bottom: 1rem;">
+                        Świetna relacja z klientem — skróciłeś jednak etap diagnozy. <strong>Skupmy się na tym przez 2 tygodnie.</strong>
+                    </p>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(0, 212, 255, 0.2); color: var(--neon-blue); border: 1px solid var(--neon-blue); border-radius: 8px; font-size: 0.875rem; cursor: pointer;">
+                            🎙 Notatka głosowa (1:23)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mój progres (narracyjny) -->
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-semibold mb-4 text-white">Mój progres</h3>
+                <div class="progress-narrative">
+                    <div style="font-size: 1.25rem; font-weight: 600; color: var(--accent-green); margin-bottom: 1rem;">
+                        ✨ Robisz postęp!
+                    </div>
+                    <div class="progress-items">
+                        <div class="progress-item">
+                            <span style="font-size: 1.5rem;">✔</span>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: white;">Bezpieczeństwo w demo</div>
+                                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.6);">Zamknięte 2 tygodnie temu</div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <span style="font-size: 1.5rem;">🔁</span>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: white;">Diagnoza aplikacji</div>
+                                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.6);">W trakcie — tydzień 1/2</div>
+                            </div>
+                        </div>
+                        <div class="progress-item" style="opacity: 0.5;">
+                            <span style="font-size: 1.5rem;">⏳</span>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: white;">Domykanie rozmowy</div>
+                                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.6);">Następny krok</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MANAGER VIEW -->
+        <div id="view-manager" class="max-w-7xl mx-auto space-y-6 px-6 hidden">
+            
+            <!-- Mapa wzorców zespołu -->
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-semibold mb-4 text-white">Mapa wzorców zespołu</h3>
+                <div class="pattern-map">
+                    <div class="pattern-group pattern-orange">
+                        <div>
+                            <div class="font-semibold text-white" style="font-size: 1.1rem;">🟠 "Wiedzą, ale nie robią"</div>
+                            <div class="text-sm text-white/60 mt-1">Wysoka THEORY, niska PRACTICE</div>
+                        </div>
+                        <div style="background: rgba(255, 149, 0, 0.2); color: #ff9500; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 1.25rem;">
+                            5 osób
+                        </div>
+                    </div>
+                    <div class="pattern-group pattern-blue">
+                        <div>
+                            <div class="font-semibold text-white" style="font-size: 1.1rem;">🔵 "Robią dobrze, ale nie działa"</div>
+                            <div class="text-sm text-white/60 mt-1">Wysoka PRACTICE, niski PERFORMANCE</div>
+                        </div>
+                        <div style="background: rgba(0, 212, 255, 0.2); color: var(--neon-blue); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 1.25rem;">
+                            2 osoby
+                        </div>
+                    </div>
+                    <div class="pattern-group pattern-green">
+                        <div>
+                            <div class="font-semibold text-white" style="font-size: 1.1rem;">🟢 "Standard działa"</div>
+                            <div class="text-sm text-white/60 mt-1">Wszystkie wymiary na poziomie</div>
+                        </div>
+                        <div style="background: rgba(0, 255, 157, 0.2); color: var(--accent-green); padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 1.25rem;">
+                            3 osoby
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Heatmapa standardu -->
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-semibold mb-4 text-white">Heatmapa standardu — gdzie zespół kuleje?</h3>
+                <div style="overflow-x: auto;">
+                    <table class="heatmap-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Element standardu</th>
+                                <th>Zespół</th>
+                                <th>Top 3</th>
+                                <th>Bottom 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align: left; font-weight: 600;">Diagnoza aplikacji</td>
+                                <td class="heat-low">🔴 Niski</td>
+                                <td class="heat-medium">🟡 Średni</td>
+                                <td class="heat-low">🔴 Niski</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; font-weight: 600;">Prezentacja demo</td>
+                                <td class="heat-medium">🟡 Średni</td>
+                                <td class="heat-high">🟢 Wysoki</td>
+                                <td class="heat-low">🔴 Niski</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; font-weight: 600;">Bezpieczeństwo</td>
+                                <td class="heat-high">🟢 Wysoki</td>
+                                <td class="heat-high">🟢 Wysoki</td>
+                                <td class="heat-medium">🟡 Średni</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; font-weight: 600;">Domykanie rozmowy</td>
+                                <td class="heat-medium">🟡 Średni</td>
+                                <td class="heat-high">🟢 Wysoki</td>
+                                <td class="heat-low">🔴 Niski</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-sm text-white/70 mt-4">💡 <strong>Diagnoza aplikacji</strong> to systemowy problem zespołu — nie tylko indywidualne braki</p>
+            </div>
+
+            <!-- Alerty decyzyjne -->
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-semibold mb-4 text-white">⚠️ Alerty decyzyjne</h3>
+                <div class="alert-decision">
+                    <span style="font-size: 1.5rem;">⚠️</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: white; margin-bottom: 0.5rem;">3 osoby: wysoka wiedza, niska praktyka</div>
+                        <div style="color: rgba(255,255,255,0.7); margin-bottom: 0.75rem;">Rekomendacja: <strong>OJT (On-the-Job Training)</strong></div>
+                        <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Zaplanuj OJT</button>
+                    </div>
+                </div>
+                <div class="alert-decision">
+                    <span style="font-size: 1.5rem;">⚠️</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: white; margin-bottom: 0.5rem;">1 osoba: dobra praktyka, niski performance</div>
+                        <div style="color: rgba(255,255,255,0.7); margin-bottom: 0.75rem;">Możliwa przyczyna: <strong>problemy segmentowe lub systemowe</strong></div>
+                        <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Sprawdź segment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coaching View - Widok osoby -->
+            <div class="glass-card p-6 rounded-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-white">Jan Kowalski (JSS)</h3>
+                        <div class="text-sm text-white/60 mt-1">Coaching View — Przygotowanie do rozmowy 1:1</div>
+                    </div>
+                    <span class="intervention-badge badge-practice">Practice gap</span>
+                </div>
+                
+                <!-- Trójkąt Kompetencji (pełny dla menedżera) -->
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-3 text-white">Trójkąt Kompetencji</h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-center p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);">
+                            <div class="text-sm text-white/60 mb-1">THEORY</div>
+                            <div class="text-3xl font-bold mb-2" style="color: var(--neon-blue);">85%</div>
+                            <div class="text-xs" style="color: var(--accent-green);">⬆ +5% (30d)</div>
+                        </div>
+                        <div class="text-center p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);">
+                            <div class="text-sm text-white/60 mb-1">PRACTICE</div>
+                            <div class="text-3xl font-bold mb-2" style="color: var(--neon-purple);">62%</div>
+                            <div class="text-xs" style="color: var(--neon-red);">⬇ -2% (30d)</div>
+                        </div>
+                        <div class="text-center p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);">
+                            <div class="text-sm text-white/60 mb-1">PERFORMANCE</div>
+                            <div class="text-3xl font-bold mb-2" style="color: var(--accent-green);">58%</div>
+                            <div class="text-xs" style="color: rgba(255,255,255,0.6);">➝ +0% (30d)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rekomendacja rozmowy 1:1 -->
+                <div class="p-4 rounded-lg" style="background: linear-gradient(135deg, rgba(176, 0, 255, 0.15), rgba(0, 212, 255, 0.15)); border: 2px solid var(--neon-purple);">
+                    <h4 class="font-bold mb-3 text-white" style="font-size: 1.1rem;">🎯 Fokus rozmowy 1:1</h4>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="text-sm text-white/60">Zachowanie:</div>
+                            <div class="font-semibold text-white">Diagnoza aplikacji</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white/60">Dlaczego:</div>
+                            <div class="font-semibold text-white">skracana przy presji czasu</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-white/60">Cel:</div>
+                            <div class="font-semibold text-white">pełna diagnoza przez 2 tygodnie</div>
+                        </div>
+                    </div>
+
+                    <h5 class="font-semibold mt-4 mb-2 text-white">❓ Pytania coachingowe</h5>
+                    <div class="space-y-2">
+                        <div class="coaching-question">
+                            "Co sprawia, że przechodzisz szybciej do demo?"
+                        </div>
+                        <div class="coaching-question">
+                            "Co by się zmieniło, gdybyś wydłużył diagnozę o 2 minuty?"
+                        </div>
+                        <div class="coaching-question">
+                            "Jakie 3 pytania odkrywające dałyby Ci najwięcej informacji?"
+                        </div>
+                    </div>
+
+                    <button class="btn-primary mt-4" style="width: 100%; padding: 0.75rem;">📅 Zaplanuj rozmowę 1:1</button>
+                </div>
+            </div>
+
+            <!-- Historia interwencji -->
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-semibold mb-4 text-white">Historia interwencji</h3>
+                <div class="intervention-timeline">
+                    <div class="timeline-item">
+                        <div class="font-semibold text-white">Ustalono: Praca nad bezpieczeństwem</div>
+                        <div class="text-sm text-white/60 mt-1">10 stycznia 2026</div>
+                        <div class="text-sm text-white/70 mt-2">Wykonano: 3 wizyty OJT, 2 sesje microlearning</div>
+                        <div class="text-sm mt-2" style="color: var(--accent-green);">✅ Zamknięte — cel osiągnięty</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="font-semibold text-white">W trakcie: Diagnoza aplikacji</div>
+                        <div class="text-sm text-white/60 mt-1">24 stycznia 2026</div>
+                        <div class="text-sm text-white/70 mt-2">Trwa: tydzień 1/2 — 2 wizyty wykonane</div>
+                        <div class="text-sm mt-2" style="color: var(--neon-gold);">🔁 Kontynuacja</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shadowing Mode (uproszczony) -->
+            <div class="glass-card p-6 rounded-2xl">
+                <h3 class="text-lg font-semibold mb-4 text-white">📱 Shadowing Mode (Mobile)</h3>
+                <div class="p-4 rounded-lg" style="background: linear-gradient(135deg, rgba(176, 0, 255, 0.1), rgba(0, 212, 255, 0.1)); border: 2px solid var(--neon-purple);">
+                    <p class="text-sm text-white/80 mb-4">Minimalistyczna obserwacja w terenie — <strong>złapać rzeczywistość, nie wypełniać formularz</strong></p>
+                    
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between p-3 rounded" style="background: rgba(255,255,255,0.05);">
+                            <span class="text-sm text-white font-medium">1. Budowanie relacji</span>
+                            <div class="flex gap-2">
+                                <button class="px-4 py-2 rounded" style="background: var(--accent-green); color: white; font-weight: 600; border: none; cursor: pointer;">✓</button>
+                                <button class="px-4 py-2 rounded" style="background: var(--neon-red); color: white; font-weight: 600; border: none; cursor: pointer;">✗</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded" style="background: rgba(255,255,255,0.05);">
+                            <span class="text-sm text-white font-medium">2. Diagnoza aplikacji (3+ pytania)</span>
+                            <div class="flex gap-2">
+                                <button class="px-4 py-2 rounded" style="background: var(--accent-green); color: white; font-weight: 600; border: none; cursor: pointer;">✓</button>
+                                <button class="px-4 py-2 rounded" style="background: var(--neon-red); color: white; font-weight: 600; border: none; cursor: pointer;">✗</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded" style="background: rgba(255,255,255,0.05);">
+                            <span class="text-sm text-white font-medium">3. Demo dopasowane do problemu</span>
+                            <div class="flex gap-2">
+                                <button class="px-4 py-2 rounded" style="background: var(--accent-green); color: white; font-weight: 600; border: none; cursor: pointer;">✓</button>
+                                <button class="px-4 py-2 rounded" style="background: var(--neon-red); color: white; font-weight: 600; border: none; cursor: pointer;">✗</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded" style="background: rgba(255,255,255,0.05);">
+                            <span class="text-sm text-white font-medium">4. Bezpieczeństwo podkreślone</span>
+                            <div class="flex gap-2">
+                                <button class="px-4 py-2 rounded" style="background: var(--accent-green); color: white; font-weight: 600; border: none; cursor: pointer;">✓</button>
+                                <button class="px-4 py-2 rounded" style="background: var(--neon-red); color: white; font-weight: 600; border: none; cursor: pointer;">✗</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded" style="background: rgba(255,255,255,0.05);">
+                            <span class="text-sm text-white font-medium">5. Domykanie — konkretne next steps</span>
+                            <div class="flex gap-2">
+                                <button class="px-4 py-2 rounded" style="background: var(--accent-green); color: white; font-weight: 600; border: none; cursor: pointer;">✓</button>
+                                <button class="px-4 py-2 rounded" style="background: var(--neon-red); color: white; font-weight: 600; border: none; cursor: pointer;">✗</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 rounded" style="background: rgba(255,255,255,0.05);">
+                        <button class="w-full py-3 rounded font-semibold" style="background: var(--neon-blue); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                            🎙 Nagrać notatkę głosową (po wizycie)
+                        </button>
+                    </div>
+
+                    <button class="btn-primary w-full mt-3" style="padding: 0.75rem;">💾 Zapisz obserwację</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showView(view) {
+            // Hide both views
+            document.getElementById('view-jss').classList.add('hidden');
+            document.getElementById('view-manager').classList.add('hidden');
+            
+            // Remove active class from all tabs
+            document.getElementById('tab-jss').classList.remove('tab-active');
+            document.getElementById('tab-manager').classList.remove('tab-active');
+            document.getElementById('tab-jss').classList.add('glass-card');
+            document.getElementById('tab-manager').classList.add('glass-card');
+            
+            // Show selected view and activate tab
+            if (view === 'jss') {
+                document.getElementById('view-jss').classList.remove('hidden');
+                document.getElementById('tab-jss').classList.add('tab-active');
+                document.getElementById('tab-jss').classList.remove('glass-card');
+            } else {
+                document.getElementById('view-manager').classList.remove('hidden');
+                document.getElementById('tab-manager').classList.add('tab-active');
+                document.getElementById('tab-manager').classList.remove('glass-card');
+            }
+        }
+    </script>
+</body>
+</html>
