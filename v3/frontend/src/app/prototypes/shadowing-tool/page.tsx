@@ -37,7 +37,7 @@ export default function ShadowingToolPage() {
                     expanded={expandedSection === 'diagnoza'}
                     onToggle={() => setExpandedSection(expandedSection === 'diagnoza' ? null : 'diagnoza')}
                     score={scores['diagnoza']}
-                    setScore={(v) => toggleScore('diagnoza', v)}
+                    setScore={(v: number) => toggleScore('diagnoza', v)}
                     bars={[
                         { val: 1, desc: "Brak pytań. Od razu przeszedł do prezentacji produktu." },
                         { val: 3, desc: "Zadał pytania, ale powierzchowne. Nie dotarł do 'bólu'." },
@@ -52,7 +52,7 @@ export default function ShadowingToolPage() {
                     expanded={expandedSection === 'prezentacja'}
                     onToggle={() => setExpandedSection(expandedSection === 'prezentacja' ? null : 'prezentacja')}
                     score={scores['prezentacja']}
-                    setScore={(v) => toggleScore('prezentacja', v)}
+                    setScore={(v: number) => toggleScore('prezentacja', v)}
                     bars={[
                         { val: 1, desc: "Prezentacja cech (katalogowa). Brak języka korzyści." },
                         { val: 3, desc: "Połączył produkt z problemem, ale chaotycznie." },
@@ -67,7 +67,7 @@ export default function ShadowingToolPage() {
                     expanded={expandedSection === 'closing'}
                     onToggle={() => setExpandedSection(expandedSection === 'closing' ? null : 'closing')}
                     score={scores['closing']}
-                    setScore={(v) => toggleScore('closing', v)}
+                    setScore={(v: number) => toggleScore('closing', v)}
                     bars={[
                         { val: 1, desc: "Brak ustaleń. 'Zdzwonimy się'." },
                         { val: 3, desc: "Ustalił kolejny krok, ale bez daty lub właściciela." },
