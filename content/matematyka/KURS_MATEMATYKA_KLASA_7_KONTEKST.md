@@ -158,9 +158,176 @@
    
    → zadania uzupełniające 1-11, str. 48
    
-2. **Rozwinięcia dziesiętne liczb wymiernych** (str. 14)
+2. **Rozwinięcia dziesiętne liczb wymiernych** (str. 14-17)
    - Rozwinięcia skończone i nieskończone
    - Period w rozwinięciach dziesiętnych
+   
+   **SZCZEGÓŁOWY KONTEKST LEKCJI 2:**
+   
+   **Wprowadzenie (str. 14, górna część):**
+   - **Przykłady dzielenia:**
+     * 7/16 = 7:16 = 0,4375 (rozwinięcie SKOŃCZONE)
+       - Dzielenie pisemne: 70:16=4, reszta 6 → 60:16=3, reszta 12 → 120:16=7, reszta 8 → 80:16=5, reszta 0
+     * 47/90 = 47:90 = 0,52222... = 0,5(2) (rozwinięcie NIESKOŃCZONE okresowe)
+       - Dzielenie: 470:90=5, reszta 20 → 200:90=2, reszta 20 → 200:90=2... (powtarzanie)
+     * 5 1/33 = 5 + (1:33) = 5,030303... = 5,0(303) = 5,(03) (rozwinięcie NIESKOŃCZONE okresowe)
+       - Dzielenie: 100:33=3, reszta 1 → 10:33=0, reszta 10 → 100:33=3... (powtarzanie)
+   
+   - **Kluczowa obserwacja:**
+     * Liczba 7/16 ma rozwinięcie dziesiętne SKOŃCZONE
+     * Liczby 47/90 i 5 1/33 mają rozwinięcia dziesiętne NIESKOŃCZONE
+   
+   **Ramka teoretyczna (str. 14, środek):**
+   > "Można zauważyć, że dzieląc sposobem pisemnym licznik przez mianownik ułamka, albo otrzymamy resztę równą 0, albo reszta się powtórzy, i od pewnego momentu dalsze czynności będą się powtarzać. Zatem albo otrzymamy rozwinięcie dziesiętne skończone, albo nieskończone, w którym powtarza się pewien układ cyfr."
+   
+   - **Okres i rozwinięcia okresowe:**
+     * Powtarzający się układ cyfr w rozwinięciach nieskończonych ułamków nazywamy **okresem**
+     * Takie rozwinięcia nazywamy **okresowymi**
+     * Można je zapisać w **skróconej postaci**
+   
+   **Przykłady zapisu skróconego (str. 14, dół):**
+   - 17/90 = 0,18888888... = 0,1(8)
+   - 4 7/11 = 4,27272727... = 4,(27)
+   - 71/150 = 0,47333333... = 0,47(3)
+   - 2 3/66 = 2,07575757... = 2,0(75)
+   - -3 101/1110 = -3,0909090909... = -3,0(909)
+   
+   **UWAGA:** Zapisy 0,1(8) oraz 0,18(8) oznaczają tę samą liczbę, ale pierwszy zapis jest krótszy. Rozwinięcia dziesiętne warto zapisywać w możliwie najkrótszy sposób.
+   
+   ---
+   
+   **SEKCJA GŁÓWNA (str. 15 - nagłówek "2 Rozwinięcia dziesiętne liczb wymiernych"):**
+   
+   **Wiedza wstępna:**
+   > "Wiesz już, że ilorazy liczb można zapisywać, używając kreski ułamkowej. Każdy ułamek zwykły możesz również zinterpretować jako iloraz dwóch liczb. Tę własność możemy wykorzystać, gdy zamieniamy ułamki zwykłe na dziesiętne — wystarczy podzielić licznik przez mianownik."
+   
+   **ĆWICZENIE A (str. 15):**
+   a) Zamień ułamki 7/8 i 35/32 na ułamki dziesiętne, wykonując dzielenie.
+   b) Podziel licznik przez mianownik w ułamkach 5/6 i 18/11.
+   
+   **Wyjaśnienie procesu (str. 15, środek):**
+   - Czasami, dzieląc licznik ułamka przez mianownik, otrzymamy ułamek dziesiętny o skończonej liczbie cyfr po przecinku.
+   - Mówimy wtedy, że ułamek ma **rozwinięcie dziesiętne skończone**.
+   - Niekiedy jednak dzielenie nigdy się nie kończy.
+   - Wówczas mówimy, że ułamek ma **rozwinięcie dziesiętne nieskończone**.
+   
+   **Ramka definicji (str. 15, dół):**
+   
+   **Rozwinięcie dziesiętne - Skrócony zapis**
+   
+   ```
+   17/90 = 0,18888888... = 0,1(8)
+   4 7/11 = 4,27272727... = 4,(27)
+   71/150 = 0,47333333... = 0,47(3)
+   2 3/66 = 2,07575757... = 2,0(75)
+   -3 101/1110 = -3,0909090909... = -3,0(909)
+   ```
+   
+   **Uwaga (str. 15, ramka):**
+   > "Gdy ułamek zwykły skrócimy tak, że otrzymamy ułamek nieskracalny, to nie wykonując dzielenia, można rozpoznać, czy rozwinięcie dziesiętne będzie skończone, czy nieskończone okresowe. Ułamek nieskracalny ma rozwinięcie dziesiętne nieskończone okresowe, gdy jego mianownik dzieli się przez jakąś liczbę pierwszą różną od 2 i 5 (tzn. dzieli się przez 3 lub przez jakąś liczbę większą niż 5). Takim ułamkiem jest na przykład 7/30."
+   
+   **Przykład ilustracyjny:**
+   - 104/210 = 52/105 = **52/(3·5·7)**
+     - Mianownik 105 dzieli się przez 3 i 7 (liczby pierwsze różne od 2 i 5)
+     - Zatem ułamek ten ma rozwinięcie dziesiętne nieskończone okresowe
+   
+   ---
+   
+   **ĆWICZENIE B (str. 16, nagłówek pomarańczowy):**
+   "Zapisz w skróconej postaci rozwinięcia dziesiętne liczb 47/90 i 5 1/33."
+   
+   **Informacja kontekstowa (str. 16, pod nagłówkiem):**
+   - Liczby, które można zapisać w postaci ilorazu liczb całkowitych, to **liczby wymierne**.
+   - Możemy więc powiedzieć, że:
+   
+   **Ramka z twierdzeniem (str. 16, dół):**
+   > **"Każda liczba wymierna ma rozwinięcie dziesiętne skończone albo nieskończone okresowe."**
+   
+   ---
+   
+   **ZADANIA (str. 17):**
+   
+   **Zadania 1:** Znajdź rozwinięcia dziesiętne podanych liczb:
+   a) 2/5
+   b) 10 5/8
+   c) 1 7/12
+   d) 1 5/18
+   e) 3/8
+   f) 2 1/3
+   g) 2 1/11
+   h) 11 5/9
+   
+   **Zadanie 2:**
+   a) Jaka jest piąta cyfra po przecinku liczby 12,(375)?
+   b) Jaka jest siódma cyfra po przecinku liczby 2,014?
+   c) Jaka jest dziewiąta cyfra po przecinku liczby 5,3(52)?
+   
+   **Zadanie 3:** Jaka jest setna cyfra po przecinku liczby 7,6(15), a jaka liczby 0,(126)?
+   
+   **Zadanie 4:** Ustal, która z podanych liczb jest większa:
+   a) 0,(32) czy 0,32
+   b) 3,(012) czy 3,0121
+   c) 1/4 czy 0,33
+   d) 3/4 czy 0,(125)
+   e) 5,(171) czy 5,(17)
+   f) 2,(307) czy 2,3(07)
+   
+   **Zadanie 5:** Podaj przykład liczby x, która spełnia podany warunek:
+   a) 0,1 < x < 0,(1)
+   b) 0,(7) < x < 0,(8)
+   c) 1/2 < x < 0,(5)
+   
+   **Zadanie 6:** Ustal, która liczba jest większa, znajdując kilka początkowych cyfr rozwinięć dziesiętnych podanych liczb:
+   a) 3/5 czy 7/18
+   b) 27/16 czy 12/37
+   c) 357/430 czy 476/550
+   
+   ---
+   
+   **SEKCJA: CIEKAWOSTKA (str. 17, górny prawy róg, niebieska ramka):**
+   
+   **Nagłówek:** "Ciekawostka"
+   
+   **Tytuł:** "8. Przeczytaj ciekawostkę"
+   
+   **Treść:**
+   a) Wśród ułamków podanych niżej wskaż te, które mają rozwinięcie dziesiętne skończone:
+      1/3, 1/4, 1/5, 1/6, 1/7, 1/8, 1/9, ... 2/3, 2/9, 3/10
+   
+   b) Uzasadnij, że każda z liczb:
+      56/350, 66/528, 147/210
+   ma rozwinięcie dziesiętne skończone.
+   
+   c) Wśród liczb podanych poniżej jest tylko jedna liczba, która ma rozwinięcie dziesiętne skończone. Wskaż tę liczbę:
+      5/28, 127/120, 11/32, 162/180
+   
+   ---
+   
+   **SEKCJA: SPRAWDŹ, CZY UMIESZ (str. 17, dolny prawy róg, niebieska ramka):**
+   
+   **1. Jaka jest trzynasta cyfra po przecinku rozwinięcia dziesiętnego liczby 1,6(0518)?**
+   - A. 0
+   - B. 5
+   - C. 1
+   - D. 8
+   
+   **2. Liczby l = 3,14, m = 3,(3), n = 3/100 ustawiono w kolejności od najmniejszej do największej. Otrzymano kolejność:**
+   - A. m, n, l
+   - B. n, m, l
+   - C. n, l, m
+   - D. l, n, m
+   
+   **Odsyłacz:** → zadanie uzupełniające 12-15, str. 49
+   
+   ---
+   
+   **PODSUMOWANIE LEKCJI 2:**
+   - Ułamki zwykłe można zamieniać na dziesiętne przez dzielenie licznika przez mianownik
+   - Rozwinięcia dziesiętne są skończone LUB nieskończone okresowe
+   - W rozwinięciach nieskończonych powtarza się "okres" - ciąg cyfr
+   - Zapis skrócony: 0,333... = 0,(3) lub 0,123123... = 0,(123)
+   - Każda liczba wymierna ma rozwinięcie dziesiętne skończone lub nieskończone okresowe
+   - Ułamek nieskracalny ma rozwinięcie nieskończone okresowe, gdy mianownik dzieli się przez liczbę pierwszą różną od 2 i 5
 
 3. **Zaokrąglanie liczb. Szacowanie wyników** (str. 18)
    - Reguły zaokrąglania
