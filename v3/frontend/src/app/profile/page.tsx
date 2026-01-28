@@ -3,12 +3,14 @@
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useEffect, Suspense } from 'react'
-import { User, Bell, Zap, Trophy, Flame, Target, LogOut, TrendingUp, Award, Rocket, BookOpen, Sparkles, Star, Settings } from 'lucide-react'
+import { User, Bell, Zap, Trophy, Flame, Target, LogOut, TrendingUp, Award, Rocket, BookOpen, Sparkles, Star, Settings, Check, Layout } from 'lucide-react'
 import { getUserStatsSummary } from '@/lib/rpg-stats'
+import { useTheme } from '@/contexts/ThemeContext'
 import ActivityHeatmap from '@/components/profile/ActivityHeatmap'
 import AchievementsGrid from '@/components/profile/AchievementsGrid'
 import CompetencyRadar from '@/components/profile/CompetencyRadar'
 import EditProfileModal, { ARCHETYPES } from '@/components/profile/EditProfileModal'
+import ThemeSelector from '@/components/profile/ThemeSelector'
 
 function ProfileContent() {
     const { user, profile, signOut } = useAuth()
@@ -47,6 +49,49 @@ function ProfileContent() {
     return (
         <div style={{ minHeight: '100vh' }}>
 
+
+            {/* Mobile/Desktop Tab Navigation */}
+            <div style={{
+                display: 'flex',
+                gap: '8px',
+                marginBottom: '24px',
+                overflowX: 'auto',
+                paddingBottom: '4px'
+            }}>
+                {[
+                    { id: 'informacje', label: 'Informacje', icon: User },
+                    { id: 'postepy', label: 'Postępy', icon: TrendingUp },
+                    { id: 'cele', label: 'Cele', icon: Target },
+                    { id: 'ustawienia', label: 'Ustawienia', icon: Settings },
+                ].map((tab) => {
+                    const Icon = tab.icon
+                    const isActive = activeTab === tab.id
+                    return (
+                        <button
+                            key={tab.id}
+                            onClick={() => router.push(`/profile?tab=${tab.id}`)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '10px 20px',
+                                background: isActive ? 'var(--neon-purple)' : 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid rgba(255, 255, 255, 0.08)',
+                                borderRadius: '30px',
+                                color: isActive ? 'white' : 'rgba(255, 255, 255, 0.6)',
+                                cursor: 'pointer',
+                                whiteSpace: 'nowrap',
+                                fontSize: '14px',
+                                fontWeight: 600,
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            <Icon size={16} />
+                            {tab.label}
+                        </button>
+                    )
+                })}
+            </div>
 
             {/* Content */}
             <div className="page-content-wrapper">
@@ -370,6 +415,13 @@ function ProfileContent() {
                         padding: '32px'
                     }}>
                         <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '24px' }}>Ustawienia konta</h3>
+
+                        <div style={{ marginBottom: '32px' }}>
+                            <label style={{ display: 'block', fontSize: '13px', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '12px' }}>
+                                Wygląd Aplikacji (Motyw)
+                            </label>
+                            <ThemeSelector />
+                        </div>
 
                         <div style={{ marginBottom: '24px' }}>
                             <label style={{ display: 'block', fontSize: '13px', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '8px' }}>

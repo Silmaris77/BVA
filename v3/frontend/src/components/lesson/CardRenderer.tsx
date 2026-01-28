@@ -8,6 +8,7 @@ import MatchingCard from './math/MatchingCard'
 import TrueFalseCard from './math/TrueFalseCard'
 import ComparisonCard from './math/ComparisonCard'
 import FillGapCard from './math/FillGapCard'
+import DigitSelectorCard from './math/DigitSelectorCard'
 
 import QuestionCard from './QuestionCard'
 import SummaryCard from './SummaryCard'
@@ -36,7 +37,7 @@ import CuriosityCard from './CuriosityCard'
 import ActionCard from './ActionCard'
 import DiagnosticCard from './DiagnosticCard'
 
-export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'matching' | 'true-false' | 'comparison' | 'fill-gap' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness' | 'curiosity' | 'action' | 'diagnostic'
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'matching' | 'true-false' | 'comparison' | 'fill-gap' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness' | 'curiosity' | 'action' | 'diagnostic' | 'digit-selector'
 
 export interface LessonCardData {
     type: CardType
@@ -130,6 +131,10 @@ export interface LessonCardData {
     statements?: { id: string, text: string, isTrue: boolean, explanation?: string }[]
     expression?: { left: string, right: string, relationship: '>' | '<' | '=' }
     parts?: (string | { id: string, correctRange?: { min: number, max: number }, correctExact?: number, placeholder?: string })[]
+
+    // Digit Selector
+    number?: string | number
+    correctIndex?: number
 
     [key: string]: any
 }
@@ -409,6 +414,14 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
             return <FillGapCard
                 title={card.title || 'Uzupełnij luki'}
                 parts={card.parts || []}
+                explanation={card.explanation}
+            />
+        case 'digit-selector':
+            return <DigitSelectorCard
+                title={card.title}
+                question={card.question || 'Wskaż cyfrę'}
+                number={card.number || '0'}
+                correctIndex={card.correctIndex || 0}
                 explanation={card.explanation}
             />
         case 'learning-path':
