@@ -33,8 +33,10 @@ import CycleCardVariantB from './CycleCardVariantB'
 import DunningKrugerCard from './DunningKrugerCard'
 import ReadinessCard from './ReadinessCard'
 import CuriosityCard from './CuriosityCard'
+import ActionCard from './ActionCard'
+import DiagnosticCard from './DiagnosticCard'
 
-export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'matching' | 'true-false' | 'comparison' | 'fill-gap' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness' | 'curiosity'
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'matching' | 'true-false' | 'comparison' | 'fill-gap' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness' | 'curiosity' | 'action' | 'diagnostic'
 
 export interface LessonCardData {
     type: CardType
@@ -141,6 +143,7 @@ interface CardRendererProps {
 }
 
 export default function CardRenderer({ card, onAnswer, onTestResult, onReset, onNext }: CardRendererProps) {
+    console.log('Rendering Card Type:', card.type);
     switch (card.type) {
         case 'intro':
             return <IntroCard
@@ -343,8 +346,8 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 image={card.image}
                 onStart={onNext}
             />
-        
-        {/* Math Cards */}
+
+            {/* Math Cards */ }
         case 'input':
             return <InputCard
                 question={card.question || 'Oblicz...'}
@@ -444,6 +447,20 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
             return <CuriosityCard
                 title={card.title || 'Ciekawostka'}
                 content={card.content || ''}
+            />
+        case 'action':
+            return <ActionCard
+                title={card.title || 'Działanie'}
+                description={card.description || ''}
+                actionType={card.actionType || 'copy'}
+                content={card.content || ''}
+            />
+        case 'diagnostic':
+            return <DiagnosticCard
+                title={card.title || 'Diagnostyka'}
+                description={card.description || ''}
+                questions={card.questions as any || []}
+                results={card.results as any || []}
             />
         default:
             return (

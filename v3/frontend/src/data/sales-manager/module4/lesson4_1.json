@@ -2,205 +2,372 @@
     "lesson_id": "sm-m4-l1-psychologia",
     "title": "Jak ludzie się uczą i jaka jest rola menedżera",
     "subtitle": "Moduł 4: Rozwijanie ludzi",
-    "duration_minutes": 20,
-    "xp_reward": 300,
+    "duration_minutes": 30,
+    "xp_reward": 500,
     "difficulty": "intermediate",
-    "description": "Zrozum psychologię uczenia się dorosłych, 4 poziomy kompetencji i zmień swoje nastawienie z 'naprawiania' na 'rozwijanie'.",
+    "description": "Kompletny warsztat psychologii szefa. Zdiagnozuj swój zespół (R1-R4) i naucz się uczyć innych.",
     "module_id": "d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44",
     "cards": [
         {
-            "type": "intro",
-            "title": "Mindset: Ogrodnik, nie Mechanik",
-            "description": "Wielu menedżerów myśli, że pracownik to maszyna, którą trzeba 'naprawić' szybkim feedbackiem. To błąd. Rozwój to proces organiczny, który wymaga warunków, a nie tylko instrukcji."
+            "type": "hero",
+            "title": "Jesteś Menedżerem? Teraz jesteś też Trenerem",
+            "subtitle": "Zmiana Tożsamości",
+            "content": "Większość menedżerów myśli, że ich rolą jest 'dowożenie wyników'. To prawda, ale tylko połowiczna. Jedynym sposobem na DŁUGOFALOWE wyniki jest rozwój ludzi, którzy te wyniki robią.",
+            "icon": "users",
+            "theme": "primary"
         },
         {
             "type": "concept",
-            "title": "Menedżer jako Trener",
-            "content": "Rola menedżera ewoluuje. Oprócz celów biznesowych, Twoim zadaniem jest:",
+            "title": "Definicja Sukcesu",
+            "content": "Jako handlowiec, sukcesem była TWOJA sprzedaż. Jako menedżer, sukcesem jest WZROST sprzedaży Twoich ludzi.",
             "keyPoints": [
-                "Odkrywaniem pasji i mocnych stron pracowników",
-                "Współtworzeniem planów rozwoju",
-                "Dostarczaniem narzędzi i wiedzy",
-                "Budowaniem bezpiecznego środowiska do nauki",
-                "Narzucaniem tempa rozwoju (akceleracja)"
+                "Stary cel: Być najlepszym graczem na boisku.",
+                "Nowy cel: Sprawić, by inni grali lepiej od Ciebie.",
+                "Narzędzie: Trening, Feedback, Coaching."
             ],
             "visual": {
                 "type": "image",
-                "src": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80"
+                "src": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80"
             }
         },
         {
-            "type": "learning-path",
-            "title": "4 Poziomy Kompetencji",
-            "description": "Zanim zaczniesz kogoś uczyć, musisz wiedzieć, gdzie on jest. Kliknij, aby zobaczyć etapy.",
-            "levels": [
+            "type": "checklist",
+            "title": "Autodiagnoza: Dziś Byłem...",
+            "description": "Zaznacz, które czynności wykonałeś w ostatnim tygodniu. Zobaczysz, czy zarządzasz, czy trenujesz.",
+            "items": [
                 {
-                    "stage": 0,
-                    "title": "START",
-                    "subtitle": "Nieświadoma niekompetencja",
-                    "details": "„Nie wiem, że nie wiem”. Stan, w którym pracownik nie jest świadom popełnianych błędów. Potrzeba rozwoju jest tutaj niska, bo nie widać problemu.",
-                    "status": "completed",
-                    "color": "#9ca3af"
+                    "id": "1",
+                    "text": "Rozwiązałem problem za pracownika (Strażak)"
                 },
                 {
-                    "stage": 1,
-                    "title": "UŚWIADOMIENIE",
-                    "subtitle": "Świadoma niekompetencja",
-                    "details": "„Wiem, czego nie wiem”. Moment zderzenia z rzeczywistością. Pracownik widzi swoje braki. To budzi motywację, ale może też rodzić frustrację.",
-                    "status": "current",
-                    "color": "#fbbf24"
+                    "id": "2",
+                    "text": "Wypełniłem tabelki i raporty (Administrator)"
                 },
                 {
-                    "stage": 2,
-                    "title": "PRAKTYKA",
-                    "subtitle": "Świadoma kompetencja",
-                    "details": "„Wiem, co wiem”. Pojawiają się pierwsze rezultaty, ale wymagają one dużego skupienia i wysiłku. Działanie nie jest jeszcze płynne.",
-                    "status": "locked",
-                    "color": "#34d399"
+                    "id": "3",
+                    "text": "Zadałem pytanie: 'Co zrobisz inaczej?' (Trener)"
                 },
                 {
-                    "stage": 3,
-                    "title": "MISTRZOSTWO",
-                    "subtitle": "Nieświadoma kompetencja",
-                    "details": "„Nie wiem, co wiem”. Pełny automatyzm. Pracownik działa intuicyjnie, szybko i bezbłędnie. Wiedza stała się nawykiem.",
-                    "status": "locked",
-                    "color": "#00d4ff"
+                    "id": "4",
+                    "text": "Pojechałem na wizytę, żeby TYLKO obserwować (Trener)"
                 }
             ]
+        },
+        {
+            "type": "quote",
+            "content": "Najtrudniejsza rzecz dla menedżera to przestać grać i zacząć oglądać grę. Musisz pozwolić innym przejąć kontrolę, nawet jeśli zrobią to gorzej niż Ty.",
+            "author": "Sir Alex Ferguson",
+            "role": "Menedżer Manchester United"
         },
         {
             "type": "readiness",
             "title": "Poziomy Gotowości (R1-R4)",
-            "description": "Każdy pracownik może być na innym poziomie gotowości w zależności od zadania. Poznaj model Przywództwa Sytuacyjnego."
+            "description": "Zanim zaczniesz kogoś uczyć, musisz wiedzieć, czego on potrzebuje. Nie każdy jest taki sam."
         },
         {
-            "type": "dunning-kruger",
-            "title": "Pułapka: Efekt Krugera-Dunninga",
-            "description": "Dlaczego najsłabsi handlowcy są często najbardziej pewni siebie?",
-            "points": [
+            "type": "diagnostic",
+            "title": "Diagnostyka: Przypadek Tomka",
+            "description": "Tomek jest w firmie od miesiąca. Biega do klientów z wielką energią, ale często myli produkty. Kiedy zwracasz mu uwagę, mówi: 'Spoko szefie, ogarnę to!'.",
+            "questions": [
                 {
-                    "stage": 0,
-                    "title": "Szczyt Głupoty",
-                    "label": "Terytorium Ignoranta",
-                    "description": "Wysoka pewność, znikoma wiedza",
-                    "details": "„Sprzedaż? To proste!” Nowy handlowiec często przecenia swoje siły, bo nie wie, czego nie wie.",
-                    "color": "#ef4444"
+                    "id": "q1",
+                    "text": "Jak oceniasz kompetencje Tomka?",
+                    "answers": [
+                        {
+                            "text": "Wysokie (wie co robi)",
+                            "score": "X"
+                        },
+                        {
+                            "text": "Niskie (dopiero się uczy)",
+                            "score": "R1"
+                        }
+                    ]
                 },
                 {
-                    "stage": 1,
-                    "title": "Dolina Rozpaczy",
-                    "label": "Szok Rzeczywistości",
-                    "description": "Upadek pewności",
-                    "details": "Pierwsze porażki. Uświadamia sobie, jak trudna jest ta praca. Pewność siebie szoruje o dno.",
+                    "id": "q2",
+                    "text": "Jak oceniasz jego zaangażowanie?",
+                    "answers": [
+                        {
+                            "text": "Wysokie (chce mu się)",
+                            "score": "R1"
+                        },
+                        {
+                            "text": "Niskie (jest zgaszony)",
+                            "score": "X"
+                        }
+                    ]
+                }
+            ],
+            "results": [
+                {
+                    "id": "R1",
+                    "title": "To jest R1: Entuzjastyczny Debiutant",
+                    "description": "Tomek 'nie wie, czego nie wie'. Ma dużo energii, ale mało wiedzy. Potrzebuje jasnych instrukcji, a nie coachingu.",
+                    "color": "#fbbf24"
+                },
+                {
+                    "id": "X",
+                    "title": "Spróbuj ponownie",
+                    "description": "To nie do końca tak. Tomek ma energię, ale brakuje mu wiedzy.",
+                    "color": "#ef4444"
+                }
+            ]
+        },
+        {
+            "type": "concept",
+            "title": "R1: Instrukcja Obsługi",
+            "content": "Pracownik R1 jest jak dziecko uczące się chodzić. Ma zapał, ale się przewraca.",
+            "keyPoints": [
+                "✅ Rób: Dawaj konkretne instrukcje (Krok po kroku).",
+                "✅ Rób: Chwal za małe sukcesy.",
+                "❌ Nie Rób: 'Zrób jak uważasz' (Delegowanie).",
+                "❌ Nie Rób: Głęboki coaching (To go tylko zmyli)."
+            ]
+        },
+        {
+            "type": "diagnostic",
+            "title": "Diagnostyka: Przypadek Anny",
+            "description": "Anna pracuje 4 miesiące. Początkowy zapał minął. Klienci odmawiają, a ona mówi: 'Ten rynek jest trudny, nikt nie chce kupować'. Zaczyna spóźniać się z raportami.",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Co się stało z motywacją Anny?",
+                    "answers": [
+                        {
+                            "text": "Spadła (zderzenie z murem)",
+                            "score": "R2"
+                        },
+                        {
+                            "text": "Jest wysoka, to tylko gorszy dzień",
+                            "score": "X"
+                        }
+                    ]
+                },
+                {
+                    "id": "q2",
+                    "text": "A co z jej umiejętnościami?",
+                    "answers": [
+                        {
+                            "text": "Są już mistrzowskie",
+                            "score": "X"
+                        },
+                        {
+                            "text": "Trochę umie, ale to za mało na sukces",
+                            "score": "R2"
+                        }
+                    ]
+                }
+            ],
+            "results": [
+                {
+                    "id": "R2",
+                    "title": "To jest R2: Rozczarowany Adept",
+                    "description": "To najtrudniejszy moment. Anna jest w 'Dolinie Rozpaczy'. Uświadomiła sobie, jak dużo jeszcze nie umie.",
                     "color": "#f59e0b"
                 },
                 {
-                    "stage": 2,
-                    "title": "Droga Oświecenia",
-                    "label": "Nauka i Praktyka",
-                    "description": "Odbudowa pewności",
-                    "details": "Zaczyna rozumieć mechanizmy. Uczy się na błędach. Pewność rośnie, ale tym razem ma solidne podstawy.",
-                    "color": "#10b981"
-                },
-                {
-                    "stage": 3,
-                    "title": "Płaskowyż Stabilności",
-                    "label": "Ekspert",
-                    "description": "Kompetencja i pokora",
-                    "details": "Wie, co robi. Działa intuicyjnie. Rozumie też, że zawsze można się czegoś jeszcze nauczyć.",
-                    "color": "#3b82f6"
+                    "id": "X",
+                    "title": "Spróbuj ponownie",
+                    "description": "Anna ewidentnie straciła zapał (motywację). To typowe po kilku miesiącach.",
+                    "color": "#ef4444"
                 }
             ]
+        },
+        {
+            "type": "concept",
+            "title": "R2: Ratunek w Dolinie",
+            "content": "To tu rezygnuje najwięcej handlowców. Twoją rolą jest być 'Ratownikiem'.",
+            "keyPoints": [
+                "Celem jest ODBUDOWA pewności siebie.",
+                "Musisz łączyć Instruktaż (nadal się uczy) ze Wsparciem (potrzebuje otuchy).",
+                "Pokaż perspektywę: 'To normalne, każdy przez to przechodził'."
+            ]
+        },
+        {
+            "type": "warning",
+            "title": "Śmiertelny Błąd Menedżera",
+            "description": "Najgorsze, co możesz zrobić pracownikowi R2, to zostawić go samego ('Już pracujesz 3 miesiące, radź sobie'). To pewna droga do utraty pracownika."
+        },
+        {
+            "type": "concept",
+            "title": "R3 i R4: Kompetentni",
+            "content": "Kiedy pracownik przejdzie dolinę, staje się kompetentny.",
+            "keyPoints": [
+                "R3 (Praktyk): Umie, ale czasem wątpi. Potrzebuje WSPARCIA (pytań).",
+                "R4 (Ekspert): Umie i chce. Potrzebuje AUTONOMII i nowych wyzwań."
+            ]
+        },
+        {
+            "type": "lightbulb",
+            "title": "Pułapka Złotej Klatki",
+            "content": "Dlaczego najlepsi (R4) odchodzą? Często dlatego, że menedżer nadal traktuje ich jak R1 (kontroluje, poucza).",
+            "insight": "Ekspert potrzebuje powietrza. Jeśli będziesz go mikrozarządzać, udusisz jego motywację."
+        },
+        {
+            "type": "dunning-kruger",
+            "title": "Pułapka Ego: Efekt Krugera-Dunninga",
+            "description": "Zobacz, jak pewność siebie zmienia się w czasie. Zauważasz tu swoich ludzi?"
+        },
+        {
+            "type": "quiz",
+            "title": "Gdzie jest Ignorant?",
+            "questions": [
+                {
+                    "question": "Kto ma najwyższą (i nieuzasadnioną) pewność siebie?",
+                    "options": [
+                        "Osoba na Szczycie Głupoty",
+                        "Ekspert",
+                        "Osoba w Dolinie Rozpaczy"
+                    ],
+                    "correct": 0,
+                    "explanation": "To paradoks: Najmniej wiedzą ci, którzy myślą, że wiedzą wszystko. To 'Szczyt Głupoty'."
+                }
+            ]
+        },
+        {
+            "type": "lightbulb",
+            "title": "Paradoks Eksperta",
+            "content": "Zauważyłeś, że Twoi najlepsi ludzie często mówią: 'To nic wielkiego, po prostu mi się udało'?",
+            "insight": "To Syndrom Oszusta. Eksperci często nie doceniają swoich umiejętności. Twoim zadaniem jest im o nich przypominać."
+        },
+        {
+            "type": "action",
+            "title": "Challenge: Doceń Eksperta",
+            "description": "Nie czekaj na ocenę roczną. Zrób to teraz.",
+            "content": "Hej, myślałem o tej sytuacji z wczoraj. Świetnie to rozegrałeś! Cieszę się, że mam Cię w zespole.",
+            "actionType": "sms"
         },
         {
             "type": "cycle-b",
             "cycleType": "kolb",
-            "title": "Cykl Kolba: Jak uczy się mózg?",
-            "description": "Dorośli uczą się najskuteczniej przechodząc przez 4 etapy. Zobacz interaktywny model.",
-            "steps": [
+            "title": "Silnik Treningu: Cykl Kolba",
+            "description": "Jak zamienić doświadczenie w wiedzę? Oto mechanizm, którego będziesz używać codziennie."
+        },
+        {
+            "type": "concept",
+            "title": "Krok 1: Doświadczenie",
+            "content": "Żeby się uczyć, pracownik musi coś ZROBIĆ. Ale uwaga: Ty musisz to WIDZIEĆ.",
+            "keyPoints": [
+                "Nie możesz trenować na podstawie 'opowieści' pracownika ('Klient był trudny').",
+                "Musisz być świadkiem (obserwacja w terenie).",
+                "To jest paliwo do procesu."
+            ]
+        },
+        {
+            "type": "concept",
+            "title": "Krok 2: Refleksja",
+            "content": "To najważniejszy moment. Większość menedżerów go pomija i od razu mówi: 'Zrobiłeś to źle'.",
+            "remember": {
+                "text": "BŁĄD: Mówienie pracownikowi, co zrobił źle.\nSUKCES: Sprawienie, by SAM to zauważył."
+            }
+        },
+        {
+            "type": "habit",
+            "title": "Narzędzie: 5 Pytań Refleksyjnych",
+            "description": "Jak wywołać refleksję? Nie wymyślaj koła na nowo. Użyj tych pytań:",
+            "habits": [
                 {
-                    "id": 1,
-                    "title": "Doświadczenie",
-                    "description": "Konkretne zdarzenie, np. rozmowa z klientem. 'Co się stało?' - to punkt wyjścia.",
-                    "icon": "target",
-                    "color": "#00d4ff"
+                    "id": "q1",
+                    "text": "Jak się czujesz po tej wizycie?"
                 },
                 {
-                    "id": 2,
-                    "title": "Refleksja",
-                    "description": "Analiza tego zdarzenia. 'Dlaczego tak poszło? Co czułem?' Dystans do emocji.",
-                    "icon": "brain",
-                    "color": "#7dd956"
+                    "id": "q2",
+                    "text": "Jaki miałeś cel?"
                 },
                 {
-                    "id": 3,
-                    "title": "Teoria (Wniosek)",
-                    "description": "Szukanie reguł. 'Co zrobię inaczej?' Łączenie praktyki z modelem działania.",
-                    "icon": "lightbulb",
-                    "color": "#ffd700"
+                    "id": "q3",
+                    "text": "Co poszło dokładnie tak, jak chciałeś?"
                 },
                 {
-                    "id": 4,
-                    "title": "Eksperyment",
-                    "description": "Testowanie nowego podejścia w praktyce. 'Sprawdzam!' Cykl się zamyka.",
-                    "icon": "check",
-                    "color": "#ff0055"
+                    "id": "q4",
+                    "text": "Co Cię zaskoczyło / co poszło nie tak?"
+                },
+                {
+                    "id": "q5",
+                    "text": "Co zrobisz inaczej następnym razem?"
                 }
             ]
         },
         {
+            "type": "concept",
+            "title": "Krok 3: Wnioski (Teoria)",
+            "content": "Dopiero gdy pracownik przeanalizuje błąd, jest gotowy na Twoją wiedzę.",
+            "keyPoints": [
+                "Teraz możesz powiedzieć: 'Z mojego doświadczenia wynika...'",
+                "Teraz możesz pokazać standard firmowy.",
+                "To jest moment na 'nauczanie'."
+            ]
+        },
+        {
+            "type": "concept",
+            "title": "Krok 4: Eksperyment",
+            "content": "Wnioski nic nie dają, jeśli nie zostaną wdrożone.",
+            "keyPoints": [
+                "Trening musi kończyć się planem: 'Na następnej wizycie sprawdzę X'.",
+                "Cykl się zamyka - nowe działanie to nowe Doświadczenie."
+            ]
+        },
+        {
             "type": "story",
-            "title": "Błąd Młodego Menedżera",
-            "scenario": "Tomek, świeżo upieczony lider, próbował uczyć doświadczonego handlowca (Jana) metodą „mikrozarządzania” – mówił mu dokładnie, co ma robić w każdej minucie.",
+            "title": "Case Study: Zmarnowany Trening",
+            "scenario": "Menedżer Artur pojechał z handlowcem. Po wizycie powiedział: 'Słuchaj, za szybko podałeś cenę. Nie zbadałeś potrzeb. Następnym razem pytaj więcej.' Handlowiec pokiwał głową.",
             "consequences": [
-                "Jan poczuł się niedoceniony (utrata motywacji).",
-                "Wyniki Jana spadły, mimo dobrych intencji Tomka.",
-                "Relacja uległa pogorszeniu."
+                "Menedżer pominął etap Refleksji.",
+                "Handlowiec poczuł się oceniony, a nie nauczony.",
+                "Wniosek Artura („pytaj więcej”) wpadł jednym uchem, a wypadł drugim."
             ],
             "lesson": {
-                "heading": "Wniosek",
-                "text": "Tomek użył stylu dyrektywnego wobec pracownika na poziomie 'Świadomej Kompetencji'. To błąd w dopasowaniu stylu do poziomu gotowości."
+                "heading": "Lekcja",
+                "text": "Gdyby Artur zapytał: 'Jak myślisz, dlaczego klient tak szybko zapytał o cenę?', handlowiec sam doszedłby do wniosku, że nie zbudował wartości."
             }
         },
         {
             "type": "quiz",
-            "title": "Sprawdź wiedzę",
+            "title": "Sprawdź Wiedzę",
             "questions": [
                 {
-                    "question": "Na którym etapie pracownik wie, że czegoś nie potrafi i to go motywuje?",
+                    "question": "Jaki jest główny cel menedżera?",
                     "options": [
-                        "Nieświadoma niekompetencja",
-                        "Świadoma niekompetencja",
-                        "Nieświadoma kompetencja"
+                        "Rozwój ludzi, by osiągali wyniki",
+                        "Osobiste dowożenie sprzedaży"
                     ],
-                    "correct": 1,
-                    "explanation": "Świadoma niekompetencja to moment, w którym uświadamiamy sobie braki, co jest impulsem do nauki."
+                    "correct": 0,
+                    "explanation": "Twoim produktem jest Twój zespół."
                 },
                 {
-                    "question": "Co charakteryzuje efekt Krugera-Dunninga?",
+                    "question": "Co robisz z pracownikiem R2 (zniechęconym)?",
                     "options": [
-                        "Eksperci przeceniają się",
-                        "Nowicjusze przeceniają swoje umiejętności",
-                        "Wszyscy oceniają się obiektywnie"
+                        "Dajesz mu wolną rękę",
+                        "Łączysz wsparcie emocjonalne z instrukcją"
                     ],
                     "correct": 1,
-                    "explanation": "Efekt ten polega na tym, że osoby o niskich kompetencjach nie dostrzegają swoich błędów i przeceniają swoją wiedzę."
+                    "explanation": "R2 potrzebuje 'Ratownika' - zarówno merytoryki, jak i otuchy."
+                },
+                {
+                    "question": "Kiedy dajesz feedback merytoryczny?",
+                    "options": [
+                        "Od razu po błędzie",
+                        "Dopiero po etapie Refleksji pracownika"
+                    ],
+                    "correct": 1,
+                    "explanation": "Zasada: Najpierw zapytaj, potem powiedz. Cykl Kolba."
                 }
             ]
         },
         {
             "type": "summary",
-            "title": "Fundamenty Zbudowane",
+            "title": "Twój Nowy System",
             "recap": [
-                "Przestajesz być 'Mechanikiem' od naprawiania, stajesz się 'Ogrodnikiem' tworzącym warunki.",
-                "Rozumiesz mechanizm 4 Poziomów Kompetencji i Efekt Krugera-Dunninga.",
-                "Wiesz, że bez Refleksji (Cykl Kolba) nie ma trwałej nauki."
+                "Diagnozuj (R1-R4) - nie strzelaj na oślep.",
+                "Uważaj na Ego (Dunning-Kruger).",
+                "Uruchamiaj Refleksję (Cykl Kolba).",
+                "Bądź Trenerem, nie Sędzią."
             ],
             "badge": {
-                "title": "Psychologia Rozwoju",
-                "xp": 300
+                "title": "Cerytfikat Trenera",
+                "xp": 500
             },
-            "nextSteps": "W następnej lekcji przełożymy tę teorię na konkretne narzędzie: Trening On-the-Job."
+            "nextSteps": "Psychologię masz opanowaną. W następnej lekcji dostaniesz twardy proces: Jak zaplanować dzień OJT krok po kroku."
         }
     ]
 }

@@ -19,9 +19,17 @@ interface Lesson {
     subtitle?: string
     estimated_duration?: number
     xp_reward: number
+    track?: string
+    category?: string // Allow category in interface
     content: {
         cards: Card[]
     }
+}
+
+const TRACK_TITLES: Record<string, string> = {
+    'sales-manager': 'Akademia Menedżera',
+    'sales': 'Akademia B2B',
+    'math': 'Matematyka'
 }
 
 export default function LessonPlayerPage() {
@@ -121,12 +129,23 @@ export default function LessonPlayerPage() {
                         setCards(originalCards)
                     } else {
                         // Create Cover Card automatically
+                        // Determine Category: Explicit DB category > Track Title Mapping > Default
+                        let categoryDisplay = 'Moduł Edukacyjny';
+                        if (data.lesson.category) {
+                            categoryDisplay = data.lesson.category; // DB override
+                        } else if (data.lesson.track && TRACK_TITLES[data.lesson.track]) {
+                            categoryDisplay = TRACK_TITLES[data.lesson.track];
+                        } else if (data.lesson.track === 'sales-manager') {
+                            // Fallback for sales-manager if key is slightly diff
+                            categoryDisplay = 'Akademia Menedżera';
+                        }
+
                         const coverCard: Card = {
                             type: 'cover',
                             title: data.lesson.title,
                             subtitle: data.lesson.subtitle,
                             description: data.lesson.description,
-                            category: data.lesson.category || 'Moduł Edukacyjny',
+                            category: categoryDisplay,
                             durationMinutes: data.lesson.duration_minutes,
                             xpReward: data.lesson.xp_reward
                         }
