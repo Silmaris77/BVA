@@ -329,9 +329,294 @@
    - Każda liczba wymierna ma rozwinięcie dziesiętne skończone lub nieskończone okresowe
    - Ułamek nieskracalny ma rozwinięcie nieskończone okresowe, gdy mianownik dzieli się przez liczbę pierwszą różną od 2 i 5
 
-3. **Zaokrąglanie liczb. Szacowanie wyników** (str. 18)
+3. **Zaokrąglanie liczb. Szacowanie wyników** (str. 18-23)
    - Reguły zaokrąglania
    - Szacowanie w zadaniach praktycznych
+   
+   **SZCZEGÓŁOWY KONTEKST LEKCJI 3:**
+   
+   **Wprowadzenie (str. 18):**
+   - Przykład z życia: Samochód Ford Focus ma długość 4,481 m
+   - W życiu codziennym często posługujemy się zaokrąglonymi wartościami
+   - Pytanie: odpowiedni zaokrąglony wymiar takiego samochodu - odpowiedź: 4,5 m
+   
+   **Inżynier podałby wymiar dokładnie, a kierowca w zaokrągleniu.**
+   
+   **Wiedza wstępna:**
+   > "W życiu codziennym często posługujemy się zaokrąglonymi liczbami. Sięgając np. swojego wzrostu z dokładnością do 1 milimetra, tylko z dokładnością do 1 centymetra. Odległe między miastami podawane są na ogół z dokładnością do 1 kilometra, a średnia odległość Ziemi od Księżyca — z dokładnością do 100 kilometrów."
+   
+   - Przypominamy reguły zaokrąglania liczb dodatnich
+   - Symbol ≈ czytamy: "równa się w przybliżeniu"
+   
+   ---
+   
+   **ZAOKRĄGLANIE DO DZIESIĄTEK:**
+   
+   184 ≈ 180
+   2372 ≈ 2370
+   51 ≈ 50
+   392 ≈ 390
+   4393 ≈ 4390
+   
+   **Reguła**: Gdy cyfra jedności jest 0, 1, 2, 3, 4, zaokrąglamy w dół. Gdy cyfra jedności jest 5, 6, 7, 8, 9, zaokrąglamy w górę.
+   
+   185 ≈ 190
+   2379 ≈ 2380
+   57 ≈ 60
+   1398 ≈ 1400
+   4496 ≈ 4500
+   
+   **ĆWICZENIE**: Zawsze, gdy zaokrąglamy liczbę, której cyfra jedności jest 0, to jej zaokrąglenie do dziesiątek jest równe tej liczbie.
+   
+   ---
+   
+   **UWAGA (str. 18, ramka):**
+   > "Warto zwrócić uwagę, że wynikiem zaokrąglenia do dziesiątek jest zawsze wielokrotność liczby 10, czyli jedna z liczb: 0, 10, 20, ..., 90, 100, 110, 120, 130, ..., 980, 990, 1000, 1010, ..."
+   
+   **ĆWICZENIE A (pomarańczowa ramka, str. 18):**
+   > "Na osiach liczbowych zaznaczono kilka liczb. Podaj zaokrąglenie do dziesiątek liczb zaznaczonych literami."
+   
+   [Osie liczbowe a-h z punktami do odczytania: a=380, b=390, c=400, d=3570, e=3580, f=3590, g=3600, h=3610]
+   
+   ---
+   
+   **ZAOKRĄGLANIE DO SETEK (str. 19):**
+   
+   407 ≈ 400
+   29939 ≈ 29900
+   37 ≈ 0
+   
+   **Reguła**: Gdy cyfra dziesiątek jest 0, 1, 2, 3, 4, zaokrąglamy w dół. Gdy cyfra dziesiątek jest 5, 6, 7, 8, 9, zaokrąglamy w górę.
+   
+   750 ≈ 800
+   234995 ≈ 235000
+   61 ≈ 100
+   
+   ---
+   
+   **ZAOKRĄGLANIE DO TYSIĘCY:**
+   
+   34280 ≈ 34000
+   5199 ≈ 5000
+   487 ≈ 0
+   
+   **Reguła**: Gdy cyfra setek jest 0, 1, 2, 3, 4, zaokrąglamy w dół. Gdy cyfra setek jest 5, 6, 7, 8, 9, zaokrąglamy w górę.
+   
+   1513 ≈ 2000
+   89789 ≈ 90000
+   7099783 ≈ 7100000
+   
+   ---
+   
+   **ĆWICZENIE B (str. 19, ramka):**
+   > "W każdej z podanych liczb wskaż cyfrę dziesiątek oraz cyfrę setek:
+   > a = 357,208   b = 97,0145   c = 2507,(57)
+   > 
+   > Czy potrafisz też, jak zaokrąglić te liczby do jedności? A jak do części dziesiątych?"
+   
+   ---
+   
+   **UŁAMKI DZIESIĘTNE (str. 19):**
+   
+   > "Ułamki dziesiętne możemy zaokrąglać, stosując analogiczne reguły."
+   
+   **ZAOKRĄGLANIE DO JEDNOŚCI:**
+   
+   120,307 ≈ 120
+   1,42 ≈ 1
+   13,09 ≈ 13
+   
+   **Reguła**: Gdy cyfra części dziesiątych jest 0, 1, 2, 3, 4, zaokrąglamy w dół. Gdy cyfra części dziesiątych jest 5, 6, 7, 8, 9, zaokrąglamy w górę.
+   
+   13,574 ≈ 14
+   9,81 ≈ 10
+   19,95 ≈ 20
+   
+   ---
+   
+   **ZAOKRĄGLANIE DO CZĘŚCI DZIESIĄTYCH:**
+   
+   12,0303 ≈ 12,0
+   9,118 ≈ 9,1
+   400,427 ≈ 400,4
+   
+   **Reguła**: Gdy cyfra części setnych jest 0, 1, 2, 3, 4, zaokrąglamy w dół. Gdy cyfra części setnych jest 5, 6, 7, 8, 9, zaokrąglamy w górę.
+   
+   213,57 ≈ 213,6
+   149,96 ≈ 150,0
+   17,952 ≈ 18,0
+   
+   **UWAGA (str. 19, dół):**
+   > "Gdy zaokrąglamy do dziesiątek, setek, części dziesiątych itp., możemy także powiedzieć, że zaokrąglamy z dokładnością do dziesiątek, setek, części dziesiątych itp."
+   
+   ---
+   
+   **KLUCZOWA INFORMACJA (str. 19, ramka):**
+   
+   **Wynikiem zaokrąglenia do setek jest zawsze wielokrotność liczby 100, a wynikiem zaokrąglenia do tysięcy jest wielokrotność liczby 1000.**
+   
+   ---
+   
+   **ZADANIA (str. 21-23):**
+   
+   **Zadanie 1:** Każdą z podanych liczb zaokrąglij: a) do setek, b) do tysięcy.
+   - k = 1407    l = 78896    m = 23307    n = 107961    o = 341719
+   
+   **Zadanie 2:** W Polsce (dane z 1 stycznia 2022) było 1652727,04 zł. Jaki podatek dla dzieci przeznaczono 1352908,43 zł. Zapisz te dwie wielkie liczby z dokładnością do: a) tysięcy złotych, b) dziesiątek tysięcy złotych.
+   
+   **Zadanie 3:** Podane liczby zaokrąglij: a) do jedności, b) do części dziesiątych.
+   - p = 3,146    r = 56,07    s = 0,532    t = 510,954    u = 19,763
+   
+   **Zadanie 4:** Każdą z podanych liczb zaokrąglij do części setnych.
+   - a = 0,321    b = 12,798    c = 0,997    d = 4,006    e = 6,(23)
+   
+   **Zadanie 5:** Ile jest liczb naturalnych, których:
+   a) zaokrąglenie do dziesiątek jest równe 90,
+   b) zaokrąglenie do setek jest równe 2500?
+   
+   **Zadanie 6:** Podaj zaokrąglenia ułamków 7/9 oraz 1500/11 do jedności, dziesiątek i setek.
+   
+   **Zadanie 7:** Trzej wędkarze chwali się swoimi osiągnięciami.
+   - Ryszard złowił karpia, którego suma długości i masy pana Zdzisława wyniosła 72 kg.
+   - A ja pięciokilogramowego szczupaka — kontynuował pan Władysław.
+   - To jeszcze nic, mnie się udało złapać metrowego węgorza — przechwalał się pan Bogusław.
+   
+   **Pytanie**: W rzeczywistości karp miał 45 cm, szczupak ważył 3,5 kg, a węgorz miał zaledwie 65 cm. Wędkarze oczywiście przesadzili, ale czy którzyś z nich może się tłumaczyć regułami zaokrąglania?
+   
+   **Zadanie 8:** W tabeli zamieszczono dane dotyczące liczby uczestników kilku igrzysk olimpijskich. W zaokrąglonej do źródeł danych odwołaj się.
+   
+   [Tabela z danymi olimpijskimi:]
+   
+   | Liczba uczestników | Nr igrzysk/rok | Miejsce | wg MKOl | wg portalu www.sport.pl |
+   |-------------------|----------------|---------|---------|-------------------------|
+   | I/1896 | Ateny | 241 | 245 | |
+   | II/1900 | Paryż | 997 | 1078 | |
+   | V/1912 | Londyn | 2008 | 2015 | |
+   | IV/1928 | Amsterdam | 2883 | 2884 | |
+   | XIV/1948 | Londyn | 4104 | 4092 | |
+   | XVII/1960 | Rzym | 5338 | 5313 | |
+   | XXII/1980 | Moskwa | 5179 | 5283 | |
+   | XXIII/1984 | Los Angeles | 6829 | 6797 | |
+   | XXV/1992 | Barcelona | 9356 | 9364 | |
+   
+   **Pytania:**
+   a) Dla każdej pary danych liczb ustal, czy dla obu źródeł liczby po zaokrągleniu do setek są takie same, gdyby była ona zaokrąglona zaokrągleniem dziesiątki w siębie, jak i drugiej.
+   
+   b) W 2004 roku igrzyska odbywały się w Atenach. Wszystkie źródła podają w nich udział 10500 zawodników. Liczba ta to pewne zaokrąglenie dokładniejszej liczby zawodników. Jaka wartość liczby zawodników Jaka liczba i do której cyfry została zaokrąglona, aby uzyskać tę najbardziej możliwą liczbę zawodników?
+   
+   **Zadanie 9:** W każdym z poniższych wierszków: pierwsze, drugi i piąty wers powinny mieć tyle samo sylab. Podobne powinno być także w wersach trzecim i czwartym. Poniżej odpisując wiersze liczby odpowiedniej zaokrąglając występujące w nich liczby. Spróbuj poprawić te wierszyki.
+   
+   [Ilustracje z wierszami:]
+   
+   "Sprawdzał byśmy geometra czasów w Bolonii
+   Jak daleko pada jabłkiem od jabłoni
+   151,6 cali wypadł faktycznie
+   Nie wiadomo, czy dokładnie
+   Bo najbliższe dębie to jakiś spod jabłoni."
+   
+   "Rak z jasową odszedł spod Kołobrzegu
+   Zimą nie mógł odnaleźć drogi
+   Gdzie to raki zimują?
+   Znowu plan mu się udał
+   276,32 kroków na wschód od leszczyny."
+   
+   "Bez innego rażącą, opowiem, co w wsi Prim
+   Odkrył, że w połowie drogi jest na Krymu
+   To 897,6 mil od Rzymu
+   A 901,9 mil do Krymu
+   Teraz w Rzymu każdy wie, gdzie Rzym, gdzie Krym."
+   
+   "Pewien klepał kilometr z Megową
+   Reut bentem zmienioną i rewelacje
+   142,499 cali ma Rewelacja
+   Nie zachwyca go wcale
+   Więc wypuści pod lokieta w się schował."
+   
+   **Zadanie 10:** Podaj zaokrąglenia liczb zaznaczonych na osi liczbowej:
+   a) do części setnych, b) do części dziesiątych, c) do jedności.
+   
+   [Oś liczbowa z punktami: 5,43, 5,44, 5,45, 5,46, 5,47, 5,48, 5,49, 5,5, 5,51, 5,52]
+   
+   **Zadanie 11:** Wymiary placu zaokrąglone do 1 m wynoszą 10 m × 20 m. Sprawdź, czy możliwe jest, by ten plac miał powierzchnię mniejszą niż 214 m². Czy może mieć powierzchnię większą niż 215 m²?
+   
+   **Zadanie 12:** Oszacuj wynik dodawania, nie wykonując dokładnych obliczeń. Jaki znak < czy > należy wpisać w miejsce * ?
+   a) 2258 + 496 * 2800    d) 1987 + 496 * 700
+   b) 4989 + 698 * 5700    e) 531,25 + 445,06 * 900
+   c) 3401 + 725 * 4100    f) 502,75 + 458,11 * 1000
+   
+   **Zadanie 13:** Oszacuj wynik mnożenia, nie wykonując dokładnych obliczeń. Jaki znak < czy > należy wpisać w miejsce * ?
+   a) 68 · 3 * 210          d) 4,8 · 30 * 150
+   b) 149 · 4 * 500         e) 60 · 7,2 * 400
+   c) 3248 · 5 * 16000      f) 6 · 11,945 * 75
+   
+   **Zadanie 14:** Poniżej podano kilka interesujących danych liczbowych. Łatwiej byłoby zapamiętać te dane, gdyby liczby podane były w zaokrągleniu. Zaproponuj, jak zaokrąglić te liczby.
+   
+   [Tabela z danymi:]
+   
+   - Długość równika — 40075 km
+   - Odległość Ziemi od Księżyca — 384402 km
+   - Odległość Ziemi od Słońca — 149600000 km
+   - Promień Ziemski — 299792,460 km
+   - Średni ciężar — 340 g
+   - Powierzchnia Polski — 312685 km²
+   - Powierzchnia Chin — 9597000 km²
+   - Powierzchnia Europy — 10529000 km²
+   - Powierzchnia Afryki — 30305000 km²
+   
+   **Oszacuj:**
+   a) Ile razy powierzchnia Afryki jest większa od powierzchni Europy?
+   b) Ile razy prędkość światła jest większa od prędkości dźwięku?
+   c) Ile razy trzeba obracać równik, aby jej długość była równa odległości od Księży?
+   d) Ile razy powierzchnia Chin jest większa od powierzchni Polski?
+   e) Ile razy świetło ze Słońca do Ziemi dociera w ciągu około 1 s?
+   f) Czy to prawda, że światło ze Słońca do Ziemi dociera w ciągu ok. 8 minut?
+   
+   **Zadanie 15:** Rozwiąż poniższe zadania w pamięci, korzystając z odpowiednich zaokrągleń liczb.
+   
+   a) Ile największej czekolady po 3,09 zł za sztukę można kupić za 20 zł?
+   b) Ile baletrów po 10,50 zł każdy można kupić za 50 zł?
+   c) Czy kupując 19 batoników po 1,99 zł każdy, otrzymasz resztę z 50 zł mniejszą czy większą od 10 zł?
+   d) Wzdłuż ściany o długości 4,95 m ustawiono trzy regały, każdy o wymiarach 30 cm × 92 cm × 210 cm. Czy zmieści się jeszcze biurko o długości 152 cm?
+   e) Do pierwszej klasy w pewnej szkole podstawowej zgłosiło się 103 uczniów. W każdej klasie musi być nie więcej niż 19 uczniów. Jaka największa liczba klas pierwszych, które można utworzyć?
+   f) Pani Jola zaciągnęła kredyt w wysokości 8000 zł. Spłaca rata wynosi 195 zł. Czy pani Jola spłaci kredyt w ciągu 1 roku?
+   
+   **Zadanie 16:** Oszacuj, czy kwadrat, którego pole jest równe 80,997 cm², ma bok dłuższy czy krótszy od 9 cm.
+   
+   [Ilustracja z postacią wypowiadającą: "W nowym opakowaniu było 3,6 kg proszku do prania. W marce przykładając, żę na jedno pranie zużywa się jedną miarką, a pranie wykonuje się co dwa miesiące czy proszku wystarczy na dwa miesiące."]
+   
+   **Zadanie 17:** W nowym opakowaniu było 3,6 kg proszku do prania. W marce przykładając, żę na jedno pranie zużywa się jedną miarką, a pranie wykonuje się co dwa miesiące czy proszku wystarczy na dwa miesiące.
+   
+   **Zadanie 18:** Działka rolna pana Wrotskich ma kształt prostokąta o wymiarach 30,7 m × 19,9 m, a działka rolna państwa Krukowskich ma kształt kwadratu o boku długości 30,3 m. Oszacuj, która z tych działek jest większa.
+   
+   ---
+   
+   **SEKCJA: SPRAWDŹ, CZY UMIESZ (str. 23, dolna część):**
+   
+   **1. Gdy zaokrąglimy liczbę 3,(93) do części setnych, otrzymamy:**
+   - A. 4,00
+   - B. 3,94
+   - C. 3,93
+   - D. 3,9
+   
+   **2. Gdy ustawiamy liczbę:**
+   - k = 3,9 · 40    l = 178 + 121    m = 21,5 · 8    n = 87,42 + 52,87
+   w kolejności od największej do najmniejszej, otrzymamy układ liter:
+   - A. n, k, m, l
+   - B. n, m, k, l
+   - C. k, l, m, n
+   - D. l, m, k, n
+   
+   **Odsyłacz:** → zadanie uzupełniające 16-23, str. 49
+   
+   ---
+   
+   **PODSUMOWANIE LEKCJI 3:**
+   - Zaokrąglamy liczby, aby uprościć obliczenia lub przedstawić dane w przystępnej formie
+   - Reguły zaokrąglania: jeśli cyfra na danym miejscu jest 0-4, zaokrąglamy w dół; jeśli 5-9, zaokrąglamy w górę
+   - Możemy zaokrąglać do dziesiątek, setek, tysięcy, jedności, części dziesiątych, setnych itd.
+   - Symbol ≈ oznacza "w przybliżeniu równe"
+   - Szacowanie wyników pozwala sprawdzić, czy obliczenia są prawidłowe
+   - W życiu codziennym często używamy zaokrągleń dla wygody i przejrzystości
 
 4. **Dodawanie i odejmowanie liczb dodatnich** (str. 24)
    - Działania na ułamkach
