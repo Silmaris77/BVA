@@ -39,6 +39,7 @@ export interface GameState {
 
     // UI Effects
     lastCashTransaction?: { amount: number, id: number } | null
+    lastKWTransaction?: { amount: number, id: number } | null // [NEW]
     projectedTeamCost?: Record<string, number> // Map charId -> cost to show in UI
 
 
@@ -56,7 +57,7 @@ export type GamePhase = 'EVENT' | 'PILL' | 'TASK' | 'DEVELOPMENT' | 'CONTRACT' |
 
 export interface EventEffect {
     type: 'CASH' | 'KW' | 'EFFICIENCY' | 'AVAILABILITY' | 'NONE'
-    target?: 'MANAGER' | 'EMPLOYEE' | 'TEAM' | 'ALL'
+    target?: 'MANAGER' | 'EMPLOYEE' | 'EMPLOYEES' | 'TEAM' | 'ALL'
     amount: number
     description?: string
 }
@@ -69,8 +70,11 @@ export interface EventRisk {
     // 'SUM_LE': succeeds if sum <= targetValue
     rule: 'CONTAINS' | 'SUM_GE' | 'SUM_LE'
     targetValue: number
+    modifier?: 'MANAGER_EFFICIENCY'
     successEffect?: EventEffect[]
     failureEffect?: EventEffect[]
+    successMessage?: string // [NEW] Custom narrative for success
+    failureMessage?: string // [NEW] Custom narrative for failure ("To było miłe...")
 }
 
 export interface EventOption {

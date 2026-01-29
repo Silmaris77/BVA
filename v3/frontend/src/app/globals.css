@@ -1786,6 +1786,7 @@ html[data-theme='brainventure'] .orb {
     background: #1E73B9;
     /* Subtle Neuro Blue ambiance */
 }
+
 /* BRAINVENTURE THEME */
 .brainventure-theme {
     --bg-deep: #0f172a;
@@ -1815,4 +1816,338 @@ html[data-theme='brainventure'] .orb {
     background: rgba(30, 41, 59, 0.7);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* MODERN iOS THEME 📱 */
+:root[data-theme='modern-ios'] {
+    --bg-deep: #000000;
+    --glass-bg: rgba(28, 28, 30, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --text-main: #FFFFFF;
+    --text-muted: #8E8E93;
+    --neon-purple: #BF5AF2;
+    --neon-blue: #0A84FF;
+    --neon-gold: #FFD60A;
+    --neon-red: #FF453A;
+    --neon-green: #30D158;
+}
+
+html[data-theme='modern-ios'],
+:root[data-theme='modern-ios'] body {
+    background: #000000 !important;
+    background-image: none !important;
+    /* Remove any gradients */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+/* Force body background specifically */
+body[class] {
+    transition: background 0.3s ease;
+}
+
+:root[data-theme='modern-ios'] body {
+    background-color: #000000 !important;
+}
+
+/* Hide ambient orbs for cleaner look */
+html[data-theme='modern-ios'] .orb {
+    opacity: 0.15;
+    filter: blur(100px) saturate(1.5);
+    background: radial-gradient(circle, rgba(10, 132, 255, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+/* iOS Cards (Glassmorphism) */
+html[data-theme='modern-ios'] .glass-card,
+html[data-theme='modern-ios'] .glass-panel,
+html[data-theme='modern-ios'] .bg-gray-800,
+html[data-theme='modern-ios'] .bg-gray-900,
+html[data-theme='modern-ios'] .bg-gray-900\/50 {
+    background: rgba(28, 28, 30, 0.65) !important;
+    backdrop-filter: blur(25px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Typography */
+html[data-theme='modern-ios'] h1,
+html[data-theme='modern-ios'] h2,
+html[data-theme='modern-ios'] h3,
+html[data-theme='modern-ios'] button {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif !important;
+    letter-spacing: -0.02em;
+}
+
+html[data-theme='modern-ios'] h1 {
+    font-weight: 700;
+}
+
+/* Buttons (Pills) */
+html[data-theme='modern-ios'] button:not(.nav-item) {
+    border-radius: 999px !important;
+    font-weight: 600;
+    transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.2s !important;
+}
+
+html[data-theme='modern-ios'] button:active {
+    transform: scale(0.96);
+}
+
+/* Navigation Items */
+html[data-theme='modern-ios'] .nav-item {
+    border-radius: 12px !important;
+    margin: 4px 8px;
+    border-left: none !important;
+}
+
+html[data-theme='modern-ios'] .nav-item.active {
+    background: rgba(10, 132, 255, 0.15) !important;
+    color: #0A84FF !important;
+}
+
+/* Inputs */
+html[data-theme='modern-ios'] input,
+html[data-theme='modern-ios'] textarea,
+html[data-theme='modern-ios'] select {
+    background: rgba(118, 118, 128, 0.12) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    color: white !important;
+    padding: 12px 16px !important;
+    font-size: 17px !important;
+}
+
+html[data-theme='modern-ios'] input:focus {
+    box-shadow: 0 0 0 2px #0A84FF !important;
+}
+
+/* Dynamic Island effects */
+html[data-theme='modern-ios'] .toast,
+html[data-theme='modern-ios'] .active-event-widget {
+    border-radius: 30px !important;
+    background: black !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+html[data-theme='modern-ios'] ::selection {
+    background: rgba(10, 132, 255, 0.3);
+    color: white;
+}/* =========================================
+   LAYOUT COMPONENTS (Themeable)
+   ========================================= */
+
+/* --- Sidebar --- */
+.nav-sidebar {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+/* --- TopBar --- */
+.global-topbar {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+/* --- BottomNav --- */
+.nav-bottom {
+    background: rgba(20, 20, 35, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+
+/* === THEME OVERRIDES FOR LAYOUT === */
+
+/* MODERN iOS 📱 */
+html[data-theme='modern-ios'] .nav-sidebar {
+    background: rgba(20, 20, 20, 0.6) !important;
+    /* Translucent Sidebar */
+    border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+html[data-theme='modern-ios'] .global-topbar {
+    background: rgba(0, 0, 0, 0.6) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* CYBER 🦾 */
+html[data-theme='cyber'] .nav-sidebar {
+    background: rgba(5, 5, 10, 0.9) !important;
+    border-right: 1px solid var(--neon-blue) !important;
+    box-shadow: 4px 0 20px rgba(0, 212, 255, 0.1);
+}
+
+html[data-theme='cyber'] .global-topbar {
+    background: rgba(5, 5, 10, 0.9) !important;
+    border-bottom: 1px solid var(--neon-purple) !important;
+}
+
+/* EXECUTIVE 💼 */
+html[data-theme='executive'] .nav-sidebar {
+    background: linear-gradient(180deg, #1e2330 0%, #151820 100%) !important;
+    border-right: 2px solid #b8860b !important;
+}
+
+html[data-theme='executive'] .global-topbar {
+    background: #1e2330 !important;
+    border-bottom: 2px solid #b8860b !important;
+}
+
+/* HALLOWEEN 🎃 */
+html[data-theme='halloween'] .nav-sidebar {
+    background: rgba(20, 5, 0, 0.9) !important;
+    border-right: 1px solid #ff6600 !important;
+}
+
+/* DRUNK 🥴 */
+html[data-theme='drunk'] .nav-sidebar {
+    border-right: 4px dotted #ff00aa !important;
+    animation: borderPulse 2s infinite;
+}
+
+@keyframes borderPulse {
+    0% {
+        border-color: #ff00aa;
+    }
+
+    50% {
+        border-color: #00ffff;
+    }
+
+    100% {
+        border-color: #ff00aa;
+    }
+}
+
+/* FLINTSTONE / MILWAUKEE 🔴 */
+html[data-theme='milwaukee'] .nav-sidebar {
+    background: #111 !important;
+    border-right: 4px solid #db0000 !important;
+}
+/* =========================================
+   NAVIGATION ITEMS (Themeable)
+   ========================================= */
+
+.nav-item-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    margin: 4px 0;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-item-link.active {
+    color: #ffffff;
+    background: color-mix(in srgb, var(--neon-blue), transparent 85%);
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--neon-blue), transparent 80%);
+}
+
+.nav-item-link.active svg {
+    color: var(--neon-blue);
+}
+
+/* Variant for Purple (Practice) */
+.nav-item-link.variant-purple.active {
+    background: color-mix(in srgb, var(--neon-purple), transparent 85%);
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--neon-purple), transparent 80%);
+}
+
+.nav-item-link.variant-purple.active svg {
+    color: var(--neon-purple);
+}
+
+/* Mobile/Compact Nav Items */
+.nav-item-compact {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .nav-item-compact {
+        padding: 8px;
+    }
+}
+/* =========================================
+   BOTTOM NAV ITEMS (Themeable)
+   ========================================= */
+
+.nav-bottom-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 100%;
+    position: relative;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s;
+}
+
+.nav-bottom-item .nav-icon {
+    margin-bottom: 4px;
+    transition: color 0.2s;
+    color: currentColor;
+}
+
+.nav-bottom-item .nav-label {
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.nav-bottom-item.active {
+    color: var(--neon-blue);
+}
+
+.nav-bottom-item.active .nav-label {
+    font-weight: 600;
+}
+
+.nav-bottom-indicator {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 4px;
+    width: 48px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
+    box-shadow: 0 0 20px var(--neon-purple);
+}
+
+/* Modern iOS Specifics */
+html[data-theme='modern-ios'] .nav-bottom-indicator {
+    background: var(--neon-blue);
+    box-shadow: none;
+    height: 3px;
+    width: 40px;
+    border-radius: 10px;
 }

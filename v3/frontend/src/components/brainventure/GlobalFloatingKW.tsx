@@ -3,30 +3,31 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useBrainVenture } from './BrainVentureContext'
+import { Gem } from 'lucide-react'
 
 interface FloatingItem {
     id: number
     amount: number
 }
 
-export default function GlobalFloatingMoney() {
+export default function GlobalFloatingKW() {
     const { state } = useBrainVenture()
     const [items, setItems] = useState<FloatingItem[]>([])
     const lastProcessedId = React.useRef<number | null>(null)
 
     // Listen for global transactions
     useEffect(() => {
-        if (state.lastCashTransaction) {
+        if (state.lastKWTransaction) {
             // Check if transaction is recent (within 2s) to avoid replaying old state on remount
-            const isFresh = (Date.now() - Math.floor(state.lastCashTransaction.id)) < 2000;
+            const isFresh = (Date.now() - Math.floor(state.lastKWTransaction.id)) < 2000;
 
-            if (lastProcessedId.current === state.lastCashTransaction.id || !isFresh) return
+            if (lastProcessedId.current === state.lastKWTransaction.id || !isFresh) return
 
-            lastProcessedId.current = state.lastCashTransaction.id
-            const newItem = state.lastCashTransaction
+            lastProcessedId.current = state.lastKWTransaction.id
+            const newItem = state.lastKWTransaction
             setItems(prev => [...prev, newItem])
         }
-    }, [state.lastCashTransaction])
+    }, [state.lastKWTransaction])
 
     const remove = React.useCallback((id: number) => {
         setItems(prev => prev.filter(i => i.id !== id))
@@ -36,21 +37,18 @@ export default function GlobalFloatingMoney() {
         <div className="fixed inset-0 pointer-events-none z-[100] overflow-hidden">
             <AnimatePresence>
                 {items.map(item => (
-                    <FloatingMoney key={item.id} item={item} onRemove={remove} />
+                    <FloatingKW key={item.id} item={item} onRemove={remove} />
                 ))}
             </AnimatePresence>
         </div>
     )
 }
 
-function FloatingMoney({ item, onRemove }: { item: FloatingItem, onRemove: (id: number) => void }) {
+function FloatingKW({ item, onRemove }: { item: FloatingItem, onRemove: (id: number) => void }) {
     const isIncome = item.amount >= 0
-    const text = isIncome ? `+${item.amount} PLN` : `${item.amount} PLN`
-    const colorClass = isIncome ? 'text-green-400' : 'text-red-500'
-    const emoji = isIncome ? '💰' : '💸'
+    const text = isIncome ? `+${item.amount} KW` : `${item.amount} KW`
+    const colorClass = isIncome ? 'text-blue-400' : 'text-purple-400'
 
-    // Positioning roughly near the Money counter in the top bar
-    // Matching KW position (65%) for unified "center-ish" look requested by user
     const startX = '65%'
     const startY = '10%'
 
@@ -76,7 +74,7 @@ function FloatingMoney({ item, onRemove }: { item: FloatingItem, onRemove: (id: 
                        text-4xl font-bold ${colorClass} drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] 
                        font-mono flex items-center gap-2`}
         >
-            <span>{emoji}</span> {text}
+            <Gem size={32} /> {text}
         </motion.div>
     )
 }

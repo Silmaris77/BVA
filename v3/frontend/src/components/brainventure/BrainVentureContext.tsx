@@ -61,6 +61,7 @@ type GameAction =
     | { type: 'SET_CURRENT_EVENT'; payload: EventCard | null }
     | { type: 'UNLOCK_PILL'; payload: string }
     | { type: 'SET_PROJECTED_COST'; payload: Record<string, number> }
+    | { type: 'SET_THEME'; payload: 'default' | 'ios' } // New action
 
 // Reducer
 function gameReducer(state: GameState, action: GameAction): GameState {
@@ -129,7 +130,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             }
 
         case 'UPDATE_KW':
-            return { ...state, knowledgeCrystals: state.knowledgeCrystals + action.payload }
+            return {
+                ...state,
+                knowledgeCrystals: state.knowledgeCrystals + action.payload,
+                lastKWTransaction: { amount: action.payload, id: Date.now() + Math.random() }
+            }
 
         case 'UPDATE_EFFICIENCY':
             return {

@@ -512,7 +512,7 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                 )}
                 {passed && (
                     <div style={{ color: '#00ff88', fontWeight: 600 }}>
-                        Lekcja odblokowana. Kliknij "Zakończ" na dole ekranu.
+                        Lekcja zaliczona. Przejdź do podsumowania.
                     </div>
                 )}
             </div>

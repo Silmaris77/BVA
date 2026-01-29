@@ -21,18 +21,7 @@ export default function BottomNav() {
 
     return (
         <nav
-            className="nav-bottom"
-            style={{
-                position: 'fixed',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                width: '100%',
-                zIndex: 9999,
-                background: 'rgba(20, 20, 35, 0.95)',
-                backdropFilter: 'blur(20px)',
-                borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-            }}
+            className="nav-bottom fixed bottom-0 left-0 right-0 z-[9999] w-full"
         >
             <div style={{
                 display: 'flex',
@@ -51,53 +40,16 @@ export default function BottomNav() {
                         <Link
                             key={item.path}
                             href={item.path}
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flex: 1,
-                                height: '100%',
-                                position: 'relative',
-                                textDecoration: 'none'
-                            }}
+                            className={`nav-bottom-item ${active ? 'active' : ''}`}
                         >
                             {/* Active indicator */}
-                            {active && (
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: '50%',
-                                        transform: 'translateX(-50%)',
-                                        height: '4px',
-                                        width: '48px',
-                                        borderRadius: '2px',
-                                        background: 'linear-gradient(90deg, #b000ff, #00d4ff)',
-                                        boxShadow: '0 0 20px rgba(176, 0, 255, 0.6)',
-                                    }}
-                                />
-                            )}
+                            {active && <div className="nav-bottom-indicator" />}
 
                             {/* Icon */}
-                            <Icon
-                                size={24}
-                                style={{
-                                    color: active ? '#00d4ff' : 'rgba(255, 255, 255, 0.5)',
-                                    marginBottom: '4px',
-                                }}
-                            />
+                            <Icon size={24} className="nav-icon" />
 
                             {/* Label */}
-                            <span
-                                style={{
-                                    fontSize: '11px',
-                                    color: active ? '#00d4ff' : 'rgba(255, 255, 255, 0.5)',
-                                    fontWeight: active ? 600 : 400,
-                                }}
-                            >
-                                {item.name}
-                            </span>
+                            <span className="nav-label">{item.name}</span>
                         </Link>
                     )
                 })}

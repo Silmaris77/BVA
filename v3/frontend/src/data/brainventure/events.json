@@ -1,417 +1,154 @@
 [
     {
-        "id": "event_test_loss",
-        "title": "NAGŁE ZWOLNIENIE LEKARSKIE (TEST)",
-        "description": "Jeden z Twoich pracowników zgłasza niedyspozycję. Traci 5 Punktów Dostępności w tej rundzie.",
-        "type": "NEGATIVE",
+        "id": "event_1",
+        "title": "CIEKAWY ARTYKUŁ NA LINKEDIN",
+        "description": "Dzisiaj przeczytałeś ciekawy artykuł opublikowany na LinkedIn, dotyczący zarządzania komunikacją w zespole. Znalazłeś w nim kilka wartościowych wskazówek, które z pewnością wykorzystasz w swojej pracy.",
+        "type": "POSITIVE",
         "immediateEffects": [
             {
-                "type": "AVAILABILITY",
-                "target": "EMPLOYEE",
-                "amount": -5,
-                "description": "-5 PD Pracownika"
-            }
-        ]
-    },
-    {
-        "id": "event_test_trade",
-        "title": "OFERTA SPECJALNA (TEST)",
-        "description": "Tajemniczy handlarz oferuje wiedzę za gotówkę. Czy chcesz kupić 2 Kryształy Wiedzy za 500 PLN?",
-        "type": "NEUTRAL",
-        "options": [
-            {
-                "id": "buy_kw",
-                "label": "Kup (500 PLN -> 2 KW)",
-                "immediateEffects": [
-                    {
-                        "type": "CASH",
-                        "amount": -500,
-                        "description": "-500 PLN"
-                    },
-                    {
-                        "type": "KW",
-                        "amount": 2,
-                        "description": "+2 KW"
-                    }
-                ]
-            },
-            {
-                "id": "reject_trade",
-                "label": "Odrzuć",
-                "immediateEffects": []
-            }
-        ]
-    },
-    {
-        "id": "event_1",
-        "title": "BONUS DLA ZESPOŁU",
-        "description": "Zarząd postanowił wypłacić Wam dodatkowy bonus.",
-        "type": "POSITIVE",
-        "options": [
-            {
-                "id": "opt_1",
-                "label": "Spróbuj zdobyć bonus",
-                "risk": {
-                    "diceCount": 1,
-                    "rule": "SUM_GE",
-                    "targetValue": 5,
-                    "successEffect": [
-                        {
-                            "type": "EFFICIENCY",
-                            "target": "TEAM",
-                            "amount": 1,
-                            "description": "Efektywność zespołu +1"
-                        }
-                    ],
-                    "failureEffect": [
-                        {
-                            "type": "NONE",
-                            "amount": 0,
-                            "description": "Brak bonusu"
-                        }
-                    ]
-                }
+                "type": "KW",
+                "amount": 1,
+                "description": "Otrzymujesz 1 Kryształek Wiedzy"
             }
         ]
     },
     {
         "id": "event_2",
-        "title": "NOWY MODEL LLM",
-        "description": "Firma udostępniła demonstracyjną wersję AI. Każdy Menedżer na czas tej rundy otrzymuje 1 punkt Efektywności.",
+        "title": "WSPARCIE TRENERA WEWNĘTRZNEGO",
+        "description": "Jeden z trenerów wewnętrznych, zaoferował Ci dzisiaj swoje wsparcie w działaniach związanych z zarządzeniem zespołem. Jeśli zaakceptujesz jego propozycję, to w fazie 4, wykonując Szkolenie dla pracownika lub dla zespołu, będziesz mógł dodać 1 pkt do wyniku rzutu kostką.",
         "type": "POSITIVE",
-        "immediateEffects": [
-            {
-                "type": "EFFICIENCY",
-                "target": "MANAGER",
-                "amount": 1,
-                "description": "Efektywność Menedżera +1"
-            }
-        ]
-    },
-    {
-        "id": "event_3",
-        "title": "DODATKOWY PROJEKT DLA PRACOWNIKA",
-        "description": "Pracownik zgłosił chęć podjęcia dodatkowego projektu. Zyskujesz 2 KW, ale tracisz 5 pkt Dostępności.",
-        "type": "NEUTRAL",
         "options": [
             {
-                "id": "accept",
-                "label": "Zgódź się",
+                "id": "opt_2_a",
+                "label": "Akceptuję propozycję",
                 "immediateEffects": [
                     {
                         "type": "KW",
-                        "amount": 2,
-                        "description": "+2 KW"
-                    },
-                    {
-                        "type": "AVAILABILITY",
-                        "target": "EMPLOYEE",
-                        "amount": -5,
-                        "description": "-5 PD Pracownika"
+                        "amount": 1,
+                        "description": "Zyskujesz wsparcie (Efekt fabularny - w MVP +1 KW)"
                     }
                 ]
             },
             {
-                "id": "reject",
-                "label": "Odmów",
+                "id": "opt_2_b",
+                "label": "Dziękuję, poradzę sobie",
                 "immediateEffects": []
             }
         ]
     },
     {
-        "id": "event_4",
-        "title": "AWARIA W SYSTEMIE CRM",
-        "description": "Ryzyko awarii u Twojego klienta.",
-        "type": "NEGATIVE",
+        "id": "event_3",
+        "title": "LIST POCHWALNY OD KLIENTA",
+        "description": "Klient przysłał list pochwalny, w którym dziękuje za wysoki poziom obsługi świadczonej przez Twoją firmę. Dzielisz się tą informacją z pracownikami, co może przełożyć się na zwiększenie ich efektywności w tej rundzie.",
+        "type": "POSITIVE",
         "options": [
             {
-                "id": "check_failure",
-                "label": "Sprawdź system (Rzut kostką)",
+                "id": "opt_3_a",
+                "label": "Podziel się wiadomością",
                 "risk": {
                     "diceCount": 1,
-                    "rule": "CONTAINS",
-                    "targetValue": 1,
+                    "rule": "SUM_GE",
+                    "targetValue": 5,
+                    "successMessage": "Pracownicy poczuli się docenieni! Morale wzrosło.",
+                    "failureMessage": "Pracownicy przyjęli to do wiadomości, ale nie wpłynęło to na ich pracę.",
                     "successEffect": [
                         {
-                            "type": "AVAILABILITY",
-                            "target": "MANAGER",
-                            "amount": -5,
-                            "description": "Awaria! -5 PD"
+                            "type": "EFFICIENCY",
+                            "target": "EMPLOYEES",
+                            "amount": 1,
+                            "description": "Obu pracowników zyskuje +1 PE"
                         }
                     ],
-                    "failureEffect": [
+                    "failureEffect": []
+                }
+            }
+        ]
+    },
+    {
+        "id": "event_4",
+        "title": "UŚCISK DŁONI PREZESA",
+        "description": "Prezes firmy postanowił docenić efekty pracy jednego z Twoich pracowników. Z samego rana spotkał się z Wami i osobiście pochwalił pracownika.",
+        "type": "POSITIVE",
+        "options": [
+            {
+                "id": "opt_4_a",
+                "label": "Sprawdź efekt pochwały",
+                "risk": {
+                    "diceCount": 1,
+                    "rule": "SUM_GE",
+                    "targetValue": 5,
+                    "successMessage": "Pochwała zadziałała motywująco! Pracownik pracuje ze zdwojoną energią.",
+                    "failureMessage": "To było miłe ze strony prezesa, ale nic więcej już się nie wydarzyło.",
+                    "successEffect": [
                         {
-                            "type": "NONE",
-                            "amount": 0,
-                            "description": "System działa poprawnie"
+                            "type": "EFFICIENCY",
+                            "target": "EMPLOYEE",
+                            "amount": 1,
+                            "description": "Pracownik zyskuje +1 PE"
                         }
-                    ]
+                    ],
+                    "failureEffect": []
                 }
             }
         ]
     },
     {
         "id": "event_5",
-        "title": "ZALECENIA Z AUDYTU",
-        "description": "Dostajesz rekomendacje z audytu. Wdrożenie ich wymaga czasu, ale daje wiedzę.",
-        "type": "POSITIVE",
+        "title": "PROŚBA O POMOC OD PRACOWNIKA",
+        "description": "Twój pracownik zgłosił problem dotyczący współpracy z klientem i poprosił Cię o pomoc w poszukaniu rozwiązania. Sukces Twojej interwencji zależy od Twojej efektywności menedżerskiej.",
+        "type": "NEUTRAL",
         "options": [
             {
-                "id": "implement",
-                "label": "Wdróż zalecenia (-2 PD)",
-                "immediateEffects": [
-                    {
-                        "type": "AVAILABILITY",
-                        "target": "MANAGER",
-                        "amount": -2,
-                        "description": "-2 PD"
-                    },
-                    {
-                        "type": "KW",
-                        "amount": 1,
-                        "description": "+1 KW"
-                    }
-                ]
-            },
-            {
-                "id": "ignore",
-                "label": "Zignoruj",
-                "immediateEffects": []
+                "id": "opt_5_a",
+                "label": "Udziel pomocy",
+                "risk": {
+                    "diceCount": 2,
+                    "rule": "SUM_GE",
+                    "targetValue": 10,
+                    "modifier": "MANAGER_EFFICIENCY",
+                    "successMessage": "Twoje doświadczenie okazało się kluczowe. Problem rozwiązany!",
+                    "failureMessage": "Niestety, problem okazał się bardziej złożony. Nie udało się znaleźć idealnego rozwiązania.",
+                    "successEffect": [
+                        {
+                            "type": "EFFICIENCY",
+                            "target": "EMPLOYEE",
+                            "amount": 1,
+                            "description": "Pracownik zyskuje +1 PE"
+                        }
+                    ],
+                    "failureEffect": []
+                }
             }
         ]
     },
     {
         "id": "event_6",
         "title": "OKAZJA DO ROZWOJU",
-        "description": "Darmowy webinar o trudnych sytuacjach.",
+        "description": "Każda firma na rynku otrzymała zaproszenie do udziału w darmowym webinarze. Będzie on dotyczył analizy trudnych sytuacji z klientami, co może być pomocne w radzeniu sobie z wyzwaniami, z którymi obecnie się borykacie. Co robisz? Jeśli zgodzisz się na udział pracownika w webinarze, to otrzyma on 2 Kryształki Wiedzy. Jednocześnie odejmiesz mu w tej rundzie 5 pkt Dostępności.",
         "type": "NEUTRAL",
         "options": [
             {
-                "id": "send_emp",
-                "label": "Wyślij pracownika",
+                "id": "opt_6_a",
+                "label": "Wyślij pracownika na webinar",
                 "immediateEffects": [
                     {
                         "type": "KW",
                         "amount": 2,
-                        "description": "+2 KW"
+                        "description": "Zdobywasz 2 KW"
                     },
                     {
                         "type": "AVAILABILITY",
                         "target": "EMPLOYEE",
                         "amount": -5,
-                        "description": "-5 PD Pracownika"
+                        "description": "Pracownik traci 5 PD"
                     }
                 ]
             },
             {
-                "id": "skip",
-                "label": "Pomiń",
+                "id": "opt_6_b",
+                "label": "Odrzuć zaproszenie",
                 "immediateEffects": []
             }
         ]
-    },
-    {
-        "id": "event_7",
-        "title": "PORANNA NIEDYSPOZYCJA",
-        "description": "Czujesz się źle. Decyzja:\n1. Przyjazd na 12:00 -> -5 PD Menedżera.\n2. Jedziesz rano (ryzyko): Rzut kostką. 1-5 OK, 6 wracasz do domu i tracisz całą Dostępność (10 PD).",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_8",
-        "title": "KORKI W MIEŚCIE",
-        "description": "Awaria zasilania i korki. Pracujesz zdalnie. W tej rundzie NIE MOŻESZ przeprowadzać szkoleń (Faza 4).",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_9",
-        "title": "PROMOCJA LEKCJI E-LEARNINGOWYCH",
-        "description": "Oferta MindExcellence tylko dzisiaj. Jeśli weźmiesz udział: otrzymujesz 1 Pigułkę Wiedzy na stałe, ale NIE MOŻESZ wykonywać szkoleń w fazie 4.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_10",
-        "title": "PROBLEMY OSOBISTE PRACOWNIKA",
-        "description": "Pracownik chce wyjść wcześniej przez chore dziecko.\n1. Zgadzasz się: -5 PD pracownika.\n2. Domagasz się obecności (ryzyko): Rzut kostką. 1 = spadek Efektywności o 2 pkt.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_11",
-        "title": "KONFLIKT Z DYREKTOREM FINANSOWYM",
-        "description": "Krytyka faktur. Rzuć 2x kostką + Efektywność Menedżera. Wynik <= 12 oznacza spadek Efektywności obu pracowników o 1 pkt w tej rundzie.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_12",
-        "title": "AWARIA SAMOCHODU",
-        "description": "Pracownik z najwyższą efektywnością ma problem z autem. Rzuć 1x kostką. 1 = -5 PD tego pracownika.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_13",
-        "title": "PLOTKI O POTENCJALNEJ FUZJI",
-        "description": "Obawy o zwolnienia. Rzuć 2x kostką + Efektywność Menedżera. Wynik <= 12 oznacza spadek Efektywności obu pracowników o 1 pkt.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_14",
-        "title": "PLANY IMPREZY INTEGRACYJNEJ",
-        "description": "Dobry nastrój w zespole. Na czas tej rundy Efektywność obu pracowników jest wyższa o 1 pkt.",
-        "type": "POSITIVE"
-    },
-    {
-        "id": "event_15",
-        "title": "AWARIA SIECI TELEKOMUNIKACYJNEJ",
-        "description": "Atak hakerski. Rzuć 1x kostką za KAŻDEGO w zespole. Wynik 1 = dana osoba traci 5 PD.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_16",
-        "title": "NIESPEŁNIONE OBIETNICE",
-        "description": "Brak zmiany biura mimo obietnic. Rzuć 2x kostką + Efektywność Menedżera. Wynik <= 10 oznacza, że wybrany pracownik traci 1 pkt Efektywności.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_17",
-        "title": "AWARIA SYSTEMU KOMPUTEROWEGO",
-        "description": "Brak maila. Rzuć 1x kostką za każdego. Wynik <= 5 oznacza spadek Efektywności danej osoby o 1 pkt na tę rundę.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_18",
-        "title": "MENTORING Z DOŚWIADCZONYM MENEDŻEREM",
-        "description": "Oferta mentoringu. Jeśli poświęcisz CAŁĄ Dostępność (10 PD) w tej rundzie, zyskujesz na stałe +1 Efektywności Menedżera.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_19",
-        "title": "SUCCESS STORY",
-        "description": "Wywiad w portalu branżowym. Rzuć 1x kostką. 5 lub 6 = Efektywność obu pracowników +1 na tę rundę.",
-        "type": "POSITIVE"
-    },
-    {
-        "id": "event_20",
-        "title": "WIZYTA Z CENTRALI",
-        "description": "Opieka nad gośćmi. Odejmij 5 PD jednemu pracownikowi i rzuć 1x kostką. Wynik >= 2 dajesz Ci 2 KW.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_21",
-        "title": "UTRACONE KNOW-HOW",
-        "description": "Wykasowałeś notatki ze szkolenia. Tracisz 1 KW. Jeśli nie masz KW -> Rzuć 1x kostką. 1 lub 2 = -1 Efektywności Menedżera na tę rundę.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_22",
-        "title": "PROŚBA PREZESA",
-        "description": "Zaproszenie na zarząd. Rzuć 1x kostką. 4+ = Efektywność Menedżera +1 na tę rundę.",
-        "type": "POSITIVE"
-    },
-    {
-        "id": "event_23",
-        "title": "AKTUALIZACJA PRZEPISÓW RODO",
-        "description": "Obowiązkowe szkolenie. Odejmij 5 PD wybranemu pracownikowi.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_24",
-        "title": "AWARIA KOPII ZAPASOWYCH",
-        "description": "Brak dostępu do plików. W tej rundzie NIE możesz korzystać z zakupionych Pigułek Wiedzy (nie widzisz ich treści).",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_25",
-        "title": "PILNE SPOTKANIE ZARZĄDU",
-        "description": "Wezwanie. Rzuć 1x kostką. 1 = spotkanie trwa pół dnia, tracisz 5 PD Menedżera.",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_26",
-        "title": "NAGŁA PROŚBA OD KLIENTA",
-        "description": "Zmiana specyfikacji w najdroższym kontrakcie.\n1. Kontynuujesz: Wymaga to dodatkowych 20 pkt Wydajności.\n2. Rezygnujesz z kontraktu (bez kar).",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_27",
-        "title": "PRAKTYKANT",
-        "description": "Wdrożenie praktykanta. Odejmij 5 PD sobie lub pracownikowi -> Otrzymujesz 1 KW.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_28",
-        "title": "PRACOWNIK PROSI O SPOTKANIE",
-        "description": "Problem z klientem.\n1. Spotykasz się: Musisz wykonać akcję Szkolenie Pracownika w Fazie 4.\n2. Nie spotykasz się: Pracownik traci 1 PE w tej rundzie.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_29",
-        "title": "AWARIA DOSTĘPU DO DANYCH",
-        "description": "Problem z chmurą. Rzuć 1x kostką. 6 = nie możesz zobaczyć treści wylosowanej Pigułki w tej rundzie (zakryta).",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_30",
-        "title": "PLANY MARKETINGOWE",
-        "description": "Dyskusja o budżecie. Rzuć 1x kostką. 1 = tracisz 5 PD, ale zyskujesz 1 KW.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_31",
-        "title": "UDZIAŁ W IMPREZIE CHARYTATYWNEJ",
-        "description": "Sponsoring przyjęty pozytywnie. Efektywność obu pracowników +1 na tę rundę.",
-        "type": "POSITIVE"
-    },
-    {
-        "id": "event_32",
-        "title": "WDROŻENIE AI W FIRMIE",
-        "description": "Narzędzie wspierające decyzje. Otrzymujesz 2 KW.",
-        "type": "POSITIVE"
-    },
-    {
-        "id": "event_33",
-        "title": "USŁUGI WYWIADOWNI GOSPODARCZEJ",
-        "description": "Możesz zainwestować 300 zł, aby podejrzeć 5 kolejnych kart z talii Kontraktów.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_34",
-        "title": "OFERTA OUTSOURCINGU PRACOWNICZEGO",
-        "description": "Możesz kupić 30 pkt Wydajności za 500 zł (tylko w tej rundzie).",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_35",
-        "title": "AWARIA WINDY",
-        "description": "Pracownik utknął w windzie. Rzuć 1x kostką. 1 = Pracownik traci 1 PE w tej rundzie (stres).",
-        "type": "NEGATIVE"
-    },
-    {
-        "id": "event_36",
-        "title": "AMBITNY PRACOWNIK",
-        "description": "Pracownik prosi o rozwój. Jeśli wybierzesz Szkolenie Pracownika w Fazie 4, dodaj +2 do wyniku rzutu kostką.",
-        "type": "POSITIVE"
-    },
-    {
-        "id": "event_37",
-        "title": "KONFLIKT W ZESPOLE",
-        "description": "Musisz rozwiązać konflikt. Rzuć 2x kostką + Efektywność Menedżera. Wynik >= 12 -> Efektywność każdego pracownika +1 na tę rundę.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_38",
-        "title": "RENEGOCJACJA UMOWY",
-        "description": "Klient chce przyspieszenia najdroższego kontraktu.\n1. Bez zmian.\n2. Realizujesz o 1 rundę szybciej -> Bonus 1500 zł.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_39",
-        "title": "SPOTKANIE Z EKSPERTEM BRANŻOWYM",
-        "description": "Udział w spotkaniu za 5 PD Menedżera = 2 KW.",
-        "type": "NEUTRAL"
-    },
-    {
-        "id": "event_40",
-        "title": "NADWYŻKA W BUDŻECIE",
-        "description": "Oszczędność 1000 zł. Wybierz:\n1. Atrakcja dla zespołu: Efektywność obu pracowników +1 na tę rundę.\n2. Bilans: +1000 zł do kasy.",
-        "type": "POSITIVE"
     }
 ]

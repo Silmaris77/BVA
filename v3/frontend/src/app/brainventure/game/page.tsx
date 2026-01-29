@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { useBrainVenture } from '../../../components/brainventure/BrainVentureContext'
 import { motion, AnimatePresence } from 'framer-motion'
-import { TrendingUp, DollarSign, Brain, Clock, BarChart2 } from 'lucide-react'
+import { TrendingUp, DollarSign, Gem, Clock, BarChart2 } from 'lucide-react'
 
 import EventPhase from '../../../components/brainventure/EventPhase'
 import PillPhase from '../../../components/brainventure/PillPhase'
@@ -14,6 +14,7 @@ import SummaryPhase from '../../../components/brainventure/SummaryPhase'
 import GameSidebar from '../../../components/brainventure/GameSidebar'
 import GameContextPanel from '../../../components/brainventure/GameContextPanel'
 import GlobalFloatingMoney from '../../../components/brainventure/GlobalFloatingMoney'
+import GlobalFloatingKW from '../../../components/brainventure/GlobalFloatingKW'
 
 // Placeholder Views (To be extracted)
 import PILLS_DATA from '../../../data/brainventure/pills.json'
@@ -41,7 +42,7 @@ const WikiView = ({ unlockedPillIds }: { unlockedPillIds: string[] }) => {
                 </div>
             ) : (
                 <div className="mt-12 flex flex-col items-center justify-center opacity-30">
-                    <Brain size={64} className="mb-4" />
+                    <Gem size={64} className="mb-4" />
                     <p className="text-lg">Twoja baza wiedzy jest pusta.</p>
                     <p className="text-sm">Kupuj Pigułki Wiedzy w Fazie 2, aby je tutaj gromadzić.</p>
                 </div>
@@ -304,7 +305,7 @@ const PHASE_LABELS: Record<string, string> = {
     'SUMMARY': 'Podsumowanie'
 }
 
-type ViewType = 'GAME' | 'WIKI' | 'TEAM' | 'CONTRACTS' | 'HISTORY' | 'STATS'
+type ViewType = 'GAME' | 'WIKI' | 'TEAM' | 'CONTRACTS' | 'HISTORY' | 'STATS' | 'SETTINGS'
 
 export default function GamePage() {
     const { state, dispatch, formatMoney, getTeamProductivity } = useBrainVenture()
@@ -317,6 +318,7 @@ export default function GamePage() {
     return (
         <div className="flex h-screen w-full bg-[var(--bg-deep)] text-white font-sans overflow-hidden">
             <GlobalFloatingMoney />
+            <GlobalFloatingKW />
 
             {/* Sidebar */}
             <GameSidebar currentView={currentView} onViewChange={setCurrentView} />
@@ -327,7 +329,7 @@ export default function GamePage() {
                 {/* Top HUD */}
                 <header className="bg-gray-900/50 border-b border-gray-700/50 p-4 flex justify-between items-center z-10 backdrop-blur-md">
                     <div className="flex gap-4 items-center">
-                        <div className="flex flex-col">
+                        <div className="flex flex-col pl-2">
                             <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest leading-none mb-1">Runda</span>
                             <span className="text-xl font-bold text-white leading-none">{state.round} / 8</span>
                         </div>
@@ -353,24 +355,26 @@ export default function GamePage() {
 
                         <div className="h-8 w-px bg-gray-700 mx-2"></div>
 
-                        <div className="flex flex-col items-end">
-                            <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest leading-none mb-1">Budżet</span>
-                            <div className="flex items-center gap-2 text-green-400 font-mono font-bold text-xl leading-none">
-                                <DollarSign size={16} /> {formatMoney(state.cash)}
+                        <div className="flex gap-6">
+                            <div className="flex flex-col items-end">
+                                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest leading-none mb-1">Budżet</span>
+                                <div className="flex items-center gap-2 text-green-400 font-mono font-bold text-xl leading-none">
+                                    <DollarSign size={16} /> {formatMoney(state.cash)}
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="flex flex-col items-end">
-                            <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest leading-none mb-1">Wiedza (KW)</span>
-                            <div className="flex items-center gap-2 text-purple-400 font-mono font-bold text-xl leading-none">
-                                <Brain size={16} /> {state.knowledgeCrystals}
+                            <div className="flex flex-col items-end">
+                                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest leading-none mb-1">Wiedza (KW)</span>
+                                <div className="flex items-center gap-2 text-blue-400 font-mono font-bold text-xl leading-none">
+                                    <Gem size={16} /> {state.knowledgeCrystals}
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="flex flex-col items-end">
-                            <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest leading-none mb-1">Moc Zespołu (W)</span>
-                            <div className="flex items-center gap-2 text-blue-400 font-mono font-bold text-xl leading-none">
-                                <TrendingUp size={16} /> {productivity}
+                            <div className="flex flex-col items-end">
+                                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest leading-none mb-1">Moc Zespołu (W)</span>
+                                <div className="flex items-center gap-2 text-blue-400 font-mono font-bold text-xl leading-none">
+                                    <TrendingUp size={16} /> {productivity}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -392,7 +396,7 @@ export default function GamePage() {
                                 <GameContextPanel />
 
                                 {/* RIGHT PANEL: Main Game Phase */}
-                                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-gradient-to-br from-gray-900 via-[#0f172a] to-gray-900 relative">
+                                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 relative bg-gradient-to-br from-gray-900 via-[#0f172a] to-gray-900">
                                     {/* Grid Background Effect */}
                                     <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] pointer-events-none"></div>
 

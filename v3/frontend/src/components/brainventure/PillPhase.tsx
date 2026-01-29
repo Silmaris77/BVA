@@ -33,14 +33,9 @@ export default function PillPhase() {
         dispatch({ type: 'SET_PHASE_READY', payload: true })
     }
 
-    const [showCostAnim, setShowCostAnim] = useState(false)
-
-    // ... useEffects ...
-
     const handleBuy = () => {
         if (state.cash >= 100 && pill) {
-            setShowCostAnim(true)
-            dispatch({ type: 'UPDATE_CASH', payload: -100, silent: true })
+            dispatch({ type: 'UPDATE_CASH', payload: -100 }) // Global animation enabled
             dispatch({ type: 'UNLOCK_PILL', payload: pill.id })
 
             setTimeout(() => {
@@ -96,7 +91,7 @@ export default function PillPhase() {
                 <div className="relative">
                     <button
                         onClick={handleBuy}
-                        disabled={state.cash < 100 || showCostAnim}
+                        disabled={state.cash < 100}
                         className="w-full h-full flex flex-col items-center justify-center p-6 rounded-xl border border-purple-500 bg-purple-900/20 hover:bg-purple-900/40 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <span className="text-purple-300 group-hover:text-purple-100 font-bold text-lg mb-1 flex items-center gap-2">
@@ -104,20 +99,6 @@ export default function PillPhase() {
                         </span>
                         <span className="text-sm text-purple-400/60">Zyskaj dostęp na stałe (Koszt: 100 zł)</span>
                     </button>
-
-                    {/* Local Cost Animation */}
-                    <AnimatePresence>
-                        {showCostAnim && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 0, scale: 0.5 }}
-                                animate={{ opacity: 1, y: -50, scale: 1.2 }}
-                                exit={{ opacity: 0 }}
-                                className="absolute top-0 right-0 left-0 flex justify-center -mt-8 pointer-events-none"
-                            >
-                                <span className="text-4xl font-bold text-red-500 drop-shadow-md font-mono">💸 -100 PLN</span>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
                 </div>
             </div>
         </div>

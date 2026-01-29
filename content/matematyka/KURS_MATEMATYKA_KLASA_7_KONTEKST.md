@@ -618,26 +618,662 @@
    - Szacowanie wyników pozwala sprawdzić, czy obliczenia są prawidłowe
    - W życiu codziennym często używamy zaokrągleń dla wygody i przejrzystości
 
-4. **Dodawanie i odejmowanie liczb dodatnich** (str. 24)
-   - Działania na ułamkach
-   - Działania na liczbach dziesiętnych
+4. **Dodawanie i odejmowanie liczb dodatnich** (str. 24-27)
+   - Dodawanie i odejmowanie ułamków zwykłych
+   - Dodawanie i odejmowanie liczb dziesiętnych
+   - Sprowadzanie do wspólnego mianownika
+   - Dodawanie i odejmowanie sposobem pisemnym
+   - Zamiany ułamków zwykłych na dziesiętne i odwrotnie
 
-5. **Mnożenie i dzielenie liczb dodatnich** (str. 28)
-   - Mnożenie i dzielenie ułamków
+**TEORIA:**
+
+Przypominamy sobie, jak obliczamy sumy i różnice liczb wymiernych.
+
+**Dodając lub odejmując ułamki zwykłe**, sprowadzamy je do wspólnego mianownika:
+- ½ + ⅕ = 5/10 + 2/10 = 7/10
+- 4⅓ - ⅔ = 4⅔ - ⅔ = 3⅔ + ⅓ - ⅔ = 3⅔
+
+**Dodając lub odejmując ułamki dziesiętne**, postępujemy podobnie jak przy dodawaniu i odejmowaniu liczb naturalnych. Niektóre proste rachunki można wykonać w pamięci, a gdy są bardziej skomplikowane — możemy wykonać działania sposobem pisemnym.
+
+**Przykłady:**
+- 0,9 + 0,4 = 1,3
+- 0,54 - 0,2 = 0,54 - 0,20 = 0,34
+
+Dodając i odejmując ułamki dziesiętne, postępujemy podobnie jak przy dodawaniu i odejmowaniu liczb naturalnych:
+- 14,065 + 2,7 = 16,765
+- (-0,7) + (-5,81) = -6,51
+
+Przy dodawaniu i odejmowaniu liczb wymiernych staramy się zawsze ułamki przedstawić w tej samej postaci — ułamka zwykłego albo ułamka dziesiętnego.
+
+**Przykłady zamiany:**
+- ⅓ + 0,75 = 0,2 + 0,75 = 0,95
+- 5⅓ + 0,3 = 5⅓ + ⅓ = 5⅔ = 16/30 + 9/30 = 25/30 = 19/30
+
+**ĆWICZENIA I ZADANIA:**
+
+**ĆWICZENIE A** - Oblicz w pamięci:
+1. Oblicz w pamięci:
+   a) ⅗ + ⅕    d) 1 - ⅔    g) 1 - 6/7    j) 8 - ¼    m) 5/7 - 4⅖
+   b) 1⅔ + ⅓    e) 1 - 6/7    h) ⅖ + ⅕    k) 5 - ⅚    n) 6 - 2⅗
+   c) 2⅕ + 3⅘    f) 1 - 19/25    i) ⅔ - ⅛    l) 10 - ⅘    o) 2⅘ + ⅕
+
+2. Oblicz:
+   a) ½ + 1/13    d) ⅕ + ⅓    g) 1½ + ⅙    j) ⅔ - ⅛
+   b) ¾ + 1/15    e) ⅖ - ⅛    h) 1⅕ - ⅔    k) 1⅙ - ⅝
+   c) ⅚ - 1/15    f) 1⅓ - ⅓    i) 2⅖ - 1/7    l) 2⅔ - 1⅚
+
+3. Na weselu goście rodzicówpanny młodej stanowili ⅔, a rodzców pana młodego ⅛ zaproszonych osób. Tzorłali goście zostali zaproszeni przez młodą parę. Kto zaprosił najwięcej gości?
+
+4. **Z tradycyjnego dla świerej klasy:** Powiedziała Basia — większość, bo aż ⅔ chłopaków jest wysokich. — Na tak, ale zaledwie o ⅓ chłopaków jest niższych od przeciętnych. No to tak, ale zaledwie o ⅓ chłopaków jest niższych od przeciętnych od przeciętnych — nie zgadza się Kasia. Czy z tego fragmentu rozmowy dwóch koleżanek wynika, że w ich mniemaniu w klasie jest choć jeden zabawny przyjaciel?
+
+**Ciekawostka:**
+Każdą liczbę wymierną można przedstawić w postaci sumy różnych ułamków prostych. Ułamkami prostymi nazywamy ułamki o liczniku 1 i mianownikach będących liczbami naturalnymi, np. ½, ⅓, ¼, ⅕, ⅙ itd.
+
+5. **Ułamki o liczniku 1 nazywamy ułamkami prostymi.** Zastąp symbole odpowiednimi ułamkami prostymi:
+   a) 1 - ½ + ⅙ + ■    c) ⅔ - ⅙ + ■ + ■
+   b) 1 - ½ + ⅙ + ■ + ■    d) ⅚ - ⅙ - ■ + ■
+
+**ĆWICZENIE B** - Oblicz sposobem pisemnym:
+6. Oblicz w pamięci:
+   a) 0,6 + 0,7    d) 1,2 + 2,15    g) 1 - 0,7    j) 10 - 2,2
+   b) 1,4 + 1,6    e) 1,07 + 3,5    h) 3 - 0,01    k) 11 - 1,3
+   c) 0,05 + 5    f) 2,34 + 8,7    i) 1 - 0,09    l) 1,3 - 0,8
+
+7. Na diagramie podano średnie prędkości wiatru w czterech kolejnych dniach tygodnia:
+   a) Którego dnia średnia prędkość wiatru była najmniejsza, a którego największa? Ile wynosiła różnica tych prędkości?
+   b) O ile mniejsza była średnia prędkość wiatru w środę niż w poniedziałek?
+
+8. Barka na Noteci burned rozwija prędkość 1,4 m/s. Prędkość nurtu rzeki wynosi 0,28 m/s. Z jaką prędkością barka płynie po tej rzece:
+   a) z prądem
+   b) pod prąd?
+
+9. Do przygotowania 2 litrów koktajlu mlecznego należy użyć 0,3 l soku z owoców leśnych (0,25 l musi) bananowego, a następnie dodać mleko. Ile należy dodać mleka?
+
+10. W ramce obok przedstawiony jest skład syropu dla dzieci. Ile jest wody w 120 g tego syropu?
+    [Pini Sirupus - skład syropu: jogurt - 1,9%, witaminy B - 0,192 g, soki cytrusowe - 1,2 g, kwas cytrynowy - 0,06 g, ksylitol - 0,15 g, woda]
+
+11. Oblicz sposobem pisemnym:
+    a) 15,27 + 9,83    d) 68,24 - 28,71
+    b) 37,6 + 4,82    e) 700,3 - 39,8
+    c) 29 + 38,2 + 6,957    f) 56,8 - 7,451
+
+12. Przyłrzyj się podanym cenom. Ile powinny kosztować lody z bitą śmietaną?
+    [Ilustracja lodów: lody z owocami 12,67 zł, gałka lodów z owocami 10,45 zł, gałka lodów z bitą śmietaną 8,68 zł]
+
+**ĆWICZENIE C** - Oblicz, zamieniając ułamki zwykłe na ułamki dziesiętne:
+13. Oblicz w pamięci:
+    a) ½ + 0,5    c) 0,75 - ½    e) ¾ - 0,25    g) 1,2 - ½
+    b) 1½ - 0,3    d) 0,125 - ⅛    f) 1,5 - ⅔    h) 1¼ - 0,5
+
+14. Oblicz, zamieniając ułamki zwykłe na ułamki dziesiętne:
+    a) 1,16 + ¼    c) 65,8 - 2/9    e) ⅔ - 0,15    g) 2,5 - ⅗
+    b) 3,9 + 1/25    d) 3,65 - 1⅖    f) 17⅓ + 1,7    h) 3¼ - 0,2
+
+15. Oblicz:
+    a) 3,6 + ⅖    c) 2,75 + ⅖    e) 3⅓ - 3,3
+    b) 4⅕ - 1,11    d) 0,125 - ⅛    f) 1⅓ - 0,09
+
+16. W Ameryce Północnej znajduje się Kanada, USA, Meksyk oraz wiele innych krajów:
+    a) Kanada i USA zajmują po 2/3 powierzchni całego kontynentu. Jaką część powierzchni zajmują pozostałe kraje?
+    b) 0,59 ludności Ameryki Północnej mieszka w USA, ⅓ w Meksyku, a tylko ⅑ w Kanadzie. Jaka część ludności zamieszkuje pozostałe kraje?
+
+**Sprawdź, czy umiesz:**
+1. Wynikiem działania 4½ - 2,5 jest:
+   A. 2⅔    B. 1⅕    C. 2¼    D. 1 19/20
+
+2. Suma liczb, które należy wstawić w puste kratki, wynosi:
+   [Diagram z kratkami: 2, _, 1,8, 2,2, _, 2,6]
+   A. 2    B. 1,8    C. 6,2    D. 6,5
+
+3. Punkt M na osi liczbowej odpowiada liczbie:
+   [Oś liczbowa z punktem M między 2,6 a 3,6]
+   A. 2 5/12    B. 2,625    C. 2,8    D. 2,85
+
+→ zadania uzupełniające 24-32, str. 50
+
+5. **Mnożenie i dzielenie liczb dodatnich** (str. 28-33)
+   - Mnożenie i dzielenie ułamków zwykłych
    - Mnożenie i dzielenie liczb dziesiętnych
+   - Skracanie ułamków przed mnożeniem
+   - Przesuwanie przecinka w działaniach
 
-6. **Wyrażenia arytmetyczne** (str. 34)
+**TEORIA:**
+
+Poniżej przypominamy, jak mnożymy oraz dzielimy ułamki zwykłe.
+
+**Przykłady mnożenia ułamków:**
+- 2⅕ × 2/9 = 12/5 × 2/9 = 8/15
+- 1⅙ × 8 = 7/6 × 8 = 28/3 = 9⅓
+- ⅗ × 7/9 = 3/5 × 9/5 = 27/35
+- 2⅘ × 12 = 14/5 × 12 = 168/15 = 11⅕
+
+**Liczby mieszane zamieniamy na ułamek niewłaściwy, a potem skracamy mnożnik przez licznik i mianownik przez mianownik:**
+
+**Mnożymy pierwszy ułamek przez odwrotność drugiego:**
+- Liczby mieszane zamieniamy na ułamek niewłaściwy
+- Skracamy mnożnik przez licznik i mianownik przez mianownik
+- Mnożymy liczniki przez liczniki i mianowniki przez mianowniki
+
+Mnożenie i dzielenie ułamków dziesiętnych w praktyce wykonuje się najczęściej za pomocą kalkulatora. Nie warto jednak korzystać z kalkulatora, gdy mamy wykonać tak proste działania jak w poniższych przykładach.
+
+W kolejnych przykładach przypominamy, jak wykonuje się działania na ułamkach dziesiętnych sposobem pisemnym:
+
+**Przykłady mnożenia dziesiętnego:**
+- 1,35 × 2,7 = 3,645
+- 2,04 × 0,017 = 0,03468
+
+**Przykłady dzielenia dziesiętnego:**
+- 30,24 ÷ 1,5 = 302,4 ÷ 15 = 20,16
+- 67,2 ÷ 0,24 = 6720 ÷ 24 = 280
+
+**Wykonujemy mnożenie jak na liczbach naturalnych, a następnie nie oddzielamy przecinkiem tylu cyfr od prawej strony, ile dzielnik jest liczb wszystkich w obu czynnikach.**
+
+**Przed wykonaniem dzielenia przesuwamy przecinek w obu liczbach o tyle samo miejsc, tak aby dzielnik był liczbą całkowitą.**
+
+**Przesuwamy przecinek w prawo o tyle miejsc (dopisując odpowiednią liczbę zer), obydwa mnożymy przez 10, 100, 1000 itd.**
+- 73,4 ÷ 10000 = 734000
+- 5,12 ÷ 1000 = 0,00512
+
+**Obliczeamy w pamięci:**
+- 0,4 ÷ 0,2 = 0,084
+- 0,02 ÷ 0,15 = 0,0030 = 0,003
+
+**Przesuwamy przecinek w lewo o 4 miejsca:**
+- 3270,8 ÷ 32 = 8 = 4
+- 0,016/1,25 = 3,6/4 = 0,9
+
+**ĆWICZENIE: Sprawdź, ile różnych wyników otrzymamy po wykonaniu poniższych działań:**
+- 3,27 ÷ 100 = 3,27 ÷ 1/25 = 3,27 × 0,01 = 3,27/100
+- 3,27 ÷ 100 = 3,27 ÷ 1/25 = 3,27 × 0,01 = 3,27/100
+
+**ZADANIA:**
+
+1. Oblicz w pamięci:
+   a) ¾ ÷ 4    c) 1/10 ÷ ½    e) 2 ÷ ⅓    g) ⅖ ÷ ¼    i) 6 ÷ 5
+   b) ⅖ ÷ 7    d) ⅘ ÷ 3    f) ⅘ ÷ 2    h) ⅝ ÷ ⅓    j) 3 ÷ 9
+
+2. Oblicz:
+   a) ⅓ ÷ ¼    d) 1⅓ ÷ 2/15    g) 6⅙ ÷ 3⅓    j) 8⅖ ÷ ⅖ ÷ 3
+   b) ⅗ ÷ 1/12    e) 2⅖ ÷ 5    h) 7⅙ ÷ 2⅖    k) 2½ ÷ 7 ÷ 2⅖
+   c) ⅘ ÷ 2/33    f) 1⅗ ÷ 6    i) 2 ÷ 13-4/21    l) 4 ÷ 15-9/12
+
+3. Oblicz:
+   ½, ⅓, ⅔, ¾, ⅖, ⅗, ⅘, ⅙, ⅚, ⅐, 1/9, 1/10, 1/11, 1/12
+
+4. Dziewczęta stanowią ⅔ liczby uczniów Zielonej Szkoły. W czasie zajęć dziewczęta podzielono na 10 równolicznych grup, a chłopców na 5 równolicznych grup. Czy liczniejsze są grupy dziewcząt czy chłopców?
+
+5. Oblicz w pamięci:
+   a) ⅔ z 20 zł    c) ⅗ z 12 h    e) 2⅓ z 5 kg
+   b) ⅓ z 8 kg    d) ⅖ z 60 zł    f) 1½ z 30 h
+
+6. W pewnym roku szkolnym było 297 dni, z tego ⅔ to były dni wolne od nauki. Same soboty i niedziele stanowiły 1/7 wszystkich dni. Ile sobót i niedziel było wówczas w roku szkolnym?
+
+7. Przeczytaj poniższą informację. Przyłuśnimy, że prezydent zatwierdził pewną ustawę:
+   a) Ilu posłów musi głosować za odrzuceniem weta prezydenta, by sejm weto odrzucił, jeśli w głosowaniu biorą udział wszyscy posłowie?
+   b) W pewnym głosowaniu nad wetem prezydenta wzięło udział 328 posłów. Spośród nich 197 posłów było za odrzuceniem weta prezydenta, a 11 posłów wstrzymało się od głosu. Czy weto prezydenta zostało odrzucone?
+
+8. Rozlewamy 42 l soku do butelek o pojemności 1 l, wyplajjąc ⅗ 1/7 i odłrości każdej butelki. Ile butelek musimy przygotować?
+   [Ilustracja z butelkami i ciekawostką]
+
+9. Oblicz:
+   a) 1/35 - ⅖ ÷ 7/11 × ⅘    b) 31/4 ÷ 11    c) ⅓ ÷ ⅗    d) ⅖ ÷ ⅚
+   [oraz inne działania]
+
+10. Jakimi liczbami należy zastąpić symbole?
+    ⅓ × ⅖ = 3    12 - ⅜ = 5⅝    ⅖ ÷ ⅓ = 6
+
+11. Oblicz:
+    a) 1,0049 ÷ 0,1    c) 92,03 ÷ 1/1000    e) 0,0167 ÷ 1/10    g) 3,47/100
+    b) 504,3 ÷ 0,001    d) 1093,02 ÷ 0,1    f) 24,92 ÷ 0,001    h) 0,07/100
+
+12. W 100 g topionego sera jest 0,54 g wapnia. Ile wapnia zawiera 1 g tego sera? Ile wapnia zawiera 1 kg, a ile — 1 dag tego sera?
+
+13. Pan Nowak przejechał swoim samochodem już 100000 km. Do tej pory jego samochód spalał przeciętnie 7,2 l na 100 km, teraz w porówcznych warunkach spala aż 7,9 l. O ile więcej benzyny spalił dotychczas samochód pana Nowaka?
+
+14. Wiedząc, że 2/31 = 0,0217, zapisz rozwinięcia dziesiętne podanych liczb:
+    a) 10 ÷ 3/31    b) 100/31    c) ⅔ ÷ 3/60    d) 1/3000
+
+15. Wyraź podane wielkości we wskazanej jednostce:
+    a) [m]: 0,2 km, 17 cm, 1,4 cm, 6 dm, 0,7 km = 0,7 ÷ 1060 m
+    b) [cm]: 0,3 m, 5 km, 72 dm, 4 mm, 6,2 cm = 6,2 ÷ 1/50 m
+    c) [dag]: 1,3 kg, 4 kg, 520 g, 12 g
+    d) [g]: 14 dag, 1,7 dag, 6 kg, 0,3 kg
+
+16. Na mapie w skali 1:10000 odcinek łączący dwa punkty ma długość 13,5 cm. Podaj jaką jest odległość w terenie między tymi punktami w centymetrach, w metrach oraz w kilometrach?
+
+**Ciekawostka:**
+Podające milę do dwóch miar, otrzymujemy najpierw milimetr, co oznacza tysięczną część metra. Analogicznie dla innych miar - prefiks mil- oznacza tysięczną część podstawowej jednostki miary. Przedrostek mili- pochodzi od łacińskiego mille (tysiąc).
+- 1 mm = 0,001 m
+- 1 mg = 0,001 g, 1 ml = 0,001 l
+Z kolei od greckiego słowa miliön (dosłączas) pochodzą nazwa jednostki długości — 1 mikrony od miliona części metra.
+- 1 μ = 0,000001 m
+
+17. Wykonaj obliczenia:
+    a) 2,5 metra — ile to milimetrów?
+       8,5 milimetra — ile to metrów?
+    b) 11,6 grama — ile to miligramów?
+       20,5 miligrama — ile to gramów?
+    c) 0,0065 metra — ile to mikronów?
+       2734 mikronów — ile to metrów?
+
+18. Zapisz odpowiednie równości:
+    a) 1 mikron — jaką to część milimetra?
+    b) 1 milimetr — ile to mikronów?
+
+**ĆWICZENIE D** - Oblicz sposobem pisemnym:
+19. Oblicz:
+    a) 2,3 ÷ 2    d) 1,3 ÷ 30    g) 0,6 ÷ 3    j) 0,24 ÷ 0,06
+    b) 0,21 ÷ 4    e) 0,3 ÷ 0,2    h) 0,25 ÷ 5    k) 7 ÷ 0,2
+    c) 0,5 ÷ 20    f) 0,2 ÷ 0,43    i) 0,8 ÷ 0,4    l) 0,9 ÷ 4,5
+
+20. Oblicz, ile to złotych:
+    a) 200 dwudziestołroszówek
+    b) 500 dziesięciogroszówek
+    c) 280 pięciogroszówek
+    d) 1400 pięćdziesięciogroszówek
+
+21. Średnica bakterii wynosi około 0,006 mm, wirusa około 0,00002 mm, a atomu około 0,0000001 mm:
+    a) Ile razy średnica bakterii jest większa od średnicy wirusa?
+    b) Ile razy średnica wirusa jest większa od średnicy atomu?
+    c) Ile razy średnica bakterii jest większa od średnicy atomu?
+
+22. Zobacz, jak sprytnie Krysia rozwiązywała zadanie: Za 1,5 bulek zapłacono 9,60 zł. Ile trzeba by było zapłacić za 10 bulek? Rozwiąż poniższe zadania na dwa sposoby:
+    a) W trzech szklankach mieści się 0,63 kg mąki. Z ilu szklanek mąki — ile to gram mąki?
+    b) Za 3000 g pewnej wędliny zapłacono 8,40 zł. Ile kosztuje 1 kg tej wędliny?
+    c) Za 3 kg cukierków zapłacono 33,90 zł. Ile trzeba zapłacić za 2 kg tych cukierków?
+    d) W hyce o pojemności 15 ml mieści się 6 cukru. Ile cukru mieści się w szklance o pojemności 250 ml?
+
+23. Oblicz sposobem pisemnym:
+    a) 3,22 ÷ 0,7    c) 9,305 ÷ 0,016    e) 62,72 ÷ 7    g) 364 ÷ 0,14
+    b) 90,6 ÷ 10,1    d) 1,24 ÷ 3,15    f) 3780 ÷ 9,9    h) 1,694 ÷ 0,018
+
+24. a) Litr oleju waży 0,92 kg. Ile waży 2,5 litra oleju?
+    b) Ile waży litr ręci, jeśli 7 litrów waży 94,5 kg?
+
+25. W 1867 r. Rosja sprzedała Stanom Zjednoczonym Alaskę za 7,2 mln dolarów. Można przyjąć, że powierzchnia Alaski wyniosła wówczas ok. 1,5 mln km². Ile zapłacili Amerykanie za każdy km² Alaski?
+
+26. Przeczytaj informacje w ramce:
+    a) Ile gramów diamentu Cullinan stracono w trakcie obróbki? Jaka to część Cullinana? Wynik podaj w postaci ułamka zwykłego oraz w postaci do części setnych.
+    b) Jakie części Cullinana stanowią dwa największe brylanty z niego otrzymane?
+    c) Ile przeciętnie ważył każdy ze 103 mniejszych brylantów?
+    d) O ile więcej karatów miał największy brylant z Cullinana niż drugi w kolejności Jana Kazimierza?
+
+[Kantor SYRENA - tabela z kursami walut]
+
+27. Przed wyjazdem do Londynu pan Janek Zosia kupila w kantorze Syrena euro za 870 zł. W Londynie wymieniła euro na funty. Otrzymała:
+    a) ile funtów otrzymała?
+    b) Ile funtów by otrzymała, gdyby za tę samą kwotę kupiła dolary amerykańskie i wymieniła je w Londynie na funty?
+
+28. Oblicz (postaraj się liczyć w pamięci):
+    a) 0,5 ÷ ½    c) 1⅓ ÷ 1,25    e) 0,25 ÷ ⅕    g) 2,125 ÷ ⅛
+    b) 0,75 ÷ ⅙    d) 0,25 ÷ ⅛    f) 1,5 ÷ ½    h) 0,5 ÷ ¼
+
+29. Oblicz:
+    a) 0,2 ÷ ⅕    d) ¾ ÷ 0,0375    g) (2 5/11 ÷ ⅔) ÷ 0,11
+    b) 1½ ÷ 2,7    e) 0,48 ÷ 1⅕    h) 1,8 ÷ (1⅕ ÷ 6⅗)
+    c) 1⅓ ÷ ⅗ ÷ 0,2    f) 3/17 ÷ 2    i) 2⅓ ÷ 11/6
+
+→ zadania uzupełniające 33-50, str. 50-52
+
+6. **Wyrażenia arytmetyczne** (str. 34-37)
    - Kolejność działań
    - Nawiasy w wyrażeniach
+   - Obliczanie wartości wyrażeń
+   - Podział na mnożenie i dzielenie, dodawanie i odejmowanie
 
-7. **Działania na liczbach dodatnich i ujemnych** (str. 38)
+**TEORIA:**
+
+Obliczając wartości wyrażeń arytmetycznych, należy pamiętać o właściwej kolejności wykonywania działań.
+
+**Przykłady:**
+- 5 ÷ 2³ = 5 - 8 = 40
+- 18 ÷ 3² ÷ 2 = 18 ÷ 9 ÷ 2 = 2 ÷ 2 = 4
+- 5 - 1½ + 6⅖ ÷ 2 = 5 - 3/2 + 2⅖ = 
+- ½ [(7 - ⅖) ÷ (0,7 + 1,3)] =
+
+**Potęgowane wykonujemy przed mnożeniem i dzieleniem. Gdy nie ma nawiasów, mnożenie i dzielenie wykonujemy od lewej do prawej.**
+
+**Mnożenie i dzielenie wykonujemy przed dodawaniem i odejmowaniem.**
+
+**Zachowujemy tą działań w trzech nawiasach, które nie zawierają innych nawiasów.**
+
+**ZADANIA:**
+
+1. Które działanie należy wykonać jako pierwszej? Wykonaj obliczenia:
+   a) 34 - 4 ÷ 5    c) 24 ÷ (3 ÷ 4)    e) 2 ÷ (20 + 14 ÷ 2)
+   b) 20 ÷ 2²    d) 22 - (5 + 6)    f) (25 - (3 + 8)) ÷ 3
+
+2. Wykonaj obliczenia. Postaraj się liczyć w pamięci:
+   a) ½ ÷ 4 - 2    d) (0,6 + 0,9) ÷ 3    g) ⅓ ÷ ½ - 0,5 - 0,75
+   b) 3 - (⅓)²    e) 10 ÷ (0,5 + ⅓)    h) (1 - (6÷7)²) ÷ 9
+   c) 1 + ⅔ ÷ ⅙    f) 0,3 + 0,5 ÷ 4    i) (0 (1 + 0,1² - 1½) ÷ 10
+
+3. Pan Izydor zapłacił za swoje zakupy banknotem stuzłotowym i jako resztę otrzymał banknotowe dwudziestozłotowy i trzy dwudziestogroszówki. Ile kosztowały zakupy pana Izydora?
+
+4. Oblicz:
+   a) (⅕ - ½) ÷ ⅓    d) 4,8 ÷ (½ - (1,2 - 0,6))    g) (6,5 - 4,7) ÷ (4 - 2⅖)
+   b) 3,2 ÷ (0,8 - ⅕)    e) (4 - ⅗) ÷ (15,2 - 0,7)    h) (1,5 - 1⅓) ÷ 2⅗ - 0,1
+   c) ⅔ ÷ (½ + ⅙)    f) (½) 123 ÷ 10 + 0,2 ÷ 6,1    i) (6,25 - 2⅖) ÷ 2⅖ - 1
+
+5. Zapisz odpowiednie wyrażenie arytmetyczne i oblicz jego wartość:
+   a) Do liczby 7,5 dodaj ilocyn liczb 1,2 i 1⅕
+   b) Od ilorazu liczby 2,5 przez ⅘ odejmij ¼
+   c) Od sumy liczb ½ i ⅕ odejmij kwadrat liczby ⅕
+   d) Do sześcianu liczby 2 dodaj kwadrat liczby ⅖
+
+6. Oblicz:
+   a) 5 ÷ 7-10/15    c) 14-9/5 ÷ 3    e) 5-8/27 ÷ 16-10/9
+   b) 6 ÷ 7-3/8    d) 21 ÷ 4+7/9    f) (14 ÷ 81-17/5) ÷ ⅚
+
+7. Oblicz:
+   a) 2,75 + 0,1 ÷ 10 / 0,25 ÷ 5    b) (2⅔ - 1⅓) ÷ 6    c) 1,4/0,2 - 0,8 ÷ ⅓
+
+8. Rysunki przedstawiają fragmenty osi liczbowych. Oblicz współrzędne punktów oznaczonych literami:
+   [Diagramy z osiami liczbowymi A, B]
+
+9. Kupując w sklepie internetowym, musimy dodatkowo zapłacić za przesyłkę zgodnie z daną w tabeli:
+   [Tabela z wartościami zamówienia i kosztami przesyłki]
+
+10. Przyjrzyj się fotografii obok. Ile złotych można zaoszczędzić, kupując 30 litrów oranżady w butelkach dwulitrowych zamiast w butelkach półlitrowych?
+    [Ilustracja z butelkami oranżady]
+
+11. Spół jest stopem między, cyną i cynku. Używa się go do wyrobu dzwonów. Miedź stanowi ¾ stopu, cyna ⅙, reszta stopu to cynk. Spółków 0,5 l, ile cynku użyto do wykonania tego dzwonu?
+
+12. Ogrodnik zebrał 110 kg jabłek, które układał w trzech jednakowych skrzynkach. Jedna skrzynka waży brutto 34⅓ kg, a druga — 36,3 kg. Trzy puste skrzynki ważą razem 6⅔ kg. Ile ważyły jabłka w trzeciej skrzynce?
+
+13. Harcerze ugotowali 10 litrów grochówki. Zupa była bardzo gęsta, więc dolali jeszcze 3,4 litra wody. Każdy z nich zjadł po 1 litrze zupy. W garnku zostało jeszcze 3,8 litra grochówki. Ilu było harcerzy?
+
+14. Woda stanowi około 0,9 masy śniegach grzybów. Suszoną 2,5 kg grzybów. Wyparowano ⅞ wody. Ile ważyły suszone grzyby?
+
+**Sprawdź, czy umiesz:**
+
+1. Iloraz 2⅔ ÷ 1,4 jest równy:
+   A. 1⅕    B. 6/35    C. 147/70    D. 10½
+
+2. ⅔ godziny lekcyjnej — ile to minut?
+   A. 27 minut    B. 36 minut    C. 75 minut    D. 3 minuty
+
+3. Na rozbudowie stajni pan Wroński potrzebuje 1,5 mln zł. Z funduszy Unii Europejskiej może uzyskać ¾ tej kwoty. Ile własnych pieniędzy, dla uzupełnienia musiał przeznaczyć na tę inwestycję?
+   A. 0,9 mln zł    B. 0,09 mln zł    C. 0,6 mln zł    D. 0,06mln zł
+
+→ zadania uzupełniające 33-50, str. 50-52
+
+7. **Działania na liczbach dodatnich i ujemnych** (str. 38-41)
    - Wprowadzenie liczb ujemnych
    - Reguły dodawania, odejmowania, mnożenia, dzielenia
+   - Suma i różnica liczb o różnych znakach
+   - Potęgowanie liczb ujemnych
 
-8. **Oś liczbowa. Odległości liczb na osi liczbowej** (str. 42)
+**TEORIA:**
+
+**Z historii:**
+
+Liczby ujemne zostały wynalezione przez Chińczyków w II w. n.e. Reguły działań na liczbach ujemnych sformułowali matematyki hinduscy w VII w. n.e.
+
+W Europie liczby ujemne pojawiły się dopiero w XII w. Bardzo długo nie były jednak uznawane, nawet przez wybitnych matematyków.
+
+Uważano je za dziwne, abstrakcyjne, przy czym nazywano je liczbach, którym dawalmy przedrostek "minus".
+
+Liczby ujemne uznano w pełni dopiero w połowie XVIII w.
+
+Wykonywanie działań na dowolnych liczbach wymiernych (dodatnich i ujemnych) jest nieco trudniejsze niż wykonywanie działań na samych liczbach dodatnich. Warto pamiętać, że każdej odejmowanie liczby można zastąpić dodawaniem liczby do niej przeciwnej.
+
+**Przykłady:**
+- 7 + 12 = 19
+- -7 + (-12) = -19
+- 7 + (-12) = -5
+- -7 + 12 = 5
+
+**Zasady mnożenia i dzielenia liczb wymiernych są proste. Wystarczy tylko pamiętać, że:**
+- iloczyn (iloraz) dwu liczb o tych samych znakach jest liczbą dodatnią
+- iloczyn (iloraz) dwu liczb o znakach przeciwnych jest liczbą ujemną
+
+**Przykłady:**
+- 15 ÷ 3 = 45    51 ÷ 3 = 17
+- (-15) ÷ (-3) = 45    (-51) ÷ (-3) = 17
+- 15 ÷ (-3) = -45    51 ÷ (-3) = -17
+- (-15) ÷ 3 = -45    (-51) ÷ 3 = -17
+
+**ĆWICZENIE:** Podaj przykład dwóch liczb, których:
+a) suma jest liczbą ujemną, a iloczyn jest liczbą dodatnią
+b) suma i iloczyn są liczbami ujemnym
+
+**ZADANIA:**
+
+1. Oblicz w pamięci:
+   a) -27 + 12    d) 16 - 60    g) -⅓ + (-⅔)    j) -1 - (-⅓)
+   b) -33 + 44    e) -15 - 25    h) 0,2 - 0,7    k) 5,5 - (-0,8)
+   c) -23 + (-17)    f) -30 - (-50)    i) -0,6 - 0,4    l) -0,75 + ⅓
+
+2. Ustal, czy wynik działania jest liczbą dodatnią czy ujemną:
+   a = -3⅓ - (-4 1/15)    c = 2,66 + (-2⅕)    e = -2⅓ - (-3,8)
+   b = -2 1/15 + 0,2    d = 4,08 - (-3,275)    f = 14,2 - 7,87
+
+3. Na mapie podano średnie temperatury (w °C) dzienią i nocnią w kilku stolicach europejskich w pewnego zimowego dnia:
+   a) W którym z miast różnica między średnią temperaturą dnia i nocy była największa, a w którym różnica temperatury dnia i nocy wyniosła 1 ile wynosły te różnice?
+   b) Znajdź miasta z najwyższą i najniższą średnią temperaturą dzienną. Oblicz różnicę tych temperatur.
+   c) O ile °C niższa była średnia nocna temperatura w stolicy Hiszpanii niż w stolicy Hiszpanii?
+
+4. Oblicz:
+   a) -2½ + 3,3    d) -4,5 - 2⅕    g) -5⅔ + 7
+   b) 1⅚ - 3⅕    e) -3⅕ - (-5⅔)    h) 1,23 - 9
+   c) 4,3 - 7,5    f) 7⅓ + (-4⅔)    i) -6 - (-4⅚)
+
+5. Przedstaw liczbę -2,5 w postaci:
+   a) sumy dwóch liczb ujemnych
+   b) sumy liczby dodatniej i ujemnej
+   c) różnicy dwóch liczb ujemnych
+   d) różnicy liczby ujemnej i dodatniej
+
+6. Zastąp symbole możliwie największymi liczbami całkowitymi tak, aby nierówności były prawdziwe:
+   ♥ -6,25 < 0    3⅓ - ■ > 0    -4,75 + ● < 0    7⅓ - (●) < 0
+
+7. Oblicz:
+   a) 3 - 15 - 5    c) 5 - (-12) - 7 + 14    e) 1,6 - 2½ - 1
+   b) -7 + 11 - 6    d) -2 - (-8) - 6 - 3    f) -3⅓ + 2,75 - 0,6
+
+8. Oblicz sprytnie:
+   a) 15 - (-11) - 15 - 11    e) -1,1 + 2,2 + 3,3 - 5,5 + 6,6
+   b) -10 - 7 - (-7) - 18    f) -3,7 + 2,85 + 4,7 - 4,85
+   c) -⅚ + ⅚ + ⅚ - ⅔ - ⅚    g) 1⅓ - 0,5 - ⅔ = 0,25 + 1⅔
+   d) -⅙ + ⅙ - ⅙ + ⅙ - ⅙ + ⅙    h) -⅓ + ⅓ + 2,5 + 3⅓ - (-0,125)
+
+9. Oblicz (postaraj się liczyć w pamięci):
+   a) (-0,35) ÷ 2    c) (-⅔) ÷ (-⅓)    e) (-1)³ ÷ (-0,9)    g) -2² ÷ (-2)
+   b) 2,5 ÷ (-2)    d) (⅔) ÷ (-⅓)    f) (-0,1) ÷ (-10)²    h) (-2)³ ÷ 4
+
+10. Ustal, jaka liczba — dodatnia czy ujemna — jest:
+    a) iloczynem trzystucha liczb ujemnych
+    b) średnią iloczynów dwóch liczb o przeciwnych znakach
+    c) ilorazem kwadratów dwóch liczb o przeciwnych znakach
+    d) odwrotnością iloczynów trzech liczb ujemnych
+    e) odwrotnością sumy dwóch liczb ujemnych
+
+11. Oblicz:
+    a) -2 ÷ (7 - 11)    d) (-3) ÷ (-2 - 10) - 5 / 7 - 9    g) (-2) ÷ 1-4/4
+    b) 6 - (-7) ÷ (-2) / -4    e) (-2)² + 45 ÷ (-3²)    h) 12-20/5 ÷ 3
+    c) (-2 - 4) ÷ (-6) ÷ (-3)²    f) 15-(-2) ÷ 4 / -11 + 4 ÷ 5-2/2-3    i) -8+4/-11+3 ÷ 6
+
+12. Wstaw nawiasy na cztery sposoby tak, aby uzyskać cztery różne wyniki:
+    -3 - 6 ÷ 5 - 1 ÷ 8
+
+13. Które zdanie jest prawdziwe?
+    ① Suma liczby i liczby do niej przeciwnej jest równa 0
+    ② Ilocyn liczby i liczby do niej przeciwnej jest równy 1
+    ③ Suma liczby i jej odwrotności wynosi 0
+    ④ Ilocyn liczby i jej odwrotności jest równy 1
+
+14. Oblicz:
+    a) -1,8 ÷ ⅔ - 0,8 ÷ (-⅓)²    b) -0,9 + ⅚ + (-¼)
+    [wzory]
+
+15. Rysunku przedstawiają fragmenty osi. Oblicz współrzędne punktów oznaczonych literami:
+    [Ilustracja z osiami A, B]
+
+**Sprawdź, czy umiesz:**
+
+1. W którym przykładzie wynik jest liczbą dodatnią?
+   A. -9,85 + 3,4    B. -5,8 - 7,35    C. -3,7 - (-9,5)    D. 4,5 - 6,25
+
+2. W którym przykładzie wynik jest liczbą ujemną?
+   A. (-3,7)²    B. (-7,6) ÷ (-3)    C. (-4,8) ÷ (-2)    D. (-3,1) ÷ (-9)²
+
+3. Wynikiem działania -4,65 - 0,4 jest liczba:
+   A. -4,69    B. -4,25    C. -5,05    D. -4,61
+
+4. Wartość wyrażenia (3-5)³/4-(-6) - 2(7-9)/3-6 wynosi:
+   A. -8,8    B. -2,8    C. 7,2    D. 8,8
+
+→ zadania uzupełniające 67-71, str. 54
+
+8. **Oś liczbowa. Odległości liczb na osi liczbowej** (str. 42-45)
    - Przedstawianie liczb na osi
    - Odległość między liczbami
    - Wartość bezwzględna
+   - Nierówności na osi liczbowej
+
+**TEORIA:**
+
+**ĆWICZENIE A:** Na poniższym rysunku każdy punks oznaczony literą odpowiada pewnej liczbie. Wymień dwie liczb z tych liczb są:
+a) większe od 4
+b) mniejsze od -1
+c) większe od -2 lub równe -2
+d) mniejsze od 5 lub równe 5
+
+[Oś liczbowa z punktami oznaczonymi literami a, b, c, d, e, f, g, h, k od -2 do 5]
+
+**ĆWICZENIE B:** Narysuj oś liczbową i zaznacz kilka liczb większych od -3,5. Zaproponuj, jak zaznaczyć na osi wszystkie liczby spełniające ten warunek.
+
+Liczby, które rozważaliśmy w powyższych ćwiczeniach, musiały spełniać pewne warunki. Każdy z tych warunków można opisać za pomocą nierówności. Zbiory wszystkich liczb spełniających te warunki możemy zaznaczyć na osi liczbowej.
+
+Liczby większe od 3,5 to te, które spełniają nierówność: x > 3,5
+
+Liczby mniejsze od -1 to te, które spełniają nierówność: x < -1
+
+Liczby mniejsze lub równe 5 to te, które spełniają nierówność: x ≤ 5
+
+[Ilustracje osi liczbowych z zaznaczonymi przedziałami]
+
+**ĆWICZENIE C:** Poniższe nierówności opisują następujące zbiory liczbowe:
+- liczby dodatnie, liczby ujemne, liczby nieujemne oraz liczby niedodatnie. Dla każdego z tych zborów wskaż odpowiednią nierówność:
+   ① x < 0   ② x > 0   ③ x ≤ 0   ④ x ≥ 0
+
+**ĆWICZENIE D:** Podaj przykład dwóch liczb ujemnych, których odległość na osi jest równa 1:
+a) większe niż -2 i nie równe -2
+b) mniejsze lub równe 10 oraz większe od -2
+c) -2,5 < x ≤ 3,4 | x jest liczbą naturalną
+d) -10,5 ≤ x < 9,5 | x jest liczbą naturalną
+
+**ĆWICZENIE E:** Podaj przykład dwóch liczb ujemnych, których odległość na osi jest równa 1.
+
+**Odległość między dowolnymi dwoma liczbami na osi liczbowej jest równa długości odcinka łączącego punkty odpowiadające tym liczbom (jednostką długości odcinka jest odcinek jednostkowy).**
+
+[Przykłady na osi liczbowej]
+
+Na osi liczbowej między liczbami 3 i 7 mieści się 5 odcinków jednostkowych. Zatem odległość między tymi liczbami wynosi 5.
+
+Na osi liczbowej między liczbami -8 i -6,5 mieści się 1,5 odcinka jednostkowego. Odległość między tymi liczbami wynosi 1,5.
+
+Na osi liczbowej między liczbami -2 i 6 mieści się 8 odcinków jednostkowych. Odległość między tymi liczbami wynosi 8.
+
+**ĆWICZENIE E: Zaznacz na osi liczbowej liczby -3 i 1,5:**
+a) Jaka jest odległość między tymi liczbami?
+b) Od większej z tych liczb odjmij mniejszą
+
+Aby obliczyć odległość między dwoma liczbami na osi liczbowej, wystarczy od większej z tych liczb odjąć liczbę mniejszą.
+
+**Przykład:**
+Jaka jest odległość na osi liczbowej między liczbami a = -9,1 i b = -3,7?
+-9,1 < -3,7
+b - a = -3,7 - (-9,1) = -3,7 + 9,1 = 5,4
+
+Odp. Odległość między liczbami a i b wynosi 5,4.
+
+**ZADANIA:**
+
+1. Zapisz odpowiednie nierówność:
+   a) Liczba x jest większa od -2,5
+   b) Liczba y jest mniejsza od 11
+   c) Liczba z jest ujemna
+   d) Liczba t jest mniejsza lub równa 5
+   e) Liczba y jest nieujemna
+   f) Liczba b jest nie mniejsza od 8
+   g) Liczba c jest nie większa od 11
+   Uwaga: Liczba jest nie mniejsza od 8, gdy jest większa od 8 lub równa 8.
+
+2. Zaznacz na osi liczbowej zbiór liczb spełniających podany warunek:
+   a) x < -2    c) x < 200    e) x > -3,5
+   b) x > 10    d) x < -1½    f) x > ⅔
+
+3. Zapisz nierówność, jaką spełniają wszystkie liczby z zaznaczonego zbioru liczbowego. Napisz, jaka liczba leży najbliżej punktu O wśród liczb z tego zbioru:
+   [Ilustracje osi liczbowych]
+
+4. Zaznacz na osi liczbowej zbiór liczb spełniających warunek:
+   a) 4 < x < 9    c) -2,5 ≤ x ≤ 2,5
+   b) -3 < a < 0    d) -1 < y < ½
+
+5. Ustal, ile jest liczb spełniających warunek:
+   a) x < 14 | x jest liczbą naturalną
+   b) x > 7 i x jest liczbą całkowitą, ujemną
+   c) -2,5 < x ≤ 3,4 | x jest liczbą naturalną
+   d) -10,5 ≤ x < 9,5 | x jest liczbą naturalną
+
+6. Jaka jest odległość na osi liczbowej między liczbami a i b, gdy:
+   a) a = 3,5    b) a = -12    c) a = -¾    d) a = ⅔
+      b = 40        b = 37         b = -105       b = -1
+
+7. a) Jakie liczby leżą na osi liczbowej w odległości 15 od liczby -5?
+   b) Pewna liczba leży na osi liczbowej dokładnie w tej samej odległości od liczby -3 i 17. Co to za liczba?
+
+8. Zaznacz na trzech różnych osiach podane zbiory liczbowe, a następnie opisz je za pomocą nierówności (zob. ramka powyżej):
+   ① Zbiór liczb leżących w odległości mniejszej niż 5 od liczby 0
+   ② Zbiór liczb leżących w odległości nie większej niż 2 od liczby 1
+   ③ Zbiór liczb leżących w odległości mniejszej niż 10 od liczby -7
+
+9. Na osi liczbowej zaznaczono punkt A o współrzędnej -5 oraz punkt B o współrzędnej 7. Następnie zaznaczono jeszcze dwa punkty C i D tak, że punkty C, A oraz D i B są równe punktami między punktami C i A oraz D i B są równe 1,5. Jaka jest odległość między punktami C i D?
+
+**Ciekawostka:**
+
+Symbol (a) oznacza wartość bezwzględną liczby a. Nazywamy wartość bezwzględną liczby dodatniej tub równej 0 jest ta liczba, a wartość bezwzględna liczby ujemnej jest liczba do niej przeciwna. Na przykład:
+   |5½| = 5½    |6| = 0    |-4| < 4
+
+Wartość bezwzględna liczby jest równa odległości tej liczby od zera.
+
+Zatem gdy dowolnych dwóch liczb a i b na osi liczbowej, nie musimy upłnać, która z nich jest większa, jeśli liczymy różnicę ich wartości bezwzglednych:
+
+Gdy dla dowolnych liczby a i b na osi liczbowej chcemy obliczyć ich odległość, to jeśli a ≤ b - możemy wyznaczyć wartości bezwzględne odległości tę równość między liczbami a i b, to możemy skorzystać ze wzoru: odległości = |a - b| = |b - a|.
+
+Do obliczania odległości między liczbami na osi liczbowej, nie przydają się zachodzieć równości:
+   |-a| = |a|    |-a| = |a|
+
+Gdyż dla dowolnych dwóch liczb a i b najlepiej obliczać różnicę z danych liczb a i b zachodzi równość:
+   |a - b| = |b - a|
+
+Na przykład dla a = 2 i b = -8 otrzymany:
+   |a - b| = |2 - (-8)| = 10 = 10
+   Wartość: Zatem, że dla dwóch liczb możemy obliczać odległość między liczbami na osi liczbowej (o warstwie niżej od góry w matematyce), gdy wartość odległości iloczynu razy, gdy czy też wartość odległości tę między liczbami a i b zachodzi równość: warunek bezwzględnej tej liczby.
+
+Do obliczenia odległości między liczbami a i b możemy skorzystać ze wzoru: odległość = |a - b| lub odległość = |b - a|.
+
+**10. a) Przeczytaj ciekawostkę i oblicz:**
+    |-5|    |7 6/11|    |0 - 6,7|    |17,5 - 10|    |-8 - 2|    |6 - (-2)|
+
+    b) Zdanie: Odległość liczby a od 7 jest równa 9, można zapisać odpisu liczbą. Jakie?
+    c) Jakie liczby spełniają warunek |x - 12| < 15?
+
+**Sprawdź, czy umiesz:**
+
+1. Wśród liczb zaznaczonych na osi na pewno nie ma żadnej liczby:
+   [Oś liczbowa z zaznaczonymi punktami]
+   A. dodatniej    B. mniejszej od -3    C. nieujemnej    D. mniejszej od 3
+
+2. Odcinek, którego końce na osi mają współrzędne -4 oraz 12, ma długość:
+   A. 4    B. 8    C. 12    D. 16
+
+3. Która z podanych liczb leżą na osi liczbowej w równej odległości od -2?
+   A. 1 i -5    B. 0 i 2    C. -4 i 4    D. -3 i -4
+
+→ zadania uzupełniające 72-75, str. 54
 
 **Sekcje dodatkowe:**
 - Przed klasówką (str. 46)

@@ -85,54 +85,19 @@ export default function TopBar() {
     const renderTabs = () => {
         if (isScience) {
             return (
-                <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '0px' }}>
-                    {SCIENCE_TABS.map(tab => {
-                        const isHovered = hoveredTab === tab.id
-                        return (
-                            <Link
-                                key={tab.id}
-                                href={tab.href}
-                                onMouseEnter={() => setHoveredTab(tab.id)}
-                                onMouseLeave={() => setHoveredTab(null)}
-                                style={{
-                                    padding: isMobile ? '8px' : '8px 16px',
-                                    borderRadius: '8px',
-                                    background: tab.active ? 'rgba(0, 212, 255, 0.15)' : isHovered ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
-                                    border: tab.active ? '1px solid #00d4ff' : isHovered ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
-                                    color: tab.active ? '#00d4ff' : isHovered ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.6)',
-                                    boxShadow: tab.active ? '0 0 20px rgba(0, 212, 255, 0.2)' : 'none',
-                                    fontSize: '13px',
-                                    fontWeight: 600,
-                                    textDecoration: 'none',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '6px',
-                                    transition: 'all 0.2s',
-                                    whiteSpace: 'nowrap',
-                                    position: 'relative',
-                                    overflow: 'hidden'
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: isHovered && !tab.active ? '100%' : '-100%',
-                                        width: '100%',
-                                        height: '100%',
-                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
-                                        transition: isHovered && !tab.active ? 'left 0.5s ease' : 'none',
-                                        pointerEvents: 'none',
-                                        zIndex: 1
-                                    }}
-                                />
-                                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <tab.icon size={16} />
-                                    {!isMobile && tab.label}
-                                </div>
-                            </Link>
-                        )
-                    })}
+                <div className="flex gap-2 overflow-x-auto pb-0">
+                    {SCIENCE_TABS.map(tab => (
+                        <Link
+                            key={tab.id}
+                            href={tab.href}
+                            className={`nav-item-link nav-item-compact ${tab.active ? 'active' : ''}`}
+                        >
+                            <div className="relative z-[2] flex items-center gap-2">
+                                <tab.icon size={16} />
+                                {!isMobile && tab.label}
+                            </div>
+                        </Link>
+                    ))}
                 </div>
             )
         }
@@ -140,49 +105,16 @@ export default function TopBar() {
         if (isPractice) {
             const currentView = searchParams.get('view') || 'przeglad'
             return (
-                <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '0px' }}>
+                <div className="flex gap-2 overflow-x-auto pb-0">
                     {PRACTICE_TABS.map(tab => {
                         const isActive = currentView === tab.value
-                        const isHovered = hoveredTab === tab.id
                         return (
                             <Link
                                 key={tab.id}
                                 href={`/practice?view=${tab.value}`}
-                                onMouseEnter={() => setHoveredTab(tab.id)}
-                                onMouseLeave={() => setHoveredTab(null)}
-                                style={{
-                                    padding: isMobile ? '8px' : '8px 16px',
-                                    borderRadius: '8px',
-                                    background: isActive ? 'rgba(176, 0, 255, 0.15)' : isHovered ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
-                                    border: isActive ? '1px solid #b000ff' : isHovered ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
-                                    color: isActive ? '#b000ff' : isHovered ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.6)',
-                                    boxShadow: isActive ? '0 0 20px rgba(176, 0, 255, 0.2)' : 'none',
-                                    fontSize: '13px',
-                                    fontWeight: 600,
-                                    textDecoration: 'none',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '6px',
-                                    transition: 'all 0.2s',
-                                    whiteSpace: 'nowrap',
-                                    position: 'relative',
-                                    overflow: 'hidden'
-                                }}
+                                className={`nav-item-link nav-item-compact variant-purple ${isActive ? 'active' : ''}`}
                             >
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: isHovered && !isActive ? '100%' : '-100%',
-                                        width: '100%',
-                                        height: '100%',
-                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
-                                        transition: isHovered && !isActive ? 'left 0.5s ease' : 'none',
-                                        pointerEvents: 'none',
-                                        zIndex: 1
-                                    }}
-                                />
-                                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <div className="relative z-[2] flex items-center gap-2">
                                     <tab.icon size={16} />
                                     {!isMobile && tab.label}
                                 </div>
@@ -196,49 +128,16 @@ export default function TopBar() {
         if (isProfile) {
             const currentTab = searchParams.get('tab') || 'informacje'
             return (
-                <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '0px' }}>
+                <div className="flex gap-2 overflow-x-auto pb-0">
                     {PROFILE_TABS.map(tab => {
                         const isActive = currentTab === tab.value
-                        const isHovered = hoveredTab === tab.id
                         return (
                             <Link
                                 key={tab.id}
                                 href={`/profile?tab=${tab.value}`}
-                                onMouseEnter={() => setHoveredTab(tab.id)}
-                                onMouseLeave={() => setHoveredTab(null)}
-                                style={{
-                                    padding: isMobile ? '8px' : '8px 16px',
-                                    borderRadius: '8px',
-                                    background: isActive ? 'rgba(176, 0, 255, 0.15)' : isHovered ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
-                                    border: isActive ? '1px solid #b000ff' : isHovered ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
-                                    color: isActive ? '#b000ff' : isHovered ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.6)',
-                                    boxShadow: isActive ? '0 0 20px rgba(176, 0, 255, 0.2)' : 'none',
-                                    fontSize: '13px',
-                                    fontWeight: 600,
-                                    textDecoration: 'none',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '6px',
-                                    transition: 'all 0.2s',
-                                    whiteSpace: 'nowrap',
-                                    position: 'relative',
-                                    overflow: 'hidden'
-                                }}
+                                className={`nav-item-link nav-item-compact variant-purple ${isActive ? 'active' : ''}`}
                             >
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: isHovered && !isActive ? '100%' : '-100%',
-                                        width: '100%',
-                                        height: '100%',
-                                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
-                                        transition: isHovered && !isActive ? 'left 0.5s ease' : 'none',
-                                        pointerEvents: 'none',
-                                        zIndex: 1
-                                    }}
-                                />
-                                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <div className="relative z-[2] flex items-center gap-2">
                                     <tab.icon size={16} />
                                     {!isMobile && tab.label}
                                 </div>
@@ -253,21 +152,7 @@ export default function TopBar() {
     }
 
     return (
-        <div style={{
-            background: 'rgba(0, 0, 0, 0.2)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            padding: '0 32px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between', // Changed to space-between
-            position: 'sticky',
-            top: 0,
-            zIndex: 50,
-            marginBottom: '0',
-            height: '65px' // Enforce height for alignment
-        }}>
+        <div className="global-topbar sticky top-0 z-50 flex h-[65px] items-center justify-between px-8">
             {/* LEFT SIDE: Navigation Tabs */}
             <div style={{ flex: 1, overflow: 'hidden', marginLeft: '16px' }}>
                 {renderTabs()}
