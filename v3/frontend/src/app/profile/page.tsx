@@ -50,48 +50,7 @@ function ProfileContent() {
         <div style={{ minHeight: '100vh' }}>
 
 
-            {/* Mobile/Desktop Tab Navigation */}
-            <div style={{
-                display: 'flex',
-                gap: '8px',
-                marginBottom: '24px',
-                overflowX: 'auto',
-                paddingBottom: '4px'
-            }}>
-                {[
-                    { id: 'informacje', label: 'Informacje', icon: User },
-                    { id: 'postepy', label: 'Postępy', icon: TrendingUp },
-                    { id: 'cele', label: 'Cele', icon: Target },
-                    { id: 'ustawienia', label: 'Ustawienia', icon: Settings },
-                ].map((tab) => {
-                    const Icon = tab.icon
-                    const isActive = activeTab === tab.id
-                    return (
-                        <button
-                            key={tab.id}
-                            onClick={() => router.push(`/profile?tab=${tab.id}`)}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '10px 20px',
-                                background: isActive ? 'var(--neon-purple)' : 'rgba(255, 255, 255, 0.05)',
-                                border: '1px solid rgba(255, 255, 255, 0.08)',
-                                borderRadius: '30px',
-                                color: isActive ? 'white' : 'rgba(255, 255, 255, 0.6)',
-                                cursor: 'pointer',
-                                whiteSpace: 'nowrap',
-                                fontSize: '14px',
-                                fontWeight: 600,
-                                transition: 'all 0.2s'
-                            }}
-                        >
-                            <Icon size={16} />
-                            {tab.label}
-                        </button>
-                    )
-                })}
-            </div>
+
 
             {/* Content */}
             <div className="page-content-wrapper">

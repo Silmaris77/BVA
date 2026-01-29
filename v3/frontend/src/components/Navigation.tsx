@@ -39,28 +39,19 @@ export default function Sidebar() {
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
+                justifyContent: 'center',
                 padding: '8px 12px',
-                marginBottom: '32px'
+                marginBottom: '48px'
             }}>
-                <div style={{
-                    width: '36px',
-                    height: '36px',
-                    background: 'linear-gradient(135deg, #b000ff, #00d4ff)',
-                    borderRadius: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 800,
-                    fontSize: '18px'
-                }}>B</div>
                 <div style={{
                     fontSize: '18px',
                     fontWeight: 700,
                     background: 'linear-gradient(135deg, #00d4ff, #b000ff)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text'
+                    backgroundClip: 'text',
+                    textAlign: 'center',
+                    lineHeight: '1.2'
                 }}>BrainVenture</div>
             </div>
 

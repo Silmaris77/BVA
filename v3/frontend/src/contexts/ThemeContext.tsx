@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
-export type Theme = 'default' | 'cyber' | 'light' | 'slate' | 'graphite' | 'halloween' | 'chaos' | 'drunk' | 'winter' | 'milwaukee'
+export type Theme = 'default' | 'cyber' | 'light' | 'slate' | 'graphite' | 'halloween' | 'chaos' | 'drunk' | 'winter' | 'milwaukee' | 'executive' | 'diplomat' | 'brainventure'
 
 interface ThemeContextType {
     theme: Theme

@@ -15,6 +15,9 @@ export default function ThemeSelector() {
         { id: 'drunk', name: '🥴 DRUNK MODE', color: '#ff00aa' },
         { id: 'winter', name: '❄️ WINTER', color: '#a5f3fc' },
         { id: 'milwaukee', name: '🔴 HEAVY DUTY', color: '#db0000' },
+        { id: 'executive', name: '💼 EXECUTIVE', color: '#d4af37' },
+        { id: 'diplomat', name: '🏛️ SENATOR', color: '#722F37' },
+        { id: 'brainventure', name: '🧠 BRAINVENTURE', color: '#B10A4A' },
     ]
 
     return (

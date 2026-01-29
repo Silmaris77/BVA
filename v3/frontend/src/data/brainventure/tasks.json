@@ -1,0 +1,282 @@
+[
+    {
+        "id": "task_1",
+        "question": "Czym jest „negatywne nastawienie mózgu”? Wyjaśnij mechanizm i podaj 3 sytuacje z pracy menedżera, które z niego wynikają.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_1"
+    },
+    {
+        "id": "task_2",
+        "question": "Czym jest „ból społeczny” i jakie ma konsekwencje? Wymień 3 obszary działań menedżera wykorzystujące tę wiedzę.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_2"
+    },
+    {
+        "id": "task_3",
+        "question": "Bazując na wiedzy o stresie, wyjaśnij podłoże reakcji menedżera w sytuacji kryzysowej (z opisu w karcie). Jaki wpływ ma to na jego przyszłość?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_3"
+    },
+    {
+        "id": "task_4",
+        "question": "Z czego wynika spadek atmosfery w zespole, gdy lider ma problemy osobiste? Wyjaśnij mechanizm zarażania emocjami.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_4"
+    },
+    {
+        "id": "task_5",
+        "question": "Dlaczego lider powinien rozwijać inteligencję emocjonalną? Wymień dwa kroki do jej rozwoju.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_5"
+    },
+    {
+        "id": "task_6",
+        "question": "W jakich sytuacjach w pracy uwalniany jest kortyzol? Podaj 3 przykłady i opisz wpływ na zespół.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_6"
+    },
+    {
+        "id": "task_7",
+        "question": "Czym jest oksytocyna i jak wpływa na relacje? Podaj po 2 przykłady wpływu i sposobów na jej zwiększenie.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_7"
+    },
+    {
+        "id": "task_8",
+        "question": "Czym jest serotonina? Jak wpływa na menedżera? Podaj 4 sposoby na jej zwiększenie.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_8"
+    },
+    {
+        "id": "task_9",
+        "question": "Czym są endorfiny? Podaj 2 przykłady wpływu na zachowanie i 3 sposoby na ich zwiększenie w pracy.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_9"
+    },
+    {
+        "id": "task_10",
+        "question": "Kiedy mózg uwalnia dopaminę w pracy? Podaj 2 przykłady i opisz wpływ na menedżera.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_10"
+    },
+    {
+        "id": "task_11",
+        "question": "Dlaczego handlowcy bardziej boją się utraty klienta niż walczą o nowego? Wyjaśnij mechanizm unikania straty.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_11"
+    },
+    {
+        "id": "task_12",
+        "question": "Jak progres działa na ludzi? Jaki neuroprzekaźnik za to odpowiada? Podaj 2 przykłady działań menedżera budujących poczucie progresu.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_12"
+    },
+    {
+        "id": "task_13",
+        "question": "Jaka jest różnica w reakcjach mózgu na pozytywy vs negatywy? Jak zwiększyć pulę pozytywnych doświadczeń pracownika? (4 przykłady)",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_13"
+    },
+    {
+        "id": "task_14",
+        "question": "Rozwiń akronim SCARF. Jak można wykorzystać ten model w środowisku zawodowym?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_14"
+    },
+    {
+        "id": "task_15",
+        "question": "Pracownik unika kontaktu po Twoich uwagach. Wyjaśnij to odnosząc się do modelu SCARF. Co mogłeś zrobić inaczej?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_15"
+    },
+    {
+        "id": "task_16",
+        "question": "Jesteś zdenerwowany, że Twój podwładny startuje w rekrutacji na menedżera. Dlaczego to czujesz (wg SCARF)? Jaki element jest zagrożony?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_16"
+    },
+    {
+        "id": "task_17",
+        "question": "Nowy menedżer chce wszystko kontrolować. Na jaką potrzebę pracowników wpływa negatywnie? Jakie będą konsekwencje (SCARF)?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_17"
+    },
+    {
+        "id": "task_18",
+        "question": "Nowi pracownicy są zamknięci w sobie, trzymasz się ze „starą gwardią”. Jaka potrzeba nie jest zaspokojona? Co zrobić, by temu zapobiec?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_18"
+    },
+    {
+        "id": "task_19",
+        "question": "Tomek, gwiazda sprzedaży, spóźnia się z raportami. Robisz dla niego wyjątek. Jaka potrzeba reszty zespołu jest zagrożona (SCARF)?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_19"
+    },
+    {
+        "id": "task_20",
+        "question": "Na jakiej podstawie definiujemy Status? Jak wyeliminować zagrożenia dla Statusu pracowników? (3 przykłady)",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_20"
+    },
+    {
+        "id": "task_21",
+        "question": "Co negatywnie wpływa na Pewność? Jak wyeliminować te zagrożenia u pracowników?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_21"
+    },
+    {
+        "id": "task_22",
+        "question": "Mikrozarządzanie przy delegowaniu prezentacji. Jaki element SCARF został zagrożony? Co zrobić inaczej?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_22"
+    },
+    {
+        "id": "task_23",
+        "question": "Z czego wynika poczucie Przynależności (SCARF)? Jak wyeliminować zagrożenia dla niej? (3 przykłady czego nie robić)",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_23"
+    },
+    {
+        "id": "task_24",
+        "question": "Co negatywnie wpływa na Uczciwość (SCARF)? Jak wyeliminować te zagrożenia?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_24"
+    },
+    {
+        "id": "task_25",
+        "question": "Dlaczego trudno nam doceniać innych? Jak wzmocnić Status pracowników? (4 przykłady)",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_25"
+    },
+    {
+        "id": "task_26",
+        "question": "Jaki wpływ ma Pewność na myślenie? Jak wzmocnić poczucie pewności u pracowników? (3 przykłady)",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_26"
+    },
+    {
+        "id": "task_27",
+        "question": "Co decyduje o Autonomii? Jak ją wzmocnić u pracowników? (4 przykłady)",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_27"
+    },
+    {
+        "id": "task_28",
+        "question": "Z jakim hormonem wiąże się Przynależność? Jak ją wzmocnić w zespole? (3 przykłady)",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_28"
+    },
+    {
+        "id": "task_29",
+        "question": "Na jaki element SCARF wpływa przestrzeganie reguł? Czy zasady nagradzania powinny być jawne? Uzasadnij.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_29"
+    },
+    {
+        "id": "task_30",
+        "question": "Nowy pracownik jest lubiany, co Cie denerwuje. Jaki element Twoich potrzeb jest zagrożony? Jakie niewłaściwe zachowania mogą się u Ciebie pojawić?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_30"
+    },
+    {
+        "id": "task_31",
+        "question": "Za co odpowiada kora przedczołowa (3 przykłady)? Co zaburza jej pracę?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_31"
+    },
+    {
+        "id": "task_32",
+        "question": "Ile czynności naraz może nadzorować kora przedczołowa? Kiedy multitasking może się sprawdzić?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_32"
+    },
+    {
+        "id": "task_33",
+        "question": "Czym są filtry percepcyjne? Podaj 4 efekty ich działania i jeden przykład.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_33"
+    },
+    {
+        "id": "task_34",
+        "question": "Co gra główną rolę w podejmowaniu decyzji? Wymień 4 efekty wpływu emocji na decyzje.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_34"
+    },
+    {
+        "id": "task_35",
+        "question": "Jakie 3 zasady pracy mózgu opisują przetwarzanie informacji? Jakie są 3 etapy zarządzania uprzedzeniami (SEEDS)?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_35"
+    },
+    {
+        "id": "task_36",
+        "question": "Rekrutujesz kogoś podobnego do siebie. Jakie to zniekształcenie (SEEDS)? Podaj inny przykład.",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_36"
+    },
+    {
+        "id": "task_37",
+        "question": "Wybierasz ofertę droższą, ale znanej firmy, zamiast tańszej z polecenia. Jakie to zniekształcenie (SEEDS)?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_37"
+    },
+    {
+        "id": "task_38",
+        "question": "Wybierasz na integrację głuszę bez internetu, bo Tobie się to podoba. Jakie to zniekształcenie (SEEDS)?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_38"
+    },
+    {
+        "id": "task_39",
+        "question": "Zmiana premii na półroczne została źle przyjęta. Dlaczego? Jakie to zniekształcenie (SEEDS)?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_39"
+    },
+    {
+        "id": "task_40",
+        "question": "Kasia odrzuciła awans do innego działu. Dlaczego? Jakie to zniekształcenie (SEEDS)?",
+        "type": "OPEN",
+        "rewardKW": 2,
+        "relatedPillId": "pill_40"
+    }
+]

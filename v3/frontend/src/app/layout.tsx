@@ -13,6 +13,8 @@ import "./globals.css"
 
 const outfit = Outfit({ subsets: ["latin"] })
 
+// Force rebuild for theme CSS
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,8 +27,9 @@ export default function RootLayout({
   const isLessonPlayer = pathname?.match(/^\/lessons\/[^\/]+$/) // matches /lessons/[id] but not /lessons
   const isLessonEditor = pathname?.startsWith('/admin/lessons/create')
   const isConsultingGame = pathname?.startsWith('/practice/games/consulting')
+  const isBrainVenture = pathname?.startsWith('/brainventure')
 
-  const isFullscreen = isAuthPage || isLessonPlayer || isLessonEditor || isConsultingGame
+  const isFullscreen = isAuthPage || isLessonPlayer || isLessonEditor || isConsultingGame || isBrainVenture
 
   return (
     <html lang="pl" suppressHydrationWarning>

@@ -1,0 +1,323 @@
+[
+    {
+        "id": "contract_1",
+        "title": "KONTRAKT",
+        "value": 2000,
+        "requiredProductivity": 90,
+        "duration": 2,
+        "description": "Jeżeli kontrakt zostanie zrealizowany w bieżącej rundzie, klient zapłaci dodatkowo 500 zł.",
+        "bonusCondition": "DONE_IN_1_ROUND_PLUS_500"
+    },
+    {
+        "id": "contract_2",
+        "title": "KONTRAKT",
+        "value": 1000,
+        "requiredProductivity": 70,
+        "duration": 1,
+        "description": "Kontrakt jest ambitnym wyzwaniem. Po zakończeniu rzuć 1x kostką. Gdy wyrzucisz min. 5, otrzymasz 1 KW."
+    },
+    {
+        "id": "contract_3",
+        "title": "KONTRAKT",
+        "value": 1000,
+        "requiredProductivity": 50,
+        "duration": 2,
+        "description": "Klient domaga się, by realizacja kontraktu rozpoczęła się w bieżącej rundzie."
+    },
+    {
+        "id": "contract_4",
+        "title": "KONTRAKT",
+        "value": 2000,
+        "requiredProductivity": 80,
+        "duration": 2,
+        "description": "Jeżeli kontrakt zostanie zrealizowany w bieżącej rundzie, klient zapłaci dodatkowo 500 zł."
+    },
+    {
+        "id": "contract_5",
+        "title": "KONTRAKT",
+        "value": 500,
+        "requiredProductivity": 20,
+        "duration": 2,
+        "description": "Klient stawia warunek: w pierwszej rundzie realizacji należy przeznaczyć min. 50 pkt Wydajności."
+    },
+    {
+        "id": "contract_6",
+        "title": "KONTRAKT",
+        "value": 2000,
+        "requiredProductivity": 60,
+        "duration": 1,
+        "description": "Wymaga wyłączności. Realizacja tylko z własnymi pracownikami (bez outsourcingu)."
+    },
+    {
+        "id": "contract_7",
+        "title": "KONTRAKT",
+        "value": 2500,
+        "requiredProductivity": 110,
+        "duration": 2,
+        "description": "Po zakończeniu rzuć 1x kostką. Min 5 = 1 KW."
+    },
+    {
+        "id": "contract_8",
+        "title": "KONTRAKT",
+        "value": 2000,
+        "requiredProductivity": 120,
+        "duration": 2,
+        "description": "Jeśli wykonasz w bieżącej rundzie = +500 zł."
+    },
+    {
+        "id": "contract_9",
+        "title": "KONTRAKT",
+        "value": 2600,
+        "requiredProductivity": 120,
+        "duration": 3,
+        "description": "Wymagany zakup oprogramowania za 500 zł przed startem."
+    },
+    {
+        "id": "contract_10",
+        "title": "KONTRAKT",
+        "value": 5500,
+        "requiredProductivity": 120,
+        "duration": 2,
+        "description": "Start natychmiast, min. 60 pkt Wydajności w 1. rundzie."
+    },
+    {
+        "id": "contract_11",
+        "title": "KONTRAKT",
+        "value": 6000,
+        "requiredProductivity": 170,
+        "duration": 3,
+        "description": "Wymagany udział przełożonego (min 5 PD w 1. rundzie)."
+    },
+    {
+        "id": "contract_12",
+        "title": "KONTRAKT",
+        "value": 2000,
+        "requiredProductivity": 120,
+        "duration": 2,
+        "description": "Wykonanie w 1 rundę = +500 zł."
+    },
+    {
+        "id": "contract_13",
+        "title": "KONTRAKT",
+        "value": 1500,
+        "requiredProductivity": 80,
+        "duration": 1,
+        "description": "Wyklucza udział poddostawców."
+    },
+    {
+        "id": "contract_14",
+        "title": "KONTRAKT",
+        "value": 4000,
+        "requiredProductivity": 220,
+        "duration": 3,
+        "description": "Po zakończeniu rzuć kostką. Min 5 = 2 KW."
+    },
+    {
+        "id": "contract_15",
+        "title": "KONTRAKT",
+        "value": 3200,
+        "requiredProductivity": 60,
+        "duration": 1,
+        "description": "Po zakończeniu otrzymasz 1 KW."
+    },
+    {
+        "id": "contract_16",
+        "title": "KONTRAKT",
+        "value": 2500,
+        "requiredProductivity": 120,
+        "duration": 3,
+        "description": "Wykonanie w 1 rundę = +500 zł."
+    },
+    {
+        "id": "contract_17",
+        "title": "KONTRAKT",
+        "value": 2500,
+        "requiredProductivity": 120,
+        "duration": 2,
+        "description": "Jeśli przeznaczysz 170 pkt (zamiast 120), klient dopłaci 1000 zł."
+    },
+    {
+        "id": "contract_18",
+        "title": "KONTRAKT",
+        "value": 8000,
+        "requiredProductivity": 270,
+        "duration": 2,
+        "description": "Wyklucza udział poddostawców."
+    },
+    {
+        "id": "contract_19",
+        "title": "KONTRAKT",
+        "value": 8000,
+        "requiredProductivity": 270,
+        "duration": 3,
+        "description": "Po zakończeniu otrzymasz 1 KW."
+    },
+    {
+        "id": "contract_20",
+        "title": "KONTRAKT",
+        "value": 7000,
+        "requiredProductivity": 120,
+        "duration": 3,
+        "description": "Wymagany udział osoby z Efektywnością min. 6."
+    },
+    {
+        "id": "contract_21",
+        "title": "KONTRAKT",
+        "value": 2000,
+        "requiredProductivity": 170,
+        "duration": 2,
+        "description": "Po zakończeniu rzuć kostką. Min 5 = 2 KW."
+    },
+    {
+        "id": "contract_22",
+        "title": "KONTRAKT",
+        "value": 4000,
+        "requiredProductivity": 270,
+        "duration": 3,
+        "description": "Wymagany pracownik z Efektywnością min. 5."
+    },
+    {
+        "id": "contract_23",
+        "title": "KONTRAKT",
+        "value": 4500,
+        "requiredProductivity": 270,
+        "duration": 3,
+        "description": "Start natychmiast, min. 100 pkt Wydajności w 1. rundzie."
+    },
+    {
+        "id": "contract_24",
+        "title": "KONTRAKT",
+        "value": 2500,
+        "requiredProductivity": 80,
+        "duration": 2,
+        "description": "Musi być podzielony na 2 rundy (nie można skończyć w jednej)."
+    },
+    {
+        "id": "contract_25",
+        "title": "KONTRAKT",
+        "value": 6500,
+        "requiredProductivity": 220,
+        "duration": 2,
+        "description": "Po zakończeniu rzuć kostką. Min 5 = 2 KW."
+    },
+    {
+        "id": "contract_26",
+        "title": "KONTRAKT",
+        "value": 4500,
+        "requiredProductivity": 220,
+        "duration": 3,
+        "description": "Jeśli kupisz soft za 500 zł, wymagana wydajność spada do 150."
+    },
+    {
+        "id": "contract_27",
+        "title": "KONTRAKT",
+        "value": 1500,
+        "requiredProductivity": 130,
+        "duration": 2,
+        "description": "Po zakończeniu rzuć kostką. Min 5 = 2 KW."
+    },
+    {
+        "id": "contract_28",
+        "title": "KONTRAKT",
+        "value": 4500,
+        "requiredProductivity": 180,
+        "duration": 2,
+        "description": "Start natychmiast, min. 100 pkt Wydajności w 1. rundzie."
+    },
+    {
+        "id": "contract_29",
+        "title": "KONTRAKT",
+        "value": 4500,
+        "requiredProductivity": 140,
+        "duration": 1,
+        "description": "Wymaga wyłączności. Realizacja tylko zasobami własnymi."
+    },
+    {
+        "id": "contract_30",
+        "title": "KONTRAKT",
+        "value": 6500,
+        "requiredProductivity": 120,
+        "duration": 1,
+        "description": "Bonus za zaangażowanie: Za każde dodatkowe 50 pkt Wydajności zapłacą 1000 zł."
+    },
+    {
+        "id": "contract_31",
+        "title": "KONTRAKT",
+        "value": 5000,
+        "requiredProductivity": 170,
+        "duration": 2,
+        "description": "Wykonanie w bieżącej rundzie = +1000 zł."
+    },
+    {
+        "id": "contract_32",
+        "title": "KONTRAKT",
+        "value": 4500,
+        "requiredProductivity": 170,
+        "duration": 2,
+        "description": "Po realizacji otrzymasz dodatkowo po 1 KW dla każdego pracownika biorącego udział."
+    },
+    {
+        "id": "contract_33",
+        "title": "KONTRAKT",
+        "value": 4500,
+        "requiredProductivity": 120,
+        "duration": 2,
+        "description": "Przed realizacją musisz kupić oprogramowanie za 500 zł."
+    },
+    {
+        "id": "contract_34",
+        "title": "KONTRAKT",
+        "value": 5500,
+        "requiredProductivity": 160,
+        "duration": 2,
+        "description": "Kontrakt angażujący. Po zakończeniu, jeden pracownik traci 5 PD w następnej rundzie."
+    },
+    {
+        "id": "contract_35",
+        "title": "KONTRAKT",
+        "value": 6500,
+        "requiredProductivity": 140,
+        "duration": 2,
+        "description": "Wykonanie w 1 rundę = +500 zł."
+    },
+    {
+        "id": "contract_36",
+        "title": "KONTRAKT",
+        "value": 3500,
+        "requiredProductivity": 120,
+        "duration": 1,
+        "description": "Bonus 1000 zł, jeśli w projekt zaangażowany menedżer i min. jeden pracownik."
+    },
+    {
+        "id": "contract_37",
+        "title": "KONTRAKT",
+        "value": 4000,
+        "requiredProductivity": 120,
+        "duration": 1,
+        "description": "Otrzymujesz 1 KW za każdego uczestnika projektu."
+    },
+    {
+        "id": "contract_38",
+        "title": "KONTRAKT",
+        "value": 4700,
+        "requiredProductivity": 140,
+        "duration": 1,
+        "description": "Rzuć 1x kostką za każdego pracownika. 4+ = 1 KW dla Ciebie."
+    },
+    {
+        "id": "contract_39",
+        "title": "KONTRAKT",
+        "value": 4900,
+        "requiredProductivity": 160,
+        "duration": 1,
+        "description": "Wymagany udział menedżera."
+    },
+    {
+        "id": "contract_40",
+        "title": "KONTRAKT",
+        "value": 7200,
+        "requiredProductivity": 160,
+        "duration": 1,
+        "description": "Jeśli menedżer + 1 pracownik = 2 KW po zakończeniu."
+    }
+]
