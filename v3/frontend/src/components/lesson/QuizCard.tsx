@@ -27,6 +27,9 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
     const currentQuestion = questions[currentIndex]
     const letters = ['A', 'B', 'C', 'D']
 
+    // Debug: Log question data to find object in options
+    console.log('QuizCard questions:', JSON.stringify(questions, null, 2))
+
     const handleAnswer = (index: number) => {
         if (isAnswered) return
 
@@ -286,7 +289,13 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                     flexDirection: 'column',
                     gap: '12px'
                 }}>
-                    {currentQuestion.options.map((option, index) => (
+                    {currentQuestion.options.map((option, index) => {
+                        // Handle case where option might be an object instead of string
+                        const optionText = typeof option === 'string' 
+                            ? option 
+                            : (option as any)?.text || (option as any)?.label || JSON.stringify(option);
+                        
+                        return (
                         <button
                             key={index}
                             onClick={() => handleAnswer(index)}
@@ -312,7 +321,7 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                                 {letters[index]}
                             </div>
                             <span style={{ flex: 1, textAlign: 'left' }}>
-                                <MathRenderer content={option} inline={true} />
+                                <MathRenderer content={optionText} inline={true} />
                             </span>
                             {isAnswered && index === currentQuestion.correctAnswer && (
                                 <CheckCircle2 size={20} color="#00ff88" />
@@ -321,7 +330,7 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                                 <XCircle size={20} color="#ef4444" />
                             )}
                         </button>
-                    ))}
+                    )})}
                 </div>
 
                 {isAnswered && (

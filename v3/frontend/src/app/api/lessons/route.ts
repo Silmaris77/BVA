@@ -22,6 +22,19 @@ export async function GET() {
             return NextResponse.json({ error: (error || modulesError)?.message }, { status: 500 });
         }
 
+        // Parse content for each lesson if it's a string
+        if (lessons) {
+            for (const lesson of lessons) {
+                if (lesson.content && typeof lesson.content === 'string') {
+                    try {
+                        lesson.content = JSON.parse(lesson.content);
+                    } catch (e) {
+                        console.error(`Failed to parse content for lesson ${lesson.lesson_id}:`, e);
+                    }
+                }
+            }
+        }
+
         // Get user progress if authenticated
         const { data: { user } } = await supabase.auth.getUser();
 

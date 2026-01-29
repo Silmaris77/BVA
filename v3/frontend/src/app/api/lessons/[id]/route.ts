@@ -81,6 +81,15 @@ export async function GET(
             return NextResponse.json({ error: 'Lesson not found' }, { status: 404 });
         }
 
+        // Parse content if it's a string
+        if (lesson.content && typeof lesson.content === 'string') {
+            try {
+                lesson.content = JSON.parse(lesson.content);
+            } catch (e) {
+                console.error('Failed to parse lesson content:', e);
+            }
+        }
+
         // If user is authenticated, check access and get progress
         if (currentUser) {
             // TODO: Implement access control check using content_access_rules

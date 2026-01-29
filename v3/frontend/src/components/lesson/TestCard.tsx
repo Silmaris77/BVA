@@ -367,7 +367,13 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                         {currentQuestion.options ? (
-                            currentQuestion.options.map((option, index) => (
+                            currentQuestion.options.map((option, index) => {
+                                // Handle case where option might be an object instead of string
+                                const optionText = typeof option === 'string' 
+                                    ? option 
+                                    : (option as any)?.text || (option as any)?.label || JSON.stringify(option);
+                                
+                                return (
                                 <button
                                     key={index}
                                     onClick={() => handleAnswer(index)}
@@ -402,7 +408,7 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                                         {letters[index]}
                                     </div>
                                     <span style={{ flex: 1 }}>
-                                        <MathRenderer content={option} inline={true} />
+                                        <MathRenderer content={optionText} inline={true} />
                                     </span>
                                     {isAnswered && index === selectedOption && (
                                         index === currentQuestion.correctAnswer
@@ -410,7 +416,7 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                                             : <XCircle size={20} color="#ef4444" />
                                     )}
                                 </button>
-                            ))
+                            )})
                         ) : (
                             <div style={{ color: 'white', textAlign: 'center', padding: '20px', background: 'rgba(239, 68, 68, 0.2)', borderRadius: '12px' }}>
                                 Nieobsługiwany typ pytania w teście.
