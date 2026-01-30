@@ -443,13 +443,19 @@ export default function LessonsPage() {
                         {/* LESSONS TAB */}
                         {activeTab === 'lessons' && (
                             <>
-                                {/* Search and Sort */}
-                                <div className="filter-bar">
-                                    {/* Search */}
-                                    <div className="search-container" style={{ position: 'relative', flex: 1 }}>
+                                {/* Toolbar: Search | Categories | Sort */}
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '16px',
+                                    marginBottom: '32px',
+                                    height: '48px' // Fixed height for alignment
+                                }}>
+                                    {/* 1. Search (Fixed Width) */}
+                                    <div className="search-container" style={{ position: 'relative', width: '280px', flexShrink: 0 }}>
                                         <input
                                             type="text"
-                                            placeholder="Szukaj lekcji..."
+                                            placeholder="Szukaj..."
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             style={{
@@ -461,7 +467,8 @@ export default function LessonsPage() {
                                                 color: 'white',
                                                 fontFamily: 'Outfit, sans-serif',
                                                 fontSize: '14px',
-                                                outline: 'none'
+                                                outline: 'none',
+                                                height: '42px'
                                             }}
                                         />
                                         <Search size={18} style={{
@@ -473,62 +480,88 @@ export default function LessonsPage() {
                                         }} />
                                     </div>
 
-                                    {/* Sort */}
-                                    <div className="sort-container">
-                                        <span style={{
-                                            fontSize: '14px',
-                                            color: 'rgba(255, 255, 255, 0.6)',
-                                            fontWeight: 500
-                                        }}>
-                                            Sortuj:
-                                        </span>
+                                    {/* 2. Divider */}
+                                    <div style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.1)' }} />
+
+                                    {/* 3. Categories (Scrollable Row) */}
+                                    <div className="hide-scrollbar" style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        overflowX: 'auto',
+                                        flex: 1,
+                                        paddingRight: '16px'
+                                    }}>
+                                        {categories.map(cat => {
+                                            const count = cat.id === 'all'
+                                                ? lessons.length
+                                                : lessons.filter(l => l.category === cat.id).length
+
+                                            if (count === 0 && cat.id !== 'all') return null
+
+                                            return (
+                                                <button
+                                                    key={cat.id}
+                                                    onClick={() => setSelectedCategory(cat.id)}
+                                                    style={{
+                                                        padding: '8px 16px',
+                                                        background: selectedCategory === cat.id ? `${cat.color}20` : 'rgba(255, 255, 255, 0.03)',
+                                                        border: selectedCategory === cat.id ? `1px solid ${cat.color}` : '1px solid transparent', // Cleaner border for inactive
+                                                        borderRadius: '10px',
+                                                        color: selectedCategory === cat.id ? cat.color : 'rgba(255, 255, 255, 0.6)',
+                                                        fontSize: '13px',
+                                                        fontWeight: 500,
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s',
+                                                        whiteSpace: 'nowrap',
+                                                        fontFamily: 'Outfit, sans-serif',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '6px',
+                                                        height: '36px'
+                                                    }}
+                                                >
+                                                    {cat.name}
+                                                    <span style={{
+                                                        fontSize: '10px',
+                                                        opacity: selectedCategory === cat.id ? 0.8 : 0.4,
+                                                        background: selectedCategory === cat.id ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)',
+                                                        padding: '1px 5px',
+                                                        borderRadius: '6px',
+                                                        minWidth: '20px'
+                                                    }}>
+                                                        {count}
+                                                    </span>
+                                                </button>
+                                            )
+                                        })}
+                                    </div>
+
+                                    {/* 4. Sort (Compact) */}
+                                    <div className="sort-container" style={{ flexShrink: 0 }}>
                                         <select
                                             value={sortBy}
                                             onChange={(e) => setSortBy(e.target.value as any)}
                                             style={{
-                                                padding: '10px 16px',
+                                                padding: '0 12px',
+                                                height: '42px',
                                                 background: 'rgba(255, 255, 255, 0.05)',
                                                 border: '1px solid rgba(255, 255, 255, 0.1)',
                                                 borderRadius: '10px',
-                                                color: 'white',
+                                                color: 'rgba(255, 255, 255, 0.8)',
                                                 cursor: 'pointer',
                                                 fontFamily: 'Outfit, sans-serif',
-                                                fontSize: '14px',
+                                                fontSize: '13px',
                                                 fontWeight: 500,
                                                 outline: 'none'
                                             }}
                                         >
                                             <option value="newest" style={{ background: '#1a1a2e' }}>Najnowsze</option>
-                                            <option value="duration" style={{ background: '#1a1a2e' }}>Czas trwania</option>
-                                            <option value="xp" style={{ background: '#1a1a2e' }}>Nagroda XP</option>
-                                            <option value="difficulty" style={{ background: '#1a1a2e' }}>Poziom trudności</option>
+                                            <option value="duration" style={{ background: '#1a1a2e' }}>Czas</option>
+                                            <option value="xp" style={{ background: '#1a1a2e' }}>XP</option>
+                                            <option value="difficulty" style={{ background: '#1a1a2e' }}>Trudność</option>
                                         </select>
                                     </div>
-                                </div>
-
-                                {/* Category Filters */}
-                                <div className="category-scroll">
-                                    {categories.map(cat => (
-                                        <button
-                                            key={cat.id}
-                                            onClick={() => setSelectedCategory(cat.id)}
-                                            style={{
-                                                padding: '10px 20px',
-                                                background: selectedCategory === cat.id ? `${cat.color}20` : 'rgba(255, 255, 255, 0.05)',
-                                                border: selectedCategory === cat.id ? `1px solid ${cat.color}` : '1px solid rgba(255, 255, 255, 0.08)',
-                                                borderRadius: '12px',
-                                                color: selectedCategory === cat.id ? cat.color : 'rgba(255, 255, 255, 0.7)',
-                                                fontSize: '14px',
-                                                fontWeight: 600,
-                                                cursor: 'pointer',
-                                                transition: 'all 0.2s',
-                                                whiteSpace: 'nowrap',
-                                                fontFamily: 'Outfit, sans-serif'
-                                            }}
-                                        >
-                                            {cat.name}
-                                        </button>
-                                    ))}
                                 </div>
 
                                 {/* Flat List */}
