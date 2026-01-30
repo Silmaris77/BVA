@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { ARCHETYPES } from '@/components/profile/EditProfileModal'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useAIConversation } from '@/contexts/AIConversationContext'
 
 export default function TopBar() {
     const { user, profile } = useAuth()
@@ -258,8 +259,27 @@ export default function TopBar() {
                             return profile?.full_name?.substring(0, 2).toUpperCase() || 'U'
                         })()}
                     </div>
+
+                    {/* AI Partner Trigger (Mentor) - Mobile Hidden for now */}
+                    <AIHelperTrigger />
                 </div>
             )}
         </div>
+    )
+}
+
+function AIHelperTrigger() {
+    const { startConversation, state } = useAIConversation()
+
+    if (state.isOpen) return null // Hide trigger if chat is open
+
+    return (
+        <button
+            onClick={() => startConversation('mentor', "Cześć! Jestem Twoim wirtualnym mentorem. W czym mogę pomóc?")}
+            className="ml-2 flex items-center justify-center w-10 h-10 rounded-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 hover:text-cyan-300 transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+            title="Zapytaj Mentora"
+        >
+            <Bot size={20} />
+        </button>
     )
 }

@@ -3,7 +3,7 @@
 import React from 'react'
 import { LayoutDashboard, Users, BookOpen, Briefcase, History, BarChart2 } from 'lucide-react'
 
-type ViewType = 'GAME' | 'WIKI' | 'TEAM' | 'CONTRACTS' | 'HISTORY' | 'STATS'
+type ViewType = 'GAME' | 'WIKI' | 'TEAM' | 'CONTRACTS' | 'HISTORY' | 'STATS' | 'SETTINGS'
 
 interface GameSidebarProps {
     currentView: ViewType

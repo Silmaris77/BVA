@@ -104,7 +104,8 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
         setUserAnswers(newAnswers)
 
         const currentQuestion = questions[currentIndex]
-        if (index === currentQuestion.correctAnswer) {
+        // Use Number() to handle string correctAnswer from JSON
+        if (index === Number(currentQuestion.correctAnswer)) {
             setScore(prev => prev + 1)
         }
     }
@@ -373,6 +374,8 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                                     ? option 
                                     : (option as any)?.text || (option as any)?.label || JSON.stringify(option);
                                 
+                                const correctIdx = Number(currentQuestion.correctAnswer);
+                                
                                 return (
                                 <button
                                     key={index}
@@ -381,10 +384,10 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                                     style={{
                                         padding: '16px 20px',
                                         background: isAnswered && index === selectedOption
-                                            ? (index === currentQuestion.correctAnswer ? 'rgba(0, 255, 136, 0.15)' : 'rgba(239, 68, 68, 0.15)')
+                                            ? (index === correctIdx ? 'rgba(0, 255, 136, 0.15)' : 'rgba(239, 68, 68, 0.15)')
                                             : 'rgba(255, 255, 255, 0.05)',
                                         border: isAnswered && index === selectedOption
-                                            ? (index === currentQuestion.correctAnswer ? '2px solid #00ff88' : '2px solid #ef4444')
+                                            ? (index === correctIdx ? '2px solid #00ff88' : '2px solid #ef4444')
                                             : '2px solid rgba(255, 255, 255, 0.1)',
                                         borderRadius: '12px',
                                         cursor: isAnswered ? 'default' : 'pointer',
@@ -411,7 +414,7 @@ export default function TestCard({ title, questions = [], onTestResult, onReset 
                                         <MathRenderer content={optionText} inline={true} />
                                     </span>
                                     {isAnswered && index === selectedOption && (
-                                        index === currentQuestion.correctAnswer
+                                        index === correctIdx
                                             ? <CheckCircle2 size={20} color="#00ff88" />
                                             : <XCircle size={20} color="#ef4444" />
                                     )}

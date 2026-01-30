@@ -3,6 +3,8 @@
 import { Outfit } from "next/font/google"
 import { AuthProvider } from "@/contexts/AuthContext"
 import { ThemeProvider } from "@/contexts/ThemeContext"
+import { AIConversationProvider } from "@/contexts/AIConversationContext"
+import AIConversationWidget from "@/components/ai/ConversationWidget"
 import Sidebar from "@/components/Navigation"
 import BottomNav from "@/components/BottomNav"
 import GlobalTopBar from "@/components/layout/GlobalTopBar"
@@ -44,18 +46,21 @@ export default function RootLayout({
 
         <AuthProvider>
           <ThemeProvider>
-            <EffectsOverlay />
-            {!isFullscreen && <Sidebar />}
-            {/* Main content with responsive margins - skip for fullscreen pages */}
-            <div className={!isFullscreen ? 'main-content' : ''}>
-              {!isFullscreen && (
-                <Suspense fallback={<div style={{ height: '65px' }} />}>
-                  <GlobalTopBar />
-                </Suspense>
-              )}
-              {children}
-            </div>
-            {!isFullscreen && <BottomNav />}
+            <AIConversationProvider>
+              <EffectsOverlay />
+              {!isFullscreen && <Sidebar />}
+              {/* Main content with responsive margins - skip for fullscreen pages */}
+              <div className={!isFullscreen ? 'main-content' : ''}>
+                {!isFullscreen && (
+                  <Suspense fallback={<div style={{ height: '65px' }} />}>
+                    <GlobalTopBar />
+                  </Suspense>
+                )}
+                {children}
+              </div>
+              {!isFullscreen && <BottomNav />}
+              <AIConversationWidget />
+            </AIConversationProvider>
           </ThemeProvider>
         </AuthProvider>
       </body>

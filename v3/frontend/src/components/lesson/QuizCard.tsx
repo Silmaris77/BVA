@@ -29,6 +29,7 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
 
     // Debug: Log question data to find object in options
     console.log('QuizCard questions:', JSON.stringify(questions, null, 2))
+    console.log('Current question correctAnswer:', currentQuestion?.correctAnswer, 'type:', typeof currentQuestion?.correctAnswer)
 
     const handleAnswer = (index: number) => {
         if (isAnswered) return
@@ -36,7 +37,8 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
         setSelectedOption(index)
         setIsAnswered(true)
 
-        if (index === currentQuestion.correctAnswer) {
+        // Compare with type coercion in case correctAnswer is string
+        if (index === Number(currentQuestion.correctAnswer)) {
             setScore(prev => prev + 1)
             triggerConfetti()
         }
@@ -98,6 +100,8 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
     }
 
     const getOptionStyle = (index: number) => {
+        const correctIdx = Number(currentQuestion.correctAnswer);
+        
         const baseStyle = {
             padding: '16px 20px',
             background: 'rgba(255, 255, 255, 0.05)',
@@ -119,7 +123,7 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
             return baseStyle
         }
 
-        if (index === currentQuestion.correctAnswer) {
+        if (index === correctIdx) {
             return {
                 ...baseStyle,
                 background: 'rgba(0, 255, 136, 0.15)',
@@ -128,7 +132,7 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
             }
         }
 
-        if (index === selectedOption && index !== currentQuestion.correctAnswer) {
+        if (index === selectedOption && index !== correctIdx) {
             return {
                 ...baseStyle,
                 background: 'rgba(239, 68, 68, 0.15)',
@@ -295,6 +299,8 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                             ? option 
                             : (option as any)?.text || (option as any)?.label || JSON.stringify(option);
                         
+                        const correctIdx = Number(currentQuestion.correctAnswer);
+                        
                         return (
                         <button
                             key={index}
@@ -306,7 +312,7 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                                 width: '32px',
                                 height: '32px',
                                 borderRadius: '8px',
-                                background: isAnswered && index === currentQuestion.correctAnswer
+                                background: isAnswered && index === correctIdx
                                     ? 'rgba(0, 255, 136, 0.2)'
                                     : isAnswered && index === selectedOption
                                         ? 'rgba(239, 68, 68, 0.2)'
@@ -323,10 +329,10 @@ export default function QuizCard({ title, questions = [] }: QuizCardProps) {
                             <span style={{ flex: 1, textAlign: 'left' }}>
                                 <MathRenderer content={optionText} inline={true} />
                             </span>
-                            {isAnswered && index === currentQuestion.correctAnswer && (
+                            {isAnswered && index === correctIdx && (
                                 <CheckCircle2 size={20} color="#00ff88" />
                             )}
-                            {isAnswered && index === selectedOption && index !== currentQuestion.correctAnswer && (
+                            {isAnswered && index === selectedOption && index !== correctIdx && (
                                 <XCircle size={20} color="#ef4444" />
                             )}
                         </button>
